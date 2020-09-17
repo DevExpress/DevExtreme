@@ -1,8 +1,9 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
-const window = require('../core/utils/window').getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import support from '../core/utils/support';
-import commonUtils from '../core/utils/common';
+import { noop } from '../core/utils/common';
 import { getPublicElement } from '../core/element';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
@@ -13,11 +14,14 @@ import registerComponent from '../core/component_registrator';
 import { addNamespace } from '../events/utils';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import themes from './themes';
-import clickEvent from '../events/click';
+import { name as clickEventName } from '../events/click';
 import Popover from './popover';
 import TextBox from './text_box';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 import translator from '../animation/translator';
+import { isDefined } from '../core/utils/type';
+
+// STYLE lookup
 
 const LOOKUP_CLASS = 'dx-lookup';
 const LOOKUP_SEARCH_CLASS = 'dx-lookup-search';
@@ -233,7 +237,7 @@ const Lookup = DropDownList.inherit({
             * @hidden
             */
 
-            itemCenteringEnabled: false,
+            dropDownCentered: false,
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
@@ -304,7 +308,7 @@ const Lookup = DropDownList.inherit({
 
                     showCancelButton: false,
 
-                    itemCenteringEnabled: true,
+                    dropDownCentered: true,
 
                     _scrollToSelectedItemEnabled: true,
 
@@ -385,7 +389,7 @@ const Lookup = DropDownList.inherit({
         });
     },
 
-    _fireContentReadyAction: commonUtils.noop, // TODO: why not symmetric to other dropdowns?
+    _fireContentReadyAction: noop, // TODO: why not symmetric to other dropdowns?
 
     _popupWrapperClass: function() {
         return '';
@@ -397,7 +401,7 @@ const Lookup = DropDownList.inherit({
         });
 
         this._$field = $('<div>').addClass(LOOKUP_FIELD_CLASS);
-        eventsEngine.on(this._$field, addNamespace(clickEvent.name, this.NAME), e => {
+        eventsEngine.on(this._$field, addNamespace(clickEventName, this.NAME), e => {
             fieldClickAction({ event: e });
         });
 
@@ -454,7 +458,8 @@ const Lookup = DropDownList.inherit({
             return;
         }
 
-        this._updateField(this.option('displayValue') || this.option('placeholder'));
+        const displayValue = this.option('displayValue');
+        this._updateField(isDefined(displayValue) && String(displayValue) || this.option('placeholder'));
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
     },
 
@@ -580,7 +585,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _setPopupPosition: function() {
-        if(!this.option('itemCenteringEnabled')) return;
+        if(!this.option('dropDownCentered')) return;
 
         const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(flipped) return;
@@ -641,7 +646,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupHeight: function() {
-        if(this._list && this._list.itemElements() && this.option('itemCenteringEnabled')) {
+        if(this._list && this._list.itemElements()) {
             return this._calculateListHeight(this.option('grouped')) +
                 (this._$searchWrapper ? this._$searchWrapper.outerHeight() : 0) +
                 (this._popup._$bottom ? this._popup._$bottom.outerHeight() : 0) +
@@ -652,12 +657,12 @@ const Lookup = DropDownList.inherit({
     },
 
     _getPopupWidth: function() {
-        return this.option('itemCenteringEnabled') ? $(this.element()).outerWidth() : $(window).width() * 0.8;
+        return $(this.element()).outerWidth();
     },
 
     _renderPopup: function() {
         if(this.option('usePopover') && !this.option('dropDownOptions.fullScreen')) {
-            if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
+            if(this.option('_scrollToSelectedItemEnabled')) {
                 this.callBase();
             } else {
                 this._renderPopover();
@@ -712,7 +717,7 @@ const Lookup = DropDownList.inherit({
         }
     },
 
-    _preventFocusOnPopup: commonUtils.noop,
+    _preventFocusOnPopup: noop,
 
     _popupConfig: function() {
         const result = extend(this.callBase(), {
@@ -736,10 +741,14 @@ const Lookup = DropDownList.inherit({
         delete result.animation;
         delete result.position;
 
-        if(this.option('_scrollToSelectedItemEnabled') && this.option('itemCenteringEnabled')) {
-            result.position = {
+        if(this.option('_scrollToSelectedItemEnabled')) {
+            result.position = this.option('dropDownCentered') ? {
                 my: 'left top',
                 at: 'left top',
+                of: this.element()
+            } : {
+                my: 'left top',
+                at: 'left bottom',
                 of: this.element()
             };
         }
@@ -897,8 +906,8 @@ const Lookup = DropDownList.inherit({
         this._searchBox.registerKeyHandler('escape', this.close.bind(this));
         this._searchBox.registerKeyHandler('enter', this._selectListItemHandler.bind(this));
         this._searchBox.registerKeyHandler('space', this._selectListItemHandler.bind(this));
-        this._searchBox.registerKeyHandler('end', commonUtils.noop);
-        this._searchBox.registerKeyHandler('home', commonUtils.noop);
+        this._searchBox.registerKeyHandler('end', noop);
+        this._searchBox.registerKeyHandler('home', noop);
     },
 
     _toggleSearchClass: function(isSearchEnabled) {
@@ -922,7 +931,7 @@ const Lookup = DropDownList.inherit({
         this._searchBox.option('placeholder', placeholder);
     },
 
-    _setAriaTargetForList: commonUtils.noop,
+    _setAriaTargetForList: noop,
 
     _renderList: function() {
         this.callBase();
@@ -954,7 +963,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _getSelectionChangedHandler: function() {
-        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : commonUtils.noop;
+        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : noop;
     },
 
     _listContentReadyHandler: function() {
@@ -1125,9 +1134,10 @@ const Lookup = DropDownList.inherit({
             case 'cleanSearchOnOpening':
             case '_scrollToSelectedItemEnabled':
                 break;
-            case 'itemCenteringEnabled':
-                if(this.option('_scrollToSelectedItemEnabled') && value) {
-                    this.option('usePopover', false);
+            case 'dropDownCentered':
+                if(this.option('_scrollToSelectedItemEnabled')) {
+                    this.option('dropDownOptions.position', undefined);
+                    this._renderPopup();
                 }
                 break;
             default:
@@ -1152,4 +1162,4 @@ const Lookup = DropDownList.inherit({
 
 registerComponent('dxLookup', Lookup);
 
-module.exports = Lookup;
+export default Lookup;

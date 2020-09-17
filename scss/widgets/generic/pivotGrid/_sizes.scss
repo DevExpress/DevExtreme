@@ -1,3 +1,26 @@
 @use "../sizes" as *;
+
 // adduse
+
+$pivotgrid-empty-column-width: null !default;
+$pivotgrid-common-left-right-padding: null !default;
+$pivotgrid-common-top-bottom-padding: null !default;
+$pivotgrid-field-indicators-offset: null !default;
+$pivotgrid-indicators-line-height: null !default;
+
+@if $size == "default" {
+  $pivotgrid-empty-column-width: 19px;
+  $pivotgrid-common-left-right-padding: 10px;
+  $pivotgrid-common-top-bottom-padding: 7px;
+  $pivotgrid-field-indicators-offset: 6px;
+  $pivotgrid-indicators-line-height: 19px;
+}
+
+@else if $size == "compact" {
+  $pivotgrid-empty-column-width: 16px;
+  $pivotgrid-common-left-right-padding: 6px;
+  $pivotgrid-common-top-bottom-padding: 5px;
+  $pivotgrid-field-indicators-offset: 4px;
+  $pivotgrid-indicators-line-height: 16px;
+}
 

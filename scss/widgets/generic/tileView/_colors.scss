@@ -1,10 +1,14 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$tileview-color: null !default;
+/**
+* $name 10. Item text color
+* $type color
+*/
+$tileview-color: $base-text-color !default;
 $tileview-bg: null !default;
 $tileview-border-color: null !default;
 $tileview-hover-bg: null !default;
@@ -14,11 +18,6 @@ $tileview-active-color: null !default;
 
 
 @if $color == "carmine" {
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
-  $tileview-color: $base-text-color !default;
   $tileview-bg: $base-element-bg !default;
   $tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $tileview-hover-bg: $base-element-bg !default;
@@ -28,11 +27,6 @@ $tileview-active-color: null !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
-  $tileview-color: $base-text-color !default;
   $tileview-bg: $base-bg !default;
   $tileview-border-color: $base-border-color !default;
   $tileview-hover-bg: $base-hover-color !default;
@@ -42,11 +36,6 @@ $tileview-active-color: null !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
-  $tileview-color: $base-text-color !default;
   $tileview-bg: $base-element-bg !default;
   $tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $tileview-hover-bg: $base-element-bg !default;
@@ -56,11 +45,6 @@ $tileview-active-color: null !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
-  $tileview-color: $base-text-color !default;
   $tileview-bg: $base-element-bg !default;
   $tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $tileview-hover-bg: $base-element-bg !default;
@@ -70,11 +54,6 @@ $tileview-active-color: null !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
-  $tileview-color: $base-text-color !default;
   $tileview-bg: $base-element-bg !default;
   $tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $tileview-hover-bg: $base-element-bg !default;
@@ -84,11 +63,6 @@ $tileview-active-color: null !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
-  $tileview-color: $base-text-color !default;
   $tileview-bg: $base-element-bg !default;
   $tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $tileview-hover-bg: $base-element-bg !default;
@@ -98,11 +72,6 @@ $tileview-active-color: null !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
-  $tileview-color: $base-text-color !default;
   $tileview-bg: $base-element-bg !default;
   $tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $tileview-hover-bg: $base-element-bg !default;
@@ -112,11 +81,6 @@ $tileview-active-color: null !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 10. Item text color
-    * $type color
-    */
-  $tileview-color: $base-text-color !default;
   $tileview-bg: $base-element-bg !default;
   $tileview-border-color: color.change($base-border-color, $alpha: 0.6) !default;
   $tileview-hover-bg: $base-element-bg !default;

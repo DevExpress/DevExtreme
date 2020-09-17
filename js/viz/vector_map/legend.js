@@ -1,8 +1,9 @@
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { clone } from '../../core/utils/object';
 const _extend = extend;
 const _each = each;
-const legendModule = require('../components/legend');
+import legendModule from '../components/legend';
 const _BaseLegend = legendModule.Legend;
 
 const unknownSource = { category: 'UNKNOWN', name: 'UNKNOWN' };
@@ -47,7 +48,7 @@ let Legend = function(parameters) {
     };
 };
 
-Legend.prototype = _extend(require('../../core/utils/object').clone(_BaseLegend.prototype), {
+Legend.prototype = _extend(clone(_BaseLegend.prototype), {
     constructor: Legend,
 
     dispose: function() {
@@ -100,7 +101,7 @@ Legend.prototype = _extend(require('../../core/utils/object').clone(_BaseLegend.
     }
 });
 
-function LegendsControl(parameters) {
+export function LegendsControl(parameters) {
     this._params = parameters;
     this._items = [];
     parameters.container.virtualLink('legend-base');
@@ -139,15 +140,15 @@ LegendsControl.prototype = {
     }
 };
 
-exports.LegendsControl = LegendsControl;
-
 ///#DEBUG
 const originalLegend = Legend;
-exports._TESTS_Legend = Legend;
-exports._TESTS_stubLegendType = function(stub) {
+export { Legend as _TESTS_Legend };
+
+export function _TESTS_stubLegendType(stub) {
     Legend = stub;
-};
-exports._TESTS_restoreLegendType = function() {
+}
+
+export function _TESTS_restoreLegendType() {
     Legend = originalLegend;
-};
+}
 ///#ENDDEBUG

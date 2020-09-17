@@ -74,14 +74,13 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 position:positionConfig
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 position:positionConfig
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPositioning?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, position?: positionConfig }) => any);
+    onPositioning?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, event?: event, position?: positionConfig }) => any);
     /**
      * @docid dxContextMenuOptions.onShowing
      * @extends Action
@@ -128,7 +127,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     submenuDirection?: 'auto' | 'left' | 'right';
     /**
      * @docid dxContextMenuOptions.target
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

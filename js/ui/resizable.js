@@ -3,19 +3,17 @@ import registerComponent from '../core/component_registrator';
 import DOMComponent from '../core/dom_component';
 import $ from '../core/renderer';
 import { inArray } from '../core/utils/array';
-import commonUtils from '../core/utils/common';
+import { pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { each } from '../core/utils/iterator';
 import { fitIntoRange } from '../core/utils/math';
-import typeUtils from '../core/utils/type';
-import windowUtils from '../core/utils/window';
+import { isPlainObject, isFunction, isWindow } from '../core/utils/type';
+import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
-import dragEvents from '../events/drag';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
 import { getBoundingRect } from '../core/utils/position';
 import { addNamespace } from '../events/utils';
 import { triggerResizeEvent } from '../events/visibility_change';
-const isPlainObject = typeUtils.isPlainObject;
-const isFunction = typeUtils.isFunction;
 
 const RESIZABLE = 'dxResizable';
 const RESIZABLE_CLASS = 'dx-resizable';
@@ -29,9 +27,9 @@ const RESIZABLE_HANDLE_RIGHT_CLASS = 'dx-resizable-handle-right';
 
 const RESIZABLE_HANDLE_CORNER_CLASS = 'dx-resizable-handle-corner';
 
-const DRAGSTART_START_EVENT_NAME = addNamespace(dragEvents.start, RESIZABLE);
-const DRAGSTART_EVENT_NAME = addNamespace(dragEvents.move, RESIZABLE);
-const DRAGSTART_END_EVENT_NAME = addNamespace(dragEvents.end, RESIZABLE);
+const DRAGSTART_START_EVENT_NAME = addNamespace(dragEventStart, RESIZABLE);
+const DRAGSTART_EVENT_NAME = addNamespace(dragEventMove, RESIZABLE);
+const DRAGSTART_END_EVENT_NAME = addNamespace(dragEventEnd, RESIZABLE);
 
 const SIDE_BORDER_WIDTH_STYLES = {
     'left': 'borderLeftWidth',
@@ -213,7 +211,7 @@ const Resizable = DOMComponent.inherit({
     },
 
     _getBorderWidth: function($element, direction) {
-        if(typeUtils.isWindow($element.get(0))) return 0;
+        if(isWindow($element.get(0))) return 0;
         const borderWidth = $element.css(SIDE_BORDER_WIDTH_STYLES[direction]);
         return parseInt(borderWidth) || 0;
     },
@@ -253,7 +251,7 @@ const Resizable = DOMComponent.inherit({
 
     _getOffset: function(e) {
         const offset = e.offset;
-        const steps = commonUtils.pairToObject(this.option('step'), !this.option('roundStepValue'));
+        const steps = pairToObject(this.option('step'), !this.option('roundStepValue'));
         const sides = this._getMovingSides(e);
         const strictPrecision = this.option('stepPrecision') === 'strict';
 
@@ -344,7 +342,7 @@ const Resizable = DOMComponent.inherit({
         const scrollOffset = { scrollY: 0, scrollX: 0 };
         if(isElement) {
             const areaElement = $(area)[0];
-            if(typeUtils.isWindow(areaElement)) {
+            if(isWindow(areaElement)) {
                 scrollOffset.scrollX = areaElement.pageXOffset;
                 scrollOffset.scrollY = areaElement.pageYOffset;
             }
@@ -380,7 +378,7 @@ const Resizable = DOMComponent.inherit({
                 offset: extend({
                     top: 0,
                     left: 0
-                }, typeUtils.isWindow($area[0]) ? {} : $area.offset())
+                }, isWindow($area[0]) ? {} : $area.offset())
             };
 
             this._correctAreaGeometry(result, $area);
@@ -432,11 +430,11 @@ const Resizable = DOMComponent.inherit({
                 break;
             case 'minWidth':
             case 'maxWidth':
-                windowUtils.hasWindow() && this._renderWidth(this.$element().outerWidth());
+                hasWindow() && this._renderWidth(this.$element().outerWidth());
                 break;
             case 'minHeight':
             case 'maxHeight':
-                windowUtils.hasWindow() && this._renderHeight(this.$element().outerHeight());
+                hasWindow() && this._renderHeight(this.$element().outerHeight());
                 break;
             case 'onResize':
             case 'onResizeStart':
@@ -465,4 +463,4 @@ const Resizable = DOMComponent.inherit({
 
 registerComponent(RESIZABLE, Resizable);
 
-module.exports = Resizable;
+export default Resizable;

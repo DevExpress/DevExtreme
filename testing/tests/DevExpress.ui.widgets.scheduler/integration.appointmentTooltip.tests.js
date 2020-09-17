@@ -618,8 +618,8 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
     });
 
     test('Tooltip of allDay appointment should display right dates', function(assert) {
-        const startDate = new Date(2015, 2, 5, 6);
-        const endDate = new Date(2015, 2, 6, 7);
+        const startDate = new Date(2015, 2, 5);
+        const endDate = new Date(2015, 2, 6);
 
         const scheduler = createScheduler({
             currentDate: new Date(2015, 2, 4),
@@ -807,7 +807,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         this.clock.tick(300);
 
         assert.ok(notifyStub.called, 'notify is called');
-        assert.ok(notifyStub.withArgs('deleteAppointment').called, 'deleteAppointment is called');
+        assert.ok(notifyStub.withArgs('onDeleteButtonPress').called, 'onDeleteButtonPress is called');
         assert.notOk(notifyStub.withArgs('showAppointmentTooltip').called, 'showAppointmentTooltip isn\'t called');
     });
 

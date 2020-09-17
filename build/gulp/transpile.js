@@ -7,29 +7,53 @@ const replace = require('gulp-replace');
 const plumber = require('gulp-plumber');
 const path = require('path');
 const notify = require('gulp-notify');
-
+const compressionPipes = require('./compression-pipes.js');
+const renovationPipes = require('./renovation-pipes');
+const utils = require('./utils');
+const env = require('./env-variables');
 const context = require('./context.js');
 
 require('./generator/gulpfile');
 
 const GLOB_TS = require('./ts').GLOB_TS;
-const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.tsx'];
+const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.{tsx,ts}', '!js/renovation/code_coverage/**/*.*'];
 const TESTS_PATH = 'testing';
 const TESTS_SRC = TESTS_PATH + '/**/*.js';
 
 const VERSION_FILE_PATH = 'core/version.js';
 
-gulp.task('transpile', gulp.series('generate-components', 'bundler-config', function() {
+gulp.task('transpile-prod-renovation', utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
+    return gulp.src(SRC)
+        .pipe(compressionPipes.removeDebug())
+        .pipe(renovationPipes.replaceWidgets())
+        .pipe(babel())
+        .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH));
+}));
+
+gulp.task('transpile-prod-old', function() {
+    return gulp.src(SRC)
+        .pipe(compressionPipes.removeDebug())
+        .pipe(babel())
+        .pipe(gulp.dest(context.TRANSPILED_PROD_PATH));
+});
+
+gulp.task('transpile', gulp.series('bundler-config', 'transpile-prod-old', 'transpile-prod-renovation', function() {
     return gulp.src(SRC)
         .pipe(babel())
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 }));
 
-gulp.task('version-replace', gulp.series('transpile', function() {
-    return gulp.src(path.join(context.TRANSPILED_PATH, VERSION_FILE_PATH), { base: './' })
+const replaceTask = (sourcePath) => {
+    return () => gulp.src(path.join(sourcePath, VERSION_FILE_PATH), { base: './' })
         .pipe(replace('%VERSION%', context.version.script))
         .pipe(gulp.dest('./'));
-}));
+};
+
+gulp.task('version-replace', gulp.series('transpile', gulp.parallel([
+    replaceTask(context.TRANSPILED_PATH),
+    replaceTask(context.TRANSPILED_PROD_PATH),
+    utils.runTaskByCondition(env.RUN_RENOVATION_TASK, () => replaceTask(context.TRANSPILED_PROD_RENOVATION_PATH))(),
+])));
 
 gulp.task('transpile-watch', gulp.series('version-replace', function() {
     return watch(SRC)

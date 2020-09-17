@@ -1,4 +1,5 @@
 import * as sass from 'sass';
+import fiber from 'fibers';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
 
@@ -13,14 +14,14 @@ export default class Compiler {
 
   importerCache: Record<string, string> = {};
 
-  meta: Array<MetaItem> = metadata;
+  meta: ThemesMetadata = metadata;
 
-  userItems: Array<ConfigMetaItem> = [];
+  userItems: ConfigMetaItem[] = [];
 
   indexFileContent: string;
 
   compile(
-    items: Array<ConfigMetaItem>,
+    items: ConfigMetaItem[],
     options: sass.Options,
   ): Promise<CompilerResult> {
     this.changedVariables = {};
@@ -31,6 +32,7 @@ export default class Compiler {
       functions: {
         'collector($map)': this.collector.bind(this),
       },
+      fiber,
     };
 
     compilerOptions = { ...compilerOptions, ...options };
@@ -51,33 +53,33 @@ export default class Compiler {
 
   static getImportType(url: string): ImportType {
     if (url.endsWith('tb_index')) return ImportType.Index;
-    if (url.startsWith('tb')) return ImportType.Color;
+    if (url.startsWith('tb_')) return ImportType.Color;
     return ImportType.Unknown;
   }
 
-  getMatchingUserItemsAsString(url: string): string {
-    const metaKeysForUrl: Array<string> = this.meta
-      .filter((item) => item.Path === url)
-      .map((item) => item.Key);
+  getMatchingUserItemsAsString(theme: string): string {
+    const meta = theme === 'generic' ? this.meta.generic : this.meta.material;
+    const themeKeys: string[] = meta.map((item) => item.Key);
 
     return this.userItems
-      .filter((item) => metaKeysForUrl.indexOf(item.key) >= 0)
+      .filter((item) => themeKeys.includes(item.key))
       .map((item) => `${item.key}: ${item.value};`)
       .join('');
   }
 
   setter(url: string): sass.ImporterReturnType {
-    let content = this.importerCache[url];
     const importType = Compiler.getImportType(url);
 
     if (importType === ImportType.Unknown) {
       return null;
     }
 
+    let content = this.importerCache[url];
+
     if (!content) {
       content = importType === ImportType.Index
         ? this.indexFileContent
-        : this.getMatchingUserItemsAsString(url);
+        : this.getMatchingUserItemsAsString(url.replace('tb_', ''));
 
       this.importerCache[url] = content;
     }
@@ -86,7 +88,7 @@ export default class Compiler {
   }
 
   collector(map: sass.types.Map): sass.types.ReturnValue {
-    for (let mapIndex = 1; mapIndex < map.getLength(); mapIndex += 1) {
+    for (let mapIndex = 0; mapIndex < map.getLength(); mapIndex += 1) {
       const value = map.getValue(mapIndex);
       let variableValue;
 

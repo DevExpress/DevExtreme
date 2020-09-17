@@ -1,12 +1,12 @@
-const errorUtils = require('../../core/utils/error');
-const errors = require('../../core/errors');
+import errorUtils from '../../core/utils/error';
+import errors from '../../core/errors';
 
 /**
 * @docid
 * @name ErrorsUIWidgets
 */
 
-module.exports = errorUtils(errors.ERROR_MESSAGES, {
+export default errorUtils(errors.ERROR_MESSAGES, {
 
     /**
     * @name ErrorsUIWidgets.E1001
@@ -240,6 +240,16 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     * @name ErrorsUIWidgets.E1058
     */
     E1058: 'The "startDayHour" must be earlier than the "endDayHour"',
+
+    /**
+    * @name ErrorsUIWidgets.E1059
+    */
+    E1059: 'All column names must be different',
+
+    /**
+    * @name ErrorsUIWidgets.E1060
+    */
+    E1060: 'All editable columns must have names',
 
     /**
     * @name ErrorsUIWidgets.W1001

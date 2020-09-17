@@ -1,3 +1,4 @@
+import { ClientFunction } from 'testcafe';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import DataCell from './cell';
@@ -50,5 +51,14 @@ export default class DataRow extends FocusableElement {
 
   getSelectCheckBox(): Selector {
     return this.element.find(`.${CLASS.selectCheckBox}`);
+  }
+
+  getOffset(): Promise<any> {
+    const { element } = this;
+
+    return ClientFunction(
+      () => ($(element()) as any).offset(),
+      { dependencies: { element } },
+    )();
   }
 }

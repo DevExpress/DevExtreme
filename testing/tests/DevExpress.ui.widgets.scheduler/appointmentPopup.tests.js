@@ -5,14 +5,18 @@ import { SchedulerTestWrapper, initTestMarkup, createWrapper, isDesktopEnvironme
 
 import $ from 'jquery';
 import devices from 'core/devices';
-import SchedulerTimezoneEditor from 'ui/scheduler/timezones/ui.scheduler.timezone_editor';
+import SelectBox from 'ui/select_box';
+// import SchedulerTimezoneEditor from 'ui/scheduler/timezones/ui.scheduler.timezone_editor';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import messageLocalization from 'localization/message';
-
+import { APPOINTMENT_FORM_GROUP_NAMES } from 'ui/scheduler/ui.scheduler.appointment_form';
+import { dateToMilliseconds as toMs } from 'core/utils/date';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
+
+const { module, test } = QUnit;
 
 const APPOINTMENT_POPUP_WIDTH = 485;
 const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 970;
@@ -21,11 +25,11 @@ const checkFormWithRecurrenceEditor = (assert, instance, visibility) => {
     const colSpan = visibility === true ? 1 : 2;
     const form = instance.getAppointmentDetailsForm();
 
-    assert.equal(form.itemOption('recurrenceRule').visible,
+    assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence).visible,
         visibility, `Recurrence Editor is ${visibility === true ? 'visible' : 'not visible'}`);
 
-    assert.equal(form.option('items')[0].colSpan, colSpan, 'colSpan of main group is correct');
-    assert.equal(form.option('items')[1].colSpan, colSpan, 'colSpan of recurrence group is correct');
+    assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Main).colSpan, colSpan, 'colSpan of main group is correct');
+    assert.equal(form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence).colSpan, colSpan, 'colSpan of recurrence group is correct');
 
     assert.equal(instance.getAppointmentPopup().option('maxWidth'), width, 'maxWidth of popup is correct');
 };
@@ -114,69 +118,34 @@ const moduleConfig = {
 };
 
 QUnit.module('Appointment popup form', moduleConfig, () => {
-    QUnit.module('toolbar', () => {
-        [true, false].forEach(allowUpdatingValue => {
-            const data = [{
-                text: 'Website Re-Design Plan',
-                startDate: new Date(2017, 4, 22, 9, 30),
-                endDate: new Date(2017, 4, 22, 11, 30),
-                disabled: true
-            }, {
-                text: 'Book Flights to San Fran for Sales Trip',
-                startDate: new Date(2017, 4, 22, 12, 0),
-                endDate: new Date(2017, 4, 22, 13, 0),
-            }];
-
-            QUnit.test(`done button visibility in case allowUpdatingValue = ${allowUpdatingValue}`, function(assert) {
-                const scheduler = createWrapper({
-                    dataSource: data,
-                    views: ['week'],
-                    currentView: 'week',
-                    currentDate: new Date(2017, 4, 25),
-                    editing: {
-                        allowUpdating: allowUpdatingValue
-                    }
-                });
-
-                const assertText = `done button visibility should be equal to = ${allowUpdatingValue}`;
-                for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
-                    scheduler.appointments.dblclick(i);
-                    assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
-                    scheduler.appointmentPopup.clickCancelButton();
-                }
-            });
+    QUnit.test('Recurrence form should work properly if recurrenceRule property mapped recurrenceRuleExpr', function(assert) {
+        const scheduler = createScheduler({
+            dataSource: [{
+                text: 'Watercolor Landscape',
+                startDate: new Date(2017, 4, 1, 9, 30),
+                endDate: new Date(2017, 4, 1, 11),
+                customRecurrenceRule: 'FREQ=WEEKLY;BYDAY=TU,FR;COUNT=10'
+            }],
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2017, 4, 25),
+            recurrenceRuleExpr: 'customRecurrenceRule',
+            height: 600
         });
 
-        QUnit.test('toolbar should be re-rendered after change editing option', function(assert) {
-            const scheduler = createWrapper({
-                dataSource: [],
-                views: ['week'],
-                currentView: 'week',
-                currentDate: new Date(2017, 4, 25),
-                editing: {
-                    allowUpdating: true
-                }
-            });
+        scheduler.appointments.dblclick(0);
+        scheduler.appointmentPopup.dialog.clickEditSeries();
 
-            const dataObj = {
-                text: 'a',
-                startDate: new Date(2015, 5, 15, 10),
-                endDate: new Date(2015, 5, 15, 11)
-            };
+        const form = scheduler.instance._appointmentPopup._appointmentForm;
 
-            scheduler.instance.showAppointmentPopup(dataObj);
-            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible');
+        assert.ok(form.getEditor('repeat').option('value'), 'repeat checkbox should be checked');
+        assert.ok(form.option('items')[1].visible, 'recurrence form should be visible');
 
-            scheduler.option('editing', {
-                allowUpdating: false
-            });
+        scheduler.instance.getAppointmentPopup().hide();
+        scheduler.instance.showAppointmentPopup();
 
-            scheduler.instance.showAppointmentPopup(dataObj);
-            assert.notOk(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button shouldn\'t be visible after set allowUpdating option to false');
-
-            scheduler.instance.showAppointmentPopup();
-            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible in case \'create new appointment\'');
-        });
+        assert.notOk(form.getEditor('repeat').option('value'), 'repeat checkbox should be unchecked if empty form');
+        assert.notOk(form.option('items')[1].visible, 'recurrence form should be invisible if empty form');
     });
 
     QUnit.test('showAppointmentPopup method should be work properly with no argument', function(assert) {
@@ -239,6 +208,21 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
 
             testCase();
         });
+    });
+
+    QUnit.test('Appointment popup form should have two named groups', function(assert) {
+        const scheduler = createScheduler({ dataSource: [] });
+        const data = {
+            text: 'appointment',
+            startDate: new Date(2017, 4, 1, 9, 30),
+            endDate: new Date(2017, 4, 1, 11),
+        };
+
+        scheduler.instance.showAppointmentPopup(data);
+        const form = scheduler.instance.getAppointmentDetailsForm();
+
+        assert.equal(form.option('items')[0].name, APPOINTMENT_FORM_GROUP_NAMES.Main, 'first group name is correct');
+        assert.equal(form.option('items')[1].name, APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'second group name is correct');
     });
 
     QUnit.test('Appointment popup should be with correct dates after change allDay switch and w/o saving (T832711)', function(assert) {
@@ -469,6 +453,151 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
         deferred.done(() => {
             assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'has no load panel');
             assert.equal(scheduler.appointments.getTitleText(0), 'New Subject', 'Subject is correct');
+        });
+    });
+
+    [true, false].forEach(cancel => {
+        QUnit.test(`onAppointmentUpdating and e.cancel=${cancel} (T907281)`, function(assert) {
+            const data = [{
+                startDate: new Date(2015, 4, 24, 9),
+                endDate: new Date(2015, 4, 24, 11),
+                text: 'Subject'
+            }];
+            const scheduler = createScheduler({
+                views: ['day'],
+                dataSource: data,
+                currentDate: new Date(2015, 4, 24),
+                startDayHour: 8,
+                endDayHour: 18,
+                onAppointmentUpdating: e => e.cancel = cancel
+            });
+
+            scheduler.instance.showAppointmentPopup(data[0]);
+
+            scheduler.appointmentForm.setSubject('New Subject');
+
+            scheduler.appointmentPopup.saveAppointmentData();
+
+            assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'Has no load panel');
+
+            const subject = cancel ? 'Subject' : 'New Subject';
+            assert.equal(scheduler.appointments.getTitleText(0), subject, 'Subject is correct');
+        });
+
+        QUnit.test(`onAppointmentAdding and e.cancel=${cancel}`, function(assert) {
+            const scheduler = createScheduler({
+                views: ['day'],
+                dataSource: [],
+                currentDate: new Date(2015, 4, 24),
+                startDayHour: 8,
+                endDayHour: 18,
+                onAppointmentAdding: e => e.cancel = cancel
+            });
+
+            scheduler.instance.showAppointmentPopup();
+
+            scheduler.appointmentForm.setStartDate(new Date(2015, 4, 24, 9));
+            scheduler.appointmentForm.setEndDate(new Date(2015, 4, 24, 11));
+            scheduler.appointmentForm.setSubject('New Subject');
+
+            scheduler.appointmentPopup.saveAppointmentData();
+
+            assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'Has no load panel');
+
+            const subject = cancel ? '' : 'New Subject';
+            assert.equal(scheduler.appointments.getTitleText(0), subject, 'Subject is correct');
+        });
+
+        QUnit.test(`onAppointmentDeleting and e.cancel=${cancel}`, function(assert) {
+            const clock = sinon.useFakeTimers();
+            const data = [{
+                text: 'Some Text',
+                startDate: new Date(2015, 4, 24, 9),
+                endDate: new Date(2015, 4, 24, 11)
+            }];
+            const scheduler = createScheduler({
+                views: ['day'],
+                dataSource: data,
+                currentDate: new Date(2015, 4, 24),
+                startDayHour: 8,
+                endDayHour: 18,
+                onAppointmentDeleting: e => e.cancel = cancel
+            });
+
+            scheduler.instance.deleteAppointment(data[0]);
+            clock.tick();
+
+            assert.notOk(scheduler.appointmentPopup.hasLoadPanel(), 'Has no load panel');
+
+            const subject = cancel ? 'Some Text' : '';
+            assert.equal(scheduler.appointments.getTitleText(0), subject, 'Subject is correct');
+
+            clock.restore();
+        });
+    });
+
+    QUnit.module('toolbar', () => {
+        [true, false].forEach(allowUpdatingValue => {
+            const data = [{
+                text: 'Website Re-Design Plan',
+                startDate: new Date(2017, 4, 22, 9, 30),
+                endDate: new Date(2017, 4, 22, 11, 30),
+                disabled: true
+            }, {
+                text: 'Book Flights to San Fran for Sales Trip',
+                startDate: new Date(2017, 4, 22, 12, 0),
+                endDate: new Date(2017, 4, 22, 13, 0),
+            }];
+
+            QUnit.test(`done button visibility in case allowUpdatingValue = ${allowUpdatingValue}`, function(assert) {
+                const scheduler = createWrapper({
+                    dataSource: data,
+                    views: ['week'],
+                    currentView: 'week',
+                    currentDate: new Date(2017, 4, 25),
+                    editing: {
+                        allowUpdating: allowUpdatingValue
+                    }
+                });
+
+                const assertText = `done button visibility should be equal to = ${allowUpdatingValue}`;
+                for(let i = 0; i < scheduler.appointments.getAppointmentCount(); i++) {
+                    scheduler.appointments.dblclick(i);
+                    assert.equal(scheduler.appointmentPopup.getDoneButton().length > 0, allowUpdatingValue, assertText);
+                    scheduler.appointmentPopup.clickCancelButton();
+                }
+            });
+        });
+
+        QUnit.test('toolbar should be re-rendered after change editing option', function(assert) {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['week'],
+                currentView: 'week',
+                currentDate: new Date(2017, 4, 25),
+                editing: {
+                    allowUpdating: true
+                }
+            });
+
+            const dataObj = {
+                text: 'a',
+                startDate: new Date(2015, 5, 15, 10),
+                endDate: new Date(2015, 5, 15, 11)
+            };
+
+            scheduler.instance.showAppointmentPopup(dataObj);
+            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible');
+
+            scheduler.option('editing', {
+                allowUpdating: false
+            });
+
+            scheduler.instance.showAppointmentPopup(dataObj);
+            assert.notOk(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button shouldn\'t be visible after set allowUpdating option to false');
+
+            scheduler.instance.showAppointmentPopup();
+            assert.ok(scheduler.appointmentPopup.getDoneButton().length > 0, '"done" button should be visible in case \'create new appointment\'');
         });
     });
 });
@@ -1103,96 +1232,6 @@ QUnit.test('There are no exceptions when select date on the appointment popup,if
     assert.ok(true, 'There are no exceptions');
 });
 
-QUnit.test('Popup should not contain startDateTimeZone editor by default', function(assert) {
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-
-    assert.notOk(startDateTimezoneEditor, 'StartDateTZ editor isn\'t visible by default');
-});
-
-QUnit.test('Popup should not contain endDateTimeZone editor by default', function(assert) {
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const endDateTimeZoneEditor = form.getEditor('endDateTimeZone');
-
-    assert.notOk(endDateTimeZoneEditor, 'StartDateTZ editor isn\'t visible by default');
-});
-
-QUnit.test('It should be possible to render startDateTimeZone editor on appt form', function(assert) {
-    this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption('startDateTimeZone', { visible: true });
-    });
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-
-    assert.ok(startDateTimezoneEditor instanceof SchedulerTimezoneEditor, 'Editor is SchedulerTimezoneEditor');
-    assert.equal(startDateTimezoneEditor.option('observer'), this.instance, 'Observer is defined');
-});
-
-QUnit.test('It should be possible to render endDateTimeZone editor on appt form', function(assert) {
-    this.instance.option('onAppointmentFormOpening', function(e) {
-        e.form.itemOption('endDateTimeZone', { visible: true });
-    });
-    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
-
-    const form = this.instance.getAppointmentDetailsForm();
-    const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-
-    assert.ok(endDateTimezoneEditor instanceof SchedulerTimezoneEditor, 'Editor is SchedulerTimezoneEditor');
-    assert.equal(endDateTimezoneEditor.option('observer'), this.instance, 'Observer is defined');
-});
-
-['allowTimeZoneEditing', 'allowEditingTimeZones'].forEach(allowTimeZoneEditingOption => {
-    QUnit.test(`startDateTimeZone and endDateTimeZone editor should be rendered with ${allowTimeZoneEditingOption} option`, function(assert) {
-        this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
-        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
-
-        const form = this.instance.getAppointmentDetailsForm();
-        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-
-        assert.ok(startDateTimezoneEditor.option('visible'), 'startDateTimeZone editor is visible');
-        assert.ok(endDateTimezoneEditor.option('visible'), 'endDateTimeZone editor is visible');
-
-        assert.equal(startDateTimezoneEditor.option('value'), null, 'startDateTimeZone editor value should be null');
-        assert.equal(endDateTimezoneEditor.option('value'), null, 'endDateTimeZone editor value should be null');
-    });
-
-    QUnit.test(`Change value in startDateTimeZone editor should trigger change value in endDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
-        this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
-        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
-
-        const form = this.instance.getAppointmentDetailsForm();
-        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-
-        startDateTimezoneEditor.option('value', 'Africa/Cairo');
-
-        assert.equal(startDateTimezoneEditor.option('value'), 'Africa/Cairo', 'startDateTimeZone editor value should be "Africa/Cairo"');
-        assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
-    });
-
-    QUnit.test(`Change value in endDateTimeZone editor shouldn't trigger change value in startDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
-        this.instance.option('editing.allowTimeZoneEditing', true);
-        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
-
-        const form = this.instance.getAppointmentDetailsForm();
-        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-
-        startDateTimezoneEditor.option('value', 'Asia/Pyongyang');
-        endDateTimezoneEditor.option('value', 'Africa/Cairo');
-
-        assert.equal(startDateTimezoneEditor.option('value'), 'Asia/Pyongyang', 'startDateTimeZone editor value should be "Africa/Cairo"');
-        assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
-    });
-});
-
 QUnit.test('Validate works always before done click', function(assert) {
     const data = new DataSource({
         store: this.tasks
@@ -1322,8 +1361,8 @@ QUnit.test('startDateBox & endDateBox should have required validation rules', fu
 
     const form = this.instance.getAppointmentDetailsForm();
 
-    assert.deepEqual(form.itemOption('startDate').validationRules, [{ type: 'required' }]);
-    assert.deepEqual(form.itemOption('endDate').validationRules, [{ type: 'required' }]);
+    assert.deepEqual(form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDate`).validationRules, [{ type: 'required' }]);
+    assert.deepEqual(form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.endDate`).validationRules, [{ type: 'required' }]);
 });
 
 QUnit.test('Changes shouldn\'t be saved if form is invalid', function(assert) {
@@ -1415,40 +1454,51 @@ QUnit.test('Multiple showing appointment popup for recurrence appointments shoul
 
 QUnit.test('Appointment popup will render even if no appointmentData is provided (T734413)', function(assert) {
     const scheduler = createInstance();
+    const currentDate = new Date(2020, 2, 4);
+    const cellDuration = 60;
+    scheduler.option('currentDate', currentDate);
+    scheduler.option('cellDuration', cellDuration);
+
     scheduler.instance.showAppointmentPopup({}, true);
     scheduler.instance.hideAppointmentPopup(true);
     scheduler.instance.showAppointmentPopup({}, true);
     const { startDate, endDate } = scheduler.appointmentForm.getFormInstance().option('formData');
     const appointmentPopup = scheduler.appointmentPopup;
 
-    assert.equal(startDate, null, 'startDate has null in the dxForm');
-    assert.equal(endDate, null, 'endDate has null in the dxForm');
+    assert.equal(startDate.getTime(), currentDate.getTime(), 'startDate is currentDate in Appointment Form');
+    assert.equal(endDate.getTime(), new Date(currentDate.getTime() + cellDuration * toMs('minute')).getTime(), 'endDate is currentDate + cellDuration in Appointment Form');
     assert.ok(appointmentPopup.isVisible(), 'Popup is rendered');
 
     const $popup = appointmentPopup.getPopup();
     const $startDate = $popup.find('input[name=\'startDate\']')[0];
     const $endDate = $popup.find('input[name=\'endDate\']')[0];
 
-    assert.equal($startDate.value, '', 'startDate is rendered empty');
-    assert.equal($endDate.value, '', 'endDate is rendered empty');
+    assert.equal($startDate.value, '2020-03-04T00:00:00', 'startDate is specified');
+    assert.equal($endDate.value, '2020-03-04T01:00:00', 'endDate is specified');
 });
 
-QUnit.test('Appointment popup will render on showAppointmentPopup with no arguments', function(assert) {
+QUnit.test('Appointment popup will render with currentDate on showAppointmentPopup with no arguments', function(assert) {
     const scheduler = createInstance();
+    const currentDate = new Date(2020, 2, 4);
+    const cellDuration = 60;
+    scheduler.option('currentDate', currentDate);
+    scheduler.option('cellDuration', cellDuration);
+
     scheduler.instance.showAppointmentPopup();
+
     const { startDate, endDate } = scheduler.appointmentForm.getFormInstance().option('formData');
     const appointmentPopup = scheduler.appointmentPopup;
 
-    assert.equal(startDate, null, 'startDate has null in the dxForm');
-    assert.equal(endDate, null, 'endDate has null in the dxForm');
+    assert.equal(startDate.getTime(), currentDate.getTime(), 'startDate is currentDate in Appointment Form');
+    assert.equal(endDate.getTime(), new Date(currentDate.getTime() + cellDuration * toMs('minute')).getTime(), 'endDate is currentDate + cellDuration in Appointment Form');
     assert.ok(appointmentPopup.isVisible(), 'Popup is rendered');
 
     const $popup = appointmentPopup.getPopup();
     const $startDate = $popup.find('input[name=\'startDate\']')[0];
     const $endDate = $popup.find('input[name=\'endDate\']')[0];
 
-    assert.equal($startDate.value, '', 'startDate is rendered empty');
-    assert.equal($endDate.value, '', 'endDate is rendered empty');
+    assert.equal($startDate.value, '2020-03-04T00:00:00', 'startDate is specified');
+    assert.equal($endDate.value, '2020-03-04T01:00:00', 'endDate is specified');
 });
 
 QUnit.test('Appointment form will have right dates on multiple openings (T727713)', function(assert) {
@@ -1579,3 +1629,179 @@ QUnit.test('Popup should not be closed until the valid value is typed', function
     assert.equal(scheduler.appointmentForm.getPendingEditorsCount.call(scheduler), 1, 'the only pending editor is displayed in the form');
 });
 
+module('Timezone Editors', moduleOptions, () => {
+    test('Popup should not contain startDateTimeZone editor by default', function(assert) {
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        assert.notOk(startDateTimezoneEditor, 'StartDateTZ editor isn\'t visible by default');
+    });
+
+    test('Popup should not contain endDateTimeZone editor by default', function(assert) {
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const endDateTimeZoneEditor = form.getEditor('endDateTimeZone');
+
+        assert.notOk(endDateTimeZoneEditor, 'EndDateTZ editor isn\'t visible by default');
+    });
+
+    test('It should be possible to render startDateTimeZone editor on appt form', function(assert) {
+        this.instance.option('onAppointmentFormOpening', function(e) {
+            e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDateTimeZone`, { visible: true });
+        });
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        assert.ok(startDateTimezoneEditor instanceof SelectBox, 'Editor is SelectBox');
+        assert.equal(startDateTimezoneEditor.option('value'), null, 'Value is correct');
+    });
+
+    test('It should be possible to render endDateTimeZone editor on appt form', function(assert) {
+        this.instance.option('onAppointmentFormOpening', function(e) {
+            e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.endDateTimeZone`, { visible: true });
+        });
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+
+        assert.ok(endDateTimezoneEditor instanceof SelectBox, 'Editor is SelectBox');
+        assert.equal(endDateTimezoneEditor.option('value'), null, 'Value is correct');
+    });
+
+    test('timeZone editors should have correct options', function(assert) {
+        this.instance.option('onAppointmentFormOpening', function(e) {
+            e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.startDateTimeZone`, { visible: true });
+            e.form.itemOption(`${APPOINTMENT_FORM_GROUP_NAMES.Main}.endDateTimeZone`, { visible: true });
+        });
+        this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: 'caption', description: 'First task of this day', allDay: true });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        const endDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        [startDateTimezoneEditor, endDateTimezoneEditor].forEach(editor => {
+            assert.equal(editor.option('displayExpr'), 'title', 'displayExpr is correct');
+            assert.equal(editor.option('valueExpr'), 'id', 'valueExpr is correct');
+            assert.strictEqual(editor.option('searchEnabled'), true, 'searchEnabled is correct');
+            assert.equal(editor.option('placeholder'), 'No timezone', 'placeholder is correct');
+
+            assert.ok(editor.option('dataSource') instanceof DataSource, 'editor has dataSource');
+            assert.equal(editor.option('dataSource')._paginate, true, 'paging is enabled');
+            assert.equal(editor.option('dataSource')._pageSize, 10, 'pageSize is correct');
+        });
+    });
+
+    QUnit.test('timeZone editors should have correct value & display value on init', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        const endDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        [startDateTimezoneEditor, endDateTimezoneEditor].forEach(editor => {
+            assert.equal(editor.option('value'), 'Europe/Paris', 'value is ok');
+            assert.equal(editor.option('displayValue'), '(GMT +01:00) Europe/Paris', 'displayValue is ok');
+        });
+    });
+
+    QUnit.test('timeZone editor should have correct display value for timezones with different offsets ', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        startDateTimezoneEditor.option('value', 'Etc/UTC');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +00:00) Etc/UTC', 'displayValue is ok');
+        startDateTimezoneEditor.option('value', 'America/Los_Angeles');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT -08:00) America/Los_Angeles', 'displayValue is ok');
+    });
+
+    QUnit.test('timeZone editor display value for timeZone with DST should depend on date', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+        let form = this.instance.getAppointmentDetailsForm();
+        let startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +01:00) Europe/Paris', 'displayValue is ok');
+        this.instance.getAppointmentPopup().hide();
+
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 5, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 5, 1, 2), text: 'test_text' });
+
+        form = this.instance.getAppointmentDetailsForm();
+        startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +02:00) Europe/Paris', 'displayValue is ok, DST');
+    });
+
+    QUnit.test('dataSource of timezoneEditor should be filtered', function(assert) {
+        this.instance.option('editing.allowTimeZoneEditing', true);
+        this.instance.option('onAppointmentFormOpening', function(e) {
+            const startDateTimezoneEditor = e.form.getEditor('startDateTimeZone');
+            const dataSource = startDateTimezoneEditor.option('dataSource');
+            dataSource.paginate(false);
+            dataSource.filter(['id', 'contains', 'Pacific']);
+            startDateTimezoneEditor.option('opened', true);
+        });
+
+        this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+        const form = this.instance.getAppointmentDetailsForm();
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        assert.equal(startDateTimezoneEditor.option('items').length, 46, 'Items are filtered');
+
+    });
+
+    ['allowTimeZoneEditing', 'allowEditingTimeZones'].forEach(allowTimeZoneEditingOption => {
+        test(`startDateTimeZone and endDateTimeZone editor should be rendered with ${allowTimeZoneEditingOption} option`, function(assert) {
+            this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
+            this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+            const form = this.instance.getAppointmentDetailsForm();
+            const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+            const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+
+            assert.ok(startDateTimezoneEditor.option('visible'), 'startDateTimeZone editor is visible');
+            assert.ok(endDateTimezoneEditor.option('visible'), 'endDateTimeZone editor is visible');
+
+            assert.equal(startDateTimezoneEditor.option('value'), null, 'startDateTimeZone editor value should be null');
+            assert.equal(endDateTimezoneEditor.option('value'), null, 'endDateTimeZone editor value should be null');
+        });
+
+        test(`Change value in startDateTimeZone editor should trigger change value in endDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
+            this.instance.option(`editing.${allowTimeZoneEditingOption}`, true);
+            this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+            const form = this.instance.getAppointmentDetailsForm();
+            const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+            const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+
+            startDateTimezoneEditor.option('value', 'Africa/Cairo');
+
+            assert.equal(startDateTimezoneEditor.option('value'), 'Africa/Cairo', 'startDateTimeZone editor value should be "Africa/Cairo"');
+            assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
+        });
+
+        test(`Change value in endDateTimeZone editor shouldn't trigger change value in startDateTimeZone editor if ${allowTimeZoneEditingOption}: true`, function(assert) {
+            this.instance.option('editing.allowTimeZoneEditing', true);
+            this.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
+
+            const form = this.instance.getAppointmentDetailsForm();
+            const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+            const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+
+            startDateTimezoneEditor.option('value', 'Asia/Pyongyang');
+            endDateTimezoneEditor.option('value', 'Africa/Cairo');
+
+            assert.equal(startDateTimezoneEditor.option('value'), 'Asia/Pyongyang', 'startDateTimeZone editor value should be "Africa/Cairo"');
+            assert.equal(endDateTimezoneEditor.option('value'), 'Africa/Cairo', 'endDateTimeZone editor value should be "Africa/Cairo"');
+        });
+    });
+});

@@ -3,17 +3,19 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
+@use "../overlay";
 
 
 .dx-toast-content {
   color: $toast-color;
-  font-size: $MATERIAL_BASE_FONT_SIZE;
+  font-size: $material-base-font-size;
   font-weight: 400;
-  padding: $MATERIAL_TOAST_CONTENT_PADDING;
+  padding: $material-toast-content-padding;
   border-radius: $toast-border-radius;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, $MATERIAL_TOAST_SHADOW_COLOR);
-  min-height: $MATERIAL_TOAST_HEIGHT;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, $material-toast-shadow-color);
+  min-height: $material-toast-height;
   display: flex;
   align-items: center;
 }

@@ -12,6 +12,8 @@ import { FunctionTemplate } from '../core/templates/function_template';
 import { getImageContainer, getImageSourceType } from '../core/utils/icon';
 import { getPublicElement } from '../core/element';
 
+// STYLE button
+
 const ANONYMOUS_TEMPLATE_NAME = 'content';
 
 class Button extends Widget {
@@ -403,4 +405,4 @@ class Button extends Widget {
 
 registerComponent('dxButton', Button);
 
-module.exports = Button;
+export default Button;

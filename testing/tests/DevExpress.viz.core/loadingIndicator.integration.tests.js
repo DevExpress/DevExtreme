@@ -10,7 +10,8 @@ $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height
 QUnit.module('Loading indicator', {
     beforeEach: function() {
         const loadingIndicator = this.loadingIndicator = new vizMocks.LoadingIndicator();
-        loadingIndicatorModule.LoadingIndicator = sinon.spy(function() { return loadingIndicator; });
+        loadingIndicatorModule.DEBUG_set_LoadingIndicator(sinon.spy(function() { return loadingIndicator; }));
+
         this.$container = $('#test-container');
     },
 

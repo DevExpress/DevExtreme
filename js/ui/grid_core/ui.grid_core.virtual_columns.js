@@ -221,6 +221,16 @@ const ColumnsControllerExtender = (function() {
 
             return visibleColumns;
         },
+        getColumnIndexOffset: function() {
+            let offset = 0;
+            if(this._beginPageIndex > 0) {
+                const fixedColumns = this.getFixedColumns();
+                const transparentColumnIndex = fixedColumns.map(c => c.command).indexOf('transparent');
+                const leftFixedColumnCount = transparentColumnIndex >= 0 ? transparentColumnIndex : 0;
+                offset = this._beginPageIndex * this.getColumnPageSize() - leftFixedColumnCount - 1;
+            }
+            return offset > 0 ? offset : 0;
+        },
         dispose: function() {
             clearTimeout(this._changedTimeout);
             this.callBase.apply(this, arguments);
@@ -230,7 +240,7 @@ const ColumnsControllerExtender = (function() {
     return members;
 })();
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             scrolling: {

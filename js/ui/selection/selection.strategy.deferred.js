@@ -1,10 +1,10 @@
-const typeUtils = require('../../core/utils/type');
-const SelectionStrategy = require('./selection.strategy');
-const errors = require('../widget/ui.errors');
-const dataQuery = require('../../data/query');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import { isString } from '../../core/utils/type';
+import SelectionStrategy from './selection.strategy';
+import errors from '../widget/ui.errors';
+import dataQuery from '../../data/query';
+import { Deferred } from '../../core/utils/deferred';
 
-module.exports = SelectionStrategy.inherit({
+export default SelectionStrategy.inherit({
 
     getSelectedItems: function() {
         return this._loadFilteredData(this.options.selectionFilter);
@@ -14,7 +14,7 @@ module.exports = SelectionStrategy.inherit({
         const d = new Deferred();
         const that = this;
         const key = this.options.key();
-        const select = typeUtils.isString(key) ? [key] : key;
+        const select = isString(key) ? [key] : key;
 
         this._loadFilteredData(this.options.selectionFilter, null, select).done(function(items) {
             const keys = items.map(function(item) {
@@ -30,8 +30,9 @@ module.exports = SelectionStrategy.inherit({
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
         if(isSelectAll) {
             const filter = this.options.filter();
+            const needResetSelectionFilter = !filter || JSON.stringify(filter) === JSON.stringify(this.options.selectionFilter) && isDeselect;
 
-            if(!filter) {
+            if(needResetSelectionFilter) {
                 this._setOption('selectionFilter', isDeselect ? [] : null);
             } else {
                 this._addSelectionFilter(isDeselect, filter, isSelectAll);
@@ -137,7 +138,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _addFilterOperator: function(selectionFilter, filterOperator) {
-        if(selectionFilter.length > 1 && typeUtils.isString(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
+        if(selectionFilter.length > 1 && isString(selectionFilter[1]) && selectionFilter[1] !== filterOperator) {
             selectionFilter = [selectionFilter];
         }
         if(selectionFilter.length) {
@@ -147,7 +148,7 @@ module.exports = SelectionStrategy.inherit({
     },
 
     _denormalizeFilter: function(filter) {
-        if(filter && typeUtils.isString(filter[0])) {
+        if(filter && isString(filter[0])) {
             filter = [filter];
         }
         return filter;

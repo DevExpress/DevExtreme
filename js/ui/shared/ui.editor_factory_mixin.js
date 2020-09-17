@@ -1,21 +1,21 @@
-const $ = require('../../core/renderer');
-const noop = require('../../core/utils/common').noop;
-const eventsEngine = require('../../events/core/events_engine');
-const typeUtils = require('../../core/utils/type');
-const isWrapped = require('../../core/utils/variable_wrapper').isWrapped;
-const compileGetter = require('../../core/utils/data').compileGetter;
-const browser = require('../../core/utils/browser');
-const extend = require('../../core/utils/extend').extend;
-const devices = require('../../core/devices');
-const getPublicElement = require('../../core/element').getPublicElement;
-const normalizeDataSourceOptions = require('../../data/data_source/utils').normalizeDataSourceOptions;
-const normalizeKeyName = require('../../events/utils').normalizeKeyName;
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import eventsEngine from '../../events/core/events_engine';
+import { isDefined, isObject, isFunction } from '../../core/utils/type';
+import { isWrapped } from '../../core/utils/variable_wrapper';
+import { compileGetter } from '../../core/utils/data';
+import browser from '../../core/utils/browser';
+import { extend } from '../../core/utils/extend';
+import devices from '../../core/devices';
+import { getPublicElement } from '../../core/element';
+import { normalizeDataSourceOptions } from '../../data/data_source/utils';
+import { normalizeKeyName } from '../../events/utils';
 
-require('../text_box');
-require('../number_box');
-require('../check_box');
-require('../select_box');
-require('../date_box');
+import '../text_box';
+import '../number_box';
+import '../check_box';
+import '../select_box';
+import '../date_box';
 
 const CHECKBOX_SIZE_CLASS = 'checkbox-size';
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
@@ -58,7 +58,7 @@ const EditorFactoryMixin = (function() {
                 if(isInputOrKeyUpEvent && needDelayedUpdate) {
                     sharedData.valueChangeTimeout = data.valueChangeTimeout = setTimeout(function() {
                         updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
-                    }, typeUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
+                    }, isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
                 } else {
                     updateValue(e);
                 }
@@ -97,7 +97,7 @@ const EditorFactoryMixin = (function() {
         const config = getTextEditorConfig(options);
         const isSearching = options.parentType === 'searchPanel';
         const toString = function(value) {
-            return typeUtils.isDefined(value) ? value.toString() : '';
+            return isDefined(value) ? value.toString() : '';
         };
 
         if(options.editorType && options.editorType !== 'dxTextBox') {
@@ -115,7 +115,7 @@ const EditorFactoryMixin = (function() {
     const prepareNumberBox = function(options) {
         const config = getTextEditorConfig(options);
 
-        config.value = typeUtils.isDefined(options.value) ? options.value : null;
+        config.value = isDefined(options.value) ? options.value : null;
 
         options.editorName = 'dxNumberBox';
 
@@ -178,13 +178,13 @@ const EditorFactoryMixin = (function() {
             displayGetter = compileGetter(lookup.displayExpr);
             dataSource = lookup.dataSource;
 
-            if(typeUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
+            if(isFunction(dataSource) && !isWrapped(dataSource)) {
                 dataSource = dataSource(options.row || {});
 
                 watchLookupDataSource(options);
             }
 
-            if(typeUtils.isObject(dataSource) || Array.isArray(dataSource)) {
+            if(isObject(dataSource) || Array.isArray(dataSource)) {
                 dataSource = normalizeDataSourceOptions(dataSource);
                 if(isFilterRow) {
                     postProcess = dataSource.postProcess;
@@ -231,7 +231,7 @@ const EditorFactoryMixin = (function() {
     function prepareCheckBox(options) {
         options.editorName = 'dxCheckBox';
         options.editorOptions = getResultConfig({
-            value: typeUtils.isDefined(options.value) ? options.value : undefined,
+            value: isDefined(options.value) ? options.value : undefined,
             hoverStateEnabled: !options.readOnly,
             focusStateEnabled: !options.readOnly,
             activeStateEnabled: false,
@@ -275,7 +275,7 @@ const EditorFactoryMixin = (function() {
             options.cancel = false;
             options.editorElement = getPublicElement($container);
 
-            if(!typeUtils.isDefined(options.tabIndex)) {
+            if(!isDefined(options.tabIndex)) {
                 options.tabIndex = this.option('tabIndex');
             }
 
@@ -308,7 +308,7 @@ const EditorFactoryMixin = (function() {
                 options.editorName = options.editorType;
             }
 
-            if(options.parentType === 'dataRow' && !options.isOnForm && !typeUtils.isDefined(options.editorOptions.showValidationMark)) {
+            if(options.parentType === 'dataRow' && !options.isOnForm && !isDefined(options.editorOptions.showValidationMark)) {
                 options.editorOptions.showValidationMark = false;
             }
 
@@ -319,4 +319,4 @@ const EditorFactoryMixin = (function() {
     };
 })();
 
-module.exports = EditorFactoryMixin;
+export default EditorFactoryMixin;

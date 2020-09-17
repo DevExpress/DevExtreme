@@ -5,17 +5,19 @@
 @use "../sizes" as *;
 @use "../overlay/colors" as *;
 @use "../textEditor/colors" as *;
+@use "../../base/popover";
+
 // adduse
 
 
-$MATERIAL_POPOVER_TOOLBAR_PADDING: 15px;
+$material-popover-toolbar-padding: 15px;
 
 .dx-popover-wrapper {
   .dx-popup-title {
     margin: 0;
 
     &.dx-toolbar {
-      padding-left: $MATERIAL_POPOVER_TOOLBAR_PADDING;
+      padding-left: $material-popover-toolbar-padding;
     }
   }
 
@@ -25,7 +27,7 @@ $MATERIAL_POPOVER_TOOLBAR_PADDING: 15px;
 
   .dx-rtl.dx-popup-title {
     &.dx-toolbar {
-      padding-right: $MATERIAL_POPOVER_TOOLBAR_PADDING;
+      padding-right: $material-popover-toolbar-padding;
       padding-left: 0;
     }
   }

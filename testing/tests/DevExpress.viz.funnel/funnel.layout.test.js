@@ -9,6 +9,9 @@ const titleModule = require('viz/core/title');
 const exportModule = require('viz/core/export');
 const labelEnvironment = require('./commonParts/label.js').labelEnvironment;
 const dxFunnel = require('viz/funnel/funnel');
+const Legend = legendModule.Legend;
+const TitleOrig = titleModule.Title;
+const ExportMenuOrig = exportModule.ExportMenu;
 
 dxFunnel.addPlugin(legendModule.plugin);
 dxFunnel.addPlugin(titleModule.plugin);
@@ -20,33 +23,33 @@ function stubLegend() {
     that.legend.stub('coordsIn').returns(true);
     that.legend.stub('getItemByCoord').withArgs(2, 3).returns({ id: 4 });
     that.legend.stub('measure').returns([100, 100]);
-    sinon.stub(legendModule, 'Legend', function() {
-        return that.legend;
-    });
+    legendModule._setLegend(
+        function() {
+            return that.legend;
+        }
+    );
 }
 
 function stubTitle() {
     const that = this;
     that.title = new vizMocks.Title();
     that.title.stub('measure').returns([200, 50]);
-    sinon.stub(titleModule, 'Title', function() {
-        return that.title;
-    });
+    titleModule.DEBUG_set_title(sinon.spy(function() { return that.title; }));
 }
 
 function stubExport() {
     const that = this;
     that.export = new vizMocks.ExportMenu();
     that.export.stub('measure').returns([50, 50]);
-    sinon.stub(exportModule, 'ExportMenu', function() {
+    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
         return that.export;
-    });
+    }));
 }
 
 function restore() {
-    legendModule.Legend.restore();
-    titleModule.Title.restore();
-    exportModule.ExportMenu.restore();
+    legendModule._setLegend(Legend);
+    titleModule.DEBUG_set_title(TitleOrig);
+    exportModule.DEBUG_set_ExportMenu(ExportMenuOrig);
 }
 
 QUnit.module('Layout Funnel element', $.extend({}, labelEnvironment, {

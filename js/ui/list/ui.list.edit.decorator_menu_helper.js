@@ -18,4 +18,4 @@ const EditDecoratorMenuHelperMixin = {
 
 };
 
-module.exports = EditDecoratorMenuHelperMixin;
+export default EditDecoratorMenuHelperMixin;

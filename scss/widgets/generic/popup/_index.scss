@@ -5,24 +5,27 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../overlay/colors" as *;
-@use "../toolbar" as *;
+@use "../toolbar/mixins" as *;
 @use "../toolbar/sizes" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
+@use "../typography/sizes" as *;
+
 // adduse
+@use "../overlay";
 
 
-$GENERIC_POPUP_CLOSEBUTTON_OFFSET: ($GENERIC_POPUP_CLOSEBUTTON_SIZE - $GENERIC_POPUP_CLOSEBUTTON_ICON_SIZE) / 2;
+$generic-popup-closebutton-offset: ($generic-popup-closebutton-size - $generic-popup-closebutton-icon-size) / 2;
 
-$GENERIC_POPUP_TOOLBAR_HEIGHT: $GENERIC_BASE_INLINE_WIDGET_HEIGHT;
-$GENERIC_POPUP_TOOLBAR_LABEL_FONT_SIZE: $GENERIC_M_FONT_SIZE;
+$generic-popup-toolbar-height: $generic-base-inline-widget-height;
+$generic-popup-toolbar-label-font-size: $generic-m-font-size;
 
-$GENERIC_POPUP_CLOSEBUTTON_BORDER_WEIGHT: $GENERIC_BASE_BORDER_WIDTH;
-$GENERIC_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE: $GENERIC_POPUP_CLOSEBUTTON_SIZE - $GENERIC_POPUP_CLOSEBUTTON_BORDER_WEIGHT * 2;
+$generic-popup-closebutton-border-weight: $generic-base-border-width;
+$generic-popup-closebutton-icon-container-size: $generic-popup-closebutton-size - $generic-popup-closebutton-border-weight * 2;
 
-$GENERIC_MOBILE_POPUP_CLOSEBUTTON_SIZE: 37px;
-$GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_SIZE: 15px;
-$GENERIC_MOBILE_POPUP_CLOSEBUTTON_OFFSET: ($GENERIC_MOBILE_POPUP_CLOSEBUTTON_SIZE - $GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_SIZE) / 2;
-$GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE: $GENERIC_MOBILE_POPUP_CLOSEBUTTON_SIZE - $GENERIC_POPUP_CLOSEBUTTON_BORDER_WEIGHT * 2;
+$generic-mobile-popup-closebutton-size: 37px;
+$generic-mobile-popup-closebutton-icon-size: 15px;
+$generic-mobile-popup-closebutton-offset: ($generic-mobile-popup-closebutton-size - $generic-mobile-popup-closebutton-icon-size) / 2;
+$generic-mobile-popup-closebutton-icon-container-size: $generic-mobile-popup-closebutton-size - $generic-popup-closebutton-border-weight * 2;
 
 .dx-popup-wrapper {
   & > .dx-overlay-content {
@@ -39,14 +42,14 @@ $GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE: $GENERIC_MOBILE_POPUP_CLO
 
 .dx-popup-title {
   position: relative;
-  padding: $GENERIC_POPUP_TOOLBARTOP_PADDING;
+  padding: $generic-popup-toolbartop-padding;
   min-height: 28px;
   border-bottom: 1px solid $popup-title-border-color;
   background: $popup-title-bg;
   color: $popup-title-color;
 
   &.dx-toolbar {
-    @include dx-toolbar-sizing($GENERIC_POPUP_TOOLBAR_HEIGHT, $GENERIC_POPUP_TOOLBARTOP_PADDING, $GENERIC_POPUP_TOOLBAR_LABEL_FONT_SIZE, $GENERIC_POPUP_TOOLBAR_ITEM_SPACING );
+    @include dx-toolbar-sizing($generic-popup-toolbar-height, $generic-popup-toolbartop-padding, $generic-popup-toolbar-label-font-size, $generic-popup-toolbar-item-spacing );
 
     box-shadow: none;
   }
@@ -65,7 +68,7 @@ $GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE: $GENERIC_MOBILE_POPUP_CLO
     @include dx-button-styling();
     @include dx-button-styling-clear();
 
-    @mixin dx-closebutton-sizing($size, $offset, $iconSize, $iconContainerSize) {
+    @mixin dx-closebutton-sizing($size, $offset, $icon-size, $icon-container-size) {
       width: $size;
       height: $size;
       margin: 0 (-$offset) 0 $offset;
@@ -75,31 +78,33 @@ $GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE: $GENERIC_MOBILE_POPUP_CLO
       }
 
       .dx-icon {
-        @include dx-icon-sizing($iconSize, $iconContainerSize);
+        @include dx-icon-sizing($icon-size, $icon-container-size);
       }
     }
 
     @include dx-closebutton-sizing(
-            $GENERIC_POPUP_CLOSEBUTTON_SIZE,
-            $GENERIC_POPUP_CLOSEBUTTON_OFFSET,
-            $GENERIC_POPUP_CLOSEBUTTON_ICON_SIZE,
-            $GENERIC_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE);
+      $generic-popup-closebutton-size,
+      $generic-popup-closebutton-offset,
+      $generic-popup-closebutton-icon-size,
+      $generic-popup-closebutton-icon-container-size
+    );
 
     .dx-device-mobile & {
       @include dx-closebutton-sizing(
-                $GENERIC_MOBILE_POPUP_CLOSEBUTTON_SIZE,
-                $GENERIC_MOBILE_POPUP_CLOSEBUTTON_OFFSET,
-                $GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_SIZE,
-                $GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE);
+        $generic-mobile-popup-closebutton-size,
+        $generic-mobile-popup-closebutton-offset,
+        $generic-mobile-popup-closebutton-icon-size,
+        $generic-mobile-popup-closebutton-icon-container-size
+      );
     }
   }
 }
 
 .dx-popup-content {
-  padding: $GENERIC_POPUP_CONTENT_PADDING;
+  padding: $generic-popup-content-padding;
 
   & > .dx-button {
-    margin: $GENERIC_POPUP_BUTTON_MARGIN;
+    margin: $generic-popup-button-margin;
   }
 }
 
@@ -109,19 +114,19 @@ $GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE: $GENERIC_MOBILE_POPUP_CLO
 
   &.dx-toolbar {
     @include dx-toolbar-sizing(
-            $GENERIC_POPUP_TOOLBAR_HEIGHT,
-            $GENERIC_POPUP_TOOLBARBOTTOM_PADDING,
-            $GENERIC_POPUP_TOOLBAR_LABEL_FONT_SIZE,
-            $GENERIC_POPUP_TOOLBAR_ITEM_SPACING
-        );
+      $generic-popup-toolbar-height,
+      $generic-popup-toolbarbottom-padding,
+      $generic-popup-toolbar-label-font-size,
+      $generic-popup-toolbar-item-spacing
+    );
 
     .dx-device-mobile & {
       @include dx-toolbar-sizing(
-                $GENERIC_POPUP_TOOLBAR_HEIGHT,
-                $GENERIC_POPUP_TOOLBARBOTTOM_PADDING,
-                $GENERIC_POPUP_TOOLBAR_LABEL_FONT_SIZE,
-                $GENERIC_POPUP_TOOLBAR_ITEM_SPACING
-            );
+        $generic-popup-toolbar-height,
+        $generic-popup-toolbarbottom-padding,
+        $generic-popup-toolbar-label-font-size,
+        $generic-popup-toolbar-item-spacing
+      );
     }
   }
 
@@ -131,8 +136,8 @@ $GENERIC_MOBILE_POPUP_CLOSEBUTTON_ICON_CONTAINER_SIZE: $GENERIC_MOBILE_POPUP_CLO
 }
 
 .dx-popup-content.dx-dialog-content {
-  min-width: 220px - 2 * $GENERIC_POPUP_CONTENT_PADDING;
-  padding: $GENERIC_POPUP_CONTENT_PADDING;
+  min-width: 220px - 2 * $generic-popup-content-padding;
+  padding: $generic-popup-content-padding;
 }
 
 .dx-dialog-message {

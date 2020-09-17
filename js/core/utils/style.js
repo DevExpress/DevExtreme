@@ -1,7 +1,7 @@
-const camelize = require('./inflector').camelize;
-const callOnce = require('./call_once');
-const typeUtils = require('./type');
-const domAdapter = require('../dom_adapter');
+import { camelize } from './inflector';
+import callOnce from './call_once';
+import { isNumeric } from './type';
+import domAdapter from '../dom_adapter';
 
 const jsPrefixes = ['', 'Webkit', 'Moz', 'O', 'Ms'];
 const cssPrefixes = {
@@ -78,7 +78,7 @@ const pxExceptions = [
 ];
 
 const normalizeStyleProp = function(prop, value) {
-    if(typeUtils.isNumeric(value) && pxExceptions.indexOf(prop) === -1) {
+    if(isNumeric(value) && pxExceptions.indexOf(prop) === -1) {
         value += 'px';
     }
 
@@ -87,7 +87,7 @@ const normalizeStyleProp = function(prop, value) {
 
 const setDimensionProperty = function(elements, propertyName, value) {
     if(elements) {
-        value = typeUtils.isNumeric(value) ? value += 'px' : value;
+        value = isNumeric(value) ? value += 'px' : value;
         for(let i = 0; i < elements.length; ++i) {
             elements[i].style[propertyName] = value;
         }
@@ -102,8 +102,9 @@ const setHeight = function(elements, value) {
     setDimensionProperty(elements, 'height', value);
 };
 
-exports.styleProp = styleProp;
-exports.stylePropPrefix = stylePropPrefix;
-exports.normalizeStyleProp = normalizeStyleProp;
-exports.setWidth = setWidth;
-exports.setHeight = setHeight;
+export {
+    styleProp,
+    stylePropPrefix,
+    normalizeStyleProp,
+    setWidth,
+    setHeight };

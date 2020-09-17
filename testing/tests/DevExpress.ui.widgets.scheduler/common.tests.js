@@ -14,9 +14,9 @@ import dragEvents from 'events/drag';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import SchedulerTimezones from 'ui/scheduler/timezones/ui.scheduler.timezones';
+import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
 import 'ui/scheduler/ui.scheduler';
-import dxScheduler from 'ui/scheduler/ui.scheduler';
+import dxScheduler, { getTimeZones } from 'ui/scheduler/ui.scheduler';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -249,12 +249,6 @@ QUnit.module('Initialization', {
 });
 
 (function() {
-
-    function getDeltaTz(schedulerTz) {
-        const defaultTz = new Date().getTimezoneOffset() / 60;
-        return schedulerTz + defaultTz;
-    }
-
     QUnit.module('Methods', {
         beforeEach: function() {
             this.createInstance = function(options) {
@@ -320,10 +314,8 @@ QUnit.module('Initialization', {
         assert.strictEqual(this.instance.option('dataSource').items()[2].text, '', 'new item was added with correct text');
     });
 
-    QUnit.test('Add new item when timezone doesn\'t equal to the default value', function(assert) {
+    QUnit.test('addAppointment shouldn\'t have an effect on data item, when timezone is set', function(assert) {
         const data = [];
-        const deltaTz = getDeltaTz(5);
-        const daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
 
         this.createInstance({
             currentDate: new Date(2015, 1, 9),
@@ -333,115 +325,8 @@ QUnit.module('Initialization', {
 
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'first' });
 
-        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz + daylightOffset), 'Start date is OK');
-        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz + daylightOffset), 'End date is OK');
-
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: 'second' });
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: 'third' });
-
-        const $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
-        assert.equal($appointments.length, 3, 'All appts are rendered');
-    });
-
-    QUnit.test('Add new item when timezone doesn\'t equal to the default value, startDay and endDay hours are set', function(assert) {
-        const data = [];
-        const deltaTz = getDeltaTz(10);
-        const daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
-
-        this.createInstance({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data,
-            timezone: 5,
-            startDayHour: 3,
-            endDayHour: 20,
-            timeZone: 10
-        });
-
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'first' });
-
-        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz + daylightOffset), 'Start date is OK');
-        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz + daylightOffset), 'End date is OK');
-
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 3, 30), endDate: new Date(2015, 1, 9, 4), text: 'second' });
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 19), endDate: new Date(2015, 1, 9, 19, 30), text: 'third' });
-
-        const $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
-        assert.equal($appointments.length, 3, 'All appts are rendered');
-    });
-
-    QUnit.test('Add new item when timezone doesn\'t equal to the default value, negative value', function(assert) {
-        const data = [];
-        const deltaTz = getDeltaTz(-7);
-        const daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
-
-        this.createInstance({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data,
-            timeZone: -7
-        });
-
-        this.instance.addAppointment({
-            startDate: new Date(2015, 1, 9, 16),
-            endDate: new Date(2015, 1, 9, 17),
-            text: 'first'
-        });
-
-        assert.deepEqual(data[0].startDate, new Date(new Date(2015, 1, 9).setHours(16 - deltaTz + daylightOffset)), 'Start date is OK');
-        assert.deepEqual(data[0].endDate, new Date(new Date(2015, 1, 9).setHours(17 - deltaTz + daylightOffset)), 'End date is OK');
-
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: 'second' });
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: 'third' });
-
-        const $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
-        assert.equal($appointments.length, 3, 'All appts are rendered');
-    });
-
-    QUnit.test('Add new item when timezone doesn\'t equal to the default value, negative value, startDay and endDay hours are set', function(assert) {
-        const data = [];
-        const deltaTz = getDeltaTz(-7);
-        const daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
-
-        this.createInstance({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data,
-            timezone: 5,
-            startDayHour: 3,
-            endDayHour: 20,
-            timeZone: -7
-        });
-
-        this.instance.addAppointment({
-            startDate: new Date(2015, 1, 9, 16),
-            endDate: new Date(2015, 1, 9, 17),
-            text: 'first'
-        });
-
-        assert.deepEqual(data[0].startDate, new Date(new Date(2015, 1, 9).setHours(16 - deltaTz + daylightOffset)), 'Start date is OK');
-        assert.deepEqual(data[0].endDate, new Date(new Date(2015, 1, 9).setHours(17 - deltaTz + daylightOffset)), 'End date is OK');
-
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 3, 30), endDate: new Date(2015, 1, 9, 4), text: 'second' });
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 19), endDate: new Date(2015, 1, 9, 19, 30), text: 'third' });
-
-        const $appointments = $(this.instance.$element().find('.dx-scheduler-appointment'));
-        assert.equal($appointments.length, 3, 'All appts are rendered');
-    });
-
-    QUnit.test('Add new item when timezone doesn\'t equal to the default value and set as string', function(assert) {
-        this.clock.restore();
-        const data = [];
-        const deltaTz = getDeltaTz(4);
-        const daylightOffset = (new Date().getTimezoneOffset() - new Date(2015, 1, 9).getTimezoneOffset()) / 60;
-
-        this.createInstance({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data,
-            timeZone: 'Asia/Muscat'
-        });
-
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17) });
-
-        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz + daylightOffset), 'Start date is OK');
-        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz + daylightOffset), 'End date is OK');
+        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16), 'Start date is OK');
+        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17), 'End date is OK');
     });
 
     QUnit.test('Update item', function(assert) {
@@ -985,8 +870,8 @@ QUnit.module('Initialization', {
             { tz: 'Asia/Brunei', offset: 8, daylightOffset: 8, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) },
             { tz: 'Asia/Damascus', offset: 2, daylightOffset: 3, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) }
         ].forEach(function(item) {
-            const offset = SchedulerTimezones.getTimezoneOffsetById(item.tz, item.date);
-            const daylightOffset = SchedulerTimezones.getTimezoneOffsetById(item.tz, item.daylightDate);
+            const offset = timeZoneDataUtils.getTimeZoneOffsetById(item.tz, item.date);
+            const daylightOffset = timeZoneDataUtils.getTimeZoneOffsetById(item.tz, item.daylightDate);
 
             assert.equal(offset, item.offset, item.tz + ': Common offset is OK');
             assert.equal(daylightOffset, item.daylightOffset, item.tz + ': DST offset is OK');
@@ -1132,6 +1017,26 @@ QUnit.module('Initialization', {
 
         assert.ok(this.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
         assert.ok(!this.instance._appointmentTooltip.show.called, 'show tooltip is not called');
+    });
+
+    QUnit.test('_getUpdatedData for the empty data item (T906240)', function(assert) {
+        const startCellDate = new Date(2020, 1, 2, 3);
+        const endCellDate = new Date(2020, 1, 2, 4);
+        const scheduler = createWrapper({});
+
+        scheduler.instance.getTargetCellData = () => {
+            return {
+                startDate: startCellDate,
+                endDate: endCellDate
+            };
+        };
+
+        const updatedData = scheduler.instance._getUpdatedData({ text: 'test' });
+        assert.deepEqual(updatedData, {
+            allDay: undefined,
+            endDate: endCellDate,
+            startDate: startCellDate
+        }, 'Updated data is correct');
     });
 })('Methods');
 
@@ -2338,6 +2243,46 @@ QUnit.module('Initialization', {
             assert.equal(errors.log.callCount, 1, 'warning has been called once');
             assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');
         });
+    });
+
+    QUnit.test('Data source should not be loaded on option change if it is already being loaded (T916558)', function(assert) {
+        const dataSource = new DataSource({
+            store: []
+        });
+        this.createInstance({
+            currentDate: new Date(2015, 4, 24),
+            views: ['day', 'workWeek', { type: 'week' }],
+            currentView: 'day',
+            dataSource,
+        });
+
+        const initMarkupSpy = sinon.spy(this.instance, '_initMarkup');
+        const reloadDataSourceSpy = sinon.spy(this.instance, '_reloadDataSource');
+
+        const nextDataSource = new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolve([]);
+                    }, 300);
+
+                    return d.promise();
+                }
+            })
+        });
+        this.instance.option({
+            'dataSource': nextDataSource,
+        });
+        this.instance.option({
+            'views[2].intervalCount': 2,
+            'views[2].startDate': new Date(),
+        });
+
+        this.clock.tick(400);
+
+        assert.ok(initMarkupSpy.calledTwice, 'Init markup was called on the second and third option change');
+        assert.ok(reloadDataSourceSpy.calledOnce, '_reloadDataSource was not called on init mark up');
     });
 })('Options');
 
@@ -4716,5 +4661,47 @@ QUnit.module('Options for Material theme in components', {
         appointments = this.instance.getAppointmentsInstance();
 
         assert.equal(appointments.option('_collectorOffset'), 0, 'SchedulerAppointments has correct _collectorOffset');
+    });
+});
+
+QUnit.module('Getting timezones', {}, () => {
+    const findTimeZone = (timeZones, id) => {
+        return timeZones.filter((timeZone) => timeZone.id === id)[0];
+
+    };
+    QUnit.test('getTimeZones method should return accepted timezones with correct format', function(assert) {
+        const date = new Date(2020, 5, 1);
+        const timeZones = getTimeZones(date);
+        const firstTimeZone = timeZones[0];
+
+        assert.ok(timeZones instanceof Array, 'method returns an array');
+        assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'id'), 'returned timeZone has an id');
+        assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'offset'), 'returned timeZone has an offset');
+        assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'title'), 'returned timeZone has a title');
+    });
+
+    QUnit.test('getTimeZones method should work properly without date passing', function(assert) {
+        const timeZones = getTimeZones();
+        const timeZone = findTimeZone(timeZones, 'Europe/Moscow');
+
+        assert.deepEqual(timeZone, {
+            id: 'Europe/Moscow',
+            offset: 3,
+            title: '(GMT +03:00) Europe/Moscow'
+        }, 'some of returned timeZone is ok');
+    });
+
+    QUnit.test('getTimeZones method should return correct offsets depending on the date', function(assert) {
+        const winter = new Date(2020, 1, 8, 1);
+        const summer = new Date(2020, 6, 8, 2);
+        let timeZones = getTimeZones(winter);
+        let timeZone = findTimeZone(timeZones, 'America/Los_Angeles');
+
+        assert.equal(timeZone.offset, -8, 'returned offset for timeZone with DST is OK');
+
+        timeZones = getTimeZones(summer);
+        timeZone = findTimeZone(timeZones, 'America/Los_Angeles');
+
+        assert.equal(timeZone.offset, -7, 'returned offset for timeZone with DST is OK');
     });
 });

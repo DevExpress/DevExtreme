@@ -23,6 +23,7 @@ import ArrayStore from 'data/array_store';
 import TreeList from 'ui/tree_list/ui.tree_list';
 import pointerMock from '../../helpers/pointerMock.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
+import { createEvent } from 'events/utils';
 
 fx.off = true;
 
@@ -229,6 +230,9 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             height: 50,
             paging: { pageSize: 2, pageIndex: 1 },
             columns: ['name', 'age'],
+            scrolling: {
+                useNative: false
+            },
             dataSource: [
                 { id: 1, parentId: 0, name: 'Name 1', age: 19 },
                 { id: 2, parentId: 0, name: 'Name 2', age: 19 },
@@ -287,6 +291,73 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
 
         // assert
         assert.notOk(treeList.isRowExpanded(2), 'second row is collapsed');
+    });
+
+    // T917248
+    QUnit.testInActiveWindow('Row should be selected via space key press on check box', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+            return;
+        }
+        const treeList = createTreeList({
+            columns: ['name', 'age'],
+            dataSource: [
+                { id: 1, parentId: 0, name: 'Name 1', age: 19 },
+                { id: 2, parentId: 1, name: 'Name 2', age: 19 }
+            ],
+            selection: {
+                mode: 'multiple',
+                recursive: true
+            },
+            expandedRowKeys: [1]
+        });
+
+        this.clock.tick();
+
+        const $target = $(treeList.getCellElement(1, 0)).find('.dx-select-checkbox');
+
+        treeList.focus($target.get(0));
+        this.clock.tick();
+
+        // act
+        $target.trigger(createEvent('keydown', { target: $target.get(0), key: ' ' }));
+        this.clock.tick();
+
+        // assert
+        const $checkBoxes = treeList.$element().find('.dx-select-checkbox');
+        for(let i = 0; i < $checkBoxes.length; i++) {
+            assert.equal($checkBoxes.eq(i).attr('aria-checked'), 'true', 'checkbox is checked');
+        }
+
+        assert.deepEqual(treeList.getSelectedRowKeys(), [2], 'row was selected');
+    });
+
+    // T917248
+    QUnit.testInActiveWindow('Row should not be selected after click on expand icon', function(assert) {
+        const treeList = createTreeList({
+            columns: ['name', 'age'],
+            dataSource: [
+                { id: 1, parentId: 0, name: 'Name 1', age: 19 },
+                { id: 2, parentId: 1, name: 'Name 2', age: 19 }
+            ],
+            selection: {
+                mode: 'multiple'
+            }
+        });
+
+        this.clock.tick();
+
+        $('.dx-treelist-collapsed').trigger('dxclick');
+
+        this.clock.tick();
+
+        // assert
+        const $checkBoxes = treeList.$element().find('.dx-select-checkbox');
+        for(let i = 0; i < $checkBoxes.length; i++) {
+            assert.equal($checkBoxes.eq(i).attr('aria-checked'), 'false', 'checkbox is checked');
+        }
+
+        assert.deepEqual(treeList.getSelectedRowKeys(), [], 'row was not selected');
     });
 
     QUnit.test('Filter Row', function(assert) {
@@ -1527,7 +1598,6 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
     // T757537
     QUnit.test('TreeList should not hang when scrolling', function(assert) {
     // arrange
-        const contentReadySpy = sinon.spy();
         const treeList = createTreeList({
             dataSource: [
                 { id: 1, parentId: 0 },
@@ -1553,15 +1623,13 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
             columnAutoWidth: true,
             scrolling: {
                 useNative: false
-            },
-            onContentReady: contentReadySpy
+            }
         });
         const done = assert.async();
 
         this.clock.tick(100);
         this.clock.restore();
         const scrollable = treeList.getScrollable();
-        contentReadySpy.reset();
 
         // act
         scrollable.scrollTo({ y: 200 });
@@ -1570,7 +1638,6 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         setTimeout(function() {
         // assert
             assert.strictEqual(treeList.pageIndex(), 2, 'page index');
-            assert.strictEqual(contentReadySpy.callCount, 3, 'onContentReady');
             done();
         }, 1000);
     });

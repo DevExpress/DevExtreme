@@ -1,5 +1,6 @@
 import { setPublicElementWrapper } from '../../core/element';
-const useJQuery = require('./use_jquery')();
+import useJQueryFn from './use_jquery';
+const useJQuery = useJQueryFn();
 
 const getPublicElement = function($element) {
     return $element;

@@ -4,16 +4,17 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../menu/colors" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
 @use "../../base/icons" as *;
 @use "../../base/mixins" as *;
+
 // adduse
 
-$GENERIC_MENU_ITEM_PADDING_INCREASED: $GENERIC_MENU_ITEM_PADDING_BASE + 2px;
-$GENERIC_MENU_ITEM_PADDING_REDUCED: $GENERIC_MENU_ITEM_PADDING_BASE - 2px;
-$GENERIC_MENU_ARROW_IMAGE_SIZE: 7px;
+$generic-menu-item-padding-increased: $generic-menu-item-padding-base + 2px;
+$generic-menu-item-padding-reduced: $generic-menu-item-padding-base - 2px;
+$generic-menu-arrow-image-size: 7px;
 
-$GENERIC_MENU_POPUP_BORDER: 1px solid $menu-popup-border-color;
+$generic-menu-popup-border: 1px solid $menu-popup-border-color;
 
 
 .dx-menu-item {
@@ -31,7 +32,7 @@ $GENERIC_MENU_POPUP_BORDER: 1px solid $menu-popup-border-color;
 
   &.dx-menu-item-has-text {
     .dx-icon {
-      margin-right: -$GENERIC_BASE_ICON_SIZE;
+      margin-right: -$generic-base-icon-size;
     }
   }
 }
@@ -65,26 +66,26 @@ $GENERIC_MENU_POPUP_BORDER: 1px solid $menu-popup-border-color;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+    @include dx-icon-sizing($generic-base-icon-size);
   }
 
   .dx-menu-item-content {
-    padding: $GENERIC_MENU_ITEM_PADDING_REDUCED $GENERIC_MENU_ITEM_PADDING_BASE $GENERIC_MENU_ITEM_PADDING_INCREASED;
+    padding: $generic-menu-item-padding-reduced $generic-menu-item-padding-base $generic-menu-item-padding-increased;
 
     .dx-menu-item-text {
-      padding: 0 $GENERIC_MENU_PADDING_BIG $GENERIC_MENU_ITEM_PADDING_BASE $GENERIC_MENU_ITEM_PADDING_BASE + $GENERIC_BASE_ICON_SIZE;
+      padding: 0 $generic-menu-padding-big $generic-menu-item-padding-base $generic-menu-item-padding-base + $generic-base-icon-size;
     }
 
     .dx-menu-item-popout {
-      min-width: $GENERIC_MENU_ARROW_IMAGE_SIZE;
-      min-height: $GENERIC_MENU_ARROW_IMAGE_SIZE;
+      min-width: $generic-menu-arrow-image-size;
+      min-height: $generic-menu-arrow-image-size;
     }
   }
 
   &.dx-rtl {
     .dx-menu-item-content {
       .dx-menu-item-text {
-        padding: 0 $GENERIC_MENU_ITEM_PADDING_BASE + $GENERIC_BASE_ICON_SIZE $GENERIC_MENU_ITEM_PADDING_BASE $GENERIC_MENU_PADDING_BIG;
+        padding: 0 $generic-menu-item-padding-base + $generic-base-icon-size $generic-menu-item-padding-base $generic-menu-padding-big;
       }
 
       .dx-icon {
@@ -104,7 +105,7 @@ $GENERIC_MENU_POPUP_BORDER: 1px solid $menu-popup-border-color;
 
     .dx-menu-item-has-text {
       .dx-icon {
-        margin-left: -$GENERIC_BASE_ICON_SIZE;
+        margin-left: -$generic-base-icon-size;
       }
     }
   }

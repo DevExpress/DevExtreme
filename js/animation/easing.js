@@ -1,4 +1,4 @@
-const isFunction = require('../core/utils/type').isFunction;
+import { isFunction } from '../core/utils/type';
 
 const CSS_TRANSITION_EASING_REGEX = /cubic-bezier\((\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\s*,\s*(\d+(?:\.\d+)?)\)/;
 
@@ -56,7 +56,7 @@ const polynomBezier = function(x1, y1, x2, y2) {
 };
 
 let easing = {};
-const convertTransitionTimingFuncToEasing = function(cssTransitionEasing) {
+export const convertTransitionTimingFuncToEasing = function(cssTransitionEasing) {
     cssTransitionEasing = TransitionTimingFuncMap[cssTransitionEasing] || cssTransitionEasing;
 
     let coeffs = cssTransitionEasing.match(CSS_TRANSITION_EASING_REGEX);
@@ -83,13 +83,10 @@ const convertTransitionTimingFuncToEasing = function(cssTransitionEasing) {
     return easingName;
 };
 
-exports.setEasing = function(value) {
+export function setEasing(value) {
     easing = value;
-};
+}
 
-exports.getEasing = function(name) {
+export function getEasing(name) {
     return easing[name];
-};
-
-exports.convertTransitionTimingFuncToEasing = convertTransitionTimingFuncToEasing;
-
+}

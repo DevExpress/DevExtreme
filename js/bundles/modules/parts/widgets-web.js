@@ -1,3 +1,4 @@
+/* eslint-disable import/no-commonjs */
 const data = require('./data');
 const ui = require('./widgets-base');
 

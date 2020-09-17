@@ -1,25 +1,26 @@
-const extend = require('../../../core/utils/extend').extend;
+import { extend } from '../../../core/utils/extend';
 const _extend = extend;
 
-const symbolPoint = require('./symbol_point');
-const barPoint = require('./bar_point');
-const piePoint = require('./pie_point');
-const isDefined = require('../../../core/utils/type').isDefined;
-const vizUtils = require('../../core/utils');
+import symbolPoint from './symbol_point';
+import barPoint from './bar_point';
+import piePoint from './pie_point';
+import { isDefined } from '../../../core/utils/type';
+import vizUtils from '../../core/utils';
 const normalizeAngle = vizUtils.normalizeAngle;
 
 const _math = Math;
 const _max = _math.max;
 
-const RADIAL_LABEL_INDENT = require('../../components/consts').radialLabelIndent;
+import { radialLabelIndent as RADIAL_LABEL_INDENT } from '../../components/consts';
 
 const ERROR_BARS_ANGLE_OFFSET = 90;
 const CANVAS_POSITION_END = 'canvas_position_end';
 const CANVAS_POSITION_DEFAULT = 'canvas_position_default';
 
-exports.polarSymbolPoint = _extend({}, symbolPoint, {
+export const polarSymbolPoint = _extend({}, symbolPoint, {
 
     _getLabelCoords: piePoint._getLabelCoords,
+    _getElementCoords: piePoint._getElementCoords,
 
     _moveLabelOnCanvas: function(coord, visibleArea, labelBBox) {
         let x = coord.x;
@@ -146,15 +147,16 @@ exports.polarSymbolPoint = _extend({}, symbolPoint, {
     }
 });
 
-exports.polarBarPoint = _extend({}, barPoint, {
+export const polarBarPoint = _extend({}, barPoint, {
 
-    _translateErrorBars: exports.polarSymbolPoint._translateErrorBars,
+    _translateErrorBars: polarSymbolPoint._translateErrorBars,
 
-    _getErrorBarSettings: exports.polarSymbolPoint._getErrorBarSettings,
+    _getErrorBarSettings: polarSymbolPoint._getErrorBarSettings,
 
-    _moveLabelOnCanvas: exports.polarSymbolPoint._moveLabelOnCanvas,
+    _moveLabelOnCanvas: polarSymbolPoint._moveLabelOnCanvas,
 
     _getLabelCoords: piePoint._getLabelCoords,
+    _getElementCoords: piePoint._getElementCoords,
 
     _getLabelConnector: piePoint._getLabelConnector,
 
@@ -162,7 +164,7 @@ exports.polarBarPoint = _extend({}, barPoint, {
 
     _getLabelPosition: piePoint._getLabelPosition,
 
-    _getCoords: exports.polarSymbolPoint._getCoords,
+    _getCoords: polarSymbolPoint._getCoords,
 
     _translate() {
         const that = this;
@@ -172,7 +174,7 @@ exports.polarBarPoint = _extend({}, barPoint, {
 
         that.radiusInner = translator.translate(that.minValue);
 
-        exports.polarSymbolPoint._translate.call(that);
+        polarSymbolPoint._translate.call(that);
 
         if(that.radiusInner === null) {
             that.radiusInner = that.radius = maxRadius;

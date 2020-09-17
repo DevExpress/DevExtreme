@@ -4,28 +4,29 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+
 // adduse
 
 
-$MATERIAL_SWITCH_SHADOW_BLUR_RADIUS: 10px;
-$MATERIAL_SWITCH_TRANSITION: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-$MATERIAL_ON_VALUE_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color.change($switch-handle-on-bg, $alpha: 0.1);
-$MATERIAL_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color.change($base-text-color, $alpha: 0.1);
-$MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color.change($switch-invalid-handle-bg, $alpha: 0.1);
+$material-switch-shadow-blur-radius: 10px;
+$material-switch-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+$material-on-value-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color.change($switch-handle-on-bg, $alpha: 0.1);
+$material-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color.change($base-text-color, $alpha: 0.1);
+$material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color.change($switch-invalid-handle-bg, $alpha: 0.1);
 
 .dx-switch-wrapper {
   position: relative;
-  padding: $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS;
+  padding: $material-switch-shadow-blur-radius;
   box-sizing: content-box;
-  left: -$MATERIAL_SWITCH_SHADOW_BLUR_RADIUS;
-  top: -$MATERIAL_SWITCH_SHADOW_BLUR_RADIUS;
+  left: -$material-switch-shadow-blur-radius;
+  top: -$material-switch-shadow-blur-radius;
   overflow: hidden;
   vertical-align: middle;
 }
 
 .dx-switch {
-  width: $MATERIAL_SWITCH_WIDTH;
-  height: $MATERIAL_SWITCH_HEIGHT;
+  width: $material-switch-width;
+  height: $material-switch-height;
 
   &.dx-state-readonly,
   &.dx-state-disabled {
@@ -41,7 +42,7 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
   &.dx-state-active,
   &.dx-state-focused {
     .dx-switch-handle:before {
-      box-shadow: $MATERIAL_SWITCH_SHADOW;
+      box-shadow: $material-switch-shadow;
       border-radius: 50%;
     }
   }
@@ -51,14 +52,14 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
 .dx-switch {
   &.dx-state-readonly.dx-state-focused {
     .dx-switch-handle:before {
-      box-shadow: $MATERIAL_SWITCH_SHADOW;
+      box-shadow: $material-switch-shadow;
       border-radius: 50%;
     }
   }
 }
 
 .dx-switch-container {
-  height: $MATERIAL_SWITCH_HEIGHT;
+  height: $material-switch-height;
   overflow: visible;
   position: relative;
 
@@ -69,7 +70,7 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
     height: 14px;
     border-radius: 500px;
     background-color: $switch-bg;
-    margin: $MATERIAL_SWITCH_CONTAINER_MARGIN 0;
+    margin: $material-switch-container-margin 0;
   }
 }
 
@@ -84,7 +85,7 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
   float: left;
   padding: 4px 0;
   width: 50%;
-  height: $MATERIAL_SWITCH_HEIGHT;
+  height: $material-switch-height;
   color: transparent;
   text-align: center;
   line-height: 100%;
@@ -101,14 +102,14 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
 }
 
 .dx-switch-handle {
-  flex-basis: $MATERIAL_SWITCH_HEIGHT;
+  flex-basis: $material-switch-height;
   flex-shrink: 0;
   position: relative;
   float: left;
-  width: $MATERIAL_SWITCH_HEIGHT;
-  height: $MATERIAL_SWITCH_HEIGHT;
+  width: $material-switch-height;
+  height: $material-switch-height;
   background-color: $switch-handle-off-bg;
-  box-shadow: $MATERIAL_SWITCH_HANDLE_SHADOW;
+  box-shadow: $material-switch-handle-shadow;
   border-radius: $switch-handle-border-radius;
 
   &:before {
@@ -118,7 +119,7 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
     height: 100%;
     background-color: $switch-handle-off-bg;
     border-radius: $switch-handle-border-radius;
-    transition: $MATERIAL_SWITCH_TRANSITION;
+    transition: $material-switch-transition;
   }
 }
 
@@ -134,7 +135,7 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
   &.dx-state-active,
   &.dx-state-focused {
     .dx-switch-handle:before {
-      box-shadow: $MATERIAL_ON_VALUE_SWITCH_SHADOW;
+      box-shadow: $material-on-value-switch-shadow;
       border-radius: 50%;
     }
   }
@@ -145,8 +146,8 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
   .dx-switch-on,
   .dx-switch-off {
     float: right;
-    padding-left: $MATERIAL_SWITCH_HANDLE_WIDTH + $MATERIAL_SWITCH_ON_OFF_ADDING_PADDING;
-    padding-right: $MATERIAL_SWITCH_HANDLE_OFFSET;
+    padding-left: $material-switch-handle-width + $material-switch-on-off-adding-padding;
+    padding-right: $material-switch-handle-offset;
   }
 
   .dx-switch-off {
@@ -156,15 +157,15 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
   .dx-switch-handle {
     float: right;
     margin-left: 0;
-    margin-right: -$MATERIAL_SWITCH_HEIGHT;
+    margin-right: -$material-switch-height;
   }
 
   .dx-switch-wrapper {
-    left: $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS;
+    left: $material-switch-shadow-blur-radius;
   }
 
   .dx-switch-container {
-    margin: 0 0 0 (-$MATERIAL_SWITCH_CONTAINER_ADJUSTMENT);
+    margin: 0 0 0 (-$material-switch-container-adjustment);
   }
 }
 
@@ -183,7 +184,7 @@ $MATERIAL_INVALID_SWITCH_SHADOW: 0 0 0 $MATERIAL_SWITCH_SHADOW_BLUR_RADIUS color
     &.dx-state-active,
     &.dx-state-focused {
       .dx-switch-container .dx-switch-handle:before {
-        box-shadow: $MATERIAL_INVALID_SWITCH_SHADOW;
+        box-shadow: $material-invalid-switch-shadow;
       }
     }
   }

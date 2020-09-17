@@ -4,23 +4,26 @@ import { join, dirname } from 'path';
 const widgetListComment = '// public widgets';
 
 export default class WidgetsHandler {
-  widgets: Array<string>;
+  widgets: string[];
 
   indexPath: string;
 
   baseIndexContent: string;
 
-  constructor(widgets: Array<string>, bundlePath: string) {
-    const theme = /material/.test(bundlePath) ? 'material' : 'generic';
-    this.widgets = widgets || [];
+  dependencies: FlatStylesDependencies;
+
+  constructor(widgets: string[], bundlePath: string, dependencies: FlatStylesDependencies) {
+    const theme = bundlePath.includes('material') ? 'material' : 'generic';
+    this.dependencies = dependencies || {};
+    this.widgets = widgets ? widgets.map((w) => w.toLowerCase()) : [];
     this.indexPath = join(dirname(bundlePath), '..', 'widgets', theme, '_index.scss');
   }
 
-  getIndexWidgetItems(indexContent: string): Array<WidgetItem> {
+  getIndexWidgetItems(indexContent: string): WidgetItem[] {
     const widgetListIndex = indexContent.indexOf(widgetListComment);
     const widgetRegex = /@use "\.\/(\w+)";/g;
     const widgetsListString = indexContent.substr(widgetListIndex + widgetListComment.length);
-    const result: Array<WidgetItem> = [];
+    const result: WidgetItem[] = [];
 
     this.baseIndexContent = indexContent.substr(0, widgetListIndex);
 
@@ -33,13 +36,25 @@ export default class WidgetsHandler {
     return result;
   }
 
-  getWidgetLists(allWidgets: Array<WidgetItem>): WidgetHandlerResult {
-    const userWidgets = this.widgets;
+  getWidgetsWithDependencies(): string[] {
+    return this.widgets.reduce((fullWidgetsList, widget) => {
+      const notUnique = [
+        ...fullWidgetsList,
+        widget,
+        ...this.dependencies[widget] || [],
+      ];
+
+      return [...new Set(notUnique)];
+    }, []);
+  }
+
+  getWidgetLists(allWidgets: WidgetItem[]): WidgetHandlerResult {
+    const userWidgets = this.getWidgetsWithDependencies();
     const needWidgets = allWidgets.filter((w) => userWidgets.length === 0
-      || userWidgets.indexOf(w.widgetName) >= 0);
+      || userWidgets.includes(w.widgetName));
     const widgets = needWidgets.map((w) => w.widgetName);
     const widgetImports = needWidgets.map((w) => w.widgetImportString);
-    const unusedWidgets = userWidgets.filter((w) => widgets.indexOf(w) < 0);
+    const unusedWidgets = userWidgets.filter((w) => !widgets.includes(w));
     const indexContent = this.baseIndexContent + widgetImports.join('\n');
 
     return {

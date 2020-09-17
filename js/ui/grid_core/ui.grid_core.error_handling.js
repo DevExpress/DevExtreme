@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import { each } from '../../core/utils/iterator';
 import modules from './ui.grid_core.modules';
 
@@ -27,7 +27,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
             $errorRow = $('<tr>').addClass(ERROR_ROW_CLASS);
             $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
-            eventsEngine.on($closeButton, clickEvent.name, that.createAction(function(args) {
+            eventsEngine.on($closeButton, clickEventName, that.createAction(function(args) {
                 const e = args.event;
                 let $errorRow;
                 const errorRowIndex = $(e.currentTarget).closest('.' + ERROR_ROW_CLASS).index();
@@ -134,7 +134,7 @@ const ErrorHandlingController = modules.ViewController.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             errorRowEnabled: true

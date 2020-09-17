@@ -1,1 +1,2 @@
-module.exports = require('./gauges/bar_gauge').dxBarGauge;
+import { dxBarGauge } from './gauges/bar_gauge';
+export default dxBarGauge;

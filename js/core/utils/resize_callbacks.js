@@ -1,8 +1,8 @@
-const windowUtils = require('./window');
-const domAdapter = require('../dom_adapter');
-const Callbacks = require('./callbacks');
-const readyCallbacks = require('./ready_callbacks');
-const callOnce = require('./call_once');
+import { hasWindow, getWindow } from './window';
+import domAdapter from '../dom_adapter';
+import Callbacks from './callbacks';
+import readyCallbacks from './ready_callbacks';
+import callOnce from './call_once';
 
 const resizeCallbacks = (function() {
     let prevSize;
@@ -10,12 +10,12 @@ const resizeCallbacks = (function() {
     const originalCallbacksAdd = callbacks.add;
     const originalCallbacksRemove = callbacks.remove;
 
-    if(!windowUtils.hasWindow()) {
+    if(!hasWindow()) {
         return callbacks;
     }
 
     const formatSize = function() {
-        const window = windowUtils.getWindow();
+        const window = getWindow();
         return {
             width: window.innerWidth,
             height: window.innerHeight,
@@ -54,7 +54,7 @@ const resizeCallbacks = (function() {
 
         readyCallbacks.add(function() {
             if(!removeListener && callbacks.has()) {
-                removeListener = domAdapter.listen(windowUtils.getWindow(), 'resize', handleResize);
+                removeListener = domAdapter.listen(getWindow(), 'resize', handleResize);
             }
         });
 
@@ -74,4 +74,4 @@ const resizeCallbacks = (function() {
     return callbacks;
 })();
 
-module.exports = resizeCallbacks;
+export default resizeCallbacks;

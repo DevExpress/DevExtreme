@@ -1,42 +1,43 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_PAGER_PADDINGS: null !default;
-$GENERIC_PAGER_SEPARATOR_PADDINGS: null !default;
-$GENERIC_PAGER_PAGE_PADDING_LEFT_RIGHT: null !default;
-$GENERIC_PAGER_PAGE_PADDING_TOP: null !default;
-$GENERIC_PAGER_PAGE_PADDING_BOTTOM: null !default;
-$GENERIC_PAGER_NAVBUTTON_PADDINGS: null !default;
-$GENERIC_PAGER_NAVBUTTON_HEIGHT: null !default;
-$GENERIC_PAGER_PAGESIZE_PADDING_TOP: null !default;
-$GENERIC_PAGER_PAGESIZE_PADDING_BOTTOM: null !default;
-$GENERIC_PAGER_PAGESIZE_PADDING_LEFT: null !default;
-$GENERIC_PAGER_PAGESIZE_PADDING_RIGHT: null !default;
+$generic-pager-paddings: null !default;
+$generic-pager-separator-paddings: null !default;
+$generic-pager-page-padding-left-right: null !default;
+$generic-pager-page-padding-top: null !default;
+$generic-pager-page-padding-bottom: null !default;
+$generic-pager-navbutton-paddings: null !default;
+$generic-pager-navbutton-height: null !default;
+$generic-pager-pagesize-padding-top: null !default;
+$generic-pager-pagesize-padding-bottom: null !default;
+$generic-pager-pagesize-padding-left: null !default;
+$generic-pager-pagesize-padding-right: null !default;
 
 @if $size == "default" {
-  $GENERIC_PAGER_PADDINGS: 9px;
-  $GENERIC_PAGER_SEPARATOR_PADDINGS: 8px;
-  $GENERIC_PAGER_PAGE_PADDING_LEFT_RIGHT: 9px;
-  $GENERIC_PAGER_PAGE_PADDING_TOP: 7px;
-  $GENERIC_PAGER_PAGE_PADDING_BOTTOM: 8px;
-  $GENERIC_PAGER_NAVBUTTON_PADDINGS: $GENERIC_PAGER_PADDINGS 13px;
-  $GENERIC_PAGER_NAVBUTTON_HEIGHT: 17px;
-  $GENERIC_PAGER_PAGESIZE_PADDING_TOP: 7px;
-  $GENERIC_PAGER_PAGESIZE_PADDING_BOTTOM: 8px;
-  $GENERIC_PAGER_PAGESIZE_PADDING_LEFT: 10px;
-  $GENERIC_PAGER_PAGESIZE_PADDING_RIGHT: 9px;
+  $generic-pager-paddings: 9px;
+  $generic-pager-separator-paddings: 8px;
+  $generic-pager-page-padding-left-right: 9px;
+  $generic-pager-page-padding-top: 7px;
+  $generic-pager-page-padding-bottom: 8px;
+  $generic-pager-navbutton-paddings: $generic-pager-paddings 13px;
+  $generic-pager-navbutton-height: 17px;
+  $generic-pager-pagesize-padding-top: 7px;
+  $generic-pager-pagesize-padding-bottom: 8px;
+  $generic-pager-pagesize-padding-left: 10px;
+  $generic-pager-pagesize-padding-right: 9px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_PAGER_PADDINGS: 5px;
-  $GENERIC_PAGER_PAGE_PADDING_LEFT_RIGHT: 6px;
-  $GENERIC_PAGER_PAGE_PADDING_TOP: 4px;
-  $GENERIC_PAGER_PAGE_PADDING_BOTTOM: 5px;
-  $GENERIC_PAGER_SEPARATOR_PADDINGS: 4px;
-  $GENERIC_PAGER_NAVBUTTON_PADDINGS: $GENERIC_PAGER_PADDINGS 7px;
-  $GENERIC_PAGER_NAVBUTTON_HEIGHT: 16px;
-  $GENERIC_PAGER_PAGESIZE_PADDING_TOP: 4px;
-  $GENERIC_PAGER_PAGESIZE_PADDING_BOTTOM: 5px;
-  $GENERIC_PAGER_PAGESIZE_PADDING_LEFT: 8px;
-  $GENERIC_PAGER_PAGESIZE_PADDING_RIGHT: 6px;
+  $generic-pager-paddings: 5px;
+  $generic-pager-page-padding-left-right: 6px;
+  $generic-pager-page-padding-top: 4px;
+  $generic-pager-page-padding-bottom: 5px;
+  $generic-pager-separator-paddings: 4px;
+  $generic-pager-navbutton-paddings: $generic-pager-paddings 7px;
+  $generic-pager-navbutton-height: 16px;
+  $generic-pager-pagesize-padding-top: 4px;
+  $generic-pager-pagesize-padding-bottom: 5px;
+  $generic-pager-pagesize-padding-left: 8px;
+  $generic-pager-pagesize-padding-right: 6px;
 }

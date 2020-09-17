@@ -1,6 +1,6 @@
-const BaseStrategy = require('./base');
-const Observer = require('./observer');
-const extend = require('../../core/utils/extend').extend;
+import BaseStrategy from './base';
+import Observer from './observer';
+import { extend } from '../../core/utils/extend';
 
 const eventMap = {
     'dxpointerdown': 'pointerdown',
@@ -51,4 +51,4 @@ MsPointerStrategy.resetObserver = function() {
 };
 
 
-module.exports = MsPointerStrategy;
+export default MsPointerStrategy;

@@ -429,7 +429,7 @@ function processDataCell(data, rowIndex, columnIndex, isRunningTotalCalculation)
     data.values[rowIndex][columnIndex].allowResetting = isRunningTotalCalculation;
 }
 
-exports.applyDisplaySummaryMode = function(descriptions, data) {
+export function applyDisplaySummaryMode(descriptions, data) {
     const expressions = [];
     const columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }];
     const rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }];
@@ -437,6 +437,10 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
     const fieldsCache = createCache();
 
     data.values = data.values || [];
+
+    foreachTree(columnElements, (columnPath) => {
+        columnPath[0].isEmpty = [];
+    }, false);
 
     foreachTree(rowElements, function(rowPath) {
         const rowItem = rowPath[0];
@@ -449,7 +453,6 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
             const columnItem = columnPath[0];
             let isEmptyCell;
 
-            columnItem.isEmpty = columnItem.isEmpty || [];
 
             processDataCell(data, rowItem.index, columnItem.index, false);
 
@@ -479,9 +482,9 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
 
     data.isEmptyGrandTotalRow = rowElements[0].isEmpty;
     data.isEmptyGrandTotalColumn = columnElements[0].isEmpty;
-};
+}
 
-exports.applyRunningTotal = function(descriptions, data) {
+export function applyRunningTotal(descriptions, data) {
     const expressions = [];
     const columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }];
     const rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }];
@@ -512,9 +515,9 @@ exports.applyRunningTotal = function(descriptions, data) {
             }
         }, false);
     }, false);
-};
+}
 
-exports.createMockSummaryCell = function(descriptions, fields, indices) {
+export function createMockSummaryCell(descriptions, fields, indices) {
     const summaryCell = new SummaryCell([], [], {}, descriptions, 0);
     summaryCell.value = function(fieldId) {
         if(isDefined(fieldId)) {
@@ -534,9 +537,12 @@ exports.createMockSummaryCell = function(descriptions, fields, indices) {
     };
 
     return summaryCell;
-};
+}
+
 ///#DEBUG
-exports.Cell = SummaryCell;
-exports.summaryDictionary = summaryDictionary;
-exports.getExpression = getExpression;
+export {
+    SummaryCell as Cell,
+    summaryDictionary,
+    getExpression
+};
 ///#ENDDEBUG

@@ -39,9 +39,9 @@ function stubExport() {
     const that = this;
     that.export = new vizMocks.ExportMenu();
     that.export.stub('measure').returns([0, 0]);
-    sinon.stub(exportModule, 'ExportMenu', function() {
+    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
         return that.export;
-    });
+    }));
 }
 
 stubExport();

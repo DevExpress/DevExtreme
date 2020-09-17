@@ -13,6 +13,7 @@ import chartThemeManagerModule from '../components/chart_theme_manager';
 import LayoutManagerModule from './layout_manager';
 import trackerModule from './tracker';
 import { map as _map, setCanvasValues as _setCanvasValues, processSeriesTemplate } from '../core/utils';
+import { when } from '../../core/utils/deferred';
 const _isArray = Array.isArray;
 
 const REINIT_REFRESH_ACTION = '_reinit';
@@ -300,11 +301,11 @@ function checkOverlapping(firstRect, secondRect) {
             (firstRect.y >= secondRect.y && firstRect.y <= secondRect.y + secondRect.height));
 }
 
-const overlapping = {
+export const overlapping = {
     resolveLabelOverlappingInOneDirection: resolveLabelOverlappingInOneDirection
 };
 
-const BaseChart = BaseWidget.inherit({
+export const BaseChart = BaseWidget.inherit({
     _eventsMap: {
         onSeriesClick: { name: 'seriesClick' },
         onPointClick: { name: 'pointClick' },
@@ -703,7 +704,32 @@ const BaseChart = BaseWidget.inherit({
         that._renderSeries(drawOptions, isRotated, isLegendInside);
 
         that._renderer.unlock();
+
+        const allAxes = (this._argumentAxes || []).concat(this._valueAxes || []);
+
+        if(that._changesApplying) {
+            that._changesApplying = false;
+            allAxes.forEach(function(a) {
+                a.setRenderedState(false);
+            });
+            return;
+        }
+        let syncRendering = true;
+        when.apply(this, allAxes.map(axis => axis.getTemplatesDef())).done(() => {
+            if(syncRendering) {
+                return;
+            }
+            allAxes.forEach(function(a) {
+                a.setRenderedState(true);
+            });
+            that._changesApplying = true;
+
+            that._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
+        });
+        syncRendering = false;
     },
+
+    _updateLegendPosition: noop,
 
     _createCrosshairCursor: noop,
 
@@ -774,9 +800,8 @@ const BaseChart = BaseWidget.inherit({
         that._renderTrackers(isLegendInside);
         that._tracker.repairTooltip();
 
-        that._clearCanvas();
-
         that._renderExtraElements();
+        that._clearCanvas();
 
         that._drawn();
         that._renderCompleteHandler();
@@ -852,6 +877,7 @@ const BaseChart = BaseWidget.inherit({
 
     _cleanGroups: function() {
         const that = this;
+
         that._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
@@ -866,8 +892,6 @@ const BaseChart = BaseWidget.inherit({
     _allowLegendInsidePosition() {
         return false;
     },
-
-    _updateLegendPosition: noop,
 
     _createLegend: function() {
         const that = this;
@@ -1015,6 +1039,7 @@ const BaseChart = BaseWidget.inherit({
         argumentAxis: 'AXES_AND_PANES',
         commonAxisSettings: 'AXES_AND_PANES',
         panes: 'AXES_AND_PANES',
+        commonPaneSettings: 'AXES_AND_PANES',
         defaultPane: 'AXES_AND_PANES',
         containerBackgroundColor: 'AXES_AND_PANES',
 
@@ -1029,7 +1054,7 @@ const BaseChart = BaseWidget.inherit({
 
     _optionChangesOrder: ['ROTATED', 'PALETTE', 'REFRESH_SERIES_REINIT', 'AXES_AND_PANES', 'INIT', 'REINIT', 'DATA_SOURCE', 'REFRESH_SERIES_DATA_INIT', 'DATA_INIT', 'FORCE_DATA_INIT', 'REFRESH_AXES', 'CORRECT_AXIS'],
 
-    _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES',
+    _customChangesOrder: ['ANIMATION', 'REFRESH_SERIES_FAMILIES', 'FORCE_FIRST_DRAWING', 'FORCE_DRAWING',
         'FORCE_RENDER', 'VISUAL_RANGE', 'SCROLL_BAR', 'REINIT', 'REFRESH', 'FULL_RENDER'],
 
     _change_ANIMATION: function() {
@@ -1103,6 +1128,21 @@ const BaseChart = BaseWidget.inherit({
     _change_REINIT: function() {
         this._processRefreshData(REINIT_REFRESH_ACTION);
     },
+
+    _change_FORCE_DRAWING: function() {
+        this._resetComponentsAnimation();
+    },
+
+    _change_FORCE_FIRST_DRAWING: function() {
+        this._resetComponentsAnimation(true);
+    },
+
+    _resetComponentsAnimation: function(isFirstDrawing) {
+        this.series.forEach((s) => { s.resetApplyingAnimation(isFirstDrawing); });
+        this._resetAxesAnimation(isFirstDrawing);
+    },
+
+    _resetAxesAnimation: noop,
 
     _refreshSeries: function(actionName) {
         this.needToPopulateSeries = true;
@@ -1339,7 +1379,7 @@ const BaseChart = BaseWidget.inherit({
     getStackedPoints: function(point) {
         const stackName = point.series.getStackName();
         return this._getVisibleSeries().reduce((stackPoints, series) => {
-            if((!_isDefined(series.getStackName()) && !_isDefined(stackName)) || stackName === series.getStackName()) {
+            if((!_isDefined(series.getStackName()) || !_isDefined(stackName)) || stackName === series.getStackName()) {
                 stackPoints = stackPoints.concat(series.getPointsByArg(point.argument));
             }
             return stackPoints;
@@ -1431,16 +1471,18 @@ REFRESH_SERIES_FAMILIES_ACTION_OPTIONS.forEach(function(name) {
     BaseChart.prototype._optionChangesMap[name] = 'REFRESH_SERIES_FAMILIES';
 });
 
-exports.overlapping = overlapping;
-
-exports.BaseChart = BaseChart;
-
 // PLUGINS_SECTION
-BaseChart.addPlugin(require('../core/export').plugin);
-BaseChart.addPlugin(require('../core/title').plugin);
-BaseChart.addPlugin(require('../core/tooltip').plugin);
-BaseChart.addPlugin(require('../core/loading_indicator').plugin);
-BaseChart.addPlugin(require('../core/data_source').plugin);
+import { plugin as exportPlugin } from '../core/export';
+import { plugin as titlePlugin } from '../core/title';
+import { plugin as dataSourcePlugin } from '../core/data_source';
+import { plugin as tooltipPlugin } from '../core/tooltip';
+import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
+
+BaseChart.addPlugin(exportPlugin);
+BaseChart.addPlugin(titlePlugin);
+BaseChart.addPlugin(dataSourcePlugin);
+BaseChart.addPlugin(tooltipPlugin);
+BaseChart.addPlugin(loadingIndicatorPlugin);
 
 // These are charts specifics on using title - they cannot be omitted because of charts custom layout.
 const _change_TITLE = BaseChart.prototype._change_TITLE;

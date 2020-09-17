@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'renovation/widget.j';
+import 'renovation/ui/common/widget.j';
 
 import { act } from 'preact/test-utils';
 
@@ -11,7 +11,7 @@ QUnit.testStart(function() {
 
 const moduleConfig = {
     Widget(options = {}) {
-        act(() => $('#component').dxrWidget(options));
+        act(() => $('#component').dxWidget(options));
         return $('#component');
     }
 };
@@ -65,7 +65,7 @@ QUnit.module('Container', moduleConfig, () => {
             'custom-attr': 'v1',
             'class': 'my-widget-class'
         });
-        const widget = this.Widget({}).dxrWidget('instance');
+        const widget = this.Widget({}).dxWidget('instance');
 
         assert.strictEqual(widget.$element().attr('id'), 'component');
         assert.strictEqual(widget.$element().attr('custom-attr'), 'v1');
@@ -77,7 +77,7 @@ QUnit.module('Container', moduleConfig, () => {
         $('#component').attr({ 'custom-attr': 'v1' });
         const widget = this.Widget({
             elementAttr: { 'custom-attr': 'v2' }
-        }).dxrWidget('instance');
+        }).dxWidget('instance');
 
         assert.strictEqual(widget.$element().attr('custom-attr'), 'v2');
         assert.deepEqual(widget.option().elementAttr, { 'custom-attr': 'v2' });
@@ -86,7 +86,7 @@ QUnit.module('Container', moduleConfig, () => {
     QUnit.test('should save attributes after rerender', function(assert) {
         const widget = this.Widget({
             elementAttr: { 'custom-attr': 'v2' }
-        }).dxrWidget('instance');
+        }).dxWidget('instance');
 
         // NOTE: force rerender
         this.Widget({ elementAttr: { 'a': 'v' } });
@@ -97,7 +97,7 @@ QUnit.module('Container', moduleConfig, () => {
     QUnit.test('should not recreate container element', function(assert) {
         const $container = $('#component');
         const container = $container.get(0);
-        const widget = this.Widget({}).dxrWidget('instance');
+        const widget = this.Widget({}).dxWidget('instance');
 
         assert.strictEqual(widget.$element().get(0), container);
     });
@@ -105,7 +105,7 @@ QUnit.module('Container', moduleConfig, () => {
     QUnit.test('should not recreate container element after rerender', function(assert) {
         const $container = $('#component');
         const container = $container.get(0);
-        const widget = this.Widget({}).dxrWidget('instance');
+        const widget = this.Widget({}).dxWidget('instance');
 
         // NOTE: force rerender
         this.Widget({ elementAttr: { 'a': 'v' } });
@@ -116,7 +116,7 @@ QUnit.module('Container', moduleConfig, () => {
 
 QUnit.module('Preact Wrapper', moduleConfig, () => {
     QUnit.test('should create in separate element', function(assert) {
-        act(() => $('<div>').dxrWidget({}));
+        act(() => $('<div>').dxWidget({}));
 
         assert.ok(true, 'no exceptions');
     });

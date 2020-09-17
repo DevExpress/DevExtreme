@@ -22,6 +22,8 @@ jest.mock('../../src/data/metadata/dx-theme-builder-metadata', () => ({
   metadata,
 }));
 
+jest.mock('fibers', () => undefined);
+
 PostCompiler.addInfoHeader = (css: string): string => css;
 
 describe('Compile manager - integration test on test sass', () => {

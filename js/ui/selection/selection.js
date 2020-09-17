@@ -1,12 +1,12 @@
-const Class = require('../../core/class');
-const deferredStrategy = require('./selection.strategy.deferred');
-const standardStrategy = require('./selection.strategy.standard');
-const extend = require('../../core/utils/extend').extend;
-const noop = require('../../core/utils/common').noop;
-const isDefined = require('../../core/utils/type').isDefined;
-const Deferred = require('../../core/utils/deferred').Deferred;
+import Class from '../../core/class';
+import deferredStrategy from './selection.strategy.deferred';
+import standardStrategy from './selection.strategy.standard';
+import { extend } from '../../core/utils/extend';
+import { noop } from '../../core/utils/common';
+import { isDefined } from '../../core/utils/type';
+import { Deferred } from '../../core/utils/deferred';
 
-module.exports = Class.inherit({
+export default Class.inherit({
     ctor: function(options) {
         this.options = extend(this._getDefaultOptions(), options, {
             selectedItemKeys: options.selectedKeys || []
@@ -81,7 +81,7 @@ module.exports = Class.inherit({
     selectedItemKeys: function(keys, preserve, isDeselect, isSelectAll) {
         const that = this;
 
-        keys = keys || [];
+        keys = isDefined(keys) ? keys : [];
         keys = Array.isArray(keys) ? keys : [keys];
         that.validate();
 

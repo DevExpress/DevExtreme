@@ -21,7 +21,7 @@ export class Template {
 
 /**
  * @docid template
- * @type String|function|Node|jQuery
+ * @type String|function|Element|jQuery
  * @section Common
  * @prevFileNamespace DevExpress.core
  * @public

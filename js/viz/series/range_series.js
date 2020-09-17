@@ -1,15 +1,17 @@
 // there are rangebar, rangearea
-const extend = require('../../core/utils/extend').extend;
+import { extend } from '../../core/utils/extend';
+
 const _extend = extend;
-const _isDefined = require('../../core/utils/type').isDefined;
-const _map = require('../core/utils').map;
-const _noop = require('../../core/utils/common').noop;
+import { isDefined as _isDefined } from '../../core/utils/type';
+import { map as _map } from '../core/utils';
+import { noop as _noop } from '../../core/utils/common';
+import { chart as scatterSeries } from './scatter_series';
+import { chart as barChart } from './bar_series';
+import { chart as areaChart } from './area_series';
+const barSeries = barChart.bar;
+const areaSeries = areaChart.area;
 
-const scatterSeries = require('./scatter_series').chart;
-const barSeries = require('./bar_series').chart.bar;
-const areaSeries = require('./area_series').chart.area;
-
-exports.chart = {};
+const chart = {};
 
 const baseRangeSeries = {
 
@@ -121,9 +123,9 @@ const baseRangeSeries = {
     }
 };
 
-exports.chart['rangebar'] = _extend({}, barSeries, baseRangeSeries);
+chart['rangebar'] = _extend({}, barSeries, baseRangeSeries);
 
-exports.chart['rangearea'] = _extend({}, areaSeries, {
+chart['rangearea'] = _extend({}, areaSeries, {
     _drawPoint: function(options) {
         const point = options.point;
 
@@ -197,3 +199,7 @@ exports.chart['rangearea'] = _extend({}, areaSeries, {
         }
     }
 }, baseRangeSeries);
+
+export {
+    chart
+};

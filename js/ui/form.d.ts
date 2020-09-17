@@ -328,15 +328,6 @@ export default class dxForm extends Widget {
 
 export interface dxFormButtonItem {
     /**
-     * @docid dxFormButtonItem.alignment
-     * @type Enums.HorizontalAlignment
-     * @default "right"
-     * @deprecated dxFormButtonItem.horizontalAlignment
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    alignment?: 'center' | 'left' | 'right';
-    /**
      * @docid dxFormButtonItem.buttonOptions
      * @type dxButtonOptions
      * @default undefined
@@ -542,7 +533,7 @@ export interface dxFormGroupItem {
      * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field2 formData:object
      * @type_function_param2 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -655,7 +646,7 @@ export interface dxFormSimpleItem {
      * @type_function_param1_field4 editorType:string
      * @type_function_param1_field5 name:string
      * @type_function_param2 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

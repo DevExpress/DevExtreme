@@ -1,33 +1,31 @@
-const _isFunction = require('../../core/utils/type').isFunction;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
+import { isFunction as _isFunction } from '../../core/utils/type';
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
 const _round = Math.round;
 
 const algorithms = {};
 let defaultAlgorithm;
 
-exports.getAlgorithm = function(value) {
+export function getAlgorithm(value) {
     return algorithms[_normalizeEnum(value)] || (_isFunction(value) && value) || defaultAlgorithm;
-};
+}
 
-exports.addAlgorithm = function(name, callback) {
+export function addAlgorithm(name, callback) {
     algorithms[name] = callback;
-};
+}
 
-exports.setDefaultAlgorithm = function(name) {
+export function setDefaultAlgorithm(name) {
     defaultAlgorithm = algorithms[name];
-};
+}
 
 const directionToIndexOffsets = {};
 directionToIndexOffsets[-1] = [2, 0];
 directionToIndexOffsets[+1] = [0, 2];
 
-const getStaticSideIndex = function(rect) {
+export const getStaticSideIndex = function(rect) {
     return (rect[2] - rect[0]) < (rect[3] - rect[1]) ? 0 : 1;
 };
 
-exports.getStaticSideIndex = getStaticSideIndex;
-
-exports.buildSidesData = function(rect, directions, _staticSideIndex) {
+export function buildSidesData(rect, directions, _staticSideIndex) {
     const staticSideIndex = _staticSideIndex !== undefined ? _staticSideIndex : getStaticSideIndex(rect);
     const variedSideIndex = 1 - staticSideIndex;
     const staticSideDirection = directions[staticSideIndex];
@@ -44,9 +42,9 @@ exports.buildSidesData = function(rect, directions, _staticSideIndex) {
         staticDir: staticSideDirection,
         variedDir: variedSideDirection
     };
-};
+}
 
-exports.calculateRectangles = function(nodes, head, totalRect, sidesData, rowData) {
+export function calculateRectangles(nodes, head, totalRect, sidesData, rowData) {
     let i;
     let ii;
     const variedSidePart = [0, 0, 0, 0];
@@ -72,4 +70,4 @@ exports.calculateRectangles = function(nodes, head, totalRect, sidesData, rowDat
         nodes[i].rect = rect;
     }
     totalRect[sidesData.varied1] = variedSidePart[sidesData.varied2];
-};
+}

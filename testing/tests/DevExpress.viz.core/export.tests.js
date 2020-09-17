@@ -2,6 +2,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
 const exportModule = require('viz/core/export');
 const themeModule = require('viz/themes');
 const clientExporter = require('exporter');
+const combineMarkupsOrig = exportModule.combineMarkups;
 
 themeModule.registerTheme({
     name: 'someTheme.light',
@@ -523,13 +524,12 @@ QUnit.test('Combine widgets markups (combineMarkups) in grid layout with bottom-
 QUnit.module('API. Export methods', {
     beforeEach: function() {
         sinon.stub(clientExporter, 'export');
-        sinon.stub(exportModule, 'combineMarkups');
         this.toDataURLStub = sinon.stub(window.HTMLCanvasElement.prototype, 'toDataURL');
         this.toDataURLStub.returnsArg(0);
     },
     afterEach: function() {
         clientExporter.export.restore();
-        exportModule.combineMarkups.restore();
+        exportModule.DEBUG_set_combineMarkups(combineMarkupsOrig);
         this.toDataURLStub.restore();
     }
 });
@@ -693,7 +693,9 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
 
 QUnit.test('exportWidgets method. Defaults', function(assert) {
     // arrange
-    exportModule.combineMarkups.returns({ markup: 'testMarkup', width: 600, height: 400 });
+    exportModule.DEBUG_set_combineMarkups(sinon.spy(function() {
+        return { markup: 'testMarkup', width: 600, height: 400 };
+    }));
 
     // act
     exportModule.exportWidgets([{ widget1: true }, { widget2: true }]);
@@ -740,7 +742,9 @@ QUnit.test('exportWidgets method. Set options. Size options are ignored', functi
         verticalAlignment: 'bottom',
         horizontalAlignment: 'right'
     };
-    exportModule.combineMarkups.returns({ markup: 'testMarkup', width: 600, height: 400 });
+    exportModule.DEBUG_set_combineMarkups(sinon.spy(function() {
+        return { markup: 'testMarkup', width: 600, height: 400 };
+    }));
 
     // act
     exportModule.exportWidgets([{ widget1: true }, { widget2: true }], options);
@@ -1486,44 +1490,4 @@ QUnit.test('Send warning message if was hidden due to small container', function
 
     // assert
     assert.ok(this.incidentOccurred.calledWith('W2107'));
-});
-
-QUnit.test('Menu is hidden first time and shown if container gets bigger', function(assert) {
-    // arrange
-    const exportMenu = this.createExportMenu();
-    exportMenu.draw(10, 20, { width: 30, height: 30 });
-
-    // act
-    exportMenu.probeDraw(100, 60, { width: 30, height: 30 });
-    exportMenu.draw(100, 60, { width: 30, height: 30 });
-
-    // assert
-    assert.equal(this.renderer.g.getCall(0).returnValue._stored_settings.visibility, null);
-});
-
-QUnit.test('Return real layout options if container gets bigger', function(assert) {
-    // arrange
-    const exportMenu = this.createExportMenu();
-    exportMenu.draw(10, 20, { width: 30, height: 30 });
-    exportMenu.probeDraw(100, 60, { width: 30, height: 30 });
-    exportMenu.draw(100, 60, { width: 30, height: 30 });
-
-    // act
-    const layout = exportMenu.getLayoutOptions();
-
-    // assert
-    assert.deepEqual(layout, {
-        cutLayoutSide: 'top',
-        cutSide: 'vertical',
-        height: 20,
-        width: 20,
-        x: 1,
-        y: 2,
-        horizontalAlignment: 'right',
-        position: {
-            horizontal: 'right',
-            vertical: 'top'
-        },
-        verticalAlignment: 'top'
-    });
 });

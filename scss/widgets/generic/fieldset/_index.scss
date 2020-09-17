@@ -4,21 +4,22 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../common/sizes" as *;
-@use "../common" as *;
-@use "../typography" as *;
+@use "../common/mixins" as *;
+@use "../typography/mixins" as *;
+@use "../checkBox/sizes" as *;
+@use "../switch/sizes" as *;
+@use "../slider/sizes" as *;
+
 // adduse
 
 
-$GENERIC_FIELD_MIN_HEIGHT: $GENERIC_BASE_INLINE_WIDGET_HEIGHT;
-$GENERIC_FIELD_VALUE_TOP_PADDING: $GENERIC_BASE_INLINE_WIDGET_TOP_PADDING;
-$GENERIC_FIELD_VALUE_HORIZONTAL_PADDING: $GENERIC_BASE_INLINE_HORIZONTAL_PADDING;
-$GENERIC_FIELD_VALUE_BOTTOM_PADDING: $GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING;
-$GENERIC_FIELDSET_ATTENTION_ICON_OFFSET: $GENERIC_BASE_INLINE_HORIZONTAL_PADDING + $GENERIC_INVALID_BADGE_SIZE;
+$generic-field-min-height: $generic-base-inline-widget-height;
+$generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding + $generic-invalid-badge-size;
 
-$GENERIC_MOBILE_FIELDSET_VERTICAL_MARGIN: 20px;
-$GENERIC_MOBILE_FIELDSET_HORIZONTAL_MARGIN: 15px;
-$GENERIC_MOBILE_FIELDSET_HEADER_VERTICAL_MARGIN: 20px;
-$GENERIC_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
+$generic-mobile-fieldset-vertical-margin: 20px;
+$generic-mobile-fieldset-horizontal-margin: 15px;
+$generic-mobile-fieldset-header-vertical-margin: 20px;
+$generic-mobile-field-vertical-margin: 10px;
 
 
 @mixin dx-fieldset-styling() {
@@ -34,7 +35,7 @@ $GENERIC_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
   .dx-field-value {
     &.dx-attention {
       color: $fieldset-field-value-invalid-color;
-      padding-left: $GENERIC_FIELDSET_ATTENTION_ICON_OFFSET;
+      padding-left: $generic-fieldset-attention-icon-offset;
 
       &:before {
         @include dx-invalid-generic-badge();
@@ -51,18 +52,18 @@ $GENERIC_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
 @mixin dx-field-value-widget-position($name, $size) {
   &.#{$name},
   &:not(.dx-widget) > .#{$name} {
-    margin: ($GENERIC_FIELD_MIN_HEIGHT - $size)/2 0;
+    margin: ($generic-field-min-height - $size) / 2 0;
   }
 }
 
 // TODO: merge with .dx-fieldset-sizing after removing scope .dx-device-phone
 @mixin dx-fieldset-sizing-base() {
   .dx-field-label {
-    padding: $GENERIC_FIELD_VALUE_TOP_PADDING $GENERIC_FIELD_LABELVALUE_SPACING $GENERIC_FIELD_VALUE_BOTTOM_PADDING 0;
+    padding: $generic-field-value-top-padding $generic-field-labelvalue-spacing $generic-field-value-bottom-padding 0;
   }
 
   .dx-field {
-    min-height: $GENERIC_FIELD_MIN_HEIGHT;
+    min-height: $generic-field-min-height;
     padding: 0;
   }
 
@@ -80,15 +81,15 @@ $GENERIC_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
       }
     }
 
-    @include dx-field-value-widget-position(dx-checkbox, $GENERIC_CHECKBOX_SIZE);
-    @include dx-field-value-widget-position(dx-switch, $GENERIC_SWITCH_HEIGHT);
-    @include dx-field-value-widget-position(dx-slider, $GENERIC_SLIDER_HEIGHT);
-    @include dx-field-value-widget-position(dx-radiogroup, $GENERIC_RADIOGROUP_MIN_HEIGHT);
+    @include dx-field-value-widget-position(dx-checkbox, $generic-checkbox-size);
+    @include dx-field-value-widget-position(dx-switch, $generic-switch-height);
+    @include dx-field-value-widget-position(dx-slider, $generic-slider-height);
+    @include dx-field-value-widget-position(dx-radiogroup, $generic-radiogroup-min-height);
 
     &.dx-attention {
-      padding: $GENERIC_FIELD_VALUE_TOP_PADDING $GENERIC_FIELD_VALUE_HORIZONTAL_PADDING $GENERIC_FIELD_VALUE_BOTTOM_PADDING;
+      padding: $generic-field-value-top-padding $generic-field-value-horizontal-padding $generic-field-value-bottom-padding;
       position: relative;
-      padding-left: $GENERIC_FIELDSET_ATTENTION_ICON_OFFSET;
+      padding-left: $generic-fieldset-attention-icon-offset;
 
       &:before {
         left: 0;
@@ -97,13 +98,13 @@ $GENERIC_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
   }
 
   .dx-field-value-static {
-    padding: $GENERIC_FIELD_VALUE_TOP_PADDING $GENERIC_FIELD_VALUE_HORIZONTAL_PADDING $GENERIC_FIELD_VALUE_BOTTOM_PADDING;
+    padding: $generic-field-value-top-padding $generic-field-value-horizontal-padding $generic-field-value-bottom-padding;
   }
 }
 
-@mixin dx-fieldset-sizing($vertical-margin, $horizontal_margin, $header-vertical-margin, $field-vertical_margin) {
+@mixin dx-fieldset-sizing($vertical-margin, $horizontal-margin, $header-vertical-margin, $field-vertical-margin) {
   .dx-fieldset {
-    margin: $vertical-margin $horizontal_margin;
+    margin: $vertical-margin $horizontal-margin;
     padding: 0;
 
     @at-root #{selector-append(".dx-rtl", &)},
@@ -127,7 +128,7 @@ $GENERIC_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
   }
 
   .dx-field {
-    margin: 0 0 $field-vertical_margin 0;
+    margin: 0 0 $field-vertical-margin 0;
   }
 
   .dx-field:last-of-type {
@@ -138,17 +139,17 @@ $GENERIC_MOBILE_FIELD_VERTICAL_MARGIN: 10px;
 @include dx-fieldset-styling();
 @include dx-fieldset-sizing-base();
 @include dx-fieldset-sizing(
-    $GENERIC_FIELDSET_VERTICAL_MARGIN,
-    $GENERIC_FIELDSET_HORIZONTAL_MARGIN,
-    $GENERIC_FIELDSET_HEADER_VERTICAL_MARGIN,
-    $GENERIC_FIELD_VERTICAL_MARGIN
+  $generic-fieldset-vertical-margin,
+  $generic-fieldset-horizontal-margin,
+  $generic-fieldset-header-vertical-margin,
+  $generic-field-vertical-margin
 );
 
 .dx-device-mobile {
   @include dx-fieldset-sizing(
-        $GENERIC_MOBILE_FIELDSET_VERTICAL_MARGIN,
-        $GENERIC_MOBILE_FIELDSET_HORIZONTAL_MARGIN,
-        $GENERIC_MOBILE_FIELDSET_HEADER_VERTICAL_MARGIN,
-        $GENERIC_MOBILE_FIELD_VERTICAL_MARGIN
-    );
+    $generic-mobile-fieldset-vertical-margin,
+    $generic-mobile-fieldset-horizontal-margin,
+    $generic-mobile-fieldset-header-vertical-margin,
+    $generic-mobile-field-vertical-margin
+  );
 }

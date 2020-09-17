@@ -44,4 +44,4 @@ class DiagramPanel extends Widget {
     }
 }
 
-module.exports = DiagramPanel;
+export default DiagramPanel;

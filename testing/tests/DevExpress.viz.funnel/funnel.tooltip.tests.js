@@ -6,6 +6,7 @@ const vizMocks = require('../../helpers/vizMocks.js');
 const tooltipModule = require('viz/core/tooltip');
 const funnelTooltip = require('viz/funnel/tooltip');
 const dxFunnel = require('viz/funnel/funnel');
+const tooltipOrig = tooltipModule.Tooltip;
 
 dxFunnel.addPlugin(funnelTooltip.plugin);
 
@@ -29,13 +30,13 @@ const tooltipEnvironment = $.extend({}, environment, {
         this.tooltip.stub('show').returns(true);
         this.tooltip.stub('formatValue').returns('formatted');
 
-        sinon.stub(tooltipModule, 'Tooltip', function() {
+        tooltipModule.DEBUG_set_tooltip(sinon.spy(function() {
             return that.tooltip;
-        });
+        }));
     },
     afterEach: function() {
         environment.afterEach.call(this);
-        tooltipModule.Tooltip.restore();
+        tooltipModule.DEBUG_set_tooltip(tooltipOrig);
     }
 });
 

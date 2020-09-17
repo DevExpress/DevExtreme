@@ -1,17 +1,16 @@
-const eventsEngine = require('../../events/core/events_engine');
-const extend = require('../../core/utils/extend').extend;
-const isNumeric = require('../../core/utils/type').isNumeric;
-const browser = require('../../core/utils/browser');
-const devices = require('../../core/devices');
-const fitIntoRange = require('../../core/utils/math').fitIntoRange;
-const inRange = require('../../core/utils/math').inRange;
-const number = require('../../localization/number');
-const maskCaret = require('./number_box.caret');
-const getLDMLFormat = require('../../localization/ldml/number').getFormat;
-const NumberBoxBase = require('./number_box.base');
-const eventUtils = require('../../events/utils');
-const typeUtils = require('../../core/utils/type');
-const { ensureDefined, escapeRegExp } = require('../../core/utils/common');
+import eventsEngine from '../../events/core/events_engine';
+import { extend } from '../../core/utils/extend';
+import { isNumeric, isDefined, isFunction, isString } from '../../core/utils/type';
+import browser from '../../core/utils/browser';
+import devices from '../../core/devices';
+import { fitIntoRange } from '../../core/utils/math';
+import { inRange } from '../../core/utils/math';
+import number from '../../localization/number';
+import maskCaret from './number_box.caret';
+import { getFormat as getLDMLFormat } from '../../localization/ldml/number';
+import NumberBoxBase from './number_box.base';
+import { addNamespace, getChar, normalizeKeyName } from '../../events/utils';
+import { ensureDefined, escapeRegExp } from '../../core/utils/common';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';
 const MOVE_FORWARD = 1;
@@ -172,8 +171,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _keyboardHandler: function(e) {
         this.clearCaretTimeout();
 
-        this._lastKey = number.convertDigits(eventUtils.getChar(e), true);
-        this._lastKeyName = eventUtils.normalizeKeyName(e);
+        this._lastKey = number.convertDigits(getChar(e), true);
+        this._lastKeyName = normalizeKeyName(e);
 
         if(!this._shouldHandleKey(e.originalEvent)) {
             return this.callBase(e);
@@ -213,8 +212,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
         let start = caret.start;
         let end = caret.end;
 
-        this._lastKey = eventUtils.getChar(e);
-        this._lastKeyName = eventUtils.normalizeKeyName(e);
+        this._lastKey = getChar(e);
+        this._lastKeyName = normalizeKeyName(e);
 
         const isDeleteKey = this._isDeleteKey(this._lastKeyName);
         const isBackspaceKey = !isDeleteKey;
@@ -282,7 +281,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _parse: function(text, format) {
         const formatOption = this.option('format');
-        const isCustomParser = typeUtils.isFunction(formatOption.parser);
+        const isCustomParser = isFunction(formatOption.parser);
         const parser = isCustomParser ? formatOption.parser : number.parse;
 
         if(!isCustomParser) {
@@ -302,7 +301,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _format: function(value, format) {
         const formatOption = this.option('format');
-        const isCustomFormatter = typeUtils.isFunction(formatOption?.formatter);
+        const isCustomFormatter = isFunction(formatOption?.formatter);
         const formatter = isCustomFormatter ? formatOption.formatter : number.format;
 
         return formatter(value, format);
@@ -318,8 +317,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _updateFormat: function() {
         const format = this.option('format');
-        const isCustomParser = typeUtils.isFunction(format?.parser);
-        const isLDMLPattern = typeUtils.isString(format) && (format.indexOf('0') >= 0 || format.indexOf('#') >= 0);
+        const isCustomParser = isFunction(format?.parser);
+        const isLDMLPattern = isString(format) && (format.indexOf('0') >= 0 || format.indexOf('#') >= 0);
 
         this._currentFormat = isCustomParser || isLDMLPattern ?
             format :
@@ -331,7 +330,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
     _getFormatForSign: function(text) {
         const format = this._getFormatPattern();
-        if(typeUtils.isString(format)) {
+        if(isString(format)) {
             const signParts = format.split(';');
             const sign = number.getSign(text, format);
 
@@ -375,7 +374,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _truncateToPrecision: function(value, maxPrecision) {
-        if(typeUtils.isDefined(value)) {
+        if(isDefined(value)) {
             const strValue = value.toString();
             const decimalSeparatorIndex = strValue.indexOf('.');
 
@@ -421,7 +420,8 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const sign = number.getSign(text, format?.formatter || format);
         const textWithoutStubs = this._removeStubs(text, true);
         const parsedValue = this._parse(textWithoutStubs, format);
-        const parsedValueWithSign = parsedValue ? sign * parsedValue : parsedValue;
+        const parsedValueSign = parsedValue < 0 ? -1 : 1;
+        const parsedValueWithSign = isNumeric(parsedValue) && sign !== parsedValueSign ? sign * parsedValue : parsedValue;
 
         return parsedValueWithSign;
     },
@@ -487,7 +487,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isChar: function(str) {
-        return typeUtils.isString(str) && str.length === 1;
+        return isString(str) && str.length === 1;
     },
 
     _moveCaret: function(offset) {
@@ -502,7 +502,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _shouldHandleKey: function(e) {
-        const keyName = eventUtils.normalizeKeyName(e);
+        const keyName = normalizeKeyName(e);
         const isSpecialChar = e.ctrlKey || e.shiftKey || e.altKey || !this._isChar(keyName);
         const isMinusKey = keyName === MINUS_KEY;
         const useMaskBehavior = this._useMaskBehavior();
@@ -531,7 +531,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _isInputFromPaste: function(e) {
         const inputType = e.originalEvent && e.originalEvent.inputType;
 
-        if(typeUtils.isDefined(inputType)) {
+        if(isDefined(inputType)) {
             return inputType === 'insertFromPaste';
         } else {
             return this._isValuePasted;
@@ -541,18 +541,18 @@ const NumberBoxMask = NumberBoxBase.inherit({
     _attachFormatterEvents: function() {
         const $input = this._input();
 
-        eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), function(e) {
+        eventsEngine.on($input, addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), function(e) {
             this._formatValue(e);
             this._isValuePasted = false;
         }.bind(this));
 
         if(browser.msie && browser.version < 12) {
-            eventsEngine.on($input, eventUtils.addNamespace('paste', NUMBER_FORMATTER_NAMESPACE), function() {
+            eventsEngine.on($input, addNamespace('paste', NUMBER_FORMATTER_NAMESPACE), function() {
                 this._isValuePasted = true;
             }.bind(this));
         }
 
-        eventsEngine.on($input, eventUtils.addNamespace('dxclick', NUMBER_FORMATTER_NAMESPACE), function() {
+        eventsEngine.on($input, addNamespace('dxclick', NUMBER_FORMATTER_NAMESPACE), function() {
             if(!this._caretTimeout) {
                 this._caretTimeout = setTimeout(function() {
                     this._caret(maskCaret.getCaretInBoundaries(this._caret(), this._getInputVal(), this._getFormatPattern()));
@@ -613,7 +613,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
 
         const caret = this._caret();
         if(caret.start !== caret.end) {
-            if(eventUtils.normalizeKeyName(e) === MINUS_KEY) {
+            if(normalizeKeyName(e) === MINUS_KEY) {
                 this._applyRevertedSign(e, caret, true);
                 return;
             } else {
@@ -695,7 +695,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const textWasChanged = number.convertDigits(this._formattedValue, true) !== normalizedText;
         if(textWasChanged) {
             const value = this._tryParse(normalizedText, caret, '');
-            if(typeUtils.isDefined(value)) {
+            if(isDefined(value)) {
                 this._parsedValue = value;
             }
         }
@@ -789,4 +789,4 @@ const NumberBoxMask = NumberBoxBase.inherit({
     }
 });
 
-module.exports = NumberBoxMask;
+export default NumberBoxMask;

@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-restricted-imports
 import jQuery from 'jquery';
 import { compare as compareVersions } from '../core/utils/version';
 import errors from '../core/utils/error';
@@ -9,13 +10,13 @@ if(useJQuery && compareVersions(jQuery.fn.jquery, [1, 10]) < 0) {
     throw errors.Error('E0012');
 }
 
-require('./jquery/renderer');
-require('./jquery/hooks');
-require('./jquery/deferred');
-require('./jquery/hold_ready');
-require('./jquery/events');
-require('./jquery/easing');
-require('./jquery/element_data');
-require('./jquery/element');
-require('./jquery/component_registrator');
-require('./jquery/ajax');
+import './jquery/renderer';
+import './jquery/hooks';
+import './jquery/deferred';
+import './jquery/hold_ready';
+import './jquery/events';
+import './jquery/easing';
+import './jquery/element_data';
+import './jquery/element';
+import './jquery/component_registrator';
+import './jquery/ajax';

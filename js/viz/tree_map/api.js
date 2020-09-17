@@ -1,7 +1,7 @@
-const proto = require('./tree_map.base').prototype;
-const nodeProto = require('./node').prototype;
-
-const _extend = require('../../core/utils/extend').extend;
+import { prototype as proto } from './tree_map.base';
+import { prototype as nodeProto } from './node';
+import { extend as _extend } from '../../core/utils/extend';
+import { noop } from '../../core/utils/common';
 
 proto._eventsMap.onNodesInitialized = { name: 'nodesInitialized' };
 proto._eventsMap.onNodesRendering = { name: 'nodesRendering' };
@@ -155,7 +155,7 @@ function updateValue(node, value) {
     }
 }
 
-proto._extendProxyType = require('../../core/utils/common').noop;
+proto._extendProxyType = noop;
 
 const _resetNodes = proto._resetNodes;
 proto._resetNodes = function() {

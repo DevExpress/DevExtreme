@@ -5,10 +5,12 @@
 @use "../sizes" as *;
 @use "../overlay/colors" as *;
 @use "../textEditor/colors" as *;
+@use "../../base/popover";
+
 // adduse
 
 
-$GENERIC_POPOVER_TOOLBAR_PADDING: 15px;
+$generic-popover-toolbar-padding: 15px;
 
 .dx-popover-wrapper {
   &.dx-position-bottom .dx-popover-arrow:after {
@@ -19,7 +21,7 @@ $GENERIC_POPOVER_TOOLBAR_PADDING: 15px;
     margin: 0;
 
     &.dx-toolbar {
-      padding-left: $GENERIC_POPOVER_TOOLBAR_PADDING;
+      padding-left: $generic-popover-toolbar-padding;
     }
   }
 
@@ -36,7 +38,7 @@ $GENERIC_POPOVER_TOOLBAR_PADDING: 15px;
 .dx-popover-wrapper { // stylelint-disable-line no-duplicate-selectors
   .dx-rtl.dx-popup-title {
     &.dx-toolbar {
-      padding-right: $GENERIC_POPOVER_TOOLBAR_PADDING;
+      padding-right: $generic-popover-toolbar-padding;
       padding-left: 0;
     }
   }

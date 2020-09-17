@@ -1,25 +1,9 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$dateview-shadow-up: null !default;
-$dateview-shadow-down: null !default;
-$dateview-color: null !default;
-
-
-@if $mode == "light" {
-
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
-@if $mode == "dark" {
-
-  $dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
-  $dateview-color: $base-text-color !default;
-}
-
+$dateview-shadow-up: 0deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
+$dateview-shadow-down: 180deg, color.change($base-bg, $alpha: 0) 0%, color.change($base-bg, $alpha: 0.8) 60% !default;
+$dateview-color: $base-text-color !default;

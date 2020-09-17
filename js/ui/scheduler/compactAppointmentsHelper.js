@@ -3,9 +3,10 @@ import Button from '../button';
 import translator from '../../animation/translator';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
-import deferredUtils from '../../core/utils/deferred';
+import { when } from '../../core/utils/deferred';
 import { extendFromObject } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
+import { AppointmentTooltipInfo } from './dataStructures';
 import { LIST_ITEM_DATA_KEY, FIXED_CONTAINER_CLASS, LIST_ITEM_CLASS } from './constants';
 
 
@@ -33,7 +34,7 @@ export class CompactAppointmentsHelper {
         this._makeBackgroundDarker($button);
 
         this.elements.push($button);
-        $button.data('items', this._createAppointmentsData(items));
+        $button.data('items', this._createTooltipInfos(items));
 
         return $button;
     }
@@ -46,13 +47,17 @@ export class CompactAppointmentsHelper {
         this.elements = [];
     }
 
-    _createAppointmentsData(items) {
-        return items.data.map((item, index) => {
-            return {
-                data: item,
-                color: items.colors[index],
-                settings: items.settings[index],
-            };
+    _createTooltipInfos(items) {
+        return items.data.map((appointment, index) => {
+            const targetedAdapter = this.instance.createAppointmentAdapter(appointment).clone();
+
+            if(items.settings?.length > 0) {
+                const { info } = items.settings[index];
+                targetedAdapter.startDate = info.sourceAppointment.startDate;
+                targetedAdapter.endDate = info.sourceAppointment.endDate;
+            }
+
+            return new AppointmentTooltipInfo(appointment, targetedAdapter.source(), items.colors[index], items.settings[index]);
         });
     }
 
@@ -77,9 +82,10 @@ export class CompactAppointmentsHelper {
     _clickEvent(onAppointmentClick) {
         return (e) => {
             const config = {
-                itemData: e.itemData.data,
+                itemData: e.itemData.appointment,
                 itemElement: e.itemElement
             };
+
             const createClickEvent = extendFromObject(this.instance.fire('mapAppointmentFields', config), e, false);
             delete createClickEvent.itemData;
             delete createClickEvent.itemIndex;
@@ -111,9 +117,9 @@ export class CompactAppointmentsHelper {
                     const event = e.event;
                     const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
 
-                    if(itemData && !itemData.data.disabled) {
+                    if(itemData && !itemData.appointment.disabled) {
                         event.data = event.data || {};
-                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.data, itemData.settings);
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings);
 
                         dragBehavior.onDragStart(event.data);
                         translator.resetPosition($(dragElement));
@@ -121,7 +127,7 @@ export class CompactAppointmentsHelper {
                 },
                 onDragEnd: (e) => {
                     const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
-                    if(itemData && !itemData.data.disabled) {
+                    if(itemData && !itemData.appointment.disabled) {
                         dragBehavior.onDragEnd(e);
                     }
                 }
@@ -157,7 +163,7 @@ export class CompactAppointmentsHelper {
     }
 
     _makeBackgroundColor($button, colors, color) {
-        deferredUtils.when.apply(null, colors).done(function() {
+        when.apply(null, colors).done(function() {
             this._makeBackgroundColorCore($button, color, arguments);
         }.bind(this));
     }

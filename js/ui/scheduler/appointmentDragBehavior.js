@@ -55,9 +55,9 @@ export default class AppointmentDragBehavior {
         });
     }
 
-    getItemData(appointment) {
-        const itemData = $(appointment).data(LIST_ITEM_DATA_KEY);
-        return itemData && itemData.data || this.appointments._getItemData(appointment);
+    getItemData(appointmentElement) {
+        const itemData = $(appointmentElement).data(LIST_ITEM_DATA_KEY);
+        return itemData?.targetedAppointment || itemData?.appointment || this.appointments._getItemData(appointmentElement);
     }
 
     getItemSettings(appointment) {
@@ -139,5 +139,3 @@ export default class AppointmentDragBehavior {
         }
     }
 }
-
-module.exports = AppointmentDragBehavior;

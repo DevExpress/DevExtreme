@@ -2,252 +2,68 @@ $size: null !default;
 
 @use "colors" as *;
 
-$GENERIC_SIZE_POSTFIX: null !default;
-$GENERIC_BASE_FONT_SIZE: null !default;
-$GENERIC_BASE_LINE_HEIGHT: null !default;
-$GENERIC_XL_FONT_SIZE: null !default;
-$GENERIC_L_FONT_SIZE: null !default;
-$GENERIC_M_FONT_SIZE: null !default;
-$GENERIC_S_FONT_SIZE: null !default;
-$GENERIC_XS_FONT_SIZE: null !default;
-$GENERIC_H3_FONT_SIZE: null !default;
-$GENERIC_H5_FONT_SIZE: null !default;
-$GENERIC_FORM_GROUP_CAPTION_FONT_SIZE: null !default;
-$GENERIC_FORM_GROUP_CONTENT_PADDING_BOTTOM: null !default;
-$GENERIC_BASE_INLINE_WIDGET_HEIGHT: null !default;
-$GENERIC_BASE_INLINE_BLOCK_HEIGHT: null !default;
-$GENERIC_BASE_ICON_SIZE: null !default;
-$GENERIC_BASE_MORE_ADAPTIVE_ICON_SIZE: null !default;
-$GENERIC_BASE_INLINE_HORIZONTAL_PADDING: null !default;
-$GENERIC_GRID_BASE_NODATA_FONT_SIZE: null !default;
-$GENERIC_DATAGRID_CELL_PADDING: null !default;
-$PIVOTGRID_EXPAND_ICON_OFFSET: null !default;
-$PIVOTGRID_EXPAND_ICON_TEXT_OFFSET: null !default;
-$ACCORDION_TITLE_ICON_TOP_OFFSET: null !default;
-$ACCORDION_TITLE_ICON_MARGIN: null !default;
-$PIVOTGRID_EMPTY_COLUMN_WIDTH: null !default;
-$PIVOTGRID_COMMON_LEFT_RIGHT_PADDING: null !default;
-$PIVOTGRID_COMMON_TOP_BOTTOM_PADDING: null !default;
-$PIVOTGRID_FIELD_INDICATORS_OFFSET: null !default;
-$PIVOTGRID_INDICATORS_LINE_HEIGHT: null !default;
-$TREELIST_EXPANDED_ICON_MARGIN_LEFT: null !default;
-$TREELIST_COLLAPSED_ICON_MARGIN_LEFT: null !default;
-$TREELIST_ICON_MARGIN_TOP: null !default;
-$filterbuilder-item-margin-bottom: null !default;
-$filterbuilder-treeview-item-horizontal-padding: null !default;
-$filterbuilder-treeview-item-padding: null !default;
-$FILEMANAGER_TOOLBAR_SEPARATOR_HEIGHT: null !default;
-$FILEMANAGER_TOOLBAR_VIEWMODE_WIDTH: null !default;
-$FILEMANAGER_TOOLBAR_VIEWMODE_PADDING: null !default;
-$FILEMANAGER_BREADCRUMBS_ITEM_PADDING_TOP: null !default;
-$FILEMANAGER_BREADCRUMBS_ITEM_PADDING_BOTTOM: null !default;
-$FILEMANAGER_DETAILS_VIEW_CHECKBOX_COLUMN_WIDTH: null !default;
-$FILEMANAGER_FILE_ACTIONS_BUTTON_SIZE: null !default;
-$FILEMANAGER_FILE_ACTIONS_BUTTON_TOP_BOTTOM_PADDING: null !default;
-$FILEMANAGER_DIRS_TREE_ICON_MARGIN_BOTTOM: null !default;
-$FILEMANAGER_LARGE_ICON_SIZE: null !default;
-$FILEMANAGER_LARGE_ICON_BUTTON_CONTENT_PADDING: null !default;
-$FILEMANAGER_PROGRESS_PANEL_PADDING_TOP: null !default;
-$FILEMANAGER_PROGRESS_BOX_BUTTON_CLOSE_MARGIN_TOP: null !default;
-$GANTT_HEADER_ITEM_HEIGHT: null !default;
-$GANTT_TASK_WRAPPER_PADDING_TOP: null !default;
-$GANTT_TASK_TITLE_PADDING_LEFT: null !default;
-$GANTT_TASK_HEIGHT: null !default;
-$GANTT_PARENT_TASK_HEIGHT: null !default;
-$GANTT_DEPENDENCY_SUCCESSOR_SIZE: null !default;
-$GANTT_MILESTONE_SIZE: null !default;
-$GANTT_CV_DIALOG_PADDING_BOTTOM: null !default;
-$GANTT_CV_DIALOG_ROW_PADDING_TOP: null !default;
-$GENERIC_CHECKBOX_SIZE: null !default;
-$GENERIC_SWITCH_HEIGHT: null !default;
-$GENERIC_SLIDER_HEIGHT: null !default;
-$GENERIC_RADIOGROUP_MIN_HEIGHT: null !default;
-$GENERIC_LIST_ITEM_VERTICAL_PADDING: null !default;
+$generic-size-postfix: null !default;
+$generic-base-font-size: null !default;
+$generic-base-line-height: null !default;
+$generic-base-inline-widget-height: null !default;
+$generic-base-inline-block-height: null !default;
+$generic-base-icon-size: null !default;
+$generic-base-more-adaptive-icon-size: null !default;
+$generic-base-inline-horizontal-padding: null !default;
 
 @if $size == "default" {
-  $GENERIC_SIZE_POSTFIX: "";
+  $generic-size-postfix: "";
 
   // Font sizes
-  $GENERIC_BASE_FONT_SIZE: 14px;
-  $GENERIC_BASE_LINE_HEIGHT: 1.35715; // 19px/14px
-
-  $GENERIC_XL_FONT_SIZE: 34px;
-  $GENERIC_L_FONT_SIZE: 28px;
-  $GENERIC_M_FONT_SIZE: 20px;
-  $GENERIC_S_FONT_SIZE: 18px;
-  $GENERIC_XS_FONT_SIZE: 12px;
-
-  $GENERIC_H3_FONT_SIZE: 22px;
-  $GENERIC_H5_FONT_SIZE: 16px;
-
-  $GENERIC_FORM_GROUP_CAPTION_FONT_SIZE: 20px;
-  $GENERIC_FORM_GROUP_CONTENT_PADDING_BOTTOM: 20px;
+  $generic-base-font-size: 14px;
+  $generic-base-line-height: 1.35715; // 19px/14px
 
   // Base sizes
-  $GENERIC_BASE_INLINE_WIDGET_HEIGHT: 36px;
-  $GENERIC_BASE_INLINE_BLOCK_HEIGHT: 19px;
-  $GENERIC_BASE_ICON_SIZE: 18px;
-  $GENERIC_BASE_MORE_ADAPTIVE_ICON_SIZE: 21px;
-  $GENERIC_BASE_INLINE_HORIZONTAL_PADDING: 10px;
-
-  $GENERIC_GRID_BASE_NODATA_FONT_SIZE: 17px;
-  $GENERIC_DATAGRID_CELL_PADDING: 7px;
-
-  $PIVOTGRID_EXPAND_ICON_OFFSET: -5px;
-  $PIVOTGRID_EXPAND_ICON_TEXT_OFFSET: 0;
-
-  $ACCORDION_TITLE_ICON_TOP_OFFSET: 4px;
-  $ACCORDION_TITLE_ICON_MARGIN: 6px;
-
-  $PIVOTGRID_EMPTY_COLUMN_WIDTH: 19px;
-
-  $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING: 10px;
-  $PIVOTGRID_COMMON_TOP_BOTTOM_PADDING: 7px;
-  $PIVOTGRID_FIELD_INDICATORS_OFFSET: 6px;
-  $PIVOTGRID_INDICATORS_LINE_HEIGHT: 19px;
-
-  $TREELIST_EXPANDED_ICON_MARGIN_LEFT: 5px;
-  $TREELIST_COLLAPSED_ICON_MARGIN_LEFT: 6px;
-  $TREELIST_ICON_MARGIN_TOP: $GENERIC_BASE_ICON_SIZE/2 - 1;
-
-  $filterbuilder-item-margin-bottom: 9px;
-  $filterbuilder-treeview-item-horizontal-padding: 15px;
-  $filterbuilder-treeview-item-padding: 5px $filterbuilder-treeview-item-horizontal-padding;
-
-  $FILEMANAGER_TOOLBAR_SEPARATOR_HEIGHT: 36px;
-  $FILEMANAGER_TOOLBAR_VIEWMODE_WIDTH: 150px;
-  $FILEMANAGER_TOOLBAR_VIEWMODE_PADDING: 8px;
-  $FILEMANAGER_BREADCRUMBS_ITEM_PADDING_TOP: 5px;
-  $FILEMANAGER_BREADCRUMBS_ITEM_PADDING_BOTTOM: 8px;
-  $FILEMANAGER_DETAILS_VIEW_CHECKBOX_COLUMN_WIDTH: 43px;
-  $FILEMANAGER_FILE_ACTIONS_BUTTON_SIZE: 21px;
-  $FILEMANAGER_FILE_ACTIONS_BUTTON_TOP_BOTTOM_PADDING: 10px;
-  $FILEMANAGER_DIRS_TREE_ICON_MARGIN_BOTTOM: 0;
-  $FILEMANAGER_LARGE_ICON_SIZE: 22px;
-  $FILEMANAGER_LARGE_ICON_BUTTON_CONTENT_PADDING: 4px;
-  $FILEMANAGER_PROGRESS_PANEL_PADDING_TOP: 6px;
-  $FILEMANAGER_PROGRESS_BOX_BUTTON_CLOSE_MARGIN_TOP: 9px;
-
-  $GANTT_HEADER_ITEM_HEIGHT: 45px;
-  $GANTT_TASK_WRAPPER_PADDING_TOP: 0;
-  $GANTT_TASK_TITLE_PADDING_LEFT: 7px;
-  $GANTT_TASK_HEIGHT: 21px;
-  $GANTT_PARENT_TASK_HEIGHT: 19px;
-  $GANTT_DEPENDENCY_SUCCESSOR_SIZE: 10px;
-  $GANTT_MILESTONE_SIZE: 14px;
-  $GANTT_CV_DIALOG_PADDING_BOTTOM: 8px;
-  $GANTT_CV_DIALOG_ROW_PADDING_TOP: 12px;
-
-  $GENERIC_CHECKBOX_SIZE: 22px;
-  $GENERIC_SWITCH_HEIGHT: 24px;
-  $GENERIC_SLIDER_HEIGHT: 28px;
-  $GENERIC_RADIOGROUP_MIN_HEIGHT: 26px;
-  $GENERIC_LIST_ITEM_VERTICAL_PADDING: 10px;
+  $generic-base-inline-widget-height: 36px;
+  $generic-base-inline-block-height: 19px;
+  $generic-base-icon-size: 18px;
+  $generic-base-more-adaptive-icon-size: 21px;
+  $generic-base-inline-horizontal-padding: 10px;
 }
 
 @if $size == "compact" {
-  $GENERIC_SIZE_POSTFIX: ".compact";
+  $generic-size-postfix: ".compact";
 
   // Font sizes
-  $GENERIC_BASE_FONT_SIZE: 12px;
-  $GENERIC_BASE_LINE_HEIGHT: 1.33334; // 16px/12px
-
-  $GENERIC_XL_FONT_SIZE: 29px;
-  $GENERIC_L_FONT_SIZE: 24px;
-  $GENERIC_M_FONT_SIZE: 18px;
-  $GENERIC_S_FONT_SIZE: 16px;
-  $GENERIC_XS_FONT_SIZE: 10px;
-
-  $GENERIC_H3_FONT_SIZE: 20px;
-  $GENERIC_H5_FONT_SIZE: 14px;
-
-  $GENERIC_FORM_GROUP_CAPTION_FONT_SIZE: 16px;
-  $GENERIC_FORM_GROUP_CONTENT_PADDING_BOTTOM: 10px;
+  $generic-base-font-size: 12px;
+  $generic-base-line-height: 1.33334; // 16px/12px
 
   // Base sizes
-  $GENERIC_BASE_INLINE_WIDGET_HEIGHT: 26px;
-  $GENERIC_BASE_INLINE_BLOCK_HEIGHT: 16px;
-  $GENERIC_BASE_ICON_SIZE: 14px;
-  $GENERIC_BASE_MORE_ADAPTIVE_ICON_SIZE: 17px;
-  $GENERIC_BASE_INLINE_HORIZONTAL_PADDING: 6px;
-
-  $GENERIC_GRID_BASE_NODATA_FONT_SIZE: 14px;
-  $GENERIC_DATAGRID_CELL_PADDING: 5px;
-
-  $ACCORDION_TITLE_ICON_TOP_OFFSET: 1px;
-  $ACCORDION_TITLE_ICON_MARGIN: 4px;
-
-  $PIVOTGRID_EMPTY_COLUMN_WIDTH: 16px;
-  $PIVOTGRID_EXPAND_ICON_OFFSET: -5px;
-  $PIVOTGRID_EXPAND_ICON_TEXT_OFFSET: 0;
-
-  $PIVOTGRID_COMMON_LEFT_RIGHT_PADDING: 6px;
-  $PIVOTGRID_COMMON_TOP_BOTTOM_PADDING: 5px;
-  $PIVOTGRID_FIELD_INDICATORS_OFFSET: 4px;
-  $PIVOTGRID_INDICATORS_LINE_HEIGHT: 16px;
-
-  $TREELIST_EXPANDED_ICON_MARGIN_LEFT: 3px;
-  $TREELIST_COLLAPSED_ICON_MARGIN_LEFT: 4px;
-  $TREELIST_ICON_MARGIN_TOP: $GENERIC_BASE_ICON_SIZE/2;
-
-  $filterbuilder-item-margin-bottom: 5px;
-  $filterbuilder-treeview-item-horizontal-padding: 15px;
-  $filterbuilder-treeview-item-padding: 3px $filterbuilder-treeview-item-horizontal-padding;
-
-  $FILEMANAGER_TOOLBAR_SEPARATOR_HEIGHT: 26px;
-  $FILEMANAGER_TOOLBAR_VIEWMODE_WIDTH: 130px;
-  $FILEMANAGER_TOOLBAR_VIEWMODE_PADDING: 5px;
-  $FILEMANAGER_BREADCRUMBS_ITEM_PADDING_TOP: 3px;
-  $FILEMANAGER_BREADCRUMBS_ITEM_PADDING_BOTTOM: 7px;
-  $FILEMANAGER_DETAILS_VIEW_CHECKBOX_COLUMN_WIDTH: 39px;
-  $FILEMANAGER_FILE_ACTIONS_BUTTON_SIZE: 18px;
-  $FILEMANAGER_FILE_ACTIONS_BUTTON_TOP_BOTTOM_PADDING: 9px;
-  $FILEMANAGER_DIRS_TREE_ICON_MARGIN_BOTTOM: 1px;
-  $FILEMANAGER_LARGE_ICON_SIZE: 18px;
-  $FILEMANAGER_LARGE_ICON_BUTTON_CONTENT_PADDING: 3px;
-  $FILEMANAGER_PROGRESS_PANEL_PADDING_TOP: 6px;
-  $FILEMANAGER_PROGRESS_BOX_BUTTON_CLOSE_MARGIN_TOP: 6px;
-
-  $GANTT_HEADER_ITEM_HEIGHT: 45px;
-  $GANTT_TASK_WRAPPER_PADDING_TOP: 0;
-  $GANTT_TASK_TITLE_PADDING_LEFT: 5px;
-  $GANTT_TASK_HEIGHT: 18px;
-  $GANTT_DEPENDENCY_SUCCESSOR_SIZE: 9px;
-  $GANTT_MILESTONE_SIZE: 12px;
-  $GANTT_CV_DIALOG_PADDING_BOTTOM: 10px;
-  $GANTT_CV_DIALOG_ROW_PADDING_TOP: 10px;
-
-  $GENERIC_CHECKBOX_SIZE: 16px;
-  $GENERIC_SWITCH_HEIGHT: 18px;
-  $GENERIC_SLIDER_HEIGHT: 20px;
-  $GENERIC_RADIOGROUP_MIN_HEIGHT: 20px;
-  $GENERIC_LIST_ITEM_VERTICAL_PADDING: 5px;
+  $generic-base-inline-widget-height: 26px;
+  $generic-base-inline-block-height: 16px;
+  $generic-base-icon-size: 14px;
+  $generic-base-more-adaptive-icon-size: 17px;
+  $generic-base-inline-horizontal-padding: 6px;
 }
 
 // Base inline widgets paddings
-$GENERIC_BASE_INLINE_WIDGET_VERTICAL_PADDING:
-    $GENERIC_BASE_INLINE_WIDGET_HEIGHT - $GENERIC_BASE_INLINE_BLOCK_HEIGHT;
-$GENERIC_BASE_INLINE_WIDGET_TOP_PADDING:
-    floor($GENERIC_BASE_INLINE_WIDGET_VERTICAL_PADDING/2);
-$GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING:
-    $GENERIC_BASE_INLINE_WIDGET_VERTICAL_PADDING - $GENERIC_BASE_INLINE_WIDGET_TOP_PADDING;
+$generic-base-inline-widget-vertical-padding:
+  $generic-base-inline-widget-height -
+  $generic-base-inline-block-height;
+$generic-base-inline-widget-top-padding: floor($generic-base-inline-widget-vertical-padding / 2);
+$generic-base-inline-widget-bottom-padding:
+  $generic-base-inline-widget-vertical-padding -
+  $generic-base-inline-widget-top-padding;
 
 // Base bordered inline widgets sizes
-$GENERIC_BASE_BORDER_WIDTH: 1px;
-$GENERIC_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE:
-    $GENERIC_BASE_INLINE_WIDGET_HEIGHT - $GENERIC_BASE_BORDER_WIDTH * 2;
-$GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING:
-    $GENERIC_BASE_INLINE_WIDGET_TOP_PADDING - $GENERIC_BASE_BORDER_WIDTH;
-$GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING:
-    $GENERIC_BASE_INLINE_HORIZONTAL_PADDING - $GENERIC_BASE_BORDER_WIDTH;
-$GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING:
-    $GENERIC_BASE_INLINE_WIDGET_BOTTOM_PADDING - $GENERIC_BASE_BORDER_WIDTH;
-$GENERIC_BASE_INLINE_BORDEREDWIDGET_PADDING:
-  $GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING
-  $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING
-  $GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING;
+$generic-base-border-width: 1px;
+$generic-base-inline-borderedwidget-inner-size:
+  $generic-base-inline-widget-height -
+  $generic-base-border-width * 2;
 
-$SCHEDULER_LEFT_COLUMN_WIDTH: 100px;
+$generic-base-inline-borderedwidget-top-padding:
+  $generic-base-inline-widget-top-padding -
+  $generic-base-border-width;
 
-// Base mobile sizes
-$GENERIC_MOBILE_BASE_INLINE_WIDGET_SIZE: 36px;
+$generic-base-inline-borderedwidget-horizontal-padding:
+  $generic-base-inline-horizontal-padding -
+  $generic-base-border-width;
+
+$generic-base-inline-borderedwidget-bottom-padding:
+  $generic-base-inline-widget-bottom-padding -
+  $generic-base-border-width;

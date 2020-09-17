@@ -3,9 +3,11 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/scrollable";
+
 // adduse
-$SCROLLBAR_SIZE_THIN: 6px;
-$SCROLLBAR_SIZE: 13px;
+$scrollbar-size-thin: 6px;
+$scrollbar-size: 13px;
 
 .dx-scrollable-content {
   -webkit-transform: none; // stylelint-disable-line property-no-vendor-prefix
@@ -53,11 +55,11 @@ $SCROLLBAR_SIZE: 13px;
 .dx-scrollbar-vertical {
   .dx-scrollable-scroll {
     float: right;
-    width: $SCROLLBAR_SIZE_THIN;
+    width: $scrollbar-size-thin;
   }
 
   &.dx-scrollbar-hoverable {
-    width: $SCROLLBAR_SIZE_THIN;
+    width: $scrollbar-size-thin;
     transition: width 0.2s linear 0.15s, background-color 0.2s linear 0.15s;
 
     .dx-scrollable-scroll {
@@ -78,10 +80,10 @@ $SCROLLBAR_SIZE: 13px;
 
     &.dx-state-hover,
     &.dx-scrollable-scrollbar-active {
-      width: $SCROLLBAR_SIZE;
+      width: $scrollbar-size;
 
       .dx-scrollable-scroll {
-        width: $SCROLLBAR_SIZE;
+        width: $scrollbar-size;
       }
     }
   }
@@ -89,7 +91,7 @@ $SCROLLBAR_SIZE: 13px;
 
 .dx-scrollbar-horizontal {
   .dx-scrollable-scroll {
-    height: $SCROLLBAR_SIZE_THIN;
+    height: $scrollbar-size-thin;
 
     &,
     .dx-rtl & {
@@ -100,7 +102,7 @@ $SCROLLBAR_SIZE: 13px;
   }
 
   &.dx-scrollbar-hoverable {
-    height: $SCROLLBAR_SIZE_THIN;
+    height: $scrollbar-size-thin;
     transition: height 0.2s linear 0.15s, background-color 0.2s linear 0.15s;
 
     .dx-scrollable-scroll {
@@ -121,10 +123,10 @@ $SCROLLBAR_SIZE: 13px;
 
     &.dx-state-hover,
     &.dx-scrollable-scrollbar-active {
-      height: $SCROLLBAR_SIZE;
+      height: $scrollbar-size;
 
       .dx-scrollable-scroll {
-        height: $SCROLLBAR_SIZE;
+        height: $scrollbar-size;
       }
     }
   }
@@ -136,7 +138,7 @@ $SCROLLBAR_SIZE: 13px;
     > .dx-scrollable-wrapper {
       > .dx-scrollable-container {
         > .dx-scrollable-content {
-          padding-right: $SCROLLBAR_SIZE_THIN;
+          padding-right: $scrollbar-size-thin;
         }
       }
     }
@@ -147,7 +149,7 @@ $SCROLLBAR_SIZE: 13px;
         > .dx-scrollable-container {
           > .dx-scrollable-content {
             padding-right: 0;
-            padding-left: $SCROLLBAR_SIZE_THIN;
+            padding-left: $scrollbar-size-thin;
           }
         }
       }
@@ -159,7 +161,7 @@ $SCROLLBAR_SIZE: 13px;
     > .dx-scrollable-wrapper {
       > .dx-scrollable-container {
         > .dx-scrollable-content {
-          padding-bottom: $SCROLLBAR_SIZE_THIN;
+          padding-bottom: $scrollbar-size-thin;
         }
       }
     }
@@ -169,7 +171,7 @@ $SCROLLBAR_SIZE: 13px;
 .dx-scrollview-scrollbottom-text,
 .dx-scrollview-pull-down-text {
   margin-left: 10px;
-  top: (50px - $MATERIAL_BASE_FONT_SIZE) / 2;
+  top: (50px - $material-base-font-size) / 2;
   display: inline-block;
 
   .dx-rtl & {

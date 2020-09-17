@@ -1,17 +1,17 @@
-const isDefined = require('./type').isDefined;
-const each = require('./iterator').each;
-const objectUtils = require('./object');
-const config = require('../config');
+import { isDefined } from './type';
+import { each } from './iterator';
+import { orderEach } from './object';
+import config from '../config';
 
-const isEmpty = function(entity) {
+export const isEmpty = function(entity) {
     return Array.isArray(entity) && !entity.length;
 };
 
-const wrapToArray = function(entity) {
+export const wrapToArray = function(entity) {
     return Array.isArray(entity) ? entity : [entity];
 };
 
-const inArray = function(value, object) {
+export const inArray = function(value, object) {
     if(!object) {
         return -1;
     }
@@ -20,7 +20,7 @@ const inArray = function(value, object) {
     return array.indexOf(value);
 };
 
-const intersection = function(a, b) {
+export const intersection = function(a, b) {
     if(!Array.isArray(a) || a.length === 0 ||
        !Array.isArray(b) || b.length === 0) {
         return [];
@@ -39,7 +39,7 @@ const intersection = function(a, b) {
     return result;
 };
 
-const removeDuplicates = function(from, what) {
+export const removeDuplicates = function(from, what) {
     if(!Array.isArray(from) || from.length === 0) {
         return [];
     }
@@ -61,7 +61,7 @@ const removeDuplicates = function(from, what) {
     return result;
 };
 
-const normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
+export const normalizeIndexes = function(items, indexParameterName, currentItem, needIndexCallback) {
     const indexedItems = {};
     let parameterIndex = 0;
     const useLegacyVisibleIndex = config().useLegacyVisibleIndex;
@@ -95,7 +95,7 @@ const normalizeIndexes = function(items, indexParameterName, currentItem, needIn
 
     parameterIndex = 0;
 
-    objectUtils.orderEach(indexedItems, function(index, items) {
+    orderEach(indexedItems, function(index, items) {
         each(items, function() {
             if(index >= 0) {
                 this[indexParameterName] = parameterIndex++;
@@ -114,7 +114,7 @@ const normalizeIndexes = function(items, indexParameterName, currentItem, needIn
     return parameterIndex;
 };
 
-const merge = function(array1, array2) {
+export const merge = function(array1, array2) {
     for(let i = 0; i < array2.length; i++) {
         array1[array1.length] = array2[i];
     }
@@ -122,7 +122,7 @@ const merge = function(array1, array2) {
     return array1;
 };
 
-const find = function(array, condition) {
+export const find = function(array, condition) {
     for(let i = 0; i < array.length; i++) {
         if(condition(array[i])) {
             return array[i];
@@ -130,7 +130,7 @@ const find = function(array, condition) {
     }
 };
 
-const groupBy = (array, cb) => array.reduce(
+export const groupBy = (array, cb) => array.reduce(
     (result, item) => ({
         ...result,
         [cb(item)]: [
@@ -140,13 +140,3 @@ const groupBy = (array, cb) => array.reduce(
     }),
     {}
 );
-
-exports.isEmpty = isEmpty;
-exports.wrapToArray = wrapToArray;
-exports.intersection = intersection;
-exports.removeDuplicates = removeDuplicates;
-exports.normalizeIndexes = normalizeIndexes;
-exports.inArray = inArray;
-exports.merge = merge;
-exports.find = find;
-exports.groupBy = groupBy;

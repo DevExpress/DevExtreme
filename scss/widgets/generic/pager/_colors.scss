@@ -1,140 +1,67 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
+/**
+* $name 150. Pager selected item text color
+* $type color
+*/
 $pager-page-selected-color: null !default;
+
+/**
+* $name 160. Pager selected item background color
+* $type color
+*/
 $pager-page-selected-bg: null !default;
 $pager-page-selected-border-color: null !default;
-$pager-page-border-radius: null !default;
-
+$pager-page-border-radius: $base-border-radius - 1px !default;
 
 @if $color == "carmine" {
-  /**
-    * $name 150. Pager selected item text color
-    * $type color
-    */
   $pager-page-selected-color: lighten($base-text-color, 100%) !default;
-
-  /**
-    * $name 160. Pager selected item background color
-    * $type color
-    */
   $pager-page-selected-bg: $base-accent !default;
   $pager-page-selected-border-color: transparent !default;
-  $pager-page-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 170. Pager selected item background color
-    * $type color
-    */
   $pager-page-selected-bg: $base-inverted-bg !default;
   $pager-page-selected-border-color: $base-border-color !default;
-
-  /**
-    * $name 175. Pager selected item text color
-    * $type color
-    */
   $pager-page-selected-color: $base-inverted-text-color !default;
-  $pager-page-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 150. Pager selected item text color
-    * $type color
-    */
   $pager-page-selected-color: $base-text-color !default;
-
-  /**
-    * $name 160. Pager selected item background color
-    * $type color
-    */
   $pager-page-selected-bg: lighten($base-bg, 17%) !default;
   $pager-page-selected-border-color: transparent !default;
-  $pager-page-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 150. Pager selected item text color
-    * $type color
-    */
   $pager-page-selected-color: $base-bg !default;
-
-  /**
-    * $name 160. Pager selected item background color
-    * $type color
-    */
   $pager-page-selected-bg: $base-accent !default;
   $pager-page-selected-border-color: transparent !default;
-  $pager-page-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 150. Pager selected item background color
-    * $type color
-    */
   $pager-page-selected-bg: lighten($base-bg, 17%) !default;
   $pager-page-selected-border-color: transparent !default;
-
-  /**
-    * $name 160. Pager selected item text color
-    * $type color
-    */
   $pager-page-selected-color: $base-text-color !default;
-  $pager-page-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 150. Pager selected item background color
-    * $type color
-    */
   $pager-page-selected-bg: $base-link-color !default;
   $pager-page-selected-border-color: transparent !default;
-
-  /**
-    * $name 160. Pager selected item text color
-    * $type color
-    */
   $pager-page-selected-color: lighten($base-text-color, 100%) !default;
-  $pager-page-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 150. Pager selected item text color
-    * $type color
-    */
   $pager-page-selected-color: $base-text-color !default;
-
-  /**
-    * $name 160. Pager selected item background color
-    * $type color
-    */
   $pager-page-selected-bg: darken($base-bg, 17%) !default;
   $pager-page-selected-border-color: transparent !default;
-  $pager-page-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 150. Pager selected item text color
-    * $type color
-    */
   $pager-page-selected-color: $base-text-color !default;
-
-  /**
-    * $name 160. Pager selected item background color
-    * $type color
-    */
   $pager-page-selected-bg: $base-border-color !default;
   $pager-page-selected-border-color: transparent !default;
-  $pager-page-border-radius: $base-border-radius - 1px !default;
 }
-

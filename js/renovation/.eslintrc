@@ -1,6 +1,10 @@
 {
     "overrides": [{
-        "files": ["*.ts", "*.tsx"],
-        "extends": ["devextreme/renovation-declarations"]
+        "files": ["*.ts?(x)"],
+        "extends": ["devextreme/renovation-declarations"],
+        "excludedFiles": "**/__tests__/**/*"
+    }, {
+        "files": ["**/__tests__/**/*.ts?(x)", "**/test_utils/**/*.ts?(x)"],
+        "extends": ["devextreme/jest"]
     }]
 }

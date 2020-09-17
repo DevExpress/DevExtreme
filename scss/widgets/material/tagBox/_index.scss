@@ -5,7 +5,8 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../textEditor" as *;
-@use "../common" as *;
+@use "../common/sizes" as *;
+
 // adduse
 
 
@@ -15,35 +16,35 @@
   }
 
   .dx-texteditor-input {
-    height: $MATERIAL_TAGBOX_TAG_HEIGHT;
+    height: $material-tagbox-tag-height;
   }
 
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-texteditor-input {
       padding: 0;
-      margin-top: $MATERIAL_TAGBOX_TAG_MARGIN;
+      margin-top: $material-tagbox-tag-margin;
     }
 
     .dx-tag-container {
-      padding: $MATERIAL_TAGBOX_TAG_CONTAINER_PADDING;
-      min-height: $MATERIAL_BASE_INLINE_WIDGET_HEIGHT;
+      padding: $material-tagbox-tag-container-padding;
+      min-height: $material-base-inline-widget-height;
     }
   }
 }
 
 .dx-tagbox:not(.dx-texteditor-empty):not(.dx-editor-filled):not(.dx-editor-outlined) {
   .dx-tag-container {
-    margin-top: -$MATERIAL_TAGBOX_TAG_MARGIN;
+    margin-top: -$material-tagbox-tag-margin;
 
     &:after {
-      margin-top: -$MATERIAL_TEXTEDITOR_ICON_CONTAINER_SIZE / 2 + $MATERIAL_TAGBOX_TAG_MARGIN / 2;
+      margin-top: -$material-texteditor-icon-container-size / 2 + $material-tagbox-tag-margin / 2;
     }
   }
 
   .dx-texteditor-input {
     padding-left: 0;
-    margin-top: $MATERIAL_TAGBOX_TAG_MARGIN;
+    margin-top: $material-tagbox-tag-margin;
 
     @at-root #{selector-append(".dx-rtl", &)},
     .dx-rtl & {
@@ -78,7 +79,7 @@
 
 .dx-tag-content {
   margin: 0;
-  padding: $MATERIAL_TAGBOX_TAG_CONTENT_PADDING;
+  padding: $material-tagbox-tag-content-padding;
   min-width: 40px;
   background-color: $tagbox-tag-bg;
   color: $tagbox-tag-color;
@@ -86,9 +87,9 @@
 }
 
 .dx-tag-remove-button {
-  width: $MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH;
+  width: $material-tagbox-remove-button-width;
   height: 100%;
-  right: $MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT;
+  right: $material-tagbox-remove-button-right;
 
   @include dx-icon(clear);
 
@@ -112,7 +113,7 @@
 }
 
 .dx-tag {
-  margin: $MATERIAL_TAGBOX_TAG_MARGIN $MATERIAL_TAGBOX_TAG_MARGIN 0 0;
+  margin: $material-tagbox-tag-margin $material-tagbox-tag-margin 0 0;
 
   &:hover {
     .dx-tag-content {
@@ -130,11 +131,11 @@
 }
 
 @mixin tagbox-editor-container-offset() {
-  right: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+  right: $material-invalid-badge-horizontal-padding;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
-    left: $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+    left: $material-invalid-badge-horizontal-padding;
   }
 }
 
@@ -158,8 +159,8 @@
 .dx-tagbox-popup-wrapper {
   .dx-list-select-all {
     border-bottom: 1px solid $tagbox-select-all-border-color;
-    padding-bottom: $MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM;
-    margin-bottom: $MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM;
+    padding-bottom: $material-tagbox-select-all-padding-bottom;
+    margin-bottom: $material-tagbox-select-all-margin-bottom;
 
     &:after {
       background-color: transparent;
@@ -169,8 +170,8 @@
 
 .dx-rtl {
   .dx-tag-content {
-    padding-right: $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
-    padding-left: $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT;
+    padding-right: $material-tagbox-tag-content-padding-left;
+    padding-left: $material-tagbox-tag-content-padding-right;
   }
 
   .dx-tag-remove-button {

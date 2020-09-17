@@ -1,11 +1,11 @@
-const Class = require('../../core/class');
-const commonUtils = require('../../core/utils/common');
-const contains = require('../../core/utils/dom').contains;
-const devices = require('../../core/devices');
-const eventUtils = require('../utils');
-const pointerEvents = require('../pointer');
-const Emitter = require('./emitter');
-const registerEmitter = require('./emitter_registrator');
+import Class from '../../core/class';
+import { noop, ensureDefined } from '../../core/utils/common';
+import { contains } from '../../core/utils/dom';
+import devices from '../../core/devices';
+import { isMouseEvent } from '../utils';
+import pointerEvents from '../pointer';
+import Emitter from './emitter';
+import registerEmitter from './emitter_registrator';
 
 const ACTIVE_EVENT_NAME = 'dxactive';
 const INACTIVE_EVENT_NAME = 'dxinactive';
@@ -62,8 +62,8 @@ const FeedbackEmitter = Emitter.inherit({
     ctor: function() {
         this.callBase.apply(this, arguments);
 
-        this._active = new FeedbackEvent(0, commonUtils.noop);
-        this._inactive = new FeedbackEvent(0, commonUtils.noop);
+        this._active = new FeedbackEvent(0, noop);
+        this._inactive = new FeedbackEvent(0, noop);
     },
 
     configure: function(data, eventName) {
@@ -102,12 +102,12 @@ const FeedbackEmitter = Emitter.inherit({
 
         const eventTarget = this._getEmitterTarget(e);
 
-        const mouseEvent = eventUtils.isMouseEvent(e);
+        const mouseEvent = isMouseEvent(e);
         const isSimulator = devices.isSimulator();
         const deferFeedback = isSimulator || !mouseEvent;
 
-        const activeTimeout = commonUtils.ensureDefined(this.activeTimeout, ACTIVE_TIMEOUT);
-        const inactiveTimeout = commonUtils.ensureDefined(this.inactiveTimeout, INACTIVE_TIMEOUT);
+        const activeTimeout = ensureDefined(this.activeTimeout, ACTIVE_TIMEOUT);
+        const inactiveTimeout = ensureDefined(this.inactiveTimeout, INACTIVE_TIMEOUT);
 
         this._active = new FeedbackEvent(deferFeedback ? activeTimeout : 0, function() {
             that._fireEvent(ACTIVE_EVENT_NAME, e, { target: eventTarget });
@@ -156,7 +156,7 @@ const FeedbackEmitter = Emitter.inherit({
 
 });
 FeedbackEmitter.lock = function(deferred) {
-    const lockInactive = activeFeedback ? activeFeedback.lockInactive() : commonUtils.noop;
+    const lockInactive = activeFeedback ? activeFeedback.lockInactive() : noop;
 
     deferred.done(lockInactive);
 };
@@ -170,6 +170,8 @@ registerEmitter({
     ]
 });
 
-exports.lock = FeedbackEmitter.lock;
-exports.active = ACTIVE_EVENT_NAME;
-exports.inactive = INACTIVE_EVENT_NAME;
+export const lock = FeedbackEmitter.lock;
+export {
+    ACTIVE_EVENT_NAME as active,
+    INACTIVE_EVENT_NAME as inactive
+};

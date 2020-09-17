@@ -7,4 +7,4 @@ class DiagramPropertiesToolbar extends DiagramToolbar {
     }
 }
 
-module.exports = DiagramPropertiesToolbar;
+export default DiagramPropertiesToolbar;

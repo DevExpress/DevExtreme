@@ -1,4 +1,4 @@
-import dataUtils from '../core/element_data';
+import { data as elementData } from '../core/element_data';
 import Callbacks from '../core/utils/callbacks';
 import errors from './widget/ui.errors';
 import DOMComponent from '../core/dom_component';
@@ -31,7 +31,7 @@ const Validator = DOMComponent.inherit({
             */
             /**
             * @name dxValidatorOptions.adapter.validationRequestsCallbacks
-            * @type Array<function> | jquery.callbacks
+            * @type Array<function>
             */
             /**
             * @name dxValidatorOptions.adapter.applyValidationResults
@@ -110,12 +110,12 @@ const Validator = DOMComponent.inherit({
 
     _initAdapter() {
         const element = this.$element()[0];
-        const dxStandardEditor = dataUtils.data(element, 'dx-validation-target');
+        const dxStandardEditor = elementData(element, 'dx-validation-target');
         let adapter = this.option('adapter');
         if(!adapter) {
             if(dxStandardEditor) {
                 adapter = new DefaultAdapter(dxStandardEditor, this);
-                adapter.validationRequestsCallbacks.add((args) => {
+                adapter.validationRequestsCallbacks.push((args) => {
                     if(this._validationInfo.skipValidation) {
                         return;
                     }
@@ -128,16 +128,9 @@ const Validator = DOMComponent.inherit({
         }
         const callbacks = adapter.validationRequestsCallbacks;
         if(callbacks) {
-            if(Array.isArray(callbacks)) {
-                callbacks.push((args) => {
-                    this.validate(args);
-                });
-            } else {
-                errors.log('W0014', 'validationRequestsCallbacks', 'jQuery.Callbacks', '17.2', 'Use the array instead');
-                callbacks.add((args) => {
-                    this.validate(args);
-                });
-            }
+            callbacks.push((args) => {
+                this.validate(args);
+            });
         }
     },
 
@@ -301,4 +294,4 @@ const Validator = DOMComponent.inherit({
 
 registerComponent('dxValidator', Validator);
 
-module.exports = Validator;
+export default Validator;

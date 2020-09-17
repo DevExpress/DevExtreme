@@ -15,9 +15,9 @@ $('<div id="test-container" style="width: 400px; height: 400px;"></div>').append
 
 const _LoadingIndicator = loadingIndicatorModule.LoadingIndicator;
 
-titleModule.Title = vizMocks.Title;
+titleModule.DEBUG_set_title(vizMocks.Title);
 tooltipModule.Tooltip = vizMocks.Tooltip;
-loadingIndicatorModule.LoadingIndicator = vizMocks.LoadingIndicator;
+loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.LoadingIndicator);
 
 QUnit.module('Misc', {
     beforeEach: function() {
@@ -94,7 +94,7 @@ QUnit.test('Animation after false resizing', function(assert) {
 });
 
 QUnit.test('Change theme when loading indicator is shown', function(assert) {
-    loadingIndicatorModule.LoadingIndicator = _LoadingIndicator;
+    loadingIndicatorModule.DEBUG_set_LoadingIndicator(_LoadingIndicator);
     try {
         this.create({ values: [1, 2] });
         this.widget.showLoadingIndicator();
@@ -103,7 +103,7 @@ QUnit.test('Change theme when loading indicator is shown', function(assert) {
 
         assert.ok(true, 'no errors');
     } finally {
-        loadingIndicatorModule.LoadingIndicator = vizMocks.LoadingIndicator;
+        loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.LoadingIndicator);
     }
 });
 
@@ -143,19 +143,21 @@ QUnit.module('Legend', {
             return this.renderer;
         });
 
-        sinon.stub(legendModule, 'Legend', () => {
-            const stub = new stubLegend();
-            stub.stub('measure').returns([120, 120]);
-            stub.stub('layoutOptions').returns({
-                horizontalAlignment: 'right',
-                verticalAlignment: 'top',
-                side: 'horizontal'
-            });
-            return stub;
-        });
+        legendModule._setLegend(sinon.spy(
+            () => {
+                const stub = new stubLegend();
+                stub.stub('measure').returns([120, 120]);
+                stub.stub('layoutOptions').returns({
+                    horizontalAlignment: 'right',
+                    verticalAlignment: 'top',
+                    side: 'horizontal'
+                });
+                return stub;
+            }
+        ));
     },
     afterEach() {
-        legendModule.Legend.restore();
+        legendModule._setLegend(Legend);
         rendererModule.Renderer.restore();
     },
 

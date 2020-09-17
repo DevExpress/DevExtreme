@@ -1,21 +1,8 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN: null !default;
-$MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE: null !default;
-$MATERIAL_DATEBOX_POPUP_CONTENT_MARGIN: null !default;
-$MATERIAL_DATEBOX_INPUT_MIN_HEIGHT: null !default;
-
-@if $size == "default" {
-  $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN: 10px;
-  $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE: 18px;
-  $MATERIAL_DATEBOX_POPUP_CONTENT_MARGIN: 0 34px;
-  $MATERIAL_DATEBOX_INPUT_MIN_HEIGHT: 33px;
-}
-
-@else if $size == "compact" {
-  $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN: 10px;
-  $MATERIAL_DATEBOX_OVERLAY_ITEM_MARGIN_ADAPTIVE: 18px;
-  $MATERIAL_DATEBOX_POPUP_CONTENT_MARGIN: 0 34px;
-  $MATERIAL_DATEBOX_INPUT_MIN_HEIGHT: 33px;
-}
+$material-datebox-overlay-item-margin: 10px;
+$material-datebox-overlay-item-margin-adaptive: 18px;
+$material-datebox-popup-content-margin: 0 34px;
+$material-datebox-input-min-height: 33px;

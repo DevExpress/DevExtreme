@@ -216,4 +216,4 @@ const HierarchicalCollectionWidget = CollectionWidget.inherit({
     }
 });
 
-module.exports = HierarchicalCollectionWidget;
+export default HierarchicalCollectionWidget;

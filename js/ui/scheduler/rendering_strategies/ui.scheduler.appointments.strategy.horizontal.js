@@ -12,11 +12,11 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
         return true;
     }
 
-    calculateAppointmentWidth(appointment, position, isRecurring) {
+    calculateAppointmentWidth(appointment, position) {
         const cellWidth = this.getDefaultCellWidth() || this.getAppointmentMinSize();
         const allDay = this.instance.fire('getField', 'allDay', appointment);
-        const startDate = this.startDate(appointment, false, position);
-        const endDate = this.endDate(appointment, position, isRecurring, false);
+        const startDate = position.info.appointment.startDate;
+        const endDate = this.normalizeEndDateByViewEnd(appointment, position.info.appointment.endDate);
 
         let appointmentDuration = this._getAppointmentDurationInMs(startDate, endDate, allDay);
 
@@ -110,4 +110,4 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 }
 
-module.exports = HorizontalRenderingStrategy;
+export default HorizontalRenderingStrategy;

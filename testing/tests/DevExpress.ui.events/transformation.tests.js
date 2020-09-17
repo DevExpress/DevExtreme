@@ -194,20 +194,6 @@ testEventDeltaScale(transformEvent['pinch']);
 testEventScale(transformEvent['pinchend']);
 
 
-QUnit.module('zoom firing');
-
-testEventFiring(transformEvent['zoomstart']);
-testEventFiring(transformEvent['zoom']);
-testEventFiring(transformEvent['zoomend']);
-
-
-QUnit.module('zoom data');
-
-testEventScale(transformEvent['zoom']);
-testEventDeltaScale(transformEvent['zoom']);
-testEventScale(transformEvent['zoomend']);
-
-
 QUnit.module('rotate firing');
 
 testEventFiring(transformEvent['rotatestart']);

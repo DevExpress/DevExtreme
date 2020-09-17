@@ -2,7 +2,7 @@ import $ from 'jquery';
 import fx from 'animation/fx';
 import config from 'core/config';
 import typeUtils from 'core/utils/type';
-import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import pointerMock from '../../helpers/pointerMock.js';
 
 import 'ui/slide_out';

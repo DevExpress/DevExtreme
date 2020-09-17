@@ -4,10 +4,12 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+
 // adduse
+@use "../scrollable";
 
 
-$MATERIAL_DATEVIEW_ROLLER_PADDING: ($MATERIAL_DATEVIEW_ROLLER_HEIGHT - $MATERIAL_DATEVIEW_ROLLER_ITEM_HEIGHT) / 2;
+$material-dateview-roller-padding: ($material-dateview-roller-height - $material-dateview-roller-item-height) / 2;
 
 
 .dx-dateview-rollers {
@@ -34,12 +36,12 @@ $MATERIAL_DATEVIEW_ROLLER_PADDING: ($MATERIAL_DATEVIEW_ROLLER_HEIGHT - $MATERIAL
   .dx-scrollable-content:before,
   .dx-scrollable-content:after {
     content: "";
-    height: $MATERIAL_DATEVIEW_ROLLER_PADDING;
+    height: $material-dateview-roller-padding;
     display: block;
   }
 
   .dx-scrollable-container {
-    height: $MATERIAL_DATEVIEW_ROLLER_HEIGHT;
+    height: $material-dateview-roller-height;
   }
 
   &.dx-dateviewroller-year {
@@ -80,8 +82,8 @@ $MATERIAL_DATEVIEW_ROLLER_PADDING: ($MATERIAL_DATEVIEW_ROLLER_HEIGHT - $MATERIAL
 }
 
 .dx-dateview-item {
-  height: $MATERIAL_DATEVIEW_ROLLER_ITEM_HEIGHT;
-  line-height: $MATERIAL_DATEVIEW_ROLLER_ITEM_HEIGHT;
+  height: $material-dateview-roller-item-height;
+  line-height: $material-dateview-roller-item-height;
   text-align: center;
   font-size: 1.3em;
   color: $dateview-color;
@@ -103,7 +105,7 @@ $MATERIAL_DATEVIEW_ROLLER_PADDING: ($MATERIAL_DATEVIEW_ROLLER_HEIGHT - $MATERIAL
 
 .dx-dateview-item-selected-frame {
   position: absolute;
-  top: $MATERIAL_DATEVIEW_ROLLER_PADDING;
+  top: $material-dateview-roller-padding;
   width: 100%;
 
   &:before,
@@ -113,17 +115,17 @@ $MATERIAL_DATEVIEW_ROLLER_PADDING: ($MATERIAL_DATEVIEW_ROLLER_HEIGHT - $MATERIAL
     display: block;
     width: 100%;
     position: absolute;
-    height: $MATERIAL_DATEVIEW_ROLLER_PADDING;
+    height: $material-dateview-roller-padding;
   }
 
   &:before {
-    top: -$MATERIAL_DATEVIEW_ROLLER_PADDING;
+    top: -$material-dateview-roller-padding;
 
     @include gradient-linear($dateview-shadow-up);
   }
 
   &:after {
-    top: $MATERIAL_DATEVIEW_ROLLER_ITEM_HEIGHT;
+    top: $material-dateview-roller-item-height;
 
     @include gradient-linear($dateview-shadow-down);
   }

@@ -1,6 +1,6 @@
 import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
-import commonUtils from '../../core/utils/common';
+import { executeAsync } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isString, isNumeric, isBoolean, isDefined, isPlainObject } from '../../core/utils/type';
 import { throttleChanges } from '../utils';
@@ -419,7 +419,7 @@ export const DataSource = Class.inherit({
 
         this._loadQueue.add(() => {
             if(typeof loadOperation.delay === 'number') {
-                this._delayedLoadTask = commonUtils.executeAsync(loadTask, loadOperation.delay);
+                this._delayedLoadTask = executeAsync(loadTask, loadOperation.delay);
             } else {
                 loadTask();
             }

@@ -1,9 +1,9 @@
-const queryAdapters = require('./query_adapters');
-const errorsModule = require('./errors');
-const each = require('../core/utils/iterator').each;
-const isFunction = require('../core/utils/type').isFunction;
-const Deferred = require('../core/utils/deferred').Deferred;
-const arrayQueryImpl = require('./array_query');
+import queryAdapters from './query_adapters';
+import errorsModule from './errors';
+import { each } from '../core/utils/iterator';
+import { isFunction } from '../core/utils/type';
+import { Deferred } from '../core/utils/deferred';
+import arrayQueryImpl from './array_query';
 
 const remoteQueryImpl = function(url, queryOptions, tasks) {
     tasks = tasks || [];
@@ -147,4 +147,4 @@ const remoteQueryImpl = function(url, queryOptions, tasks) {
     return query;
 };
 
-module.exports = remoteQueryImpl;
+export default remoteQueryImpl;

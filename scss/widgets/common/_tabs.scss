@@ -1,9 +1,10 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
-$nav_button_width: 25px;
-$icon_size: 16px;
+$nav-button-width: 25px;
+$icon-size: 16px;
 
 @mixin dx-tabs-ie-hack() {
   a { /* END TODO */ /* TODO: IE hack */
@@ -73,13 +74,13 @@ $icon_size: 16px;
 
 .dx-tabs-nav-buttons {
   .dx-tabs-scrollable {
-    margin-right: $nav_button_width;
-    margin-left: $nav_button_width;
+    margin-right: $nav-button-width;
+    margin-left: $nav-button-width;
   }
 }
 
 .dx-tabs-nav-button {
-  width: $nav_button_width;
+  width: $nav-button-width;
   padding: 0;
   height: 100%;
   position: absolute;
@@ -108,8 +109,8 @@ $icon_size: 16px;
   @include dx-tabs-ie-hack();
 
   .dx-icon {
-    width: $icon_size;
-    height: $icon_size;
+    width: $icon-size;
+    height: $icon-size;
     display: block;
     margin: 0 auto;
     -webkit-user-drag: none;
@@ -128,7 +129,7 @@ $icon_size: 16px;
   max-width: 100%;
   -webkit-user-drag: none;
 
-  @include dx-overflow;
+  @include dx-overflow();
 }
 
 .dx-tabs-item-badge {

@@ -1,6 +1,6 @@
-const each = require('../../core/utils/iterator').each;
-const readyCallbacks = require('../../core/utils/ready_callbacks');
-const domAdapter = require('../../core/dom_adapter');
+import { each } from '../../core/utils/iterator';
+import readyCallbacks from '../../core/utils/ready_callbacks';
+import domAdapter from '../../core/dom_adapter';
 
 const addEventsListener = function(events, handler) {
     readyCallbacks.add(function() {
@@ -66,4 +66,4 @@ const Observer = function(eventMap, pointerEquals, onPointerAdding) {
 
 };
 
-module.exports = Observer;
+export default Observer;

@@ -1,6 +1,6 @@
 import DataGrid from './ui.data_grid.base';
 
-module.exports = DataGrid;
+export default DataGrid;
 
 import './ui.data_grid.state_storing';
 import './ui.data_grid.selection';
@@ -26,3 +26,5 @@ import './ui.data_grid.virtual_columns';
 import './ui.data_grid.export';
 import './ui.data_grid.focus';
 import './ui.data_grid.row_dragging';
+
+// STYLE dataGrid

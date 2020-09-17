@@ -16,11 +16,11 @@ import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import DataHelperMixin from '../../data_helper';
 import CollectionWidgetItem from './item';
-import selectors from '../widget/selectors';
+import { focusable } from '../widget/selectors';
 import messageLocalization from '../../localization/message';
 import holdEvent from '../../events/hold';
 import { compileGetter } from '../../core/utils/data';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import contextMenuEvent from '../../events/contextmenu';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 
@@ -382,6 +382,8 @@ const CollectionWidget = Widget.inherit({
             this._refreshItemId($target, needCleanItemId);
             this._toggleFocusClass(isFocused, $target);
         }
+
+        this._updateParentActiveDescendant();
     },
 
     _refreshActiveDescendant: function($target) {
@@ -455,6 +457,8 @@ const CollectionWidget = Widget.inherit({
         const index = $item.data(this._itemIndexKey());
         this._renderItem(this._renderedItemsCount + index, itemData, null, $item);
     },
+
+    _updateParentActiveDescendant: noop,
 
     _optionChanged: function(args) {
         if(args.name === 'items') {
@@ -668,7 +672,7 @@ const CollectionWidget = Widget.inherit({
 
     _attachClickEvent: function() {
         const itemSelector = this._itemSelector();
-        const clickEventNamespace = addNamespace(clickEvent.name, this.NAME);
+        const clickEventNamespace = addNamespace(clickEventName, this.NAME);
         const pointerDownEventNamespace = addNamespace(pointerEvents.down, this.NAME);
         const that = this;
 
@@ -718,13 +722,13 @@ const CollectionWidget = Widget.inherit({
     },
 
     _closestFocusable: function($target) {
-        if($target.is(selectors.focusable)) {
+        if($target.is(focusable)) {
             return $target;
         } else {
             $target = $target.parent();
 
             while($target.length && !domAdapter.isDocument($target.get(0))) {
-                if($target.is(selectors.focusable)) {
+                if($target.is(focusable)) {
                     return $target;
                 }
                 $target = $target.parent();
@@ -849,7 +853,7 @@ const CollectionWidget = Widget.inherit({
             return;
         }
 
-        eventsEngine.on($itemElement, clickEvent.name, (function(e) {
+        eventsEngine.on($itemElement, clickEventName, (function(e) {
             this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
                 event: e
             });
@@ -1066,7 +1070,7 @@ const CollectionWidget = Widget.inherit({
     /**
     * @name CollectionWidgetmethods.itemElements
     * @publicName itemElements()
-    * @return Array<Node>
+    * @return Array<Element>
     * @hidden
     */
     itemElements: function() {
@@ -1076,7 +1080,7 @@ const CollectionWidget = Widget.inherit({
     /**
     * @name CollectionWidgetmethods.itemsContainer
     * @publicName itemsContainer()
-    * @return Node
+    * @return Element
     * @hidden
     */
     itemsContainer: function() {
@@ -1087,4 +1091,4 @@ const CollectionWidget = Widget.inherit({
 
 CollectionWidget.ItemClass = CollectionWidgetItem;
 
-module.exports = CollectionWidget;
+export default CollectionWidget;

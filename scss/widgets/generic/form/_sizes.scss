@@ -1,3 +1,17 @@
 @use "../sizes" as *;
+
 // adduse
+
+$generic-form-group-caption-font-size: null !default;
+$generic-form-group-content-padding-bottom: null !default;
+
+@if $size == "default" {
+  $generic-form-group-caption-font-size: 20px;
+  $generic-form-group-content-padding-bottom: 20px;
+}
+
+@else if $size == "compact" {
+  $generic-form-group-caption-font-size: 16px;
+  $generic-form-group-content-padding-bottom: 10px;
+}
 

@@ -1,12 +1,14 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const devices = require('../core/devices');
-const extend = require('../core/utils/extend').extend;
-const inkRipple = require('./widget/utils.ink_ripple');
-const Editor = require('./editor/editor');
-const registerComponent = require('../core/component_registrator');
-const eventUtils = require('../events/utils');
-const clickEvent = require('../events/click');
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import devices from '../core/devices';
+import { extend } from '../core/utils/extend';
+import inkRipple from './widget/utils.ink_ripple';
+import Editor from './editor/editor';
+import registerComponent from '../core/component_registrator';
+import { addNamespace } from '../events/utils';
+import { name as clickEventName } from '../events/click';
+
+// STYLE checkbox
 
 const CHECKBOX_CLASS = 'dx-checkbox';
 const CHECKBOX_ICON_CLASS = 'dx-checkbox-icon';
@@ -165,7 +167,7 @@ const CheckBox = Editor.inherit({
 
     _renderClick: function() {
         const that = this;
-        const eventName = eventUtils.addNamespace(clickEvent.name, that.NAME);
+        const eventName = addNamespace(clickEventName, that.NAME);
 
         that._clickAction = that._createAction(that._clickHandler);
 
@@ -220,4 +222,4 @@ const CheckBox = Editor.inherit({
 
 registerComponent('dxCheckBox', CheckBox);
 
-module.exports = CheckBox;
+export default CheckBox;

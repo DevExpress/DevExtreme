@@ -4,6 +4,9 @@ import { each as _each } from '../../core/utils/iterator';
 import { sign } from '../../core/utils/math';
 import { noop as _noop } from '../../core/utils/common';
 import { map as _map, normalizeEnum as _normalizeEnum } from './utils';
+///#DEBUG
+import { debug } from '../../core/utils/console';
+///#ENDDEBUG
 const { round, abs, pow, sqrt } = Math;
 const _min = Math.min;
 
@@ -312,9 +315,11 @@ function updateFullStackedSeriesValues(series, stackKeepers) {
 
         _each(singleSeries.getPoints(), function(index, point) {
             const stackSum = getAbsStackSumByArg(stackKeepers, stackName, point.argument.valueOf());
-            point.value = point.value / stackSum;
-            if(isNumeric(point.minValue)) {
-                point.minValue = point.minValue / stackSum;
+            if(stackSum !== 0) {
+                point.value = point.value / stackSum;
+                if(isNumeric(point.minValue)) {
+                    point.minValue = point.minValue / stackSum;
+                }
             }
         });
     });
@@ -384,9 +389,8 @@ function adjustBubbleSeriesDimensions() {
     });
 }
 
-function SeriesFamily(options) {
+export function SeriesFamily(options) {
     ///#DEBUG
-    const debug = require('../../core/utils/console').debug;
     debug.assert(options.type, 'type was not passed or empty');
     ///#ENDDEBUG
 
@@ -446,9 +450,6 @@ function SeriesFamily(options) {
             break;
     }
 }
-
-
-exports.SeriesFamily = SeriesFamily;
 
 SeriesFamily.prototype = {
     constructor: SeriesFamily,

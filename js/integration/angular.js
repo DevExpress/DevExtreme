@@ -1,10 +1,5 @@
-const angular = require('angular');
-
-// Check availability in global environment
-if(angular) {
-    require('./jquery');
-    require('./angular/component_registrator');
-    require('./angular/event_registrator');
-    require('./angular/components');
-    require('./angular/action_executors');
-}
+import './jquery';
+import './angular/component_registrator';
+import './angular/event_registrator';
+import './angular/components';
+import './angular/action_executors';

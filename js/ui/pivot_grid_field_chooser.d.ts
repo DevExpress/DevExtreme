@@ -73,14 +73,13 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      * @type_function_param1_field4 items:Array<Object>
      * @type_function_param1_field5 area:string
      * @type_function_param1_field6 field:PivotGridDataSourceOptions.fields
-     * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field8 event:event
+     * @type_function_param1_field7 event:event
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: dxElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: dxElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: event }) => any);
     /**
      * @docid dxPivotGridFieldChooserOptions.searchTimeout
      * @type number

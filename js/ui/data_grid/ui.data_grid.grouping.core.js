@@ -4,7 +4,7 @@ import gridCore from './ui.data_grid.core';
 import { normalizeSortingInfo } from '../../data/utils';
 import { when } from '../../core/utils/deferred';
 
-exports.createOffsetFilter = function(path, storeLoadOptions) {
+export function createOffsetFilter(path, storeLoadOptions) {
     const groups = normalizeSortingInfo(storeLoadOptions.group);
     let filter = [];
 
@@ -36,9 +36,9 @@ exports.createOffsetFilter = function(path, storeLoadOptions) {
     filter = gridCore.combineFilters(filter, 'or');
 
     return gridCore.combineFilters([filter, storeLoadOptions.filter]);
-};
+}
 
-exports.GroupingHelper = Class.inherit((function() {
+export const GroupingHelper = Class.inherit((function() {
 
     const findGroupInfoByKey = function(groupsInfo, key) {
         const hash = groupsInfo.hash;

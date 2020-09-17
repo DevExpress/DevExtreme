@@ -1,22 +1,24 @@
-import { getDocument } from '../../core/dom_adapter';
+import domAdapter from '../../core/dom_adapter';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { Tooltip } from '../core/tooltip';
 import { extend } from '../../core/utils/extend';
 import { patchFontOptions } from './utils';
 import { Plaque } from './plaque';
 import pointerEvents from '../../events/pointer';
-import dragEvents from '../../events/drag';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
 import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
+
+const getDocument = domAdapter.getDocument;
 
 const EVENT_NS = 'annotations';
 const DOT_EVENT_NS = '.' + EVENT_NS;
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 const POINTER_UP_EVENT_NAME = addNamespace(pointerEvents.up, EVENT_NS);
 
-const DRAG_START_EVENT_NAME = dragEvents.start + DOT_EVENT_NS;
-const DRAG_EVENT_NAME = dragEvents.move + DOT_EVENT_NS;
-const DRAG_END_EVENT_NAME = dragEvents.end + DOT_EVENT_NS;
+const DRAG_START_EVENT_NAME = dragEventStart + DOT_EVENT_NS;
+const DRAG_EVENT_NAME = dragEventMove + DOT_EVENT_NS;
+const DRAG_END_EVENT_NAME = dragEventEnd + DOT_EVENT_NS;
 
 function coreAnnotation(options, contentTemplate) {
     return {
@@ -26,7 +28,7 @@ function coreAnnotation(options, contentTemplate) {
             this.plaque = new Plaque(
                 extend(true, {}, options, { cornerRadius: (options.border || {}).cornerRadius }),
                 widget, annotationGroup, contentTemplate,
-                isDefined(options.value) || isDefined(options.argument)
+                widget._isAnnotationBounded(options)
             );
             this.plaque.draw(widget._getAnnotationCoords(this));
 
@@ -214,8 +216,8 @@ const chartPlugin = {
                 return;
             }
 
-            this.hideTooltip();
-            this.clearHover();
+            this._clear();
+
 
             if(annotation.options.allowDragging && event.type === pointerEvents.down) {
                 this._annotations._hideToolTipForDrag = true;
@@ -225,6 +227,9 @@ const chartPlugin = {
                 annotation.showTooltip(this._annotations.tooltip, coords);
                 event.stopPropagation();
             }
+        },
+        _isAnnotationBounded(options) {
+            return isDefined(options.value) || isDefined(options.argument);
         },
         _pullOptions(options) {
             return {
@@ -240,6 +245,13 @@ const chartPlugin = {
                 offsetX: options.offsetX,
                 offsetY: options.offsetY
             };
+        },
+        _forceAnnotationRender() {
+            this._change(['FORCE_RENDER']);
+        },
+        _clear() {
+            this.hideTooltip();
+            this.clearHover();
         }
     }
 };
@@ -289,6 +301,7 @@ const polarChartPlugin = {
             return coords;
         },
         _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
+        _isAnnotationBounded: chartPlugin.members._isAnnotationBounded,
         _pullOptions(options) {
             const polarOptions = extend({}, {
                 radius: options.radius,
@@ -298,7 +311,111 @@ const polarChartPlugin = {
             delete polarOptions.axis;
 
             return polarOptions;
+        },
+        _forceAnnotationRender: chartPlugin.members._forceAnnotationRender,
+        _clear: chartPlugin.members._clear
+    }
+};
+const vectorMapPlugin = {
+    name: 'annotations_vector_map',
+    init() {},
+    dispose() {
+        this._annotations._offTracker();
+        this._annotations._offTracker = null;
+    },
+    members: {
+        _getAnnotationCoords(annotation) {
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY
+            };
+            coords.canvas = this._projection.getCanvas();
+            if(annotation.coordinates) {
+                const data = this._projection.toScreenPoint(annotation.coordinates);
+                coords.x = data[0];
+                coords.y = data[1];
+            }
+
+            return coords;
+        },
+        _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
+        _isAnnotationBounded(options) {
+            return isDefined(options.coordinates);
+        },
+        _pullOptions(options) {
+            const vectorMapOptions = extend({}, {
+                coordinates: options.coordinates
+            }, chartPlugin.members._pullOptions(options));
+
+            delete vectorMapOptions.axis;
+            delete vectorMapOptions.series;
+            delete vectorMapOptions.argument;
+            delete vectorMapOptions.value;
+            return vectorMapOptions;
+        },
+        _forceAnnotationRender() {
+            this._change(['EXTRA_ELEMENTS']);
+        },
+        _getAnnotationStyles() {
+            return { 'text-anchor': 'start' };
+        },
+        _clear() {}
+    },
+    extenders: {
+        _prepareExtraElements() {
+            const that = this;
+            const renderElements = () => {
+                that._renderExtraElements();
+            };
+            that._annotations._offTracker = that._tracker.on({
+                'move': renderElements,
+                'zoom': renderElements,
+                'end': renderElements
+            });
         }
+    }
+};
+const pieChartPlugin = {
+    name: 'annotations_pie_chart',
+    init() {},
+    dispose() {},
+    members: {
+        _getAnnotationCoords(annotation) {
+            let series;
+            const coords = {
+                offsetX: annotation.offsetX,
+                offsetY: annotation.offsetY,
+                canvas: this._canvas
+            };
+
+            if(annotation.argument) {
+                if(annotation.series) {
+                    series = this.getSeriesByName(annotation.series);
+                } else {
+                    series = this.series[0];
+                }
+                const argument = series.getPointsByArg(annotation.argument)[0];
+                const { x, y } = argument.getAnnotationCoords(annotation.location);
+                coords.x = x;
+                coords.y = y;
+            }
+
+            return coords;
+        },
+        _isAnnotationBounded(options) {
+            return options.argument;
+        },
+        _annotationsPointerEventHandler: chartPlugin.members._annotationsPointerEventHandler,
+        _pullOptions(options) {
+            const pieChartOptions = extend({}, {
+                location: options.location
+            }, chartPlugin.members._pullOptions(options));
+
+            delete pieChartOptions.axis;
+            return pieChartOptions;
+        },
+        _clear: chartPlugin.members._clear,
+        _forceAnnotationRender: chartPlugin.members._forceAnnotationRender
     }
 };
 const corePlugin = {
@@ -320,11 +437,6 @@ const corePlugin = {
         };
 
         this._annotations.tooltip.setRendererOptions(this._getRendererOptions());
-        const tooltipOptions = extend({}, this._themeManager.getOptions('tooltip'));
-
-        tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
-
-        this._annotations.tooltip.update(tooltipOptions);
     },
     dispose() {
         this._annotationsGroup.linkRemove().linkOff();
@@ -334,7 +446,10 @@ const corePlugin = {
     },
     extenders: {
         _createHtmlStructure() {
-            this._annotationsGroup = this._renderer.g().attr({ 'class': `${this._rootClassPrefix}-annotations` }).linkOn(this._renderer.root, 'annotations').linkAppend();
+            this._annotationsGroup = this._renderer.g()
+                .attr({ 'class': `${this._rootClassPrefix}-annotations` })
+                .css(this._getAnnotationStyles())
+                .linkOn(this._renderer.root, 'annotations').linkAppend();
             eventsEngine.on(getDocument(), POINTER_ACTION, () => this._annotations.hideTooltip());
             eventsEngine.on(getDocument(), POINTER_UP_EVENT_NAME, (event) => {
                 this._annotations._hideToolTipForDrag = false;
@@ -354,14 +469,20 @@ const corePlugin = {
         _buildAnnotations() {
             this._annotations.items = [];
 
-            const items = this._getOption('annotations');
+            const items = this._getOption('annotations', true);
             if(!items?.length) {
                 return;
             }
-            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation'), this._pullOptions);
+            this._annotations.items = createAnnotations(this, items, this._getOption('commonAnnotationSettings'), this._getOption('customizeAnnotation', true), this._pullOptions);
+        },
+        _setAnnotationTooltipOptions() {
+            const tooltipOptions = extend({}, this._getOption('tooltip'));
+            tooltipOptions.contentTemplate = tooltipOptions.customizeTooltip = undefined;
+            this._annotations.tooltip.update(tooltipOptions);
         },
         _getAnnotationCoords() { return {}; },
-        _pullOptions() { return {}; }
+        _pullOptions() { return {}; },
+        _getAnnotationStyles() { return {}; }
     },
     customize(constructor) {
         constructor.addChange({
@@ -386,7 +507,8 @@ const corePlugin = {
             code: 'ANNOTATIONS',
             handler() {
                 this._buildAnnotations();
-                this._change(['FORCE_RENDER']);
+                this._setAnnotationTooltipOptions();
+                this._forceAnnotationRender();
             },
             isThemeDependent: true,
             isOptionChange: true
@@ -398,5 +520,7 @@ const corePlugin = {
 export const plugins = {
     core: corePlugin,
     chart: chartPlugin,
-    polarChart: polarChartPlugin
+    polarChart: polarChartPlugin,
+    vectorMap: vectorMapPlugin,
+    pieChart: pieChartPlugin
 };

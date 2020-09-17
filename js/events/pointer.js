@@ -101,6 +101,7 @@ const pointer = {
 
 ///#DEBUG
 pointer.getStrategy = getStrategy;
+
 ///#ENDDEBUG
 
-module.exports = pointer;
+export default pointer;

@@ -12,7 +12,7 @@ import eventsEngine from 'events/core/events_engine';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
-import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import Overlay from 'ui/overlay';
 import * as zIndex from 'ui/overlay/z_index';
 import 'ui/scroll_view/ui.scrollable';
@@ -373,6 +373,25 @@ testModule('option', moduleConfig, () => {
 
         overlay.option('disabled', undefined);
         assert.ok(!$content.hasClass(DISABLED_STATE_CLASS), 'disabled state not present in content element');
+    });
+
+    test('there is no errors when overlay has a subscription on \'onHiding\' event where the widget is desposed', function(assert) {
+        const instance = $('#overlay').dxOverlay({
+            visible: true,
+            onHiding: function(e) {
+                e.component.dispose();
+            }
+        }).dxOverlay('instance');
+
+        let errorOccurred = false;
+
+        try {
+            instance.hide();
+        } catch(e) {
+            errorOccurred = true;
+        }
+
+        QUnit.assert.strictEqual(errorOccurred, false, 'error must not be occurred');
     });
 
     test('visibility callbacks', function(assert) {

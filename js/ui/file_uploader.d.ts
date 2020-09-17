@@ -138,6 +138,30 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     name?: string;
     /**
+     * @docid dxFileUploaderOptions.onDropZoneEnter
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 dropZoneElement:dxElement
+     * @type_function_param1_field5 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onDropZoneEnter?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, dropZoneElement?: dxElement, event?: event }) => any);
+    /**
+     * @docid dxFileUploaderOptions.onDropZoneLeave
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 dropZoneElement:dxElement
+     * @type_function_param1_field5 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onDropZoneLeave?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, dropZoneElement?: dxElement, event?: event }) => any);
+    /**
      * @docid dxFileUploaderOptions.onProgress
      * @extends Action
      * @type function(e)
@@ -146,71 +170,66 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @type_function_param1_field5 segmentSize:Number
      * @type_function_param1_field6 bytesLoaded:Number
      * @type_function_param1_field7 bytesTotal:Number
-     * @type_function_param1_field8 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field9 event:event
-     * @type_function_param1_field10 request:XMLHttpRequest
+     * @type_function_param1_field8 event:event
+     * @type_function_param1_field9 request:XMLHttpRequest
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onProgress?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, segmentSize?: number, bytesLoaded?: number, bytesTotal?: number, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
+    onProgress?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, segmentSize?: number, bytesLoaded?: number, bytesTotal?: number, event?: event, request?: XMLHttpRequest }) => any);
     /**
      * @docid dxFileUploaderOptions.onUploadAborted
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 file:File
-     * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field6 event:event
-     * @type_function_param1_field7 request:XMLHttpRequest
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 request:XMLHttpRequest
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploadAborted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
+    onUploadAborted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest }) => any);
     /**
      * @docid dxFileUploaderOptions.onUploadError
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 file:File
-     * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field6 event:event
-     * @type_function_param1_field7 request:XMLHttpRequest
-     * @type_function_param1_field8 error:any
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 request:XMLHttpRequest
+     * @type_function_param1_field7 error:any
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploadError?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest, error?: any }) => any);
+    onUploadError?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest, error?: any }) => any);
     /**
      * @docid dxFileUploaderOptions.onUploadStarted
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 file:File
-     * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field6 event:event
-     * @type_function_param1_field7 request:XMLHttpRequest
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 request:XMLHttpRequest
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploadStarted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
+    onUploadStarted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest }) => any);
     /**
      * @docid dxFileUploaderOptions.onUploaded
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 file:File
-     * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field6 event:event
-     * @type_function_param1_field7 request:XMLHttpRequest
+     * @type_function_param1_field5 event:event
+     * @type_function_param1_field6 request:XMLHttpRequest
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploaded?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, event?: event, request?: XMLHttpRequest }) => any);
+    onUploaded?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest }) => any);
     /**
      * @docid dxFileUploaderOptions.onValueChanged
      * @extends Action
@@ -218,13 +237,12 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:Array<File>
      * @type_function_param1_field5 previousValue:Array<File>
-     * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field6 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, value?: Array<File>, previousValue?: Array<File>, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onValueChanged?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, value?: Array<File>, previousValue?: Array<File>, event?: event }) => any);
     /**
      * @docid dxFileUploaderOptions.progress
      * @type number
@@ -258,6 +276,22 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     showFileList?: boolean;
     /**
+     * @docid dxFileUploaderOptions.dialogTrigger
+     * @type string|Element|jQuery
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    dialogTrigger?: string | Element | JQuery;
+    /**
+     * @docid dxFileUploaderOptions.dropZone
+     * @type string|Element|jQuery
+     * @default undefined
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    dropZone?: string | Element | JQuery;
+    /**
      * @docid dxFileUploaderOptions.uploadButtonText
      * @type string
      * @default "Upload"
@@ -283,6 +317,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @public
      */
     uploadFailedMessage?: string;
+    /**
+     * @docid dxFileUploaderOptions.uploadAbortedMessage
+     * @type string
+     * @default "Upload cancelled"
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    uploadAbortedMessage?: string;
     /**
      * @docid dxFileUploaderOptions.uploadFile
      * @type function
@@ -353,6 +395,52 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
 export default class dxFileUploader extends Editor {
     constructor(element: Element, options?: dxFileUploaderOptions)
     constructor(element: JQuery, options?: dxFileUploaderOptions)
+    /**
+     * @docid dxFileUploaderMethods.upload
+     * @publicName upload()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    upload(): void;
+    /**
+     * @docid dxFileUploaderMethods.upload
+     * @publicName upload(fileIndex)
+     * @param1 fileIndex:number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    upload(fileIndex: number): void;
+    /**
+     * @docid dxFileUploaderMethods.upload
+     * @publicName upload(file)
+     * @param1 file:File
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    upload(file: File): void;
+    /**
+     * @docid dxFileUploaderMethods.abortUpload
+     * @publicName abortUpload()
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    abortUpload(): void;
+    /**
+     * @docid dxFileUploaderMethods.abortUpload
+     * @publicName abortUpload(fileIndex)
+     * @param1 fileIndex:number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    abortUpload(fileIndex: number): void;
+    /**
+     * @docid dxFileUploaderMethods.abortUpload
+     * @publicName abortUpload(file)
+     * @param1 file:File
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    abortUpload(file: File): void;
 }
 
 declare global {

@@ -1,37 +1,39 @@
-const $ = require('../core/renderer');
-const window = require('../core/utils/window').getWindow();
-const eventsEngine = require('../events/core/events_engine');
-const stringUtils = require('../core/utils/string');
-const registerComponent = require('../core/component_registrator');
-const translator = require('../animation/translator');
-const Animator = require('./scroll_view/animator');
-const browser = require('../core/utils/browser');
-const dasherize = require('../core/utils/inflector').dasherize;
-const extend = require('../core/utils/extend').extend;
-const DOMComponent = require('../core/dom_component');
-const getPublicElement = require('../core/element').getPublicElement;
-const eventUtils = require('../events/utils');
-const pointerEvents = require('../events/pointer');
-const dragEvents = require('../events/drag');
-const positionUtils = require('../animation/position');
-const typeUtils = require('../core/utils/type');
-const noop = require('../core/utils/common').noop;
-const viewPortUtils = require('../core/utils/view_port');
-const commonUtils = require('../core/utils/common');
-const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
-const deferredUtils = require('../core/utils/deferred');
-const getBoundingRect = require('../core/utils/position').getBoundingRect;
-const when = deferredUtils.when;
-const fromPromise = deferredUtils.fromPromise;
-const Deferred = deferredUtils.Deferred;
-
+import $ from '../core/renderer';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import eventsEngine from '../events/core/events_engine';
+import stringUtils from '../core/utils/string';
+import registerComponent from '../core/component_registrator';
+import translator from '../animation/translator';
+import Animator from './scroll_view/animator';
+import browser from '../core/utils/browser';
+import { dasherize } from '../core/utils/inflector';
+import { extend } from '../core/utils/extend';
+import DOMComponent from '../core/dom_component';
+import { getPublicElement } from '../core/element';
+import { addNamespace, needSkipEvent } from '../events/utils';
+import pointerEvents from '../events/pointer';
+import {
+    start as dragEventStart,
+    move as dragEventMove,
+    end as dragEventEnd,
+    enter as dragEventEnter,
+    leave as dragEventLeave
+} from '../events/drag';
+import positionUtils from '../animation/position';
+import { isFunction, isObject } from '../core/utils/type';
+import { noop, splitPair } from '../core/utils/common';
+import { value as viewPort } from '../core/utils/view_port';
+import { EmptyTemplate } from '../core/templates/empty_template';
+import { when, fromPromise, Deferred } from '../core/utils/deferred';
+import { getBoundingRect } from '../core/utils/position';
 const DRAGGABLE = 'dxDraggable';
-const DRAGSTART_EVENT_NAME = eventUtils.addNamespace(dragEvents.start, DRAGGABLE);
-const DRAG_EVENT_NAME = eventUtils.addNamespace(dragEvents.move, DRAGGABLE);
-const DRAGEND_EVENT_NAME = eventUtils.addNamespace(dragEvents.end, DRAGGABLE);
-const DRAG_ENTER_EVENT_NAME = eventUtils.addNamespace(dragEvents.enter, DRAGGABLE);
-const DRAGEND_LEAVE_EVENT_NAME = eventUtils.addNamespace(dragEvents.leave, DRAGGABLE);
-const POINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, DRAGGABLE);
+const DRAGSTART_EVENT_NAME = addNamespace(dragEventStart, DRAGGABLE);
+const DRAG_EVENT_NAME = addNamespace(dragEventMove, DRAGGABLE);
+const DRAGEND_EVENT_NAME = addNamespace(dragEventEnd, DRAGGABLE);
+const DRAG_ENTER_EVENT_NAME = addNamespace(dragEventEnter, DRAGGABLE);
+const DRAGEND_LEAVE_EVENT_NAME = addNamespace(dragEventLeave, DRAGGABLE);
+const POINTERDOWN_EVENT_NAME = addNamespace(pointerEvents.down, DRAGGABLE);
 
 const CLONE_CLASS = 'clone';
 
@@ -39,6 +41,11 @@ let targetDraggable;
 let sourceDraggable;
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
+
+const getMousePosition = (event) => ({
+    x: event.pageX - $(window).scrollLeft(),
+    y: event.pageY - $(window).scrollTop()
+});
 
 class ScrollHelper {
     constructor(orientation, component) {
@@ -183,7 +190,8 @@ class ScrollHelper {
         const scrollableSize = getBoundingRect($scrollable.get(0));
         const start = scrollableSize[this._limitProps.start];
         const size = scrollableSize[this._sizeAttr];
-        const location = this._sizeAttr === 'width' ? event.pageX : event.pageY;
+        const mousePosition = getMousePosition(event);
+        const location = this._sizeAttr === 'width' ? mousePosition.x : mousePosition.y;
 
         return location < start || location > (start + size);
     }
@@ -231,6 +239,8 @@ const Draggable = DOMComponent.inherit({
             onDragStart: null,
             onDragMove: null,
             onDragEnd: null,
+            onDragEnter: null,
+            onDragLeave: null,
             /**
              * @name dxDraggableOptions.onDrop
              * @type function(e)
@@ -258,7 +268,7 @@ const Draggable = DOMComponent.inherit({
             /**
              * @name DraggableBaseOptions.contentTemplate
              * @type template|function
-             * @type_function_return string|Node|jQuery
+             * @type_function_return string|Element|jQuery
              * @hidden
              * @default "content"
              */
@@ -312,13 +322,13 @@ const Draggable = DOMComponent.inherit({
     },
 
     _normalizeCursorOffset: function(offset) {
-        if(typeUtils.isObject(offset)) {
+        if(isObject(offset)) {
             offset = {
                 h: offset.x,
                 v: offset.y
             };
         }
-        offset = commonUtils.splitPair(offset).map((value) => parseFloat(value));
+        offset = splitPair(offset).map((value) => parseFloat(value));
 
         return {
             left: offset[0],
@@ -327,7 +337,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _getNormalizedCursorOffset: function(offset, options) {
-        if(typeUtils.isFunction(offset)) {
+        if(isFunction(offset)) {
             offset = offset.call(this, options);
         }
 
@@ -537,7 +547,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _pointerDownHandler: function(e) {
-        if(eventUtils.needSkipEvent(e)) {
+        if(needSkipEvent(e)) {
             return;
         }
 
@@ -648,7 +658,7 @@ const Draggable = DOMComponent.inherit({
     _getBoundOffset: function() {
         let boundOffset = this.option('boundOffset');
 
-        if(typeUtils.isFunction(boundOffset)) {
+        if(isFunction(boundOffset)) {
             boundOffset = boundOffset.call(this);
         }
 
@@ -658,7 +668,7 @@ const Draggable = DOMComponent.inherit({
     _getArea: function() {
         let area = this.option('boundary');
 
-        if(typeUtils.isFunction(area)) {
+        if(isFunction(area)) {
             area = area.call(this);
         }
         return $(area);
@@ -668,7 +678,7 @@ const Draggable = DOMComponent.inherit({
         let container = this.option('container');
 
         if(container === undefined) {
-            container = viewPortUtils.value();
+            container = viewPort();
         }
 
         return $(container);
@@ -706,11 +716,7 @@ const Draggable = DOMComponent.inherit({
         const that = this;
 
         if(that.option('autoScroll')) {
-            const $window = $(window);
-            const mousePosition = {
-                x: e.pageX - $window.scrollLeft(),
-                y: e.pageY - $window.scrollTop()
-            };
+            const mousePosition = getMousePosition(e);
             const allObjects = that.getElementsFromPoint(mousePosition);
 
             that._verticalScrollHelper.updateScrollable(allObjects, mousePosition);
@@ -846,21 +852,31 @@ const Draggable = DOMComponent.inherit({
             return false;
         }
 
-        if(!sourceDraggable._dragElementIsCloned()) {
-            return true;
-        }
-
+        const $dragElement = sourceDraggable._$dragElement;
         const $sourceDraggableElement = sourceDraggable.$element();
-        const elements = this.getElementsFromPoint({
-            x: e.pageX,
-            y: e.pageY
-        }, e.target);
-        const firstWidgetElement = elements.filter((element) => $(element).hasClass(this._addWidgetPrefix()))[0];
+        const $targetDraggableElement = this.$element();
 
-        return firstWidgetElement !== $sourceDraggableElement.get(0);
+        const mousePosition = getMousePosition(e);
+        const elements = this.getElementsFromPoint(mousePosition, e.target);
+        const firstWidgetElement = elements.filter((element) => {
+            const $element = $(element);
+
+            if($element.hasClass(this._addWidgetPrefix())) {
+                return !$element.closest($dragElement).length;
+            }
+        })[0];
+
+        const $sourceElement = this._getSourceElement();
+        const isTargetOverItself = firstWidgetElement === $sourceDraggableElement.get(0);
+        const isTargetOverNestedDraggable = $(firstWidgetElement).closest($sourceElement).length;
+
+        return !firstWidgetElement || firstWidgetElement === $targetDraggableElement.get(0) && !isTargetOverItself && !isTargetOverNestedDraggable;
+
     },
 
     _dragEnterHandler: function(e) {
+        this._fireDragEnterEvent(e);
+
         if(this._isTargetOverAnotherDraggable(e)) {
             this._setTargetDraggable();
         }
@@ -870,6 +886,8 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragLeaveHandler: function(e) {
+        this._fireDragLeaveEvent(e);
+
         this._resetTargetDraggable();
 
         if(this !== this._getSourceDraggable()) {
@@ -920,6 +938,8 @@ const Draggable = DOMComponent.inherit({
             case 'onDragMove':
             case 'onDragEnd':
             case 'onDrop':
+            case 'onDragEnter':
+            case 'onDragLeave':
                 this['_' + name + 'Action'] = this._createActionByOption(name);
                 break;
             case 'dragTemplate':
@@ -991,9 +1011,21 @@ const Draggable = DOMComponent.inherit({
         this._resetSourceDraggable();
         this._$sourceElement = null;
         this._stopAnimator();
+    },
+
+    _fireDragEnterEvent: function(sourceEvent) {
+        const args = this._getEventArgs(sourceEvent);
+
+        this._getAction('onDragEnter')(args);
+    },
+
+    _fireDragLeaveEvent: function(sourceEvent) {
+        const args = this._getEventArgs(sourceEvent);
+
+        this._getAction('onDragLeave')(args);
     }
 });
 
 registerComponent(DRAGGABLE, Draggable);
 
-module.exports = Draggable;
+export default Draggable;

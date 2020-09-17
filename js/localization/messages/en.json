@@ -65,6 +65,7 @@
         "dxFileUploader-upload": "Upload",
         "dxFileUploader-uploaded": "Uploaded",
         "dxFileUploader-readyToUpload": "Ready to upload",
+        "dxFileUploader-uploadAbortedMessage": "Upload cancelled",
         "dxFileUploader-uploadFailedMessage": "Upload failed",
         "dxFileUploader-invalidFileExtension": "File type is not allowed",
         "dxFileUploader-invalidMaxFileSize": "File is too large",
@@ -164,6 +165,7 @@
 
         "dxPager-infoText": "Page {0} of {1} ({2} items)",
         "dxPager-pagesCountText": "of",
+        "dxPager-pageSizesAllText": "All",
 
         "dxPivotGrid-grandTotal": "Grand Total",
         "dxPivotGrid-total": "{0} Total",
@@ -319,6 +321,7 @@
         "dxFileManager-commandThumbnails": "Thumbnails View",
         "dxFileManager-commandDetails": "Details View",
         "dxFileManager-commandClearSelection": "Clear selection",
+        "dxFileManager-commandShowNavPane": "Toggle navigation pane",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Move to",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "Move",

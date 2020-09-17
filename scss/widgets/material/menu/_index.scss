@@ -3,13 +3,14 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../menuBase" as *;
 @use "../menuBase/sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
+@use "../menuBase" as *;
 
 
-$MATERIAL_MENU_FONT_SIZE: 13px;
+$material-menu-font-size: 13px;
 
 .dx-context-menu-container-border {
   background-color: transparent;
@@ -23,11 +24,11 @@ $MATERIAL_MENU_FONT_SIZE: 13px;
   color: $menu-color;
 
   .dx-menu-item {
-    font-size: $MATERIAL_MENU_FONT_SIZE;
+    font-size: $material-menu-font-size;
     border-radius: $base-border-radius;
 
     .dx-menu-item-content {
-      padding: 7px $MATERIAL_MENU_HORIZONTAL_PADDING 8px;
+      padding: 7px $material-menu-horizontal-padding 8px;
 
       .dx-menu-item-popout-container {
         width: 0;
@@ -37,7 +38,7 @@ $MATERIAL_MENU_FONT_SIZE: 13px;
     &.dx-menu-item-has-text {
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-right: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING - $MATERIAL_MENU_HORIZONTAL_PADDING - $MATERIAL_BASE_ICON_SIZE;
+          margin-right: $material-menu-item-with-icon-horizontal-padding - $material-menu-horizontal-padding - $material-base-icon-size;
         }
       }
     }
@@ -48,7 +49,7 @@ $MATERIAL_MENU_FONT_SIZE: 13px;
       &.dx-menu-item-has-text {
         &.dx-menu-item-has-icon {
           .dx-icon {
-            margin-left: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING - $MATERIAL_MENU_HORIZONTAL_PADDING - $MATERIAL_BASE_ICON_SIZE;
+            margin-left: $material-menu-item-with-icon-horizontal-padding - $material-menu-horizontal-padding - $material-base-icon-size;
             margin-right: 0;
           }
         }

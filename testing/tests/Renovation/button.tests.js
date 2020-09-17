@@ -10,7 +10,7 @@ import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import { Deferred } from 'core/utils/deferred';
 import { act } from 'preact/test-utils';
 
-import 'renovation/button.j';
+import 'renovation/ui/button.j';
 import 'common.css!';
 import 'generic_light.css!';
 
@@ -39,7 +39,7 @@ const INK_RIPPLE_CLASS = 'dx-inkripple';
 
 const moduleConfig = {
     Button(options = {}) {
-        act(() => $('#button').dxrButton(options));
+        act(() => $('#button').dxButton(options));
         return $('#button');
     }
 };
@@ -50,7 +50,7 @@ QUnit.test('should render button with default template', function(assert) {
     const $element = this.Button({ text: 'test', icon: 'check' });
     const $contentElements = $element.find('.dx-button-content').children();
 
-    assert.strictEqual($element.dxrButton('option', 'template'), '', 'default template value');
+    assert.strictEqual($element.dxButton('option', 'template'), undefined, 'default template value');
     assert.ok($contentElements.eq(0).hasClass('dx-icon'), 'render icon');
     assert.ok($contentElements.eq(1).hasClass('dx-button-text'), 'render test');
 });
@@ -201,7 +201,7 @@ QUnit.module('options changed callbacks', moduleConfig, () => {
             _templateData: { custom: 1 }
         });
         template.reset();
-        act(() => element.dxrButton('repaint'));
+        act(() => element.dxButton('repaint'));
 
         assert.strictEqual(template.firstCall.args[0].custom, 1, 'custom field is correct');
     });
@@ -308,9 +308,9 @@ QUnit.module('contentReady', () => {
         };
 
         let $firstButton;
-        act(() => $firstButton = $('#widget').dxrButton(buttonConfig));
+        act(() => $firstButton = $('#widget').dxButton(buttonConfig));
 
-        act(() => $('#button').dxrButton($.extend({}, buttonConfig, {
+        act(() => $('#button').dxButton($.extend({}, buttonConfig, {
             onContentReady(e) {
                 assert.ok(areElementsEqual($firstButton, $(e.element)), 'rendered widget and widget with fired action are equals');
                 done();
@@ -370,7 +370,7 @@ QUnit.module('widget sizing render', moduleConfig, () => {
     QUnit.test('constructor', function(assert) {
         const element = this.Button({ text: 'ahoy!', width: 400 });
 
-        assert.strictEqual(element.dxrButton('option', 'width'), 400);
+        assert.strictEqual(element.dxButton('option', 'width'), 400);
         assert.strictEqual(element.outerWidth(), 400, 'outer width of the element must be equal to custom width');
     });
 
@@ -378,7 +378,7 @@ QUnit.module('widget sizing render', moduleConfig, () => {
         $('#button').width('300px');
         const element = this.Button({ text: 'ahoy!' });
 
-        assert.strictEqual(element.dxrButton('option', 'width'), undefined);
+        assert.strictEqual(element.dxButton('option', 'width'), undefined);
         assert.strictEqual(element.outerWidth(), 300, 'outer width of the element must be equal to custom width');
     });
 
@@ -529,7 +529,7 @@ QUnit.module('submit behavior', {
                 assert.ok(e.isDefaultPrevented(), 'default is prevented');
             });
             this.Button({ validationGroup: 'testGroup' });
-            const buttonInstance = this.$element.dxrButton('instance');
+            const buttonInstance = this.$element.dxButton('instance');
 
 
             ValidationEngine.registerValidatorInGroup('testGroup', validator);

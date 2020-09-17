@@ -1,18 +1,18 @@
-const $ = require('../../core/renderer');
-const noop = require('../../core/utils/common').noop;
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const errors = require('../widget/ui.errors');
-const decoratorRegistry = require('./ui.list.edit.decorator_registry');
+import $ from '../../core/renderer';
+import { noop } from '../../core/utils/common';
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import errors from '../widget/ui.errors';
+import decoratorRegistry from './ui.list.edit.decorator_registry';
 
-require('./ui.list.edit.decorator.static');
-require('./ui.list.edit.decorator.switchable.button');
-require('./ui.list.edit.decorator.switchable.slide');
-require('./ui.list.edit.decorator.swipe');
-require('./ui.list.edit.decorator.context');
-require('./ui.list.edit.decorator.selection');
-require('./ui.list.edit.decorator.reorder');
+import './ui.list.edit.decorator.static';
+import './ui.list.edit.decorator.switchable.button';
+import './ui.list.edit.decorator.switchable.slide';
+import './ui.list.edit.decorator.swipe';
+import './ui.list.edit.decorator.context';
+import './ui.list.edit.decorator.selection';
+import './ui.list.edit.decorator.reorder';
 
 
 const editOptionsRegistry = [];
@@ -251,4 +251,4 @@ const EditProvider = Class.inherit({
     }
 });
 
-module.exports = EditProvider;
+export default EditProvider;

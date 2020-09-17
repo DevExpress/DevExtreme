@@ -58,19 +58,20 @@
 */
 
 
-const $ = require('../core/renderer');
-const commonUtils = require('../core/utils/common');
-const each = require('../core/utils/iterator').each;
-const windowUtils = require('../core/utils/window');
-const window = windowUtils.getWindow();
-const domAdapter = require('../core/dom_adapter');
-const isWindow = require('../core/utils/type').isWindow;
-const extend = require('../core/utils/extend').extend;
-const getBoundingRect = require('../core/utils/position').getBoundingRect;
-const browser = require('../core/utils/browser');
+import $ from '../core/renderer';
 
-const translator = require('./translator');
-const support = require('../core/utils/support');
+import { splitPair, pairToObject } from '../core/utils/common';
+import { each } from '../core/utils/iterator';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import domAdapter from '../core/dom_adapter';
+import { isWindow } from '../core/utils/type';
+import { extend } from '../core/utils/extend';
+import { getBoundingRect } from '../core/utils/position';
+import browser from '../core/utils/browser';
+import translator from './translator';
+import support from '../core/utils/support';
+import devices from '../core/devices';
 
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;
@@ -83,7 +84,7 @@ const normalizeAlign = function(raw) {
         v: 'center'
     };
 
-    const pair = commonUtils.splitPair(raw);
+    const pair = splitPair(raw);
 
     if(pair) {
         each(pair, function() {
@@ -100,11 +101,11 @@ const normalizeAlign = function(raw) {
 };
 
 const normalizeOffset = function(raw) {
-    return commonUtils.pairToObject(raw);
+    return pairToObject(raw);
 };
 
 const normalizeCollision = function(raw) {
-    const pair = commonUtils.splitPair(raw);
+    const pair = splitPair(raw);
     let h = String(pair && pair[0]).toLowerCase();
     let v = String(pair && pair[1]).toLowerCase();
 
@@ -308,8 +309,15 @@ const calculatePosition = function(what, options) {
         if(isWindow(of[0])) {
             h.atLocation = of.scrollLeft();
             v.atLocation = of.scrollTop();
-            h.atSize = of[0].innerWidth >= of[0].outerWidth ? of[0].innerWidth : of.width();
-            v.atSize = of[0].innerHeight >= of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
+            if(devices.real().deviceType === 'phone' && of[0].visualViewport) {
+                h.atLocation = Math.max(h.atLocation, of[0].visualViewport.offsetLeft);
+                v.atLocation = Math.max(v.atLocation, of[0].visualViewport.offsetTop);
+                h.atSize = of[0].visualViewport.width;
+                v.atSize = of[0].visualViewport.height;
+            } else {
+                h.atSize = of[0].innerWidth >= of[0].outerWidth ? of[0].innerWidth : of.width();
+                v.atSize = of[0].innerHeight >= of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
+            }
         } else if(of[0].nodeType === 9) {
             h.atLocation = 0;
             v.atLocation = 0;
@@ -317,11 +325,11 @@ const calculatePosition = function(what, options) {
             v.atSize = of.height();
         } else {
             const ofRect = getBoundingRect(of.get(0));
-            const o = of.offset();
+            const o = getOffsetWithoutScale(of);
             h.atLocation = o.left;
             v.atLocation = o.top;
-            h.atSize = ofRect.width;
-            v.atSize = ofRect.height;
+            h.atSize = Math.max(ofRect.width, of.outerWidth());
+            v.atSize = Math.max(ofRect.height, of.outerHeight());
         }
     }
 
@@ -395,6 +403,22 @@ const calculatePosition = function(what, options) {
     return result;
 };
 
+const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
+    const currentElement = $currentElement.get(0);
+    if(!currentElement || $currentElement.is('body')) {
+        return $startElement.offset();
+    }
+
+    const transform = $currentElement.get(0).style.transform;
+    const scale = (transform.match(/scale(.+)/) || [])[0];
+
+    currentElement.style.transform = transform.replace(scale, '');
+    const offset = getOffsetWithoutScale($startElement, $currentElement.parent());
+    currentElement.style.transform = transform;
+
+    return offset;
+};
+
 const position = function(what, options) {
     const $what = $(what);
 
@@ -404,7 +428,8 @@ const position = function(what, options) {
 
     translator.resetPosition($what, true);
 
-    const offset = $what.offset();
+
+    const offset = getOffsetWithoutScale($what);
     const targetPosition = (options.h && options.v) ? options : calculatePosition($what, options);
 
     const preciser = function(number) {
@@ -438,7 +463,7 @@ if(!position.normalizeAlign) {
     position.normalizeAlign = normalizeAlign;
 }
 
-module.exports = {
+export default {
     calculateScrollbarWidth: calculateScrollbarWidth,
     calculate: calculatePosition,
     setup: position,

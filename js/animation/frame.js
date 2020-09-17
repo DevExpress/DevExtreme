@@ -1,6 +1,6 @@
-const windowUtils = require('../core/utils/window');
-const window = windowUtils.hasWindow() ? windowUtils.getWindow() : {};
-const callOnce = require('../core/utils/call_once');
+import { hasWindow, getWindow } from '../core/utils/window';
+const window = hasWindow() ? getWindow() : {};
+import callOnce from '../core/utils/call_once';
 
 const FRAME_ANIMATION_STEP_TIME = 1000 / 60;
 
@@ -55,12 +55,12 @@ const setAnimationFrameMethods = callOnce(function() {
     }
 });
 
-exports.requestAnimationFrame = function() {
+export function requestAnimationFrame() {
     setAnimationFrameMethods();
     return request.apply(window, arguments);
-};
+}
 
-exports.cancelAnimationFrame = function() {
+export function cancelAnimationFrame() {
     setAnimationFrameMethods();
     cancel.apply(window, arguments);
-};
+}

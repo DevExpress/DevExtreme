@@ -4,8 +4,12 @@ interface MetaItem {
   Value?: string;
   Type?: string;
   TypeValues?: string;
-  Path?: string;
   [key: string]: string;
+}
+
+interface ThemesMetadata {
+  generic: MetaItem[];
+  material: MetaItem[];
 }
 
 interface ConfigMetaItem {
@@ -24,9 +28,9 @@ interface ConfigSettings {
   outColorScheme?: string;
   assetsBasePath?: string;
   base?: boolean;
-  items?: Array<ConfigMetaItem>;
+  items?: ConfigMetaItem[];
   data?: string;
-  widgets?: Array<string>;
+  widgets?: string[];
   noClean?: boolean;
 
   fileFormat?: string;
@@ -55,14 +59,14 @@ interface CompilerResult {
 interface PackageResult {
   css: string;
   compiledMetadata: { [key: string]: string };
-  widgets: Array<string>;
-  unusedWidgets: Array<string>;
+  widgets: string[];
+  unusedWidgets: string[];
   swatchSelector: string;
   version?: string;
 }
 
 interface Metadata {
-  metadata: Array<MetaItem>;
+  metadata: ThemesMetadata;
   version: string;
 }
 
@@ -77,12 +81,33 @@ interface WidgetItem {
 }
 
 interface WidgetHandlerResult {
-  widgets: Array<string>;
-  unusedWidgets: Array<string>;
+  widgets: string[];
+  unusedWidgets: string[];
   indexContent: string;
 }
 
 interface SwatchSass {
   sass: string;
   selector: string;
+}
+
+interface ScriptsDependencyTree {
+  widget: string;
+  dependencies: { [key: string]: ScriptsDependencyTree };
+}
+
+interface ScriptsDependencyCache {
+  [key: string]: ScriptsDependencyTree;
+}
+
+interface FlatStylesDependencies {
+  [key: string]: string[];
+}
+
+interface AstComment {
+  value: string;
+}
+
+interface SyntaxTree {
+  comments?: AstComment[];
 }

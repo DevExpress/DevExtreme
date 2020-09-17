@@ -9,6 +9,7 @@ QUnit.testStart(function() {
 
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
 
@@ -1179,7 +1180,7 @@ QUnit.module('Footer with virtual scroll', {
 
         // act
         that.rowsView.render($testElement);
-        that.rowsView.height(100);
+        that.rowsView.height(200);
         that.rowsView.resize();
 
         // assert

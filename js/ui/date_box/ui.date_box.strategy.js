@@ -1,8 +1,8 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const noop = require('../../core/utils/common').noop;
-const Class = require('../../core/class');
-const dateLocalization = require('../../localization/date');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import { noop } from '../../core/utils/common';
+import Class from '../../core/class';
+import dateLocalization from '../../localization/date';
 
 const abstract = Class.abstract;
 
@@ -133,4 +133,4 @@ const DateBoxStrategy = Class.inherit({
     }
 });
 
-module.exports = DateBoxStrategy;
+export default DateBoxStrategy;

@@ -1,9 +1,9 @@
-const extend = require('../../../core/utils/extend').extend;
-const symbolPoint = require('./symbol_point');
+import { extend } from '../../../core/utils/extend';
+import symbolPoint from './symbol_point';
 const _extend = extend;
 const MIN_BUBBLE_HEIGHT = 20;
 
-module.exports = _extend({}, symbolPoint, {
+export default _extend({}, symbolPoint, {
     correctCoordinates: function(diameter) {
         this.bubbleSize = diameter / 2;
     },

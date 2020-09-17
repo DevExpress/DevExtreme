@@ -1,6 +1,6 @@
 const CENTER = 0.5;
 
-module.exports = {
+export default {
     getFigures: function(data) {
         const height = 1 / data.length;
 

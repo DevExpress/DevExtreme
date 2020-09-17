@@ -1,4 +1,5 @@
 import $ from '../../core/renderer';
+import { isDxMouseWheelEvent } from '../../events/utils';
 
 const allowScroll = function(container, delta, shiftKey) {
     const $container = $(container);
@@ -20,6 +21,26 @@ const allowScroll = function(container, delta, shiftKey) {
     }
 };
 
+const prepareScrollData = function(container, validateTarget) {
+    const $container = $(container);
+    const isCorrectTarget = function(eventTarget) {
+        return validateTarget ? $(eventTarget).is(container) : true;
+    };
+
+    return {
+        validate: function(e) {
+            if(isDxMouseWheelEvent(e) && isCorrectTarget(e.target)) {
+                if(allowScroll($container, -e.delta, e.shiftKey)) {
+                    e._needSkipEvent = true;
+                    return true;
+                }
+                return false;
+            }
+        }
+    };
+};
+
 export {
-    allowScroll
+    allowScroll,
+    prepareScrollData
 };

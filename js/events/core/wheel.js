@@ -51,4 +51,4 @@ const wheel = {
 
 registerEvent(EVENT_NAME, wheel);
 
-exports.name = EVENT_NAME;
+export { EVENT_NAME as name };

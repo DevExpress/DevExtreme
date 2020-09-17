@@ -2605,10 +2605,12 @@ QUnit.test('no sortable without allowReordering', function(assert) {
     assert.strictEqual($list.find('.dx-sortable').length, 0, 'no sortable');
 });
 
-QUnit.test('sortable should be created with deprecated option allowItemReordering', function(assert) {
+QUnit.test('sortable should be created with itemDragging.allowItemReordering option', function(assert) {
     const $list = $('#templated-list').dxList({
         items: ['0'],
-        allowItemReordering: true
+        itemDragging: {
+            allowReordering: true
+        }
     });
 
     const sortable = $list.find('.dx-sortable').dxSortable('instance');
@@ -2860,27 +2862,18 @@ QUnit.test('prev item should be moved back if item moved to start position', fun
 });
 
 QUnit.test('item should be moved with animation', function(assert) {
-    const origFX = fx.animate;
-    let animated = false;
-    fx.animate = () => {
-        animated = true;
-        return $.Deferred().resolve().promise();
-    };
+    fx.off = false;
 
-    try {
-        const $list = $('#templated-list').dxList({
-            items: ['0', '1', '2'],
-            itemDragging: { allowReordering: true }
-        });
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
-        const $item1 = $items.eq(1);
-        const pointer = reorderingPointerMock($item1, this.clock);
+    const $list = $('#templated-list').dxList({
+        items: ['0', '1', '2'],
+        itemDragging: { allowReordering: true }
+    });
+    const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+    const $item1 = $items.eq(1);
+    const pointer = reorderingPointerMock($item1, this.clock);
 
-        pointer.dragStart(0.5).drag(1);
-        assert.strictEqual(animated, true, 'animation present');
-    } finally {
-        fx.animate = origFX;
-    }
+    pointer.dragStart(0.5).drag(1);
+    assert.strictEqual($items.get(2).style.transitionDuration, '300ms', 'animation present');
 });
 
 QUnit.test('drop item should reorder list items with correct indexes', function(assert) {

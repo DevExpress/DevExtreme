@@ -31,5 +31,3 @@ export default class SchedulerTimelineWeek extends SchedulerTimeline {
 }
 
 registerComponent('dxSchedulerTimelineWeek', SchedulerTimelineWeek);
-
-module.exports = SchedulerTimelineWeek;

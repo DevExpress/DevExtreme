@@ -3,6 +3,11 @@ import {
 } from '../../core/element';
 
 import {
+    PaletteType,
+    PaletteExtensionModeType
+} from '../palette';
+
+import {
     template
 } from '../../core/templates/template';
 
@@ -157,7 +162,7 @@ export interface BaseGaugeRangeContainer {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+    palette?: Array<string> | PaletteType;
     /**
      * @docid BaseGaugeOptions.rangeContainer.paletteExtensionMode
      * @type Enums.VizPaletteExtensionMode
@@ -165,7 +170,7 @@ export interface BaseGaugeRangeContainer {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
+    paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid BaseGaugeOptions.rangeContainer.ranges
      * @type Array<Object>
@@ -328,7 +333,7 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -486,7 +491,7 @@ export interface CommonIndicator {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+    palette?: Array<string> | PaletteType;
     /**
      * @docid CommonIndicator.secondColor
      * @type string
@@ -560,7 +565,7 @@ export interface CommonIndicator {
      */
     width?: number;
 }
-
+export type GaugeIndicatorType = 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
 export interface GaugeIndicator extends CommonIndicator {
     /**
      * @docid GaugeIndicator.type
@@ -569,5 +574,5 @@ export interface GaugeIndicator extends CommonIndicator {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    type?: 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
+    type?: GaugeIndicatorType;
 }

@@ -1,12 +1,14 @@
-const $ = require('../core/renderer');
-const noop = require('../core/utils/common').noop;
-const messageLocalization = require('../localization/message');
-const registerComponent = require('../core/component_registrator');
-const extend = require('../core/utils/extend').extend;
-const LoadIndicator = require('./load_indicator');
-const Overlay = require('./overlay');
-const Deferred = require('../core/utils/deferred').Deferred;
-const themes = require('./themes');
+import $ from '../core/renderer';
+import { noop } from '../core/utils/common';
+import messageLocalization from '../localization/message';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import LoadIndicator from './load_indicator';
+import Overlay from './overlay';
+import { Deferred } from '../core/utils/deferred';
+import themes from './themes';
+
+// STYLE loadPanel
 
 const LOADPANEL_CLASS = 'dx-loadpanel';
 const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
@@ -183,8 +185,11 @@ const LoadPanel = Overlay.inherit({
             return;
         }
 
-        this._$indicator = $('<div>').addClass(LOADPANEL_INDICATOR_CLASS)
-            .appendTo(this._$contentWrapper);
+        if(!this._$indicator) {
+            this._$indicator = $('<div>')
+                .addClass(LOADPANEL_INDICATOR_CLASS)
+                .appendTo(this._$contentWrapper);
+        }
 
         this._createComponent(this._$indicator, LoadIndicator, {
             indicatorSrc: this.option('indicatorSrc')
@@ -214,11 +219,7 @@ const LoadPanel = Overlay.inherit({
                 this._togglePaneVisible();
                 break;
             case 'indicatorSrc':
-                if(this._$indicator) {
-                    this._createComponent(this._$indicator, LoadIndicator, {
-                        indicatorSrc: this.option('indicatorSrc')
-                    });
-                }
+                this._renderLoadIndicator();
                 break;
             default:
                 this.callBase(args);
@@ -245,4 +246,4 @@ const LoadPanel = Overlay.inherit({
 
 registerComponent('dxLoadPanel', LoadPanel);
 
-module.exports = LoadPanel;
+export default LoadPanel;

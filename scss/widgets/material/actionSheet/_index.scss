@@ -3,12 +3,13 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
 
 
 .dx-actionsheet-container {
   .dx-actionsheet-item {
-    margin: $MATERIAL_ACTIONSHEET_ITEM_MARGIN;
+    margin: $material-actionsheet-item-margin;
   }
 
   .dx-button {

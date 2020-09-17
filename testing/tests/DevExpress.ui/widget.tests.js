@@ -420,6 +420,31 @@ QUnit.module('render', {}, () => {
         const instance = $('#widget').dxWidget().dxWidget('instance');
         assert.equal(instance.option('hint'), undefined);
     });
+
+    QUnit.test('init with ignoreParentReadOnly option', function(assert) {
+        const $element = $('#widget').dxWidget({
+            ignoreParentReadOnly: true
+        });
+
+        assert.ok($element.hasClass('dx-state-independent'), 'button with icon has icon class');
+    });
+
+    QUnit.test('ignoreParentReadOnly option change', function(assert) {
+        const element = $('#widget');
+        const instance = element.dxWidget({}).dxWidget('instance');
+
+        assert.notOk(element.hasClass('dx-state-independent'));
+
+        instance.option({
+            ignoreParentReadOnly: true
+        });
+        assert.ok(element.hasClass('dx-state-independent'));
+
+        instance.option({
+            ignoreParentReadOnly: false
+        });
+        assert.notOk(element.hasClass('dx-state-independent'));
+    });
 });
 
 QUnit.module('API', {
@@ -907,6 +932,26 @@ QUnit.module('templates support', {}, () => {
 
         assert.equal(renderResult, 'template result', 'render method should have correct context');
         assert.equal(onRenderedHandler.callCount, 1, 'onRendered has been called');
+    });
+
+    QUnit.test('external custom template should not call onRendered method with templatesRenderAsynchronously (template.render exists)', function(assert) {
+        const onRenderedHandler = sinon.spy();
+
+        const testContainer = new TestContainer('#container', {
+            templatesRenderAsynchronously: true,
+            template: {
+                render() {
+                    return 'template result';
+                }
+            }
+        });
+
+        const template = testContainer._getTemplateByOption('template');
+
+        const renderResult = template.render({ onRendered: onRenderedHandler });
+
+        assert.equal(renderResult, 'template result', 'render method should have correct context');
+        assert.equal(onRenderedHandler.callCount, 0, 'onRendered has been called');
     });
 
     QUnit.test('shared external template as script element', function(assert) {

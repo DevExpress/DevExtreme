@@ -4,7 +4,7 @@ import dateSerialization from '../../core/utils/date_serialization';
 import { getRecurrenceProcessor } from './recurrence';
 import dateUtils from '../../core/utils/date';
 import { equalByValue } from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { isFunction, isDefined, isString } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import arrayUtils from '../../core/utils/array';
@@ -169,7 +169,7 @@ class AppointmentModel {
             const resourceGetter = this._dataAccessors.getter.resources[resourceName];
             let resource;
 
-            if(typeUtils.isFunction(resourceGetter)) {
+            if(isFunction(resourceGetter)) {
                 resource = resourceGetter(appointment);
             }
 
@@ -241,7 +241,7 @@ class AppointmentModel {
                    (apptEndDayHour >= endDayHour && apptStartDayHour <= endDayHour && apptStartDayHour >= startDayHour);
     }
 
-    _createCombinedFilter(filterOptions, timeZoneProcessor) {
+    _createCombinedFilter(filterOptions, timeZoneCalculator) {
         const dataAccessors = this._dataAccessors;
         const startDayHour = filterOptions.startDayHour;
         const endDayHour = filterOptions.endDayHour;
@@ -260,7 +260,7 @@ class AppointmentModel {
             const appointmentTakesSeveralDays = that.appointmentTakesSeveralDays(appointment);
             const isAllDay = dataAccessors.getter.allDay(appointment);
             const appointmentIsLong = appointmentTakesSeveralDays || appointmentTakesAllDay;
-            const useRecurrence = typeUtils.isDefined(dataAccessors.getter.recurrenceRule);
+            const useRecurrence = isDefined(dataAccessors.getter.recurrenceRule);
             let recurrenceRule;
 
             if(useRecurrence) {
@@ -277,8 +277,15 @@ class AppointmentModel {
 
             const startDateTimeZone = dataAccessors.getter.startDateTimeZone(appointment);
             const endDateTimeZone = dataAccessors.getter.endDateTimeZone(appointment);
-            const comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone);
-            const comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
+
+            const comparableStartDate = timeZoneCalculator.createDate(startDate, {
+                appointmentTimeZone: startDateTimeZone,
+                path: 'toGrid'
+            });
+            const comparableEndDate = timeZoneCalculator.createDate(endDate, {
+                appointmentTimeZone: endDateTimeZone,
+                path: 'toGrid'
+            });
 
             if(result && useRecurrence) {
                 const recurrenceException = getRecurrenceException ? getRecurrenceException(appointment) : dataAccessors.getter.recurrenceException(appointment);
@@ -404,7 +411,7 @@ class AppointmentModel {
         const startDate = this._dataAccessors.expr.startDateExpr;
         const endDate = this._dataAccessors.expr.endDateExpr;
 
-        if(typeUtils.isString(filter[0])) {
+        if(isString(filter[0])) {
             if(config().forceIsoDateParsing && filter.length > 1) {
                 if(filter[0] === startDate || filter[0] === endDate) {
                     // TODO: wrap filter value to new Date only necessary for case T838165(details in note)
@@ -420,14 +427,8 @@ class AppointmentModel {
         return filter;
     }
 
-    filterLoadedAppointments(filterOptions, timeZoneProcessor) {
-        if(!typeUtils.isFunction(timeZoneProcessor)) {
-            timeZoneProcessor = (date) => {
-                return date;
-            };
-        }
-
-        const combinedFilter = this._createCombinedFilter(filterOptions, timeZoneProcessor);
+    filterLoadedAppointments(filterOptions, timeZoneCalculator) {
+        const combinedFilter = this._createCombinedFilter(filterOptions, timeZoneCalculator);
 
         if(this._filterMaker.isRegistered()) {
             this._filterMaker.make('user', undefined);
@@ -436,7 +437,7 @@ class AppointmentModel {
 
             this._filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
 
-            const dateFilter = this.customizeDateFilter(this._filterMaker.combine(), timeZoneProcessor);
+            const dateFilter = this.customizeDateFilter(this._filterMaker.combine(), timeZoneCalculator);
 
             combinedFilter.push([dateFilter]);
         }
@@ -512,7 +513,7 @@ class AppointmentModel {
         return !dateUtils.sameDate(startDate, endDate);
     }
 
-    customizeDateFilter(dateFilter, timeZoneProcessor) {
+    customizeDateFilter(dateFilter, timeZoneCalculator) {
         const currentFilter = extend(true, [], dateFilter);
 
         return ((appointment) => {
@@ -526,8 +527,14 @@ class AppointmentModel {
             const startDateTimeZone = this._dataAccessors.getter.startDateTimeZone(appointment);
             const endDateTimeZone = this._dataAccessors.getter.endDateTimeZone(appointment);
 
-            const comparableStartDate = timeZoneProcessor(startDate, startDateTimeZone);
-            const comparableEndDate = timeZoneProcessor(endDate, endDateTimeZone);
+            const comparableStartDate = timeZoneCalculator.createDate(startDate, {
+                appointmentTimeZone: startDateTimeZone,
+                path: 'toGrid'
+            });
+            const comparableEndDate = timeZoneCalculator.createDate(endDate, {
+                appointmentTimeZone: endDateTimeZone,
+                path: 'toGrid'
+            });
 
             this._dataAccessors.setter.startDate(appointment, comparableStartDate);
             this._dataAccessors.setter.endDate(appointment, comparableEndDate);
@@ -537,18 +544,25 @@ class AppointmentModel {
     }
 
     fixWrongEndDate(appointment, startDate, endDate) {
-        if(this._isEndDateWrong(appointment, startDate, endDate)) {
-            if(this._dataAccessors.getter.allDay(appointment)) {
-                endDate = dateUtils.setToDayEnd(new Date(startDate));
-            } else {
-                endDate = new Date(startDate.getTime() + this._baseAppointmentDuration * toMs('minute'));
-            }
+        if(this._isEndDateWrong(startDate, endDate)) {
+            const isAllDay = this._dataAccessors.getter.allDay(appointment);
+
+            endDate = this._calculateAppointmentEndDate(isAllDay, startDate);
+
             this._dataAccessors.setter.endDate(appointment, endDate);
         }
         return endDate;
     }
 
-    _isEndDateWrong(appointment, startDate, endDate) {
+    _calculateAppointmentEndDate(isAllDay, startDate) {
+        if(isAllDay) {
+            return dateUtils.setToDayEnd(new Date(startDate));
+        }
+
+        return new Date(startDate.getTime() + this._baseAppointmentDuration * toMs('minute'));
+    }
+
+    _isEndDateWrong(startDate, endDate) {
         return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 
@@ -582,4 +596,4 @@ class AppointmentModel {
     }
 }
 
-module.exports = AppointmentModel;
+export default AppointmentModel;

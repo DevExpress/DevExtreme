@@ -4,10 +4,8 @@
 /js/bundles/dx.custom.js
 /js/localization/default_messages.js
 /js/localization/cldr-data
-/js/renovation/**/*.p.d.ts
-/js/renovation/**/*.p.js
-/js/renovation/**/*.j.d.ts
-/js/renovation/**/*.j.js
+/js/renovation/**/*.j.tsx
+/js/renovation/code_coverage
 bin
 node_modules
 obj

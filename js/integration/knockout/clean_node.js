@@ -1,48 +1,48 @@
-const elementData = require('../../core/element_data');
-const afterCleanData = elementData.afterCleanData;
-const strategyChanging = elementData.strategyChanging;
-const ko = require('knockout');
-const compareVersion = require('../../core/utils/version').compare;
+import { afterCleanData, strategyChanging, cleanData } from '../../core/element_data';
+// eslint-disable-next-line no-restricted-imports
+import ko from 'knockout';
+import { compare as compareVersion } from '../../core/utils/version';
 
-const originalKOCleanExternalData = ko.utils.domNodeDisposal.cleanExternalData;
-
-const patchCleanData = function() {
-    afterCleanData(function(nodes) {
-        let i;
-        for(i = 0; i < nodes.length; i++) {
-            nodes[i].cleanedByJquery = true;
-        }
-
-        for(i = 0; i < nodes.length; i++) {
-            if(!nodes[i].cleanedByKo) {
-                ko.cleanNode(nodes[i]);
+if(ko) {
+    const originalKOCleanExternalData = ko.utils.domNodeDisposal.cleanExternalData;
+    const patchCleanData = function() {
+        afterCleanData(function(nodes) {
+            let i;
+            for(i = 0; i < nodes.length; i++) {
+                nodes[i].cleanedByJquery = true;
             }
-            delete nodes[i].cleanedByKo;
-        }
 
-        for(i = 0; i < nodes.length; i++) {
-            delete nodes[i].cleanedByJquery;
+            for(i = 0; i < nodes.length; i++) {
+                if(!nodes[i].cleanedByKo) {
+                    ko.cleanNode(nodes[i]);
+                }
+                delete nodes[i].cleanedByKo;
+            }
+
+            for(i = 0; i < nodes.length; i++) {
+                delete nodes[i].cleanedByJquery;
+            }
+        });
+
+        ko.utils.domNodeDisposal.cleanExternalData = function(node) {
+            node.cleanedByKo = true;
+            if(!node.cleanedByJquery) {
+                cleanData([node]);
+            }
+        };
+    };
+
+    const restoreOriginCleanData = function() {
+        afterCleanData(function() {});
+        ko.utils.domNodeDisposal.cleanExternalData = originalKOCleanExternalData;
+    };
+
+    patchCleanData();
+
+    strategyChanging.add(function(strategy) {
+        const isJQuery = !!strategy.fn;
+        if(isJQuery && compareVersion(strategy.fn.jquery, [2, 0]) < 0) {
+            restoreOriginCleanData();
         }
     });
-
-    ko.utils.domNodeDisposal.cleanExternalData = function(node) {
-        node.cleanedByKo = true;
-        if(!node.cleanedByJquery) {
-            elementData.cleanData([node]);
-        }
-    };
-};
-
-const restoreOriginCleanData = function() {
-    afterCleanData(function() {});
-    ko.utils.domNodeDisposal.cleanExternalData = originalKOCleanExternalData;
-};
-
-patchCleanData();
-
-strategyChanging.add(function(strategy) {
-    const isJQuery = !!strategy.fn;
-    if(isJQuery && compareVersion(strategy.fn.jquery, [2, 0]) < 0) {
-        restoreOriginCleanData();
-    }
-});
+}

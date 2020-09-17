@@ -4,10 +4,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
-$MATERIAL_ACCORDION_DISABLED_OPACITY: 0.5;
+$material-accordion-disabled-opacity: 0.5;
 
 
 .dx-accordion {
@@ -18,7 +19,7 @@ $MATERIAL_ACCORDION_DISABLED_OPACITY: 0.5;
 
 .dx-accordion-item {
   background-color: $accordion-item-bg;
-  box-shadow: $MATERIAL_ACCORDION_SHADOW;
+  box-shadow: $material-accordion-shadow;
   transition: margin 200ms cubic-bezier(0.4, 0, 0.2, 1);
   will-change: margin, height;
   border-top: 1px solid $accordion-item-border-color;
@@ -53,7 +54,7 @@ $MATERIAL_ACCORDION_DISABLED_OPACITY: 0.5;
 }
 
 .dx-accordion-item-opened {
-  margin: $MATERIAL_ACCORDION_OPENED_MARGIN 0;
+  margin: $material-accordion-opened-margin 0;
   border-top: none;
 
   &:first-child {
@@ -61,15 +62,15 @@ $MATERIAL_ACCORDION_DISABLED_OPACITY: 0.5;
   }
 
   & > .dx-accordion-item-title {
-    height: $MATERIAL_ACCORDION_OPENED_TITLE_HEIGHT;
+    height: $material-accordion-opened-title-height;
 
     .dx-accordion-item-title-caption {
-      top: floor(($MATERIAL_ACCORDION_OPENED_TITLE_HEIGHT - $MATERIAL_ACCORDION_TITLE_FONT_SIZE) / 2);
+      top: floor(($material-accordion-opened-title-height - $material-accordion-title-font-size) / 2);
     }
 
     &:before {
       content: "\f014";
-      top: floor(($MATERIAL_ACCORDION_OPENED_TITLE_HEIGHT - $MATERIAL_BASE_ICON_SIZE) / 2) - 2;
+      top: floor(($material-accordion-opened-title-height - $material-base-icon-size) / 2) - 2;
     }
   }
 
@@ -79,9 +80,9 @@ $MATERIAL_ACCORDION_DISABLED_OPACITY: 0.5;
 }
 
 .dx-accordion-item-title {
-  height: $MATERIAL_ACCORDION_TITLE_HEIGHT;
+  height: $material-accordion-title-height;
   position: relative;
-  padding: 12px $MATERIAL_ACCORDION_TITLE_PADDING;
+  padding: 12px $material-accordion-title-padding;
   background-color: $accordion-item-bg;
 
   .dx-accordion-item-title-caption,
@@ -93,59 +94,59 @@ $MATERIAL_ACCORDION_DISABLED_OPACITY: 0.5;
 
   .dx-accordion-item-title-caption {
     color: $accordion-title-color;
-    font-size: $MATERIAL_ACCORDION_TITLE_FONT_SIZE;
-    top: floor(($MATERIAL_ACCORDION_TITLE_HEIGHT - $MATERIAL_ACCORDION_TITLE_FONT_SIZE) / 2);
-    left: $MATERIAL_ACCORDION_TITLE_PADDING;
-    right: $MATERIAL_ACCORDION_TITLE_PADDING*2 + $MATERIAL_BASE_ICON_SIZE;
+    font-size: $material-accordion-title-font-size;
+    top: floor(($material-accordion-title-height - $material-accordion-title-font-size) / 2);
+    left: $material-accordion-title-padding;
+    right: $material-accordion-title-padding * 2 + $material-base-icon-size;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
   }
 
   &:before {
-    top: floor(($MATERIAL_ACCORDION_TITLE_HEIGHT - $MATERIAL_BASE_ICON_SIZE) / 2) - 1;
-    right: $MATERIAL_ACCORDION_TITLE_PADDING;
+    top: floor(($material-accordion-title-height - $material-base-icon-size) / 2) - 1;
+    right: $material-accordion-title-padding;
     font-weight: normal;
     color: $accordion-icon-color;
     content: "\f016";
     font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
-    font-size: $MATERIAL_BASE_ICON_SIZE;
-    height: $MATERIAL_BASE_ICON_SIZE;
-    width: $MATERIAL_BASE_ICON_SIZE;
+    font-size: $material-base-icon-size;
+    height: $material-base-icon-size;
+    width: $material-base-icon-size;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($MATERIAL_BASE_ICON_SIZE);
+    @include dx-icon-sizing($material-base-icon-size);
   }
 
   .dx-accordion-item-title-caption .dx-icon {
-    @include dx-icon-margin($ACCORDION_TITLE_ICON_MARGIN);
+    @include dx-icon-margin($accordion-title-icon-margin);
 
     position: relative;
-    top: $ACCORDION_TITLE_ICON_TOP_OFFSET;
+    top: $accordion-title-icon-top-offset;
   }
 }
 
 .dx-state-disabled {
   &.dx-accordion-item {
-    opacity: $MATERIAL_ACCORDION_DISABLED_OPACITY;
+    opacity: $material-accordion-disabled-opacity;
   }
 }
 
 .dx-accordion-item-body {
-  padding: $MATERIAL_ACCORDION_BODY_PADDING;
+  padding: $material-accordion-body-padding;
   font-size: 12px;
 }
 
 .dx-rtl {
   .dx-accordion-item-title {
     .dx-accordion-item-title-caption {
-      right: $MATERIAL_ACCORDION_TITLE_PADDING;
-      left: $MATERIAL_ACCORDION_TITLE_PADDING*2 + $MATERIAL_BASE_ICON_SIZE;
+      right: $material-accordion-title-padding;
+      left: $material-accordion-title-padding * 2 + $material-base-icon-size;
     }
 
     &:before {
-      left: $MATERIAL_ACCORDION_TITLE_PADDING;
+      left: $material-accordion-title-padding;
       right: auto;
     }
   }

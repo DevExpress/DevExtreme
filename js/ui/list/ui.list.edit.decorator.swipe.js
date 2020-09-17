@@ -1,8 +1,8 @@
-const translator = require('../../animation/translator');
-const fx = require('../../animation/fx');
-const registerDecorator = require('./ui.list.edit.decorator_registry').register;
-const EditDecorator = require('./ui.list.edit.decorator');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import translator from '../../animation/translator';
+import fx from '../../animation/fx';
+import { register as registerDecorator } from './ui.list.edit.decorator_registry';
+import EditDecorator from './ui.list.edit.decorator';
+import { Deferred } from '../../core/utils/deferred';
 
 
 registerDecorator(

@@ -1,34 +1,30 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_POPUP_CONTENT_PADDING: null !default;
-$MATERIAL_POPUP_CONTENT_WITHTITLE_TOP_PADDING: null !default;
-$MATERIAL_POPUP_BUTTON_MARGIN: null !default;
-$MATERIAL_POPUP_TOOLBAR_ITEM_SPACING: null !default;
-$MATERIAL_POPUP_TOOLBARTOP_PADDING: null !default;
-$MATERIAL_POPUP_TOOLBARBOTTOM_PADDING: null !default;
-$MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT: null !default;
+$material-popup-content-padding: null !default;
+$material-popup-content-withtitle-top-padding: null !default;
+$material-popup-toolbartop-padding: null !default;
+$material-popup-toolbarbottom-padding: null !default;
+$material-popup-bottom-toolbar-height: null !default;
+
+$material-popup-button-margin: 0 8px;
+$material-popup-toolbar-item-spacing: 8px;
 
 @if $size == "default" {
-  $MATERIAL_POPUP_CONTENT_PADDING: 24px;
-  $MATERIAL_POPUP_CONTENT_WITHTITLE_TOP_PADDING: 20px;
+  $material-popup-content-padding: 24px;
+  $material-popup-content-withtitle-top-padding: 20px;
 
-  $MATERIAL_POPUP_BUTTON_MARGIN: 0 8px;
-
-  $MATERIAL_POPUP_TOOLBAR_ITEM_SPACING: 8px;
-  $MATERIAL_POPUP_TOOLBARTOP_PADDING: 0 8px 0 24px;
-  $MATERIAL_POPUP_TOOLBARBOTTOM_PADDING: 0 8px 0 24px;
-  $MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT: 52px;
+  $material-popup-toolbartop-padding: 0 8px 0 24px;
+  $material-popup-toolbarbottom-padding: 0 8px 0 24px;
+  $material-popup-bottom-toolbar-height: 52px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_POPUP_CONTENT_PADDING: 16px;
-  $MATERIAL_POPUP_CONTENT_WITHTITLE_TOP_PADDING: 14px;
+  $material-popup-content-padding: 16px;
+  $material-popup-content-withtitle-top-padding: 14px;
 
-  $MATERIAL_POPUP_BUTTON_MARGIN: 0 8px;
-
-  $MATERIAL_POPUP_TOOLBAR_ITEM_SPACING: 8px;
-  $MATERIAL_POPUP_TOOLBARTOP_PADDING: 0 8px 0 16px;
-  $MATERIAL_POPUP_TOOLBARBOTTOM_PADDING: 0 8px 0 16px;
-  $MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT: 44px;
+  $material-popup-toolbartop-padding: 0 8px 0 16px;
+  $material-popup-toolbarbottom-padding: 0 8px 0 16px;
+  $material-popup-bottom-toolbar-height: 44px;
 }

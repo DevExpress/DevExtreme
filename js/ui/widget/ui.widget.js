@@ -95,7 +95,8 @@ const Widget = DOMComponent.inherit({
             * @type_function_return number|date
             */
 
-            onKeyboardHandled: null
+            onKeyboardHandled: null,
+            ignoreParentReadOnly: false
         });
     },
 
@@ -148,6 +149,7 @@ const Widget = DOMComponent.inherit({
         this._renderFocusState();
         this._attachFeedbackEvents();
         this._attachHoverEvents();
+        this._toggleIndependentState();
     },
 
     _renderHint() {
@@ -460,6 +462,10 @@ const Widget = DOMComponent.inherit({
         this.setAria('disabled', value || undefined);
     },
 
+    _toggleIndependentState() {
+        this.$element().toggleClass('dx-state-independent', this.option('ignoreParentReadOnly'));
+    },
+
     _setWidgetOption(widgetName, args) {
         if(!this[widgetName]) {
             return;
@@ -494,6 +500,9 @@ const Widget = DOMComponent.inherit({
                 break;
             case 'hint':
                 this._renderHint();
+                break;
+            case 'ignoreParentReadOnly':
+                this._toggleIndependentState();
                 break;
             case 'activeStateEnabled':
                 this._attachFeedbackEvents();
@@ -606,4 +615,4 @@ Widget.getOptionsFromContainer = ({ name, fullName, value }) => {
     return options;
 };
 
-module.exports = Widget;
+export default Widget;

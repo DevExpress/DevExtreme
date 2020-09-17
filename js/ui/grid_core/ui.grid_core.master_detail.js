@@ -11,7 +11,7 @@ const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const ROW_LINES_CLASS = 'dx-row-lines';
 
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             masterDetail: {
@@ -119,11 +119,6 @@ module.exports = {
                                 that._expandedItems[expandIndex].visible = !visible;
                             } else {
                                 that._expandedItems.push({ key: key, visible: true });
-
-                                const editingController = that.getController('editing');
-                                if(editingController) {
-                                    editingController.correctEditRowIndexAfterExpand(key);
-                                }
                             }
 
                             that.updateItems({
@@ -261,6 +256,17 @@ module.exports = {
                                 this.updateDimensions();
                             }
                         });
+                    }
+                },
+                _toggleBestFitMode: function(isBestFit) {
+                    this.callBase.apply(this, arguments);
+                    if(this.option('masterDetail.template')) {
+                        const $rowsTable = this._rowsView._getTableElement();
+                        if($rowsTable) {
+                            $rowsTable
+                                .find('.dx-master-detail-cell')
+                                .toggleClass('dx-hidden', isBestFit);
+                        }
                     }
                 }
             }

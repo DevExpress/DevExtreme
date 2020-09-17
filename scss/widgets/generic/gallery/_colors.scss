@@ -2,365 +2,134 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
+/**
+* $name 10. Indicator background color
+* $type color
+*/
+$gallery-indicator-bg: $base-bg !default;
 
-$gallery-indicator-bg: null !default;
+/**
+* $name 20. Selected indicator background color
+* $type color
+*/
 $gallery-indicator-item-selected-bg: null !default;
+
+/**
+* $name 30. Focused indicator background color
+* $type color
+*/
 $gallery-indicator-focused-bg: null !default;
 $gallery-indicator-item-border-color: null !default;
 $gallery-indicator-selected-border-color: null !default;
 $gallery-navbutton-degradation-bg: null !default;
-$gallery-navbutton-hover-color: null !default;
-$gallery-nav-arrow-color: null !default;
-$gallery-navbutton-active-color: null !default;
-$gallery-navbutton-border-radius: null !default;
 
+/**
+* $name 30. Navigation button color
+* $type color
+*/
+$gallery-navbutton-hover-color: null !default;
+
+/**
+* $name 40. Navigation icon color
+* $type color
+*/
+$gallery-nav-arrow-color: null !default;
+
+/**
+* $name 50. Active navigation button color
+* $type color
+*/
+$gallery-navbutton-active-color: null !default;
+$gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 
 @if $color == "carmine" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
-  $gallery-indicator-bg: $base-bg !default;
-
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
-  /**
-    * $name 30. Navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.3) !default;
-
-  /**
-    * $name 40. Navigation icon color
-    * $type color
-    */
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
-  /**
-    * $name 50. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
-  $gallery-indicator-bg: $base-bg !default;
-
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-inverted-bg !default;
-
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: $base-inverted-bg !default;
-
   $gallery-indicator-item-border-color: $base-border-color !default;
   $gallery-indicator-selected-border-color: extcolor.difference(#fff, $base-border-color) !default;
-
-
   $gallery-navbutton-degradation-bg: $base-inverted-bg !default;
-
-
   $gallery-nav-arrow-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 30. Navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: $base-hover-color !default;
-
-  /**
-    * $name 30. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: $base-text-color !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
-  $gallery-indicator-bg: $base-bg !default;
-
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: lighten($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
-  /**
-    * $name 40. Navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
-  /**
-    * $name 50. Navigation icon color
-    * $type color
-    */
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
-  /**
-    * $name 60. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
-  $gallery-indicator-bg: $base-bg !default;
-
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: lighten($base-accent, 15%) !default;
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
-  /**
-    * $name 30. Navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
-  /**
-    * $name 40. Navigation icon color
-    * $type color
-    */
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
-  /**
-    * $name 50. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
-  $gallery-indicator-bg: $base-bg !default;
-
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: lighten($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
-  /**
-    * $name 30. Navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
-  /**
-    * $name 40. Navigation icon color
-    * $type color
-    */
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
-  /**
-    * $name 50. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
-  $gallery-indicator-bg: $base-bg !default;
-
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
-  /**
-    * $name 40. Navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
-  /**
-    * $name 50. Navigation icon color
-    * $type color
-    */
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
-  /**
-    * $name 60. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
-  $gallery-indicator-bg: $base-bg !default;
-
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
-  /**
-    * $name 40. Navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
-  /**
-    * $name 50. Navigation icon color
-    * $type color
-    */
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
-  /**
-    * $name 60. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 10. Indicator background color
-    * $type color
-    */
-  $gallery-indicator-bg: $base-bg !default;
-
-  /**
-    * $name 20. Selected indicator background color
-    * $type color
-    */
   $gallery-indicator-item-selected-bg: $base-accent !default;
-
-  /**
-    * $name 30. Focused indicator background color
-    * $type color
-    */
   $gallery-indicator-focused-bg: darken($base-accent, 15%) !default;
-
   $gallery-indicator-item-border-color: $base-accent !default;
   $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
-
   $gallery-navbutton-degradation-bg: $gallery-indicator-bg !default;
-
-  /**
-    * $name 30. Navigation button color
-    * $type color
-    */
   $gallery-navbutton-hover-color: color.change($base-accent, $alpha: 0.5) !default;
-
-  /**
-    * $name 40. Navigation icon color
-    * $type color
-    */
   $gallery-nav-arrow-color: $base-inverted-icon-color !default;
-
-  /**
-    * $name 50. Active navigation button color
-    * $type color
-    */
   $gallery-navbutton-active-color: color.change($base-accent, $alpha: 0.7) !default;
-  $gallery-navbutton-border-radius: $base-border-radius - 4px !default;
 }
 

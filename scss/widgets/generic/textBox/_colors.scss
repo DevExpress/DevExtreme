@@ -1,70 +1,45 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
+/**
+* $name 80. Search icon color
+* $type color
+*/
 $textbox-search-icon-color: null !default;
 
 
 @if $color == "carmine" {
-  /**
-    * $name 80. Search icon color
-    * $type color
-    */
   $textbox-search-icon-color: lighten($base-icon-color, 3%) !default;
 }
 
 @if $color == "contrast" {
-
   $textbox-search-icon-color: $base-icon-color !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 90. Search icon color
-    * $type color
-    */
   $textbox-search-icon-color: darken($base-icon-color, 40%) !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 70. Search icon color
-    * $type color
-    */
   $textbox-search-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 90. Search icon color
-    * $type color
-    */
   $textbox-search-icon-color: darken($base-icon-color, 40%) !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 90. Search icon color
-    * $type color
-    */
   $textbox-search-icon-color: $base-icon-color !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 90. Search icon color
-    * $type color
-    */
   $textbox-search-icon-color: lighten($base-icon-color, 40%) !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 90. Search icon color
-    * $type color
-    */
   $textbox-search-icon-color: $base-icon-color !default;
 }
 

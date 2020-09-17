@@ -32,24 +32,26 @@ QUnit.module('searching');
 
 const configs = [];
 ['items', 'dataSource'].forEach((dataSourceOption) => { // 'createChildren' is partially supported
-    [false, true].forEach((virtualModeEnabled) => {
-        [false, true].forEach((expanded) => {
-            [false, true].forEach(selectNodesRecursive => {
-                ['multiple', 'single'].forEach(selectionMode => {
-                    ['none', 'normal', 'selectAll'].forEach(showCheckBoxesMode => {
-                        configs.push({ dataSourceOption, virtualModeEnabled, expanded, selectNodesRecursive, selectionMode, showCheckBoxesMode });
-                    });
+    [false, true].forEach((expanded) => {
+        [false, true].forEach(selectNodesRecursive => {
+            ['multiple', 'single'].forEach(selectionMode => {
+                ['none', 'normal', 'selectAll'].forEach(showCheckBoxesMode => {
+                    configs.push({ dataSourceOption, expanded, selectNodesRecursive, selectionMode, showCheckBoxesMode });
                 });
             });
         });
     });
 });
 
+function isLazyDataSourceMode(wrapper) {
+    const options = wrapper.instance.option();
+    return options.dataSource && options.virtualModeEnabled || options.createChildren;
+}
+
 configs.forEach(config => {
-    QUnit.test(`selectionMode:${config.selectionMode}, showCheckBoxesMode: ${config.showCheckBoxesMode}, virtualModeEnabled: ${config.virtualModeEnabled}, itemsExpr:"subItems", dataStructure: tree, keyExpr:undefined -> search("2"); (T871605)`, function(assert) {
+    QUnit.test(`dataSource: ${config.dataSourceOption}, selectionMode:${config.selectionMode}, showCheckBoxesMode: ${config.showCheckBoxesMode}, itemsExpr:"subItems", dataStructure: tree, keyExpr:undefined -> search("2"); (T871605)`, function(assert) {
         const options = {
             itemsExpr: 'subItems',
-            virtualModeEnabled: config.virtualModeEnabled,
             selectNodesRecursive: config.selectNodesRecursive,
             showCheckBoxesMode: config.showCheckBoxesMode,
             selectionMode: config.selectionMode,
@@ -70,6 +72,44 @@ configs.forEach(config => {
         const $item1_2 = wrapper.getElement().find('[aria-label="item1_2"]');
         assert.equal($item1_2.length, 1, 'item1_2 is exists');
         assert.equal(wrapper.hasInvisibleClass($item1_2), false, 'item1_2 is visible');
+    });
+
+    [false, true].forEach((virtualModeEnabled) => {
+        [null, 0, -1, ''].forEach(rootValue => {
+            QUnit.test(`dataSource: ${config.dataSourceOption}, selectionMode:${config.selectionMode}, showCheckBoxesMode: ${config.showCheckBoxesMode}, virtualModeEnabled: ${config.virtualModeEnabled}, expanded: ${config.expanded}, dataStructure: plain, rootValue: ${rootValue} -> search("1"); (T906787)`, function(assert) {
+                const options = {
+                    rootValue,
+                    virtualModeEnabled,
+                    selectNodesRecursive: config.selectNodesRecursive,
+                    showCheckBoxesMode: config.showCheckBoxesMode,
+                    selectionMode: config.selectionMode,
+                    dataStructure: 'plain'
+                };
+                options[config.dataSourceOption] = [
+                    { id: 1, text: 'item1', parentId: rootValue, expanded: config.expanded },
+                    { id: 2, text: 'item1_1', parentId: 1 },
+                    { id: 3, text: 'item2', parentId: rootValue }
+                ];
+                const wrapper = new TreeViewTestWrapper(options);
+                wrapper.instance.option('searchValue', '1');
+
+                const $item1 = wrapper.getElement().find('[aria-label="item1"]');
+                const $item2 = wrapper.getElement().find('[aria-label="item2"]');
+                const $item1_1 = wrapper.getElement().find('[aria-label="item1_1"]');
+                const $item1_2 = wrapper.getElement().find('[aria-label="item1_2"]');
+
+                assert.equal($item1.length, 1, 'item1 is exists');
+                assert.equal(wrapper.hasInvisibleClass($item1), false, 'item1 is visible');
+
+                assert.equal($item2.length, 0, 'item2 doesnt exists');
+                if(isLazyDataSourceMode(wrapper) && !config.expanded) {
+                    assert.equal($item1_1.length, 0, 'item1_1 doesnt exists in virtual mode');
+                } else {
+                    assert.equal($item1_1.length, 1, 'item1_2 is exists');
+                    assert.equal(wrapper.hasInvisibleClass($item1_2), false, 'item1_1 is visible');
+                }
+            });
+        });
     });
 });
 

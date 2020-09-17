@@ -4,15 +4,16 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
-$GENERIC_SLIDEOUT_MENU_ICON_SIZE: $GENERIC_BASE_ICON_SIZE + $GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE;
+$generic-slideout-menu-icon-size: $generic-base-icon-size + $generic-slideout-menu-icon-oversize;
 
 .dx-slideout-menu .dx-list-item .dx-icon {
-  @include dx-icon-sizing($GENERIC_SLIDEOUT_MENU_ICON_SIZE);
-  @include dx-icon-margin($GENERIC_SLIDEOUT_MENU_ICON_SIZE/2);
+  @include dx-icon-sizing($generic-slideout-menu-icon-size);
+  @include dx-icon-margin($generic-slideout-menu-icon-size / 2);
 
-  margin-top: -$GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE/2;
-  margin-bottom: -$GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE/2;
+  margin-top: -$generic-slideout-menu-icon-oversize / 2;
+  margin-bottom: -$generic-slideout-menu-icon-oversize / 2;
 }

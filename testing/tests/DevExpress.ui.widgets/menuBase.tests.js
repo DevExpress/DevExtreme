@@ -952,4 +952,20 @@ QUnit.module('Aria accessibility', {
         helper.checkAttributes(helper.getItems().eq(0), { id: helper.focusedItemId, role: 'menuitem', tabindex: '-1', 'aria-haspopup': 'true' }, 'Items[0]');
         helper.checkAttributes(helper.getItems().eq(1), { role: 'menuitem', tabindex: '-1' }, 'Items[1]');
     });
+
+    // T927422
+    QUnit.test('Items: [{items[{}, {}], {}], any <li>, <ul> tags need role=none', function() {
+        helper.createWidget({
+            items: [{ text: 'Item1_1', items: [{ text: 'Item2_1' }, { text: 'Item2_2' }] }, { text: 'item1_2' }],
+            showSubmenuMode: 'onClick'
+        });
+
+        helper.checkAttributes(helper.$widget.find('ul'), { role: 'none' }, 'Items[1]');
+
+        const $listItems = helper.$widget.find('li');
+
+        $listItems.each((_, listItem) => {
+            helper.checkAttributes($(listItem), { role: 'none' }, 'list item');
+        });
+    });
 });

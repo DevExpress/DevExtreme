@@ -18,7 +18,7 @@ const cutCaptions = (captions, format) => {
     });
 };
 
-module.exports = {
+export default {
     getMonthNames: function(format) {
         return cutCaptions(MONTHS, format);
     },

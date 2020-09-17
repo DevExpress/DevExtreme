@@ -3,6 +3,11 @@ import {
 } from '../core/element';
 
 import {
+    PaletteType,
+    PaletteExtensionModeType
+} from './palette';
+
+import {
     template
 } from '../core/templates/template';
 
@@ -19,6 +24,8 @@ import BaseWidget, {
     BaseWidgetTooltip,
     Font
 } from './core/base_widget';
+
+import { HatchingDirectionType } from './common';
 
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
@@ -64,14 +71,14 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    link?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, colorMode?: 'none' | 'source' | 'target' | 'gradient', hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number };
+    link?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, colorMode?: 'none' | 'source' | 'target' | 'gradient', hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number };
     /**
      * @docid dxSankeyOptions.node
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    node?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number, padding?: number, width?: number };
+    node?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number, padding?: number, width?: number };
     /**
      * @docid dxSankeyOptions.onLinkClick
      * @extends Action
@@ -128,7 +135,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+    palette?: Array<string> | PaletteType;
     /**
      * @docid dxSankeyOptions.paletteExtensionMode
      * @type Enums.VizPaletteExtensionMode
@@ -136,7 +143,7 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
+    paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid dxSankeyOptions.sortData
      * @type object
@@ -221,7 +228,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field2 target:string
      * @type_function_param1_field3 weight:Number
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -235,7 +242,7 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field2 weightIn:Number
      * @type_function_param1_field3 weightOut:Number
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

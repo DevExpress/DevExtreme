@@ -1,19 +1,21 @@
-const $ = require('../core/renderer');
-const windowUtils = require('../core/utils/window');
-const window = windowUtils.getWindow();
-const getPublicElement = require('../core/element').getPublicElement;
-const domAdapter = require('../core/dom_adapter');
-const eventsEngine = require('../events/core/events_engine');
-const registerComponent = require('../core/component_registrator');
-const commonUtils = require('../core/utils/common');
-const extend = require('../core/utils/extend').extend;
-const translator = require('../animation/translator');
-const positionUtils = require('../animation/position');
-const typeUtils = require('../core/utils/type');
-const mathUtils = require('../core/utils/math');
-const eventUtils = require('../events/utils');
-const Popup = require('./popup');
-const getBoundingRect = require('../core/utils/position').getBoundingRect;
+import $ from '../core/renderer';
+import { getWindow, hasWindow } from '../core/utils/window';
+const window = getWindow();
+import { getPublicElement } from '../core/element';
+import domAdapter from '../core/dom_adapter';
+import eventsEngine from '../events/core/events_engine';
+import registerComponent from '../core/component_registrator';
+import { noop, pairToObject } from '../core/utils/common';
+import { extend } from '../core/utils/extend';
+import translator from '../animation/translator';
+import positionUtils from '../animation/position';
+import { isObject, isString } from '../core/utils/type';
+import { fitIntoRange } from '../core/utils/math';
+import { addNamespace } from '../events/utils';
+import Popup from './popup';
+import { getBoundingRect } from '../core/utils/position';
+
+// STYLE popover
 
 const POPOVER_CLASS = 'dx-popover';
 const POPOVER_WRAPPER_CLASS = 'dx-popover-wrapper';
@@ -52,7 +54,7 @@ const SIDE_BORDER_WIDTH_STYLES = {
 };
 
 const getEventNameByOption = function(optionValue) {
-    return typeUtils.isObject(optionValue) ? optionValue.name : optionValue;
+    return isObject(optionValue) ? optionValue.name : optionValue;
 };
 const getEventName = function(that, optionName) {
     const optionValue = that.option(optionName);
@@ -62,18 +64,18 @@ const getEventName = function(that, optionName) {
 const getEventDelay = function(that, optionName) {
     const optionValue = that.option(optionName);
 
-    return typeUtils.isObject(optionValue) && optionValue.delay;
+    return isObject(optionValue) && optionValue.delay;
 };
 const attachEvent = function(that, name) {
     const target = that.option('target');
-    const isSelector = typeUtils.isString(target);
+    const isSelector = isString(target);
     const event = getEventName(that, name + 'Event');
 
     if(!event || that.option('disabled')) {
         return;
     }
 
-    const eventName = eventUtils.addNamespace(event, that.NAME);
+    const eventName = addNamespace(event, that.NAME);
     const action = that._createAction((function() {
         const delay = getEventDelay(that, name + 'Event');
         this._clearEventsTimeouts();
@@ -108,7 +110,7 @@ const detachEvent = function(that, target, name, event) {
         return;
     }
 
-    eventName = eventUtils.addNamespace(eventName, that.NAME);
+    eventName = addNamespace(eventName, that.NAME);
 
     const EVENT_HANDLER_NAME = '_' + name + 'EventHandler';
     if(that[EVENT_HANDLER_NAME]) {
@@ -243,7 +245,7 @@ const Popover = Popup.inherit({
                 }
             }, {
                 device: function() {
-                    return !windowUtils.hasWindow();
+                    return !hasWindow();
                 },
                 options: {
                     animation: null
@@ -319,7 +321,7 @@ const Popover = Popup.inherit({
         this._renderOverlayPosition();
     },
 
-    _renderOverlayBoundaryOffset: commonUtils.noop,
+    _renderOverlayBoundaryOffset: noop,
 
     _renderOverlayPosition: function() {
         this._resetOverlayPosition();
@@ -374,7 +376,7 @@ const Popover = Popup.inherit({
     },
 
     _getContainerPosition: function() {
-        const offset = commonUtils.pairToObject(this._position.offset || '');
+        const offset = pairToObject(this._position.offset || '');
         let hOffset = offset.h;
         let vOffset = offset.v;
         const isVerticalSide = this._isVerticalSide();
@@ -449,7 +451,7 @@ const Popover = Popup.inherit({
         }
 
         const borderWidth = this._getContentBorderWidth(side);
-        const finalArrowLocation = mathUtils.fitIntoRange(arrowLocation - borderWidth + this.option('arrowOffset'), borderWidth, contentSize - arrowSize - borderWidth * 2);
+        const finalArrowLocation = fitIntoRange(arrowLocation - borderWidth + this.option('arrowOffset'), borderWidth, contentSize - arrowSize - borderWidth * 2);
         this._$arrow.css(axis, finalArrowLocation);
     },
 
@@ -597,4 +599,4 @@ const Popover = Popup.inherit({
 
 registerComponent('dxPopover', Popover);
 
-module.exports = Popover;
+export default Popover;

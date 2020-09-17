@@ -48,7 +48,7 @@ QUnit.module('markup', () => {
 
         assert.equal(input.val(), 'custom');
         assert.equal(input.attr('type'), 'text');
-        assert.equal(input.prop('placeholder') || element.find('.' + PLACEHOLDER_CLASS).attr('data-dx_placeholder'), 'enter value');
+        assert.equal(element.find('.' + PLACEHOLDER_CLASS).attr('data-dx_placeholder'), 'enter value');
 
         assert.equal(input.prop('readOnly'), true);
     });

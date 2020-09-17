@@ -1,6 +1,6 @@
-const $ = require('../../core/renderer');
-const Class = require('../../core/class');
-const equalByValue = require('../../core/utils/common').equalByValue;
+import $ from '../../core/renderer';
+import Class from '../../core/class';
+import { equalByValue } from '../../core/utils/common';
 const abstract = Class.abstract;
 
 
@@ -132,4 +132,4 @@ const EditStrategy = Class.inherit({
 });
 
 
-module.exports = EditStrategy;
+export default EditStrategy;

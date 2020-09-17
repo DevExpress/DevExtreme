@@ -3,17 +3,12 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../button" as *;
 @use "../button/colors" as *;
 @use "../../base/icons" as *;
+
 // adduse
-
-
-$GENERIC_TABS_BORDER_WIDTH: $GENERIC_BASE_BORDER_WIDTH;
-$GENERIC_TABS_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-border-color;
-$GENERIC_TABS_TRANSPARENT_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-tab-bg;
-$GENERIC_TAB_FOCUS_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-focused-border-color;
-
+@use "../scrollable";
+@use "../badge";
 
 @mixin dx-tabs-border-mixin($border-horizontal, $border-vertical) {
   &:after {
@@ -33,19 +28,19 @@ $GENERIC_TAB_FOCUS_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-focused-border
 }
 
 .dx-tabs {
-  border: $GENERIC_TABS_BORDER;
+  border: $generic-tabs-border;
 }
 
 .dx-tabs-scrollable {
-  margin: -$GENERIC_TABS_BORDER_WIDTH;
+  margin: -$generic-tabs-border-width;
   height: calc(100% + 2px);
 
   .dx-tabs-wrapper {
-    border: $GENERIC_TABS_BORDER;
+    border: $generic-tabs-border;
 
     .dx-tabs-nav-buttons & {
-      border-left: $GENERIC_TABS_TRANSPARENT_BORDER;
-      border-right: $GENERIC_TABS_TRANSPARENT_BORDER;
+      border-left: $generic-tabs-transparent-border;
+      border-right: $generic-tabs-transparent-border;
     }
   }
 }
@@ -74,7 +69,7 @@ $GENERIC_TAB_FOCUS_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-focused-border
 }
 
 .dx-tab {
-  padding: $GENERIC_TABS_ITEM_PADDING;
+  padding: $generic-tabs-item-padding;
   background-color: $tabs-tab-bg;
   color: $tabs-tab-color;
 
@@ -83,8 +78,8 @@ $GENERIC_TAB_FOCUS_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-focused-border
     display: inline-block;
     vertical-align: middle;
 
-    @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
-    @include dx-icon-margin($GENERIC_BASE_ICON_SIZE/2);
+    @include dx-icon-sizing($generic-base-icon-size);
+    @include dx-icon-margin($generic-base-icon-size / 2);
   }
 
   &.dx-state-hover {
@@ -97,7 +92,7 @@ $GENERIC_TAB_FOCUS_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-focused-border
   }
 
   &.dx-state-focused {
-    @include dx-tabs-border-mixin($GENERIC_TAB_FOCUS_BORDER, $GENERIC_TAB_FOCUS_BORDER);
+    @include dx-tabs-border-mixin($generic-tab-focus-border, $generic-tab-focus-border);
   }
 
   &.dx-tab-selected {
@@ -107,7 +102,7 @@ $GENERIC_TAB_FOCUS_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-focused-border
 }
 
 .dx-tab-selected {
-  @include dx-tabs-border-mixin($GENERIC_TABS_BORDER, none);
+  @include dx-tabs-border-mixin($generic-tabs-border, none);
 
   .dx-icon {
     color: $tabs-tab-icon-selected-color;
@@ -116,11 +111,11 @@ $GENERIC_TAB_FOCUS_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-focused-border
   &:not(.dx-state-focused) {
     & + & {
       &:after {
-        border-left: $GENERIC_TABS_TRANSPARENT_BORDER;
+        border-left: $generic-tabs-transparent-border;
 
         .dx-rtl & {
-          border-left: $GENERIC_TABS_BORDER;
-          border-right: $GENERIC_TABS_TRANSPARENT_BORDER;
+          border-left: $generic-tabs-border;
+          border-right: $generic-tabs-transparent-border;
         }
       }
     }
@@ -129,7 +124,7 @@ $GENERIC_TAB_FOCUS_BORDER: $GENERIC_TABS_BORDER_WIDTH solid $tabs-focused-border
 
 .dx-tab-text {
   vertical-align: middle;
-  line-height: $GENERIC_TAB_TEXT_LINE_HEIGHT;
+  line-height: $generic-tab-text-line-height;
 }
 
 .dx-state-disabled {

@@ -4,10 +4,12 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+
 // adduse
+@use "../scrollable";
 
 
-$GENERIC_DATEVIEW_ROLLER_PADDING: ($GENERIC_DATEVIEW_ROLLER_HEIGHT - $GENERIC_DATEVIEW_ROLLER_ITEM_HEIGHT) / 2;
+$generic-dateview-roller-padding: ($generic-dateview-roller-height - $generic-dateview-roller-item-height) / 2;
 
 
 .dx-dateview-rollers {
@@ -34,12 +36,12 @@ $GENERIC_DATEVIEW_ROLLER_PADDING: ($GENERIC_DATEVIEW_ROLLER_HEIGHT - $GENERIC_DA
   .dx-scrollable-content:before,
   .dx-scrollable-content:after {
     content: "";
-    height: $GENERIC_DATEVIEW_ROLLER_PADDING;
+    height: $generic-dateview-roller-padding;
     display: block;
   }
 
   .dx-scrollable-container {
-    height: $GENERIC_DATEVIEW_ROLLER_HEIGHT;
+    height: $generic-dateview-roller-height;
   }
 
   &.dx-dateviewroller-year {
@@ -80,8 +82,8 @@ $GENERIC_DATEVIEW_ROLLER_PADDING: ($GENERIC_DATEVIEW_ROLLER_HEIGHT - $GENERIC_DA
 }
 
 .dx-dateview-item {
-  height: $GENERIC_DATEVIEW_ROLLER_ITEM_HEIGHT;
-  line-height: $GENERIC_DATEVIEW_ROLLER_ITEM_HEIGHT;
+  height: $generic-dateview-roller-item-height;
+  line-height: $generic-dateview-roller-item-height;
   text-align: center;
   font-size: 1.3em;
   color: $dateview-color;
@@ -102,7 +104,7 @@ $GENERIC_DATEVIEW_ROLLER_PADDING: ($GENERIC_DATEVIEW_ROLLER_HEIGHT - $GENERIC_DA
 
 .dx-dateview-item-selected-frame {
   position: absolute;
-  top: $GENERIC_DATEVIEW_ROLLER_PADDING;
+  top: $generic-dateview-roller-padding;
   width: 100%;
 
   &:before,
@@ -112,18 +114,18 @@ $GENERIC_DATEVIEW_ROLLER_PADDING: ($GENERIC_DATEVIEW_ROLLER_HEIGHT - $GENERIC_DA
     display: block;
     width: 100%;
     position: absolute;
-    height: $GENERIC_DATEVIEW_ROLLER_PADDING;
+    height: $generic-dateview-roller-padding;
   }
 
   &:before {
-    top: -$GENERIC_DATEVIEW_ROLLER_PADDING;
+    top: -$generic-dateview-roller-padding;
     border-bottom: 1px solid $dateview-border-color;
 
     @include gradient-linear($dateview-shadow-up);
   }
 
   &:after {
-    top: $GENERIC_DATEVIEW_ROLLER_ITEM_HEIGHT;
+    top: $generic-dateview-roller-item-height;
     border-top: 1px solid $dateview-border-color;
 
     @include gradient-linear($dateview-shadow-down);

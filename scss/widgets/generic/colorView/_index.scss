@@ -3,76 +3,78 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/colorView" as *;
+@use "../../base/colorView/mixins" as *;
+@use "../../base/colorView";
+
 // adduse
 
 
-@include dx-base-colorview-styles($COLORVIEW_HANDLE_COLOR, $COLORVIEW_HANDLE_BORDER_COLOR);
+@include dx-base-colorview-styles($colorview-handle-color, $colorview-handle-border-color);
 
 
-$GENERIC_COLORVIEW_ALPHA_WIDTH: $GENERIC_COLORVIEW_PALETTE_WIDTH + 4;
-$GENERIC_COLORVIEW_HUE_SCALE_HEIGHT: $GENERIC_COLORVIEW_PALETTE_HEIGHT;
+$generic-colorview-alpha-width: $generic-colorview-palette-width + 4;
+$generic-colorview-hue-scale-height: $generic-colorview-palette-height;
 
 .dx-colorview-container {
-  width: $GENERIC_COLORVIEW_CONTAINER_WIDTH;
+  width: $generic-colorview-container-width;
 
   label {
-    line-height: $GENERIC_COLORVIEW_CONTAINER_LINE_HEIGHT;
+    line-height: $generic-colorview-container-line-height;
 
     &.dx-colorview-label-hex {
-      margin: $GENERIC_COLORVIEW_CONTAINER_HEX_MARGIN;
+      margin: $generic-colorview-container-hex-margin;
     }
 
     &.dx-colorview-alpha-channel-label {
-      margin-left: $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN;
-      width: $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_WIDTH;
+      margin-left: $generic-colorview-container-alpha-label-margin;
+      width: $generic-colorview-container-alpha-label-width;
     }
 
     .dx-texteditor {
-      width: $GENERIC_COLORVIEW_CONTAINER_TEXTBOX_WIDTH;
-      margin: $GENERIC_COLORVIEW_CONTAINER_TEXTBOX_MARGIN;
+      width: $generic-colorview-container-textbox-width;
+      margin: $generic-colorview-container-textbox-margin;
     }
   }
 }
 
 .dx-colorview-hue-scale-cell {
-  margin-left: $GENERIC_COLORVIEW_HUE_SCALE_MARGIN;
+  margin-left: $generic-colorview-hue-scale-margin;
 }
 
 .dx-colorview-palette {
-  width: $GENERIC_COLORVIEW_PALETTE_WIDTH;
-  height: $GENERIC_COLORVIEW_PALETTE_HEIGHT;
+  width: $generic-colorview-palette-width;
+  height: $generic-colorview-palette-height;
 }
 
 .dx-colorview-alpha-channel-scale {
-  width: $GENERIC_COLORVIEW_PALETTE_WIDTH;
+  width: $generic-colorview-palette-width;
 }
 
 .dx-colorview-container-row.dx-colorview-alpha-channel-row {
-  margin-top: $GENERIC_COLORVIEW_ALPHA_MARGIN;
+  margin-top: $generic-colorview-alpha-margin;
 }
 
 .dx-colorview-hue-scale {
-  width: $GENERIC_COLORVIEW_HUE_SCALE_WIDTH;
-  height: $GENERIC_COLORVIEW_HUE_SCALE_HEIGHT;
+  width: $generic-colorview-hue-scale-width;
+  height: $generic-colorview-hue-scale-height;
 }
 
 .dx-colorview-alpha-channel-cell {
-  width: $GENERIC_COLORVIEW_ALPHA_WIDTH;
+  width: $generic-colorview-alpha-width;
 }
 
 .dx-colorview-hue-scale-wrapper {
-  height: $GENERIC_COLORVIEW_HUE_SCALE_HEIGHT + 2;
+  height: $generic-colorview-hue-scale-height + 2;
 }
 
 .dx-colorview-color-preview {
   width: 100%;
-  height: $GENERIC_COLORVIEW_COLOR_PREVIEW_HEIGHT;
+  height: $generic-colorview-color-preview-height;
 }
 
 .dx-colorview-controls-container {
-  width: $GENERIC_COLORVIEW_CONTROLS_CONTAINER_WIDTH;
-  margin-left: $GENERIC_COLORVIEW_CONTROLS_CONTAINER_MARGIN;
+  width: $generic-colorview-controls-container-width;
+  margin-left: $generic-colorview-controls-container-margin;
 }
 
 .dx-colorview-container label { // stylelint-disable-line no-duplicate-selectors
@@ -91,25 +93,25 @@ $GENERIC_COLORVIEW_HUE_SCALE_HEIGHT: $GENERIC_COLORVIEW_PALETTE_HEIGHT;
 }
 
 .dx-colorview-color-preview-container {
-  margin-bottom: $GENERIC_COLORVIEW_PREVIEW_CONTAINER_MARGIN;
+  margin-bottom: $generic-colorview-preview-container-margin;
 }
 
 .dx-rtl {
   .dx-colorview-controls-container {
     margin-left: 0;
-    margin-right: $GENERIC_COLORVIEW_CONTROLS_CONTAINER_MARGIN;
+    margin-right: $generic-colorview-controls-container-margin;
   }
 
   .dx-colorview-hue-scale-cell {
     margin-left: 0;
-    margin-right: $GENERIC_COLORVIEW_HUE_SCALE_MARGIN;
+    margin-right: $generic-colorview-hue-scale-margin;
   }
 
   .dx-colorview-container {
     label {
       &.dx-colorview-alpha-channel-label {
         margin-left: 0;
-        margin-right: $GENERIC_COLORVIEW_CONTAINER_ALPHA_LABEL_MARGIN;
+        margin-right: $generic-colorview-container-alpha-label-margin;
       }
     }
   }

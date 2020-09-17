@@ -1,0 +1,27 @@
+export const FORM_CLASS = 'dx-form';
+export const FORM_GROUP_CLASS = 'dx-form-group';
+export const FORM_GROUP_CAPTION_CLASS = 'dx-form-group-caption';
+export const FORM_FIELD_ITEM_COL_CLASS = 'dx-col-';
+export const FIELD_ITEM_CLASS = 'dx-field-item';
+export const FLEX_LAYOUT_CLASS = 'dx-flex-layout';
+export const LAYOUT_MANAGER_ONE_COLUMN = 'dx-layout-manager-one-col';
+export const FIELD_ITEM_OPTIONAL_MARK_CLASS = 'dx-field-item-optional-mark';
+export const FIELD_ITEM_REQUIRED_MARK_CLASS = 'dx-field-item-required-mark';
+export const FIELD_ITEM_OPTIONAL_CLASS = 'dx-field-item-optional';
+export const FIELD_ITEM_REQUIRED_CLASS = 'dx-field-item-required';
+export const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
+export const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
+export const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
+export const FIELD_ITEM_CONTENT_WRAPPER_CLASS = 'dx-field-item-content-wrapper';
+export const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
+export const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
+export const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
+export const FIELD_ITEM_LABEL_LOCATION_CLASS = 'dx-field-item-label-location-';
+export const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
+export const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
+export const FIELD_ITEM_CONTENT_LOCATION_CLASS = 'dx-field-item-content-location-';
+export const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
+export const FIELD_EMPTY_ITEM_CLASS = 'dx-field-empty-item';
+export const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
+export const SINGLE_COLUMN_ITEM_CONTENT = 'dx-single-column-item-content';
+

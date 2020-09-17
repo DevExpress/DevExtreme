@@ -12,4 +12,4 @@ class NodesOption extends ItemsOption {
     }
 }
 
-module.exports = NodesOption;
+export default NodesOption;

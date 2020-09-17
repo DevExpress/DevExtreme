@@ -203,4 +203,4 @@ const ODataStore = Store.inherit({
 
 }, 'odata');
 
-module.exports = ODataStore;
+export default ODataStore;

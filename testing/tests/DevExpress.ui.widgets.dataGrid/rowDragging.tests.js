@@ -428,8 +428,8 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         assert.strictEqual(reorderArgs.toIndex, 1, 'onReorder toIndex');
         assert.strictEqual(reorderArgs.itemData, this.options.dataSource[0], 'onReorder itemData');
 
-        assert.strictEqual(this.dataGrid.getVisibleRows().length, 4, 'visible row count');
-        assert.strictEqual(this.dataGrid.getVisibleRows()[reorderArgs.toIndex].data, this.options.dataSource[7], 'onReorder toIndex data');
+        assert.strictEqual(this.dataGrid.getVisibleRows().length, 2, 'visible row count');
+        assert.strictEqual(this.dataGrid.getVisibleRows()[reorderArgs.toIndex].data, this.options.dataSource[9], 'onReorder toIndex data');
     });
 
     QUnit.test('Sortable should have height if dataSource is empty', function(assert) {
@@ -625,7 +625,7 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         rowsView.render($testElement);
 
         // act
-        pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 10).move(0, 5);
+        pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 10).move(0, 45);
 
         // assert
         const $placeholder = $('.dx-sortable-placeholder');

@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import ArrayStore from '../../data/array_store';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
@@ -380,10 +380,10 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
         };
 
         if(element) {
-            eventsEngine.on(element, clickEvent.name, '.dx-area-field.dx-area-box', func);
+            eventsEngine.on(element, clickEventName, '.dx-area-field.dx-area-box', func);
             return;
         }
-        eventsEngine.on(that.$element(), clickEvent.name, '.dx-area-field.dx-area-box', func);
+        eventsEngine.on(that.$element(), clickEventName, '.dx-area-field.dx-area-box', func);
     },
 
     _initTemplates: noop,
@@ -395,4 +395,4 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
 
 registerComponent('dxPivotGridFieldChooserBase', FieldChooserBase);
 
-module.exports = FieldChooserBase;
+export default FieldChooserBase;

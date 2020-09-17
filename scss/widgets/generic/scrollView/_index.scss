@@ -4,7 +4,10 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../scrollable/colors" as *;
+
 // adduse
+@use "../scrollable";
+@use "../../base/scrollView";
 
 
 .dx-scrollview-pull-down-image {

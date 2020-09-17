@@ -81,19 +81,20 @@ QUnit.begin(function() {
         return test.renderer;
     });
 
-    titleModule.Title = function() {
+    titleModule.DEBUG_set_title(function() {
         return new vizMocks.Title();
-    };
-    loadingIndicatorModule.LoadingIndicator = function(parameters) {
+    });
+    loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
         return new vizMocks.LoadingIndicator(parameters);
-    };
-    exportModule.ExportMenu = function(parameters) {
+    });
+    exportModule.DEBUG_set_ExportMenu(function(parameters) {
         return new vizMocks.ExportMenu(parameters);
-    };
+    });
     const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip, { isEnabled: function() { return 'tooltip_enabled'; } });
-    tooltipModule.Tooltip = function(parameters) {
+
+    tooltipModule.DEBUG_set_tooltip(function(parameters) {
         return new StubTooltip(parameters);
-    };
+    });
 });
 
 const environment = {

@@ -2,7 +2,7 @@ const CENTER = 0.5;
 const LEFTCORNER = 0;
 const RIGHTCORNER = 1;
 
-module.exports = {
+export default {
     getFigures: function(data, neckWidth, neckHeight) {
         let height = 0;
         let y = 0;

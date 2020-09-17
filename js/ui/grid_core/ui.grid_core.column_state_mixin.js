@@ -6,7 +6,7 @@ import { getDefaultAlignment } from '../../core/utils/position';
 const COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
 const GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';
 
-module.exports = {
+export default {
     _applyColumnState: function(options) {
         const that = this;
         const rtlEnabled = this.option('rtlEnabled');

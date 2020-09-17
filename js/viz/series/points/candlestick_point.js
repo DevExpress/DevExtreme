@@ -1,6 +1,6 @@
-const _extend = require('../../../core/utils/extend').extend;
-const symbolPoint = require('./symbol_point');
-const barPoint = require('./bar_point');
+import { extend as _extend } from '../../../core/utils/extend';
+import symbolPoint from './symbol_point';
+import barPoint from './bar_point';
 
 const _math = Math;
 const _abs = _math.abs;
@@ -10,7 +10,7 @@ const _round = _math.round;
 
 const DEFAULT_FINANCIAL_TRACKER_MARGIN = 2;
 
-module.exports = _extend({}, barPoint, {
+export default _extend({}, barPoint, {
     _getContinuousPoints: function(openCoord, closeCoord) {
         const that = this;
         const x = that.x;

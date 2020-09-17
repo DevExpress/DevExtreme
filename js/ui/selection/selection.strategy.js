@@ -1,11 +1,10 @@
-const dataQuery = require('../../data/query');
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const getKeyHash = commonUtils.getKeyHash;
-const Class = require('../../core/class');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import dataQuery from '../../data/query';
+import { getKeyHash, noop, equalByValue } from '../../core/utils/common';
+import { isPlainObject, isObject } from '../../core/utils/type';
+import Class from '../../core/class';
+import { Deferred } from '../../core/utils/deferred';
 
-module.exports = Class.inherit({
+export default Class.inherit({
     ctor: function(options) {
         this.options = options;
 
@@ -20,7 +19,7 @@ module.exports = Class.inherit({
         this._setOption('addedItems', []);
     },
 
-    validate: commonUtils.noop,
+    validate: noop,
 
     _setOption: function(name, value) {
         this.options[name] = value;
@@ -33,7 +32,7 @@ module.exports = Class.inherit({
         const removedItems = this.options.removedItems;
         const selectedItems = this.options.selectedItems;
         const selectedItemKeys = this.options.selectedItemKeys;
-        const onSelectionChanged = this.options.onSelectionChanged || commonUtils.noop;
+        const onSelectionChanged = this.options.onSelectionChanged || noop;
 
         this._clearItemKeys();
         onSelectionChanged({
@@ -48,12 +47,12 @@ module.exports = Class.inherit({
 
     equalKeys: function(key1, key2) {
         if(this.options.equalByReference) {
-            if(typeUtils.isObject(key1) && typeUtils.isObject(key2)) {
+            if(isObject(key1) && isObject(key2)) {
                 return key1 === key2;
             }
         }
 
-        return commonUtils.equalByValue(key1, key2);
+        return equalByValue(key1, key2);
     },
 
     getSelectableItems: function(items) {
@@ -84,7 +83,7 @@ module.exports = Class.inherit({
         } else {
             this.options.load(loadOptions)
                 .done(function(items) {
-                    let filteredItems = typeUtils.isPlainObject(items) ? items.data : items;
+                    let filteredItems = isPlainObject(items) ? items.data : items;
 
                     if(localFilter && !isSelectAll) {
                         filteredItems = filteredItems.filter(localFilter);
@@ -104,7 +103,7 @@ module.exports = Class.inherit({
         for(let i = 0; i < keys.length; i++) {
             const keyHash = getKeyHash(keys[i]);
 
-            if(!typeUtils.isObject(keyHash)) {
+            if(!isObject(keyHash)) {
                 this.options.keyHashIndices[keyHash] = this.options.keyHashIndices[keyHash] || [];
 
                 const keyIndices = this.options.keyHashIndices[keyHash];

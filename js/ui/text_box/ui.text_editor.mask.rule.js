@@ -1,9 +1,8 @@
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const inArray = require('../../core/utils/array').inArray;
-const typeUtils = require('../../core/utils/type');
-const noop = require('../../core/utils/common').noop;
-const isFunction = typeUtils.isFunction;
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import { inArray } from '../../core/utils/array';
+import { isDefined, isFunction } from '../../core/utils/type';
+import { noop } from '../../core/utils/common';
 
 const EMPTY_CHAR = ' ';
 
@@ -31,9 +30,9 @@ const BaseMaskRule = Class.inherit({
     _prepareHandlingArgs: function(args, config) {
         config = config || {};
         const handlingProperty = Object.prototype.hasOwnProperty.call(args, 'value') ? 'value' : 'text';
-        args[handlingProperty] = typeUtils.isDefined(config.str) ? config.str : args[handlingProperty];
-        args.start = typeUtils.isDefined(config.start) ? config.start : args.start;
-        args.length = typeUtils.isDefined(config.length) ? config.length : args.length;
+        args[handlingProperty] = isDefined(config.str) ? config.str : args[handlingProperty];
+        args.start = isDefined(config.start) ? config.start : args.start;
+        args.length = isDefined(config.length) ? config.length : args.length;
         args.index = args.index + 1;
         return args;
     },
@@ -61,7 +60,7 @@ const BaseMaskRule = Class.inherit({
     isValid: noop
 });
 
-const EmptyMaskRule = BaseMaskRule.inherit({
+export const EmptyMaskRule = BaseMaskRule.inherit({
 
     next: noop,
 
@@ -95,7 +94,7 @@ const EmptyMaskRule = BaseMaskRule.inherit({
 
 });
 
-const MaskRule = BaseMaskRule.inherit({
+export const MaskRule = BaseMaskRule.inherit({
 
     text: function() {
         return (this._value !== EMPTY_CHAR ? this._value : this.maskChar) + this.next().text();
@@ -218,7 +217,7 @@ const MaskRule = BaseMaskRule.inherit({
 
 });
 
-const StubMaskRule = MaskRule.inherit({
+export const StubMaskRule = MaskRule.inherit({
 
     value: function() {
         return this.next().value();
@@ -286,7 +285,3 @@ const StubMaskRule = MaskRule.inherit({
     }
 
 });
-
-module.exports.MaskRule = MaskRule;
-module.exports.StubMaskRule = StubMaskRule;
-module.exports.EmptyMaskRule = EmptyMaskRule;

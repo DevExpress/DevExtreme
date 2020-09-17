@@ -1,16 +1,16 @@
 const _isFinite = isFinite;
-const registerComponent = require('../../core/component_registrator');
-const objectUtils = require('../../core/utils/object');
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const dxBaseGauge = require('./base_gauge').dxBaseGauge;
-const dxGauge = require('./common').dxGauge;
-const vizUtils = require('../core/utils');
+import registerComponent from '../../core/component_registrator';
+import objectUtils from '../../core/utils/object';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { dxBaseGauge } from './base_gauge';
+import { dxGauge } from './common';
+import vizUtils from '../core/utils';
 const _normalizeAngle = vizUtils.normalizeAngle;
 const _getCosAndSin = vizUtils.getCosAndSin;
-const circularIndicatorsModule = require('./circular_indicators');
-const createIndicatorCreator = require('./common').createIndicatorCreator;
-const CircularRangeContainer = require('./circular_range_container');
+import circularIndicatorsModule from './circular_indicators';
+import { createIndicatorCreator } from './common';
+import CircularRangeContainer from './circular_range_container';
 
 const _abs = Math.abs;
 const _max = Math.max;
@@ -292,4 +292,4 @@ dxCircularGauge.prototype._factory.RangeContainer = CircularRangeContainer;
 
 registerComponent('dxCircularGauge', dxCircularGauge);
 
-module.exports = dxCircularGauge;
+export default dxCircularGauge;

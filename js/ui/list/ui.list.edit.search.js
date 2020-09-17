@@ -1,5 +1,5 @@
-const ListEdit = require('./ui.list.edit');
-const searchBoxMixin = require('../widget/ui.search_box_mixin');
+import ListEdit from './ui.list.edit';
+import searchBoxMixin from '../widget/ui.search_box_mixin';
 
 const ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
     _addWidgetPrefix: function(className) {
@@ -35,4 +35,4 @@ const ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
     }
 });
 
-module.exports = ListSearch;
+export default ListSearch;

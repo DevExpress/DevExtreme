@@ -1,16 +1,16 @@
-const _each = require('../../core/utils/iterator').each;
+import { each as _each } from '../../core/utils/iterator';
 const _max = Math.max;
 const _min = Math.min;
 const _round = Math.round;
-const registerComponent = require('../../core/component_registrator');
-const extend = require('../../core/utils/extend').extend;
-const objectUtils = require('../../core/utils/object');
-const dxBaseGauge = require('./base_gauge').dxBaseGauge;
-const dxGauge = require('./common').dxGauge;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
-const linearIndicatorsModule = require('./linear_indicators');
-const createIndicatorCreator = require('./common').createIndicatorCreator;
-const LinearRangeContainer = require('./linear_range_container');
+import registerComponent from '../../core/component_registrator';
+import { extend } from '../../core/utils/extend';
+import objectUtils from '../../core/utils/object';
+import { dxBaseGauge } from './base_gauge';
+import { dxGauge } from './common';
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import linearIndicatorsModule from './linear_indicators';
+import { createIndicatorCreator } from './common';
+import LinearRangeContainer from './linear_range_container';
 
 const dxLinearGauge = dxGauge.inherit({
     _rootClass: 'dxg-linear-gauge',
@@ -244,4 +244,4 @@ dxLinearGauge.prototype._factory.RangeContainer = LinearRangeContainer;
 
 registerComponent('dxLinearGauge', dxLinearGauge);
 
-module.exports = dxLinearGauge;
+export default dxLinearGauge;

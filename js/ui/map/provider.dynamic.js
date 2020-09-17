@@ -1,7 +1,7 @@
-const Promise = require('../../core/polyfills/promise');
-const extend = require('../../core/utils/extend').extend;
-const iteratorUtils = require('../../core/utils/iterator');
-const Provider = require('./provider');
+import Promise from '../../core/polyfills/promise';
+import { extend } from '../../core/utils/extend';
+import iteratorUtils from '../../core/utils/iterator';
+import Provider from './provider';
 const abstract = Provider.abstract;
 
 const DynamicProvider = Provider.inherit({
@@ -229,4 +229,4 @@ const DynamicProvider = Provider.inherit({
 
 });
 
-module.exports = DynamicProvider;
+export default DynamicProvider;

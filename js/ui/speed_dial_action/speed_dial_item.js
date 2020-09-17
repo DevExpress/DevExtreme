@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import { getImageContainer } from '../../core/utils/icon';
 import Overlay from '../overlay';
 import inkRipple from '../widget/utils.ink_ripple';
@@ -139,7 +139,7 @@ class SpeedDialItem extends Overlay {
     }
 
     _setClickAction() {
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
         const overlayContent = this.$element().find(OVERLAY_CONTENT_SELECTOR);
 
         eventsEngine.off(overlayContent, eventName);
@@ -218,4 +218,4 @@ class SpeedDialItem extends Overlay {
     }
 }
 
-module.exports = SpeedDialItem;
+export default SpeedDialItem;

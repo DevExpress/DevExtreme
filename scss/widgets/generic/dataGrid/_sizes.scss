@@ -1,3 +1,14 @@
 @use "../sizes" as *;
+
 // adduse
+
+$generic-datagrid-cell-padding: null !default;
+
+@if $size == "default" {
+  $generic-datagrid-cell-padding: 7px;
+}
+
+@else if $size == "compact" {
+  $generic-datagrid-cell-padding: 5px;
+}
 

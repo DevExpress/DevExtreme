@@ -1,7 +1,7 @@
 const _ln = Math.log;
 const _LN2 = Math.LN2;
 
-function GestureHandler(params) {
+export function GestureHandler(params) {
     const that = this;
     that._projection = params.projection;
     that._renderer = params.renderer;
@@ -99,5 +99,3 @@ GestureHandler.prototype = {
         }
     }
 };
-
-exports.GestureHandler = GestureHandler;

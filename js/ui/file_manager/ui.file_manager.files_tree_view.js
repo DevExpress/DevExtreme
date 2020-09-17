@@ -242,4 +242,4 @@ class FileManagerFilesTreeView extends Widget {
 
 }
 
-module.exports = FileManagerFilesTreeView;
+export default FileManagerFilesTreeView;

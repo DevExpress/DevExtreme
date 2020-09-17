@@ -1,15 +1,16 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_RADIOBUTTON_SIZE: null !default;
-$GENERIC_RADIOBUTTON_DOT_SIZE: null !default;
+$generic-radiobutton-size: null !default;
+$generic-radiobutton-dot-size: null !default;
 
 @if $size == "default" {
-  $GENERIC_RADIOBUTTON_SIZE: 22px;
-  $GENERIC_RADIOBUTTON_DOT_SIZE: 10px;
+  $generic-radiobutton-size: 22px;
+  $generic-radiobutton-dot-size: 10px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_RADIOBUTTON_SIZE: 16px;
-  $GENERIC_RADIOBUTTON_DOT_SIZE: 8px;
+  $generic-radiobutton-size: 16px;
+  $generic-radiobutton-dot-size: 8px;
 }

@@ -1,6 +1,6 @@
-const noop = require('../../core/utils/common').noop;
+import { noop } from '../../core/utils/common';
 const _round = Math.round;
-const objectUtils = require('../../core/utils/object');
+import objectUtils from '../../core/utils/object';
 const defaultOffset = {
     horizontal: 0,
     vertical: 0
@@ -51,5 +51,7 @@ wrapperLayoutElementPrototype.shift = function(shiftX, shiftY) {
     this._renderElement.move(_round(shiftX - bBox.x), _round(shiftY - bBox.y));
 };
 
-exports.LayoutElement = LayoutElement;
-exports.WrapperLayoutElement = WrapperLayoutElement;
+export {
+    LayoutElement,
+    WrapperLayoutElement
+};

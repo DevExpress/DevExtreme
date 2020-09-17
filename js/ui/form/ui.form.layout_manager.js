@@ -6,22 +6,45 @@ import registerComponent from '../../core/component_registrator';
 import { isDefined, isEmptyObject, isFunction, isObject, type } from '../../core/utils/type';
 import { getPublicElement } from '../../core/element';
 import { isWrapped, isWritableWrapped, unwrap } from '../../core/utils/variable_wrapper';
-import windowUtils from '../../core/utils/window';
+import { getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import stringUtils from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { inArray, normalizeIndexes } from '../../core/utils/array';
 import dataUtils from '../../core/utils/data';
 import removeEvent from '../../core/remove_event';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import errors from '../widget/ui.errors';
 import messageLocalization from '../../localization/message';
-import styleUtils from '../../core/utils/style';
+import { styleProp } from '../../core/utils/style';
 import inflector from '../../core/utils/inflector';
 import Widget from '../widget/ui.widget';
 import Validator from '../validator';
 import ResponsiveBox from '../responsive_box';
 import themes from '../themes';
+import {
+    FIELD_ITEM_CLASS,
+    FLEX_LAYOUT_CLASS,
+    LAYOUT_MANAGER_ONE_COLUMN,
+    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_REQUIRED_MARK_CLASS,
+    FIELD_ITEM_OPTIONAL_CLASS,
+    FIELD_ITEM_REQUIRED_CLASS,
+    FIELD_ITEM_LABEL_TEXT_CLASS,
+    FIELD_ITEM_LABEL_CONTENT_CLASS,
+    FIELD_ITEM_HELP_TEXT_CLASS,
+    FIELD_ITEM_CONTENT_WRAPPER_CLASS,
+    FORM_LAYOUT_MANAGER_CLASS,
+    LABEL_VERTICAL_ALIGNMENT_CLASS,
+    LABEL_HORIZONTAL_ALIGNMENT_CLASS,
+    FIELD_ITEM_LABEL_LOCATION_CLASS,
+    FIELD_ITEM_LABEL_ALIGN_CLASS,
+    FIELD_ITEM_LABEL_CLASS,
+    FIELD_ITEM_CONTENT_LOCATION_CLASS,
+    FIELD_ITEM_CONTENT_CLASS,
+    FIELD_EMPTY_ITEM_CLASS,
+    FIELD_BUTTON_ITEM_CLASS,
+    SINGLE_COLUMN_ITEM_CONTENT } from './constants';
 
 import '../text_box';
 import '../number_box';
@@ -30,35 +53,11 @@ import '../date_box';
 import '../button';
 
 const FORM_EDITOR_BY_DEFAULT = 'dxTextBox';
-const FIELD_ITEM_CLASS = 'dx-field-item';
-const FIELD_EMPTY_ITEM_CLASS = 'dx-field-empty-item';
-const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
-const FIELD_ITEM_REQUIRED_CLASS = 'dx-field-item-required';
-const FIELD_ITEM_OPTIONAL_CLASS = 'dx-field-item-optional';
-const FIELD_ITEM_REQUIRED_MARK_CLASS = 'dx-field-item-required-mark';
-const FIELD_ITEM_OPTIONAL_MARK_CLASS = 'dx-field-item-optional-mark';
-const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
-const FIELD_ITEM_LABEL_ALIGN_CLASS = 'dx-field-item-label-align';
-const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
-const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
-const FIELD_ITEM_LABEL_LOCATION_CLASS = 'dx-field-item-label-location-';
-const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
-const FIELD_ITEM_CONTENT_LOCATION_CLASS = 'dx-field-item-content-location-';
-const FIELD_ITEM_CONTENT_WRAPPER_CLASS = 'dx-field-item-content-wrapper';
-const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
-const SINGLE_COLUMN_ITEM_CONTENT = 'dx-single-column-item-content';
 
-const LABEL_HORIZONTAL_ALIGNMENT_CLASS = 'dx-label-h-align';
-const LABEL_VERTICAL_ALIGNMENT_CLASS = 'dx-label-v-align';
-
-const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 const LAYOUT_MANAGER_FIRST_ROW_CLASS = 'dx-first-row';
 const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
 const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
 const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
-const LAYOUT_MANAGER_ONE_COLUMN = 'dx-layout-manager-one-col';
-
-const FLEX_LAYOUT_CLASS = 'dx-flex-layout';
 
 const INVALID_CLASS = 'dx-invalid';
 
@@ -154,7 +153,7 @@ const LayoutManager = Widget.inherit({
             const propertyName = nameParts.pop();
             const layoutData = this.option(nameParts.join('.'));
 
-            return propertyName in layoutData;
+            return layoutData && (propertyName in layoutData);
         }
 
         return false;
@@ -205,8 +204,7 @@ const LayoutManager = Widget.inherit({
                 that._updateItemWatchers(items);
             }
 
-            this._items = processedItems;
-
+            this._setItems(processedItems);
             this._sortItems();
         }
     },
@@ -328,7 +326,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _hasBrowserFlex: function() {
-        return styleUtils.styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
+        return styleProp(LAYOUT_STRATEGY_FLEX) === LAYOUT_STRATEGY_FLEX;
     },
 
     _renderResponsiveBox: function() {
@@ -345,7 +343,7 @@ const LayoutManager = Widget.inherit({
             that._extendItemsWithDefaultTemplateOptions(layoutItems, that._items);
 
             that._responsiveBox = that._createComponent($container, ResponsiveBox, that._getResponsiveBoxConfig(layoutItems, colCount, templatesInfo));
-            if(!windowUtils.hasWindow()) {
+            if(!hasWindow()) {
                 that._renderTemplates(templatesInfo);
             }
         }
@@ -406,7 +404,7 @@ const LayoutManager = Widget.inherit({
                 }
             },
             onContentReady: function(e) {
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     that._renderTemplates(templatesInfo);
                 }
                 if(that.option('onLayoutChanged')) {
@@ -462,7 +460,7 @@ const LayoutManager = Widget.inherit({
         if(colCountByScreen) {
             let screenFactor = this.option('form').getTargetScreenFactor();
             if(!screenFactor) {
-                screenFactor = windowUtils.hasWindow() ? windowUtils.getCurrentScreenFactor(this.option('screenByWidth')) : 'lg';
+                screenFactor = hasWindow() ? getCurrentScreenFactor(this.option('screenByWidth')) : 'lg';
             }
             colCount = colCountByScreen[screenFactor] || colCount;
         }
@@ -479,7 +477,7 @@ const LayoutManager = Widget.inherit({
     },
 
     _getMaxColCount: function() {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             return 1;
         }
 
@@ -520,11 +518,16 @@ const LayoutManager = Widget.inherit({
                 delete item.colSpan;
             }
         }
-        this._items = result;
+        this._setItems(result);
     },
 
     _getColByIndex: function(index, colCount) {
         return index % colCount;
+    },
+
+    _setItems: function(items) {
+        this._items = items;
+        this._cashedColCount = null; // T923489
     },
 
     _generateLayoutItems: function() {
@@ -1076,8 +1079,8 @@ const LayoutManager = Widget.inherit({
         const isBooleanEditors = editorType === 'dxCheckBox' || editorType === 'dxSwitch';
 
         if($label && isBooleanEditors) {
-            eventsEngine.on($label, clickEvent.name, function() {
-                eventsEngine.trigger($editor.children(), clickEvent.name);
+            eventsEngine.on($label, clickEventName, function() {
+                eventsEngine.trigger($editor.children(), clickEventName);
             });
         }
     },
@@ -1263,29 +1266,4 @@ const LayoutManager = Widget.inherit({
 
 registerComponent('dxLayoutManager', LayoutManager);
 
-module.exports = LayoutManager;
-
-//#DEBUG
-module.exports.__internals = {
-    FIELD_ITEM_CLASS: FIELD_ITEM_CLASS,
-    FIELD_EMPTY_ITEM_CLASS: FIELD_EMPTY_ITEM_CLASS,
-    FIELD_ITEM_CONTENT_CLASS: FIELD_ITEM_CONTENT_CLASS,
-    FIELD_ITEM_CONTENT_LOCATION_CLASS: FIELD_ITEM_CONTENT_LOCATION_CLASS,
-    FIELD_ITEM_LABEL_CLASS: FIELD_ITEM_LABEL_CLASS,
-    FIELD_ITEM_LABEL_ALIGN_CLASS: FIELD_ITEM_LABEL_ALIGN_CLASS,
-    FIELD_ITEM_LABEL_LOCATION_CLASS: FIELD_ITEM_LABEL_LOCATION_CLASS,
-    LABEL_HORIZONTAL_ALIGNMENT_CLASS: LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-    LABEL_VERTICAL_ALIGNMENT_CLASS: LABEL_VERTICAL_ALIGNMENT_CLASS,
-    FORM_LAYOUT_MANAGER_CLASS: FORM_LAYOUT_MANAGER_CLASS,
-    FIELD_ITEM_CONTENT_WRAPPER_CLASS: FIELD_ITEM_CONTENT_WRAPPER_CLASS,
-    FIELD_ITEM_HELP_TEXT_CLASS: FIELD_ITEM_HELP_TEXT_CLASS,
-    FIELD_ITEM_LABEL_CONTENT_CLASS: FIELD_ITEM_LABEL_CONTENT_CLASS,
-    FIELD_ITEM_LABEL_TEXT_CLASS: FIELD_ITEM_LABEL_TEXT_CLASS,
-    FIELD_ITEM_REQUIRED_CLASS: FIELD_ITEM_REQUIRED_CLASS,
-    FIELD_ITEM_OPTIONAL_CLASS: FIELD_ITEM_OPTIONAL_CLASS,
-    FIELD_ITEM_REQUIRED_MARK_CLASS: FIELD_ITEM_REQUIRED_MARK_CLASS,
-    FIELD_ITEM_OPTIONAL_MARK_CLASS: FIELD_ITEM_OPTIONAL_MARK_CLASS,
-    LAYOUT_MANAGER_ONE_COLUMN: LAYOUT_MANAGER_ONE_COLUMN,
-    FLEX_LAYOUT_CLASS: FLEX_LAYOUT_CLASS
-};
-//#ENDDEBUG
+export default LayoutManager;

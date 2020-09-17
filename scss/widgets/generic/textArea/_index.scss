@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
 
 
@@ -15,7 +16,7 @@
   }
 
   &.dx-invalid .dx-texteditor-container:after {
-    top: $GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING;
+    top: $generic-base-inline-borderedwidget-top-padding;
     margin-top: 0;
   }
 }

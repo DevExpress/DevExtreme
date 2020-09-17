@@ -1,4 +1,4 @@
-const _patchFontOptions = require('./utils').patchFontOptions;
+import { patchFontOptions as _patchFontOptions } from './utils';
 
 const STATE_HIDDEN = 0;
 const STATE_SHOWN = 1;
@@ -8,14 +8,14 @@ const ANIMATION_DURATION = 400;
 
 const LOADING_INDICATOR_READY = 'loadingIndicatorReady';
 
-function LoadingIndicator(parameters) {
+export let LoadingIndicator = function(parameters) {
     const that = this;
     const renderer = parameters.renderer;
     that._group = renderer.g().attr({ 'class': 'dx-loading-indicator' }).linkOn(renderer.root, { name: 'loading-indicator', after: 'peripheral' });
     that._rect = renderer.rect().attr({ opacity: 0 }).append(that._group);
     that._text = renderer.text().attr({ align: 'center' }).append(that._group);
     that._createStates(parameters.eventTrigger, that._group, renderer.root, parameters.notify);
-}
+};
 
 LoadingIndicator.prototype = {
     constructor: LoadingIndicator,
@@ -103,14 +103,12 @@ LoadingIndicator.prototype = {
     }
 };
 
-exports.LoadingIndicator = LoadingIndicator;
-
-exports.plugin = {
+export const plugin = {
     name: 'loading_indicator',
     init: function() {
         const that = this;
         // "exports" is used for testing purposes.
-        that._loadingIndicator = new exports.LoadingIndicator({ eventTrigger: that._eventTrigger, renderer: that._renderer, notify: notify });
+        that._loadingIndicator = new LoadingIndicator({ eventTrigger: that._eventTrigger, renderer: that._renderer, notify: notify });
         that._scheduleLoadingIndicatorHiding();
         function notify(state) {
             // This flag is used to suppress redundant `_optionChanged` notifications caused by the mechanism that synchronizes the `loadingIndicator.show` option and the loading indicator visibility
@@ -195,3 +193,8 @@ exports.plugin = {
     },
     fontFields: ['loadingIndicator.font']
 };
+///#DEBUG
+export const DEBUG_set_LoadingIndicator = function(value) {
+    LoadingIndicator = value;
+};
+///#ENDDEBUG

@@ -751,7 +751,7 @@ QUnit.module('State Storing with real controllers', {
 
         // assert
         assert.strictEqual(this.dataController.pageSize(), 2);
-        assert.strictEqual(this.dataController.items().length, 4);
+        assert.strictEqual(this.dataController.items().length, 2);
     });
 
     QUnit.test('Load pageSize from state when scrolling mode is infinite and pager.visible, pager.showPageSizeSelector is set', function(assert) {
@@ -964,7 +964,7 @@ QUnit.module('State Storing with real controllers', {
         // assert
         assert.strictEqual(customSaveCallCount, 1, 'customSave call count');
         assert.deepEqual(userState, {
-            columns: [{ visibleIndex: 0, dataField: 'id', visible: true, dataType: 'number' }],
+            columns: [{ visibleIndex: 0, dataField: 'id', name: 'id', visible: true, dataType: 'number' }],
             pageIndex: 0,
             pageSize: 40,
             allowedPageSizes: [10, 20, 40],
@@ -1068,7 +1068,7 @@ QUnit.module('State Storing with real controllers', {
         assert.strictEqual(customSaveCallCount, 1, 'customSave call count');// T139963
 
         assert.deepEqual(userState, {
-            columns: [{ visibleIndex: 0, dataField: 'id', visible: true, sortOrder: 'asc', sortIndex: 0, dataType: 'number' }],
+            columns: [{ visibleIndex: 0, dataField: 'id', name: 'id', visible: true, sortOrder: 'asc', sortIndex: 0, dataType: 'number' }],
             pageIndex: 0,
             pageSize: 20,
             allowedPageSizes: [10, 20, 40],
@@ -1110,7 +1110,7 @@ QUnit.module('State Storing with real controllers', {
         // assert
         assert.strictEqual(customSaveCallCount, 1, 'customSave call count');
         assert.deepEqual(userState, {
-            columns: [{ groupIndex: 0, sortOrder: 'asc', lastSortOrder: 'asc', visibleIndex: 0, dataField: 'id', visible: true, sortIndex: 0, dataType: 'number' }],
+            columns: [{ groupIndex: 0, sortOrder: 'asc', lastSortOrder: 'asc', visibleIndex: 0, dataField: 'id', name: 'id', visible: true, sortIndex: 0, dataType: 'number' }],
             pageIndex: 0,
             pageSize: 20,
             allowedPageSizes: [10, 20, 40],
@@ -1156,7 +1156,7 @@ QUnit.module('State Storing with real controllers', {
         // assert
         assert.strictEqual(customSaveCallCount, 1, 'customSave call count');
         assert.deepEqual(userState, {
-            columns: [{ visibleIndex: 0, dataField: 'id', visible: true, dataType: 'number' }],
+            columns: [{ visibleIndex: 0, dataField: 'id', name: 'id', visible: true, dataType: 'number' }],
             pageIndex: 0,
             pageSize: 20,
             allowedPageSizes: [10, 20, 40],
@@ -1172,7 +1172,7 @@ QUnit.module('State Storing with real controllers', {
         // assert
         assert.strictEqual(customSaveCallCount, 2, 'customSave call count');
         assert.deepEqual(userState, {
-            columns: [{ visibleIndex: 0, dataField: 'id', visible: true, dataType: 'number', width: 100 }],
+            columns: [{ visibleIndex: 0, dataField: 'id', name: 'id', visible: true, dataType: 'number', width: 100 }],
             pageIndex: 0,
             pageSize: 20,
             allowedPageSizes: [10, 20, 40],
@@ -1250,6 +1250,7 @@ QUnit.module('State Storing with real controllers', {
         // assert
         assert.deepEqual(userState.columns, [{
             dataField: 'id',
+            name: 'id',
             dataType: 'number',
             filterValues: [3],
             visible: true,
@@ -1326,7 +1327,7 @@ QUnit.module('State Storing with real controllers', {
         const $dataRows = this.gridView.element().find('tr.dx-data-row');
         assert.strictEqual(this.dataController.pageIndex(), 3);
         assert.strictEqual($dataRows.eq(0).text(), '6');
-        assert.strictEqual($dataRows.length, 4);
+        assert.strictEqual($dataRows.length, 2);
     });
 
     QUnit.test('Show NoData message when dataSource is empty and state is loaded', function(assert) {
@@ -1496,52 +1497,6 @@ QUnit.module('State Storing with real controllers', {
         }
     });
 
-    // T643374
-    QUnit.test('ScrollTop should be correct after loading pageIndex from state', function(assert) {
-    // arrange
-        this.clock.restore();
-
-        const that = this;
-        const done = assert.async();
-        const $testElement = $('#container').height(60);
-
-        that.$element = function() {
-            return $testElement;
-        };
-
-        that.setupDataGridModules({
-            stateStoring: {
-                enabled: true,
-                type: 'custom',
-                customLoad: function() {
-                    return { pageIndex: 3 };
-                },
-                customSave: function() {
-                }
-            },
-            scrolling: {
-                mode: 'virtual'
-            },
-            loadingTimeout: null,
-            dataSource: {
-                pageSize: 2,
-                store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }, { id: 6 }, { id: 7 }, { id: 8 }, { id: 9 }, { id: 10 }]
-            }
-        });
-
-        // act
-        that.gridView.render($testElement);
-        that.gridView.update();
-
-        setTimeout(function() {
-        // assert
-            const scrollTop = that.getScrollable().scrollTop();
-            assert.ok(scrollTop > 0, 'scrollTop');
-            assert.ok($testElement.find('.dx-virtual-row').first().children().first().height() <= scrollTop, 'scrollTop should be less than or equal to virtual row height');
-            done();
-        });
-    });
-
     QUnit.test('Load focusedRowKey state', function(assert) {
     // arrange, act
         this.setupDataGridModules({
@@ -1602,7 +1557,7 @@ QUnit.module('State Storing with real controllers', {
 
         // assert
         assert.deepEqual(userState, {
-            columns: [{ visibleIndex: 0, dataField: 'id', visible: true, dataType: 'number' }],
+            columns: [{ visibleIndex: 0, dataField: 'id', name: 'id', visible: true, dataType: 'number' }],
             pageIndex: 0,
             pageSize: 20,
             allowedPageSizes: [10, 20, 40],
@@ -1621,6 +1576,7 @@ QUnit.module('State Storing with real controllers', {
             'columns': [{
                 'visibleIndex': 0,
                 'dataField': 'field1',
+                'name': 'field1',
                 'dataType': 'number',
                 'visible': true
             }],

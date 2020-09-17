@@ -1,4 +1,5 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
@@ -31,6 +32,7 @@
 .dx-state-focused.dx-invalid .dx-invalid-message-auto .dx-overlay-wrapper,
 .dx-invalid-message-visible.dx-invalid .dx-invalid-message-auto .dx-overlay-wrapper,
 .dx-lookup.dx-dropdowneditor-active .dx-invalid-message-auto .dx-overlay-wrapper,
+.dx-dropdownbox.dx-dropdowneditor-active .dx-invalid-message-auto .dx-overlay-wrapper,
 .dx-invalid-message-always .dx-overlay-wrapper {
   visibility: visible;
 }

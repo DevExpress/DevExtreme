@@ -3,7 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
+
 // adduse
 .dx-overlay-shader {
   background-color: $overlay-shader-bg;
@@ -16,7 +17,8 @@
 .dx-popup-wrapper {
   .dx-state-focused {
     &.dx-overlay-content {
-      //TOOD focused state of popup
+
+      // TODO focused state of popup
     }
   }
 }

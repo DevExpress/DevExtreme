@@ -1,6 +1,6 @@
-const isPlainObject = require('./type').isPlainObject;
+import { isPlainObject } from './type';
 
-const extendFromObject = function(target, source, overrideExistingValues) {
+export const extendFromObject = function(target, source, overrideExistingValues) {
     target = target || {};
     for(const prop in source) {
         if(Object.prototype.hasOwnProperty.call(source, prop)) {
@@ -13,7 +13,7 @@ const extendFromObject = function(target, source, overrideExistingValues) {
     return target;
 };
 
-const extend = function(target) {
+export const extend = function(target) {
     target = target || {};
 
     let i = 1;
@@ -60,6 +60,3 @@ const extend = function(target) {
 
     return target;
 };
-
-exports.extend = extend;
-exports.extendFromObject = extendFromObject;

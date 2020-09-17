@@ -695,7 +695,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     /**
     * @name CollectionWidgetMethods.isItemSelected
     * @publicName isItemSelected(itemElement)
-    * @param1 itemElement:Node
+    * @param1 itemElement:Element
     * @return boolean
     * @hidden
     */
@@ -706,7 +706,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     /**
     * @name CollectionWidgetMethods.selectItem
     * @publicName selectItem(itemElement)
-    * @param1 itemElement:Node
+    * @param1 itemElement:Element
     * @hidden
     */
     selectItem: function(itemElement) {
@@ -734,7 +734,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     /**
     * @name CollectionWidgetMethods.unselectItem
     * @publicName unselectItem(itemElement)
-    * @param1 itemElement:Node
+    * @param1 itemElement:Element
     * @hidden
     */
     unselectItem: function(itemElement) {
@@ -779,7 +779,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     /**
     * @name CollectionWidgetMethods.deleteItem
     * @publicName deleteItem(itemElement)
-    * @param1 itemElement:Node
+    * @param1 itemElement:Element
     * @return Promise<void>
     * @hidden
     */
@@ -818,8 +818,8 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     /**
     * @name CollectionWidgetMethods.reorderItem
     * @publicName reorderItem(itemElement, toItemElement)
-    * @param1 itemElement:Node
-    * @param2 toItemElement:Node
+    * @param1 itemElement:Element
+    * @param2 toItemElement:Element
     * @return Promise<void>
     * @hidden
     */
@@ -863,4 +863,4 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     }
 });
 
-module.exports = CollectionWidget;
+export default CollectionWidget;

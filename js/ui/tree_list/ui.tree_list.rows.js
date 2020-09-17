@@ -9,7 +9,7 @@ const TREELIST_EMPTY_SPACE = 'dx-treelist-empty-space';
 const TREELIST_EXPANDED_CLASS = 'dx-treelist-expanded';
 const TREELIST_COLLAPSED_CLASS = 'dx-treelist-collapsed';
 
-exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
+export const RowsView = rowsViewModule.views.rowsView.inherit((function() {
     const createCellContent = function($container) {
         return $('<div>')
             .addClass(TREELIST_TEXT_CONTENT)
@@ -132,6 +132,6 @@ exports.RowsView = rowsViewModule.views.rowsView.inherit((function() {
 treeListCore.registerModule('rows', {
     defaultOptions: rowsViewModule.defaultOptions,
     views: {
-        rowsView: exports.RowsView
+        rowsView: RowsView
     }
 });

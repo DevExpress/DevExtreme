@@ -26,4 +26,4 @@ export const FileManagerMessages = {
     }
 };
 
-module.exports.ErrorCode = ErrorCode;
+export { ErrorCode };

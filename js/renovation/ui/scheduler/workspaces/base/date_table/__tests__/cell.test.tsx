@@ -1,0 +1,191 @@
+import React from 'react';
+import { shallow } from 'enzyme';
+import {
+  viewFunction as CellView, DateTableCellBase,
+} from '../cell';
+import { CellBase } from '../../cell';
+import * as combineClassesModule from '../../../../../../utils/combine_classes';
+
+const combineClasses = jest.spyOn(combineClassesModule, 'combineClasses');
+
+describe('DateTableCellBase', () => {
+  describe('Render', () => {
+    const render = (viewModel) => shallow(<CellView {...{
+      ...viewModel,
+      props: { ...viewModel.props },
+    }}
+    />);
+
+    it('should spread restAttributes', () => {
+      const cell = render({ restAttributes: { 'custom-attribute': 'customAttribute' } });
+
+      expect(cell.prop('custom-attribute'))
+        .toBe('customAttribute');
+    });
+
+    it('should pass correct props to the base cell', () => {
+      const dataCellTemplate = () => null;
+      const dataCellTemplateProps = {};
+      const cell = render({
+        classes: 'test-class',
+        dataCellTemplateProps,
+        props: {
+          isFirstCell: true,
+          isLastCell: false,
+          dataCellTemplate,
+        },
+      });
+
+      expect(cell.is(CellBase))
+        .toBe(true);
+      expect(cell.hasClass('test-class'))
+        .toBe(true);
+      expect(cell.props())
+        .toMatchObject({
+          isFirstCell: true,
+          isLastCell: false,
+          contentTemplate: dataCellTemplate,
+          contentTemplateProps: dataCellTemplateProps,
+        });
+    });
+
+    it('should render children', () => {
+      const cell = render({ props: { children: <div className="child" /> } });
+
+      expect(cell.find('.child').exists())
+        .toBe(true);
+    });
+  });
+
+  describe('Logic', () => {
+    describe('Getters', () => {
+      describe('classes', () => {
+        afterEach(jest.resetAllMocks);
+
+        it('should call combineClasses with correct parameters', () => {
+          const cell = new DateTableCellBase({ index: 0 });
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          cell.classes;
+
+          expect(combineClasses)
+            .toHaveBeenCalledWith({
+              'dx-scheduler-cell-sizes-horizontal': true,
+              'dx-scheduler-cell-sizes-vertical': true,
+              'dx-scheduler-date-table-cell': true,
+              '': true,
+            });
+        });
+
+        it('should not assign several classes when the cell is all-day', () => {
+          const cell = new DateTableCellBase({ index: 0, allDay: true });
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          cell.classes;
+
+          expect(combineClasses)
+            .toHaveBeenCalledWith({
+              'dx-scheduler-cell-sizes-horizontal': true,
+              'dx-scheduler-cell-sizes-vertical': false,
+              'dx-scheduler-date-table-cell': false,
+              '': true,
+            });
+        });
+
+        it('should take into account className', () => {
+          const cell = new DateTableCellBase({ index: 0, className: 'test-class' });
+
+          // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+          cell.classes;
+
+          expect(combineClasses)
+            .toHaveBeenCalledWith({
+              'dx-scheduler-cell-sizes-horizontal': true,
+              'dx-scheduler-cell-sizes-vertical': true,
+              'dx-scheduler-date-table-cell': true,
+              'test-class': true,
+            });
+        });
+      });
+
+      describe('dataCellTemplateProps', () => {
+        it('should collect template props correctly', () => {
+          const data = {
+            startDate: new Date(2020, 7, 26),
+            endDate: new Date(2020, 7, 27),
+            groups: { id: 1 },
+            groupIndex: 3,
+            text: 'Test text',
+            allDay: true,
+          };
+          const props = {
+            index: 0,
+            ...data,
+          };
+          const cell = new DateTableCellBase(props);
+
+          const templateProps = cell.dataCellTemplateProps;
+
+          expect(templateProps)
+            .toEqual({
+              index: props.index,
+              data,
+            });
+        });
+
+        it('should add all-day prop correctly', () => {
+          const data = {
+            startDate: new Date(2020, 7, 26),
+            endDate: new Date(2020, 7, 27),
+            groups: { id: 1 },
+            groupIndex: 3,
+            text: 'Test text',
+            allDay: false,
+          };
+          const props = {
+            index: 0,
+            ...data,
+          };
+          const cell = new DateTableCellBase(props);
+
+          const templateProps = cell.dataCellTemplateProps;
+
+          expect(templateProps)
+            .toEqual({
+              index: props.index,
+              data: {
+                ...data,
+                allDay: undefined,
+              },
+            });
+        });
+
+        it('should add groupIndex prop correctly if groups undefined', () => {
+          const data = {
+            startDate: new Date(2020, 7, 26),
+            endDate: new Date(2020, 7, 27),
+            groups: undefined,
+            groupIndex: 3,
+            text: 'Test text',
+          };
+          const props = {
+            index: 0,
+            ...data,
+          };
+          const cell = new DateTableCellBase(props);
+
+          const templateProps = cell.dataCellTemplateProps;
+
+          expect(templateProps)
+            .toEqual({
+              index: props.index,
+              data: {
+                ...data,
+                groupIndex: undefined,
+              },
+            });
+        });
+      });
+    });
+  });
+});

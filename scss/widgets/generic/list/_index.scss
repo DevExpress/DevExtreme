@@ -6,16 +6,19 @@
 @use "../../base/icons" as *;
 @use "../button/colors" as *;
 @use "../button/sizes" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
+@use "../../base/list";
+
 // adduse
+@use "../badge";
 
 
-$GENERIC_MOBILE_LIST_ITEM_HORIZONTAL_PADDING: 15px;
+$generic-mobile-list-item-horizontal-padding: 15px;
 
-$GENERIC_LIST_BORDER: $GENERIC_LIST_BORDER_WIDTH solid $list-border-color;
-$GENERIC_LIST_ITEM_BORDER: $GENERIC_LIST_ITEM_BORDER_WIDTH solid $list-border-color;
-$GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_BASE_FONT_SIZE) + $GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING + $GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING + 2 * $GENERIC_BASE_BORDER_WIDTH;
+$generic-list-border: $generic-list-border-width solid $list-border-color;
+$generic-list-item-border: $generic-list-item-border-width solid $list-border-color;
+$generic-list-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;
 
 
 .dx-list-item-chevron {
@@ -28,24 +31,24 @@ $GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_B
   }
 
   @include dx-icon(chevronnext);
-  @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+  @include dx-icon-sizing($generic-base-icon-size);
 
   margin-left: -5px;
   color: $list-item-chevron-icon-color;
 }
 
 .dx-list-item-icon-container {
-  width: $GENERIC_BASE_ICON_SIZE + $GENERIC_LIST_ITEM_HORIZONTAL_PADDING;
-  height: $GENERIC_BASE_ICON_SIZE;
+  width: $generic-base-icon-size + $generic-list-item-horizontal-padding;
+  height: $generic-base-icon-size;
   vertical-align: top;
 }
 
 .dx-list-item-icon {
-  @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+  @include dx-icon-sizing($generic-base-icon-size);
 }
 
 .dx-list-search {
-  margin-bottom: $GENERIC_LIST_SEARCHBOX_MARGIN_BOTTOM;
+  margin-bottom: $generic-list-searchbox-margin-bottom;
 }
 
 @mixin item-states() {
@@ -116,12 +119,12 @@ $GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_B
   }
 }
 
-@mixin dx-list-sizing($item_horizontal_padding) {
+@mixin dx-list-sizing($item-horizontal-padding) {
   .dx-list {
     border: none;
 
     &.dx-list-with-search .dx-scrollable-wrapper {
-      height: calc(100% - #{round($GENERIC_LIST_SEARCH_EDITOR_HEIGHT + $GENERIC_LIST_SEARCHBOX_MARGIN_BOTTOM)});
+      height: calc(100% - #{round($generic-list-search-editor-height + $generic-list-searchbox-margin-bottom)});
     }
 
     .dx-empty-message {
@@ -156,8 +159,8 @@ $GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_B
 
   .dx-list-group-header {
     font-weight: bold;
-    padding: $GENERIC_LIST_GROUP_HEADER_VERTICAL_PADDING $item_horizontal_padding $GENERIC_LIST_ITEM_VERTICAL_PADDING $item_horizontal_padding;
-    border-top: $GENERIC_LIST_ITEM_BORDER;
+    padding: $generic-list-group-header-vertical-padding $item-horizontal-padding $generic-list-item-vertical-padding $item-horizontal-padding;
+    border-top: $generic-list-item-border;
     border-bottom: $list-group-header-border-bottom;
     background: $list-group-header-bg;
     color: $list-group-color;
@@ -205,7 +208,7 @@ $GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_B
 
   .dx-list-item,
   .dx-list .dx-empty-message {
-    border-top: $GENERIC_LIST_ITEM_BORDER;
+    border-top: $generic-list-item-border;
     color: $list-normal-color;
 
     .dx-list-item-separator-hidden & {
@@ -216,7 +219,7 @@ $GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_B
 
   .dx-list-item-content,
   .dx-list .dx-empty-message {
-    padding: $GENERIC_LIST_ITEM_VERTICAL_PADDING $item_horizontal_padding;
+    padding: $generic-list-item-vertical-padding $item-horizontal-padding;
   }
 
   .dx-list-next-button .dx-button {
@@ -224,25 +227,25 @@ $GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_B
   }
 
   .dx-list-item-chevron-container {
-    width: 6px + $item_horizontal_padding;
+    width: 6px + $item-horizontal-padding;
   }
 
   .dx-list-border-visible {
-    border: $GENERIC_LIST_BORDER;
+    border: $generic-list-border;
 
     .dx-list-select-all {
-      border-bottom: $GENERIC_LIST_BORDER;
+      border-bottom: $generic-list-border;
     }
   }
 
   .dx-list-item-before-bag {
     &.dx-list-toggle-delete-switch-container {
-      width: $item_horizontal_padding + 19px;
+      width: $item-horizontal-padding + 19px;
     }
 
     &.dx-list-select-checkbox-container,
     &.dx-list-select-radiobutton-container {
-      width: $item_horizontal_padding + 21px;
+      width: $item-horizontal-padding + 21px;
     }
 
     .dx-button.dx-list-toggle-delete-switch {
@@ -256,46 +259,46 @@ $GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_B
     }
 
     .dx-icon-toggle-delete {
-      margin: $GENERIC_LIST_ITEM_VERTICAL_PADDING / 2 $item_horizontal_padding / 2 $GENERIC_LIST_ITEM_VERTICAL_PADDING / 2 $item_horizontal_padding;
-      width: 9px + $GENERIC_LIST_ITEM_VERTICAL_PADDING;
-      height: 9px + $GENERIC_LIST_ITEM_VERTICAL_PADDING;
+      margin: $generic-list-item-vertical-padding / 2 $item-horizontal-padding / 2 $generic-list-item-vertical-padding / 2 $item-horizontal-padding;
+      width: 9px + $generic-list-item-vertical-padding;
+      height: 9px + $generic-list-item-vertical-padding;
     }
 
     .dx-list-select-checkbox,
     .dx-list-select-radiobutton {
-      margin-top: $GENERIC_LIST_SELECT_ALL_MARGIN_TOP;
+      margin-top: $generic-list-select-all-margin-top;
       margin-bottom: -3px;
-      margin-left: $item_horizontal_padding;
+      margin-left: $item-horizontal-padding;
     }
   }
 
   .dx-list-select-all {
-    padding: $GENERIC_LIST_ITEM_VERTICAL_PADDING - 1px 0 $GENERIC_LIST_ITEM_VERTICAL_PADDING - 2px;
+    padding: $generic-list-item-vertical-padding - 1px 0 $generic-list-item-vertical-padding - 2px;
   }
 
   .dx-list-select-all-checkbox {
     float: left;
-    margin: -1px $GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT -3px $item_horizontal_padding;
+    margin: -1px $generic-list-select-all-margin-right -3px $item-horizontal-padding;
   }
 
   .dx-list-select-all-label {
-    line-height: $GENERIC_LIST_SELECT_ALL_LABEL_LINE_HEIGHT;
-    padding: 0 $GENERIC_LIST_ITEM_HORIZONTAL_PADDING;
-    margin-top: $GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP;
+    line-height: $generic-list-select-all-label-line-height;
+    padding: 0 $generic-list-item-horizontal-padding;
+    margin-top: $generic-list-select-all-label-margin-top;
   }
 
   .dx-list-item-after-bag {
     &.dx-list-static-delete-button-container {
-      width: $item_horizontal_padding + $GENERIC_BUTTON_ICON_SIZE + $GENERIC_LIST_DELETEBUTTON_PADDING * 2 + $GENERIC_BUTTON_BORDER_WEIGHT * 2;
+      width: $item-horizontal-padding + $generic-button-icon-size + $generic-list-deletebutton-padding * 2 + $generic-button-border-weight * 2;
     }
 
     &.dx-list-reorder-handle-container {
-      width: $item_horizontal_padding + $GENERIC_BASE_ICON_SIZE * 1.3;
+      width: $item-horizontal-padding + $generic-base-icon-size * 1.3;
     }
 
     .dx-list-reorder-handle {
       @include dx-icon(dragvertical);
-      @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE, $GENERIC_BASE_ICON_SIZE * 1.6);
+      @include dx-icon-sizing($generic-base-icon-size, $generic-base-icon-size * 1.6);
     }
   }
 
@@ -317,11 +320,11 @@ $GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_B
 
   .dx-list-switchable-delete-button,
   .dx-list-static-delete-button {
-    margin-right: $item_horizontal_padding;
+    margin-right: $item-horizontal-padding;
     padding: 0;
 
     .dx-button-content {
-      padding: $GENERIC_LIST_DELETEBUTTON_PADDING;
+      padding: $generic-list-deletebutton-padding;
     }
   }
 
@@ -348,31 +351,31 @@ $GENERIC_LIST_SEARCH_EDITOR_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_B
 
     .dx-list-item-before-bag {
       .dx-icon-toggle-delete {
-        margin: $GENERIC_LIST_ITEM_VERTICAL_PADDING / 2 $item_horizontal_padding $GENERIC_LIST_ITEM_VERTICAL_PADDING / 2 $item_horizontal_padding / 2;
+        margin: $generic-list-item-vertical-padding / 2 $item-horizontal-padding $generic-list-item-vertical-padding / 2 $item-horizontal-padding / 2;
       }
 
       .dx-list-select-checkbox,
       .dx-list-select-radiobutton {
-        margin-right: $item_horizontal_padding;
+        margin-right: $item-horizontal-padding;
         margin-left: 1px;
       }
     }
 
     .dx-list-select-all-checkbox {
       float: right;
-      margin-right: $item_horizontal_padding;
+      margin-right: $item-horizontal-padding;
       margin-left: 1px;
     }
 
     .dx-list-switchable-delete-button {
-      margin-left: $item_horizontal_padding;
+      margin-left: $item-horizontal-padding;
       margin-right: 0;
     }
   }
 }
 
-@include dx-list-sizing($GENERIC_LIST_ITEM_HORIZONTAL_PADDING);
+@include dx-list-sizing($generic-list-item-horizontal-padding);
 
 .dx-device-mobile {
-  @include dx-list-sizing($GENERIC_MOBILE_LIST_ITEM_HORIZONTAL_PADDING);
+  @include dx-list-sizing($generic-mobile-list-item-horizontal-padding);
 }

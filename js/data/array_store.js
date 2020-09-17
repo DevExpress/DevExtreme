@@ -61,4 +61,4 @@ const ArrayStore = Store.inherit({
     }
 }, 'array');
 
-module.exports = ArrayStore;
+export default ArrayStore;

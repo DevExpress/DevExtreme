@@ -1046,7 +1046,8 @@ function AxisWrapper(params) {
         drawingType: 'linear',
         widgetClass: 'dxrs',
         axisClass: 'range-selector',
-        isArgumentAxis: true
+        isArgumentAxis: true,
+        getTemplate() {}
     });
     that._updateSelectedRangeCallback = params.updateSelectedRange;
     that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getShiftDirection;
@@ -1112,7 +1113,7 @@ AxisWrapper.prototype = {
 
 registerComponent('dxRangeSelector', dxRangeSelector);
 
-module.exports = dxRangeSelector;
+export default dxRangeSelector;
 
 // PLUGINS_SECTION
 import { plugin as exportPlugin } from '../core/export';

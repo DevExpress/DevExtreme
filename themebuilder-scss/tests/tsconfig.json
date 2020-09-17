@@ -12,6 +12,7 @@
         "./**/*.ts"
     ],
     "files": [
-        "../src/types/types.ts"
+        "../src/types/types.ts",
+        "../src/types/precinct.d.ts",
     ]
 }

@@ -4,7 +4,7 @@ import fx from 'animation/fx';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 import 'ui/scheduler/ui.scheduler';
-import 'common.css!';
+
 import 'generic_light.css!';
 import devices from 'core/devices';
 
@@ -29,7 +29,7 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleConfig, () => {
+QUnit.skip('DST/STD for recurrence appointments, T804886 and T856624', moduleConfig, () => {
     QUnit.test('Any recurrence appt part should be rendered correctly if recurrence starts in STD and ends in DST in custom timezone, appointment timezone is set (T804886)', function(assert) {
         // NOTE: The daylight saving changed in Montreal on 10.03.2019 and in Paris on 31.03.2019
         const scheduler = createWrapper({
@@ -398,7 +398,7 @@ QUnit.module('DST/STD for recurrence appointments, T804886 and T856624', moduleC
     });
 });
 
-QUnit.module('Appointments with DST/STD cases', moduleConfig, () => {
+QUnit.skip('Appointments with DST/STD cases', moduleConfig, () => {
     const getDeltaTz = (schedulerTz, date) => schedulerTz * toMs('hour') + date.getTimezoneOffset() * toMs('minute');
 
     QUnit.test('Appointment wich started in DST and ended in STD time should have correct start & end dates', function(assert) {

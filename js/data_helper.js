@@ -1,6 +1,7 @@
-const DataSource = require('./data/data_source/data_source').DataSource;
-const extend = require('./core/utils/extend').extend;
-const normalizeDataSourceOptions = require('./data/data_source/utils').normalizeDataSourceOptions;
+
+import { DataSource } from './data/data_source/data_source';
+import { extend } from './core/utils/extend';
+import { normalizeDataSourceOptions } from './data/data_source/utils';
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
 const DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler';
@@ -145,4 +146,4 @@ const DataHelperMixin = {
 
 };
 
-module.exports = DataHelperMixin;
+export default DataHelperMixin;

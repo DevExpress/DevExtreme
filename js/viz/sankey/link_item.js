@@ -1,7 +1,7 @@
 import { COLOR_MODE_GRADIENT, COLOR_MODE_SOURCE, COLOR_MODE_TARGET } from './constants';
 
 const states = ['normal', 'adjacentNodeHover', 'hover'];
-const isDefined = require('../../core/utils/type').isDefined;
+import { isDefined } from '../../core/utils/type';
 
 function compileAttrs(color, itemOptions, itemBaseOptions, gradient) {
 
@@ -129,4 +129,4 @@ Link.prototype = {
     }
 };
 
-module.exports = Link;
+export default Link;

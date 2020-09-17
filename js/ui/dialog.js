@@ -6,9 +6,8 @@ import config from '../core/config';
 
 import { resetActiveElement } from '../core/utils/dom';
 import { Deferred } from '../core/utils/deferred';
-import { isFunction } from '../core/utils/type';
+import { isFunction, isPlainObject } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
-import { isPlainObject } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { getWindow } from '../core/utils/window';
 import { trigger } from '../events/core/events_engine';
@@ -41,7 +40,7 @@ const DX_DIALOG_BUTTON_CLASSNAME = `${DX_DIALOG_CLASSNAME}-button`;
 
 const DX_BUTTON_CLASSNAME = 'dx-button';
 
-const FakeDialogComponent = Component.inherit({
+export const FakeDialogComponent = Component.inherit({
     ctor: function(element, options) {
         this.callBase(options);
     },
@@ -65,12 +64,11 @@ const FakeDialogComponent = Component.inherit({
         ]);
     }
 });
-exports.FakeDialogComponent = FakeDialogComponent;
 
-exports.title = '';
+export let title = '';
 
 
-exports.custom = function(options) {
+export const custom = function(options) {
     const deferred = new Deferred();
 
     const defaultOptions = new FakeDialogComponent().option();
@@ -95,15 +93,7 @@ exports.custom = function(options) {
 
     const popupToolbarItems = [];
 
-    let toolbarItemsOption = options.toolbarItems;
-
-    if(toolbarItemsOption) {
-        errors.log('W0001', 'DevExpress.ui.dialog', 'toolbarItems', '16.2', 'Use the \'buttons\' option instead');
-    } else {
-        toolbarItemsOption = options.buttons;
-    }
-
-    each(toolbarItemsOption || [DEFAULT_BUTTON], function() {
+    each(options.buttons || [DEFAULT_BUTTON], function() {
         const action = new Action(this.onClick, {
             context: popupInstance
         });
@@ -122,7 +112,7 @@ exports.custom = function(options) {
     });
 
     const popupInstance = new Popup($element, extend({
-        title: options.title || exports.title,
+        title: options.title || title,
         showTitle: ensureDefined(options.showTitle, true),
         dragEnabled: ensureDefined(options.dragEnabled, true),
         height: 'auto',
@@ -210,14 +200,13 @@ exports.custom = function(options) {
     };
 };
 
-
-exports.alert = function(messageHtml, title, showTitle) {
+export const alert = function(messageHtml, title, showTitle) {
     const options = isPlainObject(messageHtml) ? messageHtml : { title, messageHtml, showTitle, dragEnabled: showTitle };
 
-    return exports.custom(options).show();
+    return custom(options).show();
 };
 
-exports.confirm = function(messageHtml, title, showTitle) {
+export const confirm = function(messageHtml, title, showTitle) {
     const options = isPlainObject(messageHtml)
         ? messageHtml
         : {
@@ -231,5 +220,11 @@ exports.confirm = function(messageHtml, title, showTitle) {
             dragEnabled: showTitle
         };
 
-    return exports.custom(options).show();
+    return custom(options).show();
 };
+
+///#DEBUG
+export const DEBUG_set_title = function(value) {
+    title = value;
+};
+///#ENDDEBUG

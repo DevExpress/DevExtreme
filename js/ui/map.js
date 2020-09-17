@@ -1,27 +1,30 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const Promise = require('../core/polyfills/promise');
-const fromPromise = require('../core/utils/deferred').fromPromise;
-const registerComponent = require('../core/component_registrator');
-const errors = require('./widget/ui.errors');
-const devices = require('../core/devices');
-const Widget = require('./widget/ui.widget');
-const inflector = require('../core/utils/inflector');
-const each = require('../core/utils/iterator').each;
-const extend = require('../core/utils/extend').extend;
-const inArray = require('../core/utils/array').inArray;
-const isNumeric = require('../core/utils/type').isNumeric;
-const eventUtils = require('../events/utils');
-const pointerEvents = require('../events/pointer');
-const wrapToArray = require('../core/utils/array').wrapToArray;
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import Promise from '../core/polyfills/promise';
+import { fromPromise } from '../core/utils/deferred';
+import registerComponent from '../core/component_registrator';
+import errors from './widget/ui.errors';
+import devices from '../core/devices';
+import Widget from './widget/ui.widget';
+import inflector from '../core/utils/inflector';
+import { each } from '../core/utils/iterator';
+import { extend } from '../core/utils/extend';
+import { inArray } from '../core/utils/array';
+import { isNumeric } from '../core/utils/type';
+import { addNamespace } from '../events/utils';
+import pointerEvents from '../events/pointer';
+import { wrapToArray } from '../core/utils/array';
 
 // NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
 
+import googleStatic from './map/provider.google_static';
+import google from './map/provider.dynamic.google';
+import bing from './map/provider.dynamic.bing';
 
 const PROVIDERS = {
-    googleStatic: require('./map/provider.google_static'),
-    google: require('./map/provider.dynamic.google'),
-    bing: require('./map/provider.dynamic.bing')
+    googleStatic,
+    google,
+    bing
 };
 
 
@@ -264,7 +267,7 @@ const Map = Widget.inherit({
     },
 
     _grabEvents: function() {
-        const eventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
+        const eventName = addNamespace(pointerEvents.down, this.NAME);
 
         eventsEngine.on(this.$element(), eventName, this._cancelEvent.bind(this));
     },
@@ -417,11 +420,11 @@ const Map = Widget.inherit({
                 result = wrapToArray(result);
 
                 const mapRefreshed = result[0];
-                if(mapRefreshed) {
+                if(mapRefreshed && !this._disposed) {
                     this._triggerReadyAction();
                 }
                 ///#DEBUG
-                if(!mapRefreshed && name !== 'clean') {
+                if(!mapRefreshed && name !== 'clean' && !this._disposed) {
                     this._triggerUpdateAction();
                 }
                 ///#ENDDEBUG
@@ -507,4 +510,4 @@ const Map = Widget.inherit({
 
 registerComponent('dxMap', Map);
 
-module.exports = Map;
+export default Map;

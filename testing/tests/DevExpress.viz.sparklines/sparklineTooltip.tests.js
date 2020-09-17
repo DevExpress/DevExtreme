@@ -20,9 +20,9 @@ StubThemeManager.prototype.setTheme = function() {
     vizMocks.forceThemeOptions(this);
 };
 
-tooltipModule.Tooltip = function(parameters) {
+tooltipModule.DEBUG_set_tooltip(function(parameters) {
     return new StubTooltip(parameters);
-};
+});
 rendererModule.Renderer = function() {
     return new vizMocks.Renderer();
 };

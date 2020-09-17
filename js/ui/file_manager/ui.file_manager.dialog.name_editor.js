@@ -64,4 +64,4 @@ class FileManagerNameEditorDialog extends FileManagerDialogBase {
 
 }
 
-module.exports = FileManagerNameEditorDialog;
+export default FileManagerNameEditorDialog;

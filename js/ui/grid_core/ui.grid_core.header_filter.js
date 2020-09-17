@@ -4,7 +4,7 @@ import filterUtils from '../shared/filtering';
 import gridCoreUtils from './ui.grid_core.utils';
 import { headerFilterMixin, HeaderFilterView, updateHeaderFilterItemSelectionState, allowHeaderFiltering } from './ui.grid_core.header_filter_core';
 import messageLocalization from '../../localization/message';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import { compileGetter } from '../../core/utils/data';
 import { each } from '../../core/utils/iterator';
 import { isDefined, isObject, isFunction } from '../../core/utils/type';
@@ -335,7 +335,7 @@ const ColumnHeadersViewHeaderFilterExtender = extend({}, headerFilterMixin, {
         const that = this;
 
         if(indicatorName === 'headerFilter') {
-            eventsEngine.on($indicator, clickEvent.name, that.createAction(function(e) {
+            eventsEngine.on($indicator, clickEventName, that.createAction(function(e) {
                 e.event.stopPropagation();
                 that.getController('headerFilter').showHeaderFilterMenu(column.index, false);
             }));
@@ -390,7 +390,7 @@ const HeaderPanelHeaderFilterExtender = extend({}, headerFilterMixin, {
                 showColumnLines: true
             });
 
-            $headerFilterIndicator && eventsEngine.on($headerFilterIndicator, clickEvent.name, that.createAction(function(e) {
+            $headerFilterIndicator && eventsEngine.on($headerFilterIndicator, clickEventName, that.createAction(function(e) {
                 const event = e.event;
 
                 event.stopPropagation();
@@ -459,7 +459,7 @@ const DataControllerFilterRowExtender = {
     }
 };
 
-module.exports = {
+export default {
     invertFilterExpression: invertFilterExpression,
     defaultOptions: function() {
         return {

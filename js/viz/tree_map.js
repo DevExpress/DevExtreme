@@ -1,1 +1,2 @@
-module.exports = require('./tree_map/tree_map');
+import TreeMap from './tree_map/tree_map';
+export default TreeMap;

@@ -16,6 +16,8 @@ import Submenu from './ui.submenu';
 import Button from '../button';
 import TreeView from '../tree_view';
 
+// STYLE menu
+
 const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_VERTICAL_CLASS = DX_MENU_CLASS + '-vertical';
 const DX_MENU_HORIZONTAL_CLASS = DX_MENU_CLASS + '-horizontal';
@@ -50,7 +52,7 @@ const DEFAULT_DELAY = {
     'hide': 300
 };
 
-const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged'];
+const ACTIONS = ['onSubmenuShowing', 'onSubmenuShown', 'onSubmenuHiding', 'onSubmenuHidden', 'onItemContextMenu', 'onItemClick', 'onSelectionChanged', 'onItemRendered'];
 
 class Menu extends MenuBase {
 
@@ -476,7 +478,7 @@ class Menu extends MenuBase {
     }
 
     _getKeyboardListeners() {
-        return super._getKeyboardListeners().concat(this._submenus);
+        return super._getKeyboardListeners().concat(this._visibleSubmenu);
     }
 
     _createSubmenu(node, $rootItem) {
@@ -525,7 +527,7 @@ class Menu extends MenuBase {
             },
             onSelectionChanged: this._nestedItemOnSelectionChangedHandler.bind(this),
             onItemClick: this._nestedItemOnItemClickHandler.bind(this),
-            onItemRendered: this.option('onItemRendered'),
+            onItemRendered: this._nestedItemOnItemRenderedHandler.bind(this),
             onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREVITEM_OPERATION),
             onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION),
             onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREVITEM_OPERATION : null),
@@ -609,6 +611,10 @@ class Menu extends MenuBase {
 
     _nestedItemOnItemClickHandler(e) {
         this._actions['onItemClick'](e);
+    }
+
+    _nestedItemOnItemRenderedHandler(e) {
+        this._actions['onItemRendered'](e);
     }
 
     _attachSubmenuHandlers($rootItem, submenu) {
@@ -825,6 +831,7 @@ class Menu extends MenuBase {
         }
 
         if(submenu) {
+            this._clearTimeouts();
             submenu.show();
             this.option('focusedElement', submenu.option('focusedElement'));
         }
@@ -977,4 +984,4 @@ class Menu extends MenuBase {
 
 registerComponent('dxMenu', Menu);
 
-module.exports = Menu;
+export default Menu;

@@ -1,0 +1,115 @@
+@use "../../base/mixins" as *;
+
+// adduse
+
+$scheduler-appointment-collector-margin: 3px;
+$scheduler-appointment-collector-height: 20px;
+$scheduler-popup-scrollable-content-padding: 20px;
+
+.dx-scheduler-appointment-popup {
+  .dx-popup-content {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .dx-scrollable-content {
+    padding-top: $scheduler-popup-scrollable-content-padding;
+  }
+
+  .dx-form.dx-recurrence-editor-container {
+    .dx-scrollable-content {
+      padding-top: 0;
+    }
+  }
+}
+
+.dx-scheduler {
+  .dx-scheduler-appointment-content-details {
+    margin-top: 2px;
+  }
+
+  .dx-empty-message {
+    line-height: normal;
+  }
+}
+
+.dx-scheduler-all-day-panel {
+  td {
+    padding: 0;
+  }
+}
+
+.dx-scheduler-appointment-collector {
+  position: absolute;
+  display: block;
+  height: $scheduler-appointment-collector-height;
+  text-align: center;
+  cursor: pointer;
+  margin: $scheduler-appointment-collector-margin 0 0 $scheduler-appointment-collector-margin;
+
+  .dx-scheduler-appointment-collector-content {
+    @include dx-overflow();
+
+    margin: 0 2 * ($scheduler-appointment-collector-margin - 1);
+
+    &.dx-button-content {
+      padding: 0;
+    }
+
+    span:last-child {
+      display: inline-block;
+      vertical-align: middle;
+      line-height: $scheduler-appointment-collector-height / 1.5;
+      height: $scheduler-appointment-collector-height;
+      padding-left: 2px;
+    }
+  }
+
+  &.dx-state-hover {
+    &:before {
+      border-radius: $scheduler-appointment-collector-height;
+    }
+  }
+
+  &.dx-button.dx-button-default {
+    padding: 0;
+    max-width: none;
+    border-radius: $scheduler-appointment-collector-height;
+  }
+}
+
+.dx-scheduler-work-space-mouse-selection {
+  .dx-scheduler-fixed-appointments,
+  .dx-scheduler-scrollable-appointments {
+    pointer-events: none;
+  }
+}
+
+.dx-rtl {
+  .dx-scheduler-appointment-collector {
+    margin: $scheduler-appointment-collector-margin $scheduler-appointment-collector-margin 0 0;
+  }
+}
+
+.dx-scheduler-adaptive {
+  @media (max-width: 450px) {
+    .dx-scheduler-view-switcher-label {
+      display: none;
+    }
+  }
+
+  .dx-scheduler-work-space-week .dx-scheduler-header-panel-cell {
+    white-space: pre-wrap;
+    line-height: 1.3;
+  }
+
+  .dx-scheduler-appointment-collector {
+    margin: 0;
+
+    .dx-scheduler-appointment-collector-content {
+      span:last-child {
+        line-height: $scheduler-appointment-collector-height;
+      }
+    }
+  }
+}

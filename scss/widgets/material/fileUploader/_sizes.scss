@@ -1,24 +1,24 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_FILEUPLOADER_VERTICAL_PADDING: null !default;
-$MATERIAL_FILEUPLOADER_FILE_CONTAINER_PADDING: null !default;
-$MATERIAL_FILEUPLOADER_FILE_CONTAINER_TEXT_MARGIN: null !default;
-$MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_MARGIN: null !default;
-$MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_SIZE: null !default;
+$material-fileuploader-file-container-padding: null !default;
+$material-fileuploader-file-container-text-margin: null !default;
+$material-fileuploader-file-container-button-margin: null !default;
+$material-fileuploader-file-container-button-size: null !default;
+
+$material-fileuploader-vertical-padding: 7px;
 
 @if $size == "default" {
-  $MATERIAL_FILEUPLOADER_VERTICAL_PADDING: 7px;
-  $MATERIAL_FILEUPLOADER_FILE_CONTAINER_PADDING: 5px 8px;
-  $MATERIAL_FILEUPLOADER_FILE_CONTAINER_TEXT_MARGIN: 15px;
-  $MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_MARGIN: 5px;
-  $MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_SIZE: 36px;
+  $material-fileuploader-file-container-padding: 5px 8px;
+  $material-fileuploader-file-container-text-margin: 15px;
+  $material-fileuploader-file-container-button-margin: 5px;
+  $material-fileuploader-file-container-button-size: 36px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_FILEUPLOADER_VERTICAL_PADDING: 7px;
-  $MATERIAL_FILEUPLOADER_FILE_CONTAINER_PADDING: 2px 4px;
-  $MATERIAL_FILEUPLOADER_FILE_CONTAINER_TEXT_MARGIN: 6px;
-  $MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_MARGIN: 2px;
-  $MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_SIZE: 28px;
+  $material-fileuploader-file-container-padding: 2px 4px;
+  $material-fileuploader-file-container-text-margin: 6px;
+  $material-fileuploader-file-container-button-margin: 2px;
+  $material-fileuploader-file-container-button-size: 28px;
 }

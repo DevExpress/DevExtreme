@@ -44,7 +44,7 @@ const processSeriesFamilies = function(series, minBubbleSize, maxBubbleSize, bar
     return families;
 };
 
-const SeriesDataSource = function(options) {
+export const SeriesDataSource = function(options) {
     const that = this;
     const themeManager = that._themeManager = createThemeManager(options.chart);
 
@@ -262,5 +262,3 @@ SeriesDataSource.prototype = {
         return this._themeManager;
     }
 };
-
-exports.SeriesDataSource = SeriesDataSource;

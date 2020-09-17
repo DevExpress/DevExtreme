@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop } from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { isNumeric, isString, isFunction, isDefined, isDate } from '../../core/utils/type';
 import { inRange } from '../../core/utils/math';
 import { extend } from '../../core/utils/extend';
 import Button from '../button';
@@ -16,9 +16,11 @@ import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
 import devices from '../../core/devices';
 import fx from '../../animation/fx';
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
+
+// STYLE calendar
 
 const CALENDAR_CLASS = 'dx-calendar';
 const CALENDAR_BODY_CLASS = 'dx-calendar-body';
@@ -50,6 +52,8 @@ const ZOOM_LEVEL = {
     DECADE: 'decade',
     CENTURY: 'century'
 };
+
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
@@ -220,11 +224,11 @@ const Calendar = Editor.inherit({
             return this.option('dateSerializationFormat');
         }
 
-        if(typeUtils.isNumeric(value)) {
+        if(isNumeric(value)) {
             return 'number';
         }
 
-        if(!typeUtils.isString(value)) {
+        if(!isString(value)) {
             return;
         }
 
@@ -405,7 +409,7 @@ const Calendar = Editor.inherit({
 
     _getNormalizedDate: function(date) {
         date = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
-        return typeUtils.isDefined(date) ? new Date(date) : date;
+        return isDefined(date) ? this._getDate(date) : date;
     },
 
     _initActions: function() {
@@ -532,7 +536,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDateByOffset: function(offset, date) {
-        date = new Date(date || this.option('currentDate'));
+        date = this._getDate(date || this.option('currentDate'));
 
         const currentDay = date.getDate();
         const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
@@ -600,7 +604,7 @@ const Calendar = Editor.inherit({
 
         this._view = this._renderSpecificView(currentDate);
 
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             const beforeDate = this._getDateByOffset(-1, currentDate);
             this._beforeView = this._isViewAvailable(beforeDate) ? this._renderSpecificView(beforeDate) : null;
 
@@ -618,21 +622,19 @@ const Calendar = Editor.inherit({
         const $view = $('<div>').appendTo(this._$viewsWrapper);
         const config = this._viewConfig(date);
 
-        return new specificView($view, config);
+        return this._createComponent($view, specificView, config);
     },
 
     _viewConfig: function(date) {
         let disabledDates = this.option('disabledDates');
 
-        disabledDates = typeUtils.isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
+        disabledDates = isFunction(disabledDates) ? this._injectComponent(disabledDates.bind(this)) : disabledDates;
         return {
             date: date,
             min: this._getMinDate(),
             max: this._getMaxDate(),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             value: this._dateOption('value'),
-            rtlEnabled: this.option('rtlEnabled'),
-            disabled: this.option('disabled'),
             tabIndex: undefined,
             focusStateEnabled: this.option('focusStateEnabled'),
             hoverStateEnabled: this.option('hoverStateEnabled'),
@@ -795,8 +797,8 @@ const Calendar = Editor.inherit({
     },
 
     _updateButtonsVisibility: function() {
-        this._navigator.toggleButton('next', !typeUtils.isDefined(this._getRequiredView('next')));
-        this._navigator.toggleButton('prev', !typeUtils.isDefined(this._getRequiredView('prev')));
+        this._navigator.toggleButton('next', !isDefined(this._getRequiredView('next')));
+        this._navigator.toggleButton('prev', !isDefined(this._getRequiredView('prev')));
     },
 
     _renderSwipeable: function() {
@@ -992,6 +994,18 @@ const Calendar = Editor.inherit({
             to: { left: to },
             duration: duration
         });
+    },
+
+    _getDate(value) {
+        let result;
+        if(isIE11 && isDate(value)) {
+            result = new Date(value.getTime());
+            result.setMilliseconds(0);
+        } else {
+            result = new Date(value);
+        }
+
+        return result;
     },
 
     _toTodayView: function() {
@@ -1194,13 +1208,9 @@ const Calendar = Editor.inherit({
                 value = this._convertToDate(value);
                 previousValue = this._convertToDate(previousValue);
                 this._updateAriaSelected(value, previousValue);
-                this.option('currentDate', typeUtils.isDefined(value) ? new Date(value) : new Date());
+                this.option('currentDate', isDefined(value) ? new Date(value) : new Date());
                 this._updateViewsValue(value);
                 this._setSubmitValue(value);
-                this.callBase(args);
-                break;
-            case 'disabled':
-                this._view.option('disabled', value);
                 this.callBase(args);
                 break;
             case 'onCellClick':
@@ -1225,4 +1235,4 @@ const Calendar = Editor.inherit({
 
 registerComponent('dxCalendar', Calendar);
 
-module.exports = Calendar;
+export default Calendar;

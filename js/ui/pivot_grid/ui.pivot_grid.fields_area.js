@@ -22,7 +22,7 @@ function renderGroupConnector(field, nextField, prevField, $container) {
     }
 }
 
-exports.FieldsArea = AreaItem.inherit({
+export const FieldsArea = AreaItem.inherit({
 
     ctor: function(component, area) {
         this.callBase(component);

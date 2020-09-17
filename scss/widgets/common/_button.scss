@@ -1,8 +1,7 @@
 @use "../base/mixins" as *;
+@use "../base/button/mixins" as *;
+
 // adduse
-@mixin dx-button-disabled() {
-  cursor: default;
-}
 
 .dx-button-disabled {
   @include dx-button-disabled();

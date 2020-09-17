@@ -105,4 +105,4 @@ class FileSystemItem {
     }
 }
 
-module.exports = FileSystemItem;
+export default FileSystemItem;

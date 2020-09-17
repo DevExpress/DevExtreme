@@ -4,10 +4,13 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../scrollable/colors" as *;
+
 // adduse
+@use "../scrollable";
+@use "../../base/scrollView";
 
 
-$SCROLLVIEW_LOADING_INDICATOR_SIZE: 42px;
+$scrollview-loading-indicator-size: 42px;
 
 .dx-scrollable-native.dx-scrollable-native-android .dx-scrollview-pull-down {
   background-color: $scrollable-bg;
@@ -24,9 +27,9 @@ $SCROLLVIEW_LOADING_INDICATOR_SIZE: 42px;
 .dx-scrollview-scrollbottom-indicator,
 .dx-scrollview-pull-down-indicator {
   margin-right: 0;
-  height: $SCROLLVIEW_LOADING_INDICATOR_SIZE;
-  width: $SCROLLVIEW_LOADING_INDICATOR_SIZE;
-  border-radius: $SCROLLVIEW_LOADING_INDICATOR_SIZE / 2;
+  height: $scrollview-loading-indicator-size;
+  width: $scrollview-loading-indicator-size;
+  border-radius: $scrollview-loading-indicator-size / 2;
   display: inline-flex;
   justify-content: center;
   flex-direction: column;
@@ -48,7 +51,7 @@ $SCROLLVIEW_LOADING_INDICATOR_SIZE: 42px;
 .dx-scrollview-pull-down-indicator {
   position: relative;
   margin-left: 0;
-  margin-top: -$SCROLLVIEW_LOADING_INDICATOR_SIZE / 2;
+  margin-top: -$scrollview-loading-indicator-size / 2;
 }
 
 .dx-scrollview-pull-down-text {

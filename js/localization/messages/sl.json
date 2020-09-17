@@ -63,6 +63,7 @@
         "dxFileUploader-upload": "Naloži",
         "dxFileUploader-uploaded": "Naloženo",
         "dxFileUploader-readyToUpload": "Pripravljeno za nalaganje",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Nalaganje je spodletelo",
         "dxFileUploader-invalidFileExtension": "Tip datoteke ni dovoljen",
         "dxFileUploader-invalidMaxFileSize": "Datoteka je prevelika",
@@ -162,7 +163,7 @@
 
         "dxPager-infoText": "Stran {0} od {1} ({2} zapisov)",
         "dxPager-pagesCountText": "od",
-
+        "dxPager-pageSizesAllText": "Vse",
         "dxPivotGrid-grandTotal": "Skupna vsota",
         "dxPivotGrid-total": "{0} skupaj",
         "dxPivotGrid-fieldChooserTitle": "Izbirnik polj",

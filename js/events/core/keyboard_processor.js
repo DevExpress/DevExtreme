@@ -73,4 +73,4 @@ const KeyboardProcessor = Class.inherit({
     }
 });
 
-module.exports = KeyboardProcessor;
+export default KeyboardProcessor;

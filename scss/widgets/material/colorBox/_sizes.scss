@@ -1,15 +1,16 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_COLORBOX_OVERLAY_PADDING: null !default;
-$MATERIAL_COLORBOX_PREVIEW_LEFT: null !default;
+$material-colorbox-overlay-padding: null !default;
+$material-colorbox-preview-left: null !default;
 
 @if $size == "default" {
-  $MATERIAL_COLORBOX_OVERLAY_PADDING: 20px;
-  $MATERIAL_COLORBOX_PREVIEW_LEFT: 13px;
+  $material-colorbox-overlay-padding: 20px;
+  $material-colorbox-preview-left: 13px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_COLORBOX_OVERLAY_PADDING: 16px;
-  $MATERIAL_COLORBOX_PREVIEW_LEFT: 8px;
+  $material-colorbox-overlay-padding: 16px;
+  $material-colorbox-preview-left: 8px;
 }

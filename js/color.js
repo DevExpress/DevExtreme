@@ -543,4 +543,4 @@ Color.prototype = {
     }
 };
 
-module.exports = Color;
+export default Color;

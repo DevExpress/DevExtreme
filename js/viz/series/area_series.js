@@ -1,16 +1,16 @@
 // there are area, steparea, stackedarea, fullstackedarea, splinearea
-const objectUtils = require('../../core/utils/object');
-const extend = require('../../core/utils/extend').extend;
-const scatterSeries = require('./scatter_series').chart;
-const lineSeries = require('./line_series');
+import objectUtils from '../../core/utils/object';
+import { extend } from '../../core/utils/extend';
+import { chart as scatterSeries } from './scatter_series';
+import lineSeries from './line_series';
 const chartLineSeries = lineSeries.chart.line;
 const polarLineSeries = lineSeries.polar.line;
-const _map = require('../core/utils').map;
+import { map as _map } from '../core/utils';
 const _extend = extend;
 const calculateBezierPoints = lineSeries.chart['spline']._calculateBezierPoints;
 
-exports.chart = {};
-exports.polar = {};
+const chart = {};
+const polar = {};
 
 const baseAreaMethods = {
 
@@ -117,7 +117,7 @@ function createAreaPoints(points) {
     }));
 }
 
-const areaSeries = exports.chart['area'] = _extend({}, chartLineSeries, baseAreaMethods, {
+const areaSeries = chart['area'] = _extend({}, chartLineSeries, baseAreaMethods, {
     _prepareSegment(points, rotated) {
         const that = this;
         const processedPoints = that._processSinglePointsAreaSegment(points, rotated);
@@ -157,7 +157,7 @@ const areaSeries = exports.chart['area'] = _extend({}, chartLineSeries, baseArea
     }
 });
 
-exports.polar['area'] = _extend({}, polarLineSeries, baseAreaMethods, {
+polar['area'] = _extend({}, polarLineSeries, baseAreaMethods, {
     _prepareSegment: function(points, rotated, lastSegment) {
         lastSegment && polarLineSeries._closeSegment.call(this, points);
 
@@ -168,7 +168,7 @@ exports.polar['area'] = _extend({}, polarLineSeries, baseAreaMethods, {
     }
 });
 
-exports.chart['steparea'] = _extend({}, areaSeries, {
+chart['steparea'] = _extend({}, areaSeries, {
     _prepareSegment: function(points, rotated) {
         const stepLineSeries = lineSeries.chart['stepline'];
         points = areaSeries._processSinglePointsAreaSegment(points, rotated);
@@ -178,7 +178,7 @@ exports.chart['steparea'] = _extend({}, areaSeries, {
     getSeriesPairCoord: lineSeries.chart['stepline'].getSeriesPairCoord
 });
 
-exports.chart['splinearea'] = _extend({}, areaSeries, {
+chart['splinearea'] = _extend({}, areaSeries, {
     _areaPointsToSplineAreaPoints: function(areaPoints) {
         const previousMiddlePoint = areaPoints[areaPoints.length / 2 - 1];
         const middlePoint = areaPoints[areaPoints.length / 2];
@@ -222,3 +222,8 @@ exports.chart['splinearea'] = _extend({}, areaSeries, {
 
     obtainCubicBezierTCoef: lineSeries.chart['spline'].obtainCubicBezierTCoef
 });
+
+export {
+    chart,
+    polar
+};

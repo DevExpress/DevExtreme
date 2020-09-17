@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
@@ -18,25 +19,25 @@
 }
 
 .dx-scrollview-pulldown {
-  background-image: $SCROLLVIEW_PULLDOWN_PATH;
+  background-image: $scrollview-pulldown-path;
   background-position: 0 0;
   background-repeat: no-repeat;
 }
 
 .dx-loadindicator-image {
-  background-image: $LOADINDICATOR_IMAGE_PATH;
+  background-image: $loadindicator-image-path;
   background-position: center center;
   background-repeat: no-repeat;
 }
 
 .dx-loadindicator-image-small {
-  background-image: $LOADINDICATOR_IMAGE_SMALL_PATH;
+  background-image: $loadindicator-image-small-path;
   background-position: center center;
   background-repeat: no-repeat;
 }
 
 .dx-loadindicator-image-large {
-  background-image: $LOADINDICATOR_IMAGE_LARGE_PATH;
+  background-image: $loadindicator-image-large-path;
   background-position: center center;
   background-repeat: no-repeat;
 }

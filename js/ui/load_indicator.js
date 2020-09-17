@@ -1,12 +1,14 @@
-const $ = require('../core/renderer');
-const windowUtils = require('../core/utils/window');
-const navigator = windowUtils.getNavigator();
-const support = require('../core/utils/support');
-const themes = require('./themes');
-const extend = require('../core/utils/extend').extend;
-const devices = require('../core/devices');
-const registerComponent = require('../core/component_registrator');
-const Widget = require('./widget/ui.widget');
+import $ from '../core/renderer';
+import { getNavigator } from '../core/utils/window';
+const navigator = getNavigator();
+import support from '../core/utils/support';
+import themes from './themes';
+import { extend } from '../core/utils/extend';
+import devices from '../core/devices';
+import registerComponent from '../core/component_registrator';
+import Widget from './widget/ui.widget';
+
+// STYLE loadIndicator
 
 const LOADINDICATOR_CLASS = 'dx-loadindicator';
 const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
@@ -229,4 +231,4 @@ const LoadIndicator = Widget.inherit({
 
 registerComponent('dxLoadIndicator', LoadIndicator);
 
-module.exports = LoadIndicator;
+export default LoadIndicator;

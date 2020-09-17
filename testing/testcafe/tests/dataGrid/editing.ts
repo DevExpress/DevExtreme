@@ -1,11 +1,12 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import createWidget, { disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 
-fixture`Editing`
-  .page(url(__dirname, '../container.html'));
+fixture.disablePageReloads`Editing`
+  .page(url(__dirname, '../container.html'))
+  .afterEach(() => disposeWidgets());
 
 const getGridConfig = (config) => {
   const defaultConfig = {
@@ -1286,3 +1287,143 @@ test('Validation(Batch) - Unmodified data cell with enabled showEditorAlways sho
     }],
   }],
 })));
+
+test('Async Validation(Batch) - Validation frame should be rendered when a neighboring cell is modified with showEditorAlways and repaintChangesOnly enabled (T906094)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  const headerPanel = dataGrid.getHeaderPanel();
+  const cancelButton = headerPanel.getCancelButton();
+  const dataRow = dataGrid.getDataRow(0);
+  const cell0 = dataRow.getDataCell(0);
+  const cell1 = dataRow.getDataCell(1);
+  const editor0 = cell0.getEditor();
+  const editor1 = cell1.getEditor();
+
+  await t
+    .click(cell0.element)
+    .expect(cell0.isFocused)
+    .ok()
+    .expect(editor0.element.exists)
+    .ok()
+    .typeText(editor0.element, 'test')
+    .pressKey('enter')
+    .expect(cell1.isValidationPending)
+    .ok()
+    .expect(cell0.isModified)
+    .ok()
+    .expect(cell0.isFocused)
+    .ok()
+    .expect(cell1.isInvalid)
+    .ok()
+    .click(cancelButton)
+    .expect(cell0.isModified)
+    .notOk()
+    .expect(cell0.isFocused)
+    .notOk()
+    .expect(cell1.isInvalid)
+    .notOk()
+    .expect(cell1.isValidationPending)
+    .notOk()
+    .click(cell0.element)
+    .expect(cell0.isFocused)
+    .ok()
+    .expect(editor0.element.exists)
+    .ok()
+    .typeText(editor0.element, 'test')
+    .pressKey('enter')
+    .expect(cell1.isValidationPending)
+    .ok()
+    .expect(cell0.isModified)
+    .ok()
+    .expect(cell0.isFocused)
+    .ok()
+    .expect(cell1.isInvalid)
+    .ok()
+    .expect(editor1.element.exists)
+    .ok()
+    .click(editor1.element)
+    .expect(cell1.isValidationPending)
+    .ok()
+    .expect(cell1.isInvalid)
+    .ok()
+    .expect(cell1.hasInvalidMessage)
+    .ok()
+    .expect(cell1.isFocused)
+    .ok()
+    .expect(cell0.isFocused)
+    .notOk()
+    .expect(cell0.isModified)
+    .ok()
+    .click(cell0.element)
+    .expect(editor0.element.exists)
+    .ok()
+    .selectText(editor0.element, 0, 4)
+    .typeText(editor0.element, 't')
+    .pressKey('enter')
+    .expect(cell1.isValidationPending)
+    .ok()
+    .expect(cell1.isInvalid)
+    .notOk();
+}).before(() => createWidget('dxDataGrid', getGridConfig({
+  dataSource: [{ id: 1, name: '', lastName: '' }],
+  keyExpr: 'id',
+  repaintChangesOnly: true,
+  editing: {
+    mode: 'batch',
+    allowUpdating: true,
+  },
+  columns: [{
+    dataField: 'name',
+  }, {
+    dataField: 'lastName',
+    showEditorAlways: true,
+    validationRules: [{
+      type: 'async',
+      message: 'Invalid value',
+      validationCallback(params) {
+        const d = $.Deferred();
+        setTimeout(() => {
+          d.resolve(params.data.name.length < 2);
+        }, 1000);
+        return d.promise();
+      },
+    }],
+  }],
+})));
+
+// T905677
+test('Rollback changes on a click on a revert button  when startEditAction is dblclick', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const dataRow = dataGrid.getDataRow(0);
+  const cell0 = dataRow.getDataCell(1);
+  const $revertButton = cell0.getRevertButton();
+
+  await t
+    .doubleClick(cell0.element)
+    .expect(cell0.isEditCell)
+    .ok()
+    .click(cell0.element.find('.dx-checkbox'))
+    .expect($revertButton.exists)
+    .ok()
+    .click($revertButton)
+    .expect($revertButton.exists)
+    .notOk()
+    .expect(cell0.isEditCell)
+    .notOk()
+    .expect(dataGrid.apiGetCellValue(0, 1))
+    .notOk();
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: [{ name: 'test', test: false }],
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    startEditAction: 'dblClick',
+  },
+  columns: ['name',
+    {
+      dataField: 'test',
+      dataType: 'boolean',
+      showEditorAlways: false,
+    },
+  ],
+}));

@@ -1,9 +1,7 @@
 import $ from './renderer';
-import config from './config';
 import { getWindow } from './utils/window';
 import { isPlainObject, isFunction } from './utils/type';
 import { each } from './utils/iterator';
-import errors from './errors';
 
 export default class Action {
     constructor(action, config) {
@@ -38,25 +36,6 @@ export default class Action {
         const afterExecute = this._afterExecute;
 
         const argsBag = e.args[0] || {};
-
-        ///#DEBUG
-        if('jQueryEvent' in argsBag && !argsBag.event) {
-            throw 'The jQueryEvent field is deprecated. Please, use the `event` field instead';
-        }
-        ///#ENDDEBUG
-
-        if(!('jQueryEvent' in argsBag) && argsBag.event && config().useJQuery) {
-            Object.defineProperty(argsBag, 'jQueryEvent', {
-                get: function() {
-                    errors.log('W0003', 'Handler argument', 'jQueryEvent', '17.2', 'Use the \'event\' field instead');
-                    return argsBag.event;
-                },
-                set: function(value) {
-                    errors.log('W0003', 'Handler argument', 'jQueryEvent', '17.2', 'Use the \'event\' field instead');
-                    argsBag.event = value;
-                }
-            });
-        }
 
         if(!this._validateAction(e)) {
             return;
@@ -153,7 +132,7 @@ Action.registerExecutor({
 
     'readOnly': {
         validate: createValidatorByTargetElement(($target) =>
-            $target.is('.dx-state-readonly, .dx-state-readonly *')
+            $target.is('.dx-state-readonly, .dx-state-readonly *:not(.dx-state-independent)')
         )
     },
     'undefined': {

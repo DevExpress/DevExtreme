@@ -183,6 +183,8 @@ class DiagramContextMenuWrapper extends Widget {
             case 'commands':
                 this._invalidate();
                 break;
+            case 'export':
+                break;
             default:
                 super._optionChanged(args);
         }
@@ -230,4 +232,4 @@ class DiagramContextMenuBar extends DiagramBar {
     }
 }
 
-module.exports = { DiagramContextMenuWrapper, DiagramContextMenu };
+export default { DiagramContextMenuWrapper, DiagramContextMenu };

@@ -569,3 +569,123 @@ const legendItem = {
         state: "normal"
     }
 };
+/**
+* @name BaseWidgetAnnotationConfig
+* @type object
+*/
+const BaseWidgetAnnotationConfig = {
+    type: undefined,
+    x: undefined,
+    y: undefined,
+    offsetX: undefined,
+    offsetY: undefined,
+    tooltipEnabled: true,
+    color: '#ffffff',
+    opacity: 0.9,
+    border: {
+        /**
+        * @name BaseWidgetAnnotationConfig.border.width
+        * @default 1
+        * @type number
+        */
+        width: 1,
+        /**
+        * @name BaseWidgetAnnotationConfig.border.color
+        * @type string
+        * @default '#dddddd'
+        */
+        color: '#dddddd',
+        /**
+        * @name BaseWidgetAnnotationConfig.border.dashStyle
+        * @type Enums.DashStyle
+        * @default 'solid'
+        */
+        dashStyle: 'solid',
+        /**
+        * @name BaseWidgetAnnotationConfig.border.opacity
+        * @type number
+        * @default undefined
+        */
+        opacity: undefined,
+        /**
+        * @name BaseWidgetAnnotationConfig.border.visible
+        * @type boolean
+        * @default true
+        */
+        visible: true,
+        /**
+        * @name BaseWidgetAnnotationConfig.border.cornerRadius
+        * @type number
+        * @default 0
+        * @default 4 @for Material
+        */
+        cornerRadius: 0
+    },
+    font: {
+        color: '#333333'
+    },
+    arrowLength: 14,
+    arrowWidth: 14,
+    paddingLeftRight: 10,
+    paddingTopBottom: 10,
+    shadow: {
+        /**
+        * @name BaseWidgetAnnotationConfig.shadow.opacity
+        * @type number
+        * @default 0.15
+        */
+        opacity: 0.15,
+        /**
+        * @name BaseWidgetAnnotationConfig.shadow.color
+        * @type string
+        * @default '#000000'
+        */
+        color: '#000000',
+        /**
+        * @name BaseWidgetAnnotationConfig.shadow.offsetX
+        * @type number
+        * @default 0
+        */
+        offsetX: 0,
+        /**
+        * @name BaseWidgetAnnotationConfig.shadow.offsetY
+        * @type number
+        * @default 1
+        */
+        offsetY: 1,
+        /**
+        * @name BaseWidgetAnnotationConfig.shadow.blur
+        * @type number
+        * @default 4
+        */
+        blur: 4
+    },
+    image: {
+        /**
+        * @name BaseWidgetAnnotationConfig.image.url
+        * @type string
+        * @default undefined
+        */
+        url: undefined,
+        /**
+        * @name BaseWidgetAnnotationConfig.image.width
+        * @type number
+        * @default 30
+        */
+        width: 30,
+        /**
+        * @name BaseWidgetAnnotationConfig.image.height
+        * @type number
+        * @default 30
+        */
+        height: 30
+    },
+    text: undefined,
+    description: undefined,
+    width: undefined,
+    height: undefined,
+    wordWrap: "normal",
+    textOverflow: "ellipsis",
+    allowDragging: false,
+    data: undefined
+};

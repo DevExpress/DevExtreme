@@ -51,6 +51,10 @@ const RowDraggingExtender = {
         const sortableFixedName = '_sortableFixed';
         const currentSortableName = isFixedTableRendering ? sortableFixedName : sortableName;
         const anotherSortableName = isFixedTableRendering ? sortableName : sortableFixedName;
+        const togglePointerEventsStyle = (toggle) => {
+            // T929503
+            this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
+        };
 
         if(allowReordering && $content.length) {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({
@@ -69,6 +73,16 @@ const RowDraggingExtender = {
                     e.cancel = !isDataRow;
 
                     rowDragging.onDragStart?.(e);
+                },
+                onDragEnter: () => {
+                    togglePointerEventsStyle(true);
+                },
+                onDragLeave: () => {
+                    togglePointerEventsStyle(false);
+                },
+                onDragEnd: (e) => {
+                    togglePointerEventsStyle(false);
+                    rowDragging.onDragEnd?.(e);
                 },
                 dropFeedbackMode: browser.msie ? 'indicate' : rowDragging.dropFeedbackMode,
                 onOptionChanged: (e) => {
@@ -159,7 +173,7 @@ const RowDraggingExtender = {
 };
 
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             rowDragging: {
@@ -199,12 +213,12 @@ module.exports = {
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.boundary
-                 * @type string|Node|jQuery
+                 * @type string|Element|jQuery
                  * @default undefined
                  */
                 /**
                  * @name GridBaseOptions.rowDragging.container
-                 * @type string|Node|jQuery
+                 * @type string|Element|jQuery
                  * @default undefined
                  */
                 /**
@@ -214,7 +228,7 @@ module.exports = {
                  * @type_function_param1_field1 itemData:any
                  * @type_function_param1_field2 itemElement:dxElement
                  * @type_function_param2 containerElement:dxElement
-                 * @type_function_return string|Node|jQuery
+                 * @type_function_return string|Element|jQuery
                  * @default undefined
                  */
                 /**

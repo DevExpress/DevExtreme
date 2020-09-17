@@ -1,12 +1,15 @@
-const noop = require('../../core/utils/common').noop;
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const BaseThemeManager = require('../core/base_theme_manager').BaseThemeManager;
-const _isString = typeUtils.isString;
-const _isDefined = typeUtils.isDefined;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
+import { noop } from '../../core/utils/common';
+import {
+    isString as _isString,
+    isDefined as _isDefined,
+    isNumeric,
+    isPlainObject
+} from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { BaseThemeManager } from '../core/base_theme_manager';
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
 
-const ThemeManager = BaseThemeManager.inherit((function() {
+export const ThemeManager = BaseThemeManager.inherit((function() {
     const ctor = function(params) {
         const that = this;
 
@@ -45,7 +48,7 @@ const ThemeManager = BaseThemeManager.inherit((function() {
         axisOptions = extend(true, {}, axisOptions);
         axisOptions.title = processTitleOptions(axisOptions.title);
 
-        if(axisOptions.type === 'logarithmic' && (axisOptions.logarithmBase <= 0) || (axisOptions.logarithmBase && !typeUtils.isNumeric(axisOptions.logarithmBase))) {
+        if(axisOptions.type === 'logarithmic' && (axisOptions.logarithmBase <= 0) || (axisOptions.logarithmBase && !isNumeric(axisOptions.logarithmBase))) {
             axisOptions.logarithmBase = undefined;
             axisOptions.logarithmBaseError = true;
         }
@@ -74,7 +77,7 @@ const ThemeManager = BaseThemeManager.inherit((function() {
         const theme = this._theme[name];
         let result = this._mergedSettings[name];
         if(result) { return result; }
-        if(typeUtils.isPlainObject(theme) && typeUtils.isPlainObject(userOptions)) {
+        if(isPlainObject(theme) && isPlainObject(userOptions)) {
             result = extend(true, {}, theme, userOptions);
         } else {
             result = _isDefined(userOptions) ? userOptions : theme;
@@ -152,7 +155,7 @@ const ThemeManager = BaseThemeManager.inherit((function() {
         },
         animation: function(name) {
             let userOptions = this._userOptions[name];
-            userOptions = typeUtils.isPlainObject(userOptions) ? userOptions : _isDefined(userOptions) ? { enabled: !!userOptions } : {};
+            userOptions = isPlainObject(userOptions) ? userOptions : _isDefined(userOptions) ? { enabled: !!userOptions } : {};
             return mergeOptions.call(this, name, userOptions);
         },
         seriesTemplate() {
@@ -225,5 +228,3 @@ const ThemeManager = BaseThemeManager.inherit((function() {
         }
     };
 })());
-
-exports.ThemeManager = ThemeManager;

@@ -96,7 +96,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @default null
      * @type_function_param1 selectedItem:object
      * @type_function_param2 fieldElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -127,7 +127,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -169,18 +169,17 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 scrollOffset:object
-     * @type_function_param1_field7 reachedLeft:boolean
-     * @type_function_param1_field8 reachedRight:boolean
-     * @type_function_param1_field9 reachedTop:boolean
-     * @type_function_param1_field10 reachedBottom:boolean
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 scrollOffset:object
+     * @type_function_param1_field6 reachedLeft:boolean
+     * @type_function_param1_field7 reachedRight:boolean
+     * @type_function_param1_field8 reachedTop:boolean
+     * @type_function_param1_field9 reachedBottom:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onScroll?: ((e: { component?: dxLookup, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
+    onScroll?: ((e: { component?: dxLookup, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
      * @docid dxLookupOptions.onTitleRendered
      * @extends Action
@@ -200,13 +199,12 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
-     * @type_function_param1_field6 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field7 event:event
+     * @type_function_param1_field6 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onValueChanged?: ((e: { component?: dxLookup, element?: dxElement, model?: any, value?: any, previousValue?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onValueChanged?: ((e: { component?: dxLookup, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
     /**
      * @docid dxLookupOptions.pageLoadMode
      * @type Enums.ListPageLoadMode
@@ -367,7 +365,7 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      * @type template|function
      * @default "title"
      * @type_function_param1 titleElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
@@ -395,14 +393,14 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
      */
     usePopover?: boolean;
     /**
-     * @docid dxLookupOptions.itemCenteringEnabled
+     * @docid dxLookupOptions.dropDownCentered
      * @type boolean
      * @default false
      * @default true [for](Material)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    itemCenteringEnabled?: boolean;
+    dropDownCentered?: boolean;
     /**
      * @docid dxLookupOptions.dropDownOptions
      * @type dxPopoverOptions

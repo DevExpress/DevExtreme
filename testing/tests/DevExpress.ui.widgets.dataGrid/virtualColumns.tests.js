@@ -2,6 +2,7 @@ import $ from 'jquery';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 import 'ui/data_grid/ui.data_grid';
 import 'common.css!';
+import 'generic_light.css!';
 import { DataSource } from 'data/data_source/data_source';
 import dataSourceAdapter from 'ui/data_grid/ui.data_grid.data_source_adapter';
 
@@ -427,6 +428,25 @@ QUnit.module('Scrolling', { beforeEach: setupModule, afterEach: teardownModule }
 
         assert.deepEqual(columnsChangedPositions, [950, 700, 450, 200]);
     });
+
+    QUnit.test('The column index offset should depend on fixed columns', function(assert) {
+        // arrange
+        this.setupVirtualColumns();
+
+        // act
+        this.columnsController.setScrollPosition(400);
+        let offset = this.columnsController.getColumnIndexOffset();
+
+        // assert
+        assert.equal(offset, 4, 'offset without fixed columns');
+
+        // act
+        this.columnOption(0, 'fixed', true);
+        offset = this.columnsController.getColumnIndexOffset();
+
+        // assert
+        assert.equal(offset, 3, 'offset with fixed column');
+    });
 });
 
 QUnit.testStart(function() {
@@ -595,7 +615,7 @@ QUnit.module('Rendering', { beforeEach: setupRenderingModule, afterEach: teardow
         // assert
         const $cells = this.rowsView.element().find('.dx-data-row').children();
         assert.strictEqual($cells.length, 12, 'cell count in data row');
-        assert.strictEqual($cells.eq(0).outerWidth(), 250, 'virtual cell width');
+        assert.strictEqual($cells[0].getBoundingClientRect().width, 250, 'virtual cell width');
         assert.strictEqual(this.getVisibleColumns()[1].dataField, 'field6', 'first rendered dataField');
     });
 

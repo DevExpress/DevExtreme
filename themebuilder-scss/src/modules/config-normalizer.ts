@@ -87,8 +87,6 @@ const getThemeAndColorScheme = (config: ConfigSettings): ConfigSettings => {
     const passedThemeName = config.baseTheme.substr(0, dotIndex);
     const passedColorScheme = config.baseTheme.substr(dotIndex + 1).replace(/\./g, '-');
 
-    console.log(passedThemeName, passedColorScheme);
-
     foundTheme = themes.find((t) => t.name === passedThemeName
       && t.colorScheme === passedColorScheme);
 
@@ -113,23 +111,18 @@ const getThemeAndColorScheme = (config: ConfigSettings): ConfigSettings => {
   };
 };
 
-const replaceItemKeys = (
+const processItemKeys = (
   config: ConfigSettings,
-  searchValue: RegExp,
-  replaceValue: string,
+  processor: (item: string) => string,
 ): void => {
   if (config.items && config.items.length) {
     config.items.forEach((item) => {
-      item.key = item.key.replace(searchValue, replaceValue);
+      item.key = processor(item.key);
     });
   }
 };
 
-const convertTreeListConstants = (config: ConfigSettings): void => replaceItemKeys(config, /@treelist/, '@datagrid');
-
-const convertItemKeysToSassFormat = (config: ConfigSettings): void => replaceItemKeys(config, /@/, '$');
-
-const normalizePath = (path: string): string => path + (path[path.length - 1] !== '/' ? '/' : '');
+const normalizePath = (path: string): string => path + (!path.endsWith('/') ? '/' : '');
 
 const parseConfig = (config: ConfigSettings): void => {
   const { command } = config;
@@ -157,8 +150,13 @@ const parseConfig = (config: ConfigSettings): void => {
     config.widgets = config.widgets.map((w) => w.toLowerCase());
   }
 
-  convertTreeListConstants(config);
-  convertItemKeysToSassFormat(config);
+  [
+    (key: string): string => key.replace(/@treelist/, '@datagrid'),
+    (key: string): string => key.replace(/@/, '$'),
+    (key: string): string => key.toLowerCase().replace(/_/g, '-'),
+  ].forEach((processor) => {
+    processItemKeys(config, processor);
+  });
 
   Object.assign(config, {
     data: config.data !== undefined ? config.data : {},

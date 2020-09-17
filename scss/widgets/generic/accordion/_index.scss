@@ -4,10 +4,12 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+@use "../typography/sizes" as *;
+
 // adduse
 
 
-$GENERIC_ACCORDION_DISABLED_OPACITY: 0.5;
+$generic-accordion-disabled-opacity: 0.5;
 
 
 .dx-accordion {
@@ -73,39 +75,39 @@ $GENERIC_ACCORDION_DISABLED_OPACITY: 0.5;
 
 .dx-accordion-item-title {
   color: $accordion-title-color;
-  padding: $GENERIC_ACCORDION_TITLE_PADDING;
-  font-size: $GENERIC_S_FONT_SIZE;
+  padding: $generic-accordion-title-padding;
+  font-size: $generic-s-font-size;
 
   &:before {
     font-weight: normal;
     color: $accordion-icon-color;
     content: "\f016";
     font-family: DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
-    font-size: $GENERIC_BASE_ICON_SIZE;
-    margin-left: $GENERIC_BASE_ICON_SIZE/2;
+    font-size: $generic-base-icon-size;
+    margin-left: $generic-base-icon-size / 2;
     margin-right: 0;
-    line-height: $GENERIC_ACCORDION_ARROW_LINE_HEIGHT;
+    line-height: $generic-accordion-arrow-line-height;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+    @include dx-icon-sizing($generic-base-icon-size);
 
     display: inline-block;
     color: $accordion-icon-color;
   }
 
   .dx-accordion-item-title-caption .dx-icon {
-    @include dx-icon-margin($ACCORDION_TITLE_ICON_MARGIN);
+    @include dx-icon-margin($accordion-title-icon-margin);
 
     vertical-align: top;
     position: relative;
-    top: $ACCORDION_TITLE_ICON_TOP_OFFSET;
+    top: $accordion-title-icon-top-offset;
   }
 }
 
 .dx-state-disabled {
   &.dx-accordion-item {
-    opacity: $GENERIC_ACCORDION_DISABLED_OPACITY;
+    opacity: $generic-accordion-disabled-opacity;
   }
 }
 
@@ -116,15 +118,15 @@ $GENERIC_ACCORDION_DISABLED_OPACITY: 0.5;
 }
 
 .dx-accordion-item-body {
-  padding: $GENERIC_ACCORDION_BODY_PADDING;
-  font-size: $GENERIC_BASE_FONT_SIZE;
+  padding: $generic-accordion-body-padding;
+  font-size: $generic-base-font-size;
 }
 
 .dx-rtl {
   .dx-accordion-item-title {
     &:before {
       margin-left: 0;
-      margin-right: $GENERIC_BASE_ICON_SIZE/2;
+      margin-right: $generic-base-icon-size / 2;
     }
   }
 }

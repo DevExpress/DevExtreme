@@ -1,13 +1,13 @@
-const $ = require('../../core/renderer');
-const Widget = require('../widget/ui.widget');
-const Tooltip = require('../tooltip');
-const translator = require('../../animation/translator');
-const positionUtils = require('../../animation/position');
-const mathUtils = require('../../core/utils/math');
-const typeUtils = require('../../core/utils/type');
-const extend = require('../../core/utils/extend').extend;
-const getBoundingRect = require('../../core/utils/position').getBoundingRect;
-const numberLocalization = require('../../localization/number');
+import $ from '../../core/renderer';
+import Widget from '../widget/ui.widget';
+import Tooltip from '../tooltip';
+import translator from '../../animation/translator';
+import positionUtils from '../../animation/position';
+import { fitIntoRange } from '../../core/utils/math';
+import { isDefined, type } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import { getBoundingRect } from '../../core/utils/position';
+import numberLocalization from '../../localization/number';
 
 const SLIDER_CLASS = 'dx-slider';
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
@@ -106,7 +106,7 @@ const SliderHandle = Widget.inherit({
         this._saveTooltipElements();
         this._resetTooltipPosition();
 
-        if(typeUtils.type(position) === 'string') {
+        if(type(position) === 'string') {
             position = extend({
                 boundary: this._$slider,
                 boundaryOffset: { h: 1, v: 1 }
@@ -165,7 +165,7 @@ const SliderHandle = Widget.inherit({
 
         let position = this.option('tooltipPosition');
 
-        if(typeUtils.type(position) === 'string') {
+        if(type(position) === 'string') {
             position = extend({
                 of: this.$element(),
                 boundary: this._$slider,
@@ -181,7 +181,7 @@ const SliderHandle = Widget.inherit({
         const arrowMaxRight = this._contentLocate.left + this._$tooltipContent.outerWidth() - this._$tooltipArrow.outerWidth();
 
         translator.move(this._$tooltipContent, { left: this._contentLocate.left + (isLeftSide ? 1 : -1) * calculatePosition.h.oversize });
-        translator.move(this._$tooltipArrow, { left: mathUtils.fitIntoRange(arrowLeft, arrowMinLeft, arrowMaxRight) });
+        translator.move(this._$tooltipArrow, { left: fitIntoRange(arrowLeft, arrowMinLeft, arrowMaxRight) });
     },
 
     _getFormattedValue: function(value) {
@@ -217,7 +217,7 @@ const SliderHandle = Widget.inherit({
     },
 
     _ensureTooltipIsCentered: function(value, previousValue) {
-        if(typeUtils.isDefined(value) && typeUtils.isDefined(previousValue) && value.toString().length !== previousValue.toString().length) {
+        if(isDefined(value) && isDefined(previousValue) && value.toString().length !== previousValue.toString().length) {
             this._centeredTooltipPosition();
         }
     },
@@ -279,4 +279,4 @@ const SliderHandle = Widget.inherit({
     }
 });
 
-module.exports = SliderHandle;
+export default SliderHandle;

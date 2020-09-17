@@ -4,13 +4,15 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+@use "../../base/fileUploader";
+
 // adduse
 
 
-$GENERIC_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
+$generic-fileuploader-file-wrapper-border-size: 3px;
 
 .dx-fileuploader-wrapper {
-  padding: $GENERIC_FILEUPLOADER_VERTICAL_PADDING;
+  padding: $generic-fileuploader-vertical-padding;
 }
 
 .dx-fileuploader-content > .dx-fileuploader-upload-button {
@@ -19,8 +21,8 @@ $GENERIC_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 }
 
 .dx-fileuploader-input-wrapper {
-  padding: $GENERIC_FILEUPLOADER_VERTICAL_PADDING 0 $GENERIC_FILEUPLOADER_VERTICAL_PADDING;
-  border: $GENERIC_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE dashed transparent;
+  padding: $generic-fileuploader-vertical-padding 0 $generic-fileuploader-vertical-padding;
+  border: $generic-fileuploader-file-wrapper-border-size dashed transparent;
 }
 
 .dx-fileuploader.dx-state-disabled .dx-fileuploader-input-label {
@@ -43,21 +45,22 @@ $GENERIC_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 
   .dx-fileuploader-input-container {
     display: block;
-    border: $GENERIC_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE dashed $fileuploader-border-color;
+    border: $generic-fileuploader-file-wrapper-border-size dashed $fileuploader-border-color;
     width: 100%;
   }
 
   .dx-fileuploader-input {
     display: block;
     width: 100%;
-    padding: $GENERIC_FILEUPLOADER_VERTICAL_PADDING*2 $GENERIC_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE;
+    padding: $generic-fileuploader-vertical-padding * 2 $generic-fileuploader-file-wrapper-border-size;
+
     // NOTE: height of the widget should be the same in default and drag over states
     margin-bottom: 1px;
     box-sizing: content-box;
   }
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: $GENERIC_FILEUPLOADER_VERTICAL_PADDING*2 $GENERIC_FILEUPLOADER_VERTICAL_PADDING + 2px;
+    padding: $generic-fileuploader-vertical-padding * 2 $generic-fileuploader-vertical-padding + 2px;
   }
 }
 
@@ -67,11 +70,11 @@ $GENERIC_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 }
 
 .dx-fileuploader-input {
-  padding: $GENERIC_FILEUPLOADER_VERTICAL_PADDING 0;
+  padding: $generic-fileuploader-vertical-padding 0;
 }
 
 .dx-fileuploader-input-label {
-  padding: $GENERIC_FILEUPLOADER_VERTICAL_PADDING + ($GENERIC_BASE_FONT_SIZE/2 - $GENERIC_FILEUPLOADER_VERTICAL_PADDING)/2 + 1px $GENERIC_FILEUPLOADER_VERTICAL_PADDING + 2px;
+  padding: $generic-fileuploader-vertical-padding + ($generic-base-font-size / 2 - $generic-fileuploader-vertical-padding) / 2 + 1px $generic-fileuploader-vertical-padding + 2px;
   color: $fileuploader-filename-color;
 
   @include dx-overflow();
@@ -99,12 +102,12 @@ $GENERIC_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 }
 
 .dx-fileuploader-file-name {
-  padding-bottom: $GENERIC_FILEUPLOADER_VERTICAL_PADDING/2;
+  padding-bottom: $generic-fileuploader-vertical-padding / 2;
   color: $fileuploader-filename-color;
 }
 
 .dx-fileuploader-file-size {
-  padding-bottom: $GENERIC_FILEUPLOADER_VERTICAL_PADDING/2;
+  padding-bottom: $generic-fileuploader-vertical-padding / 2;
 }
 
 .dx-fileuploader-invalid .dx-fileuploader-file-status-message {

@@ -1,4 +1,4 @@
-import { animation } from './ui.drawer.rendering.strategy';
+import { animation } from './ui.drawer.animation';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import translator from '../../animation/translator';
@@ -43,4 +43,4 @@ class PushStrategy extends DrawerStrategy {
     }
 }
 
-module.exports = PushStrategy;
+export default PushStrategy;

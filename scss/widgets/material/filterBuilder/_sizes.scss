@@ -1,27 +1,28 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_FILTERBUILDER_ICON_PADDING: null !default;
-$MATERIAL_FILTERBUILDER_FILLED_EDITOR_PADDING: null !default;
-$MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING: null !default;
-$MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING: null !default;
-$MATERIAL_FILTERBUILDER_TREEVIEW_TOGGLE_LEFT: null !default;
-$MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_MIN_HEIGTH: null !default;
+$material-filterbuilder-icon-padding: null !default;
+$material-filterbuilder-filled-editor-padding: null !default;
+$material-filterbuilder-treeview-item-left-padding: null !default;
+$material-filterbuilder-treeview-item-padding: null !default;
+$material-filterbuilder-treeview-toggle-left: null !default;
+$material-filterbuilder-treeview-item-min-heigth: null !default;
 
 @if $size == "default" {
-  $MATERIAL_FILTERBUILDER_ICON_PADDING: 8px;
-  $MATERIAL_FILTERBUILDER_FILLED_EDITOR_PADDING: 13px 12px;
-  $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING: 24px;
-  $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING: 8px $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING 10px;
-  $MATERIAL_FILTERBUILDER_TREEVIEW_TOGGLE_LEFT: 16px;
-  $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_MIN_HEIGTH: 36px;
+  $material-filterbuilder-icon-padding: 8px;
+  $material-filterbuilder-filled-editor-padding: 13px 12px;
+  $material-filterbuilder-treeview-item-left-padding: 24px;
+  $material-filterbuilder-treeview-item-padding: 8px $material-filterbuilder-treeview-item-left-padding 10px;
+  $material-filterbuilder-treeview-toggle-left: 16px;
+  $material-filterbuilder-treeview-item-min-heigth: 36px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_FILTERBUILDER_ICON_PADDING: 4px;
-  $MATERIAL_FILTERBUILDER_FILLED_EDITOR_PADDING: 8px 8px;
-  $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING: 8px;
-  $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_PADDING: 4px $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_LEFT_PADDING 5px;
-  $MATERIAL_FILTERBUILDER_TREEVIEW_TOGGLE_LEFT: 0;
-  $MATERIAL_FILTERBUILDER_TREEVIEW_ITEM_MIN_HEIGTH: 26px;
+  $material-filterbuilder-icon-padding: 4px;
+  $material-filterbuilder-filled-editor-padding: 8px 8px;
+  $material-filterbuilder-treeview-item-left-padding: 8px;
+  $material-filterbuilder-treeview-item-padding: 4px $material-filterbuilder-treeview-item-left-padding 5px;
+  $material-filterbuilder-treeview-toggle-left: 0;
+  $material-filterbuilder-treeview-item-min-heigth: 26px;
 }

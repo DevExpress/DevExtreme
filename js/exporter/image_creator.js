@@ -6,8 +6,8 @@ import { each as _each, map as _map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import domAdapter from '../core/dom_adapter';
 import domUtils from '../core/utils/dom';
-import windowUtils from '../core/utils/window';
-const window = windowUtils.getWindow();
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
 import { camelize } from '../core/utils/inflector';
 import { Deferred, fromPromise } from '../core/utils/deferred';
 
@@ -743,7 +743,7 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToC
         });
 }
 
-exports.imageCreator = {
+export const imageCreator = {
     getImageData: function(markup, options) {
         const mimeType = 'image/' + options.format;
         const width = options.width;
@@ -760,7 +760,7 @@ exports.imageCreator = {
     getData: function(markup, options) {
         const that = this;
 
-        return exports.imageCreator.getImageData(markup, options).then(binaryData => {
+        return imageCreator.getImageData(markup, options).then(binaryData => {
             const mimeType = 'image/' + options.format;
             const data = isFunction(window.Blob) && !options.forceProxy ?
                 that._getBlob(binaryData, mimeType) :
@@ -785,11 +785,11 @@ exports.imageCreator = {
     }
 };
 
-exports.getData = function(data, options) {
-    return exports.imageCreator.getData(data, options);
-};
+export function getData(data, options) {
+    return imageCreator.getData(data, options);
+}
 
-exports.testFormats = function(formats) {
+export function testFormats(formats) {
     const canvas = createCanvas(100, 100, 0);
     return formats.reduce(function(r, f) {
         const mimeType = ('image/' + f).toLowerCase();
@@ -801,4 +801,4 @@ exports.testFormats = function(formats) {
         }
         return r;
     }, { supported: [], unsupported: [] });
-};
+}

@@ -7,7 +7,7 @@ import Action from './action';
 import errors from './errors';
 import Callbacks from './utils/callbacks';
 import { EventsStrategy } from './events_strategy';
-import publicComponentUtils from './utils/public_component';
+import { name as publicComponentName } from './utils/public_component';
 import { PostponedOperations } from './postponed_operations';
 import { isFunction, isPlainObject, isDefined } from './utils/type';
 import { noop } from './utils/common';
@@ -71,7 +71,7 @@ const Component = Class.inherit({
     ctor(options = {}) {
         const { _optionChangedCallbacks, _disposingCallbacks } = options;
 
-        this.NAME = publicComponentUtils.name(this.constructor);
+        this.NAME = publicComponentName(this.constructor);
 
         this._eventsStrategy = EventsStrategy.create(this, options.eventsStrategy);
 
@@ -237,7 +237,7 @@ const Component = Class.inherit({
                     this._optionChangedAction(extend({}, args));
                 }
 
-                if(!this._disposed && this._cancelOptionChange !== args.name) {
+                if(!this._disposed && this._cancelOptionChange !== name) {
                     this._optionChanged(args);
                 }
             }
@@ -381,4 +381,4 @@ const Component = Class.inherit({
     }
 });
 
-module.exports = Component;
+export default Component;

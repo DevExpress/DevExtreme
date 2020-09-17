@@ -8,7 +8,7 @@ import Swipeable from 'events/gesture/swipeable';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import 'ui/multi_view';
-import { animation } from 'ui/multi_view';
+import { animation } from 'ui/multi_view/ui.multi_view.animation';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 

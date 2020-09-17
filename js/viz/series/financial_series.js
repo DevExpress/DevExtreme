@@ -1,15 +1,16 @@
 // there are stock, candlestick
-const scatterSeries = require('./scatter_series').chart;
-const barSeries = require('./bar_series').chart.bar;
-const _extend = require('../../core/utils/extend').extend;
+import { chart as scatterSeries } from './scatter_series';
+import { chart as barChart } from './bar_series';
+import { extend as _extend } from '../../core/utils/extend';
+import { isDefined as _isDefined } from '../../core/utils/type';
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import { noop as _noop } from '../../core/utils/common';
 
-const _isDefined = require('../../core/utils/type').isDefined;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
-const _noop = require('../../core/utils/common').noop;
+const barSeries = barChart.bar;
 
 const DEFAULT_FINANCIAL_POINT_SIZE = 10;
 
-exports.stock = _extend({}, scatterSeries, {
+export const stock = _extend({}, scatterSeries, {
     _animate: _noop,
 
     _applyMarkerClipRect: function(settings) {
@@ -278,11 +279,11 @@ exports.stock = _extend({}, scatterSeries, {
     }
 });
 
-exports.candlestick = _extend({}, exports.stock, {
+export const candlestick = _extend({}, stock, {
 
     _parsePointStyle: function(style, defaultColor, innerColor) {
         const color = style.color || innerColor;
-        const base = exports.stock._parsePointStyle.call(this, style, defaultColor, color);
+        const base = stock._parsePointStyle.call(this, style, defaultColor, color);
         base.fill = color;
         base.hatching = style.hatching;
         return base;

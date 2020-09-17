@@ -1,18 +1,20 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const noop = require('../core/utils/common').noop;
-const fx = require('../animation/fx');
-const clickEvent = require('../events/click');
-const translator = require('../animation/translator');
-const getPublicElement = require('../core/element').getPublicElement;
-const hideTopOverlayCallback = require('../mobile/hide_top_overlay').hideCallback;
-const registerComponent = require('../core/component_registrator');
-const extend = require('../core/utils/extend').extend;
-const Widget = require('./widget/ui.widget');
-const Swipeable = require('../events/gesture/swipeable');
-const EmptyTemplate = require('../core/templates/empty_template').EmptyTemplate;
-const Deferred = require('../core/utils/deferred').Deferred;
-const windowUtils = require('../core/utils/window');
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import { noop } from '../core/utils/common';
+import { name as clickEventName } from '../events/click';
+import translator from '../animation/translator';
+import { getPublicElement } from '../core/element';
+import { hideCallback as hideTopOverlayCallback } from '../mobile/hide_callback';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import Widget from './widget/ui.widget';
+import Swipeable from '../events/gesture/swipeable';
+import { EmptyTemplate } from '../core/templates/empty_template';
+import { Deferred } from '../core/utils/deferred';
+import { hasWindow } from '../core/utils/window';
+import { animation } from './slide_out_view/ui.slide_out_view.animation';
+
+// STYLE slideOutView
 
 const SLIDEOUTVIEW_CLASS = 'dx-slideoutview';
 const SLIDEOUTVIEW_WRAPPER_CLASS = 'dx-slideoutview-wrapper';
@@ -23,24 +25,6 @@ const SLIDEOUTVIEW_SHIELD_CLASS = 'dx-slideoutview-shield';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const ANONYMOUS_TEMPLATE_NAME = 'content';
-
-const ANIMATION_DURATION = 400;
-
-
-const animation = {
-    moveTo: function($element, position, completeAction) {
-        fx.animate($element, {
-            type: 'slide',
-            to: { left: position },
-            duration: ANIMATION_DURATION,
-            complete: completeAction
-        });
-    },
-    complete: function($element) {
-        fx.stop($element, true);
-    }
-};
-
 const SlideOutView = Widget.inherit({
     ctor: function(element, options) {
         this.callBase(element, options);
@@ -196,8 +180,8 @@ const SlideOutView = Widget.inherit({
     _renderShield: function() {
         this._$shield = this._$shield || $('<div>').addClass(SLIDEOUTVIEW_SHIELD_CLASS);
         this._$shield.appendTo(this.content());
-        eventsEngine.off(this._$shield, clickEvent.name);
-        eventsEngine.on(this._$shield, clickEvent.name, this.hideMenu.bind(this));
+        eventsEngine.off(this._$shield, clickEventName);
+        eventsEngine.on(this._$shield, clickEventName, this.hideMenu.bind(this));
         this._toggleShieldVisibility(this.option('menuVisible'));
     },
 
@@ -260,7 +244,7 @@ const SlideOutView = Widget.inherit({
     },
 
     _renderPosition: function(offset, animate) {
-        if(!windowUtils.hasWindow()) return;
+        if(!hasWindow()) return;
 
         const pos = this._calculatePixelOffset(offset) * this._getRTLSignCorrection();
 
@@ -401,8 +385,4 @@ const SlideOutView = Widget.inherit({
 
 registerComponent('dxSlideOutView', SlideOutView);
 
-module.exports = SlideOutView;
-
-///#DEBUG
-module.exports.animation = animation;
-///#ENDDEBUG
+export default SlideOutView;

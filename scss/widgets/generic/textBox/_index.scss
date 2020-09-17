@@ -4,10 +4,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
-@use "../textEditor" as *;
 @use "../textEditor/colors" as *;
 @use "../textEditor/sizes" as *;
+
 // adduse
+@use "../textEditor" as *;
 
 
 .dx-searchbox {
@@ -15,7 +16,7 @@
     @include dx-icon(search);
     @include dx-texteditor-icon();
 
-    font-size: $GENERIC_TEXTEDITOR_ICON_SIZE - 1;
+    font-size: $generic-texteditor-icon-size - 1;
 
     &:before {
       position: static;
@@ -28,11 +29,11 @@
 
   .dx-texteditor-input,
   .dx-placeholder:before {
-    padding-left: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
+    padding-left: $generic-texteditor-icon-container-size;
 
     @at-root #{selector-append(".dx-rtl", &)},
     .dx-rtl & {
-      padding-right: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
+      padding-right: $generic-texteditor-icon-container-size;
     }
   }
 

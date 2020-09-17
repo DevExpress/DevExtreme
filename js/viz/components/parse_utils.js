@@ -1,6 +1,6 @@
-const noop = require('../../core/utils/common').noop;
-const dateSerialization = require('../../core/utils/date_serialization');
-const isDefined = require('../../core/utils/type').isDefined;
+import { noop } from '../../core/utils/common';
+import dateSerialization from '../../core/utils/date_serialization';
+import { isDefined } from '../../core/utils/type';
 const parsers = {
     string: function(val) {
         return isDefined(val) ? ('' + val) : val;
@@ -37,18 +37,14 @@ const parsers = {
     }
 };
 
-function correctValueType(type) {
+export function correctValueType(type) {
     return (type === 'numeric' || type === 'datetime' || type === 'string') ? type : '';
 }
 
-module.exports = {
-    correctValueType: correctValueType,
-
-    getParser: function(valueType) {
-        return parsers[correctValueType(valueType)] || noop;
-    }
+export const getParser = function(valueType) {
+    return parsers[correctValueType(valueType)] || noop;
 };
 
 ///#DEBUG
-module.exports.parsers = parsers;
+export { parsers };
 ///#ENDDEBUG

@@ -10,6 +10,8 @@ import DataExpressionMixin from '../editor/ui.data_expression';
 import Editor from '../editor/editor';
 import { Deferred } from '../../core/utils/deferred';
 
+// STYLE radioGroup
+
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
@@ -362,4 +364,4 @@ RadioGroup.include(DataExpressionMixin);
 
 registerComponent('dxRadioGroup', RadioGroup);
 
-module.exports = RadioGroup;
+export default RadioGroup;

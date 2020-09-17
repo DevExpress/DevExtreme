@@ -3,27 +3,27 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../tabs" as *;
+@use "../tabs/sizes" as *;
 @use "../tabs/colors" as *;
+
 // adduse
 
-
-$GENERIC_TABPANEL_INSET_SHADOW_LEFT: inset $GENERIC_TABS_BORDER_WIDTH 0;
-$GENERIC_TABPANEL_INSET_SHADOW_TOP: inset 0 $GENERIC_TABS_BORDER_WIDTH;
-$GENERIC_TABPANEL_INSET_SHADOW_RIGHT: inset (-$GENERIC_TABS_BORDER_WIDTH) 0;
-$GENERIC_TABPANEL_INSET_SHADOW_BOTTOM: inset 0 (-$GENERIC_TABS_BORDER_WIDTH);
+$generic-tabpanel-inset-shadow-left: inset $generic-tabs-border-width 0;
+$generic-tabpanel-inset-shadow-top: inset 0 $generic-tabs-border-width;
+$generic-tabpanel-inset-shadow-right: inset (-$generic-tabs-border-width) 0;
+$generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
 
 @mixin tabpanel-shadow-mixin($accent-color) {
   & > .dx-tabpanel-tabs {
     .dx-tabs {
-      box-shadow: $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM $accent-color, $GENERIC_TABPANEL_INSET_SHADOW_TOP, $GENERIC_TABPANEL_INSET_SHADOW_RIGHT, $GENERIC_TABPANEL_INSET_SHADOW_LEFT;
+      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-left;
     }
 
     .dx-tab {
-      box-shadow: $GENERIC_TABPANEL_INSET_SHADOW_TOP, $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM $accent-color;
+      box-shadow: $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-bottom $accent-color;
 
       &.dx-tab-selected {
-        box-shadow: $GENERIC_TABPANEL_INSET_SHADOW_TOP $accent-color, $GENERIC_TABPANEL_INSET_SHADOW_RIGHT $accent-color, $GENERIC_TABPANEL_INSET_SHADOW_LEFT $accent-color;
+        box-shadow: $generic-tabpanel-inset-shadow-top $accent-color, $generic-tabpanel-inset-shadow-right $accent-color, $generic-tabpanel-inset-shadow-left $accent-color;
       }
 
       &.dx-tab-selected,
@@ -37,11 +37,11 @@ $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM: inset 0 (-$GENERIC_TABS_BORDER_WIDTH);
     .dx-tabs-expanded {
       .dx-tab:not(.dx-tab-selected) {
         &:first-of-type {
-          box-shadow: $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM $accent-color, $GENERIC_TABPANEL_INSET_SHADOW_LEFT, $GENERIC_TABPANEL_INSET_SHADOW_TOP;
+          box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
 
           @at-root #{selector-append(".dx-rtl", &)},
           .dx-rtl & {
-            box-shadow: $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM $accent-color, $GENERIC_TABPANEL_INSET_SHADOW_RIGHT, $GENERIC_TABPANEL_INSET_SHADOW_TOP;
+            box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top;
           }
         }
       }
@@ -50,22 +50,22 @@ $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM: inset 0 (-$GENERIC_TABS_BORDER_WIDTH);
     .dx-tabs-stretched {
       .dx-tab:not(.dx-tab-selected) {
         &:last-of-type {
-          box-shadow: $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM $accent-color, $GENERIC_TABPANEL_INSET_SHADOW_RIGHT, $GENERIC_TABPANEL_INSET_SHADOW_TOP;
+          box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-right, $generic-tabpanel-inset-shadow-top;
 
           @at-root #{selector-append(".dx-rtl", &)},
           .dx-rtl & {
-            box-shadow: $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM $accent-color, $GENERIC_TABPANEL_INSET_SHADOW_LEFT, $GENERIC_TABPANEL_INSET_SHADOW_TOP;
+            box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
           }
         }
       }
     }
 
     .dx-tabs-nav-button-left {
-      box-shadow: $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM $accent-color, $GENERIC_TABPANEL_INSET_SHADOW_LEFT, $GENERIC_TABPANEL_INSET_SHADOW_TOP;
+      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-left, $generic-tabpanel-inset-shadow-top;
     }
 
     .dx-tabs-nav-button-right {
-      box-shadow: $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM $accent-color, $GENERIC_TABPANEL_INSET_SHADOW_TOP, $GENERIC_TABPANEL_INSET_SHADOW_RIGHT;
+      box-shadow: $generic-tabpanel-inset-shadow-bottom $accent-color, $generic-tabpanel-inset-shadow-top, $generic-tabpanel-inset-shadow-right;
     }
   }
 
@@ -127,6 +127,6 @@ $GENERIC_TABPANEL_INSET_SHADOW_BOTTOM: inset 0 (-$GENERIC_TABS_BORDER_WIDTH);
   }
 
   .dx-multiview-wrapper {
-    border: $GENERIC_TABS_BORDER;
+    border: $generic-tabs-border;
   }
 }

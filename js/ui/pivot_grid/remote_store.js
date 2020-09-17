@@ -9,6 +9,7 @@ import { getFiltersByPath,
     getExpandedLevel,
     discoverObjectFields,
     setDefaultFieldValueFormatting } from './ui.pivot_grid.utils';
+import { forEachGroup } from './remote_store.utils';
 import { deserializeDate } from '../../core/utils/date_serialization';
 
 function createGroupingOptions(dimensionOptions, useSortOrder) {
@@ -189,20 +190,6 @@ function createLoadOptions(options, externalFilterExpr, hasRows) {
     return loadOptions;
 }
 
-function forEachGroup(data, callback, level) {
-
-    data = data || [];
-    level = level || 0;
-
-    for(let i = 0; i < data.length; i++) {
-        const group = data[i];
-        callback(group, level);
-        if(group && group.items && group.items.length) {
-            forEachGroup(group.items, callback, level + 1);
-        }
-    }
-}
-
 function setValue(valuesArray, value, rowIndex, columnIndex, dataIndex) {
     valuesArray[rowIndex] = valuesArray[rowIndex] || [];
     valuesArray[rowIndex][columnIndex] = valuesArray[rowIndex][columnIndex] || [];
@@ -348,7 +335,10 @@ function getExpandedPathSliceFilter(options, dimensionName, level, firstCollapse
         each(paths, function(_, path) {
             path = path.slice(startSliceIndex, level);
             if(index < path.length) {
-                filterValues.push(path[index]);
+                const filterValue = path[index];
+                if(filterValues.indexOf(filterValue) === -1) {
+                    filterValues.push(filterValue);
+                }
             }
         });
 
@@ -462,7 +452,7 @@ function prepareFields(fields) {
     });
 }
 
-module.exports = Class.inherit((function() {
+export default Class.inherit((function() {
     return {
         ctor: function(options) {
             this._dataSource = new DataSource(options);
@@ -492,9 +482,7 @@ module.exports = Class.inherit((function() {
             const result = {
                 rows: [],
                 columns: [],
-                values: [
-                    [[]]
-                ],
+                values: [],
                 grandTotalRowIndex: 0,
                 grandTotalColumnIndex: 0,
 
@@ -568,7 +556,3 @@ module.exports = Class.inherit((function() {
         }
     };
 })());
-
-///#DEBUG
-module.exports.__forEachGroup = forEachGroup;
-///#ENDDEBUG

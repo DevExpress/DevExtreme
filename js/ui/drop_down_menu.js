@@ -1,15 +1,16 @@
-const $ = require('../core/renderer');
-const window = require('../core/utils/window').getWindow();
-const devices = require('../core/devices');
-const registerComponent = require('../core/component_registrator');
-const extend = require('../core/utils/extend').extend;
-const Widget = require('./widget/ui.widget');
-const Button = require('./button');
-const Popover = require('./popover');
-const DataHelperMixin = require('../data_helper');
-const List = require('./list');
-const themes = require('./themes');
-const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
+import $ from '../core/renderer';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import devices from '../core/devices';
+import registerComponent from '../core/component_registrator';
+import { extend } from '../core/utils/extend';
+import Widget from './widget/ui.widget';
+import Button from './button';
+import Popover from './popover';
+import DataHelperMixin from '../data_helper';
+import List from './list';
+import themes from './themes';
+import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_POPUP_CLASS = 'dx-dropdownmenu-popup';
@@ -453,4 +454,4 @@ const DropDownMenu = Widget.inherit({
 
 registerComponent('dxDropDownMenu', DropDownMenu);
 
-module.exports = DropDownMenu;
+export default DropDownMenu;

@@ -17,4 +17,4 @@ class WidgetObserver extends Widget {
     }
 }
 
-module.exports = WidgetObserver;
+export default WidgetObserver;

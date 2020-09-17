@@ -3,46 +3,47 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
 @use "../button/colors" as *;
+
 // adduse
 
 
-$MATERIAL_CALENDAR_NAVIGATOR_ICON_FONTSIZE: $MATERIAL_BASE_ICON_SIZE;
-$MATERIAL_CALENDAR_NAVIGATOR_FONTSIZE: 14px;
-$MATERIAL_CALENDAR_NAVIGATOR_LINE_HEIGHT: 1.6;
-$MATERIAL_CALENDAR_WIDTH: $MATERIAL_CALENDAR_BODY_WIDTH;
-$MATERIAL_CALENDAR_HEIGHT: $MATERIAL_CALENDAR_BODY_HEIGHT + $MATERIAL_CALENDAR_NAVIGATOR_FONTSIZE * $MATERIAL_CALENDAR_NAVIGATOR_LINE_HEIGHT + $MATERIAL_CALENDAR_NAVIGATOR_VERTICAL_PADDING * 2;
+$material-calendar-navigator-icon-fontsize: $material-base-icon-size;
+$material-calendar-navigator-fontsize: 14px;
+$material-calendar-navigator-line-height: 1.6;
+$material-calendar-width: $material-calendar-body-width;
+$material-calendar-height: $material-calendar-body-height + $material-calendar-navigator-fontsize * $material-calendar-navigator-line-height + $material-calendar-navigator-vertical-padding * 2;
 
 .dx-calendar {
-  width: $MATERIAL_CALENDAR_WIDTH;
-  min-width: $MATERIAL_CALENDAR_WIDTH;
-  height: $MATERIAL_CALENDAR_HEIGHT + 20px;
-  min-height: $MATERIAL_CALENDAR_HEIGHT + 20px;
+  width: $material-calendar-width;
+  min-width: $material-calendar-width;
+  height: $material-calendar-height + 20px;
+  min-height: $material-calendar-height + 20px;
   background-color: $calendar-bg;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   outline: 0;
   border: 1px solid transparent;
 
   &.dx-calendar-with-footer {
-    height: $MATERIAL_CALENDAR_HEIGHT + $MATERIAL_CALENDAR_FOOTER_HEIGHT + 10px + 20px;
-    min-height: $MATERIAL_CALENDAR_HEIGHT + $MATERIAL_CALENDAR_FOOTER_HEIGHT;
+    height: $material-calendar-height + $material-calendar-footer-height + 10px + 20px;
+    min-height: $material-calendar-height + $material-calendar-footer-height;
 
     .dx-calendar-body {
-      bottom: $MATERIAL_CALENDAR_FOOTER_HEIGHT + 10px;
+      bottom: $material-calendar-footer-height + 10px;
     }
 
     .dx-calendar-footer {
       text-align: center;
-      height: $MATERIAL_CALENDAR_FOOTER_HEIGHT;
+      height: $material-calendar-footer-height;
       width: 100%;
     }
   }
 }
 
 .dx-calendar-navigator {
-  line-height: $MATERIAL_CALENDAR_NAVIGATOR_LINE_HEIGHT;
-  height: $MATERIAL_CALENDAR_NAVIGATOR_HEIGHT;
+  line-height: $material-calendar-navigator-line-height;
+  height: $material-calendar-navigator-height;
   display: table;
   border-collapse: collapse;
 
@@ -57,7 +58,7 @@ $MATERIAL_CALENDAR_HEIGHT: $MATERIAL_CALENDAR_BODY_HEIGHT + $MATERIAL_CALENDAR_N
     }
 
     .dx-icon {
-      font-size: $MATERIAL_CALENDAR_NAVIGATOR_ICON_FONTSIZE;
+      font-size: $material-calendar-navigator-icon-fontsize;
     }
 
     &.dx-calendar-disabled-navigator-link {
@@ -80,22 +81,22 @@ $MATERIAL_CALENDAR_HEIGHT: $MATERIAL_CALENDAR_BODY_HEIGHT + $MATERIAL_CALENDAR_N
   }
 
   .dx-calendar-caption-button {
-    font-size: $MATERIAL_CALENDAR_NAVIGATOR_FONTSIZE;
+    font-size: $material-calendar-navigator-fontsize;
     line-height: 1.2;
     text-transform: uppercase;
-    right: $MATERIAL_NAV_BUTTON_WIDTH;
-    left: $MATERIAL_NAV_BUTTON_WIDTH;
+    right: $material-nav-button-width;
+    left: $material-nav-button-width;
 
     &.dx-button {
       .dx-button-content {
-        padding: $MATERIAL_CALENDAR_CAPTION_BUTTON_PADDING;
+        padding: $material-calendar-caption-button-padding;
       }
     }
   }
 }
 
 .dx-calendar-navigator-previous-month {
-  width: $MATERIAL_NAV_BUTTON_WIDTH;
+  width: $material-nav-button-width;
   background: none;
 
   &.dx-button {
@@ -113,7 +114,7 @@ $MATERIAL_CALENDAR_HEIGHT: $MATERIAL_CALENDAR_BODY_HEIGHT + $MATERIAL_CALENDAR_N
 
 .dx-calendar-navigator-previous-month,
 .dx-calendar-navigator-next-view {
-  width: $MATERIAL_NAV_BUTTON_WIDTH;
+  width: $material-nav-button-width;
   background: none;
 
   &.dx-button {
@@ -153,7 +154,7 @@ $MATERIAL_CALENDAR_HEIGHT: $MATERIAL_CALENDAR_BODY_HEIGHT + $MATERIAL_CALENDAR_N
 }
 
 .dx-calendar-body {
-  top: $MATERIAL_CALENDAR_BODY_TOP;
+  top: $material-calendar-body-top;
 
   thead {
     font-size: 11px;
@@ -172,17 +173,17 @@ $MATERIAL_CALENDAR_HEIGHT: $MATERIAL_CALENDAR_BODY_HEIGHT + $MATERIAL_CALENDAR_N
       color: $calendar-header-color;
       font-weight: 500;
       text-align: center;
-      padding: 1px 0 $MATERIAL_CALENDAR_HEADER_BOTTOM_PADDING 0;
+      padding: 1px 0 $material-calendar-header-bottom-padding 0;
     }
   }
 }
 
 .dx-calendar-cell {
   text-align: center;
-  padding: $MATERIAL_CALENDAR_CELL_VERTICAL_PADDING 0;
+  padding: $material-calendar-cell-vertical-padding 0;
   color: $calendar-color;
-  font-size: $MATERIAL_CALENDAR_CELL_FONT_SIZE;
-  width: $MATERIAL_CALENDAR_CELL_WIDTH;
+  font-size: $material-calendar-cell-font-size;
+  width: $material-calendar-cell-width;
   border-radius: $calendar-cell-contoured-border-radius;
 
   .dx-calendar-view-decade &,
@@ -204,8 +205,8 @@ $MATERIAL_CALENDAR_HEIGHT: $MATERIAL_CALENDAR_BODY_HEIGHT + $MATERIAL_CALENDAR_N
 
   span {
     display: inline-block;
-    width: $MATERIAL_CALENDAR_CELL_DIAMETER;
-    line-height: $MATERIAL_CALENDAR_CELL_DIAMETER;
+    width: $material-calendar-cell-diameter;
+    line-height: $material-calendar-cell-diameter;
     border-radius: 50%;
   }
 

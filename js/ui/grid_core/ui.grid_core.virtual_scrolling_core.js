@@ -12,29 +12,31 @@ import Callbacks from '../../core/utils/callbacks';
 const SCROLLING_MODE_INFINITE = 'infinite';
 const SCROLLING_MODE_VIRTUAL = 'virtual';
 
-const isVirtualMode = function(that) {
-    return that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
-};
+const isVirtualMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_VIRTUAL || that._isVirtual;
 
-const isAppendMode = function(that) {
-    return that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
-};
+const isAppendMode = (that) => that.option('scrolling.mode') === SCROLLING_MODE_INFINITE && !that._isVirtual;
 
-exports.getPixelRatio = function(window) {
-    return window.devicePixelRatio || 1;
-};
+const needTwoPagesLoading = (that) => that.option('scrolling.loadTwoPagesOnStart') || that._isVirtual || that._viewportItemIndex > 0;
 
-exports.getContentHeightLimit = function(browser) {
+export let getPixelRatio = (window) => window.devicePixelRatio || 1;
+
+///#DEBUG
+export function _setPixelRatioFn(value) {
+    getPixelRatio = value;
+}
+///#ENDDEBUG
+
+export function getContentHeightLimit(browser) {
     if(browser.msie) {
         return 4000000;
     } else if(browser.mozilla) {
         return 8000000;
     }
 
-    return 15000000 / exports.getPixelRatio(getWindow());
-};
+    return 15000000 / getPixelRatio(getWindow());
+}
 
-exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, $targetElement) {
+export function subscribeToExternalScrollers($element, scrollChangedHandler, $targetElement) {
     let $scrollElement;
     const scrollableArray = [];
     const scrollToArray = [];
@@ -117,9 +119,9 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
             });
         }
     };
-};
+}
 
-exports.VirtualScrollController = Class.inherit((function() {
+export const VirtualScrollController = Class.inherit((function() {
     const getViewportPageCount = function(that) {
         const pageSize = that._dataSource.pageSize();
         const preventPreload = that.option('scrolling.preventPreload');
@@ -167,7 +169,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     pageCount++;
                 }
 
-                if(isAppendMode(that)) {
+                if(isAppendMode(that) || !needTwoPagesLoading(that)) {
                     pageCount--;
                 }
             }
@@ -419,7 +421,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     });
                 }
                 const virtualContentSize = (virtualItemsCount.begin + virtualItemsCount.end + that.itemsCount()) * that._viewportItemSize;
-                const contentHeightLimit = exports.getContentHeightLimit(browser);
+                const contentHeightLimit = getContentHeightLimit(browser);
                 if(virtualContentSize > contentHeightLimit) {
                     that._sizeRatio = contentHeightLimit / virtualContentSize;
                 } else {
@@ -632,7 +634,7 @@ exports.VirtualScrollController = Class.inherit((function() {
                     that._cache.push(cacheItem);
                 }
 
-                const isDelayChanged = isVirtualMode(that) && lastCacheLength === 0;
+                const isDelayChanged = isVirtualMode(that) && lastCacheLength === 0 && needTwoPagesLoading(that);
                 processChanged(that, callBase, that._cache.length > 1 ? changeType : undefined, isDelayChanged, removeCacheItem);
                 that._delayDeferred = that.load().done(function() {
                     if(processDelayChanged(that, callBase)) {
@@ -667,7 +669,7 @@ exports.VirtualScrollController = Class.inherit((function() {
         subscribeToWindowScrollEvents: function($element) {
             const that = this;
 
-            that._windowScroll = that._windowScroll || exports.subscribeToExternalScrollers($element, function(scrollTop) {
+            that._windowScroll = that._windowScroll || subscribeToExternalScrollers($element, function(scrollTop) {
                 if(that.viewportItemSize()) {
                     that.setViewportPosition(scrollTop);
                 }

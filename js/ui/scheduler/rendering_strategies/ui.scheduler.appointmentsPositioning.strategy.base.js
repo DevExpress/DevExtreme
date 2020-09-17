@@ -1,4 +1,4 @@
-import typeUtils from '../../../core/utils/type';
+import { isDefined } from '../../../core/utils/type';
 
 const COLLECTOR_DEFAULT_WIDTH = 24;
 const COLLECTOR_DEFAULT_OFFSET = 3;
@@ -22,7 +22,7 @@ class AppointmentPositioningStrategy {
     }
 
     getDropDownAppointmentWidth(intervalCount, isAllDay) {
-        if(isAllDay || !typeUtils.isDefined(isAllDay)) {
+        if(isAllDay || !isDefined(isAllDay)) {
             return COLLECTOR_WIDTH_IN_PERCENTS * this.getRenderingStrategy().getDefaultCellWidth() / 100;
         } else {
             return COLLECTOR_DEFAULT_WIDTH;
@@ -79,4 +79,4 @@ class AppointmentPositioningStrategy {
     }
 }
 
-module.exports = AppointmentPositioningStrategy;
+export default AppointmentPositioningStrategy;

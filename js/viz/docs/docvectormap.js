@@ -318,5 +318,30 @@ const dxVectorMap = {
     viewport: function() { },
     convertCoordinates: function() { },
     convertToGeo: function() { },
-    convertToXY: function() { }
+    convertToXY: function() { },
+    commonAnnotationSettings: undefined,
+    annotations: [{}],
+    customizeAnnotation: undefined,
 };
+
+/**
+* @name dxVectorMapCommonAnnotationConfig
+* @type object
+* @inherits BaseWidgetAnnotationConfig
+*/
+const dxVectorMapCommonAnnotationConfig = {
+    coordinates: undefined,
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
+};
+
+/**
+* @name dxVectorMapAnnotationConfig
+* @type object
+* @inherits dxVectorMapCommonAnnotationConfig
+*/
+const dxVectorMapAnnotationConfig = {
+    name: undefined
+};
+

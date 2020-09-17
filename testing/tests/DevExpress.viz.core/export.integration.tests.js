@@ -19,7 +19,7 @@ QUnit.module('Export', {
         };
 
         const exportMenu = this.exportMenu = new vizMocks.ExportMenu();
-        exportModule.ExportMenu = sinon.spy(function() { return exportMenu; });
+        exportModule.DEBUG_set_ExportMenu(sinon.spy(function() { return exportMenu; }));
 
         sinon.stub(clientExporter, 'export').returns(new Deferred());
 

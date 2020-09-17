@@ -9,6 +9,8 @@ import translator from '../animation/translator';
 import fx from '../animation/fx';
 import { Deferred } from '../core/utils/deferred';
 
+// STYLE sortable
+
 const SORTABLE = 'dxSortable';
 
 const PLACEHOLDER_CLASS = 'placeholder';
@@ -16,6 +18,23 @@ const CLONE_CLASS = 'clone';
 
 
 const isElementVisible = itemElement => $(itemElement).is(':visible');
+
+const animate = (element, config) => {
+    if(!element) return;
+
+    const left = config.to?.left || 0;
+    const top = config.to?.top || 0;
+
+    element.style.transform = `translate(${left}px,${top}px)`;
+    element.style.transition = fx.off ? '' : `all ${config.duration}ms ${config.easing}`;
+};
+
+const stopAnimation = (element) => {
+    if(!element) return;
+
+    element.style.transform = '';
+    element.style.transition = '';
+};
 
 const Sortable = Draggable.inherit({
     _getDefaultOptions: function() {
@@ -51,7 +70,8 @@ const Sortable = Draggable.inherit({
             onPlaceholderPrepared: null,
             animation: {
                 type: 'slide',
-                duration: 300
+                duration: 300,
+                easing: 'ease'
             },
             fromIndex: null,
             toIndex: null,
@@ -145,17 +165,13 @@ const Sortable = Draggable.inherit({
     },
 
     dragEnter: function() {
-        if(this === this._getTargetDraggable()) {
-            this.option('toIndex', this.option('fromIndex'));
-        } else {
+        if(this !== this._getTargetDraggable()) {
             this.option('toIndex', -1);
         }
     },
 
     dragLeave: function() {
-        if(this === this._getTargetDraggable()) {
-            this.option('toIndex', -1);
-        } else {
+        if(this !== this._getTargetDraggable()) {
             this.option('toIndex', this.option('fromIndex'));
         }
     },
@@ -445,7 +461,7 @@ const Sortable = Draggable.inherit({
     _updatePlaceholderSizes: function($placeholderElement, itemElement) {
         const that = this;
         const dropInsideItem = that.option('dropInsideItem');
-        const $item = itemElement ? $(itemElement) : that._getSourceElement();
+        const $item = $(itemElement);
         const isVertical = that._isVerticalOrientation();
         let width = '';
         let height = '';
@@ -620,14 +636,12 @@ const Sortable = Draggable.inherit({
         const $placeholderElement = that._$placeholderElement || that._createPlaceholder();
         const items = that._getItems();
         const toIndex = that.option('toIndex');
-        const itemElement = items[toIndex];
         const isVerticalOrientation = that._isVerticalOrientation();
         const rtlEnabled = this.option('rtlEnabled');
         const dropInsideItem = that.option('dropInsideItem');
         let position = null;
         let leftMargin = 0;
-
-        that._updatePlaceholderSizes($placeholderElement, itemElement);
+        let itemElement = items[toIndex];
 
         if(itemElement) {
             const $itemElement = $(itemElement);
@@ -639,7 +653,7 @@ const Sortable = Draggable.inherit({
                 position.left += $itemElement.outerWidth(true);
             }
         } else {
-            const prevVisibleItemElement = this._getPrevVisibleItem(items, toIndex);
+            const prevVisibleItemElement = itemElement = this._getPrevVisibleItem(items, toIndex);
 
             if(prevVisibleItemElement) {
                 position = $(prevVisibleItemElement).offset();
@@ -651,6 +665,8 @@ const Sortable = Draggable.inherit({
                 }
             }
         }
+
+        that._updatePlaceholderSizes($placeholderElement, itemElement);
 
         if(position && !that._isPositionVisible(position)) {
             position = null;
@@ -712,16 +728,14 @@ const Sortable = Draggable.inherit({
         const rtlEnabled = this.option('rtlEnabled');
 
         for(let i = 0; i < items.length; i++) {
-            const $item = $(items[i]);
+            const itemElement = items[i];
             const prevPosition = prevPositions[i];
             const position = positions[i];
 
             if(toIndex === null || fromIndex === null) {
-                fx.stop($item);
-                translator.resetPosition($item);
+                stopAnimation(itemElement);
             } else if(prevPosition !== position) {
-                fx.stop($item);
-                fx.animate($item, extend({}, animationConfig, {
+                animate(itemElement, extend({}, animationConfig, {
                     to: { [positionPropName]: !isVerticalOrientation && rtlEnabled ? -position : position }
                 }));
             }
@@ -770,4 +784,4 @@ const Sortable = Draggable.inherit({
 
 registerComponent(SORTABLE, Sortable);
 
-module.exports = Sortable;
+export default Sortable;

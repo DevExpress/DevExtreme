@@ -4,14 +4,15 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../menu/colors" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
 @use "../../base/icons" as *;
 @use "../../base/mixins" as *;
+
 // adduse
 
 
-$MATERIAL_MENU_ARROW_IMAGE_SIZE: 7px;
-$MATERIAL_MENU_HORIZONTAL_PADDING: 16px;
+$material-menu-arrow-image-size: 7px;
+$material-menu-horizontal-padding: 16px;
 
 .dx-menu-item {
   color: $menu-color;
@@ -49,16 +50,16 @@ $MATERIAL_MENU_HORIZONTAL_PADDING: 16px;
   }
 
   .dx-icon {
-    @include dx-icon-sizing($MATERIAL_BASE_ICON_SIZE);
+    @include dx-icon-sizing($material-base-icon-size);
   }
 
   .dx-menu-item {
     .dx-menu-item-content {
-      line-height: $MATERIAL_MENU_ITEM_LINE_HEIGHT;
+      line-height: $material-menu-item-line-height;
 
       .dx-menu-item-popout {
-        min-width: $MATERIAL_MENU_ARROW_IMAGE_SIZE;
-        min-height: $MATERIAL_MENU_ARROW_IMAGE_SIZE;
+        min-width: $material-menu-arrow-image-size;
+        min-height: $material-menu-arrow-image-size;
       }
     }
   }

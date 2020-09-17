@@ -1,6 +1,6 @@
 import { extend } from '../../core/utils/extend';
 
-module.exports = {
+export default {
     _getEmptyCell: function() {
         return {
             text: '',

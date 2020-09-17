@@ -4,13 +4,14 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
 @use "../button/sizes" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
+
 // adduse
 
 
-$MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING: 8px;
+$material-dropdownbutton-horizontal-padding: 8px;
 
 @mixin dx-size-dropdownbutton() {
   min-width: 0;
@@ -30,7 +31,7 @@ $MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING: 8px;
   }
 
   .dx-button-content {
-    flex: $MATERIAL_TOGGLE_BUTTON_FLEX;
+    flex: $material-toggle-button-flex;
   }
 }
 
@@ -39,7 +40,7 @@ $MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING: 8px;
 }
 
 .dx-dropdownbutton {
-  height: $MATERIAL_BUTTON_HEIGHT;
+  height: $material-button-height;
 
   .dx-buttongroup-last-item .dx-button-content {
     padding-right: 0;
@@ -54,18 +55,18 @@ $MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING: 8px;
     min-width: 0;
 
     .dx-button-content {
-      padding-left: $MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING;
+      padding-left: $material-dropdownbutton-horizontal-padding;
       padding-right: 2px;
 
       .dx-icon.dx-icon-right.dx-icon-spindown {
-        @include dx-icon-sizing($MATERIAL_BUTTON_ICON_SIZE);
+        @include dx-icon-sizing($material-button-icon-size);
 
         margin-left: 0;
       }
 
       .dx-rtl & {
         padding-left: 2px;
-        padding-right: $MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING;
+        padding-right: $material-dropdownbutton-horizontal-padding;
       }
     }
   }
@@ -73,8 +74,8 @@ $MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING: 8px;
   &:not(.dx-dropdownbutton-has-arrow) {
     .dx-button.dx-button-has-text {
       .dx-button-content {
-        padding-left: $MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING;
-        padding-right: $MATERIAL_DROPDOWNBUTTON_HORIZONTAL_PADDING;
+        padding-left: $material-dropdownbutton-horizontal-padding;
+        padding-right: $material-dropdownbutton-horizontal-padding;
       }
     }
   }

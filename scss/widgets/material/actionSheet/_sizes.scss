@@ -1,12 +1,5 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_ACTIONSHEET_ITEM_MARGIN: null !default;
-
-@if $size == "default" {
-  $MATERIAL_ACTIONSHEET_ITEM_MARGIN: 0 0 10px 0;
-}
-
-@else if $size == "compact" {
-  $MATERIAL_ACTIONSHEET_ITEM_MARGIN: 0 0 10px 0;
-}
+$material-actionsheet-item-margin: 0 0 10px 0;

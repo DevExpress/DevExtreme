@@ -3,41 +3,29 @@
 @use "../colors" as *;
 @use "../overlay/colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
-
+/**
+* $name 10. Text color
+* $type color
+*/
 $tooltip-color: null !default;
-$tooltip-bg: null !default;
-$tooltip-border-radius: null !default;
 
+/**
+* $name 20. Background color
+* $type color
+*/
+$tooltip-bg: null !default;
+$tooltip-border-radius: $base-border-radius !default;
 
 @if $mode == "light" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: #616161 !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $mode == "dark" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: rgba(0, 0, 0, 1) !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 

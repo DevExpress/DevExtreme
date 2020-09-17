@@ -1,17 +1,19 @@
 /* global google */
 
-const $ = require('../../core/renderer');
-const window = require('../../core/utils/window').getWindow();
-const noop = require('../../core/utils/common').noop;
-const devices = require('../../core/devices');
-const Promise = require('../../core/polyfills/promise');
-const extend = require('../../core/utils/extend').extend;
-const map = require('../../core/utils/iterator').map;
-const DynamicProvider = require('./provider.dynamic');
-const errors = require('../widget/ui.errors');
-const Color = require('../../color');
-const ajax = require('../../core/utils/ajax');
-const isDefined = require('../../core/utils/type').isDefined;
+import $ from '../../core/renderer';
+
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
+import { noop } from '../../core/utils/common';
+import devices from '../../core/devices';
+import Promise from '../../core/polyfills/promise';
+import { extend } from '../../core/utils/extend';
+import { map } from '../../core/utils/iterator';
+import DynamicProvider from './provider.dynamic';
+import errors from '../widget/ui.errors';
+import Color from '../../color';
+import ajax from '../../core/utils/ajax';
+import { isDefined } from '../../core/utils/type';
 
 const GOOGLE_MAP_READY = '_googleScriptReady';
 let GOOGLE_URL = 'https://maps.googleapis.com/maps/api/js?callback=' + GOOGLE_MAP_READY;
@@ -460,6 +462,7 @@ const GoogleProvider = DynamicProvider.inherit({
 GoogleProvider.remapConstant = function(newValue) {
     GOOGLE_URL = newValue;
 };
+
 ///#ENDDEBUG
 
-module.exports = GoogleProvider;
+export default GoogleProvider;

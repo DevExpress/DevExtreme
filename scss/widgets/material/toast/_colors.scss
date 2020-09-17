@@ -1,85 +1,37 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
+/**
+* $name 10. Text color
+* $type color
+*/
+$toast-color: color.change(#fff, $alpha: 0.87) !default;
+$toast-border-radius: $base-border-radius !default;
+$toast-default-bg: color.change(#000, $alpha: 0.87) !default;
 
-$toast-color: null !default;
-$toast-border-radius: null !default;
-$toast-default-bg: null !default;
-$toast-info-bg: null !default;
-$toast-warning-bg: null !default;
-$toast-error-bg: null !default;
-$toast-success-bg: null !default;
+/**
+* $name 20. Info background color
+* $type color
+*/
+$toast-info-bg: $toast-default-bg !default;
 
+/**
+* $name 30. Warning background color
+* $type color
+*/
+$toast-warning-bg: $base-warning !default;
 
-@if $mode == "light" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $toast-color: color.change(#fff, $alpha: 0.87) !default;
+/**
+* $name 40. Error background color
+* $type color
+*/
+$toast-error-bg: $base-danger !default;
 
-  $toast-border-radius: $base-border-radius !default;
-  $toast-default-bg: color.change(#000, $alpha: 0.87) !default;
-
-  /**
-    * $name 20. Info background color
-    * $type color
-    */
-  $toast-info-bg: $toast-default-bg !default;
-
-  /**
-    * $name 30. Warning background color
-    * $type color
-    */
-  $toast-warning-bg: $base-warning !default;
-
-  /**
-    * $name 40. Error background color
-    * $type color
-    */
-  $toast-error-bg: $base-danger !default;
-
-  /**
-    * $name 50. Success background color
-    * $type color
-    */
-  $toast-success-bg: $base-success !default;
-}
-
-@if $mode == "dark" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $toast-color: color.change(#fff, $alpha: 0.87) !default;
-
-  $toast-border-radius: $base-border-radius !default;
-  $toast-default-bg: color.change(#000, $alpha: 0.87) !default;
-
-  /**
-    * $name 20. Info background color
-    * $type color
-    */
-  $toast-info-bg: $toast-default-bg !default;
-
-  /**
-    * $name 30. Warning background color
-    * $type color
-    */
-  $toast-warning-bg: $base-warning !default;
-
-  /**
-    * $name 40. Error background color
-    * $type color
-    */
-  $toast-error-bg: $base-danger !default;
-
-  /**
-    * $name 50. Success background color
-    * $type color
-    */
-  $toast-success-bg: $base-success !default;
-}
-
+/**
+* $name 50. Success background color
+* $type color
+*/
+$toast-success-bg: $base-success !default;

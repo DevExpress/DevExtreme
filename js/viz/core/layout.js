@@ -1,4 +1,4 @@
-const _normalizeEnum = require('./utils').normalizeEnum;
+import { normalizeEnum as _normalizeEnum } from './utils';
 const _min = Math.min;
 const _max = Math.max;
 const _round = Math.round;
@@ -297,4 +297,4 @@ function makeHeader(header, weakElement) {
     };
 }
 
-module.exports = Layout;
+export default Layout;

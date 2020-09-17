@@ -4,19 +4,21 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/validation" as *;
+
 // adduse
+@use "../overlay";
 
 
-@include dx-base-validation($VALIDATION_SUMMARY_COLOR, $VALIDATION_MESSAGE_COLOR, $VALIDATION_MESSAGE_BACKGROUND_COLOR);
+@include dx-base-validation($validation-summary-color, $validation-message-color, $validation-message-background-color);
 
 .dx-invalid-message > .dx-overlay-content {
   background-color: transparent;
-  color: $VALIDATION_MESSAGE_BACKGROUND_COLOR;
-  padding: $MATERIAL_VALIDATION_MESSAGE_PADDING 0 0;
+  color: $validation-message-background-color;
+  padding: $material-validation-message-padding 0 0;
 }
 
 .dx-validationsummary > .dx-validationsummary-item:not(:last-child) {
-  margin-bottom: $MATERIAL_VALIDATIONSUMMARY_ITEM_MARGIN;
+  margin-bottom: $material-validationsummary-item-margin;
 }
 
 .dx-form-validation-summary {

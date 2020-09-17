@@ -46,4 +46,4 @@ class CurrentTimeShader {
     }
 }
 
-module.exports = CurrentTimeShader;
+export default CurrentTimeShader;

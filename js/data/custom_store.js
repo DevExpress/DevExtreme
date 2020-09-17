@@ -1,16 +1,13 @@
-const $ = require('../core/renderer');
-const dataUtils = require('./utils');
-const arrayUtils = require('./array_utils');
-const isFunction = require('../core/utils/type').isFunction;
-const config = require('../core/config');
-const errors = require('./errors').errors;
-const Store = require('./abstract_store');
-const arrayQuery = require('./array_query');
-const queryByOptions = require('./store_helper').queryByOptions;
-const deferredUtils = require('../core/utils/deferred');
-const Deferred = deferredUtils.Deferred;
-const when = deferredUtils.when;
-const fromPromise = deferredUtils.fromPromise;
+import $ from '../core/renderer';
+import dataUtils from './utils';
+import arrayUtils from './array_utils';
+import { isFunction } from '../core/utils/type';
+import config from '../core/config';
+import { errors } from './errors';
+import Store from './abstract_store';
+import arrayQuery from './array_query';
+import { queryByOptions } from './store_helper';
+import { Deferred, when, fromPromise } from '../core/utils/deferred';
 
 const TOTAL_COUNT = 'totalCount';
 const LOAD = 'load';
@@ -380,4 +377,4 @@ const CustomStore = Store.inherit({
     }
 });
 
-module.exports = CustomStore;
+export default CustomStore;

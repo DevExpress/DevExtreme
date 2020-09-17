@@ -14,22 +14,24 @@ QUnit.module('Legend', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
         this.itemGroupNumber = 1;
-        sinon.stub(legendModule, 'Legend', function() {
-            const stub = new stubLegend();
-            stub.stub('coordsIn').returns(true);
-            stub.stub('getItemByCoord').withArgs(2, 3).returns({ id: 4 });
-            stub.stub('measure').returns([100, 100]);
-            stub.stub('layoutOptions').returns({
-                horizontalAlignment: 'right',
-                verticalAlignment: 'top',
-                side: 'horizontal'
-            });
-            return stub;
-        });
+        legendModule._setLegend(sinon.spy(
+            function() {
+                const stub = new stubLegend();
+                stub.stub('coordsIn').returns(true);
+                stub.stub('getItemByCoord').withArgs(2, 3).returns({ id: 4 });
+                stub.stub('measure').returns([100, 100]);
+                stub.stub('layoutOptions').returns({
+                    horizontalAlignment: 'right',
+                    verticalAlignment: 'top',
+                    side: 'horizontal'
+                });
+                return stub;
+            }
+        ));
     },
     afterEach: function() {
         environment.afterEach.call(this);
-        legendModule.Legend.restore();
+        legendModule._setLegend(Legend);
     }
 }));
 

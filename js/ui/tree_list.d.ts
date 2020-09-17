@@ -121,25 +121,24 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid dxTreeListOptions.onCellClick
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 data:object
-     * @type_function_param1_field7 key:any
-     * @type_function_param1_field8 value:any
-     * @type_function_param1_field9 displayValue:any
-     * @type_function_param1_field10 text:string
-     * @type_function_param1_field11 columnIndex:number
-     * @type_function_param1_field12 column:object
-     * @type_function_param1_field13 rowIndex:number
-     * @type_function_param1_field14 rowType:string
-     * @type_function_param1_field15 cellElement:dxElement
-     * @type_function_param1_field16 row:dxTreeListRowObject
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 data:object
+     * @type_function_param1_field6 key:any
+     * @type_function_param1_field7 value:any
+     * @type_function_param1_field8 displayValue:any
+     * @type_function_param1_field9 text:string
+     * @type_function_param1_field10 columnIndex:number
+     * @type_function_param1_field11 column:object
+     * @type_function_param1_field12 rowIndex:number
+     * @type_function_param1_field13 rowType:string
+     * @type_function_param1_field14 cellElement:dxElement
+     * @type_function_param1_field15 row:dxTreeListRowObject
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCellClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any) | string;
+    onCellClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: dxElement, row?: dxTreeListRowObject }) => any) | string;
     /**
      * @docid dxTreeListOptions.onCellDblClick
      * @type function(e)
@@ -365,27 +364,26 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
      * @docid dxTreeListOptions.onRowClick
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 data:object
-     * @type_function_param1_field7 key:any
-     * @type_function_param1_field8 values:Array<any>
-     * @type_function_param1_field9 columns:Array<Object>
-     * @type_function_param1_field10 rowIndex:number
-     * @type_function_param1_field11 rowType:string
-     * @type_function_param1_field12 isSelected:boolean
-     * @type_function_param1_field13 isExpanded:boolean
-     * @type_function_param1_field14 isNewRow:boolean
-     * @type_function_param1_field15 rowElement:dxElement
-     * @type_function_param1_field16 handled:boolean
-     * @type_function_param1_field17 node:dxTreeListNode
-     * @type_function_param1_field18 level:number
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 data:object
+     * @type_function_param1_field6 key:any
+     * @type_function_param1_field7 values:Array<any>
+     * @type_function_param1_field8 columns:Array<Object>
+     * @type_function_param1_field9 rowIndex:number
+     * @type_function_param1_field10 rowType:string
+     * @type_function_param1_field11 isSelected:boolean
+     * @type_function_param1_field12 isExpanded:boolean
+     * @type_function_param1_field13 isNewRow:boolean
+     * @type_function_param1_field14 rowElement:dxElement
+     * @type_function_param1_field15 handled:boolean
+     * @type_function_param1_field16 node:dxTreeListNode
+     * @type_function_param1_field17 level:number
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onRowClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
+    onRowClick?: ((e: { component?: dxTreeList, element?: dxElement, model?: any, event?: event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
     /**
      * @docid dxTreeListOptions.onRowDblClick
      * @type function(e)
@@ -658,16 +656,6 @@ export default class dxTreeList extends Widget implements GridBase {
     getSelectedRowKeys(): Array<any>;
     /**
      * @docid dxTreeListMethods.getSelectedRowKeys
-     * @publicName getSelectedRowKeys(leavesOnly)
-     * @param1 leavesOnly:boolean
-     * @return Array<any>
-     * @deprecated
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    getSelectedRowKeys(leavesOnly: boolean): Array<any>;
-    /**
-     * @docid dxTreeListMethods.getSelectedRowKeys
      * @publicName getSelectedRowKeys(mode)
      * @param1 mode:string
      * @return Array<any>
@@ -937,7 +925,7 @@ export interface dxTreeListColumnButton extends GridBaseColumnButton {
      * @type_function_param2_field6 rowIndex:number
      * @type_function_param2_field7 rowType:string
      * @type_function_param2_field8 row:dxTreeListRowObject
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

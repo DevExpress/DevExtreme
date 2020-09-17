@@ -1,12 +1,11 @@
 import $ from '../renderer';
-import { getBody } from '../dom_adapter';
+import domAdapter from '../dom_adapter';
 import Callbacks from '../utils/callbacks';
 import { contains } from '../utils/dom';
 import { triggerShownEvent } from '../../events/visibility_change';
 import errors from '../errors';
 
 export const renderedCallbacks = Callbacks({ syncStrategy: true });
-
 
 export class TemplateBase {
     render(options) {
@@ -36,7 +35,7 @@ export class TemplateBase {
             return;
         }
 
-        const resultInBody = getBody().contains($container.get(0));
+        const resultInBody = domAdapter.getBody().contains($container.get(0));
         if(!resultInBody) {
             return;
         }

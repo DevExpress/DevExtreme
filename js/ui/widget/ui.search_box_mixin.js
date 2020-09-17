@@ -6,7 +6,7 @@ import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 
 
-module.exports = {
+export default {
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             searchMode: '',

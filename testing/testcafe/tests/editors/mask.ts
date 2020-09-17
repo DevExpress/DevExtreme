@@ -5,6 +5,7 @@ import TextBox from '../../model/textBox';
 fixture`Mask T814440`
   .page(url(__dirname, './pages/t814440.html'));
 
+// note: https://github.com/DevExpress/testcafe-hammerhead/issues/2377
 test('\'onInput\' and \'onValueChanged\' events should raise then the mask enabled (T814440)', async (t) => {
   const textBox = new TextBox('#textbox');
   const { input } = textBox;

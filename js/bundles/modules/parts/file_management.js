@@ -1,3 +1,4 @@
+/* eslint-disable import/no-commonjs */
 import DevExpress from './core';
 
 /// BUNDLER_PARTS

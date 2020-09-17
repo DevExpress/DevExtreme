@@ -1,15 +1,15 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const noop = require('../../core/utils/common').noop;
-const EditDecorator = require('./ui.list.edit.decorator');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import { noop } from '../../core/utils/common';
+import EditDecorator from './ui.list.edit.decorator';
 const abstract = EditDecorator.abstract;
-const eventUtils = require('../../events/utils');
-const pointerEvents = require('../../events/pointer');
-const feedbackEvents = require('../../events/core/emitter.feedback');
+import { addNamespace } from '../../events/utils';
+import pointerEvents from '../../events/pointer';
+import { active } from '../../events/core/emitter.feedback';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
-const POINTER_DOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, LIST_EDIT_DECORATOR);
-const ACTIVE_EVENT_NAME = eventUtils.addNamespace(feedbackEvents.active, LIST_EDIT_DECORATOR);
+const POINTER_DOWN_EVENT_NAME = addNamespace(pointerEvents.down, LIST_EDIT_DECORATOR);
+const ACTIVE_EVENT_NAME = addNamespace(active, LIST_EDIT_DECORATOR);
 
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 
@@ -197,4 +197,4 @@ const SwitchableEditDecorator = EditDecorator.inherit({
 
 });
 
-module.exports = SwitchableEditDecorator;
+export default SwitchableEditDecorator;

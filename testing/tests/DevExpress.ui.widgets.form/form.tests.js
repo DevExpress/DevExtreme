@@ -4,6 +4,7 @@ import domAdapter from 'core/dom_adapter';
 import browser from 'core/utils/browser';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
+import { extend } from 'core/utils/extend';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -11,8 +12,22 @@ import 'ui/autocomplete';
 import 'ui/calendar';
 import 'ui/date_box';
 import 'ui/drop_down_box';
-import { __internals as internals } from 'ui/form/ui.form';
+import {
+    FIELD_ITEM_CLASS,
+    FORM_GROUP_CLASS,
+    FORM_LAYOUT_MANAGER_CLASS,
+    FIELD_ITEM_LABEL_CONTENT_CLASS,
+    FORM_FIELD_ITEM_COL_CLASS,
+    HIDDEN_LABEL_CLASS,
+    FIELD_ITEM_CONTENT_CLASS,
+    FIELD_ITEM_LABEL_TEXT_CLASS,
+    FIELD_ITEM_REQUIRED_MARK_CLASS,
+    FIELD_ITEM_OPTIONAL_MARK_CLASS,
+    FIELD_ITEM_LABEL_CLASS,
+    FORM_GROUP_CAPTION_CLASS
+} from 'ui/form/constants';
 import 'ui/html_editor';
+import '../../helpers/ignoreQuillTimers.js';
 import 'ui/lookup';
 import 'ui/radio_group';
 import 'ui/tag_box';
@@ -25,7 +40,6 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
-const FORM_LAYOUT_MANAGER_CLASS = 'dx-layout-manager';
 
 QUnit.testStart(function() {
     const markup =
@@ -104,7 +118,7 @@ QUnit.test('Check field  wodth on render form with colspan', function(assert) {
         }]
     });
 
-    const $fieldItems = $testContainer.find('.' + internals.FIELD_ITEM_CLASS);
+    const $fieldItems = $testContainer.find('.' + FIELD_ITEM_CLASS);
     const fieldWidths = {
         ID: $fieldItems.eq(1).width(),
         FirstName: $fieldItems.eq(2).width(),
@@ -178,7 +192,7 @@ QUnit.test('Invalid field name when item is defined not as string and not as obj
         items: [1, 'lastName']
     }).dxForm('instance');
 
-    assert.equal(form.$element().find('.' + internals.FIELD_ITEM_CLASS).length, 1, 'items count');
+    assert.equal(form.$element().find('.' + FIELD_ITEM_CLASS).length, 1, 'items count');
     assert.equal(form.getEditor('name'), undefined, 'editor by name field');
     assert.equal(form.getEditor('lastName').option('value'), 'Klark', 'editor by lastName field');
 });
@@ -411,6 +425,76 @@ QUnit.test('From renders the right types of editors according to stylingMode opt
     assert.ok($testContainer.find('.dx-field-item .dx-textbox').hasClass('dx-editor-underlined'), 'right class rendered');
 });
 
+[
+    { editorType: 'dxTextBox' },
+    { label: { text: 'label text' } },
+    { editorOptions: { width: 400 } },
+].forEach(testConfig => {
+    [true, false].forEach(useRepaint => {
+        const clone = (item) => JSON.parse(JSON.stringify(item));
+        QUnit.test(`Form.itemOption('group.item1', newItem2), testConfig = ${JSON.stringify(testConfig)}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
+            const item1 = {
+                editorType: 'dxDropDownBox',
+                dataField: 'item1',
+                label: { text: 'item1' },
+                editorOptions: { placeholder: 'test_placeHolder' }
+            };
+            const newItem1 = extend({
+                dataField: 'newItem1',
+                label: { text: 'new item1' },
+                editorOptions: { width: 300 }
+            }, testConfig);
+
+            const form = $('#form').dxForm({
+                items: [{
+                    itemType: 'group',
+                    caption: 'group1',
+                    items: [ clone(item1) ]
+                }]
+            }).dxForm('instance');
+
+            form.itemOption('group1.item1', clone(newItem1));
+            if(useRepaint) {
+                form.repaint();
+            }
+
+            if('editorType' in testConfig) {
+                assert.deepEqual(form.itemOption('group1.item1'), undefined, 'item1');
+                assert.deepEqual(form.itemOption('group1.newItem1'), extend(true, {}, newItem1, { editorType: testConfig.editorType || item1.editorType }), 'newItem1');
+            } else {
+                assert.deepEqual(form.itemOption('group1.item1'), extend(true, {}, item1, newItem1, { editorType: item1.editorType, dataField: item1.dataField }), 'item1');
+                assert.deepEqual(form.itemOption('group1.newItem1'), undefined, 'newItem1');
+            }
+        });
+
+        QUnit.test(`Form.itemOption('item1', newItem2), testConfig = ${JSON.stringify(testConfig)}. useRepaint = ${useRepaint} (T903774)`, function(assert) {
+            const item1 = {
+                editorType: 'dxDropDownBox',
+                dataField: 'item1',
+                label: { text: 'item1' },
+                editorOptions: { placeholder: 'test_placeHolder' }
+            };
+            const newItem1 = extend({
+                dataField: 'newItem1',
+                label: { text: 'new item1' },
+                editorOptions: { width: 300 }
+            }, testConfig);
+
+            const form = $('#form').dxForm({
+                items: [ clone(item1) ]
+            }).dxForm('instance');
+
+            form.itemOption('item1', clone(newItem1));
+            if(useRepaint) {
+                form.repaint();
+            }
+
+            assert.deepEqual(form.itemOption('item1'), undefined, 'item1');
+            assert.deepEqual(form.itemOption('newItem1'), extend(true, {}, newItem1, { editorType: testConfig.editorType || item1.editorType }), 'newItem1');
+        });
+    });
+});
+
 
 QUnit.module('Tabs', {
     beforeEach: function() {
@@ -505,7 +589,7 @@ QUnit.test('Render tabs when formData is changed', function(assert) {
                     }]
             }]
     }).dxForm('instance');
-    let $groups = testContainer.find('.dx-item-selected ' + '.' + internals.FORM_GROUP_CLASS);
+    let $groups = testContainer.find('.dx-item-selected ' + '.' + FORM_GROUP_CLASS);
 
     form.option('formData', {
         firstName: 'Test Name',
@@ -521,17 +605,17 @@ QUnit.test('Render tabs when formData is changed', function(assert) {
 
     this.clock.tick();
 
-    $groups = testContainer.find('.dx-item-selected ' + '.' + internals.FORM_GROUP_CLASS);
+    $groups = testContainer.find('.dx-item-selected ' + '.' + FORM_GROUP_CLASS);
     assert.equal($groups.length, 2);
-    assert.equal($groups.eq(0).find('.' + internals.FIELD_ITEM_CLASS).length, 2, 'group 1');
-    assert.equal($groups.eq(1).find('.' + internals.FIELD_ITEM_CLASS).length, 2, 'group 2');
+    assert.equal($groups.eq(0).find('.' + FIELD_ITEM_CLASS).length, 2, 'group 1');
+    assert.equal($groups.eq(1).find('.' + FIELD_ITEM_CLASS).length, 2, 'group 2');
 
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
-    $groups = testContainer.find('.dx-item-selected ' + '.' + internals.FORM_GROUP_CLASS);
+    $groups = testContainer.find('.dx-item-selected ' + '.' + FORM_GROUP_CLASS);
 
     assert.equal($groups.length, 1);
-    assert.equal($groups.eq(0).find('.' + internals.FIELD_ITEM_CLASS).length, 2, 'group 1');
+    assert.equal($groups.eq(0).find('.' + FIELD_ITEM_CLASS).length, 2, 'group 1');
 });
 
 QUnit.test('Check align labels', function(assert) {
@@ -572,7 +656,7 @@ QUnit.test('Check align labels', function(assert) {
     let $labelTexts;
     let labelWidth;
     let $layoutManager;
-    let $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
+    let $layoutManagers = testContainer.find('.' + FORM_LAYOUT_MANAGER_CLASS);
 
     $layoutManager = $layoutManagers.eq(0);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
@@ -590,7 +674,7 @@ QUnit.test('Check align labels', function(assert) {
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
 
-    $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
+    $layoutManagers = testContainer.find('.' + FORM_LAYOUT_MANAGER_CLASS);
     $layoutManager = $layoutManagers.eq(3);
     $labelTexts = findLabelTextsInColumn($layoutManager, 0);
     labelWidth = getLabelWidth($layoutManager, form, 'First Name:');
@@ -642,11 +726,11 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
     let labelContentWidth;
     let $labelsContent;
     let $layoutManager;
-    let $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
+    let $layoutManagers = testContainer.find('.' + FORM_LAYOUT_MANAGER_CLASS);
     let i;
 
     $layoutManager = $layoutManagers.eq(1);
-    $labelsContent = $layoutManager.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
     for(i = 0; i < 4; i++) {
         labelContentWidth = $labelsContent.eq(i).width();
@@ -657,9 +741,9 @@ QUnit.test('Check align labels when layout is changed by default_T306106', funct
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
 
-    $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
+    $layoutManagers = testContainer.find('.' + FORM_LAYOUT_MANAGER_CLASS);
     $layoutManager = $layoutManagers.eq(3);
-    $labelsContent = $layoutManager.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'First Name:');
     for(i = 0; i < 2; i++) {
         labelContentWidth = $labelsContent.eq(i).width();
@@ -707,13 +791,13 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
     let labelContentWidth;
     let $labelsContent;
     let $layoutManager;
-    let $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
+    let $layoutManagers = testContainer.find('.' + FORM_LAYOUT_MANAGER_CLASS);
     let i;
 
     this.updateScreenSize(500);
 
     $layoutManager = $layoutManagers.eq(1);
-    $labelsContent = $layoutManager.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'Address house:');
     for(i = 0; i < 4; i++) {
         labelContentWidth = $labelsContent.eq(i).width();
@@ -724,9 +808,9 @@ QUnit.test('Check align labels when layout is changed_T306106', function(assert)
     testContainer.find('.dx-tabpanel').dxTabPanel('instance').option('selectedIndex', 1);
     this.clock.tick();
 
-    $layoutManagers = testContainer.find('.' + internals.FORM_LAYOUT_MANAGER_CLASS);
+    $layoutManagers = testContainer.find('.' + FORM_LAYOUT_MANAGER_CLASS);
     $layoutManager = $layoutManagers.eq(3);
-    $labelsContent = $layoutManager.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    $labelsContent = $layoutManager.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     labelWidth = getLabelWidth($layoutManager, form, 'First Name:');
     for(i = 0; i < 2; i++) {
         labelContentWidth = $labelsContent.eq(i).width();
@@ -817,7 +901,7 @@ function getLabelWidth(container, form, text) {
 }
 
 function findLabelTextsInColumn($container, columnIndex) {
-    return $container.find('.' + internals.FORM_FIELD_ITEM_COL_CLASS + columnIndex + ' .' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    return $container.find('.' + FORM_FIELD_ITEM_COL_CLASS + columnIndex + ' .' + FIELD_ITEM_LABEL_CONTENT_CLASS);
 }
 
 QUnit.test('Align labels in column', function(assert) {
@@ -854,33 +938,33 @@ QUnit.test('Align labels in column', function(assert) {
     let labelWidth;
 
     for(i = 0; i < 4; i++) {
-        labelWidth = $col1.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = $col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col0 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'First Name:');
     for(i = 0; i < 3; i++) {
-        labelWidth = $col2.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = $col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col1 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'Birth Date:');
     for(i = 0; i < 2; i++) {
-        labelWidth = $col3.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = $col3.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col2 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'Last Name:');
     for(i = 0; i < 2; i++) {
-        labelWidth = $col4.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = $col4.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col3 item ' + i);
     }
 
-    assert.equal($('.' + internals.HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Align labels in column when labels text is identical', function(assert) {
@@ -894,7 +978,7 @@ QUnit.test('Align labels in column when labels text is identical', function(asse
     let i;
 
     for(i = 0; i < 2; i++) {
-        const labelWidth = $col1.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        const labelWidth = $col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col0 item ' + i);
     }
@@ -908,7 +992,7 @@ QUnit.test('Disable alignItemLabels', function(assert) {
         alignItemLabels: false
     }).dxForm('instance');
 
-    const $labelTexts = $('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    const $labelTexts = $('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
 
     assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width());
 });
@@ -931,12 +1015,12 @@ QUnit.test('Disable alignItemLabels in group', function(assert) {
         ]
     }).dxForm('instance');
 
-    const $groups = $('.' + internals.FORM_GROUP_CLASS);
-    let $labelTexts = $groups.eq(0).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    const $groups = $('.' + FORM_GROUP_CLASS);
+    let $labelTexts = $groups.eq(0).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
 
     assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 1');
 
-    $labelTexts = $groups.eq(1).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    $labelTexts = $groups.eq(1).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     assert.equal($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 2');
 });
 
@@ -1115,14 +1199,14 @@ QUnit.test('Align labels in columns when there are rows', function(assert) {
     let labelWidth;
 
     for(i = 0; i < 2; i++) {
-        labelWidth = $col1.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = $col1.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col0 item ' + i);
     }
 
     $maxLabelWidth = getLabelWidth(testContainer, form, 'Field four:');
     for(i = 0; i < 2; i++) {
-        labelWidth = $col2.eq(i).find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+        labelWidth = $col2.eq(i).find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'col2 item ' + i);
     }
@@ -1151,7 +1235,7 @@ QUnit.test('Change option after group rendered (check for cycling template rende
 
     $formContainer.dxForm('instance').option('colCount', 4);
 
-    const $fieldItemWidgets = $formContainer.find('.' + internals.FIELD_ITEM_CONTENT_CLASS);
+    const $fieldItemWidgets = $formContainer.find('.' + FIELD_ITEM_CONTENT_CLASS);
 
     assert.equal($fieldItemWidgets.length, 3, 'Correct number of a widgets');
 });
@@ -1181,7 +1265,7 @@ QUnit.test('Align labels when layout is changed in responsive box_T306106', func
         }
     }).dxForm('instance');
 
-    const $labelsContent = testContainer.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    const $labelsContent = testContainer.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     const $maxLabelWidth = getLabelWidth(testContainer, form, 'First Name:');
     let i;
 
@@ -1193,7 +1277,7 @@ QUnit.test('Align labels when layout is changed in responsive box_T306106', func
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
 
-    assert.equal($('.' + internals.HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Align labels when layout is changed when small window size by default_T306106', function(assert) {
@@ -1223,7 +1307,7 @@ QUnit.test('Align labels when layout is changed when small window size by defaul
         }
     }).dxForm('instance');
 
-    const $labelsContent = testContainer.find('.' + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
+    const $labelsContent = testContainer.find('.' + FIELD_ITEM_LABEL_CONTENT_CLASS);
     const $maxLabelWidth = getLabelWidth(testContainer, form, 'First Name:');
     let i;
 
@@ -1233,7 +1317,7 @@ QUnit.test('Align labels when layout is changed when small window size by defaul
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, 'item ' + i);
     }
 
-    assert.equal($('.' + internals.HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
+    assert.equal($('.' + HIDDEN_LABEL_CLASS).length, 0, 'hidden labels count');
 });
 
 QUnit.test('Labels are not aligned when labelLocation is top', function(assert) {
@@ -1245,7 +1329,7 @@ QUnit.test('Labels are not aligned when labelLocation is top', function(assert) 
         },
     }).dxForm('instance');
 
-    const $labelTexts = $(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $labelTexts = $(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
     assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width());
 });
 
@@ -1270,12 +1354,12 @@ QUnit.test('Labels are not aligned when labelLocation is top with the groups', f
         ]
     }).dxForm('instance');
 
-    const $groups = $(`.${internals.FORM_GROUP_CLASS}`);
-    let $labelTexts = $groups.eq(0).find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $groups = $(`.${FORM_GROUP_CLASS}`);
+    let $labelTexts = $groups.eq(0).find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
 
     assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 1');
 
-    $labelTexts = $groups.eq(1).find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    $labelTexts = $groups.eq(1).find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
     assert.notEqual($labelTexts.eq(0).width(), $labelTexts.eq(1).width(), 'group 2');
 });
 
@@ -1288,9 +1372,9 @@ QUnit.test('required mark aligned', function(assert) {
         }]
     });
 
-    const $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    const $requiredLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`);
-    const $requiredMark = $labelsContent.find(`.${internals.FIELD_ITEM_REQUIRED_MARK_CLASS}`);
+    const $labelsContent = $testContainer.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $requiredLabel = $labelsContent.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $requiredMark = $labelsContent.find(`.${FIELD_ITEM_REQUIRED_MARK_CLASS}`);
 
     $labelsContent.width(200);
 
@@ -1305,9 +1389,9 @@ QUnit.test('optional mark aligned', function(assert) {
         items: ['position']
     });
 
-    const $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    const $optionalLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`);
-    const $optionalMark = $labelsContent.find(`.${internals.FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
+    const $labelsContent = $testContainer.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $optionalLabel = $labelsContent.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $optionalMark = $labelsContent.find(`.${FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
 
     $labelsContent.width(200);
 
@@ -1556,7 +1640,7 @@ QUnit.test('Use \'itemOption\' with no items', function(assert) {
     form.itemOption('test3', 'label', { text: 'NEWLABEL' });
 
     assert.deepEqual(testItem, { dataField: 'test2' }, 'corrected item received');
-    assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
+    assert.equal($testContainer.find('.' + FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
 });
 
 QUnit.test('Use \'itemOption\' do not change the order of an items', function(assert) {
@@ -1653,7 +1737,7 @@ QUnit.test('Use \'itemOption\' with groups', function(assert) {
     assert.deepEqual({ itemType: secondGroup.itemType, caption: secondGroup.caption }, { itemType: 'group', caption: 'Full Name' }, 'corrected item received');
     assert.equal(innerOption.dataField, 'FirstName', 'corrected item received');
 
-    assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
+    assert.equal($testContainer.find('.' + FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
 });
 
 QUnit.test('Use \'itemOption\' with groups and one group has empty caption (T359214)', function(assert) {
@@ -1716,7 +1800,7 @@ QUnit.test('Use \'itemOption\' with groups and one group has empty caption (T359
 
     form.itemOption('TestGroup1.TestGroup2', 'caption', 'custom');
 
-    assert.equal($testContainer.find('.' + internals.FORM_GROUP_CAPTION_CLASS).last().text(), 'custom', 'new caption rendered');
+    assert.equal($testContainer.find('.' + FORM_GROUP_CAPTION_CLASS).last().text(), 'custom', 'new caption rendered');
 });
 
 QUnit.test('Use \'itemOption\' with tabs', function(assert) {
@@ -1756,7 +1840,7 @@ QUnit.test('Use \'itemOption\' with tabs', function(assert) {
         items: [{ dataField: 'Country' }, { dataField: 'City' }, { dataField: 'Region' }]
     }, 'Correct tab\'s item');
     assert.equal(innerTabItem.dataField, 'Country', 'corrected item received');
-    assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).eq(4).text(), 'NEWLABEL:', 'new label rendered');
+    assert.equal($testContainer.find('.' + FIELD_ITEM_LABEL_CLASS).eq(4).text(), 'NEWLABEL:', 'new label rendered');
 });
 
 QUnit.test('\'itemOption\' should get an item with several spaces in the caption', function(assert) {
@@ -1787,7 +1871,7 @@ QUnit.test('\'itemOption\' should get an item with several spaces in the caption
     form.itemOption('Testgroupitem.LastName', 'label', { text: 'NEWLABEL' });
 
     assert.equal(innerGroupItem.dataField, 'FirstName', 'corrected item received');
-    assert.equal($testContainer.find('.' + internals.FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
+    assert.equal($testContainer.find('.' + FIELD_ITEM_LABEL_CLASS).last().text(), 'NEWLABEL:', 'new label rendered');
 });
 
 QUnit.test('\'itemOption\' should get an item with several spaces in the caption and long path', function(assert) {
@@ -3288,9 +3372,9 @@ QUnit.test('required mark aligned when rtlEnabled option is set to true', functi
         }]
     });
 
-    const $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    const $requiredLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`);
-    const $requiredMark = $labelsContent.find(`.${internals.FIELD_ITEM_REQUIRED_MARK_CLASS}`);
+    const $labelsContent = $testContainer.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $requiredLabel = $labelsContent.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $requiredMark = $labelsContent.find(`.${FIELD_ITEM_REQUIRED_MARK_CLASS}`);
 
     $labelsContent.width(200);
 
@@ -3306,9 +3390,9 @@ QUnit.test('optional mark aligned when rtlEnabled option is set to true', functi
         items: ['position']
     });
 
-    const $labelsContent = $testContainer.find(`.${internals.FIELD_ITEM_LABEL_CONTENT_CLASS}`);
-    const $optionalLabel = $labelsContent.find(`.${internals.FIELD_ITEM_LABEL_TEXT_CLASS}`);
-    const $optionalMark = $labelsContent.find(`.${internals.FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
+    const $labelsContent = $testContainer.find(`.${FIELD_ITEM_LABEL_CONTENT_CLASS}`);
+    const $optionalLabel = $labelsContent.find(`.${FIELD_ITEM_LABEL_TEXT_CLASS}`);
+    const $optionalMark = $labelsContent.find(`.${FIELD_ITEM_OPTIONAL_MARK_CLASS}`);
 
     $labelsContent.width(200);
 
@@ -3346,3 +3430,22 @@ QUnit.test('Should not skip `optionChanged` event handler that has been added on
         'onOptionChanged'
     ]);
 });
+
+[2, 3, 'auto'].forEach(colCount => {
+    [1, undefined].forEach(colSpan => {
+        QUnit.test(`Form.colCount=${colCount}, field.colSpan=${colSpan} -> resizeWindow() //T923489`, function(assert) {
+            $('#form').dxForm({
+                colCount: colCount,
+                items: [
+                    { dataField: 'field1', colSpan: 2 },
+                    { dataField: 'field2', colSpan: colSpan }
+                ]
+            }).dxForm('instance');
+
+            resizeCallbacks.fire();
+
+            assert.equal(1, 1, 'resize of the form does not freeze the page');
+        });
+    });
+});
+

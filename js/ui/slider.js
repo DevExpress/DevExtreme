@@ -1,2 +1,2 @@
-
-module.exports = require('./slider/ui.slider');
+import Slider from './slider/ui.slider';
+export default Slider;

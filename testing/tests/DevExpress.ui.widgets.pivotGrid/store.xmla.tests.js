@@ -7,13 +7,14 @@ define(function(require) {
     }
 
     const browser = require('core/utils/browser');
+    const devices = require('core/devices');
     const PivotGridTestSettings = require('../../helpers/pivotGridTestSettings.js').default;
 
     if(browser.msie && parseInt(browser.version) >= 17) return;
 
     const $ = require('jquery');
     const pivotGridUtils = require('ui/pivot_grid/ui.pivot_grid.utils');
-    const pivotGridDataSource = require('ui/pivot_grid/data_source');
+    const pivotGridDataSourceUtils = require('ui/pivot_grid/data_source.utils');
     const XmlaStore = require('ui/pivot_grid/xmla_store');
 
     const CATEGORIES_DATA = [
@@ -144,7 +145,7 @@ define(function(require) {
 
             this.load = function(options) {
                 return this.store.load(options).done(function(data) {
-                    pivotGridDataSource.sort(options, data);
+                    pivotGridDataSourceUtils.sort(options, data);
                 });
             };
 
@@ -1916,99 +1917,76 @@ define(function(require) {
 
     });
 
-    QUnit.module('Discover', testEnvironment, () => {
+    if(browser.chrome && devices.real().deviceType === 'desktop') {
+        QUnit.module('Discover', testEnvironment, () => {
 
-        QUnit.test('Discover. Incorrect dataSource url', function(assert) {
-            const done = assert.async();
-            new XmlaStore({
-                url: '',
-                catalog: 'Adventure Works DW Standard Edition',
-                cube: 'Adventure Works'
-            }).getFields().fail(function() {
-                assert.ok(true);
-                done();
+            QUnit.test('Discover. Incorrect dataSource url', function(assert) {
+                const done = assert.async();
+                new XmlaStore({
+                    url: '',
+                    catalog: 'Adventure Works DW Standard Edition',
+                    cube: 'Adventure Works'
+                }).getFields().fail(function() {
+                    assert.ok(true);
+                    done();
+                });
             });
-        });
 
-        QUnit.test('Discover. Incorrect dataSource cube', function(assert) {
-            const done = assert.async();
-            new XmlaStore($.extend({}, this.dataSource, {
-                cube: 'cube'
-            })).getFields()
-                .done(function(data) {
-                    assert.ok(!data.length);
-                }).fail(getFailCallBack(assert)).always(done);
-        });
+            QUnit.test('Discover. Incorrect dataSource cube', function(assert) {
+                const done = assert.async();
+                new XmlaStore($.extend({}, this.dataSource, {
+                    cube: 'cube'
+                })).getFields()
+                    .done(function(data) {
+                        assert.ok(!data.length);
+                    }).fail(getFailCallBack(assert)).always(done);
+            });
 
-        QUnit.test('Discover. Incorrect dataSource catalog', function(assert) {
-            const done = assert.async();
-            new XmlaStore($.extend({}, this.dataSource, {
-                catalog: 'catalog'
-            })).getFields()
-                .done(function(data) {
-                    assert.equal(data.length, 0);
-                }).fail(getFailCallBack(assert))
-                .always(done);
-        });
+            QUnit.test('Discover. Incorrect dataSource catalog', function(assert) {
+                const done = assert.async();
+                new XmlaStore($.extend({}, this.dataSource, {
+                    catalog: 'catalog'
+                })).getFields()
+                    .done(function(data) {
+                        assert.equal(data.length, 0);
+                    }).fail(getFailCallBack(assert))
+                    .always(done);
+            });
 
-        QUnit.test('Discover', function(assert) {
-            const done = assert.async();
+            QUnit.test('Discover', function(assert) {
+                const done = assert.async();
 
-            this.store.getFields().done(function(data) {
-                assert.ok(data);
-                assert.equal(data.length, 302);
+                this.store.getFields().done(function(data) {
+                    assert.ok(data);
+                    assert.equal(data.length, 302);
 
-                assert.deepEqual(findItems(data, 'dataField', '[Measures].[Internet Sales Amount]'), [{
-                    caption: 'Internet Sales Amount',
-                    displayFolder: 'Internet Sales',
-                    dataField: '[Measures].[Internet Sales Amount]',
-                    dimension: 'Measures',
-                    groupIndex: undefined,
-                    hierarchyName: undefined,
-                    groupName: undefined,
-                    isMeasure: true,
-                    isDefault: false
-                }], 'Measure item');
-
-                assert.strictEqual(findItems(data, 'isMeasure', true).length, 47, 'Measures count');
-
-                assert.deepEqual(findItems(data, 'dataField', '[Customer].[Yearly Income]'), [{
-                    dataField: '[Customer].[Yearly Income]',
-                    caption: 'Yearly Income',
-                    displayFolder: 'Demographic',
-                    dimension: 'Customer',
-                    hierarchyName: undefined,
-                    groupName: undefined,
-                    groupIndex: undefined,
-                    isMeasure: false,
-                    isDefault: false
-                }], 'not Hierarchy');
-
-                assert.deepEqual(findItems(data, 'dataField', '[Date].[Calendar].[Calendar Year]'), [{
-                    caption: 'Calendar Year',
-                    dataField: '[Date].[Calendar].[Calendar Year]',
-                    dimension: 'Date',
-                    groupIndex: 0,
-                    hierarchyName: '[Date].[Calendar]',
-                    groupName: '[Date].[Calendar]',
-                    displayFolder: '',
-                    isMeasure: false,
-                    isDefault: false
-                }], 'hierarchy level');
-
-                assert.deepEqual(findItems(data, 'hierarchyName', '[Date].[Calendar]'), [
-                    {
-                        caption: 'Date.Calendar',
-                        dataField: '[Date].[Calendar]',
-                        dimension: 'Date',
+                    assert.deepEqual(findItems(data, 'dataField', '[Measures].[Internet Sales Amount]'), [{
+                        caption: 'Internet Sales Amount',
+                        displayFolder: 'Internet Sales',
+                        dataField: '[Measures].[Internet Sales Amount]',
+                        dimension: 'Measures',
                         groupIndex: undefined,
-                        hierarchyName: '[Date].[Calendar]',
-                        groupName: '[Date].[Calendar]',
-                        displayFolder: 'Calendar',
+                        hierarchyName: undefined,
+                        groupName: undefined,
+                        isMeasure: true,
+                        isDefault: false
+                    }], 'Measure item');
+
+                    assert.strictEqual(findItems(data, 'isMeasure', true).length, 47, 'Measures count');
+
+                    assert.deepEqual(findItems(data, 'dataField', '[Customer].[Yearly Income]'), [{
+                        dataField: '[Customer].[Yearly Income]',
+                        caption: 'Yearly Income',
+                        displayFolder: 'Demographic',
+                        dimension: 'Customer',
+                        hierarchyName: undefined,
+                        groupName: undefined,
+                        groupIndex: undefined,
                         isMeasure: false,
                         isDefault: false
-                    },
-                    {
+                    }], 'not Hierarchy');
+
+                    assert.deepEqual(findItems(data, 'dataField', '[Date].[Calendar].[Calendar Year]'), [{
                         caption: 'Calendar Year',
                         dataField: '[Date].[Calendar].[Calendar Year]',
                         dimension: 'Date',
@@ -2018,66 +1996,89 @@ define(function(require) {
                         displayFolder: '',
                         isMeasure: false,
                         isDefault: false
-                    },
-                    {
-                        caption: 'Calendar Semester',
-                        dataField: '[Date].[Calendar].[Calendar Semester]',
-                        dimension: 'Date',
-                        groupIndex: 1,
-                        hierarchyName: '[Date].[Calendar]',
-                        groupName: '[Date].[Calendar]',
-                        displayFolder: '',
-                        isMeasure: false,
-                        isDefault: false
-                    },
-                    {
-                        caption: 'Calendar Quarter',
-                        dataField: '[Date].[Calendar].[Calendar Quarter]',
-                        dimension: 'Date',
-                        groupIndex: 2,
-                        hierarchyName: '[Date].[Calendar]',
-                        groupName: '[Date].[Calendar]',
-                        displayFolder: '',
-                        isMeasure: false,
-                        isDefault: false
-                    },
-                    {
-                        caption: 'Month',
-                        dataField: '[Date].[Calendar].[Month]',
-                        dimension: 'Date',
-                        groupIndex: 3,
-                        hierarchyName: '[Date].[Calendar]',
-                        groupName: '[Date].[Calendar]',
-                        displayFolder: '',
-                        isMeasure: false,
-                        isDefault: false
-                    },
-                    {
-                        caption: 'Date',
-                        dataField: '[Date].[Calendar].[Date]',
-                        dimension: 'Date',
-                        groupIndex: 4,
-                        hierarchyName: '[Date].[Calendar]',
-                        groupName: '[Date].[Calendar]',
-                        displayFolder: '',
-                        isMeasure: false,
-                        isDefault: false
-                    }
-                ], 'Hierarchy item, with levels');
+                    }], 'hierarchy level');
 
-                assert.deepEqual(findItems(data, 'dataField', '[Customer].[Customer Geography]')[0].isDefault, true, 'default hierarchy');
-                assert.deepEqual(findItems(data, 'isDefault', true).length, 16, 'Default fields count');
+                    assert.deepEqual(findItems(data, 'hierarchyName', '[Date].[Calendar]'), [
+                        {
+                            caption: 'Date.Calendar',
+                            dataField: '[Date].[Calendar]',
+                            dimension: 'Date',
+                            groupIndex: undefined,
+                            hierarchyName: '[Date].[Calendar]',
+                            groupName: '[Date].[Calendar]',
+                            displayFolder: 'Calendar',
+                            isMeasure: false,
+                            isDefault: false
+                        },
+                        {
+                            caption: 'Calendar Year',
+                            dataField: '[Date].[Calendar].[Calendar Year]',
+                            dimension: 'Date',
+                            groupIndex: 0,
+                            hierarchyName: '[Date].[Calendar]',
+                            groupName: '[Date].[Calendar]',
+                            displayFolder: '',
+                            isMeasure: false,
+                            isDefault: false
+                        },
+                        {
+                            caption: 'Calendar Semester',
+                            dataField: '[Date].[Calendar].[Calendar Semester]',
+                            dimension: 'Date',
+                            groupIndex: 1,
+                            hierarchyName: '[Date].[Calendar]',
+                            groupName: '[Date].[Calendar]',
+                            displayFolder: '',
+                            isMeasure: false,
+                            isDefault: false
+                        },
+                        {
+                            caption: 'Calendar Quarter',
+                            dataField: '[Date].[Calendar].[Calendar Quarter]',
+                            dimension: 'Date',
+                            groupIndex: 2,
+                            hierarchyName: '[Date].[Calendar]',
+                            groupName: '[Date].[Calendar]',
+                            displayFolder: '',
+                            isMeasure: false,
+                            isDefault: false
+                        },
+                        {
+                            caption: 'Month',
+                            dataField: '[Date].[Calendar].[Month]',
+                            dimension: 'Date',
+                            groupIndex: 3,
+                            hierarchyName: '[Date].[Calendar]',
+                            groupName: '[Date].[Calendar]',
+                            displayFolder: '',
+                            isMeasure: false,
+                            isDefault: false
+                        },
+                        {
+                            caption: 'Date',
+                            dataField: '[Date].[Calendar].[Date]',
+                            dimension: 'Date',
+                            groupIndex: 4,
+                            hierarchyName: '[Date].[Calendar]',
+                            groupName: '[Date].[Calendar]',
+                            displayFolder: '',
+                            isMeasure: false,
+                            isDefault: false
+                        }
+                    ], 'Hierarchy item, with levels');
 
-                assert.strictEqual(findItems(data, 'groupIndex', -1).length, 0, 'all level not exists');
+                    assert.deepEqual(findItems(data, 'dataField', '[Customer].[Customer Geography]')[0].isDefault, true, 'default hierarchy');
+                    assert.deepEqual(findItems(data, 'isDefault', true).length, 16, 'Default fields count');
 
-                assert.strictEqual(findItems(data, 'dataField', '[Measures]').length, 0, 'Measure Hieararchy doesn\'t exist');
+                    assert.strictEqual(findItems(data, 'groupIndex', -1).length, 0, 'all level not exists');
 
-            }).fail(getFailCallBack(assert))
-                .always(done);
+                    assert.strictEqual(findItems(data, 'dataField', '[Measures]').length, 0, 'Measure Hieararchy doesn\'t exist');
+
+                }).fail(getFailCallBack(assert))
+                    .always(done);
+            });
         });
-
-
-    });
+    }
 
     QUnit.module('Filtering', testEnvironment, () => {
 

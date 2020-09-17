@@ -2,7 +2,7 @@ import { find } from '../core/utils/array';
 import { ensureDefined } from '../core/utils/common';
 import { compileGetter, compileSetter } from '../core/utils/data';
 import Guid from '../core/guid';
-import typeUtils from '../core/utils/type';
+import { isFunction } from '../core/utils/type';
 import { errors } from '../data/errors';
 import { Deferred } from '../core/utils/deferred';
 import { getWindow } from '../core/utils/window';
@@ -384,7 +384,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
     }
 
     _getSetter(expr) {
-        return typeUtils.isFunction(expr) ? expr : compileSetter(expr);
+        return isFunction(expr) ? expr : compileSetter(expr);
     }
 
     _isFileItemExists(fileItem) {
@@ -406,4 +406,4 @@ function getJSZip() {
     return JSZip;
 }
 
-module.exports = ObjectFileSystemProvider;
+export default ObjectFileSystemProvider;

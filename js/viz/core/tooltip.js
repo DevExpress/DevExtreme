@@ -1,10 +1,10 @@
 import domAdapter from '../../core/dom_adapter';
-import windowUtils from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 import inflector from '../../core/utils/inflector';
 
 import $ from '../../core/renderer';
 import rendererModule from './renderers/renderer';
-import typeUtils from '../../core/utils/type';
+import { isFunction, isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import vizUtils from './utils';
 import { format } from '../../format_helper';
@@ -14,7 +14,7 @@ import { Plaque } from './plaque';
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
 const mathMin = Math.min;
-const window = windowUtils.getWindow();
+const window = getWindow();
 const DEFAULT_HTML_GROUP_WIDTH = 3000;
 
 function hideElement($element) {
@@ -34,7 +34,7 @@ function getSpecialFormatOptions(options, specialFormat) {
     return result;
 }
 
-function Tooltip(params) {
+export let Tooltip = function(params) {
     const that = this;
     let renderer;
 
@@ -56,7 +56,7 @@ function Tooltip(params) {
     // html text
     that._textGroupHtml = $('<div>').css({ position: 'absolute', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._wrapper);
     that._textHtml = $('<div>').css({ position: 'relative', display: 'inline-block', padding: 0, margin: 0, border: '0px solid transparent' }).appendTo(that._textGroupHtml);
-}
+};
 
 Tooltip.prototype = {
     constructor: Tooltip,
@@ -206,14 +206,14 @@ Tooltip.prototype = {
 
         let customize = {};
 
-        if(typeUtils.isFunction(customizeTooltip)) {
+        if(isFunction(customizeTooltip)) {
             customize = customizeTooltip.call(formatObject, formatObject);
-            customize = typeUtils.isPlainObject(customize) ? customize : {};
+            customize = isPlainObject(customize) ? customize : {};
             if('text' in customize) {
-                state.text = typeUtils.isDefined(customize.text) ? String(customize.text) : '';
+                state.text = isDefined(customize.text) ? String(customize.text) : '';
             }
             if('html' in customize) {
-                state.html = typeUtils.isDefined(customize.html) ? String(customize.html) : '';
+                state.html = isDefined(customize.html) ? String(customize.html) : '';
             }
         }
         if(!('text' in state) && !('html' in state)) {
@@ -362,9 +362,7 @@ Tooltip.prototype = {
     }
 };
 
-exports.Tooltip = Tooltip;
-
-exports.plugin = {
+export const plugin = {
     name: 'tooltip',
     init: function() {
         this._initTooltip();
@@ -376,7 +374,7 @@ exports.plugin = {
         // The method exists only to be overridden in sparklines.
         _initTooltip: function() {
             // "exports" is used for testing purposes.
-            this._tooltip = new exports.Tooltip({
+            this._tooltip = new Tooltip({
                 cssClass: this._rootClassPrefix + '-tooltip',
                 eventTrigger: this._eventTrigger,
                 pathModified: this.option('pathModified'),
@@ -428,3 +426,9 @@ exports.plugin = {
     },
     fontFields: ['tooltip.font']
 };
+
+///#DEBUG
+export const DEBUG_set_tooltip = function(value) {
+    Tooltip = value;
+};
+///#ENDDEBUG

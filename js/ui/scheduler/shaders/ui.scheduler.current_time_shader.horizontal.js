@@ -68,4 +68,4 @@ class HorizontalCurrentTimeShader extends CurrentTimeShader {
     }
 }
 
-module.exports = HorizontalCurrentTimeShader;
+export default HorizontalCurrentTimeShader;

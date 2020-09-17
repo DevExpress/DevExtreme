@@ -312,4 +312,4 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
 
 registerComponent('dxSchedulerWorkSpaceMonth', SchedulerWorkSpaceMonth);
 
-module.exports = SchedulerWorkSpaceMonth;
+export default SchedulerWorkSpaceMonth;

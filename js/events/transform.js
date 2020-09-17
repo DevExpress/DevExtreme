@@ -1,23 +1,19 @@
-const mathUtils = require('../core/utils/math');
-const iteratorUtils = require('../core/utils/iterator');
-const errors = require('../core/errors');
-const eventUtils = require('./utils');
-const Emitter = require('./core/emitter');
-const registerEmitter = require('./core/emitter_registrator');
-
+import { sign as mathSign, fitIntoRange } from '../core/utils/math';
+import iteratorUtils from '../core/utils/iterator';
+import { hasTouches } from './utils';
+import Emitter from './core/emitter';
+import registerEmitter from './core/emitter_registrator';
 
 const DX_PREFIX = 'dx';
 
 const TRANSFORM = 'transform';
 const TRANSLATE = 'translate';
-const ZOOM = 'zoom';
 const PINCH = 'pinch';
 const ROTATE = 'rotate';
 
 const START_POSTFIX = 'start';
 const UPDATE_POSTFIX = '';
 const END_POSTFIX = 'end';
-
 
 const eventAliases = [];
 const addAlias = function(eventName, eventArgs) {
@@ -39,11 +35,6 @@ addAlias(TRANSFORM, {
 addAlias(TRANSLATE, {
     translation: true,
     deltaTranslation: true
-});
-
-addAlias(ZOOM, {
-    scale: true,
-    deltaScale: true
 });
 
 addAlias(PINCH, {
@@ -88,8 +79,8 @@ const getRotation = function(firstVector, secondVector) {
         return 0;
     }
 
-    const sign = mathUtils.sign(firstVector.x * secondVector.y - secondVector.x * firstVector.y);
-    const angle = Math.acos(mathUtils.fitIntoRange(scalarProduct / distanceProduct, -1, 1));
+    const sign = mathSign(firstVector.x * secondVector.y - secondVector.x * firstVector.y);
+    const angle = Math.acos(fitIntoRange(scalarProduct / distanceProduct, -1, 1));
 
     return sign * angle;
 };
@@ -103,16 +94,8 @@ const getTranslation = function(firstVector, secondVector) {
 
 const TransformEmitter = Emitter.inherit({
 
-    configure: function(data, eventName) {
-        if(eventName.indexOf(ZOOM) > -1) {
-            errors.log('W0005', eventName, '15.1', 'Use \'' + eventName.replace(ZOOM, PINCH) + '\' event instead');
-        }
-
-        this.callBase(data);
-    },
-
     validatePointers: function(e) {
-        return eventUtils.hasTouches(e) > 1;
+        return hasTouches(e) > 1;
     },
 
     start: function(e) {
@@ -228,35 +211,6 @@ const TransformEmitter = Emitter.inherit({
 */
 
 /**
- * @name UI Events.dxzoomstart
- * @type eventType
- * @deprecated UI Events.dxpinchstart
- * @type_function_param1 event:event
- * @type_function_param1_field1 cancel:boolean
- * @module events/transform
-*/
-/**
-  * @name UI Events.dxzoom
-  * @type eventType
-  * @deprecated UI Events.dxpinch
-  * @type_function_param1 event:event
-  * @type_function_param1_field1 scale:number
-  * @type_function_param1_field2 deltaScale:number
-  * @type_function_param1_field3 cancel:boolean
-  * @module events/transform
-*/
-/**
-  * @name UI Events.dxzoomend
-  * @type eventType
-  * @deprecated UI Events.dxpinchend
-  * @type_function_param1 event:event
-  * @type_function_param1_field1 scale:number
-  * @type_function_param1_field2 deltaScale:number
-  * @type_function_param1_field3 cancel:boolean
-  * @module events/transform
-*/
-
-/**
 * @name UI Events.dxpinchstart
 * @type eventType
 * @type_function_param1 event:event
@@ -319,7 +273,25 @@ registerEmitter({
     emitter: TransformEmitter,
     events: eventNames
 });
-
+const exportNames = {};
 iteratorUtils.each(eventNames, function(_, eventName) {
-    exports[eventName.substring(DX_PREFIX.length)] = eventName;
+    exportNames[eventName.substring(DX_PREFIX.length)] = eventName;
 });
+/* eslint-disable spellcheck/spell-checker */
+export const {
+    transformstart,
+    transform,
+    transformend,
+    translatestart,
+    translate,
+    translateend,
+    zoomstart,
+    zoom,
+    zoomend,
+    pinchstart,
+    pinch,
+    pinchend,
+    rotatestart,
+    rotate,
+    rotateend
+} = exportNames;

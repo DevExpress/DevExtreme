@@ -1,10 +1,10 @@
-const noop = require('../../../core/utils/common').noop;
-const extend = require('../../../core/utils/extend').extend;
-const barPoint = require('./bar_point');
-const rangeSymbolPointMethods = require('./range_symbol_point');
+import { noop } from '../../../core/utils/common';
+import { extend } from '../../../core/utils/extend';
+import barPoint from './bar_point';
+import rangeSymbolPointMethods from './range_symbol_point';
 const _extend = extend;
 
-module.exports = _extend({}, barPoint, {
+export default _extend({}, barPoint, {
     deleteLabel: rangeSymbolPointMethods.deleteLabel,
 
     _getFormatObject: rangeSymbolPointMethods._getFormatObject,

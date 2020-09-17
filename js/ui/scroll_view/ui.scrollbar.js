@@ -259,4 +259,4 @@ readyCallback.add(function() {
     });
 });
 
-module.exports = Scrollbar;
+export default Scrollbar;

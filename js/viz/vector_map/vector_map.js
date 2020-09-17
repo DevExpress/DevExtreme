@@ -8,19 +8,15 @@ import legendModule from './legend';
 import layoutModule from './layout';
 import { MapLayerCollection, getMaxBound } from './map_layer';
 import tooltipViewerModule from './tooltip_viewer';
+import { generateDataKey } from './vector_map.utils';
 
 const DEFAULT_WIDTH = 800;
 const DEFAULT_HEIGHT = 400;
 const RE_STARTS_LAYERS = /^layers/;
 const RE_ENDS_DATA_SOURCE = /\.dataSource$/;
-let nextDataKey = 1;
 
 import './projection';
 import BaseWidget from '../core/base_widget';
-
-function generateDataKey() {
-    return 'vectormap-data-' + nextDataKey++;
-}
 
 function mergeBounds(sumBounds, dataBounds) {
     return dataBounds ? [Math.min(dataBounds[0], dataBounds[2], sumBounds[0]),
@@ -182,8 +178,10 @@ const dxVectorMap = BaseWidget.inherit({
         that._layoutControl.suspend();
 
         that._initLayerCollection(dataKey);
+        that._createHtmlStructure();
         that._initControlBar(dataKey);
         that._initLegendsControl();
+        that._prepareExtraElements();
         that._tooltipViewer = new tooltipViewerModule.TooltipViewer({ tracker: that._tracker, tooltip: that._tooltip, layerCollection: that._layerCollection });
     },
 
@@ -194,6 +192,8 @@ const dxVectorMap = BaseWidget.inherit({
     _initialChanges: ['PROJECTION', 'RESUME_LAYOUT', 'LAYOUT_INIT', 'BOUNDS', 'MAX_ZOOM_FACTOR', 'ZOOM_FACTOR', 'CENTER'],
 
     _layoutChangesOrder: ['RESUME_LAYOUT', 'LAYERS'],
+
+    _customChangesOrder: ['EXTRA_ELEMENTS'],
 
     _initCore: function() {
         this._root = this._renderer.root.attr({ align: 'center', cursor: 'default' });
@@ -234,6 +234,7 @@ const dxVectorMap = BaseWidget.inherit({
         this._projection.setSize(layout);
         this._layoutControl.setSize(layout);
         this._layerCollection.setRect([layout.left, layout.top, layout.width, layout.height]);
+        this._requestChange(['EXTRA_ELEMENTS']);
     },
 
     // The "layers_data", "mapData", "markers" options must never be merged (because of their meaning)
@@ -264,6 +265,7 @@ const dxVectorMap = BaseWidget.inherit({
     _optionChangesMap: {
         background: 'BACKGROUND',
         layers: 'LAYERS',
+        extraElements: 'EXTRA_ELEMENTS',
         controlBar: 'CONTROL_BAR',
         legends: 'LEGENDS',
         touchEnabled: 'TRACKER',
@@ -309,6 +311,10 @@ const dxVectorMap = BaseWidget.inherit({
 
     _change_CONTROL_BAR: function() {
         this._setControlBarOptions();
+    },
+
+    _change_EXTRA_ELEMENTS: function() {
+        this._renderExtraElements();
     },
 
     _change_LEGENDS: function() {
@@ -462,20 +468,19 @@ const dxVectorMap = BaseWidget.inherit({
 import componentRegistrator from '../../core/component_registrator';
 componentRegistrator('dxVectorMap', dxVectorMap);
 
-module.exports = dxVectorMap;
-///#DEBUG
-module.exports._TESTS_resetDataKey = function() {
-    nextDataKey = 1;
-};
-///#ENDDEBUG
+export default dxVectorMap;
 
 // PLUGINS_SECTION
 import { plugin as ExportPlugin } from '../core/export';
 import { plugin as TitlePlugin } from '../core/title';
 import { plugin as TooltipPlugin } from '../core/tooltip';
 import { plugin as LoadingIndicatorPlugin } from '../core/loading_indicator';
+import { plugins as annotationsPlugins } from '../core/annotations';
+
 dxVectorMap.addPlugin(ExportPlugin);
 dxVectorMap.addPlugin(TitlePlugin);
 dxVectorMap.addPlugin(TooltipPlugin);
 dxVectorMap.addPlugin(LoadingIndicatorPlugin);
+dxVectorMap.addPlugin(annotationsPlugins.core);
+dxVectorMap.addPlugin(annotationsPlugins.vectorMap);
 

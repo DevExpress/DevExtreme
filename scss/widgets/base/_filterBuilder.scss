@@ -26,16 +26,16 @@ $filterbuilder-menu-icon-color: null !default;
 .dx-filterbuilder {
   background-color: $filterbuilder-bg;
 
-  @mixin button-color($color, $hoverColor, $focusColor) {
+  @mixin button-color($color, $hover-color, $focus-color) {
     background-color: $color;
 
     &:hover {
-      background-color: $hoverColor;
+      background-color: $hover-color;
     }
 
     &:focus,
     &.dx-state-active {
-      background-color: $focusColor;
+      background-color: $focus-color;
       color: $filterbuilder-text-focus-color;
     }
   }

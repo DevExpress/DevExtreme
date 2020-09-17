@@ -1,14 +1,12 @@
-const dxBaseGauge = require('./base_gauge').dxBaseGauge;
-const typeUtils = require('../../core/utils/type');
-const each = require('../../core/utils/iterator').each;
-const extend = require('../../core/utils/extend').extend;
-const _isDefined = typeUtils.isDefined;
+import { dxBaseGauge } from './base_gauge';
+import { isDefined as _isDefined, isNumeric as _isNumber } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { extend } from '../../core/utils/extend';
 const _isArray = Array.isArray;
-const _isNumber = typeUtils.isNumeric;
-const axisModule = require('../axes/base_axis');
-const _map = require('../core/utils').map;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
-const _compareArrays = require('./base_gauge').compareArrays;
+import axisModule from '../axes/base_axis';
+import { map as _map } from '../core/utils';
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import { compareArrays as _compareArrays } from './base_gauge';
 
 const _isFinite = isFinite;
 const _Number = Number;
@@ -17,7 +15,7 @@ const _max = Math.max;
 
 const _extend = extend;
 const _each = each;
-const _noop = require('../../core/utils/common').noop;
+import { noop as _noop } from '../../core/utils/common';
 const SHIFT_ANGLE = 90;
 
 const OPTION_VALUE = 'value';
@@ -36,7 +34,7 @@ function parseArrayOfNumbers(arg) {
     return _isArray(arg) ? arg : _isNumber(arg) ? [arg] : null;
 }
 
-exports.dxGauge = dxBaseGauge.inherit({
+export const dxGauge = dxBaseGauge.inherit({
     _initCore: function() {
         const that = this;
         const renderer = that._renderer;
@@ -71,7 +69,8 @@ exports.dxGauge = dxBaseGauge.inherit({
             axesContainerGroup: that._scaleGroup,
             axisType: that._scaleTypes.type,
             drawingType: that._scaleTypes.drawingType,
-            widgetClass: 'dxg'
+            widgetClass: 'dxg',
+            getTemplate() {}
         });
     },
 
@@ -650,9 +649,9 @@ ValueIndicatorsSet.prototype = {
     }
 };
 
-exports.createIndicatorCreator = function(indicators) {
+export function createIndicatorCreator(indicators) {
     return function(parameters, type, _strict) {
         const indicatorType = indicators[_normalizeEnum(type)] || (!_strict && indicators._default);
         return indicatorType ? new indicatorType(parameters) : null;
     };
-};
+}

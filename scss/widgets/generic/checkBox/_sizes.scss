@@ -1,21 +1,23 @@
 @use "../sizes" as *;
 @use "colors" as *;
+
 // adduse
 
-$GENERIC_CHECKBOX_ARROW_ICON_SIZE: null !default;
-$GENERIC_CHECKBOX_INTERMIDIATE_ICON_SIZE: null !default;
-$GENERIC_CHECKBOX_INTERMIDIATE_ICON_MARGIN: null !default;
+$generic-checkbox-arrow-icon-size: null !default;
+$generic-checkbox-intermidiate-icon-size: null !default;
+$generic-checkbox-intermidiate-icon-margin: null !default;
+$generic-checkbox-size: null !default;
 
 @if $size == "default" {
-  $GENERIC_CHECKBOX_ARROW_ICON_SIZE: 16px;
-
-  $GENERIC_CHECKBOX_INTERMIDIATE_ICON_SIZE: 14px;
-  $GENERIC_CHECKBOX_INTERMIDIATE_ICON_MARGIN: 4px;
+  $generic-checkbox-arrow-icon-size: 16px;
+  $generic-checkbox-intermidiate-icon-size: 14px;
+  $generic-checkbox-intermidiate-icon-margin: 4px;
+  $generic-checkbox-size: 22px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_CHECKBOX_ARROW_ICON_SIZE: 10px;
-
-  $GENERIC_CHECKBOX_INTERMIDIATE_ICON_SIZE: 8px;
-  $GENERIC_CHECKBOX_INTERMIDIATE_ICON_MARGIN: 3px;
+  $generic-checkbox-arrow-icon-size: 10px;
+  $generic-checkbox-intermidiate-icon-size: 8px;
+  $generic-checkbox-intermidiate-icon-margin: 3px;
+  $generic-checkbox-size: 16px;
 }

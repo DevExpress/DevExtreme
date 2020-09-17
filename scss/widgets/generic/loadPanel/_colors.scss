@@ -2,26 +2,24 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../overlay/colors" as *;
-// adduse
 
+// adduse
 
 $loadpanel-border-color: null !default;
 $loadpanel-content-shadow-color: null !default;
+
+/**
+* $name 20. Loadpanel background color
+* $type color
+*/
 $loadpanel-content-bg: null !default;
 $loadpanel-content-border-radius: null !default;
-
 
 @if $color == "carmine" {
 
   $loadpanel-border-color: $overlay-border-color !default;
   $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
 
-  /**
-    * $name 20. Loadpanel background color
-    * $type color
-    * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
-    */
   $loadpanel-content-bg: $overlay-content-bg !default;
 
   $loadpanel-content-border-radius: $base-border-radius-large !default;
@@ -41,12 +39,6 @@ $loadpanel-content-border-radius: null !default;
   $loadpanel-border-color: $overlay-border-color !default;
   $loadpanel-content-shadow-color: $overlay-content-shadow-color !default;
 
-  /**
-    * $name 20. Loadpanel background color
-    * $type color
-    * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
-    */
   $loadpanel-content-bg: $overlay-content-bg !default;
   $loadpanel-content-border-radius: $base-border-radius-large !default;
 }
@@ -56,12 +48,6 @@ $loadpanel-content-border-radius: null !default;
   $loadpanel-border-color: $overlay-border-color !default;
   $loadpanel-content-shadow-color: $overlay-content-shadow-color !default;
 
-  /**
-    * $name 20. Loadpanel background color
-    * $type color
-    * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
-    */
   $loadpanel-content-bg: $overlay-content-bg !default;
   $loadpanel-content-border-radius: $base-border-radius-large !default;
 }
@@ -71,12 +57,6 @@ $loadpanel-content-border-radius: null !default;
   $loadpanel-border-color: $overlay-border-color !default;
   $loadpanel-content-shadow-color: $overlay-content-shadow-color !default;
 
-  /**
-    * $name 20. Loadpanel background color
-    * $type color
-    * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
-    */
   $loadpanel-content-bg: $overlay-content-bg !default;
   $loadpanel-content-border-radius: $base-border-radius-large !default;
 }
@@ -86,12 +66,6 @@ $loadpanel-content-border-radius: null !default;
   $loadpanel-border-color: $overlay-border-color !default;
   $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
 
-  /**
-    * $name 20. Loadpanel background color
-    * $type color
-    * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
-    */
   $loadpanel-content-bg: $overlay-content-bg !default;
 
   $loadpanel-content-border-radius: $base-border-radius-large !default;
@@ -102,12 +76,6 @@ $loadpanel-content-border-radius: null !default;
   $loadpanel-border-color: $overlay-border-color !default;
   $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
 
-  /**
-    * $name 20. Loadpanel background color
-    * $type color
-    * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
-    */
   $loadpanel-content-bg: $overlay-content-bg !default;
 
   $loadpanel-content-border-radius: $base-border-radius-large !default;
@@ -118,12 +86,6 @@ $loadpanel-content-border-radius: null !default;
   $loadpanel-border-color: $overlay-border-color !default;
   $loadpanel-content-shadow-color: color.change($base-shadow-color, $alpha: 0.25) !default;
 
-  /**
-    * $name 20. Loadpanel background color
-    * $type color
-    * $inherit $overlay-content-bg
-    * $isLastSubGroupItem true
-    */
   $loadpanel-content-bg: $overlay-content-bg !default;
   $loadpanel-content-border-radius: $base-border-radius-large !default;
 }

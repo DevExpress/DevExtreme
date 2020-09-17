@@ -280,7 +280,7 @@ function formatText(data, options) {
     return options.customizeText ? options.customizeText.call(data, data) : data.valueText;
 }
 
-function Label(renderSettings) {
+export function Label(renderSettings) {
     this._renderer = renderSettings.renderer;
     this._container = renderSettings.labelsGroup;
     this._point = renderSettings.point;
@@ -539,8 +539,6 @@ Label.prototype = {
         };
     }
 };
-
-exports.Label = Label;
 
 ///#DEBUG
 Label._DEBUG_formatText = formatText;

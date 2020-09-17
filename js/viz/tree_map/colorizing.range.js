@@ -1,4 +1,4 @@
-const _createColorCodeGetter = require('./colorizing').createColorCodeGetter;
+import { createColorCodeGetter as _createColorCodeGetter } from './colorizing';
 
 function getPaletteIndex(value, items) {
     let start = 0;
@@ -33,5 +33,6 @@ function rangeColorizer(options, themeManager) {
     };
 }
 
-require('./colorizing').addColorizer('range', rangeColorizer);
-module.exports = rangeColorizer;
+import { addColorizer } from './colorizing';
+addColorizer('range', rangeColorizer);
+export default rangeColorizer;

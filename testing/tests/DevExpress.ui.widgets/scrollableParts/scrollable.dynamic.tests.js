@@ -5,6 +5,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import pointerMock from '../../../helpers/pointerMock.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,

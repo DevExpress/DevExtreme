@@ -227,10 +227,10 @@ QUnit.module('options changing', {
         assert.expect(2);
 
         this.instance.option('placeholder', 'John Doe');
-        assert.equal(this.element.find('.' + INPUT_CLASS).prop('placeholder') || this.element.find('.' + PLACEHOLDER_CLASS).attr('data-dx_placeholder'), 'John Doe');
+        assert.equal(this.element.find('.' + PLACEHOLDER_CLASS).attr('data-dx_placeholder'), 'John Doe');
 
         this.instance.option('placeholder', 'John Jr. Doe');
-        assert.equal(this.element.find('.' + INPUT_CLASS).prop('placeholder') || this.element.find('.' + PLACEHOLDER_CLASS).attr('data-dx_placeholder'), 'John Jr. Doe');
+        assert.equal(this.element.find('.' + PLACEHOLDER_CLASS).attr('data-dx_placeholder'), 'John Jr. Doe');
     });
 
     QUnit.test('\'maxLength\' option', function(assert) {

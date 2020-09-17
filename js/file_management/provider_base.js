@@ -149,4 +149,4 @@ class FileSystemProviderBase {
     }
 }
 
-module.exports = FileSystemProviderBase;
+export default FileSystemProviderBase;

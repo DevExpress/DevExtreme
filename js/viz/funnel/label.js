@@ -175,7 +175,7 @@ function removeEmptySpace(labels, requiredSpace, startPoint) {
     }, requiredSpace);
 }
 
-exports.plugin = {
+export const plugin = {
     name: 'lables',
     init: noop,
     dispose: noop,

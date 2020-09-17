@@ -2,8 +2,8 @@ import $ from '../../core/renderer';
 import treeListCore from './ui.tree_list.core';
 import { noop, equalByValue } from '../../core/utils/common';
 import selectionModule from '../grid_core/ui.grid_core.selection';
-import errors from '../widget/ui.errors';
 import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -168,7 +168,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     const selectedRowKeys = that.option('selectedRowKeys');
                     const isRecursiveSelection = this.isRecursiveSelection();
                     const normalizedArgs = isRecursiveSelection && that._normalizeSelectionArgs({
-                        keys: value || []
+                        keys: isDefined(value) ? value : []
                     }, !isDeselect);
 
                     if(normalizedArgs && !equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {
@@ -387,7 +387,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                 },
 
                 _isModeLeavesOnly: function(mode) {
-                    return mode === 'leavesOnly' || mode === true;
+                    return mode === 'leavesOnly';
                 },
 
                 _getAllSelectedRowKeys: function(parentKeys) {
@@ -466,10 +466,6 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
 
                     if(!that._dataController) {
                         return [];
-                    }
-
-                    if(mode === true) {
-                        errors.log('W0002', 'dxTreeList', 'getSelectedRowKeys(leavesOnly)', '18.1', 'Use the \'getSelectedRowKeys(mode)\' method with a string parameter instead');
                     }
 
                     let selectedRowKeys = that.callBase.apply(that, arguments);

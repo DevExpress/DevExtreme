@@ -20,13 +20,15 @@ const ScrollBarClass = scrollBarClassModule.ScrollBar;
 const trackerModule = require('viz/chart_components/tracker');
 const ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker);
 const PieTrackerSub = vizMocks.stubClass(trackerModule.PieTracker);
-const chartModule = require('viz/chart');
 const dataValidatorModule = require('viz/components/data_validator');
 const chartMocks = require('../../../helpers/chartMocks.js');
 const insertMockFactory = chartMocks.insertMockFactory;
 const resetMockFactory = chartMocks.resetMockFactory;
 const exportModule = require('viz/core/export');
+const _test_prepareSegmentRectPoints = require('viz/utils')._test_prepareSegmentRectPoints;
 const restoreMockFactory = chartMocks.restoreMockFactory;
+require('viz/chart');
+const tooltipOrig = tooltipModule.Tooltip;
 
 exports.LabelCtor = LabelCtor;
 exports.rendererModule = rendererModule;
@@ -46,9 +48,9 @@ function stubExport() {
     const that = this;
     that.export = new vizMocks.ExportMenu();
     that.export.stub('measure').returns([0, 0]);
-    sinon.stub(exportModule, 'ExportMenu', function() {
+    exportModule.DEBUG_set_ExportMenu(sinon.spy(function() {
         return that.export;
-    });
+    }));
 }
 
 stubExport();
@@ -69,12 +71,12 @@ rendererModule.Renderer = sinon.spy(function(parameters) {
     return new vizMocks.Renderer(parameters);
 });
 
-titleModule.Title = sinon.spy(function(parameters) {
+titleModule.DEBUG_set_title(sinon.spy(function(parameters) {
     const title = new vizMocks.Title(parameters);
     title.stub('layoutOptions').returns({ horizontalAlignment: 'center', verticalAlignment: 'top' });
     title.stub('measure').returns([0, 0]);
     return title;
-});
+}));
 
 legendModule.Legend = sinon.spy(function(parameters) {
     const legend = new vizMocks.Legend(parameters);
@@ -137,7 +139,6 @@ exports.environment = {
         that.themeManager.getOptions.withArgs('series').returnsArg(1);
         that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
         that.themeManager.getOptions.withArgs('margin').returns({
-            marginsThemeApplied: true,
             left: 0,
             right: 0,
             top: 0,
@@ -217,14 +218,14 @@ exports.environment = {
             family.updateSeriesValues = sinon.stub();
             return family;
         });
-        this.prepareSegmentRectPoints = chartModule._test_prepareSegmentRectPoints(function(x, y, w, h, borderOptions) { return { points: [x, y, w, h], pathType: borderOptions }; });
+        this.prepareSegmentRectPoints = _test_prepareSegmentRectPoints(function(x, y, w, h, borderOptions) { return { points: [x, y, w, h], pathType: borderOptions }; });
         this.createCrosshair = sinon.stub(crosshairModule, 'Crosshair', function() {
             return sinon.createStubInstance(Crosshair);
         });
 
-        tooltipModule.Tooltip = sinon.spy(function(parameters) {
+        tooltipModule.DEBUG_set_tooltip(sinon.spy(function(parameters) {
             return that.tooltip;
-        });
+        }));
         sinon.stub(vizUtils, 'updatePanesCanvases', function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
@@ -257,11 +258,11 @@ exports.environment = {
         this.restoreValidateData();
 
         resetModules();
-        tooltipModule.Tooltip.reset();
+        tooltipModule.DEBUG_set_tooltip(tooltipOrig);
 
         this.tooltip = null;
 
-        tooltipModule.Tooltip = null;
+        tooltipModule.DEBUG_set_tooltip(null);
 
 
     },

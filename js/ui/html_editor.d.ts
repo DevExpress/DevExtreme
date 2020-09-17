@@ -226,6 +226,15 @@ export default class dxHtmlEditor extends Editor {
      */
     getLength(): number;
     /**
+     * @docid dxHtmlEditorMethods.getModule
+     * @publicName getModule(moduleName)
+     * @param1 moduleName:string
+     * @return Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getModule(moduleName: string): any;
+    /**
      * @docid dxHtmlEditorMethods.getQuillInstance
      * @publicName getQuillInstance()
      * @return Object
@@ -348,7 +357,7 @@ export interface dxHtmlEditorMention {
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -394,7 +403,7 @@ export interface dxHtmlEditorMention {
      * @type_function_param1_field2 id:string|number
      * @type_function_param1_field3 value:any
      * @type_function_param2 contentElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -412,7 +421,7 @@ export interface dxHtmlEditorMention {
 export interface dxHtmlEditorToolbar {
     /**
      * @docid dxHtmlEditorToolbar.container
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */

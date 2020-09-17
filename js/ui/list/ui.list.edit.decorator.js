@@ -1,15 +1,19 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const noop = require('../../core/utils/common').noop;
-const Class = require('../../core/class');
-const swipeEvents = require('../../events/swipe');
-const eventUtils = require('../../events/utils');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import { noop } from '../../core/utils/common';
+import Class from '../../core/class';
+import {
+    start as swipeEventStart,
+    swipe as swipeEventSwipe,
+    end as swipeEventEnd
+} from '../../events/swipe';
+import { addNamespace } from '../../events/utils';
 
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
-const SWIPE_START_EVENT_NAME = eventUtils.addNamespace(swipeEvents.start, LIST_EDIT_DECORATOR);
-const SWIPE_UPDATE_EVENT_NAME = eventUtils.addNamespace(swipeEvents.swipe, LIST_EDIT_DECORATOR);
-const SWIPE_END_EVENT_NAME = eventUtils.addNamespace(swipeEvents.end, LIST_EDIT_DECORATOR);
+const SWIPE_START_EVENT_NAME = addNamespace(swipeEventStart, LIST_EDIT_DECORATOR);
+const SWIPE_UPDATE_EVENT_NAME = addNamespace(swipeEventSwipe, LIST_EDIT_DECORATOR);
+const SWIPE_END_EVENT_NAME = addNamespace(swipeEventEnd, LIST_EDIT_DECORATOR);
 
 const EditDecorator = Class.inherit({
 
@@ -108,4 +112,4 @@ const EditDecorator = Class.inherit({
 
 });
 
-module.exports = EditDecorator;
+export default EditDecorator;

@@ -1,7 +1,7 @@
-const proto = require('./tree_map.base').prototype;
-const _expand = require('../core/helpers').expand;
+import { prototype as proto } from './tree_map.base';
+import { expand as _expand } from '../core/helpers';
 
-require('./api');
+import './api';
 
 proto._eventsMap.onDrill = { name: 'drill' };
 

@@ -5,7 +5,7 @@ import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import { triggerResizeEvent } from '../../events/visibility_change';
 
-require('../drop_down_menu');
+import '../drop_down_menu';
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
 
@@ -124,7 +124,7 @@ const HeaderPanel = columnsView.ColumnsView.inherit({
     allowDragging: noop
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
         };

@@ -4,7 +4,7 @@ import { each } from '../../core/utils/iterator';
 import DataHelperMixin from '../../data_helper';
 import { isFunction as _isFunction } from '../../core/utils/type';
 import { isDefined as _isDefined } from '../../core/utils/type';
-import DeferredModule from '../../core/utils/deferred';
+import { Deferred, when } from '../../core/utils/deferred';
 import { parseScalar as _parseScalar,
     patchFontOptions as _patchFontOptions,
     normalizeEnum as _normalizeEnum
@@ -976,7 +976,7 @@ MapLayer.prototype = _extend({
     setOptions: function(options) {
         const that = this;
         options = that._options = options || {};
-        that._dataSourceLoaded = new DeferredModule.Deferred();
+        that._dataSourceLoaded = new Deferred();
         if('dataSource' in options && options.dataSource !== that._options_dataSource) {
             that._options_dataSource = options.dataSource;
             that._params.notifyDirty();
@@ -1603,7 +1603,7 @@ MapLayerCollection.prototype = {
         readyCallbacks = layers.map(l => {
             return l.getDataReadyCallback();
         });
-        readyCallbacks.length && DeferredModule.when.apply(undefined, readyCallbacks).done(that._dataReady);
+        readyCallbacks.length && when.apply(undefined, readyCallbacks).done(that._dataReady);
     },
 
     _updateClip: function() {

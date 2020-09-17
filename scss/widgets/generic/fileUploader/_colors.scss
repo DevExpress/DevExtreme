@@ -1,171 +1,55 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
+/**
+* $name 10. Filename text color
+* $type color
+*/
+$fileuploader-filename-color: $base-text-color !default;
 
-$fileuploader-filename-color: null !default;
+/**
+* $name 20. File status text color
+* $type color
+*/
 $fileuploader-falename-status-color: null !default;
-$fileuploader-border-color: null !default;
 
+/**
+* $name 30. Border color on dragover
+* $type color
+*/
+$fileuploader-border-color: $base-border-color !default;
 
 @if $color == "carmine" {
-  /**
-    * $name 10. Filename text color
-    * $type color
-    */
-  $fileuploader-filename-color: $base-text-color !default;
-
-  /**
-    * $name 20. File status text color
-    * $type color
-    */
   $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
-
-  /**
-    * $name 30. Border color on dragover
-    * $type color
-    */
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Filename text color
-    * $type color
-    */
-  $fileuploader-filename-color: $base-text-color !default;
-
-  /**
-    * $name 20. File status text color
-    * $type color
-    */
   $fileuploader-falename-status-color: $base-text-color !default;
-
-  /**
-    * $name 30. Border color on dragover
-    * $type color
-    */
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Filename text color
-    * $type color
-    */
-  $fileuploader-filename-color: $base-text-color !default;
-
-  /**
-    * $name 20. File status text color
-    * $type color
-    */
   $fileuploader-falename-status-color: darken($fileuploader-filename-color, 40%) !default;
-
-  /**
-    * $name 30. Border color on dragover
-    * $type color
-    */
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 10. Filename text color
-    * $type color
-    */
-  $fileuploader-filename-color: $base-text-color !default;
-
-  /**
-    * $name 20. File status text color
-    * $type color
-    */
   $fileuploader-falename-status-color: darken($fileuploader-filename-color, 40%) !default;
-
-  /**
-    * $name 30. Border color on dragover
-    * $type color
-    */
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Filename text color
-    * $type color
-    */
-  $fileuploader-filename-color: $base-text-color !default;
-
-  /**
-    * $name 20. File status text color
-    * $type color
-    */
   $fileuploader-falename-status-color: darken($fileuploader-filename-color, 40%) !default;
-
-  /**
-    * $name 30. Border color on dragover
-    * $type color
-    */
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Filename text color
-    * $type color
-    */
-  $fileuploader-filename-color: $base-text-color !default;
-
-  /**
-    * $name 20. File status text color
-    * $type color
-    */
   $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
-
-  /**
-    * $name 30. Border color on dragover
-    * $type color
-    */
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 10. Filename text color
-    * $type color
-    */
-  $fileuploader-filename-color: $base-text-color !default;
-
-  /**
-    * $name 20. File status text color
-    * $type color
-    */
   $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
-
-  /**
-    * $name 30. Border color on dragover
-    * $type color
-    */
-  $fileuploader-border-color: $base-border-color !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 10. Filename text color
-    * $type color
-    */
-  $fileuploader-filename-color: $base-text-color !default;
-
-  /**
-    * $name 20. File status text color
-    * $type color
-    */
   $fileuploader-falename-status-color: lighten($fileuploader-filename-color, 40%) !default;
-
-  /**
-    * $name 30. Border color on dragover
-    * $type color
-    */
-  $fileuploader-border-color: $base-border-color !default;
 }
-

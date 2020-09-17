@@ -112,7 +112,7 @@ module('dialog tests', {
         };
         assert.equal(instance.title, undefined, 'dialog.title value isn\'t set.');
 
-        dialog.title = this.title;
+        dialog.DEBUG_set_title(this.title);
         instance = dialog.custom(options);
         instance.show();
 
@@ -220,7 +220,7 @@ module('dialog tests', {
     test('alert dialog', function(assert) {
         assert.ok(this.thereIsNoDialog(), 'Dialog is not shown.');
 
-        dialog.title = this.title;
+        dialog.DEBUG_set_title(this.title);
         dialog.alert(this.messageHtml);
 
         assert.ok(this.thereIsDialog(), 'Dialog is shown.');

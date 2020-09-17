@@ -13,4 +13,4 @@ const publisherMixin = {
         }
     }
 };
-module.exports = publisherMixin;
+export default publisherMixin;

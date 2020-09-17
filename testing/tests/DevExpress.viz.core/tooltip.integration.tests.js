@@ -9,7 +9,7 @@ $('#qunit-fixture').append('<div id="test-container" style="width: 600px; height
 QUnit.module('Tooltip', {
     beforeEach: function() {
         const tooltip = this.tooltip = new vizMocks.Tooltip();
-        tooltipModule.Tooltip = sinon.spy(function() { return tooltip; });
+        tooltipModule.DEBUG_set_tooltip(sinon.spy(function() { return tooltip; }));
         this.$container = $('#test-container');
     },
 

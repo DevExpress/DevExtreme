@@ -4,13 +4,15 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/mixins" as *;
+@use "../../base/fileUploader";
+
 // adduse
 
 
-$MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
+$material-fileuploader-file-wrapper-border-size: 3px;
 
 .dx-fileuploader-wrapper {
-  padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING;
+  padding: $material-fileuploader-vertical-padding;
 }
 
 .dx-fileuploader-content > .dx-fileuploader-upload-button {
@@ -19,8 +21,8 @@ $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 }
 
 .dx-fileuploader-input-wrapper {
-  padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING 0 $MATERIAL_FILEUPLOADER_VERTICAL_PADDING;
-  border: $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE dashed transparent;
+  padding: $material-fileuploader-vertical-padding 0 $material-fileuploader-vertical-padding;
+  border: $material-fileuploader-file-wrapper-border-size dashed transparent;
 }
 
 .dx-fileuploader.dx-state-disabled .dx-fileuploader-input-label {
@@ -43,21 +45,22 @@ $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 
   .dx-fileuploader-input-container {
     display: block;
-    border: $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE dashed $fileuploader-border-color;
+    border: $material-fileuploader-file-wrapper-border-size dashed $fileuploader-border-color;
     width: 100%;
   }
 
   .dx-fileuploader-input {
     display: block;
     width: 100%;
-    padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING*2 $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE;
-    //NOTE: height of the widget should be the same in default and drag over states
+    padding: $material-fileuploader-vertical-padding * 2 $material-fileuploader-file-wrapper-border-size;
+
+    // NOTE: height of the widget should be the same in default and drag over states
     margin-bottom: 1px;
     box-sizing: content-box;
   }
 
   .dx-fileuploader-input-label { // stylelint-disable-line no-duplicate-selectors
-    padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING*2 $MATERIAL_FILEUPLOADER_VERTICAL_PADDING + 2px;
+    padding: $material-fileuploader-vertical-padding * 2 $material-fileuploader-vertical-padding + 2px;
   }
 }
 
@@ -67,11 +70,11 @@ $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 }
 
 .dx-fileuploader-input {
-  padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING 0;
+  padding: $material-fileuploader-vertical-padding 0;
 }
 
 .dx-fileuploader-input-label {
-  padding: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING + ($MATERIAL_BASE_FONT_SIZE/2 - $MATERIAL_FILEUPLOADER_VERTICAL_PADDING)/2 + 1px $MATERIAL_FILEUPLOADER_VERTICAL_PADDING + 2px;
+  padding: $material-fileuploader-vertical-padding + ($material-base-font-size / 2 - $material-fileuploader-vertical-padding) / 2 + 1px $material-fileuploader-vertical-padding + 2px;
   color: $fileuploader-filename-color;
 
   @include dx-overflow();
@@ -96,27 +99,27 @@ $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 
   .dx-fileuploader-file-container {
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-    padding: $MATERIAL_FILEUPLOADER_FILE_CONTAINER_PADDING;
+    padding: $material-fileuploader-file-container-padding;
     margin-bottom: 4px;
 
     .dx-fileuploader-button-container + .dx-fileuploader-button-container {
       .dx-button {
-        margin-right: $MATERIAL_FILEUPLOADER_FILE_CONTAINER_TEXT_MARGIN;
+        margin-right: $material-fileuploader-file-container-text-margin;
 
         .dx-rtl & {
-          margin-left: $MATERIAL_FILEUPLOADER_FILE_CONTAINER_TEXT_MARGIN;
+          margin-left: $material-fileuploader-file-container-text-margin;
           margin-right: 0;
         }
       }
     }
 
     .dx-button {
-      height: $MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_SIZE;
-      width: $MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_SIZE;
-      margin-right: $MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_MARGIN;
+      height: $material-fileuploader-file-container-button-size;
+      width: $material-fileuploader-file-container-button-size;
+      margin-right: $material-fileuploader-file-container-button-margin;
 
       .dx-rtl & {
-        margin-left: $MATERIAL_FILEUPLOADER_FILE_CONTAINER_BUTTON_MARGIN;
+        margin-left: $material-fileuploader-file-container-button-margin;
         margin-right: 0;
       }
     }
@@ -129,13 +132,13 @@ $MATERIAL_FILEUPLOADER_FILE_WRAPPER_BORDER_SIZE: 3px;
 }
 
 .dx-fileuploader-file-name {
-  padding-bottom: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING/2;
+  padding-bottom: $material-fileuploader-vertical-padding / 2;
   color: $fileuploader-filename-color;
   font-weight: 500;
 }
 
 .dx-fileuploader-file-size {
-  padding-bottom: $MATERIAL_FILEUPLOADER_VERTICAL_PADDING/2;
+  padding-bottom: $material-fileuploader-vertical-padding / 2;
 }
 
 .dx-fileuploader-invalid {

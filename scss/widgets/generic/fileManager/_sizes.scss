@@ -1,3 +1,49 @@
 @use "../sizes" as *;
+
 // adduse
+
+$filemanager-toolbar-separator-height: null !default;
+$filemanager-toolbar-viewmode-width: null !default;
+$filemanager-toolbar-viewmode-padding: null !default;
+$filemanager-breadcrumbs-item-padding-top: null !default;
+$filemanager-breadcrumbs-item-padding-bottom: null !default;
+$filemanager-details-view-checkbox-column-width: null !default;
+$filemanager-file-actions-button-size: null !default;
+$filemanager-file-actions-button-top-bottom-padding: null !default;
+$filemanager-dirs-tree-icon-margin-bottom: null !default;
+$filemanager-large-icon-size: null !default;
+$filemanager-large-icon-button-content-padding: null !default;
+$filemanager-progress-box-button-close-margin-top: null !default;
+
+$filemanager-progress-panel-padding-top: 6px;
+
+@if $size == "default" {
+  $filemanager-toolbar-separator-height: 36px;
+  $filemanager-toolbar-viewmode-width: 150px;
+  $filemanager-toolbar-viewmode-padding: 8px;
+  $filemanager-breadcrumbs-item-padding-top: 5px;
+  $filemanager-breadcrumbs-item-padding-bottom: 8px;
+  $filemanager-details-view-checkbox-column-width: 43px;
+  $filemanager-file-actions-button-size: 21px;
+  $filemanager-file-actions-button-top-bottom-padding: 10px;
+  $filemanager-dirs-tree-icon-margin-bottom: 0;
+  $filemanager-large-icon-size: 22px;
+  $filemanager-large-icon-button-content-padding: 4px;
+  $filemanager-progress-box-button-close-margin-top: 9px;
+}
+
+@else if $size == "compact" {
+  $filemanager-toolbar-separator-height: 26px;
+  $filemanager-toolbar-viewmode-width: 130px;
+  $filemanager-toolbar-viewmode-padding: 5px;
+  $filemanager-breadcrumbs-item-padding-top: 3px;
+  $filemanager-breadcrumbs-item-padding-bottom: 7px;
+  $filemanager-details-view-checkbox-column-width: 39px;
+  $filemanager-file-actions-button-size: 18px;
+  $filemanager-file-actions-button-top-bottom-padding: 9px;
+  $filemanager-dirs-tree-icon-margin-bottom: 1px;
+  $filemanager-large-icon-size: 18px;
+  $filemanager-large-icon-button-content-padding: 3px;
+  $filemanager-progress-box-button-close-margin-top: 6px;
+}
 

@@ -16,13 +16,9 @@ function adjustValue(value, precision) {
     return roundByAbs(intermediateValue) / precisionMultiplier;
 }
 
-function toFixed(value, precision) {
+export function toFixed(value, precision) {
     const valuePrecision = precision || 0;
     const adjustedValue = valuePrecision > 0 ? adjustValue(...arguments) : value;
 
     return (adjustedValue).toFixed(valuePrecision);
 }
-
-export {
-    toFixed
-};

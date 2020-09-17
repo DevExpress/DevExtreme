@@ -4,7 +4,7 @@ import { extend } from '../../core/utils/extend';
 import GroupedEditStrategy from './ui.list.edit.strategy.grouped';
 import { format as formatMessage } from '../../localization/message';
 import EditProvider from './ui.list.edit.provider';
-import ListBase from './ui.list.base';
+import { ListBase } from './ui.list.base';
 
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_ITEM_RESPONSE_WAIT_CLASS = 'dx-list-item-response-wait';
@@ -88,14 +88,6 @@ const ListEdit = ListBase.inherit({
         }
     },
 
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            allowItemReordering: { since: '19.2', alias: 'itemDragging.allowReordering' }
-        });
-    },
-
     _getDefaultOptions() {
         return extend(this.callBase(), {
             showSelectionControls: false,
@@ -132,11 +124,7 @@ const ListEdit = ListBase.inherit({
 
             itemDeleteMode: 'static',
 
-            allowItemReordering: false,
-
             itemDragging: {}
-
-
         });
     },
 
@@ -301,7 +289,6 @@ const ListEdit = ListBase.inherit({
             case 'menuMode':
             case 'allowItemDeleting':
             case 'itemDeleteMode':
-            case 'allowItemReordering':
             case 'itemDragging':
             case 'selectAllText':
                 this._invalidate();
@@ -328,7 +315,7 @@ const ListEdit = ListBase.inherit({
     /**
     * @name dxListMethods.getFlatIndexByItemElement
     * @publicName getFlatIndexByItemElement(itemElement)
-    * @param1 itemElement:Node
+    * @param1 itemElement:Element
     * @return object
     * @hidden
     */
@@ -340,7 +327,7 @@ const ListEdit = ListBase.inherit({
     * @name dxListMethods.getItemElementByFlatIndex
     * @publicName getItemElementByFlatIndex(flatIndex)
     * @param1 flatIndex:Number
-    * @return Node
+    * @return Element
     * @hidden
     */
     getItemElementByFlatIndex(flatIndex) {
@@ -368,4 +355,4 @@ const ListEdit = ListBase.inherit({
 
 });
 
-module.exports = ListEdit;
+export default ListEdit;

@@ -34,7 +34,7 @@ const DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(({ model, parent }) =>
     return widgetElement;
 });
 
-export default class TemplateManager {
+export class TemplateManager {
     constructor(createElement, anonymousTemplateName) {
         this._tempTemplates = [];
         this._defaultTemplates = {};

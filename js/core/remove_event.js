@@ -1,7 +1,7 @@
-const $ = require('./renderer');
-const beforeCleanData = require('./element_data').beforeCleanData;
-const eventsEngine = require('../events/core/events_engine');
-const registerEvent = require('../events/core/event_registrator');
+import $ from './renderer';
+import { beforeCleanData } from './element_data';
+import eventsEngine from '../events/core/events_engine';
+import registerEvent from '../events/core/event_registrator';
 
 const eventName = 'dxremove';
 const eventPropName = 'dxRemoveEvent';
@@ -31,4 +31,4 @@ registerEvent(eventName, {
     }
 });
 
-module.exports = eventName;
+export default eventName;

@@ -1,5 +1,5 @@
-const typeUtils = require('./type');
-const variableWrapper = require('./variable_wrapper');
+import { isNumeric, isPlainObject, isObject } from './type';
+import variableWrapper from './variable_wrapper';
 
 const clone = (function() {
     function Clone() { }
@@ -22,8 +22,8 @@ const orderEach = function(map, func) {
     }
 
     keys.sort(function(x, y) {
-        const isNumberX = typeUtils.isNumeric(x);
-        const isNumberY = typeUtils.isNumeric(y);
+        const isNumberX = isNumeric(x);
+        const isNumberY = isNumeric(y);
 
         if(isNumberX && isNumberY) return x - y;
         if(isNumberX && !isNumberY) return -1;
@@ -60,8 +60,8 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
             continue;
         }
 
-        if(typeUtils.isPlainObject(newValue)) {
-            const goDeeper = extendComplexObject ? typeUtils.isObject(prevValue) : typeUtils.isPlainObject(prevValue);
+        if(isPlainObject(newValue)) {
+            const goDeeper = extendComplexObject ? isObject(prevValue) : isPlainObject(prevValue);
             newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference);
         }
 
@@ -73,6 +73,8 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
     return target;
 };
 
-exports.clone = clone;
-exports.orderEach = orderEach;
-exports.deepExtendArraySafe = deepExtendArraySafe;
+export {
+    clone,
+    orderEach,
+    deepExtendArraySafe
+};

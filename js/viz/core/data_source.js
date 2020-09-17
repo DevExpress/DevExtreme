@@ -1,5 +1,5 @@
-const noop = require('../../core/utils/common').noop;
-const DataHelperMixin = require('../../data_helper');
+import { noop } from '../../core/utils/common';
+import DataHelperMixin from '../../data_helper';
 const postCtor = DataHelperMixin.postCtor;
 let name;
 const members = {
@@ -35,7 +35,7 @@ for(name in DataHelperMixin) {
     members[name] = DataHelperMixin[name];
 }
 
-exports.plugin = {
+export const plugin = {
     name: 'data_source',
     init: function() {
         postCtor.call(this);

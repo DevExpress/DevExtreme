@@ -4,12 +4,13 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
 .dx-pager {
-  padding-top: $GENERIC_PAGER_PADDINGS;
-  padding-bottom: $GENERIC_PAGER_PADDINGS;
+  padding-top: $generic-pager-paddings;
+  padding-bottom: $generic-pager-paddings;
 
   &.dx-light-mode {
     .dx-page-sizes {
@@ -23,18 +24,18 @@
 
   .dx-pages {
     .dx-page {
-      padding: $GENERIC_PAGER_PAGE_PADDING_TOP $GENERIC_PAGER_PAGE_PADDING_LEFT_RIGHT $GENERIC_PAGER_PAGE_PADDING_BOTTOM;
+      padding: $generic-pager-page-padding-top $generic-pager-page-padding-left-right $generic-pager-page-padding-bottom;
     }
 
     .dx-separator {
-      padding-left: $GENERIC_PAGER_SEPARATOR_PADDINGS;
-      padding-right: $GENERIC_PAGER_SEPARATOR_PADDINGS;
+      padding-left: $generic-pager-separator-paddings;
+      padding-right: $generic-pager-separator-paddings;
     }
 
     .dx-navigate-button {
       width: 9px;
-      height: $GENERIC_PAGER_NAVBUTTON_HEIGHT;
-      padding: $GENERIC_PAGER_NAVBUTTON_PADDINGS;
+      height: $generic-pager-navbutton-height;
+      padding: $generic-pager-navbutton-paddings;
     }
 
     .dx-prev-button {
@@ -60,10 +61,10 @@
   }
 
   .dx-page-sizes .dx-page-size {
-    padding-left: $GENERIC_PAGER_PAGESIZE_PADDING_LEFT;
-    padding-right: $GENERIC_PAGER_PAGESIZE_PADDING_RIGHT;
-    padding-top: $GENERIC_PAGER_PAGESIZE_PADDING_TOP;
-    padding-bottom: $GENERIC_PAGER_PAGESIZE_PADDING_BOTTOM;
+    padding-left: $generic-pager-pagesize-padding-left;
+    padding-right: $generic-pager-pagesize-padding-right;
+    padding-top: $generic-pager-pagesize-padding-top;
+    padding-bottom: $generic-pager-pagesize-padding-bottom;
   }
 
   .dx-pages,

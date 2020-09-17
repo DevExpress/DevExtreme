@@ -1,21 +1,23 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const registerComponent = require('../core/component_registrator');
-const commonUtils = require('../core/utils/common');
-const typeUtils = require('../core/utils/type');
-const windowUtils = require('../core/utils/window');
-const extend = require('../core/utils/extend').extend;
-const getPublicElement = require('../core/element').getPublicElement;
-const fx = require('../animation/fx');
-const clickEvent = require('../events/click');
-const translator = require('../animation/translator');
-const devices = require('../core/devices');
-const Widget = require('./widget/ui.widget');
-const eventUtils = require('../events/utils');
-const CollectionWidget = require('./collection/ui.collection_widget.edit');
-const Swipeable = require('../events/gesture/swipeable');
-const BindableTemplate = require('../core/templates/bindable_template').BindableTemplate;
-const Deferred = require('../core/utils/deferred').Deferred;
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import registerComponent from '../core/component_registrator';
+import { noop } from '../core/utils/common';
+import { isDefined, isPlainObject } from '../core/utils/type';
+import { hasWindow } from '../core/utils/window';
+import { extend } from '../core/utils/extend';
+import { getPublicElement } from '../core/element';
+import fx from '../animation/fx';
+import { name as clickEventName } from '../events/click';
+import translator from '../animation/translator';
+import devices from '../core/devices';
+import Widget from './widget/ui.widget';
+import { addNamespace } from '../events/utils';
+import CollectionWidget from './collection/ui.collection_widget.edit';
+import Swipeable from '../events/gesture/swipeable';
+import { BindableTemplate } from '../core/templates/bindable_template';
+import { Deferred } from '../core/utils/deferred';
+
+// STYLE gallery
 
 const GALLERY_CLASS = 'dx-gallery';
 const GALLERY_WRAPPER_CLASS = GALLERY_CLASS + '-wrapper';
@@ -43,8 +45,8 @@ const MAX_CALC_ERROR = 1;
 const GalleryNavButton = Widget.inherit({
     _supportedKeys: function() {
         return extend(this.callBase(), {
-            pageUp: commonUtils.noop,
-            pageDown: commonUtils.noop
+            pageUp: noop,
+            pageDown: noop
         });
     },
     _getDefaultOptions: function() {
@@ -61,7 +63,7 @@ const GalleryNavButton = Widget.inherit({
 
         const that = this;
         const $element = this.$element();
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
 
         $element.addClass(GALLERY_CLASS + '-nav-button-' + this.option('direction'));
 
@@ -183,7 +185,7 @@ const Gallery = CollectionWidget.inherit({
             item: new BindableTemplate((function($container, data) {
                 const $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 
-                if(typeUtils.isPlainObject(data)) {
+                if(isPlainObject(data)) {
                     this._prepareDefaultItemTemplate(data, $container);
 
                     $img.attr({
@@ -245,7 +247,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _itemsPerPage: function() {
-        const itemsPerPage = windowUtils.hasWindow() ? Math.floor(1 / this._itemPercentWidth()) : 1;
+        const itemsPerPage = hasWindow() ? Math.floor(1 / this._itemPercentWidth()) : 1;
 
         return Math.min(itemsPerPage, this._itemsCount());
     },
@@ -313,7 +315,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _renderDragHandler: function() {
-        const eventName = eventUtils.addNamespace('dragstart', this.NAME);
+        const eventName = addNamespace('dragstart', this.NAME);
 
         eventsEngine.off(this.$element(), eventName);
         eventsEngine.on(this.$element(), eventName, 'img', function() { return false; });
@@ -329,7 +331,7 @@ const Gallery = CollectionWidget.inherit({
     },
 
     _renderItems: function(items) {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             const selectedIndex = this.option('selectedIndex');
 
             items = items.length > selectedIndex ? items.slice(selectedIndex, selectedIndex + 1) : items.slice(0, 1);
@@ -469,7 +471,7 @@ const Gallery = CollectionWidget.inherit({
         const targetPosition = this._offsetDirection() * targetIndex * (itemWidth + this._itemFreeSpace());
         let positionReady;
 
-        if(typeUtils.isDefined(this._animationOverride)) {
+        if(isDefined(this._animationOverride)) {
             animate = this._animationOverride;
             delete this._animationOverride;
         }
@@ -574,11 +576,39 @@ const Gallery = CollectionWidget.inherit({
             .addClass(GALLERY_INDICATOR_CLASS)
             .appendTo(this._$wrapper);
 
+        const isIndicatorEnabled = this.option('indicatorEnabled');
+
         for(let i = 0; i < this._pagesCount(); i++) {
-            $('<div>').addClass(GALLERY_INDICATOR_ITEM_CLASS).appendTo(indicator);
+            const $indicatorItem = $('<div>').addClass(GALLERY_INDICATOR_ITEM_CLASS).appendTo(indicator);
+
+            if(isIndicatorEnabled) {
+                this._attachIndicatorClickHandler($indicatorItem, i);
+            }
         }
 
         this._renderSelectedPageIndicator();
+    },
+
+    _attachIndicatorClickHandler: function($element, index) {
+        eventsEngine.on($element, addNamespace(clickEventName, this.NAME), function(event) {
+            this._indicatorSelectHandler(event, index);
+        }.bind(this));
+    },
+
+    _detachIndicatorClickHandler: function($element) {
+        eventsEngine.off($element, addNamespace(clickEventName, this.NAME));
+    },
+
+    _toggleIndicatorInteraction: function(clickEnabled) {
+        const $indicatorItems = this._$indicator?.find(GALLERY_INDICATOR_ITEM_SELECTOR) || [];
+
+        if($indicatorItems.length) {
+            $indicatorItems.each(function(index, element) {
+                clickEnabled ?
+                    this._attachIndicatorClickHandler($(element), index) :
+                    this._detachIndicatorClickHandler($(element));
+            }.bind(this));
+        }
     },
 
     _cleanIndicators: function() {
@@ -651,30 +681,19 @@ const Gallery = CollectionWidget.inherit({
             onEnd: this._swipeEndHandler.bind(this),
             itemSizeFunc: this._elementWidth.bind(this)
         });
-
-        const indicatorSelectAction = this._createAction(this._indicatorSelectHandler);
-
-        eventsEngine.off(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR);
-        eventsEngine.on(rootElement, eventUtils.addNamespace(clickEvent.name, this.NAME), GALLERY_INDICATOR_ITEM_SELECTOR, function(e) {
-            indicatorSelectAction({ event: e });
-        });
     },
 
-    _indicatorSelectHandler: function(args) {
-        const e = args.event;
-        const instance = args.component;
-
-        if(!instance.option('indicatorEnabled')) {
+    _indicatorSelectHandler: function(e, indicatorIndex) {
+        if(!this.option('indicatorEnabled')) {
             return;
         }
 
-        const indicatorIndex = $(e.target).index();
-        const itemIndex = instance._fitPaginatedIndex(indicatorIndex * instance._itemsPerPage());
+        const itemIndex = this._fitPaginatedIndex(indicatorIndex * this._itemsPerPage());
 
-        instance._needLongMove = true;
+        this._needLongMove = true;
 
-        instance.option('selectedIndex', itemIndex);
-        instance._loadNextPageIfNeeded(itemIndex);
+        this.option('selectedIndex', itemIndex);
+        this._loadNextPageIfNeeded(itemIndex);
     },
 
     _renderNavButtons: function() {
@@ -737,6 +756,7 @@ const Gallery = CollectionWidget.inherit({
         ) {
             this._loadNextPage().done((function() {
                 this._renderIndicator();
+                this._cloneDuplicateItems();
                 this._renderItemPositions();
                 this._renderNavButtonsVisibility();
                 this._renderItemSizes(selectedIndex);
@@ -1018,7 +1038,7 @@ const Gallery = CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    _selectFocusedItem: commonUtils.noop,
+    _selectFocusedItem: noop,
 
     _moveFocus: function() {
         this._stopItemAnimations();
@@ -1082,7 +1102,7 @@ const Gallery = CollectionWidget.inherit({
                 this.$element().toggleClass(GALLERY_LOOP_CLASS, args.value);
                 this.option('loopItemFocus', args.value);
 
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     this._cloneDuplicateItems();
                     this._renderItemPositions();
                     this._renderNavButtonsVisibility();
@@ -1099,15 +1119,17 @@ const Gallery = CollectionWidget.inherit({
                 break;
             case 'wrapAround':
             case 'stretchImages':
-                if(windowUtils.hasWindow()) {
+                if(hasWindow()) {
                     this._renderItemSizes();
                     this._renderItemPositions();
                     this._renderItemVisibility();
                 }
                 break;
             case 'swipeEnabled':
-            case 'indicatorEnabled':
                 this._renderUserInteraction();
+                break;
+            case 'indicatorEnabled':
+                this._toggleIndicatorInteraction(args.value);
                 break;
             default:
                 this.callBase(args);
@@ -1145,4 +1167,4 @@ const Gallery = CollectionWidget.inherit({
 
 registerComponent('dxGallery', Gallery);
 
-module.exports = Gallery;
+export default Gallery;

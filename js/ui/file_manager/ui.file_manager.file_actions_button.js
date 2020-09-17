@@ -65,4 +65,4 @@ class FileManagerFileActionsButton extends Widget {
 
 }
 
-module.exports = FileManagerFileActionsButton;
+export default FileManagerFileActionsButton;

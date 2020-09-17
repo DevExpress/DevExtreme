@@ -1,14 +1,12 @@
-const $ = require('../../core/renderer');
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const iteratorUtils = require('../../core/utils/iterator');
-const fx = require('../fx');
-const animationPresetsModule = require('../presets/presets');
-const deferredUtils = require('../../core/utils/deferred');
-const when = deferredUtils.when;
-const Deferred = deferredUtils.Deferred;
+import $ from '../../core/renderer';
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import { executeAsync } from '../../core/utils/common';
+import { isFunction, isPlainObject } from '../../core/utils/type';
+import iteratorUtils from '../../core/utils/iterator';
+import fx from '../fx';
+import animationPresetsModule from '../presets/presets';
+import { when, Deferred } from '../../core/utils/deferred';
 
 const directionPostfixes = {
     forward: ' dx-forward',
@@ -18,7 +16,7 @@ const directionPostfixes = {
 };
 const DX_ANIMATING_CLASS = 'dx-animating';
 
-const TransitionExecutor = Class.inherit({
+export const TransitionExecutor = Class.inherit({
     ctor: function() {
         this._accumulatedDelays = {
             enter: 0,
@@ -59,7 +57,7 @@ const TransitionExecutor = Class.inherit({
 
         if(!config) {
             result = undefined;
-        } else if(typeUtils.isFunction(config[type])) {
+        } else if(isFunction(config[type])) {
             result = config[type];
         } else {
             result = extend({
@@ -91,9 +89,9 @@ const TransitionExecutor = Class.inherit({
     _createAnimation: function($element, animationConfig, configModifier) {
         let result;
 
-        if(typeUtils.isPlainObject(animationConfig)) {
+        if(isPlainObject(animationConfig)) {
             result = fx.createAnimation($element, animationConfig);
-        } else if(typeUtils.isFunction(animationConfig)) {
+        } else if(isFunction(animationConfig)) {
             result = animationConfig($element, configModifier);
         }
 
@@ -165,7 +163,7 @@ const TransitionExecutor = Class.inherit({
                     that.reset();
                 });
 
-            commonUtils.executeAsync(function() {
+            executeAsync(function() {
                 that._startAnimations();
             });
         }
@@ -177,5 +175,3 @@ const TransitionExecutor = Class.inherit({
     }
 
 });
-
-exports.TransitionExecutor = TransitionExecutor;

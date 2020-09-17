@@ -1,4 +1,4 @@
-const typeUtils = require('./type');
+import { isFunction, type } from './type';
 
 const encodeHtml = (function() {
     const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
@@ -61,14 +61,14 @@ const stringFormat = function() {
     let reg;
     let value;
 
-    if(typeUtils.isFunction(s)) {
+    if(isFunction(s)) {
         return s.apply(this, values);
     }
 
     for(let i = 0; i < values.length; i++) {
         reg = new RegExp('\\{' + i + '\\}', 'gm');
         value = values[i];
-        if(typeUtils.type(value) === 'string' && value.indexOf('$') >= 0) {
+        if(type(value) === 'string' && value.indexOf('$') >= 0) {
             replaceDollarCount = '$'.replace('$', '$$').length;
             value = value.replace('$', replaceDollarCount === 1 ? '$$$$' : '$$');
         }
@@ -96,8 +96,10 @@ const isEmpty = (function() {
     };
 })();
 
-exports.encodeHtml = encodeHtml;
-exports.quadToObject = quadToObject;
-exports.format = stringFormat;
-exports.replaceAll = replaceAll;
-exports.isEmpty = isEmpty;
+export {
+    encodeHtml,
+    quadToObject,
+    stringFormat as format,
+    replaceAll,
+    isEmpty
+};

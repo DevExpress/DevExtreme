@@ -1246,6 +1246,33 @@ QUnit.module('Grouping with basic remoteOperations', {
         }]);
     });
 
+    QUnit.test('grouping with mapping. Use an isContinuationOnNextPage flag', function(assert) {
+        const source = this.createDataSource({
+            pageSize: 2,
+            map: item => {
+                return item;
+            }
+        });
+
+        source.load();
+
+        assert.ok(source.items()[0].isContinuationOnNextPage);
+    });
+
+    QUnit.test('grouping with mapping. Use an isContinuation flag', function(assert) {
+        const source = this.createDataSource({
+            pageSize: 2,
+            pageIndex: 1,
+            map: item => {
+                return item;
+            }
+        });
+
+        source.load();
+
+        assert.ok(source.items()[0].isContinuation);
+    });
+
     QUnit.test('grouping with pageSize less items count. Not Continue on next page group parameter when all items on group on current page', function(assert) {
         const source = this.createDataSource({
             pageSize: 3
@@ -3157,6 +3184,7 @@ QUnit.module('Remote group paging', {
         });
 
         dataSource.load();
+        dataSource.setViewportPosition(1);
 
         // act
         dataSource.changeRowExpand([0]);

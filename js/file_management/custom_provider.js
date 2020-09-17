@@ -90,4 +90,4 @@ class CustomFileSystemProvider extends FileSystemProviderBase {
     }
 }
 
-module.exports = CustomFileSystemProvider;
+export default CustomFileSystemProvider;

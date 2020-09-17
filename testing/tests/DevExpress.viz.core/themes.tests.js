@@ -5,6 +5,8 @@ const uiThemeModule = require('ui/themes');
 require('viz/core/themes/generic.light');
 require('viz/core/themes/generic.dark');
 
+uiThemeModule.setDefaultTimeout(0);
+
 QUnit.moduleStart(function() {
     $.each([
         { platform: 'platform' },
@@ -73,6 +75,22 @@ QUnit.test('registerTheme with options', function(assert) {
 
     $.each(lightTheme, function(key, value) {
         assert.equal(themeModule.getTheme('platform5.light')[key], value);
+    });
+});
+
+QUnit.test('register compact theme with the same name (T925673)', function(assert) {
+    const darkTheme = {
+        name: 'generic.dark.compact',
+        rangeSelector: { background: { color: 'test-background' } },
+    };
+    themeModule.registerTheme(darkTheme, 'generic.dark.compact');
+
+    assert.deepEqual(themeModule.getTheme('generic.dark.compact').rangeSelector.background, {
+        'color': 'test-background',
+        'image': {
+            'location': 'full'
+        },
+        'visible': true
     });
 });
 
@@ -373,6 +391,7 @@ QUnit.module('Interaction with ui.themes', {
     beforeEach: function() {
         themeModule.resetCurrentTheme();
         this.$frame = $('<iframe></iframe>').appendTo('body');
+        return new Promise((resolve) => uiThemeModule.initialized(resolve));
     },
     afterEach: function() {
         this.$frame.remove();

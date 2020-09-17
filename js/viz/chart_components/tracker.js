@@ -1,6 +1,6 @@
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import { extend } from '../../core/utils/extend';
 import { each as _each } from '../../core/utils/iterator';
 import { events as eventsConsts, states as statesConsts } from '../components/consts';
@@ -32,9 +32,26 @@ const INCLUDE_POINTS_MODE = 'includepoints';
 const EXLUDE_POINTS_MODE = 'excludepoints';
 const LEGEND_HOVER_MODES = [INCLUDE_POINTS_MODE, EXLUDE_POINTS_MODE, NONE_MODE];
 
-function getData(event, dataKey) {
+function getData(event, dataKey, tryCheckParent) {
     const target = event.target;
-    return (target.tagName === 'tspan' ? target.parentNode : target)[dataKey];
+    if(target.tagName === 'tspan') {
+        return target.parentNode[dataKey];
+    }
+    const data = target[dataKey];
+    if(tryCheckParent && !isDefined(data)) {
+        const getParentData = function(node) {
+            if(node.parentNode) {
+                if(isDefined(node.parentNode[dataKey])) {
+                    return node.parentNode[dataKey];
+                } else {
+                    return getParentData(node.parentNode);
+                }
+            }
+            return undefined;
+        };
+        return getParentData(target);
+    }
+    return data;
 }
 
 function eventCanceled(event, target) {
@@ -73,7 +90,7 @@ const baseTrackerPrototype = {
         that._renderer.root.off(DOT_EVENT_NS)
             .on(POINTER_ACTION, data, that._pointerHandler)
             .on(addNamespace(pointerEvents.up, EVENT_NS), () => clearTimeout(that._holdTimer))
-            .on(addNamespace(clickEvent.name, EVENT_NS), data, that._clickHandler);
+            .on(addNamespace(clickEventName, EVENT_NS), data, that._clickHandler);
     },
 
     update: function(options) {
@@ -432,7 +449,7 @@ const baseTrackerPrototype = {
                 that._legendClick(item, e);
             }
         } else if(axis?.coordsIn(x, y)) {
-            const argument = getData(e, ARG_DATA);
+            const argument = getData(e, ARG_DATA, true);
             if(isDefined(argument)) {
                 that._eventTrigger('argumentAxisClick', { argument: argument, event: e });
             }
@@ -454,7 +471,7 @@ const baseTrackerPrototype = {
     }
 };
 
-const ChartTracker = function(options) {
+export const ChartTracker = function(options) {
     this.ctor(options);
 };
 
@@ -583,7 +600,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         const that = this;
         that._resetHoveredArgument();
         if(that._axisHoverEnabled && that._argumentAxis.coordsIn(x, y)) {
-            that._hoverArgument(getData(e, ARG_DATA));
+            that._hoverArgument(getData(e, ARG_DATA, true));
             return true;
         }
     },
@@ -625,7 +642,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     }
 });
 
-const PieTracker = function(options) {
+export const PieTracker = function(options) {
     this.ctor(options);
 };
 
@@ -666,6 +683,3 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
     _getCanvas: _noop,
     _notifyLegendOnHoverArgument: true
 });
-
-exports.ChartTracker = ChartTracker;
-exports.PieTracker = PieTracker;

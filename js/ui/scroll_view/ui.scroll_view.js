@@ -1,18 +1,20 @@
-const $ = require('../../core/renderer');
-const devices = require('../../core/devices');
-const windowUtils = require('../../core/utils/window');
-const messageLocalization = require('../../localization/message');
-const registerComponent = require('../../core/component_registrator');
-const getPublicElement = require('../../core/element').getPublicElement;
-const extend = require('../../core/utils/extend').extend;
-const noop = require('../../core/utils/common').noop;
-const PullDownStrategy = require('./ui.scroll_view.native.pull_down');
-const SwipeDownStrategy = require('./ui.scroll_view.native.swipe_down');
-const SimulatedStrategy = require('./ui.scroll_view.simulated');
-const Scrollable = require('./ui.scrollable');
-const LoadIndicator = require('../load_indicator');
-const themes = require('./../themes');
-const LoadPanel = require('../load_panel');
+import $ from '../../core/renderer';
+import devices from '../../core/devices';
+import { hasWindow } from '../../core/utils/window';
+import messageLocalization from '../../localization/message';
+import registerComponent from '../../core/component_registrator';
+import { getPublicElement } from '../../core/element';
+import { extend } from '../../core/utils/extend';
+import { noop } from '../../core/utils/common';
+import PullDownStrategy from './ui.scroll_view.native.pull_down';
+import SwipeDownStrategy from './ui.scroll_view.native.swipe_down';
+import SimulatedStrategy from './ui.scroll_view.simulated';
+import Scrollable from './ui.scrollable';
+import LoadIndicator from '../load_indicator';
+import themes from './../themes';
+import LoadPanel from '../load_panel';
+
+// STYLE scrollView
 
 const SCROLLVIEW_CLASS = 'dx-scrollview';
 const SCROLLVIEW_CONTENT_CLASS = SCROLLVIEW_CLASS + '-content';
@@ -32,7 +34,7 @@ const refreshStrategies = {
     simulated: SimulatedStrategy
 };
 
-const isServerSide = !windowUtils.hasWindow();
+const isServerSide = !hasWindow();
 
 const scrollViewServerConfig = {
     finishLoading: noop,
@@ -340,4 +342,4 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
 
 registerComponent('dxScrollView', ScrollView);
 
-module.exports = ScrollView;
+export default ScrollView;

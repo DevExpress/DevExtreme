@@ -506,7 +506,7 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         // assert
         assert.equal(this.dataController.totalItemsCount(), 5, 'totalItemsCount');
-        assert.equal(this.getVisibleRows().length, 4, 'row count');
+        assert.equal(this.getVisibleRows().length, 2, 'row count');
         assert.strictEqual(this.getVisibleRows()[0].node, this.getNodeByKey(1), 'first node instance is correct');
     });
 
@@ -902,6 +902,72 @@ QUnit.module('Initialization', { beforeEach: setupModule, afterEach: teardownMod
 
         assert.strictEqual(rows[4].node.key, 5, 'key of the fifth node');
         assert.strictEqual(rows[4].node.level, 2, 'level of the fifth node');
+    });
+
+    // T915695
+    [-1, null, 0].forEach(parentId => {
+        QUnit.test(`TreeList should not throw error when rootValue is defined (parentId = ${parentId})`, function(assert) {
+            // arrange
+            const array = [{
+                id: 1, parent_id: parentId
+            }, {
+                id: 2, parent_id: 1
+            }, {
+                id: 3, parent_id: 2
+            }];
+            const clock = sinon.useFakeTimers();
+
+            try {
+                this.applyOptions({
+                    autoExpandAll: true,
+                    dataSource: array,
+                    rootValue: 2,
+                    keyExpr: 'id',
+                    parentIdExpr: 'parent_id'
+                });
+
+                clock.tick();
+
+                const rows = this.getVisibleRows();
+                assert.equal(rows.length, 1, 'visible rows count');
+                assert.equal(rows[0].data.id, 3, 'visible row\'s id');
+            } catch(e) {
+                assert.notOk(true, 'error should not be thrown');
+            } finally {
+                clock.restore();
+            }
+        });
+    });
+
+    // T915695
+    QUnit.test('rootValue is parent if node\'s parentId is undefined', function(assert) {
+        // arrange
+        const array = [{
+            id: 1
+        }, {
+            id: 2, parent_id: 0
+        }];
+        const clock = sinon.useFakeTimers();
+
+        try {
+            this.applyOptions({
+                autoExpandAll: true,
+                dataSource: array,
+                rootValue: 2,
+                keyExpr: 'id',
+                parentIdExpr: 'parent_id'
+            });
+
+            clock.tick();
+
+            const rows = this.getVisibleRows();
+            assert.equal(rows.length, 1, 'visible rows count');
+            assert.equal(rows[0].data.id, 1, 'visible row\'s id');
+        } catch(e) {
+            assert.ok(true, 'error was thrown');
+        } finally {
+            clock.restore();
+        }
     });
 });
 

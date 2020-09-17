@@ -39,13 +39,13 @@ class FileManagerContextMenu extends Widget {
         super._initMarkup();
     }
 
-    showAt(fileItems, element, offset) {
+    showAt(fileItems, element, offset, targetFileItem) {
         if(this._isVisible) {
             this._raiseContextMenuHidden();
         }
         this._isVisible = true;
 
-        const items = this.createContextMenuItems(fileItems);
+        const items = this.createContextMenuItems(fileItems, null, targetFileItem);
 
         const position = {
             of: element,
@@ -71,15 +71,16 @@ class FileManagerContextMenu extends Widget {
         this._contextMenu.show();
     }
 
-    createContextMenuItems(fileItems, contextMenuItems) {
+    createContextMenuItems(fileItems, contextMenuItems, targetFileItem) {
         this._targetFileItems = fileItems;
+        this._targetFileItem = isDefined(targetFileItem) ? targetFileItem : fileItems?.[0];
 
         const result = [];
 
         const itemArray = contextMenuItems || this.option('items');
         itemArray.forEach(srcItem => {
             const commandName = isString(srcItem) ? srcItem : srcItem.name;
-            const item = this._configureItemByCommandName(commandName, srcItem, fileItems);
+            const item = this._configureItemByCommandName(commandName, srcItem, fileItems, this._targetFileItem);
             if(this._isContextMenuItemAvailable(item, fileItems)) {
                 result.push(item);
             }
@@ -110,19 +111,19 @@ class FileManagerContextMenu extends Widget {
 
     _extendAttributes(targetObject, sourceObject, objectKeysArray) {
         objectKeysArray.forEach(objectKey => {
-            extend(targetObject, sourceObject[objectKey]
+            extend(targetObject, isDefined(sourceObject[objectKey])
                 ? { [objectKey]: sourceObject[objectKey] }
                 : {});
         });
     }
 
-    _configureItemByCommandName(commandName, item, fileItems) {
+    _configureItemByCommandName(commandName, item, fileItems, targetFileItem) {
         if(!this._isDefaultItem(commandName)) {
             const res = extend(true, {}, item);
             res.originalItemData = item;
             this._addItemClickHandler(commandName, res);
             if(Array.isArray(item.items)) {
-                res.items = this.createContextMenuItems(fileItems, item.items);
+                res.items = this.createContextMenuItems(fileItems, item.items, targetFileItem);
             }
             return res;
         }
@@ -164,6 +165,8 @@ class FileManagerContextMenu extends Widget {
     _onContextMenuItemClick(commandName, args) {
         const changedArgs = extend(true, {}, args);
         changedArgs.itemData = args.itemData.originalItemData;
+        changedArgs.fileSystemItem = this._targetFileItem?.fileItem;
+        changedArgs.viewArea = this.option('viewArea');
         this._actions.onItemClick(changedArgs);
         if(this._isDefaultItem(commandName)) {
             const targetFileItems = this._isIsolatedCreationItemCommand(commandName) ? null : this._targetFileItems;
@@ -223,4 +226,4 @@ class FileManagerContextMenu extends Widget {
 
 }
 
-module.exports = FileManagerContextMenu;
+export default FileManagerContextMenu;

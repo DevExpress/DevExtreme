@@ -16,13 +16,13 @@ import Widget from '../widget/ui.widget';
 import Editor from '../editor/editor';
 import { defaultScreenFactorFunc, getCurrentScreenFactor, hasWindow } from '../../core/utils/window';
 import ValidationEngine from '../validation_engine';
-import LayoutManager from './ui.form.layout_manager';
 import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import TabPanel from '../tab_panel';
 import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
 import themes from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
+import './ui.form.layout_manager';
 import {
     concatPaths,
     createItemPathByIndex,
@@ -31,17 +31,22 @@ import {
     tryGetTabPath,
     getTextWithoutSpaces,
     isExpectedItem,
-    isFullPathContainsTabs
+    isFullPathContainsTabs,
+    getItemPath
 } from './ui.form.utils';
 
 import '../validation_summary';
 import '../validation_group';
+
+// STYLE form
 
 const FORM_CLASS = 'dx-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
 const FORM_GROUP_CLASS = 'dx-form-group';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
+const FIELD_ITEM_CONTENT_HAS_GROUP_CLASS = 'dx-field-item-has-group';
+const FIELD_ITEM_CONTENT_HAS_TABS_CLASS = 'dx-field-item-has-tabs';
 const FORM_GROUP_WITH_CAPTION_CLASS = 'dx-form-group-with-caption';
 const FORM_GROUP_CAPTION_CLASS = 'dx-form-group-caption';
 const HIDDEN_LABEL_CLASS = 'dx-layout-manager-hidden-label';
@@ -636,6 +641,8 @@ const Form = Widget.inherit({
         };
         const tabPanel = this._createComponent($tabPanel, TabPanel, tabPanelOptions);
 
+        $($container).addClass(FIELD_ITEM_CONTENT_HAS_TABS_CLASS);
+
         tabPanel.on('optionChanged', e => {
             if(e.fullName === 'dataSource') {
                 tryUpdateTabPanelInstance(e.value, e.component);
@@ -650,6 +657,9 @@ const Form = Widget.inherit({
             .toggleClass(FORM_GROUP_WITH_CAPTION_CLASS, isDefined(item.caption) && item.caption.length)
             .addClass(FORM_GROUP_CLASS)
             .appendTo($container);
+
+        $($container).addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
+
         let colCount;
         let layoutManager;
 
@@ -963,6 +973,11 @@ const Form = Widget.inherit({
 
             if(layoutManager) {
                 const fullOptionName = getFullOptionName(nameParts[endPartIndex], optionName);
+                if(optionName === 'editorType') { // T903774
+                    if(layoutManager.option(fullOptionName) !== value) {
+                        return false;
+                    }
+                }
                 if(optionName === 'visible') { // T874843
                     const formItems = this.option(getFullOptionName(itemPath, 'items'));
                     if(formItems && formItems.length) {
@@ -1331,10 +1346,10 @@ const Form = Widget.inherit({
         return deferred.promise();
     },
 
-    itemOption(id, option, value) {
+    itemOption: function(id, option, value) {
         const items = this._generateItemsFromData(this.option('items'));
         const item = this._getItemByField(id, items);
-        const path = this._itemsRunTimeInfo.getPathFromItem(item);
+        const path = getItemPath(items, item);
 
         if(!item) {
             return;
@@ -1370,6 +1385,7 @@ const Form = Widget.inherit({
             }
         }
     },
+
     validate: function() {
         return ValidationEngine.validateGroup(this._getValidationGroup());
     },
@@ -1385,14 +1401,4 @@ const Form = Widget.inherit({
 
 registerComponent('dxForm', Form);
 
-module.exports = Form;
-
-//#DEBUG
-module.exports.__internals = extend({
-    FORM_CLASS: FORM_CLASS,
-    FORM_GROUP_CLASS: FORM_GROUP_CLASS,
-    FORM_GROUP_CAPTION_CLASS: FORM_GROUP_CAPTION_CLASS,
-    FORM_FIELD_ITEM_COL_CLASS: FORM_FIELD_ITEM_COL_CLASS
-}, LayoutManager.__internals);
-
-//#ENDDEBUG
+export default Form;

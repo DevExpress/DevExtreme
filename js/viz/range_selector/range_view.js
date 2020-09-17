@@ -27,7 +27,7 @@ function merge(a, b) {
     return a !== undefined ? a : b;
 }
 
-function RangeView(params) {
+export function RangeView(params) {
     this._params = params;
     this._clipRect = params.renderer.clipRect();
     params.root.attr({ 'clip-path': this._clipRect.id });
@@ -68,5 +68,3 @@ RangeView.prototype = {
         }
     }
 };
-
-exports.RangeView = RangeView;

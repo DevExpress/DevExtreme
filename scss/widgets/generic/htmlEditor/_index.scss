@@ -6,12 +6,14 @@
 @use "../button/sizes" as *;
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
+@use "../../base/htmlEditor";
+
 // adduse
 
 
-$GENERIC_HTML_EDITOR_TOOLBAR_HEIGHT: $GENERIC_BASE_INLINE_WIDGET_HEIGHT;
-$GENERIC_MOBILE_HTML_EDITOR_TOOLBAR_HEIGHT: $GENERIC_MOBILE_BASE_INLINE_WIDGET_SIZE;
+$generic-html-editor-toolbar-height: $generic-base-inline-widget-height;
+$generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
 
 .dx-htmleditor {
   .dx-htmleditor-toolbar-wrapper:first-child {
@@ -74,10 +76,10 @@ $GENERIC_MOBILE_HTML_EDITOR_TOOLBAR_HEIGHT: $GENERIC_MOBILE_BASE_INLINE_WIDGET_S
   }
 
   .dx-htmleditor-toolbar-separator {
-    height: $GENERIC_HTML_EDITOR_TOOLBAR_HEIGHT;
+    height: $generic-html-editor-toolbar-height;
 
     .dx-device-mobile & {
-      height: $GENERIC_MOBILE_HTML_EDITOR_TOOLBAR_HEIGHT;
+      height: $generic-mobile-html-editor-toolbar-height;
     }
   }
 }
@@ -90,7 +92,7 @@ $GENERIC_MOBILE_HTML_EDITOR_TOOLBAR_HEIGHT: $GENERIC_MOBILE_BASE_INLINE_WIDGET_S
   &.dx-color-format,
   &.dx-background-format {
     .dx-button-content {
-      padding-bottom: $GENERIC_BUTTON_ICON_HORIZONTAL_PADDING - 3px;
+      padding-bottom: $generic-button-icon-horizontal-padding - 3px;
     }
   }
 }

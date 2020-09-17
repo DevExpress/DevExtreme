@@ -200,4 +200,4 @@ class DiagramFloatingPanel extends DiagramPanel {
         });
     }
 }
-module.exports = DiagramFloatingPanel;
+export default DiagramFloatingPanel;

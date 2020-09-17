@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from './artifacts/react/renovation/button';
+import Button from './artifacts/react/renovation/ui/button';
 
 function App() {
     return (

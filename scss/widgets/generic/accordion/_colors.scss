@@ -1,329 +1,130 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
+/**
+* $name 50. Text color
+* $type color
+*/
+$accordion-color: $base-text-color !default;
 
-$accordion-color: null !default;
+/**
+* $name 10. Item title text color
+* $type color
+*/
 $accordion-title-color: null !default;
-$accordion-item-title-opened-bg: null !default;
-$accordion-item-border-color: null !default;
+
+/**
+* $name 20. Active item title background color
+* $type color
+*/
+$accordion-item-title-opened-bg: transparent !default;
+
+/**
+* $name 30. Item border color
+* $type color
+*/
+$accordion-item-border-color: $base-border-color !default;
+
+/**
+* $name 40. Focused item border color
+* $type color
+*/
 $accordion-item-focused-border-color: null !default;
-$accordion-background-color: null !default;
+$accordion-background-color: $base-bg !default;
+
+/**
+* $name 70. Item title active state text color
+* $type color
+*/
 $accordion-title-active-color: null !default;
 $accordion-title-active-bg: null !default;
+
+/**
+* $name 90. Item title hovered state background color
+* $type color
+*/
 $accordion-item-hover-bg: null !default;
+
+/**
+* $name 30. Item active state icon color
+* $type color
+*/
 $accordion-icon-active-color: null !default;
-$accordion-icon-color: null !default;
+$accordion-icon-color: $base-icon-color !default;
 
 
 @if $color == "carmine" {
-
-
-  $accordion-color: $base-text-color !default;
-
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
   $accordion-title-color: $accordion-color !default;
-
-  /**
-    * $name 20. Active item title background color
-    * $type color
-    */
-  $accordion-item-title-opened-bg: transparent !default;
-
-  /**
-    * $name 30. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
   $accordion-item-focused-border-color: $base-accent !default;
-  $accordion-background-color: $base-bg !default;
   $accordion-title-active-color: $base-accent !default;
   $accordion-title-active-bg: $base-hover-bg !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-
-  /**
-    * $name 30. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $base-accent !default;
-  $accordion-icon-color: $base-icon-color !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Active item title background color
-    * $type color
-    */
-  $accordion-item-title-opened-bg: transparent !default;
-
-  /**
-    * $name 20. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
-
-  /**
-    * $name 40. Focused item border color
-    * $type color
-    */
-  $accordion-item-focused-border-color: $base-focus-color !default;
-
-  /**
-    * $name 50. Text color
-    * $type color
-    */
-  $accordion-color: $base-text-color !default;
-
-  /**
-    * $name 51. Background color
-    * $type color
-    */
-  $accordion-background-color: $base-bg !default;
-
-  /**
-    * $name 60. Item title text color
-    * $type color
-    */
   $accordion-title-color: $base-text-color !default;
-
-  /**
-    * $name 70. Item title active state text color
-    * $type color
-    */
+  $accordion-item-focused-border-color: $base-focus-color !default;
   $accordion-title-active-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 80. Item title active state background color
-    * $type color
-    */
   $accordion-title-active-bg: $base-inverted-bg !default;
-
-  /**
-    * $name 90. Item title hovered state background color
-    * $type color
-    */
   $accordion-item-hover-bg: $base-hover-color !default;
-
-  /**
-    * $name 100. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $base-inverted-text-color !default;
-  $accordion-icon-color: $base-icon-color !default;
 }
 
 @if $color == "dark" {
-
-
-  $accordion-color: $base-text-color !default;
-
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
   $accordion-title-color: $accordion-color !default;
-
-  /**
-    * $name 20. Active item title background color
-    * $type color
-    */
-  $accordion-item-title-opened-bg: transparent !default;
-
-  /**
-    * $name 30. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
   $accordion-item-focused-border-color: $base-focus-bg !default;
-  $accordion-background-color: $base-bg !default;
   $accordion-title-active-color: $accordion-color !default;
   $accordion-title-active-bg: color.change(lighten($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-
-  /**
-    * $name 40. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $accordion-color !default;
-  $accordion-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkmoon" {
-
-
-  $accordion-item-border-color: $base-border-color !default;
-  $accordion-item-focused-border-color: $base-accent !default;
-  $accordion-color: $base-text-color !default;
-  $accordion-background-color: $base-bg !default;
-
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
   $accordion-title-color: $accordion-color !default;
-
-  /**
-    * $name 20. Active item title background color
-    * $type color
-    */
-  $accordion-item-title-opened-bg: transparent !default;
-
-  /**
-    * $name 30. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
+  $accordion-item-focused-border-color: $base-accent !default;
   $accordion-title-active-color: $base-accent !default;
   $accordion-title-active-bg: color.change(lighten($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-
-  /**
-    * $name 100. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $accordion-color !default;
-  $accordion-icon-color: $base-icon-color !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
   $accordion-title-color: $base-header-color !default;
-
-  /**
-    * $name 20. Active item title background color
-    * $type color
-    */
-  $accordion-item-title-opened-bg: transparent !default;
-
-  /**
-    * $name 30. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
   $accordion-item-focused-border-color: $base-accent !default;
-  $accordion-color: $base-text-color !default;
-  $accordion-background-color: $base-bg !default;
   $accordion-title-active-color: $base-accent-highlight-color !default;
   $accordion-title-active-bg: color.change(lighten($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-
-  /**
-    * $name 40. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $accordion-color !default;
-  $accordion-icon-color: $base-icon-color !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
   $accordion-title-color: $base-accent !default;
-
-  /**
-    * $name 20. Active item title background color
-    * $type color
-    */
-  $accordion-item-title-opened-bg: transparent !default;
-
-  /**
-    * $name 30. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
   $accordion-item-focused-border-color: $base-focus-bg !default;
-  $accordion-color: $base-text-color !default;
-  $accordion-background-color: $base-bg !default;
   $accordion-title-active-color: $accordion-color !default;
   $accordion-title-active-bg: color.change(darken($accordion-background-color, 9%), $alpha: 0.4) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-
-  /**
-    * $name 40. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $accordion-color !default;
-  $accordion-icon-color: $base-icon-color !default;
 }
 
 @if $color == "light" {
-
-
-  $accordion-color: $base-text-color !default;
-
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
   $accordion-title-color: $accordion-color !default;
-
-  /**
-    * $name 20. Active item title background color
-    * $type color
-    */
-  $accordion-item-title-opened-bg: transparent !default;
-
-  /**
-    * $name 30. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
   $accordion-item-focused-border-color: $base-focus-bg !default;
-  $accordion-background-color: $base-bg !default;
   $accordion-title-active-color: $accordion-color !default;
   $accordion-title-active-bg: color.change(darken($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-
-  /**
-    * $name 40. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $accordion-color !default;
-  $accordion-icon-color: $base-icon-color !default;
 }
 
 @if $color == "softblue" {
-
-
-  $accordion-color: $base-text-color !default;
-
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
   $accordion-title-color: $accordion-color !default;
-
-  /**
-    * $name 20. Active item title background color
-    * $type color
-    */
-  $accordion-item-title-opened-bg: transparent !default;
-
-  /**
-    * $name 30. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
   $accordion-item-focused-border-color: $base-accent !default;
-  $accordion-background-color: $base-bg !default;
   $accordion-title-active-color: $accordion-color !default;
   $accordion-title-active-bg: color.change(darken($accordion-background-color, 62.5%), $alpha: 0.2) !default;
   $accordion-item-hover-bg: $base-hover-bg !default;
-
-  /**
-    * $name 40. Item active state icon color
-    * $type color
-    */
   $accordion-icon-active-color: $accordion-color !default;
-  $accordion-icon-color: $base-icon-color !default;
 }
 

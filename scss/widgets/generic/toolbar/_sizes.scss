@@ -1,15 +1,28 @@
 @use "../sizes" as *;
+@use "../typography/sizes" as *;
+
 // adduse
 
-$GENERIC_TOOLBAR_MENU_TOP_PADDING: null !default;
-$GENERIC_TOOLBAR_MENU_BOTTOM_PADDING: null !default;
+$generic-toolbar-menu-top-padding: null !default;
+$generic-toolbar-menu-bottom-padding: null !default;
+$generic-mobile-toolbar-height: 36px;
 
 @if $size == "default" {
-  $GENERIC_TOOLBAR_MENU_TOP_PADDING: 7px;
-  $GENERIC_TOOLBAR_MENU_BOTTOM_PADDING: 8px;
+  $generic-toolbar-menu-top-padding: 7px;
+  $generic-toolbar-menu-bottom-padding: 8px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_TOOLBAR_MENU_TOP_PADDING: 4px;
-  $GENERIC_TOOLBAR_MENU_BOTTOM_PADDING: 4px;
+  $generic-toolbar-menu-top-padding: 4px;
+  $generic-toolbar-menu-bottom-padding: 4px;
 }
+
+$generic-toolbar-height: $generic-base-inline-widget-height;
+$generic-toolbar-padding: 0;
+$generic-toolbar-item-spacing: 5px;
+$generic-toolbar-label-font-size: $generic-m-font-size;
+$generic-toolbar-section-padding: 15px;
+
+$generic-mobile-toolbar-padding: 0;
+$generic-mobile-toolbar-item-spacing: 5px;
+$generic-mobile-toolbar-label-font-size: 20px;

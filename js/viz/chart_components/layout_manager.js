@@ -1,7 +1,6 @@
-import { extend } from '../../core/utils/extend';
 import { isNumeric as _isNumber } from '../../core/utils/type';
-import layoutElementModule from '../core/layout_element';
 import consts from '../components/consts';
+import layoutElementModule from '../core/layout_element';
 const { floor, sqrt } = Math;
 const _min = Math.min;
 const _max = Math.max;
@@ -112,49 +111,7 @@ function getInnerRadius(series) {
     return innerRadius;
 }
 
-const inverseAlign = {
-    left: 'right',
-    right: 'left',
-    top: 'bottom',
-    bottom: 'top',
-    center: 'center'
-};
-
-function downSize(canvas, layoutOptions) {
-    canvas[layoutOptions.cutLayoutSide] += layoutOptions.cutSide === 'horizontal' ? layoutOptions.width : layoutOptions.height;
-}
-
-function getOffset(layoutOptions, offsets) {
-    const side = layoutOptions.cutLayoutSide;
-    const offset = {
-        horizontal: 0,
-        vertical: 0
-    };
-
-    switch(side) {
-        case 'top':
-        case 'left':
-            offset[layoutOptions.cutSide] = -offsets[side];
-            break;
-        case 'bottom':
-        case 'right':
-            offset[layoutOptions.cutSide] = offsets[side];
-            break;
-    }
-
-    return offset;
-}
-
 function LayoutManager() {
-}
-
-function toLayoutElementCoords(canvas) {
-    return new layoutElementModule.WrapperLayoutElement(null, {
-        x: canvas.left,
-        y: canvas.top,
-        width: canvas.width - canvas.left - canvas.right,
-        height: canvas.height - canvas.top - canvas.bottom
-    });
 }
 
 function getAverageLabelWidth(centerX, radius, canvas, sizeLabels) {
@@ -179,6 +136,15 @@ function correctAvailableRadius(availableRadius, canvas, series, minR, paneCente
     correctLabelRadius(sizeLabels, availableRadius + RADIAL_LABEL_INDENT, series, canvas, averageWidthLabels, paneCenterX);
 
     return availableRadius;
+}
+
+function toLayoutElementCoords(canvas) {
+    return new layoutElementModule.WrapperLayoutElement(null, {
+        x: canvas.left,
+        y: canvas.top,
+        width: canvas.width - canvas.left - canvas.right,
+        height: canvas.height - canvas.top - canvas.bottom
+    });
 }
 
 LayoutManager.prototype = {
@@ -266,142 +232,38 @@ LayoutManager.prototype = {
         return needHorizontalSpace > 0 || needVerticalSpace > 0 ? { width: needHorizontalSpace, height: needVerticalSpace } : false;
     },
 
-    layoutElements: function(elements, canvas, funcAxisDrawer, panes, rotated) {
-        this._elements = elements;
-
-        this._probeDrawing(canvas);
-        this._drawElements(canvas);
-
-        funcAxisDrawer();
-        this._processAdaptiveLayout(panes, rotated, canvas, funcAxisDrawer);
-        this._positionElements(canvas);
-    },
-
-    _processAdaptiveLayout: function(panes, rotated, canvas, funcAxisDrawer) {
-        const that = this;
-        const size = that.needMoreSpaceForPanesCanvas(panes, rotated);
-        const items = this._elements;
-
-        if(!size) return;
-
-        function processCanvases(item, layoutOptions, side) {
-            if(!item.getLayoutOptions()[side]) {
-                canvas[layoutOptions.cutLayoutSide] -= layoutOptions[side];
-                size[side] = size[side] - layoutOptions[side];
-            }
-        }
-
-        items.slice().reverse().forEach(function(item) {
-            const layoutOptions = item.getLayoutOptions();
-            let needRedraw = false;
-
-            if(!layoutOptions) {
-                return;
-            }
-
-            const sizeObject = extend({}, layoutOptions);
-
-            needRedraw =
-                layoutOptions.cutSide === 'vertical' && size.width < 0 ||
-                layoutOptions.cutSide === 'horizontal' && size.height < 0 ||
-                layoutOptions.cutSide === 'vertical' && size.height > 0 ||
-                layoutOptions.cutSide === 'horizontal' && size.width > 0;
-
-            const cutSide = layoutOptions.cutSide === 'horizontal' ? 'width' : 'height';
-
-            if(needRedraw) {
-                let width = sizeObject.width - size.width;
-                let height = sizeObject.height - size.height;
-
-                if(cutSide === 'height' && size.width < 0) {
-                    width = canvas.width - canvas.left - canvas.right;
-                }
-                if(cutSide === 'width' && size.height < 0) {
-                    height = canvas.height - canvas.top - canvas.bottom;
-                }
-                item.draw(width, height);
-
-            }
-            processCanvases(item, layoutOptions, cutSide);
-
-        });
-
-        funcAxisDrawer(size);
-    },
-
-    _probeDrawing: function(canvas) {
-        const that = this;
-        this._elements.forEach(function(item) {
-            const layoutOptions = item.getLayoutOptions();
-
-            if(!layoutOptions) {
-                return;
-            }
-
-            const sizeObject = { width: canvas.width - canvas.left - canvas.right, height: canvas.height - canvas.top - canvas.bottom };
-            if(layoutOptions.cutSide === 'vertical') {
-                sizeObject.height -= that._options.height;
-            } else {
-                sizeObject.width -= that._options.width;
-            }
-            item.probeDraw(sizeObject.width, sizeObject.height);
-
-            downSize(canvas, item.getLayoutOptions());
-        });
-    },
-
-    _drawElements: function(canvas) {
-        this._elements.slice().reverse().forEach(function(item) {
-            const layoutOptions = item.getLayoutOptions();
-
-            if(!layoutOptions) {
-                return;
-            }
-
-            const sizeObject = {
-                width: canvas.width - canvas.left - canvas.right,
-                height: canvas.height - canvas.top - canvas.bottom
-            };
-            const cutSide = layoutOptions.cutSide;
-            const length = cutSide === 'horizontal' ? 'width' : 'height';
-
-            sizeObject[length] = layoutOptions[length];
-            item.draw(sizeObject.width, sizeObject.height);
-        });
-    },
-
-    _positionElements: function(canvas) {
-        const offsets = {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0
+    layoutInsideLegend: function(legend, canvas) {
+        const inverseAlign = {
+            left: 'right',
+            right: 'left',
+            top: 'bottom',
+            bottom: 'top',
+            center: 'center'
         };
 
-        this._elements.slice().reverse().forEach(function(item) {
-            const layoutOptions = item.getLayoutOptions();
+        const layoutOptions = legend.getLayoutOptions();
 
-            if(!layoutOptions) {
-                return;
-            }
+        if(!layoutOptions) {
+            return;
+        }
 
-            const position = layoutOptions.position;
-            const cutSide = layoutOptions.cutSide;
-            const my = {
-                horizontal: position.horizontal,
-                vertical: position.vertical
-            };
+        const position = layoutOptions.position;
+        const cutSide = layoutOptions.cutSide;
+        const my = {
+            horizontal: position.horizontal,
+            vertical: position.vertical
+        };
 
-            my[cutSide] = inverseAlign[my[cutSide]];
+        canvas[layoutOptions.cutLayoutSide] += layoutOptions.cutSide === 'horizontal' ? layoutOptions.width : layoutOptions.height;
 
-            item.position({
-                of: toLayoutElementCoords(canvas), my: my,
-                at: position, offset: getOffset(layoutOptions, offsets)
-            });
+        my[cutSide] = inverseAlign[my[cutSide]];
 
-            offsets[layoutOptions.cutLayoutSide] += layoutOptions[layoutOptions.cutSide === 'horizontal' ? 'width' : 'height'];
+        legend.position({
+            of: toLayoutElementCoords(canvas),
+            my: my,
+            at: position
         });
-    }
+    },
 };
 
-exports.LayoutManager = LayoutManager;
+export { LayoutManager };

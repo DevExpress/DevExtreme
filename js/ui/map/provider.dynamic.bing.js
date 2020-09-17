@@ -1,13 +1,14 @@
-const noop = require('../../core/utils/common').noop;
-const window = require('../../core/utils/window').getWindow();
-const Promise = require('../../core/polyfills/promise');
-const extend = require('../../core/utils/extend').extend;
-const errors = require('../widget/ui.errors');
-const iteratorUtils = require('../../core/utils/iterator');
-const DynamicProvider = require('./provider.dynamic');
-const Color = require('../../color');
-const ajax = require('../../core/utils/ajax');
-const isDefined = require('../../core/utils/type').isDefined;
+import { noop } from '../../core/utils/common';
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
+import Promise from '../../core/polyfills/promise';
+import { extend } from '../../core/utils/extend';
+import errors from '../widget/ui.errors';
+import iteratorUtils from '../../core/utils/iterator';
+import DynamicProvider from './provider.dynamic';
+import Color from '../../color';
+import ajax from '../../core/utils/ajax';
+import { isDefined } from '../../core/utils/type';
 
 /* global Microsoft */
 const BING_MAP_READY = '_bingScriptReady';
@@ -462,6 +463,7 @@ const BingProvider = DynamicProvider.inherit({
 BingProvider.remapConstant = function(newValue) {
     BING_URL_V8 = newValue;
 };
+
 ///#ENDDEBUG
 
-module.exports = BingProvider;
+export default BingProvider;

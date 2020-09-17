@@ -1,3 +1,4 @@
+/* eslint-disable import/no-commonjs */
 const DevExpress = require('./core');
 require('./data');
 require('./file_management');

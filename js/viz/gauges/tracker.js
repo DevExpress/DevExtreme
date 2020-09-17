@@ -1,10 +1,13 @@
-const eventsEngine = require('../../events/core/events_engine');
-const Class = require('../../core/class');
-const domAdapter = require('../../core/dom_adapter');
-const wheelEvent = require('../../events/core/wheel');
-const ready = require('../../core/utils/ready_callbacks').add;
-const addNamespace = require('../../events/utils').addNamespace;
-const pointerEvents = require('../../events/pointer');
+import eventsEngine from '../../events/core/events_engine';
+import Class from '../../core/class';
+import domAdapter from '../../core/dom_adapter';
+import wheelEvent from '../../events/core/wheel';
+import { add as ready } from '../../core/utils/ready_callbacks';
+import { addNamespace } from '../../events/utils';
+import pointerEvents from '../../events/pointer';
+///#DEBUG
+import { debug } from '../../core/utils/console';
+///#ENDDEBUG
 const EVENT_NS = 'gauge-tooltip';
 
 const TOOLTIP_HIDE_DELAY = 100;
@@ -12,7 +15,6 @@ const TOOLTIP_HIDE_DELAY = 100;
 const Tracker = Class.inherit({
     ctor: function(parameters) {
         ///#DEBUG
-        const debug = require('../../core/utils/console').debug;
         debug.assertParam(parameters, 'parameters');
         debug.assertParam(parameters.renderer, 'parameters.renderer');
         debug.assertParam(parameters.container, 'parameters.container');
@@ -173,4 +175,4 @@ ready(function() {
     eventsEngine.subscribeGlobal(domAdapter.getDocument(), addNamespace([pointerEvents.down], EVENT_NS), handleDocumentTooltipTouchStart);
 });
 
-module.exports = Tracker;
+export default Tracker;

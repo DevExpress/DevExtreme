@@ -424,7 +424,7 @@
             }
         }
 
-        if(callback.match(/function\(\)\{clearTimeout\(\w+\),(\w+&&)+cancelAnimationFrame\(\w+\),setTimeout\(\w+\)\}/)) return true; // NOTE: Preact hooks
+        if(callback.match(/function\(\)\{clearTimeout\(\w+\),(\w+&&)*cancelAnimationFrame\(\w+\),setTimeout\(\w+\)\}/)) return true; // NOTE: Preact hooks
         if(callback.match(/\.__H\.\w+\.forEach\(/)) return true; // NOTE: Preact hooks
     });
 

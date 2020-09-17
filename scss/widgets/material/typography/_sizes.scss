@@ -1,3 +1,46 @@
 @use "../sizes" as *;
+
 // adduse
+
+$material-xl-font-size: null !default;
+$material-l-font-size: null !default;
+$material-m-font-size: null !default;
+$material-s-font-size: null !default;
+$material-xs-font-size: null !default;
+$material-h1-font-size: null !default;
+$material-h2-font-size: null !default;
+$material-h3-font-size: null !default;
+$material-h4-font-size: null !default;
+$material-h5-font-size: null !default;
+$material-h6-font-size: null !default;
+
+@if $size == "default" {
+  $material-xl-font-size: 34px;
+  $material-l-font-size: 28px;
+  $material-m-font-size: 20px;
+  $material-s-font-size: 18px;
+  $material-xs-font-size: 12px;
+
+  $material-h1-font-size: 96px;
+  $material-h2-font-size: 60px;
+  $material-h3-font-size: 48px;
+  $material-h4-font-size: 34px;
+  $material-h5-font-size: 24px;
+  $material-h6-font-size: 20px;
+}
+
+@else if $size == "compact" {
+  $material-xl-font-size: 24px;
+  $material-l-font-size: 20px;
+  $material-m-font-size: 16px;
+  $material-s-font-size: 14px;
+  $material-xs-font-size: 12px;
+
+  $material-h1-font-size: 64px;
+  $material-h2-font-size: 42px;
+  $material-h3-font-size: 20px;
+  $material-h4-font-size: 18px;
+  $material-h5-font-size: 16px;
+  $material-h6-font-size: 14px;
+}
 

@@ -3,17 +3,20 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
 @use "../button/colors" as *;
 @use "../../base/icons" as *;
+
 // adduse
+@use "../scrollable";
+@use "../badge";
 
 
-$MATERIAL_TABS_BACKGROUND: darken($base-bg, 4%);
+$material-tabs-background: darken($base-bg, 4%);
 
 .dx-tabs {
   padding: 0;
-  background-color: $MATERIAL_TABS_BACKGROUND;
+  background-color: $material-tabs-background;
   position: relative;
 
   .dx-inkripple {
@@ -30,7 +33,7 @@ $MATERIAL_TABS_BACKGROUND: darken($base-bg, 4%);
   border: none;
   background-color: $tabs-tab-bg;
   position: absolute;
-  height: $MATERIAL_TAB_HEIGHT;
+  height: $material-tab-height;
   border-radius: 0;
   box-shadow: none;
 
@@ -59,8 +62,8 @@ $MATERIAL_TABS_BACKGROUND: darken($base-bg, 4%);
 }
 
 .dx-tab {
-  padding: $MATERIAL_TABS_ITEM_PADDING;
-  min-width: $MATERIAL_TAB_MIN_WIDTH;
+  padding: $material-tabs-item-padding;
+  min-width: $material-tab-min-width;
   background-color: $tabs-tab-bg;
   color: $tabs-tab-color;
 
@@ -72,7 +75,7 @@ $MATERIAL_TABS_BACKGROUND: darken($base-bg, 4%);
     color: $tabs-tab-icon-color;
     vertical-align: middle;
 
-    @include dx-icon-sizing($MATERIAL_BASE_ICON_SIZE);
+    @include dx-icon-sizing($material-base-icon-size);
 
     margin: 0 auto;
   }
@@ -100,7 +103,7 @@ $MATERIAL_TABS_BACKGROUND: darken($base-bg, 4%);
 .dx-tab-text {
   vertical-align: middle;
   text-transform: uppercase;
-  line-height: $MATERIAL_TAB_TEXT_LINE_HEIGHT;
+  line-height: $material-tab-text-line-height;
   font-weight: 500;
 }
 

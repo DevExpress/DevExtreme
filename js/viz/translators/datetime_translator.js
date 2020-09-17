@@ -1,11 +1,12 @@
+import { addDateInterval } from '../../core/utils/date';
 function parse(value) {
     return value !== null ? new Date(value) : value;
 }
 
-module.exports = {
+export default {
     _fromValue: parse,
 
     _toValue: parse,
 
-    _add: require('../../core/utils/date').addDateInterval
+    _add: addDateInterval
 };

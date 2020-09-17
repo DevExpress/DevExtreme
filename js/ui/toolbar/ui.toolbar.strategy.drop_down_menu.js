@@ -1,7 +1,7 @@
-const extend = require('../../core/utils/extend').extend;
-const ToolbarStrategy = require('./ui.toolbar.strategy');
-const ToolbarMenu = require('./ui.toolbar.menu');
-const DropDownMenu = require('../drop_down_menu');
+import { extend } from '../../core/utils/extend';
+import ToolbarStrategy from './ui.toolbar.strategy';
+import ToolbarMenu from './ui.toolbar.menu';
+import DropDownMenu from '../drop_down_menu';
 
 const MENU_INVISIBLE_CLASS = 'dx-state-invisible';
 
@@ -71,4 +71,4 @@ const DropDownMenuStrategy = ToolbarStrategy.inherit({
 
 });
 
-module.exports = DropDownMenuStrategy;
+export default DropDownMenuStrategy;

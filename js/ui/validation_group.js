@@ -73,4 +73,4 @@ class ValidationGroup extends DOMComponent {
 
 registerComponent('dxValidationGroup', ValidationGroup);
 
-module.exports = ValidationGroup;
+export default ValidationGroup;

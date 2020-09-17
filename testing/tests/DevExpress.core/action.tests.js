@@ -1,9 +1,7 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
-import errors from 'core/errors';
 import Action from 'core/action';
 
-const noJquery = QUnit.urlParams['nojquery'];
 
 QUnit.testStart(function() {
     const markup =
@@ -260,58 +258,34 @@ QUnit.test('ui interaction validator should prevent all ui action handlers by \'
     assert.ok(!handlerSpy.called);
 });
 
-QUnit.test('Action argument should contain both Event and jQueryEvent field or none of them', function(assert) {
-    const eventMock = {};
+QUnit.test('ui interaction validator should prevent all ui action handlers if \'dx-state-readonly\' class and target element has \'dx-state-independent\' class', function(assert) {
+    const handlerSpy = sinon.spy(noop);
+    const $targetElement = $('.dx-state-readonly .dx-click-target');
+    $targetElement.addClass('dx-state-independent dx-state-readonly');
 
-    new Action(function(e) {
-        assert.notOk(e.event);
-        assert.notOk(e.jQueryEvent);
-    }).execute({});
+    const action = new Action(handlerSpy);
 
-    new Action(function(e) {
-        assert.ok(e.event);
-        assert.ok(noJquery || e.jQueryEvent);
-    }).execute({ event: eventMock });
+    action.execute({
+        event: $.Event('click', { target: $targetElement.get(0) }),
+        element: $targetElement
+    });
 
-    assert.throws(function() {
-        new Action(noop).execute({ jQueryEvent: eventMock });
-    }, /The jQueryEvent field is deprecated\. Please, use the `event` field instead/);
+    assert.strictEqual(handlerSpy.callCount, 0);
 });
 
-QUnit.test('Working with jQueryEvent field should throw warning', function(assert) {
-    const eventMock = {};
-    const expectedWarning = ['W0003', 'Handler argument', 'jQueryEvent', '17.2', 'Use the \'event\' field instead'];
-    const originalLog = errors.log;
-    const log = [];
+QUnit.test('ui interaction validator should not prevent all ui action handlers if \'dx-state-readonly\' class is on the parents and target element has \'dx-state-independent\' class', function(assert) {
+    const handlerSpy = sinon.spy(noop);
+    const $targetElement = $('.dx-state-readonly .dx-click-target');
+    $targetElement.addClass('dx-state-independent');
 
-    errors.log = function() {
-        log.push($.makeArray(arguments));
-    };
+    const action = new Action(handlerSpy);
 
-    new Action(function(e) {
-        e.jQueryEvent;
-    }).execute({ event: eventMock });
+    action.execute({
+        event: $.Event('click', { target: $targetElement.get(0) }),
+        element: $targetElement
+    });
 
-    if(noJquery) {
-        assert.equal(log.length, 0);
-    } else {
-        assert.equal(log.length, 1);
-        assert.deepEqual(log[0], expectedWarning);
-    }
-
-    new Action(function(e) {
-        e.jQueryEvent = {};
-    }).execute({ event: eventMock });
-
-
-    if(noJquery) {
-        assert.equal(log.length, 0);
-    } else {
-        assert.equal(log.length, 2);
-        assert.deepEqual(log[1], expectedWarning);
-    }
-
-    errors.log = originalLog;
+    assert.strictEqual(handlerSpy.callCount, 1);
 });
 
 QUnit.module('excludeValidators', {

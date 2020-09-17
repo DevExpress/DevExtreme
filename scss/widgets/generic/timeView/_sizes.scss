@@ -1,30 +1,28 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_TIMEVIEW_CLOCK_MIN_SIZE: null !default;
-$GENERIC_TIMEVIEW_FIELD_MIN_HEIGHT: null !default;
-$GENERIC_TIMEVIEW_ARROW_HEIGHT_REDUCE: null !default;
-$GENERIC_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: null !default;
-$GENERIC_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: null !default;
-$GENERIC_TIMEVIEW_TIME_SEPARATOR_MARGIN: null !default;
-$GENERIC_TIMEVIEW_FORMAT12_WIDTH: null !default;
+$generic-timeview-clock-min-size: null !default;
+$generic-timeview-field-min-height: null !default;
+$generic-timeview-arrow-height-reduce: null !default;
+$generic-timeview-field-numberbox-reduce: null !default;
+$generic-timeview-format12-width: null !default;
+
+$generic-timeview-clock-additional-size: 8px;
+$generic-timeview-time-separator-margin: 5px;
 
 @if $size == "default" {
-  $GENERIC_TIMEVIEW_CLOCK_MIN_SIZE: 191px;
-  $GENERIC_TIMEVIEW_FIELD_MIN_HEIGHT: 50px;
-  $GENERIC_TIMEVIEW_ARROW_HEIGHT_REDUCE: 0;
-  $GENERIC_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0;
-  $GENERIC_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
-  $GENERIC_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
-  $GENERIC_TIMEVIEW_FORMAT12_WIDTH: 70px;
+  $generic-timeview-clock-min-size: 191px;
+  $generic-timeview-field-min-height: 50px;
+  $generic-timeview-arrow-height-reduce: 0;
+  $generic-timeview-field-numberbox-reduce: 0;
+  $generic-timeview-format12-width: 70px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_TIMEVIEW_CLOCK_MIN_SIZE: 161px;
-  $GENERIC_TIMEVIEW_FIELD_MIN_HEIGHT: 32px;
-  $GENERIC_TIMEVIEW_ARROW_HEIGHT_REDUCE: 20px;
-  $GENERIC_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 16px;
-  $GENERIC_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
-  $GENERIC_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
-  $GENERIC_TIMEVIEW_FORMAT12_WIDTH: 55px;
+  $generic-timeview-clock-min-size: 161px;
+  $generic-timeview-field-min-height: 32px;
+  $generic-timeview-arrow-height-reduce: 20px;
+  $generic-timeview-field-numberbox-reduce: 16px;
+  $generic-timeview-format12-width: 55px;
 }

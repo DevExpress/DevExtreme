@@ -1349,6 +1349,25 @@ QUnit.module('Menu tests', {
         assert.equal(hidingCount, 0, 'submenu should not hides');
     });
 
+    QUnit.test('Menu should not hide when root item clicked right after mouseleave, hideSubmenuOnMouseLeave: true', function(assert) {
+        if(!isDeviceDesktop(assert)) return;
+
+        const menu = createMenu({
+            items: [{ text: 'Item_1', items: [{ text: 'item_1_1' }] }, { text: 'Item_2', items: [{ text: 'item_2_1' }] }],
+            hideSubmenuOnMouseLeave: true
+        });
+        const $rootMenuItems = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`);
+        $($rootMenuItems).eq(0).trigger('dxclick');
+
+        assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(0)).option('visible'), true, 'submenu_1.visible');
+
+        $(menu.element).trigger($.Event('mouseleave', { target: $rootMenuItems.eq(0).get(0), relatedTarget: $rootMenuItems.eq(1).get(0) }));
+        $($rootMenuItems.eq(1)).trigger('dxclick');
+        this.clock.tick(300);
+
+        assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(0)).option('visible'), false, 'submenu_1.not_visible');
+        assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(1)).option('visible'), true, 'submenu_2.visible');
+    });
     // T431949
     QUnit.test('Menu should stop show submenu timeout when another level submenu was hovered', function(assert) {
         if(!isDeviceDesktop(assert)) return;
@@ -1482,6 +1501,61 @@ QUnit.module('keyboard navigation', {
         this.keyboard.press('enter');
 
         assert.equal(itemClickHandler.callCount, 1, 'press enter on item call item click action');
+    });
+
+    QUnit.test('process keyboard only for a visible submenu when enter pressed', function(assert) {
+        const itemClickHandler = sinon.spy();
+        const items = [{
+            id: '1',
+            text: 'item_1',
+            items: [
+                { id: '1_1', text: 'item_1_1' },
+                { id: '1_2', text: 'item_1_2' }
+            ]
+        }, {
+            id: '2',
+            text: 'item_2',
+            items: [
+                { id: '2_1', text: 'item_2_1' },
+                { id: '2_2', text: 'item_2_2' }
+            ]
+        }];
+
+        this.instance.option('items', items);
+        this.instance.option('orientation', 'vertical');
+        this.instance.option('onItemClick', itemClickHandler);
+
+        this.keyboard
+            .press('right')
+            .press('down')
+            .press('down')
+            .press('enter');
+
+        assert.equal(itemClickHandler.callCount, 1, 'handler.callCount');
+        assert.equal(itemClickHandler.args[0][0].itemData.id, '1_2', 'handler.itemData');
+        itemClickHandler.reset();
+
+        this.keyboard
+            .press('down')
+            .press('down')
+            .press('right')
+            .press('down')
+            .press('down')
+            .press('enter');
+
+        assert.equal(itemClickHandler.callCount, 1, 'handler.callCount');
+        assert.equal(itemClickHandler.args[0][0].itemData.id, '2_2', 'handler.itemData');
+        itemClickHandler.reset();
+
+        this.keyboard
+            .press('down')
+            .press('right')
+            .press('down')
+            .press('down')
+            .press('enter');
+
+        assert.equal(itemClickHandler.callCount, 1, 'handler.callCount');
+        assert.equal(itemClickHandler.args[0][0].itemData.id, '1_2', 'handler.itemData');
     });
 
     QUnit.test('select item when space pressed', function(assert) {
@@ -2600,3 +2674,67 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
         assert.equal(handler.callCount, 0, 'handler for option was not executed after unsubscribe');
     });
 }
+
+QUnit.module('itemRendered event', () => { // T906117
+    const testDataSource = [{
+        text: 'item1',
+        items: [{
+            text: 'item1_1',
+            items: [{
+                text: 'item1_1_1'
+            }]
+        }]
+    }];
+
+    function bindCallback(menu, bindingOption, callback) {
+        if(bindingOption === 'property') {
+            menu.option('onItemRendered', callback);
+        } else {
+            menu.on('itemRendered', callback);
+        }
+    }
+
+    ['property', 'event'].forEach(bindingOption => {
+        QUnit.test(`itemRendered callback is called for all level nodes. Binding via ${bindingOption}`, function(assert) {
+            const expectedItemsArray = [];
+            const callback = (e) => {
+                assert.equal(e.component, menu, 'component arg is menu');
+                assert.equal(e.element, menu.element(), 'element arg is menu');
+                assert.equal($(e.itemElement).text().trim(), e.itemData.text, 'item element text is equals to the item text');
+                expectedItemsArray.push(e.itemData.text);
+            };
+
+            const menu = $('#menu').dxMenu().dxMenu('instance');
+            bindCallback(menu, bindingOption, callback);
+
+            menu.option('dataSource', testDataSource);
+            ['item1', 'item1_1']
+                .forEach(item => $(`.${DX_MENU_ITEM_TEXT_CLASS}:contains("${item}")`).trigger('dxclick'));
+
+            assert.equal(expectedItemsArray.length, 3);
+            assert.equal(expectedItemsArray[0], 'item1');
+            assert.equal(expectedItemsArray[1], 'item1_1');
+            assert.equal(expectedItemsArray[2], 'item1_1_1');
+        });
+
+        QUnit.test(`removing callback from menu removes callbacks from submenu too. Binding via ${bindingOption}`, function(assert) {
+            const expectedItemsArray = [];
+            const callback = (e) => expectedItemsArray.push(e.itemData.text);
+
+            const menu = $('#menu').dxMenu().dxMenu('instance');
+            bindCallback(menu, bindingOption, callback);
+
+            if(bindingOption === 'property') {
+                menu.option('onItemRendered', null);
+            } else {
+                menu.off('itemRendered');
+            }
+
+            menu.option('dataSource', testDataSource);
+            ['item1', 'item1_1']
+                .forEach(item => $(`.${DX_MENU_ITEM_TEXT_CLASS}:contains("${item}")`).trigger('dxclick'));
+
+            assert.equal(expectedItemsArray.length, 0);
+        });
+    });
+});

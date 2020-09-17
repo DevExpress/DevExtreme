@@ -1,10 +1,10 @@
-const extend = require('../../../core/utils/extend').extend;
-const isNumeric = require('../../../core/utils/type').isNumeric;
-const candlestickPoint = require('./candlestick_point');
+import { extend } from '../../../core/utils/extend';
+import { isNumeric } from '../../../core/utils/type';
+import candlestickPoint from './candlestick_point';
 const _extend = extend;
 const _isNumeric = isNumeric;
 
-module.exports = _extend({}, candlestickPoint, {
+export default _extend({}, candlestickPoint, {
     _getPoints: function() {
         const that = this;
         const createPoint = that._options.rotated ? function(x, y) { return [y, x]; } : function(x, y) { return [x, y]; };

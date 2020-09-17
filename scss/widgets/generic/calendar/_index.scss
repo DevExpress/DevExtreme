@@ -3,37 +3,39 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
 @use "../button/colors" as *;
+@use "../typography/sizes" as *;
+
 // adduse
 
 
-$GENERIC_CALENDAR_NAVIGATOR_FONTSIZE: $GENERIC_H5_FONT_SIZE;
-$GENERIC_CALENDAR_NAVIGATOR_LINE_HEIGHT: 1.6;
-$GENERIC_CALENDAR_WIDTH: $GENERIC_CALENDAR_BODY_WIDTH;
-$GENERIC_CALENDAR_HEIGHT: $GENERIC_CALENDAR_BODY_HEIGHT + $GENERIC_CALENDAR_NAVIGATOR_FONTSIZE * $GENERIC_CALENDAR_NAVIGATOR_LINE_HEIGHT + $GENERIC_CALENDAR_NAVIGATOR_VERTICAL_PADDING * 2;
+$generic-calendar-navigator-fontsize: $generic-h5-font-size;
+$generic-calendar-navigator-line-height: 1.6;
+$generic-calendar-width: $generic-calendar-body-width;
+$generic-calendar-height: $generic-calendar-body-height + $generic-calendar-navigator-fontsize * $generic-calendar-navigator-line-height + $generic-calendar-navigator-vertical-padding * 2;
 
 .dx-calendar {
-  width: $GENERIC_CALENDAR_WIDTH;
-  min-width: $GENERIC_CALENDAR_WIDTH;
-  height: $GENERIC_CALENDAR_HEIGHT + 20px;
-  min-height: $GENERIC_CALENDAR_HEIGHT + 20px;
+  width: $generic-calendar-width;
+  min-width: $generic-calendar-width;
+  height: $generic-calendar-height + 20px;
+  min-height: $generic-calendar-height + 20px;
   background-color: $calendar-bg;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   outline: 0;
   border: 1px solid transparent;
 
   &.dx-calendar-with-footer {
-    height: $GENERIC_CALENDAR_HEIGHT + $GENERIC_CALENDAR_FOOTER_HEIGHT + 10px + 20px;
-    min-height: $GENERIC_CALENDAR_HEIGHT + $GENERIC_CALENDAR_FOOTER_HEIGHT;
+    height: $generic-calendar-height + $generic-calendar-footer-height + 10px + 20px;
+    min-height: $generic-calendar-height + $generic-calendar-footer-height;
 
     .dx-calendar-body {
-      bottom: $GENERIC_CALENDAR_FOOTER_HEIGHT + 10px;
+      bottom: $generic-calendar-footer-height + 10px;
     }
 
     .dx-calendar-footer {
       text-align: center;
-      height: $GENERIC_CALENDAR_FOOTER_HEIGHT;
+      height: $generic-calendar-footer-height;
       width: 100%;
 
       .dx-button {
@@ -48,8 +50,8 @@ $GENERIC_CALENDAR_HEIGHT: $GENERIC_CALENDAR_BODY_HEIGHT + $GENERIC_CALENDAR_NAVI
 }
 
 .dx-calendar-navigator {
-  line-height: $GENERIC_CALENDAR_NAVIGATOR_LINE_HEIGHT;
-  height: $GENERIC_CALENDAR_NAVIGATOR_HEIGHT;
+  line-height: $generic-calendar-navigator-line-height;
+  height: $generic-calendar-navigator-height;
   display: table;
   border-collapse: collapse;
 
@@ -60,7 +62,7 @@ $GENERIC_CALENDAR_HEIGHT: $GENERIC_CALENDAR_BODY_HEIGHT + $GENERIC_CALENDAR_NAVI
     border-color: $calendar-navigator-border-color;
 
     .dx-icon {
-      font-size: $GENERIC_CALENDAR_NAVIGATOR_FONTSIZE;
+      font-size: $generic-calendar-navigator-fontsize;
     }
 
     &.dx-calendar-disabled-navigator-link {
@@ -84,12 +86,12 @@ $GENERIC_CALENDAR_HEIGHT: $GENERIC_CALENDAR_BODY_HEIGHT + $GENERIC_CALENDAR_NAVI
   }
 
   .dx-calendar-caption-button {
-    font-size: $GENERIC_CALENDAR_NAVIGATOR_FONTSIZE;
+    font-size: $generic-calendar-navigator-fontsize;
     font-weight: bold;
     line-height: 1.2;
     text-transform: uppercase;
-    right: $GENERIC_NAV_BUTTON_WIDTH;
-    left: $GENERIC_NAV_BUTTON_WIDTH;
+    right: $generic-nav-button-width;
+    left: $generic-nav-button-width;
 
     &.dx-button {
       &.dx-state-active {
@@ -97,7 +99,7 @@ $GENERIC_CALENDAR_HEIGHT: $GENERIC_CALENDAR_BODY_HEIGHT + $GENERIC_CALENDAR_NAVI
       }
 
       .dx-button-content {
-        padding: $GENERIC_CALENDAR_CAPTION_BUTTON_PADDING;
+        padding: $generic-calendar-caption-button-padding;
         color: $calendar-button-caption-color;
       }
     }
@@ -105,7 +107,7 @@ $GENERIC_CALENDAR_HEIGHT: $GENERIC_CALENDAR_BODY_HEIGHT + $GENERIC_CALENDAR_NAVI
 }
 
 .dx-calendar-navigator-previous-month {
-  width: $GENERIC_NAV_BUTTON_WIDTH;
+  width: $generic-nav-button-width;
   background: none;
 
   &.dx-button {
@@ -123,7 +125,7 @@ $GENERIC_CALENDAR_HEIGHT: $GENERIC_CALENDAR_BODY_HEIGHT + $GENERIC_CALENDAR_NAVI
 
 .dx-calendar-navigator-previous-month,
 .dx-calendar-navigator-next-view {
-  width: $GENERIC_NAV_BUTTON_WIDTH;
+  width: $generic-nav-button-width;
   background: none;
 
   &.dx-button {
@@ -163,7 +165,7 @@ $GENERIC_CALENDAR_HEIGHT: $GENERIC_CALENDAR_BODY_HEIGHT + $GENERIC_CALENDAR_NAVI
 }
 
 .dx-calendar-body {
-  top: $GENERIC_CALENDAR_BODY_TOP;
+  top: $generic-calendar-body-top;
 
   thead {
     font-size: 10px;
@@ -188,17 +190,17 @@ $GENERIC_CALENDAR_HEIGHT: $GENERIC_CALENDAR_BODY_HEIGHT + $GENERIC_CALENDAR_NAVI
     th {
       color: $calendar-header-color;
       text-align: center;
-      font-size: $GENERIC_XS_FONT_SIZE;
-      padding: 1px 0 $GENERIC_CALENDAR_HEADER_BOTTOM_PADDING 0;
+      font-size: $generic-xs-font-size;
+      padding: 1px 0 $generic-calendar-header-bottom-padding 0;
     }
   }
 }
 
 .dx-calendar-cell {
   text-align: center;
-  padding: 1px $GENERIC_CALENDAR_CELL_HORIZONTAL_PADDING 2px;
+  padding: 1px $generic-calendar-cell-horizontal-padding 2px;
   color: $calendar-color;
-  font-size: $GENERIC_CALENDAR_CELL_FONT_SIZE;
+  font-size: $generic-calendar-cell-font-size;
   border: 1px double transparent;
   width: 39px;
   border-radius: $calendar-cell-contoured-border-radius;

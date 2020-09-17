@@ -3,13 +3,14 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
 
 
-$MATERIAL_SLIDER_HANDLE_MARGIN: -14px;
+$material-slider-handle-margin: -14px;
 
 .dx-rangeslider-start-handle {
-  margin-left: $MATERIAL_SLIDER_HANDLE_MARGIN;
+  margin-left: $material-slider-handle-margin;
 }
 
 .dx-state-disabled {
@@ -20,7 +21,7 @@ $MATERIAL_SLIDER_HANDLE_MARGIN: -14px;
 
 .dx-rtl {
   .dx-rangeslider-start-handle {
-    margin-right: $MATERIAL_SLIDER_HANDLE_MARGIN;
+    margin-right: $material-slider-handle-margin;
   }
 
   &.dx-state-disabled .dx-rangeslider-start-handle {

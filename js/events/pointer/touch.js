@@ -1,7 +1,7 @@
-const devices = require('../../core/devices');
-const extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const BaseStrategy = require('./base');
+import devices from '../../core/devices';
+import { extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import BaseStrategy from './base';
 
 const eventMap = {
     'dxpointerdown': 'touchstart',
@@ -64,4 +64,4 @@ TouchStrategy.map = eventMap;
 TouchStrategy.normalize = normalizeTouchEvent;
 
 
-module.exports = TouchStrategy;
+export default TouchStrategy;

@@ -1,11 +1,11 @@
-const Class = require('../core/class');
-const typeUtils = require('../core/utils/type');
-const iteratorUtils = require('../core/utils/iterator');
-const compileGetter = require('../core/utils/data').compileGetter;
-const toComparable = require('../core/utils/data').toComparable;
-const Deferred = require('../core/utils/deferred').Deferred;
-const errorsModule = require('./errors');
-const dataUtils = require('./utils');
+import Class from '../core/class';
+import { isFunction, isDefined } from '../core/utils/type';
+import iteratorUtils from '../core/utils/iterator';
+import { compileGetter } from '../core/utils/data';
+import { toComparable } from '../core/utils/data';
+import { Deferred } from '../core/utils/deferred';
+import errorsModule from './errors';
+import dataUtils from './utils';
 
 const Iterator = Class.inherit({
 
@@ -230,7 +230,7 @@ const compileCriteria = (function() {
         let isConjunctiveNextOperator = false;
 
         iteratorUtils.each(crit, function() {
-            if(Array.isArray(this) || typeUtils.isFunction(this)) {
+            if(Array.isArray(this) || isFunction(this)) {
                 if(ops.length > 1 && isConjunctiveOperator !== isConjunctiveNextOperator) {
                     throw new errorsModule.errors.Error('E4019');
                 }
@@ -259,7 +259,7 @@ const compileCriteria = (function() {
     };
 
     const toString = function(value) {
-        return typeUtils.isDefined(value) ? value.toString() : '';
+        return isDefined(value) ? value.toString() : '';
     };
 
     const compileBinary = function(crit) {
@@ -333,7 +333,7 @@ const compileCriteria = (function() {
     }
 
     return function(crit) {
-        if(typeUtils.isFunction(crit)) {
+        if(isFunction(crit)) {
             return crit;
         }
         if(dataUtils.isGroupCriterion(crit)) {
@@ -542,7 +542,7 @@ const arrayQueryImpl = function(iter, queryOptions) {
     };
 
     const select = function(getter) {
-        if(!typeUtils.isFunction(getter) && !Array.isArray(getter)) {
+        if(!isFunction(getter) && !Array.isArray(getter)) {
             getter = [].slice.call(arguments);
         }
 
@@ -655,4 +655,4 @@ const arrayQueryImpl = function(iter, queryOptions) {
     };
 };
 
-module.exports = arrayQueryImpl;
+export default arrayQueryImpl;

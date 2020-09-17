@@ -6,6 +6,11 @@ import {
     Font
 } from './core/base_widget';
 
+export type ChartSeriesType = 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
+export type DashStyleType = 'dash' | 'dot' | 'longDash' | 'solid';
+export type TimeIntervalType = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+export type HatchingDirectionType = 'left' | 'none' | 'right';
+
 export interface BaseLegend {
     /**
      * @docid BaseLegend.backgroundColor
@@ -21,7 +26,7 @@ export interface BaseLegend {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
+    border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyleType, opacity?: number, visible?: boolean, width?: number };
     /**
      * @docid BaseLegend.columnCount
      * @type number
@@ -199,7 +204,7 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
+    type?: ChartSeriesType;
 }
 
 export interface ScaleBreak {
@@ -238,7 +243,7 @@ export interface VizRange {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    length?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    length?: number | any | TimeIntervalType;
     /**
      * @docid VizRange.startValue
      * @type number|date|string

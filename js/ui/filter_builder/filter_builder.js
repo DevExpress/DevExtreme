@@ -7,13 +7,16 @@ import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 import utils from './utils';
-import deferredUtils from '../../core/utils/deferred';
+import { when } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
 import TreeView from '../tree_view';
 import Popup from '../popup';
 import { getElementMaxHeightByWindow } from '../overlay/utils';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import { normalizeKeyName } from '../../events/utils';
+import { renderValueText } from './utils';
+
+// STYLE filterBuilder
 
 const FILTER_BUILDER_CLASS = 'dx-filterbuilder';
 const FILTER_BUILDER_GROUP_CLASS = FILTER_BUILDER_CLASS + '-group';
@@ -26,9 +29,6 @@ const FILTER_BUILDER_IMAGE_CLASS = FILTER_BUILDER_ACTION_CLASS + '-icon';
 const FILTER_BUILDER_IMAGE_ADD_CLASS = 'dx-icon-plus';
 const FILTER_BUILDER_IMAGE_REMOVE_CLASS = 'dx-icon-remove';
 const FILTER_BUILDER_ITEM_TEXT_CLASS = FILTER_BUILDER_CLASS + '-text';
-const FILTER_BUILDER_ITEM_TEXT_PART_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + '-part';
-const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + '-separator';
-const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS = FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS + '-empty';
 const FILTER_BUILDER_ITEM_FIELD_CLASS = FILTER_BUILDER_CLASS + '-item-field';
 const FILTER_BUILDER_ITEM_OPERATION_CLASS = FILTER_BUILDER_CLASS + '-item-operation';
 const FILTER_BUILDER_ITEM_VALUE_CLASS = FILTER_BUILDER_CLASS + '-item-value';
@@ -64,29 +64,6 @@ const OPERATORS = {
 };
 
 const EditorFactory = Class.inherit(EditorFactoryMixin);
-
-const renderValueText = function($container, value, customOperation) {
-    if(Array.isArray(value)) {
-        const lastItemIndex = value.length - 1;
-        $container.empty();
-        value.forEach((t, i) => {
-            $('<span>')
-                .addClass(FILTER_BUILDER_ITEM_TEXT_PART_CLASS)
-                .text(t)
-                .appendTo($container);
-            if(i !== lastItemIndex) {
-                $('<span>')
-                    .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS)
-                    .text(customOperation && customOperation.valueSeparator ? customOperation.valueSeparator : '|')
-                    .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS).appendTo($container);
-            }
-        });
-    } else if(value) {
-        $container.text(value);
-    } else {
-        $container.text(messageLocalization.format('dxFilterBuilder-enterValueText'));
-    }
-};
 
 const FilterBuilder = Widget.inherit({
     _getDefaultOptions: function() {
@@ -729,7 +706,7 @@ const FilterBuilder = Widget.inherit({
                 renderValueText($text, result);
             });
         } else {
-            deferredUtils.when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
+            when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
                 renderValueText($text, result, customOperation);
             });
         }
@@ -949,5 +926,4 @@ const FilterBuilder = Widget.inherit({
 
 registerComponent('dxFilterBuilder', FilterBuilder);
 
-module.exports = FilterBuilder;
-module.exports.renderValueText = renderValueText;
+export default FilterBuilder;

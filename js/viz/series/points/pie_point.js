@@ -1,5 +1,5 @@
-const extend = require('../../../core/utils/extend').extend;
-const symbolPoint = require('./symbol_point');
+import { extend } from '../../../core/utils/extend';
+import symbolPoint from './symbol_point';
 
 const _extend = extend;
 const _round = Math.round;
@@ -7,14 +7,14 @@ const _sqrt = Math.sqrt;
 const _acos = Math.acos;
 const DEG = 180 / Math.PI;
 const _abs = Math.abs;
-const vizUtils = require('../../core/utils');
+import vizUtils from '../../core/utils';
 const _normalizeAngle = vizUtils.normalizeAngle;
 const _getCosAndSin = vizUtils.getCosAndSin;
-const _isDefined = require('../../../core/utils/type').isDefined;
+import { isDefined as _isDefined } from '../../../core/utils/type';
 const getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords;
-const RADIAL_LABEL_INDENT = require('../../components/consts').radialLabelIndent;
+import { radialLabelIndent as RADIAL_LABEL_INDENT } from '../../components/consts';
 
-module.exports = _extend({}, symbolPoint, {
+export default _extend({}, symbolPoint, {
     _updateData: function(data, argumentChanged) {
         const that = this;
         symbolPoint._updateData.call(this, data);
@@ -86,24 +86,23 @@ module.exports = _extend({}, symbolPoint, {
         return options.position;
     },
 
-    _getLabelCoords: function(label) {
+    getAnnotationCoords: function(location) {
+        return this._getElementCoords(location !== 'edge' ? 'inside' : 'outside', this.radiusOuter, 0);
+    },
+
+    _getElementCoords: function(position, elementRadius, radialOffset, bBox = { x: 0, y: 0, width: 0, height: 0 }) {
         const that = this;
-        const bBox = label.getBoundingRect();
-        const options = label.getLayoutOptions();
         const angleFunctions = _getCosAndSin(that.middleAngle);
-        const position = that._getLabelPosition(options);
         const radiusInner = that.radiusInner;
         const radiusOuter = that.radiusOuter;
-        const radiusLabels = that.radiusLabels;
         const columnsPosition = position === 'columns';
         let rad;
         let x;
-
         if(position === 'inside') {
-            rad = radiusInner + (radiusOuter - radiusInner) / 2 + options.radialOffset;
+            rad = radiusInner + (radiusOuter - radiusInner) / 2 + radialOffset;
             x = that.centerX + rad * angleFunctions.cos - bBox.width / 2;
         } else {
-            rad = radiusLabels + options.radialOffset;
+            rad = elementRadius + radialOffset;
             if(angleFunctions.cos > 0.1 || columnsPosition && angleFunctions.cos >= 0) {
                 x = that.centerX + rad * angleFunctions.cos;
             } else if(angleFunctions.cos < -0.1 || columnsPosition && angleFunctions.cos < 0) {
@@ -117,6 +116,15 @@ module.exports = _extend({}, symbolPoint, {
             x: x,
             y: _round(that.centerY - rad * angleFunctions.sin - bBox.height / 2)
         };
+    },
+
+    _getLabelCoords: function(label) {
+        const that = this;
+        const bBox = label.getBoundingRect();
+        const options = label.getLayoutOptions();
+        const position = that._getLabelPosition(options);
+
+        return that._getElementCoords(position, that.radiusLabels, options.radialOffset, bBox);
     },
 
     _correctLabelCoord: function(coord, moveLabelsFromCenter) {

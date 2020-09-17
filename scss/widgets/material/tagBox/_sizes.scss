@@ -1,39 +1,32 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT: null !default;
-$MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT: null !default;
-$MATERIAL_TAGBOX_TAG_CONTENT_PADDING: null !default;
-$MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: null !default;
-$MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: null !default;
-$MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: null !default;
-$MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: null !default;
-$MATERIAL_TAGBOX_TAG_MARGIN: null !default;
-$MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: null !default;
-$MATERIAL_TAGBOX_TAG_HEIGHT: null !default;
+$material-tagbox-tag-content-padding-left: null !default;
+$material-tagbox-tag-content-padding: null !default;
+$material-tagbox-tag-margin: null !default;
+$material-tagbox-tag-container-padding: null !default;
+$material-tagbox-tag-height: null !default;
+
+$material-tagbox-tag-content-padding-right: 32px;
+$material-tagbox-remove-button-right: 4px;
+$material-tagbox-remove-button-width: 24px;
+$material-tagbox-select-all-padding-bottom: 12px;
+$material-tagbox-select-all-margin-bottom: 3px;
+$tagbox-tag-border-radius: 16px !default;
 
 @if $size == "default" {
-  $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT: 12px;
-  $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT: 32px;
-  $MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 8px $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 7px $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
-  $MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: 4px;
-  $MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 24px;
-  $MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 12px;
-  $MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 3px;
-  $MATERIAL_TAGBOX_TAG_MARGIN: 8px;
-  $MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: 4px 12px 12px 12px;
-  $MATERIAL_TAGBOX_TAG_HEIGHT: 32px;
+  $material-tagbox-tag-content-padding-left: 12px;
+  $material-tagbox-tag-content-padding: 8px $material-tagbox-tag-content-padding-right 7px $material-tagbox-tag-content-padding-left;
+  $material-tagbox-tag-margin: 8px;
+  $material-tagbox-tag-container-padding: 4px 12px 12px 12px;
+  $material-tagbox-tag-height: 32px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT: 8px;
-  $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT: 32px;
-  $MATERIAL_TAGBOX_TAG_CONTENT_PADDING: 5px $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_RIGHT 5px $MATERIAL_TAGBOX_TAG_CONTENT_PADDING_LEFT;
-  $MATERIAL_TAGBOX_REMOVE_BUTTON_RIGHT: 4px;
-  $MATERIAL_TAGBOX_REMOVE_BUTTON_WIDTH: 24px;
-  $MATERIAL_TAGBOX_SELECT_ALL_PADDING_BOTTOM: 12px;
-  $MATERIAL_TAGBOX_SELECT_ALL_MARGIN_BOTTOM: 3px;
-  $MATERIAL_TAGBOX_TAG_MARGIN: 5px;
-  $MATERIAL_TAGBOX_TAG_CONTAINER_PADDING: 2px 8px 7px 8px;
-  $MATERIAL_TAGBOX_TAG_HEIGHT: 26px;
+  $material-tagbox-tag-content-padding-left: 8px;
+  $material-tagbox-tag-content-padding: 5px $material-tagbox-tag-content-padding-right 5px $material-tagbox-tag-content-padding-left;
+  $material-tagbox-tag-margin: 5px;
+  $material-tagbox-tag-container-padding: 2px 8px 7px 8px;
+  $material-tagbox-tag-height: 26px;
 }

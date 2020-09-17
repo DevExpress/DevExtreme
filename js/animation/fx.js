@@ -1,25 +1,22 @@
-const $ = require('../core/renderer');
-const window = require('../core/utils/window').getWindow();
-const eventsEngine = require('../events/core/events_engine');
-const errors = require('../core/errors');
-const getPublicElement = require('../core/element').getPublicElement;
-const extend = require('../core/utils/extend').extend;
-const typeUtils = require('../core/utils/type');
-const iteratorUtils = require('../core/utils/iterator');
-const translator = require('./translator');
-const easing = require('./easing');
-const animationFrame = require('./frame');
-const support = require('../core/utils/support');
-const positionUtils = require('./position');
-const removeEvent = require('../core/remove_event');
-const eventUtils = require('../events/utils');
-const deferredUtils = require('../core/utils/deferred');
-const when = deferredUtils.when;
-const Deferred = deferredUtils.Deferred;
-const removeEventName = eventUtils.addNamespace(removeEvent, 'dxFX');
-const isFunction = typeUtils.isFunction;
-const isPlainObject = typeUtils.isPlainObject;
-const noop = require('../core/utils/common').noop;
+import $ from '../core/renderer';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import eventsEngine from '../events/core/events_engine';
+import errors from '../core/errors';
+import { getPublicElement } from '../core/element';
+import { extend } from '../core/utils/extend';
+import { isFunction, isPlainObject } from '../core/utils/type';
+import iteratorUtils from '../core/utils/iterator';
+import translator from './translator';
+import easing from './easing';
+import animationFrame from './frame';
+import support from '../core/utils/support';
+import positionUtils from './position';
+import removeEvent from '../core/remove_event';
+import { addNamespace } from '../events/utils';
+import { when, Deferred } from '../core/utils/deferred';
+const removeEventName = addNamespace(removeEvent, 'dxFX');
+import { noop } from '../core/utils/common';
 
 
 const RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i;
@@ -655,7 +652,7 @@ const stopAnimationOnElement = function(jumpToEnd) {
     animation.strategy.stop($element, config, jumpToEnd);
 };
 
-const scopedRemoveEvent = eventUtils.addNamespace(removeEvent, 'dxFXStartAnimation');
+const scopedRemoveEvent = addNamespace(removeEvent, 'dxFXStartAnimation');
 
 const subscribeToRemoveEvent = function(animation) {
     eventsEngine.off(animation.element, scopedRemoveEvent);
@@ -795,7 +792,7 @@ function setupPosition($element, config) {
 function setProps($element, props) {
     iteratorUtils.each(props, function(key, value) {
         try {
-            $element.css(key, typeUtils.isFunction(value) ? value() : value);
+            $element.css(key, isFunction(value) ? value() : value);
         } catch(e) { }
     });
 }
@@ -841,4 +838,4 @@ const fx = {
     _simulatedTransitionEndDelay: 100
 };
 
-module.exports = fx;
+export default fx;

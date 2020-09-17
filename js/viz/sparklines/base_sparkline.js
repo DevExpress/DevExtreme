@@ -1,21 +1,21 @@
-const eventsEngine = require('../../events/core/events_engine');
-const domAdapter = require('../../core/dom_adapter');
-const isFunction = require('../../core/utils/type').isFunction;
-const BaseWidget = require('../core/base_widget');
-const extend = require('../../core/utils/extend').extend;
-const addNamespace = require('../../events/utils').addNamespace;
-const pointerEvents = require('../../events/pointer');
-const pointInCanvas = require('../core/utils').pointInCanvas;
+import eventsEngine from '../../events/core/events_engine';
+import domAdapter from '../../core/dom_adapter';
+import { isFunction } from '../../core/utils/type';
+import BaseWidget from '../core/base_widget';
+import { extend } from '../../core/utils/extend';
+import { addNamespace } from '../../events/utils';
+import pointerEvents from '../../events/pointer';
+import { pointInCanvas } from '../core/utils';
 
 const DEFAULT_LINE_SPACING = 2;
 const EVENT_NS = 'sparkline-tooltip';
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 
-const translator2DModule = require('../translators/translator2d');
+import translator2DModule from '../translators/translator2d';
 
 const _extend = extend;
 const _floor = Math.floor;
-const _noop = require('../../core/utils/common').noop;
+import { noop as _noop } from '../../core/utils/common';
 
 function inCanvas({ left, top, bottom, right, width, height }, x, y) {
     return pointInCanvas({
@@ -244,10 +244,11 @@ const BaseSparkline = BaseWidget.inherit({
     }
 });
 
-module.exports = BaseSparkline;
+export default BaseSparkline;
 
 // PLUGINS_SECTION
-BaseSparkline.addPlugin(require('../core/tooltip').plugin);
+import { plugin as tooltipPlugin } from '../core/tooltip';
+BaseSparkline.addPlugin(tooltipPlugin);
 
 // These are sparklines specifics on using tooltip - they cannot be omitted because of tooltip laziness.
 _initTooltip = BaseSparkline.prototype._initTooltip;
@@ -277,7 +278,8 @@ BaseSparkline.prototype._setTooltipOptions = function() {
 
 // PLUGINS_SECTION
 // T422022
-const exportPlugin = extend(true, {}, require('../core/export').plugin, {
+import { plugin } from '../core/export';
+const exportPlugin = extend(true, {}, plugin, {
     init: _noop,
     dispose: _noop,
     customize: null,

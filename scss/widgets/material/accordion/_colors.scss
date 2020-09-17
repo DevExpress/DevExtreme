@@ -1,83 +1,32 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
+$accordion-color: $base-text-color !default;
 
-$accordion-color: null !default;
-$accordion-title-color: null !default;
-$accordion-item-border-color: null !default;
-$accordion-icon-active-color: null !default;
-$accordion-background-color: null !default;
-$accordion-title-active-color: null !default;
-$accordion-title-active-bg: null !default;
-$accordion-item-hover-bg: null !default;
-$accordion-item-bg: null !default;
-$accordion-icon-color: null !default;
-$accordion-title-hover-border-color: null !default;
+/**
+* $name 10. Item title text color
+* $type color
+*/
+$accordion-title-color: $accordion-color !default;
 
+/**
+* $name 20. Item border color
+* $type color
+*/
+$accordion-item-border-color: $base-border-color !default;
 
-@if $mode == "light" {
-
-
-  $accordion-color: $base-text-color !default;
-
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
-  $accordion-title-color: $accordion-color !default;
-
-  /**
-    * $name 20. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
-
-  /**
-    * $name 30. Item active state icon color
-    * $type color
-    */
-  $accordion-icon-active-color: $accordion-color !default;
-
-  $accordion-background-color: $base-bg !default;
-  $accordion-title-active-color: $accordion-color !default;
-  $accordion-title-active-bg: $base-hover-bg !default;
-  $accordion-item-hover-bg: $base-hover-bg !default;
-  $accordion-item-bg: $accordion-background-color !default;
-  $accordion-icon-color: color.change($base-icon-color, $alpha: 0.38) !default;
-  $accordion-title-hover-border-color: darken($base-border-color, 6%) !default;
-}
-
-@if $mode == "dark" {
-
-
-  $accordion-color: $base-text-color !default;
-
-  /**
-    * $name 10. Item title text color
-    * $type color
-    */
-  $accordion-title-color: $accordion-color !default;
-
-  /**
-    * $name 20. Item border color
-    * $type color
-    */
-  $accordion-item-border-color: $base-border-color !default;
-
-  /**
-    * $name 30. Item active state icon color
-    * $type color
-    */
-  $accordion-icon-active-color: $accordion-color !default;
-
-  $accordion-background-color: $base-bg !default;
-  $accordion-title-active-color: $accordion-color !default;
-  $accordion-title-active-bg: $base-hover-bg !default;
-  $accordion-item-hover-bg: $base-hover-bg !default;
-  $accordion-item-bg: $accordion-background-color !default;
-  $accordion-icon-color: color.change($base-icon-color, $alpha: 0.38) !default;
-  $accordion-title-hover-border-color: darken($base-border-color, 6%) !default;
-}
-
+/**
+* $name 30. Item active state icon color
+* $type color
+*/
+$accordion-icon-active-color: $accordion-color !default;
+$accordion-background-color: $base-bg !default;
+$accordion-title-active-color: $accordion-color !default;
+$accordion-title-active-bg: $base-hover-bg !default;
+$accordion-item-hover-bg: $base-hover-bg !default;
+$accordion-item-bg: $accordion-background-color !default;
+$accordion-icon-color: color.change($base-icon-color, $alpha: 0.38) !default;
+$accordion-title-hover-border-color: darken($base-border-color, 6%) !default;

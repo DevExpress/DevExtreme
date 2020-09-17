@@ -194,4 +194,4 @@ const nativeDOMAdapterStrategy = {
     }
 };
 
-module.exports = injector(nativeDOMAdapterStrategy);
+export default injector(nativeDOMAdapterStrategy);

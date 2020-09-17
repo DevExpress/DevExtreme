@@ -51,4 +51,4 @@ const caret = function(input, position) {
     setCaret(input, position);
 };
 
-module.exports = caret;
+export default caret;

@@ -31,4 +31,4 @@ class MenuBaseEditStrategy extends PlainEditStrategy {
     }
 }
 
-module.exports = MenuBaseEditStrategy;
+export default MenuBaseEditStrategy;

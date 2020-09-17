@@ -15,10 +15,10 @@ require('viz/vector_map/vector_map');
 
 $('#qunit-fixture').append('<div id="container" style="width: 1200px; height: 600px;"></div>');
 
-titleModule.Title = vizMocks.stubClass(titleModule.Title, { });
-tooltipModule.Tooltip = vizMocks.stubClass(tooltipModule.Tooltip);
-exportMenuModule.ExportMenu = vizMocks.stubClass(exportMenuModule.ExportMenu); // TODO maybe if you test layer - you should create exact layer?
-loadingIndicatorModule.LoadingIndicator = vizMocks.stubClass(loadingIndicatorModule.LoadingIndicator);
+titleModule.DEBUG_set_title(vizMocks.stubClass(titleModule.Title, { }));
+tooltipModule.DEBUG_set_tooltip(vizMocks.stubClass(tooltipModule.Tooltip));
+exportMenuModule.DEBUG_set_ExportMenu(vizMocks.stubClass(exportMenuModule.ExportMenu)); // TODO maybe if you test layer - you should create exact layer?
+loadingIndicatorModule.DEBUG_set_LoadingIndicator(vizMocks.stubClass(loadingIndicatorModule.LoadingIndicator));
 controlBarModule.ControlBar = vizMocks.stubClass(controlBarModule.ControlBar);
 legendModule.LegendsControl = vizMocks.stubClass(legendModule.LegendsControl);
 tooltipViewerModule.TooltipViewer = vizMocks.stubClass(tooltipViewerModule.TooltipViewer);
@@ -79,7 +79,7 @@ const environment = {
     },
 
     getMarker: function(index) {
-        return this.renderer.g.getCall(2 + index).returnValue;
+        return this.renderer.g.getCall(3 + index).returnValue;
     },
 
     getLabel: function(index) {

@@ -102,13 +102,12 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 location:object
-     * @type_function_param1_field5 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field6 event:event
+     * @type_function_param1_field5 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onClick?: ((e: { component?: dxMap, element?: dxElement, model?: any, location?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
+    onClick?: ((e: { component?: dxMap, element?: dxElement, model?: any, location?: any, event?: event }) => any) | string;
     /**
      * @docid dxMapOptions.onMarkerAdded
      * @extends Action

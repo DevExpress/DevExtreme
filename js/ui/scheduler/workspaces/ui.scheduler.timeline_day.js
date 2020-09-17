@@ -20,4 +20,4 @@ class SchedulerTimelineDay extends SchedulerTimeline {
 
 registerComponent('dxSchedulerTimelineDay', SchedulerTimelineDay);
 
-module.exports = SchedulerTimelineDay;
+export default SchedulerTimelineDay;

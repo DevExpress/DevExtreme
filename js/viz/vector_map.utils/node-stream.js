@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars, no-var, one-var*/
-
+/* eslint-disable no-unused-vars, no-var, one-var, import/no-commonjs*/
 function wrapBuffer(buffer) {
     return buffer;
 }

@@ -8,9 +8,6 @@ import translator from 'animation/translator';
 
 import 'common.css!';
 
-fx.off = true;
-
-
 QUnit.testStart(function() {
     const markup =
         `<style>
@@ -21,15 +18,17 @@ QUnit.testStart(function() {
                 cursor: default;
             }
         </style>
-        <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-            <div id="item1" class="draggable" style="background: yellow;">item1</div>
-            <div id="item2" class="draggable" style="background: red;">item2</div>
-            <div id="item3" class="draggable" style="background: blue;">item3</div>
-        </div>
-        <div id="items2" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
-            <div id="item4" class="draggable" style="background: yellow;">item4</div>
-            <div id="item5" class="draggable" style="background: red;">item5</div>
-            <div id="item6" class="draggable" style="background: blue;">item6</div>
+        <div id="container">
+            <div id="items" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+                <div id="item1" class="draggable" style="background: yellow;">item1</div>
+                <div id="item2" class="draggable" style="background: red;">item2</div>
+                <div id="item3" class="draggable" style="background: blue;">item3</div>
+            </div>
+            <div id="items2" style="display: inline-block; vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;">
+                <div id="item4" class="draggable" style="background: yellow;">item4</div>
+                <div id="item5" class="draggable" style="background: red;">item5</div>
+                <div id="item6" class="draggable" style="background: blue;">item6</div>
+            </div>
         </div>
         <div id="items3" style="vertical-align: top; width: 300px; height: 250px; position: relative; background: grey;"></div>
         <div id="itemsHorizontal" style="width: 250px; height: 300px;">
@@ -96,6 +95,7 @@ QUnit.testStart(function() {
         `;
 
     $('#qunit-fixture').html(markup);
+    fx.off = true;
 });
 
 const SORTABLE_CLASS = 'dx-sortable';
@@ -659,6 +659,7 @@ QUnit.module('placeholder and source', moduleConfig, () => {
 
     QUnit.test('Move items during dragging', function(assert) {
         // arrange
+        fx.off = false;
 
         this.createSortable({
             filter: '.draggable',
@@ -683,7 +684,39 @@ QUnit.module('placeholder and source', moduleConfig, () => {
 
         assert.strictEqual(items[0].style.transform, '', 'items 1 is not moved');
         assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
+        assert.strictEqual(items[1].style.transitionDuration, '300ms', 'items 2 transition duration');
+        assert.strictEqual(items[1].style.transitionTimingFunction, 'ease', 'items 2 transition timing function');
         assert.strictEqual(items[2].style.transform, '', 'items 3 is not moved');
+    });
+
+    QUnit.test('Move items during dragging with custom animation', function(assert) {
+        // arrange
+        fx.off = false;
+
+        this.createSortable({
+            filter: '.draggable',
+            dropFeedbackMode: 'push',
+            animation: {
+                duration: 500,
+                easing: 'ease-in-out'
+            }
+        });
+
+        let items = this.$element.children();
+        const $dragItemElement = items.eq(0);
+
+        // assert
+        assert.strictEqual(items.length, 3, 'item count');
+
+        // act
+        pointerMock($dragItemElement).start().down(15, 15).move(0, 30);
+
+        // assert
+        items = this.$element.children();
+
+        assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
+        assert.strictEqual(items[1].style.transitionDuration, '500ms', 'items 2 transition duration');
+        assert.strictEqual(items[1].style.transitionTimingFunction, 'ease-in-out', 'items 2 transition timing function');
     });
 
     QUnit.test('Move items during dragging if content tempalte is defined', function(assert) {
@@ -2092,6 +2125,8 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 
     QUnit.test('Animation should be stopped for target sortable items after leave', function(assert) {
         // arrange
+        fx.off = false;
+
         const sortable1 = this.createSortable({
             group: 'shared',
             dropFeedbackMode: 'push'
@@ -2108,22 +2143,19 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 
         // assert
         const items2 = $(sortable2.$element()).children();
+        assert.strictEqual(items2[0].style.transitionDuration, '300ms', 'items2 1 transition');
         assert.strictEqual(items2[0].style.transform, 'translate(0px, 30px)', 'items2 1 is moved down');
         assert.strictEqual(items2[1].style.transform, 'translate(0px, 30px)', 'items2 2 is moved down');
         assert.strictEqual(items2[2].style.transform, 'translate(0px, 30px)', 'items2 3 is moved down');
 
         // act
-        sinon.spy(fx, 'stop');
         pointer.move(300, 0);
 
         // assert
-        assert.strictEqual(items2[0].style.transform, 'none', 'items2 1 is moved down');
-        assert.strictEqual(items2[1].style.transform, 'none', 'items2 2 is moved down');
-        assert.strictEqual(items2[2].style.transform, 'none', 'items2 3 is moved down');
-        assert.strictEqual(fx.stop.callCount, 3, 'fx.stop call count');
-        assert.strictEqual(fx.stop.getCall(0).args[0].get(0), items2[0], 'fx.stop called for items2 1');
-        assert.strictEqual(fx.stop.getCall(1).args[0].get(0), items2[1], 'fx.stop called for items2 1');
-        assert.strictEqual(fx.stop.getCall(2).args[0].get(0), items2[2], 'fx.stop called for items2 1');
+        assert.strictEqual(items2[0].style.transitionDuration, '', 'items2 1 transition is reseted');
+        assert.strictEqual(items2[0].style.transform, '', 'items2 1 transform is reseted');
+        assert.strictEqual(items2[1].style.transform, '', 'items2 2 transform is reseted');
+        assert.strictEqual(items2[2].style.transform, '', 'items2 3 transform is reseted');
     });
 
     QUnit.test('items should not be moved after leave and enter', function(assert) {
@@ -2140,7 +2172,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
 
         // act
         const pointer = pointerMock(sortable1.$element().children().eq(0));
-        pointer.start().down().move(350, 0).move(50, 0).move(-50).move(-350);
+        pointer.start().down().move(350, 0).move(50, 0).move(-350).move(-50);
 
         // assert
         const items1 = $(sortable1.$element()).children();
@@ -2149,7 +2181,7 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
         assert.strictEqual(items1[2].style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'items1 3 is not moved');
     });
 
-    QUnit.test('Items should be moved after leave sortable if group is defined', function(assert) {
+    QUnit.test('Items should not be moved after leave sortable if group is defined', function(assert) {
         // arrange
         const sortable = this.createSortable({
             group: 'shared',
@@ -2163,8 +2195,8 @@ QUnit.module('Cross-Component Drag and Drop', crossComponentModuleConfig, () => 
         // assert
         const items = $(sortable.$element()).children();
         assert.strictEqual(items[0].style.transform, '', 'items 1 is not moved');
-        assert.strictEqual(items[1].style.transform, 'translate(0px, -30px)', 'items 2 is moved up');
-        assert.strictEqual(items[2].style.transform, 'translate(0px, -30px)', 'items 3 is moved up');
+        assert.strictEqual(items[1].style.transform, '', 'items 2 is not moved');
+        assert.strictEqual(items[2].style.transform, '', 'items 3 is not moved');
     });
 
     QUnit.test('Items should not be moved after leave sortable if group is not defined', function(assert) {
@@ -3024,6 +3056,36 @@ QUnit.module('Drag and drop with nested sortable', crossComponentModuleConfig, (
         assert.deepEqual(onAdd.getCall(0).args[0].fromComponent, sortable1, 'onAdd args - fromComponent');
         assert.deepEqual(onAdd.getCall(0).args[0].toComponent, sortable2, 'onAdd args - toComponent');
         assert.strictEqual(onAdd.getCall(0).args[0].toIndex, 1, 'onAdd args - toIndex');
+    });
+
+    QUnit.test('Placeholder should have correct height when drag and drop item from nested sortable to parent sortable', function(assert) {
+        // arrange
+        const sortable1 = this.createSortable({
+            group: 'shared',
+            dropFeedbackMode: 'indicate'
+        }, $('#items'));
+
+        this.createSortable({
+            group: 'shared',
+            dropFeedbackMode: 'indicate'
+        }, $('#items2'));
+
+        this.createSortable({
+            group: 'shared',
+            itemOrientation: 'horizontal',
+            dropFeedbackMode: 'indicate'
+        }, $('#container'));
+
+        const $itemElement = sortable1.$element().children().eq(0);
+        const pointer = pointerMock($itemElement);
+
+        pointer.start().down().move(610, 0).move(40, 0);
+
+        const $placeholder = $('.dx-sortable-placeholder');
+        assert.strictEqual($placeholder.length, 1, 'placeholder exists');
+        assert.equal($placeholder.get(0).style.height, '250px', 'placeholder height style');
+        assert.equal($placeholder.get(0).style.width, '', 'placeholder width style');
+        assert.deepEqual(translator.locate($placeholder), { left: 604, top: 0 }, 'placeholder position');
     });
 });
 

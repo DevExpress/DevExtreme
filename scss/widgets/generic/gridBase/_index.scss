@@ -6,36 +6,39 @@
 @use "../../base/icons" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
 @use "../popup/colors" as *;
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
 @use "../button/colors" as *;
 @use "../validation/colors" as *;
-@use "../pager" as *;
+
 // adduse
+@use "../scrollable";
+@use "../overlay";
+@use "../pager";
 
 
-$GENERIC_GRID_BASE_BORDER_HIDDEN: 1px solid transparent;
-$GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
-$GENERIC_GRID_BASE_BORDER_COLOR: $datagrid-border-color;
-$GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid $datagrid-drag-header-border-color;
-$GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0 0 1px $datagrid-drag-header-shadow-color;
-$GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0 1px 3px $datagrid-drag-header-second-shadow-color;
-$GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
+$generic-grid-base-border-hidden: 1px solid transparent;
+$generic-grid-base-row-border: 1px solid transparent;
+$generic-grid-base-border-color: $datagrid-border-color;
+$generic-grid-base-drag-header-border: 1px solid $datagrid-drag-header-border-color;
+$generic-grid-base-drag-header-first-shadow: 0 0 1px $datagrid-drag-header-shadow-color;
+$generic-grid-base-drag-header-second-shadow: 0 1px 3px $datagrid-drag-header-second-shadow-color;
+$generic-grid-base-checkbox-icon-size: 16px;
 
 @mixin dx-set-checkbox-border-color-as-background() {
-  @if $GENERIC_COLOR_POSTFIX == ".contrast" {
+  @if $generic-color-postfix == ".contrast" {
     .dx-selection .dx-checkbox-icon {
       border-color: $datagrid-base-background-color;
     }
   }
 }
 
-@mixin grid-base($widgetName) {
-  .dx-#{$widgetName},
-  .dx-#{$widgetName}-container {
+@mixin grid-base($widget-name) {
+  .dx-#{$widget-name},
+  .dx-#{$widget-name}-container {
     &.dx-filter-menu {
       .dx-menu-item-has-icon {
         .dx-icon {
@@ -108,13 +111,14 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     }
   }
 
-  .dx-#{$widgetName} {
+  .dx-#{$widget-name} {
     line-height: inherit;
 
     .dx-row-alt {
       & > td,
       & > tr > td {
         background-color: $datagrid-row-alternation-bg;
+
         // T838734
         border-top: 1px solid $datagrid-row-alternation-bg;
         border-bottom: 1px solid $datagrid-row-alternation-bg;
@@ -141,66 +145,66 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     .dx-error-row {
       .dx-closebutton {
         float: right;
-        margin: $GENERIC_GRID_BASE_CELL_PADDING + 2px;
+        margin: $generic-grid-base-cell-padding + 2px;
 
         @include dx-icon(close);
         @include dx-icon-sizing(14px);
       }
 
       .dx-error-message {
-        padding: $GENERIC_GRID_BASE_CELL_PADDING;
+        padding: $generic-grid-base-cell-padding;
         padding-right: 35px;
       }
     }
 
     .dx-row {
       & > td {
-        padding: $GENERIC_GRID_BASE_CELL_PADDING;
+        padding: $generic-grid-base-cell-padding;
       }
     }
 
-    .dx-#{$widgetName}-content .dx-#{$widgetName}-table .dx-row {
+    .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
       .dx-command-edit-with-icons .dx-link {
-        @include dx-icon-sizing($GENERIC_COMMAND_EDIT_ICON_SIZE);
+        @include dx-icon-sizing($generic-command-edit-icon-size);
 
-        margin: 0 $GENERIC_COMMAND_EDIT_ICON_MARGIN;
+        margin: 0 $generic-command-edit-icon-margin;
       }
     }
 
-    .dx-#{$widgetName}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
+    .dx-#{$widget-name}-rowsview .dx-virtual-row > td[style*="text-align: right"]:before {
       background-position-y: 34px;
     }
 
     .dx-command-drag {
-      width: $GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH;
-      min-width: $GENERIC_GRID_BASE_COMMAND_HANDLE_COLUMN_WIDTH;
+      width: $generic-grid-base-command-handle-column-width;
+      min-width: $generic-grid-base-command-handle-column-width;
 
-      .dx-#{$widgetName}-drag-icon {
+      .dx-#{$widget-name}-drag-icon {
         vertical-align: middle;
 
-        @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+        @include dx-icon-sizing($generic-base-icon-size);
 
-        line-height: $GENERIC_BASE_INLINE_BLOCK_HEIGHT;
+        line-height: $generic-base-inline-block-height;
       }
     }
   }
 
-  .dx-#{$widgetName}-edit-popup .dx-error-message {
-    padding: $GENERIC_GRID_BASE_CELL_PADDING;
+  .dx-#{$widget-name}-edit-popup .dx-error-message {
+    padding: $generic-grid-base-cell-padding;
   }
 
-  .dx-#{$widgetName}-headers,
-  .dx-#{$widgetName}-rowsview {
+  .dx-#{$widget-name}-headers,
+  .dx-#{$widget-name}-rowsview {
     .dx-texteditor-input {
-      padding: $GENERIC_GRID_BASE_CELL_PADDING;
-      min-height: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_BASE_FONT_SIZE) + 2 * $GENERIC_GRID_BASE_CELL_PADDING;
+      padding: $generic-grid-base-cell-padding;
+      min-height: round($generic-base-line-height * $generic-base-font-size) + 2 * $generic-grid-base-cell-padding;
     }
 
     .dx-numberbox,
     .dx-textbox {
       &.dx-show-clear-button.dx-texteditor-empty:not(.dx-invalid) {
         .dx-texteditor-input {
-          padding-right: $GENERIC_GRID_BASE_CELL_PADDING;
+          padding-right: $generic-grid-base-cell-padding;
         }
       }
     }
@@ -210,19 +214,19 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     }
 
     .dx-lookup-field {
-      padding-left: $GENERIC_GRID_BASE_CELL_PADDING;
-      padding-top: $GENERIC_GRID_BASE_CELL_PADDING;
-      padding-bottom: $GENERIC_GRID_BASE_CELL_PADDING;
+      padding-left: $generic-grid-base-cell-padding;
+      padding-top: $generic-grid-base-cell-padding;
+      padding-bottom: $generic-grid-base-cell-padding;
     }
 
     .dx-searchbox {
       .dx-texteditor-input,
       .dx-placeholder:before {
-        padding-left: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
+        padding-left: $generic-texteditor-icon-container-size;
 
         @at-root #{selector-append(".dx-rtl", &)},
         .dx-rtl & {
-          padding-right: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
+          padding-right: $generic-texteditor-icon-container-size;
         }
       }
     }
@@ -254,21 +258,21 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     }
 
     &.dx-editor-inline-block .dx-highlight-outline::before {
-      padding-top: $GENERIC_GRID_BASE_CELL_PADDING;
-      padding-bottom: $GENERIC_GRID_BASE_CELL_PADDING;
+      padding-top: $generic-grid-base-cell-padding;
+      padding-bottom: $generic-grid-base-cell-padding;
     }
   }
 
-  .dx-#{$widgetName}-checkbox-size {
+  .dx-#{$widget-name}-checkbox-size {
     line-height: 1em;
 
     &.dx-checkbox-checked .dx-checkbox-icon {
-      font-size: $GENERIC_GRID_BASE_CHECKBOX_FONTSIZE;
+      font-size: $generic-grid-base-checkbox-fontsize;
     }
 
     .dx-checkbox-icon {
-      height: $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
-      width: $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
+      height: $generic-grid-base-checkbox-icon-size;
+      width: $generic-grid-base-checkbox-icon-size;
     }
 
     &.dx-checkbox-indeterminate {
@@ -278,23 +282,23 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     }
   }
 
-  .dx-device-mobile .dx-#{$widgetName}-column-chooser-list,
-  .dx-#{$widgetName}-column-chooser-list {
+  .dx-device-mobile .dx-#{$widget-name}-column-chooser-list,
+  .dx-#{$widget-name}-column-chooser-list {
     .dx-empty-message {
       color: $datagrid-columnchooser-message-color;
-      padding: 0 $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDING;
+      padding: 0 $generic-grid-base-column-chooser-padding;
     }
   }
 
-  .dx-#{$widgetName}-column-chooser {
+  .dx-#{$widget-name}-column-chooser {
     @include dx-base-typography();
 
-    &.dx-#{$widgetName}-column-chooser-mode-drag {
+    &.dx-#{$widget-name}-column-chooser-mode-drag {
       .dx-popup-content {
-        padding: $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS;
+        padding: $generic-grid-base-column-chooser-paddings;
 
         .dx-treeview-search {
-          margin-bottom: $GENERIC_GRID_BASE_TREEVIEW_SEARCH_MARGIN;
+          margin-bottom: $generic-grid-base-treeview-search-margin;
         }
 
         .dx-treeview-node {
@@ -303,9 +307,9 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
       }
     }
 
-    &.dx-#{$widgetName}-column-chooser-mode-select {
+    &.dx-#{$widget-name}-column-chooser-mode-select {
       .dx-popup-content {
-        padding: $GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS;
+        padding: $generic-grid-base-column-chooser-paddings;
       }
     }
 
@@ -322,64 +326,64 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
 
       .dx-popup-content {
         .dx-column-chooser-item {
-          margin-bottom: $GENERIC_GRID_BASE_COLUMN_CHOOSER_ITEM_MARGIN;
+          margin-bottom: $generic-grid-base-column-chooser-item-margin;
           background-color: $datagrid-columnchooser-item-bg;
           color: $datagrid-columnchooser-item-color;
           font-weight: $datagrid-columnchooser-font-weight;
           border: $datagrid-border;
-          padding: $GENERIC_GRID_BASE_CELL_PADDING;
+          padding: $generic-grid-base-cell-padding;
           box-shadow: 0 1px 3px -1px $datagrid-columnchooser-shadow-color;
         }
       }
     }
   }
 
-  .dx-#{$widgetName}-drag-header {
-    box-shadow: $GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW, $GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW;
+  .dx-#{$widget-name}-drag-header {
+    box-shadow: $generic-grid-base-drag-header-first-shadow, $generic-grid-base-drag-header-second-shadow;
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
-    padding: $GENERIC_GRID_BASE_CELL_PADDING;
-    border: $GENERIC_GRID_BASE_DRAG_HEADER_BORDER;
+    padding: $generic-grid-base-cell-padding;
+    border: $generic-grid-base-drag-header-border;
     background-color: $datagrid-header-drag-bg;
   }
 
-  .dx-#{$widgetName}-columns-separator {
+  .dx-#{$widget-name}-columns-separator {
     background-color: $datagrid-column-separator-bg;
   }
 
-  .dx-#{$widgetName}-columns-separator-transparent {
+  .dx-#{$widget-name}-columns-separator-transparent {
     background-color: transparent;
   }
 
-  .dx-#{$widgetName}-drop-highlight {
+  .dx-#{$widget-name}-drop-highlight {
     & > td {
       background-color: $datagrid-drop-highlight-bg;
       color: $datagrid-drop-highlight-color;
     }
   }
 
-  .dx-#{$widgetName}-focus-overlay {
+  .dx-#{$widget-name}-focus-overlay {
     border: 2px solid $datagrid-focused-border-color;
   }
 
-  .dx-#{$widgetName}-table {
+  .dx-#{$widget-name}-table {
     .dx-row {
       .dx-command-select {
-        width: $GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
-        min-width: $GENERIC_GRID_BASE_COMMAND_SELECT_COLUMN_WIDTH;
+        width: $generic-grid-base-command-select-column-width;
+        min-width: $generic-grid-base-command-select-column-width;
       }
 
       .dx-command-edit {
-        width: $GENERIC_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
-        min-width: $GENERIC_GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH;
+        width: $generic-grid-base-command-edit-column-width;
+        min-width: $generic-grid-base-command-edit-column-width;
       }
 
       .dx-command-expand {
-        width: $GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
-        min-width: $GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
+        width: $generic-grid-base-command-expand-column-width;
+        min-width: $generic-grid-base-command-expand-column-width;
 
-        &.dx-#{$widgetName}-group-space {
-          padding-top: $GENERIC_GRID_BASE_CELL_PADDING;
+        &.dx-#{$widget-name}-group-space {
+          padding-top: $generic-grid-base-cell-padding;
         }
       }
     }
@@ -390,7 +394,7 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
           background-color: $datagrid-hover-bg;
           color: $datagrid-row-hovered-color;
 
-          &.dx-#{$widgetName}-group-space {
+          &.dx-#{$widget-name}-group-space {
             border-right-color: $datagrid-hover-bg;
           }
 
@@ -399,7 +403,7 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
           }
         }
 
-        & > .dx-#{$widgetName}-readonly .dx-texteditor {
+        & > .dx-#{$widget-name}-readonly .dx-texteditor {
           .dx-texteditor-input {
             background-color: $datagrid-hover-bg;
             color: $datagrid-row-hovered-color;
@@ -413,18 +417,18 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     }
   }
 
-  .dx-#{$widgetName}-headers {
+  .dx-#{$widget-name}-headers {
     color: $datagrid-columnchooser-item-color;
     font-weight: $datagrid-columnchooser-font-weight;
     touch-action: pinch-zoom;
     border-bottom: $datagrid-border;
 
-    .dx-#{$widgetName}-content {
+    .dx-#{$widget-name}-content {
       margin-bottom: -1px;
     }
 
-    .dx-#{$widgetName}-table {
-      .dx-#{$widgetName}-borders & {
+    .dx-#{$widget-name}-table {
+      .dx-#{$widget-name}-borders & {
         border-bottom-width: 1px;
       }
 
@@ -434,7 +438,7 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     }
   }
 
-  .dx-#{$widgetName}-filter-row {
+  .dx-#{$widget-name}-filter-row {
     .dx-menu {
       .dx-overlay-content {
         color: $menu-color;
@@ -482,11 +486,11 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     }
 
     td .dx-editor-container .dx-filter-range-content {
-      padding: $GENERIC_GRID_BASE_CELL_PADDING $GENERIC_GRID_BASE_CELL_PADDING $GENERIC_GRID_BASE_CELL_PADDING $GENERIC_GRID_BASE_TEXTEDITOR_INPUT_PADDING;
+      padding: $generic-grid-base-cell-padding $generic-grid-base-cell-padding $generic-grid-base-cell-padding $generic-grid-base-texteditor-input-padding;
     }
   }
 
-  .dx-#{$widgetName}-filter-range-overlay {
+  .dx-#{$widget-name}-filter-range-overlay {
     .dx-overlay-content {
       border: $datagrid-border;
       overflow: inherit;
@@ -500,7 +504,7 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
       .dx-texteditor {
         .dx-texteditor-input {
           background-color: $datagrid-base-background-color;
-          padding: $GENERIC_GRID_BASE_CELL_PADDING;
+          padding: $generic-grid-base-cell-padding;
         }
 
         &.dx-state-focused:after {
@@ -517,7 +521,7 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
 
       .dx-menu-item {
         .dx-menu-item-content {
-          padding: $GENERIC_GRID_BASE_MENU_ITEM_PADDING;
+          padding: $generic-grid-base-menu-item-padding;
 
           .dx-icon {
             margin: 0 3px;
@@ -542,14 +546,14 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
   }
 
   .dx-highlight-outline {
-    padding: $GENERIC_GRID_BASE_CELL_PADDING;
+    padding: $generic-grid-base-cell-padding;
   }
 
-  .dx-#{$widgetName}-header-panel {
+  .dx-#{$widget-name}-header-panel {
     border-bottom: $datagrid-border;
 
     .dx-toolbar {
-      margin-bottom: $GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM;
+      margin-bottom: $generic-grid-base-header-panel-margin-bottom;
     }
 
     .dx-apply-button {
@@ -565,62 +569,62 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
 
   .dx-icon-column-chooser {
     @include dx-icon(columnchooser);
-    @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+    @include dx-icon-sizing($generic-base-icon-size);
   }
 
-  .dx-#{$widgetName}-addrow-button {
+  .dx-#{$widget-name}-addrow-button {
     .dx-icon-edit-button-addrow {
       @include dx-icon(add);
-      @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+      @include dx-icon-sizing($generic-base-icon-size);
     }
   }
 
-  .dx-#{$widgetName}-cancel-button {
+  .dx-#{$widget-name}-cancel-button {
     .dx-icon-edit-button-cancel {
       @include dx-icon(revert);
-      @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+      @include dx-icon-sizing($generic-base-icon-size);
     }
   }
 
-  .dx-#{$widgetName}-save-button {
+  .dx-#{$widget-name}-save-button {
     .dx-icon-edit-button-save {
       @include dx-icon(save);
-      @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+      @include dx-icon-sizing($generic-base-icon-size);
     }
   }
 
   .dx-apply-button {
     .dx-icon-apply-filter {
       @include dx-icon(filter);
-      @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+      @include dx-icon-sizing($generic-base-icon-size);
     }
   }
 
-  .dx-#{$widgetName}-export-button {
+  .dx-#{$widget-name}-export-button {
     .dx-icon-export-to {
       @include dx-icon(export);
-      @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+      @include dx-icon-sizing($generic-base-icon-size);
     }
 
     .dx-icon-export-excel-button {
       @include dx-icon(xlsxfile);
-      @include dx-icon-sizing($GENERIC_BASE_ICON_SIZE);
+      @include dx-icon-sizing($generic-base-icon-size);
     }
   }
 
-  .dx-#{$widgetName}-adaptive-more {
-    @include dx-icon-sizing($GENERIC_BASE_MORE_ADAPTIVE_ICON_SIZE);
+  .dx-#{$widget-name}-adaptive-more {
+    @include dx-icon-sizing($generic-base-more-adaptive-icon-size);
   }
 
-  .dx-#{$widgetName}-rowsview {
-    .dx-#{$widgetName}-borders &,
-    .dx-#{$widgetName}-headers + & {
+  .dx-#{$widget-name}-rowsview {
+    .dx-#{$widget-name}-borders &,
+    .dx-#{$widget-name}-headers + & {
       border-top: $datagrid-border;
     }
 
     .dx-row {
-      border-top: $GENERIC_GRID_BASE_ROW_BORDER;
-      border-bottom: $GENERIC_GRID_BASE_ROW_BORDER;
+      border-top: $generic-grid-base-row-border;
+      border-bottom: $generic-grid-base-row-border;
 
       &.dx-edit-row:first-child > td {
         border-top-width: 0;
@@ -632,28 +636,28 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
         border-bottom: $datagrid-border;
       }
 
-      &.dx-#{$widgetName}-edit-form {
+      &.dx-#{$widget-name}-edit-form {
         white-space: normal;
       }
     }
 
     .dx-master-detail-row {
-      > .dx-#{$widgetName}-group-space,
+      > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell {
         border-top: $datagrid-border;
         border-bottom: $datagrid-border;
       }
     }
 
-    .dx-master-detail-row:not(.dx-#{$widgetName}-edit-form) {
-      > .dx-#{$widgetName}-group-space,
+    .dx-master-detail-row:not(.dx-#{$widget-name}-edit-form) {
+      > .dx-#{$widget-name}-group-space,
       .dx-master-detail-cell {
         background-color: $datagrid-master-detail-cell-bg;
       }
     }
 
     .dx-data-row {
-      .dx-validator.dx-#{$widgetName}-invalid {
+      .dx-validator.dx-#{$widget-name}-invalid {
         .dx-highlight-outline::after {
           border: 1px solid $datagrid-row-invalid-faded-border-color;
         }
@@ -677,7 +681,7 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
         }
       }
 
-      td:not(.dx-cell-modified):not(.dx-validation-pending):not(.dx-#{$widgetName}-invalid) {
+      td:not(.dx-cell-modified):not(.dx-validation-pending):not(.dx-#{$widget-name}-invalid) {
         .dx-highlight-outline {
           padding: 0;
         }
@@ -694,18 +698,18 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
 
     .dx-adaptive-detail-row {
       .dx-adaptive-item-text {
-        padding-top: $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING;
-        padding-bottom: $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING;
-        padding-left: $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING;
+        padding-top: $generic-grid-base-adaptive-text-padding;
+        padding-bottom: $generic-grid-base-adaptive-text-padding;
+        padding-left: $generic-grid-base-adaptive-text-padding;
       }
 
-      .dx-#{$widgetName}-invalid {
+      .dx-#{$widget-name}-invalid {
         border: 1px solid $datagrid-row-invalid-faded-border-color;
 
         &.dx-adaptive-item-text {
-          padding-top: $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 1px;
-          padding-bottom: $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 1px;
-          padding-left: $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 1px;
+          padding-top: $generic-grid-base-adaptive-text-padding - 1px;
+          padding-bottom: $generic-grid-base-adaptive-text-padding - 1px;
+          padding-left: $generic-grid-base-adaptive-text-padding - 1px;
         }
       }
     }
@@ -715,9 +719,9 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
       border: 2px solid $datagrid-cell-modified-border-color;
 
       &.dx-adaptive-item-text {
-        padding-top: $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
-        padding-bottom: $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
-        padding-left: $GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING - 2px;
+        padding-top: $generic-grid-base-adaptive-text-padding - 2px;
+        padding-bottom: $generic-grid-base-adaptive-text-padding - 2px;
+        padding-left: $generic-grid-base-adaptive-text-padding - 2px;
       }
     }
 
@@ -737,8 +741,8 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
             border-radius: 0;
           }
 
-          & .dx-#{$widgetName}-group-opened,
-          & .dx-#{$widgetName}-group-closed {
+          & .dx-#{$widget-name}-group-opened,
+          & .dx-#{$widget-name}-group-closed {
             color: $datagrid-row-focused-color;
           }
         }
@@ -766,8 +770,8 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
         background-color: $datagrid-row-focused-bg;
         color: $datagrid-row-focused-color;
 
-        & .dx-#{$widgetName}-group-opened,
-        & .dx-#{$widgetName}-group-closed {
+        & .dx-#{$widget-name}-group-opened,
+        & .dx-#{$widget-name}-group-closed {
           color: $datagrid-row-focused-color;
         }
 
@@ -784,7 +788,7 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
         background-color: $datagrid-selection-bg;
         color: $datagrid-row-selected-color;
 
-        &.dx-#{$widgetName}-group-space {
+        &.dx-#{$widget-name}-group-space {
           border-right-color: $datagrid-selection-bg;
         }
 
@@ -840,11 +844,11 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
         padding: 0;
 
         .dx-highlight-outline {
-          padding-right: $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+          padding-right: $generic-texteditor-invalid-badge-size;
 
           @at-root #{selector-append(".dx-rtl", &)},
           .dx-rtl & {
-            padding-left: $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+            padding-left: $generic-texteditor-invalid-badge-size;
             padding-right: 0;
           }
         }
@@ -859,21 +863,21 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     }
   }
 
-  .dx-#{$widgetName}-search-text {
+  .dx-#{$widget-name}-search-text {
     color: $datagrid-search-color;
     background-color: $datagrid-search-bg;
   }
 
-  .dx-#{$widgetName}-nodata {
+  .dx-#{$widget-name}-nodata {
     color: $datagrid-nodata-color;
-    font-size: $GENERIC_GRID_BASE_NODATA_FONT_SIZE;
+    font-size: $generic-grid-base-nodata-font-size;
   }
 
-  .dx-#{$widgetName}-bottom-load-panel {
+  .dx-#{$widget-name}-bottom-load-panel {
     border-top: $datagrid-border;
   }
 
-  .dx-#{$widgetName}-pager {
+  .dx-#{$widget-name}-pager {
     border-top: 3px double $datagrid-border-color;
 
     &.dx-widget {
@@ -896,15 +900,15 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     }
   }
 
-  .dx-#{$widgetName}-summary-item {
+  .dx-#{$widget-name}-summary-item {
     color: $datagrid-summary-color;
   }
 
-  .dx-#{$widgetName}-total-footer {
+  .dx-#{$widget-name}-total-footer {
     border-top: $datagrid-border;
   }
 
-  .dx-#{$widgetName}-revert-tooltip {
+  .dx-#{$widget-name}-revert-tooltip {
     .dx-overlay-content {
       background-color: $datagrid-base-background-color;
       min-width: inherit;
@@ -923,13 +927,13 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
             );
 
       > .dx-button-content {
-        padding: $GENERIC_GRID_BASE_CELL_PADDING;
+        padding: $generic-grid-base-cell-padding;
       }
     }
   }
 
   .dx-toolbar-menu-section {
-    .dx-#{$widgetName}-checkbox-size {
+    .dx-#{$widget-name}-checkbox-size {
       width: 100%;
 
       .dx-checkbox-container {
@@ -954,7 +958,7 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
     .dx-data-row.dx-state-hover {
       &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused) {
         & > td:not(.dx-focused) {
-          &.dx-#{$widgetName}-group-space {
+          &.dx-#{$widget-name}-group-space {
             border-left-color: $datagrid-hover-bg;
             border-right-color: transparent;
           }
@@ -962,7 +966,7 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
       }
     }
 
-    .dx-#{$widgetName}-filter-row {
+    .dx-#{$widget-name}-filter-row {
       .dx-menu {
         .dx-menu-item-has-submenu.dx-menu-item-has-icon {
           .dx-icon {
@@ -972,17 +976,17 @@ $GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
       }
 
       td .dx-editor-container .dx-filter-range-content {
-        padding: $GENERIC_GRID_BASE_CELL_PADDING $GENERIC_GRID_BASE_TEXTEDITOR_INPUT_PADDING $GENERIC_GRID_BASE_CELL_PADDING $GENERIC_GRID_BASE_CELL_PADDING;
+        padding: $generic-grid-base-cell-padding $generic-grid-base-texteditor-input-padding $generic-grid-base-cell-padding $generic-grid-base-cell-padding;
       }
     }
 
-    .dx-#{$widgetName}-rowsview {
+    .dx-#{$widget-name}-rowsview {
       .dx-selection.dx-row,
       .dx-selection.dx-row:hover {
         & > td,
         & > tr > td {
           &:not(.dx-focused) {
-            &.dx-#{$widgetName}-group-space {
+            &.dx-#{$widget-name}-group-space {
               border-left-color: $datagrid-selection-bg;
             }
           }

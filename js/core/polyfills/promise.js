@@ -1,8 +1,6 @@
-const deferredUtils = require('../../core/utils/deferred');
-const windowUtils = require('../../core/utils/window');
-const Deferred = deferredUtils.Deferred;
-const when = deferredUtils.when;
-let promise = windowUtils.hasWindow() ? windowUtils.getWindow().Promise : Promise;
+import { Deferred, when } from '../../core/utils/deferred';
+import { hasWindow, getWindow } from '../../core/utils/window';
+let promise = hasWindow() ? getWindow().Promise : Promise;
 
 if(!promise) {
     // NOTE: This is an incomplete Promise polyfill but it is enough for creation purposes
@@ -28,4 +26,4 @@ if(!promise) {
     };
 }
 
-module.exports = promise;
+export default promise;

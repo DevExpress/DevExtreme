@@ -1,12 +1,13 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_TOOLTIP_PADDING: null !default;
+$material-tooltip-padding: null !default;
 
 @if $size == "default" {
-  $MATERIAL_TOOLTIP_PADDING: 6px 8px;
+  $material-tooltip-padding: 6px 8px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_TOOLTIP_PADDING: 4px 6px;
+  $material-tooltip-padding: 4px 6px;
 }

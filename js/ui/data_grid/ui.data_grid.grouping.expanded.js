@@ -4,7 +4,7 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { arrangeSortingInfo, multiLevelGroup } from '../../data/store_helper';
 import { combineFilters, normalizeSortingInfo } from './ui.data_grid.core';
-import { GroupingHelper, createOffsetFilter } from './ui.data_grid.grouping.core';
+import { GroupingHelper as GroupingHelperCore, createOffsetFilter } from './ui.data_grid.grouping.core';
 import { createGroupFilter } from './ui.data_grid.utils';
 import dataQuery from '../../data/query';
 import { when, Deferred } from '../../core/utils/deferred';
@@ -20,10 +20,11 @@ const loadTotalCount = function(dataSource, options) {
 };
 
 ///#DEBUG
-exports.loadTotalCount = loadTotalCount;
+export { loadTotalCount };
+
 ///#ENDDEBUG
 
-exports.GroupingHelper = GroupingHelper.inherit((function() {
+export const GroupingHelper = GroupingHelperCore.inherit((function() {
 
     const foreachCollapsedGroups = function(that, callback, updateOffsets) {
         return that.foreachGroups(function(groupInfo) {
@@ -357,14 +358,14 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         allowCollapseAll: function() {
             return false;
         },
-        refresh: function(options, isReload, operationTypes) {
+        refresh: function(options, operationTypes) {
             const that = this;
             const storeLoadOptions = options.storeLoadOptions;
             const dataSource = that._dataSource;
 
             this.callBase.apply(this, arguments);
 
-            if(isReload || operationTypes.reload) {
+            if(operationTypes.reload) {
                 return foreachCollapsedGroups(that, function(groupInfo) {
                     const groupCountQuery = loadTotalCount(dataSource, { filter: createGroupFilter(groupInfo.path, storeLoadOptions) });
                     const groupOffsetQuery = loadTotalCount(dataSource, { filter: createOffsetFilter(groupInfo.path, storeLoadOptions) });

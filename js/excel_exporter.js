@@ -11,11 +11,6 @@ import { exportPivotGrid } from './exporter/exceljs/export_pivot_grid';
 * @type object
 */
 /**
-* @name ExportDataGridProps
-* @namespace DevExpress.excelExporter
-* @type object
-*/
-/**
 * @name CellRange
 * @namespace DevExpress.excelExporter
 * @type object
@@ -39,4 +34,7 @@ import { exportPivotGrid } from './exporter/exceljs/export_pivot_grid';
 * @type any
 */
 
-export { exportDataGrid, exportPivotGrid };
+export {
+    exportDataGrid,
+    exportPivotGrid
+};

@@ -1,4 +1,4 @@
-import { animation } from './ui.drawer.rendering.strategy';
+import { animation } from './ui.drawer.animation';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
@@ -51,4 +51,4 @@ class ShrinkStrategy extends DrawerStrategy {
     }
 }
 
-module.exports = ShrinkStrategy;
+export default ShrinkStrategy;

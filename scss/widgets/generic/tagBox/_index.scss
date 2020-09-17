@@ -5,14 +5,15 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../textEditor" as *;
-@use "../common" as *;
+@use "../common/sizes" as *;
+
 // adduse
 
 
 .dx-tagbox:not(.dx-texteditor-empty) {
   .dx-texteditor-input {
     padding-left: 0;
-    margin-left: $GENERIC_TAGBOX_INPUT_MARGIN_LEFT;
+    margin-left: $generic-tagbox-input-margin-left;
 
     @at-root #{selector-append(".dx-rtl", &)},
     .dx-rtl & {
@@ -37,17 +38,17 @@
 }
 
 .dx-tag-container.dx-texteditor-input-container {
-  padding-bottom: $GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
+  padding-bottom: $generic-tagbox-tag-container-padding-bottom;
 
   .dx-texteditor-input {
-    padding-bottom: $GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING - $GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
-    min-height: $GENERIC_TEXTEDITOR_INPUT_HEIGHT - $GENERIC_TAGBOX_TAG_CONTAINER_PADDING_BOTTOM;
+    padding-bottom: $generic-base-inline-borderedwidget-bottom-padding - $generic-tagbox-tag-container-padding-bottom;
+    min-height: $generic-texteditor-input-height - $generic-tagbox-tag-container-padding-bottom;
   }
 }
 
 .dx-tag-content {
-  margin: $GENERIC_TAGBOX_TAG_CONTENT_MARGIN;
-  padding: $GENERIC_TAGBOX_TAG_CONTENT_PADDING;
+  margin: $generic-tagbox-tag-content-margin;
+  padding: $generic-tagbox-tag-content-padding;
   min-width: 40px;
   background-color: $tagbox-tag-bg;
   border-radius: $tagbox-tag-border-radius;
@@ -55,12 +56,12 @@
 }
 
 .dx-tag-remove-button {
-  width: $GENERIC_TAGBOX_REMOVE_BUTTON_WIDTH;
+  width: $generic-tagbox-remove-button-width;
   height: 100%;
 
   &:before,
   &:after {
-    right: 4px + $GENERIC_TAGBOX_REMOVE_BUTTON_RIGHT;
+    right: 4px + $generic-tagbox-remove-button-right;
     margin-top: -5px;
     width: 3px;
     height: 11px;
@@ -68,7 +69,7 @@
   }
 
   &:after {
-    right: $GENERIC_TAGBOX_REMOVE_BUTTON_RIGHT;
+    right: $generic-tagbox-remove-button-right;
     margin-top: -1px;
     width: 11px;
     height: 3px;
@@ -104,11 +105,11 @@
 }
 
 @mixin tagbox-badge-offset() {
-  right: $GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+  right: $generic-invalid-badge-horizontal-padding;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
-    left: $GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+    left: $generic-invalid-badge-horizontal-padding;
   }
 }
 
@@ -132,26 +133,26 @@
 .dx-tagbox-popup-wrapper {
   .dx-list-select-all {
     border-bottom: 1px solid $tagbox-select-all-border-color;
-    padding-bottom: $GENERIC_TAGBOX_SELECT_ALL_PADDING_BOTTOM;
-    margin-bottom: $GENERIC_TAGBOX_SELECT_ALL_MARGIN_BOTTOM;
+    padding-bottom: $generic-tagbox-select-all-padding-bottom;
+    margin-bottom: $generic-tagbox-select-all-margin-bottom;
   }
 }
 
 .dx-rtl {
   .dx-tag-content {
-    padding-right: $GENERIC_TAGBOX_TAG_CONTENT_PADDING_LEFT;
-    padding-left: $GENERIC_TAGBOX_TAG_CONTENT_PADDING_RIGHT;
+    padding-right: $generic-tagbox-tag-content-padding-left;
+    padding-left: $generic-tagbox-tag-content-padding-right;
   }
 
   .dx-tag-remove-button {
     &:before {
       right: auto;
-      left: 4px + $GENERIC_TAGBOX_REMOVE_BUTTON_RIGHT;
+      left: 4px + $generic-tagbox-remove-button-right;
     }
 
     &:after {
       right: auto;
-      left: $GENERIC_TAGBOX_REMOVE_BUTTON_RIGHT;
+      left: $generic-tagbox-remove-button-right;
     }
   }
 }

@@ -5,6 +5,11 @@ import {
 } from '../../core/element';
 
 import {
+    PaletteType,
+    PaletteExtensionModeType
+} from '../palette';
+
+import {
     template
 } from '../../core/templates/template';
 
@@ -21,10 +26,6 @@ import {
 } from '../../ui/widget/ui.widget';
 
 import {
-    Font
-} from '../core/base_widget';
-
-import {
     basePointObject,
     baseSeriesObject,
     chartSeriesObject,
@@ -35,12 +36,13 @@ import {
 
 import {
     BaseLegend,
-    BaseLegendItem
+    BaseLegendItem,
 } from '../common';
 
 import BaseWidget, {
     BaseWidgetOptions,
-    BaseWidgetTooltip
+    BaseWidgetTooltip,
+    BaseWidgetAnnotationConfig
 } from '../core/base_widget';
 
 export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
@@ -105,15 +107,14 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 target:basePointObject
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 target:basePointObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: basePointObject }) => any) | string;
+    onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, target?: basePointObject }) => any) | string;
     /**
      * @docid BaseChartOptions.onPointHoverChanged
      * @type function(e)
@@ -170,7 +171,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+    palette?: Array<string> | PaletteType;
     /**
      * @docid BaseChartOptions.paletteExtensionMode
      * @type Enums.VizPaletteExtensionMode
@@ -178,7 +179,7 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
+    paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid BaseChartOptions.pointSelectionMode
      * @type Enums.ChartElementSelectionMode
@@ -266,7 +267,7 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
      * @type template|function(pointInfo, element)
      * @type_function_param1 pointInfo:object
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -379,15 +380,7 @@ export interface BaseChartLegendItem extends BaseLegendItem {
     series?: baseSeriesObject;
 }
 
-export interface BaseChartAnnotationConfig {
-    /**
-     * @docid BaseChartAnnotationConfig.allowDragging
-     * @type boolean
-     * @default false
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    allowDragging?: boolean;
+export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * @docid BaseChartAnnotationConfig.argument
      * @type number | datetime | string
@@ -397,126 +390,6 @@ export interface BaseChartAnnotationConfig {
      */
     argument?: number | Date | string;
     /**
-     * @docid BaseChartAnnotationConfig.arrowLength
-     * @type number
-     * @default 14
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    arrowLength?: number;
-    /**
-     * @docid BaseChartAnnotationConfig.arrowWidth
-     * @type number
-     * @default 14
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    arrowWidth?: number;
-    /**
-     * @docid BaseChartAnnotationConfig.border
-     * @type object
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
-    /**
-     * @docid BaseChartAnnotationConfig.color
-     * @type string
-     * @default '#ffffff'
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    color?: string;
-    /**
-     * @docid BaseChartAnnotationConfig.customizeTooltip
-     * @type function(annotation)
-     * @type_function_param1 annotation:BaseChartAnnotationConfig|any
-     * @type_function_return object
-     * @default undefined
-     * @notUsedInTheme
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    customizeTooltip?: ((annotation: BaseChartAnnotationConfig | any) => any);
-    /**
-     * @docid BaseChartAnnotationConfig.data
-     * @type object
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    data?: any;
-    /**
-     * @docid BaseChartAnnotationConfig.description
-     * @type string
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    description?: string;
-    /**
-     * @docid BaseChartAnnotationConfig.font
-     * @type Font
-     * @default '#333333' [prop](color)
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    font?: Font;
-    /**
-     * @docid BaseChartAnnotationConfig.height
-     * @type number
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    height?: number;
-    /**
-     * @docid BaseChartAnnotationConfig.image
-     * @type string|object
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    image?: string | { height?: number, url?: string, width?: number };
-    /**
-     * @docid BaseChartAnnotationConfig.offsetX
-     * @type number
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    offsetX?: number;
-    /**
-     * @docid BaseChartAnnotationConfig.offsetY
-     * @type number
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    offsetY?: number;
-    /**
-     * @docid BaseChartAnnotationConfig.opacity
-     * @type number
-     * @default 0.9
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    opacity?: number;
-    /**
-     * @docid BaseChartAnnotationConfig.paddingLeftRight
-     * @type number
-     * @default 10
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    paddingLeftRight?: number;
-    /**
-     * @docid BaseChartAnnotationConfig.paddingTopBottom
-     * @type number
-     * @default 10
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    paddingTopBottom?: number;
-    /**
      * @docid BaseChartAnnotationConfig.series
      * @type string
      * @default undefined
@@ -525,67 +398,6 @@ export interface BaseChartAnnotationConfig {
      */
     series?: string;
     /**
-     * @docid BaseChartAnnotationConfig.shadow
-     * @type object
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
-    /**
-     * @docid BaseChartAnnotationConfig.template
-     * @type template|function
-     * @default undefined
-     * @type_function_param1 annotation:BaseChartAnnotationConfig|any
-     * @type_function_param2 element:SVGGElement
-     * @type_function_return string|SVGElement|jQuery
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    template?: template | ((annotation: BaseChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
-    /**
-     * @docid BaseChartAnnotationConfig.text
-     * @type string
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    text?: string;
-    /**
-     * @docid BaseChartAnnotationConfig.textOverflow
-     * @type Enums.VizTextOverflow
-     * @default "ellipsis"
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    textOverflow?: 'ellipsis' | 'hide' | 'none';
-    /**
-     * @docid BaseChartAnnotationConfig.tooltipEnabled
-     * @type boolean
-     * @default true
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    tooltipEnabled?: boolean;
-    /**
-     * @docid BaseChartAnnotationConfig.tooltipTemplate
-     * @type template|function(annotation, element)
-     * @type_function_param1 annotation:BaseChartAnnotationConfig|any
-     * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    tooltipTemplate?: template | ((annotation: BaseChartAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
-    /**
-     * @docid BaseChartAnnotationConfig.type
-     * @type Enums.AnnotationType
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    type?: 'text' | 'image' | 'custom';
-    /**
      * @docid BaseChartAnnotationConfig.value
      * @type number | datetime | string
      * @default undefined
@@ -593,36 +405,4 @@ export interface BaseChartAnnotationConfig {
      * @public
      */
     value?: number | Date | string;
-    /**
-     * @docid BaseChartAnnotationConfig.width
-     * @type number
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    width?: number;
-    /**
-     * @docid BaseChartAnnotationConfig.wordWrap
-     * @type Enums.VizWordWrap
-     * @default "normal"
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    wordWrap?: 'normal' | 'breakWord' | 'none';
-    /**
-     * @docid BaseChartAnnotationConfig.x
-     * @type number
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    x?: number;
-    /**
-     * @docid BaseChartAnnotationConfig.y
-     * @type number
-     * @default undefined
-     * @prevFileNamespace DevExpress.viz
-     * @public
-     */
-    y?: number;
 }

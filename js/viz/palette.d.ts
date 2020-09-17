@@ -1,5 +1,6 @@
 
-
+export type PaletteType = 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+export type PaletteExtensionModeType = 'alternate' | 'blend' | 'extrapolate';
 /**
  * @docid vizmethods.currentPalette
  * @publicName currentPalette()
@@ -39,7 +40,7 @@ export function currentPalette(paletteName: string): void;
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export function generateColors(palette: 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+export function generateColors(palette: PaletteType | Array<string>, count: number, options: { paletteExtensionMode?: PaletteExtensionModeType, baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
 
 /**
  * @docid vizmethods.getPalette

@@ -145,4 +145,4 @@ class FileManagerAdaptivityControl extends Widget {
     }
 }
 
-module.exports = FileManagerAdaptivityControl;
+export default FileManagerAdaptivityControl;

@@ -260,6 +260,16 @@ class FileManagerToolbar extends Widget {
             }
 
             extendAttributes(result.options, item, ['text', 'icon']);
+
+            if(result.widget === 'dxButton') {
+                if(result.showText === 'inMenu' && !isDefined(result.options.hint)) {
+                    result.options.hint = result.options.text;
+                }
+
+                if(result.compactMode && !isDefined(result.options.hint)) {
+                    this._configureHintForCompactMode(result);
+                }
+            }
         } else {
             extend(true, result, item);
             if(!result.widget) {
@@ -298,6 +308,7 @@ class FileManagerToolbar extends Widget {
             widget: 'dxButton',
             options: {
                 text: command.text,
+                hint: command.hint,
                 commandText: command.text,
                 icon: command.icon,
                 stylingMode: 'text',
@@ -342,14 +353,18 @@ class FileManagerToolbar extends Widget {
         };
     }
 
+    _configureHintForCompactMode(item) {
+        item.options.hint = '';
+        item.compactMode.options = item.compactMode.options || {};
+        item.compactMode.options.hint = item.options.text;
+    }
+
     _checkCompactMode(toolbar) {
         if(toolbar.compactMode) {
             this._toggleCompactMode(toolbar, false);
         }
 
-        const toolbarWidth = toolbar.$element().width();
-        const itemsWidth = toolbar._getItemsWidth();
-        const useCompactMode = toolbarWidth < itemsWidth;
+        const useCompactMode = this._toolbarHasItemsOverflow(toolbar);
 
         if(toolbar.compactMode !== useCompactMode) {
             if(!toolbar.compactMode) {
@@ -359,6 +374,12 @@ class FileManagerToolbar extends Widget {
         } else if(toolbar.compactMode) {
             this._toggleCompactMode(toolbar, true);
         }
+    }
+
+    _toolbarHasItemsOverflow(toolbar) {
+        const toolbarWidth = toolbar.$element().width();
+        const itemsWidth = toolbar._getItemsWidth();
+        return toolbarWidth < itemsWidth;
     }
 
     _toggleCompactMode(toolbar, useCompactMode) {
@@ -390,11 +411,14 @@ class FileManagerToolbar extends Widget {
         this._updateSeparatorsVisibility(items, toolbar);
     }
 
-    _getCompactModeOptions({ showText, locateInMenu }, available) {
+    _getCompactModeOptions({ showText, locateInMenu, options }, available) {
         return {
             visible: available,
             showText: ensureDefined(showText, 'always'),
-            locateInMenu: ensureDefined(locateInMenu, 'never')
+            locateInMenu: ensureDefined(locateInMenu, 'never'),
+            options: {
+                hint: options?.hint
+            }
         };
     }
 
@@ -581,4 +605,4 @@ class FileManagerToolbar extends Widget {
 
 }
 
-module.exports = FileManagerToolbar;
+export default FileManagerToolbar;

@@ -17,6 +17,8 @@ export const CLASSES = {
     navigatorNextButton: '.dx-scheduler-navigator-next',
     navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
     navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
+    scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
+    schedulerSmall: '.dx-scheduler-small',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -28,7 +30,20 @@ export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id=
 
 export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'));
 
-export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
+export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop' && !devices.real().mac;
+
+export const checkResultByDeviceType = (assert, callback) => {
+    if(isDesktopEnvironment()) {
+        callback();
+    } else {
+        const done = assert.async();
+        setTimeout(() => {
+            callback();
+            done();
+        });
+    }
+};
+
 
 class ElementWrapper {
     constructor(selector, parent) {
@@ -108,7 +123,7 @@ class HeaderWrapper extends ElementWrapper {
 
 export class SchedulerTestWrapper extends ElementWrapper {
     constructor(instance) {
-        super(`.${SCHEDULER_ID}`);
+        super(`#${SCHEDULER_ID}`);
         this.instance = instance;
 
         this.timePanel = {

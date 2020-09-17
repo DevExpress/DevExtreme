@@ -1,7 +1,9 @@
 import './core';
+// eslint-disable-next-line no-restricted-imports
 import Globalize from 'globalize';
 import numberLocalization from '../number';
 import errors from '../../core/errors';
+// eslint-disable-next-line no-restricted-imports
 import 'globalize/number';
 
 if(Globalize && Globalize.formatNumber) {

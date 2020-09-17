@@ -1571,6 +1571,25 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(element.option('value'), 1, 'value was not be changed');
         assert.equal($input.val(), '1', 'input text has been restored');
     });
+
+    QUnit.testInActiveWindow('"text" option should be updated after clear the search value', function(assert) {
+        const $element = $('#selectBox').dxSelectBox({
+            searchEnabled: true
+        });
+        const instance = $element.dxSelectBox('instance');
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $input
+            .focusin()
+            .val('123')
+            .change()
+            .blur();
+
+        instance.option('dataSource', [1, 2, 3]);
+
+        assert.strictEqual(instance.option('text'), '', 'widget has no text');
+        assert.strictEqual($input.val(), '', 'input has no text');
+    });
 });
 
 QUnit.module('clearButton', moduleSetup, () => {
@@ -3306,8 +3325,7 @@ QUnit.module('search substitution', {
             searchTimeout: 0,
             searchEnabled: true,
             focusStateEnabled: true,
-            searchMode: 'startswith',
-            autocompletionEnabled: true
+            searchMode: 'startswith'
         });
 
         this.selectBox = this.$selectBox.dxSelectBox('instance');
@@ -3374,44 +3392,6 @@ QUnit.module('search substitution', {
 
         this.keyboard.type('1');
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is good');
-    });
-
-    QUnit.test('search value should not be substituted if the \'autocompletionEnabled\' is false', function(assert) {
-        this.reinit({
-            items: [this.testItem],
-            searchTimeout: 0,
-            searchEnabled: true,
-            focusStateEnabled: true,
-            searchMode: 'startswith',
-            autocompletionEnabled: false
-        });
-
-        this.keyboard
-            .focus()
-            .type(this.testItem[0]);
-
-        assert.equal(this.$input.val(), this.testItem[0], 'search value is not substituted');
-    });
-
-    QUnit.test('autocompletionEnabled - runtime change', function(assert) {
-        this.reinit({
-            items: [this.testItem],
-            searchTimeout: 0,
-            searchEnabled: true,
-            focusStateEnabled: true,
-            searchMode: 'startswith'
-        });
-
-        this.keyboard
-            .focus()
-            .type(this.testItem[0]);
-
-        this.selectBox.option('autocompletionEnabled', false);
-        this.keyboard
-            .focus()
-            .type(this.testItem[1]);
-
-        assert.equal(this.$input.val(), this.testItem[0] + this.testItem[1], 'search value is not substituted after option runtime change');
     });
 
     QUnit.test('search value is substituted while typing', function(assert) {
@@ -3683,10 +3663,8 @@ QUnit.module('Scrolling', {
     }
 }, () => {
     QUnit.test('After load new page list should not be scrolled to selected item', function(assert) {
-        this.clock.restore();
-
         const data = [];
-        const done = assert.async();
+        assert.expect(1);
 
         for(let i = 1; i < 100; i++) {
             data.push(i);
@@ -3718,8 +3696,8 @@ QUnit.module('Scrolling', {
 
         setTimeout(() => {
             assert.roughEqual(listInstance.scrollTop(), scrollingDistance, 150, 'scrollTop is correctly after new page load');
-            done();
-        });
+        }, 0);
+        this.clock.tick(0);
     });
 });
 
@@ -5473,8 +5451,8 @@ if(devices.real().deviceType === 'desktop') {
                     tabindex: '0',
                 };
 
-                inputAttributes['aria-activedescendant'] = helper.widget._list.getFocusedItemId();
                 inputAttributes['aria-controls'] = helper.widget._listId;
+                inputAttributes['aria-owns'] = helper.widget._popupContentId;
 
                 if(!searchEnabled) {
                     inputAttributes.readonly = '';
@@ -5486,8 +5464,8 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option('searchEnabled', !searchEnabled);
                 helper.checkAttributes(helper.widget._list.$element(), { id: helper.widget._listId, 'aria-label': 'No data to display', role: 'listbox' }, 'list');
 
-                inputAttributes['aria-activedescendant'] = helper.widget._list.getFocusedItemId();
                 inputAttributes['aria-controls'] = helper.widget._listId;
+                inputAttributes['aria-owns'] = helper.widget._popupContentId;
 
                 delete inputAttributes.readonly;
 
@@ -5499,8 +5477,8 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
             });
 
-            QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, function() {
-                helper.createWidget({ opened: false });
+            QUnit.test(`opened: false, deferRendering: true -> searchEnabled: ${!searchEnabled}`, function() {
+                helper.createWidget({ opened: false, deferRendering: true });
 
                 const inputAttributes = {
                     role: 'combobox',

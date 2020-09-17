@@ -4,13 +4,13 @@ import { extend } from '../../core/utils/extend';
 import translator2DModule from '../translators/translator2d';
 import { isDefined } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
-import dragEvents from '../../events/drag';
+import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
 
 const _min = Math.min;
 const _max = Math.max;
 const MIN_SCROLL_BAR_SIZE = 2;
 
-const ScrollBar = function(renderer, group) {
+export const ScrollBar = function(renderer, group) {
     this._translator = new translator2DModule.Translator2D({}, {}, {});
     this._scroll = renderer.rect().append(group);
     this._addEvents();
@@ -45,7 +45,7 @@ ScrollBar.prototype = {
     _addEvents: function() {
         const scrollElement = this._scroll.element;
 
-        eventsEngine.on(scrollElement, dragEvents.start, e => {
+        eventsEngine.on(scrollElement, dragEventStart, e => {
             fireEvent({
                 type: 'dxc-scroll-start',
                 originalEvent: e,
@@ -53,7 +53,7 @@ ScrollBar.prototype = {
             });
         });
 
-        eventsEngine.on(scrollElement, dragEvents.move, e => {
+        eventsEngine.on(scrollElement, dragEventMove, e => {
             const dX = -e.offset.x * this._scale;
             const dY = -e.offset.y * this._scale;
             const lx = this._offset - (this._layoutOptions.vertical ? dY : dX) / this._scale;
@@ -70,7 +70,7 @@ ScrollBar.prototype = {
             });
         });
 
-        eventsEngine.on(scrollElement, dragEvents.end, e => {
+        eventsEngine.on(scrollElement, dragEventEnd, e => {
             fireEvent({
                 type: 'dxc-scroll-end',
                 originalEvent: e,
@@ -234,5 +234,3 @@ ScrollBar.prototype = {
         });
     }
 };
-
-exports.ScrollBar = ScrollBar;

@@ -16,7 +16,14 @@ export default class PostCompiler {
     const versionString = `* Version: ${version}`;
     const link = '* http://js.devexpress.com/ThemeBuilder/';
 
-    return `/*${generatedBy}\n${versionString}\n${link}\n*/\n\n${css}`;
+    const header = `/*${generatedBy}\n${versionString}\n${link}\n*/\n\n`;
+    const source = css.toString();
+    const encoding = '@charset "UTF-8";';
+
+    if (source.startsWith(encoding)) {
+      return `${encoding}\n${header}${source.replace(`${encoding}\n`, '')}`;
+    }
+    return header + css;
   }
 
   static async cleanCss(css: string): Promise<string> {

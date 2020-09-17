@@ -12,6 +12,8 @@ import {
     format
 } from '../ui/widget/ui.widget';
 
+import { HatchingDirectionType } from './common';
+
 import {
     baseSeriesObject,
     chartAxisObject
@@ -27,12 +29,20 @@ import {
 } from './chart_components/base_chart';
 
 import {
-    VizRange
+    template
+} from '../core/templates/template';
+
+import {
+    VizRange,
+    DashStyleType,
+    TimeIntervalType
 } from './common';
 
 import {
     Font
 } from './core/base_widget';
+
+export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
 
 export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
@@ -58,7 +68,7 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
+    type?: PolarChartSeriesType;
 }
 
 export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
@@ -174,43 +184,40 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 argument:Date|Number|string
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 argument:Date|Number|string
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, argument?: Date | number | string }) => any) | string;
+    onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, argument?: Date | number | string }) => any) | string;
     /**
      * @docid dxPolarChartOptions.onLegendClick
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 target:polarChartSeriesObject
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 target:polarChartSeriesObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: polarChartSeriesObject }) => any) | string;
+    onLegendClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, target?: polarChartSeriesObject }) => any) | string;
     /**
      * @docid dxPolarChartOptions.onSeriesClick
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 target:polarChartSeriesObject
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 target:polarChartSeriesObject
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onSeriesClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: polarChartSeriesObject }) => any) | string;
+    onSeriesClick?: ((e: { component?: dxPolarChart, element?: dxElement, model?: any, event?: event, target?: polarChartSeriesObject }) => any) | string;
     /**
      * @docid dxPolarChartOptions.onSeriesHoverChanged
      * @extends Action
@@ -441,7 +448,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minorTickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.argumentAxis.originValue
      * @type number
@@ -488,7 +495,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    tickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.argumentAxis.type
      * @type Enums.AxisScaleType
@@ -767,7 +774,7 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label
      * @type object
@@ -982,7 +989,7 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
+    type?: PolarChartSeriesType;
 }
 export interface dxPolarChartLegend extends BaseChartLegend {
     /**
@@ -1109,7 +1116,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minVisualRangeLength?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickCount
      * @type number
@@ -1124,7 +1131,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    minorTickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.valueAxis.showZero
      * @type boolean
@@ -1155,7 +1162,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+    tickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.valueAxis.type
      * @type Enums.AxisScaleType
@@ -1390,6 +1397,39 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @public
      */
     radius?: number;
+    /**	
+     * @docid dxPolarChartCommonAnnotationConfig.customizeTooltip	
+     * @type function(annotation)	
+     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any	
+     * @type_function_return object	
+     * @default undefined	
+     * @notUsedInTheme	
+     * @prevFileNamespace DevExpress.viz	
+     * @public	
+     */	
+    customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any);
+    /**	
+     * @docid dxPolarChartCommonAnnotationConfig.template	
+     * @type template|function	
+     * @default undefined	
+     * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any	
+     * @type_function_param2 element:SVGGElement	
+     * @type_function_return string|SVGElement|jQuery	
+     * @prevFileNamespace DevExpress.viz	
+     * @public	
+     */	
+    template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    /**	
+     * @docid dxPolarChartCommonAnnotationConfig.tooltipTemplate	
+     * @type template|function(annotation, element)	
+     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any	
+     * @type_function_param2 element:dxElement	
+     * @type_function_return string|Element|jQuery	
+     * @default undefined	
+     * @prevFileNamespace DevExpress.viz	
+     * @public	
+     */	
+    tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
 }
 
 export interface dxPolarChartSeriesTypes {
@@ -1481,7 +1521,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number };
+    border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.closed
      * @type boolean
@@ -1507,7 +1547,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
+    dashStyle?: DashStyleType;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode
      * @type Enums.ChartSeriesHoverMode
@@ -1523,7 +1563,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    hoverStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, width?: number };
+    hoverStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, dashStyle?: DashStyleType, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints
      * @type boolean
@@ -1588,7 +1628,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    selectionStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, width?: number };
+    selectionStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, dashStyle?: DashStyleType, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.showInLegend
      * @type boolean
@@ -1672,7 +1712,7 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number };
+    border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector
      * @type object

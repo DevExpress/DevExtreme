@@ -4,7 +4,7 @@ import { executeAsync } from '../../core/utils/common';
 import { isFunction, isNumeric, isDefined, isString, isPlainObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import { each, map } from '../../core/utils/iterator';
+import { each } from '../../core/utils/iterator';
 import { when, Deferred } from '../../core/utils/deferred';
 import Class from '../../core/class';
 import { EventsStrategy } from '../../core/events_strategy';
@@ -12,6 +12,7 @@ import { titleize } from '../../core/utils/inflector';
 import { normalizeIndexes } from '../../core/utils/array';
 import { LocalStore } from './local_store';
 import RemoteStore from './remote_store';
+import { sort } from './data_source.utils';
 import { XmlaStore } from './xmla_store/xmla_store';
 import { applyDisplaySummaryMode, createMockSummaryCell, applyRunningTotal } from './ui.pivot_grid.summary_display_modes';
 import {
@@ -19,9 +20,7 @@ import {
     foreachTreeAsync,
     findField,
     formatValue,
-    getCompareFunction,
     createPath,
-    foreachDataLevel,
     setFieldProperty,
     getFieldsDataType
 } from './ui.pivot_grid.utils';
@@ -106,8 +105,7 @@ function isRunningTotalUsed(dataFields) {
 function isDataExists(data) {
     return data.rows.length || data.columns.length || data.values.length;
 }
-
-module.exports = Class.inherit((function() {
+export default Class.inherit((function() {
 
     const findHeaderItem = function(headerItems, path) {
         if(headerItems._cacheByPath) {
@@ -512,90 +510,6 @@ module.exports = Class.inherit((function() {
         return result;
     }
 
-    function getSliceIndex(items, path) {
-        let index = null;
-        const pathValue = (path || []).join('.');
-
-        if(pathValue.length) {
-            foreachTree(items, function(items) {
-                const item = items[0];
-                const itemPath = createPath(items).join('.');
-                const textPath = map(items, function(item) { return item.text; }).reverse().join('.');
-
-                if(pathValue === itemPath || (item.key && textPath === pathValue)) {
-                    index = items[0].index;
-                    return false;
-                }
-            });
-        }
-
-        return index;
-    }
-
-    function getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionName) {
-        const values = dataSource.values;
-        const sortBySummaryFieldIndex = findField(loadOptions.values, field.sortBySummaryField);
-        const areRows = dimensionName === 'rows';
-        const sortByDimension = areRows ? dataSource.columns : dataSource.rows;
-        const grandTotalIndex = areRows ? dataSource.grandTotalRowIndex : dataSource.grandTotalColumnIndex;
-        const sortBySummaryPath = field.sortBySummaryPath || [];
-        const sliceIndex = sortBySummaryPath.length ? getSliceIndex(sortByDimension, sortBySummaryPath) : grandTotalIndex;
-
-        if(values && values.length && sortBySummaryFieldIndex >= 0 && isDefined(sliceIndex)) {
-            return function(field) {
-                const rowIndex = areRows ? field.index : sliceIndex;
-                const columnIndex = areRows ? sliceIndex : field.index;
-                const value = ((values[rowIndex] || [[]])[columnIndex] || [])[sortBySummaryFieldIndex];
-
-                return isDefined(value) ? value : null;
-            };
-        }
-    }
-
-    function getMemberForSortBy(sortBy, getAscOrder) {
-        let member = 'text';
-        if(sortBy === 'none') {
-            member = 'index';
-        } else if(getAscOrder || sortBy !== 'displayText') {
-            member = 'value';
-        }
-        return member;
-    }
-
-    function getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscOrder) {
-        const sortOrder = getAscOrder ? 'asc' : field.sortOrder;
-        const sortBy = getMemberForSortBy(field.sortBy, getAscOrder);
-        const defaultCompare = field.sortingMethod ? function(a, b) {
-            return field.sortingMethod(a, b);
-        } : getCompareFunction(function(item) { return item[sortBy]; });
-        const summaryValueSelector = !getAscOrder && getFieldSummaryValueSelector(field, dataSource, loadOptions, dimensionName);
-        const summaryCompare = summaryValueSelector && getCompareFunction(summaryValueSelector);
-        const sortingMethod = function(a, b) {
-            const result = summaryCompare && summaryCompare(a, b) || defaultCompare(a, b);
-            return sortOrder === 'desc' ? -result : result;
-        };
-
-        return sortingMethod;
-    }
-
-    function sortDimension(dataSource, loadOptions, dimensionName, getAscOrder) {
-        const fields = loadOptions[dimensionName] || [];
-        const baseIndex = loadOptions.headerName === dimensionName ? loadOptions.path.length : 0;
-        const sortingMethodByLevel = [];
-
-        foreachDataLevel(dataSource[dimensionName], function(item, index) {
-            const field = fields[index] || {};
-            const sortingMethod = sortingMethodByLevel[index] = sortingMethodByLevel[index] || getSortingMethod(field, dataSource, loadOptions, dimensionName, getAscOrder);
-
-            item.sort(sortingMethod);
-        }, baseIndex);
-    }
-
-    function sort(loadOptions, dataSource, getAscOrder) {
-        sortDimension(dataSource, loadOptions, 'rows', getAscOrder);
-        sortDimension(dataSource, loadOptions, 'columns', getAscOrder);
-    }
-
     function formatHeaderItems(data, loadOptions, headerName) {
         return foreachTreeAsync(data[headerName], function(items) {
             const item = items[0];
@@ -634,11 +548,6 @@ module.exports = Class.inherit((function() {
         });
         return areaFields;
     }
-
-    ///#DEBUG
-    exports.sort = sort;
-    ///#ENDDEBUG
-
 
     return {
         ctor: function(options) {
@@ -968,8 +877,8 @@ module.exports = Class.inherit((function() {
             } else {
                 return {
                     fields: getFieldsState(that._fields, STATE_PROPERTIES),
-                    columnExpandedPaths: getExpandedPaths(that._data, that._descriptions, 'columns'),
-                    rowExpandedPaths: getExpandedPaths(that._data, that._descriptions, 'rows')
+                    columnExpandedPaths: getExpandedPaths(that._data, that._descriptions, 'columns', that._lastLoadOptions),
+                    rowExpandedPaths: getExpandedPaths(that._data, that._descriptions, 'rows', that._lastLoadOptions)
                 };
             }
         },
@@ -1389,7 +1298,3 @@ module.exports = Class.inherit((function() {
         }
     };
 })());
-
-///#DEBUG
-module.exports.sort = exports.sort;
-///#ENDDEBUG

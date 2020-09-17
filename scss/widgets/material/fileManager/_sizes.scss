@@ -1,3 +1,50 @@
 @use "../sizes" as *;
+
 // adduse
+
+$filemanager-toolbar-separator-height: null !default;
+$filemanager-toolbar-viewmode-width: null !default;
+$filemanager-toolbar-viewmode-padding: null !default;
+$filemanager-breadcrumbs-item-padding-top: null !default;
+$filemanager-breadcrumbs-item-padding-bottom: null !default;
+$filemanager-details-view-checkbox-column-width: null !default;
+$filemanager-file-actions-button-size: null !default;
+$filemanager-treeview-item-top-bottom-padding: null !default;
+$filemanager-file-actions-button-top-bottom-padding: null !default;
+$filemanager-contextmenu-text-item-left-margin: null !default;
+$filemanager-large-icon-size: null !default;
+$filemanager-progress-panel-title-padding: null !default;
+$filemanager-progress-box-button-close-margin-top: null !default;
+
+@if $size == "default" {
+  $filemanager-toolbar-separator-height: 36px;
+  $filemanager-toolbar-viewmode-width: 190px;
+  $filemanager-toolbar-viewmode-padding: 6px;
+  $filemanager-breadcrumbs-item-padding-top: 7px;
+  $filemanager-breadcrumbs-item-padding-bottom: 8px;
+  $filemanager-details-view-checkbox-column-width: 49px;
+  $filemanager-file-actions-button-size: 28px;
+  $filemanager-treeview-item-top-bottom-padding: 11px;
+  $filemanager-file-actions-button-top-bottom-padding: 2px;
+  $filemanager-contextmenu-text-item-left-margin: 48px;
+  $filemanager-large-icon-size: 22px;
+  $filemanager-progress-panel-title-padding: 16px;
+  $filemanager-progress-box-button-close-margin-top: 6px;
+}
+
+@else if $size == "compact" {
+  $filemanager-toolbar-separator-height: 26px;
+  $filemanager-toolbar-viewmode-width: 150px;
+  $filemanager-toolbar-viewmode-padding: 5px;
+  $filemanager-breadcrumbs-item-padding-top: 8px;
+  $filemanager-breadcrumbs-item-padding-bottom: 9px;
+  $filemanager-details-view-checkbox-column-width: 43px;
+  $filemanager-file-actions-button-size: 22px;
+  $filemanager-treeview-item-top-bottom-padding: 8px;
+  $filemanager-file-actions-button-top-bottom-padding: 9px;
+  $filemanager-contextmenu-text-item-left-margin: 30px;
+  $filemanager-large-icon-size: 16px;
+  $filemanager-progress-panel-title-padding: 10px;
+  $filemanager-progress-box-button-close-margin-top: 5px;
+}
 

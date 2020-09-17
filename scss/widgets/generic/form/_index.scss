@@ -3,17 +3,20 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/form";
+
 // adduse
+@use "../scrollable";
 
 
 .dx-form-group-caption {
-  font-size: $GENERIC_FORM_GROUP_CAPTION_FONT_SIZE;
+  font-size: $generic-form-group-caption-font-size;
 }
 
 .dx-form-group-with-caption { // stylelint-disable-line no-duplicate-selectors
   & > .dx-form-group-content {
     border-top: 1px solid $form-group-border-color;
-    padding-bottom: $GENERIC_FORM_GROUP_CONTENT_PADDING_BOTTOM;
+    padding-bottom: $generic-form-group-content-padding-bottom;
   }
 }
 

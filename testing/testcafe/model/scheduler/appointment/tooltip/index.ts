@@ -7,10 +7,14 @@ const CLASS = {
   tooltip: 'dx-tooltip',
   tooltipWrapper: 'dx-tooltip-wrapper',
   tooltipDeleteButton: 'dx-tooltip-appointment-item-delete-button',
+
+  mobileTooltip: '.dx-scheduler-overlay-panel > .dx-overlay-content',
 };
 
 export default class AppointmentTooltip {
   element: Selector;
+
+  mobileElement: Selector;
 
   deleteElement: Selector;
 
@@ -18,6 +22,8 @@ export default class AppointmentTooltip {
 
   constructor(scheduler: Selector) {
     this.element = scheduler.find(`.${CLASS.tooltip}.${CLASS.appointmentTooltipWrapper}`);
+    this.mobileElement = Selector(CLASS.mobileTooltip);
+
     this.deleteElement = Selector(`.${CLASS.tooltipDeleteButton}`);
     this.wrapper = Selector(`.${CLASS.tooltipWrapper}.${CLASS.appointmentTooltipWrapper}`);
   }

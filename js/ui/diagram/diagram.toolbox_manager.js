@@ -49,4 +49,4 @@ const DiagramToolboxManager = {
     }
 };
 
-module.exports = DiagramToolboxManager;
+export default DiagramToolboxManager;

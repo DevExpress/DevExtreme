@@ -1,7 +1,7 @@
 import { NgModule, Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxButtonModule } from 'devextreme/renovation/button';
+import { DxButtonModule } from 'devextreme/renovation/ui/button';
 
 @Component({
     providers: [],

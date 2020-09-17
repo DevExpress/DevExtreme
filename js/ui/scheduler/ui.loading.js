@@ -1,13 +1,13 @@
-const $ = require('../../core/renderer');
-const viewPortUtils = require('../../core/utils/view_port');
-const LoadPanel = require('../load_panel');
-const Deferred = require('../../core/utils/deferred').Deferred;
+import $ from '../../core/renderer';
+import { value as viewPort } from '../../core/utils/view_port';
+import LoadPanel from '../load_panel';
+import { Deferred } from '../../core/utils/deferred';
 
 let loading = null;
 
 const createLoadPanel = function(options) {
     return new LoadPanel($('<div>')
-        .appendTo(options && options.container || viewPortUtils.value()),
+        .appendTo(options && options.container || viewPort()),
     options);
 };
 
@@ -19,13 +19,13 @@ const removeLoadPanel = function() {
     loading = null;
 };
 
-exports.show = function(options) {
+export function show(options) {
     removeLoadPanel();
     loading = createLoadPanel(options);
     return loading.show();
-};
+}
 
-exports.hide = function() {
+export function hide() {
     // todo: hot fix for case without viewport
 
     if(!loading) {
@@ -35,4 +35,4 @@ exports.hide = function() {
         .hide()
         .done(removeLoadPanel)
         .promise();
-};
+}

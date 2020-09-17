@@ -442,17 +442,23 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _renderContainer($wrapper) {
-        return $('<ul>')
+        const $container = $('<ul>');
+
+        this.setAria('role', 'none', $container);
+
+        return $container
             .appendTo($wrapper)
             .addClass(DX_MENU_ITEMS_CONTAINER_CLASS);
     }
 
     _createDOMElement($nodeContainer) {
-        const $node = $('<li>')
+        const $node = $('<li>');
+
+        this.setAria('role', 'none', $node);
+
+        return $node
             .appendTo($nodeContainer)
             .addClass(DX_MENU_ITEM_WRAPPER_CLASS);
-
-        return $node;
     }
 
     _renderItem(index, node, $nodeContainer, $nodeElement) {
@@ -692,4 +698,4 @@ class MenuBase extends HierarchicalCollectionWidget {
 }
 
 MenuBase.ItemClass = MenuItem;
-module.exports = MenuBase;
+export default MenuBase;

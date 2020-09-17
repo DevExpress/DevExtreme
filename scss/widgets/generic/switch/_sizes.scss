@@ -1,27 +1,30 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_SWITCH_WIDTH: null !default;
-$GENERIC_SWITCH_HANDLE_WIDTH: null !default;
-$GENERIC_SWITCH_HANDLE_OFFSET: null !default;
-$GENERIC_SWITCH_CONTAINER_ADJUSTMENT: null !default;
-$GENERIC_SWITCH_FONT_SIZE: null !default;
-$GENERIC_SWITCH_ON_OFF_ADDING_PADDING: null !default;
+$generic-switch-width: null !default;
+$generic-switch-handle-offset: null !default;
+$generic-switch-container-adjustment: null !default;
+$generic-switch-font-size: null !default;
+$generic-switch-on-off-adding-padding: null !default;
+$generic-switch-height: null !default;
+
+$generic-switch-handle-width: 14px;
 
 @if $size == "default" {
-  $GENERIC_SWITCH_WIDTH: 44px;
-  $GENERIC_SWITCH_HANDLE_WIDTH: 14px;
-  $GENERIC_SWITCH_HANDLE_OFFSET: 2px;
-  $GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 6px;
-  $GENERIC_SWITCH_FONT_SIZE: 9px;
-  $GENERIC_SWITCH_ON_OFF_ADDING_PADDING: 2px;
+  $generic-switch-width: 44px;
+  $generic-switch-handle-offset: 2px;
+  $generic-switch-container-adjustment: 6px;
+  $generic-switch-font-size: 9px;
+  $generic-switch-on-off-adding-padding: 2px;
+  $generic-switch-height: 24px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_SWITCH_WIDTH: 36px;
-  $GENERIC_SWITCH_HANDLE_WIDTH: 14px;
-  $GENERIC_SWITCH_HANDLE_OFFSET: 1px;
-  $GENERIC_SWITCH_CONTAINER_ADJUSTMENT: 4px;
-  $GENERIC_SWITCH_FONT_SIZE: 8px;
-  $GENERIC_SWITCH_ON_OFF_ADDING_PADDING: 0;
+  $generic-switch-width: 36px;
+  $generic-switch-handle-offset: 1px;
+  $generic-switch-container-adjustment: 4px;
+  $generic-switch-font-size: 8px;
+  $generic-switch-on-off-adding-padding: 0;
+  $generic-switch-height: 18px;
 }

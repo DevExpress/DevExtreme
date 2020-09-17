@@ -109,7 +109,8 @@ const environment = {
             axisType: 'xyAxes',
             drawingType: 'linear',
             incidentOccurred: this.incidentOccurred,
-            eventTrigger: () => { }
+            eventTrigger: () => { },
+            getTemplate() {}
         };
         this.range = new rangeModule.Range();
         this.range.min = 0;
@@ -210,7 +211,8 @@ QUnit.test('Linear axis creates 2d translator on creation', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
 
     assert.ok(axis.getTranslator() instanceof translator2DModule.Translator2D);
@@ -222,7 +224,8 @@ QUnit.test('Linear axis updates translator on option changed', function(assert) 
         renderer: this.renderer,
         axisType: 'xyAxes',
         drawingType: 'linear',
-        isArgumentAxis: true
+        isArgumentAxis: true,
+        getTemplate() {}
     });
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -244,7 +247,8 @@ QUnit.test('Linear axis updates translator, valueMarginsEnabled = true - stick f
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -262,7 +266,8 @@ QUnit.test('Linear axis with scale breaks', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -284,7 +289,8 @@ QUnit.test('Linear axis with scale breaks, breaksSize is not set', function(asse
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -305,7 +311,8 @@ QUnit.test('Update canvas', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
 
     axis.updateOptions({
@@ -329,7 +336,8 @@ QUnit.test('set business range and canvas', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
 
     axis.updateOptions({
@@ -356,7 +364,8 @@ QUnit.test('set business range with constant lines', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
 
     axis.updateOptions({
@@ -4887,12 +4896,23 @@ QUnit.test('Update discrete translator business range after adjust axis', functi
 QUnit.module('Custom positioning', {
     beforeEach: function() {
         environment.beforeEach.call(this);
+        const that = this;
         this.generatedTicks = [10, 50, 90];
         this.options.type = 'continuous';
         this.options.visible = true;
         this.options.label = {
             visible: true,
             indentFromAxis: 5
+        };
+        this.currentBBox = 0;
+
+        that.bBoxes = [];
+        for(let i = 0; i < 100; i++) {
+            that.bBoxes.push({ x: 1, y: 2, height: 10, width: 20 });
+        }
+
+        this.renderer.bBoxTemplate = function() {
+            return that.bBoxes[that.currentBBox++];
         };
 
         translator2DModule.Translator2D.restore();
@@ -4907,12 +4927,15 @@ QUnit.module('Custom positioning', {
         const horizontalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, argumentType: 'numeric' }, horizontalAxisOptions));
         const verticalAxis = this.createSimpleAxis($.extend(true, { isArgumentAxis: false, isHorizontal: false, valueType: 'numeric' }, verticalAxisOptions));
 
-        horizontalAxis.getOppositeAxis = () => { return verticalAxis; };
-        verticalAxis.getOppositeAxis = () => { return horizontalAxis; };
+        horizontalAxis.getOrthogonalAxis = () => { return verticalAxis; };
+        verticalAxis.getOrthogonalAxis = () => { return horizontalAxis; };
 
         horizontalAxis.draw(this.canvas);
         verticalAxis.draw(this.canvas);
         horizontalAxis.draw(this.canvas);
+
+        horizontalAxis.resolveOverlappingForCustomPositioning([verticalAxis]);
+        verticalAxis.resolveOverlappingForCustomPositioning([horizontalAxis]);
 
         return { horizontalAxis, verticalAxis };
     }
@@ -5027,4 +5050,166 @@ QUnit.test('Validate \'customPosition\' option', function(assert) {
     assert.ok(horizontalAxis.customPositionIsBoundary());
     assert.equal(horizontalAxis.getResolvedBoundaryPosition(), 'bottom');
     assert.ok(horizontalAxis.customPositionEqualsToPredefined());
+});
+
+QUnit.test('Resolve label overlapping by axis (in the middle, labels position by default)', function(assert) {
+    this.bBoxes[17] = { x: 1, y: 10, height: 18, width: 20 };
+    this.bBoxes[18] = { x: 465, y: 10, height: 590, width: 0 };
+    this.bBoxes[19] = { x: 1, y: 10, height: 18, width: 20 };
+
+    this.bBoxes[40] = { x: 10, y: -43, height: 18, width: 20 };
+    this.bBoxes[41] = { x: 20, y: 264, height: 0, width: 890 };
+    this.bBoxes[42] = { x: 10, y: -43, height: 18, width: 20 };
+
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        customPosition: 57,
+        label: {
+            position: 'bottom',
+            indentFromAxis: 10
+        }
+    }, {
+        customPosition: 50,
+        label: {
+            position: 'left',
+            indentFromAxis: 10
+        }
+    });
+
+    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(11).args[0], { translateX: 469 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(13).args[0], { translateY: 284 });
+});
+
+QUnit.test('Resolve label overlapping by axis (labels shifted outside)', function(assert) {
+    this.bBoxes[17] = { x: -1, y: 10, height: 18, width: 20 };
+    this.bBoxes[18] = { x: 465, y: 10, height: 590, width: 0 };
+    this.bBoxes[19] = { x: -1, y: 10, height: 18, width: 20 };
+
+    this.bBoxes[40] = { x: 10, y: -41, height: 18, width: 20 };
+    this.bBoxes[41] = { x: 20, y: 264, height: 0, width: 890 };
+    this.bBoxes[42] = { x: 10, y: -41, height: 18, width: 20 };
+
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        customPosition: 57,
+        label: {
+            position: 'bottom',
+            indentFromAxis: 10
+        }
+    }, {
+        customPosition: 50,
+        label: {
+            position: 'left',
+            indentFromAxis: 10
+        }
+    });
+
+    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(11).args[0], { translateX: 441 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(13).args[0], { translateY: 310 });
+});
+
+QUnit.test('Resolve label overlapping by axis (labels shifted inside)', function(assert) {
+    this.bBoxes[17] = { x: 3, y: 10, height: 18, width: 20 };
+    this.bBoxes[18] = { x: 465, y: 10, height: 590, width: 0 };
+    this.bBoxes[19] = { x: 3, y: 10, height: 18, width: 20 };
+
+    this.bBoxes[40] = { x: 10, y: -45, height: 18, width: 20 };
+    this.bBoxes[41] = { x: 20, y: 264, height: 0, width: 890 };
+    this.bBoxes[42] = { x: 10, y: -45, height: 18, width: 20 };
+
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        customPosition: 57,
+        label: {
+            position: 'bottom',
+            indentFromAxis: 10
+        }
+    }, {
+        customPosition: 50,
+        label: {
+            position: 'left',
+            indentFromAxis: 10
+        }
+    });
+
+    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(11).args[0], { translateX: 467 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(13).args[0], { translateY: 286 });
+});
+
+QUnit.test('Resolve label overlapping by axis (in the middle, other labels position)', function(assert) {
+    this.bBoxes[17] = { x: 1, y: 10, height: 18, width: 20 };
+    this.bBoxes[18] = { x: 465, y: 10, height: 590, width: 0 };
+    this.bBoxes[19] = { x: 1, y: 10, height: 18, width: 20 };
+
+    this.bBoxes[40] = { x: 10, y: -43, height: 18, width: 20 };
+    this.bBoxes[41] = { x: 20, y: 264, height: 0, width: 890 };
+    this.bBoxes[42] = { x: 10, y: -43, height: 18, width: 20 };
+
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        customPosition: 57,
+        label: {
+            position: 'top',
+            indentFromAxis: 10
+        }
+    }, {
+        customPosition: 50,
+        label: {
+            position: 'right',
+            indentFromAxis: 10
+        }
+    });
+
+    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(11).args[0], { translateX: 439 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(13).args[0], { translateY: 312 });
+});
+
+QUnit.test('Resolve label overlapping by opposite label (labels position by default)', function(assert) {
+    this.bBoxes[21] = { x: 1, y: 18, height: 18, width: 20 };
+    this.bBoxes[22] = { x: 6, y: 2, height: 18, width: 20 };
+    this.bBoxes[23] = { x: 1, y: 18, height: 18, width: 20 };
+
+    this.bBoxes[36] = { x: 6, y: 2, height: 18, width: 20 };
+    this.bBoxes[37] = { x: 1, y: 72, height: 18, width: 20 };
+    this.bBoxes[38] = { x: 6, y: 2, height: 18, width: 20 };
+
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        customPosition: 57,
+        label: {
+            position: 'bottom',
+            indentFromAxis: 10
+        }
+    }, {
+        customPosition: 50,
+        label: {
+            position: 'left',
+            indentFromAxis: 10
+        }
+    });
+
+    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 218 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateX: 469 });
+});
+
+QUnit.test('Resolve label overlapping by opposite label (other labels position)', function(assert) {
+    this.bBoxes[21] = { x: 16, y: 28, height: 18, width: 20 };
+    this.bBoxes[22] = { x: -4, y: -18, height: 18, width: 20 };
+    this.bBoxes[23] = { x: 16, y: 28, height: 18, width: 20 };
+
+    this.bBoxes[36] = { x: -4, y: -28, height: 18, width: 20 };
+    this.bBoxes[37] = { x: 6, y: 14, height: 18, width: 20 };
+    this.bBoxes[38] = { x: -4, y: -28, height: 18, width: 20 };
+
+    const { horizontalAxis, verticalAxis } = this.drawOrthogonalAxes({
+        customPosition: 57,
+        label: {
+            position: 'top',
+            indentFromAxis: 10
+        }
+    }, {
+        customPosition: 50,
+        label: {
+            position: 'right',
+            indentFromAxis: 10
+        }
+    });
+
+    assert.deepEqual(horizontalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateY: 246 });
+    assert.deepEqual(verticalAxis._majorTicks[1].label.attr.getCall(15).args[0], { translateX: 439 });
 });

@@ -213,4 +213,4 @@ class VerticalGroupedStrategy extends GroupedStrategy {
     }
 }
 
-module.exports = VerticalGroupedStrategy;
+export default VerticalGroupedStrategy;

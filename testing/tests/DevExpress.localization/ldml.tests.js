@@ -346,12 +346,27 @@ QUnit.module('number formatter', () => {
         }, '#0.00');
     });
 
+    QUnit.test('escaped zero should not specify the formatter precision', function(assert) {
+        const zeroFormatter = getNumberFormatter('\'00\'0.0\'00\'');
+        const sharpFormatter = getNumberFormatter('\'#,##\'0.0\'##\'');
+
+        assert.strictEqual(zeroFormatter(1234.1234), '004.100', 'take into account non-escaped symbols only');
+        assert.strictEqual(sharpFormatter(1234.123), '#,##4.1##', 'take into account non-escaped symbols only');
+    });
+
     QUnit.module('getRegExpInfo method');
 
     QUnit.test('getRegExpInfo should return correct pattern set when stub is in the end', function(assert) {
         const regExpInfo = getRegExpInfo('EEE, MMMM, dd, HH:mm:ss \'(stub)\'', dateParts);
         assert.deepEqual(regExpInfo.patterns, [
             'EEE', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', '\':\'', 'mm', '\':\'', 'ss', '\' (stub)\''
+        ]);
+    });
+
+    QUnit.test('getRegExpInfo should return correct pattern set when there is "ww" inside of it', function(assert) {
+        const regExpInfo = getRegExpInfo('ww, MMMM, dd, HH:mm:ss \'(stub)\'', dateParts);
+        assert.deepEqual(regExpInfo.patterns, [
+            'ww', '\', \'', 'MMMM', '\', \'', 'dd', '\', \'', 'HH', '\':\'', 'mm', '\':\'', 'ss', '\' (stub)\''
         ]);
     });
 });

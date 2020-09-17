@@ -21,44 +21,44 @@ const _isNaN = isNaN;
 const _Number = Number;
 const _NaN = NaN;
 
-const PANE_PADDING = 10;
+export const PANE_PADDING = 10;
 
-const getLog = function(value, base) {
+export const getLog = function(value, base) {
     if(!value) {
         return _NaN;
     }
     return log(value) / log(base);
 };
 
-const getAdjustedLog10 = function(value) {
+export const getAdjustedLog10 = function(value) {
     return adjust(getLog(value, 10));
 };
 
-const raiseTo = function(power, base) {
+export const raiseTo = function(power, base) {
     return pow(base, power);
 };
 
 //  Translates angle to [0, 360)
 //  Expects number, no validation
-const normalizeAngle = function(angle) {
+export const normalizeAngle = function(angle) {
     return ((angle % 360) + 360) % 360;
 };
 
 //  Maps angle in trigonometric space to angle in 'renderer' space
 //  Expects numbers, no validation
-const convertAngleToRendererSpace = function(angle) {
+export const convertAngleToRendererSpace = function(angle) {
     return 90 - angle;
 };
 
 //  Maps angle in degrees to angle in radians
 //  Expects number, no validation
-const degreesToRadians = function(value) {
+export const degreesToRadians = function(value) {
     return PI * value / 180;
 };
 
 //  Calculates sin and cos for <angle> in degrees
 //  Expects number, no validation
-const getCosAndSin = function(angle) {
+export const getCosAndSin = function(angle) {
     const angleInRadians = degreesToRadians(angle);
     return { cos: _cos(angleInRadians), sin: _sin(angleInRadians) };
 };
@@ -69,13 +69,13 @@ const DECIMAL_ORDER_THRESHOLD = 1E-14;
 //    ____________________
 //   /       2          2
 // \/ (y2-y1)  + (x2-x1)
-const getDistance = function(x1, y1, x2, y2) {
+export const getDistance = function(x1, y1, x2, y2) {
     const diffX = x2 - x1;
     const diffY = y2 - y1;
     return sqrt(diffY * diffY + diffX * diffX);
 };
 
-const getDecimalOrder = function(number) {
+export const getDecimalOrder = function(number) {
     let n = abs(number);
     let cn;
     if(!_isNaN(n)) {
@@ -89,7 +89,7 @@ const getDecimalOrder = function(number) {
     return _NaN;
 };
 
-const getAppropriateFormat = function(start, end, count) {
+export const getAppropriateFormat = function(start, end, count) {
     const order = _max(getDecimalOrder(start), getDecimalOrder(end));
     let precision = -getDecimalOrder(abs(end - start) / count);
     let format;
@@ -109,7 +109,7 @@ const getAppropriateFormat = function(start, end, count) {
     return null;
 };
 
-const roundValue = function(value, precision) {
+export const roundValue = function(value, precision) {
     if(precision > 20) {
         precision = 20;
     }
@@ -122,11 +122,11 @@ const roundValue = function(value, precision) {
     }
 };
 
-const getPower = function(value) {
+export const getPower = function(value) {
     return value.toExponential().split('e')[1];
 };
 
-function map(array, callback) {
+export function map(array, callback) {
     let i = 0;
     const len = array.length;
     const result = [];
@@ -157,11 +157,11 @@ function decreaseFields(object, keys, eachDecrease, decrease) {
     return dec;
 }
 
-function normalizeEnum(value) {
+export function normalizeEnum(value) {
     return String(value).toLowerCase();
 }
 
-function setCanvasValues(canvas) {
+export function setCanvasValues(canvas) {
     if(canvas) {
         canvas.originalTop = canvas.top;
         canvas.originalBottom = canvas.bottom;
@@ -175,7 +175,7 @@ function normalizeBBoxField(value) {
     return -MAX_PIXEL_COUNT < value && value < +MAX_PIXEL_COUNT ? value : 0;
 }
 
-function normalizeBBox(bBox) {
+export function normalizeBBox(bBox) {
     const xl = normalizeBBoxField(floor(bBox.x));
     const yt = normalizeBBoxField(floor(bBox.y));
     const xr = normalizeBBoxField(ceil(bBox.width + bBox.x));
@@ -191,7 +191,7 @@ function normalizeBBox(bBox) {
 }
 
 // Angle is expected to be from right-handed cartesian (not svg) space - positive is counterclockwise
-function rotateBBox(bBox, center, angle) {
+export function rotateBBox(bBox, center, angle) {
     const cos = _Number(_cos(angle * PI_DIV_180).toFixed(3));
     const sin = _Number(_sin(angle * PI_DIV_180).toFixed(3));
     const w2 = bBox.width / 2;
@@ -214,252 +214,244 @@ function rotateBBox(bBox, center, angle) {
     });
 }
 
-extend(exports, {
-    decreaseGaps: function(object, keys, decrease) {
-        let arrayGaps;
-        do {
-            arrayGaps = selectByKeys(object, keys);
-            arrayGaps.push(ceil(decrease / arrayGaps.length));
-            decrease = decreaseFields(object, keys, _min.apply(null, arrayGaps), decrease);
-        } while(decrease > 0 && arrayGaps.length > 1);
-        return decrease;
-    },
+export const decreaseGaps = function(object, keys, decrease) {
+    let arrayGaps;
+    do {
+        arrayGaps = selectByKeys(object, keys);
+        arrayGaps.push(ceil(decrease / arrayGaps.length));
+        decrease = decreaseFields(object, keys, _min.apply(null, arrayGaps), decrease);
+    } while(decrease > 0 && arrayGaps.length > 1);
+    return decrease;
+};
 
-    normalizeEnum: normalizeEnum,
+export const parseScalar = function(value, defaultValue) {
+    return value !== undefined ? value : defaultValue;
+};
 
-    parseScalar: function(value, defaultValue) {
-        return value !== undefined ? value : defaultValue;
-    },
-
-    enumParser: function(values) {
-        const stored = {};
-        let i;
-        let ii;
-        for(i = 0, ii = values.length; i < ii; ++i) {
-            stored[normalizeEnum(values[i])] = 1;
-        }
-        return function(value, defaultValue) {
-            const _value = normalizeEnum(value);
-            return stored[_value] ? _value : defaultValue;
-        };
-    },
-
-    patchFontOptions: function(options) {
-        const fontOptions = {};
-        each(options || {}, function(key, value) {
-            if(/^(cursor)$/i.test(key)) {
-                // TODO check other properties, add tests
-            } else if(key === 'opacity') {
-                value = null;
-            } else if(key === 'color') {
-                key = 'fill';
-                if('opacity' in options) {
-                    const color = new Color(value);
-                    value = `rgba(${color.r},${color.g},${color.b},${options.opacity})`;
-                }
-            } else {
-                key = 'font-' + key;
-            }
-            fontOptions[key] = value;
-        });
-        return fontOptions;
-    },
-
-    checkElementHasPropertyFromStyleSheet(element, property) {
-        const slice = Array.prototype.slice;
-        const cssRules = slice.call(domAdapter.getDocument().styleSheets).reduce((rules, styleSheet) => {
-            return rules.concat(slice.call(styleSheet.cssRules || styleSheet.rules));
-        }, []);
-
-        const elementRules = cssRules.filter(rule => {
-            try {
-                return domAdapter.elementMatches(element, rule.selectorText);
-            } catch(e) {
-                return false;
-            }
-        });
-
-        return elementRules.some(rule => !!rule.style[property]);
-    },
-
-    convertPolarToXY(centerCoords, startAngle, angle, radius) {
-        const shiftAngle = 90;
-        const normalizedRadius = radius > 0 ? radius : 0;
-
-        angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
-        const cosSin = getCosAndSin(angle);
-
-        return { x: _round(centerCoords.x + normalizedRadius * cosSin.cos), y: _round(centerCoords.y + normalizedRadius * cosSin.sin) };
-    },
-
-    convertXYToPolar: function(centerCoords, x, y) {
-        const radius = getDistance(centerCoords.x, centerCoords.y, x, y);
-        const angle = atan2(y - centerCoords.y, x - centerCoords.x);
-
-        return { phi: _round(normalizeAngle(angle * 180 / PI)), r: _round(radius) };
-    },
-
-    processSeriesTemplate: function(seriesTemplate, items) {
-        const customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop;
-        const nameField = seriesTemplate.nameField;
-        const generatedSeries = {};
-        const seriesOrder = [];
-        let series;
-        let i = 0;
-        let length;
-        let data;
-
-        items = items || [];
-        for(length = items.length; i < length; i++) {
-            data = items[i];
-            if(nameField in data) {
-                series = generatedSeries[data[nameField]];
-                if(!series) {
-                    series = generatedSeries[data[nameField]] = { name: data[nameField], nameFieldValue: data[nameField] };
-                    seriesOrder.push(series.name);
-                }
-            }
-        }
-        return map(seriesOrder, function(orderedName) {
-            const group = generatedSeries[orderedName];
-            return extend(group, customizeSeries.call(null, group.name));
-        });
-    },
-
-    getCategoriesInfo: function(categories, startValue, endValue) {
-        if(categories.length === 0) {
-            return { categories: [] };
-        }
-        startValue = isDefined(startValue) ? startValue : categories[0];
-        endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
-
-        const categoriesValue = map(categories, category => category?.valueOf());
-        let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
-        let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
-        let swapBuf;
-        let inverted = false;
-
-        indexStartValue < 0 && (indexStartValue = 0);
-        indexEndValue < 0 && (indexEndValue = categories.length - 1);
-        if(indexEndValue < indexStartValue) {
-            swapBuf = indexEndValue;
-            indexEndValue = indexStartValue;
-            indexStartValue = swapBuf;
-            inverted = true;
-        }
-
-        const visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
-        const lastIdx = visibleCategories.length - 1;
-        return {
-            categories: visibleCategories,
-            start: visibleCategories[inverted ? lastIdx : 0],
-            end: visibleCategories[inverted ? 0 : lastIdx],
-            inverted: inverted
-        };
-    },
-
-    setCanvasValues: setCanvasValues,
-
-    normalizePanesHeight(panes) {
-        panes.forEach(pane => {
-            const height = pane.height;
-            let unit = 0;
-            let parsedHeight = parseFloat(height) || undefined;
-
-            if(isString(height) && height.indexOf('px') > -1 ||
-                isNumeric(height) && height > 1) {
-                parsedHeight = _round(parsedHeight);
-                unit = 1;
-            }
-
-            if(!unit && parsedHeight) {
-                if(isString(height) && height.indexOf('%') > -1) {
-                    parsedHeight = parsedHeight / 100;
-                } else if(parsedHeight < 0) {
-                    parsedHeight = parsedHeight < -1 ? 1 : abs(parsedHeight);
-                }
-            }
-
-            pane.height = parsedHeight;
-            pane.unit = unit;
-        });
-        const weightSum = panes.filter((pane) => !pane.unit)
-            .reduce((prev, next) => prev + (next.height || 0), 0);
-        const weightHeightCount = panes.filter((pane) => !pane.unit).length;
-        const emptyHeightCount = panes.filter((pane) => !pane.unit && !pane.height).length;
-
-        if(weightSum < 1 && emptyHeightCount) {
-            panes.filter((pane) => !pane.unit && !pane.height).forEach((pane) => pane.height = (1 - weightSum) / emptyHeightCount);
-        } else if(weightSum > 1 || weightSum < 1 && !emptyHeightCount || weightSum === 1 && emptyHeightCount) {
-            if(emptyHeightCount) {
-                const weightForEmpty = weightSum / weightHeightCount;
-                const emptyWeightSum = emptyHeightCount * weightForEmpty;
-                panes.filter((pane) => !pane.unit && pane.height).forEach((pane) => pane.height *= (weightSum - emptyWeightSum) / weightSum);
-                panes.filter((pane) => !pane.unit && !pane.height).forEach((pane) => pane.height = weightForEmpty);
-            }
-            panes.forEach((pane) => !pane.unit && (pane.height *= 1 / weightSum));
-        }
-    },
-
-    updatePanesCanvases(panes, canvas, rotated) {
-        let distributedSpace = 0;
-        const padding = PANE_PADDING;
-        const paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom;
-        let usefulSpace = paneSpace - padding * (panes.length - 1);
-        const startName = rotated ? 'left' : 'top';
-        const endName = rotated ? 'right' : 'bottom';
-
-        const totalCustomSpace = panes.reduce((prev, cur) => prev + (cur.unit ? cur.height : 0), 0);
-        usefulSpace -= totalCustomSpace;
-
-        panes.forEach(pane => {
-            const calcLength = pane.unit ? pane.height : _round(pane.height * usefulSpace);
-            pane.canvas = pane.canvas || {};
-            extend(pane.canvas, canvas);
-            pane.canvas[startName] = canvas[startName] + distributedSpace;
-            pane.canvas[endName] = canvas[endName] + (paneSpace - calcLength - distributedSpace);
-
-            distributedSpace = distributedSpace + calcLength + padding;
-            setCanvasValues(pane.canvas);
-        });
-    },
-
-    unique: function(array) {
-        const values = {};
-        return map(array, function(item) {
-            const result = !values[item] ? item : null;
-            values[item] = true;
-            return result;
-        });
-    },
-
-    map: map,
-
-    getVerticallyShiftedAngularCoords: function(bBox, dy, center) {
-        // TODO: Use center instead of left top corner - that is more correct and allows to get rid of "isPositive"
-        //   horizontalOffset1 = bBox.x + bBox.width / 2 - center.x
-        //   horizontalOffset2 = bBox.y + bBox.height / 2 - center.y
-        //   verticalOffset2 = newCoord.y + bBox.height / 2 - center.y
-        const isPositive = bBox.x + bBox.width / 2 >= center.x;
-        const horizontalOffset1 = (isPositive ? bBox.x : bBox.x + bBox.width) - center.x;
-        const verticalOffset1 = bBox.y - center.y;
-        const verticalOffset2 = verticalOffset1 + dy;
-        const horizontalOffset2 = _round(sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2));
-        const dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
-        return { x: center.x + (isPositive ? dx : dx - bBox.width), y: bBox.y + dy };
-    },
-
-    mergeMarginOptions(opt1, opt2) {
-        return {
-            checkInterval: opt1.checkInterval || opt2.checkInterval,
-            size: _max(opt1.size || 0, opt2.size || 0),
-            percentStick: opt1.percentStick || opt2.percentStick,
-            sizePointNormalState: _max(opt1.sizePointNormalState || 0, opt2.sizePointNormalState || 0)
-        };
+export const enumParser = function(values) {
+    const stored = {};
+    let i;
+    let ii;
+    for(i = 0, ii = values.length; i < ii; ++i) {
+        stored[normalizeEnum(values[i])] = 1;
     }
-});
+    return function(value, defaultValue) {
+        const _value = normalizeEnum(value);
+        return stored[_value] ? _value : defaultValue;
+    };
+};
 
-function getVizRangeObject(value) {
+export const patchFontOptions = function(options) {
+    const fontOptions = {};
+    each(options || {}, function(key, value) {
+        if(/^(cursor)$/i.test(key)) {
+            // TODO check other properties, add tests
+        } else if(key === 'opacity') {
+            value = null;
+        } else if(key === 'color') {
+            key = 'fill';
+            if('opacity' in options) {
+                const color = new Color(value);
+                value = `rgba(${color.r},${color.g},${color.b},${options.opacity})`;
+            }
+        } else {
+            key = 'font-' + key;
+        }
+        fontOptions[key] = value;
+    });
+    return fontOptions;
+};
+
+export function checkElementHasPropertyFromStyleSheet(element, property) {
+    const slice = Array.prototype.slice;
+    const cssRules = slice.call(domAdapter.getDocument().styleSheets).reduce((rules, styleSheet) => {
+        return rules.concat(slice.call(styleSheet.cssRules || styleSheet.rules));
+    }, []);
+
+    const elementRules = cssRules.filter(rule => {
+        try {
+            return domAdapter.elementMatches(element, rule.selectorText);
+        } catch(e) {
+            return false;
+        }
+    });
+
+    return elementRules.some(rule => !!rule.style[property]);
+}
+
+export function convertPolarToXY(centerCoords, startAngle, angle, radius) {
+    const shiftAngle = 90;
+    const normalizedRadius = radius > 0 ? radius : 0;
+
+    angle = isDefined(angle) ? angle + startAngle - shiftAngle : 0;
+    const cosSin = getCosAndSin(angle);
+
+    return { x: _round(centerCoords.x + normalizedRadius * cosSin.cos), y: _round(centerCoords.y + normalizedRadius * cosSin.sin) };
+}
+
+export const convertXYToPolar = function(centerCoords, x, y) {
+    const radius = getDistance(centerCoords.x, centerCoords.y, x, y);
+    const angle = atan2(y - centerCoords.y, x - centerCoords.x);
+
+    return { phi: _round(normalizeAngle(angle * 180 / PI)), r: _round(radius) };
+};
+
+export const processSeriesTemplate = function(seriesTemplate, items) {
+    const customizeSeries = isFunction(seriesTemplate.customizeSeries) ? seriesTemplate.customizeSeries : noop;
+    const nameField = seriesTemplate.nameField;
+    const generatedSeries = {};
+    const seriesOrder = [];
+    let series;
+    let i = 0;
+    let length;
+    let data;
+
+    items = items || [];
+    for(length = items.length; i < length; i++) {
+        data = items[i];
+        if(nameField in data) {
+            series = generatedSeries[data[nameField]];
+            if(!series) {
+                series = generatedSeries[data[nameField]] = { name: data[nameField], nameFieldValue: data[nameField] };
+                seriesOrder.push(series.name);
+            }
+        }
+    }
+    return map(seriesOrder, function(orderedName) {
+        const group = generatedSeries[orderedName];
+        return extend(group, customizeSeries.call(null, group.name));
+    });
+};
+
+export const getCategoriesInfo = function(categories, startValue, endValue) {
+    if(categories.length === 0) {
+        return { categories: [] };
+    }
+    startValue = isDefined(startValue) ? startValue : categories[0];
+    endValue = isDefined(endValue) ? endValue : categories[categories.length - 1];
+
+    const categoriesValue = map(categories, category => category?.valueOf());
+    let indexStartValue = categoriesValue.indexOf(startValue.valueOf());
+    let indexEndValue = categoriesValue.indexOf(endValue.valueOf());
+    let swapBuf;
+    let inverted = false;
+
+    indexStartValue < 0 && (indexStartValue = 0);
+    indexEndValue < 0 && (indexEndValue = categories.length - 1);
+    if(indexEndValue < indexStartValue) {
+        swapBuf = indexEndValue;
+        indexEndValue = indexStartValue;
+        indexStartValue = swapBuf;
+        inverted = true;
+    }
+
+    const visibleCategories = categories.slice(indexStartValue, indexEndValue + 1);
+    const lastIdx = visibleCategories.length - 1;
+    return {
+        categories: visibleCategories,
+        start: visibleCategories[inverted ? lastIdx : 0],
+        end: visibleCategories[inverted ? 0 : lastIdx],
+        inverted: inverted
+    };
+};
+
+export function normalizePanesHeight(panes) {
+    panes.forEach(pane => {
+        const height = pane.height;
+        let unit = 0;
+        let parsedHeight = parseFloat(height) || undefined;
+
+        if(isString(height) && height.indexOf('px') > -1 ||
+            isNumeric(height) && height > 1) {
+            parsedHeight = _round(parsedHeight);
+            unit = 1;
+        }
+
+        if(!unit && parsedHeight) {
+            if(isString(height) && height.indexOf('%') > -1) {
+                parsedHeight = parsedHeight / 100;
+            } else if(parsedHeight < 0) {
+                parsedHeight = parsedHeight < -1 ? 1 : abs(parsedHeight);
+            }
+        }
+
+        pane.height = parsedHeight;
+        pane.unit = unit;
+    });
+    const weightSum = panes.filter((pane) => !pane.unit)
+        .reduce((prev, next) => prev + (next.height || 0), 0);
+    const weightHeightCount = panes.filter((pane) => !pane.unit).length;
+    const emptyHeightCount = panes.filter((pane) => !pane.unit && !pane.height).length;
+
+    if(weightSum < 1 && emptyHeightCount) {
+        panes.filter((pane) => !pane.unit && !pane.height).forEach((pane) => pane.height = (1 - weightSum) / emptyHeightCount);
+    } else if(weightSum > 1 || weightSum < 1 && !emptyHeightCount || weightSum === 1 && emptyHeightCount) {
+        if(emptyHeightCount) {
+            const weightForEmpty = weightSum / weightHeightCount;
+            const emptyWeightSum = emptyHeightCount * weightForEmpty;
+            panes.filter((pane) => !pane.unit && pane.height).forEach((pane) => pane.height *= (weightSum - emptyWeightSum) / weightSum);
+            panes.filter((pane) => !pane.unit && !pane.height).forEach((pane) => pane.height = weightForEmpty);
+        }
+        panes.forEach((pane) => !pane.unit && (pane.height *= 1 / weightSum));
+    }
+}
+
+export function updatePanesCanvases(panes, canvas, rotated) {
+    let distributedSpace = 0;
+    const padding = PANE_PADDING;
+    const paneSpace = rotated ? canvas.width - canvas.left - canvas.right : canvas.height - canvas.top - canvas.bottom;
+    let usefulSpace = paneSpace - padding * (panes.length - 1);
+    const startName = rotated ? 'left' : 'top';
+    const endName = rotated ? 'right' : 'bottom';
+
+    const totalCustomSpace = panes.reduce((prev, cur) => prev + (cur.unit ? cur.height : 0), 0);
+    usefulSpace -= totalCustomSpace;
+
+    panes.forEach(pane => {
+        const calcLength = pane.unit ? pane.height : _round(pane.height * usefulSpace);
+        pane.canvas = pane.canvas || {};
+        extend(pane.canvas, canvas);
+        pane.canvas[startName] = canvas[startName] + distributedSpace;
+        pane.canvas[endName] = canvas[endName] + (paneSpace - calcLength - distributedSpace);
+
+        distributedSpace = distributedSpace + calcLength + padding;
+        setCanvasValues(pane.canvas);
+    });
+}
+
+export const unique = function(array) {
+    const values = {};
+    return map(array, function(item) {
+        const result = !values[item] ? item : null;
+        values[item] = true;
+        return result;
+    });
+};
+
+export const getVerticallyShiftedAngularCoords = function(bBox, dy, center) {
+    // TODO: Use center instead of left top corner - that is more correct and allows to get rid of "isPositive"
+    //   horizontalOffset1 = bBox.x + bBox.width / 2 - center.x
+    //   horizontalOffset2 = bBox.y + bBox.height / 2 - center.y
+    //   verticalOffset2 = newCoord.y + bBox.height / 2 - center.y
+    const isPositive = bBox.x + bBox.width / 2 >= center.x;
+    const horizontalOffset1 = (isPositive ? bBox.x : bBox.x + bBox.width) - center.x;
+    const verticalOffset1 = bBox.y - center.y;
+    const verticalOffset2 = verticalOffset1 + dy;
+    const horizontalOffset2 = _round(sqrt(horizontalOffset1 * horizontalOffset1 + verticalOffset1 * verticalOffset1 - verticalOffset2 * verticalOffset2));
+    const dx = (isPositive ? +horizontalOffset2 : -horizontalOffset2) || horizontalOffset1;
+    return { x: center.x + (isPositive ? dx : dx - bBox.width), y: bBox.y + dy };
+};
+
+export function mergeMarginOptions(opt1, opt2) {
+    return {
+        checkInterval: opt1.checkInterval || opt2.checkInterval,
+        size: _max(opt1.size || 0, opt2.size || 0),
+        percentStick: opt1.percentStick || opt2.percentStick,
+        sizePointNormalState: _max(opt1.sizePointNormalState || 0, opt2.sizePointNormalState || 0)
+    };
+}
+
+export function getVizRangeObject(value) {
     if(Array.isArray(value)) {
         return { startValue: value[0], endValue: value[1] };
     } else {
@@ -467,14 +459,14 @@ function getVizRangeObject(value) {
     }
 }
 
-function convertVisualRangeObject(visualRange, convertToVisualRange) {
+export function convertVisualRangeObject(visualRange, convertToVisualRange) {
     if(convertToVisualRange) {
         return visualRange;
     }
     return [visualRange.startValue, visualRange.endValue];
 }
 
-function getAddFunction(range, correctZeroLevel) {
+export function getAddFunction(range, correctZeroLevel) {
     // T170398
     if(range.dataType === 'datetime') {
         return function(rangeValue, marginValue, sign = 1) {
@@ -495,7 +487,7 @@ function getAddFunction(range, correctZeroLevel) {
     };
 }
 
-function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
+export function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     const minDefined = isDefined(visualRange.startValue);
     const maxDefined = isDefined(visualRange.endValue);
     const nonDiscrete = options.axisType !== 'discrete';
@@ -537,10 +529,10 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
                     max = categories[categories.length - 1];
                     min = categories[categories.length - 1 - rangeLength];
                 } else if(minDefined && !maxDefined) {
-                    const categoriesInfo = exports.getCategoriesInfo(categories, min, undefined);
+                    const categoriesInfo = getCategoriesInfo(categories, min, undefined);
                     max = categoriesInfo.categories[rangeLength];
                 } else if(!minDefined && maxDefined) {
-                    const categoriesInfo = exports.getCategoriesInfo(categories, undefined, max);
+                    const categoriesInfo = getCategoriesInfo(categories, undefined, max);
                     min = categoriesInfo.categories[categoriesInfo.categories.length - 1 - rangeLength];
                 }
             }
@@ -562,7 +554,7 @@ function adjustVisualRange(options, visualRange, wholeRange, dataRange) {
     };
 }
 
-function getLogExt(value, base, allowNegatives = false, linearThreshold) {
+export function getLogExt(value, base, allowNegatives = false, linearThreshold) {
     if(!allowNegatives) {
         return getLog(value, base);
     }
@@ -576,7 +568,7 @@ function getLogExt(value, base, allowNegatives = false, linearThreshold) {
     return adjust(sign(value) * transformValue, Number(pow(base, linearThreshold - 1).toFixed(abs(linearThreshold))));
 }
 
-function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
+export function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
     if(!allowNegatives) {
         return raiseTo(value, base);
     }
@@ -594,7 +586,7 @@ function raiseToExt(value, base, allowNegatives = false, linearThreshold) {
     return adjust(sign(value) * transformValue, Number(pow(base, linearThreshold).toFixed(abs(linearThreshold))));
 }
 
-function rangesAreEqual(range, rangeFromOptions) {
+export function rangesAreEqual(range, rangeFromOptions) {
     if(Array.isArray(rangeFromOptions)) {
         return range.length === rangeFromOptions.length
             && range.every((item, i) => valueOf(item) === valueOf(rangeFromOptions[i]));
@@ -604,39 +596,10 @@ function rangesAreEqual(range, rangeFromOptions) {
     }
 }
 
-function valueOf(value) {
+export function valueOf(value) {
     return value && value.valueOf();
 }
 
-function pointInCanvas(canvas, x, y) {
+export function pointInCanvas(canvas, x, y) {
     return x >= canvas.left && x <= canvas.right && y >= canvas.top && y <= canvas.bottom;
 }
-
-exports.getVizRangeObject = getVizRangeObject;
-exports.convertVisualRangeObject = convertVisualRangeObject;
-exports.adjustVisualRange = adjustVisualRange;
-exports.getAddFunction = getAddFunction;
-exports.getLog = getLog;
-exports.getLogExt = getLogExt;
-exports.getAdjustedLog10 = getAdjustedLog10;
-exports.raiseTo = raiseTo;
-exports.raiseToExt = raiseToExt;
-
-exports.normalizeAngle = normalizeAngle;
-exports.convertAngleToRendererSpace = convertAngleToRendererSpace;
-exports.degreesToRadians = degreesToRadians;
-exports.getCosAndSin = getCosAndSin;
-exports.getDecimalOrder = getDecimalOrder;
-exports.getAppropriateFormat = getAppropriateFormat;
-exports.getDistance = getDistance;
-
-exports.roundValue = roundValue;
-exports.getPower = getPower;
-exports.valueOf = valueOf;
-
-exports.rotateBBox = rotateBBox;
-exports.normalizeBBox = normalizeBBox;
-exports.PANE_PADDING = PANE_PADDING;
-
-exports.rangesAreEqual = rangesAreEqual;
-exports.pointInCanvas = pointInCanvas;

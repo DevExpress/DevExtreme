@@ -1,15 +1,31 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
 
-$button-icon-color: null !default;
-$button-border-radius: null !default;
-$button-disabled-text-opacity: null !default;
-$button-disabled-icon-opacity: null !default;
-$button-normal-color: null !default;
+$button-icon-color: $base-icon-color !default;
+$button-border-radius: $base-border-radius !default;
+$button-disabled-text-opacity: 0.5 !default;
+$button-disabled-icon-opacity: 0.6 !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
+$button-normal-color: $base-text-color !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
 $button-normal-bg: null !default;
+
+/**
+* $name 30. Border color
+* $type color
+*/
 $button-normal-border-color: null !default;
 $button-special-hover: null !default;
 $button-normal-bg-inverted: null !default;
@@ -22,8 +38,23 @@ $button-normal-outlined-bg-active: null !default;
 $button-normal-text-bg-hover: null !default;
 $button-normal-text-bg-focused: null !default;
 $button-normal-text-bg-active: null !default;
-$button-default-color: null !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
+$button-default-color: $base-inverted-text-color !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
 $button-default-bg: null !default;
+
+/**
+* $name 30. Border color
+* $type color
+*/
 $button-default-border-color: null !default;
 $button-default-contained-bg-hover: null !default;
 $button-default-contained-bg-focused: null !default;
@@ -34,8 +65,23 @@ $button-default-outlined-bg-active: null !default;
 $button-default-text-bg-hover: null !default;
 $button-default-text-bg-focused: null !default;
 $button-default-text-bg-active: null !default;
-$button-danger-color: null !default;
-$button-danger-bg: null !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
+$button-danger-color: $base-inverted-text-color !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
+$button-danger-bg: $base-danger !default;
+
+/**
+* $name 30. Border color
+* $type color
+*/
 $button-danger-border-color: null !default;
 $button-danger-contained-bg-hover: null !default;
 $button-danger-contained-bg-focused: null !default;
@@ -46,8 +92,23 @@ $button-danger-outlined-bg-active: null !default;
 $button-danger-text-bg-hover: null !default;
 $button-danger-text-bg-focused: null !default;
 $button-danger-text-bg-active: null !default;
-$button-success-color: null !default;
-$button-success-bg: null !default;
+
+/**
+* $name 10. Text color
+* $type color
+*/
+$button-success-color: $base-inverted-text-color !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
+$button-success-bg: $base-success !default;
+
+/**
+* $name 30. Border color
+* $type color
+*/
 $button-success-border-color: null !default;
 $button-success-contained-bg-hover: null !default;
 $button-success-contained-bg-focused: null !default;
@@ -61,1037 +122,375 @@ $button-success-text-bg-active: null !default;
 
 
 @if $color == "carmine" {
-
-
-  $button-icon-color: $base-icon-color !default;
-  $button-border-radius: $base-border-radius !default;
-  $button-disabled-text-opacity: 0.5 !default;
-  $button-disabled-icon-opacity: 0.6 !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-normal-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-normal-bg: $base-element-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-normal-border-color: darken($base-border-color, 17%) !default; // #dee1e3 => #b1b7bd
   $button-special-hover: transparent !default;
-
   $button-normal-bg-inverted: darken($button-normal-bg, 100%) !default;
-
   $button-normal-contained-bg-hover: darken($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: darken($button-normal-bg, 8%) !default;
   $button-normal-contained-bg-active: darken($button-normal-bg, 24%) !default;
-
   $button-normal-outlined-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-outlined-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-outlined-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
   $button-normal-text-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-text-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-text-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-default-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-default-bg: $base-accent !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-default-border-color: darken($base-accent, 5%) !default;
-
   $button-default-contained-bg-hover: darken($button-default-bg, 9%) !default;
   $button-default-contained-bg-focused: darken($button-default-bg, 12%) !default;
   $button-default-contained-bg-active: darken($button-default-bg, 23%) !default;
-
   $button-default-outlined-bg-hover: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-focused: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-active: color.change($button-default-border-color, $alpha: 0.4) !default;
-
   $button-default-text-bg-hover: $button-default-outlined-bg-hover !default;
   $button-default-text-bg-focused: $button-default-outlined-bg-focused !default;
   $button-default-text-bg-active: $button-default-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-danger-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-danger-bg: $base-danger !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-danger-border-color: darken($base-danger, 5%) !default;
-
   $button-danger-contained-bg-hover: darken($button-danger-bg, 9%) !default;
   $button-danger-contained-bg-focused: darken($button-danger-bg, 12%) !default;
   $button-danger-contained-bg-active: darken($button-danger-bg, 23%) !default;
-
   $button-danger-outlined-bg-hover: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-focused: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-active: color.change($button-danger-border-color, $alpha: 0.4) !default;
-
   $button-danger-text-bg-hover: $button-danger-outlined-bg-hover !default;
   $button-danger-text-bg-focused: $button-danger-outlined-bg-focused !default;
   $button-danger-text-bg-active: $button-danger-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-success-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-success-bg: $base-success !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-success-border-color: darken($base-success, 5%) !default;
-
   $button-success-contained-bg-hover: darken($button-success-bg, 9%) !default;
   $button-success-contained-bg-focused: darken($button-success-bg, 12%) !default;
   $button-success-contained-bg-active: darken($button-success-bg, 23%) !default;
-
   $button-success-outlined-bg-hover: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-focused: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-active: color.change($button-success-border-color, $alpha: 0.4) !default;
-
   $button-success-text-bg-hover: $button-success-outlined-bg-hover !default;
   $button-success-text-bg-focused: $button-success-outlined-bg-focused !default;
   $button-success-text-bg-active: $button-success-outlined-bg-active !default;
 }
 
 @if $color == "contrast" {
-
-
-  $button-icon-color: $base-icon-color !default;
-
-
-  $button-border-radius: $base-border-radius !default;
-
-  $button-disabled-text-opacity: 0.5 !default;
-  $button-disabled-icon-opacity: 0.6 !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-normal-color: $base-text-color !default;
   $button-normal-border-color: $base-border-color !default;
   $button-normal-bg: $base-bg !default;
   $button-special-hover: $base-accent !default;
-
   $button-normal-contained-bg-hover: $base-hover-color !default;
   $button-normal-contained-bg-focused: $base-focus-color !default;
   $button-normal-contained-bg-active: $button-normal-bg !default;
-
   $button-normal-outlined-bg-hover: $base-hover-color !default;
   $button-normal-outlined-bg-focused: $base-focus-color !default;
   $button-normal-outlined-bg-active: $button-normal-bg !default;
-
   $button-normal-text-bg-hover: $base-hover-color !default;
   $button-normal-text-bg-focused: $base-focus-color !default;
   $button-normal-text-bg-active: $button-normal-bg !default;
-
-
   $button-default-border-color: $base-default !default;
   $button-default-bg: $base-default !default;
-  $button-default-color: $base-inverted-text-color !default;
-
   $button-default-contained-bg-hover: $base-inverted-bg !default;
   $button-default-contained-bg-focused: $base-inverted-bg !default;
   $button-default-contained-bg-active: $button-default-bg !default;
-
   $button-default-outlined-bg-hover: $base-inverted-bg !default;
   $button-default-outlined-bg-focused: $base-inverted-bg !default;
   $button-default-outlined-bg-active: $button-default-bg !default;
-
   $button-default-text-bg-hover: $base-inverted-bg !default;
   $button-default-text-bg-focused: $base-inverted-bg !default;
   $button-default-text-bg-active: $button-default-bg !default;
-
-
   $button-danger-border-color: $base-danger !default;
-  $button-danger-bg: $base-danger !default;
-  $button-danger-color: $base-inverted-text-color !default;
-
   $button-danger-contained-bg-hover: $base-inverted-bg !default;
   $button-danger-contained-bg-focused: $base-inverted-bg !default;
   $button-danger-contained-bg-active: $button-danger-bg !default;
-
   $button-danger-outlined-bg-hover: $base-inverted-bg !default;
   $button-danger-outlined-bg-focused: $base-inverted-bg !default;
   $button-danger-outlined-bg-active: $button-danger-bg !default;
-
   $button-danger-text-bg-hover: $base-inverted-bg !default;
   $button-danger-text-bg-focused: $base-inverted-bg !default;
   $button-danger-text-bg-active: $button-danger-bg !default;
-
-
   $button-success-border-color: $base-success !default;
-  $button-success-bg: $base-success !default;
-  $button-success-color: $base-inverted-text-color !default;
-
   $button-success-contained-bg-hover: $base-inverted-bg !default;
   $button-success-contained-bg-focused: $base-inverted-bg !default;
   $button-success-contained-bg-active: $button-success-bg !default;
-
   $button-success-outlined-bg-hover: $base-inverted-bg !default;
   $button-success-outlined-bg-focused: $base-inverted-bg !default;
   $button-success-outlined-bg-active: $button-success-bg !default;
-
   $button-success-text-bg-hover: $base-inverted-bg !default;
   $button-success-text-bg-focused: $base-inverted-bg !default;
   $button-success-text-bg-active: $button-success-bg !default;
 }
 
 @if $color == "dark" {
-
-
-  $button-icon-color: $base-icon-color !default;
-  $button-border-radius: $base-border-radius !default;
-  $button-disabled-text-opacity: 0.5 !default;
-  $button-disabled-icon-opacity: 0.6 !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-normal-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-normal-bg: $base-element-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-normal-border-color: $base-border-color !default;
   $button-special-hover: transparent !default;
-
   $button-normal-bg-inverted: lighten($button-normal-bg, 100%) !default;
-
   $button-normal-contained-bg-hover: lighten($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: lighten($button-normal-bg, 8%) !default;
   $button-normal-contained-bg-active: lighten($button-normal-bg, 24%) !default;
-
   $button-normal-outlined-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-outlined-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-outlined-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
   $button-normal-text-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-text-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-text-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-default-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-default-bg: $base-accent !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-default-border-color: darken($base-accent, 5%) !default;
-
   $button-default-contained-bg-hover: lighten($button-default-bg, 9%) !default;
   $button-default-contained-bg-focused: lighten($button-default-bg, 12%) !default;
   $button-default-contained-bg-active: lighten($button-default-bg, 23%) !default;
-
   $button-default-outlined-bg-hover: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-focused: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-active: color.change($button-default-border-color, $alpha: 0.4) !default;
-
   $button-default-text-bg-hover: $button-default-outlined-bg-hover !default;
   $button-default-text-bg-focused: $button-default-outlined-bg-focused !default;
   $button-default-text-bg-active: $button-default-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-danger-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-danger-bg: $base-danger !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-danger-border-color: darken($base-danger, 5%) !default;
-
   $button-danger-contained-bg-hover: lighten($button-danger-bg, 9%) !default;
   $button-danger-contained-bg-focused: lighten($button-danger-bg, 12%) !default;
   $button-danger-contained-bg-active: lighten($button-danger-bg, 23%) !default;
-
   $button-danger-outlined-bg-hover: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-focused: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-active: color.change($button-danger-border-color, $alpha: 0.4) !default;
-
   $button-danger-text-bg-hover: $button-danger-outlined-bg-hover !default;
   $button-danger-text-bg-focused: $button-danger-outlined-bg-focused !default;
   $button-danger-text-bg-active: $button-danger-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-success-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-success-bg: $base-success !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-success-border-color: darken($base-success, 5%) !default;
-
   $button-success-contained-bg-hover: lighten($button-success-bg, 9%) !default;
   $button-success-contained-bg-focused: lighten($button-success-bg, 12%) !default;
   $button-success-contained-bg-active: lighten($button-success-bg, 23%) !default;
-
   $button-success-outlined-bg-hover: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-focused: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-active: color.change($button-success-border-color, $alpha: 0.4) !default;
-
   $button-success-text-bg-hover: $button-success-outlined-bg-hover !default;
   $button-success-text-bg-focused: $button-success-outlined-bg-focused !default;
   $button-success-text-bg-active: $button-success-outlined-bg-active !default;
 }
 
 @if $color == "darkmoon" {
-
-
-  $button-icon-color: $base-icon-color !default;
-  $button-border-radius: $base-border-radius !default;
-  $button-disabled-text-opacity: 0.5 !default;
-  $button-disabled-icon-opacity: 0.6 !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-normal-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-normal-bg: $base-element-bg !default;
-
-  /**
-    * $name 20. Border color
-    * $type color
-    */
   $button-normal-border-color: lighten($base-border-color, 13%) !default;
   $button-special-hover: transparent !default;
-
   $button-normal-bg-inverted: lighten($button-normal-bg, 100%) !default;
-
   $button-normal-contained-bg-hover: lighten($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: lighten($button-normal-bg, 8%) !default;
   $button-normal-contained-bg-active: lighten($button-normal-bg, 24%) !default;
-
   $button-normal-outlined-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-outlined-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-outlined-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
   $button-normal-text-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-text-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-text-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-default-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-default-bg: $base-accent !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-default-border-color: darken($base-accent, 5%) !default;
-
   $button-default-contained-bg-hover: lighten($button-default-bg, 9%) !default;
   $button-default-contained-bg-focused: lighten($button-default-bg, 12%) !default;
   $button-default-contained-bg-active: lighten($button-default-bg, 23%) !default;
-
   $button-default-outlined-bg-hover: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-focused: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-active: color.change($button-default-border-color, $alpha: 0.4) !default;
-
   $button-default-text-bg-hover: $button-default-outlined-bg-hover !default;
   $button-default-text-bg-focused: $button-default-outlined-bg-focused !default;
   $button-default-text-bg-active: $button-default-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-danger-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-danger-bg: $base-danger !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-danger-border-color: darken($base-danger, 5%) !default;
-
   $button-danger-contained-bg-hover: lighten($button-danger-bg, 9%) !default;
   $button-danger-contained-bg-focused: lighten($button-danger-bg, 12%) !default;
   $button-danger-contained-bg-active: lighten($button-danger-bg, 23%) !default;
-
   $button-danger-outlined-bg-hover: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-focused: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-active: color.change($button-danger-border-color, $alpha: 0.4) !default;
-
   $button-danger-text-bg-hover: $button-danger-outlined-bg-hover !default;
   $button-danger-text-bg-focused: $button-danger-outlined-bg-focused !default;
   $button-danger-text-bg-active: $button-danger-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-success-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-success-bg: $base-success !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-success-border-color: darken($base-success, 5%) !default;
-
   $button-success-contained-bg-hover: lighten($button-success-bg, 9%) !default;
   $button-success-contained-bg-focused: lighten($button-success-bg, 12%) !default;
   $button-success-contained-bg-active: lighten($button-success-bg, 23%) !default;
-
   $button-success-outlined-bg-hover: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-focused: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-active: color.change($button-success-border-color, $alpha: 0.4) !default;
-
   $button-success-text-bg-hover: $button-success-outlined-bg-hover !default;
   $button-success-text-bg-focused: $button-success-outlined-bg-focused !default;
   $button-success-text-bg-active: $button-success-outlined-bg-active !default;
 }
 
 @if $color == "darkviolet" {
-
-
-  $button-icon-color: $base-icon-color !default;
-  $button-border-radius: $base-border-radius !default;
-  $button-disabled-text-opacity: 0.5 !default;
-  $button-disabled-icon-opacity: 0.6 !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-normal-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-normal-bg: #303038 !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-normal-border-color: $base-hover-bg !default;
   $button-special-hover: transparent !default;
-
   $button-normal-bg-inverted: lighten($button-normal-bg, 100%) !default;
-
   $button-normal-contained-bg-hover: lighten($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: lighten($button-normal-bg, 8%) !default;
   $button-normal-contained-bg-active: lighten($button-normal-bg, 24%) !default;
-
   $button-normal-outlined-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-outlined-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-outlined-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
   $button-normal-text-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-text-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-text-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-default-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-default-bg: $base-accent !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-default-border-color: darken($base-accent, 5%) !default;
-
   $button-default-contained-bg-hover: lighten($button-default-bg, 9%) !default;
   $button-default-contained-bg-focused: lighten($button-default-bg, 12%) !default;
   $button-default-contained-bg-active: lighten($button-default-bg, 23%) !default;
-
   $button-default-outlined-bg-hover: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-focused: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-active: color.change($button-default-border-color, $alpha: 0.4) !default;
-
   $button-default-text-bg-hover: $button-default-outlined-bg-hover !default;
   $button-default-text-bg-focused: $button-default-outlined-bg-focused !default;
   $button-default-text-bg-active: $button-default-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-danger-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-danger-bg: $base-danger !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-danger-border-color: darken($base-danger, 5%) !default;
-
   $button-danger-contained-bg-hover: lighten($button-danger-bg, 9%) !default;
   $button-danger-contained-bg-focused: lighten($button-danger-bg, 12%) !default;
   $button-danger-contained-bg-active: lighten($button-danger-bg, 23%) !default;
-
   $button-danger-outlined-bg-hover: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-focused: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-active: color.change($button-danger-border-color, $alpha: 0.4) !default;
-
   $button-danger-text-bg-hover: $button-danger-outlined-bg-hover !default;
   $button-danger-text-bg-focused: $button-danger-outlined-bg-focused !default;
   $button-danger-text-bg-active: $button-danger-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-success-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-success-bg: $base-success !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-success-border-color: darken($base-success, 5%) !default;
-
   $button-success-contained-bg-hover: lighten($button-success-bg, 9%) !default;
   $button-success-contained-bg-focused: lighten($button-success-bg, 12%) !default;
   $button-success-contained-bg-active: lighten($button-success-bg, 23%) !default;
-
   $button-success-outlined-bg-hover: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-focused: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-active: color.change($button-success-border-color, $alpha: 0.4) !default;
-
   $button-success-text-bg-hover: $button-success-outlined-bg-hover !default;
   $button-success-text-bg-focused: $button-success-outlined-bg-focused !default;
   $button-success-text-bg-active: $button-success-outlined-bg-active !default;
 }
 
 @if $color == "greenmist" {
-
-
-  $button-icon-color: $base-icon-color !default;
-  $button-border-radius: $base-border-radius !default;
-  $button-disabled-text-opacity: 0.5 !default;
-  $button-disabled-icon-opacity: 0.6 !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-normal-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-normal-bg: $base-element-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-normal-border-color: lighten($base-label-color, 16.5%) !default;
   $button-special-hover: transparent !default;
-
   $button-normal-bg-inverted: darken($button-normal-bg, 100%) !default;
-
   $button-normal-contained-bg-hover: darken($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: darken($button-normal-bg, 8%) !default;
   $button-normal-contained-bg-active: darken($button-normal-bg, 24%) !default;
-
   $button-normal-outlined-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-outlined-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-outlined-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
   $button-normal-text-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-text-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-text-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-default-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-default-bg: $base-accent !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-default-border-color: darken($base-accent, 5%) !default;
-
   $button-default-contained-bg-hover: darken($button-default-bg, 9%) !default;
   $button-default-contained-bg-focused: darken($button-default-bg, 12%) !default;
   $button-default-contained-bg-active: darken($button-default-bg, 23%) !default;
-
   $button-default-outlined-bg-hover: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-focused: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-active: color.change($button-default-border-color, $alpha: 0.4) !default;
-
   $button-default-text-bg-hover: $button-default-outlined-bg-hover !default;
   $button-default-text-bg-focused: $button-default-outlined-bg-focused !default;
   $button-default-text-bg-active: $button-default-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-danger-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-danger-bg: $base-danger !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-danger-border-color: darken($base-danger, 5%) !default;
-
   $button-danger-contained-bg-hover: darken($button-danger-bg, 9%) !default;
   $button-danger-contained-bg-focused: darken($button-danger-bg, 12%) !default;
   $button-danger-contained-bg-active: darken($button-danger-bg, 23%) !default;
-
   $button-danger-outlined-bg-hover: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-focused: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-active: color.change($button-danger-border-color, $alpha: 0.4) !default;
-
   $button-danger-text-bg-hover: $button-danger-outlined-bg-hover !default;
   $button-danger-text-bg-focused: $button-danger-outlined-bg-focused !default;
   $button-danger-text-bg-active: $button-danger-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-success-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-success-bg: $base-success !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-success-border-color: darken($base-success, 5%) !default;
-
   $button-success-contained-bg-hover: darken($button-success-bg, 9%) !default;
   $button-success-contained-bg-focused: darken($button-success-bg, 12%) !default;
   $button-success-contained-bg-active: darken($button-success-bg, 23%) !default;
-
   $button-success-outlined-bg-hover: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-focused: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-active: color.change($button-success-border-color, $alpha: 0.4) !default;
-
   $button-success-text-bg-hover: $button-success-outlined-bg-hover !default;
   $button-success-text-bg-focused: $button-success-outlined-bg-focused !default;
   $button-success-text-bg-active: $button-success-outlined-bg-active !default;
 }
 
 @if $color == "light" {
-
-
-  $button-icon-color: $base-icon-color !default;
-  $button-border-radius: $base-border-radius !default;
-  $button-disabled-text-opacity: 0.5 !default;
-  $button-disabled-icon-opacity: 0.6 !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-normal-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-normal-bg: $base-element-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-normal-border-color: $base-border-color !default; // #dee1e3 => #b1b7bd
   $button-special-hover: transparent !default;
-
   $button-normal-bg-inverted: darken($button-normal-bg, 100%) !default;
-
   $button-normal-contained-bg-hover: darken($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: darken($button-normal-bg, 8%) !default;
   $button-normal-contained-bg-active: darken($button-normal-bg, 24%) !default;
-
   $button-normal-outlined-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-outlined-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-outlined-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
   $button-normal-text-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-text-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-text-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-default-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-default-bg: $base-accent !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-default-border-color: darken($base-accent, 5%) !default;
-
   $button-default-contained-bg-hover: darken($button-default-bg, 9%) !default;
   $button-default-contained-bg-focused: darken($button-default-bg, 12%) !default;
   $button-default-contained-bg-active: darken($button-default-bg, 23%) !default;
-
   $button-default-outlined-bg-hover: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-focused: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-active: color.change($button-default-border-color, $alpha: 0.4) !default;
-
   $button-default-text-bg-hover: $button-default-outlined-bg-hover !default;
   $button-default-text-bg-focused: $button-default-outlined-bg-focused !default;
   $button-default-text-bg-active: $button-default-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-danger-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-danger-bg: $base-danger !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-danger-border-color: darken($base-danger, 5%) !default;
-
   $button-danger-contained-bg-hover: darken($button-danger-bg, 9%) !default;
   $button-danger-contained-bg-focused: darken($button-danger-bg, 12%) !default;
   $button-danger-contained-bg-active: darken($button-danger-bg, 23%) !default;
-
   $button-danger-outlined-bg-hover: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-focused: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-active: color.change($button-danger-border-color, $alpha: 0.4) !default;
-
   $button-danger-text-bg-hover: $button-danger-outlined-bg-hover !default;
   $button-danger-text-bg-focused: $button-danger-outlined-bg-focused !default;
   $button-danger-text-bg-active: $button-danger-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-success-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-success-bg: $base-success !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-success-border-color: darken($base-success, 5%) !default;
-
   $button-success-contained-bg-hover: darken($button-success-bg, 9%) !default;
   $button-success-contained-bg-focused: darken($button-success-bg, 12%) !default;
   $button-success-contained-bg-active: darken($button-success-bg, 23%) !default;
-
   $button-success-outlined-bg-hover: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-focused: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-active: color.change($button-success-border-color, $alpha: 0.4) !default;
-
   $button-success-text-bg-hover: $button-success-outlined-bg-hover !default;
   $button-success-text-bg-focused: $button-success-outlined-bg-focused !default;
   $button-success-text-bg-active: $button-success-outlined-bg-active !default;
 }
 
 @if $color == "softblue" {
-
-
-  $button-icon-color: $base-icon-color !default;
-  $button-border-radius: $base-border-radius !default;
-  $button-disabled-text-opacity: 0.5 !default;
-  $button-disabled-icon-opacity: 0.6 !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-normal-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-normal-bg: $base-element-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-normal-border-color: darken($base-border-color, 11%) !default; // #dee1e3 => #b1b7bd
   $button-special-hover: transparent !default;
-
   $button-normal-bg-inverted: darken($button-normal-bg, 100%) !default;
-
   $button-normal-contained-bg-hover: darken($button-normal-bg, 4%) !default;
   $button-normal-contained-bg-focused: darken($button-normal-bg, 8%) !default;
   $button-normal-contained-bg-active: darken($button-normal-bg, 24%) !default;
-
   $button-normal-outlined-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-outlined-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-outlined-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
   $button-normal-text-bg-hover: color.change($button-normal-bg-inverted, $alpha: 0.04) !default;
   $button-normal-text-bg-focused: color.change($button-normal-bg-inverted, $alpha: 0.08) !default;
   $button-normal-text-bg-active: color.change($button-normal-bg-inverted, $alpha: 0.24) !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-default-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $button-default-bg: $base-accent !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-default-border-color: darken($base-accent, 5%) !default;
-
   $button-default-contained-bg-hover: darken($button-default-bg, 9%) !default;
   $button-default-contained-bg-focused: darken($button-default-bg, 12%) !default;
   $button-default-contained-bg-active: darken($button-default-bg, 23%) !default;
-
   $button-default-outlined-bg-hover: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-focused: color.change($button-default-border-color, $alpha: 0.1) !default;
   $button-default-outlined-bg-active: color.change($button-default-border-color, $alpha: 0.4) !default;
-
   $button-default-text-bg-hover: $button-default-outlined-bg-hover !default;
   $button-default-text-bg-focused: $button-default-outlined-bg-focused !default;
   $button-default-text-bg-active: $button-default-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-danger-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-danger-bg: $base-danger !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-danger-border-color: darken($base-danger, 5%) !default;
-
   $button-danger-contained-bg-hover: darken($button-danger-bg, 9%) !default;
   $button-danger-contained-bg-focused: darken($button-danger-bg, 12%) !default;
   $button-danger-contained-bg-active: darken($button-danger-bg, 23%) !default;
-
   $button-danger-outlined-bg-hover: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-focused: color.change($button-danger-border-color, $alpha: 0.1) !default;
   $button-danger-outlined-bg-active: color.change($button-danger-border-color, $alpha: 0.4) !default;
-
   $button-danger-text-bg-hover: $button-danger-outlined-bg-hover !default;
   $button-danger-text-bg-focused: $button-danger-outlined-bg-focused !default;
   $button-danger-text-bg-active: $button-danger-outlined-bg-active !default;
-
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
-  $button-success-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
-  $button-success-bg: $base-success !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $button-success-border-color: darken($base-success, 5%) !default;
-
   $button-success-contained-bg-hover: darken($button-success-bg, 9%) !default;
   $button-success-contained-bg-focused: darken($button-success-bg, 12%) !default;
   $button-success-contained-bg-active: darken($button-success-bg, 23%) !default;
-
   $button-success-outlined-bg-hover: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-focused: color.change($button-success-border-color, $alpha: 0.1) !default;
   $button-success-outlined-bg-active: color.change($button-success-border-color, $alpha: 0.4) !default;
-
   $button-success-text-bg-hover: $button-success-outlined-bg-hover !default;
   $button-success-text-bg-focused: $button-success-outlined-bg-focused !default;
   $button-success-text-bg-active: $button-success-outlined-bg-active !default;

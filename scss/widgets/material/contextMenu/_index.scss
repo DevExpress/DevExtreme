@@ -4,48 +4,50 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
-@use "../menuBase" as *;
 @use "../menuBase/sizes" as *;
 @use "../menu/colors" as *;
+
 // adduse
+@use "../overlay";
+@use "../menuBase" as *;
 
 
 .dx-context-menu {
   .dx-menu-item {
-    font-size: $MATERIAL_CONTEXT_MENU_FONT_SIZE;
+    font-size: $material-context-menu-font-size;
     color: $base-text-color;
 
     .dx-menu-item-content {
-      padding: 3px $MATERIAL_CONTEXT_MENU_HORIZONTAL_PADDING 4px;
+      padding: 3px $material-context-menu-horizontal-padding 4px;
 
       .dx-menu-item-popout-container {
-        right: $MATERIAL_CONTEXT_MENU_HORIZONTAL_PADDING;
-        width: $MATERIAL_BASE_ICON_SIZE;
+        right: $material-context-menu-horizontal-padding;
+        width: $material-base-icon-size;
 
         .dx-menu-item-popout {
           color: $base-icon-color;
 
           @include dx-icon(spinright);
-          @include dx-icon-font-centered-sizing($MATERIAL_BASE_ICON_SIZE);
+          @include dx-icon-font-centered-sizing($material-base-icon-size);
         }
       }
     }
 
     &.dx-menu-item-has-submenu > .dx-menu-item-content {
-      padding-right: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING;
+      padding-right: $material-menu-item-with-icon-horizontal-padding;
     }
 
     &.dx-menu-item-has-text {
       &.dx-menu-item-has-icon {
         .dx-icon {
-          margin-right: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING - $MATERIAL_MENU_HORIZONTAL_PADDING - $MATERIAL_BASE_ICON_SIZE;
+          margin-right: $material-menu-item-with-icon-horizontal-padding - $material-menu-horizontal-padding - $material-base-icon-size;
         }
       }
     }
   }
 
   .dx-menu-items-container {
-    padding: $MATERIAL_CONTEXT_MENU_CONTAINER_VERTICAL_PADDING 0;
+    padding: $material-context-menu-container-vertical-padding 0;
   }
 
   &.dx-overlay-content.dx-state-focused {
@@ -65,21 +67,21 @@
   &.dx-rtl {
     .dx-menu-item {
       .dx-menu-item-popout-container {
-        left: $MATERIAL_CONTEXT_MENU_HORIZONTAL_PADDING;
+        left: $material-context-menu-horizontal-padding;
       }
 
       &.dx-menu-item-has-text {
         &.dx-menu-item-has-icon {
           .dx-icon {
-            margin-left: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING - $MATERIAL_CONTEXT_MENU_HORIZONTAL_PADDING - $MATERIAL_BASE_ICON_SIZE;
+            margin-left: $material-menu-item-with-icon-horizontal-padding - $material-context-menu-horizontal-padding - $material-base-icon-size;
             margin-right: 0;
           }
         }
       }
 
       &.dx-menu-item-has-submenu > .dx-menu-item-content {
-        padding-left: $MATERIAL_MENU_ITEM_WITH_ICON_HORIZONTAL_PADDING;
-        padding-right: $MATERIAL_CONTEXT_MENU_HORIZONTAL_PADDING;
+        padding-left: $material-menu-item-with-icon-horizontal-padding;
+        padding-right: $material-context-menu-horizontal-padding;
       }
     }
   }

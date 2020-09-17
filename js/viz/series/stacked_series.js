@@ -1,14 +1,15 @@
 // there stackedline, fullstackedline, stackedbar, fullstackedbar, stackedarea, fullstackedarea
-const _noop = require('../../core/utils/common').noop;
-const _extend = require('../../core/utils/extend').extend;
-const each = require('../../core/utils/iterator').each;
-const areaSeries = require('./area_series').chart;
+import { noop as _noop } from '../../core/utils/common';
+
+import { extend as _extend } from '../../core/utils/extend';
+import { each } from '../../core/utils/iterator';
+import { chart as areaSeries } from './area_series';
 const chartAreaSeries = areaSeries.area;
-const barSeries = require('./bar_series');
+import barSeries from './bar_series';
 const chartBarSeries = barSeries.chart.bar;
-const lineSeries = require('./line_series').chart;
-const vizUtils = require('../core/utils');
-const objectUtils = require('../../core/utils/object');
+import { chart as lineSeries } from './line_series';
+import vizUtils from '../core/utils';
+import objectUtils from '../../core/utils/object';
 const baseStackedSeries = {
     _calculateErrorBars: _noop,
     _updateOptions: function(options) {
@@ -16,29 +17,29 @@ const baseStackedSeries = {
     }
 };
 
-exports.chart = {};
-exports.polar = {};
+const chart = {};
+const polar = {};
 
-exports.chart['stackedline'] = _extend({}, lineSeries.line, baseStackedSeries, { });
+chart['stackedline'] = _extend({}, lineSeries.line, baseStackedSeries, { });
 
-exports.chart['stackedspline'] = _extend({}, lineSeries['spline'], baseStackedSeries, {});
+chart['stackedspline'] = _extend({}, lineSeries['spline'], baseStackedSeries, {});
 
-exports.chart['fullstackedline'] = _extend({}, lineSeries.line, baseStackedSeries, {
+chart['fullstackedline'] = _extend({}, lineSeries.line, baseStackedSeries, {
     getValueRangeInitialValue: areaSeries.area.getValueRangeInitialValue
 });
 
-exports.chart['fullstackedspline'] = _extend({}, lineSeries['spline'], baseStackedSeries, {
+chart['fullstackedspline'] = _extend({}, lineSeries['spline'], baseStackedSeries, {
     getValueRangeInitialValue: areaSeries.area.getValueRangeInitialValue
 });
 
-const stackedBar = exports.chart['stackedbar'] = _extend({}, chartBarSeries, baseStackedSeries, {
+const stackedBar = chart['stackedbar'] = _extend({}, chartBarSeries, baseStackedSeries, {
     _updateOptions: function(options) {
         baseStackedSeries._updateOptions.call(this, options);
         this._stackName = this._stackName + '_stack_' + (options.stack || 'default');
     }
 });
 
-exports.chart['fullstackedbar'] = _extend({}, chartBarSeries, baseStackedSeries, {
+chart['fullstackedbar'] = _extend({}, chartBarSeries, baseStackedSeries, {
     _updateOptions: stackedBar._updateOptions
 });
 
@@ -74,7 +75,7 @@ function preparePointsForStackedAreaSegment(points) {
     return [].concat.apply([], result);
 }
 
-exports.chart['stackedarea'] = _extend({}, chartAreaSeries, baseStackedSeries, {
+chart['stackedarea'] = _extend({}, chartAreaSeries, baseStackedSeries, {
     _prepareSegment: function(points, rotated) {
         return chartAreaSeries._prepareSegment.call(this, preparePointsForStackedAreaSegment(points), rotated);
     },
@@ -92,7 +93,7 @@ function getPointsByArgFromPrevSeries(prevSeries, argument) {
     return result;
 }
 
-exports.chart['stackedsplinearea'] = _extend({}, areaSeries['splinearea'], baseStackedSeries, {
+chart['stackedsplinearea'] = _extend({}, areaSeries['splinearea'], baseStackedSeries, {
     _prepareSegment: function(points, rotated) {
         const that = this;
         let areaSegment;
@@ -147,17 +148,22 @@ exports.chart['stackedsplinearea'] = _extend({}, areaSeries['splinearea'], baseS
         }
         return areaSegment;
     },
-    _appendInGroup: exports.chart['stackedarea']._appendInGroup
+    _appendInGroup: chart['stackedarea']._appendInGroup
 });
 
-exports.chart['fullstackedarea'] = _extend({}, chartAreaSeries, baseStackedSeries, {
-    _prepareSegment: exports.chart['stackedarea']._prepareSegment,
-    _appendInGroup: exports.chart['stackedarea']._appendInGroup
+chart['fullstackedarea'] = _extend({}, chartAreaSeries, baseStackedSeries, {
+    _prepareSegment: chart['stackedarea']._prepareSegment,
+    _appendInGroup: chart['stackedarea']._appendInGroup
 });
 
-exports.chart['fullstackedsplinearea'] = _extend({}, areaSeries['splinearea'], baseStackedSeries, {
-    _prepareSegment: exports.chart['stackedsplinearea']._prepareSegment,
-    _appendInGroup: exports.chart['stackedarea']._appendInGroup
+chart['fullstackedsplinearea'] = _extend({}, areaSeries['splinearea'], baseStackedSeries, {
+    _prepareSegment: chart['stackedsplinearea']._prepareSegment,
+    _appendInGroup: chart['stackedarea']._appendInGroup
 });
 
-exports.polar['stackedbar'] = _extend({}, barSeries.polar.bar, baseStackedSeries, {});
+polar['stackedbar'] = _extend({}, barSeries.polar.bar, baseStackedSeries, {});
+
+export {
+    chart,
+    polar
+};

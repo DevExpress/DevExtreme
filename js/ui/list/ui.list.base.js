@@ -1,30 +1,30 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const commonUtils = require('../../core/utils/common');
-const typeUtils = require('../../core/utils/type');
-const iconUtils = require('../../core/utils/icon');
-const getPublicElement = require('../../core/element').getPublicElement;
-const each = require('../../core/utils/iterator').each;
-const compileGetter = require('../../core/utils/data').compileGetter;
-const extend = require('../../core/utils/extend').extend;
-const fx = require('../../animation/fx');
-const clickEvent = require('../../events/click');
-const swipeEvents = require('../../events/swipe');
-const support = require('../../core/utils/support');
-const messageLocalization = require('../../localization/message');
-const inkRipple = require('../widget/utils.ink_ripple');
-const devices = require('../../core/devices');
-const ListItem = require('./item');
-const Button = require('../button');
-const eventUtils = require('../../events/utils');
-const themes = require('../themes');
-const windowUtils = require('../../core/utils/window');
-let ScrollView = require('../scroll_view');
-const deviceDependentOptions = require('../scroll_view/ui.scrollable').deviceDependentOptions;
-const CollectionWidget = require('../collection/ui.collection_widget.live_update').default;
-const BindableTemplate = require('../../core/templates/bindable_template').BindableTemplate;
-const Deferred = require('../../core/utils/deferred').Deferred;
-const DataConverterMixin = require('../shared/grouped_data_converter_mixin').default;
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import { ensureDefined, noop } from '../../core/utils/common';
+import { isPlainObject } from '../../core/utils/type';
+import iconUtils from '../../core/utils/icon';
+import { getPublicElement } from '../../core/element';
+import { each } from '../../core/utils/iterator';
+import { compileGetter } from '../../core/utils/data';
+import { extend } from '../../core/utils/extend';
+import fx from '../../animation/fx';
+import { name as clickEventName } from '../../events/click';
+import { end as swipeEventEnd } from '../../events/swipe';
+import support from '../../core/utils/support';
+import messageLocalization from '../../localization/message';
+import inkRipple from '../widget/utils.ink_ripple';
+import devices from '../../core/devices';
+import ListItem from './item';
+import Button from '../button';
+import eventUtils from '../../events/utils';
+import themes from '../themes';
+import { hasWindow } from '../../core/utils/window';
+import ScrollView from '../scroll_view';
+import { deviceDependentOptions } from '../scroll_view/ui.scrollable.device';
+import CollectionWidget from '../collection/ui.collection_widget.live_update';
+import { BindableTemplate } from '../../core/templates/bindable_template';
+import { Deferred } from '../../core/utils/deferred';
+import DataConverterMixin from '../shared/grouped_data_converter_mixin';
 
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -47,7 +47,9 @@ const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
 
 const groupItemsGetter = compileGetter('items');
 
-const ListBase = CollectionWidget.inherit({
+let _scrollView;
+
+export const ListBase = CollectionWidget.inherit({
 
     _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(','),
 
@@ -107,8 +109,8 @@ const ListBase = CollectionWidget.inherit({
         }
 
         return extend(this.callBase(), {
-            leftArrow: commonUtils.noop,
-            rightArrow: commonUtils.noop,
+            leftArrow: noop,
+            rightArrow: noop,
             pageUp: function() {
                 moveFocusPerPage('prev');
                 return false;
@@ -191,6 +193,7 @@ const ListBase = CollectionWidget.inherit({
 
             wrapItemText: false,
 
+            _swipeEnabled: true,
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
@@ -318,8 +321,18 @@ const ListBase = CollectionWidget.inherit({
         return true;
     },
 
+    _resetDataSourcePageIndex: function() {
+        const currentDataSource = this.getDataSource();
+
+        if(currentDataSource && currentDataSource.pageIndex() !== 0) {
+            currentDataSource.pageIndex(0);
+            currentDataSource.load();
+        }
+    },
+
     _init: function() {
         this.callBase();
+        this._resetDataSourcePageIndex();
         this._$container = this.$element();
 
         this._initScrollView();
@@ -341,7 +354,7 @@ const ListBase = CollectionWidget.inherit({
         const nextButton = this._nextButtonMode();
 
         return extend(this.callBase(), {
-            paginate: commonUtils.ensureDefined(scrollBottom || nextButton, true)
+            paginate: ensureDefined(scrollBottom || nextButton, true)
         });
     },
 
@@ -358,7 +371,7 @@ const ListBase = CollectionWidget.inherit({
         const pullRefreshEnabled = scrollingEnabled && this.option('pullRefreshEnabled');
         const autoPagingEnabled = scrollingEnabled && this._scrollBottomMode() && !!this._dataSource;
 
-        this._scrollView = this._createComponent(this.$element(), ScrollView, {
+        this._scrollView = this._createComponent(this.$element(), getScrollView(), {
             disabled: this.option('disabled') || !scrollingEnabled,
             onScroll: this._scrollHandler.bind(this),
             onPullDown: pullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
@@ -397,7 +410,7 @@ const ListBase = CollectionWidget.inherit({
     _initTemplates: function() {
         this._templateManager.addDefaultTemplates({
             group: new BindableTemplate(function($container, data) {
-                if(typeUtils.isPlainObject(data)) {
+                if(isPlainObject(data)) {
                     if(data.key) {
                         $container.text(data.key);
                     }
@@ -464,7 +477,7 @@ const ListBase = CollectionWidget.inherit({
     },
 
     _dataSourceChangedHandler: function(newItems) {
-        if(!this._shouldAppendItems() && windowUtils.hasWindow()) {
+        if(!this._shouldAppendItems() && hasWindow()) {
             this._scrollView && this._scrollView.scrollTo(0);
         }
 
@@ -542,7 +555,7 @@ const ListBase = CollectionWidget.inherit({
     },
 
     _attachGroupCollapseEvent: function() {
-        const eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
+        const eventName = eventUtils.addNamespace(clickEventName, this.NAME);
         const selector = '.' + LIST_GROUP_HEADER_CLASS;
         const $element = this.$element();
         const collapsibleGroups = this.option('collapsibleGroups');
@@ -650,14 +663,13 @@ const ListBase = CollectionWidget.inherit({
         this._refreshItemElements();
         this.callBase.apply(this, arguments);
 
-        if(this.option('onItemSwipe')) {
+        if(this.option('_swipeEnabled')) {
             this._attachSwipeEvent($(args.itemElement));
         }
     },
 
     _attachSwipeEvent: function($itemElement) {
-        const endEventName = eventUtils.addNamespace(swipeEvents.end, this.NAME);
-
+        const endEventName = eventUtils.addNamespace(swipeEventEnd, this.NAME);
         eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
     },
 
@@ -815,7 +827,7 @@ const ListBase = CollectionWidget.inherit({
     },
 
     _refresh: function() {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             this.callBase();
         } else {
             const scrollTop = this._scrollView.scrollTop();
@@ -838,7 +850,6 @@ const ListBase = CollectionWidget.inherit({
             case 'pulledDownText':
             case 'refreshingText':
             case 'pageLoadingText':
-            case 'useNative':
             case 'showScrollbar':
             case 'bounceEnabled':
             case 'scrollByContent':
@@ -889,6 +900,8 @@ const ListBase = CollectionWidget.inherit({
             case 'showChevronExpr':
             case 'badgeExpr':
                 this._invalidate();
+                break;
+            case '_swipeEnabled':
                 break;
             case '_listAttributes':
                 break;
@@ -991,10 +1004,10 @@ const ListBase = CollectionWidget.inherit({
 
 ListBase.ItemClass = ListItem;
 
-module.exports = ListBase;
+function getScrollView() {
+    return _scrollView || ScrollView;
+}
 
-///#DEBUG
-module.exports.mockScrollView = function(Mock) {
-    ScrollView = Mock;
-};
-///#ENDDEBUG
+export function setScrollView(value) {
+    _scrollView = value;
+}

@@ -1,5 +1,5 @@
-const _extend = require('../../core/utils/extend').extend;
-const isFunction = require('../../core/utils/type').isFunction;
+import { extend as _extend } from '../../core/utils/extend';
+import { isFunction } from '../../core/utils/type';
 const defaultCustomizeLinkTooltip = function(info) {
     return { html: `<strong>${info.source} > ${info.target}</strong><br/>Weight: ${info.weight}` };
 };

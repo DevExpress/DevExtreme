@@ -1,7 +1,6 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
-import dataUtils from '../core/element_data';
-import typeUtils from '../core/utils/type';
+import { data as elementData } from '../core/element_data';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import browser from '../core/utils/browser';
@@ -23,6 +22,9 @@ import { normalizeLoadResult } from '../data/data_source/utils';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
+import { allowScroll } from './text_box/utils.scroll';
+
+// STYLE tagBox
 
 const TAGBOX_TAG_DATA_KEY = 'dxTagData';
 
@@ -39,6 +41,7 @@ const TAGBOX_TAG_CONTENT_CLASS = 'dx-tag-content';
 const TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = 'dx-tagbox-default-template';
 const TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = 'dx-tagbox-custom-template';
 const NATIVE_CLICK_CLASS = 'dx-native-click';
+const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 const TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -154,6 +157,13 @@ const TagBox = SelectBox.inherit({
                 !this.option('multiline') && this._scrollContainer(direction);
             }
         });
+    },
+
+    _updateTagsContainer: function($element) {
+        this._$tagsContainer = $element
+            .addClass(TAGBOX_TAG_CONTAINER_CLASS)
+            .addClass(NATIVE_CLICK_CLASS);
+        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
     },
 
     _allowSelectItemByTab: function() {
@@ -526,11 +536,14 @@ const TagBox = SelectBox.inherit({
         eventsEngine.on($element, mouseWheelEvent, this._tagContainerMouseWheelHandler.bind(this));
     },
 
-    _tagContainerMouseWheelHandler: function({ delta }) {
+    _tagContainerMouseWheelHandler: function(e) {
         const scrollLeft = this._$tagsContainer.scrollLeft();
-        this._$tagsContainer.scrollLeft(scrollLeft + delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER);
+        const delta = e.delta * TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER;
 
-        return false;
+        if(allowScroll(this._$tagsContainer, delta, true)) {
+            this._$tagsContainer.scrollLeft(scrollLeft + delta);
+            return false;
+        }
     },
 
     _renderTypingEvent: function() {
@@ -629,12 +642,7 @@ const TagBox = SelectBox.inherit({
     _renderMultiSelect: function() {
         const d = new Deferred();
 
-        this._$tagsContainer = this._$textEditorInputContainer
-            .addClass(TAGBOX_TAG_CONTAINER_CLASS)
-            .addClass(NATIVE_CLICK_CLASS);
-
-        this._$tagsContainer.parent().addClass(NATIVE_CLICK_CLASS);
-
+        this._updateTagsContainer(this._$textEditorInputContainer);
         this._renderInputSize();
         this._renderTags()
             .done(() => {
@@ -879,15 +887,17 @@ const TagBox = SelectBox.inherit({
         }
 
         if(!isPlainDataUsed) {
-            this._loadTagsData().always((items) => {
-                if(this._disposed) {
-                    d.reject();
-                    return;
-                }
+            this._loadTagsData()
+                .done((items) => {
+                    if(this._disposed) {
+                        d.reject();
+                        return;
+                    }
 
-                this._renderTagsImpl(items);
-                d.resolve();
-            });
+                    this._renderTagsImpl(items);
+                    d.resolve();
+                })
+                .fail(d.reject);
         }
 
         return d.promise();
@@ -912,7 +922,7 @@ const TagBox = SelectBox.inherit({
             let currentValue;
             for(let i = 0; i < values.length; i++) {
                 currentValue = values[i];
-                if(typeUtils.isObject(currentValue)) {
+                if(isObject(currentValue)) {
                     if(this._isValueEquals(dataItem, currentValue)) {
                         return true;
                     }
@@ -925,6 +935,12 @@ const TagBox = SelectBox.inherit({
         }, this);
 
         return selectedItems;
+    },
+
+    _integrateInput: function() {
+        this.callBase();
+        this._updateTagsContainer($(`.${TEXTEDITOR_INPUT_CONTAINER_CLASS}`));
+        this._renderTagRemoveAction();
     },
 
     _renderTagsCore: function(items) {
@@ -1039,7 +1055,7 @@ const TagBox = SelectBox.inherit({
 
         for(let i = 0; i < tagsLength; i++) {
             const $tag = $tags[i];
-            const tagData = dataUtils.data($tag, TAGBOX_TAG_DATA_KEY);
+            const tagData = elementData($tag, TAGBOX_TAG_DATA_KEY);
 
             if(value === tagData || (equalByValue(value, tagData))) {
                 result = $($tag);
@@ -1476,4 +1492,4 @@ const TagBox = SelectBox.inherit({
 
 registerComponent('dxTagBox', TagBox);
 
-module.exports = TagBox;
+export default TagBox;

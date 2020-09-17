@@ -1,2 +1,2 @@
-
-module.exports = require('./diagram/ui.diagram');
+import Diagram from './diagram/ui.diagram';
+export default Diagram;

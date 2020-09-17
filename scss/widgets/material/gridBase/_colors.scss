@@ -1,393 +1,191 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
+$datagrid-base-color: $base-text-color !default;
+$datagrid-base-background-color: $base-bg !default;
+$datagrid-border-color: $base-border-color !default;
+$datagrid-border: 1px solid $datagrid-border-color !default;
 
-$datagrid-base-color: null !default;
-$datagrid-base-background-color: null !default;
-$datagrid-border-color: null !default;
-$datagrid-border: null !default;
+/**
+* $name 20. Header text color
+* $type color
+*/
 $datagrid-columnchooser-item-color: null !default;
-$datagrid-columnchooser-hover-icon-color: null !default;
+$datagrid-columnchooser-hover-icon-color: color.change($datagrid-base-color, $alpha: 0.38) !default;
 $datagrid-block-separator-bg: null !default;
-$datagrid-columnchooser-font-weight: null !default;
-$datagrid-drag-header-border-color: null !default;
+
+/**
+* $name 25. Header text weight
+* $type select
+* $type-values 300|500|700
+*/
+$datagrid-columnchooser-font-weight: 500 !default;
+
+/**
+* $name 35. Draggable header border color
+* $type color
+*/
+$datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
 $datagrid-drag-header-shadow-color: null !default;
 $datagrid-drag-header-second-shadow-color: null !default;
-$datagrid-header-drag-bg: null !default;
-$HEADER_FILTER_COLOR: null !default;
-$HEADER_FILTER_COLOR_EMPTY: null !default;
-$datagrid-selection-bg: null !default;
-$datagrid-row-selected-border-color: null !default;
-$datagrid-row-selected-color: null !default;
-$datagrid-row-focused-color: null !default;
-$datagrid-row-focused-bg: null !default;
-$datagrid-hover-bg: null !default;
-$datagrid-row-hovered-color: null !default;
-$datagrid-menu-icon-color: null !default;
-$datagrid-cell-modified-border-color: null !default;
-$datagrid-row-removed-bg: null !default;
-$datagrid-row-invalid-faded-border-color: null !default;
-$datagrid-nodata-color: null !default;
-$datagrid-group-row-color: null !default;
-$datagrid-group-row-bg: null !default;
-$datagrid-master-detail-cell-bg: null !default;
-$datagrid-search-color: null !default;
-$datagrid-chevron-icon-color: null !default;
-$datagrid-search-bg: null !default;
-$datagrid-row-error-color: null !default;
-$datagrid-row-error-bg: null !default;
-$datagrid-link-color: null !default;
-$datagrid-focused-border-color: null !default;
-$datagrid-editor-bg: null !default;
-$datagrid-drop-highlight-bg: null !default;
-$datagrid-drop-highlight-color: null !default;
-$datagrid-columnchooser-bg: null !default;
-$datagrid-columnchooser-item-bg: null !default;
-$datagrid-row-alternation-bg: null !default;
-$datagrid-summary-color: null !default;
-$datagrid-columnchooser-message-color: null !default;
-$datagrid-summary-bg: null !default;
-$datagrid-column-separator-bg: null !default;
-$datagrid-filter-row-background-color: null !default;
-$datagrid-active-header-filter-icon-color: null !default;
-$datagrid-text-stub-background-image-path: null !default;
-$datagrid-filter-panel-color: null !default;
+$datagrid-header-drag-bg: $datagrid-base-background-color !default;
+$header-filter-color: null !default;
+$header-filter-color-empty: null !default;
 
+/**
+* $name 55. Selected row background color
+* $type color
+*/
+$datagrid-selection-bg: null !default;
+
+/**
+* $name 60. Selected row border color
+* $type color
+*/
+$datagrid-row-selected-border-color: $datagrid-border-color !default;
+
+/**
+* $name 50. Selected row text color
+* $type color
+*/
+$datagrid-row-selected-color: $datagrid-base-color !default;
+
+/**
+* $name 65. Focused row text color
+* $type color
+*/
+$datagrid-row-focused-color: $base-inverted-text-color !default;
+
+/**
+* $name 70. Focused row background color
+* $type color
+*/
+$datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
+$datagrid-hover-bg: $base-hover-bg !default;
+$datagrid-row-hovered-color: $base-hover-color !default;
+
+/**
+* $name 30. Context menu icons color
+* $type color
+*/
+$datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
+
+/**
+* $name 40. Modified data background color
+* $type color
+*/
+$datagrid-cell-modified-border-color: color.change($base-success, $alpha: 0.32) !default;
+$datagrid-row-removed-bg: color.change($base-success, $alpha: 0.32) !default;
+
+/**
+* $name 45. Invalidate data faded color
+* $type color
+*/
+$datagrid-row-invalid-faded-border-color: color.change($base-invalid-faded-border-color, $alpha: 0.32) !default;
+$datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
+
+/**
+* $name 90. Group row text color
+* $type color
+*/
+$datagrid-group-row-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
+
+/**
+* $name 95. Group row background color
+* $type color
+*/
+$datagrid-group-row-bg: color.change($datagrid-base-background-color, $alpha: 1) !default;
+$datagrid-master-detail-cell-bg: darken($datagrid-base-background-color, 2%) !default;
+
+/**
+* $name 105. Highlighted text color
+* $type color
+*/
+$datagrid-search-color: $base-inverted-text-color !default;
+$datagrid-chevron-icon-color: lighten($base-spin-icon-color, 38.5%) !default;
+
+/**
+* $name 110. Highlighted text background color
+* $type color
+*/
+$datagrid-search-bg: $base-accent !default;
+
+/**
+* $name 115. Error row text color
+* $type color
+*/
+$datagrid-row-error-color: null !default;
+
+/**
+* $name 120. Error row background color
+* $type color
+*/
+$datagrid-row-error-bg: mix($base-invalid-color, $datagrid-base-background-color, 60%) !default;
+$datagrid-link-color: $base-link-color !default;
+
+/**
+* $name 75. Focused cell border color
+* $type color
+*/
+$datagrid-focused-border-color: mix($base-bg, $base-accent, 20%) !default;
+
+/**
+* $name 80. Editor background
+* $type color
+*/
+$datagrid-editor-bg: color.change($datagrid-base-background-color, $alpha: 0) !default;
+$datagrid-drop-highlight-bg: $base-accent !default;
+$datagrid-drop-highlight-color: $base-inverted-text-color !default;
+$datagrid-columnchooser-bg: $base-element-bg !default;
+$datagrid-columnchooser-item-bg: null !default;
+
+/**
+* $name 85. Row alternation background color
+* $type color
+*/
+$datagrid-row-alternation-bg: null !default;
+
+/**
+* $name 100. Summary item color
+* $type color
+*/
+$datagrid-summary-color: color.change($datagrid-base-color, $alpha: 0.7) !default;
+$datagrid-columnchooser-message-color: lighten($datagrid-base-color, 40%) !default;
+$datagrid-summary-bg: $datagrid-base-background-color !default;
+$datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
+$datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
+$datagrid-active-header-filter-icon-color: $base-accent !default;
+$datagrid-text-stub-background-image-path: null !default;
+$datagrid-filter-panel-color: $base-accent !default;
 
 @if $mode == "light" {
-
-
-  $datagrid-base-color: $base-text-color !default;
-  $datagrid-base-background-color: $base-bg !default;
-  $datagrid-border-color: $base-border-color !default;
-  $datagrid-border: 1px solid $datagrid-border-color !default;
-
-  /**
-    * $name 20. Header text color
-    * $type color
-    */
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
-  $datagrid-columnchooser-hover-icon-color: color.change($datagrid-base-color, $alpha: 0.38) !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
-
-  /**
-    * $name 25. Header text weight
-    * $type select
-    * $typeValues 300|500|700
-    */
-  $datagrid-columnchooser-font-weight: 500 !default;
-
-  /**
-    * $name 35. Draggable header border color
-    * $type color
-    */
-  $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.1) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
-  $datagrid-header-drag-bg: $datagrid-base-background-color !default;
-
-  $HEADER_FILTER_COLOR: $datagrid-columnchooser-item-color !default;
-  $HEADER_FILTER_COLOR_EMPTY: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
-
-  /**
-    * $name 55. Selected row background color
-    * $type color
-    */
+  $header-filter-color: $datagrid-columnchooser-item-color !default;
+  $header-filter-color-empty: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
   $datagrid-selection-bg: color.change($base-accent, $alpha: 0.04) !default;
-
-  /**
-    * $name 60. Selected row border color
-    * $type color
-    */
-  $datagrid-row-selected-border-color: $datagrid-border-color !default;
-
-  /**
-    * $name 50. Selected row text color
-    * $type color
-    */
-  $datagrid-row-selected-color: $datagrid-base-color !default;
-
-  /**
-    * $name 65. Focused row text color
-    * $type color
-    */
-  $datagrid-row-focused-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 70. Focused row background color
-    * $type color
-    */
-  $datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
-  $datagrid-hover-bg: $base-hover-bg !default;
-  $datagrid-row-hovered-color: $datagrid-base-color !default;
-
-  /**
-    * $name 30. Context menu icons color
-    * $type color
-    */
-  $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
-
-  /**
-    * $name 40. Modified data background color
-    * $type color
-    */
-  $datagrid-cell-modified-border-color: color.change($base-success, $alpha: 0.32) !default;
-  $datagrid-row-removed-bg: color.change($base-success, $alpha: 0.32) !default;
-
-  /**
-    * $name 45. Invalidate data faded color
-    * $type color
-    */
-  $datagrid-row-invalid-faded-border-color: color.change($base-invalid-faded-border-color, $alpha: 0.32) !default;
-  $datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
-
-  /**
-    * $name 90. Group row text color
-    * $type color
-    */
-  $datagrid-group-row-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
-
-  /**
-    * $name 95. Group row background color
-    * $type color
-    */
-  $datagrid-group-row-bg: color.change($datagrid-base-background-color, $alpha: 1) !default;
-
-  $datagrid-master-detail-cell-bg: darken($datagrid-base-background-color, 2%) !default;
-
-  /**
-    * $name 105. Highlighted text color
-    * $type color
-    */
-  $datagrid-search-color: $base-inverted-text-color !default;
-  $datagrid-chevron-icon-color: lighten($base-spin-icon-color, 38.5%) !default;
-
-  /**
-    * $name 110. Highlighted text background color
-    * $type color
-    */
-  $datagrid-search-bg: $base-accent !default;
-
-  /**
-    * $name 115. Error row text color
-    * $type color
-    */
   $datagrid-row-error-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 120. Error row background color
-    * $type color
-    */
-  $datagrid-row-error-bg: mix($base-invalid-color, $datagrid-base-background-color, 60%) !default;
-  $datagrid-link-color: $base-link-color !default;
-
-  /**
-    * $name 75. Focused cell border color
-    * $type color
-    */
-  $datagrid-focused-border-color: mix($base-bg, $base-accent, 20%) !default;
-
-  /**
-    * $name 80. Editor background
-    * $type color
-    */
-  $datagrid-editor-bg: color.change($datagrid-base-background-color, $alpha: 0) !default;
-
-  $datagrid-drop-highlight-bg: $base-accent !default;
-  $datagrid-drop-highlight-color: $base-inverted-text-color !default;
-  $datagrid-columnchooser-bg: $base-element-bg !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
-
-  /**
-    * $name 85. Row alternation background color
-    * $type color
-    */
   $datagrid-row-alternation-bg: darken($datagrid-base-background-color, 4%) !default;
-
-  /**
-    * $name 100. Summary item color
-    * $type color
-    */
-  $datagrid-summary-color: color.change($datagrid-base-color, $alpha: 0.7) !default;
-  $datagrid-columnchooser-message-color: lighten($datagrid-base-color, 40%) !default;
-  $datagrid-summary-bg: $datagrid-base-background-color !default;
-
-  $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
-  $datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
-  $datagrid-active-header-filter-icon-color: $base-accent !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/light/grid/text-stub.png') !default;
-  $datagrid-filter-panel-color: $base-accent !default;
 }
 
 @if $mode == "dark" {
-
-
-  $datagrid-base-color: $base-text-color !default;
-  $datagrid-base-background-color: $base-bg !default;
-  $datagrid-border-color: $base-border-color !default;
-  $datagrid-border: 1px solid $datagrid-border-color !default;
-
-  /**
-    * $name 20. Header text color
-    * $type color
-    */
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
-  $datagrid-columnchooser-hover-icon-color: color.change($datagrid-base-color, $alpha: 0.38) !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 12%) !default;
-
-  /**
-    * $name 25. Header text weight
-    * $type select
-    * $typeValues 300|500|700
-    */
-  $datagrid-columnchooser-font-weight: 500 !default;
-
-  /**
-    * $name 35. Draggable header border color
-    * $type color
-    */
-  $datagrid-drag-header-border-color: color.change($base-accent, $alpha: 0.5) !default;
   $datagrid-drag-header-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
-  $datagrid-header-drag-bg: $datagrid-base-background-color !default;
-
-  $HEADER_FILTER_COLOR: $datagrid-columnchooser-item-color !default;
-  $HEADER_FILTER_COLOR_EMPTY: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
-
-  /**
-    * $name 55. Selected row background color
-    * $type color
-    */
+  $header-filter-color: $datagrid-columnchooser-item-color !default;
+  $header-filter-color-empty: color.change($datagrid-columnchooser-item-color, $alpha: 0.38) !default;
   $datagrid-selection-bg: color.change($base-accent, $alpha: 0.07) !default;
-
-  /**
-    * $name 60. Selected row border color
-    * $type color
-    */
-  $datagrid-row-selected-border-color: $datagrid-border-color !default;
-
-  /**
-    * $name 50. Selected row text color
-    * $type color
-    */
-  $datagrid-row-selected-color: $datagrid-base-color !default;
-
-  /**
-    * $name 65. Focused row text color
-    * $type color
-    */
-  $datagrid-row-focused-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 70. Focused row background color
-    * $type color
-    */
-  $datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
-
-  $datagrid-hover-bg: $base-hover-bg !default;
-  $datagrid-row-hovered-color: $datagrid-base-color !default;
-
-  /**
-    * $name 30. Context menu icons color
-    * $type color
-    */
-  $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
-
-  /**
-    * $name 40. Modified data background color
-    * $type color
-    */
-  $datagrid-cell-modified-border-color: color.change($base-success, $alpha: 0.32) !default;
-
-  $datagrid-row-removed-bg: color.change($base-success, $alpha: 0.32) !default;
-
-  /**
-    * $name 45. Invalidate data faded color
-    * $type color
-    */
-  $datagrid-row-invalid-faded-border-color: color.change($base-invalid-faded-border-color, $alpha: 0.32) !default;
-
-  $datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
-
-  /**
-    * $name 90. Group row text color
-    * $type color
-    */
-  $datagrid-group-row-color: color.change($datagrid-base-color, $alpha: 0.54) !default;
-
-  /**
-    * $name 95. Group row background color
-    * $type color
-    */
-  $datagrid-group-row-bg: color.change($datagrid-base-background-color, $alpha: 1) !default;
-
-  $datagrid-master-detail-cell-bg: darken($datagrid-base-background-color, 2%) !default;
-
-  /**
-    * $name 105. Highlighted text color
-    * $type color
-    */
-  $datagrid-search-color: $base-inverted-text-color !default;
-  $datagrid-chevron-icon-color: lighten($base-spin-icon-color, 38.5%) !default;
-
-  /**
-    * $name 110. Highlighted text background color
-    * $type color
-    */
-  $datagrid-search-bg: $base-accent !default;
-
-  /**
-    * $name 115. Error row text color
-    * $type color
-    */
   $datagrid-row-error-color: rgba(255, 255, 255, 1) !default;
-
-  /**
-    * $name 120. Error row background color
-    * $type color
-    */
-  $datagrid-row-error-bg: mix($base-invalid-color, $datagrid-base-background-color, 60%) !default;
-
-  $datagrid-link-color: $base-link-color !default;
-
-  /**
-    * $name 75. Focused cell border color
-    * $type color
-    */
-  $datagrid-focused-border-color: mix($base-bg, $base-accent, 20%) !default;
-
-  /**
-    * $name 80. Editor background
-    * $type color
-    */
-  $datagrid-editor-bg: color.change($datagrid-base-background-color, $alpha: 0) !default;
-
-  $datagrid-drop-highlight-bg: $base-accent !default;
-  $datagrid-drop-highlight-color: $base-inverted-text-color !default;
-
-  $datagrid-columnchooser-bg: $base-element-bg !default;
   $datagrid-columnchooser-item-bg: lighten($datagrid-columnchooser-bg, 3%) !default;
-
-  /**
-    * $name 85. Row alternation background color
-    * $type color
-    */
   $datagrid-row-alternation-bg: lighten($datagrid-base-background-color, 4%) !default;
-
-  /**
-    * $name 100. Summary item color
-    * $type color
-    */
-  $datagrid-summary-color: color.change($datagrid-base-color, $alpha: 0.7) !default;
-  $datagrid-columnchooser-message-color: lighten($datagrid-base-color, 40%) !default;
-  $datagrid-summary-bg: $datagrid-base-background-color !default;
-
-  $datagrid-column-separator-bg: color.change($base-accent, $alpha: 0.5) !default;
-  $datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
-  $datagrid-active-header-filter-icon-color: $base-accent !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/material/color-schemes/dark/grid/text-stub.png') !default;
-  $datagrid-filter-panel-color: $base-accent !default;
 }
 

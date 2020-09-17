@@ -19,6 +19,14 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             }
         }
 
+        if(!options.key) {
+            options.items?.forEach(item => {
+                if(item.key === null || item.key === undefined) {
+                    item.key = item;
+                }
+            });
+        }
+
         return {
             _applyFilter: function() {
                 this._isFilterApplied = true;
@@ -186,7 +194,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 options.groupExpandPath = path;
             },
 
-            getKeyByRowIndex: function(rowIndex) { },
+            getKeyByRowIndex: function(rowIndex) {
+                const item = this.items()[rowIndex];
+                if(item) {
+                    return item.key;
+                }
+            },
 
             refresh: function() {
                 this.refreshed = true;
@@ -213,8 +226,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             getCombinedFilter: commonUtils.noop,
 
-            getRowIndexByKey: function() {
-                return -1;
+            getRowIndexByKey: function(key) {
+                return gridCore.getIndexByKey(key, options.items);
             },
 
             loadingOperationTypes: function() {
@@ -306,6 +319,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             columns[key].index = parseInt(key);
         }
 
+        columns?.forEach(column => {
+            if(typeUtils.isDefined(column.dataField) && !typeUtils.isDefined(column.name)) {
+                column.name = column.dataField;
+            }
+        });
+
         return {
             updateOptions: [],
 
@@ -347,12 +366,29 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return -1;
             },
 
+            getVisibleColumnIndex: function(id) {
+                let columnIndex = -1;
+
+                this.getVisibleColumns().some((column, index) => {
+                    if(column.name === id) {
+                        columnIndex = index;
+                        return true;
+                    }
+                });
+
+                return columnIndex;
+            },
+
             getVisibleColumns: function(rowIndex) {
                 if(this.getRowCount() > 1) {
                     return typeUtils.isDefined(rowIndex) ? columns[rowIndex] : columns[columns.length - 1];
                 }
 
                 return columns;
+            },
+
+            getColumnIndexOffset: function() {
+                return 0;
             },
 
             // TODO: set fixed columns option
@@ -924,6 +960,16 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             that.options.legacyRendering = false;
         }
 
+        if(that.options.editing?.changes === undefined) {
+            if(that.options.editing) {
+                that.options.editing.changes = [];
+            } else {
+                that.options.editing = {
+                    changes: []
+                };
+            }
+        }
+
         that.optionCalled = $.Callbacks();
 
         that.option = function(options, value) {
@@ -933,15 +979,23 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             if(typeUtils.isString(options)) {
                 path = options.split('.');
-                while(result && path.length) {
-                    if(arguments.length > 1 && path.length === 1) {
-                        if(result[path[0]] !== value) {
+                for(let i = 0; i < path.length && result; i++) {
+                    if(arguments.length > 1 && i === path.length - 1) {
+                        if(result[path[i]] !== value) {
                             changed = true;
-                            result[path[0]] = value;
+                            const previousValue = result[path[i]];
+                            result[path[i]] = value;
+
+                            if(path[0] === 'editing' && that.needFireOptionChange) {
+                                that.editingController.optionChanged({ name: path[0], fullName: options, value, previousValue });
+                            }
+
+                            if(that._optionCache) {
+                                that._optionCache[options] = value;
+                            }
                         }
                     }
-                    result = result[path[0]];
-                    path.shift();
+                    result = result[path[i]];
                 }
                 changed && that.optionCalled.fire(options, value);
                 return result;
@@ -992,6 +1046,14 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 }
             }
             return instance;
+        };
+
+        that.needFireOptionChange = true;
+
+        that._setOptionWithoutOptionChange = (options, value) => {
+            that.needFireOptionChange = false;
+            that.option(options, value);
+            that.needFireOptionChange = true;
         };
 
         that._notifyOptionChanged = function() {};

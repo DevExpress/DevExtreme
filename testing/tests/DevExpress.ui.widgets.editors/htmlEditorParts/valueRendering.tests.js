@@ -12,7 +12,7 @@ function getSelector(className) {
     return `.${className}`;
 }
 
-const { test } = QUnit;
+const { test, module: testModule } = QUnit;
 
 const moduleConfig = {
     beforeEach: function() {
@@ -23,7 +23,7 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Value as HTML markup', moduleConfig, () => {
+testModule('Value as HTML markup', moduleConfig, () => {
     test('show placeholder is value undefined', function(assert) {
         const instance = $('#htmlEditor').dxHtmlEditor({
             placeholder: 'test placeholder'
@@ -32,6 +32,20 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
         const $content = $element.find(getSelector(CONTENT_CLASS));
 
         assert.equal($content.get(0).dataset.placeholder, 'test placeholder');
+    });
+
+    test('the container must adjust to the placeholder', function(assert) {
+        const instance = $('#htmlEditor').dxHtmlEditor({
+            width: 50
+        }).dxHtmlEditor('instance');
+        const $element = instance.$element();
+        const initialHeight = $element.outerHeight();
+
+        instance.option('placeholder', '1234 567 89 0123 4567 89 012 345 67 890');
+
+        const actualHeight = $element.outerHeight();
+
+        assert.ok(actualHeight > initialHeight, 'editor height has been increased');
     });
 
     test('render default value', function(assert) {
@@ -161,9 +175,10 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
     });
 
     test('editor shouldn\'t create unexpected break lines', function(assert) {
-        const expectedMarkup = '<p>hi</p><ul><li>test</li></ul>';
+        const htmlMarkup = '<p>hi</p><ul><li>test</li></ul>';
+        const quillMarkup = '<p>hi</p><ol><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>test</li></ol>';
         const instance = $('#htmlEditor')
-            .html('<p>hi</p><ul><li>test</li></ul>')
+            .html(htmlMarkup)
             .dxHtmlEditor()
             .dxHtmlEditor('instance');
 
@@ -172,8 +187,8 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
         const $element = instance.$element();
         const markup = $element.find(getSelector(CONTENT_CLASS)).html();
 
-        assert.equal(instance.option('value'), expectedMarkup);
-        assert.equal(markup, expectedMarkup);
+        assert.equal(instance.option('value'), htmlMarkup);
+        assert.equal(markup, quillMarkup);
     });
 
     test('editor should respect attributes of the list item', function(assert) {
@@ -265,10 +280,42 @@ QUnit.module('Value as HTML markup', moduleConfig, () => {
             .find(getSelector(CONTENT_CLASS))
             .html('');
     });
+
+    test('render widget in detached container', function(assert) {
+        const $container = $('#htmlEditor');
+        const listMarkup = '<ul><li>t1</li><li>t2</li></ul>';
+        const quillMarkup = '<ol><li data-list="bullet"><span class="ql-ui" contenteditable="false">' +
+            '</span>t1</li><li data-list="bullet"><span class="ql-ui" contenteditable="false"></span>t2</li></ol>';
+
+        $container.detach();
+
+        $container.dxHtmlEditor({
+            value: listMarkup
+        });
+
+        $container.appendTo('#qunit-fixture');
+
+        const content = $container.find('.dx-htmleditor-content').html();
+        assert.strictEqual(content, quillMarkup);
+    });
+
+    test('it should keep value with nested lists if the widget has transcluded content', function(assert) {
+        const $container = $('#htmlEditor');
+        $container.html('123');
+        const expected = '<ol><li>vehicles<ol><li>cars<ol><li>electric cars</li></ol></li><li>ships<ol><li>sailing ships</li></ol></li><li>planes<ol><li>propeller air crafts</li><li>jet</li></ol></li></ol></li></ol>';
+
+        const instance = $container
+            .dxHtmlEditor({ 'value': expected })
+            .dxHtmlEditor('instance');
+
+        this.clock.tick();
+
+        assert.strictEqual(instance.option('value'), expected);
+    });
 });
 
 
-QUnit.module('Value as Markdown markup', {
+testModule('Value as Markdown markup', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },
@@ -276,7 +323,7 @@ QUnit.module('Value as Markdown markup', {
         this.clock.restore();
     }
 }, () => {
-    test('render default value', function(assert) {
+    test('render default markdown value', function(assert) {
         const instance = $('#htmlEditor').dxHtmlEditor({
             value: 'Hi!\nIt\'s a **test**!',
             valueType: 'markdown'
@@ -288,7 +335,7 @@ QUnit.module('Value as Markdown markup', {
         assert.strictEqual(markup, '<p>Hi!</p><p>It\'s a <strong>test</strong>!</p>');
     });
 
-    test('change value by user', function(assert) {
+    test('change markdown value by user', function(assert) {
         const done = assert.async();
         const instance = $('#htmlEditor')
             .dxHtmlEditor({
@@ -323,7 +370,7 @@ QUnit.module('Value as Markdown markup', {
         instance.option('value', null);
     });
 
-    test('value after change valueType', function(assert) {
+    test('apply value after change valueType', function(assert) {
         const done = assert.async();
         const instance = $('#htmlEditor')
             .dxHtmlEditor({
@@ -361,7 +408,7 @@ QUnit.module('Value as Markdown markup', {
     });
 });
 
-QUnit.module('Custom blots rendering', {
+testModule('Custom blots rendering', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
     },

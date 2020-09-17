@@ -1,8 +1,9 @@
 @use "../base/mixins" as *;
+
 // adduse
 
 
-$DROPDOWNBUTTON_HORIZONTAL_PADDING: 5px;
+$dropdownbutton-horizontal-padding: 5px;
 
 .dx-dropdownbutton {
   display: inline-block;
@@ -44,12 +45,12 @@ $DROPDOWNBUTTON_HORIZONTAL_PADDING: 5px;
 
 .dx-dropdownbutton-action.dx-buttongroup-last-item {
   &.dx-button .dx-button-content {
-    padding-left: $DROPDOWNBUTTON_HORIZONTAL_PADDING * 2;
+    padding-left: $dropdownbutton-horizontal-padding * 2;
     padding-right: 0;
 
     .dx-rtl & {
       padding-left: 0;
-      padding-right: $DROPDOWNBUTTON_HORIZONTAL_PADDING * 2;
+      padding-right: $dropdownbutton-horizontal-padding * 2;
     }
   }
 }
@@ -57,15 +58,15 @@ $DROPDOWNBUTTON_HORIZONTAL_PADDING: 5px;
 .dx-dropdownbutton:not(.dx-dropdownbutton-has-arrow) {
   .dx-button-has-icon:not(.dx-button-has-text) {
     .dx-button-content {
-      padding-left: $DROPDOWNBUTTON_HORIZONTAL_PADDING;
-      padding-right: $DROPDOWNBUTTON_HORIZONTAL_PADDING;
+      padding-left: $dropdownbutton-horizontal-padding;
+      padding-right: $dropdownbutton-horizontal-padding;
     }
   }
 
   .dx-button-has-text.dx-button {
     .dx-button-content {
-      padding-left: $DROPDOWNBUTTON_HORIZONTAL_PADDING * 2;
-      padding-right: $DROPDOWNBUTTON_HORIZONTAL_PADDING * 2;
+      padding-left: $dropdownbutton-horizontal-padding * 2;
+      padding-right: $dropdownbutton-horizontal-padding * 2;
     }
   }
 }

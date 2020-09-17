@@ -1,1 +1,2 @@
-module.exports = require('./core/export');
+import Export from './core/export';
+export default Export;

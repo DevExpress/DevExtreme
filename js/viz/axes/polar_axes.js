@@ -33,9 +33,7 @@ function getPolarQuarter(angle) {
     return quarter;
 }
 
-const polarAxes = exports;
-
-const circularAxes = polarAxes.circular = {
+const circularAxes = {
     _calculateValueMargins(ticks) {
         let { minVisible, maxVisible } = this._getViewportRange();
         if(ticks && ticks.length > 1) {
@@ -438,7 +436,9 @@ const circularAxes = polarAxes.circular = {
     }
 };
 
-polarAxes.circularSpider = extend({}, circularAxes, {
+export const circular = circularAxes;
+
+export const circularSpider = extend({}, circularAxes, {
     _createAxisElement: function() {
         return this._renderer.path([], 'area');
     },
@@ -522,7 +522,7 @@ polarAxes.circularSpider = extend({}, circularAxes, {
     }
 });
 
-polarAxes.linear = {
+export const linear = {
     _resetMargins() {
         this._reinitTranslator(this._getViewportRange());
     },
@@ -709,7 +709,7 @@ polarAxes.linear = {
     }
 };
 
-polarAxes.linearSpider = extend({}, polarAxes.linear, {
+export const linearSpider = extend({}, linear, {
     _createPathElement: function(points, attr) {
         return this._renderer.path(points, 'area').attr(attr).sharp();
     },
@@ -756,7 +756,7 @@ polarAxes.linearSpider = extend({}, polarAxes.linear, {
         };
     },
 
-    _createStrip: polarAxes.circularSpider._createStrip,
+    _createStrip: circularSpider._createStrip,
 
     _getConstantLineGraphicAttributes: function(value) {
         return this._getGridPointsByRadius(value);

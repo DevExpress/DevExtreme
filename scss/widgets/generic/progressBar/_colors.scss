@@ -2,166 +2,62 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
-
+/**
+* $name 10. Bar background color
+* $type color
+*/
 $progressbar-bg: null !default;
 $progressbar-border-color: null !default;
-$progressbar-range-bg: null !default;
-$progressbar-range-border-color: null !default;
-$progressbar-range-disabled-bg: null !default;
-$progressbar-range-indeterminate-color: null !default;
 
+/**
+* $name 20. Selected range background color
+* $type color
+*/
+$progressbar-range-bg: $base-accent !default;
+$progressbar-range-border-color: $base-accent !default;
+$progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
+$progressbar-range-indeterminate-color: $base-accent !default;
 
 @if $color == "carmine" {
-  /**
-    * $name 10. Bar background color
-    * $type color
-    */
-  $progressbar-bg:  darken($base-bg, 13.5%) !default;
+  $progressbar-bg: darken($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Bar background color
-    * $type color
-    */
   $progressbar-bg: $base-bg !default;
   $progressbar-border-color: $base-accent !default;
-
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Bar background color
-    * $type color
-    */
   $progressbar-bg: lighten($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 10. Bar background color
-    * $type color
-    */
   $progressbar-bg: extcolor.difference($base-bg, #212121) !default; // #465672 => #253552
   $progressbar-border-color: $base-border-color !default;
-
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Bar background color
-    * $type color
-    */
   $progressbar-bg: lighten($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Bar background color
-    * $type color
-    */
-  $progressbar-bg:  darken($base-bg, 9%) !default;
+  $progressbar-bg: darken($base-bg, 9%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 10. Bar background color
-    * $type color
-    */
-  $progressbar-bg:  darken($base-bg, 13.5%) !default;
+  $progressbar-bg: darken($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 10. Bar background color
-    * $type color
-    */
-  $progressbar-bg:  darken($base-bg, 13.5%) !default;
+  $progressbar-bg: darken($base-bg, 13.5%) !default;
   $progressbar-border-color: $base-border-color !default;
-
-  /**
-    * $name 20. Selected range background color
-    * $type color
-    */
-  $progressbar-range-bg: $base-accent !default;
-  $progressbar-range-border-color: $base-accent !default;
-
-  $progressbar-range-disabled-bg: color.change($base-accent, $alpha: 0.6) !default;
-  $progressbar-range-indeterminate-color: $base-accent !default;
 }
 

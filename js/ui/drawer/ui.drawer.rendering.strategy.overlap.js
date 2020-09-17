@@ -1,4 +1,4 @@
-import { animation } from './ui.drawer.rendering.strategy';
+import { animation } from './ui.drawer.animation';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
 import translator from '../../animation/translator';
@@ -190,4 +190,4 @@ class OverlapStrategy extends DrawerStrategy {
     }
 }
 
-module.exports = OverlapStrategy;
+export default OverlapStrategy;

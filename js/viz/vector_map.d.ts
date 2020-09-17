@@ -5,6 +5,10 @@ import {
 } from '../core/element';
 
 import {
+    PaletteType
+} from './palette';
+
+import {
     template
 } from '../core/templates/template';
 
@@ -24,7 +28,8 @@ import {
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    BaseWidgetAnnotationConfig
 } from './core/base_widget';
 
 import {
@@ -217,7 +222,7 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    layers?: Array<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
+    layers?: Array<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | PaletteType, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DataSource | DataSourceOptions | string, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | PaletteType, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
     /**
      * @docid dxVectorMapOptions.legends
      * @type Array<Object>
@@ -253,15 +258,14 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @extends Action
      * @type function|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 target:MapLayerElement
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 target:MapLayerElement
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onClick?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: MapLayerElement }) => any) | string;
+    onClick?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, event?: event, target?: MapLayerElement }) => any) | string;
     /**
      * @docid dxVectorMapOptions.onSelectionChanged
      * @extends Action
@@ -279,25 +283,25 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 target:MapLayerElement
+     * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement }) => any);
+    onTooltipHidden?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
     /**
      * @docid dxVectorMapOptions.onTooltipShown
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 target:MapLayerElement
+     * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onTooltipShown?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement }) => any);
+    onTooltipShown?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig | any }) => any);
     /**
      * @docid dxVectorMapOptions.onZoomFactorChanged
      * @extends Action
@@ -367,7 +371,89 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
      * @public
      */
     zoomingEnabled?: boolean;
+    /**
+     * @docid dxVectorMapOptions.commonAnnotationSettings
+     * @type dxVectorMapCommonAnnotationConfig
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    commonAnnotationSettings?: dxVectorMapCommonAnnotationConfig;
+    /**
+     * @docid dxVectorMapOptions.annotations
+     * @type Array<dxVectorMapAnnotationConfig,object>
+     * @inherits dxVectorMapOptions.commonAnnotationSettings
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    annotations?: Array<dxVectorMapAnnotationConfig | any>;
+    /**
+     * @docid dxVectorMapOptions.customizeAnnotation
+     * @type function(annotation)
+     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
+     * @type_function_return dxVectorMapAnnotationConfig
+     * @default undefined
+     * @notUsedInTheme
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig);
 }
+
+export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
+    /**
+     * @docid dxVectorMapAnnotationConfig.name
+     * @type string
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    name?: string;
+}
+
+export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
+    /**
+     * @docid dxVectorMapCommonAnnotationConfig.coordinates
+     * @type Array<number>
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    coordinates?: Array<number>;
+    /**
+     * @docid dxVectorMapCommonAnnotationConfig.customizeTooltip
+     * @type function(annotation)
+     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
+     * @type_function_return object
+     * @default undefined
+     * @notUsedInTheme
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
+    /**
+     * @docid dxVectorMapCommonAnnotationConfig.template
+     * @type template|function
+     * @default undefined
+     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
+     * @type_function_param2 element:SVGGElement
+     * @type_function_return string|SVGElement|jQuery
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
+    /**
+     * @docid dxVectorMapCommonAnnotationConfig.tooltipTemplate
+     * @type template|function(annotation, element)
+     * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
+     * @type_function_param2 element:dxElement
+     * @type_function_return string|Element|jQuery
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    tooltipTemplate?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
+}
+
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
@@ -466,7 +552,7 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
      * @type template | function(info, element)
      * @type_function_param1 info:MapLayerElement
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

@@ -1,20 +1,19 @@
-const $ = require('../core/renderer');
-const commonUtils = require('../core/utils/common');
-const typeUtils = require('../core/utils/type');
-const isDefined = typeUtils.isDefined;
-const isPromise = typeUtils.isPromise;
-const extend = require('../core/utils/extend').extend;
-const inArray = require('../core/utils/array').inArray;
-const each = require('../core/utils/iterator').each;
-const deferredUtils = require('../core/utils/deferred');
-const getPublicElement = require('../core/element').getPublicElement;
-const Deferred = deferredUtils.Deferred;
-const errors = require('../core/errors');
-const domAdapter = require('../core/dom_adapter');
-const inkRipple = require('./widget/utils.ink_ripple');
-const messageLocalization = require('../localization/message');
-const registerComponent = require('../core/component_registrator');
-const DropDownList = require('./drop_down_editor/ui.drop_down_list');
+import $ from '../core/renderer';
+import { noop, ensureDefined } from '../core/utils/common';
+import { isDefined, isPromise } from '../core/utils/type';
+import { extend } from '../core/utils/extend';
+import { inArray } from '../core/utils/array';
+import { each } from '../core/utils/iterator';
+import { Deferred, fromPromise } from '../core/utils/deferred';
+import { getPublicElement } from '../core/element';
+import errors from '../core/errors';
+import domAdapter from '../core/dom_adapter';
+import inkRipple from './widget/utils.ink_ripple';
+import messageLocalization from '../localization/message';
+import registerComponent from '../core/component_registrator';
+import DropDownList from './drop_down_editor/ui.drop_down_list';
+
+// STYLE selectBox
 
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
 const SELECTBOX_CLASS = 'dx-selectbox';
@@ -163,14 +162,6 @@ const SelectBox = DropDownList.inherit({
             showSelectionControls: false,
 
             /**
-            * @name dxSelectBoxOptions.autocompletionEnabled
-            * @type boolean
-            * @default true
-            * @hidden
-            */
-            autocompletionEnabled: true,
-
-            /**
             * @name dxSelectBoxOptions.allowClearing
             * @type boolean
             * @default true
@@ -186,7 +177,6 @@ const SelectBox = DropDownList.inherit({
 
             displayCustomValue: false,
 
-            _isAdaptablePopupPosition: false,
             useInkRipple: false,
             useHiddenSubmitElement: true
         });
@@ -424,7 +414,10 @@ const SelectBox = DropDownList.inherit({
         const fieldTemplate = this._getTemplateByOption('fieldTemplate');
 
         if(!(fieldTemplate && this.option('fieldTemplate'))) {
-            this._renderDisplayText(this._displayGetter(item));
+            const text = this._displayGetter(item);
+
+            this.option('text', text);
+            this._renderDisplayText(text);
             return;
         }
 
@@ -432,7 +425,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _getSelectionChangeHandler: function() {
-        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : commonUtils.noop;
+        return this.option('showSelectionControls') ? this._selectionChangeHandler.bind(this) : noop;
     },
 
     _selectionChangeHandler: function(e) {
@@ -533,7 +526,7 @@ const SelectBox = DropDownList.inherit({
             }
 
             this._renderInputValue().always((function(selectedItem) {
-                const newSelectedItem = commonUtils.ensureDefined(selectedItem, initialSelectedItem);
+                const newSelectedItem = ensureDefined(selectedItem, initialSelectedItem);
                 this._setSelectedItem(newSelectedItem);
                 this._updateField(newSelectedItem);
                 this._clearFilter();
@@ -694,7 +687,7 @@ const SelectBox = DropDownList.inherit({
             text: text
         };
         const actionResult = this._customItemCreatingAction(params);
-        const item = commonUtils.ensureDefined(actionResult, params.customItem);
+        const item = ensureDefined(actionResult, params.customItem);
 
         if(isDefined(actionResult)) {
             errors.log('W0015', 'onCustomItemCreating', 'customItem');
@@ -715,7 +708,7 @@ const SelectBox = DropDownList.inherit({
         }
 
         if(isPromise(item)) {
-            deferredUtils.fromPromise(item)
+            fromPromise(item)
                 .done(this._setCustomItem.bind(this))
                 .fail(this._setCustomItem.bind(this, null));
         } else {
@@ -781,8 +774,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _shouldSubstitutionBeRendered: function() {
-        return this.option('autocompletionEnabled')
-            && !this._preventSubstitution
+        return !this._preventSubstitution
             && this.option('searchEnabled')
             && !this.option('acceptCustomValue')
             && this.option('searchMode') === 'startswith';
@@ -822,16 +814,13 @@ const SelectBox = DropDownList.inherit({
     },
 
     _dispose: function() {
-        this._renderInputValueAsync = commonUtils.noop;
+        this._renderInputValueAsync = noop;
         delete this._loadItemDeferred;
         this.callBase();
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case '_isAdaptablePopupPosition':
-            case 'autocompletionEnabled':
-                break;
             case 'onCustomItemCreating':
                 this._initCustomItemCreatingAction();
                 break;
@@ -859,4 +848,4 @@ const SelectBox = DropDownList.inherit({
 
 registerComponent('dxSelectBox', SelectBox);
 
-module.exports = SelectBox;
+export default SelectBox;

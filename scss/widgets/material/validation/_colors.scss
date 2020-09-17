@@ -1,27 +1,9 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$VALIDATION_MESSAGE_COLOR: null !default;
-$VALIDATION_MESSAGE_BACKGROUND_COLOR: null !default;
-$VALIDATION_SUMMARY_COLOR: null !default;
-
-
-@if $mode == "light" {
-
-
-  $VALIDATION_MESSAGE_COLOR: $base-inverted-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
-}
-
-@if $mode == "dark" {
-
-
-  $VALIDATION_MESSAGE_COLOR: $base-inverted-text-color !default;
-  $VALIDATION_MESSAGE_BACKGROUND_COLOR: $base-invalid-color !default;
-  $VALIDATION_SUMMARY_COLOR: $base-invalid-color !default;
-}
-
+$validation-message-color: $base-inverted-text-color !default;
+$validation-message-background-color: $base-invalid-color !default;
+$validation-summary-color: $base-invalid-color !default;

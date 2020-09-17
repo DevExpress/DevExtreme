@@ -17,7 +17,17 @@ const weekData = require('cldr-core/supplemental/weekData.json');
 const likelySubtags = require('cldr-core/supplemental/likelySubtags.json');
 const parentLocales = require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale;
 
-const getParentLocale = require('../../js/localization/parentLocale.js');
+const PARENT_LOCALE_SEPARATOR = '-';
+
+const getParentLocale = (parentLocales, locale) => {
+    const parentLocale = parentLocales[locale];
+
+    if(parentLocale) {
+        return parentLocale !== 'root' && parentLocale;
+    }
+
+    return locale.substr(0, locale.lastIndexOf(PARENT_LOCALE_SEPARATOR));
+};
 
 const firstDayOfWeekData = function() {
     const DAY_INDEXES = {
@@ -64,6 +74,7 @@ const accountingFormats = function() {
 };
 
 const RESULT_PATH = path.join(context.RESULT_JS_PATH, 'localization');
+const RESULT_RENOVATION_PATH = path.join(context.RESULT_JS_RENOVATION_PATH, 'localization');
 const DICTIONARY_SOURCE_FOLDER = 'js/localization/messages';
 
 const getLocales = function(directory) {
@@ -100,7 +111,8 @@ gulp.task('localization-messages', gulp.parallel(getLocales(DICTIONARY_SOURCE_FO
             .pipe(compressionPipes.beautify())
             .pipe(headerPipes.useStrict())
             .pipe(headerPipes.bangLicense())
-            .pipe(gulp.dest(RESULT_PATH));
+            .pipe(gulp.dest(RESULT_PATH))
+            .pipe(gulp.dest(RESULT_RENOVATION_PATH));
     },
     { displayName: 'dx.messages.' + locale }
 ))));

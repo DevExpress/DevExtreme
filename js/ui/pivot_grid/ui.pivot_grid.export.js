@@ -2,6 +2,7 @@ import Class from '../../core/class';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
+import { hasWindow } from '../../core/utils/window';
 import { format } from '../../format_helper';
 import { parse } from '../../localization/number';
 import clientExporter, { excel as excelExporter } from '../../exporter';
@@ -14,7 +15,7 @@ const ROW_HEADER_STYLE_ID = 1;
 const DATA_STYLE_OFFSET = 2;
 const DEFAUL_COLUMN_WIDTH = 100;
 
-exports.ExportMixin = extend({}, exportMixin, {
+export const ExportMixin = extend({}, exportMixin, {
     exportToExcel: function() {
         const that = this;
 
@@ -110,11 +111,13 @@ exports.ExportMixin = extend({}, exportMixin, {
             dataController.endLoading();
         });
 
-        return new exports.DataProvider({
+        return new DataProvider({
             items: items,
             rtlEnabled: this.option('rtlEnabled'),
             dataFields: this.getDataSource().getAreaFields('data'),
             customizeExcelCell: this.option('export.customizeExcelCell'),
+            rowsArea: this._rowsArea,
+            columnsArea: this._columnsArea
         });
     }
 });
@@ -140,7 +143,7 @@ function getCellDataType(field) {
     return DEFAULT_DATA_TYPE;
 }
 
-exports.DataProvider = Class.inherit({
+export const DataProvider = Class.inherit({
     ctor: function(options) {
         this._options = options;
         this._styles = [];
@@ -183,6 +186,16 @@ exports.DataProvider = Class.inherit({
 
     getColumns: function() {
         return this._options.columns;
+    },
+
+    getColumnsWidths: function() {
+        const colsArea = this._options.columnsArea;
+        const rowsArea = this._options.rowsArea;
+        const columns = this._options.columns;
+        const useDefaultWidth = !hasWindow() || colsArea.option('scrolling.mode') === 'virtual' || colsArea.element().is(':hidden');
+        return useDefaultWidth
+            ? columns.map(_ => DEFAUL_COLUMN_WIDTH)
+            : rowsArea.getColumnsWidth().concat(colsArea.getColumnsWidth());
     },
 
     getRowsCount: function() {
@@ -234,6 +247,11 @@ exports.DataProvider = Class.inherit({
         } else {
             result.value = item.value;
         }
+
+        if(result.cellSourceData && result.cellSourceData.isWhiteSpace) {
+            result.value = '';
+        }
+
         return result;
     },
 
@@ -281,3 +299,9 @@ exports.DataProvider = Class.inherit({
         }
     },
 });
+
+//#DEBUG
+export const PivotGridExport = {
+    DEFAUL_COLUMN_WIDTH
+};
+//#ENDDEBUG

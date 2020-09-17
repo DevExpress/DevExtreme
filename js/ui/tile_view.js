@@ -1,15 +1,17 @@
-const $ = require('../core/renderer');
-const devices = require('../core/devices');
-const registerComponent = require('../core/component_registrator');
-const inflector = require('../core/utils/inflector');
-const iteratorUtils = require('../core/utils/iterator');
-const isDefined = require('../core/utils/type').isDefined;
-const extend = require('../core/utils/extend').extend;
-const windowUtils = require('../core/utils/window');
-const getPublicElement = require('../core/element').getPublicElement;
-const deferRender = require('../core/utils/common').deferRender;
-const ScrollView = require('./scroll_view');
-const CollectionWidget = require('./collection/ui.collection_widget.edit');
+import $ from '../core/renderer';
+import devices from '../core/devices';
+import registerComponent from '../core/component_registrator';
+import inflector from '../core/utils/inflector';
+import iteratorUtils from '../core/utils/iterator';
+import { isDefined } from '../core/utils/type';
+import { extend } from '../core/utils/extend';
+import { hasWindow } from '../core/utils/window';
+import { getPublicElement } from '../core/element';
+import { deferRender } from '../core/utils/common';
+import ScrollView from './scroll_view';
+import CollectionWidget from './collection/ui.collection_widget.edit';
+
+// STYLE tileView
 
 const TILEVIEW_CLASS = 'dx-tileview';
 const TILEVIEW_CONTAINER_CLASS = 'dx-tileview-wrapper';
@@ -208,7 +210,7 @@ const TileView = CollectionWidget.inherit({
             return Math.round(item[config.itemCrossRatio] || 1);
         }));
 
-        const crossDimensionValue = windowUtils.hasWindow() ?
+        const crossDimensionValue = hasWindow() ?
             this.$element()[config.crossDimension]() : parseInt(this.$element().get(0).style[config.crossDimension]);
 
         this._cellsPerDimension = Math.floor(crossDimensionValue / (this.option(config.baseItemCrossDimension) + itemMargin));
@@ -221,7 +223,7 @@ const TileView = CollectionWidget.inherit({
     },
 
     _renderContentSize: function(config, itemMargin) {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             const actualContentSize = this._cells.length * this.option(config.baseItemMainDimension) + (this._cells.length + 1) * itemMargin;
             const containerSize = this._$container[config.mainDimension]();
 
@@ -508,4 +510,4 @@ const TileView = CollectionWidget.inherit({
 
 registerComponent('dxTileView', TileView);
 
-module.exports = TileView;
+export default TileView;

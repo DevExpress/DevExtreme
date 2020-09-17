@@ -3,156 +3,93 @@
 @use "../colors" as *;
 @use "../button/colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
 
-$htmleditor-border-color: null !default;
-$htmleditor-invalid-border-color: null !default;
-$htmleditor-invalid-faded-border-color: null !default;
-$htmleditor-toolbar-border-color: null !default;
+$htmleditor-border-color: $base-border-color !default;
+$htmleditor-invalid-border-color: $base-invalid-color !default;
+$htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
+$htmleditor-toolbar-border-color: $base-border-color !default;
 $htmleditor-normal-format-active-bg: null !default;
 $htmleditor-default-format-active-bg: null !default;
 $htmleditor-danger-format-active-bg: null !default;
 $htmleditor-success-format-active-bg: null !default;
-$htmleditor-variable-bg: null !default;
-$htmleditor-resize-frame-border-color: null !default;
-$htmleditor-resize-handle-bg: null !default;
+$htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
+$htmleditor-resize-frame-border-color: $base-accent !default;
+$htmleditor-resize-handle-bg: $base-accent !default;
 $htmleditor-mention-bg: null !default;
 $htmleditor-mention-color: null !default;
 
 
 @if $color == "carmine" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
   $htmleditor-normal-format-active-bg: darken($base-element-bg, 10%) !default;
   $htmleditor-default-format-active-bg: darken($base-accent, 10%) !default;
   $htmleditor-danger-format-active-bg: darken($base-danger, 10%) !default;
   $htmleditor-success-format-active-bg: darken($base-success, 10%) !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: darken($base-bg, 9%) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "contrast" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
   $htmleditor-normal-format-active-bg: $base-bg !default;
   $htmleditor-default-format-active-bg: $base-default !default;
   $htmleditor-danger-format-active-bg: $base-danger !default;
   $htmleditor-success-format-active-bg: $base-success !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: extcolor.difference(#fff, $base-bg) !default;
   $htmleditor-mention-color: $base-inverted-text-color !default;
 }
 
 @if $color == "dark" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
   $htmleditor-normal-format-active-bg: lighten($base-element-bg, 10%) !default;
   $htmleditor-default-format-active-bg: darken($base-accent, 10%) !default;
   $htmleditor-danger-format-active-bg: darken($base-danger, 10%) !default;
   $htmleditor-success-format-active-bg: darken($base-success, 10%) !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: lighten($base-bg, 13.5%) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "darkmoon" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
   $htmleditor-normal-format-active-bg: lighten($base-element-bg, 10%) !default;
   $htmleditor-default-format-active-bg: lighten($base-accent, 10%) !default;
   $htmleditor-danger-format-active-bg: lighten($base-danger, 10%) !default;
   $htmleditor-success-format-active-bg: lighten($base-success, 10%) !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: lighten($base-bg, 13.5%) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "darkviolet" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
   $htmleditor-normal-format-active-bg: lighten($base-element-bg, 10%) !default;
   $htmleditor-default-format-active-bg: lighten($base-accent, 10%) !default;
   $htmleditor-danger-format-active-bg: lighten($base-danger, 10%) !default;
   $htmleditor-success-format-active-bg: lighten($base-success, 10%) !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: $base-select-bg !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "greenmist" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
   $htmleditor-normal-format-active-bg: lighten($base-element-bg, 10%) !default;
   $htmleditor-default-format-active-bg: lighten($base-accent, 10%) !default;
   $htmleditor-danger-format-active-bg: lighten($base-danger, 10%) !default;
   $htmleditor-success-format-active-bg: lighten($base-success, 10%) !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: $base-accent !default;
   $htmleditor-mention-color: lighten($base-text-color, 100%) !default;
 }
 
 @if $color == "light" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
   $htmleditor-normal-format-active-bg: darken($base-element-bg, 10%) !default;
   $htmleditor-default-format-active-bg: darken($base-accent, 10%) !default;
   $htmleditor-danger-format-active-bg: darken($base-danger, 10%) !default;
   $htmleditor-success-format-active-bg: darken($base-success, 10%) !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: darken($base-bg, 13.5%) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }
 
 @if $color == "softblue" {
-
-  $htmleditor-border-color: $base-border-color !default;
-  $htmleditor-invalid-border-color: $base-invalid-color !default;
-  $htmleditor-invalid-faded-border-color: $base-invalid-faded-border-color !default;
-  $htmleditor-toolbar-border-color: $base-border-color !default;
   $htmleditor-normal-format-active-bg: darken($base-element-bg, 10%) !default;
   $htmleditor-default-format-active-bg: darken($base-accent, 10%) !default;
   $htmleditor-danger-format-active-bg: darken($base-danger, 10%) !default;
   $htmleditor-success-format-active-bg: darken($base-success, 10%) !default;
-  $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
-  $htmleditor-resize-frame-border-color: $base-accent !default;
-  $htmleditor-resize-handle-bg: $base-accent !default;
   $htmleditor-mention-bg: darken($base-bg, 13.5%) !default;
   $htmleditor-mention-color: $base-text-color !default;
 }

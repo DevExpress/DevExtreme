@@ -1,8 +1,8 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
-import clickEvent from '../../events/click';
-import typeUtils from '../../core/utils/type';
+import { name as clickEventName } from '../../events/click';
+import { isDefined, isString } from '../../core/utils/type';
 import browser from '../../core/utils/browser';
 import Guid from '../../core/guid';
 import modules from './ui.grid_core.modules';
@@ -42,6 +42,7 @@ const EDIT_MODE_FORM = 'form';
 const EDIT_MODE_POPUP = 'popup';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const GROUP_CELL_CLASS = 'dx-group-cell';
+const GROUP_ROW_CLASS = 'dx-group-row';
 
 function getColumnId(that, column) {
     return that._columnsController.getColumnId(column);
@@ -58,7 +59,7 @@ function adaptiveCellTemplate(container, options) {
 
     if(options.rowType === 'data') {
         $adaptiveColumnButton = $('<span>').addClass(adaptiveColumnsController.addWidgetPrefix(ADAPTIVE_COLUMN_BUTTON_CLASS));
-        eventsEngine.on($adaptiveColumnButton, addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
+        eventsEngine.on($adaptiveColumnButton, addNamespace(clickEventName, ADAPTIVE_NAMESPACE), adaptiveColumnsController.createAction(function() {
             adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
         }));
         $adaptiveColumnButton.appendTo($container);
@@ -78,14 +79,14 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const rowIndex = this._dataController.getRowIndexByKey(cellOptions.key);
         const row = this._dataController.items()[rowIndex + 1];
 
-        return row && row.modifiedValues && typeUtils.isDefined(row.modifiedValues[columnIndex]);
+        return row && row.modifiedValues && isDefined(row.modifiedValues[columnIndex]);
     },
 
     _renderFormViewTemplate: function(item, cellOptions, $container) {
         const that = this;
         const column = item.column;
         const focusAction = that.createAction(function() {
-            eventsEngine.trigger($container, clickEvent.name);
+            eventsEngine.trigger($container, clickEventName);
         });
         const value = column.calculateCellValue(cellOptions.data);
         const displayValue = gridCoreUtils.getDisplayValue(column, value, cellOptions.data, cellOptions.rowType);
@@ -117,7 +118,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
             }
 
             $container.addClass(ADAPTIVE_ITEM_TEXT_CLASS);
-            if(!typeUtils.isDefined(text) || text === '') {
+            if(!isDefined(text) || text === '') {
                 $container.html('&nbsp;');
             }
 
@@ -205,7 +206,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _isPercentWidth: function(width) {
-        return typeUtils.isString(width) && width.slice(-1) === '%';
+        return isString(width) && width.slice(-1) === '%';
     },
 
     _isColumnHidden: function(column) {
@@ -222,7 +223,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         columns.forEach(function(column) {
             if(!that._isColumnHidden(column)) {
                 const width = column.width;
-                if(typeUtils.isDefined(width) && !isNaN(parseFloat(width))) {
+                if(isDefined(width) && !isNaN(parseFloat(width))) {
                     fixedColumnsWidth += that._isPercentWidth(width) ? that._calculatePercentWidth({
                         visibleIndex: column.visibleIndex,
                         columnsCount: columns.length,
@@ -319,7 +320,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         }
 
         if(this._isRowEditMode()) {
-            const editRowKey = this._editingController.getEditRowKey();
+            const editRowKey = this.option('editing.editRowKey');
             if(equalByValue(editRowKey, this._dataController.adaptiveExpandedKey())) {
                 return true;
             }
@@ -357,7 +358,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
 
     _hideAdaptiveColumn: function(resultWidths, visibleColumns) {
         const visibleIndex = this._getAdaptiveColumnVisibleIndex(visibleColumns);
-        if(typeUtils.isDefined(visibleIndex)) {
+        if(isDefined(visibleIndex)) {
             resultWidths[visibleIndex] = HIDDEN_COLUMNS_WIDTH;
             this._hideVisibleColumn({ isCommandColumn: true, visibleIndex });
         }
@@ -415,7 +416,8 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                 if(!cancelClassAdding) {
                     const currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
                     if(currentVisibleIndex >= 0) {
-                        $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);
+                        const $rowElement = $rowElements.eq(rowIndex);
+                        $cellElement = this._findCellElementInRow($rowElement, currentVisibleIndex);
                         this._isCellValid($cellElement) && this._hideVisibleCellInView({
                             viewName,
                             isCommandColumn,
@@ -425,6 +427,27 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
                 }
             }
         }
+    },
+
+    _findCellElementInRow($rowElement, visibleColumnIndex) {
+        const $rowCells = $rowElement.children();
+        let visibleIndex = visibleColumnIndex;
+        let cellIsInsideGroup = false;
+        if($rowElement.hasClass(GROUP_ROW_CLASS)) {
+            const $groupCell = $rowElement.find(`.${GROUP_CELL_CLASS}`);
+            const colSpan = $groupCell.attr('colspan');
+            if($groupCell.length && isDefined(colSpan)) {
+                const groupCellLength = parseInt(colSpan);
+                const endGroupIndex = $groupCell.index() + groupCellLength - 1;
+                if(visibleColumnIndex > endGroupIndex) {
+                    visibleIndex = visibleColumnIndex - groupCellLength + 1;
+                } else {
+                    cellIsInsideGroup = true;
+                }
+            }
+        }
+        const $cellElement = !cellIsInsideGroup ? $rowCells.eq(visibleIndex) : undefined;
+        return $cellElement;
     },
 
     _hideVisibleCellInView: function({ $cell, isCommandColumn }) {
@@ -568,12 +591,12 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     hasAdaptiveDetailRowExpanded: function() {
-        return typeUtils.isDefined(this._dataController.adaptiveExpandedKey());
+        return isDefined(this._dataController.adaptiveExpandedKey());
     },
 
     updateForm: function(hiddenColumns) {
         if(this.hasAdaptiveDetailRowExpanded()) {
-            if(this._form && typeUtils.isDefined(this._form._contentReadyAction)) {
+            if(this._form && isDefined(this._form._contentReadyAction)) {
                 if(hiddenColumns && hiddenColumns.length) {
                     this._form.option('items', this._getFormItemsByHiddenColumns(hiddenColumns));
                 } else {
@@ -586,7 +609,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     updateHidingQueue: function(columns) {
         const that = this;
         const hideableColumns = columns.filter(function(column) {
-            return column.visible && !column.type && !column.fixed && !(typeUtils.isDefined(column.groupIndex) && column.groupIndex >= 0);
+            return column.visible && !column.type && !column.fixed && !(isDefined(column.groupIndex) && column.groupIndex >= 0);
         });
         let columnsHasHidingPriority;
         let i;
@@ -598,7 +621,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         }
 
         for(i = 0; i < hideableColumns.length; i++) {
-            if(typeUtils.isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
+            if(isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
                 columnsHasHidingPriority = true;
                 that._hidingColumnsQueue[hideableColumns[i].hidingPriority] = hideableColumns[i];
             }
@@ -688,7 +711,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
     }
 });
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             columnHidingEnabled: false,
@@ -853,10 +876,6 @@ module.exports = {
 
                         this._isForceRowAdaptiveExpand = !this._adaptiveController.hasAdaptiveDetailRowExpanded();
 
-                        if(oldExpandRowIndex >= 0 && rowIndex > oldExpandRowIndex) {
-                            this._editRowIndex--;
-                        }
-
                         if(oldExpandRowIndex >= 0) {
                             rowIndices.push(oldExpandRowIndex + 1);
                         }
@@ -1017,7 +1036,7 @@ module.exports = {
 
                     items = that.callBase.apply(that, arguments);
 
-                    if((changeType === 'loadingAll') || !typeUtils.isDefined(that._adaptiveExpandedKey)) {
+                    if((changeType === 'loadingAll') || !isDefined(that._adaptiveExpandedKey)) {
                         return items;
                     }
 
@@ -1054,7 +1073,7 @@ module.exports = {
                 },
 
                 adaptiveExpandedKey: function(value) {
-                    if(typeUtils.isDefined(value)) {
+                    if(isDefined(value)) {
                         this._adaptiveExpandedKey = value;
                     } else {
                         return this._adaptiveExpandedKey;

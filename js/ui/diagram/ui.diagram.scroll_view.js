@@ -74,4 +74,4 @@ class DiagramScrollView extends Widget {
     }
 }
 
-module.exports = DiagramScrollView;
+export default DiagramScrollView;

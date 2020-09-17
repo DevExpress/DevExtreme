@@ -1,7 +1,9 @@
 /* global Debug*/
-const errors = require('../core/errors');
-const window = require('../core/utils/window').getWindow();
-const proxyUrlFormatter = require('./proxy_url_formatter');
+import errors from '../core/errors';
+
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import proxyUrlFormatter from './proxy_url_formatter';
 
 let IS_WINJS_ORIGIN;
 let IS_LOCAL_ORIGIN;
@@ -44,4 +46,4 @@ EndpointSelector.prototype = {
 
 };
 
-module.exports = EndpointSelector;
+export default EndpointSelector;

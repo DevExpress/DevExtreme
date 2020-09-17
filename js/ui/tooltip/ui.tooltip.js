@@ -1,8 +1,8 @@
-const $ = require('../../core/renderer');
-const Tooltip = require('./tooltip');
-const extend = require('../../core/utils/extend').extend;
-const Deferred = require('../../core/utils/deferred').Deferred;
-const viewPortUtils = require('../../core/utils/view_port');
+import $ from '../../core/renderer';
+import Tooltip from './tooltip';
+import { extend } from '../../core/utils/extend';
+import { Deferred } from '../../core/utils/deferred';
+import { value as viewPort } from '../../core/utils/view_port';
 
 let tooltip = null;
 let removeTooltipElement = null;
@@ -15,7 +15,7 @@ const createTooltip = function(options) {
 
     const $tooltip = $('<div>')
         .html(content)
-        .appendTo(viewPortUtils.value());
+        .appendTo(viewPort());
 
     removeTooltipElement = function() {
         $tooltip.remove();
@@ -33,13 +33,13 @@ const removeTooltip = function() {
     tooltip = null;
 };
 
-exports.show = function(options) {
+export function show(options) {
     removeTooltip();
     createTooltip(options);
     return tooltip.show();
-};
+}
 
-exports.hide = function() {
+export function hide() {
     if(!tooltip) {
         return new Deferred().resolve();
     }
@@ -47,4 +47,4 @@ exports.hide = function() {
     return tooltip.hide()
         .done(removeTooltip)
         .promise();
-};
+}

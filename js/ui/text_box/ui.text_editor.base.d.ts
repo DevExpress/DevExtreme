@@ -94,135 +94,124 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onChange?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onChange?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onCopy
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCopy?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onCopy?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onCut
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCut?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onCut?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onEnterKey
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onEnterKey?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onEnterKey?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onFocusIn
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusIn?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onFocusIn?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onFocusOut
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onFocusOut?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onFocusOut?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onInput
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onInput?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onInput?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onKeyDown
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @default null
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyDown?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onKeyDown?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onKeyPress
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @deprecated
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyPress?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onKeyPress?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onKeyUp
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onKeyUp?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onKeyUp?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.onPaste
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
+     * @type_function_param1_field4 event:event
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onPaste?: ((e: { component?: T, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
+    onPaste?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.placeholder
      * @type string
@@ -333,7 +322,6 @@ export default class dxTextEditor extends Editor {
 
 export interface dxTextEditorButton {
     /**
-     /**
      * @docid dxTextEditorButton.location
      * @type Enums.TextEditorButtonLocation
      * @default "after"

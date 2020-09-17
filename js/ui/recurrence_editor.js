@@ -1,2 +1,2 @@
-
-module.exports = require('./scheduler/ui.scheduler.recurrence_editor');
+import RecurrenceEditor from './scheduler/ui.scheduler.recurrence_editor';
+export default RecurrenceEditor;

@@ -4,7 +4,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../colorView/colors" as *;
+@use "../../base/colorBox";
+
 // adduse
+@use "../colorView";
+@use "../dropDownEditor";
 
 
 .dx-colorbox {
@@ -35,7 +39,7 @@
   }
 
   .dx-popup-content {
-    padding: $GENERIC_COLORBOX_OVERLAY_PADDING;
+    padding: $generic-colorbox-overlay-padding;
   }
 
   padding: 0;

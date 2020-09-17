@@ -7,33 +7,35 @@
 @use "../textEditor/sizes" as *;
 @use "../textEditor/colors" as *;
 @use "../dropDownEditor" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
+
 // adduse
+@use "../dropDownList";
 
 
 .dx-lookup {
   &.dx-editor-filled,
   &.dx-editor-outlined {
-    height: $MATERIAL_FILLED_LOOKUP_HEIGHT;
+    height: $material-filled-lookup-height;
 
     .dx-lookup-field {
-      padding: $MATERIAL_FILLED_TEXTEDITOR_INPUT_PADDING;
-      padding-right: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + $MATERIAL_BASE_ICON_SIZE;
+      padding: $material-filled-texteditor-input-padding;
+      padding-right: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size;
     }
 
     .dx-lookup-arrow {
-      right: $MATERIAL_BASE_ICON_SIZE / 2;
+      right: $material-base-icon-size / 2;
     }
 
     &.dx-invalid {
       .dx-lookup-field {
-        padding-right: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + $MATERIAL_BASE_ICON_SIZE * 2;
+        padding-right: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
       }
 
       &.dx-rtl {
         .dx-lookup-field {
-          padding-left: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + $MATERIAL_BASE_ICON_SIZE * 2;
-          padding-right: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+          padding-left: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
+          padding-right: $material-filled-texteditor-input-horizontal-padding;
         }
       }
     }
@@ -41,34 +43,34 @@
     &.dx-rtl,
     .dx-rtl & {
       .dx-lookup-arrow {
-        left: $MATERIAL_BASE_ICON_SIZE / 2;
+        left: $material-base-icon-size / 2;
         right: auto;
       }
 
       .dx-lookup-field {
-        padding-left: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + $MATERIAL_BASE_ICON_SIZE;
-        padding-right: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-left: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size;
+        padding-right: $material-filled-texteditor-input-horizontal-padding;
       }
     }
   }
 
   &.dx-editor-underlined {
-    height: $MATERIAL_STANDARD_LOOKUP_HEIGHT;
+    height: $material-standard-lookup-height;
 
     .dx-lookup-field {
-      padding: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_PADDING;
-      padding-right: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + $MATERIAL_BASE_ICON_SIZE;
+      padding: $material-standard-texteditor-input-padding;
+      padding-right: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
     }
 
     &.dx-invalid {
       .dx-lookup-field {
-        padding-right: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + $MATERIAL_BASE_ICON_SIZE * 2;
+        padding-right: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
       }
 
       &.dx-rtl {
         .dx-lookup-field {
-          padding-left: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + $MATERIAL_BASE_ICON_SIZE * 2;
-          padding-right: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+          padding-left: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
+          padding-right: $material-base-standard-texteditor-input-horizontal-padding;
         }
       }
     }
@@ -76,8 +78,8 @@
     &.dx-rtl,
     .dx-rtl & {
       .dx-lookup-field {
-        padding-left: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING + $MATERIAL_BASE_ICON_SIZE;
-        padding-right: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-left: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
+        padding-right: $material-base-standard-texteditor-input-horizontal-padding;
       }
     }
   }
@@ -88,13 +90,13 @@
     .dx-lookup-arrow:after {
       @include dx-invalid-material-badge();
 
-      right: $MATERIAL_BASE_ICON_SIZE;
+      right: $material-base-icon-size;
     }
 
     &.dx-rtl,
     .dx-rtl & {
       .dx-lookup-arrow:after {
-        left: $MATERIAL_BASE_ICON_SIZE;
+        left: $material-base-icon-size;
         right: auto;
       }
     }
@@ -104,13 +106,13 @@
     .dx-lookup-arrow:after {
       @include dx-valid-material-badge();
 
-      right: $MATERIAL_BASE_ICON_SIZE;
+      right: $material-base-icon-size;
     }
 
     &.dx-rtl,
     .dx-rtl & {
       .dx-lookup-arrow:after {
-        left: $MATERIAL_BASE_ICON_SIZE;
+        left: $material-base-icon-size;
         right: auto;
       }
     }
@@ -121,7 +123,7 @@
       .dx-pending-indicator {
         @include dx-pending-indicator-material();
 
-        right: $MATERIAL_BASE_ICON_SIZE;
+        right: $material-base-icon-size;
       }
     }
 
@@ -129,7 +131,7 @@
     .dx-rtl & {
       .dx-lookup-field-wrapper {
         .dx-pending-indicator {
-          left: $MATERIAL_BASE_ICON_SIZE;
+          left: $material-base-icon-size;
           right: auto;
         }
       }
@@ -138,7 +140,7 @@
 }
 
 .dx-lookup-field {
-  font-size: $MATERIAL_LOOKUP_FONT_SIZE;
+  font-size: $material-lookup-font-size;
 
   .dx-texteditor {
     border: none;
@@ -163,10 +165,10 @@
 .dx-lookup-arrow {
   @include dx-icon(spindown);
 
-  width: $MATERIAL_BASE_ICON_SIZE;
+  width: $material-base-icon-size;
   color: $lookup-icon-color;
 
-  @include dx-icon-font-centered-sizing($MATERIAL_BASE_ICON_SIZE);
+  @include dx-icon-font-centered-sizing($material-base-icon-size);
 }
 
 .dx-state-readonly .dx-lookup-field:before {
@@ -188,7 +190,7 @@
   }
 
   .dx-popup-title + .dx-popup-content {
-    top: $MATERIAL_LOOKUP_POPUP_CONTENT_TOP;
+    top: $material-lookup-popup-content-top;
   }
 }
 
@@ -199,10 +201,10 @@
 }
 
 .dx-lookup-popup-search .dx-list {
-  height: calc(100% - #{$MATERIAL_LOOKUP_LIST_TOP});
+  height: calc(100% - #{$material-lookup-list-top});
 }
 
 .dx-lookup-search-wrapper {
-  padding: $MATERIAL_LOOKUP_POPUP_CONTENT_PADDING;
-  padding-bottom: $MATERIAL_LOOKUP_POPUP_CONTENT_PADDING - 6px;
+  padding: $material-lookup-popup-content-padding;
+  padding-bottom: $material-lookup-popup-content-padding - 6px;
 }

@@ -3,12 +3,10 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
+@use "mixins" as *;
+
 // adduse
-@mixin dx-s-font-mixin() {
-  font-weight: 500;
-  font-size: $GENERIC_S_FONT_SIZE;
-}
 
 .dx-theme-generic-typography {
   background-color: $typography-bg;
@@ -18,23 +16,23 @@
   h1,
   .dx-font-xl {
     font-weight: 200;
-    font-size: $GENERIC_XL_FONT_SIZE;
+    font-size: $generic-xl-font-size;
   }
 
   h2,
   .dx-font-l {
     font-weight: normal;
-    font-size: $GENERIC_L_FONT_SIZE;
+    font-size: $generic-l-font-size;
   }
 
   h3 {
     font-weight: normal;
-    font-size: $GENERIC_H3_FONT_SIZE;
+    font-size: $generic-h3-font-size;
   }
 
   .dx-font-m {
     font-weight: normal;
-    font-size: $GENERIC_M_FONT_SIZE;
+    font-size: $generic-m-font-size;
   }
 
   h4,
@@ -44,14 +42,14 @@
 
   h5 {
     font-weight: 700;
-    font-size: $GENERIC_H5_FONT_SIZE;
+    font-size: $generic-h5-font-size;
   }
 
   h6,
   small,
   .dx-font-xs {
     font-weight: 800;
-    font-size: $GENERIC_XS_FONT_SIZE;
+    font-size: $generic-xs-font-size;
   }
 
   a {

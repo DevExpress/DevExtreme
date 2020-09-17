@@ -3,8 +3,9 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../button" as *;
 @use "../button/colors" as *;
+@use "../button/sizes" as *;
+
 // adduse
 
 
@@ -21,7 +22,7 @@
 
   &.dx-buttongroup-first-item {
     padding-left: 0;
-    border-left-width: $GENERIC_BUTTON_BORDER_WEIGHT;
+    border-left-width: $generic-button-border-weight;
 
     &.dx-button,
     &.dx-state-hover .dx-button-content {
@@ -219,7 +220,7 @@
     }
 
     &.dx-buttongroup-last-item {
-      border-left-width: $GENERIC_BUTTON_BORDER_WEIGHT;
+      border-left-width: $generic-button-border-weight;
       padding-right: 1px;
       padding-left: 0;
 

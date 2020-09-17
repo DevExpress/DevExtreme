@@ -5,11 +5,11 @@ import { toComparable } from './data';
 import { each } from './iterator';
 import { isDefined, isFunction, isString, isObject } from './type';
 
-const ensureDefined = function(value, defaultValue) {
+export const ensureDefined = function(value, defaultValue) {
     return isDefined(value) ? value : defaultValue;
 };
 
-const executeAsync = function(action, context/* , internal */) {
+export const executeAsync = function(action, context/* , internal */) {
     const deferred = new Deferred();
     const normalizedContext = context || this;
     const task = {
@@ -77,15 +77,15 @@ const deferExecute = function(name, func, deferred) {
     }
 };
 
-const deferRender = function(func, deferred) {
+export const deferRender = function(func, deferred) {
     return deferExecute('render', func, deferred);
 };
 
-const deferUpdate = function(func, deferred) {
+export const deferUpdate = function(func, deferred) {
     return deferExecute('update', func, deferred);
 };
 
-const deferRenderer = function(func) {
+export const deferRenderer = function(func) {
     return function() {
         const that = this;
         return deferExecute('render', function() {
@@ -94,7 +94,7 @@ const deferRenderer = function(func) {
     };
 };
 
-const deferUpdater = function(func) {
+export const deferUpdater = function(func) {
     return function() {
         const that = this;
         return deferExecute('update', function() {
@@ -103,7 +103,7 @@ const deferUpdater = function(func) {
     };
 };
 
-const findBestMatches = function(targetFilter, items, mapFn) {
+export const findBestMatches = function(targetFilter, items, mapFn) {
     const bestMatches = [];
     let maxMatchCount = 0;
 
@@ -164,7 +164,7 @@ const match = function(value, targetValue) {
     return false;
 };
 
-const splitPair = function(raw) {
+export const splitPair = function(raw) {
     switch(typeof raw) {
         case 'string':
             return raw.split(/\s+/, 2);
@@ -177,7 +177,7 @@ const splitPair = function(raw) {
     }
 };
 
-const normalizeKey = function(id) {
+export const normalizeKey = function(id) {
     let key = isString(id) ? id : id.toString();
     const arr = key.match(/[^a-zA-Z0-9_]/g);
 
@@ -187,7 +187,7 @@ const normalizeKey = function(id) {
     return key;
 };
 
-const denormalizeKey = function(key) {
+export const denormalizeKey = function(key) {
     const arr = key.match(/__\d+__/g);
 
     arr && arr.forEach((char) => {
@@ -199,7 +199,7 @@ const denormalizeKey = function(key) {
     return key;
 };
 
-const pairToObject = function(raw, preventRound) {
+export const pairToObject = function(raw, preventRound) {
     const pair = splitPair(raw);
     let h = preventRound ? parseFloat(pair && pair[0]) : parseInt(pair && pair[0], 10);
     let v = preventRound ? parseFloat(pair && pair[1]) : parseInt(pair && pair[1], 10);
@@ -214,7 +214,7 @@ const pairToObject = function(raw, preventRound) {
     return { h, v };
 };
 
-const getKeyHash = function(key) {
+export const getKeyHash = function(key) {
     if(key instanceof Guid) {
         return key.toString();
     } else if(isObject(key) || Array.isArray(key)) {
@@ -229,11 +229,11 @@ const getKeyHash = function(key) {
     return key;
 };
 
-const escapeRegExp = function(string) {
+export const escapeRegExp = function(string) {
     return string.replace(/[[\]{}\-()*+?.\\^$|\s]/g, '\\$&');
 };
 
-const applyServerDecimalSeparator = function(value) {
+export const applyServerDecimalSeparator = function(value) {
     const separator = config().serverDecimalSeparator;
     if(isDefined(value)) {
         value = value.toString().replace('.', separator);
@@ -241,10 +241,10 @@ const applyServerDecimalSeparator = function(value) {
     return value;
 };
 
-const noop = function() {};
-const asyncNoop = function() { return new Deferred().resolve().promise(); };
+export const noop = function() {};
+export const asyncNoop = function() { return new Deferred().resolve().promise(); };
 
-const grep = function(elements, checkFunction, invert) {
+export const grep = function(elements, checkFunction, invert) {
     const result = [];
     let check;
     const expectedCheck = !invert;
@@ -295,7 +295,7 @@ const objectsEqualByValue = function(object1, object2, depth, strict) {
 
 const maxEqualityDepth = 3;
 
-const equalByValue = function(object1, object2, depth = 0, strict = true) {
+export const equalByValue = function(object1, object2, depth = 0, strict = true) {
 
     object1 = toComparable(object1, true);
     object2 = toComparable(object2, true);
@@ -315,30 +315,3 @@ const equalByValue = function(object1, object2, depth = 0, strict = true) {
 
     return false;
 };
-
-exports.ensureDefined = ensureDefined;
-
-exports.executeAsync = executeAsync;
-
-exports.deferRender = deferRender;
-exports.deferRenderer = deferRenderer;
-exports.deferUpdate = deferUpdate;
-exports.deferUpdater = deferUpdater;
-
-exports.pairToObject = pairToObject;
-exports.splitPair = splitPair;
-
-exports.findBestMatches = findBestMatches;
-
-exports.normalizeKey = normalizeKey;
-exports.denormalizeKey = denormalizeKey;
-exports.getKeyHash = getKeyHash;
-
-exports.escapeRegExp = escapeRegExp;
-
-exports.applyServerDecimalSeparator = applyServerDecimalSeparator;
-
-exports.noop = noop;
-exports.asyncNoop = asyncNoop;
-exports.grep = grep;
-exports.equalByValue = equalByValue;

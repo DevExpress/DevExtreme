@@ -2,7 +2,7 @@ import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
 
 let dataSourceAdapterType = DataSourceAdapter;
 
-module.exports = {
+export default {
     extend: function(extender) {
         dataSourceAdapterType = dataSourceAdapterType.inherit(extender);
     },

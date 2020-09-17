@@ -1,10 +1,11 @@
-const proto = require('./tree_map.base').prototype;
-const nodeProto = require('./node').prototype;
+import { prototype as proto } from './tree_map.base';
+import { prototype as nodeProto } from './node';
+import { noop } from '../../core/utils/common';
 
 const handlers = proto._handlers;
 const _calculateState = handlers.calculateState;
 const _buildState = nodeProto._buildState;
-const _extend = require('../../core/utils/extend').extend;
+import { extend as _extend } from '../../core/utils/extend';
 
 handlers.calculateState = function(options) {
     const states = { 0: _calculateState(options) };
@@ -13,7 +14,7 @@ handlers.calculateState = function(options) {
     return states;
 };
 
-handlers.calculateAdditionalStates = require('../../core/utils/common').noop;
+handlers.calculateAdditionalStates = noop;
 
 nodeProto.code = 0;
 

@@ -16,10 +16,11 @@ import Widget from '../widget/ui.widget';
 import { format as formatMessage } from '../../localization/message';
 import { addNamespace } from '../../events/utils';
 import TextBox from '../text_box';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import devices from '../../core/devices';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import Popup from '../popup';
+import { hasWindow } from '../../core/utils/window';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -342,15 +343,24 @@ const DropDownEditor = TextBox.inherit({
                     throw errors.Error('E1010');
                 }
 
-                this._refreshEvents();
-                this._refreshValueChangeEvent();
-                this._renderFocusState();
+                this._integrateInput();
                 isFocused && eventsEngine.trigger($input, 'focus');
             }
         });
 
         $container.prepend(this._$beforeButtonsContainer);
         $container.append(this._$afterButtonsContainer);
+    },
+
+    _integrateInput: function() {
+        this._refreshEvents();
+        this._refreshValueChangeEvent();
+        this._renderFocusState();
+    },
+
+    _refreshEmptinessEvent: function() {
+        eventsEngine.off(this._input(), 'input blur', this._toggleEmptinessEventHandler);
+        this._renderEmptinessEvent();
     },
 
     _fieldRenderData: function() {
@@ -369,7 +379,7 @@ const DropDownEditor = TextBox.inherit({
 
     _renderOpenHandler: function() {
         const $inputWrapper = this._inputWrapper();
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
         const openOnFieldClick = this.option('openOnFieldClick');
 
         eventsEngine.off($inputWrapper, eventName);
@@ -770,7 +780,11 @@ const DropDownEditor = TextBox.inherit({
                 this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                 break;
             case 'popupPosition':
+                break;
             case 'deferRendering':
+                if(hasWindow()) {
+                    this._createPopup();
+                }
                 break;
             case 'applyValueMode':
             case 'applyButtonText':
@@ -817,4 +831,4 @@ const DropDownEditor = TextBox.inherit({
 
 registerComponent('dxDropDownEditor', DropDownEditor);
 
-module.exports = DropDownEditor;
+export default DropDownEditor;

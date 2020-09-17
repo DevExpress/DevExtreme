@@ -82,13 +82,13 @@ const environment = {
         const that = this;
         that.themeManager = sinon.createStubInstance(chartThemeManagerModule.ThemeManager);
 
-        that.templateManager = sinon.createStubInstance(TemplateManagerModule.default);
+        that.templateManager = sinon.createStubInstance(TemplateManagerModule.TemplateManager);
         that.templateManager._tempTemplates = [];
-        this.templateManagerCtor = sinon.stub(TemplateManagerModule, 'default', function() {
+        this.templateManagerCtor = sinon.stub(TemplateManagerModule, 'TemplateManager', function() {
             return that.templateManager;
         });
 
-        TemplateManagerModule.default.createDefaultOptions = function() { return {}; };
+        TemplateManagerModule.TemplateManager.createDefaultOptions = function() { return {}; };
 
         that.themeManager.theme.withArgs('legend').returns({ title: {} });
         $.each(['loadingIndicator', 'legend', 'size', 'title', 'adaptiveLayout'], function(_, name) {
@@ -104,9 +104,6 @@ const environment = {
         that.themeManager.getOptions.withArgs('series').returnsArg(1);
         that.themeManager.getOptions.withArgs('export').returns({});
         that.themeManager.getOptions.withArgs('seriesTemplate').returns(false);
-        that.themeManager.getOptions.withArgs('margin').returns({
-            marginsThemeApplied: true
-        });
         that.themeManager.getOptions.withArgs('commonPaneSettings').returns({
             backgroundColor: 'none',
             border: {
@@ -169,7 +166,6 @@ const environment = {
         this.validateData.restore();
         this.templateManagerCtor.restore();
 
-        this.layoutManager.layoutElements.reset();
         this.layoutManager = null;
 
         this.themeManager.getOptions.reset();
@@ -255,8 +251,19 @@ const overlappingEnvironment = $.extend({}, environment, {
             'title.font',
             'title.subtitle.font',
             'tooltip.font',
-            'loadingIndicator.font'
+            'loadingIndicator.font',
+            'commonAnnotationSettings.font'
         ] }]);
+    });
+
+    QUnit.test('`_clearCanvas` method should called after `_renderExtraElements` (canvas using for the annotations)', function(assert) {
+        const chart = this.createPieChart({});
+        chart._renderExtraElements = sinon.stub();
+        chart._clearCanvas = sinon.stub();
+
+        chart._forceRender();
+
+        assert.ok(chart._renderExtraElements.calledBefore(chart._clearCanvas));
     });
 
     QUnit.test('Creation layoutManager with options', function(assert) {
@@ -1832,19 +1839,6 @@ const overlappingEnvironment = $.extend({}, environment, {
         chart.render({ force: true });
 
         assert.strictEqual(chart.series[0].hideLayoutLabels, false);
-    });
-
-    QUnit.test('Adaptive layout with small canvas does not cause exceptions', function(assert) {
-        chartMocks.seriesMockData.series.push(new MockSeries({}));
-        const chart = this.createPieChart({
-            dataSource: [{}],
-            series: {}
-        });
-        chart.layoutManager.layoutElements = sinon.spy(function() { arguments[2](true); });
-
-        chart.render({ force: true });
-
-        assert.ok(true);
     });
 
     QUnit.module('drawn', {

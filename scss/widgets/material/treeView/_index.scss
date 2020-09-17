@@ -6,31 +6,32 @@
 @use "../../base/treeView" as *;
 @use "../../base/icons" as *;
 @use "../checkBox/colors" as *;
+
 // adduse
 
 
-$MATERIAL_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET: 8px;
-$MATERIAL_TREEVIEW_BORDER_PADDING: 1px;
-$MATERIAL_TREEVIEW_CONTAINER_PADDING:
-  $MATERIAL_TREEVIEW_BORDER_PADDING
-  $MATERIAL_TREEVIEW_BORDER_PADDING
-  $MATERIAL_TREEVIEW_BORDER_PADDING
-  $MATERIAL_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET;
+$material-treeview-container-with-border-offset: 8px;
+$material-treeview-border-padding: 1px;
+$material-treeview-container-padding:
+  $material-treeview-border-padding
+  $material-treeview-border-padding
+  $material-treeview-border-padding
+  $material-treeview-container-with-border-offset;
 
-$MATERIAL_TREEVIEW_SEARCH_EDITOR_HEIGHT: 33px;
-$MATERIAL_SELECT_ALL_ITEM_LEFT_PADDING: 26px;
-$MATERIAL_TREEVIEW_NODE_OFFSET: $MATERIAL_TREEVIEW_TOGGLE_ITEM_WIDTH;
-$MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET: $MATERIAL_TREEVIEW_CHECKBOX_OFFSET + 5;
+$material-treeview-search-editor-height: 33px;
+$material-select-all-item-left-padding: 26px;
+$material-treeview-node-offset: $material-treeview-toggle-item-width;
+$material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset + 5;
 
 .dx-treeview-node-loadindicator {
-  top: $MATERIAL_TREEVIEW_LOADINCICATOR_OFFSET_TOP;
-  left: $MATERIAL_TREEVIEW_LOADINCICATOR_OFFSET_LEFT;
-  width: $MATERIAL_TREEVIEW_LOADINCICATOR_SIZE;
-  height: $MATERIAL_TREEVIEW_LOADINCICATOR_SIZE;
+  top: $material-treeview-loadincicator-offset-top;
+  left: $material-treeview-loadincicator-offset-left;
+  width: $material-treeview-loadincicator-size;
+  height: $material-treeview-loadincicator-size;
 }
 
 .dx-rtl {
-  @include dx-treeview-make-rtl($MATERIAL_TREEVIEW_CONTAINER_WITH_BORDER_OFFSET, $MATERIAL_TREEVIEW_NODE_OFFSET, $MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET, $MATERIAL_TREEVIEW_CHECKBOX_OFFSET, $MATERIAL_SELECT_ALL_TEXT_OFFSET, $MATERIAL_SELECT_ALL_ITEM_LEFT_PADDING, $MATERIAL_TREEVIEW_BORDER_PADDING);
+  @include dx-treeview-make-rtl($material-treeview-container-with-border-offset, $material-treeview-node-offset, $material-treeview-item-with-checkbox-offset, $material-treeview-checkbox-offset, $material-select-all-text-offset, $material-select-all-item-left-padding, $material-treeview-border-padding);
 
   .dx-treeview-toggle-item-visibility {
     right: 0;
@@ -42,38 +43,38 @@ $MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET: $MATERIAL_TREEVIEW_CHECKBOX_OFFSET
 }
 
 .dx-treeview-search {
-  margin-bottom: $MATERIAL_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM;
+  margin-bottom: $material-treeview-searchbox-margin-bottom;
 }
 
 .dx-treeview-with-search > .dx-scrollable {
-  height: calc(100% - #{round($MATERIAL_TREEVIEW_SEARCH_EDITOR_HEIGHT + $MATERIAL_TREEVIEW_SEARCHBOX_MARGIN_BOTTOM)});
+  height: calc(100% - #{round($material-treeview-search-editor-height + $material-treeview-searchbox-margin-bottom)});
 }
 
 .dx-treeview-border-visible {
   border: 1px solid $treeview-border-color;
 
   .dx-treeview-select-all-item {
-    padding-left: $MATERIAL_SELECT_ALL_ITEM_LEFT_PADDING;
+    padding-left: $material-select-all-item-left-padding;
   }
 
   .dx-scrollable-content {
     > .dx-treeview-node-container {
-      padding: $MATERIAL_TREEVIEW_CONTAINER_PADDING;
+      padding: $material-treeview-container-padding;
     }
   }
 }
 
 .dx-treeview-select-all-item {
   border-bottom: 1px solid $treeview-border-color;
-  padding: $MATERIAL_SELECT_ALL_ITEM_PADDING;
+  padding: $material-select-all-item-padding;
 
   .dx-checkbox-text {
-    padding-left: $MATERIAL_SELECT_ALL_TEXT_OFFSET;
+    padding-left: $material-select-all-text-offset;
   }
 }
 
 .dx-treeview-node {
-  padding-left: $MATERIAL_TREEVIEW_NODE_OFFSET;
+  padding-left: $material-treeview-node-offset;
 }
 
 .dx-state-selected {
@@ -85,12 +86,12 @@ $MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET: $MATERIAL_TREEVIEW_CHECKBOX_OFFSET
 .dx-treeview-item-with-checkbox {
   .dx-treeview-item {
     color: $base-text-color;
-    padding-left: $MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET;
+    padding-left: $material-treeview-item-with-checkbox-offset;
   }
 
   .dx-checkbox {
-    top: $MATERIAL_TREEVIEW_CHECKBOX_VERTICAL_OFFSET;
-    left: $MATERIAL_TREEVIEW_CHECKBOX_OFFSET;
+    top: $material-treeview-checkbox-vertical-offset;
+    left: $material-treeview-checkbox-offset;
   }
 }
 
@@ -115,12 +116,12 @@ $MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET: $MATERIAL_TREEVIEW_CHECKBOX_OFFSET
 }
 
 .dx-treeview-item {
-  padding: $MATERIAL_TREEVIEW_ITEM_PADDING;
-  min-height: $MATERIAL_TREEVIEW_MIN_ITEM_HEIGHT;
-  line-height: $MATERIAL_TREEVIEW_MIN_ITEM_HEIGHT / 2 - 2;
+  padding: $material-treeview-item-padding;
+  min-height: $material-treeview-min-item-height;
+  line-height: $material-treeview-min-item-height / 2 - 2;
 
   .dx-icon {
-    @include dx-icon-sizing($MATERIAL_BASE_ICON_SIZE);
+    @include dx-icon-sizing($material-base-icon-size);
   }
 
   &.dx-state-hover {
@@ -131,16 +132,16 @@ $MATERIAL_TREEVIEW_ITEM_WITH_CHECKBOX_OFFSET: $MATERIAL_TREEVIEW_CHECKBOX_OFFSET
 
 .dx-treeview-toggle-item-visibility {
   @include dx-icon(chevronright);
-  @include dx-icon-font-centered-sizing($MATERIAL_BASE_ICON_SIZE);
+  @include dx-icon-font-centered-sizing($material-base-icon-size);
 
   color: $treeview-spin-icon-color;
-  width: $MATERIAL_TREEVIEW_TOGGLE_ITEM_WIDTH;
-  height: $MATERIAL_TREEVIEW_MIN_ITEM_HEIGHT;
+  width: $material-treeview-toggle-item-width;
+  height: $material-treeview-min-item-height;
   top: 0;
   left: 0;
 
   &.dx-treeview-toggle-item-visibility-opened {
     @include dx-icon(chevrondown);
-    @include dx-icon-font-centered-sizing($MATERIAL_BASE_ICON_SIZE);
+    @include dx-icon-font-centered-sizing($material-base-icon-size);
   }
 }

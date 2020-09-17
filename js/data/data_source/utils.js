@@ -22,14 +22,11 @@ export const normalizeStoreLoadOptionAccessorArguments = (originalArguments) => 
 };
 
 const mapGroup = (group, level, mapper) => map(group, item => {
-    const result = {
-        key: item.key,
+    const { items, ...restItem } = item;
+    return {
+        ...restItem,
         items: mapRecursive(item.items, level - 1, mapper)
     };
-    if('aggregates' in item) {
-        result.aggregates = item.aggregates;
-    }
-    return result;
 });
 
 const mapRecursive = (items, level, mapper) => {

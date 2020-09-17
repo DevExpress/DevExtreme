@@ -1,22 +1,26 @@
 @use "../sizes" as *;
 @use "colors" as *;
+
 // adduse
 
-$MATERIAL_CHECKBOX_RIPPLE_SIZE: null !default;
-$MATERIAL_CHECKBOX_ARROW_ICON_SIZE: null !default;
-$MATERIAL_CHECKBOX_INTERMIDIATE_ICON_SIZE: null !default;
-$MATERIAL_CHECKBOX_BORDER_RADIUS: null !default;
+$material-checkbox-ripple-size: null !default;
+$material-checkbox-arrow-icon-size: null !default;
+$material-checkbox-intermidiate-icon-size: null !default;
+$material-checkbox-border-radius: null !default;
+$material-checkbox-size: null !default;
 
 @if $size == "default" {
-  $MATERIAL_CHECKBOX_RIPPLE_SIZE: 40px;
-  $MATERIAL_CHECKBOX_ARROW_ICON_SIZE: 16px;
-  $MATERIAL_CHECKBOX_INTERMIDIATE_ICON_SIZE: 20px;
-  $MATERIAL_CHECKBOX_BORDER_RADIUS: $checkbox-icon-border-radius;
+  $material-checkbox-ripple-size: 40px;
+  $material-checkbox-arrow-icon-size: 16px;
+  $material-checkbox-intermidiate-icon-size: 20px;
+  $material-checkbox-border-radius: $checkbox-icon-border-radius;
+  $material-checkbox-size: 18px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_CHECKBOX_RIPPLE_SIZE: 30px;
-  $MATERIAL_CHECKBOX_ARROW_ICON_SIZE: 14px;
-  $MATERIAL_CHECKBOX_INTERMIDIATE_ICON_SIZE: 18px;
-  $MATERIAL_CHECKBOX_BORDER_RADIUS: 2px;
+  $material-checkbox-ripple-size: 30px;
+  $material-checkbox-arrow-icon-size: 14px;
+  $material-checkbox-intermidiate-icon-size: 18px;
+  $material-checkbox-border-radius: 2px;
+  $material-checkbox-size: 16px;
 }

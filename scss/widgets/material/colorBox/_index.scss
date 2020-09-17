@@ -4,13 +4,17 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../colorView/colors" as *;
+@use "../../base/colorBox";
+
 // adduse
+@use "../colorView";
+@use "../dropDownEditor";
 
 
 .dx-colorbox {
   .dx-colorbox-input-container {
     .dx-dropdowneditor-input-wrapper .dx-colorbox-input {
-      padding-left: $MATERIAL_COLORBOX_PREVIEW_LEFT + 27px;
+      padding-left: $material-colorbox-preview-left + 27px;
     }
 
     &.dx-colorbox-color-is-not-defined {
@@ -20,7 +24,7 @@
     }
 
     &:after {
-      left: $MATERIAL_COLORBOX_PREVIEW_LEFT + 1;
+      left: $material-colorbox-preview-left + 1;
     }
   }
 
@@ -32,7 +36,7 @@
 
 .dx-colorbox-color-result-preview {
   border-color: $colorview-border-color;
-  left: $MATERIAL_COLORBOX_PREVIEW_LEFT;
+  left: $material-colorbox-preview-left;
 }
 
 .dx-colorbox-overlay {
@@ -41,7 +45,7 @@
   }
 
   .dx-popup-content {
-    padding: $MATERIAL_COLORBOX_OVERLAY_PADDING;
+    padding: $material-colorbox-overlay-padding;
   }
 
   padding: 0;
@@ -51,7 +55,7 @@
   &.dx-colorbox,
   .dx-colorbox {
     &.dx-state-focused .dx-colorbox-input {
-      padding-right: $MATERIAL_COLORBOX_PREVIEW_LEFT + 27px;
+      padding-right: $material-colorbox-preview-left + 27px;
     }
   }
 

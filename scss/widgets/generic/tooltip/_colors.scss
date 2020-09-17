@@ -3,189 +3,81 @@
 @use "../colors" as *;
 @use "../overlay/colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
-
+/**
+* $name 10. Text color
+* $type color
+*/
 $tooltip-color: null !default;
+
+/**
+* $name 20. Background color
+* $type color
+*/
 $tooltip-bg: null !default;
+
+/**
+* $name 30. Border color
+* $type color
+*/
 $tooltip-border-color: null !default;
 $tooltip-shadow-color: null !default;
-$tooltip-border-radius: null !default;
-
+$tooltip-border-radius: $base-border-radius !default;
 
 @if $color == "carmine" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: $base-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "contrast" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: $base-inverted-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $tooltip-border-color: $base-border-color !default;
   $tooltip-shadow-color: $base-shadow-color !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "dark" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: $base-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: $overlay-content-shadow-color !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "darkmoon" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: lighten($base-bg, 14%) !default; // #465672 => #62789e
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: $overlay-content-shadow-color !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "darkviolet" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: $base-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $tooltip-border-color: $base-hover-bg !default;
   $tooltip-shadow-color: $overlay-content-shadow-color !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "greenmist" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: lighten($base-bg, 100%) !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "light" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: $base-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
 
 @if $color == "softblue" {
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $tooltip-color: $base-text-color !default;
-
-  /**
-    * $name 20. Background color
-    * $type color
-    */
   $tooltip-bg: $base-bg !default;
-
-  /**
-    * $name 30. Border color
-    * $type color
-    */
   $tooltip-border-color: $overlay-border-color !default;
   $tooltip-shadow-color: color.change(darken($tooltip-bg, 100%), $alpha: 0.1) !default;
-  $tooltip-border-radius: $base-border-radius !default;
 }
-

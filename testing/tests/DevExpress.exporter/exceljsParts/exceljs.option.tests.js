@@ -119,5 +119,3 @@ const ExcelJSOptionTests = {
 };
 
 export { ExcelJSOptionTests };
-
-

@@ -1,11 +1,10 @@
-const Class = require('../../core/class');
-const extend = require('../../core/utils/extend').extend;
-const typeUtils = require('../../core/utils/type');
-const each = require('../../core/utils/iterator').each;
-const paletteModule = require('../palette');
-const _isString = typeUtils.isString;
-const _parseScalar = require('./utils').parseScalar;
-const themeModule = require('../themes');
+import Class from '../../core/class';
+import { extend } from '../../core/utils/extend';
+import { isString as _isString } from '../../core/utils/type';
+import { each } from '../../core/utils/iterator';
+import { createPalette as getPalette, getDiscretePalette, getGradientPalette, getAccentColor as accentColor } from '../palette';
+import { parseScalar as _parseScalar } from './utils';
+import themeModule from '../themes';
 const _getTheme = themeModule.getTheme;
 const _addCacheItem = themeModule.addCacheItem;
 const _removeCacheItem = themeModule.removeCacheItem;
@@ -13,15 +12,15 @@ const _extend = extend;
 const _each = each;
 
 // register themes
-require('./themes/generic.light');
-require('./themes/generic.dark');
-require('./themes/generic.contrast');
-require('./themes/generic.carmine');
-require('./themes/generic.darkmoon');
-require('./themes/generic.softblue');
-require('./themes/generic.darkviolet');
-require('./themes/generic.greenmist');
-require('./themes/material');
+import './themes/generic.light';
+import './themes/generic.dark';
+import './themes/generic.contrast';
+import './themes/generic.carmine';
+import './themes/generic.darkmoon';
+import './themes/generic.softblue';
+import './themes/generic.darkviolet';
+import './themes/generic.greenmist';
+import './themes/material';
 
 function getThemePart(theme, path) {
     let _theme = theme;
@@ -31,7 +30,7 @@ function getThemePart(theme, path) {
     return _theme;
 }
 
-exports.BaseThemeManager = Class.inherit({ // TODO: test hack
+export const BaseThemeManager = Class.inherit({ // TODO: test hack
     ctor: function(options) {
         this._themeSection = options.themeSection;
         this._fontFields = options.fontFields || [];
@@ -88,19 +87,19 @@ exports.BaseThemeManager = Class.inherit({ // TODO: test hack
     // TODO: May be we need some single method for all palettes?
 
     createPalette: function(palette, options) {
-        return paletteModule.createPalette(palette, options, this._defaultPalette);
+        return getPalette(palette, options, this._defaultPalette);
     },
 
     createDiscretePalette: function(palette, count) {
-        return paletteModule.getDiscretePalette(palette, count, this._defaultPalette);
+        return getDiscretePalette(palette, count, this._defaultPalette);
     },
 
     createGradientPalette: function(palette) {
-        return paletteModule.getGradientPalette(palette, this._defaultPalette);
+        return getGradientPalette(palette, this._defaultPalette);
     },
 
     getAccentColor: function(palette) {
-        return paletteModule.getAccentColor(palette, this._defaultPalette);
+        return accentColor(palette, this._defaultPalette);
     },
 
     _initializeTheme: function() {

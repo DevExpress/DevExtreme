@@ -1,7 +1,9 @@
-const jQuery = require('jquery');
-const deferredUtils = require('../../core/utils/deferred');
-const useJQuery = require('./use_jquery')();
-const compareVersion = require('../../core/utils/version').compare;
+// eslint-disable-next-line no-restricted-imports
+import jQuery from 'jquery';
+import { setStrategy } from '../../core/utils/deferred';
+import { compare as compareVersion } from '../../core/utils/version';
+import useJQueryFn from './use_jquery';
+const useJQuery = useJQueryFn();
 
 if(useJQuery) {
     const Deferred = jQuery.Deferred;
@@ -19,5 +21,5 @@ if(useJQuery) {
             }
         };
 
-    deferredUtils.setStrategy(strategy);
+    setStrategy(strategy);
 }

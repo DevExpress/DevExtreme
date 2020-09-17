@@ -1,11 +1,15 @@
-$RECURRENCE_COUNT_NUMBER_BOX_RIGHT_MARGIN: 11px;
-$RECURRENCE_COUNT_NUMBER_BOX_LEFT_MARGIN: 16px;
-$RECURRENCE_UNTIL_DATE_BOX_BOX_MARGIN: 28px;
-$RECURRENCE_LABEL_LINE_HEIGHT_MARGIN: 36px;
+$recurrence-count-number-box-right-margin: 11px;
+$recurrence-count-number-box-left-margin: 16px;
+$recurrence-until-date-box-box-margin: 28px;
+$recurrence-label-line-height-margin: 36px;
 
-$RECURRENCE_INTERVAL_NUMBER_BOX_MARGIN_TOP: 25px;
-$RECURRENCE_RADIO_GROUP_ITEM_PADDING: 10px;
-$RECURRENCE_BUTTON_GROUP_ITEM_PADDING: 8px;
+$recurrence-interval-number-box-margin-top: 25px;
+$recurrence-radio-group-item-padding: 10px;
+$recurrence-button-group-item-padding: 8px;
+
+.dx-recurrence-repeat-end-wrapper {
+  display: flex;
+}
 
 .dx-recurrence-repeat-on,
 .dx-recurrence-numberbox-interval-wrapper {
@@ -31,35 +35,35 @@ $RECURRENCE_BUTTON_GROUP_ITEM_PADDING: 8px;
 }
 
 .dx-recurrence-numberbox-interval-label {
-  margin-top: $RECURRENCE_INTERVAL_NUMBER_BOX_MARGIN_TOP;
+  margin-top: $recurrence-interval-number-box-margin-top;
 }
 
 .dx-recurrence-repeat-end-label {
-  line-height: $RECURRENCE_LABEL_LINE_HEIGHT_MARGIN;
+  line-height: $recurrence-label-line-height-margin;
 }
 
 .dx-recurrence-radiogroup-repeat-type {
   margin: 0;
 
   .dx-item {
-    padding-bottom: $RECURRENCE_RADIO_GROUP_ITEM_PADDING;
+    padding-bottom: $recurrence-radio-group-item-padding;
   }
 }
 
 .dx-recurrence-datebox-until-date {
-  margin-left: $RECURRENCE_UNTIL_DATE_BOX_BOX_MARGIN;
+  margin-left: $recurrence-until-date-box-box-margin;
 }
 
 .dx-recurrence-numberbox-repeat-count {
-  margin-left: $RECURRENCE_COUNT_NUMBER_BOX_LEFT_MARGIN;
-  margin-right: $RECURRENCE_COUNT_NUMBER_BOX_RIGHT_MARGIN;
+  margin-left: $recurrence-count-number-box-left-margin;
+  margin-right: $recurrence-count-number-box-right-margin;
 }
 
 .dx-recurrence-button-group {
   width: 100%;
 
   .dx-button-content {
-    padding: $RECURRENCE_BUTTON_GROUP_ITEM_PADDING;
+    padding: $recurrence-button-group-item-padding;
   }
 
   .dx-buttongroup-wrapper > div {

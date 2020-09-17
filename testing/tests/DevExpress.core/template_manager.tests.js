@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import TemplateManager from 'core/template_manager';
+import { TemplateManager } from 'core/template_manager';
 import { Template } from 'core/templates/template';
 import { EmptyTemplate } from 'core/templates/empty_template';
 import { FunctionTemplate } from 'core/templates/function_template';

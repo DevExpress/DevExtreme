@@ -1,8 +1,9 @@
 @use "../base/mixins" as *;
-@use "./popover" as *;
+@use "../base/popover/mixins" as *;
+
 // adduse
-$SLIDER_TOOLTIP_CONTENT_HEIGHT: 28px;
-$SLIDER_TOOLTIP_ARROW_HEIGHT: 7px;
+$slider-tooltip-content-height: 28px;
+$slider-tooltip-arrow-height: 7px;
 
 .dx-slider-label {
   position: absolute;
@@ -46,7 +47,7 @@ $SLIDER_TOOLTIP_ARROW_HEIGHT: 7px;
   }
 
   .dx-overlay-content {
-    height: $SLIDER_TOOLTIP_CONTENT_HEIGHT;
+    height: $slider-tooltip-content-height;
 
     &:before {
       display: none;
@@ -54,7 +55,7 @@ $SLIDER_TOOLTIP_ARROW_HEIGHT: 7px;
   }
 
   @include user-select(none);
-  @include dx-popover-arrow-size(2 * $SLIDER_TOOLTIP_ARROW_HEIGHT);
+  @include dx-popover-arrow-size(2 * $slider-tooltip-arrow-height);
 }
 
 .dx-slider-wrapper {

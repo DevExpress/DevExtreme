@@ -1,4 +1,4 @@
-const map = require('./iterator').map;
+import { map } from './iterator';
 
 const _normalize = function(text) {
     if(text === undefined || text === null) {
@@ -17,15 +17,15 @@ const _chop = function(text) {
         .split(/[\s_-]+/);
 };
 
-const dasherize = function(text) {
+export const dasherize = function(text) {
     return map(_chop(text), function(p) { return p.toLowerCase(); }).join('-');
 };
 
-const underscore = function(text) {
+export const underscore = function(text) {
     return dasherize(text).replace(/-/g, '_');
 };
 
-const camelize = function(text, upperFirst) {
+export const camelize = function(text, upperFirst) {
     return map(_chop(text), function(p, i) {
         p = p.toLowerCase();
         if(upperFirst || i > 0) {
@@ -35,11 +35,11 @@ const camelize = function(text, upperFirst) {
     }).join('');
 };
 
-const humanize = function(text) {
+export const humanize = function(text) {
     return _upperCaseFirst(dasherize(text).replace(/-/g, ' '));
 };
 
-const titleize = function(text) {
+export const titleize = function(text) {
     return map(_chop(text), function(p) {
         return _upperCaseFirst(p.toLowerCase());
     }).join(' ');
@@ -47,7 +47,7 @@ const titleize = function(text) {
 
 const DIGIT_CHARS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
-const captionize = function(name) {
+export const captionize = function(name) {
     const captionList = [];
     let i;
     let char;
@@ -73,10 +73,3 @@ const captionize = function(name) {
     }
     return captionList.join('');
 };
-
-exports.dasherize = dasherize;
-exports.camelize = camelize;
-exports.humanize = humanize;
-exports.titleize = titleize;
-exports.underscore = underscore;
-exports.captionize = captionize;

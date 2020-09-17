@@ -12,7 +12,6 @@ import { addInterval } from '../../core/utils/date';
 const _abs = Math.abs;
 
 const CANVAS_PROP = ['width', 'height', 'left', 'top', 'bottom', 'right'];
-let _Translator2d;
 
 const dummyTranslator = {
     to(value) {
@@ -136,7 +135,7 @@ function getCheckingMethodsAboutBreaks(inverted) {
     };
 }
 
-exports.Translator2D = _Translator2d = function(businessRange, canvas, options) {
+const _Translator2d = function(businessRange, canvas, options) {
     this.update(businessRange, canvas, options);
 };
 
@@ -626,3 +625,5 @@ _Translator2d.prototype = {
         return this._canvasOptions.ratioOfCanvasRange;
     }
 };
+
+export { _Translator2d as Translator2D };

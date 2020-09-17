@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import clickEvent from '../../events/click';
+import { name as clickEventName } from '../../events/click';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import sortingMixin from '../grid_core/ui.grid_core.sorting_mixin';
@@ -14,7 +14,7 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
         const $row = this.callBase(row);
 
         if(row.rowType === 'header') {
-            eventsEngine.on($row, addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), 'td', this.createAction(e => {
+            eventsEngine.on($row, addNamespace(clickEventName, COLUMN_HEADERS_VIEW_NAMESPACE), 'td', this.createAction(e => {
                 this._processHeaderAction(e.event, $row);
             }));
         }
@@ -105,7 +105,7 @@ const HeaderPanelSortingExtender = extend({}, sortingMixin, {
         const that = this;
         const $item = that.callBase(...arguments);
 
-        eventsEngine.on($item, addNamespace(clickEvent.name, 'dxDataGridHeaderPanel'), that.createAction(() => {
+        eventsEngine.on($item, addNamespace(clickEventName, 'dxDataGridHeaderPanel'), that.createAction(() => {
             that._processGroupItemAction(groupColumn.index);
         }));
 
@@ -141,7 +141,7 @@ const HeaderPanelSortingExtender = extend({}, sortingMixin, {
     }
 });
 
-module.exports = {
+export default {
     defaultOptions() {
         return {
             sorting: {

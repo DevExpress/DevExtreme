@@ -1,11 +1,18 @@
-const fileSaver = require('./exporter/file_saver').fileSaver;
-const excelCreator = require('./exporter/excel_creator');
-const imageCreator = require('./exporter/image_creator');
-const svgCreator = require('./exporter/svg_creator');
-const _isFunction = require('./core/utils/type').isFunction;
-const Deferred = require('./core/utils/deferred').Deferred;
+import { fileSaver } from './exporter/file_saver';
+import { ///#DEBUG
+    __internals,
+    ///#ENDDEBUG
+    ExcelCreator,
+    getData as getExcelData
+} from './exporter/excel_creator';
+import { imageCreator, testFormats, getData as getImageData } from './exporter/image_creator';
+import { svgCreator, getData as getSvgData } from './exporter/svg_creator';
+import { isFunction as _isFunction } from './core/utils/type';
+import { Deferred } from './core/utils/deferred';
+import formatConverter from './exporter/excel_format_converter';
+import { getData } from './exporter/pdf_creator';
 
-exports.export = function(data, options, getData) {
+function _export(data, options, getData) {
     if(!data) {
         return new Deferred().resolve();
     }
@@ -38,26 +45,33 @@ exports.export = function(data, options, getData) {
     }
 
     return new Deferred().resolve();
+}
+
+export {
+    _export as export,
+    fileSaver
 };
 
-exports.fileSaver = fileSaver;
-exports.excel = {
-    creator: excelCreator.ExcelCreator,
-    getData: excelCreator.getData,
-    formatConverter: require('./exporter/excel_format_converter')
+export const excel = {
+    ///#DEBUG
+    __internals: __internals,
+    ///#ENDDEBUG
+    creator: ExcelCreator,
+    getData: getExcelData,
+    formatConverter: formatConverter
 };
-///#DEBUG
-exports.excel.__internals = excelCreator.__internals;
-///#ENDDEBUG
-exports.image = {
-    creator: imageCreator.imageCreator,
-    getData: imageCreator.getData,
-    testFormats: imageCreator.testFormats
+
+export const image = {
+    creator: imageCreator,
+    getData: getImageData,
+    testFormats: testFormats
 };
-exports.pdf = {
-    getData: require('./exporter/pdf_creator').getData
+
+export const pdf = {
+    getData: getData
 };
-exports.svg = {
-    creator: svgCreator.svgCreator,
-    getData: svgCreator.getData
+
+export const svg = {
+    creator: svgCreator,
+    getData: getSvgData
 };

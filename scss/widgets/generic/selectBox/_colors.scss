@@ -1,73 +1,11 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$selectbox-list-bg: null !default;
-
-
-@if $color == "carmine" {
-  /**
-    * $name 10. Item background color
-    * $type color
-    */
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "contrast" {
-  /**
-    * $name 10. Item background color
-    * $type color
-    */
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "dark" {
-  /**
-    * $name 10. Item background color
-    * $type color
-    */
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "darkmoon" {
-  /**
-    * $name 10. Item background color
-    * $type color
-    */
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "darkviolet" {
-  /**
-    * $name 10. Item background color
-    * $type color
-    */
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "greenmist" {
-  /**
-    * $name 10. Item background color
-    * $type color
-    */
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "light" {
-  /**
-    * $name 10. Item background color
-    * $type color
-    */
-  $selectbox-list-bg: $base-bg !default;
-}
-
-@if $color == "softblue" {
-  /**
-    * $name 10. Item background color
-    * $type color
-    */
-  $selectbox-list-bg: $base-bg !default;
-}
-
+/**
+* $name 10. Item background color
+* $type color
+*/
+$selectbox-list-bg: $base-bg !default;

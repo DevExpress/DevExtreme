@@ -6,6 +6,7 @@ export default function createConstantLine(axis, options) {
 
     let parsedValue;
     let valueIsParsed = false;
+    let lastStoredCoordinates;
 
     axis._checkAlignmentConstantLineLabels(labelOptions);
 
@@ -66,6 +67,10 @@ export default function createConstantLine(axis, options) {
             return this;
         },
 
+        getContentContainer() {
+            return this.label;
+        },
+
         removeLabel() {
             this.label && this.label.remove();
         },
@@ -95,7 +100,12 @@ export default function createConstantLine(axis, options) {
         },
 
         saveCoords() {
+            lastStoredCoordinates = storedCoord;
             storedCoord = this.coord;
+        },
+
+        resetCoordinates() {
+            storedCoord = lastStoredCoordinates;
         }
     };
 }

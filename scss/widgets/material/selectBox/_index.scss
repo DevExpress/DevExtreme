@@ -3,12 +3,14 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
+@use "../dropDownList";
 
 
 .dx-selectbox-popup-wrapper {
   .dx-overlay-content {
-    box-shadow: $dropdown-widgets-shadow;
+    box-shadow: $material-base-dropdown-widgets-shadow;
   }
 
   .dx-popup-content {

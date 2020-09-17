@@ -1,11 +1,13 @@
-const proto = require('./tree_map.base').prototype;
-const nodeProto = require('./node').prototype;
-const expand = require('../core/helpers').expand;
-const common = require('./common');
+import TreeMapBase from './tree_map.base';
+import { prototype as nodeProto } from './node';
+import { expand } from '../core/helpers';
+import common from './common';
+
+const proto = TreeMapBase.prototype;
 
 const _buildRectAppearance = common.buildRectAppearance;
-const _normalizeEnum = require('../core/utils').normalizeEnum;
-const _inArray = require('../../core/utils/array').inArray;
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
+import { inArray as _inArray } from '../../core/utils/array';
 
 const MODE_NONE = 0;
 const MODE_SINGLE = 1;
@@ -13,8 +15,8 @@ const MODE_MULTIPLE = 2;
 
 const STATE_CODE = 2;
 
-require('./api');
-require('./states');
+import './api';
+import './states';
 
 proto._eventsMap.onSelectionChanged = { name: 'selectionChanged' };
 
@@ -41,7 +43,7 @@ expand(proto, '_extendProxyType', function(proto) {
     that._selectionList = [];
 });
 
-require('./tree_map.base').addChange({
+TreeMapBase.addChange({
     code: 'SELECTION_MODE',
     handler: function() {
         const that = this;

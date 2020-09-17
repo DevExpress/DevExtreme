@@ -5,49 +5,54 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../common/sizes" as *;
+@use "../common/mixins" as *;
 @use "../button/sizes" as *;
-@use "../common" as *;
-@use "../button" as *;
+@use "../button/mixins" as *;
+
 // adduse
 
 
-$GENERIC_TEXTEDITOR_BORDER_WIDTH: $GENERIC_BASE_BORDER_WIDTH;
-$GENERIC_TEXTEDITOR_INPUT_PADDING: $GENERIC_BASE_INLINE_BORDEREDWIDGET_PADDING;
-$GENERIC_TEXTEDITOR_INPUT_HEIGHT: round($GENERIC_BASE_LINE_HEIGHT * $GENERIC_BASE_FONT_SIZE) + $GENERIC_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING + $GENERIC_BASE_INLINE_BORDEREDWIDGET_BOTTOM_PADDING;
+$generic-texteditor-border-width: $generic-base-border-width;
+$generic-texteditor-input-padding:
+  $generic-base-inline-borderedwidget-top-padding
+  $generic-base-inline-borderedwidget-horizontal-padding
+  $generic-base-inline-borderedwidget-bottom-padding;
 
-$GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE: $GENERIC_BASE_INLINE_BORDEREDWIDGET_INNER_SIZE;
-$GENERIC_TEXTEDITOR_ICON_SIZE: $GENERIC_BASE_ICON_SIZE;
+$generic-texteditor-input-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding;
 
-$GENERIC_TEXTEDITOR_CLEAR_ICON_SIZE: $GENERIC_TEXTEDITOR_ICON_SIZE + $GENERIC_TEXTEDITOR_CLEAR_ICON_OVERSIZE;
+$generic-texteditor-icon-container-size: $generic-base-inline-borderedwidget-inner-size;
+$generic-texteditor-icon-size: $generic-base-icon-size;
 
-$GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENERIC_INVALID_BADGE_HORIZONTAL_PADDING;
+$generic-texteditor-clear-icon-size: $generic-texteditor-icon-size + $generic-texteditor-clear-icon-oversize;
+
+$generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $generic-invalid-badge-horizontal-padding;
 
 
 @mixin dx-texteditor-icon() {
   position: absolute;
   top: 50%;
-  margin-top: -$GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE/2;
+  margin-top: -$generic-texteditor-icon-container-size / 2;
 
-  @include dx-icon-sizing($GENERIC_TEXTEDITOR_ICON_SIZE, $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
+  @include dx-icon-sizing($generic-texteditor-icon-size, $generic-texteditor-icon-container-size);
 }
 
 @mixin texteditor-input-padding() {
   .dx-texteditor-input {
-    padding-right: $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+    padding-right: $generic-texteditor-invalid-badge-size;
   }
 
   &.dx-rtl .dx-texteditor-input {
-    padding: $GENERIC_TEXTEDITOR_INPUT_PADDING;
-    padding-left: $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE;
+    padding: $generic-texteditor-input-padding;
+    padding-left: $generic-texteditor-invalid-badge-size;
   }
 }
 
 @mixin texteditor-validation-icon-offset() {
-  right: $GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+  right: $generic-invalid-badge-halfhorizontal-padding;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
-    left: $GENERIC_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+    left: $generic-invalid-badge-halfhorizontal-padding;
     right: auto;
   }
 }
@@ -80,19 +85,19 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
 .dx-texteditor {
   &.dx-editor-outlined {
     background: $texteditor-bg;
-    border: $GENERIC_TEXTEDITOR_BORDER_WIDTH solid $texteditor-border-color;
+    border: $generic-texteditor-border-width solid $texteditor-border-color;
     border-radius: $texteditor-border-radius;
   }
 
   &.dx-editor-underlined {
     background: $texteditor-underlined-bg;
-    border-bottom: $GENERIC_TEXTEDITOR_BORDER_WIDTH solid $texteditor-border-color;
+    border-bottom: $generic-texteditor-border-width solid $texteditor-border-color;
     border-radius: 0;
   }
 
   &.dx-editor-filled {
     background: $texteditor-filled-bg;
-    border: $GENERIC_TEXTEDITOR_BORDER_WIDTH solid transparent;
+    border: $generic-texteditor-border-width solid transparent;
     border-radius: $texteditor-border-radius;
   }
 
@@ -146,8 +151,8 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
 
 .dx-show-clear-button {
   .dx-clear-button-area {
-    width: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
-    min-width: $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE;
+    width: $generic-texteditor-icon-container-size;
+    min-width: $generic-texteditor-icon-container-size;
     right: 0;
   }
 
@@ -155,7 +160,7 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
     color: $texteditor-button-clear-icon-color;
 
     @include dx-texteditor-icon();
-    @include dx-icon-sizing($GENERIC_TEXTEDITOR_CLEAR_ICON_SIZE - $GENERIC_TEXTEDITOR_CLEAR_ICON_OVERSIZE, $GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
+    @include dx-icon-sizing($generic-texteditor-clear-icon-size - $generic-texteditor-clear-icon-oversize, $generic-texteditor-icon-container-size);
   }
 }
 
@@ -164,7 +169,7 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
   color: $texteditor-placeholder-color;
 
   &:before {
-    padding: $GENERIC_TEXTEDITOR_INPUT_PADDING;
+    padding: $generic-texteditor-input-padding;
 
     .dx-editor-underlined & {
       padding-left: 0;
@@ -174,12 +179,12 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
 
 .dx-texteditor-input {
   margin: 0;
-  padding: $GENERIC_TEXTEDITOR_INPUT_PADDING;
+  padding: $generic-texteditor-input-padding;
   background: rgba(0, 0, 0, 0);
   color: $texteditor-color;
   font-size: 1em;
   border-radius: $texteditor-input-border-radius;
-  min-height: $GENERIC_TEXTEDITOR_INPUT_HEIGHT;
+  min-height: $generic-texteditor-input-height;
 
   .dx-editor-underlined & {
     background: $texteditor-underlined-bg;
@@ -196,22 +201,22 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
   .dx-texteditor-buttons-container {
     + .dx-texteditor-input-container {
       .dx-texteditor-input {
-        padding-left: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+        padding-left: $generic-base-inline-borderedwidget-horizontal-padding;
 
         @at-root #{selector-append(".dx-rtl", &)} {
           padding-left: 0;
-          padding-right: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+          padding-right: $generic-base-inline-borderedwidget-horizontal-padding;
         }
       }
 
       .dx-placeholder {
-        left: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+        left: $generic-base-inline-borderedwidget-horizontal-padding;
       }
 
       @at-root #{selector-append(".dx-rtl", &)} {
         .dx-placeholder {
           left: 0;
-          right: $GENERIC_BASE_INLINE_BORDEREDWIDGET_HORIZONTAL_PADDING;
+          right: $generic-base-inline-borderedwidget-horizontal-padding;
         }
       }
     }
@@ -229,13 +234,13 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
     @at-root #{selector-append(".dx-rtl", &)} {
       > .dx-button {
         &:first-child {
-          margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+          margin-left: $generic-editor-custom-button-margin;
           margin-right: 0;
         }
 
         &:last-child {
           margin-left: 0;
-          margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+          margin-right: $generic-editor-custom-button-margin;
         }
 
         &:first-child:last-child {
@@ -297,18 +302,18 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
       &:first-child {
         > .dx-button {
           &:first-child {
-            margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-            margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-left: $generic-editor-custom-button-margin;
+            margin-right: $generic-editor-custom-button-margin;
           }
 
           &:last-child {
             margin-left: 0;
-            margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-right: $generic-editor-custom-button-margin;
           }
 
           &:first-child:last-child {
             margin-left: 0;
-            margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-right: $generic-editor-custom-button-margin;
           }
         }
       }
@@ -316,13 +321,13 @@ $GENERIC_TEXTEDITOR_INVALID_BADGE_SIZE: $GENERIC_INVALID_BADGE_SIZE + 2 * $GENER
       &:last-child {
         > .dx-button {
           &:first-child {
-            margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-left: $generic-editor-custom-button-margin;
             margin-right: 0;
           }
 
           &:last-child {
-            margin-left: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
-            margin-right: $GENERIC_EDITOR_CUSTOM_BUTTON_MARGIN;
+            margin-left: $generic-editor-custom-button-margin;
+            margin-right: $generic-editor-custom-button-margin;
           }
         }
       }

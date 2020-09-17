@@ -6,6 +6,7 @@ import 'ui/box';
 import 'ui/responsive_box';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 const SCROLLABLE_ID = 'my_scrollable';
 const PLACEMENT_STANDALONE = 'standalone';

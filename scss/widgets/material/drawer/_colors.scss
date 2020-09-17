@@ -1,25 +1,11 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-
-$drawer-shader-background-color: null !default;
-
-
-@if $mode == "light" {
-  /**
-    * $name 10. Shader background color
-    * $type color
-    */
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
-@if $mode == "dark" {
-  /**
-    * $name 10. Shader background color
-    * $type color
-    */
-  $drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;
-}
-
+/**
+* $name 10. Shader background color
+* $type color
+*/
+$drawer-shader-background-color: color.change($base-shadow-color, $alpha: 0.5) !default;

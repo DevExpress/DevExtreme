@@ -894,7 +894,10 @@ const dxPieChart = {
     innerRadius: 0.5,
     onLegendClick: function() { },
     sizeGroup: undefined,
-    centerTemplate: undefined
+    centerTemplate: undefined,
+    commonAnnotationSettings: undefined,
+    annotations: [{}],
+    customizeAnnotation: undefined
 };
 
 const dxPolarChart = {
@@ -1249,128 +1252,12 @@ const BaseChart = {
 /**
 * @name BaseChartAnnotationConfig
 * @type object
+* @inherits BaseWidgetAnnotationConfig
 */
 const BaseChartAnnotationConfig = {
-    type: undefined,
     argument: undefined,
     value: undefined,
-    series: undefined,
-    x: undefined,
-    y: undefined,
-    offsetX: undefined,
-    offsetY: undefined,
-    tooltipEnabled: true,
-    color: '#ffffff',
-    opacity: 0.9,
-    border: {
-        /**
-        * @name BaseChartAnnotationConfig.border.width
-        * @default 1
-        * @type number
-        */
-        width: 1,
-        /**
-        * @name BaseChartAnnotationConfig.border.color
-        * @type string
-        * @default '#dddddd'
-        */
-        color: '#dddddd',
-        /**
-        * @name BaseChartAnnotationConfig.border.dashStyle
-        * @type Enums.DashStyle
-        * @default 'solid'
-        */
-        dashStyle: 'solid',
-        /**
-        * @name BaseChartAnnotationConfig.border.opacity
-        * @type number
-        * @default undefined
-        */
-        opacity: undefined,
-        /**
-        * @name BaseChartAnnotationConfig.border.visible
-        * @type boolean
-        * @default true
-        */
-        visible: true,
-        /**
-        * @name BaseChartAnnotationConfig.border.cornerRadius
-        * @type number
-        * @default 0
-        * @default 4 @for Material
-        */
-        cornerRadius: 0
-    },
-    font: {
-        color: '#333333'
-    },
-    arrowLength: 14,
-    arrowWidth: 14,
-    paddingLeftRight: 10,
-    paddingTopBottom: 10,
-    shadow: {
-        /**
-        * @name BaseChartAnnotationConfig.shadow.opacity
-        * @type number
-        * @default 0.15
-        */
-        opacity: 0.15,
-        /**
-        * @name BaseChartAnnotationConfig.shadow.color
-        * @type string
-        * @default '#000000'
-        */
-        color: '#000000',
-        /**
-        * @name BaseChartAnnotationConfig.shadow.offsetX
-        * @type number
-        * @default 0
-        */
-        offsetX: 0,
-        /**
-        * @name BaseChartAnnotationConfig.shadow.offsetY
-        * @type number
-        * @default 1
-        */
-        offsetY: 1,
-        /**
-        * @name BaseChartAnnotationConfig.shadow.blur
-        * @type number
-        * @default 4
-        */
-        blur: 4
-    },
-    image: {
-        /**
-        * @name BaseChartAnnotationConfig.image.url
-        * @type string
-        * @default undefined
-        */
-        url: undefined,
-        /**
-        * @name BaseChartAnnotationConfig.image.width
-        * @type number
-        * @default 30
-        */
-        width: 30,
-        /**
-        * @name BaseChartAnnotationConfig.image.height
-        * @type number
-        * @default 30
-        */
-        height: 30
-    },
-    text: undefined,
-    template: undefined,
-    description: undefined,
-    width: undefined,
-    height: undefined,
-    customizeTooltip: undefined,
-    tooltipTemplate: undefined,
-    wordWrap: "normal",
-    textOverflow: "ellipsis",
-    allowDragging: false,
-    data: undefined
+    series: undefined
 };
 /**
 * @name dxChartCommonAnnotationConfig
@@ -1378,7 +1265,10 @@ const BaseChartAnnotationConfig = {
 * @inherits BaseChartAnnotationConfig
 */
 const dxChartCommonAnnotationConfig = {
-    axis: undefined
+    axis: undefined,
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
 }
 /**
 * @name dxChartAnnotationConfig
@@ -1396,7 +1286,10 @@ const dxChartAnnotationConfig = {
 */
 const dxPolarChartCommonAnnotationConfig = {
     radius: undefined,
-    angle: undefined
+    angle: undefined,
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
 };
 
 /**
@@ -1405,5 +1298,28 @@ const dxPolarChartCommonAnnotationConfig = {
 * @inherits dxPolarChartCommonAnnotationConfig
 */
 const dxPolarChartAnnotationConfig = {
+    name: undefined
+};
+
+/**
+* @name dxPieChartCommonAnnotationConfig
+* @type object
+* @inherits BaseWidgetAnnotationConfig
+*/
+const dxPieChartCommonAnnotationConfig = {
+    argument: undefined,
+    series: undefined,
+    location: 'center',
+    customizeTooltip: undefined,
+    tooltipTemplate: undefined,
+    template: undefined
+};
+
+/**
+* @name dxPieChartAnnotationConfig
+* @type object
+* @inherits dxPieChartCommonAnnotationConfig
+*/
+const dxPieChartAnnotationConfig = {
     name: undefined
 };

@@ -132,6 +132,10 @@ Projection.prototype = {
         this._setupScreen();
     },
 
+    getCanvas: function() {
+        return this._canvas;
+    },
+
     _toScreen: function(coordinates) {
         return [
             this._x0 + this._xRadius * coordinates[0],
@@ -509,5 +513,5 @@ function createProjectUnprojectMethods(project, unproject, p1, p2, delta) {
 }
 
 ///#DEBUG
-exports._TESTS_Engine = Engine;
+export { Engine as _TESTS_Engine };
 ///#ENDDEBUG

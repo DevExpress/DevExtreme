@@ -96,7 +96,7 @@ const LDML_FORMATTERS = {
     }
 };
 
-const getFormatter = function(format, dateParts) {
+export const getFormatter = function(format, dateParts) {
     return function(date) {
         let charIndex;
         let formatter;
@@ -138,5 +138,3 @@ const getFormatter = function(format, dateParts) {
         return result;
     };
 };
-
-module.exports.getFormatter = getFormatter;

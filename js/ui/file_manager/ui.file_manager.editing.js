@@ -575,4 +575,4 @@ class FileManagerActionContext {
 
 }
 
-module.exports = FileManagerEditingControl;
+export default FileManagerEditingControl;

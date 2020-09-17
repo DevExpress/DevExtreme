@@ -255,4 +255,4 @@ class RemoteFileSystemProvider extends FileSystemProviderBase {
 
 }
 
-module.exports = RemoteFileSystemProvider;
+export default RemoteFileSystemProvider;

@@ -107,4 +107,4 @@ class VerticalCurrentTimeShader extends CurrentTimeShader {
 }
 
 
-module.exports = VerticalCurrentTimeShader;
+export default VerticalCurrentTimeShader;

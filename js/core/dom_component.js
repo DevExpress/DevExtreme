@@ -3,7 +3,7 @@ import config from './config';
 import errors from './errors';
 import windowResizeCallbacks from '../core/utils/resize_callbacks';
 import Component from './component';
-import TemplateManager from './template_manager';
+import { TemplateManager } from './template_manager';
 import { attachInstanceToElement, getInstanceByElement } from './utils/public_component';
 import { cleanDataRecursive } from './element_data';
 import { each } from './utils/iterator';
@@ -37,7 +37,7 @@ const DOMComponent = Component.inherit({
     /**
     * @name DOMComponentMethods.ctor
     * @publicName ctor(element,options)
-    * @param1 element:Node|JQuery
+    * @param1 element:Element|JQuery
     * @param2 options:DOMComponentOptions|undefined
     * @hidden
     */
@@ -482,5 +482,4 @@ DOMComponent.defaultOptions = function(rule) {
     this._classCustomRules.push(rule);
 };
 
-
-module.exports = DOMComponent;
+export default DOMComponent;

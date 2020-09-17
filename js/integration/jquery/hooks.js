@@ -1,11 +1,13 @@
-const jQuery = require('jquery');
-const useJQuery = require('./use_jquery')();
-const compareVersion = require('../../core/utils/version').compare;
-const each = require('../../core/utils/iterator').each;
-const isNumeric = require('../../core/utils/type').isNumeric;
-const setEventFixMethod = require('../../events/utils').setEventFixMethod;
-const registerEvent = require('../../events/core/event_registrator');
-const hookTouchProps = require('../../events/core/hook_touch_props');
+// eslint-disable-next-line no-restricted-imports
+import jQuery from 'jquery';
+import useJQueryFn from './use_jquery';
+const useJQuery = useJQueryFn();
+import { compare as compareVersion } from '../../core/utils/version';
+import { each } from '../../core/utils/iterator';
+import { isNumeric } from '../../core/utils/type';
+import { setEventFixMethod } from '../../events/utils';
+import registerEvent from '../../events/core/event_registrator';
+import hookTouchProps from '../../events/core/hook_touch_props';
 
 if(useJQuery) {
     if(compareVersion(jQuery.fn.jquery, [3]) < 0) {

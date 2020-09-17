@@ -1,7 +1,6 @@
-const BaseSparkline = require('./base_sparkline');
-
-const dataValidatorModule = require('../components/data_validator');
-const seriesModule = require('../series/base_series');
+import BaseSparkline from './base_sparkline';
+import dataValidatorModule from '../components/data_validator';
+import seriesModule from '../series/base_series';
 const MIN_BAR_WIDTH = 1;
 const MAX_BAR_WIDTH = 50;
 const DEFAULT_BAR_INTERVAL = 4;
@@ -28,10 +27,10 @@ const _round = _math.round;
 const _max = _math.max;
 const _min = _math.min;
 const _isFinite = isFinite;
-const vizUtils = require('../core/utils');
+import vizUtils from '../core/utils';
 const _map = vizUtils.map;
 const _normalizeEnum = vizUtils.normalizeEnum;
-const _isDefined = require('../../core/utils/type').isDefined;
+import { isDefined as _isDefined } from '../../core/utils/type';
 const _Number = Number;
 const _String = String;
 
@@ -527,9 +526,10 @@ _map(['lineColor', 'lineWidth', 'areaOpacity', 'minColor', 'maxColor', 'barPosit
 ], function(name) {
     dxSparkline.prototype._optionChangesMap[name] = 'OPTIONS';
 });
+import componentRegistrator from '../../core/component_registrator';
+componentRegistrator('dxSparkline', dxSparkline);
 
-require('../../core/component_registrator')('dxSparkline', dxSparkline);
-
-module.exports = dxSparkline;
+export default dxSparkline;
 // PLUGINS_SECTION
-dxSparkline.addPlugin(require('../core/data_source').plugin);
+import { plugin } from '../core/data_source';
+dxSparkline.addPlugin(plugin);

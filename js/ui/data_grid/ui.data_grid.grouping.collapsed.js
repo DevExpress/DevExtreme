@@ -1,13 +1,26 @@
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { combineFilters, normalizeSortingInfo } from './ui.data_grid.core';
-import { GroupingHelper, createOffsetFilter } from './ui.data_grid.grouping.core';
+import { GroupingHelper as GroupingHelperCore, createOffsetFilter } from './ui.data_grid.grouping.core';
 import { createGroupFilter } from './ui.data_grid.utils';
 import errors from '../widget/ui.errors';
 import { errors as dataErrors } from '../../data/errors';
 import { when, Deferred } from '../../core/utils/deferred';
 
-exports.GroupingHelper = GroupingHelper.inherit((function() {
+function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
+    groupIndex = groupIndex || 0;
+    if(pageSize > 1 && groupSize > 0) {
+        let pageOffset = (groupOffset - Math.floor(groupOffset / pageSize) * pageSize) || pageSize;
+        pageOffset += groupSize - groupIndex - 2;
+        if(pageOffset < 0) {
+            pageOffset += pageSize;
+        }
+        return Math.floor(pageOffset / (pageSize - groupIndex - 1));
+    }
+    return 0;
+}
+
+export const GroupingHelper = GroupingHelperCore.inherit((function() {
     const foreachExpandedGroups = function(that, callback, updateGroups) {
         return that.foreachGroups(function(groupInfo, parents) {
             if(groupInfo.isExpanded) {
@@ -141,23 +154,6 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
         return totalOffset;
     };
-
-    function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
-        groupIndex = groupIndex || 0;
-        if(pageSize > 1 && groupSize > 0) {
-            let pageOffset = (groupOffset - Math.floor(groupOffset / pageSize) * pageSize) || pageSize;
-            pageOffset += groupSize - groupIndex - 2;
-            if(pageOffset < 0) {
-                pageOffset += pageSize;
-            }
-            return Math.floor(pageOffset / (pageSize - groupIndex - 1));
-        }
-        return 0;
-    }
-
-    ///#DEBUG
-    exports.getContinuationGroupCount = getContinuationGroupCount;
-    ///#ENDDEBUG
 
     function applyContinuationToGroupItem(options, expandedInfo, groupLevel, expandedItemIndex) {
         const item = expandedInfo.items[expandedItemIndex];
@@ -504,8 +500,6 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
                 storeLoadOptions.skip = options.skip;
                 storeLoadOptions.take = options.take;
-            } else {
-                that.foreachGroups(function(groupInfo) { groupInfo.count = 0; });
             }
         },
         handleDataLoadedCore: function(options, callBase) {
@@ -520,6 +514,10 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
                 processGroupItems(that, options.data, loadedGroupCount, expandedInfo, [], options.isCustomLoading, options.storeLoadOptions.isLoadingAll);
             } else {
+                if(!options.remoteOperations.paging) {
+                    that.foreachGroups(function(groupInfo) { groupInfo.count = 0; });
+                }
+
                 totalCount = updateGroupInfos(that, options, options.data, loadedGroupCount);
 
                 if(totalCount < 0) {
@@ -612,7 +610,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
             return items;
         },
 
-        refresh: function(options, isReload, operationTypes) {
+        refresh: function(options, operationTypes) {
             const that = this;
             const dataSource = that._dataSource;
             const storeLoadOptions = options.storeLoadOptions;
@@ -636,7 +634,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
 
             that.callBase.apply(this, arguments);
 
-            if(group && options.remoteOperations.paging && (isReload || operationTypes.reload)) {
+            if(group && options.remoteOperations.paging && operationTypes.reload) {
                 return foreachExpandedGroups(that, function(groupInfo) {
                     const groupCountQuery = loadGroupTotalCount(dataSource, {
                         filter: createGroupFilter(groupInfo.path, {
@@ -669,3 +667,7 @@ exports.GroupingHelper = GroupingHelper.inherit((function() {
         }
     };
 })());
+
+///#DEBUG
+export { getContinuationGroupCount };
+///#ENDDEBUG

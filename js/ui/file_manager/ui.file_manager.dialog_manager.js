@@ -59,4 +59,4 @@ class FileManagerDialogManager {
     }
 }
 
-module.exports = FileManagerDialogManager;
+export default FileManagerDialogManager;

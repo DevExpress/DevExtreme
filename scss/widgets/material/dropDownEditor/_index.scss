@@ -3,36 +3,36 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../common" as *;
 @use "../common/sizes" as *;
 @use "../textEditor/sizes" as *;
 @use "../button/colors" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
-$MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE: $MATERIAL_BASE_ICON_SIZE;
+$material-dropdowneditor-container-button-size: $material-base-icon-size;
 
-$MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET:
-  $MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE +
-  $MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+$material-dropdowneditor-invalid-badge-offset:
+  $material-dropdowneditor-container-button-size +
+  $material-invalid-badge-halfhorizontal-padding;
 
-$MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET:
-  $MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE * 2 +
-  $MATERIAL_INVALID_BADGE_HALFHORIZONTAL_PADDING;
+$material-dropdowneditor-invalid-badge-with-clear-offset:
+  $material-dropdowneditor-container-button-size * 2 +
+  $material-invalid-badge-halfhorizontal-padding;
 
-$MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE: $MATERIAL_INVALID_BADGE_SIZE + $MATERIAL_INVALID_BADGE_HORIZONTAL_PADDING;
+$material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $material-invalid-badge-horizontal-padding;
 
 @mixin dx-dropdowneditor-button-icon() {
-  width: $MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+  width: $material-dropdowneditor-container-button-size;
   height: 100%;
 
-  @include dx-icon-font-centered-sizing($MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE);
+  @include dx-icon-font-centered-sizing($material-dropdowneditor-container-button-size);
 }
 
 .dx-dropdowneditor-button {
-  width: $MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
-  min-width: $MATERIAL_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
+  width: $material-dropdowneditor-container-button-size;
+  min-width: $material-dropdowneditor-container-button-size;
 
   .dx-state-disabled & {
     .dx-dropdowneditor-icon {
@@ -77,24 +77,24 @@ $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE: $MATERIAL_INVALID_BADGE_SIZE + $MAT
   &.dx-dropdowneditor-button-visible {
     &.dx-editor-underlined {
       .dx-texteditor-input {
-        padding-right: $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-right: $material-dropdowneditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
       }
 
       &.dx-rtl .dx-texteditor-input {
-        padding-right: $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-        padding-left: $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + $MATERIAL_STANDARD_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-right: $material-base-standard-texteditor-input-horizontal-padding;
+        padding-left: $material-dropdowneditor-invalid-badge-size + $material-base-standard-texteditor-input-horizontal-padding;
       }
     }
 
     &.dx-editor-filled,
     &.dx-editor-outlined {
       .dx-texteditor-input {
-        padding-right: $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-right: $material-dropdowneditor-invalid-badge-size + $material-filled-texteditor-input-horizontal-padding;
       }
 
       &.dx-rtl .dx-texteditor-input {
-        padding-right: $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
-        padding-left: $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE + $MATERIAL_FILLED_TEXTEDITOR_INPUT_HORIZONTAL_PADDING;
+        padding-right: $material-filled-texteditor-input-horizontal-padding;
+        padding-left: $material-dropdowneditor-invalid-badge-size + $material-filled-texteditor-input-horizontal-padding;
       }
     }
   }
@@ -121,12 +121,12 @@ $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE: $MATERIAL_INVALID_BADGE_SIZE + $MAT
 .dx-valid.dx-dropdowneditor {
   .dx-texteditor-buttons-container {
     &:after {
-      right: $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
+      right: $material-dropdowneditor-invalid-badge-offset;
 
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
         right: auto;
-        left: $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
+        left: $material-dropdowneditor-invalid-badge-offset;
       }
     }
   }
@@ -134,12 +134,12 @@ $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE: $MATERIAL_INVALID_BADGE_SIZE + $MAT
   &.dx-show-clear-button:not(.dx-texteditor-empty) {
     .dx-texteditor-buttons-container {
       &:after {
-        right: $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET;
+        right: $material-dropdowneditor-invalid-badge-with-clear-offset;
 
         @at-root #{selector-append(".dx-rtl", &)},
         .dx-rtl & {
           right: auto;
-          left: $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_WITH_CLEAR_OFFSET;
+          left: $material-dropdowneditor-invalid-badge-with-clear-offset;
         }
       }
     }
@@ -148,7 +148,7 @@ $MATERIAL_DROPDOWNEDITOR_INVALID_BADGE_SIZE: $MATERIAL_INVALID_BADGE_SIZE + $MAT
 
 .dx-dropdowneditor-overlay.dx-popup-wrapper {
   .dx-overlay-content {
-    box-shadow: $dropdown-widgets-shadow;
+    box-shadow: $material-base-dropdown-widgets-shadow;
     overflow: hidden;
   }
 }

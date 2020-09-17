@@ -1,9 +1,8 @@
 import $ from '../../core/renderer';
 import { noop } from '../../core/utils/common';
-import { isNumeric } from '../../core/utils/type';
+import { isNumeric, isDefined, isFunction } from '../../core/utils/type';
 import errors from '../widget/ui.errors';
 import dateUtils from '../../core/utils/date';
-import typeUtils from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import devices from '../../core/devices';
@@ -14,7 +13,6 @@ import Popover from '../popover';
 import Popup from '../popup';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import dateLocalization from '../../localization/date';
-import { isDefined } from '../../core/utils/type';
 import Scrollable from '../scroll_view/ui.scrollable';
 
 const ELEMENT_CLASS = 'dx-scheduler-navigator';
@@ -457,7 +455,7 @@ const SchedulerNavigator = Widget.inherit({
         const captionConfig = this._getConfig().getCaption.call(this, date);
         const customizationFunction = this.option('customizeDateNavigatorText');
 
-        const caption = typeUtils.isFunction(customizationFunction) ? customizationFunction(captionConfig) : captionConfig.text;
+        const caption = isFunction(customizationFunction) ? customizationFunction(captionConfig) : captionConfig.text;
 
         this._caption.option({
             text: caption,
@@ -513,4 +511,4 @@ const SchedulerNavigator = Widget.inherit({
 
 registerComponent('dxSchedulerNavigator', SchedulerNavigator);
 
-module.exports = SchedulerNavigator;
+export default SchedulerNavigator;

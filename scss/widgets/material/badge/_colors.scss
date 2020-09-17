@@ -2,38 +2,17 @@
 @use "../sizes" as *;
 @use "../colors" as *;
 @use "../color" as extcolor;
+
 // adduse
 
+/**
+* $name 130. Badge text color
+* $type color
+*/
+$badge-color: $base-inverted-text-color !default;
 
-$badge-color: null !default;
-$badge-bg: null !default;
-
-
-@if $mode == "light" {
-  /**
-    * $name 130. Badge text color
-    * $type color
-    */
-  $badge-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 140. Badge background color
-    * $type color
-    */
-  $badge-bg: $base-accent !default;
-}
-
-@if $mode == "dark" {
-  /**
-    * $name 130. Badge text color
-    * $type color
-    */
-  $badge-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 140. Badge background color
-    * $type color
-    */
-  $badge-bg: $base-accent !default;
-}
-
+/**
+* $name 140. Badge background color
+* $type color
+*/
+$badge-bg: $base-accent !default;

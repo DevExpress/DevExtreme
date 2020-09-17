@@ -1,10 +1,10 @@
-const errorUtils = require('./utils/error');
+import errorUtils from './utils/error';
 
 /**
 * @docid
 * @name ErrorsCore
 */
-module.exports = errorUtils({
+export default errorUtils({
 
     /**
     * @name ErrorsCore.E0001

@@ -31,6 +31,8 @@ import Popup from '../popup';
 import ContextMenu from '../context_menu';
 import { when, Deferred } from '../../core/utils/deferred';
 
+// STYLE pivotGrid
+
 const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 const ROW_AREA_CELL_CLASS = 'dx-area-row-cell';
 const COLUMN_AREA_CELL_CLASS = 'dx-area-column-cell';
@@ -192,7 +194,8 @@ const PivotGrid = Widget.inherit({
 
                 removeInvisiblePages: true,
                 virtualRowHeight: 50,
-                virtualColumnWidth: 100
+                virtualColumnWidth: 100,
+                loadTwoPagesOnStart: true
             },
             encodeHtml: true,
             dataSource: null,
@@ -368,6 +371,7 @@ const PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions.export.fileName
                  * @type string
                  * @default "PivotGrid"
+                 * @deprecated
                  */
                 fileName: 'PivotGrid',
                 /**
@@ -381,6 +385,7 @@ const PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions.export.ignoreExcelErrors
                  * @type boolean
                  * @default true
+                 * @deprecated
                  */
                 ignoreExcelErrors: true
             },
@@ -438,6 +443,17 @@ const PivotGrid = Widget.inherit({
                 */
                 showPane: true
 
+                /**
+                * @name dxPivotGridOptions.loadPanel.shading
+                * @type boolean
+                * @default false
+                */
+
+                /**
+                * @name dxPivotGridOptions.loadPanel.shadingColor
+                * @type string
+                * @default ''
+                */
             },
             texts: {
                 /**
@@ -1253,6 +1269,14 @@ const PivotGrid = Widget.inherit({
         const that = this;
         const element = that.$element();
 
+        if(isDefined(that._hasHeight)) {
+            const height = that.option('height') || that.$element().get(0).style.height;
+
+            if(height && (that._hasHeight ^ height !== 'auto')) {
+                that._hasHeight = null;
+            }
+        }
+
         if(isDefined(that._hasHeight) || element.is(':hidden')) {
             return;
         }
@@ -1428,9 +1452,7 @@ const PivotGrid = Widget.inherit({
     _update: function(isFirstDrawing) {
         const that = this;
         const updateHandler = function() {
-            that.updateDimensions().done(function() {
-                that._subscribeToEvents(that._columnsArea, that._rowsArea, that._dataArea);
-            });
+            that.updateDimensions();
         };
         if(that._needDelayResizing(that._dataArea.getData()) && isFirstDrawing) {
             setTimeout(updateHandler);
@@ -1609,6 +1631,12 @@ const PivotGrid = Widget.inherit({
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
 
             groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
+            const diff = totalWidth - groupWidth;
+            const needAdjustWidthOnZoom = diff >= 0 && diff <= 2;
+            if(needAdjustWidthOnZoom) { // T914454
+                adjustSizeArray(resultWidths, diff);
+                totalWidth = groupWidth;
+            }
 
             hasRowsScroll = that._hasHeight && calculateHasScroll(dataAreaHeight, totalHeight);
             hasColumnsScroll = calculateHasScroll(groupWidth, totalWidth);
@@ -1727,6 +1755,7 @@ const PivotGrid = Widget.inherit({
 
                 when.apply($, updateScrollableResults).done(function() {
                     that._updateScrollPosition(columnsArea, rowsArea, dataArea);
+                    that._subscribeToEvents(columnsArea, rowsArea, dataArea);
                     d.resolve();
                 });
             });
@@ -1743,4 +1772,4 @@ const PivotGrid = Widget.inherit({
 
 registerComponent('dxPivotGrid', PivotGrid);
 
-module.exports = PivotGrid;
+export default PivotGrid;

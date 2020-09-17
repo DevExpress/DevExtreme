@@ -327,4 +327,4 @@ const TimeView = Editor.inherit({
 
 registerComponent('dxTimeView', TimeView);
 
-module.exports = TimeView;
+export default TimeView;

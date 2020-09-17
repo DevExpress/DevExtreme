@@ -1,12 +1,15 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_INVALID_BADGE_SIZE: null !default;
+$material-line-height: 1.2857;
 
-@if $size == "default" {
-  $MATERIAL_INVALID_BADGE_SIZE: $MATERIAL_BASE_ICON_SIZE - 2px;
-}
+$material-inline-borderedwidget-inner-size:
+  $material-base-inline-widget-height -
+  $material-base-border-width * 2;
 
-@else if $size == "compact" {
-  $MATERIAL_INVALID_BADGE_SIZE: $MATERIAL_BASE_ICON_SIZE - 2px;
-}
+$material-invalid-badge-size: $material-base-icon-size - 2px;
+$material-invalid-badge-horizontal-padding: ($material-inline-borderedwidget-inner-size - $material-invalid-badge-size) / 2;
+$material-invalid-badge-halfhorizontal-padding: $material-invalid-badge-horizontal-padding / 2;
+
+$material-valid-badge-font-size: $material-base-font-size + 6px;

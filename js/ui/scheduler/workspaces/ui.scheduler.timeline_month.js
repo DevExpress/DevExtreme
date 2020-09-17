@@ -114,4 +114,4 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
 registerComponent('dxSchedulerTimelineMonth', SchedulerTimelineMonth);
 
-module.exports = SchedulerTimelineMonth;
+export default SchedulerTimelineMonth;

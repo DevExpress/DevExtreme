@@ -57,9 +57,6 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
             offset: '-' + this.option('offsetX') + ' -' + this.option('offsetY')
         };
     }
-    _getPopupContainer() {
-        return this.isMobileView() ? super._getPopupContainer() : undefined;
-    }
     _getPopupAnimation() {
         const $parent = this.option('offsetParent');
         if(this.isMobileView()) {
@@ -216,4 +213,4 @@ class DiagramPropertiesPanel extends DiagramFloatingPanel {
     }
 }
 
-module.exports = DiagramPropertiesPanel;
+export default DiagramPropertiesPanel;

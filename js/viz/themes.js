@@ -1,7 +1,7 @@
-const extend = require('../core/utils/extend').extend;
-const each = require('../core/utils/iterator').each;
-const vizUtils = require('./core/utils');
-const uiThemes = require('../ui/themes');
+import { extend } from '../core/utils/extend';
+import { each } from '../core/utils/iterator';
+import vizUtils from './core/utils';
+import uiThemes from '../ui/themes';
 const themes = {};
 const themesMapping = {};
 const themesSchemeMapping = {};
@@ -13,7 +13,7 @@ let defaultTheme;
 let nextCacheUid = 0;
 const widgetsCache = {};
 
-function getTheme(themeName) {
+export function getTheme(themeName) {
     const name = _normalizeEnum(themeName);
     return themes[name] || themes[themesMapping[name] || currentTheme()];
 }
@@ -26,7 +26,7 @@ function findThemeNameByPlatform(platform, version, scheme) {
     return findThemeNameByName(platform + version, scheme) || findThemeNameByName(platform, scheme);
 }
 
-function currentTheme(themeName, colorScheme) {
+export function currentTheme(themeName, colorScheme) {
     if(!arguments.length) {
         return currentThemeName || findThemeNameByName(uiThemes.current()) || defaultTheme;
     }
@@ -54,7 +54,7 @@ function registerThemeName(themeName, targetThemeName) {
     }
 }
 
-function registerTheme(theme, baseThemeName) {
+export function registerTheme(theme, baseThemeName) {
     const themeName = _normalizeEnum(theme && theme.name);
     if(themeName) {
         theme.isDefault && (defaultTheme = themeName);
@@ -63,11 +63,8 @@ function registerTheme(theme, baseThemeName) {
     }
 }
 
-function registerThemeAlias(alias, theme) {
-    registerThemeName(_normalizeEnum(alias), _normalizeEnum(theme));
-}
 
-function registerThemeSchemeAlias(from, to) {
+export function registerThemeSchemeAlias(from, to) {
     themesSchemeMapping[from] = to;
 }
 
@@ -136,6 +133,9 @@ function patchTheme(theme) {
     _each(['chart', 'polar'], function(_, section) {
         theme[section] = theme[section] || {};
         mergeObject(theme[section], 'commonAxisSettings', null, theme['chart:common:axis']);
+    });
+    _each(['chart', 'polar', 'map', 'pie'], function(_, section) {
+        theme[section] = theme[section] || {};
         mergeObject(theme[section], 'commonAnnotationSettings', null, theme['chart:common:annotation']);
     });
     mergeObject(theme.rangeSelector.chart, 'commonSeriesSettings', theme.chart);
@@ -177,17 +177,17 @@ function patchMapLayers(theme) {
     });
 }
 
-function addCacheItem(target) {
+export function addCacheItem(target) {
     const cacheUid = ++nextCacheUid;
     target._cache = cacheUid;
     widgetsCache[cacheUid] = target;
 }
 
-function removeCacheItem(target) {
+export function removeCacheItem(target) {
     delete widgetsCache[target._cache];
 }
 
-function refreshTheme() {
+export function refreshTheme() {
     _each(widgetsCache, function() {
         this.refresh();
     });
@@ -195,25 +195,15 @@ function refreshTheme() {
     return this;
 }
 
-_extend(exports, {
-    currentTheme: currentTheme,
-    registerTheme: registerTheme,
-    getTheme: getTheme,
-    registerThemeAlias: registerThemeAlias,
-    registerThemeSchemeAlias: registerThemeSchemeAlias,
-    refreshTheme: refreshTheme,
-    addCacheItem: addCacheItem,
-    removeCacheItem: removeCacheItem
-});
-
 ///#DEBUG
-_extend(exports, {
-    themes: themes,
-    themesMapping: themesMapping,
-    themesSchemeMapping: themesSchemeMapping,
-    widgetsCache: widgetsCache,
-    resetCurrentTheme: function() {
-        currentThemeName = null;
-    }
-});
+export {
+    themes,
+    themesMapping,
+    themesSchemeMapping,
+    widgetsCache
+};
+
+export const resetCurrentTheme = function() {
+    currentThemeName = null;
+};
 ///#ENDDEBUG

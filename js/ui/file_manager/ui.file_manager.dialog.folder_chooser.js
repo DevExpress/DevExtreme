@@ -66,4 +66,4 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
 
 }
 
-module.exports = FileManagerFolderChooserDialog;
+export default FileManagerFolderChooserDialog;

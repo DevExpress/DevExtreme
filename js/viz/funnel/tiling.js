@@ -1,16 +1,16 @@
-const _normalizeEnum = require('../core/utils').normalizeEnum;
+import { normalizeEnum as _normalizeEnum } from '../core/utils';
 
 const algorithms = {};
 let defaultAlgorithm;
 
-exports.getAlgorithm = function(name) {
+export function getAlgorithm(name) {
     return algorithms[_normalizeEnum(name)] || defaultAlgorithm;
-};
+}
 
-exports.addAlgorithm = function(name, callback, setDefault) {
+export function addAlgorithm(name, callback, setDefault) {
     algorithms[name] = callback;
 
     if(setDefault) {
         defaultAlgorithm = algorithms[name];
     }
-};
+}

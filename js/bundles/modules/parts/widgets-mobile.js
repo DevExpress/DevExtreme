@@ -1,3 +1,4 @@
+/* eslint-disable import/no-commonjs */
 const ui = require('./widgets-base');
 
 /// BUNDLER_PARTS

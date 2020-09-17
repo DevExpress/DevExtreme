@@ -1,6 +1,7 @@
 @use "../base/mixins" as *;
+
 // adduse
-$MAX_INTEGER: 2147483647;
+$max-integer: 2147483647;
 
 .dx-clearfix {
   @include dx-clearfix-mixin();
@@ -35,7 +36,7 @@ $MAX_INTEGER: 2147483647;
   left: 0;
   bottom: 0;
   opacity: 0;
-  z-index: $MAX_INTEGER;
+  z-index: $max-integer;
 }
 
 /* animations */

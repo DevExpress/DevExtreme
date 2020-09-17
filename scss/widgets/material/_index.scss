@@ -3,44 +3,37 @@ $size: null !default;
 $mode: null !default;
 
 @use "colors" with ($color: $color, $mode: $mode);
-@use "sizes" with ($size: $size);// ex. core
-@use "./typography"; // private
-@use "./icons"; // private
-@use "./widget"; // private
+@use "sizes" with ($size: $size);
+@use "./typography";
+@use "./icons";
+@use "./widget";
 @use "./card";
 @use "./fieldset";
+@use "./common";
+
 // public widgets
 @use "./box";
 @use "./responsiveBox";
 @use "./button";
 @use "./buttonGroup";
-@use "./scrollable"; // private
 @use "./scrollView";
 @use "./checkBox";
 @use "./switch";
-@use "./badge"; // private
 @use "./tabs";
 @use "./navBar";
-@use "./validation"; // private
-@use "./textEditor"; // private
+@use "./validation";
 @use "./textBox";
-@use "./dropDownEditor"; // private
 @use "./dropDownBox";
 @use "./list";
 @use "./textArea";
 @use "./numberBox";
-@use "./dateView"; // private
-@use "./timeView"; // private
 @use "./calendar";
 @use "./dateBox";
-@use "./dropDownList"; // private
 @use "./autocomplete";
 @use "./loadIndicator";
 @use "./treeView";
-@use "./overlay"; // private
 @use "./menu";
 @use "./selectBox";
-@use "./dropDownMenu"; // private
 @use "./toolbar";
 @use "./popup";
 @use "./dropDownButton";
@@ -56,12 +49,10 @@ $mode: null !default;
 @use "./lookup";
 @use "./loadPanel";
 @use "./tagBox";
-@use "./radioButton"; // private
 @use "./radioGroup";
 @use "./accordion";
 @use "./slideOutView";
 @use "./slideOut";
-@use "./colorView"; // private
 @use "./colorBox";
 @use "./dataGrid";
 @use "./treeList";
@@ -80,4 +71,3 @@ $mode: null !default;
 @use "./diagram";
 @use "./gantt";
 @use "./sortable";
-

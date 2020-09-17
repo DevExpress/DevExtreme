@@ -1,4 +1,4 @@
-const TabsItem = require('../tabs/item');
+import TabsItem from '../tabs/item';
 
 const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
 const NAVBAR_ITEM_BADGE_CLASS = 'dx-navbar-item-badge';
@@ -15,4 +15,4 @@ const NavBarItem = TabsItem.inherit({
 
 });
 
-module.exports = NavBarItem;
+export default NavBarItem;

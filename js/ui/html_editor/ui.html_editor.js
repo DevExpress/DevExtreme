@@ -10,16 +10,17 @@ import Errors from '../widget/ui.errors';
 import Callbacks from '../../core/utils/callbacks';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
-import { isDxMouseWheelEvent, addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils';
 import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
-import { allowScroll } from '../text_box/utils.scroll';
+import { prepareScrollData } from '../text_box/utils.scroll';
 
 import QuillRegistrator from './quill_registrator';
 import './converters/delta';
 import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
-import getTextDecorationMatcher from './matchers/textDecoration';
 import FormDialog from './ui/formDialog';
+
+// STYLE htmlEditor
 
 const HTML_EDITOR_CLASS = 'dx-htmleditor';
 const QUILL_CONTAINER_CLASS = 'dx-quill-container';
@@ -30,8 +31,6 @@ const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
 const MARKDOWN_VALUE_TYPE = 'markdown';
 
 const ANONYMOUS_TEMPLATE_NAME = 'htmlContent';
-
-const ELEMENT_NODE = 1;
 
 const HtmlEditor = Editor.inherit({
 
@@ -273,31 +272,24 @@ const HtmlEditor = Editor.inherit({
     _renderScrollHandler: function() {
         const $scrollContainer = this._getContent();
 
-        const initScrollData = {
-            validate: (e) => {
-                if(isDxMouseWheelEvent(e)) {
-                    if(allowScroll($scrollContainer, -e.delta, e.shiftKey)) {
-                        e._needSkipEvent = true;
-                        return true;
-                    }
-
-                    return false;
-                }
-            }
-        };
+        const initScrollData = prepareScrollData($scrollContainer);
 
         eventsEngine.on($scrollContainer, addNamespace(scrollEvents.init, this.NAME), initScrollData, noop);
     },
 
     _applyTranscludedContent: function() {
-        const markup = this._deltaConverter.toHtml();
-        const newDelta = this._quillInstance.clipboard.convert(markup);
+        const valueOption = this.option('value');
+        if(!isDefined(valueOption)) {
+            const html = this._deltaConverter.toHtml();
+            const newDelta = this._quillInstance.clipboard.convert({ html });
 
-        if(newDelta.ops.length) {
-            this._quillInstance.setContents(newDelta);
-        } else {
-            this._finalizeContentRendering();
+            if(newDelta.ops.length) {
+                this._quillInstance.setContents(newDelta);
+                return;
+            }
         }
+
+        this._finalizeContentRendering();
     },
 
     _hasTranscludedContent: function() {
@@ -307,19 +299,25 @@ const HtmlEditor = Editor.inherit({
     _getModulesConfig: function() {
         const quill = this._getRegistrator().getQuill();
         const wordListMatcher = getWordMatcher(quill);
-        const modulesConfig = extend({
+        const modulesConfig = extend({}, {
+            table: true,
             toolbar: this._getModuleConfigByOption('toolbar'),
             variables: this._getModuleConfigByOption('variables'),
-            dropImage: this._getBaseModuleConfig(),
+            // TODO: extract some IE11 tweaks for the Quill uploader module
+            // dropImage: this._getBaseModuleConfig(),
             resizing: this._getModuleConfigByOption('mediaResizing'),
             mentions: this._getModuleConfigByOption('mentions'),
+            uploader: {
+                onDrop: (e) => this._saveValueChangeEvent(e),
+                imageBlot: 'extendedImage'
+            },
             clipboard: {
-                matchVisual: false,
+                onPaste: (e) => this._saveValueChangeEvent(e),
+                onCut: (e) => this._saveValueChangeEvent(e),
                 matchers: [
                     ['p.MsoListParagraphCxSpFirst', wordListMatcher],
                     ['p.MsoListParagraphCxSpMiddle', wordListMatcher],
-                    ['p.MsoListParagraphCxSpLast', wordListMatcher],
-                    [ELEMENT_NODE, getTextDecorationMatcher(quill)]
+                    ['p.MsoListParagraphCxSpLast', wordListMatcher]
                 ]
             }
         }, this._getCustomModules());
@@ -488,8 +486,8 @@ const HtmlEditor = Editor.inherit({
         toolbar && toolbar.repaint();
     },
 
-    _updateHtmlContent: function(newMarkup) {
-        const newDelta = this._quillInstance.clipboard.convert(newMarkup);
+    _updateHtmlContent: function(html) {
+        const newDelta = this._quillInstance.clipboard.convert({ html });
         this._quillInstance.setContents(newDelta);
     },
 
@@ -543,6 +541,10 @@ const HtmlEditor = Editor.inherit({
 
     get: function(modulePath) {
         return this._getRegistrator().getQuill().import(modulePath);
+    },
+
+    getModule: function(moduleName) {
+        return this._applyQuillMethod('getModule', arguments);
     },
 
     getQuillInstance: function() {
@@ -624,4 +626,4 @@ const HtmlEditor = Editor.inherit({
 
 registerComponent('dxHtmlEditor', HtmlEditor);
 
-module.exports = HtmlEditor;
+export default HtmlEditor;

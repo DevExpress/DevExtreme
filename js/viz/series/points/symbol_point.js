@@ -1,12 +1,12 @@
-const extend = require('../../../core/utils/extend').extend;
-const each = require('../../../core/utils/iterator').each;
-const noop = require('../../../core/utils/common').noop;
-const windowUtils = require('../../../core/utils/window');
-const window = windowUtils.getWindow();
-const labelModule = require('./label');
+import { extend } from '../../../core/utils/extend';
+import { each } from '../../../core/utils/iterator';
+import { noop } from '../../../core/utils/common';
+import { getWindow, hasProperty } from '../../../core/utils/window';
+const window = getWindow();
+import labelModule from './label';
 const _extend = extend;
-const _isDefined = require('../../../core/utils/type').isDefined;
-const _normalizeEnum = require('../../core/utils').normalizeEnum;
+import { isDefined as _isDefined } from '../../../core/utils/type';
+import { normalizeEnum as _normalizeEnum } from '../../core/utils';
 
 const _math = Math;
 const _round = _math.round;
@@ -78,7 +78,7 @@ function getTriangleUpMarkerCoords(radius) {
     ];
 }
 
-module.exports = {
+export default {
     deleteLabel: function() {
         this._label.dispose();
         this._label = null;
@@ -539,7 +539,7 @@ module.exports = {
         navigator = that.__debug_navigator || navigator;
         that.__debug_browserNavigator = navigator;
         ///#ENDDEBUG
-        const minTrackerSize = windowUtils.hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
+        const minTrackerSize = hasProperty('ontouchstart') || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
         that._options.trackerR = r < minTrackerSize ? minTrackerSize : r;
         return that._options.trackerR;
     },

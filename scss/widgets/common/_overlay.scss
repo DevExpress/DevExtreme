@@ -1,6 +1,6 @@
 @use "../base/mixins" as *;
+
 // adduse
-$OVERLAY_ZINDEX: 1000;
 
 .dx-overlay-wrapper {
   top: 0;
@@ -8,7 +8,7 @@ $OVERLAY_ZINDEX: 1000;
   width: 100%;
   height: 100%;
   left: 0;
-  z-index: $OVERLAY_ZINDEX;
+  z-index: $overlay-zindex;
 
   &,
   *,
@@ -33,7 +33,7 @@ $OVERLAY_ZINDEX: 1000;
 .dx-overlay-content {
   position: absolute;
   pointer-events: auto;
-  z-index: $OVERLAY_ZINDEX;
+  z-index: $overlay-zindex;
   outline: 0;
   overflow: hidden;
 

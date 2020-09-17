@@ -1,18 +1,7 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_GALLERY_INDICATOR_SIZE: null !default;
-$MATERIAL_GALLERY_INDICATOR_SELECTED_SIZE: null !default;
-$MATERIAL_GALLERY_BUTTON_PADDING: null !default;
-
-@if $size == "default" {
-  $MATERIAL_GALLERY_INDICATOR_SIZE: 8px;
-  $MATERIAL_GALLERY_INDICATOR_SELECTED_SIZE: 12px;
-  $MATERIAL_GALLERY_BUTTON_PADDING: 8px;
-}
-
-@else if $size == "compact" {
-  $MATERIAL_GALLERY_INDICATOR_SIZE: 8px;
-  $MATERIAL_GALLERY_INDICATOR_SELECTED_SIZE: 12px;
-  $MATERIAL_GALLERY_BUTTON_PADDING: 8px;
-}
+$material-gallery-indicator-size: 8px;
+$material-gallery-indicator-selected-size: 12px;
+$material-gallery-button-padding: 8px;

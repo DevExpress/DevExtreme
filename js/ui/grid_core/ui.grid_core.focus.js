@@ -12,7 +12,7 @@ const FOCUSED_ROW_SELECTOR = '.dx-row' + '.' + ROW_FOCUSED_CLASS;
 const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
-exports.FocusController = core.ViewController.inherit((function() {
+const FocusController = core.ViewController.inherit((function() {
     return {
         init: function() {
             this._dataController = this.getController('data');
@@ -377,7 +377,7 @@ exports.FocusController = core.ViewController.inherit((function() {
     };
 })());
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             focusedRowEnabled: false,
@@ -393,7 +393,7 @@ module.exports = {
     },
 
     controllers: {
-        focus: exports.FocusController
+        focus: FocusController
     },
 
     extenders: {
@@ -413,7 +413,7 @@ module.exports = {
 
                     this.setRowFocusType();
 
-                    this._focusedCellPosition = { };
+                    this._focusedCellPosition = {};
                     if(isDefined(rowIndex)) {
                         this._focusedCellPosition.rowIndex = this.option('focusedRowIndex');
                     }
@@ -520,7 +520,8 @@ module.exports = {
                         const isPartialUpdateWithDeleting = isPartialUpdate && e.changeTypes && e.changeTypes.indexOf('remove') >= 0;
 
                         if(e.changeType === 'refresh' && e.items.length || isPartialUpdateWithDeleting) {
-                            this.processUpdateFocusedRow();
+                            this._updatePageIndexes();
+                            this.processUpdateFocusedRow(e);
                         } else if(e.changeType === 'append' || e.changeType === 'prepend') {
                             this._updatePageIndexes();
                         }
@@ -531,7 +532,6 @@ module.exports = {
                     const prevRenderingPageIndex = this._lastRenderingPageIndex || 0;
                     const renderingPageIndex = this._rowsScrollController ? this._rowsScrollController.pageIndex() : 0;
 
-                    this._lastPageIndex = this.pageIndex();
                     this._lastRenderingPageIndex = renderingPageIndex;
                     this._isPagingByRendering = renderingPageIndex !== prevRenderingPageIndex;
                 },
@@ -540,41 +540,36 @@ module.exports = {
                     return this._isPagingByRendering;
                 },
 
-                processUpdateFocusedRow: function() {
-                    const prevPageIndex = this._lastPageIndex;
-                    this._updatePageIndexes();
-                    const pageIndex = this._lastPageIndex;
-                    const paging = prevPageIndex !== undefined && prevPageIndex !== pageIndex;
-                    const pagingByRendering = this.isPagingByRendering();
-                    const operationTypes = this._dataSource.operationTypes() || {};
+                processUpdateFocusedRow: function(e) {
+                    const operationTypes = e.operationTypes || {};
                     const focusController = this.getController('focus');
-                    const reload = operationTypes.reload;
+                    const { reload, fullReload } = operationTypes;
                     const keyboardController = this.getController('keyboardNavigation');
                     const isVirtualScrolling = keyboardController._isVirtualScrolling();
                     const focusedRowKey = this.option('focusedRowKey');
                     const isAutoNavigate = focusController.isAutoNavigateToFocusedRow();
 
-                    if(reload && focusedRowKey !== undefined) {
+                    if(reload && !fullReload && focusedRowKey !== undefined) {
                         focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
                             if(focusedRowIndex < 0) {
                                 focusController._focusRowByIndex();
                             }
                         });
-                    } else if(paging) {
+                    } else if(operationTypes.paging && !isVirtualScrolling) {
                         if(isAutoNavigate) {
                             const rowIndexByKey = this.getRowIndexByKey(focusedRowKey);
                             const isValidRowIndexByKey = rowIndexByKey >= 0;
                             const focusedRowIndex = this.option('focusedRowIndex');
                             const needFocusRowByIndex = focusedRowIndex >= 0 && (focusedRowIndex === rowIndexByKey || !isValidRowIndexByKey);
-                            if(!isVirtualScrolling && needFocusRowByIndex) {
+                            if(needFocusRowByIndex) {
                                 focusController._focusRowByIndex();
                             }
                         } else {
-                            if(!isVirtualScrolling && this.getRowIndexByKey(focusedRowKey) < 0) {
+                            if(this.getRowIndexByKey(focusedRowKey) < 0) {
                                 this.option('focusedRowIndex', -1);
                             }
                         }
-                    } else if(!pagingByRendering) {
+                    } else if(operationTypes.fullReload) {
                         focusController._focusRowByKeyOrIndex();
                     }
                 },
@@ -753,18 +748,20 @@ module.exports = {
                     }
                 },
                 _setFocusedRowElementTabIndex: function() {
-                    const that = this;
-                    const focusedRowKey = that.option('focusedRowKey');
-                    const tabIndex = that.option('tabIndex') || 0;
-                    const dataController = that._dataController;
+                    const focusedRowKey = this.option('focusedRowKey');
+                    const tabIndex = this.option('tabIndex') || 0;
+                    const dataController = this._dataController;
+                    const columnsController = this._columnsController;
                     let rowIndex = dataController.getRowIndexByKey(focusedRowKey);
-                    let columnIndex = that.option('focusedColumnIndex');
-                    const $row = that._findRowElementForTabIndex();
+                    let columnIndex = this.option('focusedColumnIndex');
+                    const $row = this._findRowElementForTabIndex();
 
-                    that._scrollToFocusOnResize = that._scrollToFocusOnResize || function() {
-                        that.scrollToElementVertically(that._findRowElementForTabIndex());
-                        that.resizeCompleted.remove(that._scrollToFocusOnResize);
-                    };
+                    if(!isDefined(this._scrollToFocusOnResize)) {
+                        this._scrollToFocusOnResize = () => {
+                            this.scrollToElementVertically(this._findRowElementForTabIndex());
+                            this.resizeCompleted.remove(this._scrollToFocusOnResize);
+                        };
+                    }
 
                     $row.attr('tabIndex', tabIndex);
 
@@ -774,13 +771,14 @@ module.exports = {
                         }
 
                         rowIndex += dataController.getRowIndexOffset();
-                        that.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
+                        columnIndex += columnsController.getColumnIndexOffset();
+                        this.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
 
                         const dataSource = dataController.dataSource();
                         const operationTypes = dataSource && dataSource.operationTypes();
                         if(operationTypes && !operationTypes.paging && !dataController.isPagingByRendering()) {
-                            that.resizeCompleted.remove(that._scrollToFocusOnResize);
-                            that.resizeCompleted.add(that._scrollToFocusOnResize);
+                            this.resizeCompleted.remove(this._scrollToFocusOnResize);
+                            this.resizeCompleted.add(this._scrollToFocusOnResize);
                         }
                     }
                 },

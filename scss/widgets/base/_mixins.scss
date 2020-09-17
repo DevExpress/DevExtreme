@@ -18,14 +18,14 @@
   background-image: linear-gradient($options);
 }
 
-@mixin gradient-radial-circle2($startColor, $startPosition, $middleColor, $middlePosition, $endColor, $endPosition) {
-  background: $startColor;
-  background: radial-gradient(circle closest-side at center, $startColor $startPosition, $middleColor $middlePosition, $endColor $endPosition);
+@mixin gradient-radial-circle2($start-color, $start-position, $middle-color, $middle-position, $end-color, $end-position) {
+  background: $start-color;
+  background: radial-gradient(circle closest-side at center, $start-color $start-position, $middle-color $middle-position, $end-color $end-position);
 }
 
-@mixin gradient-radial-circle($startColor, $startPosition, $endColor, $endPosition) {
-  background: $startColor;
-  background: radial-gradient(circle closest-side at center, $startColor $startPosition, $endColor $endPosition);
+@mixin gradient-radial-circle($start-color, $start-position, $end-color, $end-position) {
+  background: $start-color;
+  background: radial-gradient(circle closest-side at center, $start-color $start-position, $end-color $end-position);
 }
 
 /* flex */
@@ -95,3 +95,41 @@
     }
   }
 }
+
+@mixin disabled-widget-mixin($opacity) {
+  opacity: $opacity;
+
+  @include user-select(none);
+
+  cursor: default;
+}
+
+@mixin dx-base-typography-mixin(
+  $color,
+  $font-size,
+  $font-family,
+  $line-height
+) {
+  color: $color;
+  font-weight: normal;
+  font-size: $font-size;
+  font-family: $font-family;
+  line-height: $line-height;
+
+  input,
+  textarea {
+    font-family: $font-family;
+    line-height: $line-height;
+  }
+}
+
+@mixin dx-pending-indicator($indicator-size) {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  margin-top: -$indicator-size / 2;
+  width: $indicator-size;
+  height: $indicator-size;
+}
+
+$overlay-zindex: 1000;

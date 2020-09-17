@@ -1,1 +1,2 @@
-module.exports = require('./vector_map/vector_map');
+import VectorMap from './vector_map/vector_map';
+export default VectorMap;

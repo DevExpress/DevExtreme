@@ -7,6 +7,8 @@ const dateUtils = require('core/utils/date');
 const vizMocks = require('../../helpers/vizMocks.js');
 const dataSource = vizMocks.stubClass(dataSourceModule.DataSource);
 const axisModule = require('viz/axes/base_axis');
+const titleModule = require('viz/core/title');
+const TitleOrig = titleModule.Title;
 
 QUnit.module('LoadingIndicator', commons.environment);
 
@@ -892,14 +894,13 @@ QUnit.test('containerBackgroundColor updating. shutter color was set', function(
 
 QUnit.test('title updating', function(assert) {
     const title = new vizMocks.Title();
-    const titleModule = require('viz/core/title');
     title.layoutOptions = function() {
         return { horizontalAlignment: 'center', verticalAlignment: 'top' };
     };
     title.measure = function() {
         return [100, 50];
     };
-    sinon.stub(titleModule, 'Title', commons.returnValue(title));
+    titleModule.DEBUG_set_title(sinon.spy(commons.returnValue(title)));
     try {
         const range = this.createWidget({
             title: 'title'
@@ -910,7 +911,7 @@ QUnit.test('title updating', function(assert) {
 
         assert.equal(title.move.callCount, 2);
     } finally {
-        titleModule.Title.restore();
+        titleModule.DEBUG_set_title(TitleOrig);
     }
 });
 

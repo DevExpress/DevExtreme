@@ -1,7 +1,7 @@
-const $ = require('../../core/renderer');
-const Class = require('../../core/class');
-const each = require('../../core/utils/iterator').each;
-const publicComponentUtils = require('../../core/utils/public_component');
+import $ from '../../core/renderer';
+import Class from '../../core/class';
+import { each } from '../../core/utils/iterator';
+import publicComponentUtils from '../../core/utils/public_component';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
@@ -105,4 +105,4 @@ CollectionItem.getInstance = function($element) {
     return publicComponentUtils.getInstanceByElement($element, this);
 };
 
-module.exports = CollectionItem;
+export default CollectionItem;

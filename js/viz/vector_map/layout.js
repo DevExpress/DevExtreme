@@ -1,5 +1,5 @@
-const inArray = require('../../core/utils/array').inArray;
-const each = require('../../core/utils/iterator').each;
+import { inArray } from '../../core/utils/array';
+import { each } from '../../core/utils/iterator';
 const _round = Math.round;
 const _min = Math.min;
 const _max = Math.max;
@@ -191,7 +191,7 @@ function applyLayout(canvas, items) {
     }
 }
 
-function LayoutControl() {
+export function LayoutControl() {
     const that = this;
     that._items = [];
     that._suspended = 0;
@@ -244,5 +244,3 @@ LayoutControl.prototype = {
         }
     }
 };
-
-exports.LayoutControl = LayoutControl;

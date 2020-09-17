@@ -4,7 +4,7 @@ import Button from '../../button';
 import { extend } from '../../../core/utils/extend';
 import eventsEngine from '../../../events/core/events_engine';
 import hoverEvents from '../../../events/hover';
-import clickEvent from '../../../events/click';
+import { name as clickEventName } from '../../../events/click';
 
 const CUSTOM_BUTTON_HOVERED_CLASS = 'dx-custom-button-hovered';
 
@@ -18,7 +18,7 @@ export default class CustomButton extends TextEditorButton {
         eventsEngine.on($element, hoverEvents.end, () => {
             editor.$element().removeClass(CUSTOM_BUTTON_HOVERED_CLASS);
         });
-        eventsEngine.on($element, clickEvent.name, (e) => {
+        eventsEngine.on($element, clickEventName, (e) => {
             e.stopPropagation();
         });
     }
@@ -30,6 +30,7 @@ export default class CustomButton extends TextEditorButton {
         this._addToContainer($element);
 
         const instance = editor._createComponent($element, Button, extend({}, this.options, {
+            ignoreParentReadOnly: true,
             disabled: this._isDisabled(),
             integrationOptions: this._prepareIntegrationOptions(editor)
         }));

@@ -1,27 +1,26 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_SLIDER_WIDTH: null !default;
-$MATERIAL_SLIDER_TRACK_HEIGHT: null !default;
-$MATERIAL_SLIDER_HANDLE_SIZE: null !default;
-$MATERIAL_SLIDER_WRAPPER_HEIGHT: null !default;
-$MATERIAL_SLIDER_TOOLTIP_WIDTH: null !default;
-$MATERIAL_SLIDER_TOP_TOOLTIP_MARGIN: null !default;
+$material-slider-handle-size: null !default;
+$material-slider-wrapper-height: null !default;
+$material-slider-tooltip-width: null !default;
+$material-slider-top-tooltip-margin: null !default;
+
+$material-slider-width: 14px;
+$material-slider-track-height: 4px;
+$material-slider-height: 28px;
 
 @if $size == "default" {
-  $MATERIAL_SLIDER_WIDTH: 14px;
-  $MATERIAL_SLIDER_TRACK_HEIGHT: 4px;
-  $MATERIAL_SLIDER_HANDLE_SIZE: 32px;
-  $MATERIAL_SLIDER_WRAPPER_HEIGHT: 32px;
-  $MATERIAL_SLIDER_TOOLTIP_WIDTH: 34px;
-  $MATERIAL_SLIDER_TOP_TOOLTIP_MARGIN: -5px;
+  $material-slider-handle-size: 32px;
+  $material-slider-wrapper-height: 32px;
+  $material-slider-tooltip-width: 34px;
+  $material-slider-top-tooltip-margin: -5px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_SLIDER_WIDTH: 14px;
-  $MATERIAL_SLIDER_TRACK_HEIGHT: 4px;
-  $MATERIAL_SLIDER_HANDLE_SIZE: 26px;
-  $MATERIAL_SLIDER_WRAPPER_HEIGHT: 26px;
-  $MATERIAL_SLIDER_TOOLTIP_WIDTH: 28px;
-  $MATERIAL_SLIDER_TOP_TOOLTIP_MARGIN: -2px;
+  $material-slider-handle-size: 26px;
+  $material-slider-wrapper-height: 26px;
+  $material-slider-tooltip-width: 28px;
+  $material-slider-top-tooltip-margin: -2px;
 }

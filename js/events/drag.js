@@ -1,13 +1,13 @@
-const $ = require('../core/renderer');
-const dataUtils = require('../core/element_data');
-const wrapToArray = require('../core/utils/array').wrapToArray;
-const inArray = require('../core/utils/array').inArray;
-const iteratorUtils = require('../core/utils/iterator');
-const contains = require('../core/utils/dom').contains;
-const registerEvent = require('./core/event_registrator');
-const eventUtils = require('./utils');
-const GestureEmitter = require('./gesture/emitter.gesture');
-const registerEmitter = require('./core/emitter_registrator');
+import $ from '../core/renderer';
+import { data as elementData, removeData } from '../core/element_data';
+import { wrapToArray } from '../core/utils/array';
+import { inArray } from '../core/utils/array';
+import iteratorUtils from '../core/utils/iterator';
+import { contains } from '../core/utils/dom';
+import registerEvent from './core/event_registrator';
+import { eventData as eData, fireEvent } from './utils';
+import GestureEmitter from './gesture/emitter.gesture';
+import registerEmitter from './core/emitter_registrator';
 
 
 const DRAG_START_EVENT = 'dxdragstart';
@@ -48,8 +48,8 @@ const dropTargetRegistration = {
 
     updateEventsCounter: function(element, event, value) {
         if([DRAG_ENTER_EVENT, DRAG_LEAVE_EVENT, DROP_EVENT].indexOf(event) > -1) {
-            const eventsCount = dataUtils.data(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
-            dataUtils.data(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
+            const eventsCount = elementData(element, DX_DRAG_EVENTS_COUNT_KEY) || 0;
+            elementData(element, DX_DRAG_EVENTS_COUNT_KEY, Math.max(0, eventsCount + value));
         }
     },
 
@@ -58,13 +58,13 @@ const dropTargetRegistration = {
     },
 
     teardown: function(element) {
-        const handlersCount = dataUtils.data(element, DX_DRAG_EVENTS_COUNT_KEY);
+        const handlersCount = elementData(element, DX_DRAG_EVENTS_COUNT_KEY);
         if(!handlersCount) {
             const index = inArray(element, knownDropTargets);
             knownDropTargets.splice(index, 1);
             knownDropTargetSelectors.splice(index, 1);
             knownDropTargetConfigs.splice(index, 1);
-            dataUtils.removeData(element, DX_DRAG_EVENTS_COUNT_KEY);
+            removeData(element, DX_DRAG_EVENTS_COUNT_KEY);
         }
     }
 
@@ -74,21 +74,21 @@ const dropTargetRegistration = {
 * @name UI Events.dxdragenter
 * @type eventType
 * @type_function_param1 event:event
-* @type_function_param1_field1 draggingElement:Node
+* @type_function_param1_field1 draggingElement:Element
 * @module events/drag
 */
 /**
 * @name UI Events.dxdrop
 * @type eventType
 * @type_function_param1 event:event
-* @type_function_param1_field1 draggingElement:Node
+* @type_function_param1_field1 draggingElement:Element
 * @module events/drag
 */
 /**
 * @name UI Events.dxdragleave
 * @type eventType
 * @type_function_param1 event:event
-* @type_function_param1_field1 draggingElement:Node
+* @type_function_param1_field1 draggingElement:Element
 * @module events/drag
 */
 
@@ -156,7 +156,7 @@ const DragEmitter = GestureEmitter.inherit({
     },
 
     _move: function(e) {
-        const eventData = eventUtils.eventData(e);
+        const eventData = eData(e);
         const dragOffset = this._calculateOffset(eventData);
 
         e = this._fireEvent(DRAG_EVENT, e, {
@@ -229,7 +229,7 @@ const DragEmitter = GestureEmitter.inherit({
             target: this._currentDropTarget
         };
 
-        eventUtils.fireEvent(eventData);
+        fireEvent(eventData);
     },
 
     _findDropTarget: function(e) {
@@ -244,7 +244,7 @@ const DragEmitter = GestureEmitter.inherit({
             const $target = $(target);
             iteratorUtils.each(getItemDelegatedTargets($target), function(_, delegatedTarget) {
                 const $delegatedTarget = $(delegatedTarget);
-                if(that._checkDropTarget(getItemConfig($target), $delegatedTarget, e)) {
+                if(that._checkDropTarget(getItemConfig($target), $delegatedTarget, $(result), e)) {
                     result = delegatedTarget;
                 }
             });
@@ -264,7 +264,7 @@ const DragEmitter = GestureEmitter.inherit({
         return active;
     },
 
-    _checkDropTarget: function(config, $target, e) {
+    _checkDropTarget: function(config, $target, $prevTarget, e) {
         const isDraggingElement = $target.get(0) === $(e.target).get(0);
         if(isDraggingElement) {
             return false;
@@ -286,6 +286,10 @@ const DragEmitter = GestureEmitter.inherit({
             return false;
         }
 
+        if($prevTarget.length && $prevTarget.closest($target).length) {
+            return false;
+        }
+
         if(config.checkDropTarget && !config.checkDropTarget($target, e)) {
             return false;
         }
@@ -294,7 +298,7 @@ const DragEmitter = GestureEmitter.inherit({
     },
 
     _end: function(e) {
-        const eventData = eventUtils.eventData(e);
+        const eventData = eData(e);
 
         this._fireEvent(DRAG_END_EVENT, e, {
             offset: this._calculateOffset(eventData)
@@ -341,12 +345,14 @@ registerEmitter({
 
 
 ///#DEBUG
-exports.dropTargets = knownDropTargets;
+export { knownDropTargets as dropTargets };
 ///#ENDDEBUG
 
-exports.move = DRAG_EVENT;
-exports.start = DRAG_START_EVENT;
-exports.end = DRAG_END_EVENT;
-exports.enter = DRAG_ENTER_EVENT;
-exports.leave = DRAG_LEAVE_EVENT;
-exports.drop = DROP_EVENT;
+export {
+    DRAG_EVENT as move,
+    DRAG_START_EVENT as start,
+    DRAG_END_EVENT as end,
+    DRAG_ENTER_EVENT as enter,
+    DRAG_LEAVE_EVENT as leave,
+    DROP_EVENT as drop
+};

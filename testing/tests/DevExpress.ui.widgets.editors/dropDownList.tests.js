@@ -31,6 +31,7 @@ const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 const getPopup = (instance) => {
     return instance._popup;
@@ -1173,25 +1174,74 @@ QUnit.module('popup', moduleConfig, () => {
         assert.strictEqual($overlayContent.outerWidth(), 500, 'overlay content width is correct');
     });
 
-    QUnit.test('popup should have width 100% if dropDownOptions.width is set to auto (T897820)', function(assert) {
-        const instance = $('#dropDownList').dxDropDownList({
+    QUnit.test('popup should have "auto" width if dropDownOptions.width is set to auto (T897820)', function(assert) {
+        const paddingsSize = 4;
+
+        $('#dropDownList').dxDropDownList({
             dropDownOptions: {
                 width: 'auto'
+            },
+            opened: true
+        });
+
+        const $emptyMessage = $(`.${EMPTY_MESSAGE_CLASS}`);
+        const emptyPopupWidth = $emptyMessage.outerWidth() + paddingsSize;
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        assert.roughEqual($overlayContent.outerWidth(), emptyPopupWidth, 0.1, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup width can be smaller than editor width (T916722)', function(assert) {
+        $('#dropDownList').dxDropDownList({
+            width: 500,
+            dropDownOptions: {
+                width: 100
             },
             opened: true
         }).dxDropDownList('instance');
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 'overlay content width is correct');
+        assert.strictEqual($overlayContent.outerWidth(), 100, 'overlay content width is correct');
     });
 
-    QUnit.test('popup should have width 100% if dropDownOptions.width is not defined (T897820)', function(assert) {
+    QUnit.test('popup should have editor width if dropDownOptions.width is not defined (T897820)', function(assert) {
         const instance = $('#dropDownList').dxDropDownList({
             opened: true
         }).dxDropDownList('instance');
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 'overlay content width is correct');
+        assert.roughEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 0.01, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have editor width if dropDownOptions.width is reset and minWidth is defined', function(assert) {
+        const instance = $('#dropDownList').dxDropDownList({
+            width: 500,
+            dropDownOptions: {
+                minWidth: 200,
+                width: 200
+            },
+            opened: true
+        }).dxDropDownList('instance');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        instance.option('dropDownOptions.width', null);
+
+        assert.roughEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 0.01, 'overlay content width is correct');
+    });
+
+    QUnit.test('popup should have editor width if dropDownOptions.width is undefined and minWidth is defined', function(assert) {
+        const instance = $('#dropDownList').dxDropDownList({
+            width: 500,
+            dropDownOptions: {
+                minWidth: 200,
+                width: null
+            },
+            opened: true
+        }).dxDropDownList('instance');
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.roughEqual($overlayContent.outerWidth(), instance.$element().outerWidth(), 0.01, 'overlay content width is correct');
     });
 
     QUnit.test('popup should have correct width when dropDownOptions.width is percent (T897820)', function(assert) {
@@ -1247,7 +1297,6 @@ QUnit.module('popup', moduleConfig, () => {
 
         listInstance.option('pageLoadMode', 'scrollBottom');
         listInstance.option('useNativeScrolling', 'true');
-        listInstance.option('useNative', 'true');
 
         listInstance.scrollTo(1000);
         const scrollTop = listInstance.scrollTop();
@@ -1289,7 +1338,6 @@ QUnit.module('popup', moduleConfig, () => {
 
         listInstance.option('pageLoadMode', 'scrollBottom');
         listInstance.option('useNativeScrolling', 'true');
-        listInstance.option('useNative', 'true');
 
         const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
         const keyboard = keyboardMock($input);
@@ -1497,12 +1545,33 @@ QUnit.module('aria accessibility', moduleConfig, () => {
     QUnit.test('aria-owns should point to list', function(assert) {
         const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
         const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
 
-        assert.notEqual($dropDownList.attr('aria-owns'), undefined, 'aria-owns exists');
-        assert.equal($dropDownList.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
+        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
+        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
     });
 
-    QUnit.test('aria-controls should be removed when popup is not visible', function(assert) {
+    QUnit.test('aria-owns should point to the list even if popup is closed but rendered', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({
+            deferRendering: false
+        });
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+
+        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
+        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
+    });
+
+    QUnit.test('input aria-owns should point to list', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+
+        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
+        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
+    });
+
+    QUnit.test('aria-controls should not be removed when popup is not visible', function(assert) {
         const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
         const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const instance = $dropDownList.dxDropDownList('instance');
@@ -1513,7 +1582,18 @@ QUnit.module('aria accessibility', moduleConfig, () => {
 
         instance.close();
 
-        assert.strictEqual($input.attr('aria-controls'), undefined, 'controls does not exist');
+        assert.notEqual($input.attr('aria-controls'), undefined, 'controls exists');
+        assert.equal($input.attr('aria-controls'), $list.attr('id'), 'aria-controls points to list\'s id');
+    });
+
+    QUnit.test('aria-controls should be defined immediately if deferRendering is false', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({ deferRendering: false });
+        const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const instance = $dropDownList.dxDropDownList('instance');
+        const $list = $(instance.content()).find(`.${LIST_CLASS}`);
+
+        assert.notEqual($input.attr('aria-controls'), undefined, 'controls exists');
+        assert.equal($input.attr('aria-controls'), $list.attr('id'), 'aria-controls points to list\'s id');
     });
 
     QUnit.test('input\'s aria-activedescendant attribute should point to the focused item', function(assert) {
@@ -1528,10 +1608,47 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
         const $item = $list.find('.dx-list-item:eq(1)');
 
-        list.option('focusedElement', $item);
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant exists');
 
+        list.option('focusedElement', $item);
         assert.notEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant exists');
         assert.equal($input.attr('aria-activedescendant'), $item.attr('id'), 'aria-activedescendant and id of the focused item are equals');
+    });
+
+    QUnit.test('input\'s aria-activedescendant attribute should not be defined after popup reopen', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({
+            dataSource: [1, 2, 3],
+            opened: true,
+            focusStateEnabled: true
+        });
+
+        const instance = $dropDownList.dxDropDownList('instance');
+        const $list = $(`.${LIST_CLASS}`);
+        const list = $list.dxList('instance');
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+        const $item = $list.find('.dx-list-item:eq(1)');
+
+        list.option('focusedElement', $item);
+        instance.option('opened', false);
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not defined');
+
+        instance.option('opened', true);
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not defined');
+    });
+
+    QUnit.test('input\'s aria-activedescendant attribute should be reset after list focused element change to null', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({
+            dataSource: [1, 2, 3],
+            opened: true,
+            focusStateEnabled: true
+        });
+
+        const $list = $(`.${LIST_CLASS}`);
+        const list = $list.dxList('instance');
+        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
+
+        list.option('focusedElement', null);
+        assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not defined');
     });
 
     QUnit.test('list\'s aria-target should point to the widget\'s input (T247414)', function(assert) {

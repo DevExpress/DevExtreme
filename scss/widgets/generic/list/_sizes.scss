@@ -1,48 +1,49 @@
 @use "../sizes" as *;
 @use "../list/colors" as *;
+
 // adduse
 
-$GENERIC_LIST_BORDER_WIDTH: null !default;
-$GENERIC_LIST_ITEM_HORIZONTAL_PADDING: null !default;
-$GENERIC_LIST_ITEM_BORDER_WIDTH: null !default;
-$GENERIC_LIST_GROUP_HEADER_VERTICAL_PADDING: null !default;
-$GENERIC_LIST_DELETEBUTTON_PADDING: null !default;
-$GENERIC_LIST_SELECT_ALL_MARGIN_TOP: null !default;
-$GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT: null !default;
-$GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP: null !default;
-$GENERIC_LIST_SELECT_ALL_LABEL_LINE_HEIGHT: null !default;
-$GENERIC_LIST_SEARCHBOX_MARGIN_BOTTOM: null !default;
+$generic-list-item-horizontal-padding: null !default;
+$generic-list-item-border-width: null !default;
+$generic-list-group-header-vertical-padding: null !default;
+$generic-list-deletebutton-padding: null !default;
+$generic-list-select-all-margin-top: null !default;
+$generic-list-select-all-margin-right: null !default;
+$generic-list-select-all-label-margin-top: null !default;
+$generic-list-select-all-label-line-height: null !default;
+$generic-list-searchbox-margin-bottom: null !default;
+$generic-list-item-vertical-padding: null !default;
+
+$generic-list-border-width: 1px;
 
 @if $size == "default" {
-  $GENERIC_LIST_BORDER_WIDTH: 1px;
+  $generic-list-item-horizontal-padding: 10px;
+  $generic-list-item-border-width: 1px;
+  $generic-list-group-header-vertical-padding: $list-group-header-default-padding-top;
 
-  $GENERIC_LIST_ITEM_HORIZONTAL_PADDING: 10px;
-  $GENERIC_LIST_ITEM_BORDER_WIDTH: 1px;
-  $GENERIC_LIST_GROUP_HEADER_VERTICAL_PADDING: $list-group-header-default-padding-top;
+  $generic-list-deletebutton-padding: 3px;
 
-  $GENERIC_LIST_DELETEBUTTON_PADDING: 3px;
+  $generic-list-select-all-margin-top: -1px;
+  $generic-list-select-all-margin-right: 0;
+  $generic-list-select-all-label-margin-top: 1px;
+  $generic-list-select-all-label-line-height: 17px;
 
-  $GENERIC_LIST_SELECT_ALL_MARGIN_TOP: -1px;
-  $GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT: 0;
-  $GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 1px;
-  $GENERIC_LIST_SELECT_ALL_LABEL_LINE_HEIGHT: 17px;
-
-  $GENERIC_LIST_SEARCHBOX_MARGIN_BOTTOM: 5px;
+  $generic-list-searchbox-margin-bottom: 5px;
+  $generic-list-item-vertical-padding: 10px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_LIST_BORDER_WIDTH: 1px;
+  $generic-list-item-horizontal-padding: 5px;
+  $generic-list-item-border-width: 0;
+  $generic-list-group-header-vertical-padding: $list-group-header-compact-padding-top;
 
-  $GENERIC_LIST_ITEM_HORIZONTAL_PADDING: 5px;
-  $GENERIC_LIST_ITEM_BORDER_WIDTH: 0;
-  $GENERIC_LIST_GROUP_HEADER_VERTICAL_PADDING: $list-group-header-compact-padding-top;
+  $generic-list-deletebutton-padding: 1px;
 
-  $GENERIC_LIST_DELETEBUTTON_PADDING: 1px;
+  $generic-list-select-all-margin-top: 1px;
+  $generic-list-select-all-margin-right: $generic-list-item-horizontal-padding;
+  $generic-list-select-all-label-margin-top: -1px;
+  $generic-list-select-all-label-line-height: 16px;
 
-  $GENERIC_LIST_SELECT_ALL_MARGIN_TOP: 1px;
-  $GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT: $GENERIC_LIST_ITEM_HORIZONTAL_PADDING;
-  $GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP: -1px;
-  $GENERIC_LIST_SELECT_ALL_LABEL_LINE_HEIGHT: 16px;
-
-  $GENERIC_LIST_SEARCHBOX_MARGIN_BOTTOM: 3px;
+  $generic-list-searchbox-margin-bottom: 3px;
+  $generic-list-item-vertical-padding: 5px;
 }

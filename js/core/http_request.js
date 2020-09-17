@@ -1,6 +1,6 @@
-const windowUtils = require('./utils/window');
-const window = windowUtils.getWindow();
-const injector = require('./utils/dependency_injector');
+import { getWindow } from './utils/window';
+const window = getWindow();
+import injector from './utils/dependency_injector';
 
 const nativeXMLHttpRequest = {
     getXhr: function() {
@@ -8,4 +8,4 @@ const nativeXMLHttpRequest = {
     }
 };
 
-module.exports = injector(nativeXMLHttpRequest);
+export default injector(nativeXMLHttpRequest);

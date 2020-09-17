@@ -1,18 +1,19 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_TOAST_LINE_HEIGHT: null !default;
-$GENERIC_TOAST_ICON_SIZE: null !default;
-$GENERIC_TOAST_CONTENT_PADDING: null !default;
+$generic-toast-line-height: null !default;
+$generic-toast-icon-size: null !default;
+$generic-toast-content-padding: null !default;
 
 @if $size == "default" {
-  $GENERIC_TOAST_LINE_HEIGHT: 32px;
-  $GENERIC_TOAST_ICON_SIZE: 35px;
-  $GENERIC_TOAST_CONTENT_PADDING: 10px;
+  $generic-toast-line-height: 32px;
+  $generic-toast-icon-size: 35px;
+  $generic-toast-content-padding: 10px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_TOAST_LINE_HEIGHT: 25px;
-  $GENERIC_TOAST_ICON_SIZE: 25px;
-  $GENERIC_TOAST_CONTENT_PADDING: 5px;
+  $generic-toast-line-height: 25px;
+  $generic-toast-icon-size: 25px;
+  $generic-toast-content-padding: 5px;
 }

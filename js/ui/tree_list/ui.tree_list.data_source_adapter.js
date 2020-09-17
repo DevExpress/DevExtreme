@@ -1,7 +1,7 @@
 import treeListCore from './ui.tree_list.core';
 import errors from '../widget/ui.errors';
 import { equalByValue } from '../../core/utils/common';
-import typeUtils from '../../core/utils/type';
+import { isFunction, isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import dataCoreUtils from '../../core/utils/data';
 import { extend } from '../../core/utils/extend';
@@ -41,7 +41,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         _createKeySetter: function() {
             const keyExpr = this.getKeyExpr();
 
-            if(typeUtils.isFunction(keyExpr)) {
+            if(isFunction(keyExpr)) {
                 return keyExpr;
             }
 
@@ -55,7 +55,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         createParentIdSetter: function() {
             const parentIdExpr = this.option('parentIdExpr');
 
-            if(typeUtils.isFunction(parentIdExpr)) {
+            if(isFunction(parentIdExpr)) {
                 return parentIdExpr;
             }
 
@@ -75,7 +75,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         _createHasItemsSetter: function() {
             const hasItemsExpr = this.option('hasItemsExpr');
 
-            if(typeUtils.isFunction(hasItemsExpr)) {
+            if(isFunction(hasItemsExpr)) {
                 return hasItemsExpr;
             }
 
@@ -135,7 +135,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             const key = this._keyGetter(item);
             let parentId = this._parentIdGetter(item);
 
-            parentId = typeUtils.isDefined(parentId) ? parentId : rootValue;
+            parentId = parentId !== undefined ? parentId : rootValue;
             const parentNode = nodeByKey[parentId] = nodeByKey[parentId] || { key: parentId, children: [] };
 
             const node = nodeByKey[key] = nodeByKey[key] || { key: key, children: [] };
@@ -202,7 +202,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                         this._convertDataToPlainStructure(childItems, key, result);
 
                         const itemsExpr = this.option('itemsExpr');
-                        if(!typeUtils.isFunction(itemsExpr)) {
+                        if(!isFunction(itemsExpr)) {
                             delete item[itemsExpr];
                         }
                     }
@@ -225,7 +225,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             return gridCoreUtils.combineFilters(parentIdFilters, 'or');
         },
 
-        _customizeRemoteOperations: function(options, isReload, operationTypes) {
+        _customizeRemoteOperations: function(options, operationTypes) {
             this.callBase.apply(this, arguments);
 
             options.remoteOperations.paging = false;
@@ -241,7 +241,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             }
 
             if(!options.isCustomLoading) {
-                this._isReload = this._isReload || isReload || operationTypes.reload;
+                this._isReload = this._isReload || operationTypes.reload;
 
                 if(!options.cachedStoreData) {
                     this._isChildrenLoaded = {};
@@ -666,7 +666,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             const key = store && store.key();
             const keyExpr = this.option('keyExpr');
 
-            if(typeUtils.isDefined(key) && typeUtils.isDefined(keyExpr)) {
+            if(isDefined(key) && isDefined(keyExpr)) {
                 if(!equalByValue(key, keyExpr)) {
                     throw errors.Error('E1044');
                 }
@@ -764,7 +764,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             const d = new Deferred();
             const remoteOperations = that.remoteOperations();
 
-            if(typeUtils.isDefined(keys)) {
+            if(isDefined(keys)) {
                 keys = Array.isArray(keys) ? keys : [keys];
             } else {
                 keys = that.getNodeLeafKeys();
@@ -816,7 +816,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
 })());
 
 
-module.exports = {
+export default {
     extend: function(extender) {
         DataSourceAdapterTreeList = DataSourceAdapterTreeList.inherit(extender);
     },

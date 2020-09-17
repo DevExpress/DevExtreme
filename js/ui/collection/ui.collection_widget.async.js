@@ -51,4 +51,4 @@ const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
     }
 });
 
-module.exports = AsyncCollectionWidget;
+export default AsyncCollectionWidget;

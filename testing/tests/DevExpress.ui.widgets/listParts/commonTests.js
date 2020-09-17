@@ -17,6 +17,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
+import { setScrollView } from 'ui/list/ui.list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
@@ -131,7 +132,7 @@ const moduleSetup = {
         this.element = $('#list');
 
         this.originalScrollView = ScrollView;
-        List.mockScrollView(ScrollViewMock);
+        setScrollView(ScrollViewMock);
         registerComponent('dxScrollView', ScrollViewMock);
 
         this.clock = sinon.useFakeTimers();
@@ -140,7 +141,7 @@ const moduleSetup = {
     afterEach: function() {
         executeAsyncMock.teardown();
 
-        List.mockScrollView(ScrollView);
+        setScrollView(ScrollView);
         registerComponent('dxScrollView', this.originalScrollView);
 
         this.clock.restore();
@@ -527,7 +528,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     QUnit.test('scrollView should be updated after group collapsed', function(assert) {
         try {
-            List.mockScrollView(this.originalScrollView);
+            setScrollView(this.originalScrollView);
             fx.off = true;
 
             const $element = this.element.dxList({
@@ -560,12 +561,12 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     QUnit.test('scrollView should update its position after a group has been collapsed', function(assert) {
         try {
-            List.mockScrollView(this.originalScrollView);
+            setScrollView(this.originalScrollView);
             fx.off = true;
 
             const $element = this.element.dxList({
                 pageLoadMode: 'scrollBottom',
-                height: 130,
+                height: 160,
                 scrollingEnabled: true,
                 useNativeScrolling: false,
                 dataSource: {
@@ -623,7 +624,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     QUnit.test('more button shouldn\'t disappear after group collapsed with array store', function(assert) {
         try {
-            List.mockScrollView(this.originalScrollView);
+            setScrollView(this.originalScrollView);
             fx.off = true;
 
             const $element = this.element.dxList({
@@ -655,7 +656,7 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     QUnit.test('more button shouldn\'t disappear after group collapsed with custom store', function(assert) {
         try {
-            List.mockScrollView(this.originalScrollView);
+            setScrollView(this.originalScrollView);
             fx.off = true;
 
             const data = [
@@ -1012,6 +1013,59 @@ QUnit.module('options changed', moduleSetup, () => {
         swipeItem();
 
         list.option('onItemSwipe', swipeHandler);
+        swipeItem();
+    });
+
+    QUnit.test('onItemSwipe handler should not be triggered if "_swipeEnabled" is false on init', function(assert) {
+        assert.expect(0);
+
+        const swipeHandler = () => {
+            assert.ok(true, 'swipe handled');
+        };
+
+        this.element.dxList({
+            items: [0],
+            onItemSwipe: swipeHandler,
+            _swipeEnabled: false
+        }).dxList('instance');
+
+        const item = $.proxy(function() {
+            return this.element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        }, this);
+        const swipeItem = () => {
+            pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
+        };
+
+        swipeItem();
+    });
+
+    QUnit.test('onItemSwipe - subscription by on method', function(assert) {
+        assert.expect(2);
+
+        const swipeHandler = () => {
+            assert.ok(true, 'swipe handled');
+        };
+
+        const list = this.element.dxList({
+            items: [0],
+            itemHoldTimeout: 0,
+            scrollingEnabled: true
+        }).dxList('instance');
+        list.on('itemSwipe', swipeHandler);
+
+        const item = $.proxy(function() {
+            return this.element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        }, this);
+        const swipeItem = () => {
+            pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
+        };
+
+        swipeItem();
+
+        list.off('itemSwipe');
+        swipeItem();
+
+        list.on('itemSwipe', swipeHandler);
         swipeItem();
     });
 
@@ -1446,7 +1500,7 @@ QUnit.module('events', moduleSetup, () => {
 
 QUnit.module('dataSource integration', moduleSetup, () => {
     QUnit.test('pageLoading should be ordered for async dataSource (T233998)', function(assert) {
-        List.mockScrollView(ScrollViewMock.inherit({
+        setScrollView(ScrollViewMock.inherit({
             isFull() {
                 return false;
             }
@@ -1685,8 +1739,53 @@ QUnit.module('dataSource integration', moduleSetup, () => {
         assert.equal(list.scrollTop(), 0, 'scroll to top after reload');
     });
 
+    QUnit.test('list should set dataSource pageIndex to 0 on init (T915805)', function(assert) {
+        const data = [];
+        for(let i = 100; i >= 0; i--) {
+            data.push(i);
+        }
+
+        const dataSource = new DataSource({
+            store: new ArrayStore(data),
+            paginate: true,
+            pageSize: 20
+        });
+        let list;
+        const $toggleButton = $('<div>').appendTo('#qunit-fixture');
+        try {
+            $toggleButton.dxButton({
+                onClick: () => {
+                    if(list) {
+                        list.dispose();
+                        list = null;
+                    } else {
+                        list = this.element
+                            .dxList({
+                                dataSource,
+                                opened: true,
+                                pageLoadMode: 'scrollBottom',
+                                useNativeScrolling: true
+                            }).dxList('instance');
+                    }
+
+                }
+            });
+            $toggleButton.trigger('dxclick');
+            dataSource.pageIndex(2);
+            dataSource.load();
+
+            $toggleButton.trigger('dxclick');
+            $toggleButton.trigger('dxclick');
+
+            const listDataSource = list.getDataSource();
+            assert.strictEqual(listDataSource.pageIndex(), 0, 'pageIndex is set to 0');
+        } finally {
+            $toggleButton.remove();
+        }
+    });
+
     QUnit.test('first item rendered when pageSize is 1 and dataSource set as array', function(assert) {
-        List.mockScrollView(ScrollViewMock.inherit({
+        setScrollView(ScrollViewMock.inherit({
             isFull() {
                 return false;
             }
@@ -2112,7 +2211,7 @@ QUnit.module('scrollView integration', {
         this.clock.tick(1);
 
         const scrollBarSize = Math.round(Math.pow($list.height(), 2) / $scrollViewContent.height());
-        assert.equal($scrollableScroll.height(), scrollBarSize, 'scrollbar has correct height');
+        assert.equal($scrollableScroll.outerHeight(), scrollBarSize, 'scrollbar has correct height');
     });
 
     QUnit.test('update scroll after change items', function(assert) {

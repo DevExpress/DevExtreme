@@ -1,8 +1,10 @@
-const tiling = require('./tiling');
-const dynamicSlope = require('./tiling.funnel');
-const dynamicHeight = require('./tiling.pyramid');
-const noop = require('../../core/utils/common').noop;
-const Item = require('./item');
+import tiling from './tiling';
+import dynamicSlope from './tiling.funnel';
+import dynamicHeight from './tiling.pyramid';
+import { noop } from '../../core/utils/common';
+import baseWidget from '../core/base_widget';
+import componentRegistrator from '../../core/component_registrator';
+import Item from './item';
 const NODES_CREATE_CHANGE = 'NODES_CREATE';
 
 tiling.addAlgorithm('dynamicslope', dynamicSlope, true);
@@ -21,7 +23,7 @@ function getLegendItemState(itemState) {
     };
 }
 
-const dxFunnel = require('../core/base_widget').inherit({
+const dxFunnel = baseWidget.inherit({
     _rootClass: 'dxf-funnel',
 
     _rootClassPrefix: 'dxf',
@@ -288,8 +290,9 @@ const dxFunnel = require('../core/base_widget').inherit({
 });
 
 
-require('../../core/component_registrator')('dxFunnel', dxFunnel);
-module.exports = dxFunnel;
+componentRegistrator('dxFunnel', dxFunnel);
+export default dxFunnel;
 
 // PLUGINS_SECTION
-dxFunnel.addPlugin(require('../core/data_source').plugin);
+import { plugin } from '../core/data_source';
+dxFunnel.addPlugin(plugin);

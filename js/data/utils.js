@@ -1,11 +1,12 @@
 import { isFunction } from '../core/utils/type';
 import domAdapter from '../core/dom_adapter';
-import { add as ready } from '../core/utils/ready_callbacks';
+import readyCallbacks from '../core/utils/ready_callbacks';
 import { getWindow } from '../core/utils/window';
 import { map } from '../core/utils/iterator';
 import { Deferred } from '../core/utils/deferred';
-import typeUtils from '../core/utils/type';
 import { equalByValue } from '../core/utils/common';
+
+const ready = readyCallbacks.add;
 
 const XHR_ERROR_UNLOAD = 'DEVEXTREME_XHR_ERROR_UNLOAD';
 
@@ -237,8 +238,8 @@ const isGroupCriterion = function(crit) {
     if(Array.isArray(first)) {
         return true;
     }
-    if(typeUtils.isFunction(first)) {
-        if(Array.isArray(second) || typeUtils.isFunction(second) || isGroupOperator(second)) {
+    if(isFunction(first)) {
+        if(Array.isArray(second) || isFunction(second) || isGroupOperator(second)) {
             return true;
         }
     }
@@ -315,4 +316,4 @@ const utils = {
     base64_encode: base64_encode
 };
 
-module.exports = utils;
+export default utils;

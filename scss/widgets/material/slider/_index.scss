@@ -3,38 +3,38 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_SLIDER_RADIUS: 50%;
-$MATERIAL_SLIDER_BAR_HEIGHT: 2px;
-$MATERIAL_SLIDER_HANDLE_ACTIVE_BORDER_WIDTH: 2px;
-$MATERIAL_SLIDER_HANDLE_INNER_SIZE: 12px;
-$MATERIAL_SLIDER_HANDLE_INNER_BORDER_WIDTH: 1px;
-$MATERIAL_SLIDER_HANDLE_INNER_DISABLED_SIZE: 2px;
+$material-slider-radius: 50%;
+$material-slider-bar-height: 2px;
+$material-slider-handle-active-border-width: 2px;
+$material-slider-handle-inner-size: 12px;
+$material-slider-handle-inner-border-width: 1px;
+$material-slider-handle-inner-disabled-size: 2px;
 
-
-$MATERIAL_SLIDER_TOOLTIP_POPUP_CONTENT_HORIZONTAL_PADDING: 3px;
-$MATERIAL_SLIDER_TOOLTIP_WIDTH_WITHOUT_PADDINGS: $MATERIAL_SLIDER_TOOLTIP_WIDTH - 2 * $MATERIAL_SLIDER_TOOLTIP_POPUP_CONTENT_HORIZONTAL_PADDING;
-$MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN: 5px;
+$material-slider-tooltip-popup-content-horizontal-padding: 3px;
+$material-slider-tooltip-width-without-paddings: $material-slider-tooltip-width - 2 * $material-slider-tooltip-popup-content-horizontal-padding;
+$material-slider-disabled-tooltip-top-margin: 5px;
 
 .dx-slider-wrapper {
-  height: $MATERIAL_SLIDER_WRAPPER_HEIGHT;
+  height: $material-slider-wrapper-height;
 }
 
 .dx-slider-bar,
 .dx-slider-range {
-  margin-top: ($MATERIAL_SLIDER_WRAPPER_HEIGHT - $MATERIAL_SLIDER_BAR_HEIGHT) / 2;
-  height: $MATERIAL_SLIDER_BAR_HEIGHT;
+  margin-top: ($material-slider-wrapper-height - $material-slider-bar-height) / 2;
+  height: $material-slider-bar-height;
 }
 
 .dx-slider-bar {
-  margin-right: $MATERIAL_SLIDER_HANDLE_SIZE / 2 + $MATERIAL_SLIDER_HANDLE_ACTIVE_BORDER_WIDTH;
-  margin-left: $MATERIAL_SLIDER_HANDLE_SIZE / 2 + $MATERIAL_SLIDER_HANDLE_ACTIVE_BORDER_WIDTH;
+  margin-right: $material-slider-handle-size / 2 + $material-slider-handle-active-border-width;
+  margin-left: $material-slider-handle-size / 2 + $material-slider-handle-active-border-width;
   background: $material-slider-bar-bg;
 }
 
 .dx-slider-range {
-  top: $MATERIAL_SLIDER_BAR_HEIGHT / 2 - $MATERIAL_SLIDER_HANDLE_SIZE / 2;
+  top: $material-slider-bar-height / 2 - $material-slider-handle-size / 2;
 
   &.dx-slider-range-visible {
     background: $material-slider-bg;
@@ -42,36 +42,36 @@ $MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN: 5px;
 }
 
 .dx-slider-handle {
-  margin-top: $MATERIAL_SLIDER_BAR_HEIGHT / 2 - $MATERIAL_SLIDER_HANDLE_SIZE / 2;
-  margin-right: -$MATERIAL_SLIDER_HANDLE_SIZE / 2;
-  width: $MATERIAL_SLIDER_HANDLE_SIZE;
-  height: $MATERIAL_SLIDER_HANDLE_SIZE;
-  border-radius: $MATERIAL_SLIDER_RADIUS;
+  margin-top: $material-slider-bar-height / 2 - $material-slider-handle-size / 2;
+  margin-right: -$material-slider-handle-size / 2;
+  width: $material-slider-handle-size;
+  height: $material-slider-handle-size;
+  border-radius: $material-slider-radius;
 
   &:after {
     position: absolute;
     top: 50%;
     left: 50%;
     display: block;
-    margin-top: -$MATERIAL_SLIDER_HANDLE_INNER_SIZE / 2;
-    margin-left: -$MATERIAL_SLIDER_HANDLE_INNER_SIZE / 2;
-    width: $MATERIAL_SLIDER_HANDLE_INNER_SIZE;
-    height: $MATERIAL_SLIDER_HANDLE_INNER_SIZE;
+    margin-top: -$material-slider-handle-inner-size / 2;
+    margin-left: -$material-slider-handle-inner-size / 2;
+    width: $material-slider-handle-inner-size;
+    height: $material-slider-handle-inner-size;
     background: $material-slider-bg;
     content: "";
-    border-radius: $MATERIAL_SLIDER_RADIUS;
+    border-radius: $material-slider-radius;
   }
 
   .dx-tooltip-wrapper {
     .dx-overlay-content {
       background-color: transparent;
-      min-width: $MATERIAL_SLIDER_TOOLTIP_WIDTH;
+      min-width: $material-slider-tooltip-width;
 
       &:before {
         content: "";
         position: absolute;
-        width: $MATERIAL_SLIDER_TOOLTIP_WIDTH;
-        height: $MATERIAL_SLIDER_TOOLTIP_WIDTH;
+        width: $material-slider-tooltip-width;
+        height: $material-slider-tooltip-width;
         border-radius: 0 50% 50% 50%;
         transform: rotate(45deg);
         display: block;
@@ -81,18 +81,18 @@ $MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN: 5px;
         .dx-slider-tooltip-position-top & {
           transform: rotate(-135deg);
           bottom: 0;
-          margin-top: $MATERIAL_SLIDER_TOP_TOOLTIP_MARGIN;
+          margin-top: $material-slider-top-tooltip-margin;
         }
       }
 
       .dx-popup-content {
         line-height: normal;
         font-size: 10px;
-        max-width: $MATERIAL_SLIDER_TOOLTIP_WIDTH_WITHOUT_PADDINGS;
-        min-width: $MATERIAL_SLIDER_TOOLTIP_WIDTH_WITHOUT_PADDINGS;
-        width: $MATERIAL_SLIDER_TOOLTIP_WIDTH_WITHOUT_PADDINGS;
+        max-width: $material-slider-tooltip-width-without-paddings;
+        min-width: $material-slider-tooltip-width-without-paddings;
+        width: $material-slider-tooltip-width-without-paddings;
         text-overflow: ellipsis;
-        padding: $MATERIAL_SLIDER_TOOLTIP_WIDTH / 2 - $MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN - 1 $MATERIAL_SLIDER_TOOLTIP_POPUP_CONTENT_HORIZONTAL_PADDING 5px;
+        padding: $material-slider-tooltip-width / 2 - $material-slider-disabled-tooltip-top-margin - 1 $material-slider-tooltip-popup-content-horizontal-padding 5px;
         color: $material-slider-tooltip-color;
         position: relative;
 
@@ -103,19 +103,19 @@ $MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN: 5px;
 
       &.dx-state-disabled {
         &:before {
-          margin-top: $MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN;
+          margin-top: $material-slider-disabled-tooltip-top-margin;
 
           .dx-slider-tooltip-position-top & {
-            margin-top: -$MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN;
+            margin-top: -$material-slider-disabled-tooltip-top-margin;
           }
         }
 
         .dx-popup-content {
-          padding-top: $MATERIAL_SLIDER_TOOLTIP_WIDTH / 2;
+          padding-top: $material-slider-tooltip-width / 2;
 
           .dx-slider-tooltip-position-top & {
             padding-top: 6px;
-            padding-bottom: $MATERIAL_SLIDER_TOOLTIP_WIDTH / 2;
+            padding-bottom: $material-slider-tooltip-width / 2;
           }
         }
       }
@@ -128,11 +128,11 @@ $MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN: 5px;
 }
 
 .dx-slider-tooltip-position-top {
-  padding-top: $MATERIAL_SLIDER_TOOLTIP_WIDTH + 6;
+  padding-top: $material-slider-tooltip-width + 6;
 }
 
 .dx-slider-tooltip-position-bottom {
-  padding-bottom: $MATERIAL_SLIDER_TOOLTIP_WIDTH + 6;
+  padding-bottom: $material-slider-tooltip-width + 6;
 }
 
 .dx-slider-label-position-bottom {
@@ -174,8 +174,8 @@ $MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN: 5px;
     border: 2px solid $base-bg;
 
     &:after {
-      margin-top: -$MATERIAL_SLIDER_HANDLE_INNER_DISABLED_SIZE / 2 - $MATERIAL_SLIDER_HANDLE_INNER_BORDER_WIDTH - 2px;
-      margin-left: -$MATERIAL_SLIDER_HANDLE_INNER_DISABLED_SIZE / 2 - $MATERIAL_SLIDER_HANDLE_INNER_BORDER_WIDTH - 2px;
+      margin-top: -$material-slider-handle-inner-disabled-size / 2 - $material-slider-handle-inner-border-width - 2px;
+      margin-left: -$material-slider-handle-inner-disabled-size / 2 - $material-slider-handle-inner-border-width - 2px;
       width: 8px;
       height: 8px;
       background: grey;
@@ -204,7 +204,7 @@ $MATERIAL_SLIDER_DISABLED_TOOLTIP_TOP_MARGIN: 5px;
 
 .dx-rtl {
   .dx-slider-handle {
-    margin-left: -$MATERIAL_SLIDER_HANDLE_SIZE / 2;
+    margin-left: -$material-slider-handle-size / 2;
   }
 
   &.dx-state-disabled {

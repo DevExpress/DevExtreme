@@ -1,9 +1,9 @@
-const errors = require('../errors');
-const Class = require('../class');
-const objectUtils = require('./object');
-const typeUtils = require('./type');
-const each = require('./iterator').each;
-const variableWrapper = require('./variable_wrapper');
+import errors from '../errors';
+import Class from '../class';
+import { deepExtendArraySafe } from './object';
+import { isObject, isPlainObject, isFunction, isDefined } from './type';
+import { each } from './iterator';
+import variableWrapper from './variable_wrapper';
 const unwrapVariable = variableWrapper.unwrap;
 const isWrapped = variableWrapper.isWrapped;
 const assign = variableWrapper.assign;
@@ -45,7 +45,7 @@ function unwrap(value, options) {
     return options.unwrapObservables ? unwrapVariable(value) : value;
 }
 
-const compileGetter = function(expr) {
+export const compileGetter = function(expr) {
     if(arguments.length > 1) {
         expr = [].slice.call(arguments);
     }
@@ -75,13 +75,13 @@ const compileGetter = function(expr) {
 
                 const pathPart = path[i];
 
-                if(hasDefaultValue && typeUtils.isObject(current) && !(pathPart in current)) {
+                if(hasDefaultValue && isObject(current) && !(pathPart in current)) {
                     return options.defaultValue;
                 }
 
                 let next = unwrap(current[pathPart], options);
 
-                if(!functionAsIs && typeUtils.isFunction(next)) {
+                if(!functionAsIs && isFunction(next)) {
                     next = next.call(current);
                 }
 
@@ -96,7 +96,7 @@ const compileGetter = function(expr) {
         return combineGetters(expr);
     }
 
-    if(typeUtils.isFunction(expr)) {
+    if(isFunction(expr)) {
         return expr;
     }
 };
@@ -137,7 +137,7 @@ function combineGetters(getters) {
 }
 
 const ensurePropValueDefined = function(obj, propName, value, options) {
-    if(typeUtils.isDefined(value)) {
+    if(isDefined(value)) {
         return value;
     }
 
@@ -147,7 +147,7 @@ const ensurePropValueDefined = function(obj, propName, value, options) {
     return newValue;
 };
 
-const compileSetter = function(expr) {
+export const compileSetter = function(expr) {
     expr = bracketsToDots(expr || 'this').split('.');
     const lastLevelIndex = expr.length - 1;
 
@@ -157,12 +157,12 @@ const compileSetter = function(expr) {
 
         expr.forEach(function(propertyName, levelIndex) {
             let propertyValue = readPropValue(currentValue, propertyName, options);
-            const isPropertyFunc = !options.functionsAsIs && typeUtils.isFunction(propertyValue) && !isWrapped(propertyValue);
+            const isPropertyFunc = !options.functionsAsIs && isFunction(propertyValue) && !isWrapped(propertyValue);
 
             if(levelIndex === lastLevelIndex) {
-                if(options.merge && typeUtils.isPlainObject(value) && (!typeUtils.isDefined(propertyValue) || typeUtils.isPlainObject(propertyValue))) {
+                if(options.merge && isPlainObject(value) && (!isDefined(propertyValue) || isPlainObject(propertyValue))) {
                     propertyValue = ensurePropValueDefined(currentValue, propertyName, propertyValue, options);
-                    objectUtils.deepExtendArraySafe(propertyValue, value, false, true);
+                    deepExtendArraySafe(propertyValue, value, false, true);
                 } else if(isPropertyFunc) {
                     currentValue[propertyName](value);
                 } else {
@@ -179,7 +179,7 @@ const compileSetter = function(expr) {
     };
 };
 
-const toComparable = function(value, caseSensitive) {
+export const toComparable = function(value, caseSensitive) {
     if(value instanceof Date) {
         return value.getTime();
     }
@@ -194,7 +194,3 @@ const toComparable = function(value, caseSensitive) {
 
     return value;
 };
-
-exports.compileGetter = compileGetter;
-exports.compileSetter = compileSetter;
-exports.toComparable = toComparable;

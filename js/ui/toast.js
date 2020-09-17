@@ -1,19 +1,24 @@
 // TODOs
 // 1. animation
 
-const $ = require('../core/renderer');
-const window = require('../core/utils/window').getWindow();
-const domAdapter = require('../core/dom_adapter');
-const eventsEngine = require('../events/core/events_engine');
-const ready = require('../core/utils/ready_callbacks').add;
-const commonUtils = require('../core/utils/common');
-const typeUtils = require('../core/utils/type');
-const extend = require('../core/utils/extend').extend;
-const inArray = require('../core/utils/array').inArray;
-const pointerEvents = require('../events/pointer');
-const registerComponent = require('../core/component_registrator');
-const Overlay = require('./overlay');
-const themes = require('./themes');
+import $ from '../core/renderer';
+import { getWindow } from '../core/utils/window';
+const window = getWindow();
+import domAdapter from '../core/dom_adapter';
+import eventsEngine from '../events/core/events_engine';
+import readyCallbacks from '../core/utils/ready_callbacks';
+import { noop } from '../core/utils/common';
+import { isString } from '../core/utils/type';
+import { extend } from '../core/utils/extend';
+import { inArray } from '../core/utils/array';
+import pointerEvents from '../events/pointer';
+import registerComponent from '../core/component_registrator';
+import Overlay from './overlay';
+import themes from './themes';
+
+const ready = readyCallbacks.add;
+
+// STYLE toast
 
 const TOAST_CLASS = 'dx-toast';
 const TOAST_CLASS_PREFIX = TOAST_CLASS + '-';
@@ -152,13 +157,21 @@ const Toast = Overlay.inherit({
                     return isPhone && isAndroid;
                 },
                 options: {
-                    width: function() { return $(window).width(); },
+                    width: function() { return window?.visualViewport?.width || $(window).width(); },
 
                     position: {
                         at: 'bottom center',
                         my: 'bottom center',
                         offset: '0 0'
                     }
+                }
+            },
+            {
+                device: function(device) {
+                    return device.deviceType === 'phone';
+                },
+                options: {
+                    width: function() { return window?.visualViewport?.width || $(window).width(); }
                 }
             },
             {
@@ -209,7 +222,7 @@ const Toast = Overlay.inherit({
         this._toggleCloseEvents('Click');
     },
 
-    _renderScrollTerminator: commonUtils.noop,
+    _renderScrollTerminator: noop,
 
     _toggleCloseEvents: function(event) {
         const dxEvent = 'dx' + event.toLowerCase();
@@ -219,7 +232,7 @@ const Toast = Overlay.inherit({
     },
 
     _posStringToObject: function() {
-        if(!typeUtils.isString(this.option('position'))) return;
+        if(!isString(this.option('position'))) return;
 
         const verticalPosition = this.option('position').split(' ')[0];
         const horizontalPosition = this.option('position').split(' ')[1];
@@ -298,4 +311,4 @@ const Toast = Overlay.inherit({
 
 registerComponent(WIDGET_NAME, Toast);
 
-module.exports = Toast;
+export default Toast;

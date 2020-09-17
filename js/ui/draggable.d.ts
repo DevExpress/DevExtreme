@@ -27,7 +27,7 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     autoScroll?: boolean;
     /**
      * @docid DraggableBaseOptions.boundary
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -35,7 +35,7 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     boundary?: string | Element | JQuery;
     /**
      * @docid DraggableBaseOptions.container
-     * @type string|Node|jQuery
+     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -122,7 +122,7 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
      * @type_function_param1_field1 itemData:any
      * @type_function_param1_field2 itemElement:dxElement
      * @type_function_param2 containerElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

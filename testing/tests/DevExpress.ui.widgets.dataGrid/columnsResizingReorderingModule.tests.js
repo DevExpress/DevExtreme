@@ -27,6 +27,7 @@ QUnit.testStart(function() {
 });
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
 
@@ -34,6 +35,7 @@ import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import fx from 'animation/fx';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
+import { roundPoints } from '../../helpers/grid/getPointsByColumnsHelper.js';
 
 const MockTablePositionViewController = dataGridMocks.MockTablePositionViewController;
 const MockTrackerView = dataGridMocks.MockTrackerView;
@@ -58,6 +60,7 @@ import { GroupingHeaderPanelExtender } from 'ui/data_grid/ui.data_grid.grouping'
 import { HeaderPanel } from 'ui/data_grid/ui.data_grid.header_panel';
 import Action from 'core/action';
 import devices from 'core/devices';
+import browser from 'core/utils/browser';
 import publicComponentUtils from 'core/utils/public_component';
 
 const TestDraggingHeader2 = columnResizingReordering.DraggingHeaderView.inherit({
@@ -1735,78 +1738,6 @@ QUnit.module('Columns resizing', {
         assert.ok(resizeController._isResizing, 'columnsResizer is resizing');
     });
 
-    QUnit.test('No start resizing while cell is opened for editing in "cell" mode. T450598', function(assert) {
-        // arrange
-        const callPositionChanged = sinon.stub();
-        const resizeController = this.createColumnsResizerViewController();
-
-        this.component._controllers.tablePosition.positionChanged.add(callPositionChanged);
-
-        // act
-        this.renderViews($('#container'));
-
-        this.component._controllers.editing._isEditing = true;
-        function startResizing() {
-            resizeController._isReadyResizing = true;
-            resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
-            resizeController._startResizing({
-                event: {
-                    data: resizeController,
-                    type: 'mousedown',
-                    pageX: -9750,
-                    preventDefault: function() {
-                        assert.ok(false, 'preventDefault should not be called');
-                        return true;
-                    },
-                    stopPropagation: noop,
-                    target: $('.dx-columns-separator')
-                }
-            });
-        }
-
-        this.options['editing.mode'] = 'cell';
-        startResizing();
-
-        // assert
-        assert.ok(!callPositionChanged.called, 'positionChanged should not be called');
-    });
-
-    QUnit.test('No start resizing while cell is opened for editing in "batch" mode. T450598', function(assert) {
-        // arrange
-        const callPositionChanged = sinon.stub();
-        const resizeController = this.createColumnsResizerViewController();
-
-        this.component._controllers.tablePosition.positionChanged.add(callPositionChanged);
-
-        // act
-        this.renderViews($('#container'));
-
-        this.component._controllers.editing._isEditing = true;
-        function startResizing() {
-            resizeController._isReadyResizing = true;
-            resizeController._targetPoint = { x: -9750, columnIndex: 1, index: 2 };
-            resizeController._startResizing({
-                event: {
-                    data: resizeController,
-                    type: 'mousedown',
-                    pageX: -9750,
-                    preventDefault: function() {
-                        assert.ok(false, 'preventDefault should not be called');
-                        return true;
-                    },
-                    stopPropagation: noop,
-                    target: $('.dx-columns-separator')
-                }
-            });
-        }
-
-        this.options['editing.mode'] = 'batch';
-        startResizing();
-
-        // assert
-        assert.ok(!callPositionChanged.called, 'positionChanged should not be called');
-    });
-
     QUnit.test('Start resizing while cell is opened for editing in "row" mode. T450598', function(assert) {
         // arrange
         const callPositionChanged = sinon.stub();
@@ -3014,7 +2945,7 @@ QUnit.module('Columns resizing', {
             resizeController._columnsSeparatorView.render($container);
 
             // assert
-            assert.deepEqual(resizeController.pointsByColumns(), [
+            assert.deepEqual(roundPoints(resizeController.pointsByColumns()), [
                 { x: -9500, y: -10000, columnIndex: 0, index: 0 },
                 { x: -9625, y: -10000, columnIndex: 1, index: 1 },
                 { x: -9750, y: -10000, columnIndex: 2, index: 2 },
@@ -3120,7 +3051,14 @@ QUnit.module('Columns resizing', {
 
             $headers.each((index, header) => {
                 const $dataCell = $dataCells.eq(index);
-                assert.strictEqual($(header).offset().left, $dataCell.offset().left, `cells with index ${index}: header position matches cell position`);
+                const cellOffset = $dataCell.offset().left;
+                let headerOffset = $(header).offset().left;
+
+                if(browser.msie) {
+                    // header has border, so offset for it is fractional in IE
+                    headerOffset = Math.floor(headerOffset);
+                }
+                assert.strictEqual(headerOffset, cellOffset, `cells with index ${index}: header position matches cell position`);
             });
         });
 
@@ -3143,7 +3081,7 @@ QUnit.module('Columns resizing', {
             resizeController._columnsSeparatorView.render($container);
 
             // assert
-            assert.deepEqual(resizeController.pointsByColumns(), [
+            assert.deepEqual(roundPoints(resizeController.pointsByColumns()), [
                 { x: -9125, y: -10000, columnIndex: 0, index: 1 },
                 { x: -9250, y: -10000, columnIndex: 1, index: 2 },
                 { x: -9375, y: -10000, columnIndex: 2, index: 3 },
@@ -3368,7 +3306,8 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'));
+        assert.deepEqual(roundPoints(points),
             [{ x: -10000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -9000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points');
     });
 
@@ -3380,22 +3319,33 @@ QUnit.module('Headers reordering', {
         this.renderViews($('#container'));
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'), null, null, 5),
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'), null, null, 5);
+        assert.deepEqual(roundPoints(points),
             [{ x: -10000, y: -10000, columnIndex: 5, index: 5 }, { x: -9500, y: -10000, columnIndex: 6, index: 6 }, { x: -9000, y: -10000, columnIndex: 7, index: 7 }], 'dragging points');
     });
 
     QUnit.test('Get points by columns RTL', function(assert) {
         // arrange
-        const controller = this.createDraggingHeaderViewController([{ caption: 'Column 1', width: 500 }, { caption: 'Column 2', width: 500 }]);
+        const controller = this.createDraggingHeaderViewController(
+            [
+                { caption: 'Column 1', width: 500 },
+                { caption: 'Column 2', width: 500 }
+            ]);
 
         // act
         this.renderViews($('#container'));
 
-        $('#container').css('direction', 'rtl');
+        $('#container').addClass('dx-rtl');
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td')),
-            [{ x: -9000, y: -10000, columnIndex: 0, index: 0 }, { x: -9500, y: -10000, columnIndex: 1, index: 1 }, { x: -10000, y: -10000, columnIndex: 2, index: 2 }], 'dragging points for RTL');
+        const points = gridCore.getPointsByColumns(controller._columnHeadersView._getTableElement().find('td'));
+        assert.deepEqual(
+            roundPoints(points),
+            [
+                { x: -9000, y: -10000, columnIndex: 0, index: 0 },
+                { x: -9500, y: -10000, columnIndex: 1, index: 1 },
+                { x: -10000, y: -10000, columnIndex: 2, index: 2 }
+            ], 'dragging points for RTL');
     });
 
     QUnit.test('Get points by columns with checkbox cell', function(assert) {
@@ -3412,9 +3362,10 @@ QUnit.module('Headers reordering', {
 
         // assert
         const $cells = controller._columnHeadersView._tableElement.find('td');
-        assert.deepEqual(gridCore.getPointsByColumns($cells, function(point) {
+        const points = gridCore.getPointsByColumns($cells, function(point) {
             return controller._pointCreated(point, testColumns, 'headers', testColumns[1]);
-        }), [
+        });
+        assert.deepEqual(roundPoints(points), [
             { x: -9930, y: -10000, columnIndex: 1, index: 1 },
             { x: -9805, y: -10000, columnIndex: 2, index: 2 },
             { x: -9680, y: -10000, columnIndex: 3, index: 3 }
@@ -3435,9 +3386,10 @@ QUnit.module('Headers reordering', {
         const $cells = controller._columnHeadersView._tableElement.find('td');
 
         // assert
-        assert.deepEqual(gridCore.getPointsByColumns($cells, function(point) {
+        const points = gridCore.getPointsByColumns($cells, function(point) {
             return controller._pointCreated(point, testColumns);
-        }), [
+        });
+        assert.deepEqual(roundPoints(points), [
             { x: -10000, y: -10000, columnIndex: 0, index: 0 },
             { x: -9875, y: -10000, columnIndex: 1, index: 1 },
             { x: -9750, y: -10000, columnIndex: 2, index: 2 }
@@ -4706,7 +4658,7 @@ QUnit.module('Headers reordering', {
         // assert
         assert.ok(draggingHeader._isDragging, 'is dragging');
         assert.ok($dragHeader.hasClass('dx-drag-command-cell'), 'draggable header element has class dx-command-cell');
-        assert.strictEqual($dragHeader.outerWidth(), 100, 'width');
+        assert.strictEqual($dragHeader.outerWidth(), 102, 'width');
         assert.strictEqual($dragHeader.text(), '', 'text');
     });
 });
@@ -5749,11 +5701,11 @@ QUnit.module('column chooser reordering', {
 
         // act, assert
         assert.equal(pointsByColumns.length, 3, 'count points by columns');
-        assert.equal(pointsByColumns[0].x, -10000, 'points[0] x');
+        assert.roughEqual(pointsByColumns[0].x, -10000, 0.5, 'points[0] x');
         assert.ok(pointsByColumns[0].y > -10000, 'point[0] y');
-        assert.equal(pointsByColumns[1].x, -10000, 'points[1] x');
+        assert.roughEqual(pointsByColumns[1].x, -10000, 0.5, 'points[1] x');
         assert.ok(pointsByColumns[1].y > pointsByColumns[0].y, 'point[1] y');
-        assert.equal(pointsByColumns[2].x, -10000, 'points[2] x');
+        assert.roughEqual(pointsByColumns[2].x, -10000, 0.5, 'points[2] x');
         assert.ok(pointsByColumns[2].y > pointsByColumns[1].y, 'point[2] y');
     });
 

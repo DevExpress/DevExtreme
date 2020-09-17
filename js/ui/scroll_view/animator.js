@@ -1,7 +1,7 @@
-const noop = require('../../core/utils/common').noop;
-const Class = require('../../core/class');
+import { noop } from '../../core/utils/common';
+import Class from '../../core/class';
 const abstract = Class.abstract;
-const animationFrame = require('../../animation/frame');
+import animationFrame from '../../animation/frame';
 
 const Animator = Class.inherit({
 
@@ -54,4 +54,4 @@ const Animator = Class.inherit({
 
 });
 
-module.exports = Animator;
+export default Animator;

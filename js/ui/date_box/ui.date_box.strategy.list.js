@@ -1,14 +1,15 @@
-const $ = require('../../core/renderer');
-const window = require('../../core/utils/window').getWindow();
-const List = require('../list');
-const DateBoxStrategy = require('./ui.date_box.strategy');
-const noop = require('../../core/utils/common').noop;
-const ensureDefined = require('../../core/utils/common').ensureDefined;
-const isDate = require('../../core/utils/type').isDate;
-const extend = require('../../core/utils/extend').extend;
-const dateUtils = require('./ui.date_utils');
-const dateLocalization = require('../../localization/date');
-const dateSerialization = require('../../core/utils/date_serialization');
+import $ from '../../core/renderer';
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
+import List from '../list';
+import DateBoxStrategy from './ui.date_box.strategy';
+import { noop } from '../../core/utils/common';
+import { ensureDefined } from '../../core/utils/common';
+import { isDate } from '../../core/utils/type';
+import { extend } from '../../core/utils/extend';
+import dateUtils from './ui.date_utils';
+import dateLocalization from '../../localization/date';
+import dateSerialization from '../../core/utils/date_serialization';
 
 const DATE_FORMAT = 'date';
 
@@ -275,4 +276,4 @@ const ListStrategy = DateBoxStrategy.inherit({
     }
 });
 
-module.exports = ListStrategy;
+export default ListStrategy;

@@ -15,26 +15,30 @@ import domUtils from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { fitIntoRange } from '../../core/utils/math';
-import { add as ready } from '../../core/utils/ready_callbacks';
-import typeUtils from '../../core/utils/type';
+import readyCallbacks from '../../core/utils/ready_callbacks';
+import { isString, isDefined, isFunction, isPlainObject, isWindow } from '../../core/utils/type';
 import { compare as compareVersions } from '../../core/utils/version';
-import viewPortUtils from '../../core/utils/view_port';
-import windowUtils from '../../core/utils/window';
+import { changeCallback, originalViewPort, value as viewPort } from '../../core/utils/view_port';
+import { getNavigator, getWindow, hasWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
-import dragEvents from '../../events/drag';
+import {
+    start as dragEventStart,
+    move as dragEventMove
+} from '../../events/drag';
 import pointerEvents from '../../events/pointer';
 import { keyboard } from '../../events/short';
 import { addNamespace, normalizeKeyName } from '../../events/utils';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '../../events/visibility_change';
-import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_top_overlay';
+import { hideCallback as hideTopOverlayCallback } from '../../mobile/hide_callback';
 import Resizable from '../resizable';
-import selectors from '../widget/selectors';
+import { tabbable } from '../widget/selectors';
 import swatch from '../widget/swatch_container';
 import Widget from '../widget/ui.widget';
 import * as zIndexPool from './z_index';
-const window = windowUtils.getWindow();
-const navigator = windowUtils.getNavigator();
-const viewPortChanged = viewPortUtils.changeCallback;
+const ready = readyCallbacks.add;
+const window = getWindow();
+const navigator = getNavigator();
+const viewPortChanged = changeCallback;
 
 const OVERLAY_CLASS = 'dx-overlay';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
@@ -260,7 +264,7 @@ const Overlay = Widget.inherit({
             }
         }, {
             device: function() {
-                return !windowUtils.hasWindow();
+                return !hasWindow();
             },
             options: {
                 width: null,
@@ -330,7 +334,7 @@ const Overlay = Widget.inherit({
     },
 
     _initTarget: function(target) {
-        if(!typeUtils.isDefined(target)) {
+        if(!isDefined(target)) {
             return;
         }
 
@@ -347,7 +351,7 @@ const Overlay = Widget.inherit({
             let option = options;
             while(option) {
                 if(pathParts.length === 1) {
-                    if(typeUtils.isPlainObject(option)) {
+                    if(isPlainObject(option)) {
                         option[pathParts.shift()] = target;
                     }
                     break;
@@ -359,7 +363,7 @@ const Overlay = Widget.inherit({
     },
 
     _initContainer: function(container) {
-        container = container === undefined ? viewPortUtils.value() : container;
+        container = container === undefined ? viewPort() : container;
 
         const $element = this.$element();
         let $container = $element.closest(container);
@@ -399,7 +403,7 @@ const Overlay = Widget.inherit({
 
         let closeOnOutsideClick = this.option('closeOnOutsideClick');
 
-        if(typeUtils.isFunction(closeOnOutsideClick)) {
+        if(isFunction(closeOnOutsideClick)) {
             closeOnOutsideClick = closeOnOutsideClick(e);
         }
 
@@ -483,7 +487,7 @@ const Overlay = Widget.inherit({
 
     _getAnimationConfig: function() {
         let animation = this.option('animation');
-        if(typeUtils.isFunction(animation)) animation = animation.call(this);
+        if(isFunction(animation)) animation = animation.call(this);
         return animation;
     },
 
@@ -608,7 +612,7 @@ const Overlay = Widget.inherit({
                         that._renderVisibility(false);
 
                         completeHideAnimation.apply(this, arguments);
-                        that._actions.onHidden();
+                        that._actions?.onHidden();
 
                         deferred.resolve();
                     },
@@ -745,11 +749,11 @@ const Overlay = Widget.inherit({
         const result = { first: null, last: null };
 
         for(let i = 0; i <= elementsCount; i++) {
-            if(!result.first && $elements.eq(i).is(selectors.tabbable)) {
+            if(!result.first && $elements.eq(i).is(tabbable)) {
                 result.first = $elements.eq(i);
             }
 
-            if(!result.last && $elements.eq(elementsCount - i).is(selectors.tabbable)) {
+            if(!result.last && $elements.eq(elementsCount - i).is(tabbable)) {
                 result.last = $elements.eq(elementsCount - i);
             }
 
@@ -789,7 +793,7 @@ const Overlay = Widget.inherit({
     },
 
     _toggleSubscriptions: function(enabled) {
-        if(windowUtils.hasWindow()) {
+        if(hasWindow()) {
             this._toggleHideTopOverlayCallback(enabled);
             this._toggleParentsScrollSubscription(enabled);
         }
@@ -835,7 +839,7 @@ const Overlay = Widget.inherit({
     _targetParentsScrollHandler: function(e) {
         let closeHandled = false;
         const closeOnScroll = this.option('closeOnTargetScroll');
-        if(typeUtils.isFunction(closeOnScroll)) {
+        if(isFunction(closeOnScroll)) {
             closeHandled = closeOnScroll(e);
         }
 
@@ -938,8 +942,8 @@ const Overlay = Widget.inherit({
             return;
         }
 
-        const startEventName = addNamespace(dragEvents.start, this.NAME);
-        const updateEventName = addNamespace(dragEvents.move, this.NAME);
+        const startEventName = addNamespace(dragEventStart, this.NAME);
+        const updateEventName = addNamespace(dragEventMove, this.NAME);
 
         eventsEngine.off($dragTarget, startEventName);
         eventsEngine.off($dragTarget, updateEventName);
@@ -978,7 +982,7 @@ const Overlay = Widget.inherit({
 
     _renderScrollTerminator: function() {
         const $scrollTerminator = this._wrapper();
-        const terminatorEventName = addNamespace(dragEvents.move, this.NAME);
+        const terminatorEventName = addNamespace(dragEventMove, this.NAME);
 
         eventsEngine.off($scrollTerminator, terminatorEventName);
         eventsEngine.on($scrollTerminator, terminatorEventName, {
@@ -1022,7 +1026,7 @@ const Overlay = Widget.inherit({
     },
 
     _getDragResizeContainer: function() {
-        const isContainerDefined = viewPortUtils.originalViewPort().get(0) || this.option('container');
+        const isContainerDefined = originalViewPort().get(0) || this.option('container');
         const $container = !isContainerDefined ? $(window) : this._$container;
 
         return $container;
@@ -1126,7 +1130,7 @@ const Overlay = Widget.inherit({
     },
 
     _renderGeometry: function(isDimensionChanged) {
-        if(this.option('visible') && windowUtils.hasWindow()) {
+        if(this.option('visible') && hasWindow()) {
             this._renderGeometryImpl(isDimensionChanged);
         }
     },
@@ -1191,7 +1195,7 @@ const Overlay = Widget.inherit({
     },
 
     _isWindow: function($element) {
-        return !!$element && typeUtils.isWindow($element.get(0));
+        return !!$element && isWindow($element.get(0));
     },
 
     _renderWrapperPosition: function() {
@@ -1254,7 +1258,7 @@ const Overlay = Widget.inherit({
     },
 
     _transformStringPosition: function(position, positionAliases) {
-        if(typeUtils.isString(position)) {
+        if(isString(position)) {
             position = extend({}, positionAliases[position]);
         }
 
@@ -1490,4 +1494,4 @@ Overlay.baseZIndex = zIndex => {
 
 registerComponent('dxOverlay', Overlay);
 
-module.exports = Overlay;
+export default Overlay;

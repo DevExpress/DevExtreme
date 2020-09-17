@@ -1,20 +1,26 @@
-const windowUtils = require('../../core/utils/window');
-const window = windowUtils.getWindow();
-const registerComponent = require('../../core/component_registrator');
-const typeUtils = require('../../core/utils/type');
-const dom = require('../../core/utils/dom');
-const each = require('../../core/utils/iterator').each;
-const compareVersions = require('../../core/utils/version').compare;
-const extend = require('../../core/utils/extend').extend;
-const support = require('../../core/utils/support');
-const devices = require('../../core/devices');
-const config = require('../../core/config');
-const dateUtils = require('../../core/utils/date');
-const uiDateUtils = require('./ui.date_utils');
-const dateSerialization = require('../../core/utils/date_serialization');
-const DropDownEditor = require('../drop_down_editor/ui.drop_down_editor');
-const dateLocalization = require('../../localization/date');
-const messageLocalization = require('../../localization/message');
+import { getWindow, hasWindow } from '../../core/utils/window';
+const window = getWindow();
+import registerComponent from '../../core/component_registrator';
+import { isDefined, isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
+import dom from '../../core/utils/dom';
+import { each } from '../../core/utils/iterator';
+import { compare as compareVersions } from '../../core/utils/version';
+import { extend } from '../../core/utils/extend';
+import support from '../../core/utils/support';
+import devices from '../../core/devices';
+import config from '../../core/config';
+import dateUtils from '../../core/utils/date';
+import uiDateUtils from './ui.date_utils';
+import dateSerialization from '../../core/utils/date_serialization';
+import DropDownEditor from '../drop_down_editor/ui.drop_down_editor';
+import dateLocalization from '../../localization/date';
+import messageLocalization from '../../localization/message';
+
+import Calendar from './ui.date_box.strategy.calendar';
+import DateView from './ui.date_box.strategy.date_view';
+import Native from './ui.date_box.strategy.native';
+import CalendarWithTime from './ui.date_box.strategy.calendar_with_time';
+import List from './ui.date_box.strategy.list';
 
 const DATEBOX_CLASS = 'dx-datebox';
 const DX_AUTO_WIDTH_CLASS = 'dx-auto-width';
@@ -44,26 +50,17 @@ const STRATEGY_NAME = {
 };
 
 const STRATEGY_CLASSES = {
-    Calendar: require('./ui.date_box.strategy.calendar'),
-    DateView: require('./ui.date_box.strategy.date_view'),
-    Native: require('./ui.date_box.strategy.native'),
-    CalendarWithTime: require('./ui.date_box.strategy.calendar_with_time'),
-    List: require('./ui.date_box.strategy.list')
+    Calendar,
+    DateView,
+    Native,
+    CalendarWithTime,
+    List
 };
 
 const DateBox = DropDownEditor.inherit({
 
     _supportedKeys: function() {
         return extend(this.callBase(), this._strategy.supportedKeys());
-    },
-
-    _setDeprecatedOptions: function() {
-        this.callBase();
-
-        extend(this._deprecatedOptions, {
-            'maxZoomLevel': { since: '18.1', alias: 'calendarOptions.maxZoomLevel' },
-            'minZoomLevel': { since: '18.1', alias: 'calendarOptions.minZoomLevel' }
-        });
     },
 
     _renderButtonContainers: function() {
@@ -91,10 +88,6 @@ const DateBox = DropDownEditor.inherit({
             interval: 30,
 
             disabledDates: null,
-
-            maxZoomLevel: 'month',
-
-            minZoomLevel: 'century',
 
             pickerType: PICKER_TYPE['calendar'],
 
@@ -283,7 +276,7 @@ const DateBox = DropDownEditor.inherit({
     },
 
     _formatValidationIcon: function() {
-        if(!windowUtils.hasWindow()) {
+        if(!hasWindow()) {
             return;
         }
 
@@ -504,13 +497,13 @@ const DateBox = DropDownEditor.inherit({
         const displayFormat = this._strategy.getDisplayFormat(this.option('displayFormat'));
         const parsedText = this._strategy.getParsedText(text, displayFormat);
 
-        return typeUtils.isDefined(parsedText) ? parsedText : undefined;
+        return isDefined(parsedText) ? parsedText : undefined;
     },
 
     _applyInternalValidation(value) {
         const text = this.option('text');
         const hasText = !!text && value !== null;
-        const isDate = !!value && typeUtils.isDate(value) && !isNaN(value.getTime());
+        const isDate = !!value && isDateType(value) && !isNaN(value.getTime());
         const isDateInRange = isDate && dateUtils.dateInRange(value, this.dateOption('min'), this.dateOption('max'), this.option('type'));
         const isValid = !hasText && !value || isDateInRange;
         let validationMessage = '';
@@ -658,8 +651,6 @@ const DateBox = DropDownEditor.inherit({
             case 'interval':
             case 'disabledDates':
             case 'calendarOptions':
-            case 'minZoomLevel':
-            case 'maxZoomLevel':
                 this._invalidate();
                 break;
             case 'displayFormat':
@@ -699,11 +690,11 @@ const DateBox = DropDownEditor.inherit({
             return this.option('dateSerializationFormat');
         }
 
-        if(typeUtils.isNumeric(value)) {
+        if(isNumeric(value)) {
             return 'number';
         }
 
-        if(!typeUtils.isString(value)) {
+        if(!isString(value)) {
             return;
         }
 
@@ -754,4 +745,4 @@ const DateBox = DropDownEditor.inherit({
 
 registerComponent('dxDateBox', DateBox);
 
-module.exports = DateBox;
+export default DateBox;

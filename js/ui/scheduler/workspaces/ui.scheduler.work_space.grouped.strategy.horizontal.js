@@ -208,4 +208,4 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 }
 
-module.exports = HorizontalGroupedStrategy;
+export default HorizontalGroupedStrategy;

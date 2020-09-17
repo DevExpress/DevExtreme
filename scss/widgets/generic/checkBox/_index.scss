@@ -4,10 +4,11 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+
 // adduse
 
 
-$GENERIC_CHECKBOX_DISABLE_OPACITY: 0.4;
+$generic-checkbox-disable-opacity: 0.4;
 
 .dx-checkbox {
   line-height: 0;
@@ -39,8 +40,8 @@ $GENERIC_CHECKBOX_DISABLE_OPACITY: 0.4;
 }
 
 .dx-checkbox-icon {
-  width: $GENERIC_CHECKBOX_SIZE;
-  height: $GENERIC_CHECKBOX_SIZE;
+  width: $generic-checkbox-size;
+  height: $generic-checkbox-size;
   border-radius: $checkbox-icon-border-radius;
   border: 1px solid $checkbox-border-color;
   background-color: $checkbox-bg;
@@ -50,7 +51,7 @@ $GENERIC_CHECKBOX_DISABLE_OPACITY: 0.4;
 
     color: $checkbox-checked-color;
 
-    @include dx-icon-font-centered-sizing($GENERIC_CHECKBOX_ARROW_ICON_SIZE);
+    @include dx-icon-font-centered-sizing($generic-checkbox-arrow-icon-size);
   }
 
   .dx-checkbox-indeterminate & {
@@ -58,18 +59,18 @@ $GENERIC_CHECKBOX_DISABLE_OPACITY: 0.4;
 
     color: $checkbox-indeterminate-bg;
 
-    @include dx-icon-font-centered-sizing($GENERIC_CHECKBOX_INTERMIDIATE_ICON_SIZE);
+    @include dx-icon-font-centered-sizing($generic-checkbox-intermidiate-icon-size);
   }
 }
 
 .dx-checkbox-text {
-  margin-left: -$GENERIC_CHECKBOX_SIZE;
-  padding-left: $GENERIC_CHECKBOX_SIZE + 5px;
+  margin-left: -$generic-checkbox-size;
+  padding-left: $generic-checkbox-size + 5px;
 
   @at-root #{selector-append(".dx-rtl", &)},
   .dx-rtl & {
-    margin-right: -$GENERIC_CHECKBOX_SIZE;
-    padding-right: $GENERIC_CHECKBOX_SIZE + 5px;
+    margin-right: -$generic-checkbox-size;
+    padding-right: $generic-checkbox-size + 5px;
   }
 }
 
@@ -79,12 +80,12 @@ $GENERIC_CHECKBOX_DISABLE_OPACITY: 0.4;
     opacity: 1;
 
     .dx-checkbox-icon {
-      opacity: $GENERIC_CHECKBOX_DISABLE_OPACITY;
+      opacity: $generic-checkbox-disable-opacity;
     }
   }
 
   .dx-checkbox-text {
-    opacity: $GENERIC_CHECKBOX_DISABLE_OPACITY;
+    opacity: $generic-checkbox-disable-opacity;
   }
 }
 

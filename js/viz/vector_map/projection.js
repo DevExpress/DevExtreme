@@ -1,4 +1,4 @@
-const projectionModule = require('./projection.main');
+import projectionModule from './projection.main';
 const projection = projectionModule.projection;
 
 const _min = Math.min;
@@ -99,4 +99,4 @@ projection.add('miller', projection({
     }
 }));
 
-exports.projection = projection;
+export { projection };

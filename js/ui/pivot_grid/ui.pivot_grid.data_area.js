@@ -7,7 +7,7 @@ const PIVOTGRID_TOTAL_CLASS = 'dx-total';
 const PIVOTGRID_GRAND_TOTAL_CLASS = 'dx-grandtotal';
 const PIVOTGRID_ROW_TOTAL_CLASS = 'dx-row-total';
 
-exports.DataArea = AreaItem.inherit({
+export const DataArea = AreaItem.inherit({
     _getAreaName: function() {
         return 'data';
     },

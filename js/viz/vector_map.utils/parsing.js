@@ -1,4 +1,4 @@
-/* eslint-disable no-undef, no-var, one-var*/
+/* eslint-disable no-undef, no-var, one-var, import/no-commonjs*/
 
 function noop() { }
 

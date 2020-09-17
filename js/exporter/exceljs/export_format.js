@@ -120,7 +120,7 @@ function _convertNumberFormat(format, precision, currency) {
     return result;
 }
 
-const ExportFormat = {
+export const ExportFormat = {
     formatObjectConverter: function(format, dataType) {
         const result = {
             format: format,
@@ -150,6 +150,3 @@ const ExportFormat = {
         }
     }
 };
-
-
-export { ExportFormat };

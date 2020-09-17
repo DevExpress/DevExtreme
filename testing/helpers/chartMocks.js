@@ -11,6 +11,7 @@ import seriesFamilyModule from 'viz/core/series_family';
 import seriesModule from 'viz/series/base_series';
 import vizMocks from './vizMocks.js';
 import { isDefined } from '../../js/core/utils/type.js';
+const LoadingIndicatorOrig = loadingIndicatorModule.LoadingIndicator;
 
 const firstCategory = 'First';
 const secondCategory = 'Second';
@@ -363,22 +364,22 @@ export const insertMockFactory = function insertMockFactory() {
         throw 'Unexpected series request';
     });
 
-    mockItem('LoadingIndicator', loadingIndicatorModule, function(parameters) {
-        return new vizMocks.LoadingIndicator(parameters);
-    });
-
     axisModule && mockItem('Axis', axisModule, function(parameters) {
         const axis = new MockAxis(parameters);
         axis.draw = sinon.spy(axis.draw);
         return axis;
+    });
+
+    loadingIndicatorModule.DEBUG_set_LoadingIndicator(function(parameters) {
+        return new vizMocks.LoadingIndicator(parameters);
     });
 };
 
 export const restoreMockFactory = function() {
     restoreItem('Point', pointModule);
     restoreItem('Series', seriesModule);
-    restoreItem('LoadingIndicator', loadingIndicatorModule);
     axisModule && restoreItem('Axis', axisModule);
+    loadingIndicatorModule.DEBUG_set_LoadingIndicator(LoadingIndicatorOrig);
 };
 
 export const resetMockFactory = function resetMockFactory() {
@@ -665,7 +666,8 @@ export const MockSeries = function MockSeries(options) {
         getViewport: sinon.stub().returns({}),
         getMarginOptions: sinon.stub().returns(options.marginOptions || {}),
         useAggregation: sinon.stub().returns(false),
-        usePointsToDefineAutoHiding: sinon.stub().returns(false)
+        usePointsToDefineAutoHiding: sinon.stub().returns(false),
+        resetApplyingAnimation: sinon.stub()
     };
 };
 
@@ -963,6 +965,8 @@ export const MockAxis = function(renderOptions) {
 
         hideOuterElements: sinon.spy(),
 
+        getCorrectedValuesToZero: sinon.stub().returns({}),
+
         setPane: function(pane) {
             this.pane = pane;
             this._options.pane = pane;
@@ -1081,7 +1085,7 @@ export const MockAxis = function(renderOptions) {
         getAxisShift: function() {
             return 0;
         },
-        getOppositeAxis: commonUtils.noop,
+        getOrthogonalAxis: commonUtils.noop,
         customPositionIsAvailable() {
             return false;
         },
@@ -1098,7 +1102,12 @@ export const MockAxis = function(renderOptions) {
         refreshVisualRangeOption: sinon.spy(),
         prepareAnimation: sinon.spy(),
         setCustomVisualRange: sinon.spy(),
-        handleZoomEnd: sinon.spy()
+        handleZoomEnd: sinon.spy(),
+        resolveOverlappingForCustomPositioning: sinon.spy(),
+        resetApplyingAnimation: sinon.spy(),
+        getTemplatesDef: sinon.spy(),
+        setRenderedState: sinon.spy(),
+        isRendered: sinon.spy()
     };
 };
 

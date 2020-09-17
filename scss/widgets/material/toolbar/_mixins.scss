@@ -1,0 +1,86 @@
+@use "sizes" as *;
+@use "../typography/sizes" as *;
+
+@mixin dx-toolbar-sizing($height, $padding, $label-font-size, $item-spacing) {
+  padding: $padding;
+  overflow: visible;
+
+  .dx-toolbar-before {
+    padding-right: $material-toolbar-section-padding;
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      padding-right: 0;
+      padding-left: $material-toolbar-section-padding;
+    }
+  }
+
+  .dx-toolbar-after {
+    padding-left: $material-toolbar-section-padding;
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      padding-left: 0;
+      padding-right: $material-toolbar-section-padding;
+    }
+  }
+
+  .dx-toolbar-before:empty,
+  .dx-toolbar-after:empty {
+    padding: 0;
+  }
+
+  .dx-toolbar-items-container {
+    height: $height;
+    overflow: visible;
+  }
+
+  .dx-toolbar-menu-container {
+    padding: 0 0 0 $item-spacing;
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      padding: 0 $item-spacing 0 0;
+    }
+  }
+
+  .dx-toolbar-item {
+    padding: 0 $item-spacing 0 0;
+
+    &.dx-toolbar-first-in-group {
+      padding-left: $material-toolbar-item-spacing * 4;
+    }
+
+    &:last-child {
+      padding: 0;
+    }
+
+    @at-root #{selector-append(".dx-rtl", &)} {
+      padding: 0 0 0 $item-spacing;
+
+      &:last-child {
+        padding: 0;
+      }
+    }
+  }
+
+  .dx-toolbar-label {
+    font-size: $label-font-size;
+    font-weight: 500;
+  }
+}
+
+@mixin dx-toolbar-item-padding($padding) {
+  padding: 0 0 0 $padding;
+
+  &:last-child {
+    padding: 0 0 0 $padding;
+  }
+
+  &:first-child {
+    padding: 0;
+  }
+
+  .dx-rtl & {
+    &:first-child {
+      padding-left: $padding;
+    }
+  }
+}

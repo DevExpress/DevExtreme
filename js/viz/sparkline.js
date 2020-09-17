@@ -1,1 +1,2 @@
-module.exports = require('./sparklines/sparkline');
+import Sparkline from './sparklines/sparkline';
+export default Sparkline;

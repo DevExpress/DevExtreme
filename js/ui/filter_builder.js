@@ -1,2 +1,2 @@
-
-module.exports = require('./filter_builder/filter_builder');
+import FilterBuilder from './filter_builder/filter_builder';
+export default FilterBuilder;

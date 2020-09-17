@@ -1,10 +1,8 @@
 const $ = require('jquery');
-const noop = require('core/utils/common').noop;
 const vizMocks = require('../../helpers/vizMocks.js');
-const axisModule = require('viz/axes/base_axis');
 const labelModule = require('viz/series/points/label');
-const layoutElementModule = require('viz/core/layout_element');
 const layoutManagerModule = require('viz/chart_components/layout_manager');
+const layoutElementModule = require('viz/core/layout_element');
 
 const canvasTemplate = {
     width: 1000,
@@ -15,7 +13,6 @@ const canvasTemplate = {
     right: 40
 };
 let canvas;
-const Axis = vizMocks.stubClass(axisModule.Axis);
 const LayoutElement = vizMocks.stubClass(layoutElementModule.LayoutElement);
 
 const environment = {
@@ -33,37 +30,15 @@ const environment = {
         layoutManager.setOptions(options || { width: 10, height: 10 });
         return layoutManager;
     },
-    createLayoutElement: function(bBox) {
-        const that = this;
-        const options = $.extend({}, this.commonBBox, bBox);
+    createLayoutElement: function(opt) {
+        const options = $.extend({}, this.commonBBox, opt);
         const layoutElement = new LayoutElement(options);
-        const empty = $.extend({}, options, { width: 0, height: 0 });
 
         layoutElement.stub('getLayoutOptions').returns(options);
-        layoutElement.probeDraw = sinon.stub();
         layoutElement.stub('position').returnsThis();
-        layoutElement.draw = sinon.spy(function() {
-            if(!that.checkLayoutElementVisibility(layoutElement)) {
-                layoutElement.getLayoutOptions.returns(empty);
-            }
-        });
 
         return layoutElement;
     },
-    checkLayoutElementVisibility: function(layoutElement) {
-        const layoutOptions = layoutElement.ctorArgs[0];
-
-        return layoutElement.draw.lastCall.args[0] >= layoutOptions.width
-                && layoutElement.draw.lastCall.args[1] >= layoutOptions.height;
-    },
-    getLayoutTargets: function() {
-        return [{ canvas: this.canvas }];
-    },
-    createAxis: function() {
-        const axis = new Axis();
-        axis.stub('getBoundingRect').returns({ height: 0, width: 0 });
-        return axis;
-    }
 };
 
 function setupCanvas() {
@@ -799,378 +774,30 @@ QUnit.test('space with radius', function(assert) {
     assert.deepEqual(updateSide, { height: 20, width: 10 });
 });
 
-QUnit.module('Layout elements', environment);
+QUnit.module('Layout legend inside', environment);
 
-QUnit.test('draw elements. [Left Left]', function(assert) {
-    const LE1 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
-    const LE2 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
+QUnit.test('position legend, vertical, bottom', function(assert) {
+    const LE = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'bottom' }, cutSide: 'vertical', cutLayoutSide: 'bottom' });
     const LM = this.createLayoutManager();
 
-    LM.layoutElements([LE1, LE2], this.canvas, noop, []);
-
-    assert.equal(LE1.draw.callCount, 1);
-    assert.equal(LE2.draw.callCount, 1);
-    assert.equal(LE1.probeDraw.callCount, 1);
-    assert.equal(LE2.probeDraw.callCount, 1);
-
-    assert.deepEqual(LE1.probeDraw.getCall(0).args, [90, 100]);
-    assert.deepEqual(LE2.probeDraw.getCall(0).args, [70, 100]);
-
-    assert.deepEqual(LE1.draw.getCall(0).args, [20, 100]);
-    assert.deepEqual(LE2.draw.getCall(0).args, [20, 100]);
-});
-
-QUnit.test('draw elements. [Top Top]', function(assert) {
-    const LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' });
-    const LE2 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' });
-    const LM = this.createLayoutManager();
-
-    LM.layoutElements([LE1, LE2], this.canvas, noop, []);
-
-    assert.deepEqual(LE1.probeDraw.getCall(0).args, [100, 90]);
-    assert.deepEqual(LE2.probeDraw.getCall(0).args, [100, 70]);
-    assert.deepEqual(LE1.draw.getCall(0).args, [100, 20]);
-    assert.deepEqual(LE2.draw.getCall(0).args, [100, 20]);
-});
-
-QUnit.test('draw elements. [Top Left]', function(assert) {
-    const LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' });
-    const LE2 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
-    const LM = this.createLayoutManager();
-
-    LM.layoutElements([LE1, LE2], this.canvas, noop, []);
-
-    assert.deepEqual(LE1.probeDraw.getCall(0).args, [100, 90]);
-    assert.deepEqual(LE2.probeDraw.getCall(0).args, [90, 80]);
-    assert.deepEqual(LE1.draw.getCall(0).args, [80, 20]);
-    assert.deepEqual(LE2.draw.getCall(0).args, [20, 80]);
-});
-
-QUnit.test('position elements. [Top Top]', function(assert) {
-    const LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' });
-    const LE2 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' });
-    const LM = this.createLayoutManager();
-
-    LM.layoutElements([LE1, LE2], this.canvas, noop, []);
-
-    assert.deepEqual(LE1.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 40, width: 100, height: 60 }),
-        my: { horizontal: 'center', vertical: 'bottom' },
-        at: { horizontal: 'center', vertical: 'top' },
-        offset: { horizontal: 0, vertical: -20 }
-    });
-    assert.deepEqual(LE2.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 40, width: 100, height: 60 }),
-        my: { horizontal: 'center', vertical: 'bottom' },
-        at: { horizontal: 'center', vertical: 'top' },
-        offset: { horizontal: 0, vertical: 0 }
-    });
-});
-
-QUnit.test('draw elements. [Left Left]', function(assert) {
-    const LE1 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
-    const LE2 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
-    const LM = this.createLayoutManager();
-
-    LM.layoutElements([LE1, LE2], this.canvas, noop, []);
-
-    assert.deepEqual(LE1.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 40, y: 0, width: 60, height: 100 }),
-        my: { horizontal: 'right', vertical: 'center' },
-        at: { horizontal: 'left', vertical: 'center' },
-        offset: { horizontal: -20, vertical: 0 }
-    });
-    assert.deepEqual(LE2.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 40, y: 0, width: 60, height: 100 }),
-        my: { horizontal: 'right', vertical: 'center' },
-        at: { horizontal: 'left', vertical: 'center' },
-        offset: { horizontal: 0, vertical: 0 }
-    });
-});
-
-QUnit.test('position elements. [Top Right]', function(assert) {
-    const LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' });
-    const LE2 = this.createLayoutElement({ position: { horizontal: 'right', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'right' });
-    const LM = this.createLayoutManager();
-
-    LM.layoutElements([LE1, LE2], this.canvas, noop, []);
-
-    assert.deepEqual(LE1.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 20, width: 80, height: 80 }),
-        my: { horizontal: 'center', vertical: 'bottom' },
-        at: { horizontal: 'center', vertical: 'top' },
-        offset: { horizontal: 0, vertical: 0 }
-    });
-    assert.deepEqual(LE2.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 20, width: 80, height: 80 }),
-        my: { horizontal: 'left', vertical: 'center' },
-        at: { horizontal: 'right', vertical: 'center' },
-        offset: { horizontal: 0, vertical: 0 }
-    });
-});
-
-QUnit.test('position elements. [Bottom Right Bottom Right]', function(assert) {
-    const LE1 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'bottom' }, cutSide: 'vertical', cutLayoutSide: 'bottom' });
-    const LE2 = this.createLayoutElement({ position: { horizontal: 'right', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'right' });
-    const LE3 = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'bottom' }, cutSide: 'vertical', cutLayoutSide: 'bottom' });
-    const LE4 = this.createLayoutElement({ position: { horizontal: 'right', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'right' });
-    const LM = this.createLayoutManager();
-
-    LM.layoutElements([LE1, LE2, LE3, LE4], this.canvas, noop, []);
-
-    assert.deepEqual(LE1.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 60, height: 60 }),
-        my: { horizontal: 'center', vertical: 'top' },
-        at: { horizontal: 'center', vertical: 'bottom' },
-        offset: { horizontal: 0, vertical: 20 }
-    });
-    assert.deepEqual(LE2.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 60, height: 60 }),
-        my: { horizontal: 'left', vertical: 'center' },
-        at: { horizontal: 'right', vertical: 'center' },
-        offset: { horizontal: 20, vertical: 0 }
-    });
-    assert.deepEqual(LE3.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 60, height: 60 }),
-        my: { horizontal: 'center', vertical: 'top' },
-        at: { horizontal: 'center', vertical: 'bottom' },
-        offset: { horizontal: 0, vertical: 0 }
-    });
-    assert.deepEqual(LE4.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 60, height: 60 }),
-        my: { horizontal: 'left', vertical: 'center' },
-        at: { horizontal: 'right', vertical: 'center' },
-        offset: { horizontal: 0, vertical: 0 }
-    });
-});
-
-QUnit.test('draw elements. getLayoutOptions returns null', function(assert) {
-    const LE1 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
-    const LE2 = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
-    const LM = this.createLayoutManager();
-
-    LE1.getLayoutOptions.returns(null);
-    LE2.getLayoutOptions.returns(null);
-    LM.layoutElements([LE1, LE2], this.canvas, noop, []);
-
-    assert.equal(LE1.draw.callCount, 0);
-    assert.equal(LE2.draw.callCount, 0);
-    assert.equal(LE1.probeDraw.callCount, 0);
-    assert.equal(LE2.probeDraw.callCount, 0);
-});
-
-QUnit.test('cut canvas. left', function(assert) {
-    const LE = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'center' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
-    const LM = this.createLayoutManager();
-
-    LM.layoutElements([LE], this.canvas, noop, []);
-
-    assert.deepEqual(this.canvas, {
-        bottom: 10,
-        height: 110,
-        left: 20,
-        right: 10,
-        top: 0,
-        width: 110
-    });
-});
-
-QUnit.test('cut canvas. top', function(assert) {
-    const LE = this.createLayoutElement({ position: { horizontal: 'center', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' });
-    const LM = this.createLayoutManager();
-
-    LM.layoutElements([LE], this.canvas, noop, []);
-
-    assert.deepEqual(this.canvas, {
-        bottom: 10,
-        height: 110,
-        left: 0,
-        right: 10,
-        top: 20,
-        width: 110
-    });
-});
-
-QUnit.test('draw elements."[left top]"', function(assert) {
-    const LE = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'top' }, cutSide: 'vertical', cutLayoutSide: 'top' });
-    const LM = this.createLayoutManager();
-
-    LM.layoutElements([LE], this.canvas, noop, []);
+    LM.layoutInsideLegend(LE, this.canvas);
 
     assert.deepEqual(LE.position.getCall(0).args[0], {
-        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 20, width: 100, height: 80 }),
-        my: { horizontal: 'left', vertical: 'bottom' },
+        of: new layoutElementModule.WrapperLayoutElement(null, { x: 0, y: 0, width: 100, height: 80 }),
+        my: { horizontal: 'center', vertical: 'top' },
+        at: { horizontal: 'center', vertical: 'bottom' },
+    });
+});
+
+QUnit.test('position legend, horizontal, left', function(assert) {
+    const LE = this.createLayoutElement({ position: { horizontal: 'left', vertical: 'top' }, cutSide: 'horizontal', cutLayoutSide: 'left' });
+    const LM = this.createLayoutManager();
+
+    LM.layoutInsideLegend(LE, this.canvas);
+
+    assert.deepEqual(LE.position.getCall(0).args[0], {
+        of: new layoutElementModule.WrapperLayoutElement(null, { x: 20, y: 0, width: 80, height: 100 }),
+        my: { horizontal: 'right', vertical: 'top' },
         at: { horizontal: 'left', vertical: 'top' },
-        offset: { vertical: 0, horizontal: 0 }
     });
-});
-
-QUnit.test('call draw axis method', function(assert) {
-    const LayoutManager = this.createLayoutManager();
-    const spyAxisDrawer = sinon.spy();
-
-    LayoutManager.layoutElements([], this.canvas, spyAxisDrawer, []);
-
-    assert.ok(spyAxisDrawer.calledOnce);
-    assert.deepEqual(spyAxisDrawer.getCall(0).args, []);
-});
-
-QUnit.module('Adaptive layout', environment);
-
-QUnit.test('One vertical element', function(assert) {
-    const layoutManager = this.createLayoutManager({ width: 80, height: 90 });
-    const layoutElement = this.createLayoutElement({
-        position: { horizontal: 'center', vertical: 'top' },
-        cutSide: 'vertical',
-        cutLayoutSide: 'top'
-    });
-
-    layoutManager.layoutElements(
-        [layoutElement],
-        this.canvas,
-        noop,
-        [{ canvas: this.canvas }],
-        false,
-        {}
-    );
-
-    assert.ok(!this.checkLayoutElementVisibility(layoutElement));
-    assert.equal(this.canvas.top, 0);
-    assert.equal(this.canvas.bottom, 10);
-    assert.equal(this.canvas.left, 0);
-    assert.equal(this.canvas.right, 10);
-});
-
-QUnit.test('Two vertical elements', function(assert) {
-    const layoutManager = this.createLayoutManager({ width: 80, height: 70 });
-    const layoutElement1 = this.createLayoutElement({
-        position: { horizontal: 'center', vertical: 'top' },
-        cutSide: 'vertical',
-        cutLayoutSide: 'top'
-    });
-    const layoutElement2 = this.createLayoutElement({
-        position: { horizontal: 'center', vertical: 'top' },
-        cutSide: 'vertical',
-        cutLayoutSide: 'top'
-    });
-
-    layoutManager.layoutElements(
-        [layoutElement1, layoutElement2],
-        this.canvas,
-        noop,
-        [{ canvas: this.canvas }],
-        false,
-        {}
-    );
-
-    assert.ok(this.checkLayoutElementVisibility(layoutElement1));
-    assert.ok(!this.checkLayoutElementVisibility(layoutElement2));
-    assert.equal(this.canvas.top, 20);
-});
-
-QUnit.test('One horizontal element', function(assert) {
-    const layoutManager = this.createLayoutManager({ width: 90, height: 80 });
-    const layoutElement = this.createLayoutElement({
-        position: { horizontal: 'left', vertical: 'top' },
-        cutSide: 'horizontal',
-        cutLayoutSide: 'left'
-    });
-
-    layoutManager.layoutElements(
-        [layoutElement],
-        this.canvas,
-        noop,
-        [{ canvas: this.canvas }],
-        false,
-        {}
-    );
-
-    assert.ok(!this.checkLayoutElementVisibility(layoutElement));
-});
-
-QUnit.test('Perpendicular elements. Vertical is hidden', function(assert) {
-    const layoutManager = this.createLayoutManager({ width: 80, height: 90 });
-    const layoutElement1 = this.createLayoutElement({
-        position: { horizontal: 'left', vertical: 'top' },
-        cutSide: 'horizontal',
-        cutLayoutSide: 'left',
-        width: 20,
-        height: 30
-    });
-    const layoutElement2 = this.createLayoutElement({
-        position: { horizontal: 'left', vertical: 'top' },
-        cutSide: 'vertical',
-        cutLayoutSide: 'top',
-        width: 20,
-        height: 30
-    });
-
-    layoutManager.layoutElements(
-        [layoutElement1, layoutElement2],
-        this.canvas,
-        noop,
-        [{ canvas: this.canvas }],
-        false,
-        {}
-    );
-
-    assert.ok(this.checkLayoutElementVisibility(layoutElement1));
-    assert.ok(!this.checkLayoutElementVisibility(layoutElement2));
-    assert.deepEqual(layoutElement1.draw.lastCall.args, [20, 100]);
-    assert.equal(this.canvas.top, 0);
-    assert.equal(this.canvas.left, 20);
-});
-
-QUnit.test('Perpendicular elements. Horizontal is hidden', function(assert) {
-    const layoutManager = this.createLayoutManager({ width: 90, height: 80 });
-    const layoutElement1 = this.createLayoutElement({
-        position: { horizontal: 'left', vertical: 'top' },
-        cutSide: 'horizontal',
-        cutLayoutSide: 'left',
-        width: 30,
-        height: 30
-    });
-    const layoutElement2 = this.createLayoutElement({
-        position: { horizontal: 'left', vertical: 'top' },
-        cutSide: 'vertical',
-        cutLayoutSide: 'top',
-        width: 30,
-        height: 20
-    });
-
-    layoutManager.layoutElements(
-        [layoutElement2, layoutElement1],
-        this.canvas,
-        noop,
-        [{ canvas: this.canvas }],
-        false,
-        {}
-    );
-
-    assert.ok(!this.checkLayoutElementVisibility(layoutElement1));
-    assert.ok(this.checkLayoutElementVisibility(layoutElement2));
-    assert.deepEqual(layoutElement1.draw.lastCall.args, [10, 30]);
-    assert.deepEqual(layoutElement2.draw.lastCall.args, [100, 20]);
-    assert.equal(this.canvas.top, 20);
-});
-
-QUnit.test('Check axis drawing params', function(assert) {
-    const that = this;
-    const layoutManager = this.createLayoutManager({ width: 100, height: 80 });
-    const axesDrawer = sinon.spy(function(sizeShortage) {
-        if(sizeShortage) return;
-        that.canvas.left += 10;
-    });
-
-    layoutManager.layoutElements(
-        [],
-        this.canvas,
-        axesDrawer,
-        this.getLayoutTargets(),
-        false
-    );
-
-    assert.ok(axesDrawer.calledTwice);
-    assert.deepEqual(axesDrawer.getCall(0).args, [], 'first call');
-    assert.deepEqual(axesDrawer.getCall(1).args, [{ height: 0, width: 10 }], 'second call');
 });

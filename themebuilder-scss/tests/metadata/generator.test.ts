@@ -3,10 +3,10 @@ import MetadataGenerator from '../../src/metadata/generator';
 const generator = new MetadataGenerator();
 
 describe('Metadata generator - parseComments', () => {
-  const commentSamples: Array<string> = [
+  const commentSamples: string[] = [
     '* $name 10. Constant name',
     '* $wrong some wrong comment',
-    '* $name 10. Name\n* $type select\n* $typeValues 1|2',
+    '* $name 10. Name\n* $type select\n* $type-values 1|2',
   ];
 
   test('name parsed correctly', () => {
@@ -31,7 +31,7 @@ describe('Metadata generator - getMetaItems (one item)', () => {
     [key: string]: string;
   }
 
-  const scssSamples: Array<Samples> = [
+  const scssSamples: Samples[] = [
     {
       'no new line after comment':
 `/**
@@ -123,7 +123,7 @@ $slideout-background3: #000;`;
   });
 });
 
-describe('Metadata generator - getMetaItems (duplicates removed, only first description used)', () => {
+describe('Metadata generator - getMetaItems (duplicate comment throw an error)', () => {
   const sample = `/**
 * $name Slide out background1
 * $type color
@@ -141,77 +141,33 @@ $base-color: rgb(0,170,0);
 `;
 
   test('parse items with duplicates', () => {
-    const result = MetadataGenerator.getMetaItems(sample);
-
-    expect(result.length).toBe(1);
-
-    expect(result[0]).toEqual({
-      Name: 'Slide out background1',
-      Type: 'color',
-      Key: '$slideout-background',
-    });
-  });
-});
-
-describe('Metadata generator - normalizePath', () => {
-  interface TestData {
-    scssPath: string;
-    path: string;
-    expected: string;
-  }
-
-  const isWin = process.platform === 'win32';
-
-  const matrix: Array<TestData> = [
-    { scssPath: '/scss', path: '/scss/widgets/generic/toolbar/_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
-    { scssPath: '/scss', path: '/scss/widgets/generic/navBar/_colors.scss', expected: 'tb/widgets/generic/navBar/colors' },
-    { scssPath: '/repo/scss', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
-    { scssPath: '/repo/scss', path: '/repo/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
-    { scssPath: '/repo/../scss', path: '/scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
-    { scssPath: '/repo/../scss', path: '/repo/../scss/widgets/generic/toolbar/_sizes.scss', expected: 'tb/widgets/generic/toolbar/sizes' },
-  ];
-
-  if (isWin) {
-    const additionalWindowsPaths: Array<TestData> = [
-      { scssPath: 'd:\\repo\\scss', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
-      { scssPath: 'd:\\repo\\scss', path: 'd:\\repo\\scss\\widgets\\generic\\toolbar\\_colors.scss', expected: 'tb/widgets/generic/toolbar/colors' },
-    ];
-
-    matrix.push(...additionalWindowsPaths);
-  }
-
-  test('normalizePath works as expected', () => {
-    matrix.forEach((item) => {
-      expect(MetadataGenerator.normalizePath(item.scssPath, item.path)).toBe(item.expected);
-    });
+    expect(() => MetadataGenerator.getMetaItems(sample)).toThrowError('$slideout-background has duplicated comment');
   });
 });
 
 describe('Metadata generator - getMapFromMeta', () => {
-  const testMetadata: Array<MetaItem> = [
+  const testMetadata: MetaItem[] = [
     { Key: '$menu-color' },
     { Key: '$menu-item-selected-bg' },
   ];
 
   test('getMapFromMeta works as expected', () => {
-    expect(MetadataGenerator.getMapFromMeta(testMetadata, '/'))
-      .toBe('(\n"path": "/",\n"$menu-color": $menu-color,\n"$menu-item-selected-bg": $menu-item-selected-bg,\n)');
+    expect(MetadataGenerator.getMapFromMeta(testMetadata))
+      .toBe('(\n"$menu-color": $menu-color,\n"$menu-item-selected-bg": $menu-item-selected-bg,\n)');
   });
 });
 
 describe('Metadata generator - collectMetadata', () => {
-  test('collectMetadata for file without comments return the same content and add nothing to metadata', () => {
-    const scssPath = '/scss';
+  test('collectMetadata for file without comments add nothing to metadata and save file content', () => {
     const path = '/scss/widgets/generic/toolbar/_colors.scss';
     const content = '@use "colors";';
 
-    const result = generator.collectMetadata(scssPath, path, content);
+    const result = generator.collectMetadata(path, content);
     expect(content).toBe(result);
-    expect(generator.getMetadata()).toEqual([]);
+    expect(generator.getMetadata()).toEqual({ generic: [], material: [] });
   });
 
   test('collectMetadata for file with comments modify file content and add data to metadata', () => {
-    const scssPath = '/scss';
     const path = '/scss/widgets/generic/toolbar/_colors.scss';
     const content = `
 @use "colors";
@@ -222,9 +178,7 @@ describe('Metadata generator - collectMetadata', () => {
 $slideout-background: #000;
 `;
 
-    const expected = `@forward "tb/widgets/generic/toolbar/colors";
-@use "tb/widgets/generic/toolbar/colors" as *;
-
+    const expected = `
 @use "colors";
 /**
 * $name Slide out background
@@ -232,30 +186,32 @@ $slideout-background: #000;
 */
 $slideout-background: #000;
 $never-used: collector((
-"path": "tb/widgets/generic/toolbar/colors",
 "$slideout-background": $slideout-background,
 ));
 `;
 
-    const result = generator.collectMetadata(scssPath, path, content);
-    expect(expected).toBe(result);
-    expect(generator.getMetadata()).toEqual([{
-      Name: 'Slide out background',
-      Type: 'color',
-      Key: '$slideout-background',
-      Path: 'tb/widgets/generic/toolbar/colors',
-    }]);
+    const result = generator.collectMetadata(path, content);
+    expect(result).toBe(expected);
+    expect(generator.getMetadata()).toEqual({
+      generic: [
+        {
+          Name: 'Slide out background',
+          Type: 'color',
+          Key: '$slideout-background',
+        },
+      ],
+      material: [],
+    });
   });
 
   test('clean method clean metadata', () => {
     // metadata is not empty because of the previous test
     expect(generator.getMetadata()).not.toEqual([]);
     generator.clean();
-    expect(generator.getMetadata()).toEqual([]);
+    expect(generator.getMetadata()).toEqual({ generic: [], material: [] });
   });
 
   test('collectMetadata add several item for different files with the same variables names', () => {
-    const scssPath = '/scss';
     const path1 = '/scss/widgets/generic/toolbar/_colors.scss';
     const path2 = '/scss/widgets/material/toolbar/_colors.scss';
     const content = `
@@ -267,24 +223,55 @@ $never-used: collector((
 $slideout-background: #000;
 `;
 
-    generator.collectMetadata(scssPath, path1, content);
-    generator.collectMetadata(scssPath, path2, content);
+    generator.collectMetadata(path1, content);
+    generator.collectMetadata(path2, content);
 
-    expect(generator.getMetadata()).toEqual([{
-      Name: 'Slide out background',
-      Type: 'color',
-      Key: '$slideout-background',
-      Path: 'tb/widgets/generic/toolbar/colors',
-    }, {
-      Name: 'Slide out background',
-      Type: 'color',
-      Key: '$slideout-background',
-      Path: 'tb/widgets/material/toolbar/colors',
-    }]);
+    expect(generator.getMetadata()).toEqual({
+      generic: [{
+        Name: 'Slide out background',
+        Type: 'color',
+        Key: '$slideout-background',
+      }],
+      material: [{
+        Name: 'Slide out background',
+        Type: 'color',
+        Key: '$slideout-background',
+      }],
+    });
+  });
+
+  test('collectMetadata - "./variables" imports change in main index file', () => {
+    const path = '/scss/widgets/material/_colors.scss';
+    const content = `
+@forward "./variables";
+@use "./variables" as *;
+`;
+
+    const expected = `
+@forward "tb_material";
+@use "tb_material" as *;
+`;
+    const result = generator.collectMetadata(path, content);
+
+    expect(result).toBe(expected);
+  });
+
+  test('collectMetadata - right content for bundle', () => {
+    const path = '/scss/bundles/dx.light.scss';
+    const content = `
+@use "../widgets/generic";
+`;
+
+    const expected = `
+@use "../widgets/generic/tb_index";
+`;
+    const result = generator.collectMetadata(path, content);
+
+    expect(result).toBe(expected);
   });
 });
 
-describe('Metadata generator - generate bundles content', () => {
+describe('Metadata generator - generate files content', () => {
   test('isBundleFile', () => {
     expect(MetadataGenerator.isBundleFile('bundles/dx.light.scss')).toBe(true);
     expect(MetadataGenerator.isBundleFile('bundles\\dx.light.scss')).toBe(true);
@@ -292,6 +279,16 @@ describe('Metadata generator - generate bundles content', () => {
     expect(MetadataGenerator.isBundleFile('path/bundles/dx.light.scss')).toBe(true);
     expect(MetadataGenerator.isBundleFile('path/widgets/generic/accordion/_index.scss')).toBe(false);
     expect(MetadataGenerator.isBundleFile('base/accordion/_index.scss')).toBe(false);
+  });
+
+  test('getMainColorsFileTheme', () => {
+    expect(MetadataGenerator.getMainColorsFileTheme('/widgets/generic/_colors.scss')).toBe('generic');
+    expect(MetadataGenerator.getMainColorsFileTheme('widgets\\generic\\_colors.scss')).toBe('generic');
+    expect(MetadataGenerator.getMainColorsFileTheme('widgets/material/_colors.scss')).toBe('material');
+    expect(MetadataGenerator.getMainColorsFileTheme('/scss/widgets/material/_colors.scss')).toBe('material');
+    expect(MetadataGenerator.getMainColorsFileTheme('bundles/dx.light.scss')).toBe(null);
+    expect(MetadataGenerator.getMainColorsFileTheme('path/widgets/generic/accordion/_index.scss')).toBe(null);
+    expect(MetadataGenerator.getMainColorsFileTheme('base/accordion/_index.scss')).toBe(null);
   });
 
   test('getBundleContent', () => {
@@ -310,5 +307,19 @@ describe('Metadata generator - generate bundles content', () => {
 
     expect(MetadataGenerator.getBundleContent(commonBundleContent))
       .toBe(commonBundleContent);
+  });
+
+  test('getMainColorsFileContent', () => {
+    const content = `
+@forward "./variables";
+@use "./variables" as *;
+`;
+
+    const expected = `
+@forward "tb_material";
+@use "tb_material" as *;
+`;
+
+    expect(MetadataGenerator.getMainColorsFileContent(content, 'material')).toBe(expected);
   });
 });

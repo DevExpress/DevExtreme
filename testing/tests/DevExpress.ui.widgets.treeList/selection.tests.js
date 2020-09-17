@@ -15,7 +15,6 @@ import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
 import fx from 'animation/fx';
-import errors from 'ui/widget/ui.errors';
 import ArrayStore from 'data/array_store';
 import { setupTreeListModules } from '../../helpers/treeListMocks.js';
 
@@ -299,7 +298,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         assert.equal($gridCell.find('.dx-select-checkbox').length, 0, 'Select checkbox was not rendered');
     });
 
-    QUnit.test('Click on select checkbox should works correctly', function(assert) {
+    QUnit.test('Click on select checkbox should work correctly', function(assert) {
     // arrange
         const $testElement = $('#treeList');
 
@@ -318,7 +317,27 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         assert.ok(this.dataController.items()[0].isSelected, 'Right row is selected');
     });
 
-    QUnit.test('Click on selectAll checkbox should works correctly', function(assert) {
+    // T917248
+    QUnit.test('Click on select checkbox container should not select row', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always' };
+
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        const $selectCheckbox = $testElement.find('.dx-treelist-cell-expandable').eq(0).find('.dx-select-checkbox').eq(0);
+        $selectCheckbox.parent().trigger('dxclick');
+
+        // assert
+        assert.equal($selectCheckbox.dxCheckBox('instance').option('value'), false, 'Select checkbox value');
+        assert.notOk(this.option('selectedRowKeys'), 'row is not selected');
+        assert.notOk(this.dataController.items()[0].isSelected, 'row is not selected');
+    });
+
+    QUnit.test('Click on selectAll checkbox should work correctly', function(assert) {
     // arrange
         const $testElement = $('#treeList');
 
@@ -337,7 +356,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         assert.deepEqual(this.option('selectedRowKeys'), [1], 'Right rows are selected');
     });
 
-    QUnit.test('Click on selectAll checkbox should works correctly when sorting is enabled', function(assert) {
+    QUnit.test('Click on selectAll checkbox should work correctly when sorting is enabled', function(assert) {
     // arrange
         const $testElement = $('#treeList');
         const clock = sinon.useFakeTimers();
@@ -548,7 +567,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
     });
 
     // T742205, T751539
-    QUnit.test('selection for nested node should works', function(assert) {
+    QUnit.test('selection for nested node should work', function(assert) {
     // arrange
         const $testElement = $('#treeList');
 
@@ -924,7 +943,6 @@ QUnit.module('Recursive selection', {
 
     QUnit.test('getSelectedRowKeys with \'leavesOnly\' parameter', function(assert) {
     // arrange
-        sinon.spy(errors, 'log');
         const $testElement = $('#treeList');
 
         this.options.dataSource = [
@@ -940,13 +958,7 @@ QUnit.module('Recursive selection', {
         this.rowsView.render($testElement);
 
         // act, assert
-        assert.deepEqual(this.getSelectedRowKeys(true), [2, 5], 'only leaves selected'); // deprecated in 18.1
-        assert.equal(errors.log.lastCall.args[0], 'W0002', 'Warning is raised');
-
         assert.deepEqual(this.getSelectedRowKeys('leavesOnly'), [2, 5], 'only leaves selected');
-        assert.equal(errors.log.callCount, 1, 'Warning is raised one time');
-
-        errors.log.restore();
     });
 
     QUnit.test('getSelectedRowKeys with \'all\' parameter', function(assert) {
@@ -1425,6 +1437,38 @@ QUnit.module('Recursive selection', {
         this.dataController.pageIndex(1);
         // assert
         assert.equal(this.selectionController._selection._focusedItemIndex, -1, '_focusedItemIndex corrected');
+    });
+
+    QUnit.test('Selecting row with key = 0', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+        const selectionChangedArgs = [];
+
+        this.options.rootValue = -1;
+        this.options.columns = ['id', 'text'];
+        this.options.selectedRowKeys = [1];
+        this.options.dataSource = [
+            { id: 0, parentId: -1, text: 'text a' },
+            { id: 1, parentId: 0, text: 'text ab1' },
+            { id: 2, parentId: 0, text: 'text ab2' },
+            { id: 3, parentId: -1, text: 'text b' }
+        ];
+        this.options.onSelectionChanged = (e) => {
+            selectionChangedArgs.push(e);
+        };
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectRows(0, true);
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(selectionChangedArgs.length, 1, 'selectionChanged is called once');
+        assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [0], 'selectedItemsKeys');
+        assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [0], 'currentSelectedRowKeys');
+        assert.deepEqual(this.option('selectedRowKeys'), [0], 'selected row keys');
+        assert.ok(items[0].isSelected, 'first item is selected');
     });
 });
 

@@ -1,22 +1,24 @@
 import $ from '../../core/renderer';
 import { noop } from '../../core/utils/common';
-import { hasWindow, getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { isNumeric, isFunction, isDefined, isObject as _isObject, type } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import version from '../../core/version';
 import _windowResizeCallbacks from '../../core/utils/resize_callbacks';
-import { format as _stringFormat } from '../../core/utils/string';
 import { extend } from '../../core/utils/extend';
 import themeManagerModule from '../core/base_theme_manager';
 import DOMComponent from '../../core/dom_component';
 import helpers from './helpers';
 import { parseScalar as _parseScalar } from './utils';
-import { ERROR_MESSAGES, log as _log } from './errors_warnings';
+import { log as _log } from './errors_warnings';
 import rendererModule from './renderers/renderer';
 import _Layout from './layout';
 import devices from '../../core/devices';
 import eventsEngine from '../../events/core/events_engine';
+import {
+    createEventTrigger,
+    createResizeHandler,
+    createIncidentOccurred } from './base_widget.utils';
 const _floor = Math.floor;
 
 const OPTION_RTL_ENABLED = 'rtlEnabled';
@@ -38,41 +40,11 @@ function areCanvasesDifferent(canvas1, canvas2) {
         canvas1.left === canvas2.left && canvas1.top === canvas2.top && canvas1.right === canvas2.right && canvas1.bottom === canvas2.bottom);
 }
 
-function createResizeHandler(callback) {
-    let timeout;
-    const handler = function() {
-        clearTimeout(timeout);
-        timeout = setTimeout(callback, 100);
-    };
-
-    handler.dispose = function() {
-        clearTimeout(timeout);
-        return this;
-    };
-
-    return handler;
-}
-
 function defaultOnIncidentOccurred(e) {
     if(!e.component._eventsStrategy.hasEvent('incidentOccurred')) {
         _log.apply(null, [e.target.id].concat(e.target.args || []));
     }
 }
-
-let createIncidentOccurred = function(widgetName, eventTrigger) {
-    return function incidentOccurred(id, args) {
-        eventTrigger('incidentOccurred', {
-            target: {
-                id: id,
-                type: id[0] === 'E' ? 'error' : 'warning',
-                args: args,
-                text: _stringFormat.apply(null, [ERROR_MESSAGES[id]].concat(args || [])),
-                widget: widgetName,
-                version: version
-            }
-        });
-    };
-};
 
 function pickPositiveValue(values) {
     return values.reduce(function(result, value) {
@@ -139,7 +111,7 @@ function sizeIsValid(value) {
     return isDefined(value) && value > 0;
 }
 
-module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
+const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     _eventsMap: {
         'onIncidentOccurred': { name: 'incidentOccurred' },
         'onDrawn': { name: 'drawn' }
@@ -403,8 +375,15 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const size = that.option('size') || {};
         const margin = that.option('margin') || {};
         const defaultCanvas = that._getDefaultSize() || {};
-        const elementWidth = !sizeIsValid(size.width) && hasWindow() ? that._$element.width() : 0;
-        const elementHeight = !sizeIsValid(size.height) && hasWindow() ? that._$element.height() : 0;
+        const getSizeOfSide = (size, side) => {
+            if(sizeIsValid(size[side]) || !hasWindow()) {
+                return 0;
+            }
+            const elementSize = that._$element[side]();
+            return elementSize <= 1 ? 0 : elementSize;
+        };
+        const elementWidth = getSizeOfSide(size, 'width');
+        const elementHeight = getSizeOfSide(size, 'height');
         let canvas = {
             width: size.width <= 0 ? 0 : _floor(pickPositiveValue([size.width, elementWidth, defaultCanvas.width])),
             height: size.height <= 0 ? 0 : _floor(pickPositiveValue([size.height, elementHeight, defaultCanvas.height])),
@@ -675,57 +654,6 @@ module.exports = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     }
 });
 
-helpers.replaceInherit(module.exports);
+export default baseWidget;
 
-function createEventTrigger(eventsMap, callbackGetter) {
-    let triggers = {};
-
-    each(eventsMap, function(name, info) {
-        if(info.name) {
-            createEvent(name);
-        }
-    });
-    let changes;
-    triggerEvent.change = function(name) {
-        const eventInfo = eventsMap[name];
-        if(eventInfo) {
-            (changes = changes || {})[name] = eventInfo;
-        }
-        return !!eventInfo;
-    };
-    triggerEvent.applyChanges = function() {
-        if(changes) {
-            each(changes, function(name, eventInfo) {
-                createEvent(eventInfo.newName || name);
-            });
-            changes = null;
-        }
-    };
-    triggerEvent.dispose = function() {
-        eventsMap = callbackGetter = triggers = null;
-    };
-
-    return triggerEvent;
-
-    function createEvent(name) {
-        const eventInfo = eventsMap[name];
-
-        triggers[eventInfo.name] = callbackGetter(name);
-    }
-
-    function triggerEvent(name, arg, complete) {
-        triggers[name](arg);
-        complete && complete();
-    }
-}
-///#DEBUG
-module.exports.DEBUG_createEventTrigger = createEventTrigger;
-module.exports.DEBUG_createIncidentOccurred = createIncidentOccurred;
-module.exports.DEBUG_stub_createIncidentOccurred = function(stub) {
-    createIncidentOccurred = stub;
-};
-module.exports.DEBUG_restore_createIncidentOccurred = function() {
-    createIncidentOccurred = module.exports.DEBUG_createIncidentOccurred;
-};
-module.exports.DEBUG_createResizeHandler = createResizeHandler;
-///#ENDDEBUG
+helpers.replaceInherit(baseWidget);

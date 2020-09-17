@@ -209,9 +209,13 @@ class FileManagerProgressPanel extends Widget {
     }
 
     completeSingleOperationWithError(info, errorText) {
+        const detailsItem = info.details?.[0];
         info.completed = true;
-        this._renderOperationError(info.details ? info.details[0] : info.common, errorText);
+        this._renderOperationError(detailsItem || info.common, errorText);
         this._setCloseButtonVisible(info.common, true);
+        if(detailsItem) {
+            this._setCloseButtonVisible(detailsItem, false);
+        }
     }
 
     addOperationDetailsError(info, index, errorText) {
@@ -364,4 +368,4 @@ class FileManagerProgressPanel extends Widget {
 
 }
 
-module.exports = FileManagerProgressPanel;
+export default FileManagerProgressPanel;

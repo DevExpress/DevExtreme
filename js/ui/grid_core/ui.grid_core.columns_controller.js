@@ -36,7 +36,7 @@ const regExp = /columns\[(\d+)\]\.?/gi;
 
 let globalColumnId = 1;
 
-module.exports = {
+export default {
     defaultOptions: function() {
         return {
             commonColumnSettings: {
@@ -203,6 +203,8 @@ module.exports = {
                             dataField: columnOptions
                         };
                     }
+
+                    that.setName(columnOptions);
 
                     let result = { };
                     if(columnOptions.command) {
@@ -582,7 +584,7 @@ module.exports = {
             };
 
             function checkUserStateColumn(column, userStateColumn) {
-                return column && userStateColumn && userStateColumn.name === column.name && (userStateColumn.dataField === column.dataField || column.name);
+                return column && userStateColumn && (userStateColumn.name === column.name || !column.name) && (userStateColumn.dataField === column.dataField || column.name);
             }
 
             const applyUserState = function(that) {
@@ -807,6 +809,10 @@ module.exports = {
                     if(COLUMN_INDEX_OPTIONS[optionName]) {
                         updateIndexes(that, column);
                         value = optionGetter(column);
+                    }
+
+                    if(optionName === 'name' || optionName === 'allowEditing') {
+                        that._checkColumns();
                     }
 
                     fullOptionName && fireOptionChanged(that, {
@@ -1099,6 +1105,8 @@ module.exports = {
                     } else {
                         updateIndexes(that);
                     }
+
+                    that._checkColumns();
                 },
                 callbackNames: function() {
                     return ['columnsChanged'];
@@ -1175,10 +1183,14 @@ module.exports = {
                         case 'columnWidth': {
                             args.handled = true;
                             const ignoreColumnOptionNames = args.fullName === 'columnWidth' && ['width'];
-                            const isEditingPopup = args.fullName && args.fullName.indexOf('editing.popup') === 0;
-                            const isEditingForm = args.fullName && args.fullName.indexOf('editing.form') === 0;
+                            const isEditingPopup = args.fullName?.indexOf('editing.popup') === 0;
+                            const isEditingForm = args.fullName?.indexOf('editing.form') === 0;
+                            const isEditRowKey = args.fullName?.indexOf('editing.editRowKey') === 0;
+                            const isEditColumnName = args.fullName?.indexOf('editing.editColumnName') === 0;
+                            const isChanges = args.fullName?.indexOf('editing.changes') === 0;
+                            const needReinit = !isEditingPopup && !isEditingForm && !isEditRowKey && !isChanges && !isEditColumnName;
 
-                            if(!isEditingPopup && !isEditingForm) {
+                            if(needReinit) {
                                 this.reinit(ignoreColumnOptionNames);
                             }
                             break;
@@ -1357,6 +1369,9 @@ module.exports = {
                         return field;
                     });
                 },
+                getColumnIndexOffset: function() {
+                    return 0;
+                },
                 _getFixedColumnsCore: function() {
                     const that = this;
                     const result = [];
@@ -1417,7 +1432,15 @@ module.exports = {
                         }
                     }
 
-                    return result;
+                    return result.map(columns => {
+                        return columns.map(column => {
+                            const newColumn = { ...column };
+                            if(newColumn.headerId) {
+                                newColumn.headerId += '-fixed';
+                            }
+                            return newColumn;
+                        });
+                    });
                 },
                 _isColumnFixing: function() {
                     let isColumnFixing = this.option('columnFixing.enabled');
@@ -2021,7 +2044,13 @@ module.exports = {
                                     const selector = sortParameters[i].selector;
                                     const isExpanded = sortParameters[i].isExpanded;
 
-                                    if(selector === column.dataField || selector === column.name || selector === column.selector || selector === column.calculateCellValue || selector === column.calculateGroupValue) {
+                                    if(selector === column.dataField ||
+                                        selector === column.name ||
+                                        selector === column.selector ||
+                                        selector === column.calculateCellValue ||
+                                        selector === column.calculateGroupValue ||
+                                        selector === column.calculateDisplayValue
+                                    ) {
                                         column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
 
                                         if(isExpanded !== undefined) {
@@ -2193,6 +2222,7 @@ module.exports = {
                     column.added = options;
                     updateIndexes(that, column);
                     that.updateColumns(that._dataSource);
+                    that._checkColumns();
                 },
                 deleteColumn: function(id) {
                     const that = this;
@@ -2236,10 +2266,19 @@ module.exports = {
                     }
                     return result;
                 },
+                setName: function(column) {
+                    const dataField = column.dataField;
+
+                    if(!isDefined(column.name) && isDefined(dataField)) {
+                        column.name = dataField;
+                    }
+                },
                 setUserState: function(state) {
                     const that = this;
                     const dataSource = that._dataSource;
                     let ignoreColumnOptionNames = that.option('stateStoring.ignoreColumnOptionNames');
+
+                    state?.forEach(this.setName);
 
                     if(!ignoreColumnOptionNames) {
                         ignoreColumnOptionNames = [];
@@ -2267,6 +2306,32 @@ module.exports = {
                     if(dataSource) {
                         dataSource.sort(that.getSortDataSourceParameters());
                         dataSource.group(that.getGroupDataSourceParameters());
+                    }
+                },
+                _checkColumns: function() {
+                    const usedNames = {};
+                    let hasEditableColumnWithoutName = false;
+                    let hasDuplicatedNames = false;
+                    this._columns.forEach(column => {
+                        const name = column.name;
+                        const isBand = column.columns?.length;
+                        const isEditable = column.allowEditing && (column.dataField || column.setCellValue) && !isBand;
+                        if(name) {
+                            if(usedNames[name]) {
+                                hasDuplicatedNames = true;
+                            }
+                            usedNames[name] = true;
+                        } else if(isEditable) {
+                            hasEditableColumnWithoutName = true;
+                        }
+                    });
+
+                    if(hasDuplicatedNames) {
+                        errors.log('E1059');
+                    }
+
+                    if(hasEditableColumnWithoutName) {
+                        errors.log('E1060');
                     }
                 },
                 _createCalculatedColumnOptions: function(columnOptions, bandColumn) {

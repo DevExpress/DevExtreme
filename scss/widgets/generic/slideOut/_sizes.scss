@@ -1,12 +1,13 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE: null !default;
+$generic-slideout-menu-icon-oversize: null !default;
 
 @if $size == "default" {
-  $GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE: 8px;
+  $generic-slideout-menu-icon-oversize: 8px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_SLIDEOUT_MENU_ICON_OVERSIZE: 4px;
+  $generic-slideout-menu-icon-oversize: 4px;
 }

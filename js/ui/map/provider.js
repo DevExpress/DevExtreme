@@ -1,10 +1,8 @@
-const Promise = require('../../core/polyfills/promise');
-const Class = require('../../core/class');
-const map = require('../../core/utils/iterator').map;
-const typeUtils = require('../../core/utils/type');
-const eventUtils = require('../../events/utils');
-const isPlainObject = typeUtils.isPlainObject;
-const isNumeric = typeUtils.isNumeric;
+import Promise from '../../core/polyfills/promise';
+import Class from '../../core/class';
+import { map } from '../../core/utils/iterator';
+import { isPlainObject, isNumeric } from '../../core/utils/type';
+import { addNamespace } from '../../events/utils';
 
 const abstract = Class.abstract;
 
@@ -137,7 +135,7 @@ const Provider = Class.inherit({
     },
 
     _addEventNamespace: function(name) {
-        return eventUtils.addNamespace(name, this._mapWidget.NAME);
+        return addNamespace(name, this._mapWidget.NAME);
     },
 
     _applyFunctionIfNeeded: function(fnName, array) {
@@ -174,4 +172,4 @@ const Provider = Class.inherit({
 
 });
 
-module.exports = Provider;
+export default Provider;

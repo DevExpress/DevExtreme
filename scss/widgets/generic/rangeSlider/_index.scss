@@ -3,15 +3,16 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+
 // adduse
 
 
-$GENERIC_SLIDER_HANDLE_MARGIN: -7px;
+$generic-slider-handle-margin: -7px;
 
 .dx-rangeslider-start-handle {
-  margin-left: $GENERIC_SLIDER_HANDLE_MARGIN;
+  margin-left: $generic-slider-handle-margin;
 }
 
 .dx-rtl .dx-rangeslider-start-handle {
-  margin-right: $GENERIC_SLIDER_HANDLE_MARGIN;
+  margin-right: $generic-slider-handle-margin;
 }

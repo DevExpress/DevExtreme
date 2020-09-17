@@ -1,33 +1,25 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: null !default;
-$MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE: null !default;
-$MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT: null !default;
-$MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: null !default;
-$MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: null !default;
-$MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: null !default;
-$MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN: null !default;
-$MATERIAL_TIMEVIEW_FORMAT12_WIDTH: null !default;
+$material-timeview-clock-min-size: null !default;
+$material-timeview-clock-image-min-size: null !default;
+$material-timeview-format12-width: null !default;
+
+$material-timeview-field-min-height: 35px;
+$material-timeview-arrow-height-reduce: 0;
+$material-timeview-field-numberbox-reduce: 0;
+$material-timeview-clock-additional-size: 8px;
+$material-timeview-time-separator-margin: 5px;
 
 @if $size == "default" {
-  $MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: 252px;
-  $MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE: 215px;
-  $MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT: 35px;
-  $MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: 0;
-  $MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0;
-  $MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
-  $MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
-  $MATERIAL_TIMEVIEW_FORMAT12_WIDTH: 70px;
+  $material-timeview-clock-min-size: 252px;
+  $material-timeview-clock-image-min-size: 215px;
+  $material-timeview-format12-width: 74px;
 }
 
 @else if $size == "compact" {
-  $MATERIAL_TIMEVIEW_CLOCK_MIN_SIZE: 200px;
-  $MATERIAL_TIMEVIEW_CLOCK_IMAGE_MIN_SIZE: 190px;
-  $MATERIAL_TIMEVIEW_FIELD_MIN_HEIGHT: 35px;
-  $MATERIAL_TIMEVIEW_ARROW_HEIGHT_REDUCE: 0;
-  $MATERIAL_TIMEVIEW_FIELD_NUMBERBOX_REDUCE: 0;
-  $MATERIAL_TIMEVIEW_CLOCK_ADDITIONAL_SIZE: 8px;
-  $MATERIAL_TIMEVIEW_TIME_SEPARATOR_MARGIN: 5px;
-  $MATERIAL_TIMEVIEW_FORMAT12_WIDTH: 56px;
+  $material-timeview-clock-min-size: 200px;
+  $material-timeview-clock-image-min-size: 190px;
+  $material-timeview-format12-width: 63px;
 }

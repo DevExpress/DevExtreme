@@ -1,1 +1,2 @@
-module.exports = require('./gauges/circular_gauge');
+import CircularGauge from './gauges/circular_gauge';
+export default CircularGauge;

@@ -1,44 +1,45 @@
 @use "../sizes" as *;
+
 // adduse
 
-$GENERIC_CALENDAR_CELL_FONT_SIZE: null !default;
-$GENERIC_CALENDAR_BODY_WIDTH: null !default;
-$GENERIC_CALENDAR_BODY_HEIGHT: null !default;
-$GENERIC_CALENDAR_BODY_TOP: null !default;
-$GENERIC_CALENDAR_FOOTER_HEIGHT: null !default;
-$GENERIC_CALENDAR_NAVIGATOR_VERTICAL_PADDING: null !default;
-$GENERIC_CALENDAR_NAVIGATOR_HEIGHT: null !default;
-$GENERIC_CALENDAR_HEADER_BOTTOM_PADDING: null !default;
-$GENERIC_CALENDAR_CELL_HORIZONTAL_PADDING: null !default;
-$GENERIC_NAV_BUTTON_WIDTH: null !default;
-$GENERIC_CALENDAR_CAPTION_BUTTON_PADDING: null !default;
+$generic-calendar-cell-font-size: null !default;
+$generic-calendar-body-width: null !default;
+$generic-calendar-body-height: null !default;
+$generic-calendar-body-top: null !default;
+$generic-calendar-footer-height: null !default;
+$generic-calendar-navigator-vertical-padding: null !default;
+$generic-calendar-navigator-height: null !default;
+$generic-calendar-header-bottom-padding: null !default;
+$generic-calendar-cell-horizontal-padding: null !default;
+$generic-nav-button-width: null !default;
+$generic-calendar-caption-button-padding: null !default;
 
 @if $size == "default" {
-  $GENERIC_CALENDAR_CELL_FONT_SIZE: 15px;
-  $GENERIC_CALENDAR_BODY_WIDTH: 282px;
-  $GENERIC_CALENDAR_BODY_HEIGHT: 205px;
-  $GENERIC_CALENDAR_BODY_TOP: 52px;
-  $GENERIC_CALENDAR_FOOTER_HEIGHT: 45px;
-  $GENERIC_CALENDAR_NAVIGATOR_VERTICAL_PADDING: 9px;
-  $GENERIC_CALENDAR_NAVIGATOR_HEIGHT: 36px;
+  $generic-calendar-cell-font-size: 15px;
+  $generic-calendar-body-width: 282px;
+  $generic-calendar-body-height: 205px;
+  $generic-calendar-body-top: 52px;
+  $generic-calendar-footer-height: 45px;
+  $generic-calendar-navigator-vertical-padding: 9px;
+  $generic-calendar-navigator-height: 36px;
 
-  $GENERIC_CALENDAR_HEADER_BOTTOM_PADDING: 6px;
-  $GENERIC_CALENDAR_CELL_HORIZONTAL_PADDING: 8px;
-  $GENERIC_NAV_BUTTON_WIDTH: 32px;
-  $GENERIC_CALENDAR_CAPTION_BUTTON_PADDING: 2px 15px 4px;
+  $generic-calendar-header-bottom-padding: 6px;
+  $generic-calendar-cell-horizontal-padding: 8px;
+  $generic-nav-button-width: 32px;
+  $generic-calendar-caption-button-padding: 2px 15px 4px;
 }
 
 @else if $size == "compact" {
-  $GENERIC_CALENDAR_CELL_FONT_SIZE: 13px;
-  $GENERIC_CALENDAR_BODY_WIDTH: 232px;
-  $GENERIC_CALENDAR_BODY_HEIGHT: 175px;
-  $GENERIC_CALENDAR_BODY_TOP: 42px;
-  $GENERIC_CALENDAR_FOOTER_HEIGHT: 35px;
-  $GENERIC_CALENDAR_NAVIGATOR_VERTICAL_PADDING: 4px;
-  $GENERIC_CALENDAR_NAVIGATOR_HEIGHT: 30px;
+  $generic-calendar-cell-font-size: 13px;
+  $generic-calendar-body-width: 232px;
+  $generic-calendar-body-height: 175px;
+  $generic-calendar-body-top: 42px;
+  $generic-calendar-footer-height: 35px;
+  $generic-calendar-navigator-vertical-padding: 4px;
+  $generic-calendar-navigator-height: 30px;
 
-  $GENERIC_CALENDAR_HEADER_BOTTOM_PADDING: 2px;
-  $GENERIC_CALENDAR_CELL_HORIZONTAL_PADDING: 3px;
-  $GENERIC_NAV_BUTTON_WIDTH: 24px;
-  $GENERIC_CALENDAR_CAPTION_BUTTON_PADDING: 3px 3px;
+  $generic-calendar-header-bottom-padding: 2px;
+  $generic-calendar-cell-horizontal-padding: 3px;
+  $generic-nav-button-width: 24px;
+  $generic-calendar-caption-button-padding: 3px 3px;
 }

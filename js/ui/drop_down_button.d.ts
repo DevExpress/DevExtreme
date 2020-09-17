@@ -61,7 +61,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @default "content"
      * @type_function_param1 data:Array<string,number,Object>|DataSource
      * @type_function_param2 contentElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -105,7 +105,7 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
      * @type_function_param3 itemElement:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -293,6 +293,19 @@ export default class dxDropDownButton extends Widget {
 }
 
 export interface dxDropDownButtonItem extends dxListItem {
+    /**
+     * @docid dxDropDownButtonItem.onClick
+     * @type function(e)|string
+     * @default null
+     * @type_function_param1 e:object
+     * @type_function_param1_field1 component:dxDropDownButton
+     * @type_function_param1_field2 element:dxElement
+     * @type_function_param1_field3 model:object
+     * @type_function_param1_field4 event:event
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event }) => any) | string;
 }
 
 declare global {

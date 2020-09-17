@@ -1,4 +1,4 @@
-const _createColorCodeGetter = require('./colorizing').createColorCodeGetter;
+import { createColorCodeGetter as _createColorCodeGetter } from './colorizing';
 const _min = Math.min;
 const _max = Math.max;
 
@@ -47,6 +47,6 @@ function gradientColorizer(options, themeManager) {
         return palette.getColor((getValue(node) - arg[0]) / arg[1]);
     }
 }
-
-require('./colorizing').addColorizer('gradient', gradientColorizer);
-module.exports = gradientColorizer;
+import { addColorizer } from './colorizing';
+addColorizer('gradient', gradientColorizer);
+export default gradientColorizer;

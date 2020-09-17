@@ -3,10 +3,10 @@ import { extend } from '../core/utils/extend';
 
 const _floor = Math.floor;
 const _ceil = Math.ceil;
-const _Color = require('../color');
+import _Color from '../color';
 const _isArray = Array.isArray;
 
-const _isString = require('../core/utils/type').isString;
+import { isString as _isString } from '../core/utils/type';
 
 const HIGHLIGHTING_STEP = 50;
 const DEFAULT_PALETTE = 'material';

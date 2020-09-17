@@ -1,7 +1,7 @@
-const $ = require('../../core/renderer');
-const extend = require('../../core/utils/extend').extend;
-const Widget = require('../widget/ui.widget');
-const Button = require('../button');
+import $ from '../../core/renderer';
+import { extend } from '../../core/utils/extend';
+import Widget from '../widget/ui.widget';
+import Button from '../button';
 
 const CALENDAR_NAVIGATOR_CLASS = 'dx-calendar-navigator';
 const CALENDAR_NAVIGATOR_PREVIOUS_MONTH_CLASS = 'dx-calendar-navigator-previous-month';
@@ -107,4 +107,4 @@ const Navigator = Widget.inherit({
     }
 });
 
-module.exports = Navigator;
+export default Navigator;

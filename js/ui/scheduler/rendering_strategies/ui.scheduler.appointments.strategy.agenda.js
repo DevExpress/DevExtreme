@@ -257,4 +257,4 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     }
 }
 
-module.exports = AgendaRenderingStrategy;
+export default AgendaRenderingStrategy;

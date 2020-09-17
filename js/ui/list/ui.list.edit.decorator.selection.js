@@ -1,13 +1,13 @@
-const $ = require('../../core/renderer');
-const eventsEngine = require('../../events/core/events_engine');
-const clickEvent = require('../../events/click');
-const extend = require('../../core/utils/extend').extend;
-const errors = require('../widget/ui.errors');
-const CheckBox = require('../check_box');
-const RadioButton = require('../radio_group/radio_button');
-const eventUtils = require('../../events/utils');
-const registerDecorator = require('./ui.list.edit.decorator_registry').register;
-const EditDecorator = require('./ui.list.edit.decorator');
+import $ from '../../core/renderer';
+import eventsEngine from '../../events/core/events_engine';
+import { name as clickEventName } from '../../events/click';
+import { extend } from '../../core/utils/extend';
+import errors from '../widget/ui.errors';
+import CheckBox from '../check_box';
+import RadioButton from '../radio_group/radio_button';
+import { addNamespace } from '../../events/utils';
+import { register as registerDecorator } from './ui.list.edit.decorator_registry';
+import EditDecorator from './ui.list.edit.decorator';
 
 
 const SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled';
@@ -24,7 +24,7 @@ const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
-const CLICK_EVENT_NAME = eventUtils.addNamespace(clickEvent.name, 'dxListEditDecorator');
+const CLICK_EVENT_NAME = addNamespace(clickEventName, 'dxListEditDecorator');
 
 registerDecorator(
     'selection',
@@ -47,9 +47,11 @@ registerDecorator(
 
         beforeBag: function(config) {
             const $itemElement = config.$itemElement;
-            const $container = config.$container;
+            const $container = config.$container.addClass(this._containerClass);
 
-            const $control = $('<div>').addClass(this._controlClass);
+            const $control = $('<div>')
+                .addClass(this._controlClass)
+                .appendTo($container);
             new this._controlWidget($control, extend(this._commonOptions(), {
                 value: this._isSelected($itemElement),
                 focusStateEnabled: false,
@@ -59,9 +61,6 @@ registerDecorator(
                     e.event && e.event.stopPropagation();
                 }).bind(this)
             }));
-
-            $container.addClass(this._containerClass);
-            $container.append($control);
         },
 
         modifyElement: function(config) {

@@ -1,4 +1,5 @@
-const window = require('../../core/utils/window').getWindow();
+import { getWindow } from '../../core/utils/window';
+const window = getWindow();
 
 const getSessionStorage = function() {
     let sessionStorage;
@@ -10,4 +11,4 @@ const getSessionStorage = function() {
     return sessionStorage;
 };
 
-exports.sessionStorage = getSessionStorage;
+export { getSessionStorage as sessionStorage };

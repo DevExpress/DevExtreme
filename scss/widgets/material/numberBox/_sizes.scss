@@ -1,21 +1,8 @@
 @use "../sizes" as *;
+
 // adduse
 
-$MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH: null !default;
-$MATERIAL_NUMBERBOX_SPIN_PADDING: null !default;
-$MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: null !default;
-$MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH: null !default;
-
-@if $size == "default" {
-  $MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH: 24px;
-  $MATERIAL_NUMBERBOX_SPIN_PADDING: 1px;
-  $MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 74px;
-  $MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH: 32px;
-}
-
-@else if $size == "compact" {
-  $MATERIAL_NUMBERBOX_SPIN_CONTAINER_WIDTH: 24px;
-  $MATERIAL_NUMBERBOX_SPIN_PADDING: 1px;
-  $MATERIAL_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH: 74px;
-  $MATERIAL_NUMBERBOX_CLEAR_BUTTON_AREA_WIDTH: 32px;
-}
+$material-numberbox-spin-container-width: 24px;
+$material-numberbox-spin-padding: 1px;
+$material-numberbox-touch-friendly-spin-container-width: 74px;
+$material-numberbox-clear-button-area-width: 32px;

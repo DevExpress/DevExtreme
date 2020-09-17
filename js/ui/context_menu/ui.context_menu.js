@@ -19,6 +19,8 @@ import Overlay from '../overlay';
 import MenuBase from './ui.menu_base';
 import { Deferred } from '../../core/utils/deferred';
 
+// STYLE contextMenu
+
 const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item';
 const DX_MENU_ITEM_EXPANDED_CLASS = DX_MENU_ITEM_CLASS + '-expanded';
@@ -935,4 +937,4 @@ class ContextMenu extends MenuBase {
 
 registerComponent('dxContextMenu', ContextMenu);
 
-module.exports = ContextMenu;
+export default ContextMenu;

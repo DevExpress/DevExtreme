@@ -183,8 +183,10 @@ function indexByKey(keyInfo, array, key) {
     return -1;
 }
 
-module.exports.applyBatch = applyBatch;
-module.exports.update = update;
-module.exports.insert = insert;
-module.exports.remove = remove;
-module.exports.indexByKey = indexByKey;
+export {
+    applyBatch,
+    update,
+    insert,
+    remove,
+    indexByKey
+};

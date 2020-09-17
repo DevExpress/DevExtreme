@@ -6,7 +6,9 @@
 @use "../button/sizes" as *;
 @use "../textEditor/colors" as *;
 @use "../toolbar/sizes" as *;
-@use "../common" as *;
+@use "../common/mixins" as *;
+@use "../../base/htmlEditor";
+
 // adduse
 
 
@@ -79,7 +81,7 @@
   &.dx-color-format,
   &.dx-background-format {
     .dx-button-content {
-      padding-bottom: $MATERIAL_BUTTON_VERTICAL_PADDING - 3px;
+      padding-bottom: $material-button-vertical-padding - 3px;
     }
   }
 }
@@ -89,7 +91,7 @@
   border-left-color: $htmleditor-toolbar-border-color;
 
   .dx-toolbar-multiline & {
-    height: $MATERIAL_TOOLBAR_HEIGHT / 2;
+    height: $material-toolbar-height / 2;
   }
 }
 

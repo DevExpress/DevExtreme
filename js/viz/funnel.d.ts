@@ -5,6 +5,11 @@ import {
 } from '../core/element';
 
 import {
+    PaletteType,
+    PaletteExtensionModeType
+} from './palette';
+
+import {
     template
 } from '../core/templates/template';
 
@@ -22,13 +27,17 @@ import {
 
 import {
     BaseLegend,
-    BaseLegendItem
+    BaseLegendItem,
+    DashStyleType,
+    HatchingDirectionType
 } from './common';
 
 import BaseWidget, {
     BaseWidgetOptions,
     BaseWidgetTooltip,
-    Font
+    Font,
+    WordWrapType,
+    VizTextOverflowType
 } from './core/base_widget';
 
 export interface FunnelLegendItem extends BaseLegendItem {
@@ -102,14 +111,14 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    item?: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } } };
+    item?: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } } };
     /**
      * @docid dxFunnelOptions.label
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    label?: { backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font, format?: format, horizontalAlignment?: 'left' | 'right', horizontalOffset?: number, position?: 'columns' | 'inside' | 'outside', showForZeroValues?: boolean, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' };
+    label?: { backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, connector?: { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font, format?: format, horizontalAlignment?: 'left' | 'right', horizontalOffset?: number, position?: 'columns' | 'inside' | 'outside', showForZeroValues?: boolean, textOverflow?: VizTextOverflowType, visible?: boolean, wordWrap?: WordWrapType };
     /**
      * @docid dxFunnelOptions.legend
      * @inherits BaseLegend
@@ -151,29 +160,27 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @extends Action
      * @type function|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 item:dxFunnelItem
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onItemClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
+    onItemClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
     /**
      * @docid dxFunnelOptions.onLegendClick
      * @extends Action
      * @type function|string
      * @type_function_param1 e:object
-     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-     * @type_function_param1_field5 event:event
-     * @type_function_param1_field6 item:dxFunnelItem
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 item:dxFunnelItem
      * @notUsedInTheme
      * @action
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    onLegendClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
+    onLegendClick?: ((e: { component?: dxFunnel, element?: dxElement, model?: any, event?: event, item?: dxFunnelItem }) => any) | string;
     /**
      * @docid dxFunnelOptions.onSelectionChanged
      * @extends Action
@@ -192,7 +199,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+    palette?: Array<string> | PaletteType;
     /**
      * @docid dxFunnelOptions.paletteExtensionMode
      * @type Enums.VizPaletteExtensionMode
@@ -200,7 +207,7 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
+    paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid dxFunnelOptions.resolveLabelOverlapping
      * @type Enums.FunnelResolveLabelOverlapping
@@ -305,7 +312,7 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
      * @type_function_param1_field4 percent:Number
      * @type_function_param1_field5 percentText:string
      * @type_function_param2 element:dxElement
-     * @type_function_return string|Node|jQuery
+     * @type_function_return string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

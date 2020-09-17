@@ -1,11 +1,11 @@
-const dataUtils = require('./element_data');
-const domAdapter = require('./dom_adapter');
-const windowUtils = require('./utils/window');
-const window = windowUtils.getWindow();
-const typeUtils = require('./utils/type');
-const styleUtils = require('./utils/style');
-const sizeUtils = require('./utils/size');
-const htmlParser = require('./utils/html_parser');
+import { cleanDataRecursive, removeData, data as elementData } from './element_data';
+import domAdapter from './dom_adapter';
+import { getWindow } from './utils/window';
+import { isObject, isWindow, isPlainObject, isString, isNumeric, isDefined, isFunction, type } from './utils/type';
+import { styleProp, normalizeStyleProp } from './utils/style';
+import sizeUtils from './utils/size';
+import { parseHTML, isTablePart } from './utils/html_parser';
+const window = getWindow();
 
 let renderer;
 
@@ -31,7 +31,7 @@ const initRender = function(selector, context) {
 
         [].push.apply(this, domAdapter.querySelectorAll(context, selector));
         return this;
-    } else if(domAdapter.isNode(selector) || typeUtils.isWindow(selector)) {
+    } else if(domAdapter.isNode(selector) || isWindow(selector)) {
         this[0] = selector;
         this.length = 1;
         return this;
@@ -84,7 +84,7 @@ initRender.prototype.toggle = function(value) {
 initRender.prototype.attr = function(attrName, value) {
     if(this.length > 1 && arguments.length > 1) return repeatMethod.call(this, 'attr', arguments);
     if(!this[0]) {
-        if(typeUtils.isObject(attrName) || value !== undefined) {
+        if(isObject(attrName) || value !== undefined) {
             return this;
         } else {
             return undefined;
@@ -96,7 +96,7 @@ initRender.prototype.attr = function(attrName, value) {
     if(typeof attrName === 'string' && arguments.length === 1) {
         const result = this[0].getAttribute(attrName);
         return result == null ? undefined : result;
-    } else if(typeUtils.isPlainObject(attrName)) {
+    } else if(isPlainObject(attrName)) {
         for(const key in attrName) {
             this.attr(key, attrName[key]);
         }
@@ -115,7 +115,7 @@ initRender.prototype.prop = function(propName, value) {
     if(!this[0]) return this;
     if(typeof propName === 'string' && arguments.length === 1) {
         return this[0][propName];
-    } else if(typeUtils.isPlainObject(propName)) {
+    } else if(isPlainObject(propName)) {
         for(const key in propName) {
             this.prop(key, propName[key]);
         }
@@ -142,7 +142,7 @@ initRender.prototype.hasClass = function(className) {
         if(this[0].classList) {
             if(this[0].classList.contains(classNames[i])) return true;
         } else { // IE9
-            const className = typeUtils.isString(this[0].className) ? this[0].className : domAdapter.getAttribute(this[0], 'class');
+            const className = isString(this[0].className) ? this[0].className : domAdapter.getAttribute(this[0], 'class');
             if((className || '').split(' ').indexOf(classNames[i]) >= 0) return true;
         }
     }
@@ -181,7 +181,7 @@ initRender.prototype.toggleClass = function(className, value) {
             return;
         }
 
-        if(typeUtils.isWindow(element)) {
+        if(isWindow(element)) {
             return isOuter ? element['inner' + partialName] : domAdapter.getDocumentElement()['client' + partialName];
         }
 
@@ -212,7 +212,7 @@ initRender.prototype.toggleClass = function(className, value) {
             return this;
         }
 
-        if(typeUtils.isNumeric(value)) {
+        if(isNumeric(value)) {
             const elementStyles = window.getComputedStyle(element);
             const sizeAdjustment = sizeUtils.getElementBoxParams(propName, elementStyles);
             const isBorderBox = elementStyles.boxSizing === 'border-box';
@@ -226,7 +226,7 @@ initRender.prototype.toggleClass = function(className, value) {
                 value += sizeAdjustment.border + sizeAdjustment.padding;
             }
         }
-        value += typeUtils.isNumeric(value) ? 'px' : '';
+        value += isNumeric(value) ? 'px' : '';
 
         domAdapter.setStyle(element, propName, value);
 
@@ -241,23 +241,23 @@ initRender.prototype.html = function(value) {
 
     this.empty();
 
-    if(typeof value === 'string' && !htmlParser.isTablePart(value) || typeof value === 'number') {
+    if(typeof value === 'string' && !isTablePart(value) || typeof value === 'number') {
         this[0].innerHTML = value;
 
         return this;
     }
 
-    return this.append(htmlParser.parseHTML(value));
+    return this.append(parseHTML(value));
 };
 
 const appendElements = function(element, nextSibling) {
     if(!this[0] || !element) return;
 
     if(typeof element === 'string') {
-        element = htmlParser.parseHTML(element);
+        element = parseHTML(element);
     } else if(element.nodeType) {
         element = [element];
-    } else if(typeUtils.isNumeric(element)) {
+    } else if(isNumeric(element)) {
         element = [domAdapter.createTextNode(element)];
     }
 
@@ -280,25 +280,25 @@ const setCss = function(name, value) {
         return;
     }
 
-    name = styleUtils.styleProp(name);
+    name = styleProp(name);
     for(let i = 0; i < this.length; i++) {
-        this[i].style[name] = styleUtils.normalizeStyleProp(name, value);
+        this[i].style[name] = normalizeStyleProp(name, value);
     }
 };
 
 initRender.prototype.css = function(name, value) {
-    if(typeUtils.isString(name)) {
+    if(isString(name)) {
         if(arguments.length === 2) {
             setCss.call(this, name, value);
         } else {
             if(!this[0]) return;
 
-            name = styleUtils.styleProp(name);
+            name = styleProp(name);
 
             const result = window.getComputedStyle(this[0])[name] || this[0].style[name];
-            return typeUtils.isNumeric(result) ? result.toString() : result;
+            return isNumeric(result) ? result.toString() : result;
         }
-    } else if(typeUtils.isPlainObject(name)) {
+    } else if(isPlainObject(name)) {
         for(const key in name) {
             setCss.call(this, key, name[key]);
         }
@@ -420,7 +420,7 @@ initRender.prototype.remove = function() {
         return repeatMethod.call(this, 'remove', arguments);
     }
 
-    dataUtils.cleanDataRecursive(this[0], true);
+    cleanDataRecursive(this[0], true);
     domAdapter.removeElement(this[0]);
 
     return this;
@@ -441,7 +441,7 @@ initRender.prototype.empty = function() {
         return repeatMethod.call(this, 'empty', arguments);
     }
 
-    dataUtils.cleanDataRecursive(this[0]);
+    cleanDataRecursive(this[0]);
     domAdapter.setText(this[0], '');
 
     return this;
@@ -465,17 +465,17 @@ initRender.prototype.text = function(value) {
         return result;
     }
 
-    const text = typeUtils.isFunction(value) ? value() : value;
+    const text = isFunction(value) ? value() : value;
 
-    dataUtils.cleanDataRecursive(this[0], false);
-    domAdapter.setText(this[0], typeUtils.isDefined(text) ? text : '');
+    cleanDataRecursive(this[0], false);
+    domAdapter.setText(this[0], isDefined(text) ? text : '');
 
     return this;
 };
 
 initRender.prototype.val = function(value) {
     if(arguments.length === 1) {
-        return this.prop('value', typeUtils.isDefined(value) ? value : '');
+        return this.prop('value', isDefined(value) ? value : '');
     }
 
     return this.prop('value');
@@ -550,11 +550,11 @@ initRender.prototype.filter = function(selector) {
     const result = [];
     for(let i = 0; i < this.length; i++) {
         const item = this[i];
-        if(domAdapter.isElementNode(item) && typeUtils.type(selector) === 'string') {
+        if(domAdapter.isElementNode(item) && type(selector) === 'string') {
             domAdapter.elementMatches(item, selector) && result.push(item);
-        } else if(domAdapter.isNode(selector) || typeUtils.isWindow(selector)) {
+        } else if(domAdapter.isNode(selector) || isWindow(selector)) {
             selector === item && result.push(item);
-        } else if(typeUtils.isFunction(selector)) {
+        } else if(isFunction(selector)) {
             selector.call(item, i, item) && result.push(item);
         } else {
             for(let j = 0; j < selector.length; j++) {
@@ -733,7 +733,7 @@ initRender.prototype.toArray = function() {
 };
 
 const getWindowByElement = function(element) {
-    return typeUtils.isWindow(element) ? element : element.defaultView;
+    return isWindow(element) ? element : element.defaultView;
 };
 
 initRender.prototype.offset = function() {
@@ -848,15 +848,15 @@ initRender.prototype.data = function(key, value) {
     if(!this[0]) return;
 
     if(arguments.length < 2) {
-        return dataUtils.data.call(renderer, this[0], key);
+        return elementData.call(renderer, this[0], key);
     }
 
-    dataUtils.data.call(renderer, this[0], key, value);
+    elementData.call(renderer, this[0], key, value);
     return this;
 };
 
 initRender.prototype.removeData = function(key) {
-    this[0] && dataUtils.removeData(this[0], key);
+    this[0] && removeData(this[0], key);
 
     return this;
 };
@@ -878,7 +878,7 @@ Object.defineProperty(rendererWrapper, 'fn', {
     }
 });
 
-module.exports = {
+export default {
     set: function(strategy) {
         renderer = strategy;
     },

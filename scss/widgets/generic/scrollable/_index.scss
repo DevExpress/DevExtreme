@@ -3,9 +3,11 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/scrollable";
+
 // adduse
-$SCROLLBAR_SIZE_THIN: 8px;
-$SCROLLBAR_SIZE: 15px;
+$scrollbar-size-thin: 8px;
+$scrollbar-size: 15px;
 
 .dx-scrollable-content {
   -webkit-transform: none; // stylelint-disable-line property-no-vendor-prefix
@@ -58,11 +60,11 @@ $SCROLLBAR_SIZE: 15px;
 .dx-scrollbar-vertical {
   .dx-scrollable-scroll {
     float: right;
-    width: $SCROLLBAR_SIZE_THIN;
+    width: $scrollbar-size-thin;
   }
 
   &.dx-scrollbar-hoverable {
-    width: $SCROLLBAR_SIZE_THIN;
+    width: $scrollbar-size-thin;
     transition: width 0.2s linear 0.15s, background-color 0.2s linear 0.15s;
 
     .dx-scrollable-scroll {
@@ -83,10 +85,10 @@ $SCROLLBAR_SIZE: 15px;
 
     &.dx-state-hover,
     &.dx-scrollable-scrollbar-active {
-      width: $SCROLLBAR_SIZE;
+      width: $scrollbar-size;
 
       .dx-scrollable-scroll {
-        width: $SCROLLBAR_SIZE;
+        width: $scrollbar-size;
       }
     }
   }
@@ -94,11 +96,11 @@ $SCROLLBAR_SIZE: 15px;
 
 .dx-scrollbar-horizontal {
   .dx-scrollable-scroll {
-    height: $SCROLLBAR_SIZE_THIN;
+    height: $scrollbar-size-thin;
   }
 
   &.dx-scrollbar-hoverable {
-    height: $SCROLLBAR_SIZE_THIN;
+    height: $scrollbar-size-thin;
     transition: height 0.2s linear 0.15s, background-color 0.2s linear 0.15s;
 
     .dx-scrollable-scroll {
@@ -119,10 +121,10 @@ $SCROLLBAR_SIZE: 15px;
 
     &.dx-state-hover,
     &.dx-scrollable-scrollbar-active {
-      height: $SCROLLBAR_SIZE;
+      height: $scrollbar-size;
 
       .dx-scrollable-scroll {
-        height: $SCROLLBAR_SIZE;
+        height: $scrollbar-size;
       }
     }
   }
@@ -134,7 +136,7 @@ $SCROLLBAR_SIZE: 15px;
     > .dx-scrollable-wrapper {
       > .dx-scrollable-container {
         > .dx-scrollable-content {
-          padding-right: $SCROLLBAR_SIZE_THIN;
+          padding-right: $scrollbar-size-thin;
         }
       }
     }
@@ -145,7 +147,7 @@ $SCROLLBAR_SIZE: 15px;
         > .dx-scrollable-container {
           > .dx-scrollable-content {
             padding-right: 0;
-            padding-left: $SCROLLBAR_SIZE_THIN;
+            padding-left: $scrollbar-size-thin;
           }
         }
       }
@@ -157,7 +159,7 @@ $SCROLLBAR_SIZE: 15px;
     > .dx-scrollable-wrapper {
       > .dx-scrollable-container {
         > .dx-scrollable-content {
-          padding-bottom: $SCROLLBAR_SIZE_THIN;
+          padding-bottom: $scrollbar-size-thin;
         }
       }
     }

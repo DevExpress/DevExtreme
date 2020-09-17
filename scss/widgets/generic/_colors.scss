@@ -1,46 +1,150 @@
+
+@forward "./variables";
+
+@use "./variables" as *;
 @use "sass:color";
 @use "./color" as extcolor;
 $color: null !default;
 
-$GENERIC_COLOR_POSTFIX: null !default;
-$base-font-family: null !default;
+$generic-color-postfix: null !default;
+
+/**
+* $name 10. Font family
+* $type text
+*/
+$base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
+
+/**
+* $name 10. Accent color
+* $type color
+*/
 $base-accent: null !default;
+
+/**
+* $name 20. Label color
+* $type color
+*/
 $base-label-color: null !default;
+
+/**
+* $name 30. Link color
+* $type color
+*/
 $base-link-color: null !default;
+
+/**
+* $name 40. Icon color
+* $type color
+*/
 $base-icon-color: null !default;
+
+/**
+* $name 20. Text color
+* $type color
+*/
 $base-text-color: null !default;
+
+/**
+* $name 30. Background color
+* $type color
+*/
 $base-bg: null !default;
+
+/**
+* $name 40. Border color
+* $type color
+*/
 $base-border-color: null !default;
+
+/**
+* $name 120. Border radius
+* $type text
+*/
 $base-border-radius: null !default;
 $base-border-radius-exsmall: null !default;
 $base-inverted-bg: null !default;
 $base-element-bg: null !default;
 $base-shadow-color: null !default;
+
+/**
+* $name 50. Success color
+* $type color
+*/
 $base-success: null !default;
+
+/**
+* $name 60. Warning color
+* $type color
+*/
 $base-warning: null !default;
+
+/**
+* $name 70. Danger color
+* $type color
+*/
 $base-danger: null !default;
 $typography-bg: null !default;
 $typography-color: null !default;
 $typography-link-color: null !default;
+
+/**
+* $name 80. Hovered state text color
+* $type color
+*/
 $base-hover-color: null !default;
+
+/**
+* $name 90. Hovered state background color
+* $type color
+*/
 $base-hover-bg: null !default;
 $base-select-color: null !default;
 $base-select-bg: null !default;
 $base-inverted-text-color: null !default;
+
+/**
+* $name 100. Focused state text color
+* $type color
+*/
 $base-focus-color: null !default;
+
+/**
+* $name 110. Focused state background color
+* $type color
+*/
 $base-focus-bg: null !default;
 $base-inverted-icon-color: null !default;
-$base-disabled-opacity: null !default;
+$base-disabled-opacity: 0.5 !default;
 $base-dropdown-shadow-color: null !default;
+
+/**
+* $name 1. Invalid widget state - active color
+* $type color
+*/
 $base-invalid-color: null !default;
+
+/**
+* $name 2. Invalid widget state - border color
+* $type color
+*/
 $base-invalid-faded-border-color: null !default;
 $base-header-color: null !default;
+
+/**
+* $name 70. Border radius
+* $type text
+*/
 $base-border-radius-small: null !default;
+
+/**
+* $name 30. Border radius
+* $type text
+*/
 $base-border-radius-large: null !default;
-$SCROLLVIEW_PULLDOWN_PATH: null !default;
-$LOADINDICATOR_IMAGE_PATH: null !default;
-$LOADINDICATOR_IMAGE_SMALL_PATH: null !default;
-$LOADINDICATOR_IMAGE_LARGE_PATH: null !default;
+$scrollview-pulldown-path: null !default;
+$loadindicator-image-path: null !default;
+$loadindicator-image-small-path: null !default;
+$loadindicator-image-large-path: null !default;
 $base-default: null !default;
 $base-info: null !default;
 $screen-text-color: null !default;
@@ -53,617 +157,193 @@ $base-grid-selection-background: null !default;
 $base-grid-selectedrow-border-color: null !default;
 
 @if $color == "carmine" {
-  $GENERIC_COLOR_POSTFIX: ".carmine" !default;
-
-  /**
-    * $name 10. Font family
-    * $type text
-    */
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
-
-  /**
-    * $name 10. Accent color
-    * $type color
-    */
+  $generic-color-postfix: ".carmine" !default;
   $base-accent: #f05b41 !default;
-
-  /**
-    * $name 20. Label color
-    * $type color
-    */
   $base-label-color: #8899a8 !default;
-
-  /**
-    * $name 30. Link color
-    * $type color
-    */
   $base-link-color: $base-accent !default;
-
-  /**
-    * $name 40. Icon color
-    * $type color
-    */
   $base-icon-color: $base-label-color !default;
-
-  /**
-    * $name 20. Text color
-    * $type color
-    */
   $base-text-color: #333 !default;
-
-  /**
-    * $name 30. Background color
-    * $type color
-    */
   $base-bg: #fff !default;
-
-  /**
-    * $name 40. Border color
-    * $type color
-    */
   $base-border-color: #dee1e3 !default;
-
-  /**
-    * $name 120. Border radius
-    * $type text
-    */
   $base-border-radius: 2px !default;
-
   $base-border-radius-exsmall: $base-border-radius - 2px !default;
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
-
-  /**
-    * $name 50. Success color
-    * $type color
-    */
-
-  $base-success:         #5cb85c !default;
-
-  /**
-    * $name 60. Warning color
-    * $type color
-    */
-
-  $base-warning:         #f0ad4e !default;
-
-  /**
-    * $name 70. Danger color
-    * $type color
-    */
-  $base-danger:          #f74d61 !default;
-
+  $base-success: #5cb85c !default;
+  $base-warning: #f0ad4e !default;
+  $base-danger: #f74d61 !default;
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
-
-  /**
-    * $name 80. Hovered state text color
-    * $type color
-    */
   $base-hover-color: $base-text-color !default;
-
-  /**
-    * $name 90. Hovered state background color
-    * $type color
-    */
   $base-hover-bg: color.change($base-accent, $alpha: 0.12) !default;
-
   $base-select-color: $base-text-color !default;
   $base-select-bg: lighten($base-accent, 21%) !default;
   $base-inverted-text-color: #fff !default;
-
-  /**
-    * $name 100. Focused state text color
-    * $type color
-    */
   $base-focus-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 110. Focused state background color
-    * $type color
-    */
   $base-focus-bg: $base-accent !default;
-
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
   $base-header-color: #627789 !default;
-
-  /**
-    * $name 70. Border radius
-    * $type text
-    */
   $base-border-radius-small: $base-border-radius - 1px !default;
-
-  /**
-    * $name 30. Border radius
-    * $type text
-    */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/carmine/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/carmine/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/carmine/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/carmine/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/carmine/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/carmine/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/carmine/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/carmine/loader64.gif') !default;
 }
 
 @if $color == "contrast" {
-  $GENERIC_COLOR_POSTFIX: ".contrast" !default;
-
-  /**
-    * $name 1. Font family
-    * $type text
-    */
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
-
-  /**
-    * $name 80. Background color
-    * $type color
-    */
+  $generic-color-postfix: ".contrast" !default;
   $base-bg: #000 !default;
   $base-inverted-bg: extcolor.difference(#fff, $base-bg) !default;
-
   $base-border-color: #fff !default;
   $base-border-radius: 4px !default;
   $base-accent: #cf00d7 !default;
-
   $base-hover-color: $base-accent !default;
   $base-focus-color: $base-accent !default;
   $base-shadow-color: transparent !default;
-
   $base-default: #52bbe7 !default;
   $base-success: #71c35e !default;
   $base-danger: #ee5959 !default;
   $base-warning: #ffb277 !default;
   $base-info: #80b9e4 !default;
-
-  /**
-    * $name 10. Text color
-    * $type color
-    */
   $base-text-color: #fff !default;
   $base-icon-color: #fff !default;
-
   $base-inverted-text-color: extcolor.difference(#fff, $base-text-color) !default;
   $base-inverted-icon-color: extcolor.difference(#fff, $base-text-color) !default;
-
-  /**
-    * $name 30. Link color
-    * $type color
-    */
   $base-link-color: $base-text-color !default;
-
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
-  $base-disabled-opacity: 0.5 !default;
-
-  /**
-    * $name 1. Invalid widget state - active color
-    * $type color
-    */
   $base-invalid-color: #ea4444 !default;
-
-  /**
-    * $name 2. Invalid widget state - border color
-    * $type color
-    */
   $base-invalid-faded-border-color: $base-invalid-color !default;
-
-  /**
-    * $name 20. Label color
-    * $type color
-    */
   $base-label-color: $base-text-color !default;
   $base-dropdown-shadow-color: $base-shadow-color !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/contrast/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/contrast/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/contrast/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/contrast/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/contrast/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/contrast/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/contrast/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/contrast/loader64.gif') !default;
 }
 
 @if $color == "dark" {
-  $GENERIC_COLOR_POSTFIX: ".dark" !default;
-
-  /**
-    * $name 10. Font family
-    * $type text
-    */
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
-
-  /**
-    * $name 10. Accent color
-    * $type color
-    */
+  $generic-color-postfix: ".dark" !default;
   $base-accent: #1ca8dd !default;
-
-  /**
-    * $name 20. Text color
-    * $type color
-    */
   $base-text-color: #dedede !default;
-
-  /**
-    * $name 30. Background color
-    * $type color
-    */
   $base-bg: #2a2a2a !default;
-
-  /**
-    * $name 40. Border color
-    * $type color
-    */
   $base-border-color: #4d4d4d !default;
-
-  /**
-    * $name 20. Label color
-    * $type color
-    */
   $base-label-color: $base-text-color !default;
-
-  /**
-    * $name 30. Link color
-    * $type color
-    */
   $base-link-color: $base-accent !default;
-
-  /**
-    * $name 40. Icon color
-    * $type color
-    */
   $base-icon-color: $base-text-color !default;
-
-  /**
-    * $name 120. Border radius
-    * $type text
-    */
   $base-border-radius: 4px !default;
   $base-border-radius-exsmall: $base-border-radius - 2px !default;
-
   $base-inverted-bg: lighten($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
-
   $base-shadow-color: #000 !default;
-
-  /**
-    * $name 50. Success color
-    * $type color
-    */
   $base-success: #5cb85c !default;
-
-  /**
-    * $name 60. Warning color
-    * $type color
-    */
   $base-warning: #f0ad4e !default;
-
-  /**
-    * $name 70. Danger color
-    * $type color
-    */
   $base-danger: #d9534f !default;
-
-  /**
-    * $name 80. Hovered state text color
-    * $type color
-    */
   $base-hover-color: $base-text-color !default;
-
-  /**
-    * $name 90. Hovered state background color
-    * $type color
-    */
   $base-hover-bg: color.change(#fff, $alpha: 0.05) !default;
-
   $base-select-color: $base-text-color !default;
   $base-select-bg: color.change(#fff, $alpha: 0.12) !default;
   $base-inverted-text-color: #2a2a2a !default;
-
-  /**
-    * $name 100. Focused state text color
-    * $type color
-    */
   $base-focus-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 110. Focused state background color
-    * $type color
-    */
   $base-focus-bg: $base-accent !default;
-
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
-
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  /**
-    * $name 80. Border radius
-    * $type text
-    */
   $base-border-radius-small: $base-border-radius - 1px !default;
-
-  /**
-    * $name 30. Border radius
-    * $type text
-    */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/dark/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/dark/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/dark/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/dark/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/dark/loader64.gif') !default;
 }
 
 @if $color == "darkmoon" {
-  $GENERIC_COLOR_POSTFIX: ".darkmoon" !default;
-
-  /**
-    * $name 10. Font family
-    * $type text
-    */
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
-
-  /**
-    * $name 20. Label color
-    * $type color
-    */
+  $generic-color-postfix: ".darkmoon" !default;
   $base-label-color: #c1c7c9 !default;
-
-  /**
-    * $name 40. Icon color
-    * $type color
-    */
   $base-icon-color: #aab2b5 !default;
-
-  /**
-    * $name 10. Accent color
-    * $type color
-    */
   $base-accent: #3debd3 !default;
-
-  /**
-    * $name 20. Text color
-    * $type color
-    */
   $base-text-color: #fff !default;
-
-  /**
-    * $name 30. Link color
-    * $type color
-    */
   $base-link-color: $base-accent !default;
-
-  /**
-    * $name 30. Background color
-    * $type color
-    */
   $base-bg: #465672 !default;
-
-  /**
-    * $name 40. Border color
-    * $type color
-    */
   $base-border-color: #596980 !default;
-
-  /**
-    * $name 120. Border radius
-    * $type text
-    */
   $base-border-radius: 2px !default;
   $base-border-radius-exsmall: $base-border-radius - 2px !default;
-
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
-
-  /**
-    * $name 50. Success color
-    * $type color
-    */
-
-  $base-success:         #59d8a4 !default;
-
-  /**
-    * $name 60. Warning color
-    * $type color
-    */
-
-  $base-warning:         #f0ad4e !default;
-
-  /**
-    * $name 70. Danger color
-    * $type color
-    */
-  $base-danger:          #f9517e !default;
-
-  /**
-    * $name 80. Hovered state text color
-    * $type color
-    */
+  $base-success: #59d8a4 !default;
+  $base-warning: #f0ad4e !default;
+  $base-danger: #f9517e !default;
   $base-hover-color: $base-text-color !default;
-
-  /**
-    * $name 90. Hovered state background color
-    * $type color
-    */
   $base-hover-bg: color.change(#000, $alpha: 0.12) !default;
   $base-shadow-color: $base-inverted-bg !default;
-
   $base-select-color: $base-text-color !default;
   $base-select-bg: color.change(#748fbc, $alpha: 0.42) !default;
   $base-inverted-text-color: #2a2a2a !default;
-
-  /**
-    * $name 100. Focused state text color
-    * $type color
-    */
   $base-focus-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 110. Focused state background color
-    * $type color
-    */
   $base-focus-bg: $base-accent !default;
-
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
-
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change(darken($base-shadow-color, 100%), $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  /**
-    * $name 80. Border radius
-    * $type text
-    */
   $base-border-radius-small: $base-border-radius - 1px !default;
-
-  /**
-    * $name 30. Border radius
-    * $type text
-    */
   $base-border-radius-large: $base-border-radius + 2px !default;
   $screen-text-color: extcolor.screen($base-bg, #686868) !default;
   $base-grid-selected-border-color: #45c7de !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/darkmoon/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/darkmoon/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/darkmoon/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/darkmoon/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/darkmoon/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/darkmoon/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/darkmoon/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/darkmoon/loader64.gif') !default;
 }
 
 @if $color == "darkviolet" {
-  $GENERIC_COLOR_POSTFIX: ".darkviolet" !default;
-
-  /**
-    * $name 1. Font family
-    * $type text
-    */
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
-
-  /**
-    * $name 30. Link color
-    * $type color
-    */
+  $generic-color-postfix: ".darkviolet" !default;
   $base-link-color: #83a2c7 !default;
-
-  /**
-    * $name 40. Icon color
-    * $type color
-    */
   $base-icon-color: #fff !default;
-
-  /**
-    * $name 10. Accent color
-    * $type color
-    */
   $base-accent: #9c63ff !default;
-
-  /**
-    * $name 20. Text color
-    * $type color
-    */
   $base-text-color: #f5f6f7 !default;
-
-  /**
-    * $name 20. Label color
-    * $type color
-    */
   $base-label-color: $base-text-color !default;
-
-  /**
-    * $name 30. Background color
-    * $type color
-    */
   $base-bg: #17171f !default;
-
-  /**
-    * $name 40. Border color
-    * $type color
-    */
   $base-border-color: #343840 !default;
-
-  /**
-    * $name 120. Border radius
-    * $type text
-    */
   $base-border-radius: 1px !default;
-
   $base-border-radius-exsmall: $base-border-radius - 2px !default;
   $base-inverted-bg: lighten($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: #000 !default;
-
-  /**
-    * $name 50. Success color
-    * $type color
-    */
   $base-success: #5cb85c !default;
-
-  /**
-    * $name 60. Warning color
-    * $type color
-    */
   $base-warning: #f0ad4e !default;
-
-  /**
-    * $name 70. Danger color
-    * $type color
-    */
   $base-danger: #d9534f !default;
-
-  /**
-    * $name 80. Hovered state text color
-    * $type color
-    */
   $base-hover-color: $base-text-color !default;
-
-  /**
-    * $name 90. Hovered state background color
-    * $type color
-    */
   $base-hover-bg: color.change(#9e9ec5, $alpha: 0.3) !default;
-
   $base-select-color: $base-text-color !default;
   $base-select-bg: #573199 !default;
   $base-inverted-text-color: #2a2a2a !default;
-
-  /**
-    * $name 100. Focused state text color
-    * $type color
-    */
   $base-focus-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 110. Focused state background color
-    * $type color
-    */
   $base-focus-bg: $base-accent !default;
-
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
-
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
-
   $base-header-color: #8894a0 !default;
   $base-row-alternation-background: #1d2026 !default;
   $base-selected-border: #6c48a8 !default;
@@ -671,445 +351,138 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  /**
-    * $name 80. Border radius
-    * $type text
-    */
   $base-border-radius-small: $base-border-radius - 1px !default;
-
-  /**
-    * $name 30. Border radius
-    * $type text
-    */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/darkviolet/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/darkviolet/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/darkviolet/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/darkviolet/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/darkviolet/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/darkviolet/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/darkviolet/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/darkviolet/loader64.gif') !default;
 }
 
 @if $color == "greenmist" {
-  $GENERIC_COLOR_POSTFIX: ".greenmist" !default;
-
-  /**
-    * $name 10. Font family
-    * $type text
-    */
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
-
-  /**
-    * $name 20. Label color
-    * $type color
-    */
+  $generic-color-postfix: ".greenmist" !default;
   $base-label-color: #728e94 !default;
-
-  /**
-    * $name 30. Link color
-    * $type color
-    */
   $base-link-color: #3eb8b0 !default;
-
-  /**
-    * $name 40. Icon color
-    * $type color
-    */
   $base-icon-color: $base-label-color !default;
-
-  /**
-    * $name 10. Accent color
-    * $type color
-    */
   $base-accent: #3cbab2 !default;
-
-  /**
-    * $name 20. Text color
-    * $type color
-    */
   $base-text-color: #28484f !default;
-
-  /**
-    * $name 30. Background color
-    * $type color
-    */
   $base-bg: #f5f5f5 !default;
-
-  /**
-    * $name 40. Border color
-    * $type color
-    */
   $base-border-color: darken($base-bg, 9%) !default;
-
-  /**
-    * $name 120. Border radius
-    * $type text
-    */
   $base-border-radius: 2px !default;
-
   $base-border-radius-exsmall: $base-border-radius - 2px !default;
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
-
-  /**
-    * $name 50. Success color
-    * $type color
-    */
-
-  $base-success:         #72d63c !default;
-
-  /**
-    * $name 60. Warning color
-    * $type color
-    */
-
-  $base-warning:         #ffc852 !default;
-
-  /**
-    * $name 70. Danger color
-    * $type color
-    */
-  $base-danger:          #f74a5e !default;
-
-  /**
-    * $name 80. Hovered state text color
-    * $type color
-    */
+  $base-success: #72d63c !default;
+  $base-warning: #ffc852 !default;
+  $base-danger: #f74a5e !default;
   $base-hover-color: $base-text-color !default;
-
-  /**
-    * $name 90. Hovered state background color
-    * $type color
-    */
   $base-hover-bg: color.change(#000, $alpha: 0.04) !default;
-
   $base-select-color: $base-text-color !default;
   $base-select-bg: color.change(#000, $alpha: 0.1) !default;
   $base-inverted-text-color: #fff !default;
-
-  /**
-    * $name 100. Focused state text color
-    * $type color
-    */
   $base-focus-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 110. Focused state background color
-    * $type color
-    */
   $base-focus-bg: $base-accent !default;
-
-
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
-
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  /**
-    * $name 80. Border radius
-    * $type text
-    */
   $base-border-radius-small: $base-border-radius - 1px !default;
-
-  /**
-    * $name 30. Border radius
-    * $type text
-    */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/greenmist/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/greenmist/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/greenmist/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/greenmist/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/greenmist/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/greenmist/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/greenmist/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/greenmist/loader64.gif') !default;
 }
 
 @if $color == "light" {
-  $GENERIC_COLOR_POSTFIX: ".light" !default;
-
-  /**
-    * $name 10. Font family
-    * $type text
-    */
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
-
-  /**
-    * $name 10. Accent color
-    * $type color
-    */
+  $generic-color-postfix: ".light" !default;
   $base-accent: #337ab7 !default;
-
-  /**
-    * $name 20. Text color
-    * $type color
-    */
   $base-text-color: #333 !default;
-
-  /**
-    * $name 20. Label color
-    * $type color
-    */
   $base-label-color: $base-text-color !default;
-
-  /**
-    * $name 30. Link color
-    * $type color
-    */
   $base-link-color: $base-accent !default;
-
-  /**
-    * $name 40. Icon color
-    * $type color
-    */
   $base-icon-color: $base-text-color !default;
-
-  /**
-    * $name 30. Background color
-    * $type color
-    */
   $base-bg: #fff !default;
-
-  /**
-    * $name 40. Border color
-    * $type color
-    */
   $base-border-color: #ddd !default;
-
-  /**
-    * $name 120. Border radius
-    * $type text
-    */
   $base-border-radius: 4px !default;
   $base-border-radius-exsmall: $base-border-radius - 2px !default;
-
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
-
-  /**
-    * $name 50. Success color
-    * $type color
-    */
-
-  $base-success:         #5cb85c !default;
-
-  /**
-    * $name 60. Warning color
-    * $type color
-    */
-
-  $base-warning:         #f0ad4e !default;
-
-  /**
-    * $name 70. Danger color
-    * $type color
-    */
-  $base-danger:          #d9534f !default;
-
-  /**
-    * $name 80. Hovered state text color
-    * $type color
-    */
+  $base-success: #5cb85c !default;
+  $base-warning: #f0ad4e !default;
+  $base-danger: #d9534f !default;
   $base-hover-color: $base-text-color !default;
-
-  /**
-    * $name 90. Hovered state background color
-    * $type color
-    */
   $base-hover-bg: color.change(#000, $alpha: 0.04) !default;
   $base-shadow-color: $base-inverted-bg !default;
-
-
   $base-select-color: $base-text-color !default;
   $base-select-bg: color.change(#000, $alpha: 0.1) !default;
   $base-inverted-text-color: #fff !default;
-
-  /**
-    * $name 100. Focused state text color
-    * $type color
-    */
   $base-focus-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 110. Focused state background color
-    * $type color
-    */
   $base-focus-bg: $base-accent !default;
-
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
-
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  /**
-    * $name 80. Border radius
-    * $type text
-    */
   $base-border-radius-small: $base-border-radius - 1px !default;
-
-  /**
-    * $name 30. Border radius
-    * $type text
-    */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/light/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/light/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/light/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/light/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/light/loader64.gif') !default;
 }
 
 @if $color == "softblue" {
-  $GENERIC_COLOR_POSTFIX: ".softblue" !default;
-
-  /**
-    * $name 1. Font family
-    * $type text
-    */
-  $base-font-family: 'Helvetica Neue', 'Segoe UI', helvetica, verdana, sans-serif !default;
-
-  /**
-    * $name 40. Icon color
-    * $type color
-    */
+  $generic-color-postfix: ".softblue" !default;
   $base-icon-color: #99a1a8 !default;
-
-  /**
-    * $name 10. Accent color
-    * $type color
-    */
   $base-accent: #7ab8eb !default;
-
-  /**
-    * $name 20. Text color
-    * $type color
-    */
   $base-text-color: #333 !default;
-
-  /**
-    * $name 20. Label color
-    * $type color
-    */
   $base-label-color: #8c8c8c !default;
-
-  /**
-    * $name 30. Link color
-    * $type color
-    */
   $base-link-color: $base-accent !default;
-
-  /**
-    * $name 30. Background color
-    * $type color
-    */
   $base-bg: #fff !default;
-
-  /**
-    * $name 40. Border color
-    * $type color
-    */
   $base-border-color: #e8eaeb !default;
-
-  /**
-    * $name 120. Border radius
-    * $type text
-    */
   $base-border-radius: 2px !default;
   $base-border-radius-exsmall: $base-border-radius - 2px !default;
-
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
-
-  /**
-    * $name 50. Success color
-    * $type color
-    */
-
-  $base-success:         #5cb85c !default;
-
-  /**
-    * $name 60. Warning color
-    * $type color
-    */
-
-  $base-warning:         #f0ad4e !default;
-
-  /**
-    * $name 70. Danger color
-    * $type color
-    */
-  $base-danger:          #d9534f !default;
-
-  /**
-    * $name 80. Hovered state text color
-    * $type color
-    */
+  $base-success: #5cb85c !default;
+  $base-warning: #f0ad4e !default;
+  $base-danger: #d9534f !default;
   $base-hover-color: $base-text-color !default;
-
-  /**
-    * $name 90. Hovered state background color
-    * $type color
-    */
   $base-hover-bg: color.change(#000, $alpha: 0.04) !default;
   $base-shadow-color: $base-inverted-bg !default;
-
   $base-select-color: $base-text-color !default;
   $base-select-bg: color.change(#000, $alpha: 0.1) !default;
   $base-inverted-text-color: #fff !default;
-
-  /**
-    * $name 100. Focused state text color
-    * $type color
-    */
   $base-focus-color: $base-inverted-text-color !default;
-
-  /**
-    * $name 110. Focused state background color
-    * $type color
-    */
   $base-focus-bg: $base-accent !default;
-
   $base-inverted-bg: darken($base-bg, 100%) !default;
   $base-element-bg: $base-bg !default;
   $base-shadow-color: $base-inverted-bg !default;
   $typography-bg: $base-bg !default;
   $typography-color: $base-text-color !default;
   $typography-link-color: $base-link-color !default;
-
   $base-inverted-icon-color: $base-inverted-text-color !default;
-  $base-disabled-opacity: 0.5 !default;
-
   $base-webwidget-hover-background: #edf0f2 !default;
   $base-grid-selection-background: #d1e0ed !default;
   $base-grid-selectedrow-border-color: #e1ecf5 !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-  /**
-    * $name 80. Border radius
-    * $type text
-    */
   $base-border-radius-small: $base-border-radius - 1px !default;
-
-  /**
-    * $name 30. Border radius
-    * $type text
-    */
   $base-border-radius-large: $base-border-radius + 2px !default;
 
-  $SCROLLVIEW_PULLDOWN_PATH: data-uri('images/widgets/generic/color-schemes/softblue/pulldown.png') !default;
-  $LOADINDICATOR_IMAGE_PATH: data-uri('images/widgets/generic/color-schemes/softblue/loader.gif') !default;
-  $LOADINDICATOR_IMAGE_SMALL_PATH: data-uri('images/widgets/generic/color-schemes/softblue/loader20.gif') !default;
-  $LOADINDICATOR_IMAGE_LARGE_PATH: data-uri('images/widgets/generic/color-schemes/softblue/loader64.gif') !default;
+  $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/softblue/pulldown.png') !default;
+  $loadindicator-image-path: data-uri('images/widgets/generic/color-schemes/softblue/loader.gif') !default;
+  $loadindicator-image-small-path: data-uri('images/widgets/generic/color-schemes/softblue/loader20.gif') !default;
+  $loadindicator-image-large-path: data-uri('images/widgets/generic/color-schemes/softblue/loader64.gif') !default;
 }
 

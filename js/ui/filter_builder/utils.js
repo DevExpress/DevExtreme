@@ -1,3 +1,4 @@
+import $ from '../../core/renderer';
 import { Deferred, when } from '../../core/utils/deferred';
 import { errors as dataErrors } from '../../data/errors';
 import { isDefined } from '../../core/utils/type';
@@ -46,6 +47,12 @@ const AVAILABLE_FIELD_PROPERTIES = [
     'name'
 ];
 
+const FILTER_BUILDER_CLASS = 'dx-filterbuilder';
+const FILTER_BUILDER_ITEM_TEXT_CLASS = FILTER_BUILDER_CLASS + '-text';
+const FILTER_BUILDER_ITEM_TEXT_PART_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + '-part';
+const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS = FILTER_BUILDER_ITEM_TEXT_CLASS + '-separator';
+const FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS = FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS + '-empty';
+
 function getFormattedValueText(field, value) {
     const fieldFormat = field.format || DEFAULT_FORMAT[field.dataType];
     return formatHelper.format(value, fieldFormat);
@@ -58,7 +65,7 @@ function isNegationGroup(group) {
     && !isCondition(group);
 }
 
-function getGroupCriteria(group) {
+export function getGroupCriteria(group) {
     return isNegationGroup(group) ? group[1] : group;
 }
 
@@ -95,7 +102,7 @@ function convertGroupToNewStructure(group, value) {
     }
 }
 
-function setGroupValue(group, value) {
+export function setGroupValue(group, value) {
     convertGroupToNewStructure(group, value);
 
     const criteria = getGroupCriteria(group);
@@ -117,7 +124,7 @@ function setGroupValue(group, value) {
     return group;
 }
 
-function getGroupMenuItem(group, availableGroups) {
+export function getGroupMenuItem(group, availableGroups) {
     const groupValue = getGroupValue(group);
 
     return availableGroups.filter(function(item) {
@@ -145,7 +152,7 @@ function getCriteriaOperation(criteria) {
     return value;
 }
 
-function getGroupValue(group) {
+export function getGroupValue(group) {
     const criteria = getGroupCriteria(group);
     let value = getCriteriaOperation(criteria);
 
@@ -166,17 +173,17 @@ function containItems(entity) {
     return Array.isArray(entity) && entity.length;
 }
 
-function getFilterOperations(field) {
+export function getFilterOperations(field) {
     const result = containItems(field.filterOperations) ? field.filterOperations : getDefaultFilterOperations(field);
     return extend([], result);
 }
 
-function getCaptionByOperation(operation, filterOperationDescriptions) {
+export function getCaptionByOperation(operation, filterOperationDescriptions) {
     const operationName = filterOperationsDictionary.getNameByFilterOperation(operation);
     return filterOperationDescriptions && filterOperationDescriptions[operationName] ? filterOperationDescriptions[operationName] : operationName;
 }
 
-function getOperationFromAvailable(operation, availableOperations) {
+export function getOperationFromAvailable(operation, availableOperations) {
     for(let i = 0; i < availableOperations.length; i++) {
         if(availableOperations[i].value === operation) {
             return availableOperations[i];
@@ -185,14 +192,14 @@ function getOperationFromAvailable(operation, availableOperations) {
     throw new errors.Error('E1048', operation);
 }
 
-function getCustomOperation(customOperations, name) {
+export function getCustomOperation(customOperations, name) {
     const filteredOperations = customOperations.filter(function(item) {
         return item.name === name;
     });
     return filteredOperations.length ? filteredOperations[0] : null;
 }
 
-function getAvailableOperations(field, filterOperationDescriptions, customOperations) {
+export function getAvailableOperations(field, filterOperationDescriptions, customOperations) {
     const filterOperations = getFilterOperations(field);
     const isLookupField = !!field.lookup;
     customOperations.forEach(function(customOperation) {
@@ -224,11 +231,11 @@ function getAvailableOperations(field, filterOperationDescriptions, customOperat
     });
 }
 
-function getDefaultOperation(field) {
+export function getDefaultOperation(field) {
     return field.defaultFilterOperation || getFilterOperations(field)[0];
 }
 
-function createCondition(field, customOperations) {
+export function createCondition(field, customOperations) {
     const condition = [field.dataField, '', ''];
     const filterOperation = getDefaultOperation(field);
 
@@ -237,7 +244,7 @@ function createCondition(field, customOperations) {
     return condition;
 }
 
-function removeItem(group, item) {
+export function removeItem(group, item) {
     const criteria = getGroupCriteria(group);
     const index = criteria.indexOf(item);
 
@@ -249,11 +256,11 @@ function removeItem(group, item) {
     return group;
 }
 
-function createEmptyGroup(value) {
+export function createEmptyGroup(value) {
     return value.indexOf('not') !== -1 ? ['!', [value.substring(3).toLowerCase()]] : [value];
 }
 
-function isEmptyGroup(group) {
+export function isEmptyGroup(group) {
     const criteria = getGroupCriteria(group);
 
     if(isCondition(criteria)) {
@@ -267,7 +274,7 @@ function isEmptyGroup(group) {
     return !hasConditions;
 }
 
-function addItem(item, group) {
+export function addItem(item, group) {
     const criteria = getGroupCriteria(group);
     const groupValue = getGroupValue(criteria);
 
@@ -276,7 +283,7 @@ function addItem(item, group) {
     return group;
 }
 
-function getField(dataField, fields) {
+export function getField(dataField, fields) {
     for(let i = 0; i < fields.length; i++) {
         if(fields[i].name === dataField) {
             return fields[i];
@@ -294,7 +301,7 @@ function getField(dataField, fields) {
     throw new errors.Error('E1047', dataField);
 }
 
-function isGroup(criteria) {
+export function isGroup(criteria) {
     if(!Array.isArray(criteria)) {
         return false;
     }
@@ -302,7 +309,7 @@ function isGroup(criteria) {
     return criteria.length < 2 || (Array.isArray(criteria[0]) || Array.isArray(criteria[1]));
 }
 
-function isCondition(criteria) {
+export function isCondition(criteria) {
     if(!Array.isArray(criteria)) {
         return false;
     }
@@ -347,7 +354,7 @@ function convertToInnerCondition(condition, customOperations) {
     return condition;
 }
 
-function convertToInnerStructure(value, customOperations) {
+export function convertToInnerStructure(value, customOperations) {
     if(!value) {
         return [AND_GROUP_OPERATION];
     }
@@ -365,7 +372,7 @@ function convertToInnerStructure(value, customOperations) {
     return convertToInnerGroup(value, customOperations);
 }
 
-function getNormalizedFields(fields) {
+export function getNormalizedFields(fields) {
     return fields.reduce(function(result, field) {
         if(isDefined(field.dataField)) {
             const normalizedField = {};
@@ -377,6 +384,12 @@ function getNormalizedFields(fields) {
             normalizedField.defaultCalculateFilterExpression = filterUtils.defaultCalculateFilterExpression;
             if(!isDefined(normalizedField.dataType)) {
                 normalizedField.dataType = DEFAULT_DATA_TYPE;
+            }
+            if(!isDefined(normalizedField.trueText)) {
+                normalizedField.trueText = messageLocalization.format('dxDataGrid-trueText');
+            }
+            if(!isDefined(normalizedField.falseText)) {
+                normalizedField.falseText = messageLocalization.format('dxDataGrid-falseText');
             }
             result.push(normalizedField);
         }
@@ -400,7 +413,7 @@ function getConditionFilterExpression(condition, fields, customOperations, targe
     }
 }
 
-function getFilterExpression(value, fields, customOperations, target) {
+export function getFilterExpression(value, fields, customOperations, target) {
     if(!isDefined(value)) {
         return null;
     }
@@ -441,7 +454,7 @@ function getFilterExpression(value, fields, customOperations, target) {
     }
 }
 
-function getNormalizedFilter(group) {
+export function getNormalizedFilter(group) {
     const criteria = getGroupCriteria(group);
     let i;
 
@@ -485,7 +498,7 @@ function getNormalizedFilter(group) {
     return group;
 }
 
-function getCurrentLookupValueText(field, value, handler) {
+export function getCurrentLookupValueText(field, value, handler) {
     if(value === '') {
         handler('');
         return;
@@ -538,7 +551,7 @@ function checkDefaultValue(value) {
     return value === '' || value === null;
 }
 
-function getCurrentValueText(field, value, customOperation, target = 'filterBuilder') {
+export function getCurrentValueText(field, value, customOperation, target = 'filterBuilder') {
     if(checkDefaultValue(value)) {
         return '';
     }
@@ -597,7 +610,7 @@ function generateCaptionByDataField(dataField, allowHierarchicalFields) {
     return inflector.captionize(dataField);
 }
 
-function getItems(fields, allowHierarchicalFields) {
+export function getItems(fields, allowHierarchicalFields) {
     const items = [];
 
     for(let i = 0; i < fields.length; i++) {
@@ -622,7 +635,7 @@ function getParentIdFromItemDataField(dataField) {
     return dataField.substring(0, dataField.lastIndexOf('.'));
 }
 
-function getCaptionWithParents(item, plainItems) {
+export function getCaptionWithParents(item, plainItems) {
     if(hasParent(item.dataField)) {
         const parentId = getParentIdFromItemDataField(item.dataField);
         for(let i = 0; i < plainItems.length; i++) {
@@ -634,7 +647,7 @@ function getCaptionWithParents(item, plainItems) {
     return item.caption;
 }
 
-function updateConditionByOperation(condition, operation, customOperations) {
+export function updateConditionByOperation(condition, operation, customOperations) {
     let customOperation = getCustomOperation(customOperations, operation);
     if(customOperation) {
         if(customOperation.hasValue === false) {
@@ -663,7 +676,7 @@ function updateConditionByOperation(condition, operation, customOperations) {
     return condition;
 }
 
-function getOperationValue(condition) {
+export function getOperationValue(condition) {
     let caption;
     if(condition[2] === null) {
         if(condition[1] === EQUAL_OPERATION) {
@@ -677,11 +690,11 @@ function getOperationValue(condition) {
     return caption;
 }
 
-function isValidCondition(condition) {
+export function isValidCondition(condition) {
     return condition[2] !== '';
 }
 
-function getMergedOperations(customOperations, betweenCaption, context) {
+export function getMergedOperations(customOperations, betweenCaption, context) {
     const result = extend(true, [], customOperations);
     let betweenIndex = -1;
     result.some(function(customOperation, index) {
@@ -702,7 +715,7 @@ function isMatchedCondition(filter, addedFilterDataField) {
     return filter[0] === addedFilterDataField;
 }
 
-function removeFieldConditionsFromFilter(filter, dataField) {
+export function removeFieldConditionsFromFilter(filter, dataField) {
     if(!filter || filter.length === 0) {
         return null;
     }
@@ -746,7 +759,7 @@ function syncConditionIntoGroup(filter, addedFilter, canPush) {
     return result.length === 1 ? result[0] : result;
 }
 
-function syncFilters(filter, addedFilter) {
+export function syncFilters(filter, addedFilter) {
     if(filter === null || filter.length === 0) {
         return addedFilter;
     }
@@ -767,7 +780,7 @@ function syncFilters(filter, addedFilter) {
     return syncConditionIntoGroup(filter, addedFilter, true);
 }
 
-function getMatchedConditions(filter, dataField) {
+export function getMatchedConditions(filter, dataField) {
     if(filter === null || filter.length === 0) return [];
 
     if(isCondition(filter)) {
@@ -790,7 +803,7 @@ function getMatchedConditions(filter, dataField) {
     return result;
 }
 
-function filterHasField(filter, dataField) {
+export function filterHasField(filter, dataField) {
     if(filter === null || filter.length === 0) return false;
 
     if(isCondition(filter)) {
@@ -802,37 +815,25 @@ function filterHasField(filter, dataField) {
     });
 }
 
-exports.isValidCondition = isValidCondition;
-exports.isEmptyGroup = isEmptyGroup;
-exports.getOperationFromAvailable = getOperationFromAvailable;
-exports.updateConditionByOperation = updateConditionByOperation;
-exports.getCaptionWithParents = getCaptionWithParents;
-exports.getItems = getItems;
-exports.setGroupValue = setGroupValue;
-exports.getGroupMenuItem = getGroupMenuItem;
-exports.getGroupValue = getGroupValue;
-exports.getAvailableOperations = getAvailableOperations;
-exports.removeItem = removeItem;
-exports.createCondition = createCondition;
-exports.createEmptyGroup = createEmptyGroup;
-exports.addItem = addItem;
-exports.getField = getField;
-exports.isGroup = isGroup;
-exports.isCondition = isCondition;
-exports.getNormalizedFields = getNormalizedFields;
-exports.getNormalizedFilter = getNormalizedFilter;
-exports.getGroupCriteria = getGroupCriteria;
-exports.convertToInnerStructure = convertToInnerStructure;
-exports.getDefaultOperation = getDefaultOperation;
-exports.getCurrentValueText = getCurrentValueText;
-exports.getCurrentLookupValueText = getCurrentLookupValueText;
-exports.getFilterOperations = getFilterOperations;
-exports.getCaptionByOperation = getCaptionByOperation;
-exports.getOperationValue = getOperationValue;
-exports.getFilterExpression = getFilterExpression;
-exports.getCustomOperation = getCustomOperation;
-exports.getMergedOperations = getMergedOperations;
-exports.syncFilters = syncFilters;
-exports.getMatchedConditions = getMatchedConditions;
-exports.filterHasField = filterHasField;
-exports.removeFieldConditionsFromFilter = removeFieldConditionsFromFilter;
+export const renderValueText = function($container, value, customOperation) {
+    if(Array.isArray(value)) {
+        const lastItemIndex = value.length - 1;
+        $container.empty();
+        value.forEach((t, i) => {
+            $('<span>')
+                .addClass(FILTER_BUILDER_ITEM_TEXT_PART_CLASS)
+                .text(t)
+                .appendTo($container);
+            if(i !== lastItemIndex) {
+                $('<span>')
+                    .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_CLASS)
+                    .text(customOperation && customOperation.valueSeparator ? customOperation.valueSeparator : '|')
+                    .addClass(FILTER_BUILDER_ITEM_TEXT_SEPARATOR_EMPTY_CLASS).appendTo($container);
+            }
+        });
+    } else if(value) {
+        $container.text(value);
+    } else {
+        $container.text(messageLocalization.format('dxFilterBuilder-enterValueText'));
+    }
+};

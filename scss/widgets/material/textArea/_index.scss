@@ -3,19 +3,26 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-// adduse
 
+// adduse
+$textarea-vertical-padding:
+  $material-base-inline-widget-height -
+  $material-base-inline-block-height;
+
+$textarea-top-padding:
+  floor($textarea-vertical-padding / 2) -
+  $material-base-border-width;
 
 .dx-textarea {
   height: auto;
 
   .dx-texteditor-input {
-    padding: $TEXTAREA_CONTENT_PADDING;
-    line-height: $TEXTAREA_CONTENT_LINE_HEIGHT;
+    padding: $textarea-content-padding;
+    line-height: $textarea-content-line-height;
   }
 
   .dx-placeholder:before {
-    padding: ($TEXTAREA_CONTENT_PADDING + 3) $TEXTAREA_CONTENT_PADDING;
+    padding: ($textarea-content-padding + 3) $textarea-content-padding;
   }
 
   .dx-icon-clear {
@@ -24,7 +31,7 @@
   }
 
   &.dx-invalid .dx-texteditor-container:after {
-    top: $MATERIAL_BASE_INLINE_BORDEREDWIDGET_TOP_PADDING;
+    top: $textarea-top-padding;
     margin-top: 0;
   }
 }

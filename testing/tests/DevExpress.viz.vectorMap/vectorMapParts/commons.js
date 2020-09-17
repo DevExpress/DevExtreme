@@ -1,7 +1,7 @@
 const $ = require('jquery');
 const renderer = require('core/renderer');
 const vizMocks = require('../../../helpers/vizMocks.js');
-const dxVectorMapModule = require('viz/vector_map/vector_map');
+const dxVectorMapUtils = require('viz/vector_map/vector_map.utils');
 
 const projectionModule = require('viz/vector_map/projection.main');
 const controlBarModule = require('viz/vector_map/control_bar');
@@ -30,6 +30,8 @@ const titleModule = require('viz/core/title');
 const exportModule = require('viz/core/export');
 const tooltipModule = require('viz/core/tooltip');
 
+require('viz/vector_map');
+
 const StubExportMenu = vizMocks.stubClass(exportModule.ExportMenu);
 
 function returnValue(value) {
@@ -46,9 +48,9 @@ function stubComponentConstructors(test) {
     // $.extend(DevExpress.viz, {
     //     LoadingIndicator: returnValue(test.loadingIndicator)
     // });
-    titleModule.Title = returnValue(test.title);
-    tooltipModule.Tooltip = returnValue(test.tooltip);
-    exportModule.ExportMenu = returnValue(test.exportMenu);
+    titleModule.DEBUG_set_title(returnValue(test.title));
+    tooltipModule.DEBUG_set_tooltip(returnValue(test.tooltip));
+    exportModule.DEBUG_set_ExportMenu(returnValue(test.exportMenu));
 
     projectionModule.Projection = returnValue(test.projection);
     controlBarModule.ControlBar = returnValue(test.controlBar);
@@ -65,7 +67,7 @@ exports.stubComponentConstructors = stubComponentConstructors;
 
 exports.environment = {
     beforeEach: function() {
-        dxVectorMapModule._TESTS_resetDataKey();
+        dxVectorMapUtils._TESTS_resetDataKey();
         this.$container = $('<div id="test-container"></div>');
         this.renderer = new vizMocks.Renderer();
         this.themeManager = new StubThemeManager();

@@ -322,4 +322,4 @@ const NativeStrategy = Class.inherit({
     }
 });
 
-module.exports = NativeStrategy;
+export default NativeStrategy;

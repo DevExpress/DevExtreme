@@ -5,11 +5,21 @@ import { each } from '../core/utils/iterator';
 import { EventsStrategy } from '../core/events_strategy';
 import errors from '../core/errors';
 import { grep } from '../core/utils/common';
-import typeUtils from '../core/utils/type';
+import {
+    isDefined,
+    isString,
+    isDate,
+    isBoolean,
+    isObject,
+    isFunction,
+    isPromise,
+    isNumeric } from '../core/utils/type';
 import numberLocalization from '../localization/number';
 import messageLocalization from '../localization/message';
 import Promise from '../core/polyfills/promise';
 import { fromPromise, Deferred } from '../core/utils/deferred';
+
+// STYLE validation
 
 const STATUS = {
     valid: 'valid',
@@ -54,12 +64,12 @@ class RequiredRuleValidator extends BaseRuleValidator {
     }
 
     _validate(value, rule) {
-        if(!typeUtils.isDefined(value)) return false;
+        if(!isDefined(value)) return false;
         if(value === false) {
             return false;
         }
         value = String(value);
-        if(rule.trim || !typeUtils.isDefined(rule.trim)) {
+        if(rule.trim || !isDefined(rule.trim)) {
             value = value.trim();
         }
         return value !== '';
@@ -76,10 +86,10 @@ class NumericRuleValidator extends BaseRuleValidator {
         if(rule.ignoreEmptyValue !== false && this._isValueEmpty(value)) {
             return true;
         }
-        if(rule.useCultureSettings && typeUtils.isString(value)) {
+        if(rule.useCultureSettings && isString(value)) {
             return !isNaN(numberLocalization.parse(value));
         } else {
-            return typeUtils.isNumeric(value);
+            return isNumeric(value);
         }
     }
 }
@@ -95,20 +105,20 @@ class RangeRuleValidator extends BaseRuleValidator {
             return true;
         }
         const validNumber = rulesValidators['numeric'].validate(value, rule);
-        const validValue = typeUtils.isDefined(value) && value !== '';
+        const validValue = isDefined(value) && value !== '';
         const number = validNumber ? parseFloat(value) : validValue && value.valueOf();
         const min = rule.min;
         const max = rule.max;
-        if(!(validNumber || typeUtils.isDate(value)) && !validValue) {
+        if(!(validNumber || isDate(value)) && !validValue) {
             return false;
         }
-        if(typeUtils.isDefined(min)) {
-            if(typeUtils.isDefined(max)) {
+        if(isDefined(min)) {
+            if(isDefined(max)) {
                 return number >= min && number <= max;
             }
             return number >= min;
         } else {
-            if(typeUtils.isDefined(max)) {
+            if(isDefined(max)) {
                 return number <= max;
             } else {
                 throw errors.Error('E0101');
@@ -124,8 +134,8 @@ class StringLengthRuleValidator extends BaseRuleValidator {
     }
 
     _validate(value, rule) {
-        value = typeUtils.isDefined(value) ? String(value) : '';
-        if(rule.trim || !typeUtils.isDefined(rule.trim)) {
+        value = isDefined(value) ? String(value) : '';
+        if(rule.trim || !isDefined(rule.trim)) {
             value = value.trim();
         }
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
@@ -147,8 +157,8 @@ class CustomRuleValidator extends BaseRuleValidator {
             return true;
         }
         const validator = rule.validator;
-        const dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter');
-        const extraParams = typeUtils.isFunction(dataGetter) && dataGetter();
+        const dataGetter = validator && isFunction(validator.option) && validator.option('dataGetter');
+        const extraParams = isFunction(dataGetter) && dataGetter();
         const params = {
             value: value,
             validator: validator,
@@ -168,15 +178,15 @@ class AsyncRuleValidator extends CustomRuleValidator {
     }
 
     validate(value, rule) {
-        if(!typeUtils.isDefined(rule.reevaluate)) {
+        if(!isDefined(rule.reevaluate)) {
             extend(rule, { reevaluate: true });
         }
         if(rule.ignoreEmptyValue && this._isValueEmpty(value)) {
             return true;
         }
         const validator = rule.validator;
-        const dataGetter = validator && typeUtils.isFunction(validator.option) && validator.option('dataGetter');
-        const extraParams = typeUtils.isFunction(dataGetter) && dataGetter();
+        const dataGetter = validator && isFunction(validator.option) && validator.option('dataGetter');
+        const extraParams = isFunction(dataGetter) && dataGetter();
         const params = {
             value: value,
             validator: validator,
@@ -186,7 +196,7 @@ class AsyncRuleValidator extends CustomRuleValidator {
             extend(params, extraParams);
         }
         const callbackResult = rule.validationCallback(params);
-        if(!typeUtils.isPromise(callbackResult)) {
+        if(!isPromise(callbackResult)) {
             throw errors.Error('E0103');
         }
         return this._getWrappedPromise(fromPromise(callbackResult).promise());
@@ -200,10 +210,10 @@ class AsyncRuleValidator extends CustomRuleValidator {
             const res = {
                 isValid: false
             };
-            if(typeUtils.isDefined(err)) {
-                if(typeUtils.isString(err)) {
+            if(isDefined(err)) {
+                if(isString(err)) {
                     res.message = err;
-                } else if(typeUtils.isObject(err) && typeUtils.isDefined(err.message) && typeUtils.isString(err.message)) {
+                } else if(isObject(err) && isDefined(err.message) && isString(err.message)) {
                     res.message = err.message;
                 }
             }
@@ -261,7 +271,7 @@ class PatternRuleValidator extends BaseRuleValidator {
             return true;
         }
         let pattern = rule.pattern;
-        if(typeUtils.isString(pattern)) {
+        if(isString(pattern)) {
             pattern = new RegExp(pattern);
         }
         return pattern.test(value);
@@ -600,8 +610,8 @@ const ValidationEngine = {
 
     _setDefaultMessage(info) {
         const { rule, validator, name } = info;
-        if(!typeUtils.isDefined(rule.message)) {
-            if(validator.defaultFormattedMessage && typeUtils.isDefined(name)) {
+        if(!isDefined(rule.message)) {
+            if(validator.defaultFormattedMessage && isDefined(name)) {
                 rule.message = validator.defaultFormattedMessage(name);
             } else {
                 rule.message = validator.defaultMessage();
@@ -641,7 +651,7 @@ const ValidationEngine = {
             const ruleValidator = rulesValidators[rule.type];
             let ruleValidationResult;
             if(ruleValidator) {
-                if(typeUtils.isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
+                if(isDefined(rule.isValid) && rule.value === value && !rule.reevaluate) {
                     if(!rule.isValid) {
                         result.isValid = false;
                         this._addBrokenRule({
@@ -697,7 +707,7 @@ const ValidationEngine = {
         const asyncResults = [];
         each(items, (_, item) => {
             const validateResult = item.ruleValidator.validate(value, item.rule);
-            if(!typeUtils.isPromise(validateResult)) {
+            if(!isPromise(validateResult)) {
                 this._updateRuleConfig({
                     rule: item.rule,
                     ruleResult: this._getPatchedRuleResult(validateResult),
@@ -736,7 +746,7 @@ const ValidationEngine = {
     _updateRuleConfig({ rule, ruleResult, validator, name }) {
         rule.isValid = ruleResult.isValid;
         if(!ruleResult.isValid) {
-            if(typeUtils.isDefined(ruleResult.message) && typeUtils.isString(ruleResult.message) && ruleResult.message.length) {
+            if(isDefined(ruleResult.message) && isString(ruleResult.message) && ruleResult.message.length) {
                 rule.message = ruleResult.message;
             } else {
                 this._setDefaultMessage({
@@ -751,14 +761,14 @@ const ValidationEngine = {
     _getPatchedRuleResult(ruleResult) {
         let result;
         const isValid = true;
-        if(typeUtils.isObject(ruleResult)) {
+        if(isObject(ruleResult)) {
             result = extend({}, ruleResult);
-            if(!typeUtils.isDefined(result.isValid)) {
+            if(!isDefined(result.isValid)) {
                 result.isValid = isValid;
             }
         } else {
             result = {
-                isValid: typeUtils.isBoolean(ruleResult) ? ruleResult : isValid
+                isValid: isBoolean(ruleResult) ? ruleResult : isValid
             };
         }
         return result;
@@ -881,4 +891,4 @@ const ValidationEngine = {
 
 ValidationEngine.initGroups();
 
-module.exports = ValidationEngine;
+export default ValidationEngine;

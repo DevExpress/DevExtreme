@@ -2,9 +2,9 @@ import $ from '../../core/renderer';
 import { isElementNode } from '../../core/dom_adapter';
 import { on, off } from '../../events/core/events_engine';
 import messageLocalization from '../../localization/message';
-import clickEvent from '../../events/click';
-import commonUtils from '../../core/utils/common';
-import windowUtils from '../../core/utils/window';
+import { name as clickEventName } from '../../events/click';
+import { asyncNoop, noop } from '../../core/utils/common';
+import { hasWindow } from '../../core/utils/window';
 import { isDefined, isPrimitive, isFunction, isString } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
@@ -13,7 +13,7 @@ import CheckBox from '../check_box';
 import HierarchicalCollectionWidget from '../hierarchical_collection/ui.hierarchical_collection_widget';
 import { addNamespace } from '../../events/utils';
 import { down as PointerDown } from '../../events/pointer';
-import dblclickEvent from '../../events/double_click';
+import { name as dblclickEvent } from '../../events/double_click';
 import fx from '../../animation/fx';
 import Scrollable from '../scroll_view/ui.scrollable';
 import LoadIndicator from '../load_indicator';
@@ -60,7 +60,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._itemClickHandler(e, $itemElement.children('.' + ITEM_CLASS));
 
             const expandEventName = this._getEventNameByOption(this.option('expandEvent'));
-            const expandByClick = expandEventName === addNamespace(clickEvent.name, EXPAND_EVENT_NAMESPACE);
+            const expandByClick = expandEventName === addNamespace(clickEventName, EXPAND_EVENT_NAMESPACE);
 
             if(expandByClick) {
                 this._expandEventHandler(e);
@@ -217,8 +217,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     // TODO: implement these functions
-    _initSelectedItems: commonUtils.noop,
-    _syncSelectionOptions: commonUtils.asyncNoop,
+    _initSelectedItems: noop,
+    _syncSelectionOptions: asyncNoop,
 
     _fireSelectionChanged: function() {
         const selectionChangePromise = this._selectionChangePromise;
@@ -583,7 +583,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const dataSource = this.getDataSource();
         const skipContentReadyAction = dataSource && !dataSource.isLoaded();
 
-        if(this._scrollableContainer && windowUtils.hasWindow()) {
+        if(this._scrollableContainer && hasWindow()) {
             this._scrollableContainer.update();
         }
 
@@ -591,7 +591,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             this.callBase();
         }
 
-        if(this._scrollableContainer && windowUtils.hasWindow()) {
+        if(this._scrollableContainer && hasWindow()) {
             this._scrollableContainer.update();
         }
     },
@@ -772,8 +772,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getEventNameByOption: function(name) {
-        const event = name === 'click' ? clickEvent : dblclickEvent;
-        return addNamespace(event.name, EXPAND_EVENT_NAMESPACE);
+        const event = name === 'click' ? clickEventName : dblclickEvent;
+        return addNamespace(event, EXPAND_EVENT_NAMESPACE);
     },
 
     _getNode: function(identifier) {
@@ -871,7 +871,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderToggleItemVisibilityIconClick: function($icon, node) {
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
 
         off($icon, eventName);
         on($icon, eventName, e => {
@@ -904,7 +904,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             return completionCallback.promise();
         }
 
-        if(this._isVirtualMode() || this._useCustomChildrenLoader()) {
+        if(node.internalFields.childrenKeys.length === 0 && (this._isVirtualMode() || this._useCustomChildrenLoader())) {
             this._loadNestedItemsWithUpdate(node, state, e, completionCallback);
             return completionCallback.promise();
         }
@@ -1287,7 +1287,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _attachClickEvent: function() {
         const clickSelector = '.' + this._itemClass();
         const pointerDownSelector = '.' + NODE_CLASS + ', .' + SELECT_ALL_ITEM_CLASS;
-        const eventName = addNamespace(clickEvent.name, this.NAME);
+        const eventName = addNamespace(clickEventName, this.NAME);
         const pointerDownEvent = addNamespace(PointerDown, this.NAME);
         const $itemContainer = this._itemContainer();
 
@@ -1661,4 +1661,4 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     }
 });
 
-module.exports = TreeViewBase;
+export default TreeViewBase;

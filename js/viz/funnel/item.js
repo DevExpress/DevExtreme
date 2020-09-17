@@ -1,5 +1,5 @@
 const states = ['normal', 'hover', 'selection', 'selection'];
-const isDefined = require('../../core/utils/type').isDefined;
+import { isDefined } from '../../core/utils/type';
 
 function parseStyles(color, style, baseStyle) {
     const border = style.border;
@@ -103,4 +103,4 @@ Item.prototype = {
     }
 };
 
-module.exports = Item;
+export default Item;

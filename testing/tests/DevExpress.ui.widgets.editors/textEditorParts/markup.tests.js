@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'ui/text_box/ui.text_editor';
 import { Deferred } from 'core/utils/deferred';
+import devices from 'core/devices';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const INPUT_CLASS = 'dx-texteditor-input';
@@ -47,7 +48,7 @@ module('Basic markup', () => {
         const placeholder = element.find(`.${PLACEHOLDER_CLASS}`);
 
         assert.equal(input.val(), 'custom');
-        assert.equal(input.prop('placeholder') || element.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'enter value');
+        assert.equal(element.find(`.${PLACEHOLDER_CLASS}`).attr('data-dx_placeholder'), 'enter value');
         assert.ok(placeholder.hasClass(STATE_INVISIBLE_CLASS), 'placeholder is invisible when editor has a value');
         assert.equal(input.prop('readOnly'), true);
         assert.equal(input.prop('tabindex'), 3);
@@ -106,6 +107,15 @@ module('Basic markup', () => {
         });
 
         deferred.resolve();
+    });
+
+    test('"placeholder" attribute should be defined for iOS device (T898735)', function(assert) {
+        const $editor = $('#texteditor').dxTextEditor();
+        const { ios: isIos } = devices.real();
+        const expectedPlaceholder = isIos ? ' ' : '';
+        const placeholder = $editor.find(`.${INPUT_CLASS}`).attr('placeholder') || '';
+
+        assert.strictEqual(placeholder, expectedPlaceholder, 'input has placeholder with space at iOS device');
     });
 });
 
