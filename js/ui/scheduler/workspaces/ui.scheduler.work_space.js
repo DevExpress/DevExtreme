@@ -1210,20 +1210,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.viewDataProvider.update(isGenerateNewViewData);
 
         this.renderRAllDayPanel();
-
         this.renderRTimeTable();
-
         this.renderRDateTable();
 
-        const { coordinates } = this.viewDataProvider.getFocusedCell();
-        // const firstCellInSelection = this.viewDataProvider.getFirstCellInSelection();
-        // const lastCellInSelection = this.viewDataProvider.getLastCellInSelection();
-
-        if(coordinates && coordinates.rowIndex !== -1) {
-            const $cell = this._dom_getDateCell(coordinates);
-            $cell && this._setFocusedCell($cell);
-        }
-
+        this.updateRSelection();
     }
 
     renderRAllDayPanel() {
@@ -1269,6 +1259,18 @@ class SchedulerWorkSpace extends WidgetObserver {
                 component.option(optionName, viewModel[optionName]);
             });
         }
+    }
+
+    updateRSelection() {
+        const { coordinates } = this.viewDataProvider.getFocusedCell();
+        const selectedCells = this.viewDataProvider.getSelectedCells();
+
+        if(coordinates && coordinates.rowIndex !== -1) {
+            const $cell = this._dom_getDateCell(coordinates);
+            $cell && this._setFocusedCell($cell);
+        }
+
+        selectedCells && this._setSelectedCellsByCellData(selectedCells);
     }
 
     _updateGroupTableHeight() {
