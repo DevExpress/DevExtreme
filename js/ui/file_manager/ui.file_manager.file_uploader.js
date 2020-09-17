@@ -165,6 +165,9 @@ class FileManagerFileUploader extends Widget {
 
     _setDropZonePlaceholderVisible(visible) {
         this._dropZoneEnterCounter += visible ? 1 : -1;
+        if(this._dropZoneEnterCounter < 0) {
+            this.resetDropZoneEnterCounter();
+        }
         if(visible && this._dropZoneEnterCounter === 1) {
             this._$dropZonePlaceholder.css('display', '');
             return;
@@ -174,7 +177,12 @@ class FileManagerFileUploader extends Widget {
         }
     }
 
+    resetDropZoneEnterCounter() {
+        this._dropZoneEnterCounter = 0;
+    }
+
     _uploadFiles(uploaderInfo, files) {
+        this._setDropZonePlaceholderVisible(false);
         const sessionId = new Guid().toString();
         const controller = this._getController();
         const deferreds = files.map(() => new Deferred());
@@ -283,6 +291,7 @@ class FileManagerFileUploader extends Widget {
             case 'dropZone':
                 this._uploaderInfos[0]?.fileUploader.option('dropZone', args.value);
                 this._adjustDropZonePlaceholder();
+                this.resetDropZoneEnterCounter();
                 break;
             default:
                 super._optionChanged(args);
