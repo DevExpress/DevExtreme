@@ -10787,7 +10787,7 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxSortableOptions)
         constructor(element: JQuery, options?: dxSortableOptions)
         /**
-         * <-dxSortable.update()->
+         * [descr:dxSortable.update()]
          */
         update(): void;
     }
