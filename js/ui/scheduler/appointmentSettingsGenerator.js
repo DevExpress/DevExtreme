@@ -51,7 +51,7 @@ export default class AppointmentSettingsGenerator {
         let gridAppointmentList = this._createGridAppointmentList(appointmentList);
         gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
 
-        this._processLongAppointmentsIfRequired(gridAppointmentList, appointment);
+        gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
 
         const allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
         return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
@@ -112,7 +112,7 @@ export default class AppointmentSettingsGenerator {
         return appointmentList;
     }
 
-    _processLongAppointmentsIfRequired(gridAppointmentList, appointment) {
+    _getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment) {
         const rawAppointment = appointment.source();
 
         const allDay = this.scheduler.appointmentTakesAllDay(rawAppointment);
@@ -120,18 +120,18 @@ export default class AppointmentSettingsGenerator {
         const renderingStrategy = this.scheduler.getLayoutManager().getRenderingStrategyInstance();
 
         if(renderingStrategy.needSeparateAppointment(allDay)) {
-            let longParts = [];
+            let longStartDateParts = [];
             let resultDates = [];
 
             gridAppointmentList.forEach(gridAppointment => {
                 const maxDate = new Date(dateRange[1]);
                 const endDateOfPart = renderingStrategy.normalizeEndDateByViewEnd(rawAppointment, gridAppointment.endDate);
 
-                longParts = dateUtils.getDatesOfInterval(gridAppointment.startDate, endDateOfPart, {
+                longStartDateParts = dateUtils.getDatesOfInterval(gridAppointment.startDate, endDateOfPart, {
                     milliseconds: this.scheduler.getWorkSpace().getIntervalDuration(allDay)
                 });
 
-                const newArr = longParts.filter(el => new Date(el) < maxDate)
+                const list = longStartDateParts.filter(startDatePart => new Date(startDatePart) < maxDate)
                     .map(date => {
                         return {
                             startDate: date,
@@ -140,11 +140,13 @@ export default class AppointmentSettingsGenerator {
                         };
                     });
 
-                resultDates = resultDates.concat(newArr);
+                resultDates = resultDates.concat(list);
             });
 
             gridAppointmentList = resultDates;
         }
+
+        return gridAppointmentList;
     }
 
     _createGridAppointmentList(appointmentList) {
