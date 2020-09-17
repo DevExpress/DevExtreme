@@ -47,6 +47,31 @@ module('Lookup', {
         assert.ok($('.dx-lookup-arrow', this.element).length, 'widget contents arrow');
     });
 
+    test('render dxLookup with predefined value and displayExpr (T929376)', function(assert) {
+        const $element = $('<div>').appendTo('#qunit-fixture');
+        $element.dxLookup({
+            items: [{ id: 0, text: 0 }, { id: 1, text: 1 }],
+            value: 0,
+            valueExpr: 'id',
+            displayExpr: 'text'
+        });
+
+        assert.strictEqual($element.find(`.${LOOKUP_FIELD_CLASS}`).text(), '0');
+    });
+
+    test('render dxLookup with placeholder and displayExpr returns empty string (T929376)', function(assert) {
+        const $element = $('<div>').appendTo('#qunit-fixture');
+        $element.dxLookup({
+            items: [{ id: 0, text: 0 }, { id: 1, text: 1 }],
+            value: null,
+            placeholder: 'test',
+            valueExpr: 'id',
+            displayExpr: () => ''
+        });
+
+        assert.strictEqual($element.find(`.${LOOKUP_FIELD_CLASS}`).text(), 'test', 'placeholder should be rendered');
+    });
+
     test('regression: value is out of range (B231783)', function(assert) {
         this.instance.option({
             dataSource: [1, 2, 3],

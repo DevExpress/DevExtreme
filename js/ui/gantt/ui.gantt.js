@@ -98,7 +98,8 @@ class Gantt extends Widget {
             onRowExpanded: (e) => this._ganttView.changeTaskExpanded(e.key, true),
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); },
             onContextMenuPreparing: (e) => { this._onTreeListContextMenuPreparing(e); },
-            onRowDblClick: () => { this._onTreeListRowDblClick(); }
+            onRowClick: (e) => { this._onTreeListRowClick(e); },
+            onRowDblClick: (e) => { this._onTreeListRowDblClick(e); }
         });
     }
     _renderSplitter() {
@@ -152,7 +153,9 @@ class Gantt extends Widget {
             onExpandAll: this._expandAll.bind(this),
             onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener(),
-            tooltipTemplate: this._getTooltipTemplateFunction(this.option('tooltipTemplate'))
+            taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
+            onTaskClick: (e) => { this._onTreeListRowClick(e); },
+            onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); }
         });
         this._fireContentReadyAction();
     }
@@ -179,8 +182,13 @@ class Gantt extends Widget {
             this._showPopupMenu({ position: { x: e.event.pageX, y: e.event.pageY } });
         }
     }
-    _onTreeListRowDblClick() {
-        this._ganttView._ganttViewCore.commandManager.showTaskEditDialog.execute();
+    _onTreeListRowClick(e) {
+        this._raiseTaskClickAction(e.key, e.event);
+    }
+    _onTreeListRowDblClick(e) {
+        if(this._raiseTaskDblClickAction(e.key, e.event)) {
+            this._ganttView._ganttViewCore.commandManager.showTaskEditDialog.execute();
+        }
     }
     _onTreeListSelectionChanged(e) {
         const selectedRowKey = e.currentSelectedRowKeys[0];
@@ -363,7 +371,7 @@ class Gantt extends Widget {
         this._setGanttViewOption(dataSourceName, mappedData);
         if(dataSourceName === GANTT_TASKS) {
             this._tasksRaw = data;
-            const expandedRowKeys = data.map(t => t.parentId).filter((value, index, self) => value && self.indexOf(value) === index);
+            const expandedRowKeys = data.map(t => t[this.option('tasks.parentIdExpr')]).filter((value, index, self) => value && self.indexOf(value) === index);
             this._setTreeListOption('expandedRowKeys', expandedRowKeys);
             this._setTreeListOption('dataSource', data);
         }
@@ -407,6 +415,12 @@ class Gantt extends Widget {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
             const data = this._getStoreObject(optionName, record);
+            if(optionName === GANTT_TASKS && this.customDataToInsert) {
+                for(const key in this.customDataToInsert) {
+                    data[key] = this.customDataToInsert[key];
+                }
+                delete this.customDataToInsert;
+            }
             dataOption.insert(data, (response) => {
                 const keyGetter = dataCoreUtils.compileGetter(this.option(`${optionName}.keyExpr`));
                 const insertedId = keyGetter(response);
@@ -497,6 +511,12 @@ class Gantt extends Widget {
     _createSelectionChangedAction() {
         this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
     }
+    _createTaskClickAction() {
+        this._taskClickAction = this._createActionByOption('onTaskClick');
+    }
+    _createTaskDblClickAction() {
+        this._taskDblClickAction = this._createActionByOption('onTaskDblClick');
+    }
     _createCustomCommandAction() {
         this._customCommandAction = this._createActionByOption('onCustomCommand');
     }
@@ -558,6 +578,30 @@ class Gantt extends Widget {
             coreArgs.readOnlyFields = this._convertMappedToCoreFields(GANTT_TASKS, args.readOnlyFields);
             coreArgs.hiddenFields = this._convertMappedToCoreFields(GANTT_TASKS, args.hiddenFields);
         }
+    }
+    _raiseTaskClickAction(key, event) {
+        if(!this._taskClickAction) {
+            this._createTaskClickAction();
+        }
+        const args = {
+            key: key,
+            event: event,
+            data: this.getTaskData(key)
+        };
+        this._taskClickAction(args);
+    }
+    _raiseTaskDblClickAction(key, event) {
+        if(!this._taskDblClickAction) {
+            this._createTaskDblClickAction();
+        }
+        const args = {
+            cancel: false,
+            data: this.getTaskData(key),
+            event: event,
+            key: key
+        };
+        this._taskDblClickAction(args);
+        return !args.cancel;
     }
     _getInsertingAction(optionName) {
         switch(optionName) {
@@ -745,6 +789,47 @@ class Gantt extends Widget {
         }
         return coreFields;
     }
+    _getTaskMappedFieldNames() {
+        const mappedFields = [ ];
+        const mappedFieldsData = this.option(GANTT_TASKS);
+        for(const field in mappedFieldsData) {
+            const exprMatches = field.match(GANTT_MAPPED_FIELD_REGEX);
+            const mappedFieldName = exprMatches && mappedFieldsData[exprMatches[0]];
+            if(mappedFieldName) {
+                mappedFields.push(mappedFieldName);
+            }
+        }
+        return mappedFields;
+    }
+    _getTaskCustomFields() {
+        const columns = this.option('columns');
+        const columnFields = columns && columns.map(c => c.dataField);
+        const mappedFields = this._getTaskMappedFieldNames();
+        return columnFields ? columnFields.filter(f => mappedFields.indexOf(f) < 0) : [];
+    }
+    _getCustomFieldsData(data) {
+        return this._getTaskCustomFields()
+            .reduce((previous, field) => {
+                if(data && data[field] !== undefined) {
+                    previous[field] = data[field];
+                }
+                return previous;
+            }, {});
+    }
+    _addCustomFieldsData(key, data) {
+        if(data) {
+            const modelData = this._tasksOption && this._tasksOption._getItems();
+            const keyGetter = dataCoreUtils.compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+            const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === key)[0];
+            const customFields = this._getTaskCustomFields();
+            for(let i = 0; i < customFields.length; i++) {
+                const field = customFields[i];
+                if(Object.prototype.hasOwnProperty.call(modelItem, field)) {
+                    data[field] = modelItem[field];
+                }
+            }
+        }
+    }
 
     _getSelectionMode(allowSelection) {
         return allowSelection ? 'single' : 'none';
@@ -800,11 +885,11 @@ class Gantt extends Widget {
         super._clean();
     }
 
-    _getTooltipTemplateFunction(tooltipTemplateOption) {
-        const template = tooltipTemplateOption && this._getTemplate(tooltipTemplateOption);
+    _getTaskTooltipContentTemplateFunc(taskTooltipContentTemplateOption) {
+        const template = taskTooltipContentTemplateOption && this._getTemplate(taskTooltipContentTemplateOption);
         const createTemplateFunction = template && ((container, item) => {
             template.render({
-                model: item,
+                model: this.getTaskDataByCoreData(item),
                 container: getPublicElement($(container))
             });
         });
@@ -832,6 +917,16 @@ class Gantt extends Widget {
             /**
             * @name dxGanttToolbarItem
             * @inherits dxToolbarItem
+            */
+
+            /**
+            * @name dxGanttContextMenu
+            * @type object
+            */
+
+            /**
+            * @name dxGanttContextMenuItem
+            * @inherits dxContextMenuItem
             */
 
             tasks: {
@@ -975,6 +1070,8 @@ class Gantt extends Widget {
             firstDayOfWeek: undefined,
             selectedRowKey: undefined,
             onSelectionChanged: null,
+            onTaskClick: null,
+            onTaskDblClick: null,
             onTaskInserting: null,
             onTaskDeleting: null,
             onTaskUpdating: null,
@@ -1067,8 +1164,68 @@ class Gantt extends Widget {
                 enabled: true,
                 items: undefined
             },
-            tooltipTemplate: null
+            taskTooltipContentTemplate: null
         });
+    }
+
+    getTaskData(key) {
+        const coreData = this._ganttView._ganttViewCore.getTaskData(key);
+        const mappedData = this.getTaskDataByCoreData(coreData);
+        return mappedData;
+    }
+    getTaskDataByCoreData(coreData) {
+        const mappedData = coreData ? this._convertCoreToMappedData(GANTT_TASKS, coreData) : null;
+        this._addCustomFieldsData(coreData.id, mappedData);
+        return mappedData;
+    }
+    insertTask(data) {
+        this.customDataToInsert = this._getCustomFieldsData(data);
+        this._ganttView._ganttViewCore.insertTask(this._convertMappedToCoreData(GANTT_TASKS, data));
+    }
+    deleteTask(key) {
+        this._ganttView._ganttViewCore.deleteTask(key);
+    }
+    updateTask(key, data) {
+        const dataOption = this[`_${GANTT_TASKS}Option`];
+        const customFieldsData = this._getCustomFieldsData(data);
+        if(dataOption && Object.keys(customFieldsData).length > 0) {
+            dataOption.update(key, customFieldsData, () => {
+                this._updateTreeListDataSource();
+            });
+        }
+        this._ganttView._ganttViewCore.updateTask(key, this._convertMappedToCoreData(GANTT_TASKS, data));
+    }
+    getDependencyData(key) {
+        const coreData = this._ganttView._ganttViewCore.getDependencyData(key);
+        return coreData ? this._convertCoreToMappedData(GANTT_DEPENDENCIES, coreData) : null;
+    }
+    insertDependency(data) {
+        this._ganttView._ganttViewCore.insertDependency(this._convertMappedToCoreData(GANTT_DEPENDENCIES, data));
+    }
+    deleteDependency(key) {
+        this._ganttView._ganttViewCore.deleteDependency(key);
+    }
+    getResourceData(key) {
+        const coreData = this._ganttView._ganttViewCore.getResourceData(key);
+        return coreData ? this._convertCoreToMappedData(GANTT_RESOURCES, coreData) : null;
+    }
+    deleteResource(key) {
+        this._ganttView._ganttViewCore.deleteResource(key);
+    }
+    insertResource(data, taskKeys) {
+        this._ganttView._ganttViewCore.insertResource(this._convertMappedToCoreData(GANTT_RESOURCES, data), taskKeys);
+    }
+    getResourceAssignmentData(key) {
+        const coreData = this._ganttView._ganttViewCore.getResourceAssignmentData(key);
+        return coreData ? this._convertCoreToMappedData(GANTT_RESOURCE_ASSIGNMENTS, coreData) : null;
+    }
+    assignResourceToTask(resourceKey, taskKey) {
+        this._ganttView._ganttViewCore.assignResourceToTask(resourceKey, taskKey);
+    }
+    // eslint-disable-next-line spellcheck/spell-checker
+    unassignResourceFromTask(resourceKey, taskKey) {
+        // eslint-disable-next-line spellcheck/spell-checker
+        this._ganttView._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
     }
 
     _optionChanged(args) {
@@ -1105,6 +1262,12 @@ class Gantt extends Widget {
                 break;
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();
+                break;
+            case 'onTaskClick':
+                this._createTaskClickAction();
+                break;
+            case 'onTaskDblClick':
+                this._createTaskDblClickAction();
                 break;
             case 'onTaskInserting':
                 this._createTaskInsertingAction();
@@ -1169,8 +1332,8 @@ class Gantt extends Widget {
             case 'contextMenu':
                 this._updateContextMenu();
                 break;
-            case 'tooltipTemplate':
-                this._setGanttViewOption('tooltipTemplate', this._getTooltipTemplateFunction(args.value));
+            case 'taskTooltipContentTemplate':
+                this._setGanttViewOption('taskTooltipContentTemplate', this._getTaskTooltipContentTemplateFunc(args.value));
                 break;
             default:
                 super._optionChanged(args);

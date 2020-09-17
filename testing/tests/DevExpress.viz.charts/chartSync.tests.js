@@ -7,6 +7,7 @@ const titleModule = require('viz/core/title');
 const exportModule = require('viz/core/export');
 const tooltipModule = require('viz/core/tooltip');
 const rendererModule = require('viz/core/renderers/renderer');
+const { Deferred } = require('core/utils/deferred');
 const StubTooltip = vizMocks.stubClass(tooltipModule.Tooltip);
 const legendModule = require('viz/components/legend');
 const layoutManagerModule = require('viz/chart_components/layout_manager');
@@ -1034,6 +1035,34 @@ const environment = {
         assert.ok(!chart._crosshairCursorGroup.stub('clear').called, 'crosshair should not be cleared');
         assert.ok(!getTrackerStub().stub('update').calledTwice, 'Tracker should not be prepared');
     };
+
+    QUnit.module('Axis templates', environment);
+
+    QUnit.test('Redraw chart after render templates', function(assert) {
+        const drawn = sinon.spy();
+        const chart = this.createChart({
+            tooltip: { enabled: false },
+            dataSource: [{ arg: 1, val: 1 }],
+            onDrawn: drawn
+        });
+        resetMocksInChart(chart);
+        const defs = [];
+
+        function getDeferred() {
+            const d = new Deferred();
+            defs.push(d);
+            return d;
+        }
+
+        $.each(chart._argumentAxes, function(_, axis) { axis.getTemplatesDef = getDeferred; });
+        $.each(chart._valueAxes, function(_, axis) { axis.getTemplatesDef = getDeferred; });
+
+        drawn.reset();
+        chart.render({ force: true });
+        $.each(defs, function(_, d) { d.resolve(); });
+
+        assert.strictEqual(drawn.callCount, 2);
+    });
 
     QUnit.module('DataSource updating', {
         beforeEach: function() {

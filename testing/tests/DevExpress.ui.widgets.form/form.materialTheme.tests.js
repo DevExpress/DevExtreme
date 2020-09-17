@@ -7,20 +7,20 @@ import 'common.css!';
 import 'material_blue_light.css!';
 import FormLayoutTestWrapper from '../../helpers/FormLayoutTestWrapper.js';
 
+function testChromeOnly(name, callback) {
+    if(!browser.chrome) {
+        return;
+    }
+
+    QUnit.test(name, callback);
+}
+
 QUnit.testStart(function() {
     const markup = '<div id="form"></div>';
     $('#qunit-fixture').html(markup);
 });
 
 QUnit.module('Form scenarios', () => {
-    function testChromeOnly(name, callback) {
-        if(!browser.chrome) {
-            return;
-        }
-
-        QUnit.test(name, callback);
-    }
-
     testChromeOnly('1 column -> [item1]', function(assert) {
         const wrapper = new FormLayoutTestWrapper(1, {}, ['item1']);
         wrapper.checkFormSize(1000, 75);
@@ -269,5 +269,63 @@ QUnit.module('Form scenarios', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 34, 770, 230, 31);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 85, 0, 1000, 34);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 119, 0, 1000, 31);
+    });
+});
+
+QUnit.module('Left label location scenarios', () => {
+    testChromeOnly('1 column -> [item1]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(1, { labelLocation: 'left' }, ['item1']);
+        wrapper.checkFormSize(1000, 41);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 951, 31);
+    });
+
+    testChromeOnly('1 column -> [item1, item2, item3]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(1, { labelLocation: 'left' }, ['item1', 'item2', 'item3']);
+        wrapper.checkFormSize(1000, 195);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 951, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 87, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 77, 49, 951, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 164, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 154, 49, 951, 31);
+    });
+
+    testChromeOnly('1 column -> [item1, { group [item2, item3] ]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(1, { labelLocation: 'left' }, [
+            'item1',
+            { itemType: 'group', items: ['item2', 'item3'] }
+        ]);
+        wrapper.checkFormSize(1000, 169);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 43, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 43, 956, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 61, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 51, 49, 951, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 138, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 128, 49, 951, 31);
+    });
+
+    testChromeOnly('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(1, { labelLocation: 'left' }, [
+            'item1',
+            {
+                itemType: 'group',
+                caption: 'Contact Information',
+                items: [ { itemType: 'tabbed',
+                    tabPanelOptions: { deferRendering: false },
+                    tabs: [ { title: 'item2', items: ['item2'] }]
+                }]
+            }
+        ]);
+        wrapper.checkFormSize(1000, 252);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 43, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 43, 956, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 181, 20, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 171, 69, 911, 31);
     });
 });

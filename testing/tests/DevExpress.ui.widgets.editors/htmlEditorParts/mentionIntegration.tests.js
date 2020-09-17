@@ -60,7 +60,7 @@ module('Mentions integration', {
 
         this.addText = (element, text, prevText) => {
             if(IS_IE11) {
-                element.innerText = `${prevText}${text}\n`;
+                element.outerText = `${prevText}${text}`;
             } else {
                 element.innerText += text;
             }
@@ -369,10 +369,8 @@ module('Mentions integration', {
     test('list should show relevant items on typing text', function(assert) {
         const done = assert.async();
         const valueChangeSpy = sinon.spy(({ component }) => {
-
             if(valueChangeSpy.calledOnce) {
                 const element = this.$element.find('p').get(0);
-
                 this.addText(element, 'F', '@');
                 this.clock.tick();
             } else {
@@ -479,16 +477,17 @@ module('Mentions integration', {
 
     test('minimal search length', function(assert) {
         const done = assert.async();
+        const getParagraph = () => this.$element.find('p').get(0);
         const valueChangeSpy = sinon.spy(({ component }) => {
             let $items;
             if(valueChangeSpy.calledOnce) {
-                const element = this.$element.find('p').get(0);
-
-                this.addText(element, 'F', '@');
+                this.addText(getParagraph(), 'F', '@');
                 this.clock.tick();
                 const $items = this.getItems();
                 assert.strictEqual($items.length, 4, 'dataSource isn\'t filtered');
-                this.addText(element, 'r', '@F');
+            } else if(valueChangeSpy.calledTwice) {
+                this.addText(getParagraph(), 'r', '@F');
+                this.clock.tick();
             } else {
                 this.clock.tick(POPUP_TIMEOUT);
                 $items = this.getItems();

@@ -427,8 +427,18 @@ QUnit.test('Should created group for annotations', function(assert) {
     this.createMap();
 
     assert.equal(this.renderer.g.returnValues[1].attr.args[0][0]['class'], 'dxm-annotations');
+    assert.equal(this.renderer.g.returnValues[1].css.args[0][0]['text-anchor'], 'start');
     assert.ok(this.renderer.g.returnValues[1].linkAppend.called);
     assert.deepEqual(this.renderer.g.returnValues[1].linkOn.args[0], [this.renderer.root, 'annotations']);
+});
+
+QUnit.test('Should created group for annotations before controll bar and legend', function(assert) {
+    const spyLegend = sinon.spy(legendModule, 'LegendsControl');
+    const spyControlBar = sinon.spy(controlBarModule, 'ControlBar');
+    this.createMap();
+
+    assert.ok(this.renderer.g.returnValues[1].attr.calledBefore(spyControlBar));
+    assert.ok(this.renderer.g.returnValues[1].attr.calledBefore(spyLegend));
 });
 
 QUnit.test('Should be rendered', function(assert) {
@@ -492,6 +502,11 @@ QUnit.test('Should subscribe on change move and zoom events', function(assert) {
 
     assert.ok(plaqueModule.Plaque.callCount, 2);
     assert.ok(plaqueModule.Plaque.returnValues[0].draw.callCount, 2);
+
+    // render after change zoom by control bar
+    this.tracker.on.args[0][0].end();
+    assert.ok(plaqueModule.Plaque.callCount, 3);
+    assert.ok(plaqueModule.Plaque.returnValues[0].draw.callCount, 3);
 });
 
 QUnit.test('Annotation should be re-render after update size', function(assert) {

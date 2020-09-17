@@ -2,12 +2,15 @@ import Form from '../form';
 import dateSerialization from '../../core/utils/date_serialization';
 import messageLocalization from '../../localization/message';
 import devices from '../../core/devices';
+import DataSource from '../../data/data_source';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
+import { extend } from '../../core/utils/extend';
 
 import './ui.scheduler.recurrence_editor';
-import './timezones/ui.scheduler.timezone_editor';
 import '../text_area';
 import '../tag_box';
 import '../switch';
+import '../select_box';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
 
@@ -75,17 +78,22 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    _createTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, schedulerInst, isMainTimeZone, isShow = false) {
+    _createTimezoneEditor: function(timeZoneExpr, secondTimeZoneExpr, visibleIndex, colSpan, isMainTimeZone, isShow = false) {
+        const noTzTitle = messageLocalization.format('dxScheduler-noTimezoneTitle');
+
         return {
             dataField: timeZoneExpr,
-            editorType: 'dxSchedulerTimezoneEditor',
+            editorType: 'dxSelectBox',
             visibleIndex: visibleIndex,
             colSpan: colSpan,
             label: {
                 text: ' ',
             },
             editorOptions: {
-                observer: schedulerInst,
+                displayExpr: 'title',
+                valueExpr: 'id',
+                placeholder: noTzTitle,
+                searchEnabled: true,
                 onValueChanged: (args) => {
                     const form = this._appointmentForm;
                     const secondTimezoneEditor = form.getEditor(secondTimeZoneExpr);
@@ -128,14 +136,14 @@ const SchedulerAppointmentForm = {
                     this._dateBoxValueChanged(args, dataExprs.endDateExpr, (endValue, startValue) => { return endValue < startValue; });
                 }),
 
-            this._createTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, schedulerInst, true, allowTimeZoneEditing),
+            this._createTimezoneEditor(dataExprs.startDateTimeZoneExpr, dataExprs.endDateTimeZoneExpr, 1, colSpan, true, allowTimeZoneEditing),
 
             this._createDateBoxEditor(dataExprs.endDateExpr, colSpan, firstDayOfWeek, 'dxScheduler-editorLabelEndDate',
                 (args) => {
                     this._dateBoxValueChanged(args, dataExprs.startDateExpr, (startValue, endValue) => { return endValue < startValue; });
                 }),
 
-            this._createTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, schedulerInst, false, allowTimeZoneEditing)
+            this._createTimezoneEditor(dataExprs.endDateTimeZoneExpr, dataExprs.startDateTimeZoneExpr, 3, colSpan, false, allowTimeZoneEditing)
         ];
     },
 
@@ -266,14 +274,14 @@ const SchedulerAppointmentForm = {
                 name: APPOINTMENT_FORM_GROUP_NAMES.Recurrence,
                 visible: recurrenceEditorVisibility,
                 colSpan: recurrenceEditorVisibility ? 1 : 2,
-                items: this._createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly),
+                items: this._createRecurrenceEditor(dataExprs, schedulerInst, readOnly),
             }
         ];
 
         return this._editors;
     },
 
-    _createRecurrenceEditor(dataExprs, schedulerInst, recurrenceEditorVisibility, readOnly) {
+    _createRecurrenceEditor(dataExprs, schedulerInst, readOnly) {
         return [{
             dataField: dataExprs.recurrenceRuleExpr,
             editorType: 'dxRecurrenceEditor',
@@ -314,8 +322,41 @@ const SchedulerAppointmentForm = {
         }
     },
 
-    updateFormData: function(appointmentForm, formData) {
+    updateTimeZoneEditorDataSource(date, expression) {
+        const timeZoneDataSource = new DataSource({
+            store: timeZoneDataUtils.getDisplayedTimeZones(date),
+            paginate: true,
+            pageSize: 10
+        });
+
+        const options = { dataSource: timeZoneDataSource };
+
+        this.setEditorOptions(expression, 'Main', options);
+    },
+
+    updateRecurrenceEditorStartDate(date, expression) {
+        const options = { startDate: date };
+
+        this.setEditorOptions(expression, 'Recurrence', options);
+    },
+
+    setEditorOptions(name, groupName, options) {
+        const editorPath = `${APPOINTMENT_FORM_GROUP_NAMES.groupName}.${name}`;
+        const editor = this._appointmentForm.itemOption(editorPath);
+
+        editor && this._appointmentForm.itemOption(editorPath, 'editorOptions', extend({}, editor.editorOptions, options));
+    },
+
+    updateFormData: function(appointmentForm, formData, dataExprs) {
         appointmentForm._lockDateShiftFlag = true;
+
+        const startDate = new Date(formData[dataExprs.startDateExpr]);
+        const endDate = new Date(formData[dataExprs.endDateExpr]);
+
+        this.updateTimeZoneEditorDataSource(startDate, dataExprs.startDateTimeZoneExpr);
+        this.updateTimeZoneEditorDataSource(endDate, dataExprs.endDateTimeZoneExpr);
+        this.updateRecurrenceEditorStartDate(startDate, dataExprs.recurrenceRuleExpr);
+
         appointmentForm.option('formData', formData);
         appointmentForm._lockDateShiftFlag = false;
     }

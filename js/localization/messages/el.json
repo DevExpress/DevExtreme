@@ -65,6 +65,7 @@
         "dxFileUploader-upload": "Μεταφόρτωση",
         "dxFileUploader-uploaded": "Μεταφορτώθηκε",
         "dxFileUploader-readyToUpload": "Έτοιμο προς μεταφόρτωση",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Η μεταφόρτωση απέτυχε",
         "dxFileUploader-invalidFileExtension": "Ο τυπος του αρχείου δεν είναι επιτρεπτός",
         "dxFileUploader-invalidMaxFileSize": "Το αρχείο είναι πολύ μεγάλο",
@@ -164,7 +165,7 @@
 
         "dxPager-infoText": "Σελίδα {0} από {1} ({2} αντικείμενα)",
         "dxPager-pagesCountText": "από",
-
+        "dxPager-pageSizesAllText": "Όλα",
         "dxPivotGrid-grandTotal": "Σύνολο",
         "dxPivotGrid-total": "{0} Σύνολο",
         "dxPivotGrid-fieldChooserTitle": "Επιλογέας πεδίου",

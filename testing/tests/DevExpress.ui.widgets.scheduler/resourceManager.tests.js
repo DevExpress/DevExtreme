@@ -867,4 +867,18 @@ QUnit.test('getResourcesData should be correct after reloading resources', funct
             done();
         }, this));
     });
+
+    QUnit.test('getResourcesDataByGroups if empty groups', function(assert) {
+        this.createInstance([]);
+
+        const done = assert.async();
+
+        this.instance.loadResources([]).done($.proxy(() => {
+            const resourcesDataByGroups = this.instance.getResourcesDataByGroups();
+
+            assert.deepEqual(resourcesDataByGroups, [], 'getResourcesDataByGroups works correctly');
+
+            done();
+        }, this));
+    });
 });

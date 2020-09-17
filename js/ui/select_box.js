@@ -162,14 +162,6 @@ const SelectBox = DropDownList.inherit({
             showSelectionControls: false,
 
             /**
-            * @name dxSelectBoxOptions.autocompletionEnabled
-            * @type boolean
-            * @default true
-            * @hidden
-            */
-            autocompletionEnabled: true,
-
-            /**
             * @name dxSelectBoxOptions.allowClearing
             * @type boolean
             * @default true
@@ -185,7 +177,6 @@ const SelectBox = DropDownList.inherit({
 
             displayCustomValue: false,
 
-            _isAdaptablePopupPosition: false,
             useInkRipple: false,
             useHiddenSubmitElement: true
         });
@@ -783,8 +774,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _shouldSubstitutionBeRendered: function() {
-        return this.option('autocompletionEnabled')
-            && !this._preventSubstitution
+        return !this._preventSubstitution
             && this.option('searchEnabled')
             && !this.option('acceptCustomValue')
             && this.option('searchMode') === 'startswith';
@@ -831,9 +821,6 @@ const SelectBox = DropDownList.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case '_isAdaptablePopupPosition':
-            case 'autocompletionEnabled':
-                break;
             case 'onCustomItemCreating':
                 this._initCustomItemCreatingAction();
                 break;

@@ -1,4 +1,5 @@
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/scroll_view/ui.scrollable';
 
 import $ from 'jquery';
@@ -105,9 +106,38 @@ QUnit.module('VirtualScrollingController. Virtual scrolling mode', moduleConfig,
         this.scrollController.load();
 
 
+        assert.strictEqual(mockDataSource.load.callCount, 1);
+        assert.equal(this.externalDataChangedHandler.callCount, 1);
+
+        assert.strictEqual(this.scrollController.beginPageIndex(), 0);
+        assert.strictEqual(this.scrollController.endPageIndex(), 0);
+
+        assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [undefined]);
+    });
+
+    QUnit.test('Load after scroll to top', function(assert) {
+        this.scrollController.viewportSize(12);
+        this.scrollController.load();
+
+        this.scrollController.setViewportPosition(0);
+
+        assert.strictEqual(mockDataSource.load.callCount, 1);
+        assert.equal(this.externalDataChangedHandler.callCount, 1);
+
+        assert.strictEqual(this.scrollController.beginPageIndex(), 0);
+        assert.strictEqual(this.scrollController.endPageIndex(), 0);
+
+        assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [undefined]);
+    });
+
+    QUnit.test('Load if loadTwoPagesOnStart is true', function(assert) {
+        mockComponent.option.withArgs('scrolling.loadTwoPagesOnStart').returns(true);
+        this.scrollController.viewportSize(12);
+        this.scrollController.load();
+
+
         assert.strictEqual(mockDataSource.load.callCount, 2);
-        assert.equal(this.externalDataChangedHandler.callCount, 2); // TODO 1
-        // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
+        assert.equal(this.externalDataChangedHandler.callCount, 2);
 
         assert.strictEqual(this.scrollController.beginPageIndex(), 0);
         assert.strictEqual(this.scrollController.endPageIndex(), 1);
@@ -125,12 +155,11 @@ QUnit.module('VirtualScrollingController. Virtual scrolling mode', moduleConfig,
         this.scrollController.load();
 
 
-        assert.strictEqual(mockDataSource.load.callCount, 2);
-        assert.equal(this.externalDataChangedHandler.callCount, 1); // TODO 1
-        // assert.ok(this.externalDataChangedHandler.calledAfter(mockDataSource.load.lastCall));
+        assert.strictEqual(mockDataSource.load.callCount, 1);
+        assert.equal(this.externalDataChangedHandler.callCount, 1);
 
         assert.strictEqual(this.scrollController.beginPageIndex(), 0);
-        assert.strictEqual(this.scrollController.endPageIndex(), 1);
+        assert.strictEqual(this.scrollController.endPageIndex(), 0);
 
         assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [undefined]);
     });
@@ -169,11 +198,13 @@ QUnit.module('VirtualScrollingController. Virtual scrolling mode', moduleConfig,
         this.scrollController.viewportSize(12);
         this.scrollController.load();
 
-        this.scrollController.setContentSize(400);
+        const contentSize = 200;
 
-        assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + 400);
+        this.scrollController.setContentSize(contentSize);
+
+        assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + contentSize);
         assert.strictEqual(this.scrollController.beginPageIndex(), 0);
-        assert.strictEqual(this.scrollController.endPageIndex(), 1);
+        assert.strictEqual(this.scrollController.endPageIndex(), 0);
 
         assert.strictEqual(this.scrollController.getContentOffset(), 0);
     });
@@ -211,9 +242,12 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(viewportPosition, 50, 'viewport position after set');
     });
 
-    QUnit.test('setViewport position. Scroll in in the viewport area', function(assert) {
+    QUnit.test('setViewport position. Scroll in the viewport area', function(assert) {
+        this.scrollController.setViewportPosition(1);
+        mockDataSource.load.reset();
+
         this.scrollController.setViewportPosition(230);
-        this.scrollController.setViewportPosition(0);
+        this.scrollController.setViewportPosition(1);
         this.scrollController.setViewportPosition(this.contentSize - 1);
 
         assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + 400);
@@ -235,7 +269,7 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(this.scrollController.getContentOffset(), 0);
         assert.ok(mockDataSource.load.called);
 
-        assert.strictEqual(this.externalDataChangedHandler.callCount, 1);
+        assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
         assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
             changeType: 'append',
             items: []
@@ -253,7 +287,7 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(this.scrollController.getContentOffset(), 0);
         assert.ok(mockDataSource.load.called);
 
-        assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
+        assert.strictEqual(this.externalDataChangedHandler.callCount, 3);
         assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
             changeType: 'append',
             items: []
@@ -271,11 +305,11 @@ QUnit.module('Virtual scrolling', {
 
         clock.tick(100);
 
-        assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 4 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + 400);
-        assert.strictEqual(this.scrollController.beginPageIndex(), 0);
+        assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + this.contentSize);
+        assert.strictEqual(this.scrollController.beginPageIndex(), 2);
         assert.strictEqual(this.scrollController.endPageIndex(), 3);
 
-        assert.strictEqual(this.scrollController.getContentOffset(), 0);
+        assert.strictEqual(this.scrollController.getContentOffset(), this.contentSize * 2);
         assert.ok(mockDataSource.load.called);
 
         assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
@@ -301,11 +335,11 @@ QUnit.module('Virtual scrolling', {
         clock.tick(143);
         clock.tick(150);
 
-        assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 4 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + 400);
-        assert.strictEqual(this.scrollController.beginPageIndex(), 0);
+        assert.strictEqual(this.scrollController.getVirtualContentSize(), (DEFAULT_TOTAL_ITEMS_COUNT - 2 * mockDataSource.pageSize()) * this.scrollController.viewportItemSize() + this.contentSize);
+        assert.strictEqual(this.scrollController.beginPageIndex(), 2);
         assert.strictEqual(this.scrollController.endPageIndex(), 3);
 
-        assert.strictEqual(this.scrollController.getContentOffset(), 0);
+        assert.strictEqual(this.scrollController.getContentOffset(), this.contentSize * 2);
         assert.ok(mockDataSource.load.called);
 
         assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
@@ -354,7 +388,7 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(this.scrollController.beginPageIndex(), 0);
         assert.strictEqual(this.scrollController.endPageIndex(), 2);
 
-        assert.strictEqual(this.externalDataChangedHandler.callCount, 1);
+        assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
 
         clock.restore();
     });
@@ -371,7 +405,7 @@ QUnit.module('Virtual scrolling', {
         clock.tick(10);
         assert.strictEqual(this.externalDataChangedHandler.callCount, 0);
         clock.tick(71);
-        assert.strictEqual(this.externalDataChangedHandler.callCount, 1);
+        assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
 
         clock.restore();
     });
@@ -389,7 +423,7 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(this.scrollController.getContentOffset(), 0);
         assert.ok(mockDataSource.load.called);
 
-        assert.strictEqual(this.externalDataChangedHandler.callCount, 1);
+        assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
         assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
             changeType: 'append',
             items: []
@@ -411,7 +445,7 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(this.scrollController.getContentOffset(), 0);
         assert.ok(mockDataSource.load.called);
 
-        assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
+        assert.strictEqual(this.externalDataChangedHandler.callCount, 3);
         assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{
             changeType: 'append',
             items: []
@@ -432,7 +466,7 @@ QUnit.module('Virtual scrolling', {
         assert.strictEqual(this.scrollController.getContentOffset(), 400);
         assert.ok(mockDataSource.load.called);
 
-        assert.strictEqual(this.externalDataChangedHandler.callCount, 2);
+        assert.strictEqual(this.externalDataChangedHandler.callCount, 3);
         assert.deepEqual(this.externalDataChangedHandler.lastCall.args, [{ changeType: 'append', items: [], removeCount: 20 }]);
     });
 

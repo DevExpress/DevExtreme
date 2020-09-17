@@ -65,6 +65,7 @@
         "dxFileUploader-upload": "Upload",
         "dxFileUploader-uploaded": "Đã upload",
         "dxFileUploader-readyToUpload": "Sẵn sàng để upload",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Upload thất bại",
         "dxFileUploader-invalidFileExtension": "Kiểu tập tin không cho phép",
         "dxFileUploader-invalidMaxFileSize": "Tập tin quá lớn",
@@ -164,7 +165,7 @@
 
         "dxPager-infoText": "Trang {0} của {1} ({2} mục)",
         "dxPager-pagesCountText": "của",
-
+        "dxPager-pageSizesAllText": "Tất cả",
         "dxPivotGrid-grandTotal": "Tổng tất cả",
         "dxPivotGrid-total": "{0} Tổng",
         "dxPivotGrid-fieldChooserTitle": "Trình lựa chọn Trường",

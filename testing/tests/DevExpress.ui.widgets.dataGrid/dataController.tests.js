@@ -38,7 +38,7 @@ const setupModule = function() {
     ]);
 
     this.applyOptions = function(options) {
-        $.extend(this.options, options);
+        $.extend(true, this.options, options);
         this.columnsController.init();
     };
 
@@ -3371,9 +3371,9 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
         assert.ok(virtualItemsCount);
         assert.deepEqual(virtualItemsCount, {
             begin: 0,
-            end: 960
+            end: 980
         });
-        assert.equal(this.dataController.items().length, 40);
+        assert.equal(this.dataController.items().length, 20);
     });
 
     QUnit.test('virtual items at end', function(assert) {
@@ -3580,8 +3580,8 @@ QUnit.module('Virtual scrolling', { beforeEach: setupVirtualScrollingModule, aft
 
         // arrange
         assert.equal(that.dataController.items()[0].key, 999, 'sorting is applied');
-        assert.equal(countCallChanged, 4, 'count call changed of the dataController');
-        assert.equal(countCallDataSourceChanged, 4, 'count call changed of the dataSource');
+        assert.equal(countCallChanged, 2, 'count call changed of the dataController');
+        assert.equal(countCallDataSourceChanged, 2, 'count call changed of the dataSource');
     });
 
     // T717716
@@ -3800,19 +3800,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             }
         }, {
             changeType: 'append',
-            items: this.dataController.items().slice(10, 15),
-            operationTypes: {
-                filtering: false,
-                fullReload: false,
-                groupExpanding: undefined,
-                grouping: false,
-                pageIndex: false,
-                paging: false,
-                reload: false,
-                skip: true,
-                sorting: false,
-                take: false
-            }
+            items: this.dataController.items().slice(10, 15)
         }]);
     });
 
@@ -3865,10 +3853,10 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.dataController.viewportSize(9);
         this.clock.tick(0);
 
-        assert.strictEqual(this.dataController.items().length, 40);
+        assert.strictEqual(this.dataController.items().length, 20);
         assert.strictEqual(this.dataController.items()[0].key, 0);
         assert.strictEqual(this.dataController.getContentOffset('begin'), 0);
-        assert.strictEqual(this.dataController.getContentOffset('end'), 600);
+        assert.strictEqual(this.dataController.getContentOffset('end'), 800);
         assert.deepEqual(this.changedArgs, [{
             changeType: 'refresh',
             isDataChanged: true,
@@ -3876,16 +3864,8 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
             items: this.dataController.items(),
             needUpdateDimensions: true,
             operationTypes: {
-                filtering: false,
                 fullReload: true,
-                groupExpanding: undefined,
-                grouping: false,
-                pageIndex: false,
-                paging: false,
-                reload: true,
-                skip: true,
-                sorting: false,
-                take: false
+                reload: true
             }
         }]);
     });
@@ -4038,7 +4018,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         });
 
         // assert
-        assert.deepEqual(this.getDataItems(), [1, 2, 3, 4, 5, 6], 'two pages are loaded');
+        assert.deepEqual(this.getDataItems(), [1, 2, 3], 'one page is loaded');
         assert.ok(this.dataController.isLoaded());
     });
 
@@ -4050,6 +4030,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const changedArgs = [];
 
         this.dataController.viewportSize(2);
+        this.dataController.setViewportItemIndex(0.1);
+
         this.dataController.changed.add(function(e) {
             changedArgs.push(e);
         });
@@ -4136,7 +4118,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.setupDataSource({
             pageSize: 2
         });
-        this.dataController.viewportSize(3);
+        this.dataController.viewportSize(5);
         this.dataController.changed.add(function(e) {
             changedArgs.push(e);
         });
@@ -4164,7 +4146,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.setupDataSource({
             pageSize: 2
         });
-        this.dataController.viewportSize(3);
+        this.dataController.viewportSize(5);
         this.dataController.changed.add(function(e) {
             changedArgs.push(e);
         });
@@ -4234,6 +4216,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         const dataController = this.dataController;
 
         dataController.viewportSize(2);
+        dataController.setViewportItemIndex(0.1);
+
         dataController.changed.add(function(e) {
             changedArgs.push(e);
         });
@@ -4402,7 +4386,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         this.clock.tick();
 
         // assert
-        assert.deepEqual(events, ['loadingChanged', 'loadingChanged', 'changed', 'changed']);
+        assert.deepEqual(events, ['loadingChanged', 'loadingChanged', 'changed']);
     });
 
     // B252337
@@ -4596,6 +4580,7 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
         });
 
         this.dataController.viewportSize(10);
+        this.dataController.setViewportItemIndex(0.1);
 
         let changedArgs;
 
@@ -4637,6 +4622,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             pageSize
         });
         this.dataController.viewportSize(pageSize);
+        this.dataController.setViewportItemIndex(0);
+
         const items = this.dataController.items();
         assert.equal(items[pageSize - 1].rowType, 'group');
         assert.equal(items[pageSize].data.name, 'text 2,1');
@@ -4665,6 +4652,8 @@ QUnit.module('Virtual scrolling (ScrollingDataSource)', {
             pageSize
         });
         this.dataController.viewportSize(pageSize);
+        this.dataController.setViewportItemIndex(0);
+
         const items = this.dataController.items();
         assert.equal(items[pageSize - 2].rowType, 'group');
         assert.equal(items[pageSize - 1].data.name, 'text 2,1');
@@ -7655,10 +7644,10 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             { name: 'Dan', phone: '98-75-21' }
         ];
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'cell',
             allowAdding: true
-        };
+        });
 
         const dataSource = createDataSource(array, { key: 'name' });
 
@@ -7687,10 +7676,10 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             { name: 'Dan', phone: '98-75-21' }
         ];
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'row',
             allowAdding: true
-        };
+        });
 
         const dataSource = createDataSource(array, { key: 'name' });
 
@@ -7845,9 +7834,9 @@ QUnit.module('Editing', { beforeEach: setupModule, afterEach: teardownModule }, 
             { id: 3 },
         ];
 
-        this.options.editing = {
+        $.extend(this.options.editing, {
             mode: 'form'
-        };
+        });
 
         const dataSource = createDataSource(array, { key: 'id' });
 
@@ -12749,9 +12738,7 @@ QUnit.module('Refresh changesOnly', {
     QUnit.test('edit row should be updated on cancel', function(assert) {
         this.setupModules();
 
-        this.options.editing = {
-            mode: 'row'
-        };
+        $.extend(this.options.editing, { mode: 'row' });
 
         this.options.repaintChangesOnly = true;
 
@@ -12779,9 +12766,7 @@ QUnit.module('Refresh changesOnly', {
 
         let changedArgs;
 
-        this.options.editing = {
-            mode: 'form'
-        };
+        $.extend(this.options.editing, { mode: 'form' });
 
         this.dataController.changed.add(function(args) {
             changedArgs = args;
@@ -12814,7 +12799,7 @@ QUnit.module('Refresh changesOnly', {
             changedArgs = args;
         });
 
-        this.options.editing = { mode: 'cell' };
+        $.extend(this.options.editing, { mode: 'cell' });
         this.editCell(0, 1);
 
         // act
@@ -12849,7 +12834,7 @@ QUnit.module('Refresh changesOnly', {
         });
 
         this.options.repaintChangesOnly = true;
-        this.options.editing = { mode: 'row', allowUpdating: true };
+        $.extend(this.options.editing, { mode: 'row', allowUpdating: true });
         this.editRow(0);
 
         // act
@@ -13161,7 +13146,7 @@ QUnit.module('Using DataSource instance', {
         };
 
         this.applyOptions = function(options) {
-            $.extend(this.options, options);
+            $.extend(true, this.options, options);
             this.columnsController.init();
         };
 
@@ -13426,7 +13411,7 @@ QUnit.module('Exporting', {
         };
 
         this.applyOptions = function(options) {
-            $.extend(this.options, options);
+            $.extend(true, this.options, options);
             this.columnsController.init();
         };
 
@@ -14378,6 +14363,9 @@ QUnit.module('onOptionChanged', {
         sinon.stub(that, 'option', function(optionName, value) {
             if(optionName === 'paging.pageSize' && value === 3) {
                 pageSize = that.dataController.dataSource().pageSize();
+            }
+            if(optionName === 'editing.changes') {
+                return that.options.editing.changes;
             }
         });
 

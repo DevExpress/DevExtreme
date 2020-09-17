@@ -6,7 +6,7 @@ import { move } from '../../../animation/translator';
 import devices from '../../../core/devices';
 import Resizable from '../../resizable';
 import { getBoundingRect } from '../../../core/utils/position';
-import Quill from 'quill';
+import Quill from 'devextreme-quill';
 
 const DX_RESIZE_FRAME_CLASS = 'dx-resize-frame';
 const DX_TOUCH_DEVICE_CLASS = 'dx-touch-device';

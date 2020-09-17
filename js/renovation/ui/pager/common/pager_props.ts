@@ -3,6 +3,8 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { EventCallback } from '../../common/event_callback.d';
 
+export type DisplayMode = 'adaptive' | 'compact' | 'full';
+
 @ComponentBindings()
 export default class PagerProps {
   @OneWay() gridCompatibility = true;
@@ -13,7 +15,9 @@ export default class PagerProps {
 
   @OneWay() infoText?: string;
 
-  @OneWay() lightModeEnabled = false;
+  @OneWay() lightModeEnabled?: boolean;
+
+  @OneWay() displayMode: DisplayMode = 'adaptive';
 
   @OneWay() maxPagesCount = 10;
 
@@ -37,7 +41,7 @@ export default class PagerProps {
 
   @OneWay() showPageSizes = true;
 
-  @OneWay() pageSizes = [5, 10];
+  @OneWay() pageSizes: (number | 'all')[] = [5, 10];
 
   @OneWay() rtlEnabled = false;
 

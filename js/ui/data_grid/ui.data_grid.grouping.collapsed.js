@@ -500,8 +500,6 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
 
                 storeLoadOptions.skip = options.skip;
                 storeLoadOptions.take = options.take;
-            } else {
-                that.foreachGroups(function(groupInfo) { groupInfo.count = 0; });
             }
         },
         handleDataLoadedCore: function(options, callBase) {
@@ -516,6 +514,10 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
 
                 processGroupItems(that, options.data, loadedGroupCount, expandedInfo, [], options.isCustomLoading, options.storeLoadOptions.isLoadingAll);
             } else {
+                if(!options.remoteOperations.paging) {
+                    that.foreachGroups(function(groupInfo) { groupInfo.count = 0; });
+                }
+
                 totalCount = updateGroupInfos(that, options, options.data, loadedGroupCount);
 
                 if(totalCount < 0) {

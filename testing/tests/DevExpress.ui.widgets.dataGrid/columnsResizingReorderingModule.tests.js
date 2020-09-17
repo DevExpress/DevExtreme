@@ -3050,12 +3050,11 @@ QUnit.module('Columns resizing', {
             assert.strictEqual($headers.length, 3, 'header count');
 
             $headers.each((index, header) => {
-                const isIE11 = browser.msie && parseInt(browser.version) <= 11;
                 const $dataCell = $dataCells.eq(index);
                 const cellOffset = $dataCell.offset().left;
                 let headerOffset = $(header).offset().left;
 
-                if(isIE11) {
+                if(browser.msie) {
                     // header has border, so offset for it is fractional in IE
                     headerOffset = Math.floor(headerOffset);
                 }
