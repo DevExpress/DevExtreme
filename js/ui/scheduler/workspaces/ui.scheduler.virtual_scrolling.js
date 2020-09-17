@@ -48,13 +48,8 @@ export default class VirtualScrollingDispatcher {
     }
 
     dispose() {
-        if(this.virtualScrolling) {
-            delete this.virtualScrolling;
-            this.virtualScrolling = null;
-
-            if(this._onScrollHandler) {
-                eventsEngine.off(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this._onScrollHandler);
-            }
+        if(this._onScrollHandler) {
+            eventsEngine.off(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this._onScrollHandler);
         }
     }
 
