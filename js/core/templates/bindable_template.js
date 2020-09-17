@@ -1,6 +1,6 @@
 import $ from '../renderer';
 import { TemplateBase } from './template_base';
-import { on } from '../../events/core/events_engine';
+import eventsEngine from '../../events/core/events_engine';
 import removeEvent from '../remove_event';
 import { isPrimitive } from '../utils/type';
 
@@ -76,7 +76,7 @@ export class BindableTemplate extends TemplateBase {
             $container.empty();
             this._render($container, data, options.model);
         });
-        on($container, removeEvent, dispose);
+        eventsEngine.on($container, removeEvent, dispose);
 
         return $container.contents();
     }

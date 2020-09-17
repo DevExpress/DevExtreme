@@ -2,7 +2,7 @@ import Promise from '../../core/polyfills/promise';
 import Class from '../../core/class';
 import { map } from '../../core/utils/iterator';
 import { isPlainObject, isNumeric } from '../../core/utils/type';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 
 const abstract = Class.abstract;
 

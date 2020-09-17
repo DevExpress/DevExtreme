@@ -3,8 +3,9 @@ import domAdapter from './dom_adapter';
 import { getWindow } from './utils/window';
 import { isObject, isWindow, isPlainObject, isString, isNumeric, isDefined, isFunction, type } from './utils/type';
 import { styleProp, normalizeStyleProp } from './utils/style';
-import sizeUtils from './utils/size';
+import { getSize, getElementBoxParams } from './utils/size';
 import { parseHTML, isTablePart } from './utils/html_parser';
+
 const window = getWindow();
 
 let renderer;
@@ -205,7 +206,7 @@ initRender.prototype.toggleClass = function(className, value) {
                 margins: value
             };
 
-            return sizeUtils.getSize(element, propName, include);
+            return getSize(element, propName, include);
         }
 
         if(value === undefined || value === null) {
@@ -214,7 +215,7 @@ initRender.prototype.toggleClass = function(className, value) {
 
         if(isNumeric(value)) {
             const elementStyles = window.getComputedStyle(element);
-            const sizeAdjustment = sizeUtils.getElementBoxParams(propName, elementStyles);
+            const sizeAdjustment = getElementBoxParams(propName, elementStyles);
             const isBorderBox = elementStyles.boxSizing === 'border-box';
             value = Number(value);
 

@@ -1,21 +1,16 @@
 // there are line, stepline, stackedline, fullstackedline, spline
-import series from './scatter_series';
-
-const chartScatterSeries = series.chart;
-const polarScatterSeries = series.polar;
-import objectUtils from '../../core/utils/object';
+import { chart as chartScatterSeries, polar as polarScatterSeries } from './scatter_series';
+import { clone } from '../../core/utils/object';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import vizUtils from '../core/utils';
+import {
+    map,
+    normalizeAngle,
+    getCosAndSin
+} from '../core/utils';
 import { solveCubicEquation, trunc } from '../../core/utils/math';
-const normalizeAngle = vizUtils.normalizeAngle;
 
 const DISCRETE = 'discrete';
-
-const _map = vizUtils.map;
-
-const _extend = extend;
-const _each = each;
 
 const { round, sqrt, pow, min, max, abs } = Math;
 
@@ -23,7 +18,7 @@ const chart = {};
 const polar = {};
 
 function clonePoint(point, newX, newY, newAngle) {
-    const p = objectUtils.clone(point);
+    const p = clone(point);
     p.x = newX;
     p.y = newY;
     p.angle = newAngle;
@@ -32,7 +27,7 @@ function clonePoint(point, newX, newY, newAngle) {
 
 function getTangentPoint(point, prevPoint, centerPoint, tan, nextStepAngle) {
     const correctAngle = point.angle + nextStepAngle;
-    const cosSin = vizUtils.getCosAndSin(correctAngle);
+    const cosSin = getCosAndSin(correctAngle);
     const x = centerPoint.x + (point.radius + tan * nextStepAngle) * cosSin.cos;
     const y = centerPoint.y - (point.radius + tan * nextStepAngle) * cosSin.sin;
 
@@ -55,7 +50,7 @@ const lineMethods = {
 
     _applyGroupSettings: function(style, settings, group) {
         const that = this;
-        settings = _extend(settings, style);
+        settings = extend(settings, style);
         that._applyElementsClipRect(settings);
         group.attr(settings);
     },
@@ -84,7 +79,7 @@ const lineMethods = {
 
     _getDefaultSegment: function(segment) {
         return {
-            line: _map(segment.line || [], function(pt) {
+            line: map(segment.line || [], function(pt) {
                 return pt.getDefaultCoords();
             })
         };
@@ -109,7 +104,7 @@ const lineMethods = {
     _applyStyle: function(style) {
         const that = this;
         that._elementsGroup && that._elementsGroup.attr(style.elements);
-        _each(that._graphics || [], function(_, graphic) {
+        each(that._graphics || [], function(_, graphic) {
             graphic.line && graphic.line.attr({ 'stroke-width': style.elements['stroke-width'] }).sharp();
         });
     },
@@ -138,7 +133,7 @@ const lineMethods = {
     _animate: function() {
         const that = this;
         const lastIndex = that._graphics.length - 1;
-        _each(that._graphics || [], function(i, elem) {
+        each(that._graphics || [], function(i, elem) {
             let complete;
             if(i === lastIndex) {
                 complete = function() {
@@ -218,7 +213,7 @@ const lineMethods = {
     }
 };
 
-const lineSeries = chart['line'] = _extend({}, chartScatterSeries, lineMethods, {
+const lineSeries = chart['line'] = extend({}, chartScatterSeries, lineMethods, {
     getPointCenterByArg(arg) {
         const value = this.getArgumentAxis().getTranslator().translate(arg);
         return { x: value, y: value };
@@ -252,12 +247,12 @@ const lineSeries = chart['line'] = _extend({}, chartScatterSeries, lineMethods, 
     }
 });
 
-chart['stepline'] = _extend({}, lineSeries, {
+chart['stepline'] = extend({}, lineSeries, {
     _calculateStepLinePoints(points) {
         const segment = [];
         const coordName = this._options.rotated ? 'x' : 'y';
 
-        _each(points, function(i, pt) {
+        each(points, function(i, pt) {
             let point;
 
             if(!i) {
@@ -266,7 +261,7 @@ chart['stepline'] = _extend({}, lineSeries, {
             }
             const step = segment[segment.length - 1][coordName];
             if(step !== pt[coordName]) {
-                point = objectUtils.clone(pt);
+                point = clone(pt);
                 point[coordName] = step;
                 segment.push(point);
             }
@@ -307,7 +302,7 @@ chart['stepline'] = _extend({}, lineSeries, {
     }
 });
 
-chart['spline'] = _extend({}, lineSeries, {
+chart['spline'] = extend({}, lineSeries, {
 
     _calculateBezierPoints: function(src, rotated) {
         const bezierPoints = [];
@@ -475,7 +470,7 @@ chart['spline'] = _extend({}, lineSeries, {
     },
 });
 
-polar.line = _extend({}, polarScatterSeries, lineMethods, {
+polar.line = extend({}, polarScatterSeries, lineMethods, {
     _sortPoints: function(points) {
         return points;
     },
@@ -592,7 +587,7 @@ polar.line = _extend({}, polarScatterSeries, lineMethods, {
                 coords = getTangentPoint(point, prevPoint, centerPoint, tan, stepAngle);
             } else {
                 if(isArgument) {
-                    const cosSin = vizUtils.getCosAndSin(-coordParam);
+                    const cosSin = getCosAndSin(-coordParam);
                     const k1 = (point.y - prevPoint.y) / (point.x - prevPoint.x);
                     const b1 = prevPoint.y - prevPoint.x * k1;
                     const k2 = cosSin.sin / cosSin.cos;
@@ -637,7 +632,7 @@ polar.line = _extend({}, polarScatterSeries, lineMethods, {
         const neighborPoints = [];
 
         if(this.getOptions().closed) {
-            points = _extend(true, [], points);
+            points = extend(true, [], points);
             const lastPoint = points[points.length - 1];
             const firstPointCopy = clonePoint(points[0], points[0].x, points[0].y, points[0].angle);
             const lastPointCopy = clonePoint(lastPoint, lastPoint.x, lastPoint.y, lastPoint.angle);

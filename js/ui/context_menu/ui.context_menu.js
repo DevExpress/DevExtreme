@@ -14,7 +14,7 @@ import { hasWindow } from '../../core/utils/window';
 import fx from '../../animation/fx';
 import { setup } from '../../animation/position';
 import devices from '../../core/devices';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import Overlay from '../overlay';
 import MenuBase from './ui.menu_base';
 import { Deferred } from '../../core/utils/deferred';

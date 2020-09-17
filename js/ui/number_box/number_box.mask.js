@@ -9,7 +9,7 @@ import number from '../../localization/number';
 import maskCaret from './number_box.caret';
 import { getFormat as getLDMLFormat } from '../../localization/ldml/number';
 import NumberBoxBase from './number_box.base';
-import { addNamespace, getChar, normalizeKeyName } from '../../events/utils';
+import { addNamespace, getChar, normalizeKeyName } from '../../events/utils/index';
 import { ensureDefined, escapeRegExp } from '../../core/utils/common';
 
 const NUMBER_FORMATTER_NAMESPACE = 'dxNumberFormatter';

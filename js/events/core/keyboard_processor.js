@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import Class from '../../core/class';
 import { inArray } from '../../core/utils/array';
-import { addNamespace, normalizeKeyName } from '../../events/utils';
+import { addNamespace, normalizeKeyName } from '../../events/utils/index';
 
 const COMPOSITION_START_EVENT = 'compositionstart';
 const COMPOSITION_END_EVENT = 'compositionend';

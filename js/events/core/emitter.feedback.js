@@ -2,7 +2,7 @@ import Class from '../../core/class';
 import { noop, ensureDefined } from '../../core/utils/common';
 import { contains } from '../../core/utils/dom';
 import devices from '../../core/devices';
-import { isMouseEvent } from '../utils';
+import { isMouseEvent } from '../utils/index';
 import pointerEvents from '../pointer';
 import Emitter from './emitter';
 import registerEmitter from './emitter_registrator';
