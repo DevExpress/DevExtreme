@@ -366,7 +366,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const $focusedCells = $(this._selectedCells);
 
-        this._toggleSelectedCellClass(true, $focusedCells);
+        this._toggleFocusClass(true, $focusedCells);
         this.setAria('label', 'Add appointment', $focusedCells);
 
         const selectedCellData = this.getSelectedCellData();
@@ -515,7 +515,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $cells = $(this._selectedCells);
 
         if(isDefined($cells) && $cells.length) {
-            this._toggleSelectedCellClass(false, $cells);
+            this._toggleFocusClass(false, $cells);
             this.setAria('label', undefined, $cells);
         }
     }
@@ -1301,7 +1301,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 : undefined;
 
             if(isDefined($cell)) {
-                this._toggleSelectedCellClass(true, $cell);
+                this._toggleFocusClass(true, $cell);
                 cells.push($cell.get(0));
             }
         }
