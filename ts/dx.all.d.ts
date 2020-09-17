@@ -7579,6 +7579,10 @@ declare module DevExpress.ui {
          */
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /**
+         * [descr:dxGantt.Options.onContextMenuPreparing]
+         */
+        onContextMenuPreparing?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, cancel?: boolean, event?: DevExpress.events.event, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => any);
+        /**
          * [descr:dxGantt.Options.onCustomCommand]
          */
         onCustomCommand?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, name?: string }) => any);
