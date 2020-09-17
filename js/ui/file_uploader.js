@@ -15,7 +15,7 @@ import Button from './button';
 import ProgressBar from './progress_bar';
 import browser from '../core/utils/browser';
 import devices from '../core/devices';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
 import themes from './themes';

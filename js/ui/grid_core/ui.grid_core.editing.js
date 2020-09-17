@@ -11,7 +11,7 @@ import { name as clickEventName } from '../../events/click';
 import { name as doubleClickEvent } from '../../events/double_click';
 import pointerEvents from '../../events/pointer';
 import { getIndexByKey, createObjectWithChanges, setEmptyText, getSelectionRange, setSelectionRange, focusAndSelectElement } from './ui.grid_core.utils';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import dialog from '../dialog';
 import messageLocalization from '../../localization/message';
 import Button from '../button';

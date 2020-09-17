@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
-import { addNamespace, createEvent } from 'events/utils';
+import { addNamespace, createEvent } from 'events/utils/index';
 import {
     setupDataGridModules,
     MockDataController,

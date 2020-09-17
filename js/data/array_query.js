@@ -1,6 +1,6 @@
 import Class from '../core/class';
 import { isFunction, isDefined } from '../core/utils/type';
-import iteratorUtils from '../core/utils/iterator';
+import { each, map } from '../core/utils/iterator';
 import { compileGetter } from '../core/utils/data';
 import { toComparable } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
@@ -173,7 +173,7 @@ const SortIterator = Iterator.inherit({
             return;
         }
 
-        iteratorUtils.each(that.rules, function() {
+        each(that.rules, function() {
             this.getter = compileGetter(this.getter);
         });
 
@@ -229,7 +229,7 @@ const compileCriteria = (function() {
         let isConjunctiveOperator = false;
         let isConjunctiveNextOperator = false;
 
-        iteratorUtils.each(crit, function() {
+        each(crit, function() {
             if(Array.isArray(this) || isFunction(this)) {
                 if(ops.length > 1 && isConjunctiveOperator !== isConjunctiveNextOperator) {
                     throw new errorsModule.errors.Error('E4019');
@@ -416,7 +416,7 @@ const GroupIterator = Iterator.inherit({
         }
 
         this.groupedIter = new ArrayIterator(
-            iteratorUtils.map(
+            map(
                 keys,
                 function(key) {
                     return { key: key, items: hash[key] };
