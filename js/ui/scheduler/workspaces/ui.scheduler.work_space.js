@@ -156,13 +156,13 @@ class SchedulerWorkSpace extends WidgetObserver {
             e.preventDefault();
             e.stopPropagation();
 
-            if(this._focusedCells && this._focusedCells.length) {
+            if(this._selectedCells && this._selectedCells.length) {
                 const $itemElement = $(this.option('focusedElement'));
-                const $cellElement = $($itemElement.length ? $itemElement : this._focusedCells);
+                const $cellElement = $($itemElement.length ? $itemElement : this._selectedCells);
 
-                e.target = this._focusedCells;
+                e.target = this._selectedCells;
                 this._showPopup = true;
-                this._cellClickAction({ event: e, cellElement: $(this._focusedCells), cellData: this.getCellData($cellElement) });
+                this._cellClickAction({ event: e, cellElement: $(this._selectedCells), cellData: this.getCellData($cellElement) });
             }
         };
         const arrowPressHandler = function(e, cell) {
@@ -210,7 +210,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getAllFocusedCells() {
-        return this._focusedCells ||
+        return this._selectedCells ||
             this._$dateTable.find('.' + DATE_TABLE_CELL_CLASS).eq(0);
     }
 
@@ -352,7 +352,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _setSelectedCells($firstCell, $lastCell, isMultiSelection) {
         this._releaseSelectedCells();
-        this._focusedCells = [];
+        this._selectedCells = [];
 
         if(this.isVirtualScrolling()) {
             this._setSelectedCellsInVirtualMode(
@@ -364,9 +364,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             );
         }
 
-        const $focusedCells = $(this._focusedCells);
+        const $focusedCells = $(this._selectedCells);
 
-        this._toggleFocusClass(true, $focusedCells);
+        this._toggleSelectedCellClass(true, $focusedCells);
         this.setAria('label', 'Add appointment', $focusedCells);
 
         const selectedCellData = this.getSelectedCellData();
@@ -384,9 +384,9 @@ class SchedulerWorkSpace extends WidgetObserver {
                 ? 'vertical'
                 : 'horizontal';
             const $targetCells = this._getCellsBetween($correctedFirstCell, $previousCell, orientation);
-            this._focusedCells = $targetCells.toArray();
+            this._selectedCells = $targetCells.toArray();
         } else {
-            this._focusedCells = [$firstCell.get(0)];
+            this._selectedCells = [$firstCell.get(0)];
             this._$prevCell = $firstCell;
         }
     }
@@ -411,7 +411,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this.viewDataProvider.setSelectedCells(firstCell, lastCell);
         } else {
-            this._focusedCells = [$firstCell.get(0)];
+            this._selectedCells = [$firstCell.get(0)];
             this._$prevCell = $firstCell;
 
             const { rowIndex, columnIndex } = this._getCoordinatesByCell($firstCell);
@@ -512,10 +512,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _releaseSelectedCells() {
-        const $cells = $(this._focusedCells);
+        const $cells = $(this._selectedCells);
 
         if(isDefined($cells) && $cells.length) {
-            this._toggleFocusClass(false, $cells);
+            this._toggleSelectedCellClass(false, $cells);
             this.setAria('label', undefined, $cells);
         }
     }
@@ -1301,11 +1301,11 @@ class SchedulerWorkSpace extends WidgetObserver {
                 : undefined;
 
             if(isDefined($cell)) {
-                this._toggleFocusClass(true, $cell);
+                this._toggleSelectedCellClass(true, $cell);
                 cells.push($cell.get(0));
             }
         }
-        this._focusedCells = cells;
+        this._selectedCells = cells;
         console.log('_setFocusOnCellByOption', (new Date()).getTime() - time);
     }
 
