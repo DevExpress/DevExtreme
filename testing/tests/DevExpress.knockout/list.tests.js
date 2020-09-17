@@ -6,6 +6,7 @@ require('ui/list');
 require('integration/knockout');
 
 require('common.css!');
+require('generic_light.css!');
 
 QUnit.testStart(function() {
     const markup =

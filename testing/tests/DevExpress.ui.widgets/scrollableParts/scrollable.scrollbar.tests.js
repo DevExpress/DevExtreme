@@ -7,6 +7,7 @@ import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import {
     SCROLLABLE_CONTAINER_CLASS,
@@ -37,7 +38,7 @@ const moduleConfig = {
         <div id="scaledContainer" style="transform:scale(0.2, 0.5)">\
             <div style="height: 500px; width: 500px;">\
                 <div id="scaledScrollable">\
-                    <div id="scaledContent" style="height: 1000px; width: 1000px;"></div>\
+                    <div id="scaledContent" style="height: 992px; width: 992px;"></div>\
                 </div>\
             </div>\
         </div>';
@@ -137,7 +138,7 @@ QUnit.test('scrollbar height calculated correctly', function(assert) {
 
     $scrollable.dxScrollable('instance').update();
 
-    assert.equal($scroll.height(), scrollHeight, 'scrollbar height calculated correctly');
+    assert.equal($scroll.outerHeight(), scrollHeight, 'scrollbar height calculated correctly');
 });
 
 QUnit.test('scrollbar min height', function(assert) {
@@ -151,7 +152,7 @@ QUnit.test('scrollbar min height', function(assert) {
     });
 
     const $scrollbar = $scrollable.find('.' + SCROLLABLE_SCROLL_CLASS);
-    assert.roughEqual($scrollbar.height(), SCROLLBAR_MIN_HEIGHT, 0.01);
+    assert.roughEqual($scrollbar.outerHeight(), SCROLLBAR_MIN_HEIGHT, 0.01);
 });
 
 QUnit.test('scrollbar position calculated correctly when content much greater than container', function(assert) {
@@ -256,7 +257,7 @@ QUnit.test('scrollbar width calculated correctly', function(assert) {
 
     $scrollable.dxScrollable('instance').update();
 
-    assert.equal($scroll.width(), scrollWidth, 'scrollbar width calculated correctly');
+    assert.equal($scroll.outerWidth(), scrollWidth, 'scrollbar width calculated correctly');
 });
 
 QUnit.test('moving scrollable moves scrollbar', function(assert) {

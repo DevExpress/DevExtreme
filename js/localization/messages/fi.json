@@ -65,6 +65,7 @@
         "dxFileUploader-upload": "Lähetä",
         "dxFileUploader-uploaded": "Lähetetty",
         "dxFileUploader-readyToUpload": "Valmis lähetettäväksi",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Lähetys epäonnistui",
         "dxFileUploader-invalidFileExtension": "",
         "dxFileUploader-invalidMaxFileSize": "",

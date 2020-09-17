@@ -53,6 +53,7 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import AppointmentSettingsGenerator from './appointmentSettingsGenerator';
 import utils from './utils';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
 import DateAdapter from './dateAdapter';
 
 // STYLE scheduler
@@ -2416,7 +2417,6 @@ class Scheduler extends Widget {
         this._workSpace.scrollToTime(hours, minutes, date);
     }
 
-
     addAppointment(appointment) {
         const adapter = this.createAppointmentAdapter(appointment);
         adapter.text = adapter.text || '';
@@ -2490,6 +2490,20 @@ class Scheduler extends Widget {
         * @hidden
         */
 }
+
+const getTimeZones = (date) => {
+    if(!isDefined(date)) {
+        date = new Date();
+    }
+
+    const dateInUTC = timeZoneUtils.createUTCDate(date);
+    return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
+};
+/**
+* @name ui.dxScheduler
+* @section utils
+*/
+Scheduler.getTimeZones = getTimeZones;
 
 Scheduler.include(DataHelperMixin);
 

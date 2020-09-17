@@ -65,6 +65,7 @@
         "dxFileUploader-upload": "Upload",
         "dxFileUploader-uploaded": "Uploaded",
         "dxFileUploader-readyToUpload": "Ready to upload",
+        "dxFileUploader-uploadAbortedMessage": "Upload cancelled",
         "dxFileUploader-uploadFailedMessage": "Upload failed",
         "dxFileUploader-invalidFileExtension": "File type is not allowed",
         "dxFileUploader-invalidMaxFileSize": "File is too large",
