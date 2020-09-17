@@ -20,9 +20,11 @@ class FileManagerFileUploader extends Widget {
         this.$element().addClass(FILE_MANAGER_FILE_UPLOADER_CLASS);
 
         this._uploaderInfos = [];
+        this._dropZoneEnterCounter = 1;
 
         this._createInternalFileUploader();
         this._createDropZonePlaceholder();
+        this._setDropZonePlaceholderVisible(false);
 
         super._initMarkup();
     }
@@ -162,7 +164,14 @@ class FileManagerFileUploader extends Widget {
     }
 
     _setDropZonePlaceholderVisible(visible) {
-        this._$dropZonePlaceholder.css('display', visible ? '' : 'none');
+        this._dropZoneEnterCounter += visible ? 1 : -1;
+        if(visible && this._dropZoneEnterCounter === 1) {
+            this._$dropZonePlaceholder.css('display', '');
+            return;
+        }
+        if(!visible && this._dropZoneEnterCounter === 0) {
+            this._$dropZonePlaceholder.css('display', 'none');
+        }
     }
 
     _uploadFiles(uploaderInfo, files) {
