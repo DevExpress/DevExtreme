@@ -11,13 +11,13 @@ gulp.task('create-timezones-data', () => {
     return remoteSrc(['latest.json'], {
         base: momentTimezonesRawUrl
     }).pipe(
-        through.obj((file, enc, cb) => {
+        through.obj((file, enc, callBack) => {
             const rawJSON = file.contents.toString();
             const parsed = JSON.parse(rawJSON);
             const transformed = transformTimezoneData(parsed);
             const stringify = JSON.stringify(transformed, null, 2);
             file.contents = Buffer.from('export default ' + stringify);
-            cb(null, file);
+            callBack(null, file);
         }))
         .pipe(rename('ui.scheduler.timezones_data.js'))
         .pipe(lint({

@@ -109,7 +109,8 @@ const environment = {
             axisType: 'xyAxes',
             drawingType: 'linear',
             incidentOccurred: this.incidentOccurred,
-            eventTrigger: () => { }
+            eventTrigger: () => { },
+            getTemplate() {}
         };
         this.range = new rangeModule.Range();
         this.range.min = 0;
@@ -210,7 +211,8 @@ QUnit.test('Linear axis creates 2d translator on creation', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
 
     assert.ok(axis.getTranslator() instanceof translator2DModule.Translator2D);
@@ -222,7 +224,8 @@ QUnit.test('Linear axis updates translator on option changed', function(assert) 
         renderer: this.renderer,
         axisType: 'xyAxes',
         drawingType: 'linear',
-        isArgumentAxis: true
+        isArgumentAxis: true,
+        getTemplate() {}
     });
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -244,7 +247,8 @@ QUnit.test('Linear axis updates translator, valueMarginsEnabled = true - stick f
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -262,7 +266,8 @@ QUnit.test('Linear axis with scale breaks', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -284,7 +289,8 @@ QUnit.test('Linear axis with scale breaks, breaksSize is not set', function(asse
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
     const translator = translator2DModule.Translator2D.lastCall.returnValue;
 
@@ -305,7 +311,8 @@ QUnit.test('Update canvas', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
 
     axis.updateOptions({
@@ -329,7 +336,8 @@ QUnit.test('set business range and canvas', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
 
     axis.updateOptions({
@@ -356,7 +364,8 @@ QUnit.test('set business range with constant lines', function(assert) {
     const axis = new Axis({
         renderer: this.renderer,
         axisType: 'xyAxes',
-        drawingType: 'linear'
+        drawingType: 'linear',
+        getTemplate() {}
     });
 
     axis.updateOptions({
