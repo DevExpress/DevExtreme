@@ -194,10 +194,11 @@ class VirtualScrolling {
         const rowHeight = this.getRowHeight();
         const isFirstInitialization = state.startIndex < 0;
         const topRowsCount = Math.floor(top / rowHeight);
+        const isStartIndexChanged = Math.abs(currentStartIndex - topRowsCount) > 0;
 
         state.scrollPosition = scrollPosition;
 
-        const needUpdateState = isFirstInitialization || Math.abs(currentStartIndex - topRowsCount) > 0;
+        const needUpdateState = isFirstInitialization || isStartIndexChanged;
         if(needUpdateState) {
             const topRowsInfo = this._calcTopRowsInfo(scrollPosition);
             const topRowsDelta = this._calcTopRowsDelta(topRowsInfo);
