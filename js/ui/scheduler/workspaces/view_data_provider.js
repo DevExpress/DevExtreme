@@ -462,7 +462,7 @@ export default class ViewDataProvider {
                 : startTime >= cellStartTime && startTime < cellEndTime;
         };
 
-        const rows = this.groupedDataMap[groupIndex];
+        const rows = this.groupedDataMap[groupIndex] || [];
 
         for(let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
             const row = rows[rowIndex];
