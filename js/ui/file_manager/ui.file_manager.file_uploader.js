@@ -169,6 +169,7 @@ class FileManagerFileUploader extends Widget {
             this.resetDropZoneEnterCounter();
         }
         if(visible && this._dropZoneEnterCounter === 1) {
+            this._adjustDropZonePlaceholder();
             this._$dropZonePlaceholder.css('display', '');
             return;
         }
