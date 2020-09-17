@@ -147,18 +147,18 @@ class FileManagerFileUploader extends Widget {
     }
 
     _createDropZonePlaceholder() {
-        this._$dropZonePlaceholder = $('<div>').addClass(FILE_MANAGER_FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS);
+        this._$dropZonePlaceholder = $('<div>')
+            .addClass(FILE_MANAGER_FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS)
+            .appendTo(this._$element.parent().parent());
     }
 
     _adjustDropZonePlaceholder() {
-        const dropZoneElement = this.option('dropZone').get(0);
-        const targetClientRect = dropZoneElement.getBoundingClientRect();
-        this._$dropZonePlaceholder.offset({
-            top: targetClientRect.top,
-            left: targetClientRect.left
-        });
-        this._$dropZonePlaceholder.width(dropZoneElement.offsetWidth);
-        this._$dropZonePlaceholder.height(dropZoneElement.offsetHeight);
+        const dropZoneTargetElement = this.option('dropZone').get(0);
+        const targetClientRect = dropZoneTargetElement.getBoundingClientRect();
+        this._$dropZonePlaceholder.css('top', targetClientRect.top);
+        this._$dropZonePlaceholder.css('left', targetClientRect.left);
+        this._$dropZonePlaceholder.width(dropZoneTargetElement.offsetWidth - 4);
+        this._$dropZonePlaceholder.height(dropZoneTargetElement.offsetHeight - 4);
     }
 
     _setDropZonePlaceholderVisible(visible) {
