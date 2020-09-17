@@ -157,10 +157,12 @@ class FileManagerFileUploader extends Widget {
     _adjustDropZonePlaceholder() {
         const dropZoneTargetElement = this.option('dropZone').get(0);
         const targetClientRect = dropZoneTargetElement.getBoundingClientRect();
+        const placeholderBorderLeftWidth = parseInt(this._$dropZonePlaceholder.css('borderLeftWidth'));
+        const placeholderBorderTopWidth = parseInt(this._$dropZonePlaceholder.css('borderTopWidth'));
         this._$dropZonePlaceholder.css('top', targetClientRect.top);
         this._$dropZonePlaceholder.css('left', targetClientRect.left);
-        this._$dropZonePlaceholder.width(dropZoneTargetElement.offsetWidth - 4);
-        this._$dropZonePlaceholder.height(dropZoneTargetElement.offsetHeight - 4);
+        this._$dropZonePlaceholder.width(dropZoneTargetElement.offsetWidth - placeholderBorderLeftWidth * 2);
+        this._$dropZonePlaceholder.height(dropZoneTargetElement.offsetHeight - placeholderBorderTopWidth * 2);
     }
 
     _setDropZonePlaceholderVisible(visible) {

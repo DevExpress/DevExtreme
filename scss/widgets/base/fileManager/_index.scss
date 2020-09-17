@@ -1,3 +1,5 @@
+@use "../mixins" as *;
+
 // adduse
 
 
@@ -268,9 +270,11 @@
 
   .dx-filemanager-fileuploader-dropzone-placeholder {
     position: absolute;
-    display: none;
+    top: 0;
+    left: 0;
     box-sizing: border-box;
     pointer-events: none;
+    z-index: $overlay-zindex;
   }
 
   .dx-filemanager-thumbnails {
