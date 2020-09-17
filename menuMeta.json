@@ -2027,11 +2027,19 @@
                 {
                     "Title": "Web API Service",
                     "Name": "WebAPIService",
-                    "DocUrl": "",
                     "Widget": "Diagram",
                     "DemoType": "Web",
                     "WideDemo": true,
-                    "Modules": "devextreme-aspnet-data-nojquery"
+                    "Modules": "devextreme-aspnet-data-nojquery",
+                    "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
+                    "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
+                    "Equivalents": "webapi",
+                    "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
+                    "MvcAdditionalFiles": [
+                      "/Models/Diagram/Employee.cs",
+                      "/Models/Diagram/InMemoryEmployeesDataContext.cs",
+                      "/Controllers/ApiControllers/DiagramEmployeesController.cs"
+                    ]
                 }
             ]
         },
