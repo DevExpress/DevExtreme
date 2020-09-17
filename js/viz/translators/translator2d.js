@@ -474,11 +474,11 @@ _Translator2d.prototype = {
     },
 
     _correctValueAboutBreaks(value, direction) {
-        const br = this._userBreaks.find((br) => {
+        const br = this._userBreaks.filter((br) => {
             return value >= br.from && value <= br.to;
         });
-        if(br) {
-            return direction > 0 ? br.to : br.from;
+        if(br.length) {
+            return direction > 0 ? br[0].to : br[0].from;
         } else {
             return value;
         }
