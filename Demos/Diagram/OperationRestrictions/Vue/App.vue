@@ -2,7 +2,7 @@
   <DxDiagram
     id="diagram"
     ref="diagram"
-    @request-operation="onRequestOperation"
+    @request-edit-operation="onRequestEditOperation"
     @request-layout-update="onRequestLayoutUpdate"
   >
     <DxCustomShape
@@ -80,7 +80,7 @@ export default {
         }
       }
     },
-    onRequestOperation(e) {
+    onRequestEditOperation(e) {
       var dataItem = e.args.shape && e.args.shape.dataItem;
       if(e.operation === 'addShape') {
         if(e.args.shape.type !== 'employee' && e.args.shape.type !== 'team') {

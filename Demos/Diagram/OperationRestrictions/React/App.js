@@ -12,13 +12,13 @@ class App extends React.Component {
       key: 'id',
       data: service.getOrgItems()
     });
-    this.onRequestOperation = this.onRequestOperation.bind(this);
+    this.onRequestEditOperation = this.onRequestEditOperation.bind(this);
     this.onRequestLayoutUpdate = this.onRequestLayoutUpdate.bind(this);
   }
 
   render() {
     return (
-      <Diagram id="diagram" onRequestOperation={this.onRequestOperation} onRequestLayoutUpdate={this.onRequestLayoutUpdate}>
+      <Diagram id="diagram" onRequestEditOperation={this.onRequestEditOperation} onRequestLayoutUpdate={this.onRequestLayoutUpdate}>
         <CustomShape category="items" type="root" baseType="octagon"
           defaultText="Development" />
         <CustomShape category="items" type="team" baseType="ellipse"
@@ -48,7 +48,7 @@ class App extends React.Component {
       }
     }
   }
-  onRequestOperation(e) {
+  onRequestEditOperation(e) {
     var dataItem = e.args.shape && e.args.shape.dataItem;
     if(e.operation === 'addShape') {
       if(e.args.shape.type !== 'employee' && e.args.shape.type !== 'team') {

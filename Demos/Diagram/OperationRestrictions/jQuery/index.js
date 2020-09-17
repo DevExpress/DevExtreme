@@ -39,7 +39,7 @@ $(function() {
                     e.allowed = true;
             }
         },
-        onRequestOperation: (e) => {
+        onRequestEditOperation: (e) => {
             var dataItem = e.args.shape && e.args.shape.dataItem;
             if(e.operation === "addShape") {
                 if(e.args.shape.type !== "employee" && e.args.shape.type !== "team") {
