@@ -44,7 +44,8 @@ export default class AppointmentSettingsGenerator {
 
         this._updateGroupIndices(appointmentList, itemResources);
 
-        if(appointmentList.length > 1 && !appointment.startDateTimeZone) {
+
+        if(appointmentList.length > 1 && !!this.scheduler.option('timeZone') && !appointment.startDateTimeZone) {
             appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
         }
 
