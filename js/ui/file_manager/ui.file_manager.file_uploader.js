@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
+import { hasWindow } from '../../core/utils/window';
 import Guid from '../../core/guid';
 
 import Widget from '../widget/ui.widget';
@@ -155,6 +156,9 @@ class FileManagerFileUploader extends Widget {
     }
 
     _adjustDropZonePlaceholder() {
+        if(!hasWindow()) {
+            return;
+        }
         const $dropZoneTarget = this.option('dropZone');
         const targetOffsetTop = $dropZoneTarget.offset().top;
         const targetOffsetLeft = $dropZoneTarget.offset().left;
