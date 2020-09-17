@@ -269,6 +269,8 @@
   .dx-filemanager-fileuploader-dropzone-placeholder {
     position: absolute;
     display: none;
+    box-sizing: border-box;
+    pointer-events: none;
   }
 
   .dx-filemanager-thumbnails {
