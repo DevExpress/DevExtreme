@@ -232,7 +232,7 @@ describe('TimePanelLayout', () => {
     });
 
     [true, false].forEach((mockValue) => {
-      it(`AllDayPanelTitle if isGroupedAllDayPanel=${mockValue}`, () => {
+      it(`should render AllDayPanelTitle if isGroupedAllDayPanel=${mockValue}`, () => {
         getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
 
         const layout = render({ });
@@ -242,7 +242,7 @@ describe('TimePanelLayout', () => {
           .toBe(mockValue);
       });
 
-      it(`AllDayPanelTitle if isGroupedAllDayPanel=${mockValue} and dateTable is empty`, () => {
+      it(`should render AllDayPanelTitle if isGroupedAllDayPanel=${mockValue} and dateTable is empty`, () => {
         getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
 
         const viewData = {
