@@ -181,6 +181,22 @@ QUnit.module('MonthView', {
         const date = this.$element.find('table').find('td')[0];
         pointerMock(date).click();
     });
+
+    QUnit.test('cell data-value has correct year after render in month view for the first century (T929559)', function(assert) {
+        const startDate = new Date(2013, 9, 16);
+        startDate.setFullYear(14);
+
+        this.reinit({
+            min: new Date(-10, 1, 1),
+            value: startDate,
+            date: startDate
+        });
+
+        const dateCell = this.$element.find('table').find('td').eq(7);
+        const cellDate = $(dateCell).data().value;
+
+        assert.strictEqual(cellDate.substring(0, 4), '0014');
+    });
 });
 
 QUnit.module('YearView', {
@@ -298,6 +314,30 @@ QUnit.module('DecadeView', {
         $.each(dateCells, function(_, dateCell) {
             const shortDate = getShortDate(new Date(startYear, 0, 1));
             assert.equal(shortDate, $(dateCell).data().value, 'data-value has a current value');
+            startYear++;
+        });
+    });
+
+    QUnit.test('data-value after render for cells in decade view for the first century (T929559)', function(assert) {
+        let startYear = 9;
+        const startDate = new Date(14, 9, 16);
+        startDate.setFullYear(14);
+
+        this.reinit({
+            min: new Date(-10, 1, 1),
+            value: startDate,
+            date: startDate
+        });
+
+        const dateCells = this.$element.find('table').find('td');
+
+        $.each(dateCells, function(_, dateCell) {
+            const expectedDate = new Date(startYear, 0, 1);
+            expectedDate.setFullYear(startYear);
+            const shortDate = getShortDate(expectedDate);
+            const startYearString = ('000' + startYear).slice(-4);
+            assert.strictEqual($(dateCell).text(), startYearString, 'correct cell text');
+            assert.strictEqual($(dateCell).data().value, shortDate, 'data-value has a current value');
             startYear++;
         });
     });

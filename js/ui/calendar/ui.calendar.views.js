@@ -12,7 +12,8 @@ import {
     getFirstDecadeInCentury,
     sameYear,
     sameDecade,
-    sameCentury
+    sameCentury,
+    createDateWithFullYear
 } from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import {
@@ -252,7 +253,7 @@ const Views = {
 
         _getFirstCellData: function() {
             const year = getFirstYearInDecade(this.option('date')) - 1;
-            return new Date(year, 0, 1);
+            return createDateWithFullYear(year, 0, 1);
         },
 
         _getNextCellData: function(date) {
@@ -326,7 +327,7 @@ const Views = {
 
         _getFirstCellData: function() {
             const decade = getFirstDecadeInCentury(this.option('date')) - 10;
-            return new Date(decade, 0, 1);
+            return createDateWithFullYear(decade, 0, 1);
         },
 
         _getNextCellData: function(date) {
