@@ -326,15 +326,15 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const updateViewData = this.isVirtualScrolling()
             && !(this._hasAllDayClass($cell) && !this._isVerticalGroupedWorkSpace());
-        !updateViewData && this.viewDataProvider?.releaseSelectedAndFocusedCells();
+        // !updateViewData && this.viewDataProvider?.releaseSelectedAndFocusedCells();
 
         let $correctedCell = $cell;
         if(isMultiSelection) {
             $correctedCell = this._correctCellForGroup($cell);
         }
 
-        this._setFocusedCell($correctedCell, updateViewData);
         this._setSelectedCells($correctedCell, undefined, isMultiSelection);
+        this._setFocusedCell($correctedCell, updateViewData);
     }
 
     _setFocusedCell($cell, updateViewData = false) {
@@ -351,6 +351,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _setSelectedCells($firstCell, $lastCell, isMultiSelection) {
+        if($firstCell && $firstCell.is(this._$focusedCell)) {
+            return;
+        }
+
         this._releaseSelectedCells();
         this._selectedCells = [];
 
@@ -1288,25 +1292,38 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _setSelectedCellsByCellData(data) {
-        const time = (new Date()).getTime();
         const cells = [];
+        const $cells = this._getAllCells();
+        const cellsInRow = this._getTotalCellCount(this._getGroupCount());
 
         for(let i = 0; i < data.length; i++) {
-            const groups = data[i].groups;
-            const groupIndex = this.option('groups').length && groups ? this._getGroupIndexByResourceId(groups) : 0;
-            const allDay = !!(data[i].allDay);
-            const coordinates = this.getCoordinatesByDate(data[i].startDate, groupIndex, allDay);
-            const $cell = coordinates
-                ? this._getCellByCoordinates(coordinates, groupIndex)
-                : undefined;
+            const { groups, startDate, allDay } = data[i];
+            let { groupIndex } = data[i];
 
-            if(isDefined($cell)) {
-                this._toggleFocusClass(true, $cell);
-                cells.push($cell.get(0));
+            if(!groupIndex) {
+                groupIndex = this.option('groups').length && groups
+                    ? this._getGroupIndexByResourceId(groups)
+                    : 0;
+            }
+
+            const coordinates = this.isVirtualScrolling()
+                ? this.viewDataProvider.findCellPositionInMap(
+                    groupIndex, startDate, allDay,
+                )
+                : this.getCoordinatesByDate(startDate, groupIndex, allDay);
+
+            if(coordinates) {
+                const { rowIndex, cellIndex } = coordinates;
+                const index = rowIndex * cellsInRow + cellIndex;
+                const $cell = $cells[index];
+
+                if(isDefined($cell)) {
+                    this._toggleFocusClass(true, $($cell));
+                    cells.push($cell);
+                }
             }
         }
         this._selectedCells = cells;
-        console.log('_setFocusOnCellByOption', (new Date()).getTime() - time);
     }
 
     _getGroupIndexByResourceId(id) {
@@ -2328,6 +2345,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         } else {
             return this.$element().find('.' + cellClass);
         }
+    }
+
+    _getAllCells(allDay) {
+        if(this._isVerticalGroupedWorkSpace()) {
+            return this._$dateTable.find('td');
+        }
+
+        const cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
+        return this.$element().find('.' + cellClass);
     }
 
     _setHorizontalGroupHeaderCellsHeight() {
