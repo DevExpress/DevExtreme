@@ -3,7 +3,7 @@ const { test } = QUnit;
 import 'common.css!';
 import 'ui/diagram';
 
-import { DiagramCommand, DiagramModelOperation } from 'devexpress-diagram';
+import { DiagramCommand, DiagramModelOperation, DiagramUnit } from 'devexpress-diagram';
 import { Consts } from '../../../helpers/diagramHelpers.js';
 
 const moduleConfig = {
@@ -29,15 +29,20 @@ QUnit.module('ClientSideEvents', {
         this.instance.option('onItemClick', function(e) {
             clickedItem = e.item;
         });
-        this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findShape('107').toNative());
+        this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findShape('107').toNative(DiagramUnit.In));
         assert.equal(clickedItem.id, '107');
         assert.equal(clickedItem.text, 'A new ticket');
         assert.equal(clickedItem.dataItem, undefined);
+        assert.equal(clickedItem.position.x, 1);
+        assert.equal(clickedItem.position.y, 0.75);
+        assert.equal(clickedItem.size.width, 1);
+        assert.equal(clickedItem.size.height, 0.5);
+        assert.equal(clickedItem.attachedConnectorIds.length, 0);
         let count = 0;
         for(const key in clickedItem) {
             if(Object.prototype.hasOwnProperty.call(clickedItem, key)) count++;
         }
-        assert.equal(count, 5);
+        assert.equal(count, 8);
     });
     test('selectionchanged on unbound diagram', function(assert) {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
@@ -73,7 +78,7 @@ QUnit.module('ClientSideEvents', {
         this.instance.option('onItemDblClick', function(e) {
             dblClickedItem = e.item;
         });
-        this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findShapeByDataKey('123').toNative());
+        this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findShapeByDataKey('123').toNative(DiagramUnit.In));
         assert.equal(clickedItem.dataItem.key, '123');
         assert.equal(clickedItem.dataItem.foo, 'bar');
         assert.equal(clickedItem.text, 'mytext');
@@ -82,16 +87,16 @@ QUnit.module('ClientSideEvents', {
         for(const key in clickedItem) {
             if(Object.prototype.hasOwnProperty.call(clickedItem, key)) count++;
         }
-        assert.equal(count, 5);
+        assert.equal(count, 8);
         assert.equal(dblClickedItem, undefined);
 
-        this.instance._diagramInstance.onNativeAction.raise('notifyItemDblClick', this.instance._diagramInstance.model.findShapeByDataKey('123').toNative());
+        this.instance._diagramInstance.onNativeAction.raise('notifyItemDblClick', this.instance._diagramInstance.model.findShapeByDataKey('123').toNative(DiagramUnit.In));
         assert.equal(dblClickedItem.dataItem.key, '123');
         assert.equal(dblClickedItem.dataItem.foo, 'bar');
         assert.equal(dblClickedItem.text, 'mytext');
         assert.equal(dblClickedItem.dataItem.key, nodes[0].key);
 
-        this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findConnectorByDataKey('1').toNative());
+        this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findConnectorByDataKey('1').toNative(DiagramUnit.In));
         assert.equal(clickedItem.dataItem.key, '1');
         assert.equal(clickedItem.fromKey, '123');
         assert.equal(clickedItem.toKey, '345');

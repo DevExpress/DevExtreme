@@ -5844,6 +5844,14 @@ declare module DevExpress.ui {
          */
         getEdgeDataSource(): DevExpress.data.DataSource;
         /**
+         * [descr:dxDiagram.getItemById(id)]
+         */
+        getItemById(id: string): dxDiagramItem;
+        /**
+         * [descr:dxDiagram.getItemByKey(key)]
+         */
+        getItemByKey(key: any): dxDiagramItem;
+        /**
          * [descr:dxDiagram.getNodeDataSource()]
          */
         getNodeDataSource(): DevExpress.data.DataSource;
@@ -5969,17 +5977,37 @@ declare module DevExpress.ui {
      */
     export interface dxDiagramConnector extends dxDiagramItem {
         /**
+         * [descr:dxDiagramConnector.fromId]
+         */
+        fromId?: string;
+        /**
          * [descr:dxDiagramConnector.fromKey]
          */
         fromKey?: any;
+        /**
+         * [descr:dxDiagramConnector.fromPointIndex]
+         */
+        fromPointIndex?: number;
+        /**
+         * [descr:dxDiagramConnector.points]
+         */
+        points?: Array<any>;
         /**
          * [descr:dxDiagramConnector.texts]
          */
         texts?: Array<string>;
         /**
+         * [descr:dxDiagramConnector.toId]
+         */
+        toId?: string;
+        /**
          * [descr:dxDiagramConnector.toKey]
          */
         toKey?: any;
+        /**
+         * [descr:dxDiagramConnector.toPointIndex]
+         */
+        toPointIndex?: number;
     }
     /**
      * [descr:dxDiagramCustomCommand]
@@ -6058,6 +6086,18 @@ declare module DevExpress.ui {
      * [descr:dxDiagramShape]
      */
     export interface dxDiagramShape extends dxDiagramItem {
+        /**
+         * [descr:dxDiagramShape.attachedConnectorIds]
+         */
+        attachedConnectorIds?: Array<string>;
+        /**
+         * [descr:dxDiagramShape.position]
+         */
+        position?: any;
+        /**
+         * [descr:dxDiagramShape.size]
+         */
+        size?: any;
         /**
          * [descr:dxDiagramShape.text]
          */
