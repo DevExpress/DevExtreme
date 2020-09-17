@@ -155,14 +155,16 @@ class FileManagerFileUploader extends Widget {
     }
 
     _adjustDropZonePlaceholder() {
-        const dropZoneTargetElement = this.option('dropZone').get(0);
-        const targetClientRect = dropZoneTargetElement.getBoundingClientRect();
-        const placeholderBorderLeftWidth = parseInt(this._$dropZonePlaceholder.css('borderLeftWidth'));
+        const $dropZoneTarget = this.option('dropZone');
+        const targetOffsetTop = $dropZoneTarget.offset().top;
+        const targetOffsetLeft = $dropZoneTarget.offset().left;
         const placeholderBorderTopWidth = parseInt(this._$dropZonePlaceholder.css('borderTopWidth'));
-        this._$dropZonePlaceholder.css('top', targetClientRect.top);
-        this._$dropZonePlaceholder.css('left', targetClientRect.left);
-        this._$dropZonePlaceholder.width(dropZoneTargetElement.offsetWidth - placeholderBorderLeftWidth * 2);
-        this._$dropZonePlaceholder.height(dropZoneTargetElement.offsetHeight - placeholderBorderTopWidth * 2);
+        const placeholderBorderLeftWidth = parseInt(this._$dropZonePlaceholder.css('borderLeftWidth'));
+
+        this._$dropZonePlaceholder.css('top', targetOffsetTop);
+        this._$dropZonePlaceholder.css('left', targetOffsetLeft);
+        this._$dropZonePlaceholder.height($dropZoneTarget.get(0).offsetHeight - placeholderBorderTopWidth * 2);
+        this._$dropZonePlaceholder.width($dropZoneTarget.get(0).offsetWidth - placeholderBorderLeftWidth * 2);
     }
 
     _setDropZonePlaceholderVisible(visible) {
