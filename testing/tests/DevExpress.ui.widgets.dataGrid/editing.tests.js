@@ -10741,7 +10741,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements(testElement).length, 0, 'not has input');
         assert.ok(!cells.eq(1).hasClass('dx-datagrid-invalid'), 'success validation');
-        assert.ok(!cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
 
         // act
         that.saveEditData();
@@ -12870,7 +12869,6 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.ok(!cells.eq(1).hasClass('dx-datagrid-invalid'), 'not failed validation');
-        assert.ok(!cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
         assert.equal(testElement.find('tbody > tr').length, 3, 'count rows');
 
         // act
