@@ -188,6 +188,7 @@ describe('TimePanelLayout', () => {
                 [{ startDate: new Date(2020, 6, 9, 3), text: '2:00 AM' }],
                 [{ startDate: new Date(2020, 6, 9, 4), text: '3:00 AM' }],
               ],
+              groupIndex: 10,
             }],
           },
         },
