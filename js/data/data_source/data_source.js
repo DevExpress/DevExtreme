@@ -454,7 +454,13 @@ export const DataSource = Class.inherit({
                 });
             }
 
-            arrayUtils.applyBatch(this.store(), items, dataSourceChanges, groupLevel, true);
+            arrayUtils.applyBatch({
+                keyInfo: this.store(),
+                array: items,
+                batchData: dataSourceChanges,
+                groupCount: groupLevel,
+                useInsertIndex: true
+            });
             this._fireChanged([{ changes: changes }]);
         }
     },

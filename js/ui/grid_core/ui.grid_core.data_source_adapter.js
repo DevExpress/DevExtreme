@@ -174,7 +174,11 @@ export default gridCore.Controller.inherit((function() {
             this.resetPagesCache(true);
 
             if(this._cachedStoreData) {
-                arrayUtils.applyBatch(store, this._cachedStoreData, changes);
+                arrayUtils.applyBatch({
+                    keyInfo: store,
+                    array: this._cachedStoreData,
+                    batchData: changes
+                });
             }
 
             if(!fromStore) {
@@ -217,8 +221,21 @@ export default gridCore.Controller.inherit((function() {
             const getItemCount = () => groupCount ? this.itemsCount() : this._items.length;
             const oldItemCount = getItemCount();
 
-            arrayUtils.applyBatch(keyInfo, this._items, changes, groupCount, true);
-            arrayUtils.applyBatch(keyInfo, dataSource.items(), changes, groupCount, true);
+
+            arrayUtils.applyBatch({
+                keyInfo: keyInfo,
+                array: this._items,
+                batchData: changes,
+                groupCount: groupCount,
+                useInsertIndex: true
+            });
+            arrayUtils.applyBatch({
+                keyInfo: keyInfo,
+                array: dataSource.items(),
+                batchData: changes,
+                groupCount: groupCount,
+                useInsertIndex: true
+            });
 
             if(this._currentTotalCount > 0) {
                 this._skipCorrection += getItemCount() - oldItemCount;

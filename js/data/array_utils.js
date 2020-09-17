@@ -87,14 +87,14 @@ function createObjectWithChanges(target, changes) {
     return objectUtils.deepExtendArraySafe(result, changes, true, true);
 }
 
-function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex, immutable) {
+function applyBatch({ keyInfo, array, batchData, groupCount, useInsertIndex, immutable, enableCache }) {
     const isDataImmutable = immutable === true;
     const resultItems = isDataImmutable ? [...array] : array;
 
     batchData.forEach(item => {
         const items = item.type === 'insert' ? resultItems : getItems(keyInfo, resultItems, item.key, groupCount);
 
-        !isDefined(immutable) && generateDataByKeyMap(keyInfo, items);
+        enableCache && generateDataByKeyMap(keyInfo, items);
 
         switch(item.type) {
             case 'update': update(keyInfo, items, item.key, item.data, true, isDataImmutable); break;
@@ -113,7 +113,13 @@ function applyChanges(data, changes, options = {}) {
         keyOf: (obj) => keyGetter(obj)
     };
 
-    return applyBatch(keyInfo, data, changes, 0, false, immutable);
+    return applyBatch({
+        keyInfo,
+        array: data,
+        batchData: changes,
+        immutable,
+        enableCache: true
+    });
 }
 
 function update(keyInfo, array, key, data, isBatch, immutable) {
