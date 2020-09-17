@@ -459,12 +459,14 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             .on('removed', removedKey => {
                 const node = this._dataAdapter.getNodeByKey(removedKey);
 
-                this.option('items')[this._dataAdapter.getIndexByKey(node.internalFields.key)] = 0;
-                this._markChildrenItemsToRemove(node);
-                this._removeItems();
+                if(isDefined(node)) {
+                    this.option('items')[this._dataAdapter.getIndexByKey(node.internalFields.key)] = 0;
+                    this._markChildrenItemsToRemove(node);
+                    this._removeItems();
 
-                this._dataAdapter.removeItem(removedKey);
-                this._updateLevel(this._parentIdGetter(node));
+                    this._dataAdapter.removeItem(removedKey);
+                    this._updateLevel(this._parentIdGetter(node));
+                }
             });
     },
 

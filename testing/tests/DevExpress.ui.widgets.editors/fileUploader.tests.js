@@ -2879,6 +2879,55 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.equal($fileUploader.dxFileUploader('option', 'value').length, 1, 'files count is correct');
         assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, firstFile.name, 'added file is correct');
     });
+
+    QUnit.test('dropZoneEnter and dropZoneLeave events should fire on correspondent interactions in a custom drop zone', function(assert) {
+        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+        const onDropZoneEnterSpy = sinon.spy();
+        const onDropZoneLeaveSpy = sinon.spy();
+        $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            dropZone: '.drop',
+            onDropZoneEnter: onDropZoneEnterSpy,
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+        const files = [fakeFile];
+        const enterEvent = $.Event($.Event('dragenter', { dataTransfer: { files: files } }));
+        const leaveEvent = $.Event($.Event('dragleave', { dataTransfer: { files: files } }));
+
+        customDropZone.trigger(enterEvent);
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
+
+        customDropZone.trigger(leaveEvent);
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
+
+        customDropZone.remove();
+    });
+
+    QUnit.test('dropZoneEnter and dropZoneLeave events should fire on correspondent interactions in the deafult drop zone', function(assert) {
+        const onDropZoneEnterSpy = sinon.spy();
+        const onDropZoneLeaveSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            onDropZoneEnter: onDropZoneEnterSpy,
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+
+        const files = [fakeFile];
+        const enterEvent = $.Event($.Event('dragenter', { dataTransfer: { files: files } }));
+        const leaveEvent = $.Event($.Event('dragleave', { dataTransfer: { files: files } }));
+
+        $inputWrapper.trigger(enterEvent);
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
+
+        $inputWrapper.trigger(leaveEvent);
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
+
+    });
 });
 
 QUnit.module('files selection', moduleConfig, () => {

@@ -135,6 +135,10 @@ class FileUploader extends Editor {
 
             onUploadAborted: null,
 
+            onDropZoneEnter: null,
+
+            onDropZoneLeave: null,
+
             allowedFileExtensions: [],
 
             maxFileSize: 0,
@@ -238,6 +242,8 @@ class FileUploader extends Editor {
         this._createProgressAction();
         this._createUploadErrorAction();
         this._createUploadAbortedAction();
+        this._createDropZoneEnterAction();
+        this._createDropZoneLeaveAction();
     }
 
     _setUploadStrategy() {
@@ -481,6 +487,14 @@ class FileUploader extends Editor {
 
     _createUploadErrorAction() {
         this._uploadErrorAction = this._createActionByOption('onUploadError', { excludeValidators: ['readOnly'] });
+    }
+
+    _createDropZoneEnterAction() {
+        this._dropZoneEnterAction = this._createActionByOption('onDropZoneEnter');
+    }
+
+    _createDropZoneLeaveAction() {
+        this._dropZoneLeaveAction = this._createActionByOption('onDropZoneLeave');
     }
 
     _createFile(value) {
@@ -892,6 +906,11 @@ class FileUploader extends Editor {
 
         this._updateEventTargets(e);
 
+        this._dropZoneEnterAction({
+            event: e,
+            dropZoneElement: e.target
+        });
+
         if(!isCustomTarget) {
             this.$element().addClass(FILEUPLOADER_DRAGOVER_CLASS);
         }
@@ -910,6 +929,11 @@ class FileUploader extends Editor {
         }
 
         this._updateEventTargets(e);
+
+        this._dropZoneLeaveAction({
+            event: e,
+            dropZoneElement: e.target
+        });
 
         if(!this._dragEventsTargets.length && !isCustomTarget) {
             this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
@@ -1274,6 +1298,12 @@ class FileUploader extends Editor {
                 break;
             case 'onUploadAborted':
                 this._createUploadAbortedAction();
+                break;
+            case 'onDropZoneEnter':
+                this._createDropZoneEnterAction();
+                break;
+            case 'onDropZoneLeave':
+                this._createDropZoneLeaveAction();
                 break;
             case 'useNativeInputClick':
                 this._renderInput();

@@ -138,6 +138,30 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     name?: string;
     /**
+     * @docid dxFileUploaderOptions.onDropZoneEnter
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 dropZoneElement:dxElement
+     * @type_function_param1_field5 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onDropZoneEnter?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, dropZoneElement?: dxElement, event?: event }) => any);
+    /**
+     * @docid dxFileUploaderOptions.onDropZoneLeave
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 dropZoneElement:dxElement
+     * @type_function_param1_field5 event:event
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onDropZoneLeave?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, dropZoneElement?: dxElement, event?: event }) => any);
+    /**
      * @docid dxFileUploaderOptions.onProgress
      * @extends Action
      * @type function(e)
