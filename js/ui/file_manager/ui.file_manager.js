@@ -128,6 +128,7 @@ class FileManager extends Widget {
                 getMultipleSelectedItems: this._getMultipleSelectedItems.bind(this)
             },
             getItemThumbnail: this._getItemThumbnailInfo.bind(this),
+            uploadDropZonePlaceholderContainer: this.$element(),
             onSuccess: ({ updatedOnlyFiles }) => this._redrawComponent(updatedOnlyFiles),
             onCreating: () => this._setItemsViewAreaActive(false),
             onError: e => this._onEditingError(e)

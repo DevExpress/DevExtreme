@@ -152,7 +152,7 @@ class FileManagerFileUploader extends Widget {
     _createDropZonePlaceholder() {
         this._$dropZonePlaceholder = $('<div>')
             .addClass(FILE_MANAGER_FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS)
-            .appendTo(this._$element.parent().parent());
+            .appendTo(this.option('dropZonePlaceholderContainer'));
     }
 
     _adjustDropZonePlaceholder() {
@@ -174,7 +174,7 @@ class FileManagerFileUploader extends Widget {
     _setDropZonePlaceholderVisible(visible) {
         this._dropZoneEnterCounter += visible ? 1 : -1;
         if(this._dropZoneEnterCounter < 0) {
-            this.resetDropZoneEnterCounter();
+            this._resetDropZoneEnterCounter();
         }
         if(visible && this._dropZoneEnterCounter === 1) {
             this._adjustDropZonePlaceholder();
@@ -186,7 +186,7 @@ class FileManagerFileUploader extends Widget {
         }
     }
 
-    resetDropZoneEnterCounter() {
+    _resetDropZoneEnterCounter() {
         this._dropZoneEnterCounter = 0;
     }
 
@@ -298,9 +298,13 @@ class FileManagerFileUploader extends Widget {
                 this._actions[name] = this._createActionByOption(name);
                 break;
             case 'dropZone':
-                this._uploaderInfos[0]?.fileUploader.option('dropZone', args.value);
+                this._uploaderInfos[0].fileUploader.option('dropZone', args.value);
                 this._adjustDropZonePlaceholder();
-                this.resetDropZoneEnterCounter();
+                this._resetDropZoneEnterCounter();
+                break;
+            case 'dropZonePlaceholderContainer':
+                this._$dropZonePlaceholder.detach();
+                this._$dropZonePlaceholder.appendTo(args.value);
                 break;
             default:
                 super._optionChanged(args);

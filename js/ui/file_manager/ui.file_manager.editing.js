@@ -60,6 +60,7 @@ class FileManagerEditingControl extends Widget {
         const $fileUploader = $('<div>').appendTo(this.$element());
         return this._createComponent($fileUploader, this._getFileUploaderComponent(), {
             getController: this._getFileUploaderController.bind(this),
+            dropZonePlaceholderContainer: this.option('uploadDropZonePlaceholderContainer'),
             onUploadSessionStarted: e => this._onUploadSessionStarted(e),
             onUploadProgress: e => this._onUploadProgress(e)
         });
@@ -418,6 +419,9 @@ class FileManagerEditingControl extends Widget {
                 this._initNotificationControl(args.value);
                 break;
             case 'getItemThumbnail':
+                break;
+            case 'uploadDropZonePlaceholderContainer':
+                this._fileUploader.option('dropZonePlaceholderContainer', args.value);
                 break;
             case 'onSuccess':
             case 'onError':
