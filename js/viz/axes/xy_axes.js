@@ -60,51 +60,6 @@ function sortingBreaks(breaks) {
     return breaks.sort(function(a, b) { return a.from - b.from; });
 }
 
-function filterBreaks(breaks, viewport, breakStyle) {
-    const minVisible = viewport.minVisible;
-    const maxVisible = viewport.maxVisible;
-    const breakSize = breakStyle ? breakStyle.width : 0;
-
-    return breaks.reduce(function(result, currentBreak) {
-        let from = currentBreak.from;
-        let to = currentBreak.to;
-        const lastResult = result[result.length - 1];
-        let newBreak;
-
-        if(!isDefined(from) || !isDefined(to)) {
-            return result;
-        }
-        if(from > to) {
-            to = [from, from = to][0];
-        }
-        if(result.length && from < lastResult.to) {
-            if(to > lastResult.to) {
-                lastResult.to = to > maxVisible ? maxVisible : to;
-                if(lastResult.gapSize) {
-                    lastResult.gapSize = undefined;
-                    lastResult.cumulativeWidth += breakSize;
-                }
-            }
-        } else {
-            if(((from >= minVisible && from < maxVisible) || (to <= maxVisible && to > minVisible)) && to - from < maxVisible - minVisible) {
-                from = from >= minVisible ? from : minVisible;
-                to = to <= maxVisible ? to : maxVisible;
-                newBreak = {
-                    from: from,
-                    to: to,
-                    cumulativeWidth: (lastResult?.cumulativeWidth ?? 0) + breakSize
-                };
-                if(currentBreak.gapSize) {
-                    newBreak.gapSize = dateUtils.convertMillisecondsToDateUnits(to - from);
-                    newBreak.cumulativeWidth = lastResult?.cumulativeWidth ?? 0;
-                }
-                result.push(newBreak);
-            }
-        }
-        return result;
-    }, []);
-}
-
 function getMarkerDates(min, max, markerInterval) {
     const origMin = min;
     let dates;
@@ -996,13 +951,10 @@ module.exports = {
                 seriesData.maxVisible = viewport.max;
             }
 
-            const breaks = that._getScaleBreaks(that._options, {
+            seriesData.userBreaks = that._getScaleBreaks(that._options, {
                 minVisible: seriesData.minVisible,
                 maxVisible: seriesData.maxVisible
             }, that._series, that.isArgumentAxis);
-
-            seriesData.breaks = that._initialBreaks = breaks.filtered;
-            seriesData.userBreaks = breaks.initial;
 
             that._translator.updateBusinessRange(that._getViewportRange());
         },
@@ -1080,6 +1032,53 @@ module.exports = {
             return skippedCategory;
         },
 
+        _filterBreaks: function(breaks, viewport, breakStyle) {
+            const minVisible = viewport.minVisible;
+            const maxVisible = viewport.maxVisible;
+            const breakSize = breakStyle ? breakStyle.width : 0;
+
+            return breaks.reduce(function(result, currentBreak) {
+                let from = currentBreak.from;
+                let to = currentBreak.to;
+                const lastResult = result[result.length - 1];
+                let newBreak;
+
+                if(!isDefined(from) || !isDefined(to)) {
+                    return result;
+                }
+                if(from > to) {
+                    to = [from, from = to][0];
+                }
+                if(result.length && from < lastResult.to) {
+                    if(to > lastResult.to) {
+                        lastResult.to = to > maxVisible ? maxVisible : to;
+                        if(lastResult.gapSize) {
+                            lastResult.gapSize = undefined;
+                            lastResult.cumulativeWidth += breakSize;
+                        }
+                    }
+                } else {
+                    if((from >= minVisible && from < maxVisible) || (to <= maxVisible && to > minVisible)) {
+                        from = from >= minVisible ? from : minVisible;
+                        to = to <= maxVisible ? to : maxVisible;
+                        if(to - from < maxVisible - minVisible) {
+                            newBreak = {
+                                from: from,
+                                to: to,
+                                cumulativeWidth: (lastResult?.cumulativeWidth ?? 0) + breakSize
+                            };
+                            if(currentBreak.gapSize) {
+                                newBreak.gapSize = dateUtils.convertMillisecondsToDateUnits(to - from);
+                                newBreak.cumulativeWidth = lastResult?.cumulativeWidth ?? 0;
+                            }
+                            result.push(newBreak);
+                        }
+                    }
+                }
+                return result;
+            }, []);
+        },
+
         _getScaleBreaks: function(axisOptions, viewport, series, isArgumentAxis) {
             const that = this;
             let breaks = (axisOptions.breaks || []).map(function(b) {
@@ -1099,11 +1098,7 @@ module.exports = {
                 && axisOptions.autoBreaksEnabled && axisOptions.maxAutoBreakCount !== 0) {
                 breaks = breaks.concat(generateAutoBreaks(axisOptions, series, viewport));
             }
-            const sortedBreaks = sortingBreaks(breaks);
-            return {
-                filtered: filterBreaks(sortedBreaks, viewport, axisOptions.breakStyle),
-                initial: sortedBreaks
-            };
+            return sortingBreaks(breaks);
         },
 
         _drawBreak: function(translatedEnd, positionFrom, positionTo, width, options, group) {
