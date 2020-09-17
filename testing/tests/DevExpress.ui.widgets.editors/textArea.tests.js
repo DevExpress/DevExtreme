@@ -5,6 +5,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import devices from 'core/devices';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/text_area';
 import 'ui/scroll_view/ui.scrollable';
 
@@ -187,7 +188,7 @@ QUnit.module('options changing', () => {
         const height = 500;
 
         instance.option('height', height);
-        assert.equal($element.height(), height, 'Widget height should change too');
+        assert.equal($element.outerHeight(), height, 'Widget height should change too');
     });
 
     QUnit.test('Changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
@@ -240,8 +241,9 @@ QUnit.module('widget sizing render', () => {
 
         const $input = $element.find('.dx-texteditor-input');
         const inputHeight = $input.outerHeight();
+        const borderHeight = parseInt($element.css('borderTopWidth'));
 
-        assert.strictEqual(inputHeight, minHeight, 'height is ok');
+        assert.strictEqual(inputHeight + 2 * borderHeight, minHeight, 'height is ok');
     });
 });
 

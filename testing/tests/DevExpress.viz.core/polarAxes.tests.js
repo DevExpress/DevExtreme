@@ -69,7 +69,8 @@ const environment = {
             gridGroup: this.renderer.g(),
             renderer: this.renderer,
             axisType: 'xyAxes',
-            drawingType: 'linear'
+            drawingType: 'linear',
+            getTemplate() {}
         };
 
         this.canvas = {

@@ -763,6 +763,10 @@ export default {
 
                         return pageSize && pageSize < rowPageSize ? pageSize : rowPageSize;
                     },
+                    _applyFilter: function() {
+                        this.setViewportPosition(0);
+                        return this.callBase.apply(this, arguments);
+                    },
                     reload: function() {
                         const that = this;
                         const rowsScrollController = that._rowsScrollController || that._dataSource;

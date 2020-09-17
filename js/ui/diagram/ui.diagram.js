@@ -665,10 +665,10 @@ class Diagram extends Widget {
             notifyItemDblClick: this._raiseItemDblClickAction.bind(this),
             notifySelectionChanged: this._raiseSelectionChanged.bind(this)
         });
-        this._diagramInstance.onRequestOperation = this._raiseRequestOperation.bind(this);
+        this._diagramInstance.onRequestOperation = this._raiseRequestEditOperation.bind(this);
         this._updateEventSubscriptionMethods();
         this._updateDefaultItemProperties();
-        this._updateOperationSettings();
+        this._updateEditingSettings();
 
         this._updateShapeTexts();
         this._updateUnitItems();
@@ -1466,16 +1466,17 @@ class Diagram extends Widget {
             shapeMaxHeight: this.option('defaultItemProperties.shapeMaxHeight')
         });
     }
-    _updateOperationSettings() {
+    _updateEditingSettings() {
         this._diagramInstance.applyOperationSettings({
-            addShape: this.option('operationSettings.allowAddShape'),
-            dragShapeFromToolbox: this.option('operationSettings.allowAddShape'),
-            deleteShape: this.option('operationSettings.allowDeleteShape'),
-            deleteConnector: this.option('operationSettings.allowDeleteConnector'),
-            connectionChange: this.option('operationSettings.allowChangeConnection'),
-            changeConnectorPoints: this.option('operationSettings.allowChangeConnectorPoints'),
-            changeShapeText: this.option('operationSettings.allowChangeShapeText'),
-            changeConnectorText: this.option('operationSettings.allowChangeConnectorText')
+            addShape: this.option('editing.allowAddShape'),
+            addShapeFromToolbox: this.option('editing.allowAddShape'),
+            deleteShape: this.option('editing.allowDeleteShape'),
+            deleteConnector: this.option('editing.allowDeleteConnector'),
+            changeConnection: this.option('editing.allowChangeConnection'),
+            changeConnectorPoints: this.option('editing.allowChangeConnectorPoints'),
+            changeShapeText: this.option('editing.allowChangeShapeText'),
+            changeConnectorText: this.option('editing.allowChangeConnectorText'),
+            resizeShape: this.option('editing.allowResizeShape')
         });
     }
 
@@ -1707,9 +1708,9 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.nodes.autoSizeEnabled
                 * @type boolean
-                * @default true
+                * @default false
                 */
-                autoSizeEnabled: true,
+                autoSizeEnabled: false
             },
             edges: {
                 /**
@@ -2185,49 +2186,55 @@ class Diagram extends Widget {
                 */
                 connectorLineEnd: 'arrow',
             },
-            operationSettings: {
+            editing: {
                 /**
-                * @name dxDiagramOptions.operationSettings.allowAddShape
+                * @name dxDiagramOptions.editing.allowAddShape
                 * @type boolean
                 * @default true
                 */
                 allowAddShape: true,
                 /**
-                * @name dxDiagramOptions.operationSettings.allowDeleteShape
+                * @name dxDiagramOptions.editing.allowDeleteShape
                 * @type boolean
                 * @default true
                 */
                 allowDeleteShape: true,
                 /**
-                * @name dxDiagramOptions.operationSettings.allowDeleteConnector
+                * @name dxDiagramOptions.editing.allowDeleteConnector
                 * @type boolean
                 * @default true
                 */
                 allowDeleteConnector: true,
                 /**
-                * @name dxDiagramOptions.operationSettings.allowChangeConnection
+                * @name dxDiagramOptions.editing.allowChangeConnection
                 * @type boolean
                 * @default true
                 */
                 allowChangeConnection: true,
                 /**
-                * @name dxDiagramOptions.operationSettings.allowChangeConnectorPoints
+                * @name dxDiagramOptions.editing.allowChangeConnectorPoints
                 * @type boolean
                 * @default true
                 */
                 allowChangeConnectorPoints: true,
                 /**
-                * @name dxDiagramOptions.operationSettings.allowChangeShapeText
+                * @name dxDiagramOptions.editing.allowChangeShapeText
                 * @type boolean
                 * @default true
                 */
                 allowChangeShapeText: true,
                 /**
-                * @name dxDiagramOptions.operationSettings.allowChangeConnectorText
+                * @name dxDiagramOptions.editing.allowChangeConnectorText
                 * @type boolean
                 * @default true
                 */
                 allowChangeConnectorText: true,
+                /**
+                * @name dxDiagramOptions.editing.allowResizeShape
+                * @type boolean
+                * @default true
+                */
+                allowResizeShape: true
             },
             export: {
                 /**
@@ -2251,7 +2258,7 @@ class Diagram extends Widget {
 
             onSelectionChanged: null,
 
-            onRequestOperation: null,
+            onRequestEditOperation: null,
 
             onRequestLayoutUpdate: null
 
@@ -2381,8 +2388,8 @@ class Diagram extends Widget {
     _createSelectionChangedAction() {
         this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
     }
-    _createRequestOperationAction() {
-        this._requestOperationAction = this._createActionByOption('onRequestOperation');
+    _createRequestEditOperationAction() {
+        this._requestEditOperationAction = this._createActionByOption('onRequestEditOperation');
     }
     _createRequestLayoutUpdateAction() {
         this._requestLayoutUpdateAction = this._createActionByOption('onRequestLayoutUpdate');
@@ -2408,12 +2415,12 @@ class Diagram extends Widget {
         }
         this._selectionChangedAction({ items: nativeItems.map(this._nativeItemToDiagramItem.bind(this)) });
     }
-    _raiseRequestOperation(operation, args) {
-        if(!this._requestOperationAction) {
-            this._createRequestOperationAction();
+    _raiseRequestEditOperation(operation, args) {
+        if(!this._requestEditOperationAction) {
+            this._createRequestEditOperationAction();
         }
-        const eventArgs = this._getRequestOperationEventArgs(operation, args);
-        this._requestOperationAction(eventArgs);
+        const eventArgs = this._getRequestEditOperationEventArgs(operation, args);
+        this._requestEditOperationAction(eventArgs);
         args.allowed = eventArgs.allowed;
     }
     _getModelOperation(operation) {
@@ -2421,13 +2428,13 @@ class Diagram extends Widget {
         switch(operation) {
             case DiagramModelOperation.AddShape:
                 return 'addShape';
-            case DiagramModelOperation.DragShapeFromToolbox:
+            case DiagramModelOperation.AddShapeFromToolbox:
                 return 'addShapeFromToolbox';
             case DiagramModelOperation.DeleteShape:
                 return 'deleteShape';
             case DiagramModelOperation.DeleteConnector:
                 return 'deleteConnector';
-            case DiagramModelOperation.ConnectionChange:
+            case DiagramModelOperation.ChangeConnection:
                 return 'changeConnection';
             case DiagramModelOperation.ChangeConnectorPoints:
                 return 'changeConnectorPoints';
@@ -2439,13 +2446,16 @@ class Diagram extends Widget {
                 return 'beforeChangeConnectorText';
             case DiagramModelOperation.ChangeConnectorText:
                 return 'changeConnectorText';
+            case DiagramModelOperation.ResizeShape:
+                return 'resizeShape';
         }
     }
-    _getRequestOperationEventArgs(operation, args) {
+    _getRequestEditOperationEventArgs(operation, args) {
         const { DiagramModelOperation, ConnectorPosition } = getDiagram();
         const eventArgs = {
             operation: this._getModelOperation(operation),
-            allowed: args.allowed
+            allowed: args.allowed,
+            updateUI: args.updateUI
         };
         switch(operation) {
             case DiagramModelOperation.AddShape:
@@ -2454,7 +2464,7 @@ class Diagram extends Widget {
                     position: args.position && { x: args.position.x, y: args.position.y }
                 };
                 break;
-            case DiagramModelOperation.DragShapeFromToolbox:
+            case DiagramModelOperation.AddShapeFromToolbox:
                 eventArgs.args = {
                     shapeType: args.shapeType
                 };
@@ -2469,7 +2479,7 @@ class Diagram extends Widget {
                     connector: args.connector && this._nativeItemToDiagramItem(args.connector)
                 };
                 break;
-            case DiagramModelOperation.ConnectionChange:
+            case DiagramModelOperation.ChangeConnection:
                 eventArgs.args = {
                     shape: args.shape && this._nativeItemToDiagramItem(args.shape),
                     connector: args.connector && this._nativeItemToDiagramItem(args.connector),
@@ -2506,6 +2516,13 @@ class Diagram extends Widget {
                     connector: args.connector && this._nativeItemToDiagramItem(args.connector),
                     index: args.index,
                     text: args.text
+                };
+                break;
+            case DiagramModelOperation.ResizeShape:
+                eventArgs.args = {
+                    shape: args.shape && this._nativeItemToDiagramItem(args.shape),
+                    newSize: args.size && { width: args.size.width, height: args.size.height },
+                    oldSize: args.oldSize && { width: args.oldSize.width, height: args.oldSize.height }
                 };
                 break;
         }
@@ -2718,8 +2735,8 @@ class Diagram extends Widget {
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();
                 break;
-            case 'onRequestOperation':
-                this._createRequestOperationAction();
+            case 'onRequestEditOperation':
+                this._createRequestEditOperationAction();
                 break;
             case 'onRequestLayoutUpdate':
                 this._createRequestLayoutUpdateAction();
@@ -2730,8 +2747,8 @@ class Diagram extends Widget {
             case 'defaultItemProperties':
                 this._updateDefaultItemProperties();
                 break;
-            case 'operationSettings':
-                this._updateOperationSettings();
+            case 'editing':
+                this._updateEditingSettings();
                 break;
             case 'export':
                 this._toolbars.forEach(toolbar => {

@@ -13,6 +13,7 @@ import chartThemeManagerModule from '../components/chart_theme_manager';
 import LayoutManagerModule from './layout_manager';
 import trackerModule from './tracker';
 import { map as _map, setCanvasValues as _setCanvasValues, processSeriesTemplate } from '../core/utils';
+import { when } from '../../core/utils/deferred';
 const _isArray = Array.isArray;
 
 const REINIT_REFRESH_ACTION = '_reinit';
@@ -703,6 +704,29 @@ export const BaseChart = BaseWidget.inherit({
         that._renderSeries(drawOptions, isRotated, isLegendInside);
 
         that._renderer.unlock();
+
+        const allAxes = (this._argumentAxes || []).concat(this._valueAxes || []);
+
+        if(that._changesApplying) {
+            that._changesApplying = false;
+            allAxes.forEach(function(a) {
+                a.setRenderedState(false);
+            });
+            return;
+        }
+        let syncRendering = true;
+        when.apply(this, allAxes.map(axis => axis.getTemplatesDef())).done(() => {
+            if(syncRendering) {
+                return;
+            }
+            allAxes.forEach(function(a) {
+                a.setRenderedState(true);
+            });
+            that._changesApplying = true;
+
+            that._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
+        });
+        syncRendering = false;
     },
 
     _updateLegendPosition: noop,
@@ -853,6 +877,7 @@ export const BaseChart = BaseWidget.inherit({
 
     _cleanGroups: function() {
         const that = this;
+
         that._stripsGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._gridGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
         that._axesGroup.linkRemove().clear(); // TODO: Must be removed in the same place where appended (advanced chart)
