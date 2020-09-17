@@ -586,15 +586,15 @@ export default {
                 },
 
                 _handleChangesChange: function(args) {
-                    if(!this.callBase.apply(this, arguments)) {
-                        const validatingController = this.getController('validating');
+                    this.callBase.apply(this, arguments);
 
-                        args.value.forEach(change => {
-                            if(validatingController._getValidationData(change.key) === undefined) {
-                                validatingController.updateValidationState(change);
-                            }
-                        });
-                    }
+                    const validatingController = this.getController('validating');
+
+                    args.value.forEach(change => {
+                        if(validatingController._getValidationData(change.key) === undefined) {
+                            validatingController.updateValidationState(change);
+                        }
+                    });
                 },
 
                 _updateRowAndPageIndices: function() {

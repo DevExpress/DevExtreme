@@ -634,7 +634,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const dataController = this._dataController;
 
             if(!args.value.length && !args.previousValue.length) {
-                return true;
+                return;
             }
 
             dataController.updateItems({
