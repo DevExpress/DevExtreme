@@ -112,6 +112,10 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
     }
   }
 
+  .dx-row-total.dx-last-cell {
+    padding-left: 22px;
+  }
+
   .dx-grandtotal.dx-last-cell {
     padding-left: 22px;
   }
@@ -128,7 +132,7 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
   }
 
   .dx-expand-icon-container {
-    margin: 0 10px 0 5px;
+    margin: 0 0 0 5px;
 
     @include dx-icon(chevronright);
 
@@ -151,6 +155,13 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
     @include dx-icon-font-centered-sizing($material-pivotgrid-chevron-icon-size);
 
     color: $pivotgrid-chevron-icon-color;
+  }
+
+  .dx-pivotgrid-collapsed,
+  .dx-pivotgrid-expanded {
+    > span {
+      padding: 0 5px 0 10px;
+    }
   }
 
   .dx-area-tree-view {
