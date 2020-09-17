@@ -212,11 +212,39 @@ configs.forEach(config => {
             return extend({ rtlEnabled: false, animationEnabled: false }, config, targetOptions);
         }
 
+        function checkPanelIsNotVisible(assert, drawerElement, panelTemplateElement) {
+            const drawerRect = drawerElement.getBoundingClientRect();
+            const panelTemplateRect = panelTemplateElement.getBoundingClientRect();
+            const panelTemplateParentRect = panelTemplateElement.parentElement.getBoundingClientRect();
+            if((panelTemplateRect.width > 0 || panelTemplateRect.height > 0) && (panelTemplateParentRect.width > 0 || panelTemplateParentRect.width > 0)) {
+                assert.strictEqual(
+                    panelTemplateRect.right < drawerRect.left
+                    || panelTemplateRect.left > drawerRect.right
+                    || panelTemplateRect.bottom < drawerRect.top
+                    || panelTemplateRect.top > drawerRect.bottom,
+                    true,
+                    `panel should not be visible, left:[${panelTemplateRect.left}/${drawerRect.left}], top:[${panelTemplateRect.top}/${drawerRect.top}], right:[${panelTemplateRect.right}/${drawerRect.right}], bottom:[${panelTemplateRect.bottom}/${drawerRect.bottom}], [panel/drawer]`);
+            }
+            const viewRect = document.getElementById('view').getBoundingClientRect();
+            assert.strictEqual(
+                viewRect.left === drawerRect.left
+                && viewRect.right === drawerRect.right
+                && viewRect.width === drawerRect.width
+                && viewRect.height === drawerRect.height,
+                true,
+                `view rect equals to drawer, left:[${viewRect.left}/${drawerRect.left}], top:[${viewRect.top}/${drawerRect.top}], right:[${viewRect.right}/${drawerRect.right}], bottom:[${viewRect.bottom}/${drawerRect.bottom}], [view/drawer]`);
+        }
+
         testOrSkip('opened: false', () => configIs('push', 'top') || configIs('overlap', 'right', 'expand') && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template,
+                __debugWhenPanelContentRendered: () => {
+                    if(!config.minSize) {
+                        checkPanelIsNotVisible(assert, drawerElement, document.getElementById('template'));
+                    }
+                }
             }));
 
             this.clock.tick(100);
