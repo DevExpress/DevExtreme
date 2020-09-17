@@ -224,7 +224,6 @@ export default class ViewDataProvider {
         this._groupedDataMap = [];
         this._workspace = workspace;
         this._focusedCell = null;
-        this._firstSelectedCell = null;
     }
 
     get viewDataGenerator() {

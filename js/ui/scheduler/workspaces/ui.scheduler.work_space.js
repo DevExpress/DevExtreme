@@ -377,7 +377,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _setSelectedCellsInStandardMode($firstCell, $lastCell, isMultiSelection) {
         if(isMultiSelection) {
             const $correctedFirstCell = this._correctCellForGroup($firstCell);
-            // const $correctedFirstCell = $firstCell;
             const $previousCell = $lastCell || this._$prevCell;
             const orientation = this.option('type') === 'day'
                     && (!this.option('groups').length
@@ -394,23 +393,23 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _setSelectedCellsInVirtualMode($firstCell, $lastCell, isMultiSelection) {
         if(isMultiSelection) {
-            // const $correctedFirstCell = this._correctCellForGroup($firstCell);
-            // const $correctedFirstCell = $firstCell;
             const $previousCell = $lastCell || this._$prevCell;
 
             const { rowIndex: firstRow, columnIndex: firstColumn } = this._getCoordinatesByCell($firstCell);
             const isFirstAllDay = this._hasAllDayClass($firstCell);
-            const { rowIndex: lastRow, columnIndex: lastColumn } = this._getCoordinatesByCell($previousCell);
-            const isLastAllDay = this._hasAllDayClass($previousCell);
-            this.viewDataProvider.setSelectedCells({
+            const firstCell = {
                 rowIndex: firstRow,
                 columnIndex: firstColumn,
                 allDay: isFirstAllDay,
-            }, {
-                rowIndex: lastRow,
-                columnIndex: lastColumn,
-                allDay: isLastAllDay,
-            });
+            };
+
+            let lastCell;
+            if(!$previousCell) {
+                lastCell = this._getCoordinatesByCell($previousCell);
+                lastCell.allDay = this._hasAllDayClass($previousCell);
+            }
+
+            this.viewDataProvider.setSelectedCells(firstCell, lastCell);
         } else {
             this._focusedCells = [$firstCell.get(0)];
             this._$prevCell = $firstCell;
