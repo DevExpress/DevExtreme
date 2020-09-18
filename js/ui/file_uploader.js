@@ -679,7 +679,7 @@ class FileUploader extends Editor {
     }
 
     _removeFile(file) {
-        file.$file.parent().remove();
+        file.$file?.parent().remove();
 
         this._files.splice(inArray(file, this._files), 1);
 
@@ -695,6 +695,19 @@ class FileUploader extends Editor {
         this._doPreventInputChange = true;
         this._$fileInput.val('');
         this._doPreventInputChange = false;
+    }
+
+    removeFile(fileData) {
+        if(this.option('uploadMode') === 'useForm' || !isDefined(fileData)) {
+            return;
+        }
+        const file = this._getFile(fileData);
+        if(file) {
+            if(file.uploadStarted) {
+                this._preventFilesUploading([file]);
+            }
+            this._removeFile(file);
+        }
     }
 
     _toggleFileUploaderEmptyClassName() {

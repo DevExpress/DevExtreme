@@ -6962,6 +6962,14 @@ declare module DevExpress.ui {
          */
         abortUpload(fileIndex: number): void;
         /**
+         * [descr:dxFileUploader.removeFile(file)]
+         */
+        removeFile(file: File): void;
+        /**
+         * [descr:dxFileUploader.removeFile(fileIndex)]
+         */
+        removeFile(fileIndex: number): void;
+        /**
          * [descr:dxFileUploader.upload()]
          */
         upload(): void;
