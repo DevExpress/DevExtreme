@@ -78,23 +78,19 @@ export default class Editor extends Component {
     innerWidget.on('optionChanged', syncOptions);
   }
 
-  _optionChanged(option): void {
-    const { name } = option || {};
+  _optionChanged(option: any = {}): void {
+    const { name } = option;
     if (name && this._getActionConfigs()[name]) {
       this._addAction(name);
     }
 
-    switch (name) {
-      default:
-        super._optionChanged(option);
-    }
-
+    super._optionChanged(option);
     this._invalidate();
   }
 
   reset(): void {
-    const defaultOptions = this._getDefaultOptions();
-    this.option('value', defaultOptions.value);
+    const { value } = this._getDefaultOptions();
+    this.option('value', value);
   }
 
   _dispose(): void {
