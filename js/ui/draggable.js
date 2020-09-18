@@ -11,7 +11,7 @@ import { dasherize } from '../core/utils/inflector';
 import { extend } from '../core/utils/extend';
 import DOMComponent from '../core/dom_component';
 import { getPublicElement } from '../core/element';
-import { addNamespace, needSkipEvent } from '../events/utils';
+import { addNamespace, needSkipEvent } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
 import {
     start as dragEventStart,
@@ -239,6 +239,8 @@ const Draggable = DOMComponent.inherit({
             onDragStart: null,
             onDragMove: null,
             onDragEnd: null,
+            onDragEnter: null,
+            onDragLeave: null,
             /**
              * @name dxDraggableOptions.onDrop
              * @type function(e)
@@ -873,6 +875,8 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragEnterHandler: function(e) {
+        this._fireDragEnterEvent(e);
+
         if(this._isTargetOverAnotherDraggable(e)) {
             this._setTargetDraggable();
         }
@@ -882,6 +886,8 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragLeaveHandler: function(e) {
+        this._fireDragLeaveEvent(e);
+
         this._resetTargetDraggable();
 
         if(this !== this._getSourceDraggable()) {
@@ -932,6 +938,8 @@ const Draggable = DOMComponent.inherit({
             case 'onDragMove':
             case 'onDragEnd':
             case 'onDrop':
+            case 'onDragEnter':
+            case 'onDragLeave':
                 this['_' + name + 'Action'] = this._createActionByOption(name);
                 break;
             case 'dragTemplate':
@@ -1003,6 +1011,18 @@ const Draggable = DOMComponent.inherit({
         this._resetSourceDraggable();
         this._$sourceElement = null;
         this._stopAnimator();
+    },
+
+    _fireDragEnterEvent: function(sourceEvent) {
+        const args = this._getEventArgs(sourceEvent);
+
+        this._getAction('onDragEnter')(args);
+    },
+
+    _fireDragLeaveEvent: function(sourceEvent) {
+        const args = this._getEventArgs(sourceEvent);
+
+        this._getAction('onDragLeave')(args);
     }
 });
 

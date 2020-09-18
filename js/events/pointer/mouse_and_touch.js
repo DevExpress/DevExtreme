@@ -2,7 +2,7 @@ import { extend } from '../../core/utils/extend';
 import BaseStrategy from './base';
 import MouseStrategy from './mouse';
 import TouchStrategy from './touch';
-import { isMouseEvent } from '../utils';
+import { isMouseEvent } from '../utils/index';
 
 const eventMap = {
     'dxpointerdown': 'touchstart mousedown',

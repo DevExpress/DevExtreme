@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import mappedAddNamespace from './add_namespace';
-import eventsEngine, { Event } from '../core/events_engine';
+import eventsEngine from '../core/events_engine';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { focused } from '../../ui/widget/selectors';
@@ -75,7 +75,7 @@ const EVENT_SOURCES_REGEX = {
 };
 
 let fixMethod = e => e;
-const copyEvent = originalEvent => fixMethod(Event(originalEvent, originalEvent), originalEvent);
+const copyEvent = originalEvent => fixMethod(eventsEngine.Event(originalEvent, originalEvent), originalEvent);
 const isDxEvent = e => eventSource(e) === 'dx';
 const isNativeMouseEvent = e => eventSource(e) === 'mouse';
 const isNativeTouchEvent = e => eventSource(e) === 'touch';

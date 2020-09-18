@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import TextEditorButton from '../text_box/texteditor_button_collection/button';
 import SpinButton from './number_box.spin';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { down as pointerDown } from '../../events/pointer';
 import { extend } from '../../core/utils/extend';
 

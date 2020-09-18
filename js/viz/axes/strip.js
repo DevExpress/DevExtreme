@@ -52,6 +52,10 @@ export default function createStrip(axis, options) {
             }
         },
 
+        getContentContainer() {
+            return this.label;
+        },
+
         removeLabel() {
         },
 

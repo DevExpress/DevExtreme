@@ -6,7 +6,7 @@ import { each as _each } from '../../core/utils/iterator';
 import { events as eventsConsts, states as statesConsts } from '../components/consts';
 import { getDistance, pointInCanvas as inCanvas, normalizeEnum as _normalizeEnum } from '../core/utils';
 import pointerEvents from '../../events/pointer';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { isDefined } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
 const _floor = Math.floor;
@@ -32,9 +32,26 @@ const INCLUDE_POINTS_MODE = 'includepoints';
 const EXLUDE_POINTS_MODE = 'excludepoints';
 const LEGEND_HOVER_MODES = [INCLUDE_POINTS_MODE, EXLUDE_POINTS_MODE, NONE_MODE];
 
-function getData(event, dataKey) {
+function getData(event, dataKey, tryCheckParent) {
     const target = event.target;
-    return (target.tagName === 'tspan' ? target.parentNode : target)[dataKey];
+    if(target.tagName === 'tspan') {
+        return target.parentNode[dataKey];
+    }
+    const data = target[dataKey];
+    if(tryCheckParent && !isDefined(data)) {
+        const getParentData = function(node) {
+            if(node.parentNode) {
+                if(isDefined(node.parentNode[dataKey])) {
+                    return node.parentNode[dataKey];
+                } else {
+                    return getParentData(node.parentNode);
+                }
+            }
+            return undefined;
+        };
+        return getParentData(target);
+    }
+    return data;
 }
 
 function eventCanceled(event, target) {
@@ -432,7 +449,7 @@ const baseTrackerPrototype = {
                 that._legendClick(item, e);
             }
         } else if(axis?.coordsIn(x, y)) {
-            const argument = getData(e, ARG_DATA);
+            const argument = getData(e, ARG_DATA, true);
             if(isDefined(argument)) {
                 that._eventTrigger('argumentAxisClick', { argument: argument, event: e });
             }
@@ -583,7 +600,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
         const that = this;
         that._resetHoveredArgument();
         if(that._axisHoverEnabled && that._argumentAxis.coordsIn(x, y)) {
-            that._hoverArgument(getData(e, ARG_DATA));
+            that._hoverArgument(getData(e, ARG_DATA, true));
             return true;
         }
     },

@@ -5,7 +5,7 @@ import svgUtils from '../core/utils/svg';
 import { each as _each, map as _map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import domAdapter from '../core/dom_adapter';
-import domUtils from '../core/utils/dom';
+import { contains } from '../core/utils/dom';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import { camelize } from '../core/utils/inflector';
@@ -735,7 +735,7 @@ function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToC
     }
     drawBackground(context, width, height, backgroundColor, margin);
 
-    return fromPromise(svgToCanvas(svgElem, canvas, markupIsDomElement && domUtils.contains(domAdapter.getBody(), markup)))
+    return fromPromise(svgToCanvas(svgElem, canvas, markupIsDomElement && contains(domAdapter.getBody(), markup)))
         .then(() => canvas)
         .always(() => {
             invisibleDiv && domAdapter.getBody().removeChild(invisibleDiv);

@@ -408,6 +408,38 @@ QUnit.module('Events', moduleConfig, () => {
 
         assert.equal(onContentReadyHandler.callCount, 1, 'onContentReadyHandler was called 1 times');
     });
+    test('task click', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option('onTaskClick', (e) => {
+            keyFromEvent = e.key;
+        });
+        const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
+        $cellElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+    });
+
+    test('task double click', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option('onTaskDblClick', (e) => {
+            keyFromEvent = e.key;
+            e.cancel = true;
+        });
+        const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
+        $cellElement.trigger('dxdblclick');
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 0, 'dialog is not shown');
+    });
 });
 
 QUnit.module('Actions', moduleConfig, () => {
@@ -1598,6 +1630,34 @@ QUnit.module('Context Menu', moduleConfig, () => {
         assert.equal(items.eq(5).text(), contextMenuOptions.contextMenu.items[5].text, 'custom item was rendered');
         this.instance.option('contextMenu.items', []);
         assert.equal(getItems().length, 4, 'there are 4 items by default');
+    });
+    test('cancel ContextMenuPreparing', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        this.instance.option('onContextMenuPreparing', (e) => {
+            e.cancel = true;
+        });
+        this.clock.tick();
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        assert.equal(getContextMenuElement().length, 0, 'menu is hidden after right click');
+    });
+    test('add item in ContextMenuPreparing', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        this.instance.option('onContextMenuPreparing', (e) => {
+            e.items.push({ text: 'My Command', name: 'Custom' });
+        });
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        const items = getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
+        assert.equal(items.eq(items.length - 1).text(), 'My Command', 'custom item was rendered');
     });
 });
 QUnit.module('Strip Lines', moduleConfig, () => {

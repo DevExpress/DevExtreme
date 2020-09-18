@@ -1,12 +1,12 @@
 import arrayUtils from '../../core/utils/array';
 import { grep } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import objectUtils from '../../core/utils/object';
-import iteratorUtils from '../../core/utils/iterator';
+import { deepExtendArraySafe } from '../../core/utils/object';
+import { each, map } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import query from '../../data/query';
-import dataCoreUtils from '../../core/utils/data';
+import { compileGetter, compileSetter } from '../../core/utils/data';
 import { DataSource } from '../../data/data_source/data_source';
 import { when, Deferred } from '../../core/utils/deferred';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
@@ -37,10 +37,10 @@ export default class ResourceManager {
     }
 
     _mapResourceData(resource, data) {
-        const valueGetter = dataCoreUtils.compileGetter(getValueExpr(resource));
-        const displayGetter = dataCoreUtils.compileGetter(getDisplayExpr(resource));
+        const valueGetter = compileGetter(getValueExpr(resource));
+        const displayGetter = compileGetter(getDisplayExpr(resource));
 
-        return iteratorUtils.map(data, function(item) {
+        return map(data, function(item) {
             const result = {
                 id: valueGetter(item),
                 text: displayGetter(item)
@@ -57,7 +57,7 @@ export default class ResourceManager {
     _isMultipleResource(resourceField) {
         let result = false;
 
-        iteratorUtils.each(this.getResources(), (function(_, resource) {
+        each(this.getResources(), (function(_, resource) {
             const field = this.getField(resource);
             if(field === resourceField) {
                 result = resource.allowMultiple;
@@ -70,7 +70,7 @@ export default class ResourceManager {
 
     getDataAccessors(field, type) {
         let result = null;
-        iteratorUtils.each(this._dataAccessors[type], function(accessorName, accessors) {
+        each(this._dataAccessors[type], function(accessorName, accessors) {
             if(field === accessorName) {
                 result = accessors;
                 return false;
@@ -91,11 +91,11 @@ export default class ResourceManager {
             setter: {}
         };
 
-        this._resourceFields = iteratorUtils.map(resources || [], (function(resource) {
+        this._resourceFields = map(resources || [], (function(resource) {
             const field = this.getField(resource);
 
-            this._dataAccessors.getter[field] = dataCoreUtils.compileGetter(field);
-            this._dataAccessors.setter[field] = dataCoreUtils.compileSetter(field);
+            this._dataAccessors.getter[field] = compileGetter(field);
+            this._dataAccessors.setter[field] = compileSetter(field);
 
             return field;
         }).bind(this));
@@ -113,7 +113,7 @@ export default class ResourceManager {
         const result = [];
         const that = this;
 
-        iteratorUtils.each(this.getResources(), function(i, resource) {
+        each(this.getResources(), function(i, resource) {
             const field = that.getField(resource);
             const currentResourceItems = that._getResourceDataByField(field);
 
@@ -136,7 +136,7 @@ export default class ResourceManager {
         const that = this;
         const result = new Deferred();
 
-        iteratorUtils.each(this.getResources(), function(_, resource) {
+        each(this.getResources(), function(_, resource) {
             const resourceField = that.getField(resource);
             if(resourceField === field) {
                 const dataSource = that._createWrappedDataSource(resource.dataSource);
@@ -185,7 +185,7 @@ export default class ResourceManager {
         }
 
         this._resourceFields.forEach(field => {
-            iteratorUtils.each(itemData, (fieldName, fieldValue) => {
+            each(itemData, (fieldName, fieldValue) => {
                 const tempObject = {};
                 tempObject[fieldName] = fieldValue;
 
@@ -218,7 +218,7 @@ export default class ResourceManager {
         const that = this;
         const deferreds = [];
 
-        iteratorUtils.each(this.getResourcesByFields(groups), function(i, resource) {
+        each(this.getResourcesByFields(groups), function(i, resource) {
             const deferred = new Deferred();
             const field = that.getField(resource);
             deferreds.push(deferred);
@@ -270,9 +270,9 @@ export default class ResourceManager {
 
     getResourceColor(field, value) {
         const valueExpr = this.getResourceByField(field).valueExpr || 'id';
-        const valueGetter = dataCoreUtils.compileGetter(valueExpr);
+        const valueGetter = compileGetter(valueExpr);
         const colorExpr = this.getResourceByField(field).colorExpr || 'color';
-        const colorGetter = dataCoreUtils.compileGetter(colorExpr);
+        const colorGetter = compileGetter(colorExpr);
 
         const result = new Deferred();
         const resourceData = this._getResourceDataByField(field);
@@ -309,7 +309,7 @@ export default class ResourceManager {
         let resources = this.getResources();
         let result;
 
-        iteratorUtils.each(resources, function(index, resource) {
+        each(resources, function(index, resource) {
             if(resource.useColorAsDefault) {
                 result = resource;
                 return false;
@@ -413,7 +413,7 @@ export default class ResourceManager {
         const tree = this.createResourcesTree(resources);
         const result = {};
 
-        iteratorUtils.each(appointments, (function(_, appointment) {
+        each(appointments, (function(_, appointment) {
             const appointmentResources = this.getResourcesFromItem(appointment);
             const treeLeaves = this.getResourceTreeLeaves(tree, appointmentResources);
 
@@ -423,7 +423,7 @@ export default class ResourceManager {
                 }
 
                 // NOTE: check appointment before pushing
-                result[treeLeaves[i]].push(objectUtils.deepExtendArraySafe({}, appointment, true));
+                result[treeLeaves[i]].push(deepExtendArraySafe({}, appointment, true));
             }
         }).bind(this));
 
@@ -497,7 +497,7 @@ export default class ResourceManager {
             data => currentResourcesData.push(Object.assign({}, data))
         );
 
-        iteratorUtils.each(groups, (_, value) => {
+        each(groups, (_, value) => {
             currentResourcesData.forEach(resourceData => {
 
                 const { items, data, name } = resourceData;
