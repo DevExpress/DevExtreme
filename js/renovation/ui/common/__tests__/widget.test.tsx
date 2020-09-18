@@ -1,6 +1,6 @@
 import React, { createRef } from 'react';
 // Should be before component import
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
 import each from 'jest-each';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
@@ -10,11 +10,13 @@ import {
 import { Widget, viewFunction, WidgetProps } from '../widget';
 import { isFakeClickEvent } from '../../../../events/utils';
 import config from '../../../../core/config';
+import { RtlEnabledProvider } from '../rtl_enabled_provider';
 
 jest.mock('../../../../events/utils', () => ({
   ...require.requireActual('../../../../events/utils'),
   isFakeClickEvent: jest.fn(),
 }));
+jest.mock('../rtl_enabled_provider', () => ({ RtlEnabledProvider: () => null }));
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -23,17 +25,17 @@ describe('Widget', () => {
         hint: 'hint',
         visible: true,
       };
-      const widget = shallow(viewFunction({
+      const widget = mount(viewFunction({
         props,
         tabIndex: 10,
         cssClasses: 'cssClasses',
-        styles: 'styles',
+        styles: { display: 'none' },
         attributes: { attributes: 'attributes' },
       } as any) as any);
 
       expect(widget.props()).toEqual({
         attributes: 'attributes',
-        style: 'styles',
+        style: { display: 'none' },
         className: 'cssClasses',
         hidden: false,
         title: 'hint',
@@ -63,13 +65,26 @@ describe('Widget', () => {
         visible: true,
         children: <div className="child" />,
       };
-      const widget = shallow(viewFunction({
+      const widget = mount(viewFunction({
         widgetRef: mockRef,
         props,
         cssClasses: 'cssClasses',
       } as any) as any);
 
       expect(widget.find('.child').exists()).toBe(true);
+    });
+
+    it('should render RtlEnabledProvider if shouldRenderRtlEnabledProvider is true', () => {
+      const props = {
+        hint: 'hint',
+        visible: true,
+      };
+      const widget = mount(viewFunction({
+        props,
+        shouldRenderRtlEnabledProvider: true,
+      } as any) as any);
+
+      expect(widget.find(RtlEnabledProvider)).toHaveLength(1);
     });
   });
 
