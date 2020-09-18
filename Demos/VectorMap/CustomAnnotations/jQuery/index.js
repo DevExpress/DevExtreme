@@ -24,14 +24,6 @@ $(function(){
             },
         },
         annotations: statesData,
-        customizeAnnotation: function(annotationItem) {
-            if(annotationItem.data.name === 'Illinois') {
-                annotationItem.offsetY = -80;
-                annotationItem.offsetX = -100;
-            }
-
-            return annotationItem;
-        },
         layers: [{
             dataSource: DevExpress.viz.map.sources.usa
         }]

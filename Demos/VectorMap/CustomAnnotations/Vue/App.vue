@@ -2,7 +2,6 @@
   <DxVectorMap
     id="vector-map"
     :bounds="bounds"
-    :customizeAnnotation="customizeAnnotation"
   >
     <DxLayer
       :data-source="usa"
@@ -14,6 +13,8 @@
     <DxAnnotation
       v-for="state in statesData"
       :coordinates="state.coordinates"
+      :offsetX="state.offsetX"
+      :offsetY="state.offsetY"
       :data="state.data"
       :key="state.data.name"
     />
@@ -50,16 +51,6 @@ export default {
       usa: mapsData.usa,
       bounds: [-118, 55, -80, 23]
     };
-  },
-  methods: {
-    customizeAnnotation: (annotationItem) => {
-      if (annotationItem.data.name === 'Illinois') {
-        annotationItem.offsetY = -80;
-        annotationItem.offsetX = -100;
-      }
-
-      return annotationItem;
-    }
   }
 };
 </script>

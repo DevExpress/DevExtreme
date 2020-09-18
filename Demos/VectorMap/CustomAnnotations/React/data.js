@@ -8,6 +8,8 @@ export const statesData = [{
   }
 }, {
   coordinates: [-89, 40],
+  offsetX: -100,
+  offsetY: -80,
   data: {
     name: 'Illinois',
     population: 12880580,

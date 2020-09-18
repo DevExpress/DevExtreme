@@ -1,7 +1,6 @@
 <dx-vector-map
   id="vector-map"
   [bounds]="[-118, 55, -80, 23]"
-  [customizeAnnotation]="customizeAnnotation"
 >
   <dxi-layer [dataSource]="usaMap"></dxi-layer>
   <dxo-common-annotation-settings type="custom" template="template">
@@ -9,6 +8,8 @@
   <dxi-annotation
     *ngFor="let data of states"
     [data]="data.data"
+    [offsetX]="data.offsetX"
+    [offsetY]="data.offsetY"
     [coordinates]="data.coordinates"
   >
   </dxi-annotation>

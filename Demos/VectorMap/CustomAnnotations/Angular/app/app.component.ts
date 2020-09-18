@@ -29,15 +29,6 @@ export class AppComponent {
     const name = annotation.data.name.replace(/\s/, "");
         return `../../../../images/flags/${name}.svg`;
   };
-
-  customizeAnnotation = (annotationItem) => {
-    if (annotationItem.data.name === "Illinois") {
-      annotationItem.offsetY = -80;
-      annotationItem.offsetX = -100;
-    }
-
-    return annotationItem;
-  };
 }
 
 @NgModule({

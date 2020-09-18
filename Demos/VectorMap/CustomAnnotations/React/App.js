@@ -12,19 +12,10 @@ import AnnotationTemplate from './AnnotationTemplate.js';
 const bounds = [-118, 55, -80, 23];
 
 export default function App() {
-  function customizeAnnotation(annotationItem) {
-    if (annotationItem.data.name === 'Illinois') {
-      annotationItem.offsetY = -80;
-      annotationItem.offsetX = -100;
-    }
-
-    return annotationItem;
-  }
   return (
     <VectorMap
       id="vector-map"
-      bounds={bounds}
-      customizeAnnotation={customizeAnnotation}>
+      bounds={bounds}>
       <Layer
         dataSource={mapsData.usa}
       >
@@ -38,6 +29,8 @@ export default function App() {
         return (
           <Annotation
             coordinates={state.coordinates}
+            offsetX={state.offsetX}
+            offsetY={state.offsetY}
             key={state.data.name}
             data={state.data}
           >
