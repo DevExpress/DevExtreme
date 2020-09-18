@@ -133,3 +133,7 @@ export interface dxElementWrapper {
 
     wrapInner(wrappingElement: this|Element|string): this;
 }
+
+declare function renderer(selector: string|Element|dxElementWrapper): dxElementWrapper;
+
+export default renderer;
