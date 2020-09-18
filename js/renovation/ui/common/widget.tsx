@@ -9,8 +9,8 @@ import {
   OneWay,
   Ref,
   Slot,
+  Fragment,
   Consumer,
-  Provider,
 } from 'devextreme-generator/component_declaration/common';
 import '../../../events/click';
 import '../../../events/hover';
@@ -27,6 +27,7 @@ import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { RtlEnabledContext } from './rtl_enabled_context';
+import { RtlEnabledProvider } from './rtl_enabled_provider';
 
 const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
@@ -57,19 +58,32 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string =>
   return combineClasses(classesMap);
 };
 
-export const viewFunction = (viewModel: Widget): JSX.Element => (
-  <div
-    ref={viewModel.widgetRef as any}
-    {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
-    tabIndex={viewModel.tabIndex}
-    title={viewModel.props.hint}
-    hidden={!viewModel.props.visible}
-    className={viewModel.cssClasses}
-    style={viewModel.styles}
-  >
-    {viewModel.props.children}
-  </div>
-);
+export const viewFunction = (viewModel: Widget): JSX.Element => {
+  const widget = (
+    <div
+      ref={viewModel.widgetRef as any}
+      {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
+      tabIndex={viewModel.tabIndex}
+      title={viewModel.props.hint}
+      hidden={!viewModel.props.visible}
+      className={viewModel.cssClasses}
+      style={viewModel.styles}
+    >
+      {viewModel.props.children}
+    </div>
+  );
+  return (
+    <Fragment>
+      {viewModel.shouldRenderRtlEnabledProvider
+        ? (
+          <RtlEnabledProvider rtlEnabled={viewModel.rtlEnabled}>
+            {widget}
+          </RtlEnabledProvider>
+        )
+        : widget}
+    </Fragment>
+  );
+};
 
 @ComponentBindings()
 export class WidgetProps extends BaseWidgetProps {
@@ -130,7 +144,11 @@ export class Widget extends JSXComponent(WidgetProps) {
   @Consumer(RtlEnabledContext)
   parentRtlEnabled?: boolean;
 
-  @Provider(RtlEnabledContext)
+  get shouldRenderRtlEnabledProvider(): boolean {
+    return (this.props.rtlEnabled !== undefined)
+    && (this.props.rtlEnabled !== this.parentRtlEnabled);
+  }
+
   get rtlEnabled(): boolean | undefined {
     if (this.props.rtlEnabled !== undefined) {
       return this.props.rtlEnabled;
@@ -341,7 +359,6 @@ export class Widget extends JSXComponent(WidgetProps) {
       focusStateEnabled,
       hoverStateEnabled,
       onVisibilityChange,
-      rtlEnabled,
       visible,
     } = this.props;
 
@@ -355,7 +372,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       focusStateEnabled,
       hoverStateEnabled,
       onVisibilityChange,
-      rtlEnabled,
+      rtlEnabled: this.rtlEnabled,
       visible,
     });
   }

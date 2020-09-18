@@ -12,10 +12,9 @@ import PagerProps, { DisplayMode } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
 
-const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
-  className,
+  classes,
   pagesContainerVisible,
   pagesContainerVisibility,
   isLargeDisplayMode,
@@ -31,7 +30,7 @@ export const viewFunction = ({
   restAttributes,
 }: PagerContent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <Widget ref={parentRef} rtlEnabled={rtlEnabled} className={className} {...restAttributes}>
+  <Widget ref={parentRef} rtlEnabled={rtlEnabled} classes={classes} {...restAttributes}>
     {showPageSizes && (
     <PageSizeSelector
       ref={pageSizesRef}
@@ -123,15 +122,12 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
       result = displayMode === 'full';
     }
     return result;
-    // return !this.props.lightModeEnabled && this.props.isLargeDisplayMode;
   }
 
-  get className(): string {
+  get classes(): string {
     const classesMap = {
-      'dx-widget': true,
       [`${this.props.className}`]: !!this.props.className,
       [PAGER_CLASS]: true,
-      [STATE_INVISIBLE_CLASS]: !this.props.visible,
       [LIGHT_MODE_CLASS]: !this.isLargeDisplayMode,
     };
     return combineClasses(classesMap);

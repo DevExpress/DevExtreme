@@ -1,11 +1,12 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Fragment,
+  Component, ComponentBindings, JSXComponent, OneWay, Fragment, Consumer,
 } from 'devextreme-generator/component_declaration/common';
 
 import { LightButton } from '../common/light_button';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
 import PagerProps from '../common/pager_props';
+import { RtlEnabledContext } from '../../common/rtl_enabled_context';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
 const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
@@ -28,7 +29,6 @@ export const viewFunction = ({
   props: {
     isLargeDisplayMode, maxPagesCount,
     pageCount, pageIndex, pagesCountText,
-    rtlEnabled,
   },
 }: PageIndexSelector) => (
   <Fragment>
@@ -45,7 +45,6 @@ export const viewFunction = ({
       pageCount={pageCount}
       pageIndex={pageIndex}
       pageIndexChange={pageIndexChange}
-      rtlEnabled={rtlEnabled}
     />
     )}
     {!isLargeDisplayMode && (
@@ -78,16 +77,19 @@ export class PageIndexSelectorProps {
 
 type PageIndexSelectorPropsType = Pick<PagerProps,
 'hasKnownLastPage' | 'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' |
-'rtlEnabled' | 'showNavigationButtons' | 'totalCount'> & PageIndexSelectorProps;
+'showNavigationButtons' | 'totalCount'> & PageIndexSelectorProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>() {
+  @Consumer(RtlEnabledContext)
+  rtlEnabled!: boolean;
+
   private getNextDirection(): Direction {
-    return !this.props.rtlEnabled ? 'next' : 'prev';
+    return !this.rtlEnabled ? 'next' : 'prev';
   }
 
   private getPrevDirection(): Direction {
-    return !this.props.rtlEnabled ? 'prev' : 'next';
+    return !this.rtlEnabled ? 'prev' : 'next';
   }
 
   private canNavigateToPage(pageIndex: number): boolean {

@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 // Should be before component import
 import { shallow, mount } from 'enzyme';
+import each from 'jest-each';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
@@ -732,6 +733,32 @@ describe('Widget', () => {
           expect(widget.tabIndex).toBe(10);
         });
       });
+
+      each`
+      rtlEnabled   | parentRtlEnabled | expected
+      ${true}      | ${true}          | ${false}
+      ${true}      | ${undefined}     | ${true}
+      ${false}     | ${undefined}     | ${true}
+      ${true}      | ${false}         | ${true}
+      ${false}     | ${true}          | ${true}
+      ${undefined} | ${undefined}     | ${false}
+      ${undefined} | ${true}          | ${false}
+      ${undefined} | ${false}         | ${false}
+      ${true}      | ${true}          | ${false}
+      `
+        .describe('shouldRenderRtlEnabledProvider', ({
+          rtlEnabled, parentRtlEnabled, expected,
+        }) => {
+          const name = `${JSON.stringify({
+            rtlEnabled: rtlEnabled === undefined ? 'u' : rtlEnabled, parentRtlEnabled: parentRtlEnabled === undefined ? 'u' : parentRtlEnabled, expected,
+          })}`;
+
+          it(name, () => {
+            const widget = new Widget({ rtlEnabled });
+            widget.parentRtlEnabled = parentRtlEnabled;
+            expect(widget.shouldRenderRtlEnabledProvider).toBe(expected);
+          });
+        });
 
       describe('rtlEnabled', () => {
         it('should return value from props if props has value', () => {

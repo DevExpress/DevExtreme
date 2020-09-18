@@ -156,8 +156,9 @@ describe('Pager pages logic', () => {
 
   it('pages: rtlEnabled: true', () => {
     const pages = new PagesLarge({
-      pageCount: 30, maxPagesCount: 10, pageIndex: 4, rtlEnabled: true,
+      pageCount: 30, maxPagesCount: 10, pageIndex: 4,
     });
+    pages.rtlEnabled = true;
     expect(pages.pages[0].pageProps).toMatchObject({ index: 29, selected: false });
     expect(pages.pages[1].key).toEqual('high');
     expect(pages.pages[2].pageProps).toMatchObject({ index: 6, selected: false });
