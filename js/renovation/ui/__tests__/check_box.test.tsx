@@ -17,7 +17,7 @@ import { ValidationMessage } from '../validationMessage';
 
 type Mock = jest.Mock;
 
-jest.mock('../validationMessage');
+jest.mock('../validationMessage', () => ({ ValidationMessage: () => null }));
 
 jest.mock('../../../core/devices', () => {
   const actualDevices = require.requireActual('../../../core/devices').default;
@@ -167,6 +167,7 @@ describe('CheckBox', () => {
                 validationErrors,
                 validationStatus: 'invalid',
                 validationMessageMode: 'always',
+                rtlEnabled: undefined,
               },
               shouldShowValidationMessage: true,
             } as any)}
