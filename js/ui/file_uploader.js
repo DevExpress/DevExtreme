@@ -697,6 +697,19 @@ class FileUploader extends Editor {
         this._doPreventInputChange = false;
     }
 
+    removeFile(fileData) {
+        if(this.option('uploadMode') === 'useForm' || !isDefined(fileData)) {
+            return;
+        }
+        const file = this._getFile(fileData);
+        if(file) {
+            if(file.uploadStarted) {
+                this._preventFilesUploading([file]);
+            }
+            this._removeFile(file);
+        }
+    }
+
     _toggleFileUploaderEmptyClassName() {
         this.$element().toggleClass(FILEUPLOADER_EMPTY_CLASS, !this._files.length || this._hasInvalidFile(this._files));
     }
