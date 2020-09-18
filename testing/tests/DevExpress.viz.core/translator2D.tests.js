@@ -28,7 +28,13 @@ function prepareScaleBreaks(array, breakSize) {
 function createTranslatorWithScaleBreaks(options) {
     const breakSize = options.breakSize || 20;
     const breaks = prepareScaleBreaks(options.breaks || [{ from: 150, to: 200 }, { from: 350, to: 370 }, { from: 590, to: 650 }], breakSize);
-    return this.createTranslator({ min: options.min || 100, max: options.max || 700, breaks: breaks, invert: options.invert }, null, { breaksSize: breakSize });
+    return this.createTranslator({
+        min: options.min || 100,
+        max: options.max || 700,
+        breaks: breaks,
+        invert: options.invert,
+        userBreaks: options.userBreaks || breaks
+    }, null, { breaksSize: breakSize });
 }
 
 const canvasTemplate = {
@@ -2746,6 +2752,39 @@ QUnit.test('Zoom. Max in the break after zoom', function(assert) {
     const zoomInfo = translator.zoom(650, 2.3);
     assert.equal(zoomInfo.max, 350);
 });
+
+// T927605 start
+QUnit.test('Scroll. Max in the user break, that was out of the range', function(assert) {
+    const breaks = [{ from: 350, to: 370 }];
+    const translator = createTranslatorWithScaleBreaks.call(this, { breaks: breaks, userBreaks: breaks.concat([{ from: 700, to: 800 }]) });
+
+    const scrollInfo = translator.zoom(25, 1);
+    assert.equal(scrollInfo.max, 800);
+});
+
+QUnit.test('Scroll. Min in the user break, that was out of the range', function(assert) {
+    const breaks = [{ from: 350, to: 370 }];
+    const translator = createTranslatorWithScaleBreaks.call(this, {
+        breaks: breaks,
+        userBreaks: breaks.concat([{ from: 0, to: 100 }])
+    });
+
+    const scrollInfo = translator.zoom(-25, 1);
+    assert.equal(scrollInfo.min, 0);
+});
+
+QUnit.test('Zoom out. Max and min in the user break, that was out of the range', function(assert) {
+    const breaks = [{ from: 350, to: 370 }];
+    const translator = createTranslatorWithScaleBreaks.call(this, {
+        breaks: breaks,
+        userBreaks: breaks.concat([{ from: 0, to: 120 }, { from: 700, to: 800 }])
+    });
+
+    const scrollInfo = translator.zoom(-25, 0.9);
+    assert.equal(scrollInfo.min, 0);
+    assert.equal(scrollInfo.max, 800);
+});
+// T927605 end
 
 QUnit.module('Zooming and scrolling. Discrete translator', {
     beforeEach: function() {
