@@ -679,7 +679,7 @@ class FileUploader extends Editor {
     }
 
     _removeFile(file) {
-        file.$file.parent().remove();
+        file.$file?.parent().remove();
 
         this._files.splice(inArray(file, this._files), 1);
 

@@ -1613,6 +1613,26 @@ QUnit.module('allowCanceling', moduleConfig, () => {
         assert.ok($uploadButton.eq(1).hasClass('dx-state-disabled'), '\'upload\' button is disabled');
     });
 
+    QUnit.test('its possible to remove file with removeFile() method when showFileList = false', function(assert) {
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            showFileList: false,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile]);
+        const instance = $element.dxFileUploader('instance');
+
+        instance.upload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        assert.ok(onUploadedSpy.calledOnce, 'upload is finished');
+
+        instance.removeFile(0);
+        assert.strictEqual(instance.option('value').length, 0, 'file is removed');
+    });
+
 });
 
 QUnit.module('autoUpload', moduleConfig, () => {
