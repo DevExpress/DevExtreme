@@ -128,20 +128,17 @@ export const Export = {
 
     _getPDFCellStyles: function(rowType, columnAlignment, cellStyle) {
         const { alignment: horizontalAlignment, bold, wrapText } = cellStyle;
-        const styles = {};
-        const setStyle = (styleName, value) => {
-            if(isDefined(value)) {
-                styles[styleName] = value;
-            }
-        };
+
         if(rowType === 'header') {
-            setStyle('halign', columnAlignment);
-        } else {
-            setStyle('halign', horizontalAlignment);
-            setStyle('fontStyle', bold ? 'bold' : undefined);
-            setStyle('cellWidth', wrapText ? 'wrap' : undefined);
+            return {
+                'halign': columnAlignment
+            };
         }
-        return styles;
+        return {
+            'halign': horizontalAlignment,
+            fontStyle: bold ? 'bold' : undefined,
+            cellWidth: wrapText ? 'wrap' : undefined
+        };
     },
 
     _tryGetPdfColumnWidths(autoTableWidth, columnWidths) {

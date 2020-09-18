@@ -29,20 +29,20 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
-    const getOptions = (context, dataGrid, options) => {
-        const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {} } = options || {};
+const getOptions = (context, dataGrid, options) => {
+    const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {} } = options || {};
 
-        const result = {
-            component: dataGrid,
-            jsPDFDocument: context.jsPDFDocument
-        };
-        result.keepColumnWidths = keepColumnWidths;
-        result.selectedRowsOnly = selectedRowsOnly;
-        result.autoTableOptions = autoTableOptions;
-        return result;
+    const result = {
+        component: dataGrid,
+        jsPDFDocument: context.jsPDFDocument
     };
+    result.keepColumnWidths = keepColumnWidths;
+    result.selectedRowsOnly = selectedRowsOnly;
+    result.autoTableOptions = autoTableOptions;
+    return result;
+};
 
+QUnit.module('Simple grid', moduleConfig, () => {
     QUnit.test('Empty grid', function(assert) {
         const done = assert.async();
         const dataGrid = $('#dataGrid').dxDataGrid({}).dxDataGrid('instance');
@@ -88,7 +88,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             done();
         });
     });
+});
 
+QUnit.module('Grid headers', moduleConfig, () => {
     QUnit.test('Header - 1 column, showColumnHeaders: false', function(assert) {
         const done = assert.async();
         const dataGrid = $('#dataGrid').dxDataGrid({
@@ -356,7 +358,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             done();
         });
     });
+});
 
+QUnit.module('Grid data rows', moduleConfig, () => {
     QUnit.test('Data - 1 row & 1 columns, showColumnHeaders: false', function(assert) {
         const done = assert.async();
         const ds = [{ f1: 'text1' }];
@@ -527,7 +531,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             done();
         });
     });
+});
 
+QUnit.module('Column data types', moduleConfig, () => {
     [
         { dataType: 'string', value: '1', alignment: 'left' },
         { dataType: 'number', value: 1, alignment: 'right' },
@@ -749,7 +755,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             done();
         });
     });
+});
 
+QUnit.module('Column data formats', moduleConfig, () => {
     [
         { format: 'millisecond', expectedPdfCellValue: '009' },
         { format: 'second', expectedPdfCellValue: '09' },
@@ -1170,7 +1178,9 @@ QUnit.module('Scenarios, check autoTableOptions', moduleConfig, () => {
             done();
         });
     });
+});
 
+QUnit.module('Grouping', moduleConfig, () => {
     QUnit.test('Grouping - 1 level', function(assert) {
         const done = assert.async();
         const ds = [
