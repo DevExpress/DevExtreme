@@ -6,6 +6,14 @@
     font-size: 12px;
   }
   
+  ::ng-deep .border{
+    width: 60px;
+    height: 40px;
+    stroke: rgba(191, 191, 191, 0.25);
+    stroke-width: 1px;
+    fill: transparent;
+  }
+  
   ::ng-deep .state {
     font-weight: 500;
     font-size: 14px;

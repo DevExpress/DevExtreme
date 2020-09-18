@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     getImagePath(point) {
-      return `../../../../images/flags/${point.data.name.replace(/\s/, '').toLowerCase()}.gif`;
+      return `../../../../images/flags/${point.data.name.replace(/\s/, '')}.svg`;
     },
     formatNumber:  new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0
@@ -42,6 +42,7 @@ export default {
     display: block;
     margin: 0 5px 0 0;
     float: left;
+    border: 1px solid rgba(191, 191, 191, 0.25);
 }
 
 .state-tooltip > h4 {

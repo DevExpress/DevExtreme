@@ -16,7 +16,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             enabled: true,
             contentTemplate: function(info) {
                 return "<div class='state-tooltip'><img src='../../../../images/flags/" +
-                    info.point.data.name.replace(/\s/, "").toLowerCase() + ".gif' /><h4>" +
+                    info.point.data.name.replace(/\s/, "") + ".svg' /><h4>" +
                     info.argument + "</h4><div><span class='caption'>Capital</span>: " +
                     info.point.data.capital +
                     "</div><div><span class='caption'>Population</span>: " +

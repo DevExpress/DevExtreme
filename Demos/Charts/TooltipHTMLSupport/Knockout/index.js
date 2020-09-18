@@ -16,7 +16,7 @@ window.onload = function() {
                 customizeTooltip: function (args) {
                     return {
                         html: "<div class='state-tooltip'><img src='../../../../images/flags/" + 
-                        args.point.data.name.replace(/\s/, "").toLowerCase() + ".gif' /><h4>" +
+                        args.point.data.name.replace(/\s/, "") + ".svg' /><h4>" +
                         args.argument + "</h4><div><span class='caption'>Capital</span>: " +
                         args.point.data.capital +
                         "</div><div><span class='caption'>Population</span>: " +

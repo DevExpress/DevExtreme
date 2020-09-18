@@ -14,7 +14,7 @@ function App() {
     >
       <Margin top={50} bottom={0} />
       <Background>
-        <Image url="../../../../images/RangeImage.png" location="full" />
+        <Image url="../../../../images/RangeSelector/background.png" location="full" />
       </Background>
       <Indent left={65} right={65} />
       <SliderMarker placeholderHeight={30} format="shorttime" />

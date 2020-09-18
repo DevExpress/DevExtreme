@@ -5,6 +5,11 @@
       width="60"
       height="40"
     />
+    <rect
+      x="0"
+      y="0"
+      class="border"
+    />
     <text
       x="70"
       y="25"
@@ -45,7 +50,7 @@ export default {
   },
   methods: {
     getImagePath() {
-      return `../../../../images/flags/${this.data.name.replace(/\s/, '').toLowerCase()}.gif`;
+      return `../../../../images/flags/${this.data.name.replace(/\s/, '')}.svg`;
     },
     formatNumber:  new Intl.NumberFormat('en-US', {
       minimumFractionDigits: 0
@@ -56,6 +61,13 @@ export default {
 <style>
 .annotation {
     font-size: 12px;
+}
+.border {
+  width: 60px;
+  height: 40px;
+  stroke: rgba(191, 191, 191, 0.25);
+  stroke-width: 1px;
+  fill: transparent;
 }
 .state {
     font-weight: 500;

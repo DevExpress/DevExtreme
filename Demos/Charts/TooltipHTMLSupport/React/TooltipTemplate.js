@@ -1,7 +1,7 @@
 import React from 'react';
 
 function getImagePath(point) {
-  return `../../../../images/flags/${point.data.name.replace(/\s/, '').toLowerCase()}.gif`;
+  return `../../../../images/flags/${point.data.name.replace(/\s/, '')}.svg`;
 }
 
 const formatNumber = new Intl.NumberFormat('en-US', {

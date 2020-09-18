@@ -25,11 +25,11 @@ export class AppComponent {
 
     customizePoint(arg: any) {
         if(arg.value == 1) {
-            return { image: { url: "../../../../images/icon-medal-gold.png", width: 20, height: 20 }, visible: true };
+            return { image: { url: "../../../../images/Charts/PointImage/icon-medal-gold.png", width: 20, height: 20 }, visible: true };
         } else if(arg.value == 2) {
-            return { image: { url: "../../../../images/icon-medal-silver.png", width: 20, height: 20 }, visible: true };
+            return { image: { url: "../../../../images/Charts/PointImage/icon-medal-silver.png", width: 20, height: 20 }, visible: true };
         } else if(arg.value == 3) {
-            return { image: { url: "../../../../images/icon-medal-bronse.png", width: 20, height: 20 }, visible: true };
+            return { image: { url: "../../../../images/Charts/PointImage/icon-medal-bronse.png", width: 20, height: 20 }, visible: true };
         }
     }
 

@@ -12,7 +12,7 @@ export const continents = [{
     population: '94,798,827',
     gdp: '1,173',
     selected: true,
-    flag: '../../../../images/flags/Egypt.png',
+    flag: '../../../../images/flags/Egypt.svg',
     cities: [{
       id: '1_1_1',
       text: 'Cairo',
@@ -21,7 +21,7 @@ export const continents = [{
       density: '19,376',
       description: "The city's metropolitan area is the largest in the Middle East and the Arab world, and the 15th-largest in the world, is associated with ancient Egypt.",
       capital: true,
-      flag: '../../../../images/flags/Cairo.png'
+      flag: '../../../../images/flags/Cairo.svg'
     }, {
       id: '1_1_2',
       text: 'Alexandria',
@@ -29,7 +29,7 @@ export const continents = [{
       area: '2,679',
       density: '1,900',
       description: 'Alexandria is the second largest city and a major economic center in Egypt, extending about 32 km (20 mi) along the coast of the Mediterranean Sea in the north central part of the country.',
-      flag: '../../../../images/flags/Alexandria.png'
+      flag: '../../../../images/flags/Alexandria.svg'
     }, {
       id: '1_1_3',
       text: 'Giza',
@@ -37,7 +37,7 @@ export const continents = [{
       area: '1,579.75',
       density: '2,300',
       description: 'Giza is the third-largest city in Egypt. It is located on the west bank of the Nile, 5 km (3 mi) southwest of central Cairo.',
-      flag: '../../../../images/flags/Giza.png'
+      flag: '../../../../images/flags/Giza.svg'
     }]
   },
   {
@@ -48,7 +48,7 @@ export const continents = [{
     area: '1,221,037',
     population: '54,956,900',
     gdp: '742.461',
-    flag: '../../../../images/flags/SouthAfrica.png',
+    flag: '../../../../images/flags/SouthAfrica.svg',
     cities: [{
       id: '1_2_2',
       text: 'Pretoria',
@@ -57,7 +57,7 @@ export const continents = [{
       density: '1,100',
       description: "Pretoria is a city in the northern part of Gauteng, South Africa. Being one of the country's three capital cities, it serves as the seat of the executive branch of government.",
       capital: true,
-      flag: '../../../../images/flags/Pretoria.png'
+      flag: '../../../../images/flags/Pretoria.svg'
     }, {
       id: '1_2_1',
       text: 'Johannesburg',
@@ -65,7 +65,7 @@ export const continents = [{
       area: '334.81',
       density: '2,900',
       description: 'Johannesburg is the largest city in South Africa and is one of the 50 largest urban areas in the world.',
-      flag: '../../../../images/flags/Johannesburg.png'
+      flag: '../../../../images/flags/Johannesburg.svg'
     }, {
       id: '1_2_3',
       text: 'Durban',
@@ -73,7 +73,7 @@ export const continents = [{
       area: '225.91',
       density: '2,600',
       description: 'Durban is the largest city in the South African province of KwaZulu-Natal. It is Located on the Indian Ocean coast of the African continent.',
-      flag: '../../../../images/flags/Durban.png'
+      flag: '../../../../images/flags/Durban.svg'
     }]
   }
   ]
@@ -88,7 +88,7 @@ export const continents = [{
     area: '377,972',
     population: '126,672,000',
     gdp: '5,420',
-    flag: '../../../../images/flags/Japan.png',
+    flag: '../../../../images/flags/Japan.svg',
     cities: [{
       id: '2_1_1',
       text: 'Tokyo',
@@ -97,7 +97,7 @@ export const continents = [{
       density: '6,224.66',
       description: 'The Greater Tokyo Area is the most populous metropolitan area in the world. The city is located in the Kantō region on the southeastern side of the main island Honshu and includes the Izu Islands and Ogasawara Islands.',
       capital: true,
-      flag: '../../../../images/flags/Tokyo.png'
+      flag: '../../../../images/flags/Tokyo.svg'
     }, {
       id: '2_1_2',
       text: 'Yokohama',
@@ -105,7 +105,7 @@ export const continents = [{
       area: '437.38',
       density: '8,534.03',
       description: 'Yokohama is the second largest city in Japan by population, after Tokyo, and the most populous municipality of Japan. It lies on Tokyo Bay, south of Tokyo, in the Kantō region of the main island of Honshu.',
-      flag: '../../../../images/flags/Yokohama.png'
+      flag: '../../../../images/flags/Yokohama.svg'
     }, {
       id: '2_1_3',
       text: 'Osaka',
@@ -113,7 +113,7 @@ export const continents = [{
       area: '223',
       density: '12,030',
       description: 'Osaka is a designated city in the Kansai region of Japan. It is the largest component of the Keihanshin Metropolitan Area, the second largest metropolitan area in Japan. The city is situated at the mouth of the Yodo River on Osaka Bay, Honshu island',
-      flag: '../../../../images/flags/Osaka.png'
+      flag: '../../../../images/flags/Osaka.svg'
     }, {
       id: '2_1_4',
       text: 'Nagoya',
@@ -121,7 +121,7 @@ export const continents = [{
       area: '326.43',
       density: '6,969.86',
       description: "Nagoya is the largest city in the Chūbu region of Japan. It is Japan's third-largest incorporated city and the fourth most populous urban area.",
-      flag: '../../../../images/flags/Nagoya.png'
+      flag: '../../../../images/flags/Nagoya.svg'
     }]
   }, {
     id: '2_2',
@@ -131,7 +131,7 @@ export const continents = [{
     area: '330,803',
     population: '31,708,000',
     gdp: '913.593',
-    flag: '../../../../images/flags/Malaysia.png',
+    flag: '../../../../images/flags/Malaysia.svg',
     cities: [{
       id: '2_2_1',
       text: 'Kuala Lumpur',
@@ -140,7 +140,7 @@ export const continents = [{
       density: '6,891',
       description: 'Kuala Lumpur, officially the Federal Territory of Kuala Lumpur, or commonly KL, is the largest city of Malaysia. It is located in Klang Valley.',
       capital: true,
-      flag: '../../../../images/flags/KualaLumpur.png'
+      flag: '../../../../images/flags/KualaLumpur.svg'
     }, {
       id: '2_2_2',
       text: 'George Town',
@@ -148,7 +148,7 @@ export const continents = [{
       area: '305.77',
       density: '2,372',
       description: 'George Town, the capital city of the Malaysian state of Penang, is located at the northeastern tip of Penang Island.',
-      flag: '../../../../images/flags/GeorgeTown.png'
+      flag: '../../../../images/flags/GeorgeTown.svg'
     }, {
       id: '2_2_3',
       text: 'Ipoh',
@@ -156,7 +156,7 @@ export const continents = [{
       area: '643',
       density: '1,023',
       description: 'Ipoh is the capital of the Malaysian state of Perak. It stands on the banks of the Kinta River.',
-      flag: '../../../../images/flags/Ipoh.png'
+      flag: '../../../../images/flags/Ipoh.svg'
     }]
   }]
 }, {
@@ -170,7 +170,7 @@ export const continents = [{
     area: '7,692,024',
     population: '24,696,700',
     gdp: '1,189',
-    flag: '../../../../images/flags/Australia.png',
+    flag: '../../../../images/flags/Australia.svg',
     cities: [{
       id: '3_1_1',
       text: 'Canberra',
@@ -179,7 +179,7 @@ export const continents = [{
       density: '428.6',
       description: 'The city is located at the northern end of the Australian Capital Territory (ACT), 280 km (170 mi) south-west of Sydney, and 660 km (410 mi) north-east of Melbourne.',
       capital: true,
-      flag: '../../../../images/flags/Canberra.png'
+      flag: '../../../../images/flags/Canberra.svg'
     }, {
       id: '3_1_2',
       text: 'Sydney',
@@ -187,7 +187,7 @@ export const continents = [{
       area: '12,367.7',
       density: '400',
       description: "Sydney is the state capital of New South Wales and the most populous city in Australia and Oceania. It is located on Australia's east coast.",
-      flag: '../../../../images/flags/Sydney.jpg'
+      flag: '../../../../images/flags/Sydney.svg'
     }, {
       id: '3_1_3',
       text: 'Melbourne',
@@ -195,7 +195,7 @@ export const continents = [{
       area: '2,664',
       density: '453',
       description: 'Melbourne is the capital and most populous city of the Australian state of Victoria, and the second-most populous city in Australia and Oceania. The city is located in the south-eastern part of mainland Australia.',
-      flag: '../../../../images/flags/Melbourne.PNG'
+      flag: '../../../../images/flags/Melbourne.svg'
     }]
   }]
 }, {
@@ -209,7 +209,7 @@ export const continents = [{
     area: '357,168',
     population: '82,175,700',
     gdp: '4,150',
-    flag: '../../../../images/flags/Germany.png',
+    flag: '../../../../images/flags/Germany.svg',
     cities: [{
       id: '4_1_1',
       text: 'Berlin',
@@ -218,7 +218,7 @@ export const continents = [{
       area: '891.7',
       density: '4,100',
       description: 'Berlin is the capital and the largest city of Germany as well as one of its 16 constituent states.',
-      flag: '../../../../images/flags/Berlin.png'
+      flag: '../../../../images/flags/Berlin.svg'
     }, {
       id: '4_1_2',
       text: 'Hamburg',
@@ -226,7 +226,7 @@ export const continents = [{
       area: '755',
       density: '2,400',
       description: 'Hamburg, officially the Free and Hanseatic City of Hamburg, is the second largest city and a state of Germany.',
-      flag: '../../../../images/flags/Hamburg.png'
+      flag: '../../../../images/flags/Hamburg.svg'
     }, {
       id: '4_1_3',
       text: 'Munich',
@@ -234,7 +234,7 @@ export const continents = [{
       area: '310.43',
       density: '4,700',
       description: 'Munich is the capital and the most populated city in the German state of Bavaria, on the banks of River Isar north of the Bavarian Alps.',
-      flag: '../../../../images/flags/Munich.png'
+      flag: '../../../../images/flags/Munich.svg'
     }]
   }, {
     id: '4_2',
@@ -244,7 +244,7 @@ export const continents = [{
     area: '17,075,200',
     population: '144,463,451',
     gdp: '4,000',
-    flag: '../../../../images/flags/Russia.png',
+    flag: '../../../../images/flags/Russia.svg',
     cities: [{
       id: '4_2_1',
       text: 'Moscow',
@@ -253,7 +253,7 @@ export const continents = [{
       area: '2,511',
       density: '4,833.36',
       description: 'Moscow is the capital and most populous city of Russia. It is located in the western part of Russia on the banks of the Moskva River.',
-      flag: '../../../../images/flags/Moscow.png'
+      flag: '../../../../images/flags/Moscow.svg'
     }, {
       id: '4_2_2',
       text: 'Saint Petersburg',
@@ -261,7 +261,7 @@ export const continents = [{
       area: '1,439',
       density: '3,764.49',
       description: "Saint Petersburg is Russia's second-largest city after Moscow. An important Russian port on the Baltic Sea, it is politically administered as a federal subject (a federal city).",
-      flag: '../../../../images/flags/SaintPetersburg.png'
+      flag: '../../../../images/flags/SaintPetersburg.svg'
     }, {
       id: '4_2_3',
       text: 'Novosibirsk',
@@ -269,7 +269,7 @@ export const continents = [{
       area: '502.7',
       density: '2,932',
       description: 'Novosibirsk is the most populous city in Asian Russia. The city is located in the southwestern part of Siberia on the banks of the Ob River adjacent to the Ob River Valley.',
-      flag: '../../../../images/flags/Novosibirsk.png'
+      flag: '../../../../images/flags/Novosibirsk.svg'
     }]
   }, {
     id: '4_3',
@@ -279,7 +279,7 @@ export const continents = [{
     area: '242,495',
     population: '65,648,000',
     gdp: '2,790',
-    flag: '../../../../images/flags/UnitedKingdom.png',
+    flag: '../../../../images/flags/UnitedKingdom.svg',
     cities: [{
       id: '4_3_1',
       text: 'London',
@@ -288,7 +288,7 @@ export const continents = [{
       area: '1,572',
       density: '5,590',
       description: 'London is the capital and most populous city of England and the United Kingdom. It stands on the River Thames in the south-east of the Great Britain island.',
-      flag: '../../../../images/flags/London.png'
+      flag: '../../../../images/flags/London.svg'
     }, {
       id: '4_3_2',
       text: 'Birmingham',
@@ -296,7 +296,7 @@ export const continents = [{
       area: '267.8',
       density: '4,199',
       description: 'Birmingham is a city and metropolitan borough in the West Midlands, England. The city stands on the small River Rea.',
-      flag: '../../../../images/flags/Birmingham.png'
+      flag: '../../../../images/flags/Birmingham.svg'
     }]
   }]
 }, {
@@ -310,7 +310,7 @@ export const continents = [{
     area: '1,972,550',
     population: '119,530,753',
     gdp: '2,406',
-    flag: '../../../../images/flags/Mexico.png',
+    flag: '../../../../images/flags/Mexico.svg',
     cities: [{
       id: '5_2_1',
       text: 'Mexico City',
@@ -319,7 +319,7 @@ export const continents = [{
       density: '6,000',
       description: 'Mexico City is the most populous city of Mexico. It is located in the Valley of Mexico, a large valley in the high plateaus at the center of Mexico.',
       capital: true,
-      flag: '../../../../images/flags/MexicoCity.png'
+      flag: '../../../../images/flags/MexicoCity.svg'
     }, {
       id: '5_2_2',
       text: 'Puebla',
@@ -327,7 +327,7 @@ export const continents = [{
       area: '534.32',
       density: '4,678',
       description: 'Puebla, formally Heroica Puebla de Zaragoza and also known as Puebla de los Angeles, is located in the Valley of Puebla, a large valley surrounded by the mountains and volcanoes of the Trans-Mexican volcanic belt on four sides.',
-      flag: '../../../../images/flags/Puebla.png'
+      flag: '../../../../images/flags/Puebla.svg'
     }, {
       id: '5_2_3',
       text: 'Guadalajara',
@@ -335,7 +335,7 @@ export const continents = [{
       area: '151',
       density: '10,361',
       description: 'Guadalajara is the capital and largest city of the Mexican state of Jalisco. The city is in the central region of Jalisco in the Western-Pacific area of Mexico.',
-      flag: '../../../../images/flags/Guadalajara.png'
+      flag: '../../../../images/flags/Guadalajara.svg'
     }]
   }, {
     id: '5_1',
@@ -345,7 +345,7 @@ export const continents = [{
     area: '9,833,520',
     population: '325,365,189',
     gdp: '18,558',
-    flag: '../../../../images/flags/UnitedStates.png',
+    flag: '../../../../images/flags/UnitedStates.svg',
     cities: [{
       id: '5_1_1',
       text: 'Washington',
@@ -354,7 +354,7 @@ export const continents = [{
       area: '177',
       density: '4,308',
       description: 'Washington, D.C., is located in the mid-Atlantic region of the U.S. East Coast and partially bordered by the Potomac River.',
-      flag: '../../../../images/flags/Washington.png'
+      flag: '../../../../images/flags/Washington.svg'
     }, {
       id: '5_1_2',
       text: 'New York City',
@@ -362,7 +362,7 @@ export const continents = [{
       area: '34,306',
       density: '10,890',
       description: 'The City of New York is the most populous city in the United States. Located at the southern tip of the state of New York, the city is the center of the New York metropolitan area, one of the most populous urban agglomerations in the world.',
-      flag: '../../../../images/flags/NewYork.png'
+      flag: '../../../../images/flags/NewYorkCity.svg'
     }, {
       id: '5_1_3',
       text: 'Los Angeles',
@@ -370,7 +370,7 @@ export const continents = [{
       area: '1,302.15',
       density: '8,483.02',
       description: 'Los Angeles, officially the City of Los Angeles, is located on the on the West Coast of the United States. It is the second most populous city in the United States and the most populous city in the state of California.',
-      flag: '../../../../images/flags/LosAngeles.png'
+      flag: '../../../../images/flags/LosAngeles.svg'
     }, {
       id: '5_1_4',
       text: 'Chicago',
@@ -378,7 +378,7 @@ export const continents = [{
       area: '606.42',
       density: '11,898.29',
       description: 'Chicago, officially the City of Chicago, is the third-most populous city in the United States. It is located in northern Illinois at the south-western tip of Lake Michigan.',
-      flag: '../../../../images/flags/Chicago.png'
+      flag: '../../../../images/flags/Chicago.svg'
     }]
   }]
 }, {
@@ -392,7 +392,7 @@ export const continents = [{
     area: '8,515,767',
     population: '208,064,000',
     gdp: '3,217',
-    flag: '../../../../images/flags/Brazil.png',
+    flag: '../../../../images/flags/Brazil.svg',
     cities: [{
       id: '6_1_1',
       text: 'Brasilia',
@@ -401,7 +401,7 @@ export const continents = [{
       area: '5,801,937',
       density: '513,14',
       description: "Brasília is the federal capital of Brazil and seat of the Federal District government. The city is located atop the Brazilian highlands in the country's center-western region.",
-      flag: '../../../../images/flags/Brasilia.png'
+      flag: '../../../../images/flags/Brasilia.svg'
     }, {
       id: '6_1_2',
       text: 'Sao Paulo',
@@ -409,7 +409,7 @@ export const continents = [{
       area: '1,521.11',
       density: '7,913.29',
       description: 'Sao Paulo is a municipality in the southeast region of Brazil. The city is the capital of the surrounding San Paulo state.',
-      flag: '../../../../images/flags/SaoPaulo.png'
+      flag: '../../../../images/flags/SaoPaulo.svg'
     }, {
       id: '6_1_3',
       text: 'Rio de Janeiro',
@@ -417,7 +417,7 @@ export const continents = [{
       area: '1,221',
       density: '2,705.1',
       description: "Rio de Janeiro is the second-most populous municipality in Brazil and the capital of the Rio de Janeiro state, Brazil's third-most populous state.",
-      flag: '../../../../images/flags/RioDeJaneiro.png'
+      flag: '../../../../images/flags/RioDeJaneiro.svg'
     }]
   }, {
     id: '6_2',
@@ -427,7 +427,7 @@ export const continents = [{
     area: '1,141,748',
     population: '49,364,592',
     gdp: '720.151',
-    flag: '../../../../images/flags/Colombia.png',
+    flag: '../../../../images/flags/Colombia.svg',
     cities: [{
       id: '6_2_1',
       text: 'Bogota',
@@ -436,7 +436,7 @@ export const continents = [{
       area: '1,587',
       density: '6,060',
       description: 'Bogotá is the capital and largest city of Colombia administered as the Capital District, although often thought of as part of Cundinamarca. The city is located in the southeastern part of the Bogotá savanna.',
-      flag: '../../../../images/flags/Bogota.png'
+      flag: '../../../../images/flags/Bogota.svg'
     }, {
       id: '6_2_2',
       text: 'Medellin',
@@ -444,7 +444,7 @@ export const continents = [{
       area: '380.64',
       density: '6,413',
       description: 'Medellín is the second-largest city in Colombia and the capital of the Antioquia department. It is located in the Aburrá Valley, a central region of the Andes Mountains in South America.',
-      flag: '../../../../images/flags/Medellin.png'
+      flag: '../../../../images/flags/Medellin.svg'
     }, {
       id: '6_2_3',
       text: 'Cali',
@@ -452,7 +452,7 @@ export const continents = [{
       area: '619',
       density: '3,900',
       description: 'Santiago de Cali, usually known by its short name Cali, is the capital of the Valle del Cauca department, and the most populous city in southwest Colombia.',
-      flag: '../../../../images/flags/Cali.png'
+      flag: '../../../../images/flags/Cali.svg'
     }]
   }]
 }];

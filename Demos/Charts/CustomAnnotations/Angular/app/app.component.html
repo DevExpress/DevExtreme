@@ -24,6 +24,7 @@
     <dxo-legend [visible]="false"></dxo-legend>
     <svg *dxTemplate="let annotation of 'template'" class="annotation">
         <image attr.href="{{getImagePath(annotation)}}" width="60" height="40" /> 
+        <rect x="0" y="0" class="border"/>
         <text x="70" y="25" class="state">{{annotation.argument}}</text>
         <text x="0" y="60">
             <tspan class="caption">Capital:</tspan>

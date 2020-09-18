@@ -22,7 +22,7 @@ export class FeatureGeometry {
 }
 
 function getImageUrl(name): string {
-    return `../../../../images/${name}.png`;
+    return `../../../../images/VectorMap/${name}.png`;
 }
 
 let weatherData: FeatureCollection = {

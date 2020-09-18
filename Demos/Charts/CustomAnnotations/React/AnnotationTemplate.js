@@ -1,7 +1,7 @@
 import React from 'react';
 
 function getImagePath(data) {
-  return `../../../../images/flags/${data.name.replace(/\s/, '').toLowerCase()}.gif`;
+  return `../../../../images/flags/${data.name.replace(/\s/, '')}.svg`;
 }
 
 const formatNumber = new Intl.NumberFormat('en-US', {
@@ -13,6 +13,7 @@ export default function AnnotationTemplate(annotation) {
   return (
     <svg className="annotation">
       <image href={getImagePath(data)} width="60" height="40" />
+      <rect x={0} y={0} className={"border"}></rect>
       <text x="70" y="25" className="state">{annotation.argument}</text>
       <text x="0" y="60">
         <tspan className="caption">Capital:</tspan>

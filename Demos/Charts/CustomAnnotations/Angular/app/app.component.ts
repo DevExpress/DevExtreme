@@ -25,8 +25,8 @@ export class AppComponent {
     }
 
     getImagePath(annotation) { 
-        const name = annotation.argument.replace(/\s/, "").toLowerCase();
-        return `../../../../images/flags/${name}.gif`;
+        const name = annotation.argument.replace(/\s/, "");
+        return `../../../../images/flags/${name}.svg`;
     }
 }
 

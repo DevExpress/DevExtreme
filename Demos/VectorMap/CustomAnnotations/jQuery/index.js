@@ -8,7 +8,8 @@ $(function(){
                 const data = annotation.data;
                 return "<svg class='annotation'>" +
                     "<image href='../../../../images/flags/" +
-                    data.name.replace(/\s/, "").toLowerCase() + ".gif' width='60' height='40' />" +
+                    data.name.replace(/\s/, "").toLowerCase() + ".svg' width='60' height='40' />" +
+                    "<rect class='border' x='0' y='0' />" +
                     "<text x='70' y='25' class='state'>" +
                     data.name + "</text>" +
                     "<text x='0' y='60'>" +

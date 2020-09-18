@@ -8,7 +8,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         },
         background: {
             image: {
-                url: "../../../../images/RangeImage.png",
+                url: "../../../../images/RangeSelector/background.png",
                 location: "full"
             }
         },
