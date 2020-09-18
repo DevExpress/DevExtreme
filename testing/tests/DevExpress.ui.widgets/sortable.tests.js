@@ -3343,12 +3343,12 @@ QUnit.module('update', moduleConfig, () => {
         assert.equal(itemPoints[0].height, itemHeight, 'first point height is updated');
     });
 
-    [false, true].forEach((updateManually) => {
-        const notUpdatedText = updateManually ? 'not ' : '';
-        QUnit.test(`itemPoints should ${notUpdatedText}be updated automatically on move if updateMenuaaly is ${updateManually}`, function(assert) {
+    [false, true].forEach((autoUpdate) => {
+        const notUpdatedText = autoUpdate ? '' : 'not ';
+        QUnit.test(`itemPoints should ${notUpdatedText}be updated automatically on move if autoUpdate is ${autoUpdate}`, function(assert) {
             const sortable = this.createSortable({
                 dropFeedbackMode: 'push',
-                updateManually: updateManually
+                autoUpdate: autoUpdate
             });
 
             pointerMock(getElement(0)).start().down(15, 15).move(0, 10);
@@ -3361,8 +3361,8 @@ QUnit.module('update', moduleConfig, () => {
 
             // assert
             const itemPoints = sortable.option('itemPoints');
-            assert.equal(itemPoints.length, updateManually ? 4 : 3, `item point count is ${notUpdatedText}updated`);
-            assert.equal(itemPoints[0].height, updateManually ? 30 : itemHeight, `first point height is ${notUpdatedText}updated`);
+            assert.equal(itemPoints.length, autoUpdate ? 3 : 4, `item point count is ${notUpdatedText}updated`);
+            assert.equal(itemPoints[0].height, autoUpdate ? itemHeight : 30, `first point height is ${notUpdatedText}updated`);
         });
     });
 

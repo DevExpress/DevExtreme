@@ -79,7 +79,7 @@ const Sortable = Draggable.inherit({
             itemPoints: null,
             fromIndexOffset: 0,
             offset: 0,
-            updateManually: true,
+            autoUpdate: false,
             draggableElementSize: 0
         });
     },
@@ -381,14 +381,14 @@ const Sortable = Draggable.inherit({
     },
 
     _updateItemPoints: function(forceUpdate) {
-        if(forceUpdate || !this.option('updateManually') || !this.option('itemPoints')) {
+        if(forceUpdate || this.option('autoUpdate') || !this.option('itemPoints')) {
             this.option('itemPoints', this._getItemPoints());
         }
     },
 
     _correctItemPoints: function(scrollBy) {
         const itemPoints = this.option('itemPoints');
-        if(scrollBy && itemPoints && this.option('updateManually')) {
+        if(scrollBy && itemPoints && !this.option('autoUpdate')) {
             const isVertical = this._isVerticalOrientation();
             const positionPropName = isVertical ? 'top' : 'left';
             itemPoints.forEach((itemPoint) => {
@@ -569,7 +569,7 @@ const Sortable = Draggable.inherit({
             case 'fromIndexOffset':
             case 'offset':
             case 'draggableElementSize':
-            case 'updateManually':
+            case 'autoUpdate':
                 break;
             case 'fromIndex':
                 if(!this._$sourceElement) {
@@ -771,7 +771,7 @@ const Sortable = Draggable.inherit({
                 ($draggableItem.outerHeight() + $draggableItem.outerHeight(true)) / 2 :
                 ($draggableItem.outerWidth() + $draggableItem.outerWidth(true)) / 2;
 
-            if(this.option('updateManually')) {
+            if(!this.option('autoUpdate')) {
                 this.option('draggableElementSize', size);
             }
         }
