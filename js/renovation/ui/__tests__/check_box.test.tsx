@@ -167,7 +167,7 @@ describe('CheckBox', () => {
                 validationErrors,
                 validationStatus: 'invalid',
                 validationMessageMode: 'always',
-                rtlEnabled: undefined,
+                rtlEnabled: false,
               },
               shouldShowValidationMessage: true,
             } as any)}
