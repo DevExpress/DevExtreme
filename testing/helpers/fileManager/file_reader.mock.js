@@ -1,4 +1,4 @@
-import windowUtils from 'core/utils/window';
+import { getWindow } from 'core/utils/window';
 
 const READ_DELAY = 10;
 
@@ -12,7 +12,7 @@ export default class FileReaderMock {
     }
 
     readAsDataURL(blob) {
-        const window = windowUtils.getWindow();
+        const window = getWindow();
 
         this._content = blob._dxContent;
         const base64String = window.btoa(this._content);

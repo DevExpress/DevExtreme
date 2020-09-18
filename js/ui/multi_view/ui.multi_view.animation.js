@@ -1,10 +1,10 @@
 
 import fx from '../../animation/fx';
-import translator from '../../animation/translator';
+import { move } from '../../animation/translator';
 
 export const _translator = {
     move($element, position) {
-        translator.move($element, { left: position });
+        move($element, { left: position });
     }
 };
 

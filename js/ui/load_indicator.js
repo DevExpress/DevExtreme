@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import { getNavigator } from '../core/utils/window';
 const navigator = getNavigator();
-import support from '../core/utils/support';
+import { animation } from '../core/utils/support';
 import themes from './themes';
 import { extend } from '../core/utils/extend';
 import devices from '../core/devices';
@@ -121,7 +121,7 @@ const LoadIndicator = Widget.inherit({
     },
 
     _renderMarkup: function() {
-        if(support.animation() && !this.option('viaImage') && !this.option('indicatorSrc')) { // B236922
+        if(animation() && !this.option('viaImage') && !this.option('indicatorSrc')) { // B236922
             this._renderMarkupForAnimation();
         } else {
             this._renderMarkupForImage();

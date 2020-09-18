@@ -9,7 +9,7 @@ const ready = readyCallbacks.add;
 import { sign } from '../../core/utils/math';
 import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import { needSkipEvent, createEvent, eventData, isDxMouseWheelEvent, eventDelta, isTouchEvent } from '../utils';
+import { needSkipEvent, createEvent, eventData, isDxMouseWheelEvent, eventDelta, isTouchEvent } from '../utils/index';
 import Emitter from '../core/emitter';
 const abs = Math.abs;
 

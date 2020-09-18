@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { name as contextMenuEventName } from '../../events/contextmenu';
 import { getDisplayFileSize } from './ui.file_manager.common';
 import messageLocalization from '../../localization/message';

@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { isDxMouseWheelEvent } from '../../events/utils';
+import { isDxMouseWheelEvent } from '../../events/utils/index';
 
 const allowScroll = function(container, delta, shiftKey) {
     const $container = $(container);

@@ -1,5 +1,5 @@
 // there are area, steparea, stackedarea, fullstackedarea, splinearea
-import objectUtils from '../../core/utils/object';
+import { clone } from '../../core/utils/object';
 import { extend } from '../../core/utils/extend';
 import { chart as scatterSeries } from './scatter_series';
 import lineSeries from './line_series';
@@ -148,7 +148,7 @@ const areaSeries = chart['area'] = _extend({}, chartLineSeries, baseAreaMethods,
     _processSinglePointsAreaSegment: function(points, rotated) {
         if(points && points.length === 1) {
             const p = points[0];
-            const p1 = objectUtils.clone(p);
+            const p1 = clone(p);
             p1[rotated ? 'y' : 'x'] += 1;
             p1.argument = null;
             return [p, p1];

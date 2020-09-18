@@ -72,10 +72,10 @@ DevExpress.fx = require('../../animation/fx');
 DevExpress.TransitionExecutor = require('../../animation/transition_executor/transition_executor').TransitionExecutor;
 DevExpress.AnimationPresetCollection = require('../../animation/presets/presets').PresetCollection;
 
-DevExpress.events = require('../../events');
+DevExpress.events = require('../../events/index');
 
 DevExpress.events.click = require('../../events/click');
-DevExpress.events.utils = require('../../events/utils');
+DevExpress.events.utils = require('../../events/utils/index');
 DevExpress.events.GestureEmitter = require('../../events/gesture/emitter.gesture');
 
 DevExpress.localization = require('../../localization');

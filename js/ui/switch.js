@@ -2,10 +2,10 @@ import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
 import { extend } from '../core/utils/extend';
-import inkRipple from './widget/utils.ink_ripple';
+import { render } from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import Editor from './editor/editor';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { lock } from '../events/core/emitter.feedback';
 import { getBoundingRect } from '../core/utils/position';
 import fx from '../animation/fx';
@@ -178,7 +178,7 @@ const Switch = Editor.inherit({
     },
 
     _renderInkRipple: function() {
-        this._inkRipple = inkRipple.render({
+        this._inkRipple = render({
             waveSizeCoefficient: 1.7,
             isCentered: true,
             useHoldAnimation: false,

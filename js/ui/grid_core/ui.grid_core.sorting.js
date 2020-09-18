@@ -5,7 +5,7 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import sortingMixin from '../grid_core/ui.grid_core.sorting_mixin';
 import messageLocalization from '../../localization/message';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 
 const COLUMN_HEADERS_VIEW_NAMESPACE = 'dxDataGridColumnHeadersView';
 

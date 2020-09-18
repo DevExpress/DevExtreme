@@ -1,6 +1,6 @@
 /* global jQuery */
 
-import dataStrategy from 'core/element_data';
+import { cleanData } from 'core/element_data';
 
 let originalCleanData;
 
@@ -12,7 +12,7 @@ QUnit.testStart(function() {
     originalCleanData = jQuery.cleanData;
 
     jQuery.cleanData = function() {
-        dataStrategy.cleanData.apply(this, arguments);
+        cleanData.apply(this, arguments);
         originalCleanData.apply(this, arguments);
     };
 });

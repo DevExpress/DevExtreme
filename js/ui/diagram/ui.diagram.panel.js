@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 
 const POINTERUP_EVENT_NAME = addNamespace(pointerEvents.up, 'dxDiagramPanel');

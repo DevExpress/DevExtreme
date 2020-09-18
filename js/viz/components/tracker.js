@@ -1,4 +1,4 @@
-import { eventData as _eventData } from '../../events/utils';
+import { eventData as _eventData } from '../../events/utils/index';
 import domAdapter from '../../core/dom_adapter';
 import { name as clickEventName } from '../../events/click';
 import { down as downPointerEventName } from '../../events/pointer';

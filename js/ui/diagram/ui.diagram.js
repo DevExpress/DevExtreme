@@ -11,7 +11,7 @@ import { getDiagram } from './diagram.importer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import { getPublicElement } from '../../core/element';
 import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import messageLocalization from '../../localization/message';
 import numberLocalization from '../../localization/number';
 import * as zIndexPool from '../overlay/z_index';
@@ -2543,7 +2543,11 @@ class Diagram extends Widget {
             dataItem: this._nodesOption && this._nodesOption.findItem(nativeShape.key),
             itemType: 'shape',
             text: nativeShape.text,
-            type: nativeShape.type
+            type: nativeShape.type,
+
+            position: { x: nativeShape.position.x, y: nativeShape.position.y },
+            size: { width: nativeShape.size.width, height: nativeShape.size.height },
+            attachedConnectorIds: nativeShape.attachedConnectorIds
         };
     }
     _nativeConnectorToDiagramConnector(nativeConnector) {
@@ -2552,8 +2556,22 @@ class Diagram extends Widget {
             itemType: 'connector',
             texts: nativeConnector.texts,
             fromKey: nativeConnector.fromKey,
-            toKey: nativeConnector.toKey
+            toKey: nativeConnector.toKey,
+
+            fromId: nativeConnector.froId,
+            fromPointIndex: nativeConnector.fromPointIndex,
+            toId: nativeConnector.toId,
+            toPointIndex: nativeConnector.toPointIndex,
+            points: nativeConnector.points.map(pt => {
+                return { x: pt.x, y: pt.y };
+            })
         };
+    }
+    getItemByKey(key) {
+        return this._diagramInstance && this._diagramInstance.getNativeItemByDataKey(key);
+    }
+    getItemById(id) {
+        return this._diagramInstance && this._diagramInstance.getNativeItemByKey(id);
     }
 
     _invalidateContextMenuCommands() {
