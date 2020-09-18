@@ -1,85 +1,89 @@
 <template>
   <div>
     <DxButton
+      id="exportButton"
       text="Export to PDF"
-      @click="onExport()"
+      @click="exportGrid()"
     />
 
     <DxDataGrid
-      id="gridContainer"
-      :data-source="dataSource"
+      :ref="dataGridRef"
+      :allow-column-reordering="true"
+      :data-source="customers"
       :show-borders="true"
     >
-      <DxColumn
-        :width="60"
-        data-field="Prefix"
-        caption="Title"
-      />
-      <DxColumn data-field="FirstName"/>
-      <DxColumn data-field="LastName"/>
+
+      <DxColumn data-field="CompanyName"/>
+      <DxColumn data-field="Phone"/>
+      <DxColumn data-field="Fax"/>
       <DxColumn data-field="City"/>
-      <DxColumn data-field="State"/>
       <DxColumn
-        :width="130"
-        data-field="Position"
+        :group-index="0"
+        data-field="State"
       />
-      <DxColumn
-        :width="100"
-        data-field="BirthDate"
-        data-type="date"
-      />
-      <DxColumn
-        :width="100"
-        data-field="HireDate"
-        data-type="date"
-      />
+
+      <DxGroupPanel :visible="true"/>
+      <DxGrouping :auto-expand-all="true"/>
+      <DxPaging :page-size="10"/>
+      <DxSearchPanel :visible="true"/>
     </DxDataGrid>
   </div>
 </template>
 <script>
-import { DxDataGrid, DxColumn } from 'devextreme-vue/data-grid';
+import { customers } from './data.js';
 import DxButton from 'devextreme-vue/button';
-import service from './data.js';
+import {
+  DxDataGrid,
+  DxColumn,
+  DxGrouping,
+  DxGroupPanel,
+  DxSearchPanel,
+  DxPaging
+} from 'devextreme-vue/data-grid';
 
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
+
+const dataGridRef = 'dataGrid';
 
 export default {
   components: {
-    DxDataGrid, DxButton, DxColumn
+    DxButton,
+    DxColumn,
+    DxGroupPanel,
+    DxGrouping,
+    DxPaging,
+    DxSearchPanel,
+    DxDataGrid
   },
   data() {
     return {
-      dataSource: service.getEmployees()
+      customers,
+      dataGridRef
     };
   },
+  computed: {
+    dataGrid: function() {
+      return this.$refs[dataGridRef].instance;
+    }
+  },
   methods: {
-    onExport(e) {
-      var headRow = [['Prefix', 'FirstName', 'LastName', 'City', 'State', 'Position', 'BirthDate', 'HireDate']];
-      var bodyRows = [];
-      for(let i = 0; i < this.dataSource.length; i++) {
-        var val = this.dataSource[i];
-        bodyRows.push([val.FirstName, val.LastName, val.Prefix, val.City, val.State, val.Position, val.BirthDate, val.HireDate]);
-      }
-
-      var autoTableOptions = {
-        theme: 'plain',
-        tableLineColor: 149,
-        tableLineWidth: 0.1,
-        styles: { textColor: 51, lineColor: 149, lineWidth: 0 },
-        columnStyles: {},
-        headStyles: { fontStyle: 'normal', textColor: 149, lineWidth: 0.1 },
-        bodyStyles: { lineWidth: 0.1 },
-        head: headRow,
-        body: bodyRows
-      };
-
+    exportGrid() {
       const doc = new jsPDF();
-      doc.autoTable(autoTableOptions);
-      doc.save('filePDF.pdf');
-
-      e.cancel = true;
+      exportDataGrid({
+        jsPDFDocument: doc,
+        component: this.dataGrid
+      }).then(() => {
+        doc.save('Customers.pdf');
+      });
     }
   }
 };
 </script>
+
+<style scoped>
+#exportButton {
+  margin-bottom: 10px;
+}
+</style>

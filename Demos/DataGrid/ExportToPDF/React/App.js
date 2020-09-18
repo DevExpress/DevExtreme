@@ -1,68 +1,61 @@
 ﻿import React from 'react';
-import DataGrid, { Column } from 'devextreme-react/data-grid';
+
+import DataGrid, {
+  Column,
+  Grouping,
+  GroupPanel,
+  Paging,
+  SearchPanel
+} from 'devextreme-react/data-grid';
 import Button from 'devextreme-react/button';
+import { customers } from './data.js';
 
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
-import service from './data.js';
+import { exportDataGrid } from 'devextreme/pdf_exporter';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.dataSource = service.getEmployees();
+const dataGridRef = React.createRef();
+
+export default function App() {
+  function exportGrid() {
+    const doc = new jsPDF();
+    const dataGrid = dataGridRef.current.instance;
+
+    exportDataGrid({
+      jsPDFDocument: doc,
+      component: dataGrid
+    }).then(() => {
+      doc.save('Customers.pdf');
+    });
   }
-  render() {
-    return (
+
+  return (
+    <React.Fragment>
       <div>
         <Button
-          text="Export to PDF"
-          onClick={this.onExport}
+          id='exportButton'
+          text='Export to PDF'
+          onClick={exportGrid}
         />
         <DataGrid
-          id="gridContainer"
-          dataSource={this.dataSource}
-          showBorders={true}>
-          <Column dataField="Prefix" width={60} caption="Title" />
-          <Column dataField="FirstName" />
-          <Column dataField="LastName" />
-          <Column dataField="City" />
-          <Column dataField="State" />
-          <Column dataField="Position" width={130} />
-          <Column dataField="BirthDate" width={100} dataType="date" />
-          <Column dataField="HireDate" width={100} dataType="date" />
+          ref={dataGridRef}
+          dataSource={customers}
+          allowColumnReordering={true}
+          showBorders={true}
+        >
+          <GroupPanel visible={true} />
+          <SearchPanel visible={true} />
+          <Grouping autoExpandAll={true} />
+          <Paging defaultPageSize={10} />
+
+          <Column dataField='CompanyName' dataType='string' />
+          <Column dataField='Phone' dataType='string' />
+          <Column dataField='Fax' dataType='string' />
+          <Column dataField='City' dataType='string' />
+          <Column dataField='State' dataType='string' groupIndex={0} />
         </DataGrid>
       </div>
-    );
-  }
-
-  onExport(e) {
-    var headRow = [['Prefix', 'FirstName', 'LastName', 'City', 'State', 'Position', 'BirthDate', 'HireDate']];
-    var bodyRows = [];
-    var data = service.getEmployees();
-    for(let i = 0; i < data.length; i++) {
-      var val = data[i];
-      bodyRows.push([val.FirstName, val.LastName, val.Prefix, val.City, val.State, val.Position, val.BirthDate, val.HireDate]);
-    }
-
-    var autoTableOptions = {
-      theme: 'plain',
-      tableLineColor: 149,
-      tableLineWidth: 0.1,
-      styles: { textColor: 51, lineColor: 149, lineWidth: 0 },
-      columnStyles: {},
-      headStyles: { fontStyle: 'normal', textColor: 149, lineWidth: 0.1 },
-      bodyStyles: { lineWidth: 0.1 },
-      head: headRow,
-      body: bodyRows
-    };
-
-    const doc = new jsPDF();
-    doc.autoTable(autoTableOptions);
-    doc.save('filePDF.pdf');
-
-    e.cancel = true;
-  }
+    </React.Fragment>
+  );
 }
-
-export default App;
