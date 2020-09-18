@@ -10,6 +10,7 @@ const inkRipple = require('./widget/utils.ink_ripple');
 const messageLocalization = require('../localization/message');
 const devices = require('../core/devices');
 const registerComponent = require('../core/component_registrator');
+const { isDefined } = require('../core/utils/type');
 const eventUtils = require('../events/utils');
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
 const themes = require('./themes');
@@ -454,7 +455,8 @@ const Lookup = DropDownList.inherit({
             return;
         }
 
-        this._updateField(this.option('displayValue') || this.option('placeholder'));
+        const displayValue = this.option('displayValue');
+        this._updateField(isDefined(displayValue) && String(displayValue) || this.option('placeholder'));
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
     },
 

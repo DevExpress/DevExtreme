@@ -1316,7 +1316,7 @@ Axis.prototype = {
         }
         that._seriesData.sortCategories(that.getCategoriesSorter(argCategories));
 
-        that._seriesData.breaks = that._initialBreaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
+        that._seriesData.userBreaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
         that._translator.updateBusinessRange(that._getViewportRange());
     },
@@ -1522,7 +1522,11 @@ Axis.prototype = {
                     minVisible: start,
                     maxVisible: end
                 }, that._series, that.isArgumentAxis);
-                ticks = generateTicks(tickInterval, false, start, end, breaks).ticks;
+                const filteredBreaks = that._filterBreaks(breaks, {
+                    minVisible: start,
+                    maxVisible: end
+                }, options.breakStyle);
+                ticks = generateTicks(tickInterval, false, start, end, filteredBreaks).ticks;
             }
         }
 
@@ -1546,9 +1550,11 @@ Axis.prototype = {
         that._isSynchronized = false;
         that.updateCanvas(canvas);
 
+        const range = that._getViewportRange();
+        that._initialBreaks = range.breaks = this._seriesData.breaks = that._filterBreaks(this._seriesData.userBreaks, range, options.breakStyle);
+
         that._estimatedTickInterval = that._getTicks(that.adjustViewport(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
 
-        const range = that._getViewportRange();
         const margins = this._calculateValueMargins();
 
         range.addRange({
@@ -1612,6 +1618,7 @@ Axis.prototype = {
 
         that._ticksToRemove = Object.keys(majorTicksByValues)
             .map(k => majorTicksByValues[k]).concat(oldMinorTicks.slice(that._minorTicks.length, oldMinorTicks.length));
+        that._ticksToRemove.forEach(t => t.label?.removeTitle());
 
         if(ticks.breaks) {
             that._seriesData.breaks = ticks.breaks;
@@ -2193,7 +2200,7 @@ Axis.prototype = {
 
         const viewPort = that.getViewport();
 
-        that._seriesData.breaks = that._initialBreaks = that._getScaleBreaks(that._options, {
+        that._seriesData.userBreaks = that._getScaleBreaks(that._options, {
             minVisible: viewPort.startValue,
             maxVisible: viewPort.endValue
         }, that._series, that.isArgumentAxis);
@@ -2673,7 +2680,7 @@ Axis.prototype = {
     _getScreenDelta: function() {
         const that = this;
         const canvas = that._getCanvasStartEnd();
-        const breaks = that._seriesData ? that._seriesData.breaks : [];
+        const breaks = that._seriesData ? that._seriesData.breaks || [] : [];
         const breaksLength = breaks.length;
         const screenDelta = _abs(canvas.start - canvas.end);
 
@@ -2681,6 +2688,8 @@ Axis.prototype = {
     },
 
     _getScaleBreaks: function() { return []; },
+
+    _filterBreaks: function() { return []; },
 
     _adjustTitle: _noop,
 

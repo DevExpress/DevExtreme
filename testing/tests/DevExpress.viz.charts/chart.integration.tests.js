@@ -1934,6 +1934,16 @@ QUnit.test('Has no exception when hiding point markers automatically (both hidin
     assert.notOk(chart.getAllSeries()[1].getVisiblePoints()[0].graphic); // intersection algorithm
 });
 
+QUnit.test('don\'t hide scatter points (T929480)', function(assert) {
+    const chart = this.createChart({
+        series: [
+            { type: 'scatter', point: { size: 14 } }
+        ]
+    });
+
+    assert.ok(chart.getAllSeries()[0].getVisiblePoints()[0].graphic);
+});
+
 // T857880
 QUnit.test('Point is visible when placed in visualRange', function(assert) {
     const chart = moduleSetup.createChart.call(this, {

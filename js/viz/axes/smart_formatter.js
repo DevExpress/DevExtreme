@@ -176,7 +176,7 @@ export function smartFormatter(tick, options) {
                     if(log10Tick < -4) {
                         typeFormat = EXPONENTIAL;
                     } else {
-                        precision = undefined;
+                        return _format(adjust(tick));
                     }
                 }
             } else {

@@ -368,8 +368,9 @@ const RecurrenceEditor = Editor.inherit({
 
     _renderRepeatOnWeekEditor() {
         const firstDayOfWeek = this._getFirstDayOfWeek();
-        const byDay = this._recurrenceRule.rules()['byday'] ?
-            this._recurrenceRule.rules()['byday'].split(',') : days[firstDayOfWeek];
+        const byDayRule = this._recurrenceRule.rules()['byday'];
+        const byDay = byDayRule?.length ?
+            byDayRule.split(',') : days[firstDayOfWeek];
 
         const localDaysNames = dateLocalization.getDayNames('abbreviated');
         const dayNames = days.slice(firstDayOfWeek).concat(days.slice(0, firstDayOfWeek));
