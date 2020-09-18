@@ -17,6 +17,8 @@ import { ValidationMessage } from '../validationMessage';
 
 type Mock = jest.Mock;
 
+jest.mock('../validationMessage');
+
 jest.mock('../../../core/devices', () => {
   const actualDevices = require.requireActual('../../../core/devices').default;
   const isSimulator = actualDevices.isSimulator.bind(actualDevices);
