@@ -58,8 +58,8 @@ const moduleConfig = {
 };
 
 // How to view a generated ExcelJS workbook in Excel:
-// 1. Add '<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>' to 'testing\runner\Views\Main\RunSuite.cshtml'
-// 2. Call 'then' function of the exportPivotGrid' function result and save workbook to file:
+// 1. Add '<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.2/FileSaver.min.js"></script>' to 'testing\runner\Views\Main\RunSuite.cshtml'
+// 2. Call 'then' function of the 'exportPivotGrid' function result and save workbook to file:
 //    .then(() => {
 //        this.worksheet.workbook.xlsx.writeBuffer().then(function(buffer) {
 //            saveAs(new Blob([buffer], { type: "application/octet-stream" }), "PivotGrid.xlsx");
