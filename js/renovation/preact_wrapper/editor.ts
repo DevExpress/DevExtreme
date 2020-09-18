@@ -1,24 +1,26 @@
 /* eslint-disable no-underscore-dangle */
 import Component from './component';
+import ValidationEngine from '../../ui/validation_engine';
 import { extend } from '../../core/utils/extend';
 import $ from '../../core/renderer';
 import { data } from '../../core/element_data';
+import Callbacks from '../../core/utils/callbacks';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
-const INVALID_CLASS = 'dx-invalid';
 const VALIDATION_TARGET = 'dx-validation-target';
-const VALIDATION_STATUS_INVALID = 'invalid';
 
 export default class Editor extends Component {
-  /* eslint-disable  @typescript-eslint/no-explicit-any */
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   showValidationMessageTimeout: any;
+
+  validationRequest: any;
 
   _valueChangeAction: any;
 
   _valueChangeEventInstance: any;
 
   getProps(): any {
-    /* eslint-enable  @typescript-eslint/no-explicit-any */
+    /* eslint-enable @typescript-eslint/no-explicit-any */
     const props = super.getProps();
     props.onFocusIn = (): void => {
       const isValidationMessageShownOnFocus = this.option('validationMessageMode') === 'auto';
@@ -48,6 +50,7 @@ export default class Editor extends Component {
     super._init();
 
     data(this.$element()[0], VALIDATION_TARGET, this);
+    this.validationRequest = Callbacks();
     this.showValidationMessageTimeout = null;
 
     this._valueChangeAction = this._createActionByOption('onValueChanged', {
@@ -65,11 +68,6 @@ export default class Editor extends Component {
     );
   }
 
-  _toggleValidationClasses(isInvalid): void {
-    this.$element().toggleClass(INVALID_CLASS, isInvalid);
-    this.option(`aria.${VALIDATION_STATUS_INVALID}`, isInvalid || undefined);
-  }
-
   _bindInnerWidgetOptions(innerWidget, optionsContainer): void {
     const syncOptions = (): any => this._options.silent(optionsContainer, extend({},
       innerWidget.option()));
@@ -79,18 +77,37 @@ export default class Editor extends Component {
   }
 
   _optionChanged(option: any = {}): void {
-    const { name } = option;
+    const { name, value, previousValue } = option;
+
     if (name && this._getActionConfigs()[name]) {
       this._addAction(name);
     }
 
-    super._optionChanged(option);
+    switch (name) {
+      case 'value':
+        if (value !== previousValue) {
+          this.validationRequest.fire({
+            value,
+            editor: this,
+          });
+        }
+        break;
+      case 'isValid':
+      case 'validationError':
+      case 'validationErrors':
+      case 'validationStatus':
+        this.option(ValidationEngine.synchronizeValidationOptions(option, this.option()));
+        break;
+      default:
+        super._optionChanged(option);
+    }
+
     this._invalidate();
   }
 
   reset(): void {
     const { value } = this._getDefaultOptions();
-    this.option('value', value);
+    this.option({ value });
   }
 
   _dispose(): void {

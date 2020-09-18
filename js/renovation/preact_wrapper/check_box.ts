@@ -14,6 +14,7 @@ export default class CheckBox extends Editor {
           event: this._valueChangeEventInstance,
         });
         this._valueChangeEventInstance = null;
+        super._optionChanged(option);
         break;
       case 'onValueChanged':
         this._valueChangeAction = this._createActionByOption('onValueChanged', {
