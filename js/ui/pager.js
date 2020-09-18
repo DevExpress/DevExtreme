@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import Class from '../core/class';
-import stringUtils from '../core/utils/string';
+import { format } from '../core/utils/string';
 import registerComponent from '../core/component_registrator';
 import { noop, deferRender, deferUpdate, deferUpdater } from '../core/utils/common';
 import { each } from '../core/utils/iterator';
@@ -13,7 +13,7 @@ import messageLocalization from '../localization/message';
 import Widget from './widget/ui.widget';
 import SelectBox from './select_box';
 import NumberBox from './number_box';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { registerKeyboardAction, setTabIndex, restoreFocus } from './shared/accessibility';
 
 const PAGES_LIMITER = 4;
@@ -528,7 +528,7 @@ const Pager = Widget.inherit({
             this._$info = $('<div>')
                 .css('display', this._isInfoHide ? 'none' : '')
                 .addClass(PAGER_INFO_CLASS)
-                .text(stringUtils.format(infoText, this.selectedPage && this.selectedPage.value(), this.option('pageCount'), this.option('totalCount')))
+                .text(format(infoText, this.selectedPage && this.selectedPage.value(), this.option('pageCount'), this.option('totalCount')))
                 .appendTo(this._$pagesChooser);
 
             if(!this._isInfoHide) {

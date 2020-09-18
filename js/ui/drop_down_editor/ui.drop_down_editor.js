@@ -14,12 +14,13 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import DropDownButton from './ui.drop_down_button';
 import Widget from '../widget/ui.widget';
 import { format as formatMessage } from '../../localization/message';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import TextBox from '../text_box';
 import { name as clickEventName } from '../../events/click';
 import devices from '../../core/devices';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import Popup from '../popup';
+import { hasWindow } from '../../core/utils/window';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -779,7 +780,11 @@ const DropDownEditor = TextBox.inherit({
                 this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                 break;
             case 'popupPosition':
+                break;
             case 'deferRendering':
+                if(hasWindow()) {
+                    this._createPopup();
+                }
                 break;
             case 'applyValueMode':
             case 'applyButtonText':

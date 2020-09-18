@@ -13,7 +13,7 @@ import { extend } from '../../core/utils/extend';
 import { name as clickEventName } from '../../events/click';
 import { getFormatter, format as formatMessage } from '../../localization/message';
 import Widget from '../widget/ui.widget';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { renderNoDataText, renderLoadPanel } from '../grid_core/ui.grid_core.utils';
 import { setFieldProperty, findField, mergeArraysByMaxValue } from './ui.pivot_grid.utils';
 import { DataController } from './ui.pivot_grid.data_controller';
@@ -1268,6 +1268,14 @@ const PivotGrid = Widget.inherit({
     _detectHasContainerHeight: function() {
         const that = this;
         const element = that.$element();
+
+        if(isDefined(that._hasHeight)) {
+            const height = that.option('height') || that.$element().get(0).style.height;
+
+            if(height && (that._hasHeight ^ height !== 'auto')) {
+                that._hasHeight = null;
+            }
+        }
 
         if(isDefined(that._hasHeight) || element.is(':hidden')) {
             return;

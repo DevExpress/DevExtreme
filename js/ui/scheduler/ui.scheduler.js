@@ -8,7 +8,7 @@ import { inArray } from '../../core/utils/array';
 import browser from '../../core/utils/browser';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
-import dataCoreUtils from '../../core/utils/data';
+import { compileGetter, compileSetter } from '../../core/utils/data';
 import { getBoundingRect } from '../../core/utils/position';
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
@@ -16,7 +16,15 @@ import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { touch } from '../../core/utils/support';
-import { isDefined, isString, isObject, isFunction, isEmptyObject, isDeferred, isPromise } from '../../core/utils/type';
+import {
+    isDefined,
+    isString,
+    isObject,
+    isFunction,
+    isEmptyObject,
+    isDeferred,
+    isPromise
+} from '../../core/utils/type';
 import { hasWindow } from '../../core/utils/window';
 import DataHelperMixin from '../../data_helper';
 import { triggerResizeEvent } from '../../events/visibility_change';
@@ -53,6 +61,8 @@ import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import AppointmentSettingsGenerator from './appointmentSettingsGenerator';
 import utils from './utils';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
+import DateAdapter from './dateAdapter';
 
 // STYLE scheduler
 const MINUTES_IN_HOUR = 60;
@@ -742,7 +752,6 @@ class Scheduler extends Widget {
         super._setDeprecatedOptions();
 
         extend(this._deprecatedOptions, {
-            onAppointmentFormCreated: { since: '18.2', alias: 'onAppointmentFormOpening' },
             dropDownAppointmentTemplate: { since: '19.2', message: 'appointmentTooltipTemplate' },
             allowEditingTimeZones: { since: '20.1', alias: 'allowTimeZoneEditing' }
         });
@@ -1241,7 +1250,11 @@ class Scheduler extends Widget {
 
         this._subscribes = subscribes;
 
-        this.timeZoneCalculator = new TimeZoneCalculator(this);
+        this.timeZoneCalculator = new TimeZoneCalculator({
+            getClientOffset: date => this.fire('getClientTimezoneOffset', date),
+            getCommonOffset: date => this._getTimezoneOffsetByOption(date),
+            getAppointmentOffset: (date, appointmentTimezone) => timeZoneUtils.calculateTimezoneByValue(appointmentTimezone, date)
+        });
     }
 
     _initTemplates() {
@@ -1256,7 +1269,7 @@ class Scheduler extends Widget {
 
     _initAppointmentTemplate() {
         const { expr } = this._dataAccessors;
-        const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
+        const createGetter = (property) => compileGetter(`appointmentData.${property}`);
 
         this._templateManager.addDefaultTemplates({
             ['item']: new BindableTemplate(($container, data, model) => {
@@ -1314,8 +1327,12 @@ class Scheduler extends Widget {
         }
     }
 
+    isVirtualScrolling() {
+        return this.getWorkSpace()?.isVirtualScrolling();
+    }
+
     _filterAppointments() {
-        const prerenderFilterName = this.getWorkSpace().isVirtualScrolling()
+        const prerenderFilterName = this.isVirtualScrolling()
             ? 'prerenderFilterVirtual'
             : 'prerenderFilter';
 
@@ -1360,8 +1377,8 @@ class Scheduler extends Widget {
         each(fields, (function(name, expr) {
             if(expr) {
 
-                const getter = dataCoreUtils.compileGetter(expr);
-                const setter = dataCoreUtils.compileSetter(expr);
+                const getter = compileGetter(expr);
+                const setter = compileSetter(expr);
 
                 let dateGetter;
                 let dateSetter;
@@ -1765,7 +1782,7 @@ class Scheduler extends Widget {
             scrolling: scrolling,
             renovateRender: this.option('renovateRender')
                 || scrolling.mode === 'virtual'
-                || currentViewOptions.scrolling?.mode === 'virtual',
+                || currentViewOptions.scrolling?.mode === 'virtual'
         }, currentViewOptions);
 
         result.observer = this;
@@ -1940,28 +1957,40 @@ class Scheduler extends Widget {
         }
     }
 
-    _singleAppointmentChangesHandler(targetAppointment, singleAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
-        this.fire('setField', 'recurrenceRule', singleAppointment, '');
-        this.fire('setField', 'recurrenceException', singleAppointment, '');
+    _getCorrectedExceptionDateByDST(exceptionDate, appointment, targetedAppointment) {
+        const offset = appointment.startDate.getTimezoneOffset() - targetedAppointment.startDate.getTimezoneOffset();
+        if(offset !== 0) {
+            return DateAdapter(exceptionDate)
+                .addTime(offset * dateUtils.dateToMilliseconds('minute'))
+                .result();
+        }
+        return exceptionDate;
+    }
+
+    _singleAppointmentChangesHandler(rawAppointment, rawTargetedAppointment, exceptionDate, isDeleted, isPopupEditing, dragEvent) {
+        const appointment = this.createAppointmentAdapter(rawAppointment);
+        const targetedAppointment = this.createAppointmentAdapter(rawTargetedAppointment);
+        const updatedAppointment = this.createAppointmentAdapter(rawAppointment);
+
+        targetedAppointment.recurrenceRule = '';
+        targetedAppointment.recurrenceException = '';
 
         if(!isDeleted && !isPopupEditing) {
-            this.addAppointment(singleAppointment);
+            this.addAppointment(rawTargetedAppointment);
         }
 
-        const recurrenceException = this._createRecurrenceException(exceptionDate, targetAppointment);
-        const updatedAppointment = extend({}, targetAppointment);
-
-        this.fire('setField', 'recurrenceException', updatedAppointment, recurrenceException);
+        const correctedExceptionDate = this._getCorrectedExceptionDateByDST(exceptionDate, appointment, targetedAppointment);
+        updatedAppointment.recurrenceException = this._createRecurrenceException(correctedExceptionDate, rawAppointment);
 
         if(isPopupEditing) {
             // TODO: need to refactor - move as parameter to appointment popup
-            this._updatedRecAppointment = updatedAppointment;
+            this._updatedRecAppointment = updatedAppointment.source();
 
-            this._appointmentPopup.show(singleAppointment, true);
-            this._editAppointmentData = targetAppointment;
+            this._appointmentPopup.show(rawTargetedAppointment, true);
+            this._editAppointmentData = rawAppointment;
 
         } else {
-            this._updateAppointment(targetAppointment, updatedAppointment, function() {
+            this._updateAppointment(rawAppointment, updatedAppointment.source(), function() {
                 this._appointments.moveAppointmentBack(dragEvent);
             }, dragEvent);
         }
@@ -1978,6 +2007,7 @@ class Scheduler extends Widget {
 
         return result.join();
     }
+
 
     _serializeRecurrenceException(exceptionDate, targetStartDate, isAllDay) {
         isAllDay && exceptionDate.setHours(targetStartDate.getHours(),
@@ -2349,17 +2379,17 @@ class Scheduler extends Widget {
         return this._workSpace.getEndViewDate();
     }
 
-    showAppointmentPopup(appointment, createNewAppointment, currentAppointment) {
-        const adapter = this.createAppointmentAdapter(currentAppointment || appointment);
-        const newCurrentAppointment = extend({}, appointment, currentAppointment);
+    showAppointmentPopup(rawAppointment, createNewAppointment, rawTargetedAppointment) {
+        const appointment = this.createAppointmentAdapter(rawTargetedAppointment || rawAppointment);
+        const newTargetedAppointment = extend({}, rawAppointment, rawTargetedAppointment);
 
-        this._checkRecurringAppointment(appointment, newCurrentAppointment, adapter.startDate, () => {
-            if(createNewAppointment || isEmptyObject(appointment)) {
+        this._checkRecurringAppointment(rawAppointment, newTargetedAppointment, appointment.startDate, () => {
+            if(createNewAppointment || isEmptyObject(rawAppointment)) {
                 delete this._editAppointmentData;
-                this._editing.allowAdding && this._appointmentPopup.show(appointment, true);
+                this._editing.allowAdding && this._appointmentPopup.show(rawAppointment, true);
             } else {
-                this._editAppointmentData = appointment;
-                this._appointmentPopup.show(appointment, this._editing.allowUpdating);
+                this._editAppointmentData = rawAppointment;
+                this._appointmentPopup.show(rawAppointment, this._editing.allowUpdating);
             }
         }, false, true);
     }
@@ -2395,7 +2425,6 @@ class Scheduler extends Widget {
     scrollToTime(hours, minutes, date) {
         this._workSpace.scrollToTime(hours, minutes, date);
     }
-
 
     addAppointment(appointment) {
         const adapter = this.createAppointmentAdapter(appointment);
@@ -2455,8 +2484,13 @@ class Scheduler extends Widget {
         return isDefined(this.option('firstDayOfWeek')) ? this.option('firstDayOfWeek') : dateLocalization.firstDayOfWeekIndex();
     }
 
-    createAppointmentAdapter(appointment) {
-        return new AppointmentAdapter(this, appointment);
+    createAppointmentAdapter(rawAppointment) {
+        const options = {
+            getField: (rawAppointment, property) => this.fire('getField', property, rawAppointment),
+            setField: (rawAppointment, property, value) => this.fire('setField', property, rawAppointment, value),
+            getTimeZoneCalculator: () => this.timeZoneCalculator
+        };
+        return new AppointmentAdapter(rawAppointment, options);
     }
 
     /**
@@ -2465,6 +2499,20 @@ class Scheduler extends Widget {
         * @hidden
         */
 }
+
+const getTimeZones = (date) => {
+    if(!isDefined(date)) {
+        date = new Date();
+    }
+
+    const dateInUTC = timeZoneUtils.createUTCDate(date);
+    return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
+};
+/**
+* @name ui.dxScheduler
+* @section utils
+*/
+Scheduler.getTimeZones = getTimeZones;
 
 Scheduler.include(DataHelperMixin);
 

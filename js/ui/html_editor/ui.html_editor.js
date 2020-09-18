@@ -10,7 +10,7 @@ import Errors from '../widget/ui.errors';
 import Callbacks from '../../core/utils/callbacks';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
 import { prepareScrollData } from '../text_box/utils.scroll';
 
@@ -541,6 +541,10 @@ const HtmlEditor = Editor.inherit({
 
     get: function(modulePath) {
         return this._getRegistrator().getQuill().import(modulePath);
+    },
+
+    getModule: function(moduleName) {
+        return this._applyQuillMethod('getModule', arguments);
     },
 
     getQuillInstance: function() {

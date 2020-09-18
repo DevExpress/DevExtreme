@@ -33,7 +33,7 @@ System.config({
         'rxjs/operators': 'npm:rxjs@6.3.3/operators',
 
         'jszip': 'npm:jszip@3.1.3/dist/jszip.min.js',
-        'devextreme-quill': 'npm:devextreme-quill@0.9.2/dist/quill.js',
+        'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.js',
         'devextreme': '../../artifacts/angular'
     },
     packages: {
@@ -48,7 +48,7 @@ System.config({
             defaultExtension: 'js',
             main: 'index.js'
         },
-        'devextreme/events/utils': {
+        'devextreme/events/utils/index': {
             defaultExtension: 'js',
             main: 'index.js'
         },

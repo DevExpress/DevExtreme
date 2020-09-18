@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, JSXComponent, Effect, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { DeferredColor, Color } from './types';
+import { DeferredColor, Color } from './types.d';
 
 export const viewFunction = (viewModel: Marker) => (
   <div

@@ -65,6 +65,7 @@
         "dxFileUploader-upload": "Nahrát",
         "dxFileUploader-uploaded": "Nahráno",
         "dxFileUploader-readyToUpload": "Připraveno k nahrání",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Nahrávání selhalo",
         "dxFileUploader-invalidFileExtension": "",
         "dxFileUploader-invalidMaxFileSize": "",
@@ -164,6 +165,7 @@
 
         "dxPager-infoText": "Strana {0} ze {1} ({2} položek)",
         "dxPager-pagesCountText": "ze",
+        "dxPager-pageSizesAllText": "Vše",
 
         "dxPivotGrid-grandTotal": "Celkem",
         "dxPivotGrid-total": "{0} Celkem",

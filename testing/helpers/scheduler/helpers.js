@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import translator from 'animation/translator';
+import { locate } from 'animation/translator';
 import devices from 'core/devices';
 import 'ui/scheduler/ui.scheduler';
 
@@ -30,7 +30,20 @@ export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id=
 
 export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'));
 
-export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
+export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop' && !devices.real().mac;
+
+export const checkResultByDeviceType = (assert, callback) => {
+    if(isDesktopEnvironment()) {
+        callback();
+    } else {
+        const done = assert.async();
+        setTimeout(() => {
+            callback();
+            done();
+        });
+    }
+};
+
 
 class ElementWrapper {
     constructor(selector, parent) {
@@ -183,7 +196,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
             },
             getAppointmentWidth: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().width,
             getAppointmentHeight: (index = 0) => this.appointments.getAppointment(index).get(0).getBoundingClientRect().height,
-            getAppointmentPosition: (index = 0) => translator.locate($(this.appointments.getAppointment(index))),
+            getAppointmentPosition: (index = 0) => locate($(this.appointments.getAppointment(index))),
 
             find: (text) => {
                 return this.appointments

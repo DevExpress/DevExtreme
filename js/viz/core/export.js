@@ -72,8 +72,9 @@ function print(imageSrc, options) {
     const document = getWindow().document;
     const iFrame = document.createElement('iframe');
     iFrame.onload = setPrint(imageSrc, options);
-    iFrame.style.visibility = 'hidden';
     iFrame.style.position = 'fixed';
+    iFrame.style.width = '0';
+    iFrame.style.height = '0';
     iFrame.style.right = '0';
     iFrame.style.bottom = '0';
     document.body.appendChild(iFrame);

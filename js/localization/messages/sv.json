@@ -65,6 +65,7 @@
         "dxFileUploader-upload": "Ladda upp",
         "dxFileUploader-uploaded": "Uppladdad",
         "dxFileUploader-readyToUpload": "Klar att ladda upp",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "Uppladdning misslyckades",
         "dxFileUploader-invalidFileExtension": "",
         "dxFileUploader-invalidMaxFileSize": "",
@@ -164,7 +165,7 @@
 
         "dxPager-infoText": "Sida {0} av {1} ({2} uppgifter)",
         "dxPager-pagesCountText": "av",
-
+        "dxPager-pageSizesAllText": "Allt",
         "dxPivotGrid-grandTotal": "Totalsumma",
         "dxPivotGrid-total": "{0} Summa",
         "dxPivotGrid-fieldChooserTitle": "Fältväljare",

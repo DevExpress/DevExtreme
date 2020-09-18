@@ -3,7 +3,8 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
-@use "../../base/fileManager" as *;
+@use "../../base/fileManager";
+@use "../../base/fileManager/mixins" as *;
 
 // adduse
 @use "../splitter";
@@ -88,6 +89,10 @@
       padding-left: $filemanager-toolbar-viewmode-padding;
       padding-right: $filemanager-toolbar-viewmode-padding;
     }
+  }
+
+  .dx-filemanager-fileuploader-dropzone-placeholder {
+    border: 2px solid $base-accent;
   }
 
   .dx-filemanager-container {

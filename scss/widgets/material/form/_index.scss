@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/form";
 
 // adduse
 @use "../scrollable";
@@ -30,26 +31,38 @@
   padding-right: 5px;
 }
 
-.dx-layout-manager .dx-field-item:not(.dx-last-col) {
-  padding-right: 20px;
-}
-
-.dx-layout-manager .dx-field-item:not(.dx-first-col) {
-  padding-left: 20px;
-}
-
-.dx-field-item {
-  padding-bottom: 10px;
-  font-size: $material-form-label-font-size;
-
+.dx-layout-manager {
   .dx-field-item {
-    &.dx-last-row {
-      padding-bottom: 0;
+    &:not(.dx-last-col) {
+      padding-right: 20px;
+    }
+
+    &:not(.dx-first-col) {
+      padding-left: 20px;
+    }
+
+    padding-bottom: 10px;
+    font-size: $material-form-label-font-size;
+
+
+    .dx-field-item {
+      &.dx-last-row {
+        padding-bottom: 0;
+      }
     }
   }
 }
 
 .dx-field-item-content {
+  &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs) {
+    padding-top: $material-form-default-top-padding;
+
+    .dx-first-row > &,
+    .dx-label-v-align & {
+      padding-top: 0;
+    }
+  }
+
   .dx-switch {
     vertical-align: middle;
   }
