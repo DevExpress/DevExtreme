@@ -2334,6 +2334,42 @@ QUnit.module('View\'s focus', {
             });
         });
     });
+
+    QUnit.testInActiveWindow('An input that resides in a group row template should be focused on click (T931756)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [{ id: 1, name: 'test', description: 'test' }],
+            keyExpr: 'id',
+            editing: {
+                mode: 'batch',
+                allowUpdating: true,
+                startEditAction: 'dblClick'
+            },
+            grouping: {
+                expandMode: 'buttonClick'
+            },
+            columns: [{
+                dataField: 'name',
+                groupIndex: 0,
+                groupCellTemplate: function(container) {
+                    $('<input>').appendTo(container);
+                }
+            }, 'description']
+        });
+        this.clock.tick();
+
+        const $inputElement = $(this.dataGrid.element()).find('input');
+
+        // act
+        $inputElement.focus();
+        this.clock.tick();
+        $inputElement.trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($inputElement.closest('td').hasClass('dx-focused'), 'cell is marked as focused');
+        assert.ok($inputElement.is(':focus'), 'input is focused');
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
