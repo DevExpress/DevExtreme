@@ -85,6 +85,10 @@
         }
     }
 
+    .dx-row-total.dx-last-cell {
+        padding-left: 22px;
+    }
+
     .dx-grandtotal.dx-last-cell {
         padding-left: 22px;
     }
@@ -101,7 +105,7 @@
     }
 
     .dx-expand-icon-container {
-        margin: 0 10px 0 5px;
+        margin: 0 0 0 5px;
         .dx-icon(chevronright);
 
         font-size: @MATERIAL_PIVOTGRID_HEADERS_FONT_SIZE;
@@ -123,6 +127,13 @@
         .dx-icon-font-centered-sizing(@MATERIAL_PIVOTGRID_CHEVRON_ICON_SIZE);
 
         color: @pivotgrid-chevron-icon-color;
+    }
+
+    .dx-pivotgrid-collapsed,
+    .dx-pivotgrid-expanded {
+      > span {
+        padding: 0 5px 0 10px;
+      }
     }
 
     .dx-area-tree-view {
