@@ -4,7 +4,7 @@ import { getWindow } from 'core/utils/window';
 import { noop } from 'core/utils/common';
 import domAdapter from 'core/dom_adapter';
 import eventsEngine from 'events/core/events_engine';
-import { addNamespace } from 'events/utils';
+import { addNamespace } from 'events/utils/index';
 
 const { test, module } = QUnit;
 

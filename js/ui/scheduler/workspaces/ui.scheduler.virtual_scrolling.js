@@ -1,7 +1,7 @@
 import domAdapter from '../../../core/dom_adapter';
 import eventsEngine from '../../../events/core/events_engine';
 import { getWindow } from '../../../core/utils/window';
-import { addNamespace } from '../../../events/utils';
+import { addNamespace } from '../../../events/utils/index';
 
 const ROW_HEIGHT = 50;
 const MIN_SCROLL_OFFSET = 10;
