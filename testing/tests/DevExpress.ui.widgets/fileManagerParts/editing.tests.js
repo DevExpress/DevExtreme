@@ -683,4 +683,37 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.notOk(detail.closeButtonVisible, 'detail item has an invisible close button');
     });
 
+    test('upload file with drag and drop', function(assert) {
+        const fileManager = this.$element.dxFileManager('instance');
+        stubFileReader(fileManager._controller._fileProvider);
+
+        const initialItemCount = this.wrapper.getDetailsItemsNames().length;
+
+        const file = createUploaderFiles(1)[0];
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [file] } }));
+
+        this.wrapper.getItemsViewPanel().trigger(event);
+        this.clock.tick(400);
+
+        const itemNames = this.wrapper.getDetailsItemNamesTexts();
+        const uploadedFileIndex = itemNames.indexOf(file.name);
+
+        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.ok(uploadedFileIndex > -1, 'file is uploaded');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
+    });
+
+    test('upload drop zone responds on drag interaction', function(assert) {
+        const itemViewPanel = this.wrapper.getItemsViewPanel();
+        const dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        itemViewPanel.trigger('dragenter');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        itemViewPanel.trigger('dragleave');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+    });
+
 });

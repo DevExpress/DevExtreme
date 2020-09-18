@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { isString } from '../../core/utils/type';
+import { isString, isDefined } from '../../core/utils/type';
 import Widget from '../widget/ui.widget';
 import registerComponent from '../../core/component_registrator';
 import dataCoreUtils from '../../core/utils/data';
@@ -179,7 +179,14 @@ class Gantt extends Widget {
         if(e.row && e.row.rowType === 'data') {
             this._setTreeListOption('selectedRowKeys', [e.row.data[this.option('tasks.keyExpr')]]);
             e.items = [];
-            this._showPopupMenu({ position: { x: e.event.pageX, y: e.event.pageY } });
+            const info = {
+                cancel: false,
+                event: e.event,
+                type: 'task',
+                key: e.row.key,
+                position: { x: e.event.pageX, y: e.event.pageY }
+            };
+            this._showPopupMenu(info);
         }
     }
     _onTreeListRowClick(e) {
@@ -520,6 +527,9 @@ class Gantt extends Widget {
     _createCustomCommandAction() {
         this._customCommandAction = this._createActionByOption('onCustomCommand');
     }
+    _createContextMenuPreparingAction() {
+        this._contextMenuPreparingAction = this._createActionByOption('onContextMenuPreparing');
+    }
     _raiseSelectionChangedAction(selectedRowKey) {
         if(!this._selectionChangedAction) {
             this._createSelectionChangedAction();
@@ -531,6 +541,12 @@ class Gantt extends Widget {
             this._createCustomCommandAction();
         }
         this._customCommandAction({ name: commandName });
+    }
+    _raiseContextMenuPreparing(options) {
+        if(!this._contextMenuPreparingAction) {
+            this._createContextMenuPreparingAction();
+        }
+        this._contextMenuPreparingAction(options);
     }
 
     _raiseInsertingAction(optionName, coreArgs) {
@@ -869,10 +885,21 @@ class Gantt extends Widget {
         }
         this._dialogInstance.show(e.name, e.parameters, e.callback, e.afterClosing, this.option('editing'));
     }
-    _showPopupMenu(e) {
+    _showPopupMenu(info) {
         if(this.option('contextMenu.enabled')) {
             this._ganttView.getBarManager().updateContextMenu();
-            this._contextMenuBar.show(e.position);
+            const args = {
+                cancel: false,
+                event: info.event,
+                targetType: info.type,
+                targetKey: info.key,
+                items: extend(true, [], this._contextMenuBar._items),
+                data: info.type === 'task' ? this.getTaskData(info.key) : this.getDependencyData(info.key)
+            };
+            this._raiseContextMenuPreparing(args);
+            if(!args.cancel) {
+                this._contextMenuBar.show(info.position, args.items);
+            }
         }
     }
     _executeCoreCommand(id) {
@@ -1085,6 +1112,7 @@ class Gantt extends Widget {
             // eslint-disable-next-line spellcheck/spell-checker
             onResourceUnassigning: null,
             onCustomCommand: null,
+            onContextMenuPreparing: null,
             allowSelection: true,
             showRowLines: true,
             stripLines: undefined,
@@ -1169,6 +1197,9 @@ class Gantt extends Widget {
     }
 
     getTaskData(key) {
+        if(!isDefined(key)) {
+            return null;
+        }
         const coreData = this._ganttView._ganttViewCore.getTaskData(key);
         const mappedData = this.getTaskDataByCoreData(coreData);
         return mappedData;
@@ -1196,6 +1227,9 @@ class Gantt extends Widget {
         this._ganttView._ganttViewCore.updateTask(key, this._convertMappedToCoreData(GANTT_TASKS, data));
     }
     getDependencyData(key) {
+        if(!isDefined(key)) {
+            return null;
+        }
         const coreData = this._ganttView._ganttViewCore.getDependencyData(key);
         return coreData ? this._convertCoreToMappedData(GANTT_DEPENDENCIES, coreData) : null;
     }
@@ -1305,6 +1339,9 @@ class Gantt extends Widget {
                 break;
             case 'onCustomCommand':
                 this._createCustomCommandAction();
+                break;
+            case 'onContextMenuPreparing':
+                this._createContextMenuPreparingAction();
                 break;
             case 'allowSelection':
                 this._setTreeListOption('selection.mode', this._getSelectionMode(args.value));

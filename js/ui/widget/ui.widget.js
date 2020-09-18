@@ -7,7 +7,7 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { focusable as focusableSelector } from './selectors';
 import { inArray } from '../../core/utils/array';
-import { isFakeClickEvent } from '../../events/utils';
+import { isFakeClickEvent } from '../../events/utils/index';
 import { isPlainObject, isDefined } from '../../core/utils/type';
 
 import '../../events/click';

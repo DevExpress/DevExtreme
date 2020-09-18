@@ -4,7 +4,7 @@ import { isDefined, isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
-import translator from '../../animation/translator';
+import { locate } from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
@@ -29,6 +29,10 @@ const subscribes = {
 
     currentDateUpdated: function(date) {
         this.option('currentDate', date);
+    },
+
+    getOption: function(name) {
+        return this.option(name);
     },
 
     setCellDataCacheAlias: function(appointment, geometry) {
@@ -408,7 +412,7 @@ const subscribes = {
 
         each(horizontalResizables, (function(_, el) {
             const $el = $(el);
-            const position = translator.locate($el);
+            const position = locate($el);
             const appointmentData = this._appointments._getItemData($el);
 
             const area = this._appointments._calculateResizableArea({
@@ -792,6 +796,6 @@ const subscribes = {
 
     removeDroppableCellClass: function() {
         this._workSpace.removeDroppableCellClass();
-    }
+    },
 };
 export default subscribes;

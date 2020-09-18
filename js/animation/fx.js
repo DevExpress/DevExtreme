@@ -6,14 +6,23 @@ import errors from '../core/errors';
 import { getPublicElement } from '../core/element';
 import { extend } from '../core/utils/extend';
 import { isFunction, isPlainObject } from '../core/utils/type';
-import iteratorUtils from '../core/utils/iterator';
-import translator from './translator';
-import easing from './easing';
+import { each, map } from '../core/utils/iterator';
+import {
+    getTranslateCss,
+    parseTranslate,
+    clearCache,
+    locate,
+    getTranslate
+} from './translator';
+import {
+    convertTransitionTimingFuncToEasing,
+    getEasing
+} from './easing';
 import animationFrame from './frame';
-import support from '../core/utils/support';
+import { transitionEndEventName, transition } from '../core/utils/support';
 import positionUtils from './position';
 import removeEvent from '../core/remove_event';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { when, Deferred } from '../core/utils/deferred';
 const removeEventName = addNamespace(removeEvent, 'dxFX');
 import { noop } from '../core/utils/common';
@@ -92,16 +101,16 @@ const TransitionAnimationStrategy = {
         const transitionEndFired = new Deferred();
         const simulatedTransitionEndFired = new Deferred();
         let simulatedEndEventTimer;
-        const transitionEndEventName = support.transitionEndEventName() + '.dxFX';
+        const transitionEndEventFullName = transitionEndEventName() + '.dxFX';
 
         config.transitionAnimation.cleanup = function() {
             clearTimeout(simulatedEndEventTimer);
             clearTimeout(waitForJSCompleteTimer);
-            eventsEngine.off($element, transitionEndEventName);
+            eventsEngine.off($element, transitionEndEventFullName);
             eventsEngine.off($element, removeEventName);
         };
 
-        eventsEngine.one($element, transitionEndEventName, function() {
+        eventsEngine.one($element, transitionEndEventFullName, function() {
             // NOTE: prevent native transitionEnd event from previous animation in queue (Chrome)
             if(Date.now() - startTime >= config.duration) {
                 transitionEndFired.reject();
@@ -165,7 +174,7 @@ const TransitionAnimationStrategy = {
             config.transitionAnimation.finish();
         } else {
             if(isPlainObject(config.to)) {
-                iteratorUtils.each(config.to, function(key) {
+                each(config.to, function(key) {
                     $element.css(key, $element.css(key));
                 });
             }
@@ -187,7 +196,7 @@ const FrameAnimationStrategy = {
             return deferred.reject().promise();
         }
 
-        iteratorUtils.each(config.to, function(prop) {
+        each(config.to, function(prop) {
             if(config.from[prop] === undefined) {
                 config.from[prop] = that._normalizeValue($element.css(prop));
             }
@@ -202,7 +211,7 @@ const FrameAnimationStrategy = {
             to: config.to,
             from: config.from,
             currentValue: config.from,
-            easing: easing.convertTransitionTimingFuncToEasing(config.easing),
+            easing: convertTransitionTimingFuncToEasing(config.easing),
             duration: config.duration,
             startTime: new Date().valueOf(),
             finish: function() {
@@ -220,9 +229,9 @@ const FrameAnimationStrategy = {
                 const currentValue = extend({}, this.currentValue);
 
                 if(currentValue[TRANSFORM_PROP]) {
-                    currentValue[TRANSFORM_PROP] = iteratorUtils.map(currentValue[TRANSFORM_PROP], function(value, prop) {
+                    currentValue[TRANSFORM_PROP] = map(currentValue[TRANSFORM_PROP], function(value, prop) {
                         if(prop === 'translate') {
-                            return translator.getTranslateCss(value);
+                            return getTranslateCss(value);
                         } else if(prop === 'scale') {
                             return 'scale(' + value + ')';
                         } else if(prop.substr(0, prop.length - 1) === 'rotate') {
@@ -260,8 +269,8 @@ const FrameAnimationStrategy = {
     _parseTransform: function(transformString) {
         const result = {};
 
-        iteratorUtils.each(transformString.match(/(\w|\d)+\([^)]*\)\s*/g), function(i, part) {
-            const translateData = translator.parseTranslate(part);
+        each(transformString.match(/(\w|\d)+\([^)]*\)\s*/g), function(i, part) {
+            const translateData = parseTranslate(part);
             const scaleData = part.match(/scale\((.+?)\)/);
             const rotateData = part.match(/(rotate.)\((.+)deg\)/);
 
@@ -332,10 +341,10 @@ const FrameAnimationStrategy = {
                 const c = to[propName] - from[propName];
                 const d = frameAnimation.duration;
 
-                return easing.getEasing(frameAnimation.easing)(x, t, b, c, d);
+                return getEasing(frameAnimation.easing)(x, t, b, c, d);
             };
 
-            iteratorUtils.each(to, function(propName, endPropValue) {
+            each(to, function(propName, endPropValue) {
                 if(typeof endPropValue === 'string' && parseFloat(endPropValue, 10) === false) {
                     return true;
                 }
@@ -375,13 +384,13 @@ const FallbackToNoAnimationStrategy = {
 const getAnimationStrategy = function(config) {
     config = config || {};
     const animationStrategies = {
-        'transition': support.transition() ? TransitionAnimationStrategy : FrameAnimationStrategy,
+        'transition': transition() ? TransitionAnimationStrategy : FrameAnimationStrategy,
         'frame': FrameAnimationStrategy,
         'noAnimation': FallbackToNoAnimationStrategy
     };
     let strategy = config.strategy || 'transition';
 
-    if(config.type === 'css' && !support.transition()) {
+    if(config.type === 'css' && !transition()) {
         strategy = 'noAnimation';
     }
 
@@ -389,7 +398,7 @@ const getAnimationStrategy = function(config) {
 };
 
 const baseConfigValidator = function(config, animationType, validate, typeMessage) {
-    iteratorUtils.each(['from', 'to'], function() {
+    each(['from', 'to'], function() {
         if(!validate(config[this])) {
             throw errors.Error('E0010', animationType, this, typeMessage);
         }
@@ -431,7 +440,7 @@ const SlideAnimationConfigurator = {
     },
 
     setup: function($element, config) {
-        const location = translator.locate($element);
+        const location = locate($element);
 
         if(config.type !== 'slide') {
             const positioningConfig = (config.type === 'slideIn') ? config.from : config.to;
@@ -443,7 +452,7 @@ const SlideAnimationConfigurator = {
         this._setUpConfig(location, config.from);
         this._setUpConfig(location, config.to);
 
-        translator.clearCache($element);
+        clearCache($element);
     },
 
     _setUpConfig: function(location, config) {
@@ -476,7 +485,7 @@ const SlideAnimationConfigurator = {
             config.top = 0;
         }
 
-        config[TRANSFORM_PROP] = translator.getTranslateCss({ x: position.left, y: position.top });
+        config[TRANSFORM_PROP] = getTranslateCss({ x: position.left, y: position.top });
     },
 
     _getRelativeValue: function(value) {
@@ -532,7 +541,7 @@ const PopAnimationConfigurator = {
             opacity: fromOpacity
         };
 
-        const translate = translator.getTranslate($element);
+        const translate = getTranslate($element);
 
         config.from[TRANSFORM_PROP] = this._getCssTransform(translate, fromScale);
 
@@ -543,7 +552,7 @@ const PopAnimationConfigurator = {
     },
 
     _getCssTransform: function(translate, scale) {
-        return translator.getTranslateCss(translate) + 'scale(' + scale + ')';
+        return getTranslateCss(translate) + 'scale(' + scale + ')';
     }
 };
 
@@ -790,7 +799,7 @@ function setupPosition($element, config) {
 }
 
 function setProps($element, props) {
-    iteratorUtils.each(props, function(key, value) {
+    each(props, function(key, value) {
         try {
             $element.css(key, isFunction(value) ? value() : value);
         } catch(e) { }
@@ -802,7 +811,7 @@ const stop = function(element, jumpToEnd) {
     const queueData = getAnimQueueData($element);
 
     // TODO: think about complete all animation in queue
-    iteratorUtils.each(queueData, function(_, animation) {
+    each(queueData, function(_, animation) {
         animation.config.delay = 0;
         animation.config.duration = 0;
         animation.isSynchronous = true;

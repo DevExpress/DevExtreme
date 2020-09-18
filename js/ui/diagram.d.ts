@@ -348,6 +348,24 @@ export default class dxDiagram extends Widget {
      */
     getEdgeDataSource(): DataSource;
     /**
+     * @docid dxDiagramMethods.getItemByKey
+     * @publicName getItemByKey(key)
+     * @param1 key:Object
+     * @return dxDiagramItem
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getItemByKey(key: Object): dxDiagramItem;
+    /**
+     * @docid dxDiagramMethods.getItemById
+     * @publicName getItemById(id)
+     * @param1 id:String
+     * @return dxDiagramItem
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getItemById(id: string): dxDiagramItem;
+    /**
      * @docid dxDiagramMethods.export
      * @publicName export()
      * @return string
@@ -388,6 +406,35 @@ export interface dxDiagramConnector extends dxDiagramItem {
      */
     fromKey?: any;
     /**
+     * @docid dxDiagramConnector.fromId
+     * @type String
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    fromId?: string;
+    /**
+     * @docid dxDiagramConnector.fromPointIndex
+     * @type Number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    fromPointIndex?: number;
+    /**
+     * @docid dxDiagramConnector.points
+     * @type Array<Object>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    points?: Array<Object>;
+    /**
+     * @docid dxDiagramConnector.points.x
+     * @type Number
+     */
+    /**
+     * @docid dxDiagramConnector.points.y
+     * @type Number
+     */
+    /**
      * @docid dxDiagramConnector.texts
      * @type Array<String>
      * @prevFileNamespace DevExpress.ui
@@ -401,6 +448,20 @@ export interface dxDiagramConnector extends dxDiagramItem {
      * @public
      */
     toKey?: any;
+    /**
+     * @docid dxDiagramConnector.toId
+     * @type string
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    toId?: string;
+    /**
+     * @docid dxDiagramConnector.toPointIndex
+     * @type number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    toPointIndex?: number;
 }
 
 /**
@@ -449,6 +510,43 @@ export interface dxDiagramShape extends dxDiagramItem {
      * @public
      */
     type?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
+    /**
+     * @docid dxDiagramShape.position
+     * @type Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    position?: Object;
+    /**
+     * @docid dxDiagramShape.position.x
+     * @type Number
+     */
+    /**
+     * @docid dxDiagramShape.position.y
+     * @type Number
+     */
+    /**
+     * @docid dxDiagramShape.size
+     * @type Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    size?: Object;
+    /**
+     * @docid dxDiagramShape.size.width
+     * @type Number
+     */
+    /**
+     * @docid dxDiagramShape.size.height
+     * @type Number
+     */
+    /**
+     * @docid dxDiagramShape.attachedConnectorIds
+     * @type Array<String>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    attachedConnectorIds?: string[];
 }
 
 /**

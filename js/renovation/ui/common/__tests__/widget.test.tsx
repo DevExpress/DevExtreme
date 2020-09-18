@@ -6,11 +6,11 @@ import {
   emitKeyboard, getEventHandlers, EVENT, KEY,
 } from '../../../test_utils/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
-import { isFakeClickEvent } from '../../../../events/utils';
+import { isFakeClickEvent } from '../../../../events/utils/index';
 import config from '../../../../core/config';
 
-jest.mock('../../../../events/utils', () => ({
-  ...require.requireActual('../../../../events/utils'),
+jest.mock('../../../../events/utils/index', () => ({
+  ...require.requireActual('../../../../events/utils/index'),
   isFakeClickEvent: jest.fn(),
 }));
 

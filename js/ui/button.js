@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
-import inkRipple from './widget/utils.ink_ripple';
+import { render } from './widget/utils.ink_ripple';
 import registerComponent from '../core/component_registrator';
 import * as themes from './themes';
 import Action from '../core/action';
@@ -242,7 +242,7 @@ class Button extends Widget {
 
         if(useInkRipple) {
             const isOnlyIconButton = !text && icon || type === 'back';
-            const _inkRipple = inkRipple.render(isOnlyIconButton ? {
+            const _inkRipple = render(isOnlyIconButton ? {
                 waveSizeCoefficient: 1,
                 useHoldAnimation: false,
                 isCentered: true
