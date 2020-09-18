@@ -5,7 +5,7 @@ import { isDefined, isPlainObject, isEmptyObject } from '../core/utils/type';
 import errors from './widget/ui.errors';
 import { getWindow, defaultScreenFactorFunc, hasWindow } from '../core/utils/window';
 const window = getWindow();
-import iteratorUtils from '../core/utils/iterator';
+import { each, map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import registerComponent from '../core/component_registrator';
 import Box from './box';
@@ -222,11 +222,11 @@ const ResponsiveBox = CollectionWidget.inherit({
 
         this._prepareRowsAndCols();
 
-        iteratorUtils.each(this._rows, (function() {
+        each(this._rows, (function() {
             const row = [];
             grid.push(row);
 
-            iteratorUtils.each(this._cols, (function() {
+            each(this._cols, (function() {
                 row.push(this._createEmptyCell());
             }).bind(this));
         }).bind(this));
@@ -274,13 +274,13 @@ const ResponsiveBox = CollectionWidget.inherit({
             return (item1.location.row - item2.location.row) || (item1.location.col - item2.location.col);
         });
 
-        iteratorUtils.each(this._screenItems, function(index, item) {
+        each(this._screenItems, function(index, item) {
             extend(item.location, { row: index, col: 0, rowspan: 1, colspan: 1 });
         });
     },
 
     _sizesByScreen: function(sizeConfigs) {
-        return iteratorUtils.map(this._filterByScreen(sizeConfigs), (function(sizeConfig) {
+        return map(this._filterByScreen(sizeConfigs), (function(sizeConfig) {
             return extend(this._defaultSizeConfig(), sizeConfig);
         }).bind(this));
     },
@@ -332,7 +332,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _spreadItems: function() {
-        iteratorUtils.each(this._screenItems, (function(_, itemInfo) {
+        each(this._screenItems, (function(_, itemInfo) {
             const location = itemInfo.location || {};
             const itemCol = location.col;
             const itemRow = location.row;
@@ -407,7 +407,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _linkNodeToItem: function() {
-        iteratorUtils.each(this._itemElements(), function(_, itemNode) {
+        each(this._itemElements(), function(_, itemNode) {
             const $item = $(itemNode);
             const item = $item.data(BOX_ITEM_DATA_KEY);
             if(!item.box) {
@@ -438,7 +438,7 @@ const ResponsiveBox = CollectionWidget.inherit({
     },
 
     _rootBoxConfig: function(items) {
-        const rootItems = iteratorUtils.each(items, (function(index, item) {
+        const rootItems = each(items, (function(index, item) {
             this._needApplyAutoBaseSize(item) && extend(item, { baseSize: 'auto' });
         }).bind(this));
 
@@ -621,13 +621,13 @@ const ResponsiveBox = CollectionWidget.inherit({
             return;
         }
 
-        iteratorUtils.each(this._assistantRoots, function(_, item) {
+        each(this._assistantRoots, function(_, item) {
             $(item).remove();
         });
     },
 
     _clearItemNodeTemplates: function() {
-        iteratorUtils.each(this.option('items'), function() {
+        each(this.option('items'), function() {
             delete this.node;
         });
     },

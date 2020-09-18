@@ -71,6 +71,7 @@ const environment = {
 
         this.renderer.g.reset();
 
+        this.templateRender = sinon.spy();
         this.axis = new Axis($.extend(true, {
             renderer: this.renderer,
             stripsGroup: stripsGroup,
@@ -81,7 +82,12 @@ const environment = {
             gridGroup: gridGroup,
             axisType: 'xyAxes',
             drawingType: 'linear',
-            isArgumentAxis: true
+            isArgumentAxis: true,
+            getTemplate: sinon.spy(() => {
+                return {
+                    render: this.templateRender
+                };
+            })
         }, options));
     },
     createAxisWithBreaks: function(options, group) {
@@ -1610,6 +1616,268 @@ QUnit.test('Boundary points coincide with minor ticks - remove minor ticks', fun
     assert.strictEqual(path.getCall(4).returnValue.attr.getCall(0).args[0]['stroke-opacity'], 0.9);
     assert.deepEqual(path.getCall(3).returnValue.attr.getCall(1).args[0], { points: [30, 69 - 5, 30, 69 + 5], opacity: 1 });
     assert.deepEqual(path.getCall(4).returnValue.attr.getCall(1).args[0], { points: [70, 69 - 5, 70, 69 + 5], opacity: 1 });
+});
+
+QUnit.module('Labels template', environment);
+
+QUnit.test('Template container coords after drawing template', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: 'top',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left',
+            template() {}
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    renderer.g.reset();
+    // act
+    this.renderer.bBoxTemplate = function() {
+        return { x: 1, y: 2, width: 18, height: 18 };
+    };
+    this.axis.draw(this.canvas);
+
+    // act
+    this.templateRender.getCall(0).args[0].onRendered();
+
+    // assert
+    assert.strictEqual(renderer.g.getCall(0).returnValue.attr.callCount, 2);
+    assert.deepEqual(renderer.g.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 30, translateY: 0 });
+});
+
+QUnit.test('Template container bbox on adjusting labels. Horizontal = true, top', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: 'top',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left',
+            template() {}
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    renderer.g.reset();
+    // act
+    this.renderer.bBoxTemplate = function() {
+        return { x: 1, y: 2, width: 18, height: 18 };
+    };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.strictEqual(renderer.g.getCall(0).returnValue.attr.callCount, 1);
+    assert.deepEqual(renderer.g.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 30, translateY: 0 });
+});
+
+QUnit.test('Template container bbox on adjusting labels. Horizontal = true, bottom', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: 'bottom',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left',
+            template() {}
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    renderer.g.reset();
+    // act
+    this.renderer.bBoxTemplate = function() {
+        return { x: 1, y: 2, width: 18, height: 18 };
+    };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.strictEqual(renderer.g.getCall(0).returnValue.attr.callCount, 1);
+    assert.deepEqual(renderer.g.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 30, translateY: 78 });
+});
+
+QUnit.test('Template container bbox on adjusting labels. Horizontal = false, left', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: 'left',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left',
+            template() {}
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    renderer.g.reset();
+    // act
+    this.renderer.bBoxTemplate = function() {
+        return { x: 1, y: 2, width: 18, height: 18 };
+    };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.strictEqual(renderer.g.getCall(0).returnValue.attr.callCount, 1);
+    assert.deepEqual(renderer.g.getCall(0).returnValue.attr.lastCall.args[0], { translateX: -19, translateY: 29 });
+});
+
+QUnit.test('Template container bbox on adjusting labels. Horizontal = false, right', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        position: 'right',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left',
+            template() {}
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    renderer.g.reset();
+    // act
+    this.renderer.bBoxTemplate = function() {
+        return { x: 1, y: 2, width: 18, height: 18 };
+    };
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.strictEqual(renderer.g.getCall(0).returnValue.attr.callCount, 1);
+    assert.deepEqual(renderer.g.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 99, translateY: 29 });
+});
+
+QUnit.test('No clear labels group on draw drawn axis', function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: 'top',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left',
+            template() {}
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+
+    // act
+
+    this.axis.draw(this.canvas);
+
+    // act
+    this.axis.setRenderedState(true);
+    this.axis.draw(this.canvas);
+
+    assert.strictEqual(this.renderer.g.getCall(3).returnValue.clear.callCount, 1);
+});
+
+QUnit.test('Hint on template container', function(assert) {
+    // arrange
+    const renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: 'bottom',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left',
+            template() {},
+            customizeHint: function() {
+                return this.valueText;
+            }
+        }
+    });
+
+    this.generatedTicks = [1, 2];
+
+    this.translator.stub('translate').withArgs(1).returns(40);
+    this.translator.stub('translate').withArgs(2).returns(60);
+    renderer.g.reset();
+
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.deepEqual(renderer.g.getCall(0).returnValue.setTitle.lastCall.args[0], '1', 'Text hint');
+    assert.deepEqual(renderer.g.getCall(1).returnValue.setTitle.lastCall.args[0], '2', 'Text hint');
+});
+
+QUnit.test('store data in template container', function(assert) {
+    // arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: 'bottom',
+        label: {
+            visible: true,
+            indentFromAxis: 10,
+            alignment: 'left',
+            template() {}
+        }
+    });
+
+    this.generatedTicks = [123, 345];
+
+    this.translator.stub('translate').withArgs(123).returns(40);
+    this.translator.stub('translate').withArgs(345).returns(80);
+
+    this.renderer.g.reset();
+    // act
+    this.axis.draw(this.canvas);
+
+    // assert
+    assert.deepEqual(this.renderer.g.getCall(0).returnValue.data.getCall(0).args, ['chart-data-argument', 123]);
+    assert.deepEqual(this.renderer.g.getCall(1).returnValue.data.getCall(0).args, ['chart-data-argument', 345]);
 });
 
 QUnit.module('XY linear axis. Draw. Check tick labels', environment);

@@ -1,5 +1,5 @@
 import config from '../../core/config';
-import iteratorUtils from '../../core/utils/iterator';
+import { map, each } from '../../core/utils/iterator';
 import dateSerialization from '../../core/utils/date_serialization';
 import { getRecurrenceProcessor } from './recurrence';
 import dateUtils from '../../core/utils/date';
@@ -7,7 +7,7 @@ import { equalByValue } from '../../core/utils/common';
 import { isFunction, isDefined, isString } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
-import arrayUtils from '../../core/utils/array';
+import { wrapToArray } from '../../core/utils/array';
 import query from '../../data/query';
 import { Deferred } from '../../core/utils/deferred';
 
@@ -173,8 +173,8 @@ class AppointmentModel {
                 resource = resourceGetter(appointment);
             }
 
-            const appointmentResourceValues = arrayUtils.wrapToArray(resource);
-            const resourceData = iteratorUtils.map(resources[i].items, (item) => { return item.id; });
+            const appointmentResourceValues = wrapToArray(resource);
+            const resourceData = map(resources[i].items, (item) => { return item.id; });
 
             for(let j = 0, itemDataCount = appointmentResourceValues.length; j < itemDataCount; j++) {
                 if(inArray(appointmentResourceValues[j], resourceData) > -1) {
@@ -465,7 +465,7 @@ class AppointmentModel {
         const that = this;
 
         let result = false;
-        iteratorUtils.each(items, (index, item) => {
+        each(items, (index, item) => {
             if(that.appointmentTakesAllDay(item, startDayHour, endDayHour)) {
                 result = true;
                 return false;

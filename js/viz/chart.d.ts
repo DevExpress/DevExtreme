@@ -1553,6 +1553,17 @@ export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
 }
 export interface dxChartCommonAxisSettingsLabel {
     /**
+     * @docid dxChartOptions.commonAxisSettings.label.template
+     * @type template|function
+     * @default undefined
+     * @type_function_param1 model:any
+     * @type_function_param2 element:SVGGElement
+     * @type_function_return string|SVGElement|jQuery
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
+    template?: template | ((model: any, element: SVGGElement) => string | SVGElement | JQuery);
+    /**
      * @docid dxChartOptions.commonAxisSettings.label.alignment
      * @type Enums.HorizontalAlignment
      * @default undefined

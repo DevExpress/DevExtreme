@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
 import inflector from '../core/utils/inflector';
-import iteratorUtils from '../core/utils/iterator';
+import { map, each } from '../core/utils/iterator';
 import { isDefined } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { hasWindow } from '../core/utils/window';
@@ -206,7 +206,7 @@ const TileView = CollectionWidget.inherit({
         const items = this.option('items') || [];
         const config = this._config;
         const itemMargin = this.option('itemMargin');
-        const maxItemCrossRatio = Math.max.apply(Math, iteratorUtils.map(items || [], function(item) {
+        const maxItemCrossRatio = Math.max.apply(Math, map(items || [], function(item) {
             return Math.round(item[config.itemCrossRatio] || 1);
         }));
 
@@ -241,7 +241,7 @@ const TileView = CollectionWidget.inherit({
 
         this._itemsPositions = [];
 
-        iteratorUtils.each(items, (function(index, item) {
+        each(items, (function(index, item) {
             const currentItem = {};
             currentItem[itemMainRatio] = item[itemMainRatio] || 1;
             currentItem[itemCrossRatio] = item[itemCrossRatio] || 1;

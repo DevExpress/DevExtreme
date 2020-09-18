@@ -1,7 +1,7 @@
 import Quill from 'devextreme-quill';
 
 import eventsEngine from '../../../events/core/events_engine';
-import { addNamespace } from '../../../events/utils';
+import { addNamespace } from '../../../events/utils/index';
 import { each } from '../../../core/utils/iterator';
 import browser from '../../../core/utils/browser';
 import { getWindow } from '../../../core/utils/window';

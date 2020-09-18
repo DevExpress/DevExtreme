@@ -168,7 +168,7 @@ QUnit.module('Integration: Appointments', {
         assert.equal(appointmentsItems[0].itemData, dataSourceItems[0], 'Item is correct');
 
         const workspace = this.instance.getWorkSpace();
-        workspace._virtualScrolling._getRenderTimeout = () => -1;
+        workspace.virtualScrollingDispatcher.getRenderTimeout = () => -1;
         workspace.getScrollable().scrollTo({ y: 1000 });
 
         this.clock.restore();
@@ -224,9 +224,9 @@ QUnit.module('Integration: Appointments', {
                     createInstance(options);
 
                     if(scrollingMode === 'virtual') {
-                        const virtualScrolling = this.instance.getWorkSpace()._virtualScrolling;
-                        if(virtualScrolling) {
-                            virtualScrolling._getRenderTimeout = () => -1;
+                        const virtualScrollingDispatcher = this.instance.getWorkSpace().virtualScrollingDispatcher;
+                        if(virtualScrollingDispatcher) {
+                            virtualScrollingDispatcher.getRenderTimeout = () => -1;
                         }
                     }
                 };

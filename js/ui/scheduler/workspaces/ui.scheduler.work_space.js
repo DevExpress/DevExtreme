@@ -12,7 +12,7 @@ import messageLocalization from '../../../localization/message';
 import dateLocalization from '../../../localization/date';
 import { noop } from '../../../core/utils/common';
 import { isDefined } from '../../../core/utils/type';
-import { addNamespace, isMouseEvent } from '../../../events/utils';
+import { addNamespace, isMouseEvent } from '../../../events/utils/index';
 import pointerEvents from '../../../events/pointer';
 import errors from '../../widget/ui.errors';
 import { name as clickEventName } from '../../../events/click';
@@ -32,7 +32,7 @@ import { FIXED_CONTAINER_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 
-import VirtualScrolling from './ui.scheduler.virtual_scrolling';
+import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
 import ViewDataProvider from './view_data_provider';
 
 import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
@@ -198,6 +198,13 @@ class SchedulerWorkSpace extends WidgetObserver {
                 arrowPressHandler.call(this, e, $leftCell);
             }
         });
+    }
+
+    _dispose() {
+        super._dispose();
+
+        this.virtualScrollingDispatcher?.dispose();
+        this._disposeRenovatedComponents();
     }
 
     _isRTL() {
@@ -593,7 +600,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolling: {
                 mode: 'standard',
             },
-            renovateRender: false
+            renovateRender: false,
+            height: undefined
         });
     }
 
@@ -1138,15 +1146,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _initVirtualScrolling() {
-        if(this._virtualScrolling) {
-            this._virtualScrolling.dispose();
-            delete this._virtualScrolling;
-            this._virtualScrolling = null;
+        if(this.virtualScrollingDispatcher) {
+            this.virtualScrollingDispatcher.dispose();
+            this.virtualScrollingDispatcher = null;
         }
 
         if(this.isVirtualScrolling()) {
-            const viewportHeight = this.$element().height();
-            this._virtualScrolling = new VirtualScrolling(this, viewportHeight, this._dateTableScrollable);
+            this.virtualScrollingDispatcher = new VirtualScrollingDispatcher(this);
         }
     }
 
@@ -1209,7 +1215,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         };
 
         if(this.isVirtualScrolling()) {
-            const virtualScrollingState = this._virtualScrolling.getState();
+            const virtualScrollingState = this.virtualScrollingDispatcher.getState();
             Object.assign(options, {
                 topVirtualRowHeight: virtualScrollingState.topVirtualRowHeight,
                 bottomVirtualRowHeight: virtualScrollingState.bottomVirtualRowHeight,
@@ -2526,7 +2532,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getVirtualRowOffset() {
         return this.isVirtualScrolling()
-            ? this._virtualScrolling.getState().topVirtualRowHeight
+            ? this.virtualScrollingDispatcher.getState().topVirtualRowHeight
             : 0;
     }
 

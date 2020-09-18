@@ -295,6 +295,8 @@ _Translator2d.prototype = {
         const that = this;
         const breaks = businessRange.breaks || [];
 
+        that._userBreaks = businessRange.userBreaks || [];
+
         that._businessRange = validateBusinessRange(businessRange);
 
         that._breaks = breaks.length ? prepareBreaks(breaks, that._businessRange) : undefined;
@@ -450,6 +452,12 @@ _Translator2d.prototype = {
 
         min = isDefined(min) ? min : adjust(this.from(newStart, 1));
         max = isDefined(max) ? max : adjust(this.from(newEnd, -1));
+
+        if(scale <= 1) {
+            min = this._correctValueAboutBreaks(min, scale === 1 ? translate : -1);
+            max = this._correctValueAboutBreaks(max, scale === 1 ? translate : 1);
+        }
+
         if(min > max) {
             min = min > wholeRange.endValue ? wholeRange.endValue : min;
             max = max < wholeRange.startValue ? wholeRange.startValue : max;
@@ -463,6 +471,17 @@ _Translator2d.prototype = {
             translate: adjust(translate),
             scale: adjust(scale)
         };
+    },
+
+    _correctValueAboutBreaks(value, direction) {
+        const br = this._userBreaks.filter((br) => {
+            return value >= br.from && value <= br.to;
+        });
+        if(br.length) {
+            return direction > 0 ? br[0].to : br[0].from;
+        } else {
+            return value;
+        }
     },
 
     zoomZeroLengthRange(translate, scale) {

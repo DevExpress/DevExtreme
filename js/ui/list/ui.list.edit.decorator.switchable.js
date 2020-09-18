@@ -3,7 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { noop } from '../../core/utils/common';
 import EditDecorator from './ui.list.edit.decorator';
 const abstract = EditDecorator.abstract;
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import { active } from '../../events/core/emitter.feedback';
 
