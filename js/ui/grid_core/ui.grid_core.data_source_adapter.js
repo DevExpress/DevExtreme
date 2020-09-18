@@ -176,8 +176,8 @@ export default gridCore.Controller.inherit((function() {
             if(this._cachedStoreData) {
                 arrayUtils.applyBatch({
                     keyInfo: store,
-                    array: this._cachedStoreData,
-                    batchData: changes
+                    data: this._cachedStoreData,
+                    changes
                 });
             }
 
@@ -223,16 +223,16 @@ export default gridCore.Controller.inherit((function() {
 
 
             arrayUtils.applyBatch({
-                keyInfo: keyInfo,
-                array: this._items,
-                batchData: changes,
+                keyInfo,
+                data: this._items,
+                changes,
                 groupCount: groupCount,
                 useInsertIndex: true
             });
             arrayUtils.applyBatch({
-                keyInfo: keyInfo,
-                array: dataSource.items(),
-                batchData: changes,
+                keyInfo,
+                data: dataSource.items(),
+                changes,
                 groupCount: groupCount,
                 useInsertIndex: true
             });

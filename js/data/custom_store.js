@@ -270,8 +270,8 @@ const CustomStore = Store.inherit({
         if(this.__rawData) {
             arrayUtils.applyBatch({
                 keyInfo: this,
-                array: this.__rawData,
-                batchData: changes
+                data: this.__rawData,
+                changes
             });
         }
     },

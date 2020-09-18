@@ -83,21 +83,20 @@ function createObjectWithChanges(target, changes) {
     const result = target ? Object.create(Object.getPrototypeOf(target)) : {};
     const targetWithoutPrototype = extendFromObject({}, target);
 
-    objectUtils.deepExtendArraySafe(result, targetWithoutPrototype, true, true);
-    return objectUtils.deepExtendArraySafe(result, changes, true, true);
+    deepExtendArraySafe(result, targetWithoutPrototype, true, true);
+    return deepExtendArraySafe(result, changes, true, true);
 }
 
-function applyBatch({ keyInfo, array, batchData, groupCount, useInsertIndex, immutable, enableCache }) {
-    const isDataImmutable = immutable === true;
-    const resultItems = isDataImmutable ? [...array] : array;
+function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immutable, disableCache }) {
+    const resultItems = immutable === true ? [...data] : data;
 
-    batchData.forEach(item => {
+    changes.forEach(item => {
         const items = item.type === 'insert' ? resultItems : getItems(keyInfo, resultItems, item.key, groupCount);
 
-        enableCache && generateDataByKeyMap(keyInfo, items);
+        !disableCache && generateDataByKeyMap(keyInfo, items);
 
         switch(item.type) {
-            case 'update': update(keyInfo, items, item.key, item.data, true, isDataImmutable); break;
+            case 'update': update(keyInfo, items, item.key, item.data, true, immutable); break;
             case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true); break;
             case 'remove': remove(keyInfo, items, item.key, true); break;
         }
@@ -115,10 +114,10 @@ function applyChanges(data, changes, options = {}) {
 
     return applyBatch({
         keyInfo,
-        array: data,
-        batchData: changes,
+        data,
+        changes,
         immutable,
-        enableCache: true
+        disableCache: true
     });
 }
 

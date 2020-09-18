@@ -2341,9 +2341,9 @@ declare module DevExpress.data {
         constructor(options?: XmlaStoreOptions)
     }
     /**
-     * [descr:Utils.applyChanges(data, changes, keyName, options)
+     * [descr:Utils.applyChanges(data, changes, options)]
      */
-    export function applyChanges(data: Array<any>, changes: Array<any>, keyName?: string, options?: any): Array<any>;
+    export function applyChanges(data: Array<any>, changes: Array<any>, options?: { keyExpr?: string | Array<string>, immutable?: boolean }): Array<any>;
     /**
      * [descr:Utils.base64_encode(input)]
      */

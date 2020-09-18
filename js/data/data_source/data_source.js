@@ -456,8 +456,8 @@ export const DataSource = Class.inherit({
 
             arrayUtils.applyBatch({
                 keyInfo: this.store(),
-                array: items,
-                batchData: dataSourceChanges,
+                data: items,
+                changes: dataSourceChanges,
                 groupCount: groupLevel,
                 useInsertIndex: true
             });
