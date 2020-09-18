@@ -3,7 +3,6 @@ import { data } from '../../core/element_data';
 import Callbacks from '../../core/utils/callbacks';
 import { hasWindow } from '../../core/utils/window';
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
-import { getDefaultAlignment } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
 import ValidationEngine from '../validation_engine';
