@@ -396,6 +396,22 @@ export default class ViewDataProvider {
         delete this._focusedCell;
     }
 
+    isValidFocusedCell(nextFocusedCellData) {
+        const focusedCell = this._focusedCell;
+
+        if(!focusedCell) {
+            return true;
+        }
+
+        const { groupIndex, allDay } = focusedCell;
+        const {
+            groupIndex: nextGroupIndex,
+            allDay: nextAllDay,
+        } = nextFocusedCellData;
+
+        return groupIndex === nextGroupIndex && allDay === nextAllDay;
+    }
+
     _getCellsByGroupIndexAndAllDay(groupIndex, allDay) {
         const workspace = this._workspace;
         const rowsPerGroup = workspace._getRowCountWithAllDayRows();

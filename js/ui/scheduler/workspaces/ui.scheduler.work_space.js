@@ -332,6 +332,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(isMultiSelection) {
             $correctedCell = this._correctCellForGroup($cell);
         }
+        if($correctedCell.is(this._$focusedCell)) {
+            return;
+        }
 
         this._setSelectedCells($correctedCell, undefined, isMultiSelection);
         this._setFocusedCell($correctedCell, updateViewData);
@@ -339,15 +342,19 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _setFocusedCell($cell, updateViewData = false) {
         this._releaseFocusedCell();
-
-        this._toggleFocusedCellClass(true, $cell);
-        this._$focusedCell = $cell;
+        let $correctedCell = $cell;
 
         if(updateViewData) {
             const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
             const isAllDayCell = this._hasAllDayClass($cell);
             this.viewDataProvider.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
+            const { coordinates } = this.viewDataProvider.getFocusedCell();
+
+            $correctedCell = this._dom_getDateCell(coordinates);
         }
+
+        this._toggleFocusedCellClass(true, $correctedCell);
+        this._$focusedCell = $correctedCell;
     }
 
     _setSelectedCells($firstCell, $lastCell, isMultiSelection) {
@@ -380,14 +387,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _setSelectedCellsInStandardMode($firstCell, $lastCell, isMultiSelection) {
         if(isMultiSelection) {
-            const $correctedFirstCell = this._correctCellForGroup($firstCell);
             const $previousCell = $lastCell || this._$prevCell;
             const orientation = this.option('type') === 'day'
                     && (!this.option('groups').length
                     || this.option('groupOrientation') === 'vertical')
                 ? 'vertical'
                 : 'horizontal';
-            const $targetCells = this._getCellsBetween($correctedFirstCell, $previousCell, orientation);
+            const $targetCells = this._getCellsBetween($firstCell, $previousCell, orientation);
             this._selectedCells = $targetCells.toArray();
         } else {
             this._selectedCells = [$firstCell.get(0)];
@@ -434,6 +440,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _correctCellForGroup($cell) {
+        if(this.isVirtualScrolling()) {
+            // const {
+            //     rowIndex, cellIndex,
+            // } =
+            const cellData = this.getCellData($cell);
+            const isValidFocusedCell = this.viewDataProvider.isValidFocusedCell(cellData);
+
+            return isValidFocusedCell ? $cell : this._$focusedCell;
+        }
+
         if(!this._$focusedCell) {
             return $cell;
         }
@@ -3050,6 +3066,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const columnIndex = $cell.index();
         let rowIndex = $cell.parent().index();
 
+        if(rowIndex < 0) {
+            debugger;
+        }
         if(this.isVirtualScrolling()) {
             rowIndex -= 1;
         }
