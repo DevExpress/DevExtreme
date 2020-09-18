@@ -92,6 +92,7 @@ class Gantt extends Widget {
             allowColumnResizing: true,
             autoExpandAll: true,
             showRowLines: this.option('showRowLines'),
+            rootValue: this.option('rootValue'),
             onContentReady: (e) => { this._onTreeListContentReady(e); },
             onSelectionChanged: (e) => { this._onTreeListSelectionChanged(e); },
             onRowCollapsed: (e) => this._ganttView.changeTaskExpanded(e.key, false),
@@ -1192,7 +1193,8 @@ class Gantt extends Widget {
                 enabled: true,
                 items: undefined
             },
-            taskTooltipContentTemplate: null
+            taskTooltipContentTemplate: null,
+            rootValue: 0
         });
     }
 
@@ -1371,6 +1373,9 @@ class Gantt extends Widget {
                 break;
             case 'taskTooltipContentTemplate':
                 this._setGanttViewOption('taskTooltipContentTemplate', this._getTaskTooltipContentTemplateFunc(args.value));
+                break;
+            case 'rootValue':
+                this._setTreeListOption('rootValue', args.value);
                 break;
             default:
                 super._optionChanged(args);

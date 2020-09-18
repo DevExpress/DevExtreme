@@ -7699,6 +7699,10 @@ declare module DevExpress.ui {
          */
         resources?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, textExpr?: string | Function };
         /**
+         * [descr:dxGantt.Options.rootValue]
+         */
+        rootValue?: any;
+        /**
          * [descr:dxGantt.Options.scaleType]
          */
         scaleType?: 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
