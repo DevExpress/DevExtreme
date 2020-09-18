@@ -376,7 +376,8 @@ export default class ViewDataProvider {
             }, []));
 
             return selectedCells;
-        }, []);
+        }, [])
+            .sort((firstCell, secondCell) => firstCell.startDate.getTime() - secondCell.startDate.getTime());
     }
 
     getSelectedCells() {
