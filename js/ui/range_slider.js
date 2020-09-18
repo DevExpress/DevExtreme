@@ -5,7 +5,7 @@ import SliderHandle from './slider/ui.slider_handle';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { applyServerDecimalSeparator } from '../core/utils/common';
-import { eventData } from '../events/utils/index';
+import { eventData } from '../events/utils';
 import messageLocalization from '../localization/message';
 
 // STYLE rangeSlider

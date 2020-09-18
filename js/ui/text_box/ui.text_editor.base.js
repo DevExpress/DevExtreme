@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
-import { resetActiveElement } from '../../core/utils/dom';
+import domUtils from '../../core/utils/dom';
 import { focused } from '../widget/selectors';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -10,8 +10,8 @@ import { each } from '../../core/utils/iterator';
 import { current, isMaterial } from '../themes';
 import devices from '../../core/devices';
 import Editor from '../editor/editor';
-import { addNamespace } from '../../events/utils/index';
-import { normalizeKeyName } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
+import { normalizeKeyName } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import ClearButton from './ui.text_editor.clear';
 import TextEditorButtonCollection from './texteditor_button_collection/index';
@@ -782,7 +782,7 @@ const TextEditorBase = Editor.inherit({
 
     blur: function() {
         if(this._input().is(domAdapter.getActiveElement())) {
-            resetActiveElement();
+            domUtils.resetActiveElement();
         }
     },
 

@@ -1,5 +1,5 @@
 import BaseMaskStrategy from './ui.text_editor.mask.strategy.base';
-import { getChar } from '../../events/utils/index';
+import { getChar } from '../../events/utils';
 import Promise from '../../core/polyfills/promise';
 
 const BACKSPACE_INPUT_TYPE = 'deleteContentBackward';

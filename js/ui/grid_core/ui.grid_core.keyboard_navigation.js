@@ -6,7 +6,7 @@ import { focusAndSelectElement, getWidgetInstance } from './ui.grid_core.utils';
 import { isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { focused } from '../widget/selectors';
-import { addNamespace, createEvent } from '../../events/utils/index';
+import { addNamespace, createEvent } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import { name as clickEventName } from '../../events/click';
 import { noop } from '../../core/utils/common';

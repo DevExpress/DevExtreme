@@ -8,10 +8,10 @@ import { extend } from '../core/utils/extend';
 import { getPublicElement } from '../core/element';
 import fx from '../animation/fx';
 import { name as clickEventName } from '../events/click';
-import { move } from '../animation/translator';
+import translator from '../animation/translator';
 import devices from '../core/devices';
 import Widget from './widget/ui.widget';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace } from '../events/utils';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 import Swipeable from '../events/gesture/swipeable';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -480,7 +480,7 @@ const Gallery = CollectionWidget.inherit({
             that._startSwipe();
             positionReady = that._animate(targetPosition).done(that._endSwipe.bind(that));
         } else {
-            move(this._$container, { left: targetPosition * this._elementWidth(), top: 0 });
+            translator.move(this._$container, { left: targetPosition * this._elementWidth(), top: 0 });
             positionReady = new Deferred().resolveWith(that);
         }
 
@@ -511,11 +511,11 @@ const Gallery = CollectionWidget.inherit({
             duration: that.option('animationDuration'),
             complete: function() {
                 if(that._needMoveContainerForward()) {
-                    move($container, { left: 0, top: 0 });
+                    translator.move($container, { left: 0, top: 0 });
                 }
 
                 if(that._needMoveContainerBack()) {
-                    move($container, { left: that._maxContainerOffset() * that._elementWidth(), top: 0 });
+                    translator.move($container, { left: that._maxContainerOffset() * that._elementWidth(), top: 0 });
                 }
 
                 animationComplete.resolveWith(that);

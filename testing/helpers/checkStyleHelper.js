@@ -1,6 +1,6 @@
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
-import { isDefined } from 'core/utils/type';
+import typeUtils from 'core/utils/type';
 
 export function testInChromeOnDesktopActiveWindow(name, testCallback) {
     if(devices.real().deviceType === 'desktop' && browser.webkit) {
@@ -25,7 +25,7 @@ export function getOverflowX(element) {
 export function getBackgroundColor(element) {
     let elementBackgroundColor = window.getComputedStyle(element).backgroundColor;
     let currentElement = element.parentNode;
-    while(currentElement.parentNode !== document.documentElement && isDefined(currentElement.parentNode)) {
+    while(currentElement.parentNode !== document.documentElement && typeUtils.isDefined(currentElement.parentNode)) {
         const currentStyle = window.getComputedStyle(currentElement);
         if(elementBackgroundColor !== currentStyle.backgroundColor) {
             elementBackgroundColor = currentStyle.backgroundColor;

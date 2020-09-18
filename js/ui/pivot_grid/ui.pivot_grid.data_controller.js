@@ -2,13 +2,13 @@ import Callbacks from '../../core/utils/callbacks';
 import { when, Deferred } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import { map, each } from '../../core/utils/iterator';
+import iteratorUtils from '../../core/utils/iterator';
 import Class from '../../core/class';
-import { format } from '../../core/utils/string';
+import stringUtils from '../../core/utils/string';
 import { deferUpdate } from '../../core/utils/common';
 import { isDefined, isString } from '../../core/utils/type';
-import { VirtualScrollController } from '../grid_core/ui.grid_core.virtual_scrolling_core';
-import { foreachColumnInfo, createColumnsInfo } from '../grid_core/ui.grid_core.virtual_columns_core';
+import virtualScrolling from '../grid_core/ui.grid_core.virtual_scrolling_core';
+import virtualColumnsCore from '../grid_core/ui.grid_core.virtual_columns_core';
 import stateStoring from '../grid_core/ui.grid_core.state_storing_core';
 import PivotGridDataSource from './data_source';
 import pivotGridUtils, {
@@ -48,7 +48,7 @@ export const DataController = Class.inherit((function() {
         }
 
         if(item.isAdditionalTotal) {
-            text = format(options.texts.total || '', text);
+            text = stringUtils.format(options.texts.total || '', text);
         }
 
         return text;
@@ -151,7 +151,7 @@ export const DataController = Class.inherit((function() {
             if((stringValuesUsed && sortBySummaryPath[0].indexOf('&[') !== -1 && headerItem.key) || !headerItem.key) {
                 path = createPath(items);
             } else {
-                path = map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
+                path = iteratorUtils.map(items, function(item) { return item.dataIndex >= 0 ? item.value : item.text; }).reverse();
             }
 
             if(item.type === GRAND_TOTAL_TYPE) {
@@ -227,7 +227,7 @@ export const DataController = Class.inherit((function() {
 
                         item.isLast = !item.children || !item.children.length;
                         if(item.isLast) {
-                            each(options.sortBySummaryPaths, function(index, sortBySummaryPath) {
+                            iteratorUtils.each(options.sortBySummaryPaths, function(index, sortBySummaryPath) {
                                 if(!isDefined(item.dataIndex)) {
                                     sortBySummaryPath = sortBySummaryPath.slice(0);
                                     sortBySummaryPath.pop();
@@ -431,7 +431,7 @@ export const DataController = Class.inherit((function() {
     function createSortPaths(headerFields, dataFields) {
         const sortBySummaryPaths = [];
 
-        each(headerFields, function(index, headerField) {
+        iteratorUtils.each(headerFields, function(index, headerField) {
             const fieldIndex = pivotGridUtils.findField(dataFields, headerField.sortBySummaryField);
             if(fieldIndex >= 0) {
                 sortBySummaryPaths.push((headerField.sortBySummaryPath || []).concat([fieldIndex]));
@@ -473,7 +473,7 @@ export const DataController = Class.inherit((function() {
             const row = info[rowIndex] = [];
             const dataRow = dataSourceCells[rowInfo.dataSourceIndex >= 0 ? rowInfo.dataSourceIndex : data.grandTotalRowIndex] || [];
 
-            rowInfo.isLast && foreachColumnInfo(columnsInfo, function(columnInfo, columnIndex) {
+            rowInfo.isLast && virtualColumnsCore.foreachColumnInfo(columnsInfo, function(columnInfo, columnIndex) {
                 const dataIndex = (dataFieldAreaInRows ? rowInfo.dataIndex : columnInfo.dataIndex) || 0;
                 const dataField = dataFields[dataIndex];
 
@@ -536,7 +536,7 @@ export const DataController = Class.inherit((function() {
 
     function createScrollController(dataController, component, dataAdapter) {
         if(component && component.option('scrolling.mode') === 'virtual') {
-            return new VirtualScrollController(component, extend({
+            return new virtualScrolling.VirtualScrollController(component, extend({
                 hasKnownLastPage: function() {
                     return true;
                 },
@@ -579,7 +579,7 @@ export const DataController = Class.inherit((function() {
 
     function getHiddenTotals(dataFields) {
         const result = [];
-        each(dataFields, function(index, field) {
+        iteratorUtils.each(dataFields, function(index, field) {
             if(field.showTotals === false) {
                 result.push(index);
             }
@@ -601,7 +601,7 @@ export const DataController = Class.inherit((function() {
 
     function getHiddenGrandTotalsTotals(dataFields, columnFields) {
         let result = [];
-        each(dataFields, function(index, field) {
+        iteratorUtils.each(dataFields, function(index, field) {
             if(field.showGrandTotals === false) {
                 result.push(index);
             }
@@ -754,7 +754,7 @@ export const DataController = Class.inherit((function() {
             const skipByPath = {};
             const takeByPath = {};
 
-            foreachColumnInfo(this._columnsInfo, function(columnInfo, columnIndex) {
+            virtualColumnsCore.foreachColumnInfo(this._columnsInfo, function(columnInfo, columnIndex) {
                 if(columnInfo.type === 'D' && columnInfo.path && columnInfo.dataIndex === undefined) {
                     const colspan = columnInfo.colspan || 1;
                     const path = columnInfo.path.slice(0, -1).toString();
@@ -1145,7 +1145,7 @@ export const DataController = Class.inherit((function() {
                 const startIndex = scrollController.beginPageIndex() * that.columnPageSize();
                 const endIndex = scrollController.endPageIndex() * that.columnPageSize() + that.columnPageSize();
 
-                info = createColumnsInfo(info, startIndex, endIndex);
+                info = virtualColumnsCore.createColumnsInfo(info, startIndex, endIndex);
             }
 
             return info;

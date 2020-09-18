@@ -7,7 +7,7 @@ import {
     swipe as swipeEventSwipe,
     end as swipeEventEnd
 } from '../../events/swipe';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';

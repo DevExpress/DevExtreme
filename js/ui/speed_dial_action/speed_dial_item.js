@@ -1,11 +1,11 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import { name as clickEventName } from '../../events/click';
 import { getImageContainer } from '../../core/utils/icon';
 import Overlay from '../overlay';
-import { render } from '../widget/utils.ink_ripple';
+import inkRipple from '../widget/utils.ink_ripple';
 import themes from '../themes';
 
 const FAB_CLASS = 'dx-fa-button';
@@ -166,7 +166,7 @@ class SpeedDialItem extends Overlay {
     }
 
     _renderInkRipple() {
-        this._inkRipple = render();
+        this._inkRipple = inkRipple.render();
     }
 
     _getInkRippleContainer() {

@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import { normalizeKeyName } from '../../events/utils/index';
+import { normalizeKeyName } from '../../events/utils';
 import iteratorUtils from '../../core/utils/iterator';
 import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';

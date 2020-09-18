@@ -4,7 +4,7 @@ import support from '../core/utils/support';
 import devices from '../core/devices';
 import Class from '../core/class';
 import registerEvent from './core/event_registrator';
-import { addNamespace, fireEvent, isMouseEvent } from './utils/index';
+import { addNamespace, fireEvent, isMouseEvent } from './utils';
 import holdEvent from './hold';
 
 const CONTEXTMENU_NAMESPACE = 'dxContexMenu';

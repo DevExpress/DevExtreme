@@ -3,7 +3,7 @@ import { removeData, data as elementData } from '../core/element_data';
 import Class from '../core/class';
 import devices from '../core/devices';
 import registerEvent from './core/event_registrator';
-import { addNamespace, isTouchEvent, fireEvent } from './utils/index';
+import { addNamespace, isTouchEvent, fireEvent } from './utils';
 import pointerEvents from './pointer';
 
 const HOVERSTART_NAMESPACE = 'dxHoverStart';

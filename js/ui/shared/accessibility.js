@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import { normalizeKeyName } from '../../events/utils/index';
+import { normalizeKeyName } from '../../events/utils';
 import { extend } from '../../core/utils/extend';
 import domAdapter from '../../core/dom_adapter';
 import { noop } from '../../core/utils/common';

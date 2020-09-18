@@ -2,9 +2,15 @@ function checkBoundingClientRect(assert, element, expectedRect, elementName) {
     assert.ok(!!element, elementName + ' is defined');
     if(element) {
         const rect = element.getBoundingClientRect();
+        let isCorrect = true;
+        let message = `${elementName} rect is incorrect`;
         for(const memberName in expectedRect) {
-            assert.strictEqual(rect[memberName], expectedRect[memberName], elementName + '.' + memberName);
+            message += `, ${memberName}:[${rect[memberName]}/${expectedRect[memberName]}]`;
+            if(rect[memberName] !== expectedRect[memberName]) {
+                isCorrect = false;
+            }
         }
+        assert.strictEqual(isCorrect, true, message + ', [actual/expected]');
     }
 }
 

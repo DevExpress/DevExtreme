@@ -3,7 +3,7 @@ import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { executeAsync } from '../../core/utils/common';
 import { isFunction, isPlainObject } from '../../core/utils/type';
-import { map } from '../../core/utils/iterator';
+import iteratorUtils from '../../core/utils/iterator';
 import fx from '../fx';
 import animationPresetsModule from '../presets/presets';
 import { when, Deferred } from '../../core/utils/deferred';
@@ -147,7 +147,7 @@ export const TransitionExecutor = Class.inherit({
             that.reset();
             result = new Deferred().resolve().promise();
         } else {
-            const animationDeferreds = map(this._animations, function(animation) {
+            const animationDeferreds = iteratorUtils.map(this._animations, function(animation) {
                 const result = new Deferred();
 
                 animation.deferred.always(function() {

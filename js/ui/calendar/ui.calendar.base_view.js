@@ -9,7 +9,7 @@ import { extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
 import { serializeDate } from '../../core/utils/date_serialization';
 import { format as formatMessage } from '../../localization/message';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import { name as clickEventName } from '../../events/click';
 
 const { abstract } = Widget;
