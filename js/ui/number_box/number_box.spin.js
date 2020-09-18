@@ -3,7 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import Widget from '../widget/ui.widget';
 import { extend } from '../../core/utils/extend';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import { lock } from '../../events/core/emitter.feedback';
 import holdEvent from '../../events/hold';

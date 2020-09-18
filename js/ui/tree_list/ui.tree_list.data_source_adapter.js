@@ -3,7 +3,7 @@ import errors from '../widget/ui.errors';
 import { equalByValue } from '../../core/utils/common';
 import { isFunction, isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import { compileGetter, compileSetter } from '../../core/utils/data';
+import dataCoreUtils from '../../core/utils/data';
 import { extend } from '../../core/utils/extend';
 import gridCoreUtils from '../grid_core/ui.grid_core.utils';
 import ArrayStore from '../../data/array_store';
@@ -35,7 +35,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
         _createKeyGetter: function() {
             const keyExpr = this.getKeyExpr();
 
-            return compileGetter(keyExpr);
+            return dataCoreUtils.compileGetter(keyExpr);
         },
 
         _createKeySetter: function() {
@@ -45,11 +45,11 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return keyExpr;
             }
 
-            return compileSetter(keyExpr);
+            return dataCoreUtils.compileSetter(keyExpr);
         },
 
         _createParentIdGetter: function() {
-            return compileGetter(this.option('parentIdExpr'));
+            return dataCoreUtils.compileGetter(this.option('parentIdExpr'));
         },
 
         createParentIdSetter: function() {
@@ -59,17 +59,17 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return parentIdExpr;
             }
 
-            return compileSetter(parentIdExpr);
+            return dataCoreUtils.compileSetter(parentIdExpr);
         },
 
         _createItemsGetter: function() {
-            return compileGetter(this.option('itemsExpr'));
+            return dataCoreUtils.compileGetter(this.option('itemsExpr'));
         },
 
         _createHasItemsGetter: function() {
             const hasItemsExpr = this.option('hasItemsExpr');
 
-            return hasItemsExpr && compileGetter(hasItemsExpr);
+            return hasItemsExpr && dataCoreUtils.compileGetter(hasItemsExpr);
         },
 
         _createHasItemsSetter: function() {
@@ -79,7 +79,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 return hasItemsExpr;
             }
 
-            return hasItemsExpr && compileSetter(hasItemsExpr);
+            return hasItemsExpr && dataCoreUtils.compileSetter(hasItemsExpr);
         },
 
         _updateIndexByKeyObject: function(items) {

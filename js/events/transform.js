@@ -1,6 +1,6 @@
 import { sign as mathSign, fitIntoRange } from '../core/utils/math';
 import iteratorUtils from '../core/utils/iterator';
-import { hasTouches } from './utils/index';
+import { hasTouches } from './utils';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
 

@@ -5,7 +5,7 @@ import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
 import pointerEvents from '../../events/pointer';
 import positionUtils from '../../animation/position';
-import { addNamespace, fireEvent, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, fireEvent, normalizeKeyName } from '../../events/utils';
 import browser from '../../core/utils/browser';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';

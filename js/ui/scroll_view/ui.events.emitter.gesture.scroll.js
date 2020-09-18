@@ -1,7 +1,7 @@
 import eventsEngine from '../../events/core/events_engine';
 import Class from '../../core/class';
 const abstract = Class.abstract;
-import { addNamespace, isDxMouseWheelEvent, isMouseEvent, eventData, eventDelta } from '../../events/utils/index';
+import { addNamespace, isDxMouseWheelEvent, isMouseEvent, eventData, eventDelta } from '../../events/utils';
 import GestureEmitter from '../../events/gesture/emitter.gesture';
 import registerEmitter from '../../events/core/emitter_registrator';
 import animationFrame from '../../animation/frame';

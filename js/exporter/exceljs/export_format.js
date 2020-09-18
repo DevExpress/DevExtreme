@@ -1,4 +1,4 @@
-import { format as stringFormat } from '../../core/utils/string';
+import stringUtils from '../../core/utils/string';
 import numberFormatter from '../../localization/number';
 import dateLocalization from '../../localization/date';
 import { isDefined, isString, isObject } from '../../core/utils/type';
@@ -114,7 +114,7 @@ function _convertNumberFormat(format, precision, currency) {
     }
 
     if(excelFormat) {
-        result = stringFormat(excelFormat, _applyPrecision(format, precision));
+        result = stringUtils.format(excelFormat, _applyPrecision(format, precision));
     }
 
     return result;

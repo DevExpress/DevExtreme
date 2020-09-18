@@ -2,7 +2,7 @@ import eventsEngine from '../../events/core/events_engine';
 import browser from '../../core/utils/browser';
 import domAdapter from '../../core/dom_adapter';
 import Class from '../../core/class';
-import { addNamespace, eventSource, fireEvent } from '../utils/index';
+import { addNamespace, eventSource, fireEvent } from '../utils';
 
 const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 

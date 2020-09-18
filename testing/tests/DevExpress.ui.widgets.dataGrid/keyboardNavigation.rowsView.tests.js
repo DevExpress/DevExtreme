@@ -13,7 +13,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid/ui.data_grid';
 import commonUtils from 'core/utils/common';
-import { createEvent } from 'events/utils/index';
+import { createEvent } from 'events/utils';
 import typeUtils from 'core/utils/type';
 import pointerEvents from 'events/pointer';
 import eventsEngine from 'events/core/events_engine';

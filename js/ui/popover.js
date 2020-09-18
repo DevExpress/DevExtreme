@@ -7,11 +7,11 @@ import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
 import { noop, pairToObject } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
-import { move } from '../animation/translator';
+import translator from '../animation/translator';
 import positionUtils from '../animation/position';
 import { isObject, isString } from '../core/utils/type';
 import { fitIntoRange } from '../core/utils/math';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace } from '../events/utils';
 import Popup from './popup';
 import { getBoundingRect } from '../core/utils/position';
 
@@ -346,7 +346,7 @@ const Popover = Popup.inherit({
         this._setContentHeight(true);
         this._togglePositionClass('dx-position-' + this._positionSide);
 
-        move(this._$content, { left: 0, top: 0 });
+        translator.move(this._$content, { left: 0, top: 0 });
 
         this._$arrow.css({
             top: 'auto', right: 'auto', bottom: 'auto', left: 'auto'

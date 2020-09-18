@@ -5,7 +5,7 @@ import { isDefined } from '../../core/utils/type';
 import { Deferred, when } from '../../core/utils/deferred';
 
 import holdEvent from '../../events/hold';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 
 import { BindableTemplate } from '../../core/templates/bindable_template';

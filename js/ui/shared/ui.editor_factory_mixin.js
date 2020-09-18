@@ -9,7 +9,7 @@ import { extend } from '../../core/utils/extend';
 import devices from '../../core/devices';
 import { getPublicElement } from '../../core/element';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
-import { normalizeKeyName } from '../../events/utils/index';
+import { normalizeKeyName } from '../../events/utils';
 
 import '../text_box';
 import '../number_box';

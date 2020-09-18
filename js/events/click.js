@@ -4,7 +4,7 @@ import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import domUtils from '../core/utils/dom';
 import { requestAnimationFrame, cancelAnimationFrame } from '../animation/frame';
-import { addNamespace, fireEvent, eventDelta, eventData } from './utils/index';
+import { addNamespace, fireEvent, eventDelta, eventData } from './utils';
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';

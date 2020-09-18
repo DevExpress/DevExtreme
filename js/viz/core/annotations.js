@@ -6,7 +6,7 @@ import { patchFontOptions } from './utils';
 import { Plaque } from './plaque';
 import pointerEvents from '../../events/pointer';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 
 const getDocument = domAdapter.getDocument;

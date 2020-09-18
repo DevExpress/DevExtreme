@@ -2,23 +2,23 @@ import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
-import { nativeScrolling } from '../core/utils/support';
+import support from '../core/utils/support';
 import { noop } from '../core/utils/common';
 import { getPublicElement } from '../core/element';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
-import { render } from './widget/utils.ink_ripple';
+import inkRipple from './widget/utils.ink_ripple';
 import messageLocalization from '../localization/message';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace } from '../events/utils';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
 import themes from './themes';
 import { name as clickEventName } from '../events/click';
 import Popover from './popover';
 import TextBox from './text_box';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
-import { locate, move, resetPosition } from '../animation/translator';
+import translator from '../animation/translator';
 import { isDefined } from '../core/utils/type';
 
 // STYLE lookup
@@ -250,7 +250,7 @@ const Lookup = DropDownList.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return !nativeScrolling;
+                    return !support.nativeScrolling;
                 },
                 options: {
                     useNativeScrolling: false
@@ -420,7 +420,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _renderInkRipple: function() {
-        this._inkRipple = render();
+        this._inkRipple = inkRipple.render();
     },
 
     _toggleOpenState: function() {
@@ -593,9 +593,9 @@ const Lookup = DropDownList.inherit({
         const popupContentParent = $(this._popup.content()).parent();
         const popupOffset = this._getPopupOffset();
 
-        const position = locate(popupContentParent);
+        const position = translator.locate(popupContentParent);
 
-        move(popupContentParent, {
+        translator.move(popupContentParent, {
             top: position.top - popupOffset
         });
     },
@@ -713,7 +713,7 @@ const Lookup = DropDownList.inherit({
         this.callBase();
 
         if(this.option('_scrollToSelectedItemEnabled')) {
-            resetPosition($(this._popup.content()).parent());
+            translator.resetPosition($(this._popup.content()).parent());
         }
     },
 

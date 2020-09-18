@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { ensureDefined, noop } from '../../core/utils/common';
 import { isPlainObject } from '../../core/utils/type';
-import { getImageContainer } from '../../core/utils/icon';
+import iconUtils from '../../core/utils/icon';
 import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
 import { compileGetter } from '../../core/utils/data';
@@ -10,13 +10,13 @@ import { extend } from '../../core/utils/extend';
 import fx from '../../animation/fx';
 import { name as clickEventName } from '../../events/click';
 import { end as swipeEventEnd } from '../../events/swipe';
-import { nativeScrolling } from '../../core/utils/support';
+import support from '../../core/utils/support';
 import messageLocalization from '../../localization/message';
-import { render } from '../widget/utils.ink_ripple';
+import inkRipple from '../widget/utils.ink_ripple';
 import devices from '../../core/devices';
 import ListItem from './item';
 import Button from '../button';
-import { addNamespace } from '../../events/utils/index';
+import eventUtils from '../../events/utils';
 import themes from '../themes';
 import { hasWindow } from '../../core/utils/window';
 import ScrollView from '../scroll_view';
@@ -211,7 +211,7 @@ export const ListBase = CollectionWidget.inherit({
         return this.callBase().concat(deviceDependentOptions(), [
             {
                 device: function() {
-                    return !nativeScrolling;
+                    return !support.nativeScrolling;
                 },
                 options: {
                     useNativeScrolling: false
@@ -219,7 +219,7 @@ export const ListBase = CollectionWidget.inherit({
             },
             {
                 device: function(device) {
-                    return !nativeScrolling && !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
+                    return !support.nativeScrolling && !devices.isSimulator() && devices.real().deviceType === 'desktop' && device.platform === 'generic';
                 },
                 options: {
                     showScrollbar: 'onHover',
@@ -426,7 +426,7 @@ export const ListBase = CollectionWidget.inherit({
         this.callBase(data, $container);
 
         if(data.icon) {
-            const $icon = getImageContainer(data.icon).addClass(LIST_ITEM_ICON_CLASS);
+            const $icon = iconUtils.getImageContainer(data.icon).addClass(LIST_ITEM_ICON_CLASS);
             const $iconContainer = $('<div>').addClass(LIST_ITEM_ICON_CONTAINER_CLASS);
 
             $iconContainer.append($icon);
@@ -555,7 +555,7 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _attachGroupCollapseEvent: function() {
-        const eventName = addNamespace(clickEventName, this.NAME);
+        const eventName = eventUtils.addNamespace(clickEventName, this.NAME);
         const selector = '.' + LIST_GROUP_HEADER_CLASS;
         const $element = this.$element();
         const collapsibleGroups = this.option('collapsibleGroups');
@@ -629,7 +629,7 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _renderInkRipple: function() {
-        this._inkRipple = render();
+        this._inkRipple = inkRipple.render();
     },
 
     _toggleActiveState: function($element, value, e) {
@@ -669,8 +669,7 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _attachSwipeEvent: function($itemElement) {
-        const endEventName = addNamespace(swipeEventEnd, this.NAME);
-
+        const endEventName = eventUtils.addNamespace(swipeEventEnd, this.NAME);
         eventsEngine.on($itemElement, endEventName, this._itemSwipeEndHandler.bind(this));
     },
 

@@ -5,7 +5,7 @@ import { inArray } from '../core/utils/array';
 import iteratorUtils from '../core/utils/iterator';
 import { contains } from '../core/utils/dom';
 import registerEvent from './core/event_registrator';
-import { eventData as eData, fireEvent } from './utils/index';
+import { eventData as eData, fireEvent } from './utils';
 import GestureEmitter from './gesture/emitter.gesture';
 import registerEmitter from './core/emitter_registrator';
 

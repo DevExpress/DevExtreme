@@ -1,5 +1,5 @@
 import renderer from 'core/renderer';
-import { isString, isPlainObject } from 'core/utils/type';
+import typeUtils from 'core/utils/type';
 
 const originalCSSMethod = renderer.fn.css;
 
@@ -10,9 +10,9 @@ const validateStyleName = function(name) {
 };
 
 renderer.fn.css = function(name) {
-    if(isString(name)) {
+    if(typeUtils.isString(name)) {
         validateStyleName(name);
-    } else if(isPlainObject(name)) {
+    } else if(typeUtils.isPlainObject(name)) {
         for(const key in name) {
             validateStyleName(key);
         }
