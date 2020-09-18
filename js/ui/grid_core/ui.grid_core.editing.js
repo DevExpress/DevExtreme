@@ -293,7 +293,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const changes = this.getChanges();
             const needReset = changes?.length;
             if(needReset) {
-                this.component._setOptionWithoutOptionChange('editing.changes', []);
+                this._silentOption('editing.changes', []);
             }
         },
 
@@ -692,7 +692,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _setEditRowKey: function(value, silent) {
             if(silent) {
-                this.component._setOptionWithoutOptionChange('editing.editRowKey', value);
+                this._silentOption('editing.editRowKey', value);
             } else {
                 this.option('editing.editRowKey', value);
             }
@@ -1055,7 +1055,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _setEditColumnName: function(name, silent) {
             if(silent) {
-                this.component._setOptionWithoutOptionChange('editing.editColumnName', name);
+                this._silentOption('editing.editColumnName', name);
             } else {
                 this.option('editing.editColumnName', name);
             }
@@ -1295,7 +1295,7 @@ const EditingController = modules.ViewController.inherit((function() {
             if(index >= 0) {
                 const changes = [...this.getChanges()];
                 changes.splice(index, 1);
-                this.component._setOptionWithoutOptionChange('editing.changes', changes);
+                this._silentOption('editing.changes', changes);
             }
         },
 
@@ -1723,7 +1723,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             if(changes.length < changesLength) {
-                this.component._setOptionWithoutOptionChange('editing.changes', changes);
+                this._silentOption('editing.changes', changes);
             }
 
             return hasSavedData;
@@ -2297,7 +2297,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             changes[editDataIndex] = change;
 
-            this.component._setOptionWithoutOptionChange('editing.changes', changes);
+            this._silentOption('editing.changes', changes);
 
             return editDataIndex;
         },
