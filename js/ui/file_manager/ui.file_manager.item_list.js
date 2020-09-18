@@ -1,7 +1,7 @@
 import { extend } from '../../core/utils/extend';
 import { when } from '../../core/utils/deferred';
 import { name as dblClickName } from '../../events/double_click';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import eventsEngine from '../../events/core/events_engine';
 import { getImageContainer } from '../../core/utils/icon';
 import devices from '../../core/devices';

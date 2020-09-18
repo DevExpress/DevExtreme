@@ -9,7 +9,7 @@ import barSeries from './bar_series';
 const chartBarSeries = barSeries.chart.bar;
 import { chart as lineSeries } from './line_series';
 import vizUtils from '../core/utils';
-import { clone } from '../../core/utils/object';
+import objectUtils from '../../core/utils/object';
 const baseStackedSeries = {
     _calculateErrorBars: _noop,
     _updateOptions: function(options) {
@@ -44,7 +44,7 @@ chart['fullstackedbar'] = _extend({}, chartBarSeries, baseStackedSeries, {
 });
 
 function clonePoint(point, value, minValue, position) {
-    point = clone(point);
+    point = objectUtils.clone(point);
     point.value = value;
     point.minValue = minValue;
     point.translate();

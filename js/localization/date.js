@@ -1,6 +1,6 @@
 import dependencyInjector from '../core/utils/dependency_injector';
 import { isString } from '../core/utils/type';
-import { each } from '../core/utils/iterator';
+import iteratorUtils from '../core/utils/iterator';
 import { inArray } from '../core/utils/array';
 import errors from '../core/errors';
 import { getFormatter as getLDMLDateFormatter } from './ldml/date.formatter';
@@ -70,8 +70,8 @@ const dateLocalization = dependencyInjector({
         const pattern = this._getPatternByFormat(format) || format;
         const result = [];
 
-        each(pattern.split(/\W+/), (_, formatPart) => {
-            each(possiblePartPatterns, (partName, possiblePatterns) => {
+        iteratorUtils.each(pattern.split(/\W+/), (_, formatPart) => {
+            iteratorUtils.each(possiblePartPatterns, (partName, possiblePatterns) => {
                 if(inArray(formatPart, possiblePatterns) > -1) {
                     result.push(partName);
                 }

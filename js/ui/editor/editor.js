@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { data } from '../../core/element_data';
 import Callbacks from '../../core/utils/callbacks';
 import { hasWindow } from '../../core/utils/window';
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, normalizeKeyName } from '../../events/utils';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
 import Guid from '../../core/guid';

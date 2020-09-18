@@ -2,7 +2,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { getNavigator, hasProperty } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import eventEmitterModule from './event_emitter';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import { name as wheelEventName } from '../../events/core/wheel';
 import { parseScalar } from '../core/utils';
 

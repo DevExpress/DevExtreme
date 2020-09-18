@@ -1,4 +1,4 @@
-import { eventData, eventDelta } from './utils/index';
+import { eventData, eventDelta } from './utils';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
 const abs = Math.abs;

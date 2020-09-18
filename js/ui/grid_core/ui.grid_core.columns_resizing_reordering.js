@@ -6,7 +6,7 @@ import { isDefined, isString, isObject } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
-import { addNamespace, eventData as getEventData, isTouchEvent } from '../../events/utils/index';
+import { addNamespace, eventData as getEventData, isTouchEvent } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import {
     start as dragEventStart,

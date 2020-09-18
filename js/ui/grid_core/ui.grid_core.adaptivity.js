@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import { name as clickEventName } from '../../events/click';
 import { isDefined, isString } from '../../core/utils/type';
 import browser from '../../core/utils/browser';

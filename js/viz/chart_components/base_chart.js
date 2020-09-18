@@ -4,7 +4,7 @@ import { isDefined as _isDefined, isFunction } from '../../core/utils/type';
 import { each as _each, reverseEach as _reverseEach } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import { isTouchEvent, isPointerEvent } from '../../events/utils/index';
+import { isTouchEvent, isPointerEvent } from '../../events/utils';
 import BaseWidget from '../core/base_widget';
 import legendModule from '../components/legend';
 import dataValidatorModule from '../components/data_validator';

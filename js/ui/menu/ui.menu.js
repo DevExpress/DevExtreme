@@ -7,7 +7,7 @@ import { each } from '../../core/utils/iterator';
 import { isPlainObject, isObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getElementMaxHeightByWindow } from '../overlay/utils';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import hoverEvents from '../../events/hover';
 import MenuBase from '../context_menu/ui.menu_base';

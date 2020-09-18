@@ -1,4 +1,4 @@
-import { locate, move } from '../animation/translator';
+import translator from '../animation/translator';
 import registerComponent from '../core/component_registrator';
 import DOMComponent from '../core/dom_component';
 import $ from '../core/renderer';
@@ -12,7 +12,7 @@ import { hasWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../events/drag';
 import { getBoundingRect } from '../core/utils/position';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace } from '../events/utils';
 import { triggerResizeEvent } from '../events/visibility_change';
 
 const RESIZABLE = 'dxResizable';
@@ -164,7 +164,7 @@ const Resizable = DOMComponent.inherit({
         this._toggleResizingClass(true);
         this._movingSides = this._getMovingSides(e);
 
-        this._elementLocation = locate($element);
+        this._elementLocation = translator.locate($element);
 
         const elementRect = getBoundingRect($element.get(0));
 
@@ -234,7 +234,7 @@ const Resizable = DOMComponent.inherit({
         const offsetTop = offset.y - ((elementRect.height || height) - height);
         const offsetLeft = offset.x - ((elementRect.width || width) - width);
 
-        move($element, {
+        translator.move($element, {
             top: location.top + (sides.top ? offsetTop : 0),
             left: location.left + (sides.left ? offsetLeft : 0)
         });

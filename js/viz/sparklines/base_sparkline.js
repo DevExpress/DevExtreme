@@ -3,7 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import { isFunction } from '../../core/utils/type';
 import BaseWidget from '../core/base_widget';
 import { extend } from '../../core/utils/extend';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import pointerEvents from '../../events/pointer';
 import { pointInCanvas } from '../core/utils';
 

@@ -1,5 +1,5 @@
 import $ from '../core/renderer';
-import { locate } from '../animation/translator';
+import translator from '../animation/translator';
 import { _translator, animation } from './multi_view/ui.multi_view.animation';
 import { sign } from '../core/utils/math';
 import { extend } from '../core/utils/extend';
@@ -26,7 +26,7 @@ const MULTIVIEW_ANIMATION_DURATION = 200;
 
 const toNumber = value => +(value);
 
-const position = $element => locate($element).left;
+const position = $element => translator.locate($element).left;
 
 const MultiView = CollectionWidget.inherit({
 

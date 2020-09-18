@@ -14,7 +14,7 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import DropDownButton from './ui.drop_down_button';
 import Widget from '../widget/ui.widget';
 import { format as formatMessage } from '../../localization/message';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import TextBox from '../text_box';
 import { name as clickEventName } from '../../events/click';
 import devices from '../../core/devices';
