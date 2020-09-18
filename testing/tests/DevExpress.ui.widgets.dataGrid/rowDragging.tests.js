@@ -621,6 +621,8 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
 
         // act
         this.dataGrid.pageIndex(4);
+        const $scrollContainer = $testElement.find('.dx-datagrid-rowsview .dx-scrollable-container');
+        $scrollContainer.trigger('scroll');
         rowsView.resize();
 
         assert.equal(sortableInstances[0].update.callCount, 1, 'update for sortable 0 is called');
