@@ -166,6 +166,7 @@ describe('CheckBox', () => {
                 validationStatus: 'invalid',
                 validationMessageMode: 'always',
               },
+              shouldShowValidationMessage: true,
             } as any)}
           </div>
         );
@@ -198,79 +199,6 @@ describe('CheckBox', () => {
               isValid: false,
               validationErrors,
               validationStatus: 'invalid',
-            },
-          } as any)}
-        </div>
-      );
-      const tree = mount(<CustomTree />);
-      tree.setProps({ target: ref.current });
-      tree.update();
-
-      const validationMessage = tree.find(ValidationMessage);
-      expect(validationMessage.exists()).toBe(false);
-    });
-
-    it('validationMessage should not be rendered when widget "isValid" is true', () => {
-      const ref = React.createRef();
-      const validationErrors = [{ message: 'error message' }];
-      const CustomTree = ({ target }: any) => (
-        <div ref={ref as any}>
-          {viewFunction({
-            rendered: true,
-            target,
-            validationErrors,
-            props: {
-              isValid: true,
-              validationErrors,
-              validationStatus: 'invalid',
-            },
-          } as any)}
-        </div>
-      );
-      const tree = mount(<CustomTree />);
-      tree.setProps({ target: ref.current });
-      tree.update();
-
-      const validationMessage = tree.find(ValidationMessage);
-      expect(validationMessage.exists()).toBe(false);
-    });
-
-    it('validationMessage should not be rendered when there is no validation errors', () => {
-      const ref = React.createRef();
-      const CustomTree = ({ target }: any) => (
-        <div ref={ref as any}>
-          {viewFunction({
-            rendered: true,
-            target,
-            validationErrors: null,
-            props: {
-              isValid: false,
-              validationStatus: 'invalid',
-            },
-          } as any)}
-        </div>
-      );
-      const tree = mount(<CustomTree />);
-      tree.setProps({ target: ref.current });
-      tree.update();
-
-      const validationMessage = tree.find(ValidationMessage);
-      expect(validationMessage.exists()).toBe(false);
-    });
-
-    it('validationMessage should not be rendered when widget "validationStatus" is not "invalid"', () => {
-      const ref = React.createRef();
-      const validationErrors = [{ message: 'error message' }];
-      const CustomTree = ({ target }: any) => (
-        <div ref={ref as any}>
-          {viewFunction({
-            rendered: true,
-            target,
-            validationErrors,
-            props: {
-              isValid: false,
-              validationErrors,
-              validationStatus: 'pending',
             },
           } as any)}
         </div>
@@ -637,6 +565,47 @@ describe('CheckBox', () => {
 
           const { target } = checkBox;
           expect(target).toBe(undefined);
+        });
+      });
+
+      describe('shouldShowValidationMessage', () => {
+        it('should return true when isValid=false, validationStatus="invalid" and there are validation errors', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          expect(checkBox.shouldShowValidationMessage).toBe(true);
+        });
+
+        it('should return false if there is no validation errors', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+          });
+
+          expect(checkBox.shouldShowValidationMessage).toBe(false);
+        });
+
+        it('should return false if validationStatis not equal to "invalid"', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'pending',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          expect(checkBox.shouldShowValidationMessage).toBe(false);
+        });
+
+        it('should return false if isValid is true', () => {
+          const checkBox = new CheckBox({
+            isValid: true,
+            validationStatus: 'invalid',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          expect(checkBox.shouldShowValidationMessage).toBe(false);
         });
       });
     });

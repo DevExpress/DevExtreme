@@ -85,7 +85,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       </div>
       {viewModel.props.useInkRipple
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
-      {viewModel.rendered && !viewModel.props.isValid && viewModel.props.validationStatus === 'invalid' && viewModel.validationErrors?.length
+      {viewModel.rendered && viewModel.shouldShowValidationMessage
                 && (
                 <ValidationMessage
                   validationErrors={viewModel.validationErrors}
@@ -231,11 +231,17 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     return getCssClasses(this.props);
   }
 
+  get shouldShowValidationMessage(): boolean {
+    const { isValid, validationStatus } = this.props;
+    return !isValid
+      && validationStatus === 'invalid'
+      && !!this.validationErrors?.length;
+  }
+
   get aria(): object {
-    const { readOnly, isValid, validationStatus } = this.props;
+    const { readOnly, isValid } = this.props;
     const checked = !!this.props.value;
     const indeterminate = this.props.value === null;
-    const isValidationMessageShown = !isValid && validationStatus === 'invalid' && this.validationErrors?.length;
 
     return {
       role: 'checkbox',
@@ -243,7 +249,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
       // eslint-disable-next-line spellcheck/spell-checker
-      describedby: isValidationMessageShown ? `dx-${new Guid()}` : undefined,
+      describedby: this.shouldShowValidationMessage ? `dx-${new Guid()}` : undefined,
     };
   }
 
