@@ -1,1 +1,3 @@
-TODO
+The **Diagram** widget allows you to restrict edit operations. To prohibit an operation, set the corresponding option in the [editing](/Documentation/ApiReference/UI_Widgets/dxDiagram/Configuration/editing/) property to **false**.
+
+In this demo, the [onRequestEditOperation](Documentation/ApiReference/UI_Widgets/dxDiagram/Configuration/#onRequestEditOperation) function implements a complex logic to determine whether an operation is allowed. The **updateUI** event parameter indicates whether the event is raised by user actions or UI update. If a user tries to perform a prohibited action, an error message is displayed.

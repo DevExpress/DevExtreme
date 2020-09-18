@@ -1,0 +1,1 @@
+You can access the selected shape data from the [onSelectionChanged](Documentation/ApiReference/UI_Widgets/dxDiagram/Configuration/#onSelectionChanged) function. In this demo, the function fetches the selected shape's information and displays it under the **Diagram** widget.
