@@ -445,7 +445,7 @@ QUnit.test('Depends on theme', function(assert) {
 });
 
 QUnit.test('Print method - use export to prepare image, create hidden iFrame with image, delete iFrame after printing', function(assert) {
-    assert.expect(28);
+    assert.expect(29);
     const done = assert.async();
     const deferred = new Deferred();
     const exportFunc = clientExporter.export;
@@ -470,8 +470,9 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
                 checkAssertions: function() {
                     assert.equal(window.frames.length, 1);
                     const frame = window.frames[0].frameElement;
-                    assert.equal(frame.style.visibility, 'hidden');
                     assert.equal(frame.style.position, 'fixed');
+                    assert.equal(frame.style.width, '0px');
+                    assert.equal(frame.style.height, '0px');
                     assert.equal(frame.style.right, '0px');
                     assert.equal(frame.style.bottom, '0px');
 
