@@ -10802,6 +10802,10 @@ declare module DevExpress.ui {
     export class dxSortable extends DraggableBase {
         constructor(element: Element, options?: dxSortableOptions)
         constructor(element: JQuery, options?: dxSortableOptions)
+        /**
+         * [descr:dxSortable.update()]
+         */
+        update(): void;
     }
     /**
      * [descr:dxSpeedDialAction.Options]

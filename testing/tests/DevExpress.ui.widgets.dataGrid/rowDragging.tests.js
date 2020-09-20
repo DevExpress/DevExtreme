@@ -589,6 +589,50 @@ QUnit.module('Drag and Drop rows', moduleConfig, () => {
         });
     });
 
+    QUnit.test('Sortables should be updated after resize', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+
+        this.options.columns[2] = {
+            dataField: 'field3',
+            fixed: true
+        };
+        this.options.scrolling = { mode: 'virtual' };
+        this.options.paging = { pageSize: 2, pageIndex: 1 };
+
+
+        const rowsView = this.createRowsView();
+        rowsView.render($testElement);
+        rowsView.height(50);
+        // act
+        pointerMock(rowsView.getCellElement(0, 0)).start().down().move(0, 70);
+
+        // assert
+        const $sortable = $testElement.find('.dx-sortable');
+
+        assert.equal($sortable.length, 2, 'two sortables are rendered');
+
+        const sortableInstances = [
+            $sortable.eq(0).dxSortable('instance'),
+            $sortable.eq(1).dxSortable('instance'),
+        ];
+        sinon.spy(sortableInstances[0], 'update');
+        sinon.spy(sortableInstances[1], 'update');
+
+        // act
+        this.dataGrid.pageIndex(4);
+        const $scrollContainer = $testElement.find('.dx-datagrid-rowsview .dx-scrollable-container');
+        $scrollContainer.trigger('scroll');
+        rowsView.resize();
+
+        assert.equal(sortableInstances[0].update.callCount, 1, 'update for sortable 0 is called');
+        assert.equal(sortableInstances[0].option('offset'), 8, 'sortable 0 offset is updated');
+
+        assert.equal(sortableInstances[1].update.callCount, 1, 'update for sortable 1 is called');
+        assert.equal(sortableInstances[1].option('offset'), 8, 'sortable 1 offset is updated');
+
+    });
+
     // T830034
     QUnit.test('Placeholder should not be wider than grid if horizontal scroll exists', function(assert) {
     // arrange
