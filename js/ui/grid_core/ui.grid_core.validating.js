@@ -51,6 +51,7 @@ const VALIDATION_STATUS = {
 };
 
 const EDIT_DATA_INSERT_TYPE = 'insert';
+const EDIT_DATA_REMOVE_TYPE = 'remove';
 const VALIDATION_CANCELLED = 'cancel';
 
 const validationResultIsValid = function(result) {
@@ -570,12 +571,24 @@ export default {
                     const validatingController = that.getController('validating');
                     const editDataIndex = that.callBase(options, row);
 
-                    if(editDataIndex >= 0) {
+                    if(editDataIndex >= 0 && options.type !== EDIT_DATA_REMOVE_TYPE) {
                         const editData = this.getChanges()[editDataIndex];
                         validatingController.updateValidationState(editData);
                     }
 
                     return editDataIndex;
+                },
+
+                _handleChangesChange: function(args) {
+                    this.callBase.apply(this, arguments);
+
+                    const validatingController = this.getController('validating');
+
+                    args.value.forEach(change => {
+                        if(validatingController._getValidationData(change.key) === undefined) {
+                            validatingController.updateValidationState(change);
+                        }
+                    });
                 },
 
                 _updateRowAndPageIndices: function() {

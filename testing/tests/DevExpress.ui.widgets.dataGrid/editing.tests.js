@@ -4173,10 +4173,9 @@ QUnit.module('Editing with real dataController', {
 
         that.addRow();
         this.clock.tick();
-        const hasNewValue = !!testElement.find('td:contains(modifiedValue)').length;
 
         // assert
-        assert.ok(hasNewValue);
+        assert.ok(testElement.find('td:contains(modifiedValue)').length);
     });
 
     QUnit.testInActiveWindow('Insert Row after scrolling', function(assert) {
@@ -9309,6 +9308,148 @@ QUnit.module('Editing with real dataController', {
             assert.strictEqual(countCallOnRowUpdating, 1, 'count call onRowUpdating');
             assert.strictEqual(countCallOnRowUpdated, 1, 'count call onRowUpdated');
         });
+
+        ['row', 'batch', 'popup', 'form', 'cell'].forEach(editMode => {
+            QUnit.test(`Add row via changes option (editMode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+
+                $.extend(this.options.editing, {
+                    allowAdding: true,
+                    mode: editMode
+                });
+                rowsView.render($testElement);
+
+                // assert
+                let visibleRows = this.getVisibleRows();
+                assert.equal(visibleRows.length, 7, 'row count');
+
+                // act
+                this.option('editing.changes', [{
+                    data: { name: 'test' },
+                    key: {
+                        '__DX_INSERT_INDEX__': 1,
+                        'dataRowIndex': 0,
+                        'pageIndex': 0,
+                        'parentKey': undefined,
+                        'rowIndex': 0
+                    },
+                    type: 'insert'
+                }]);
+                this.clock.tick();
+
+                // assert
+                visibleRows = this.getVisibleRows();
+                const $insertedRow = $(this.getRowElement(0));
+                const $cells = $insertedRow.find('td');
+
+                assert.equal(visibleRows.length, 8, 'row count');
+                assert.ok(visibleRows[0].isNewRow, 'inserted row');
+
+                if(editMode !== 'popup') {
+                    assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                    assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                    assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+                }
+
+                // act
+                this.saveEditData();
+
+                // assert
+                visibleRows = this.getVisibleRows();
+
+                assert.equal(visibleRows.length, 8, 'row count');
+                assert.deepEqual(visibleRows[7].data.name, 'test', 'inserted row name field');
+            });
+
+            QUnit.test(`Remove row via changes option (editMode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+
+                $.extend(this.options.editing, {
+                    allowUpdating: true,
+                    allowDeleting: true,
+                    mode: editMode
+                });
+
+                this.editingController.init();
+                rowsView.render($testElement);
+
+                // act
+                this.option('editing.changes', [{
+                    key: 1,
+                    type: 'remove'
+                }]);
+                this.clock.tick();
+
+                // assert
+                let visibleRows = this.getVisibleRows();
+                assert.equal(visibleRows[0].key, 1, 'first row key');
+                assert.ok(visibleRows[0].removed, 'first row is removed');
+                assert.equal(visibleRows.length, 7, 'row count');
+
+                const $firstRow = $(this.getRowElement(0));
+                if(editMode === 'batch') {
+                    assert.ok($firstRow.hasClass('dx-row-removed'), 'first row has removed class');
+                } else if(editMode === 'cell') {
+                    assert.notOk($firstRow.hasClass('dx-row-removed'), 'first row has removed class');
+                } else {
+                    const $commandButtons = $firstRow.find('.dx-link');
+
+                    assert.equal($commandButtons.length, 2, 'command buttons count');
+                    assert.ok($commandButtons.eq(0).hasClass('dx-link-edit'), 'edit button');
+                    assert.ok($commandButtons.eq(1).hasClass('dx-link-delete'), 'delete button');
+                }
+
+                // act
+                this.saveEditData();
+
+                // assert
+                visibleRows = this.getVisibleRows();
+                assert.equal(visibleRows[0].key, 2, 'first row key');
+                assert.equal(visibleRows.length, 6, 'row count');
+            });
+
+            QUnit.test(`Update row via changes option (editMode = ${editMode})`, function(assert) {
+                // arrange
+                const rowsView = this.rowsView;
+                const $testElement = $('#container');
+
+                $.extend(this.options.editing, {
+                    allowUpdating: true,
+                    mode: editMode
+                });
+
+                rowsView.render($testElement);
+
+                // assert
+                let visibleRows = this.getVisibleRows();
+                assert.equal(visibleRows[0].data.name, 'Alex', 'row name field');
+
+                // act
+                this.option('editing.changes', [{
+                    key: 1,
+                    type: 'update',
+                    data: { name: 'test' }
+                }]);
+                this.clock.tick();
+
+                // assert
+                visibleRows = this.getVisibleRows();
+                assert.equal(visibleRows[0].data.name, 'test', 'row name field');
+                assert.equal(this.array[0].name, 'Alex', 'row name field in dataSource');
+
+                // act
+                this.saveEditData();
+
+                // assert
+                visibleRows = this.getVisibleRows();
+                assert.equal(visibleRows[0].data.name, 'test', 'row name field');
+                assert.equal(this.array[0].name, 'test', 'row name field in dataSource');
+            });
+        });
     });
 
     QUnit.module('Save/cancel events', {
@@ -14314,7 +14455,7 @@ QUnit.module('Editing with validation', {
 
     // T865329
     [true, false].forEach(withConfirm => {
-        QUnit.test('Validation should not block deleting newly added row in cell edit mode ' + withConfirm ? '(with confirm)' : '(no confirm)', function(assert) {
+        QUnit.test('Validation should not block deleting newly added row in cell edit mode ' + (withConfirm ? '(with confirm)' : '(no confirm)'), function(assert) {
         // arrange
             const rowsView = this.rowsView;
             const testElement = $('#container');
