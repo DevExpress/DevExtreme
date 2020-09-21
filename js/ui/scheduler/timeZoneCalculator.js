@@ -32,25 +32,13 @@ export class TimeZoneCalculator {
         throw new Error('not specified pathTimeZoneConversion');
     }
 
-    getOffsets(date, appointmentTimezone) {
-        const clientOffset = -this._getClientOffset(date) / toMs('hour');
-        const commonOffset = this._getCommonOffset(date);
-        const appointmentOffset = this._getAppointmentOffset(date, appointmentTimezone);
-
-        return {
-            client: clientOffset,
-            common: !isDefined(commonOffset) ? clientOffset : commonOffset,
-            appointment: typeof appointmentOffset !== 'number' ? clientOffset : appointmentOffset
-        };
-    }
-
     _getClientOffset(date) { return this.options.getClientOffset(date); }
     _getCommonOffset(date) { return this.options.getCommonOffset(date); }
     _getAppointmentOffset(date, appointmentTimezone) { return this.options.getAppointmentOffset(date, appointmentTimezone); }
 
     _getConvertedDate(date, appointmentTimezone, useAppointmentTimeZone, isBack) {
         const newDate = new Date(date.getTime());
-        const offsets = this.getOffsets(newDate, appointmentTimezone);
+        const offsets = this._getOffsets(newDate, appointmentTimezone);
 
         if(useAppointmentTimeZone && !!appointmentTimezone) {
             return this._getConvertedDateByOffsets(date, offsets.client, offsets.appointment, isBack);
@@ -64,5 +52,17 @@ export class TimeZoneCalculator {
 
         const utcDate = date.getTime() - direction * clientOffset * toMs('hour');
         return new Date(utcDate + direction * targetOffset * toMs('hour'));
+    }
+
+    _getOffsets(date, appointmentTimezone) {
+        const clientOffset = -this._getClientOffset(date) / toMs('hour');
+        const commonOffset = this._getCommonOffset(date);
+        const appointmentOffset = this._getAppointmentOffset(date, appointmentTimezone);
+
+        return {
+            client: clientOffset,
+            common: !isDefined(commonOffset) ? clientOffset : commonOffset,
+            appointment: typeof appointmentOffset !== 'number' ? clientOffset : appointmentOffset
+        };
     }
 }
