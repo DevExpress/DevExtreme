@@ -1493,8 +1493,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _showAddAppointmentPopup($cell) {
-        const firstCellData = this.getCellData($cell.first());
-        const lastCellData = this.getCellData($cell.last());
+        let firstCellData = this.getCellData($cell.first());
+        let lastCellData = this.getCellData($cell.last());
+
+        if(this.isVirtualScrolling()) {
+            const selectedCells = this.virtualSelectionState.getSelectedCells();
+
+            firstCellData = selectedCells[0];
+            lastCellData = selectedCells[selectedCells.length - 1];
+        }
 
         const result = {
             startDate: firstCellData.startDate,
