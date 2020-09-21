@@ -141,13 +141,8 @@ const getExtremeDates = () => {
     const startDate = new Date();
     const endDate = new Date();
 
-    startDate.setFullYear(nowDate.getFullYear());
-    startDate.setMonth(0);
-    startDate.setDate(1);
-
-    endDate.setFullYear(nowDate.getFullYear());
-    endDate.setMonth(6);
-    endDate.setDate(1);
+    startDate.setFullYear(nowDate.getFullYear(), 0, 1);
+    endDate.setFullYear(nowDate.getFullYear(), 6, 1);
 
     return [startDate, endDate];
 };
