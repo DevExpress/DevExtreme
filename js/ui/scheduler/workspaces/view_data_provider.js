@@ -328,12 +328,10 @@ export default class ViewDataProvider {
         const lastRowInGroup = isVerticalGrouping
             ? (groupIndex + 1) * rowsPerGroup - 1
             : rowsPerGroup;
-        const correctedFirstRow = isShowAllDayPanel && isVerticalGrouping && !allDay
+        const correctedFirstRow = isShowAllDayPanel && !allDay
             ? firstRowInGroup + 1
             : firstRowInGroup;
-        const correctedLastRow = isShowAllDayPanel && isVerticalGrouping && allDay
-            ? correctedFirstRow
-            : lastRowInGroup;
+        const correctedLastRow = allDay ? correctedFirstRow : lastRowInGroup;
 
         return this.completeViewDataMap
             .slice(correctedFirstRow, correctedLastRow + 1)
@@ -354,17 +352,21 @@ export default class ViewDataProvider {
                 : startTime >= cellStartTime && startTime < cellEndTime;
         };
 
-        const rows = this.groupedDataMap[groupIndex] || [];
+        const rows = isAllDay && !this._workspace._isVerticalGroupedWorkSpace()
+            ? [this.completeViewDataMap[0].map((cell, index) => ({
+                cellData: cell, position: { cellIndex: index, rowIndex: 0 }
+            }))]
+            : this.groupedDataMap[groupIndex] || [];
 
         for(let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
             const row = rows[rowIndex];
 
             for(let cellIndex = 0; cellIndex < row.length; ++cellIndex) {
                 const cell = row[cellIndex];
-                const { cellData } = cell;
+                const cellData = cell.cellData;
 
                 if(cellData.groupIndex === groupIndex) {
-                    if(isStartTimeInCell(cell.cellData)) {
+                    if(isStartTimeInCell(cellData)) {
                         return cell.position;
                     }
                 }
