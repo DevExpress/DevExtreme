@@ -149,6 +149,7 @@ describe('PagerContent', () => {
         isLargeDisplayMode: true,
         infoVisible: true,
         props: {
+          rtlEnabled: false,
           showPageSizes: true,
           parentRef,
           pageSizesRef,
@@ -158,7 +159,7 @@ describe('PagerContent', () => {
       } as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />).childAt(0);
       expect(tree.instance()).toBe(parentRef.current);
-      const childrenContainer = tree.childAt(0);
+      const childrenContainer = tree.find('div').first();
       expect(childrenContainer.childAt(0).instance()).toBe(pageSizesRef.current);
       expect(childrenContainer.childAt(1).instance()).toBe(pagesRef.current);
       expect(childrenContainer.childAt(1).childAt(0).instance()).toBe(infoTextRef.current);

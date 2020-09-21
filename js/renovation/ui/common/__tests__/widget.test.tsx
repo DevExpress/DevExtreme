@@ -750,25 +750,26 @@ describe('Widget', () => {
       });
 
       each`
-      rtlEnabled   | parentRtlEnabled | expected
-      ${true}      | ${true}          | ${false}
-      ${true}      | ${undefined}     | ${true}
-      ${false}     | ${undefined}     | ${true}
-      ${true}      | ${false}         | ${true}
-      ${false}     | ${true}          | ${true}
-      ${undefined} | ${undefined}     | ${false}
-      ${undefined} | ${true}          | ${false}
-      ${undefined} | ${false}         | ${false}
-      ${true}      | ${true}          | ${false}
+      global       | rtlEnabled   | parentRtlEnabled | expected
+      ${undefined} | ${undefined} | ${undefined}     | ${false}
+      ${true}      | ${true}      | ${undefined}     | ${true}
+      ${true}      | ${false}     | ${undefined}     | ${true}
+      ${true}      | ${true}      | ${false}         | ${true}
+      ${true}      | ${false}     | ${true}          | ${true}
+      ${true}      | ${undefined} | ${undefined}     | ${true}
+      ${true}      | ${undefined} | ${true}          | ${false}
+      ${true}      | ${undefined} | ${false}         | ${false}
+      ${true}      | ${true}      | ${true}          | ${false}
       `
         .describe('shouldRenderRtlEnabledProvider', ({
-          rtlEnabled, parentRtlEnabled, expected,
+          global, rtlEnabled, parentRtlEnabled, expected,
         }) => {
           const name = `${JSON.stringify({
-            rtlEnabled: rtlEnabled === undefined ? 'u' : rtlEnabled, parentRtlEnabled: parentRtlEnabled === undefined ? 'u' : parentRtlEnabled, expected,
+            global, rtlEnabled, parentRtlEnabled, expected,
           })}`;
 
           it(name, () => {
+            config().rtlEnabled = global;
             const widget = new Widget({ rtlEnabled });
             widget.parentRtlEnabled = parentRtlEnabled;
             expect(widget.shouldRenderRtlEnabledProvider).toBe(expected);
@@ -811,7 +812,6 @@ describe('Widget', () => {
         focusStateEnabled: false,
         hoverStateEnabled: false,
         onContentReady: expect.any(Function),
-        // rtlEnabled: config().rtlEnabled,
         tabIndex: 0,
         visible: true,
         _feedbackHideTimeout: 400,

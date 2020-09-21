@@ -28,6 +28,7 @@ import BaseWidgetProps from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
 import { RtlEnabledContext } from './rtl_enabled_context';
 import { RtlEnabledProvider } from './rtl_enabled_provider';
+import { isDefined } from '../../../core/utils/type';
 
 const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
@@ -145,8 +146,12 @@ export class Widget extends JSXComponent(WidgetProps) {
   parentRtlEnabled?: boolean;
 
   get shouldRenderRtlEnabledProvider(): boolean {
-    return (this.props.rtlEnabled !== undefined)
-    && (this.props.rtlEnabled !== this.parentRtlEnabled);
+    const isPropDefined = isDefined(this.props.rtlEnabled);
+    const onlyGlobalDefined = isDefined(config().rtlEnabled)
+    && !isPropDefined && !isDefined(this.parentRtlEnabled);
+    return (isPropDefined
+    && (this.props.rtlEnabled !== this.parentRtlEnabled))
+    || onlyGlobalDefined;
   }
 
   get rtlEnabled(): boolean | undefined {
