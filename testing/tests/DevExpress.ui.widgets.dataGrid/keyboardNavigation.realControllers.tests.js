@@ -1217,13 +1217,10 @@ QUnit.module('Real DataController and ColumnsController', {
 
         const $input = $(that.getCellElement(0, 0)).find('input');
         $input.val('test').trigger('change');
-
         that.clock.tick();
 
         $input.trigger($.Event('keydown', { key: 'Enter' }));
-
-        const timeout = browser.msie ? 30 : 0; // should be removed after the IE death
-        that.clock.tick(timeout);
+        that.clock.tick();
 
         // assert
         assert.equal($('.dx-revert-button').length, 0, 'has no revert button');
