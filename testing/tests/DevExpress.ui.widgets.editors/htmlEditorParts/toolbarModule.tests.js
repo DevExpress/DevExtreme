@@ -72,6 +72,7 @@ const simpleModuleConfig = {
             format: (format, value) => {
                 this.log.push({ format: format, value: value });
             },
+            focus: noop,
             on: noop,
             off: noop,
             table: {
