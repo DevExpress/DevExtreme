@@ -164,6 +164,11 @@ export class Widget extends JSXComponent(WidgetProps) {
     return globalConfig().rtlEnabled;
   }
 
+  @Method()
+  getRootElement(): HTMLDivElement {
+    return this.widgetRef;
+  }
+
   @Effect()
   accessKeyEffect(): EffectReturn {
     const namespace = 'UIFeedback';

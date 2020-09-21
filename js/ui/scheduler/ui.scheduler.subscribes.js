@@ -31,6 +31,10 @@ const subscribes = {
         this.option('currentDate', date);
     },
 
+    getOption: function(name) {
+        return this.option(name);
+    },
+
     setCellDataCacheAlias: function(appointment, geometry) {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
@@ -792,6 +796,6 @@ const subscribes = {
 
     removeDroppableCellClass: function() {
         this._workSpace.removeDroppableCellClass();
-    }
+    },
 };
 export default subscribes;

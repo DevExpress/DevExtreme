@@ -17,22 +17,34 @@ class JSPdfDataGridTestHelper {
         assert.deepEqual(actualWidths, expectedColumnWidths, 'Column widths');
     }
 
-    checkCellsContent(headCellsArray, bodyCellsArray, actualAutoTableOptions) {
-        if(headCellsArray.length > 0) {
-            this._iterateCells(headCellsArray, (content, rowIndex, columnIndex) => {
-                assert.strictEqual(actualAutoTableOptions.head[rowIndex][columnIndex].content, content, `AutoTable head[${rowIndex}][${columnIndex}].content`);
-            });
-        } else {
-            assert.strictEqual(actualAutoTableOptions.head.length, 0, 'AutoTable head is empty');
+    checkRowAndColumnCount(expectedCells, actualAutoTableOptions, rowType) {
+        assert.strictEqual(expectedCells[rowType].length, actualAutoTableOptions[rowType].length, `actual row count of the ${rowType}`);
+        for(let rowIndex = 0; rowIndex < expectedCells[rowType].length; rowIndex++) {
+            assert.strictEqual(actualAutoTableOptions[rowType][rowIndex].length, expectedCells[rowType][rowIndex].length, 'actual column count of the head');
         }
+    }
 
-        if(bodyCellsArray.length > 0) {
-            this._iterateCells(bodyCellsArray, (content, rowIndex, columnIndex) => {
-                assert.strictEqual(actualAutoTableOptions.body[rowIndex][columnIndex].content, content, `AutoTable body[${rowIndex}][${columnIndex}].content`);
-            });
-        } else {
-            assert.strictEqual(actualAutoTableOptions.body.length, 0, 'AutoTable body is empty');
-        }
+    checkCellsContent(expectedCells, actualAutoTableOptions, rowType) {
+        this._iterateCells(expectedCells[rowType], (cell, rowIndex, columnIndex) => {
+            assert.strictEqual(actualAutoTableOptions[rowType][rowIndex][columnIndex].content, cell.content, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].content`);
+        });
+    }
+
+    checkCellsStyles(expectedCells, actualAutoTableOptions, rowType) {
+        this._iterateCells(expectedCells[rowType], (cell, rowIndex, columnIndex) => {
+            const expectedCellStyles = cell.styles || {};
+            const actualCellStyles = actualAutoTableOptions[rowType][rowIndex][columnIndex].styles;
+            assert.strictEqual(actualCellStyles['halign'], expectedCellStyles['halign'], `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
+            assert.strictEqual(actualCellStyles.fontStyle, expectedCellStyles.fontStyle, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
+        });
+    }
+
+    checkMergeCells(expectedCells, actualAutoTableOptions, rowType) {
+        this._iterateCells(expectedCells[rowType], (expectedCell, rowIndex, columnIndex) => {
+            const actualCell = actualAutoTableOptions[rowType][rowIndex][columnIndex];
+            assert.strictEqual(actualCell.colSpan, expectedCell.colSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].colSpan`);
+            assert.strictEqual(actualCell.rowSpan, expectedCell.rowSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].rowSpan`);
+        });
     }
 
     _iterateCells(cellsArray, callback) {

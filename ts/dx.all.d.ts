@@ -474,6 +474,13 @@ interface JQuery {
     dxValidationGroup(options: DevExpress.ui.dxValidationGroupOptions): JQuery;
 }
 interface JQuery {
+    dxValidationMessage(): JQuery;
+    dxValidationMessage(options: "instance"): DevExpress.ui.dxValidationMessage;
+    dxValidationMessage(options: string): any;
+    dxValidationMessage(options: string, ...params: any[]): any;
+    dxValidationMessage(options: DevExpress.ui.dxValidationMessageOptions): JQuery;
+}
+interface JQuery {
     dxValidationSummary(): JQuery;
     dxValidationSummary(options: "instance"): DevExpress.ui.dxValidationSummary;
     dxValidationSummary(options: string): any;
@@ -5844,6 +5851,14 @@ declare module DevExpress.ui {
          */
         getEdgeDataSource(): DevExpress.data.DataSource;
         /**
+         * [descr:dxDiagram.getItemById(id)]
+         */
+        getItemById(id: string): dxDiagramItem;
+        /**
+         * [descr:dxDiagram.getItemByKey(key)]
+         */
+        getItemByKey(key: any): dxDiagramItem;
+        /**
          * [descr:dxDiagram.getNodeDataSource()]
          */
         getNodeDataSource(): DevExpress.data.DataSource;
@@ -5969,17 +5984,37 @@ declare module DevExpress.ui {
      */
     export interface dxDiagramConnector extends dxDiagramItem {
         /**
+         * [descr:dxDiagramConnector.fromId]
+         */
+        fromId?: string;
+        /**
          * [descr:dxDiagramConnector.fromKey]
          */
         fromKey?: any;
+        /**
+         * [descr:dxDiagramConnector.fromPointIndex]
+         */
+        fromPointIndex?: number;
+        /**
+         * [descr:dxDiagramConnector.points]
+         */
+        points?: Array<any>;
         /**
          * [descr:dxDiagramConnector.texts]
          */
         texts?: Array<string>;
         /**
+         * [descr:dxDiagramConnector.toId]
+         */
+        toId?: string;
+        /**
          * [descr:dxDiagramConnector.toKey]
          */
         toKey?: any;
+        /**
+         * [descr:dxDiagramConnector.toPointIndex]
+         */
+        toPointIndex?: number;
     }
     /**
      * [descr:dxDiagramCustomCommand]
@@ -6058,6 +6093,18 @@ declare module DevExpress.ui {
      * [descr:dxDiagramShape]
      */
     export interface dxDiagramShape extends dxDiagramItem {
+        /**
+         * [descr:dxDiagramShape.attachedConnectorIds]
+         */
+        attachedConnectorIds?: Array<string>;
+        /**
+         * [descr:dxDiagramShape.position]
+         */
+        position?: any;
+        /**
+         * [descr:dxDiagramShape.size]
+         */
+        size?: any;
         /**
          * [descr:dxDiagramShape.text]
          */
@@ -6922,6 +6969,14 @@ declare module DevExpress.ui {
          */
         abortUpload(fileIndex: number): void;
         /**
+         * [descr:dxFileUploader.removeFile(file)]
+         */
+        removeFile(file: File): void;
+        /**
+         * [descr:dxFileUploader.removeFile(fileIndex)]
+         */
+        removeFile(fileIndex: number): void;
+        /**
          * [descr:dxFileUploader.upload()]
          */
         upload(): void;
@@ -7579,6 +7634,10 @@ declare module DevExpress.ui {
          */
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /**
+         * [descr:dxGantt.Options.onContextMenuPreparing]
+         */
+        onContextMenuPreparing?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, cancel?: boolean, event?: DevExpress.events.event, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => any);
+        /**
          * [descr:dxGantt.Options.onCustomCommand]
          */
         onCustomCommand?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, name?: string }) => any);
@@ -7646,6 +7705,10 @@ declare module DevExpress.ui {
          * [descr:dxGantt.Options.resources]
          */
         resources?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, textExpr?: string | Function };
+        /**
+         * [descr:dxGantt.Options.rootValue]
+         */
+        rootValue?: any;
         /**
          * [descr:dxGantt.Options.scaleType]
          */
@@ -10746,6 +10809,10 @@ declare module DevExpress.ui {
     export class dxSortable extends DraggableBase {
         constructor(element: Element, options?: dxSortableOptions)
         constructor(element: JQuery, options?: dxSortableOptions)
+        /**
+         * [descr:dxSortable.update()]
+         */
+        update(): void;
     }
     /**
      * [descr:dxSpeedDialAction.Options]
@@ -12230,6 +12297,38 @@ declare module DevExpress.ui {
          * [descr:dxValidationGroupResult.validators]
          */
         validators?: Array<any>;
+    }
+    /**
+     * [descr:dxValidationMessage.Options]
+     */
+    export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidationMessage> {
+        /**
+         * [descr:dxValidationMessage.Options.boundary]
+         */
+        boundary?: string | Element | JQuery;
+        /**
+         * [descr:dxValidationMessage.Options.mode]
+         */
+        mode?: string;
+        /**
+         * [descr:dxValidationMessage.Options.offset]
+         */
+        offset?: any;
+        /**
+         * [descr:dxValidationMessage.Options.positionRequest]
+         */
+        positionRequest?: string;
+        /**
+         * [descr:dxValidationMessage.Options.validationErrors]
+         */
+        validationErrors?: Array<any> | null;
+    }
+    /**
+     * [descr:dxValidationMessage]
+     */
+    export class dxValidationMessage extends dxOverlay {
+        constructor(element: Element, options?: dxValidationMessageOptions)
+        constructor(element: JQuery, options?: dxValidationMessageOptions)
     }
     /**
      * [descr:dxValidationSummary.Options]
