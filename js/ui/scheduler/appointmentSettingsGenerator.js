@@ -1,4 +1,5 @@
 import dateUtils from '../../core/utils/date';
+import { isEmptyObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getRecurrenceProcessor } from './recurrence';
 import timeZoneUtils from './utils.timeZone.js';
@@ -62,14 +63,20 @@ export default class AppointmentSettingsGenerator {
         const { isEqualLocalTimeZone, hasDSTInLocalTimeZone } = timeZoneUtils;
 
         const isRecurrence = appointmentList.length > 1;
-        const isTimeZoneSet = timeZoneName !== undefined;
-        const isAppointmentTimeZoneSet = appointment.startDateTimeZone !== undefined;
+        const isTimeZoneSet = !isEmptyObject(timeZoneName);
+        const isAppointmentTimeZoneSet = !isEmptyObject(appointment.startDateTimeZone);
 
-        return isRecurrence &&
-            isTimeZoneSet &&
+        if(!isRecurrence) {
+            return false;
+        }
+
+        if(!isTimeZoneSet && hasDSTInLocalTimeZone()) {
+            return false;
+        }
+
+        return isTimeZoneSet &&
             !isAppointmentTimeZoneSet &&
-            !isEqualLocalTimeZone(timeZoneName) &&
-            !hasDSTInLocalTimeZone();
+            !isEqualLocalTimeZone(timeZoneName);
     }
 
     _getProcessedNotNativeDateIfCrossDST(date, dateRangeOffset) {
