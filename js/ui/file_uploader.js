@@ -125,6 +125,8 @@ class FileUploader extends Editor {
 
             uploadHeaders: {},
 
+            uploadCustomData: {},
+
             onUploadStarted: null,
 
             onUploaded: null,
@@ -1290,6 +1292,7 @@ class FileUploader extends Editor {
             case 'progress':
             case 'uploadMethod':
             case 'uploadHeaders':
+            case 'uploadCustomData':
             case 'extendSelection':
                 break;
             case 'allowCanceling':
