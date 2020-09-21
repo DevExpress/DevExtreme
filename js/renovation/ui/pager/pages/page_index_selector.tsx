@@ -6,7 +6,7 @@ import { LightButton } from '../common/light_button';
 import { PagesLarge } from './large';
 import { PagesSmall } from './small';
 import PagerProps from '../common/pager_props';
-import { RtlEnabledContext } from '../../common/rtl_enabled_context';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 
 const PAGER_NAVIGATE_BUTTON = 'dx-navigate-button';
 const PAGER_PREV_BUTTON_CLASS = 'dx-prev-button';
@@ -81,15 +81,15 @@ type PageIndexSelectorPropsType = Pick<PagerProps,
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageIndexSelector extends JSXComponent<PageIndexSelectorPropsType>() {
-  @Consumer(RtlEnabledContext)
-  rtlEnabled!: boolean;
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
 
   private getNextDirection(): Direction {
-    return !this.rtlEnabled ? 'next' : 'prev';
+    return !this.config?.rtlEnabled ? 'next' : 'prev';
   }
 
   private getPrevDirection(): Direction {
-    return !this.rtlEnabled ? 'prev' : 'next';
+    return !this.config?.rtlEnabled ? 'prev' : 'next';
   }
 
   private canNavigateToPage(pageIndex: number): boolean {

@@ -6,7 +6,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Page, PageProps } from './page';
 import PagerProps from '../common/pager_props';
-import { RtlEnabledContext } from '../../common/rtl_enabled_context';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -94,8 +94,8 @@ type PagesLargePropsType = Pick<PagerProps,
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
-  @Consumer(RtlEnabledContext)
-  rtlEnabled!: boolean;
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
 
   get pages(): PageType[] {
     const { pageIndex } = this.props;
@@ -111,7 +111,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
         pageProps: pagerProps,
       };
     };
-    const rtlPageIndexes = this.rtlEnabled
+    const rtlPageIndexes = this.config?.rtlEnabled
       ? [...this.pageIndexes].reverse() : this.pageIndexes;
     return rtlPageIndexes.map((index): PageType => createPage(index));
   }

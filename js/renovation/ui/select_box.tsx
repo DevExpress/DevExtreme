@@ -7,7 +7,7 @@ import { WidgetProps } from './common/widget';
 import DataSource, { DataSourceOptions } from '../../data/data_source';
 /* eslint-disable-next-line import/named */
 import LegacySelectBox, { Options } from '../../ui/select_box';
-import { RtlEnabledContext } from './common/rtl_enabled_context';
+import { ConfigContextValue, ConfigContext } from './common/config_context';
 
 export const viewFunction = ({ widgetRef }: SelectBox) => (<div ref={widgetRef as any} />);
 
@@ -44,13 +44,13 @@ export class SelectBox extends JSXComponent(SelectBoxProps) {
     return (): void => widget.dispose();
   }
 
-  @Consumer(RtlEnabledContext)
-  rtlEnabled!: boolean;
+  @Consumer(ConfigContext)
+  config!: ConfigContextValue;
 
   get properties(): Options {
     const { valueChange, ...restProps } = this.props;
     return ({
-      rtlEnabled: this.rtlEnabled,
+      rtlEnabled: this.config?.rtlEnabled,
       ...restProps,
       onValueChanged: ({ value }) => valueChange!(value),
     }) as Options;

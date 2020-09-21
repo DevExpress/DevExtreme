@@ -68,13 +68,13 @@ describe('NumberBox', () => {
       describe('rtlEnabled', () => {
         it('get from props', () => {
           const component = new NumberBox({ rtlEnabled: true });
-          component.rtlEnabled = false;
+          component.config = { rtlEnabled: false };
           expect(component.properties.rtlEnabled).toBe(true);
         });
 
         it('get from context', () => {
           const component = new NumberBox({ });
-          component.rtlEnabled = true;
+          component.config = { rtlEnabled: true };
           expect(component.properties.rtlEnabled).toBe(true);
         });
 

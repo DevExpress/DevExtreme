@@ -33,7 +33,6 @@ describe('Pager', () => {
           pageIndex: 0,
           pageSize: 5,
           pageSizes: [5, 10],
-          rtlEnabled: false,
           showInfo: false,
           showPageSizes: true,
           showNavigationButtons: false,

@@ -7,16 +7,16 @@ import {
   Component,
   Fragment,
 } from 'devextreme-generator/component_declaration/common';
-import { RtlEnabledContext } from './rtl_enabled_context';
+import { ConfigContextValue, ConfigContext } from './config_context';
 
-export const viewFunction = (viewModel: RtlEnabledProvider): JSX.Element => (
+export const viewFunction = (viewModel: ConfigProvider): JSX.Element => (
   <Fragment>
     {viewModel.props.children}
   </Fragment>
 );
 
 @ComponentBindings()
-export class RtlEnabledProviderProps {
+export class ConfigProviderProps {
   @OneWay() rtlEnabled!: boolean;
 
   @Slot() children?: JSX.Element;
@@ -24,9 +24,11 @@ export class RtlEnabledProviderProps {
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 // TODO generator bug uncomment after fix
-export class RtlEnabledProvider extends JSXComponent<RtlEnabledProviderProps, 'rtlEnabled' /* | 'children' */>() {
-  @Provider(RtlEnabledContext)
-  get rtlEnabled(): boolean {
-    return this.props.rtlEnabled;
+export class ConfigProvider extends JSXComponent<ConfigProviderProps, 'rtlEnabled' /* | 'children' */>() {
+  @Provider(ConfigContext)
+  get config(): ConfigContextValue {
+    return {
+      rtlEnabled: this.props.rtlEnabled,
+    };
   }
 }

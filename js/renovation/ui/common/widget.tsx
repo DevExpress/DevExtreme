@@ -18,7 +18,7 @@ import '../../../events/hover';
 import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../../../events/short';
-import config from '../../../core/config';
+import globalConfig from '../../../core/config';
 import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
@@ -26,8 +26,8 @@ import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
-import { RtlEnabledContext } from './rtl_enabled_context';
-import { RtlEnabledProvider } from './rtl_enabled_provider';
+import { ConfigContextValue, ConfigContext } from './config_context';
+import { ConfigProvider } from './config_provider';
 import { isDefined } from '../../../core/utils/type';
 
 const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
@@ -75,11 +75,11 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
   );
   return (
     <Fragment>
-      {viewModel.shouldRenderRtlEnabledProvider
+      {viewModel.shouldRenderConfigProvider
         ? (
-          <RtlEnabledProvider rtlEnabled={viewModel.rtlEnabled}>
+          <ConfigProvider rtlEnabled={viewModel.rtlEnabled}>
             {widget}
-          </RtlEnabledProvider>
+          </ConfigProvider>
         )
         : widget}
     </Fragment>
@@ -142,15 +142,15 @@ export class Widget extends JSXComponent(WidgetProps) {
     return this.widgetRef;
   }
 
-  @Consumer(RtlEnabledContext)
-  parentRtlEnabled?: boolean;
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
 
-  get shouldRenderRtlEnabledProvider(): boolean {
+  get shouldRenderConfigProvider(): boolean {
     const isPropDefined = isDefined(this.props.rtlEnabled);
-    const onlyGlobalDefined = isDefined(config().rtlEnabled)
-    && !isPropDefined && !isDefined(this.parentRtlEnabled);
+    const onlyGlobalDefined = isDefined(globalConfig().rtlEnabled)
+    && !isPropDefined && !isDefined(this.config?.rtlEnabled);
     return (isPropDefined
-    && (this.props.rtlEnabled !== this.parentRtlEnabled))
+    && (this.props.rtlEnabled !== this.config?.rtlEnabled))
     || onlyGlobalDefined;
   }
 
@@ -158,10 +158,10 @@ export class Widget extends JSXComponent(WidgetProps) {
     if (this.props.rtlEnabled !== undefined) {
       return this.props.rtlEnabled;
     }
-    if (this.parentRtlEnabled !== undefined) {
-      return this.parentRtlEnabled;
+    if (this.config?.rtlEnabled !== undefined) {
+      return this.config.rtlEnabled;
     }
-    return config().rtlEnabled;
+    return globalConfig().rtlEnabled;
   }
 
   @Effect()

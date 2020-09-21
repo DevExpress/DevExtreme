@@ -4,7 +4,7 @@ import {
 /* eslint-disable-next-line import/named */
 import LegacyNumberBox, { Options } from '../../ui/number_box';
 import { WidgetProps } from './common/widget';
-import { RtlEnabledContext } from './common/rtl_enabled_context';
+import { ConfigContextValue, ConfigContext } from './common/config_context';
 
 export const viewFunction = ({ widgetRef, props: { className }, restAttributes }: NumberBox) => (
   <div
@@ -69,13 +69,13 @@ export class NumberBox extends JSXComponent(NumberBoxProps) {
     return (): void => widget.dispose();
   }
 
-  @Consumer(RtlEnabledContext)
-  rtlEnabled!: boolean;
+  @Consumer(ConfigContext)
+  config!: ConfigContextValue;
 
   get properties(): Options {
     const { valueChange, ...restProps } = this.props;
     return ({
-      rtlEnabled: this.rtlEnabled,
+      rtlEnabled: this.config?.rtlEnabled,
       ...restProps,
       onValueChanged: ({ value }) => valueChange!(value),
     }) as Options;

@@ -10,13 +10,13 @@ import {
 import { Widget, viewFunction, WidgetProps } from '../widget';
 import { isFakeClickEvent } from '../../../../events/utils';
 import config from '../../../../core/config';
-import { RtlEnabledProvider } from '../rtl_enabled_provider';
+import { ConfigProvider } from '../config_provider';
 
 jest.mock('../../../../events/utils', () => ({
   ...require.requireActual('../../../../events/utils'),
   isFakeClickEvent: jest.fn(),
 }));
-jest.mock('../rtl_enabled_provider', () => ({ RtlEnabledProvider: () => null }));
+jest.mock('../config_provider', () => ({ ConfigProvider: () => null }));
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -74,17 +74,17 @@ describe('Widget', () => {
       expect(widget.find('.child').exists()).toBe(true);
     });
 
-    it('should render RtlEnabledProvider if shouldRenderRtlEnabledProvider is true', () => {
+    it('should render ConfigProvider if shouldRenderConfigProvider is true', () => {
       const props = {
         hint: 'hint',
         visible: true,
       };
       const widget = mount(viewFunction({
         props,
-        shouldRenderRtlEnabledProvider: true,
+        shouldRenderConfigProvider: true,
       } as any) as any);
 
-      expect(widget.find(RtlEnabledProvider)).toHaveLength(1);
+      expect(widget.find(ConfigProvider)).toHaveLength(1);
     });
   });
 
@@ -751,6 +751,7 @@ describe('Widget', () => {
 
       each`
       global       | rtlEnabled   | parentRtlEnabled | expected
+      ${true}      | ${true}      | ${true}          | ${false}
       ${undefined} | ${undefined} | ${undefined}     | ${false}
       ${true}      | ${true}      | ${undefined}     | ${true}
       ${true}      | ${false}     | ${undefined}     | ${true}
@@ -761,7 +762,7 @@ describe('Widget', () => {
       ${true}      | ${undefined} | ${false}         | ${false}
       ${true}      | ${true}      | ${true}          | ${false}
       `
-        .describe('shouldRenderRtlEnabledProvider', ({
+        .describe('shouldRenderConfigProvider', ({
           global, rtlEnabled, parentRtlEnabled, expected,
         }) => {
           const name = `${JSON.stringify({
@@ -771,8 +772,8 @@ describe('Widget', () => {
           it(name, () => {
             config().rtlEnabled = global;
             const widget = new Widget({ rtlEnabled });
-            widget.parentRtlEnabled = parentRtlEnabled;
-            expect(widget.shouldRenderRtlEnabledProvider).toBe(expected);
+            widget.config = { rtlEnabled: parentRtlEnabled };
+            expect(widget.shouldRenderConfigProvider).toBe(expected);
           });
         });
 
@@ -780,7 +781,7 @@ describe('Widget', () => {
         it('should return value from props if props has value', () => {
           const widget = new Widget({ rtlEnabled: false });
           // emulate context
-          widget.parentRtlEnabled = true;
+          widget.config = { rtlEnabled: true };
 
           expect(widget.rtlEnabled).toBe(false);
         });
@@ -788,7 +789,7 @@ describe('Widget', () => {
         it('should return value from parent rtlEnabled context if props isnt defined', () => {
           const widget = new Widget({ });
           // emulate context
-          widget.parentRtlEnabled = true;
+          widget.config = { rtlEnabled: true };
           expect(widget.rtlEnabled).toBe(true);
         });
 
