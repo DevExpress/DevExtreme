@@ -384,9 +384,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._selectedCells = [];
 
         if(this.isVirtualScrolling()) {
-            this._setSelectedCellsInVirtualMode(
-                $firstCell, $lastCell, isMultiSelection
-            );
+            this._setSelectedCellsInVirtualMode($firstCell, isMultiSelection);
         } else {
             this._setSelectedCellsInStandardMode(
                 $firstCell, $lastCell, isMultiSelection
@@ -419,10 +417,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
-    _setSelectedCellsInVirtualMode($firstCell, $lastCell, isMultiSelection) {
+    _setSelectedCellsInVirtualMode($firstCell, isMultiSelection) {
         if(isMultiSelection) {
-            const $previousCell = $lastCell || this._$prevCell;
-
             const { rowIndex: firstRow, columnIndex: firstColumn } = this._getCoordinatesByCell($firstCell);
             const isFirstAllDay = this._hasAllDayClass($firstCell);
             const firstCell = {
@@ -431,13 +427,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 allDay: isFirstAllDay,
             };
 
-            let lastCell;
-            if(!$previousCell) {
-                lastCell = this._getCoordinatesByCell($previousCell);
-                lastCell.allDay = this._hasAllDayClass($previousCell);
-            }
-
-            this.virtualSelectionState.setSelectedCells(firstCell, lastCell);
+            this.virtualSelectionState.setSelectedCells(firstCell);
         } else {
             this._selectedCells = [$firstCell.get(0)];
             this._$prevCell = $firstCell;

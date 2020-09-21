@@ -27,7 +27,7 @@ export default class VirtualSelectionState {
         return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: _focusedCell };
     }
 
-    setSelectedCells(firstCellCoordinates, lastCellCoordinates) {
+    setSelectedCells(lastCellCoordinates, firstCellCoordinates) {
         this._firstSelectedCellCoordinates = firstCellCoordinates || this._firstSelectedCellCoordinates;
         this._lastSelectedCellCoordinates = lastCellCoordinates || this._lastSelectedCellCoordinates;
 
@@ -42,6 +42,11 @@ export default class VirtualSelectionState {
 
         let firstCell = viewDataProvider.getCellData(firstRowIndex, firstColumnIndex, isFirstCellAllDay);
         let lastCell = viewDataProvider.getCellData(lastRowIndex, lastColumnIndex, isLastCellAllDay);
+
+        this._firstSelectedCell = firstCellCoordinates ? firstCell : this._firstSelectedCell;
+
+        firstCell = this._firstSelectedCell;
+
         if(firstCell.startDate.getTime() > lastCell.startDate.getTime()) {
             [firstCell, lastCell] = [lastCell, firstCell];
         }
