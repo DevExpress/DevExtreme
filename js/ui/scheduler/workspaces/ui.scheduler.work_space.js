@@ -38,6 +38,7 @@ import ViewDataProvider from './view_data_provider';
 import dxrAllDayPanelLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/layout.j';
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
+import VirtualSelectionState from './virtual_selection_state';
 
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
@@ -149,6 +150,14 @@ class SchedulerWorkSpace extends WidgetObserver {
             this._viewDataProvider = new ViewDataProvider(this);
         }
         return this._viewDataProvider;
+    }
+
+    get virtualSelectionState() {
+        if(!this._virtualSelectionState) {
+            this._virtualSelectionState = new VirtualSelectionState(this, this.viewDataProvider);
+        }
+
+        return this._virtualSelectionState;
     }
 
     _supportedKeys() {
@@ -333,7 +342,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const updateViewData = this.isVirtualScrolling()
             && !(this._hasAllDayClass($cell) && !this._isVerticalGroupedWorkSpace());
-        // !updateViewData && this.viewDataProvider?.releaseSelectedAndFocusedCells();
+        // !updateViewData && this.virtualSelectionState?.releaseSelectedAndFocusedCells();
 
         let $correctedCell = $cell;
         if(isMultiSelection) {
@@ -354,8 +363,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(updateViewData) {
             const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
             const isAllDayCell = this._hasAllDayClass($cell);
-            this.viewDataProvider.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
-            const { coordinates } = this.viewDataProvider.getFocusedCell();
+            this.virtualSelectionState.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
+            const { coordinates } = this.virtualSelectionState.getFocusedCell();
 
             $correctedCell = this._dom_getDateCell(coordinates);
         }
@@ -426,7 +435,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 lastCell.allDay = this._hasAllDayClass($previousCell);
             }
 
-            this.viewDataProvider.setSelectedCells(firstCell, lastCell);
+            this.virtualSelectionState.setSelectedCells(firstCell, lastCell);
         } else {
             this._selectedCells = [$firstCell.get(0)];
             this._$prevCell = $firstCell;
@@ -439,10 +448,10 @@ class SchedulerWorkSpace extends WidgetObserver {
                 allDay: isAllDayCell,
             };
 
-            this.viewDataProvider.setSelectedCells(firstCell, firstCell);
+            this.virtualSelectionState.setSelectedCells(firstCell, firstCell);
         }
         this._setSelectedCellsByCellData(
-            this.viewDataProvider.getSelectedCells(),
+            this.virtualSelectionState.getSelectedCells(),
         );
     }
 
@@ -452,7 +461,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             //     rowIndex, cellIndex,
             // } =
             const cellData = this.getCellData($cell);
-            const isValidFocusedCell = this.viewDataProvider.isValidFocusedCell(cellData);
+            const isValidFocusedCell = this.virtualSelectionState.isValidFocusedCell(cellData);
 
             return isValidFocusedCell ? $cell : this._$focusedCell;
         }
@@ -562,7 +571,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(!this._contextMenuHandled) {
             this._releaseSelectedAndFocusedCells();
-            this.viewDataProvider?.releaseSelectedAndFocusedCells();
+            this.virtualSelectionState?.releaseSelectedAndFocusedCells();
         }
     }
 
@@ -707,6 +716,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._sideBarSemaphore = new ScrollSemaphore();
         this._dataTableSemaphore = new ScrollSemaphore();
         this._viewDataProvider = null;
+        this._virtualSelectionState = null;
 
         super._init();
 
@@ -1287,8 +1297,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateRSelection() {
-        const { coordinates } = this.viewDataProvider.getFocusedCell();
-        const selectedCells = this.viewDataProvider.getSelectedCells();
+        const { coordinates } = this.virtualSelectionState.getFocusedCell();
+        const selectedCells = this.virtualSelectionState.getSelectedCells();
 
         if(coordinates && coordinates.rowIndex !== -1) {
             const $cell = this._dom_getDateCell(coordinates);
@@ -2489,7 +2499,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getSelectedCellData() {
         if(this.isVirtualScrolling()) {
-            return this.viewDataProvider.getSelectedCells();
+            return this.virtualSelectionState.getSelectedCells();
         }
 
         const $focusedCells = this._getAllFocusedCells();
@@ -3072,9 +3082,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         const columnIndex = $cell.index();
         let rowIndex = $cell.parent().index();
 
-        if(rowIndex < 0) {
-            debugger;
-        }
         if(this.isVirtualScrolling()) {
             rowIndex -= 1;
         }
