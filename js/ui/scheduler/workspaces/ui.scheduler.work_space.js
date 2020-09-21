@@ -3087,20 +3087,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return { rowIndex, columnIndex };
     }
 
-    _getDimensions() {
-        const isVirtualScrolling = this.isVirtualScrolling();
-        if(isVirtualScrolling) {
-            return this.viewDataProvider.getDimensions();
-        }
-
-        const groupCount = this._getGroupCount();
-
-        const columnCount = this._getTotalCellCount(groupCount);
-        const rowCount = this._getTotalRowCount(groupCount);
-
-        return { columnCount, rowCount };
-    }
-
     _isShowAllDayPanel() {
         return this.option('showAllDayPanel');
     }

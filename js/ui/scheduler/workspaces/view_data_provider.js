@@ -303,21 +303,6 @@ export default class ViewDataProvider {
         return cellData;
     }
 
-    getDimensions() {
-        const { groupedData } = this._viewData;
-
-        const columnCount = groupedData[0].dateTable[0].length;
-
-        const rowCount = groupedData.reduce((currentRowCount, { dateTable }) => {
-            const dateTableSize = dateTable?.length;
-            const rowsInDateTable = dateTableSize || 0;
-
-            return currentRowCount + rowsInDateTable;
-        }, 0);
-
-        return { rowCount, columnCount };
-    }
-
     getCellsByGroupIndexAndAllDay(groupIndex, allDay) {
         const workspace = this._workspace;
         const rowsPerGroup = workspace._getRowCountWithAllDayRows();
