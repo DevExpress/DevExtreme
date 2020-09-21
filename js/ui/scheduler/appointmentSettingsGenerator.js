@@ -44,8 +44,15 @@ export default class AppointmentSettingsGenerator {
 
         this._updateGroupIndices(appointmentList, itemResources);
 
+        const timeZoneName = this.scheduler.option('timeZone');
+        const isEqualLocalTimeZone = timeZoneUtils.isEqualLocalTimeZone(timeZoneName);
 
-        if(appointmentList.length > 1 && !!this.scheduler.option('timeZone') && !appointment.startDateTimeZone) {
+        const canProcessNotNativeTimezoneDates = appointmentList.length > 1 &&
+            !isEqualLocalTimeZone &&
+            timeZoneName !== undefined &&
+            appointment.startDateTimeZone !== undefined;
+
+        if(canProcessNotNativeTimezoneDates) {
             appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
         }
 

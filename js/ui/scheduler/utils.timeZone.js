@@ -1,3 +1,4 @@
+/* globals Intl */
 import dateUtils from '../../core/utils/date';
 import timeZoneDataUtils from './timezones/utils.timezones_data';
 import DateAdapter from './dateAdapter';
@@ -101,6 +102,44 @@ const getClientTimezoneOffset = (date) => {
     return date.getTimezoneOffset() * 60000;
 };
 
+const isEqualLocalTimeZone = (timeZoneName) => {
+    if(Intl) {
+        const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if(localTimeZoneName) {
+            return localTimeZoneName === timeZoneName;
+        }
+    }
+
+    return isEqualLocalTimeZoneByNativeDate(timeZoneName);
+};
+
+const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
+    const nowDate = new Date(Date.now());
+
+    const startDate = new Date();
+    const endDate = new Date();
+
+    startDate.setFullYear(nowDate.getFullYear());
+    startDate.setMonth(0);
+    startDate.setDate(1);
+
+    endDate.setFullYear(nowDate.getFullYear());
+    endDate.setMonth(6);
+    endDate.setDate(1);
+
+    const startDateLocalOffset = -startDate.getTimezoneOffset() / 60;
+    const endDateLocalOffset = -endDate.getTimezoneOffset() / 60;
+
+    const startDateOffset = calculateTimezoneByValue(timeZoneName, startDate);
+    const endDateOffset = calculateTimezoneByValue(timeZoneName, endDate);
+
+    if(startDateLocalOffset === startDateOffset && endDateLocalOffset === endDateOffset) {
+        return true;
+    }
+
+    return false;
+};
+
 const utils = {
     getDaylightOffset,
     getDaylightOffsetInMs,
@@ -114,7 +153,9 @@ const utils = {
     getClientTimezoneOffset,
 
     createUTCDate,
-    createDateFromUTC
+    createDateFromUTC,
+
+    isEqualLocalTimeZone
 };
 
 export default utils;
