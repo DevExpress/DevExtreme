@@ -782,7 +782,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
             this._fixedTableElement.parent().scrollTop(scrollTop);
 
-            if(needFocus) {
+            if(needFocus && editorFactory) {
                 $focusedElement = editorFactory.focus();
                 $focusedElement && editorFactory.focus($focusedElement);
             }
