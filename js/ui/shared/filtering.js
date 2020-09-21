@@ -1,6 +1,6 @@
 import { isDate, isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
-import { map } from '../../core/utils/iterator';
+import iteratorUtils from '../../core/utils/iterator';
 
 const DEFAULT_DATE_INTERVAL = ['year', 'month', 'day'];
 const DEFAULT_DATETIME_INTERVAL = ['year', 'month', 'day', 'hour', 'minute'];
@@ -49,7 +49,7 @@ export default (function() {
         if(isDate(dateValue)) {
             return [dateValue.getFullYear(), dateValue.getMonth(), dateValue.getDate(), dateValue.getHours(), dateValue.getMinutes(), dateValue.getSeconds()];
         }
-        return map(('' + dateValue).split('/'), function(value, index) {
+        return iteratorUtils.map(('' + dateValue).split('/'), function(value, index) {
             return index === 1 ? Number(value) - 1 : Number(value);
         });
     };

@@ -2,20 +2,20 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import { data as elementData } from '../../core/element_data';
-import { locate, move } from '../../animation/translator';
+import translator from '../../animation/translator';
 import dateUtils from '../../core/utils/date';
 import { noop, normalizeKey } from '../../core/utils/common';
 import { isDefined, isDeferred, isPlainObject, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import { deepExtendArraySafe } from '../../core/utils/object';
-import { merge } from '../../core/utils/array';
+import objectUtils from '../../core/utils/object';
+import arrayUtils from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
 import { getRecurrenceProcessor } from './recurrence';
 import registerComponent from '../../core/component_registrator';
 import publisherMixin from './ui.scheduler.publisher_mixin';
 import Appointment from './ui.scheduler.appointment';
-import { addNamespace, isFakeClickEvent } from '../../events/utils/index';
+import { addNamespace, isFakeClickEvent } from '../../events/utils';
 import { name as dblclickEvent } from '../../events/double_click';
 import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
@@ -547,7 +547,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 }
 
                 this._initialSize = { width: e.width, height: e.height };
-                this._initialCoordinates = locate(this._$currentAppointment);
+                this._initialCoordinates = translator.locate(this._$currentAppointment);
             }).bind(this),
             onResizeEnd: (function(e) {
                 if(this._escPressed) {
@@ -869,7 +869,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _combineAppointments: function(appointments, additionalAppointments) {
         if(additionalAppointments.length) {
-            merge(appointments, additionalAppointments);
+            arrayUtils.merge(appointments, additionalAppointments);
         }
         this._sortAppointmentsByStartDate(appointments);
     },
@@ -901,7 +901,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         if($appointment && !dragEvent) {
             if(coords) {
-                move($appointment, coords);
+                translator.move($appointment, coords);
                 delete this._initialSize;
             }
             if(size) {
@@ -953,7 +953,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             this._checkStartDate(currentStartDate, originalStartDate, startDayHour);
             this._checkEndDate(currentEndDate, endDate, endDayHour);
 
-            const appointmentData = deepExtendArraySafe({}, appointment, true);
+            const appointmentData = objectUtils.deepExtendArraySafe({}, appointment, true);
             const appointmentSettings = {};
             this._applyStartDateToObj(currentStartDate, appointmentSettings);
             this._applyEndDateToObj(currentEndDate, appointmentSettings);

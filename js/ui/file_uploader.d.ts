@@ -441,6 +441,22 @@ export default class dxFileUploader extends Editor {
      * @public
      */
     abortUpload(file: File): void;
+    /**
+     * @docid dxFileUploaderMethods.removeFile
+     * @publicName removeFile(fileIndex)
+     * @param1 fileIndex:number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    removeFile(fileIndex: number): void;
+    /**
+     * @docid dxFileUploaderMethods.removeFile
+     * @publicName removeFile(file)
+     * @param1 file:File
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    removeFile(file: File): void;
 }
 
 declare global {

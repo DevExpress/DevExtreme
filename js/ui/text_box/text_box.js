@@ -9,7 +9,7 @@ import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
 import TextEditor from './ui.text_editor';
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, normalizeKeyName } from '../../events/utils';
 
 // STYLE textBox
 

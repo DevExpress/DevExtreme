@@ -2,8 +2,8 @@ import $ from '../core/renderer';
 import registerComponent from '../core/component_registrator';
 import { grep } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
-import { merge } from '../core/utils/array';
-import { each } from '../core/utils/iterator';
+import arrayUtils from '../core/utils/array';
+import iteratorUtils from '../core/utils/iterator';
 import ActionSheetStrategy from './toolbar/ui.toolbar.strategy.action_sheet';
 import DropDownMenuStrategy from './toolbar/ui.toolbar.strategy.drop_down_menu';
 import ToolbarBase from './toolbar/ui.toolbar.base';
@@ -192,7 +192,7 @@ const Toolbar = ToolbarBase.inherit({
             }, itemData);
         });
 
-        return merge(overflowItems, menuItems);
+        return arrayUtils.merge(overflowItems, menuItems);
     },
 
     _getToolbarItems: function() {
@@ -225,7 +225,7 @@ const Toolbar = ToolbarBase.inherit({
         const items = this.option('items') || [];
         let result = false;
 
-        each(items, function(index, item) {
+        iteratorUtils.each(items, function(index, item) {
             if(item.locateInMenu === 'auto') {
                 result = true;
             } else if(item.locateInMenu === 'always' && item.widget) {
@@ -246,7 +246,7 @@ const Toolbar = ToolbarBase.inherit({
             float: 'none'
         });
 
-        each(this._restoreItems || [], function(_, obj) {
+        iteratorUtils.each(this._restoreItems || [], function(_, obj) {
             $(obj.container).append(obj.item);
         });
         this._restoreItems = [];

@@ -10,7 +10,7 @@ import { isFunction, isPlainObject } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { getWindow } from '../core/utils/window';
-import eventsEngine from '../events/core/events_engine';
+import { trigger } from '../events/core/events_engine';
 import { value as getViewport } from '../core/utils/view_port';
 
 import messageLocalization from '../localization/message';
@@ -145,7 +145,7 @@ export const custom = function(options) {
                 .find(`.${DX_BUTTON_CLASSNAME}`)
                 .first();
 
-            eventsEngine.trigger($firstButton, 'focus');
+            trigger($firstButton, 'focus');
         },
         onHiding: function() {
             deferred.reject();

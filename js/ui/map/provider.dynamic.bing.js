@@ -4,7 +4,7 @@ const window = getWindow();
 import Promise from '../../core/polyfills/promise';
 import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
-import { map, each } from '../../core/utils/iterator';
+import iteratorUtils from '../../core/utils/iterator';
 import DynamicProvider from './provider.dynamic';
 import Color from '../../color';
 import ajax from '../../core/utils/ajax';
@@ -334,7 +334,7 @@ const BingProvider = DynamicProvider.inherit({
     },
 
     _renderRoute: function(options) {
-        return Promise.all(map(options.locations, function(point) {
+        return Promise.all(iteratorUtils.map(options.locations, function(point) {
             return this._resolveLocation(point);
         }.bind(this))).then(function(locations) {
             return new Promise(function(resolve) {
@@ -361,7 +361,7 @@ const BingProvider = DynamicProvider.inherit({
                     routeDraggable: false
                 });
 
-                each(locations, function(_, location) {
+                iteratorUtils.each(locations, function(_, location) {
                     const waypoint = new Microsoft.Maps.Directions.Waypoint({ location: location });
                     direction.addWaypoint(waypoint);
                 });

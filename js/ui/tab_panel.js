@@ -1,5 +1,5 @@
 import $ from '../core/renderer';
-import { touch } from '../core/utils/support';
+import support from '../core/utils/support';
 import { extend } from '../core/utils/extend';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
@@ -70,7 +70,7 @@ const TabPanel = MultiView.inherit({
             },
             {
                 device: function() {
-                    return !touch;
+                    return !support.touch;
                 },
                 options: {
                     swipeEnabled: false

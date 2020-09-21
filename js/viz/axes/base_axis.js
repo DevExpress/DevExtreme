@@ -1,22 +1,11 @@
 import { smartFormatter as _format, formatRange } from './smart_formatter';
-import {
-    patchFontOptions,
-    getVizRangeObject,
-    getLogExt as getLog,
-    raiseToExt as raiseTo,
-    valueOf,
-    rotateBBox,
-    getCategoriesInfo,
-    adjustVisualRange,
-    getAddFunction,
-    convertVisualRangeObject
-} from '../core/utils';
+import vizUtils from '../core/utils';
 import { isDefined, isFunction, isPlainObject, isNumeric, type } from '../../core/utils/type';
 import constants from './axes_constants';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import formatHelper from '../../format_helper';
-import { getParser } from '../components/parse_utils';
+import parseUtils from '../components/parse_utils';
 import tickGeneratorModule from './tick_generator';
 import Translator2DModule from '../translators/translator2d';
 import { Range } from '../translators/range';
@@ -31,6 +20,11 @@ import createStrip from './strip';
 import { Deferred, when } from '../../core/utils/deferred';
 
 const convertTicksToValues = constants.convertTicksToValues;
+const patchFontOptions = vizUtils.patchFontOptions;
+const getVizRangeObject = vizUtils.getVizRangeObject;
+const getLog = vizUtils.getLogExt;
+const raiseTo = vizUtils.raiseToExt;
+const valueOf = vizUtils.valueOf;
 const _math = Math;
 const _abs = _math.abs;
 const _max = _math.max;
@@ -283,6 +277,10 @@ function configureGenerator(options, axisDivisionFactor, viewPort, screenDelta, 
             breaks
         );
     };
+}
+
+function convertVisualRangeObject(visualRange, optionValue) {
+    return vizUtils.convertVisualRangeObject(visualRange, !_isArray(optionValue));
 }
 
 function getConstantLineSharpDirection(coord, axisCanvas) {
@@ -610,7 +608,7 @@ Axis.prototype = {
         const positionsAreConsistent = options.position === options.label.position;
         const maxSize = that._majorTicks.reduce(function(size, tick) {
             if(!tick.getContentContainer()) return size;
-            const bBox = tick.labelRotationAngle ? rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
+            const bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
             return {
                 width: _max(size.width || 0, bBox.width),
                 height: _max(size.height || 0, bBox.height),
@@ -628,8 +626,7 @@ Axis.prototype = {
         offset = offset || 0;
         const that = this;
         const options = that._options;
-
-        const box = templateBox || rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
+        const box = templateBox || vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
         const textAlign = tick.labelAlignment || options.label.alignment;
         const isDiscrete = that._options.type === 'discrete';
         const isFlatLabel = tick.labelRotationAngle % 90 === 0;
@@ -986,7 +983,7 @@ Axis.prototype = {
             align: 'center',
             'class': labelOpt.cssClass
         };
-        that._textFontStyles = patchFontOptions(labelOpt.font);
+        that._textFontStyles = vizUtils.patchFontOptions(labelOpt.font);
 
         if(options.type === constants.logarithmic) {
             if(options.logarithmBaseError) {
@@ -1100,13 +1097,13 @@ Axis.prototype = {
             result.min = wholeRange.startValue ?? result.min;
             result.max = wholeRange.endValue ?? result.max;
         } else {
-            const categoriesInfo = getCategoriesInfo(categories, wholeRange.startValue, wholeRange.endValue);
+            const categoriesInfo = vizUtils.getCategoriesInfo(categories, wholeRange.startValue, wholeRange.endValue);
 
             categories = categoriesInfo.categories;
             result.categories = categories;
         }
 
-        const adjustedVisualRange = adjustVisualRange({
+        const adjustedVisualRange = vizUtils.adjustVisualRange({
             axisType: options.type,
             dataType: options.dataType,
             base: options.logarithmBase
@@ -1243,7 +1240,7 @@ Axis.prototype = {
         if(type === constants.logarithmic) {
             length = adjust(this.calculateInterval(currentBusinessRange.maxVisible, currentBusinessRange.minVisible));
         } else if(type === constants.discrete) {
-            const categoriesInfo = getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
+            const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
             length = categoriesInfo.categories.length;
         } else {
             length = currentBusinessRange.maxVisible - currentBusinessRange.minVisible;
@@ -1265,7 +1262,7 @@ Axis.prototype = {
             const { allowNegatives, linearThreshold, minVisible, maxVisible } = currentBusinessRange;
             center = raiseTo(adjust(getLog(maxVisible, logarithmBase, allowNegatives, linearThreshold) + getLog(minVisible, logarithmBase, allowNegatives, linearThreshold)) / 2, logarithmBase, allowNegatives, linearThreshold);
         } else if(type === constants.discrete) {
-            const categoriesInfo = getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
+            const categoriesInfo = vizUtils.getCategoriesInfo(currentBusinessRange.categories, currentBusinessRange.minVisible, currentBusinessRange.maxVisible);
             const index = Math.ceil(categoriesInfo.categories.length / 2) - 1;
             center = businessRange.categories.indexOf(categoriesInfo.categories[index]);
         } else {
@@ -1513,7 +1510,7 @@ Axis.prototype = {
             const min = useAllAggregatedPoints ? businessRange.min : minVisible;
             const max = useAllAggregatedPoints ? businessRange.max : maxVisible;
             if(isDefined(min) && isDefined(max)) {
-                const add = getAddFunction({
+                const add = vizUtils.getAddFunction({
                     base: options.logarithmBase,
                     axisType: options.type,
                     dataType: options.dataType
@@ -2152,8 +2149,8 @@ Axis.prototype = {
         this._axisStripGroup.attr({ 'clip-path': elementsClipID });
     },
 
-    _validateVisualRange(optionValue) {
-        const range = getVizRangeObject(optionValue);
+    _validateVisualRange(visualRange) {
+        const range = getVizRangeObject(visualRange);
         if(range.startValue !== undefined) {
             range.startValue = this.validateUnit(range.startValue);
         }
@@ -2162,7 +2159,7 @@ Axis.prototype = {
             range.endValue = this.validateUnit(range.endValue);
         }
 
-        return convertVisualRangeObject(range, !_isArray(optionValue));
+        return convertVisualRangeObject(range, visualRange);
     },
 
     _validateOptions(options) {
@@ -2178,7 +2175,7 @@ Axis.prototype = {
         const that = this;
         const options = that._options;
         const dataType = that.isArgumentAxis ? options.argumentType : options.valueType;
-        const parser = dataType ? getParser(dataType) : function(unit) { return unit; };
+        const parser = dataType ? parseUtils.getParser(dataType) : function(unit) { return unit; };
 
         that.parser = parser;
         options.dataType = dataType;
@@ -2193,7 +2190,7 @@ Axis.prototype = {
     },
 
     _setVisualRange(visualRange, allowPartialUpdate) {
-        const range = this.adjustRange(getVizRangeObject(visualRange));
+        const range = this.adjustRange(vizUtils.getVizRangeObject(visualRange));
         if(allowPartialUpdate) {
             isDefined(range.startValue) && (this._viewport.startValue = range.startValue);
             isDefined(range.endValue) && (this._viewport.endValue = range.endValue);
@@ -2245,7 +2242,7 @@ Axis.prototype = {
     },
 
     getZoomBounds() {
-        const wholeRange = getVizRangeObject(this._options.wholeRange);
+        const wholeRange = vizUtils.getVizRangeObject(this._options.wholeRange);
         const range = this.getTranslator().getBusinessRange();
         const secondPriorityRange = {
             startValue: getZoomBoundValue(this._initRange.startValue, range.min),
@@ -2289,7 +2286,7 @@ Axis.prototype = {
                 return {
                     startValue,
                     endValue,
-                    categories: getCategoriesInfo(adjustedRange.categories, startValue, endValue).categories
+                    categories: vizUtils.getCategoriesInfo(adjustedRange.categories, startValue, endValue).categories
                 };
             }
             return {
@@ -2386,7 +2383,7 @@ Axis.prototype = {
         const businessRange = that._translator.getBusinessRange();
         let visualRange;
         if(isDefined(range)) {
-            visualRange = that.adjustRange(getVizRangeObject(range));
+            visualRange = that.adjustRange(vizUtils.getVizRangeObject(range));
             visualRange = {
                 minVisible: visualRange.startValue,
                 maxVisible: visualRange.endValue,

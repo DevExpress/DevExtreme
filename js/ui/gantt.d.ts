@@ -389,6 +389,14 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     taskTooltipContentTemplate?: template | ((container: dxElement, task: any) => string | Element | JQuery);
+    /**
+     * @docid dxGanttOptions.rootValue
+     * @type any
+     * @default 0
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    rootValue?: any;
 }
 /**
  * @docid dxGantt

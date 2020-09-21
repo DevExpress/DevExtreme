@@ -4,7 +4,7 @@ import { isDefined, isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
-import { locate } from '../../animation/translator';
+import translator from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
@@ -412,7 +412,7 @@ const subscribes = {
 
         each(horizontalResizables, (function(_, el) {
             const $el = $(el);
-            const position = locate($el);
+            const position = translator.locate($el);
             const appointmentData = this._appointments._getItemData($el);
 
             const area = this._appointments._calculateResizableArea({

@@ -3,7 +3,7 @@ import config from '../core/config';
 import Guid from '../core/guid';
 import { extend } from '../core/utils/extend';
 import { errors } from './errors';
-import { deepExtendArraySafe } from '../core/utils/object';
+import objectUtils from '../core/utils/object';
 import { keysEqual, rejectedPromise, trivialPromise } from './utils';
 
 function hasKey(target, keyOrKeys) {
@@ -114,7 +114,7 @@ function update(keyInfo, array, key, data, isBatch) {
         target = key;
     }
 
-    deepExtendArraySafe(target, data, extendComplexObject);
+    objectUtils.deepExtendArraySafe(target, data, extendComplexObject);
     if(!isBatch) {
         if(config().useLegacyStoreResult) {
             return trivialPromise(key, data);

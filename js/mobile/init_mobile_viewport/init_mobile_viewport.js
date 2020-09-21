@@ -5,7 +5,7 @@ const window = getWindow();
 import eventsEngine from '../../events/core/events_engine';
 import { extend } from '../../core/utils/extend';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
-import { supportProp, touch } from '../../core/utils/support';
+import support from '../../core/utils/support';
 import { styleProp } from '../../core/utils/style';
 import devices from '../../core/devices';
 
@@ -44,7 +44,7 @@ export const initMobileViewport = function(options) {
         $('html').css('msOverflowStyle', '-ms-autohiding-scrollbar');
     }
 
-    if(!allowSelection && supportProp('userSelect')) {
+    if(!allowSelection && support.supportProp('userSelect')) {
         $('.dx-viewport').css(styleProp('userSelect'), 'none');
     }
 
@@ -53,7 +53,7 @@ export const initMobileViewport = function(options) {
 
     realDevice = devices.real();
 
-    if(touch) {
+    if(support.touch) {
         eventsEngine.off(domAdapter.getDocument(), '.dxInitMobileViewport');
         eventsEngine.on(domAdapter.getDocument(), 'dxpointermove.dxInitMobileViewport', function(e) {
             const count = e.pointers.length;

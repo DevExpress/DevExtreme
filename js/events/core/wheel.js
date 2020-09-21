@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import registerEvent from './event_registrator';
-import { addNamespace, fireEvent } from '../utils/index';
+import { addNamespace, fireEvent } from '../utils';
 
 
 const EVENT_NAME = 'dxmousewheel';

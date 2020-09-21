@@ -6969,6 +6969,14 @@ declare module DevExpress.ui {
          */
         abortUpload(fileIndex: number): void;
         /**
+         * [descr:dxFileUploader.removeFile(file)]
+         */
+        removeFile(file: File): void;
+        /**
+         * [descr:dxFileUploader.removeFile(fileIndex)]
+         */
+        removeFile(fileIndex: number): void;
+        /**
          * [descr:dxFileUploader.upload()]
          */
         upload(): void;
@@ -7697,6 +7705,10 @@ declare module DevExpress.ui {
          * [descr:dxGantt.Options.resources]
          */
         resources?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, textExpr?: string | Function };
+        /**
+         * [descr:dxGantt.Options.rootValue]
+         */
+        rootValue?: any;
         /**
          * [descr:dxGantt.Options.scaleType]
          */
@@ -10797,6 +10809,10 @@ declare module DevExpress.ui {
     export class dxSortable extends DraggableBase {
         constructor(element: Element, options?: dxSortableOptions)
         constructor(element: JQuery, options?: dxSortableOptions)
+        /**
+         * [descr:dxSortable.update()]
+         */
+        update(): void;
     }
     /**
      * [descr:dxSpeedDialAction.Options]
