@@ -11,7 +11,7 @@ import { getDiagram } from './diagram.importer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import { getPublicElement } from '../../core/element';
 import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import messageLocalization from '../../localization/message';
 import numberLocalization from '../../localization/number';
 import * as zIndexPool from '../overlay/z_index';
@@ -1708,9 +1708,9 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.nodes.autoSizeEnabled
                 * @type boolean
-                * @default false
+                * @default true
                 */
-                autoSizeEnabled: false
+                autoSizeEnabled: true,
             },
             edges: {
                 /**

@@ -1,5 +1,5 @@
 import $ from '../core/renderer';
-import eventsEngine from './core/events_engine';
+import { triggerHandler } from './core/events_engine';
 
 const triggerVisibilityChangeEvent = function(eventName) {
     const VISIBILITY_CHANGE_SELECTOR = '.dx-visibility-change-handler';
@@ -11,7 +11,7 @@ const triggerVisibilityChangeEvent = function(eventName) {
             add($element.find(VISIBILITY_CHANGE_SELECTOR));
 
         for(let i = 0; i < changeHandlers.length; i++) {
-            eventsEngine.triggerHandler(changeHandlers[i], eventName);
+            triggerHandler(changeHandlers[i], eventName);
         }
     };
 };

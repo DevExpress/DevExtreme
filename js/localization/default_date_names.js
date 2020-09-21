@@ -1,4 +1,4 @@
-import { map } from '../core/utils/iterator';
+import iteratorUtils from '../core/utils/iterator';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -13,7 +13,7 @@ const cutCaptions = (captions, format) => {
         narrow: 1
     };
 
-    return map(captions, caption => {
+    return iteratorUtils.map(captions, caption => {
         return caption.substr(0, lengthByFormat[format]);
     });
 };

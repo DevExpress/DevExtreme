@@ -15,7 +15,7 @@ import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
 import messageLocalization from '../localization/message';
-import { addNamespace, normalizeKeyName } from '../events/utils/index';
+import { addNamespace, normalizeKeyName } from '../events/utils';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';

@@ -24,7 +24,7 @@ describe('resizable-container', () => {
   function getElementsRef({
     width, pageSizes, info, pages,
   }) {
-    const parentHtmlEl = getFakeHtml(width) as HTMLElement;
+    const parentHtmlEl: GetHtmlElement = { getHtmlElement: () => getFakeHtml(width) };
     const pageSizesHtmlEl: GetHtmlElement | undefined = pageSizes
       ? { getHtmlElement: () => getFakeHtml(pageSizes) } : undefined;
     const infoHtmlEl: GetHtmlElement | undefined = info
@@ -50,7 +50,7 @@ describe('resizable-container', () => {
           pagerProps: {
             pagerPropsProp1: 'pagerPropsProp1',
             pagerPropsProp2: 'pagerPropsProp2',
-          },
+          } as any,
         },
         restAttributes: { restAttribute: {} },
       } as Partial<ResizableContainer>;

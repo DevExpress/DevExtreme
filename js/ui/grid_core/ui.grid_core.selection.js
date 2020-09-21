@@ -8,7 +8,7 @@ import { extend } from '../../core/utils/extend';
 import support from '../../core/utils/support';
 import { name as clickEventName } from '../../events/click';
 import messageLocalization from '../../localization/message';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import holdEvent from '../../events/hold';
 import Selection from '../selection/selection';
 import { Deferred } from '../../core/utils/deferred';

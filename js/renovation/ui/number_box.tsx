@@ -1,9 +1,10 @@
 import {
-  Ref, Effect, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, Method,
+  Ref, Effect, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, Method, Consumer,
 } from 'devextreme-generator/component_declaration/common';
 /* eslint-disable-next-line import/named */
 import LegacyNumberBox, { Options } from '../../ui/number_box';
 import { WidgetProps } from './common/widget';
+import { ConfigContextValue, ConfigContext } from './common/config_context';
 
 export const viewFunction = ({ widgetRef, props: { className }, restAttributes }: NumberBox) => (
   <div
@@ -68,8 +69,15 @@ export class NumberBox extends JSXComponent(NumberBoxProps) {
     return (): void => widget.dispose();
   }
 
+  @Consumer(ConfigContext)
+  config!: ConfigContextValue;
+
   get properties(): Options {
     const { valueChange, ...restProps } = this.props;
-    return ({ ...restProps, onValueChanged: ({ value }) => valueChange!(value) }) as Options;
+    return ({
+      rtlEnabled: this.config?.rtlEnabled,
+      ...restProps,
+      onValueChanged: ({ value }) => valueChange!(value),
+    }) as Options;
   }
 }

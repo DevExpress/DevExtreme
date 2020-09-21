@@ -2,39 +2,27 @@ import $ from '../../core/renderer';
 import { data } from '../../core/element_data';
 import Callbacks from '../../core/utils/callbacks';
 import { hasWindow } from '../../core/utils/window';
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
-import { getDefaultAlignment } from '../../core/utils/position';
+import { addNamespace, normalizeKeyName } from '../../events/utils';
 import { extend } from '../../core/utils/extend';
-import Guid from '../../core/guid';
 import Widget from '../widget/ui.widget';
-import Overlay from '../overlay';
 import ValidationEngine from '../validation_engine';
 import EventsEngine from '../../events/core/events_engine';
-import { encodeHtml } from '../../core/utils/string';
+import ValidationMessage from '../validationMessage';
+import Guid from '../../core/guid';
 
+const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
 const READONLY_STATE_CLASS = 'dx-state-readonly';
 const INVALID_CLASS = 'dx-invalid';
-const INVALID_MESSAGE = 'dx-invalid-message';
-const INVALID_MESSAGE_CONTENT = 'dx-invalid-message-content';
-const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
-const INVALID_MESSAGE_ALWAYS = 'dx-invalid-message-always';
 const DX_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 const VALIDATION_TARGET = 'dx-validation-target';
-const VALIDATION_MESSAGE_MIN_WIDTH = 100;
 const VALIDATION_STATUS_VALID = 'valid';
 const VALIDATION_STATUS_INVALID = 'invalid';
 const READONLY_NAMESPACE = 'editorReadOnly';
 
-const getValidationErrorMessage = function(validationErrors) {
-    let validationErrorMessage = '';
-    if(validationErrors) {
-        validationErrors.forEach(function(err) {
-            if(err.message) {
-                validationErrorMessage += ((validationErrorMessage ? '<br />' : '') + encodeHtml(err.message));
-            }
-        });
-    }
-    return validationErrorMessage;
+const VALIDATION_MESSAGE_KEYS_MAP = {
+    validationMessageMode: 'mode',
+    validationMessageOffset: 'offset',
+    validationBoundary: 'boundary',
 };
 
 const Editor = Widget.inherit({
@@ -161,13 +149,13 @@ const Editor = Widget.inherit({
         // it can change the editor's value
         if(this._canValueBeChangedByClick() && isValidationMessageShownOnFocus) {
             // NOTE: Prevent the validation message from showing
-            this._$validationMessage && this._$validationMessage.removeClass(INVALID_MESSAGE_AUTO);
+            this._$validationMessage?.removeClass(INVALID_MESSAGE_AUTO);
 
             clearTimeout(this.showValidationMessageTimeout);
 
             // NOTE: Show the validation message after a click changes the value
             this.showValidationMessageTimeout = setTimeout(
-                () => this._$validationMessage && this._$validationMessage.addClass(INVALID_MESSAGE_AUTO), 150
+                () => this._$validationMessage?.addClass(INVALID_MESSAGE_AUTO), 150
             );
         }
 
@@ -178,105 +166,59 @@ const Editor = Widget.inherit({
         return false;
     },
 
-    _renderValidationState: function() {
-        const isValid = this.option('isValid') && this.option('validationStatus') !== VALIDATION_STATUS_INVALID;
-        const validationMessageMode = this.option('validationMessageMode');
-        const $element = this.$element();
+    _getValidationErrors: function() {
         let validationErrors = this.option('validationErrors');
         if(!validationErrors && this.option('validationError')) {
             validationErrors = [this.option('validationError')];
         }
-        $element.toggleClass(INVALID_CLASS, !isValid);
-        this.setAria(VALIDATION_STATUS_INVALID, !isValid || undefined);
+        return validationErrors;
+    },
 
-        if(!hasWindow()) {
-            return;
-        }
-
+    _disposeValidationMessage: function() {
         if(this._$validationMessage) {
             this._$validationMessage.remove();
             this.setAria('describedby', null);
             this._$validationMessage = null;
         }
+    },
 
-        const validationErrorMessage = getValidationErrorMessage(validationErrors);
+    _toggleValidationClasses: function(isInvalid) {
+        this.$element().toggleClass(INVALID_CLASS, isInvalid);
+        this.setAria(VALIDATION_STATUS_INVALID, isInvalid || undefined);
+    },
 
-        if(!isValid && validationErrorMessage) {
-            this._$validationMessage = $('<div>').addClass(INVALID_MESSAGE)
-                .html(validationErrorMessage)
-                .appendTo($element);
+    _renderValidationState: function() {
+        const isValid = this.option('isValid') && this.option('validationStatus') !== VALIDATION_STATUS_INVALID;
+        const validationErrors = this._getValidationErrors();
+        const $element = this.$element();
 
-            const validationTarget = this._getValidationMessageTarget();
+        this._toggleValidationClasses(!isValid);
 
-            this._validationMessage = this._createComponent(this._$validationMessage, Overlay, extend({
-                integrationOptions: {},
-                templatesRenderAsynchronously: false,
-                target: validationTarget,
-                shading: false,
-                width: 'auto',
-                height: 'auto',
+        if(!hasWindow()) {
+            return;
+        }
+
+        this._disposeValidationMessage();
+        if(!isValid && validationErrors) {
+            this._$validationMessage = $('<div>').appendTo($element);
+            this.setAria('describedby', 'dx-' + new Guid());
+
+            this._validationMessage = new ValidationMessage(this._$validationMessage, extend({
+                validationErrors,
+                target: this._getValidationMessageTarget(),
                 container: $element,
-                position: this._getValidationMessagePosition('below'),
-                closeOnOutsideClick: false,
-                closeOnTargetScroll: false,
-                animation: null,
-                visible: true,
-                propagateOutsideClick: true,
-                _checkParentVisibility: false
+                mode: this.option('validationMessageMode'),
+                positionRequest: 'below',
+                offset: this.option('validationMessageOffset'),
+                boundary: this.option('validationBoundary'),
+                rtlEnabled: this.option('rtlEnabled')
             }, this._options.cache('validationTooltipOptions')));
-
-            this._$validationMessage
-                .toggleClass(INVALID_MESSAGE_AUTO, validationMessageMode === 'auto')
-                .toggleClass(INVALID_MESSAGE_ALWAYS, validationMessageMode === 'always');
-
-            const messageId = 'dx-' + new Guid();
-
-            this._validationMessage.$content()
-                .addClass(INVALID_MESSAGE_CONTENT)
-                .attr('id', messageId);
-
-            this.setAria('describedby', messageId);
-
-            this._setValidationMessageMaxWidth();
             this._bindInnerWidgetOptions(this._validationMessage, 'validationTooltipOptions');
         }
     },
 
-    _setValidationMessageMaxWidth: function() {
-        if(!this._validationMessage) {
-            return;
-        }
-
-        if(this._getValidationMessageTarget().outerWidth() === 0) {
-            this._validationMessage.option('maxWidth', '100%');
-            return;
-        }
-
-        const validationMessageMaxWidth = Math.max(VALIDATION_MESSAGE_MIN_WIDTH, this._getValidationMessageTarget().outerWidth());
-        this._validationMessage.option('maxWidth', validationMessageMaxWidth);
-    },
-
     _getValidationMessageTarget: function() {
         return this.$element();
-    },
-
-    _getValidationMessagePosition: function(positionRequest) {
-        const rtlEnabled = this.option('rtlEnabled');
-        const messagePositionSide = getDefaultAlignment(rtlEnabled);
-        const messageOriginalOffset = this.option('validationMessageOffset');
-        const messageOffset = { h: messageOriginalOffset.h, v: messageOriginalOffset.v };
-        const verticalPositions = positionRequest === 'below' ? [' top', ' bottom'] : [' bottom', ' top'];
-
-        if(rtlEnabled) messageOffset.h = -messageOffset.h;
-        if(positionRequest !== 'below') messageOffset.v = -messageOffset.v;
-
-        return {
-            offset: messageOffset,
-            boundary: this.option('validationBoundary'),
-            my: messagePositionSide + verticalPositions[0],
-            at: messagePositionSide + verticalPositions[1],
-            collision: 'none flip'
-        };
     },
 
     _toggleReadOnlyState: function() {
@@ -328,26 +270,15 @@ const Editor = Widget.inherit({
         return null;
     },
 
+    _setValidationMessageOption: function({ name, value }) {
+        const optionKey = VALIDATION_MESSAGE_KEYS_MAP[name] ? VALIDATION_MESSAGE_KEYS_MAP[name] : name;
+        this._validationMessage?.option(optionKey, value);
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case 'onValueChanged':
                 this._createValueChangeAction();
-                break;
-            case 'isValid':
-            case 'validationError':
-                this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
-                break;
-            case 'validationErrors':
-            case 'validationStatus':
-                this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
-                this._renderValidationState();
-                break;
-            case 'validationBoundary':
-            case 'validationMessageMode':
-                this._renderValidationState();
-                break;
-            case 'validationTooltipOptions':
-                this._innerWidgetOptionChanged(this._validationMessage, args);
                 break;
             case 'readOnly':
                 this._toggleReadOnlyState();
@@ -367,10 +298,29 @@ const Editor = Widget.inherit({
                 break;
             case 'width':
                 this.callBase(args);
-                this._setValidationMessageMaxWidth();
+                this._validationMessage?.updateMaxWidth();
                 break;
             case 'name':
                 this._setSubmitElementName(args.value);
+                break;
+            case 'isValid':
+            case 'validationError':
+            case 'validationErrors':
+            case 'validationStatus':
+                this.option(ValidationEngine.synchronizeValidationOptions(args, this.option()));
+                this._renderValidationState();
+                break;
+            case 'validationBoundary':
+            case 'validationMessageMode':
+            case 'validationMessageOffset':
+                this._setValidationMessageOption(args);
+                break;
+            case 'rtlEnabled':
+                this._setValidationMessageOption(args);
+                this.callBase(args);
+                break;
+            case 'validationTooltipOptions':
+                this._innerWidgetOptionChanged(this._validationMessage, args);
                 break;
             default:
                 this.callBase(args);

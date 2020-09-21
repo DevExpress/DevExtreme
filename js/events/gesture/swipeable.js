@@ -6,7 +6,7 @@ import {
 import eventsEngine from '../../events/core/events_engine';
 import DOMComponent from '../../core/dom_component';
 import { each } from '../../core/utils/iterator';
-import { addNamespace } from '../utils/index';
+import { addNamespace } from '../utils';
 import { extend } from '../../core/utils/extend';
 import publicComponentUtils from '../../core/utils/public_component';
 

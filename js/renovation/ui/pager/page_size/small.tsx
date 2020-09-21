@@ -12,14 +12,13 @@ import PagerProps from '../common/pager_props';
 export const viewFunction = ({
   width,
   props: {
-    rtlEnabled, pageSize, pageSizeChange, pageSizes,
+    pageSize, pageSizeChange, pageSizes,
   },
 }: PageSizeSmall) => (
   <SelectBox
     displayExpr="text"
     valueExpr="value"
     dataSource={pageSizes}
-    rtlEnabled={rtlEnabled}
     value={pageSize}
     valueChange={pageSizeChange}
     width={width}
@@ -32,8 +31,7 @@ export class PageSizeSmallProps {
 
   @OneWay() pageSizes!: FullPageSize[];
 }
-type PageSizeSmallPropsType = Pick<PagerProps,
-'pageSize' | 'pageSizeChange' | 'rtlEnabled'> & PageSizeSmallProps;
+type PageSizeSmallPropsType = Pick<PagerProps, 'pageSize' | 'pageSizeChange'> & PageSizeSmallProps;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSmall

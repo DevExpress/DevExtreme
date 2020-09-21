@@ -1,6 +1,6 @@
 /* global DevExpress */
 
-import { extend } from './utils/extend';
+import extendUtils from './utils/extend';
 import errors from './errors';
 
 /**
@@ -117,7 +117,7 @@ const configMethod = (...args) => {
         }
     });
 
-    extend(config, newConfig);
+    extendUtils.extend(config, newConfig);
 };
 
 if(typeof DevExpress !== 'undefined' && DevExpress.config) {

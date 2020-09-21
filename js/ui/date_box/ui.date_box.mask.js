@@ -1,4 +1,4 @@
-import { addNamespace, normalizeKeyName } from '../../events/utils/index';
+import { addNamespace, normalizeKeyName } from '../../events/utils';
 import { isFunction } from '../../core/utils/type';
 import { clipboardText } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';

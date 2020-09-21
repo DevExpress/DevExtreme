@@ -11,7 +11,7 @@ import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import { inArray } from '../core/utils/array';
 import { isNumeric } from '../core/utils/type';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace } from '../events/utils';
 import pointerEvents from '../events/pointer';
 import { wrapToArray } from '../core/utils/array';
 

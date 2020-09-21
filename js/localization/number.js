@@ -3,7 +3,7 @@ import { inArray, find } from '../core/utils/array';
 import { escapeRegExp } from '../core/utils/common';
 import { each } from '../core/utils/iterator';
 import { isPlainObject } from '../core/utils/type';
-import { getFormatter } from './ldml/number';
+import ldmlNumber from './ldml/number';
 import config from '../core/config';
 import errors from '../core/errors';
 import { toFixed } from './utils';
@@ -288,7 +288,7 @@ const numberLocalization = dependencyInjector({
         if(!numberConfig) {
             const formatterConfig = this._getSeparators();
             formatterConfig.unlimitedIntegerDigits = format.unlimitedIntegerDigits;
-            return this.convertDigits(getFormatter(format.type, formatterConfig)(value));
+            return this.convertDigits(ldmlNumber.getFormatter(format.type, formatterConfig)(value));
         }
 
         return this._formatNumber(value, numberConfig, format);

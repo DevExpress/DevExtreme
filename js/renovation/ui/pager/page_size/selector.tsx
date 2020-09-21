@@ -14,7 +14,7 @@ export const viewFunction = ({
   htmlRef,
   normalizedPageSizes,
   props: {
-    isLargeDisplayMode, pageSize, pageSizeChange, rtlEnabled,
+    isLargeDisplayMode, pageSize, pageSizeChange,
   },
 }: PageSizeSelector) => (
   <div ref={htmlRef as never} className={PAGER_PAGE_SIZES_CLASS}>
@@ -28,7 +28,6 @@ export const viewFunction = ({
     {!isLargeDisplayMode && (
     <PageSizeSmall
       parentRef={htmlRef}
-      rtlEnabled={rtlEnabled}
       pageSizes={normalizedPageSizes}
       pageSize={pageSize}
       pageSizeChange={pageSizeChange}
@@ -45,7 +44,7 @@ function getAllText(): string {
 class PageSizeSelectorProps {
   @OneWay() isLargeDisplayMode = true;
 }
-type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize'| 'pageSizeChange' | 'pageSizes' | 'rtlEnabled'> & PageSizeSelectorProps;
+type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize'| 'pageSizeChange' | 'pageSizes' > & PageSizeSelectorProps;
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSelector
   extends JSXComponent<PageSizeSelectorPropsType>()

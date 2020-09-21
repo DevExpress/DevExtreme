@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
-import { move } from '../../animation/translator';
+import translator from '../../animation/translator';
 import NativeStrategy from './ui.scrollable.native';
 import LoadIndicator from '../load_indicator';
 import { each } from '../../core/utils/iterator';
@@ -142,8 +142,8 @@ const PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     },
 
     _setPullDownOffset: function(offset) {
-        move(this._$topPocket, { top: offset });
-        move(this._$scrollViewContent, { top: offset });
+        translator.move(this._$topPocket, { top: offset });
+        translator.move(this._$scrollViewContent, { top: offset });
     },
 
     handleScroll: function(e) {

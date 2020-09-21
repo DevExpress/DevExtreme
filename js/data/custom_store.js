@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import dataUtils from './utils';
-import { applyBatch } from './array_utils';
+import arrayUtils from './array_utils';
 import { isFunction } from '../core/utils/type';
 import config from '../core/config';
 import { errors } from './errors';
@@ -268,7 +268,11 @@ const CustomStore = Store.inherit({
 
     _pushImpl: function(changes) {
         if(this.__rawData) {
-            applyBatch(this, this.__rawData, changes);
+            arrayUtils.applyBatch({
+                keyInfo: this,
+                data: this.__rawData,
+                changes
+            });
         }
     },
 

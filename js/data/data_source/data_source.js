@@ -4,12 +4,12 @@ import { executeAsync } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isString, isNumeric, isBoolean, isDefined, isPlainObject } from '../../core/utils/type';
 import { throttleChanges } from '../utils';
-import { applyBatch } from '../array_utils';
+import arrayUtils from '../array_utils';
 import CustomStore from '../custom_store';
 import { EventsStrategy } from '../../core/events_strategy';
 import { errors } from '../errors';
-import { isEmpty } from '../../core/utils/array';
-import { create } from '../../core/utils/queue';
+import array from '../../core/utils/array';
+import queue from '../../core/utils/queue';
 import { Deferred, when } from '../../core/utils/deferred';
 import OperationManager from './operation_manager';
 import {
@@ -302,7 +302,7 @@ export const DataSource = Class.inherit({
     },
 
     _createLoadQueue() {
-        return create();
+        return queue.create();
     },
 
     _changeLoadingCount(increment) {
@@ -350,7 +350,7 @@ export const DataSource = Class.inherit({
         const store = this._store;
         const options = this._createStoreLoadOptions();
         const handleDone = (data) => {
-            if(!isDefined(data) || isEmpty(data)) {
+            if(!isDefined(data) || array.isEmpty(data)) {
                 d.reject(new errors.Error('E4009'));
             } else {
                 if(!Array.isArray(data)) {
@@ -454,7 +454,13 @@ export const DataSource = Class.inherit({
                 });
             }
 
-            applyBatch(this.store(), items, dataSourceChanges, groupLevel, true);
+            arrayUtils.applyBatch({
+                keyInfo: this.store(),
+                data: items,
+                changes: dataSourceChanges,
+                groupCount: groupLevel,
+                useInsertIndex: true
+            });
             this._fireChanged([{ changes: changes }]);
         }
     },

@@ -2,10 +2,10 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import devices from '../../core/devices';
 import { extend } from '../../core/utils/extend';
-import { render } from '../widget/utils.ink_ripple';
+import inkRipple from '../widget/utils.ink_ripple';
 import registerComponent from '../../core/component_registrator';
 import Editor from '../editor/editor';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import { name as clickEventName } from '../../events/click';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
@@ -74,7 +74,7 @@ const RadioButton = Editor.inherit({
     },
 
     _renderInkRipple: function() {
-        this._inkRipple = render({
+        this._inkRipple = inkRipple.render({
             waveSizeCoefficient: 3.3,
             useHoldAnimation: false,
             wavesNumber: 2,

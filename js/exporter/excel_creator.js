@@ -3,7 +3,7 @@ import { getWindow } from '../core/utils/window';
 import { isDefined, isString, isDate, isBoolean, isObject, isFunction } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import errors from '../ui/widget/ui.errors';
-import { encodeHtml } from '../core/utils/string';
+import stringUtils from '../core/utils/string';
 import JSZip from 'jszip';
 import fileSaver from './file_saver';
 import excelFormatConverter from './excel_format_converter';
@@ -152,7 +152,7 @@ export const ExcelCreator = Class.inherit({
         if(isDefined(value)) {
             value = String(value);
             if(value.length) {
-                value = encodeHtml(value);
+                value = stringUtils.encodeHtml(value);
                 if(this._stringHash[value] === undefined) {
                     this._stringHash[value] = this._stringArray.length;
                     this._stringArray.push(value);

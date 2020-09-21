@@ -1,4 +1,4 @@
-import { eventData } from './utils/index';
+import { eventData } from './utils';
 import GestureEmitter from './gesture/emitter.gesture';
 import registerEmitter from './core/emitter_registrator';
 

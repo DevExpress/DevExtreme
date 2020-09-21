@@ -15,7 +15,7 @@ import Button from './button';
 import ProgressBar from './progress_bar';
 import browser from '../core/utils/browser';
 import devices from '../core/devices';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace } from '../events/utils';
 import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
 import themes from './themes';
@@ -549,7 +549,7 @@ class FileUploader extends Editor {
         this._toggleFileUploaderEmptyClassName();
         this._updateFileNameMaxWidth();
 
-        this._$validationMessage && this._$validationMessage.dxOverlay('instance').repaint();
+        this._validationMessage?.repaint();
     }
 
     _renderFile(file) {
@@ -679,7 +679,7 @@ class FileUploader extends Editor {
     }
 
     _removeFile(file) {
-        file.$file.parent().remove();
+        file.$file?.parent().remove();
 
         this._files.splice(inArray(file, this._files), 1);
 
@@ -695,6 +695,19 @@ class FileUploader extends Editor {
         this._doPreventInputChange = true;
         this._$fileInput.val('');
         this._doPreventInputChange = false;
+    }
+
+    removeFile(fileData) {
+        if(this.option('uploadMode') === 'useForm' || !isDefined(fileData)) {
+            return;
+        }
+        const file = this._getFile(fileData);
+        if(file) {
+            if(file.uploadStarted) {
+                this._preventFilesUploading([file]);
+            }
+            this._removeFile(file);
+        }
     }
 
     _toggleFileUploaderEmptyClassName() {

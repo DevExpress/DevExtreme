@@ -4,7 +4,7 @@ import domAdapter from '../core/dom_adapter';
 import eventsEngine from '../events/core/events_engine';
 import pointerEvents from '../events/pointer';
 import { getWindow } from '../core/utils/window';
-import { addNamespace } from '../events/utils/index';
+import { addNamespace } from '../events/utils';
 import { isString } from '../core/utils/type';
 
 const window = getWindow();

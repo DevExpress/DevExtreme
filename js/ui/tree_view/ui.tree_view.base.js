@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { isElementNode } from '../../core/dom_adapter';
-import eventsEngine from '../../events/core/events_engine';
+import { on, off } from '../../events/core/events_engine';
 import messageLocalization from '../../localization/message';
 import { name as clickEventName } from '../../events/click';
 import { asyncNoop, noop } from '../../core/utils/common';
@@ -11,7 +11,7 @@ import { each } from '../../core/utils/iterator';
 import { getPublicElement } from '../../core/element';
 import CheckBox from '../check_box';
 import HierarchicalCollectionWidget from '../hierarchical_collection/ui.hierarchical_collection_widget';
-import { addNamespace } from '../../events/utils/index';
+import { addNamespace } from '../../events/utils';
 import { down as PointerDown } from '../../events/pointer';
 import { name as dblclickEvent } from '../../events/double_click';
 import fx from '../../animation/fx';
@@ -769,8 +769,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $itemsContainer = this._itemContainer();
         const itemSelector = this._itemSelector();
 
-        eventsEngine.off($itemsContainer, '.' + EXPAND_EVENT_NAMESPACE, itemSelector);
-        eventsEngine.on($itemsContainer, expandedEventName, itemSelector, this._expandEventHandler.bind(this));
+        off($itemsContainer, '.' + EXPAND_EVENT_NAMESPACE, itemSelector);
+        on($itemsContainer, expandedEventName, itemSelector, this._expandEventHandler.bind(this));
     },
 
     _getEventNameByOption: function(name) {
@@ -875,8 +875,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _renderToggleItemVisibilityIconClick: function($icon, node) {
         const eventName = addNamespace(clickEventName, this.NAME);
 
-        eventsEngine.off($icon, eventName);
-        eventsEngine.on($icon, eventName, e => {
+        off($icon, eventName);
+        on($icon, eventName, e => {
             this._toggleExpandedState(node.internalFields.key, undefined, e);
         });
     },
@@ -1294,12 +1294,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         const $itemContainer = this._itemContainer();
 
         const that = this;
-        eventsEngine.off($itemContainer, eventName, clickSelector);
-        eventsEngine.off($itemContainer, pointerDownEvent, pointerDownSelector);
-        eventsEngine.on($itemContainer, eventName, clickSelector, function(e) {
+        off($itemContainer, eventName, clickSelector);
+        off($itemContainer, pointerDownEvent, pointerDownSelector);
+        on($itemContainer, eventName, clickSelector, function(e) {
             that._itemClickHandler(e, $(this));
         });
-        eventsEngine.on($itemContainer, pointerDownEvent, pointerDownSelector, function(e) {
+        on($itemContainer, pointerDownEvent, pointerDownSelector, function(e) {
             that._itemPointerDownHandler(e);
         });
     },
