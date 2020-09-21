@@ -44,16 +44,7 @@ export default class AppointmentSettingsGenerator {
 
         this._updateGroupIndices(appointmentList, itemResources);
 
-        const timeZoneName = this.scheduler.option('timeZone');
-        const isEqualLocalTimeZone = timeZoneUtils.isEqualLocalTimeZone(timeZoneName);
-
-        const canProcessNotNativeTimezoneDates =
-            appointmentList.length > 1 &&
-            !isEqualLocalTimeZone &&
-            timeZoneName !== undefined &&
-            appointment.startDateTimeZone === undefined;
-
-        if(canProcessNotNativeTimezoneDates) {
+        if(this._canProcessNotNativeTimezoneDates(appointmentList, appointment)) {
             appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
         }
 
@@ -64,6 +55,21 @@ export default class AppointmentSettingsGenerator {
 
         const allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
         return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
+    }
+
+    _canProcessNotNativeTimezoneDates(appointmentList, appointment) {
+        const timeZoneName = this.scheduler.option('timeZone');
+        const { isEqualLocalTimeZone, hasDSTInLocalTimeZone } = timeZoneUtils;
+
+        const isRecurrence = appointmentList.length > 1;
+        const isTimeZoneSet = timeZoneName !== undefined;
+        const isAppointmentTimeZoneSet = appointment.startDateTimeZone !== undefined;
+
+        return isRecurrence &&
+            isTimeZoneSet &&
+            !isAppointmentTimeZoneSet &&
+            !isEqualLocalTimeZone(timeZoneName) &&
+            !hasDSTInLocalTimeZone();
     }
 
     _getProcessedNotNativeDateIfCrossDST(date, dateRangeOffset) {

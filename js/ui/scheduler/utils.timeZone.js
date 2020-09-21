@@ -114,7 +114,28 @@ const isEqualLocalTimeZone = (timeZoneName) => {
     return isEqualLocalTimeZoneByNativeDate(timeZoneName);
 };
 
+const hasDSTInLocalTimeZone = () => {
+    const [startDate, endDate] = getExtremeDates();
+    return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
+};
+
 const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
+    const [startDate, endDate] = getExtremeDates();
+
+    const startDateLocalOffset = -startDate.getTimezoneOffset() / 60;
+    const endDateLocalOffset = -endDate.getTimezoneOffset() / 60;
+
+    const startDateOffset = calculateTimezoneByValue(timeZoneName, startDate);
+    const endDateOffset = calculateTimezoneByValue(timeZoneName, endDate);
+
+    if(startDateLocalOffset === startDateOffset && endDateLocalOffset === endDateOffset) {
+        return true;
+    }
+
+    return false;
+};
+
+const getExtremeDates = () => {
     const nowDate = new Date(Date.now());
 
     const startDate = new Date();
@@ -128,17 +149,7 @@ const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
     endDate.setMonth(6);
     endDate.setDate(1);
 
-    const startDateLocalOffset = -startDate.getTimezoneOffset() / 60;
-    const endDateLocalOffset = -endDate.getTimezoneOffset() / 60;
-
-    const startDateOffset = calculateTimezoneByValue(timeZoneName, startDate);
-    const endDateOffset = calculateTimezoneByValue(timeZoneName, endDate);
-
-    if(startDateLocalOffset === startDateOffset && endDateLocalOffset === endDateOffset) {
-        return true;
-    }
-
-    return false;
+    return [startDate, endDate];
 };
 
 const utils = {
@@ -156,6 +167,7 @@ const utils = {
     createUTCDateWithLocalOffset,
     createDateFromUTCWithLocalOffset,
 
+    hasDSTInLocalTimeZone,
     isEqualLocalTimeZone
 };
 
