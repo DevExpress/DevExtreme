@@ -2348,6 +2348,10 @@ declare module DevExpress.data {
         constructor(options?: XmlaStoreOptions)
     }
     /**
+     * [descr:Utils.applyChanges(data, changes, options)]
+     */
+    export function applyChanges(data: Array<any>, changes: Array<any>, options?: { keyExpr?: string | Array<string>, immutable?: boolean }): Array<any>;
+    /**
      * [descr:Utils.base64_encode(input)]
      */
     export function base64_encode(input: string | Array<number>): string;

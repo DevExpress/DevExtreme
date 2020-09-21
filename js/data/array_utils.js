@@ -1,9 +1,10 @@
 import { isPlainObject, isEmptyObject, isDefined } from '../core/utils/type';
 import config from '../core/config';
 import Guid from '../core/guid';
-import { extend } from '../core/utils/extend';
+import { extend, extendFromObject } from '../core/utils/extend';
 import { errors } from './errors';
-import objectUtils from '../core/utils/object';
+import { deepExtendArraySafe } from '../core/utils/object';
+import { compileGetter } from '../core/utils/data';
 import { keysEqual, rejectedPromise, trivialPromise } from './utils';
 
 function hasKey(target, keyOrKeys) {
@@ -78,21 +79,49 @@ function setDataByKeyMapValue(array, key, data) {
     }
 }
 
-function applyBatch(keyInfo, array, batchData, groupCount, useInsertIndex) {
-    batchData.forEach(item => {
-        const items = item.type === 'insert' ? array : getItems(keyInfo, array, item.key, groupCount);
+function createObjectWithChanges(target, changes) {
+    const result = target ? Object.create(Object.getPrototypeOf(target)) : {};
+    const targetWithoutPrototype = extendFromObject({}, target);
 
-        generateDataByKeyMap(keyInfo, items);
+    deepExtendArraySafe(result, targetWithoutPrototype, true, true);
+    return deepExtendArraySafe(result, changes, true, true);
+}
+
+function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immutable, disableCache }) {
+    const resultItems = immutable === true ? [...data] : data;
+
+    changes.forEach(item => {
+        const items = item.type === 'insert' ? resultItems : getItems(keyInfo, resultItems, item.key, groupCount);
+
+        !disableCache && generateDataByKeyMap(keyInfo, items);
 
         switch(item.type) {
-            case 'update': update(keyInfo, items, item.key, item.data, true); break;
+            case 'update': update(keyInfo, items, item.key, item.data, true, immutable); break;
             case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true); break;
             case 'remove': remove(keyInfo, items, item.key, true); break;
         }
     });
+    return resultItems;
 }
 
-function update(keyInfo, array, key, data, isBatch) {
+function applyChanges(data, changes, options = {}) {
+    const { keyExpr = 'id', immutable = true } = options;
+    const keyGetter = compileGetter(keyExpr);
+    const keyInfo = {
+        key: () => keyExpr,
+        keyOf: (obj) => keyGetter(obj)
+    };
+
+    return applyBatch({
+        keyInfo,
+        data,
+        changes,
+        immutable,
+        disableCache: true
+    });
+}
+
+function update(keyInfo, array, key, data, isBatch, immutable) {
     let target;
     const extendComplexObject = true;
     const keyExpr = keyInfo.key();
@@ -108,13 +137,19 @@ function update(keyInfo, array, key, data, isBatch) {
             if(index < 0) {
                 return !isBatch && rejectedPromise(errors.Error('E4009'));
             }
+
             target = array[index];
+
+            if(immutable === true && isDefined(target)) {
+                array[index] = createObjectWithChanges(target, data);
+                return;
+            }
         }
     } else {
         target = key;
     }
 
-    objectUtils.deepExtendArraySafe(target, data, extendComplexObject);
+    deepExtendArraySafe(target, data, extendComplexObject);
     if(!isBatch) {
         if(config().useLegacyStoreResult) {
             return trivialPromise(key, data);
@@ -185,8 +220,10 @@ function indexByKey(keyInfo, array, key) {
 
 export {
     applyBatch,
+    createObjectWithChanges,
     update,
     insert,
     remove,
-    indexByKey
+    indexByKey,
+    applyChanges
 };

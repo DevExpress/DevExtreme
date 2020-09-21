@@ -43,7 +43,11 @@ const ArrayStore = Store.inherit({
     },
 
     _pushImpl: function(changes) {
-        arrayUtils.applyBatch(this, this._array, changes);
+        arrayUtils.applyBatch({
+            keyInfo: this,
+            data: this._array,
+            changes
+        });
     },
 
     _updateImpl: function(key, values) {
