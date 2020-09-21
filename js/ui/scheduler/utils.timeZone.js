@@ -2,12 +2,11 @@
 import dateUtils from '../../core/utils/date';
 import timeZoneDataUtils from './timezones/utils.timezones_data';
 import DateAdapter from './dateAdapter';
-import { isDefined } from '../../core/utils/type';
 
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
 
-const createUTCDate = date => {
+const createUTCDateWithLocalOffset = date => {
     if(!date) {
         return null;
     }
@@ -22,7 +21,7 @@ const createUTCDate = date => {
     ));
 };
 
-const createDateFromUTC = date => {
+const createDateFromUTCWithLocalOffset = date => {
     const result = DateAdapter(date);
 
     const timezoneOffsetBeforeInMin = result.getTimezoneOffset();
@@ -48,15 +47,17 @@ const getDaylightOffsetInMs = (startDate, endDate) => {
     return getDaylightOffset(startDate, endDate) * toMs('minute');
 };
 
-const calculateTimezoneByValue = (timezone, date) => {
+const calculateTimezoneByValue = (timezone, date = new Date()) => {
     // NOTE: This check could be removed. We don't support numerical timezones
     if(typeof timezone === 'string') {
-        if(!isDefined(date)) {
-            date = new Date();
-        }
-
-        const dateInUTC = createUTCDate(date);
-        timezone = timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateInUTC.getTime());
+        const dateUtc = Date.UTC(
+            date.getUTCFullYear(),
+            date.getUTCMonth(),
+            date.getUTCDate(),
+            date.getUTCHours(),
+            date.getUTCMinutes()
+        );
+        return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc);
     }
     return timezone;
 };
@@ -152,8 +153,8 @@ const utils = {
     correctRecurrenceExceptionByTimezone,
     getClientTimezoneOffset,
 
-    createUTCDate,
-    createDateFromUTC,
+    createUTCDateWithLocalOffset,
+    createDateFromUTCWithLocalOffset,
 
     isEqualLocalTimeZone
 };

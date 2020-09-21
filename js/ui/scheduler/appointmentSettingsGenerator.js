@@ -47,10 +47,11 @@ export default class AppointmentSettingsGenerator {
         const timeZoneName = this.scheduler.option('timeZone');
         const isEqualLocalTimeZone = timeZoneUtils.isEqualLocalTimeZone(timeZoneName);
 
-        const canProcessNotNativeTimezoneDates = appointmentList.length > 1 &&
+        const canProcessNotNativeTimezoneDates =
+            appointmentList.length > 1 &&
             !isEqualLocalTimeZone &&
             timeZoneName !== undefined &&
-            appointment.startDateTimeZone !== undefined;
+            appointment.startDateTimeZone === undefined;
 
         if(canProcessNotNativeTimezoneDates) {
             appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
@@ -220,9 +221,9 @@ export default class AppointmentSettingsGenerator {
         const generatedStartDates = getRecurrenceProcessor().generateDates(option);
 
         return generatedStartDates.map(date => {
-            const utcDate = timeZoneUtils.createUTCDate(date);
+            const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
             utcDate.setTime(utcDate.getTime() + duration);
-            const endDate = timeZoneUtils.createDateFromUTC(utcDate);
+            const endDate = timeZoneUtils.createDateFromUTCWithLocalOffset(utcDate);
 
             return {
                 startDate: new Date(date),
