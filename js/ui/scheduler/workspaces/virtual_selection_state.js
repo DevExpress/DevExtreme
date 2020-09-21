@@ -8,6 +8,8 @@ export default class VirtualSelectionState {
 
         this._firstSelectedCellCoordinates = null;
         this._lastSelectedCellCoordinates = null;
+
+        this._firstSelectedCell = null;
     }
 
     setFocusedCell(rowIndex, columnIndex, isAllDay) {
@@ -89,6 +91,9 @@ export default class VirtualSelectionState {
 
     releaseSelectedCells() {
         delete this._selectedCells;
+        delete this._firstSelectedCell;
+        delete this._firstSelectedCellCoordinates;
+        delete this._lastSelectedCellCoordinates;
     }
 
     releaseFocusedCell() {
