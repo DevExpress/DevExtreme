@@ -340,8 +340,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             return;
         }
 
-        const updateViewData = this.isVirtualScrolling()
-            && !(this._hasAllDayClass($cell) && !this._isVerticalGroupedWorkSpace());
+        const updateViewData = this.isVirtualScrolling();
 
         let $correctedCell = $cell;
         if(isMultiSelection) {
@@ -363,9 +362,13 @@ class SchedulerWorkSpace extends WidgetObserver {
             const { rowIndex, columnIndex } = this._getCoordinatesByCell($cell);
             const isAllDayCell = this._hasAllDayClass($cell);
             this.virtualSelectionState.setFocusedCell(rowIndex, columnIndex, isAllDayCell);
-            const { coordinates } = this.virtualSelectionState.getFocusedCell();
+            const focusedCell = this.virtualSelectionState.getFocusedCell();
+            const { cellData, coordinates } = focusedCell;
+            const { allDay } = cellData;
 
-            $correctedCell = this._dom_getDateCell(coordinates);
+            $correctedCell = allDay && !this._isVerticalGroupedWorkSpace()
+                ? this._dom_getAllDayPanelCell(coordinates.cellIndex)
+                : this._dom_getDateCell(coordinates);
         }
 
         this._toggleFocusedCellClass(true, $correctedCell);
@@ -2358,6 +2361,12 @@ class SchedulerWorkSpace extends WidgetObserver {
             .eq(position.rowIndex)
             .find('td')
             .eq(position.cellIndex);
+    }
+
+    _dom_getAllDayPanelCell(cellIndex) {
+        return this._$allDayPanel
+            .find('tr').eq(0)
+            .find('td').eq(cellIndex);
     }
 
     _getCells(allDay, direction) {
