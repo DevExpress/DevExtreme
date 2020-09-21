@@ -121,17 +121,19 @@ export default class VirtualSelectionState {
 
     _getRowIndexByColumnAndData(cellData, columnIndex) {
         const { viewDataMap } = this._viewDataProvider;
-        const { startDate, groupIndex } = cellData;
+        const { startDate, groupIndex, allDay } = cellData;
 
         return viewDataMap.findIndex((cellsRow) => {
             const { cellData: currentCellData } = cellsRow[columnIndex];
             const {
                 startDate: currentStartDate,
                 groupIndex: currentGroupIndex,
+                allDay: currentAllDay
             } = currentCellData;
 
             return startDate.getTime() === currentStartDate.getTime()
-              && groupIndex === currentGroupIndex;
+              && groupIndex === currentGroupIndex
+              && allDay === currentAllDay;
         });
     }
 }
