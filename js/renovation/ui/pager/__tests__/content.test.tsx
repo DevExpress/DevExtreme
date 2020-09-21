@@ -6,6 +6,7 @@ import { PagerContent, PagerContentProps, viewFunction as PagerContentComponent 
 import { PageIndexSelector } from '../pages/page_index_selector';
 import { PageSizeSelector } from '../page_size/selector';
 import { InfoText } from '../info';
+import { Widget } from '../../common/widget';
 
 jest.mock('../pages/page_index_selector', () => ({ PageIndexSelector: () => null }));
 jest.mock('../page_size/selector', () => ({ PageSizeSelector: forwardRef(() => null) }));
@@ -31,33 +32,36 @@ describe('PagerContent', () => {
         totalCount: 100,
       } as PagerContent['props'];
       const props = {
-        className: 'className',
         pagesContainerVisible: true,
         isLargeDisplayMode: true,
         infoVisible: true,
         props: componentProps,
-        restAttributes: { 'rest-attribute': {} },
+        restAttributes: { 'rest-attribute': {}, className: 'className' },
       } as Partial<PagerContent> as PagerContent;
-      const tree = mount(<PagerContentComponent {...props as any} />).childAt(0);
-      expect((tree.instance() as unknown as Element).className).toEqual('className');
-      expect(tree.props()).toMatchObject({
+      const tree = mount(<PagerContentComponent {...props as any} />);
+      const widget = tree.childAt(0);
+      expect(widget.props()).toMatchObject({
+        rtlEnabled: true,
         className: 'className',
+        visible: true,
         'rest-attribute': props.restAttributes['rest-attribute'],
       });
-      expect(tree.children()).toHaveLength(2);
-      expect(tree.find(PageSizeSelector)).toHaveLength(1);
-      expect(tree.childAt(0).props()).toMatchObject({
+      expect(tree.find(Widget).instance()).toBe(widget.instance());
+      const childContainer = widget.find('div').first();
+      expect(childContainer.children()).toHaveLength(2);
+      expect(widget.find(PageSizeSelector)).toHaveLength(1);
+      expect(childContainer.childAt(0).props()).toMatchObject({
         isLargeDisplayMode: true,
         pageSize: 5,
         pageSizeChange: props.props.pageSizeChange,
         pageSizes: [5, 10],
-        rtlEnabled: true,
+        // rtlEnabled: true,
       });
-      const pagesContainer = tree.childAt(1);
+      const pagesContainer = childContainer.childAt(1);
       expect((pagesContainer.instance() as unknown as Element).className).toEqual('dx-pages');
       expect(pagesContainer.children()).toHaveLength(2);
-      expect(tree.find(PageIndexSelector)).toHaveLength(1);
-      expect(tree.find(InfoText)).toHaveLength(1);
+      expect(widget.find(PageIndexSelector)).toHaveLength(1);
+      expect(widget.find(InfoText)).toHaveLength(1);
       expect(pagesContainer.childAt(0).props()).toMatchObject({
         infoText: 'infoText',
         pageCount: 50,
@@ -72,7 +76,7 @@ describe('PagerContent', () => {
         pageIndex: 2,
         pageIndexChange: props.props.pageIndexChange,
         pagesCountText: 'pagesCountText',
-        rtlEnabled: true,
+        // rtlEnabled: true,
         showNavigationButtons: true,
         totalCount: 100,
       });
@@ -141,11 +145,11 @@ describe('PagerContent', () => {
       const pagesRef = createRef();
       const infoTextRef = createRef();
       const props = {
-        className: 'className',
         pagesContainerVisible: true,
         isLargeDisplayMode: true,
         infoVisible: true,
         props: {
+          rtlEnabled: false,
           showPageSizes: true,
           parentRef,
           pageSizesRef,
@@ -155,9 +159,10 @@ describe('PagerContent', () => {
       } as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />).childAt(0);
       expect(tree.instance()).toBe(parentRef.current);
-      expect(tree.childAt(0).instance()).toBe(pageSizesRef.current);
-      expect(tree.childAt(1).instance()).toBe(pagesRef.current);
-      expect(tree.childAt(1).childAt(0).instance()).toBe(infoTextRef.current);
+      const childrenContainer = tree.find('div').first();
+      expect(childrenContainer.childAt(0).instance()).toBe(pageSizesRef.current);
+      expect(childrenContainer.childAt(1).instance()).toBe(pagesRef.current);
+      expect(childrenContainer.childAt(1).childAt(0).instance()).toBe(infoTextRef.current);
     });
   });
 
@@ -221,37 +226,20 @@ describe('PagerContent', () => {
     });
 
     describe('className', () => {
-      it('customClass', () => {
-        const component = new PagerContent({
-        } as PagerContentProps);
-        expect(component.className).toBe('dx-widget dx-pager dx-state-invisible dx-light-mode');
-        component.props.className = 'custom';
-        expect(component.className).toEqual(expect.stringContaining('custom'));
-      });
-
       it('isLargeDisplayMode', () => {
         let component = new PagerContent({
           displayMode: 'full',
           isLargeDisplayMode: true,
         } as PagerContentProps);
         expect(component.isLargeDisplayMode).toBe(true);
-        expect(component.className).not.toEqual(expect.stringContaining('dx-light-mode'));
+        expect(component.classes).not.toEqual(expect.stringContaining('dx-light-mode'));
 
         component = new PagerContent({
           displayMode: 'compact',
           isLargeDisplayMode: true,
         } as PagerContentProps);
         expect(component.isLargeDisplayMode).toBe(false);
-        expect(component.className).toEqual(expect.stringContaining('dx-light-mode'));
-      });
-
-      it('visible', () => {
-        const component = new PagerContent({
-          visible: false,
-        } as PagerContentProps);
-        expect(component.className).toEqual(expect.stringContaining('dx-state-invisible'));
-        component.props.visible = true;
-        expect(component.className).not.toEqual(expect.stringContaining('dx-state-invisible'));
+        expect(component.classes).toEqual(expect.stringContaining('dx-light-mode'));
       });
     });
 
@@ -267,9 +255,11 @@ describe('PagerContent', () => {
       .describe('isLargeDisplayMode', ({
         displayMode, lightModeEnabled, isLargeDisplayMode, expected,
       }) => {
-        it(JSON.stringify({
+        const name = JSON.stringify({
           displayMode, lightModeEnabled, isLargeDisplayMode, expected,
-        }), () => {
+        });
+
+        it(name, () => {
           const component = new PagerContent({
             displayMode,
             lightModeEnabled,
@@ -293,9 +283,11 @@ describe('PagerContent', () => {
       .describe('infoVisible', ({
         showInfo, infoTextVisible, isLargeDisplayMode, expected,
       }) => {
-        it(JSON.stringify({
+        const name = JSON.stringify({
           showInfo, infoTextVisible, isLargeDisplayMode, expected,
-        }), () => {
+        });
+
+        it(name, () => {
           const component = new PagerContent({
             showInfo,
             infoTextVisible,

@@ -9,6 +9,8 @@ import {
   OneWay,
   Ref,
   Slot,
+  Fragment,
+  Consumer,
 } from 'devextreme-generator/component_declaration/common';
 import '../../../events/click';
 import '../../../events/hover';
@@ -16,6 +18,7 @@ import '../../../events/hover';
 import {
   active, dxClick, focus, hover, keyboard, resize, visibility,
 } from '../../../events/short';
+import globalConfig from '../../../core/config';
 import { combineClasses } from '../../utils/combine_classes';
 import { extend } from '../../../core/utils/extend';
 import { focusable } from '../../../ui/widget/selectors';
@@ -23,6 +26,9 @@ import { isFakeClickEvent } from '../../../events/utils/index';
 import { normalizeStyleProp } from '../../../core/utils/style';
 import BaseWidgetProps from '../../utils/base_props';
 import { EffectReturn } from '../../utils/effect_return.d';
+import { ConfigContextValue, ConfigContext } from './config_context';
+import { ConfigProvider } from './config_provider';
+import { isDefined } from '../../../core/utils/type';
 
 const getAria = (args: object): { [name: string]: string } => Object.keys(args).reduce((r, key) => {
   if (args[key]) {
@@ -53,19 +59,32 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string =>
   return combineClasses(classesMap);
 };
 
-export const viewFunction = (viewModel: Widget): JSX.Element => (
-  <div
-    ref={viewModel.widgetRef as any}
-    {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
-    tabIndex={viewModel.tabIndex}
-    title={viewModel.props.hint}
-    hidden={!viewModel.props.visible}
-    className={viewModel.cssClasses}
-    style={viewModel.styles}
-  >
-    {viewModel.props.children}
-  </div>
-);
+export const viewFunction = (viewModel: Widget): JSX.Element => {
+  const widget = (
+    <div
+      ref={viewModel.widgetRef as any}
+      {...viewModel.attributes} // eslint-disable-line react/jsx-props-no-spreading
+      tabIndex={viewModel.tabIndex}
+      title={viewModel.props.hint}
+      hidden={!viewModel.props.visible}
+      className={viewModel.cssClasses}
+      style={viewModel.styles}
+    >
+      {viewModel.props.children}
+    </div>
+  );
+  return (
+    <Fragment>
+      {viewModel.shouldRenderConfigProvider
+        ? (
+          <ConfigProvider rtlEnabled={viewModel.rtlEnabled}>
+            {widget}
+          </ConfigProvider>
+        )
+        : widget}
+    </Fragment>
+  );
+};
 
 @ComponentBindings()
 export class WidgetProps extends BaseWidgetProps {
@@ -117,6 +136,33 @@ export class Widget extends JSXComponent(WidgetProps) {
 
   @Ref()
   widgetRef!: HTMLDivElement;
+
+  @Method()
+  getHtmlElement(): HTMLDivElement {
+    return this.widgetRef;
+  }
+
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
+  get shouldRenderConfigProvider(): boolean {
+    const isPropDefined = isDefined(this.props.rtlEnabled);
+    const onlyGlobalDefined = isDefined(globalConfig().rtlEnabled)
+    && !isPropDefined && !isDefined(this.config?.rtlEnabled);
+    return (isPropDefined
+    && (this.props.rtlEnabled !== this.config?.rtlEnabled))
+    || onlyGlobalDefined;
+  }
+
+  get rtlEnabled(): boolean | undefined {
+    if (this.props.rtlEnabled !== undefined) {
+      return this.props.rtlEnabled;
+    }
+    if (this.config?.rtlEnabled !== undefined) {
+      return this.config.rtlEnabled;
+    }
+    return globalConfig().rtlEnabled;
+  }
 
   @Method()
   getRootElement(): HTMLDivElement {
@@ -323,7 +369,6 @@ export class Widget extends JSXComponent(WidgetProps) {
       focusStateEnabled,
       hoverStateEnabled,
       onVisibilityChange,
-      rtlEnabled,
       visible,
     } = this.props;
 
@@ -337,7 +382,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       focusStateEnabled,
       hoverStateEnabled,
       onVisibilityChange,
-      rtlEnabled,
+      rtlEnabled: this.rtlEnabled,
       visible,
     });
   }

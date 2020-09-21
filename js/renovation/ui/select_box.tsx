@@ -1,5 +1,5 @@
 import {
-  Ref, Effect, Component, ComponentBindings, JSXComponent, Event, OneWay, TwoWay,
+  Ref, Effect, Component, ComponentBindings, JSXComponent, Event, OneWay, TwoWay, Consumer,
 } from 'devextreme-generator/component_declaration/common';
 import { WidgetProps } from './common/widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
@@ -7,6 +7,7 @@ import { WidgetProps } from './common/widget';
 import DataSource, { DataSourceOptions } from '../../data/data_source';
 /* eslint-disable-next-line import/named */
 import LegacySelectBox, { Options } from '../../ui/select_box';
+import { ConfigContextValue, ConfigContext } from './common/config_context';
 
 export const viewFunction = ({ widgetRef }: SelectBox) => (<div ref={widgetRef as any} />);
 
@@ -43,8 +44,15 @@ export class SelectBox extends JSXComponent(SelectBoxProps) {
     return (): void => widget.dispose();
   }
 
+  @Consumer(ConfigContext)
+  config!: ConfigContextValue;
+
   get properties(): Options {
     const { valueChange, ...restProps } = this.props;
-    return ({ ...restProps, onValueChanged: ({ value }) => valueChange!(value) }) as Options;
+    return ({
+      rtlEnabled: this.config?.rtlEnabled,
+      ...restProps,
+      onValueChanged: ({ value }) => valueChange!(value),
+    }) as Options;
   }
 }
