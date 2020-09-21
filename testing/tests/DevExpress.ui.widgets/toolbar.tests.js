@@ -1465,6 +1465,9 @@ QUnit.module('adaptivity without hiding in menu', {
 
         this.MEASURE_SAFE_TEXT = 'xyvxyv';
         this.styles = $('<style>.dx-toolbar-label > div, .dx-toolbar-label .dx-toolbar-item-content > div { text-overflow: clip !important; }</style>').appendTo('head');
+    },
+    afterEach: function() {
+        this.styles.remove();
     }
 }, () => {
     QUnit.test('items in before section should have correct sizes, width decreases', function(assert) {
