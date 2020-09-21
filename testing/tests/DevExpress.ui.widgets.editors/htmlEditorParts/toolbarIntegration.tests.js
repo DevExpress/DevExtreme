@@ -766,4 +766,22 @@ testModule('Toolbar integration', {
         });
     });
 
+    test('insert table via toolbar button', function(assert) {
+        const done = assert.async();
+        const $container = $('#htmlEditor');
+
+        $container
+            .dxHtmlEditor({
+                toolbar: {
+                    items: ['insertTable']
+                },
+                onValueChanged: ({ value }) => {
+                    const isContainsTable = value.indexOf('<table') !== -1;
+                    assert.ok(isContainsTable, 'value contains table after clicking on the "Insert table" item');
+                    done();
+                }
+            })
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+    });
 });

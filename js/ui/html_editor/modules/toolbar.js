@@ -46,6 +46,17 @@ if(Quill) {
     const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
     const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
 
+    const TABLE_OPERATIONS = [
+        'insertTable',
+        'insertRowAbove',
+        'insertRowBelow',
+        'insertColumnLeft',
+        'insertColumnRight',
+        'deleteColumn',
+        'deleteRow',
+        'deleteTable'
+    ];
+
     const USER_ACTION = 'user';
     const SILENT_ACTION = 'silent';
 
@@ -85,6 +96,7 @@ if(Quill) {
         _updateToolbar(isSelectionChanged) {
             this.updateFormatWidgets(isSelectionChanged);
             this.updateHistoryWidgets();
+            this.updateTableWidgets();
         }
 
         _getDefaultClickHandler(formatName) {
@@ -153,7 +165,16 @@ if(Quill) {
                     this._applyFormat(['indent', '-1', USER_ACTION], event);
                 },
                 superscript: this._prepareShortcutHandler('script', 'super'),
-                subscript: this._prepareShortcutHandler('script', 'sub')
+                subscript: this._prepareShortcutHandler('script', 'sub'),
+                // ToDo: add the table wizard and\or table picker
+                insertTable: this._getTableOperationHandler('insertTable', 3, 3),
+                insertRowAbove: this._getTableOperationHandler('insertRowAbove'),
+                insertRowBelow: this._getTableOperationHandler('insertRowBelow'),
+                insertColumnLeft: this._getTableOperationHandler('insertColumnLeft'),
+                insertColumnRight: this._getTableOperationHandler('insertColumnRight'),
+                deleteColumn: this._getTableOperationHandler('deleteColumn'),
+                deleteRow: this._getTableOperationHandler('deleteRow'),
+                deleteTable: this._getTableOperationHandler('deleteTable')
             };
         }
 
@@ -276,6 +297,19 @@ if(Quill) {
                     .always(() => {
                         this.quill.focus();
                     });
+            };
+        }
+
+        // ToDo: extract it to the table module
+        _getTableOperationHandler(operationName, ...rest) {
+            return () => {
+                const table = this.quill.getModule('table');
+
+                if(!table) {
+                    return;
+                }
+                this.quill.focus();
+                return table[operationName](...rest);
             };
         }
 
@@ -515,6 +549,42 @@ if(Quill) {
                         disabled: true
                     }
                 },
+                // ToDo: move it to the table module
+                insertRowAbove: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                insertRowBelow: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                insertColumnLeft: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                insertColumnRight: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                deleteRow: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                deleteColumn: {
+                    options: {
+                        disabled: true
+                    }
+                },
+                deleteTable: {
+                    options: {
+                        disabled: true
+                    }
+                },
                 separator: {
                     template: (data, index, element) => {
                         $(element).addClass(TOOLBAR_SEPARATOR_CLASS);
@@ -537,19 +607,37 @@ if(Quill) {
                 return;
             }
 
-            const undoOps = historyModule.stack.undo;
-            const redoOps = historyModule.stack.redo;
+            const {
+                undo: undoOps,
+                redo: redoOps
+            } = historyModule.stack;
 
-            this._updateHistoryWidget(this._toolbarWidgets.getByName('undo'), undoOps);
-            this._updateHistoryWidget(this._toolbarWidgets.getByName('redo'), redoOps);
+            this._updateManipulationWidget(this._toolbarWidgets.getByName('undo'), Boolean(undoOps.length));
+            this._updateManipulationWidget(this._toolbarWidgets.getByName('redo'), Boolean(redoOps.length));
         }
 
-        _updateHistoryWidget(widget, operations) {
+        updateTableWidgets() {
+            const table = this.quill.getModule('table');
+            if(!table) {
+                return;
+            }
+
+            const selection = this.quill.getSelection();
+            const isTableOperationsEnabled = selection && Boolean(this.quill.getFormat(selection)?.table);
+            TABLE_OPERATIONS.forEach((operationName) => {
+                if(operationName !== 'insertTable') {
+                    const widget = this._toolbarWidgets.getByName(operationName);
+                    this._updateManipulationWidget(widget, isTableOperationsEnabled);
+                }
+            });
+        }
+
+        _updateManipulationWidget(widget, isOperationEnabled) {
             if(!widget) {
                 return;
             }
 
-            widget.option('disabled', !operations.length);
+            widget.option('disabled', !isOperationEnabled);
         }
 
         updateFormatWidgets(isResetRequired) {

@@ -51,6 +51,17 @@ const CLEAR_FORMAT_CLASS = 'dx-clear-format';
 const IMAGE_FORMAT_CLASS = 'dx-image-format';
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 
+const TABLE_OPERATIONS = [
+    'insertTable',
+    'insertRowAbove',
+    'insertRowBelow',
+    'insertColumnLeft',
+    'insertColumnRight',
+    'deleteColumn',
+    'deleteRow',
+    'deleteTable'
+];
+
 const simpleModuleConfig = {
     beforeEach: function() {
         fx.off = true;
@@ -63,8 +74,19 @@ const simpleModuleConfig = {
             },
             on: noop,
             off: noop,
+            table: {
+                insertTable: sinon.stub(),
+                insertRowAbove: sinon.stub(),
+                insertRowBelow: sinon.stub(),
+                insertColumnLeft: sinon.stub(),
+                insertColumnRight: sinon.stub(),
+                deleteTable: sinon.stub(),
+                deleteRow: sinon.stub(),
+                deleteColumn: sinon.stub()
+            },
             getSelection: () => { return { index: 0, length: 0 }; },
-            getFormat: () => { return {}; }
+            getFormat: () => { return {}; },
+            getModule: (moduleName) => this.quillMock[moduleName]
         };
 
         this.options = {
@@ -1184,5 +1206,66 @@ testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
 
         assert.equal($separator.length, 1, 'Toolbar has a separator item');
         assert.equal($menuSeparator.length, 1, 'Toolbar has a menu separator item');
+    });
+});
+
+testModule('tables', simpleModuleConfig, function() {
+    test('render table manipulation buttons', function(assert) {
+        this.options.items = TABLE_OPERATIONS;
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        const formatWidgetsCount = $formatWidgets.length;
+        const disabledFormatWidgetsCount = $formatWidgets.filter(`.${DISABLED_STATE_CLASS}`).length;
+
+        assert.strictEqual(formatWidgetsCount, TABLE_OPERATIONS.length, 'All table operations rendered');
+        assert.strictEqual(disabledFormatWidgetsCount, formatWidgetsCount - 1, 'All operation except the "insert table" disabled');
+
+        $formatWidgets.each((index, element) => {
+            const operationName = TABLE_OPERATIONS[index];
+            const isElementExist = Boolean($(element).find(`.dx-icon-${operationName.toLowerCase()}`).length);
+            assert.ok(isElementExist, `${operationName} item has an related icon`);
+        });
+    });
+
+    test('update selection -> focus table', function(assert) {
+        this.options.items = TABLE_OPERATIONS;
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+
+        this.quillMock.getFormat = () => {
+            return { table: true };
+        };
+
+        toolbar.updateTableWidgets();
+
+        const $disabledFormatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}.${DISABLED_STATE_CLASS}`);
+        const toolbarHasDisabledItems = Boolean($disabledFormatWidgets.length);
+
+        assert.notOk(toolbarHasDisabledItems, 'table focused -> all table operation buttons are enabled');
+    });
+
+    test('buttons interaction', function(assert) {
+        this.options.items = TABLE_OPERATIONS;
+        this.quillMock.getFormat = () => {
+            return { table: true };
+        };
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateTableWidgets();
+
+        const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+
+        $formatWidgets.each((index, element) => {
+            const operationName = TABLE_OPERATIONS[index];
+            const isMethodCalled = () => this.quillMock.table[operationName].calledOnce;
+
+            assert.notOk(isMethodCalled(), `${operationName} isn't called before clicking on toolbar item`);
+
+            $(element).trigger('dxclick');
+
+            assert.ok(isMethodCalled(), `${operationName} called after click on toolbar item`);
+        });
     });
 });
