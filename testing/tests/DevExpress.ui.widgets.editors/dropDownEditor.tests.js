@@ -240,7 +240,7 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         dropDownEditor.open();
 
         assert.ok(dropDownEditor._$validationMessage);
-        const pos = dropDownEditor._$validationMessage.dxOverlay('option', 'position');
+        const pos = dropDownEditor._validationMessage.option('position');
         assert.equal(pos.my, 'left bottom', 'Message should be above dropdown');
         assert.equal(pos.at, 'left top', 'Message should be above dropdown');
     });
@@ -257,7 +257,7 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         dropDownEditor.close();
         // assert
         assert.ok(dropDownEditor._$validationMessage);
-        const pos = dropDownEditor._$validationMessage.dxOverlay('option', 'position');
+        const pos = dropDownEditor._validationMessage.option('position');
         assert.equal(pos.my, 'left top', 'Message should be below dropdown');
         assert.equal(pos.at, 'left bottom', 'Message should be below dropdown');
     });

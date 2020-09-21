@@ -571,6 +571,16 @@ describe('Widget', () => {
           expect(widget.focused).toBe(true);
         });
       });
+
+      describe('getRootElement', () => {
+        it('should return widgetRef', () => {
+          const widget = new Widget({});
+          const mockRef = jest.fn();
+          widget.widgetRef = mockRef as any;
+
+          expect(widget.getRootElement()).toBe(mockRef);
+        });
+      });
     });
   });
 

@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { isString } from '../../core/utils/type';
+import { isString, isDefined } from '../../core/utils/type';
 import Widget from '../widget/ui.widget';
 import registerComponent from '../../core/component_registrator';
 import dataCoreUtils from '../../core/utils/data';
@@ -92,13 +92,15 @@ class Gantt extends Widget {
             allowColumnResizing: true,
             autoExpandAll: true,
             showRowLines: this.option('showRowLines'),
+            rootValue: this.option('rootValue'),
             onContentReady: (e) => { this._onTreeListContentReady(e); },
             onSelectionChanged: (e) => { this._onTreeListSelectionChanged(e); },
             onRowCollapsed: (e) => this._ganttView.changeTaskExpanded(e.key, false),
             onRowExpanded: (e) => this._ganttView.changeTaskExpanded(e.key, true),
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); },
             onContextMenuPreparing: (e) => { this._onTreeListContextMenuPreparing(e); },
-            onRowDblClick: () => { this._onTreeListRowDblClick(); }
+            onRowClick: (e) => { this._onTreeListRowClick(e); },
+            onRowDblClick: (e) => { this._onTreeListRowDblClick(e); }
         });
     }
     _renderSplitter() {
@@ -152,7 +154,9 @@ class Gantt extends Widget {
             onExpandAll: this._expandAll.bind(this),
             onCollapseAll: this._collapseAll.bind(this),
             modelChangesListener: this._createModelChangesListener(),
-            taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate'))
+            taskTooltipContentTemplate: this._getTaskTooltipContentTemplateFunc(this.option('taskTooltipContentTemplate')),
+            onTaskClick: (e) => { this._onTreeListRowClick(e); },
+            onTaskDblClick: (e) => { this._onTreeListRowDblClick(e); }
         });
         this._fireContentReadyAction();
     }
@@ -176,11 +180,23 @@ class Gantt extends Widget {
         if(e.row && e.row.rowType === 'data') {
             this._setTreeListOption('selectedRowKeys', [e.row.data[this.option('tasks.keyExpr')]]);
             e.items = [];
-            this._showPopupMenu({ position: { x: e.event.pageX, y: e.event.pageY } });
+            const info = {
+                cancel: false,
+                event: e.event,
+                type: 'task',
+                key: e.row.key,
+                position: { x: e.event.pageX, y: e.event.pageY }
+            };
+            this._showPopupMenu(info);
         }
     }
-    _onTreeListRowDblClick() {
-        this._ganttView._ganttViewCore.commandManager.showTaskEditDialog.execute();
+    _onTreeListRowClick(e) {
+        this._raiseTaskClickAction(e.key, e.event);
+    }
+    _onTreeListRowDblClick(e) {
+        if(this._raiseTaskDblClickAction(e.key, e.event)) {
+            this._ganttView._ganttViewCore.commandManager.showTaskEditDialog.execute();
+        }
     }
     _onTreeListSelectionChanged(e) {
         const selectedRowKey = e.currentSelectedRowKeys[0];
@@ -503,8 +519,17 @@ class Gantt extends Widget {
     _createSelectionChangedAction() {
         this._selectionChangedAction = this._createActionByOption('onSelectionChanged');
     }
+    _createTaskClickAction() {
+        this._taskClickAction = this._createActionByOption('onTaskClick');
+    }
+    _createTaskDblClickAction() {
+        this._taskDblClickAction = this._createActionByOption('onTaskDblClick');
+    }
     _createCustomCommandAction() {
         this._customCommandAction = this._createActionByOption('onCustomCommand');
+    }
+    _createContextMenuPreparingAction() {
+        this._contextMenuPreparingAction = this._createActionByOption('onContextMenuPreparing');
     }
     _raiseSelectionChangedAction(selectedRowKey) {
         if(!this._selectionChangedAction) {
@@ -517,6 +542,12 @@ class Gantt extends Widget {
             this._createCustomCommandAction();
         }
         this._customCommandAction({ name: commandName });
+    }
+    _raiseContextMenuPreparing(options) {
+        if(!this._contextMenuPreparingAction) {
+            this._createContextMenuPreparingAction();
+        }
+        this._contextMenuPreparingAction(options);
     }
 
     _raiseInsertingAction(optionName, coreArgs) {
@@ -564,6 +595,30 @@ class Gantt extends Widget {
             coreArgs.readOnlyFields = this._convertMappedToCoreFields(GANTT_TASKS, args.readOnlyFields);
             coreArgs.hiddenFields = this._convertMappedToCoreFields(GANTT_TASKS, args.hiddenFields);
         }
+    }
+    _raiseTaskClickAction(key, event) {
+        if(!this._taskClickAction) {
+            this._createTaskClickAction();
+        }
+        const args = {
+            key: key,
+            event: event,
+            data: this.getTaskData(key)
+        };
+        this._taskClickAction(args);
+    }
+    _raiseTaskDblClickAction(key, event) {
+        if(!this._taskDblClickAction) {
+            this._createTaskDblClickAction();
+        }
+        const args = {
+            cancel: false,
+            data: this.getTaskData(key),
+            event: event,
+            key: key
+        };
+        this._taskDblClickAction(args);
+        return !args.cancel;
     }
     _getInsertingAction(optionName) {
         switch(optionName) {
@@ -831,10 +886,21 @@ class Gantt extends Widget {
         }
         this._dialogInstance.show(e.name, e.parameters, e.callback, e.afterClosing, this.option('editing'));
     }
-    _showPopupMenu(e) {
+    _showPopupMenu(info) {
         if(this.option('contextMenu.enabled')) {
             this._ganttView.getBarManager().updateContextMenu();
-            this._contextMenuBar.show(e.position);
+            const args = {
+                cancel: false,
+                event: info.event,
+                targetType: info.type,
+                targetKey: info.key,
+                items: extend(true, [], this._contextMenuBar._items),
+                data: info.type === 'task' ? this.getTaskData(info.key) : this.getDependencyData(info.key)
+            };
+            this._raiseContextMenuPreparing(args);
+            if(!args.cancel) {
+                this._contextMenuBar.show(info.position, args.items);
+            }
         }
     }
     _executeCoreCommand(id) {
@@ -879,6 +945,16 @@ class Gantt extends Widget {
             /**
             * @name dxGanttToolbarItem
             * @inherits dxToolbarItem
+            */
+
+            /**
+            * @name dxGanttContextMenu
+            * @type object
+            */
+
+            /**
+            * @name dxGanttContextMenuItem
+            * @inherits dxContextMenuItem
             */
 
             tasks: {
@@ -1022,6 +1098,8 @@ class Gantt extends Widget {
             firstDayOfWeek: undefined,
             selectedRowKey: undefined,
             onSelectionChanged: null,
+            onTaskClick: null,
+            onTaskDblClick: null,
             onTaskInserting: null,
             onTaskDeleting: null,
             onTaskUpdating: null,
@@ -1035,6 +1113,7 @@ class Gantt extends Widget {
             // eslint-disable-next-line spellcheck/spell-checker
             onResourceUnassigning: null,
             onCustomCommand: null,
+            onContextMenuPreparing: null,
             allowSelection: true,
             showRowLines: true,
             stripLines: undefined,
@@ -1114,11 +1193,15 @@ class Gantt extends Widget {
                 enabled: true,
                 items: undefined
             },
-            taskTooltipContentTemplate: null
+            taskTooltipContentTemplate: null,
+            rootValue: 0
         });
     }
 
     getTaskData(key) {
+        if(!isDefined(key)) {
+            return null;
+        }
         const coreData = this._ganttView._ganttViewCore.getTaskData(key);
         const mappedData = this.getTaskDataByCoreData(coreData);
         return mappedData;
@@ -1146,6 +1229,9 @@ class Gantt extends Widget {
         this._ganttView._ganttViewCore.updateTask(key, this._convertMappedToCoreData(GANTT_TASKS, data));
     }
     getDependencyData(key) {
+        if(!isDefined(key)) {
+            return null;
+        }
         const coreData = this._ganttView._ganttViewCore.getDependencyData(key);
         return coreData ? this._convertCoreToMappedData(GANTT_DEPENDENCIES, coreData) : null;
     }
@@ -1213,6 +1299,12 @@ class Gantt extends Widget {
             case 'onSelectionChanged':
                 this._createSelectionChangedAction();
                 break;
+            case 'onTaskClick':
+                this._createTaskClickAction();
+                break;
+            case 'onTaskDblClick':
+                this._createTaskDblClickAction();
+                break;
             case 'onTaskInserting':
                 this._createTaskInsertingAction();
                 break;
@@ -1250,6 +1342,9 @@ class Gantt extends Widget {
             case 'onCustomCommand':
                 this._createCustomCommandAction();
                 break;
+            case 'onContextMenuPreparing':
+                this._createContextMenuPreparingAction();
+                break;
             case 'allowSelection':
                 this._setTreeListOption('selection.mode', this._getSelectionMode(args.value));
                 this._setGanttViewOption('allowSelection', args.value);
@@ -1278,6 +1373,9 @@ class Gantt extends Widget {
                 break;
             case 'taskTooltipContentTemplate':
                 this._setGanttViewOption('taskTooltipContentTemplate', this._getTaskTooltipContentTemplateFunc(args.value));
+                break;
+            case 'rootValue':
+                this._setTreeListOption('rootValue', args.value);
                 break;
             default:
                 super._optionChanged(args);

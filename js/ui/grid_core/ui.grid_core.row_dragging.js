@@ -51,6 +51,10 @@ const RowDraggingExtender = {
         const sortableFixedName = '_sortableFixed';
         const currentSortableName = isFixedTableRendering ? sortableFixedName : sortableName;
         const anotherSortableName = isFixedTableRendering ? sortableName : sortableFixedName;
+        const togglePointerEventsStyle = (toggle) => {
+            // T929503
+            this[sortableFixedName]?.$element().css('pointerEvents', toggle ? 'auto' : '');
+        };
 
         if(allowReordering && $content.length) {
             this[currentSortableName] = this._createComponent($content, Sortable, extend({
@@ -70,6 +74,16 @@ const RowDraggingExtender = {
 
                     rowDragging.onDragStart?.(e);
                 },
+                onDragEnter: () => {
+                    togglePointerEventsStyle(true);
+                },
+                onDragLeave: () => {
+                    togglePointerEventsStyle(false);
+                },
+                onDragEnd: (e) => {
+                    togglePointerEventsStyle(false);
+                    rowDragging.onDragEnd?.(e);
+                },
                 dropFeedbackMode: browser.msie ? 'indicate' : rowDragging.dropFeedbackMode,
                 onOptionChanged: (e) => {
                     const hasFixedSortable = this[sortableFixedName];
@@ -85,6 +99,15 @@ const RowDraggingExtender = {
         }
 
         return $content;
+    },
+
+    _resizeCore: function() {
+        this.callBase.apply(this, arguments);
+        const offset = this._dataController.getRowIndexOffset();
+        [this._sortable, this._sortableFixed].forEach((sortable) => {
+            sortable?.option('offset', offset);
+            sortable?.update();
+        });
     },
 
     _getDraggableGridOptions: function(options) {

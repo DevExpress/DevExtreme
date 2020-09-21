@@ -1046,7 +1046,8 @@ function AxisWrapper(params) {
         drawingType: 'linear',
         widgetClass: 'dxrs',
         axisClass: 'range-selector',
-        isArgumentAxis: true
+        isArgumentAxis: true,
+        getTemplate() {}
     });
     that._updateSelectedRangeCallback = params.updateSelectedRange;
     that._axis.getAxisSharpDirection = that._axis.getSharpDirectionByCoords = getShiftDirection;
