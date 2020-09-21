@@ -582,7 +582,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         const modifiedAppointmentAdapter = scheduler.createAppointmentAdapter(sourceAppointment).clone();
 
-        const startDate = info.appointment.startDate;
+        const startDate = e.handles.top
+            ? info.appointment.startDate
+            : new Date(sourceAppointment.startDate);
         const endDate = info.appointment.endDate;
 
         const dateRange = this._getDateRange(e, startDate, endDate);
