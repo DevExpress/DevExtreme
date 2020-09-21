@@ -4305,13 +4305,15 @@ QUnit.module('Editing with real dataController', {
         // assert
         assert.equal(testElement.find('input').length, 0, 'count input');
         assert.strictEqual(testElement.find('tbody > tr').first().find('td').first().text(), 'Test1', 'text first cell');
-        assert.equal(testElement.find('.dx-highlight-outline').length, 1, 'has element with class name dx-highlight-outline');
+        assert.equal(testElement.find('.dx-editor-cell').length, 0, 'has element with class name dx-editor-cell');
+        assert.equal(testElement.find('.dx-cell-modified').length, 1, 'no element with class name dx-cell-modified');
 
         // act
         that.saveEditData();
 
         // assert
-        assert.equal(testElement.find('.dx-highlight-outline').length, 0, 'not has element with class name dx-highlight-outline');
+        assert.equal(testElement.find('.dx-editor-cell').length, 0, 'no element with class name dx-editor-cell');
+        assert.equal(testElement.find('.dx-cell-modified').length, 0, 'no element with class name dx-cell-modified');
 
         // arrange
         that.dataController.store().update = originalUpdate;
@@ -4338,13 +4340,15 @@ QUnit.module('Editing with real dataController', {
         // assert
         assert.equal(testElement.find('input').length, 0, 'count input');
         assert.strictEqual(testElement.find('tbody > tr').first().find('td').first().text(), 'Test2', 'text first cell');
-        assert.equal(testElement.find('.dx-highlight-outline').length, 1, 'has element with class name dx-highlight-outline');
+        assert.equal(testElement.find('.dx-editor-cell').length, 0, 'no element with class name dx-editor-cell');
+        assert.equal(testElement.find('.dx-cell-modified').length, 1, 'has element with class name dx-cell-modified');
 
         // act
         that.saveEditData();
 
         // assert
-        assert.equal(testElement.find('.dx-highlight-outline').length, 1, 'has element with class name dx-highlight-outline');
+        assert.equal(testElement.find('.dx-editor-cell').length, 0, 'no element with class name dx-editor-cell');
+        assert.equal(testElement.find('.dx-cell-modified').length, 1, 'has element with class name dx-cell-modified');
     });
 
     QUnit.test('Update cell when edit mode batch and cancel in onRowUpdating is deferred and resolved', function(assert) {
@@ -4630,13 +4634,15 @@ QUnit.module('Editing with real dataController', {
         // assert
         assert.equal(testElement.find('input').length, 0, 'count input');
         assert.strictEqual(testElement.find('tbody > tr').first().find('td').first().text(), 'Test', 'text first cell');
-        assert.equal(testElement.find('.dx-highlight-outline').length, 1, 'has element with class name dx-highlight-outline');
+        assert.equal(testElement.find('.dx-editor-cell').length, 0, 'no element with class name dx-editor-cell');
+        assert.equal(testElement.find('.dx-cell-modified').length, 1, 'has element with class name dx-cell-modified');
 
         // act
         that.saveEditData();
 
         // assert
-        assert.equal(testElement.find('.dx-highlight-outline').length, 0, 'not has element with class name dx-highlight-outline');
+        assert.equal(testElement.find('.dx-editor-cell').length, 0, 'no element with class name dx-editor-cell');
+        assert.equal(testElement.find('.dx-cell-modified').length, 0, 'no element with class name dx-cell-modified');
     });
 
     QUnit.test('Highlight modified boolean editor', function(assert) {
@@ -4677,10 +4683,9 @@ QUnit.module('Editing with real dataController', {
 
         // assert
         $checkbox = testElement.find('.dx-row').first().find('.dx-checkbox');
-        assert.ok($checkbox.parent().hasClass('dx-highlight-outline'), 'checkbox parent is dx-highlight-outline');
-        assert.ok($checkbox.parent().parent().hasClass('dx-editor-cell'), 'cell has dx-editor-cell class');
-        assert.ok($checkbox.parent().parent().hasClass('dx-editor-inline-block'), 'cell has dx-editor-inline-block class');
-        assert.ok($checkbox.parent().parent().hasClass('dx-cell-modified'), 'cell has dx-cell-modified class');
+        assert.ok($checkbox.parent().hasClass('dx-editor-cell'), 'cell has dx-editor-cell class');
+        assert.ok($checkbox.parent().hasClass('dx-editor-inline-block'), 'cell has dx-editor-inline-block class');
+        assert.ok($checkbox.parent().hasClass('dx-cell-modified'), 'cell has dx-cell-modified class');
     });
 
     // T389185
@@ -4810,7 +4815,6 @@ QUnit.module('Editing with real dataController', {
         // assert
         const cell = rowsView.element().find('td').first();
         assert.ok(cell.find('.dx-texteditor').length, 'has editor');
-        assert.ok(cell.children().hasClass('dx-highlight-outline'), 'has element with class dx-highlight-outline');
         assert.ok(!cell.hasClass('dx-cell-modified'), 'not has class dx-cell-modified');
 
         // act
@@ -5360,7 +5364,7 @@ QUnit.module('Editing with real dataController', {
         assert.equal(testElement.find('td').first().next().text(), '$123.000', 'cell text after editing');
     });
 
-    QUnit.test('Add highlight outline by batch edit mode_T118843', function(assert) {
+    QUnit.test('Add cell modified by batch edit mode_T118843', function(assert) {
     // arrange
         const that = this;
         const testElement = $('#container');
@@ -5374,13 +5378,13 @@ QUnit.module('Editing with real dataController', {
         testElement.find('td').eq(1).trigger('dxclick');
 
         // act
-        testElement.find('input').first().val('11');
-        testElement.find('input').first().trigger('change');
+        testElement.find('.dx-texteditor-input').first().val('11');
+        testElement.find('.dx-texteditor-input').first().trigger('change');
 
         testElement.find('td').eq(0).trigger('dxclick');
 
         // assert
-        assert.ok(testElement.find('.dx-highlight-outline').length > 0, 'highlight outline');
+        assert.ok(testElement.find('.dx-cell-modified').length > 0, 'cell modified');
 
     });
 
@@ -5403,14 +5407,14 @@ QUnit.module('Editing with real dataController', {
 
         testElement.find('td').eq(0).trigger('dxclick');
 
-        const $outlineElement = testElement.find('.dx-highlight-outline');
+        const $modifiedCell = testElement.find('.dx-cell-modified');
 
         // assert
-        assert.strictEqual($outlineElement.text(), $('<div>&nbsp;</div>').text(), 'empty text');
+        assert.strictEqual($modifiedCell.text(), $('<div>&nbsp;</div>').text(), 'empty text');
     });
 
     // T136710
-    QUnit.test('Add highlight outline by batch edit mode when delayed template used (KO)', function(assert) {
+    QUnit.test('Add modified cell by batch edit mode when delayed template used (KO)', function(assert) {
     // arrange
         const that = this;
         const testElement = $('#container');
@@ -5436,16 +5440,16 @@ QUnit.module('Editing with real dataController', {
         testElement.find('td').eq(0).trigger('dxclick');
 
         // act
-        testElement.find('input').first().val('Test11');
-        testElement.find('input').first().trigger('change');
+        testElement.find('.dx-texteditor-input').first().val('Test11');
+        testElement.find('.dx-texteditor-input').first().trigger('change');
 
         that.editingController.closeEditCell();
         that.clock.tick();
 
         // assert
-        const $elementWithOutline = testElement.find('td').first().find('.dx-highlight-outline');
-        assert.strictEqual($elementWithOutline.length, 1, 'highlight outline');
-        assert.strictEqual($elementWithOutline.text(), 'test_Test11', 'text in outline element');
+        const $modifiedCell = testElement.find('td.dx-cell-modified');
+        assert.strictEqual($modifiedCell.length, 1, 'modified cell');
+        assert.strictEqual($modifiedCell.text(), 'test_Test11', 'text in modified cell');
     });
 
 
@@ -8300,7 +8304,7 @@ QUnit.module('Editing with real dataController', {
     });
 
     // T858174
-    QUnit.test('The highlight outline should be correctly rendered after editing cell when cellTemplate is specified (React)', function(assert) {
+    QUnit.test('The modified cell should be correctly rendered after editing when cellTemplate is specified (React)', function(assert) {
     // arrange
         const that = this;
         const $testElement = $('#container');
@@ -8330,8 +8334,8 @@ QUnit.module('Editing with real dataController', {
         $testElement.find('td').eq(0).trigger('dxclick');
 
         // act
-        $testElement.find('input').first().val('Test11');
-        $testElement.find('input').first().trigger('change');
+        $testElement.find('.dx-texteditor-input').first().val('Test11');
+        $testElement.find('.dx-texteditor-input').first().trigger('change');
 
         template.reset();
         that.editingController.closeEditCell();
@@ -8340,9 +8344,9 @@ QUnit.module('Editing with real dataController', {
         // assert
         assert.strictEqual(template.callCount, 1, 'template is called');
         assert.ok(template.getCall(0).args[0].onRendered, 'template args - there is onRendered');
-        const $elementWithOutline = $testElement.find('td').first().find('.dx-highlight-outline');
-        assert.strictEqual($elementWithOutline.length, 1, 'highlight outline');
-        assert.strictEqual($elementWithOutline.text(), 'test_Test11', 'text in outline element');
+        const $modifiedCell = $testElement.find('td.dx-cell-modified');
+        assert.strictEqual($modifiedCell.length, 1, 'modified cell');
+        assert.strictEqual($modifiedCell.text(), 'test_Test11', 'text in modified cell');
     });
 
     ['row', 'form', 'popup'].forEach(editingMode => {
@@ -10337,7 +10341,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(!getInputElements(testElement).length, 'not has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         // act
         that.editCell(0, 1);
@@ -10354,7 +10357,7 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(!getInputElements(testElement).length, 'not has input');
         assert.ok(!cells.eq(1).hasClass('dx-datagrid-invalid'), 'success validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
+        assert.ok(cells.eq(1).hasClass('dx-cell-modified'), 'cell modified');
     });
 
     QUnit.test('Save edit data when edit mode batch and set validate in column', function(assert) {
@@ -10399,7 +10402,7 @@ QUnit.module('Editing with validation', {
         assert.equal(saveEditDataResult.state(), 'resolved');
         assert.ok(!getInputElements(testElement).length, 'not has input');
         assert.ok(cells.eq(4).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(4).children().first().hasClass('dx-highlight-outline'), 'has highlight');
+        assert.ok(cells.eq(4).hasClass('dx-cell-modified'), 'cell modified');
 
         // act
         that.editCell(1, 1);
@@ -10416,7 +10419,7 @@ QUnit.module('Editing with validation', {
         assert.equal(saveEditDataResult.state(), 'resolved');
         assert.ok(!getInputElements(testElement).length, 'not has input');
         assert.ok(!cells.eq(4).hasClass('dx-datagrid-invalid'), 'success validation');
-        assert.ok(!cells.eq(4).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
+        assert.ok(!cells.eq(4).hasClass('dx-cell-modified'), 'cell is not modified');
     });
 
     // T620368
@@ -10523,7 +10526,7 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.ok(cells.eq(2).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(2).children().first().hasClass('dx-highlight-outline'), 'has highlight');
+        assert.ok(cells.eq(2).hasClass('dx-cell-modified'), 'cell modified');
         assert.equal(testElement.find('tbody > tr').length, 5, 'count rows');
 
         // act
@@ -10533,8 +10536,8 @@ QUnit.module('Editing with validation', {
         assert.equal(getInputElements(testElement).length, 1, 'has input');
 
         // act
-        testElement.find('input').first().val('Test');
-        testElement.find('input').first().trigger('change');
+        testElement.find('.dx-texteditor-input').first().val('Test');
+        testElement.find('.dx-texteditor-input').first().trigger('change');
 
         that.closeEditCell();
         that.clock.tick();
@@ -10547,7 +10550,7 @@ QUnit.module('Editing with validation', {
         assert.equal(testElement.find('tbody > tr').length, 5, 'count rows');
         assert.strictEqual(cells.eq(11).text(), 'Test', 'text cell 12');
         assert.ok(!cells.eq(11).hasClass('dx-datagrid-invalid'), 'success validation');
-        assert.ok(!cells.eq(11).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
+        assert.ok(!cells.eq(11).hasClass('dx-cell-modified'), 'cell is not modified');
     });
 
     // T823583
@@ -10616,7 +10619,6 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.ok(cells.eq(2).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(2).children().first().hasClass('dx-highlight-outline'), 'has highlight');
     });
 
     // T186431
@@ -10739,7 +10741,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements(testElement).length, 0, 'not has input');
         assert.ok(!cells.eq(1).hasClass('dx-datagrid-invalid'), 'success validation');
-        assert.ok(!cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
 
         // act
         that.saveEditData();
@@ -10894,14 +10895,13 @@ QUnit.module('Editing with validation', {
         // assert
         cells = rowsView.element().find('tbody > tr').first().find('td');
         assert.ok(!cells.eq(0).hasClass('dx-datagrid-invalid'), 'not have validate');
-        assert.ok(!cells.eq(0).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
+        assert.ok(!cells.eq(0).hasClass('dx-cell-modified'), 'not modified');
 
         assert.ok(!cells.eq(1).hasClass('dx-datagrid-invalid'), 'success validate');
         assert.ok(cells.eq(1).hasClass('dx-cell-modified'), 'modified cell');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         assert.ok(!cells.eq(2).hasClass('dx-datagrid-invalid'), 'not have validate');
-        assert.ok(!cells.eq(2).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
+        assert.ok(!cells.eq(2).hasClass('dx-cell-modified'), 'not modified');
     });
 
     // T183295
@@ -10929,7 +10929,6 @@ QUnit.module('Editing with validation', {
         const callBackFunc = function() {
         // assert
             assert.ok(testElement.find('td').eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-            assert.ok(testElement.find('td').eq(1).children().hasClass('dx-highlight-outline'), 'has highlight');
             // assert.ok(testElement.find("td").eq(1).children().hasClass("dx-focused"), "has class dx-focused");
 
             that.editorFactoryController.focused.remove(callBackFunc);
@@ -10939,8 +10938,8 @@ QUnit.module('Editing with validation', {
         // act
         that.editCell(0, 1); // edit cell
 
-        testElement.find('input').val(101); // change value
-        testElement.find('input').trigger('change');
+        testElement.find('.dx-texteditor-input').val(101); // change value
+        testElement.find('.dx-texteditor-input').trigger('change');
 
         that.closeEditCell(); // close edit cell
         that.clock.tick();
@@ -11034,7 +11033,6 @@ QUnit.module('Editing with validation', {
         cells = rowsView.element().find('tbody > tr').first().find('td');
         assert.equal(getInputElements(testElement).length, 3, 'has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
         assert.equal(testElement.find('tbody > tr').length, 4, 'count rows');
         assert.equal(saveEditDataResult.state(), 'resolved');
 
@@ -11050,7 +11048,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements(testElement).length, 0, 'not has input');
         assert.ok(!cells.eq(1).hasClass('dx-datagrid-invalid'), 'success validation');
-        assert.ok(!cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
         assert.equal(testElement.find('tbody > tr').length, 4, 'count rows');
         assert.equal(saveEditDataResult.state(), 'resolved');
     });
@@ -11092,7 +11089,6 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.ok(cells.eq(2).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(2).children().first().hasClass('dx-highlight-outline'), 'has highlight');
         assert.equal(testElement.find('tbody > tr').length, 5, 'count rows');
 
         // act
@@ -11108,7 +11104,6 @@ QUnit.module('Editing with validation', {
         assert.equal(getInputElements(testElement).length, 0, 'not has input');
         assert.strictEqual(cells.eq(14).text(), 'Test', 'text cell 12');
         assert.ok(!cells.eq(14).hasClass('dx-datagrid-invalid'), 'success validation');
-        assert.ok(!cells.eq(14).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
         assert.equal(testElement.find('tbody > tr').length, 5, 'count rows');
     });
 
@@ -11210,7 +11205,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(!getInputElements($testElement).length, 'not has input');
         assert.ok($cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok($cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         // act
         $($cells.eq(1)).trigger('dxclick');
@@ -11227,7 +11221,7 @@ QUnit.module('Editing with validation', {
         // T335660
         const overlayInstance = $overlayElement.dxOverlay('instance');
         assert.ok(overlayInstance, 'has overlay instance');
-        assert.ok(overlayInstance.option('target').hasClass('dx-highlight-outline'), 'target of the overlay');
+        assert.ok(overlayInstance.option('target').hasClass('dx-editor-cell'), 'target of the overlay');
 
         // act
         $inputElement = getInputElements($testElement).first();
@@ -11350,7 +11344,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(!getInputElements(testElement).length, 'not has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         // act
         cells.eq(1).trigger('dxclick');
@@ -11366,8 +11359,8 @@ QUnit.module('Editing with validation', {
         assert.ok(rowsView.element().find('.dx-freespace-row').height() > 0, 'freespace row has height ');
 
         // T526383
-        const $highlightContainer = cells.eq(1).find('.dx-highlight-outline').first();
-        assert.ok($overlayContent.offset().top >= ($highlightContainer.offset().top + $highlightContainer.height()), 'tooltip is under the cell');
+        const $modifiedCell = cells.eq(1);
+        assert.ok($overlayContent.offset().top >= ($modifiedCell.offset().top + $modifiedCell.height()), 'tooltip is under the cell');
     });
 
     // T200857
@@ -11422,7 +11415,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(!getInputElements(testElement).length, 'not has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         // act
         cells.eq(1).trigger('dxclick');
@@ -11686,11 +11678,8 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.ok(cells.eq(2).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(2).children().first().hasClass('dx-highlight-outline'), 'has highlight');
         assert.ok(cells.eq(6).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(6).children().first().hasClass('dx-highlight-outline'), 'has highlight');
         assert.ok(cells.eq(10).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(10).children().first().hasClass('dx-highlight-outline'), 'has highlight');
         assert.equal(testElement.find('tbody > tr').length, 10, 'count rows');
         assert.ok(testElement.find('tbody > tr').eq(1).hasClass('dx-error-row'), 'has error row 1');
         assert.ok(testElement.find('tbody > tr').eq(3).hasClass('dx-error-row'), 'has error row 2');
@@ -11833,8 +11822,6 @@ QUnit.module('Editing with validation', {
         $input = $(rowsView.element().find('.dx-data-row').first().find('td').eq(2).find('.dx-texteditor-input'));
 
         // assert
-        const $highlight = $input.closest('.dx-highlight-outline');
-        assert.ok($highlight.length, 'has highlight');
         assert.ok(!$input.closest('td').hasClass('dx-datagrid-invalid'), 'not has class dx-datagrid-invalid on cell');
     });
 
@@ -12021,7 +12008,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements(testElement).length, 1, 'has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         // act
         that.editCell(0, 2);
@@ -12031,7 +12017,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements(testElement).length, 1, 'has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
     });
 
     QUnit.testInActiveWindow('Show the revert button when an edit cell to invalid value when the edit mode cell is enabled', function(assert) {
@@ -12061,9 +12046,9 @@ QUnit.module('Editing with validation', {
         const that = this;
         let $cellWithRevertButton;
 
-        this.editorFactoryController._showRevertButton = function($cell, $targetElement) {
+        this.editorFactoryController._showRevertButton = function($cell) {
             $cellWithRevertButton = $cell;
-            $.proxy(showRevertButton, that.editorFactoryController)($cell, $targetElement);
+            $.proxy(showRevertButton, that.editorFactoryController)($cell);
         };
 
         this.editCell(0, 2);
@@ -12110,9 +12095,9 @@ QUnit.module('Editing with validation', {
         const that = this;
         let $cellWithRevertButton;
 
-        this.editorFactoryController._showRevertButton = function($cell, $targetElement) {
+        this.editorFactoryController._showRevertButton = function($cell) {
             $cellWithRevertButton = $cell;
-            $.proxy(showRevertButton, that.editorFactoryController)($cell, $targetElement);
+            $.proxy(showRevertButton, that.editorFactoryController)($cell);
         };
 
         this.editCell(0, 2);
@@ -12276,7 +12261,7 @@ QUnit.module('Editing with validation', {
         assert.equal(testElement.find('.dx-data-row td').eq(0).text(), 'Alex', 'old value');
     });
 
-    QUnit.test('Revert button is not shown when the height light css class is not applied', function(assert) {
+    QUnit.test('Revert button is not shown when a cell is not defined', function(assert) {
     // arrange
         const testElement = $('#container');
 
@@ -12295,8 +12280,7 @@ QUnit.module('Editing with validation', {
         // act
         this.editCell(0, 1);
 
-        const $cells = $(this.rowsView.element().find('tbody > tr').first().find('td'));
-        this.editorFactoryController._showRevertButton($cells.eq(0));
+        this.editorFactoryController._showRevertButton();
 
         // assert
         assert.equal($('.dx-datagrid-revert-tooltip').length, 0);
@@ -12349,9 +12333,9 @@ QUnit.module('Editing with validation', {
         const that = this;
         let $cellWithRevertButton;
 
-        this.editorFactoryController._showRevertButton = function($cell, $targetElement) {
+        this.editorFactoryController._showRevertButton = function($cell) {
             $cellWithRevertButton = $cell;
-            $.proxy(showRevertButton, that.editorFactoryController)($cell, $targetElement);
+            $.proxy(showRevertButton, that.editorFactoryController)($cell);
         };
         this.editCell(0, 1);
 
@@ -12453,7 +12437,6 @@ QUnit.module('Editing with validation', {
         // assert
         // equal(getInputElements(testElement).length, 1, "has input");
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
         assert.equal(testElement.find('tbody > tr').length, 5, 'count rows');
 
         // act
@@ -12465,7 +12448,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(getInputElements(testElement).length, 'not has input');
         assert.ok(!cells.find('.dx-datagrid-invalid').length, 'not validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
         assert.equal(testElement.find('tbody > tr').length, 5, 'count rows');
     });
 
@@ -12550,7 +12532,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements(testElement).length, 0, 'has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         // act
         that.dataController.pageIndex(1);
@@ -12569,7 +12550,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(testElement.find('tbody > tr').length, 3, 'count rows');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
     });
 
     // T836508
@@ -12756,7 +12736,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements(testElement).length, 0, 'has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         // act
         that.dataController.pageIndex(1);
@@ -12776,7 +12755,6 @@ QUnit.module('Editing with validation', {
         assert.ok(that.hasEditData(), 'data is not saved');
         assert.equal(testElement.find('tbody > tr').length, 3, 'count rows');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
     });
 
     // T495625
@@ -12883,7 +12861,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements(testElement).length, 0, 'has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         // act
         that.columnsController.changeSortOrder(1, 'desc');
@@ -12892,7 +12869,6 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.ok(!cells.eq(1).hasClass('dx-datagrid-invalid'), 'not failed validation');
-        assert.ok(!cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
         assert.equal(testElement.find('tbody > tr').length, 3, 'count rows');
 
         // act
@@ -12903,7 +12879,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(testElement.find('tbody > tr').length, 4, 'count rows');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
     });
 
     QUnit.test('Edit cell with edit mode batch and filtering', function(assert) {
@@ -12950,7 +12925,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(getInputElements(testElement).length, 0, 'has input');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
 
         // act
         that.columnsController.columnOption(1, 'filterValue', 17);
@@ -12959,7 +12933,7 @@ QUnit.module('Editing with validation', {
 
         // assert
         assert.ok(!cells.eq(1).hasClass('dx-datagrid-invalid'), 'not failed validation');
-        assert.ok(!cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'not has highlight');
+        assert.ok(!cells.eq(1).hasClass('dx-cell-modified'), 'cell is not modified');
         assert.equal(testElement.find('tbody > tr').length, 2, 'count rows');
 
         // act
@@ -12970,7 +12944,6 @@ QUnit.module('Editing with validation', {
         // assert
         assert.equal(testElement.find('tbody > tr').length, 3, 'count rows');
         assert.ok(cells.eq(1).hasClass('dx-datagrid-invalid'), 'failed validation');
-        assert.ok(cells.eq(1).children().first().hasClass('dx-highlight-outline'), 'has highlight');
     });
 
     // T186431
@@ -15742,7 +15715,6 @@ QUnit.module('Editing with scrolling', {
         // assert
         const $cell = testElement.find('tbody > tr').eq(3).children().first();
         assert.strictEqual($cell.text(), 'test', 'value of the cell');
-        assert.ok($cell.find('.dx-highlight-outline').length, 'has highlight');
     });
 
     QUnit.test('Save inserted data with set onRowValidating and infinite scrolling', function(assert) {

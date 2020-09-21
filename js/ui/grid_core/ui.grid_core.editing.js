@@ -51,7 +51,6 @@ const ROW_REMOVED = 'dx-row-removed';
 const ROW_INSERTED = 'dx-row-inserted';
 const ROW_MODIFIED = 'dx-row-modified';
 const CELL_MODIFIED = 'dx-cell-modified';
-const CELL_HIGHLIGHT_OUTLINE = 'dx-highlight-outline';
 const EDITING_NAMESPACE = 'dxDataGridEditing';
 const DATA_ROW_CLASS = 'dx-data-row';
 
@@ -69,8 +68,6 @@ const EDIT_MODE_POPUP = 'popup';
 const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 const DATA_EDIT_DATA_UPDATE_TYPE = 'update';
 const DATA_EDIT_DATA_REMOVE_TYPE = 'remove';
-
-const POINTER_EVENTS_TARGET_CLASS = 'dx-pointer-events-target';
 
 const DEFAULT_START_EDIT_ACTION = 'click';
 
@@ -2576,23 +2573,9 @@ const EditingController = modules.ViewController.inherit((function() {
             return buttonItems;
         },
 
-        showHighlighting: function($cell) {
-            const $highlight = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
-            if($cell.get(0).tagName === 'TD' && !$highlight.length) {
-                $cell.wrapInner($('<div>').addClass(CELL_HIGHLIGHT_OUTLINE + ' ' + POINTER_EVENTS_TARGET_CLASS));
-            }
-        },
-
         highlightDataCell: function($cell, parameters) {
-            const isEditableCell = parameters.setValue;
             const cellModified = this.isCellModified(parameters);
-
-            if(cellModified && parameters.column.setCellValue) {
-                this.showHighlighting($cell);
-                $cell.addClass(CELL_MODIFIED);
-            } else if(isEditableCell) {
-                this.showHighlighting($cell);
-            }
+            cellModified && parameters.column.setCellValue && $cell.addClass(CELL_MODIFIED);
         },
 
         _afterInsertRow: function() { },
