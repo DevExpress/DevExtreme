@@ -13,6 +13,10 @@ class ThemeBuilderImporter extends Importer {
   bool needModification(Uri url) => url.path.contains('tb_');
   String getTheme(Uri url) => url.path.contains('material') ? 'material' : 'generic';
 
+  String getMatchingUserItemsAsString(String theme) {
+    return '';
+  }
+
   Uri canonicalize(Uri url) {
     if(!needModification(url)) return fsImporter.canonicalize(url);
 
@@ -30,7 +34,9 @@ class ThemeBuilderImporter extends Importer {
   ImporterResult load(Uri url) {
     if(!needModification(url)) return fsImporter.load(url);
 
-    var result = isIndexImport(url) ? indexFileContent : ''; // TODO add user variables
+    var result = isIndexImport(url)
+      ? indexFileContent
+      : getMatchingUserItemsAsString(getTheme(url));
     return ImporterResult(result, syntax: Syntax.scss, sourceMapUrl: url);
   }
 

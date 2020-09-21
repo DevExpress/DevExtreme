@@ -8,6 +8,7 @@ import { browserslist } from '../../../package.json';
 const stylesDirectory = '../scss';
 const stylesDestinationDirectory = './src/data/scss';
 const metadataDestinationFile = './src/data/metadata/dx-theme-builder-metadata.ts';
+const jsonMetadataDestinationFile = './dart-compiler/metadata/dx-theme-builder-metadata.json';
 const commentsRegex = /\s*\/\*[\S\s]*?\*\//g;
 
 const sourceHandler = (content: string): string => resolveDataUri(content.replace(commentsRegex, ''));
@@ -23,6 +24,7 @@ const generate = async (): Promise<void> => {
 
     await collector.saveMetadata(
       metadataDestinationFile,
+      jsonMetadataDestinationFile,
       version.package,
       browserslist,
       dependencyCollector.flatStylesDependencyTree,
