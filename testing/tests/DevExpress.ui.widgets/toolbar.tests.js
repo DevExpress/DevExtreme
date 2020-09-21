@@ -5,10 +5,15 @@ import errors from 'core/errors';
 import $ from 'jquery';
 import Toolbar from 'ui/toolbar';
 import ToolbarBase from 'ui/toolbar/ui.toolbar.base';
+
+import TabPanel from 'ui/tab_panel';
+
 import fx from 'animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import eventsEngine from 'events/core/events_engine';
+
+import { deferUpdate } from 'core/utils/common';
 
 import 'ui/button_group';
 
@@ -276,6 +281,83 @@ QUnit.module('render', {
 
         assert.ok(templateUsed);
         assert.equal(this.element.find('.custom-template').length, 1);
+    });
+
+    [true, false].forEach(templatesRenderAsynchronously => {
+        [true, false].forEach(deferRendering => {
+            function renderToolbarInsideTabPanel(container, toolbarItems) {
+                const templateCreator = deferRendering
+                    ? (func) => deferUpdate(() => func(), 100)
+                    : (func) => func();
+
+                new TabPanel(container, {
+                    templatesRenderAsynchronously,
+                    deferRendering,
+                    dataSource: [{ title: '1' }],
+                    itemTemplate: {
+                        render: item => {
+                            templateCreator(() => {
+                                const $toolbar = $('<div></div>').dxToolbar({
+                                    items: toolbarItems
+                                });
+
+                                $(item.container).append($toolbar);
+                            });
+                        }
+                    }
+                });
+            }
+
+            QUnit.test(`Toolbar menu icon rendered correctly in asynchronous template. Second item located in menu, templatesRenderAsynchronously=${templatesRenderAsynchronously}, deferRendering=${deferRendering}.`, function(assert) {
+                renderToolbarInsideTabPanel(this.element, [{
+                    location: 'after',
+                    locateInMenu: 'never',
+                    text: 'item1'
+                }, {
+                    location: 'after',
+                    locateInMenu: 'always',
+                    text: 'item2'
+                }]);
+
+                const toolbarItems = this.element.find('.dx-toolbar-after').children();
+                assert.equal(toolbarItems.length, 2, 'All items are rendered');
+
+                assert.equal(toolbarItems[0].innerText, 'item1', 'first item is simple item');
+                assert.equal(toolbarItems[1].innerText, '', 'second item is menu button');
+            });
+
+            QUnit.test(`Toolbar simple items rendered correctly in asynchronous template. Items position: before, templatesRenderAsynchronously=${templatesRenderAsynchronously}, deferRendering=${deferRendering}.`, function(assert) {
+                renderToolbarInsideTabPanel(this.element, [{
+                    location: 'before',
+                    locateInMenu: 'never',
+                    text: 'item1'
+                }, {
+                    location: 'before',
+                    locateInMenu: 'never',
+                    text: 'item2'
+                } ]);
+
+                const toolbarItems = this.element.find('.dx-toolbar-before').children();
+                assert.equal(toolbarItems[0].innerText, 'item1', 'first item is simple item');
+                assert.equal(toolbarItems[1].innerText, 'item2', 'second item is simple item');
+            });
+
+            QUnit.test(`Toolbar simple items rendered correctly in asynchronous template. Items position: after, templatesRenderAsynchronously=${templatesRenderAsynchronously}, deferRendering=${deferRendering}.`, function(assert) {
+                renderToolbarInsideTabPanel(this.element, [{
+                    location: 'after',
+                    locateInMenu: 'never',
+                    text: 'item1'
+                }, {
+                    location: 'after',
+                    locateInMenu: 'never',
+                    text: 'item2'
+                } ]);
+
+                const toolbarItems = this.element.find('.dx-toolbar-after').children();
+                assert.equal(toolbarItems[0].innerText, 'item1', 'first item is simple item');
+                assert.equal(toolbarItems[1].innerText, 'item2', 'second item is simple item');
+            });
+        });
     });
 });
 
