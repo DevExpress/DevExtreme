@@ -1708,9 +1708,9 @@ class Diagram extends Widget {
                 /**
                 * @name dxDiagramOptions.nodes.autoSizeEnabled
                 * @type boolean
-                * @default false
+                * @default true
                 */
-                autoSizeEnabled: false
+                autoSizeEnabled: true,
             },
             edges: {
                 /**
