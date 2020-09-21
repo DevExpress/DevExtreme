@@ -549,7 +549,7 @@ class FileUploader extends Editor {
         this._toggleFileUploaderEmptyClassName();
         this._updateFileNameMaxWidth();
 
-        this._$validationMessage && this._$validationMessage.dxOverlay('instance').repaint();
+        this._validationMessage?.repaint();
     }
 
     _renderFile(file) {
