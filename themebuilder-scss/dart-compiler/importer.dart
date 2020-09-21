@@ -1,20 +1,40 @@
 import 'dart:io';
 import 'package:sass/sass.dart';
 import 'package:path/path.dart' as path;
+import 'dart:convert';
+
+class MetaItem {
+  String key, value;
+  MetaItem(this.key, this.value);
+}
 
 class ThemeBuilderImporter extends Importer {
   String indexFileContent;
   String scssWidgetsDir = './widgets/';
   FilesystemImporter fsImporter = FilesystemImporter('.');
+  dynamic metadata;
+  List<MetaItem> userItems;
 
-  ThemeBuilderImporter(this.indexFileContent);
+  ThemeBuilderImporter(this.indexFileContent, this.userItems) {
+    var metaPath = path.absolute('../../../dart-compiler/metadata/dx-theme-builder-metadata.json');
+    var contents = new File(metaPath).readAsStringSync();
+    this.metadata = jsonDecode(contents);
+  }
 
   bool isIndexImport(Uri url) => url.path.contains('tb_index');
   bool needModification(Uri url) => url.path.contains('tb_');
   String getTheme(Uri url) => url.path.contains('material') ? 'material' : 'generic';
 
   String getMatchingUserItemsAsString(String theme) {
-    return '';
+    var parsedItems = metadata[theme] as List;
+    var items = parsedItems.map((item) => MetaItem(item['Key'], item['Value']));
+    var themeKeys = items.map((item) => item.key);
+
+    return userItems
+      .where((item) => themeKeys.contains(item.key))
+      .map((item) => '${item.key}: ${item.value};')
+      .toList()
+      .join('');
   }
 
   Uri canonicalize(Uri url) {

@@ -25,11 +25,15 @@ void main(List<String> arguments) {
 @use "./box";
 ''';
 
+  var userItems = new List<MetaItem>();
+  userItems.add(MetaItem('\$base-bg', '#abcdef'));
+  userItems.add(MetaItem('\$base-accent', '#abcdef'));
+
   var result = sass.compile(
     'bundles/dx.light.scss',
     charset: false,
     importers: [
-      ThemeBuilderImporter(indexFileContent)
+      ThemeBuilderImporter(indexFileContent, userItems)
     ],
     functions: [
       Collector().collector
