@@ -367,7 +367,6 @@ export let Legend = function(settings) {
     that._allowInsidePosition = settings.allowInsidePosition;
     that._widget = settings.widget;
 
-    that._asyncFirstDrawing = true;
     that._updated = false;
 };
 
@@ -447,8 +446,6 @@ extend(legendPrototype, {
         // TODO check multiple groups creation
         const that = this;
         const items = that._getItemData();
-
-        that._isAsyncRendering = false;
 
         that.erase();
 
@@ -565,16 +562,12 @@ extend(legendPrototype, {
                 renderMarker(state) {
                     dataItem.marker = getAttributes(item, state, dataItem.size);
                     markerGroup.clear();
-                    let isRendered = false;
                     template.render({
-                        model: dataItem, container: markerGroup.element, onRendered: () => {
-                            isRendered = true;
-                            deferredItems[i].resolve();
-                        }
+                        model: dataItem,
+                        container: markerGroup.element,
+                        onRendered: deferredItems[i].resolve
                     });
-                    if(!isRendered && markerGroup.element.childNodes.length === 0) {
-                        that._isAsyncRendering = true;
-                    }
+
                 }
             };
 
@@ -589,18 +582,14 @@ extend(legendPrototype, {
             return item;
         });
 
+        let syncRendering = true;
         when.apply(this, deferredItems).done(() => {
-            if(that._isAsyncRendering) {
-                const changes = ['LAYOUT', 'FULL_RENDER'];
-                if(that._asyncFirstDrawing) {
-                    changes.push('FORCE_FIRST_DRAWING');
-                    that._asyncFirstDrawing = false;
-                } else {
-                    changes.push('FORCE_DRAWING');
-                }
-                that._widget._requestChange(changes);
+            if(syncRendering) {
+                return;
             }
+            that._widget._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
         });
+        syncRendering = false;
     },
 
     _getItemData: function() {
