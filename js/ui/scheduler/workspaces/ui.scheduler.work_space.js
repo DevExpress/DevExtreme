@@ -457,9 +457,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _correctCellForGroup($cell) {
         if(this.isVirtualScrolling()) {
-            // const {
-            //     rowIndex, cellIndex,
-            // } =
             const cellData = this.getCellData($cell);
             const isValidFocusedCell = this.virtualSelectionState.isValidFocusedCell(cellData);
 
@@ -2556,15 +2553,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const { viewDataProvider } = this;
         const isAllDayCell = this._hasAllDayClass($cell);
-        if(isAllDayCell) {
-            const allDayPanel = this._isVerticalGroupedWorkSpace()
-                ? viewDataProvider.getCellData(rowIndex, cellIndex)
-                : viewDataProvider.viewData.groupedData[0].allDayPanel;
 
-            return allDayPanel[cellIndex];
-        }
-
-        return viewDataProvider.getCellData(rowIndex, cellIndex);
+        return viewDataProvider.getCellData(rowIndex, cellIndex, isAllDayCell);
     }
 
     _getHorizontalMax(groupIndex) {
