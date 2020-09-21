@@ -187,7 +187,9 @@ configs.forEach(config => {
     }, () => {
 
         function configIs(openedStateMode, position, revealMode) {
-            return config.openedStateMode === openedStateMode && (config.position === position || !position) && (config.revealMode === revealMode || !revealMode);
+            const isPosition = Array.isArray(position) ? (position.indexOf(config.position) >= 0) : (config.position === position || !position);
+            const isRevealMode = Array.isArray(revealMode) ? (revealMode.indexOf(config.revealMode) >= 0) : (config.revealMode === revealMode || !revealMode);
+            return config.openedStateMode === openedStateMode && isPosition && isRevealMode;
         }
 
         function testOrSkip(name, skip, callback) {
@@ -212,38 +214,96 @@ configs.forEach(config => {
             return extend({ rtlEnabled: false, animationEnabled: false }, config, targetOptions);
         }
 
-        function checkPanelIsNotVisible(assert, drawerElement, panelTemplateElement) {
+        function checkWhenPanelContentRendered(assert, drawer, drawerElement, panelTemplateElement) {
             const drawerRect = drawerElement.getBoundingClientRect();
-            const panelTemplateRect = panelTemplateElement.getBoundingClientRect();
-            const panelTemplateParentRect = panelTemplateElement.parentElement.getBoundingClientRect();
-            if((panelTemplateRect.width > 0 || panelTemplateRect.height > 0) && (panelTemplateParentRect.width > 0 || panelTemplateParentRect.width > 0)) {
-                assert.strictEqual(
-                    panelTemplateRect.right < drawerRect.left
-                    || panelTemplateRect.left > drawerRect.right
-                    || panelTemplateRect.bottom < drawerRect.top
-                    || panelTemplateRect.top > drawerRect.bottom,
-                    true,
-                    `panel should not be visible, left:[${panelTemplateRect.left}/${drawerRect.left}], top:[${panelTemplateRect.top}/${drawerRect.top}], right:[${panelTemplateRect.right}/${drawerRect.right}], bottom:[${panelTemplateRect.bottom}/${drawerRect.bottom}], [panel/drawer]`);
+            if(config.minSize) {
+                if(drawer.option('openedStateMode') === 'overlap') {
+                    const panelParentRect = panelTemplateElement.parentElement.getBoundingClientRect();
+                    const expectedPanelParentRect = extend({}, drawerRect);
+                    if(drawer.option('minSize')) {
+                        switch(drawer.option('position')) {
+                            case 'left':
+                                expectedPanelParentRect.width = drawer.option('minSize');
+                                break;
+                            case 'right':
+                                expectedPanelParentRect.left += drawerRect.wight - drawer.option('minSize');
+                                expectedPanelParentRect.width = drawer.option('minSize');
+                                break;
+                            case 'top':
+                                expectedPanelParentRect.height = drawer.option('minSize');
+                                break;
+                            case 'bottom':
+                                expectedPanelParentRect.top = drawerRect.bottom - drawer.option('minSize');
+                                expectedPanelParentRect.height = drawer.option('minSize');
+                                break;
+                        }
+                    }
+                    assert.strictEqual(
+                        panelParentRect.left === expectedPanelParentRect.left
+                        && panelParentRect.top === expectedPanelParentRect.top
+                        && panelParentRect.width === expectedPanelParentRect.width
+                        && panelParentRect.height === expectedPanelParentRect.height,
+                        true,
+                        'panelTemplateRect/expectedRect: ' +
+                        `left:[${panelParentRect.left}/${expectedPanelParentRect.left}], top:[${panelParentRect.top}/${expectedPanelParentRect.top}], ` +
+                        `width:[${panelParentRect.width}/${expectedPanelParentRect.width}], height:[${panelParentRect.height}/${expectedPanelParentRect.height}]`);
+                }
+            } else {
+                if(drawer.option('openedStateMode') !== 'overlap') {
+                    const panelRect = panelTemplateElement.parentElement.getBoundingClientRect();
+                    assert.strictEqual(
+                        panelRect.right < drawerRect.left
+                        || panelRect.left > drawerRect.right
+                        || panelRect.bottom < drawerRect.top
+                        || panelRect.top > drawerRect.bottom,
+                        true,
+                        'panel should be out of drawerRect, ' +
+                        `left:[${panelRect.left}/${drawerRect.left}], top:[${panelRect.top}/${drawerRect.top}], ` +
+                        `right:[${panelRect.right}/${drawerRect.right}], bottom:[${panelRect.bottom}/${drawerRect.bottom}], [panel/drawer]`);
+                }
             }
-            const viewRect = document.getElementById('view').getBoundingClientRect();
-            assert.strictEqual(
-                viewRect.left === drawerRect.left
-                && viewRect.right === drawerRect.right
-                && viewRect.width === drawerRect.width
-                && viewRect.height === drawerRect.height,
-                true,
-                `view rect equals to drawer, left:[${viewRect.left}/${drawerRect.left}], top:[${viewRect.top}/${drawerRect.top}], right:[${viewRect.right}/${drawerRect.right}], bottom:[${viewRect.bottom}/${drawerRect.bottom}], [view/drawer]`);
+
+            if(!drawer.option('minSize') || (drawer.option('openedStateMode') === 'overlap')) {
+                const expectedViewRect = extend({}, drawerRect);
+                if(drawer.option('minSize')) {
+                    switch(drawer.option('position')) {
+                        case 'left':
+                            expectedViewRect.left += drawer.option('minSize');
+                            expectedViewRect.width -= drawer.option('minSize');
+                            break;
+                        case 'right':
+                            expectedViewRect.width -= drawer.option('minSize');
+                            break;
+                        case 'top':
+                            expectedViewRect.top += drawer.option('minSize');
+                            expectedViewRect.height -= drawer.option('minSize');
+                            break;
+                        case 'bottom':
+                            expectedViewRect.height -= drawer.option('minSize');
+                            break;
+                    }
+                }
+                const viewRect = document.getElementById('view').getBoundingClientRect();
+                assert.strictEqual(
+                    viewRect.left === expectedViewRect.left
+                    && viewRect.top === expectedViewRect.top
+                    && viewRect.width === expectedViewRect.width
+                    && viewRect.height === expectedViewRect.height,
+                    true,
+                    'viewRect/expectedRect, ' +
+                    `left:[${viewRect.left}/${expectedViewRect.left}], top:[${viewRect.top}/${expectedViewRect.top}], ` +
+                    `width:[${viewRect.width}/${expectedViewRect.width}], height:[${viewRect.height}/${expectedViewRect.height}]`);
+            }
         }
 
-        testOrSkip('opened: false', () => configIs('push', 'top') || configIs('overlap', 'right', 'expand') && config.minSize, function(assert) {
+        testOrSkip('opened: false', () => configIs('push', 'top') || configIs('overlap', ['right', 'top'], ['expand', 'slide']) && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template,
-                __debugWhenPanelContentRendered: () => {
-                    if(!config.minSize) {
-                        checkPanelIsNotVisible(assert, drawerElement, document.getElementById('template'));
-                    }
+                __debugWhenPanelContentRendered: (e) => {
+                    checkWhenPanelContentRendered(assert, e.drawer, drawerElement, document.getElementById('template'));
                 }
             }));
 
