@@ -445,6 +445,46 @@ class AppointmentModel {
         return query(this._dataSource.items()).filter(combinedFilter).toArray();
     }
 
+    virtual_filterLoadedAppointments(filterOptions, timeZoneCalculator) {
+        const combinedFilters = [];
+        const dataItems = this._dataSource.items();
+        const itemsToFilter = [];
+
+        dataItems.forEach(item => {
+            for(let i = 0; i < filterOptions.length; ++i) {
+                const { resources } = filterOptions[i];
+                if(this._filterAppointmentByResources(item, resources)) {
+                    itemsToFilter.push(item);
+                    break;
+                }
+            }
+        });
+
+        filterOptions.forEach(filterOption => {
+            combinedFilters.length && combinedFilters.push('or');
+
+            const combinedFilter = this._createCombinedFilter(filterOption, timeZoneCalculator);
+
+            if(this._filterMaker.isRegistered()) {
+                this._filterMaker.make('user', undefined);
+
+                const trimmedDates = this._trimDates(filterOption.min, filterOption.max);
+
+                this._filterMaker.make('date', [trimmedDates.min, trimmedDates.max, true]);
+
+                const dateFilter = this.customizeDateFilter(this._filterMaker.combine(), timeZoneCalculator);
+
+                combinedFilter.push([dateFilter]);
+            }
+
+            combinedFilters.push(combinedFilter);
+        });
+
+        return query(itemsToFilter)
+            .filter(combinedFilters)
+            .toArray();
+    }
+
     _trimDates(min, max) {
         const minCopy = dateUtils.trimTime(new Date(min));
         const maxCopy = dateUtils.trimTime(new Date(max));
