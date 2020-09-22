@@ -2549,13 +2549,11 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.isVirtualScrolling() && --rowIndex;
 
         const columnIndex = $cell.index();
-        const cellCount = this._getTotalCellCount();
-        const cellIndex = this.option('rtlEnabled') ? cellCount - columnIndex : columnIndex;
 
         const { viewDataProvider } = this;
         const isAllDayCell = this._hasAllDayClass($cell);
 
-        return viewDataProvider.getCellData(rowIndex, cellIndex, isAllDayCell);
+        return viewDataProvider.getCellData(rowIndex, columnIndex, isAllDayCell);
     }
 
     _getHorizontalMax(groupIndex) {
