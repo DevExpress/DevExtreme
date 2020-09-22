@@ -2340,9 +2340,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getCellByCoordinates(cellCoordinates, groupIndex, inAllDayRow) {
-        if(this.isVirtualScrolling()) {
-            return this._dom_getDateCell(cellCoordinates);
-        }
         const indexes = this._groupedStrategy.prepareCellIndexes(cellCoordinates, groupIndex, inAllDayRow);
         return this._dom_getDateCell(indexes);
     }

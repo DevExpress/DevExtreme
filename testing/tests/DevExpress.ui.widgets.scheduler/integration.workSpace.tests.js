@@ -1748,7 +1748,7 @@ QUnit.test('Focused cells cash should be correct (T640466)', function(assert) {
     const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
     const workSpace = this.instance.getWorkSpace();
 
-    assert.deepEqual(workSpace._focusedCells[0], $cells.eq(0).get(0), 'Cashed cells is correct');
+    assert.deepEqual(workSpace._selectedCells[0], $cells.eq(0).get(0), 'Cashed cells is correct');
 });
 
 QUnit.test('Scheduler timeline workweek should contain two spans in header panel cell in Material theme', function(assert) {

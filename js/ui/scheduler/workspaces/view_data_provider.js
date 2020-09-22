@@ -348,7 +348,7 @@ export default class ViewDataProvider {
 
             for(let cellIndex = 0; cellIndex < row.length; ++cellIndex) {
                 const cell = row[cellIndex];
-                const cellData = cell.cellData;
+                const { cellData } = cell;
 
                 if(cellData.groupIndex === groupIndex) {
                     if(isStartTimeInCell(cellData)) {
