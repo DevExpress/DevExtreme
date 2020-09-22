@@ -668,6 +668,29 @@ QUnit.module('Views integration', {
         });
     });
 
+    QUnit.test('click on view cell can select first century value (T929559)', function(assert) {
+        const startDate = dateUtils.createDateWithFullYear(15, 2, 15);
+
+        this.reinit({
+            zoomLevel: 'month',
+            value: startDate,
+            min: new Date(-50, 1, 1)
+        });
+
+        const $element = this.$element;
+        const calendar = this.calendar;
+
+        $.each(['month', 'year', 'decade', 'century'], (_, type) => {
+            calendar.option('maxZoomLevel', type);
+            const $cell = $element.find(toSelector(CALENDAR_CELL_CLASS)).eq(5);
+            const cellDate = dataUtils.data($cell.get(0), CALENDAR_DATE_VALUE_KEY);
+
+            $cell.trigger('dxclick');
+            assert.ok($cell, 'cell has selected class');
+            assert.deepEqual(calendar.option('value'), cellDate, 'calendar value is correct');
+        });
+    });
+
     QUnit.test('view contouredDate should sync with calendar currentDate', function(assert) {
         this.reinit({
             value: new Date(2015, 2, 15),
