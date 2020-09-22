@@ -9450,6 +9450,90 @@ QUnit.module('Editing with real dataController', {
                 assert.equal(this.array[0].name, 'test', 'row name field in dataSource');
             });
         });
+
+        QUnit.test('editRow should not create empty changes object', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'row'
+            });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.clock.tick();
+
+            // assert
+            assert.deepEqual(this.option('editing.changes'), [], 'no changes');
+
+            // act
+            this.cellValue(0, 0, 'test');
+
+            // assert
+            assert.deepEqual(this.option('editing.changes'), [{
+                'data': {
+                    'name': 'test'
+                },
+                'key': 1,
+                'oldData': {
+                    'age': 15,
+                    'lastName': 'John',
+                    'name': 'Alex',
+                    'phone': '555555',
+                    'room': 1,
+                    'state': {
+                        'name': 'state 1'
+                    },
+                    'stateId': 0
+                },
+                'type': 'update'
+            }], 'no changes');
+        });
+
+        QUnit.test('editCell should not create empty changes object', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'cell'
+            });
+            rowsView.render($testElement);
+
+            // act
+            this.editCell(0, 0);
+            this.clock.tick();
+
+            // assert
+            assert.deepEqual(this.option('editing.changes'), [], 'no changes');
+
+            // act
+            this.cellValue(0, 0, 'test');
+
+            // assert
+            assert.deepEqual(this.option('editing.changes'), [{
+                'data': {
+                    'name': 'test'
+                },
+                'key': 1,
+                'oldData': {
+                    'age': 15,
+                    'lastName': 'John',
+                    'name': 'Alex',
+                    'phone': '555555',
+                    'room': 1,
+                    'state': {
+                        'name': 'state 1'
+                    },
+                    'stateId': 0
+                },
+                'type': 'update'
+            }], 'no changes');
+        });
     });
 
     QUnit.module('Save/cancel events', {
@@ -14308,6 +14392,11 @@ QUnit.module('Editing with validation', {
 
         const $firstCell = $(this.getCellElement(0, 0));
         this.focus($firstCell);
+        this.option('editing.changes', [{
+            key: rowKey,
+            data: {},
+            type: 'update'
+        }]);
         this.clock.tick();
 
         let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
@@ -14346,6 +14435,11 @@ QUnit.module('Editing with validation', {
 
         const $firstCell = $(this.getCellElement(0, 0));
         this.focus($firstCell);
+        this.option('editing.changes', [{
+            key: rowKey,
+            data: {},
+            type: 'update'
+        }]);
         this.clock.tick();
 
         let result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
