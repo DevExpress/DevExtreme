@@ -1259,7 +1259,7 @@ const TagBox = SelectBox.inherit({
     },
 
     _refreshSelected: function() {
-        this._list && this._list.getDataSource() && this._list.option('selectedItems', this._selectedItems);
+        this._list?.getDataSource() && this._list.option('selectedItems', this._selectedItems);
     },
 
     _resetListDataSourceFilter: function() {
@@ -1370,10 +1370,10 @@ const TagBox = SelectBox.inherit({
     },
 
     _setListDataSource: function() {
-        const valueBackup = this._getValue();
+        const currentValue = this._getValue();
         this.callBase();
-        if(valueBackup !== this.option('value')) {
-            this.option('value', valueBackup);
+        if(currentValue !== this.option('value')) {
+            this.option('value', currentValue);
         }
         this._refreshSelected();
     },
