@@ -523,8 +523,10 @@ const DropDownList = DropDownEditor.inherit({
 
     _shouldRefreshDataSource: function() {
         const dataSourceProvided = !!this._list.option('dataSource');
+        const showSelectionControls = this.option('showSelectionControls');
         const someItemsSelected = this.option('selectedItems')?.length > 0;
-        return dataSourceProvided !== this._needPassDataSourceToList() && !someItemsSelected;
+
+        return dataSourceProvided !== this._needPassDataSourceToList() && (!someItemsSelected || !showSelectionControls);
     },
 
     _isDesktopDevice: function() {
