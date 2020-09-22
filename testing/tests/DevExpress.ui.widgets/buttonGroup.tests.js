@@ -6,6 +6,8 @@ import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
+import { createRenovationHook } from '../../helpers/renovationHelper.js';
+import ButtonGroup from 'ui/button_group';
 import 'common.css!';
 
 const BUTTON_CLASS = 'dx-button';
@@ -33,7 +35,9 @@ QUnit.module('option changed', {
         this.buttonGroup = this.createButtonGroup();
         this.$buttonGroup = this.buttonGroup.$element();
     }
-}, () => {
+}, (hooks) => {
+    createRenovationHook(ButtonGroup, hooks);
+
     QUnit.test('change hover state for all buttons', function(assert) {
         this.buttonGroup.option('hoverStateEnabled', false);
         const buttons = $(`.${BUTTON_CLASS}`).map((_, $button) => $($button).dxButton('instance'));
