@@ -7,7 +7,7 @@ import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
 import ValidationEngine from '../validation_engine';
 import EventsEngine from '../../events/core/events_engine';
-import ValidationMessage from '../validationMessage';
+import ValidationMessage from '../validation_message';
 import Guid from '../../core/guid';
 
 const INVALID_MESSAGE_AUTO = 'dx-invalid-message-auto';
