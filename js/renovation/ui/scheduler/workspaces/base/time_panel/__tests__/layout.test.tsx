@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
+import { shallow } from 'enzyme';
 import { viewFunction as LayoutView, TimePanelTableLayout } from '../layout';
 import { Row } from '../../row';
 import { TimePanelCell as Cell } from '../cell';
@@ -55,12 +55,13 @@ describe('TimePanelLayout', () => {
         groupIndex: 2,
         index: 3,
       }]],
+      groupIndex: 2,
     }],
     cellCountInGroupRow: 2,
   };
 
   describe('Render', () => {
-    const render = (viewModel): ReactWrapper => mount(<LayoutView {...{
+    const render = (viewModel) => shallow(<LayoutView {...{
       ...viewModel,
       props: { viewData: viewDataBase, ...viewModel.props },
     }}
@@ -75,7 +76,7 @@ describe('TimePanelLayout', () => {
     it('should spread restAttributes', () => {
       const layout = render(
         { restAttributes: { 'custom-attribute': 'customAttribute' } },
-      ).childAt(0);
+      );
 
       expect(layout.prop('custom-attribute'))
         .toBe('customAttribute');
@@ -88,13 +89,11 @@ describe('TimePanelLayout', () => {
         bottomVirtualRowHeight: 200,
       });
 
-      const table = layout.find(Table);
-
-      expect(table.exists())
+      expect(layout.is(Table))
         .toBe(true);
-      expect(table.hasClass('dx-scheduler-time-panel'))
+      expect(layout.hasClass('dx-scheduler-time-panel'))
         .toBe(true);
-      expect(table.props())
+      expect(layout.props())
         .toMatchObject({
           isVirtual: 'isVirtual',
           topVirtualRowHeight: 100,
@@ -189,6 +188,7 @@ describe('TimePanelLayout', () => {
                 [{ startDate: new Date(2020, 6, 9, 3), text: '2:00 AM' }],
                 [{ startDate: new Date(2020, 6, 9, 4), text: '3:00 AM' }],
               ],
+              groupIndex: 10,
             }],
           },
         },
@@ -227,15 +227,33 @@ describe('TimePanelLayout', () => {
       expect(getIsGroupedAllDayPanel)
         .toHaveBeenCalledWith(
           viewDataBase,
-          2,
+          0,
         );
     });
 
     [true, false].forEach((mockValue) => {
-      it(`AllDayPanelTitle if isGroupedAllDayPanel=${mockValue}`, () => {
+      it(`should render AllDayPanelTitle if isGroupedAllDayPanel=${mockValue}`, () => {
         getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
 
         const layout = render({ });
+        const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');
+
+        expect(titleCell.find(AllDayPanelTitle).exists())
+          .toBe(mockValue);
+      });
+
+      it(`should render AllDayPanelTitle if isGroupedAllDayPanel=${mockValue} and dateTable is empty`, () => {
+        getIsGroupedAllDayPanel.mockImplementation(() => mockValue);
+
+        const viewData = {
+          groupedData: [{
+            dateTable: [],
+            groupIndex: 33,
+          }],
+          cellCountInGroupRow: 2,
+          isGroupedAllDayPanel: true,
+        };
+        const layout = render({ props: { viewData } });
         const titleCell = layout.find('.dx-scheduler-time-panel-title-cell');
 
         expect(titleCell.find(AllDayPanelTitle).exists())

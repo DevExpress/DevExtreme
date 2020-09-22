@@ -57,6 +57,7 @@
         "dxFileUploader-upload": "アップロード",
         "dxFileUploader-uploaded": "アップロード済み",
         "dxFileUploader-readyToUpload": "アップロードの準備中",
+        "dxFileUploader-uploadAbortedMessage": "TODO",
         "dxFileUploader-uploadFailedMessage": "アップロードに失敗しました",
         "dxFileUploader-invalidFileExtension": "このファイルの種類を使用できません",
         "dxFileUploader-invalidMaxFileSize": "ファイルが大きすぎます",

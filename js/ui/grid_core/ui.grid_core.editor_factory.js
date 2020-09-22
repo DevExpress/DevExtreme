@@ -5,7 +5,7 @@ import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
 import pointerEvents from '../../events/pointer';
 import positionUtils from '../../animation/position';
-import { addNamespace, fireEvent, normalizeKeyName } from '../../events/utils';
+import { addNamespace, normalizeKeyName } from '../../events/utils/index';
 import browser from '../../core/utils/browser';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
@@ -20,8 +20,6 @@ const FOCUSED_ELEMENT_CLASS = 'dx-focused';
 const ROW_CLASS = 'dx-row';
 const MODULE_NAMESPACE = 'dxDataGridEditorFactory';
 const UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, 'focusin', clickEventName].join(' '), MODULE_NAMESPACE);
-const POINTER_EVENTS_TARGET_CLASS = 'dx-pointer-events-target';
-const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
 const DX_HIDDEN = 'dx-hidden';
 
 const EditorFactory = modules.ViewController.inherit({
@@ -139,7 +137,7 @@ const EditorFactory = modules.ViewController.inherit({
         }
 
         if(!that._$focusOverlay) {
-            that._$focusOverlay = $('<div>').addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS) + ' ' + POINTER_EVENTS_TARGET_CLASS);
+            that._$focusOverlay = $('<div>').addClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
         }
 
         if(hideBorder) {
@@ -206,31 +204,6 @@ const EditorFactory = modules.ViewController.inherit({
                     that._updateFocusHandler(e);
                 }
             });
-        }
-    },
-
-    _focusOverlayEventProxy: function(e) {
-        const $target = $(e.target);
-        const $currentTarget = $(e.currentTarget);
-        const needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
-
-        if(!needProxy || $currentTarget.hasClass(DX_HIDDEN)) return;
-
-        $currentTarget.addClass(DX_HIDDEN);
-
-        const element = $target.get(0).ownerDocument.elementFromPoint(e.clientX, e.clientY);
-
-        fireEvent({
-            originalEvent: e,
-            target: element
-        });
-
-        e.stopPropagation();
-
-        $currentTarget.removeClass(DX_HIDDEN);
-
-        if(e.type === clickEventName && element.tagName === 'INPUT') {
-            eventsEngine.trigger($(element), 'focus');
         }
     },
 

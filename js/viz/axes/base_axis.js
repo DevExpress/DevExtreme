@@ -17,6 +17,7 @@ import xyMethods from './xy_axes';
 import polarMethods from './polar_axes';
 import createConstantLine from './constant_line';
 import createStrip from './strip';
+import { Deferred, when } from '../../core/utils/deferred';
 
 const convertTicksToValues = constants.convertTicksToValues;
 const patchFontOptions = vizUtils.patchFontOptions;
@@ -149,7 +150,8 @@ function updateGridsPosition(ticks, animate) {
 }
 export const measureLabels = function(items) {
     items.forEach(function(item) {
-        item.labelBBox = item.label ? item.label.getBBox() : { x: 0, y: 0, width: 0, height: 0 };
+        const label = item.getContentContainer();
+        item.labelBBox = label ? label.getBBox() : { x: 0, y: 0, width: 0, height: 0 };
     });
 };
 
@@ -229,7 +231,7 @@ function getOptimalAngle(boxes, labelOpt) {
 
 function updateLabels(ticks, step, func) {
     ticks.forEach(function(tick, index) {
-        if(tick.label) {
+        if(tick.getContentContainer()) {
             if(index % step !== 0) {
                 tick.removeLabel();
             } else if(func) {
@@ -333,6 +335,7 @@ export const Axis = function(renderSettings) {
     that._firstDrawing = true;
 
     that._initRange = {};
+    that._getTemplate = renderSettings.getTemplate;
 };
 
 Axis.prototype = {
@@ -588,10 +591,13 @@ Axis.prototype = {
 
     _adjustLabelsCoord(offset, maxWidth, checkCanvas) {
         const that = this;
+        const getContainerAttrs = tick => this._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas);
         that._majorTicks.forEach(function(tick) {
             if(tick.label) {
                 tick.updateMultilineTextAlignment();
-                tick.label.attr(that._getLabelAdjustedCoord(tick, offset + (tick.labelOffset || 0), maxWidth, checkCanvas));
+                tick.label.attr(getContainerAttrs(tick));
+            } else {
+                tick.templateContainer && tick.templateContainer.attr(getContainerAttrs(tick));
             }
         });
     },
@@ -601,7 +607,7 @@ Axis.prototype = {
         const options = that.getOptions();
         const positionsAreConsistent = options.position === options.label.position;
         const maxSize = that._majorTicks.reduce(function(size, tick) {
-            if(!tick.label) return size;
+            if(!tick.getContentContainer()) return size;
             const bBox = tick.labelRotationAngle ? vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle) : tick.labelBBox;
             return {
                 width: _max(size.width || 0, bBox.width),
@@ -616,11 +622,11 @@ Axis.prototype = {
         return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + (positionsAreConsistent ? maxSize.offset : 0);
     },
 
-    _getLabelAdjustedCoord: function(tick, offset, maxWidth) {
+    _getLabelAdjustedCoord: function(tick, offset, maxWidth, _checkCanvas, templateBox) {
         offset = offset || 0;
         const that = this;
         const options = that._options;
-        const box = vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
+        const box = templateBox || vizUtils.rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
         const textAlign = tick.labelAlignment || options.label.alignment;
         const isDiscrete = that._options.type === 'discrete';
         const isFlatLabel = tick.labelRotationAngle % 90 === 0;
@@ -737,7 +743,7 @@ Axis.prototype = {
         that._axisGridGroup.remove();
 
         that._axisTitleGroup.clear();
-        that._axisElementsGroup.clear();
+        !that.isRendered() && that._axisElementsGroup.clear(); // for react async templates
 
         that._axisLineGroup && that._axisLineGroup.clear();
         that._axisStripGroup && that._axisStripGroup.clear();
@@ -917,6 +923,7 @@ Axis.prototype = {
         that._translator = null;
         that._majorTicks = that._minorTicks = null;
         that._disposeBreaksGroup();
+        that._templatesRendered && that._templatesRendered.reject();
     },
 
     getOptions: function() {
@@ -1316,7 +1323,7 @@ Axis.prototype = {
         }
         that._seriesData.sortCategories(that.getCategoriesSorter(argCategories));
 
-        that._seriesData.breaks = that._initialBreaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
+        that._seriesData.userBreaks = that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis);
 
         that._translator.updateBusinessRange(that._getViewportRange());
     },
@@ -1522,7 +1529,11 @@ Axis.prototype = {
                     minVisible: start,
                     maxVisible: end
                 }, that._series, that.isArgumentAxis);
-                ticks = generateTicks(tickInterval, false, start, end, breaks).ticks;
+                const filteredBreaks = that._filterBreaks(breaks, {
+                    minVisible: start,
+                    maxVisible: end
+                }, options.breakStyle);
+                ticks = generateTicks(tickInterval, false, start, end, filteredBreaks).ticks;
             }
         }
 
@@ -1546,9 +1557,11 @@ Axis.prototype = {
         that._isSynchronized = false;
         that.updateCanvas(canvas);
 
+        const range = that._getViewportRange();
+        that._initialBreaks = range.breaks = this._seriesData.breaks = that._filterBreaks(this._seriesData.userBreaks, range, options.breakStyle);
+
         that._estimatedTickInterval = that._getTicks(that.adjustViewport(this._seriesData), _noop, true).tickInterval; // tickInterval calculation
 
-        const range = that._getViewportRange();
         const margins = this._calculateValueMargins();
 
         range.addRange({
@@ -1930,7 +1943,14 @@ Axis.prototype = {
         drawGrids(that._majorTicks, drawGridLine);
         drawGrids(that._minorTicks, drawGridLine);
 
-        callAction(that._majorTicks, 'drawLabel', that._getViewportRange());
+        callAction(that._majorTicks, 'drawLabel', that._getViewportRange(), that._getTemplate());
+
+        that._templatesRendered && that._templatesRendered.reject();
+        that._templatesRendered = new Deferred();
+
+        when.apply(this, that._majorTicks.map(tick => tick.getTemplateDeferred())).done(() => {
+            that._templatesRendered.resolve();
+        });
         that._majorTicks.forEach(function(tick) {
             tick.labelRotationAngle = 0;
             tick.labelAlignment = undefined;
@@ -1959,20 +1979,49 @@ Axis.prototype = {
 
         that._measureTitle();
         measureLabels(that._majorTicks);
+
+        !options.label.template && that._applyWordWrap();
+
+        measureLabels(that._outsideConstantLines);
+        measureLabels(that._insideConstantLines);
+        measureLabels(that._strips);
+        measureLabels(that._dateMarkers);
+
+        that._adjustConstantLineLabels(that._insideConstantLines);
+        that._adjustStripLabels();
+
+        let offset = that._constantLabelOffset = that._adjustConstantLineLabels(that._outsideConstantLines);
+
+        if(!that._translator.getBusinessRange().isEmpty()) {
+            that._setLabelsPlacement();
+            offset = that._adjustLabels(offset);
+        }
+
+        offset = that._adjustDateMarkers(offset);
+        that._adjustTitle(offset);
+    },
+
+    getTemplatesDef() {
+        return this._templatesRendered;
+    },
+
+    setRenderedState(state) {
+        this._drawn = state;
+    },
+
+    isRendered() {
+        return this._drawn;
+    },
+
+    _applyWordWrap() {
+        const that = this;
+        let convertedTickInterval;
         let textWidth;
         let textHeight;
-        let convertedTickInterval;
+        const options = this._options;
         const tickInterval = that._tickInterval;
         if(isDefined(tickInterval)) {
             convertedTickInterval = that.getTranslator().getInterval(options.dataType === 'datetime' ? dateToMilliseconds(tickInterval) : tickInterval);
-        }
-        const usefulSpace = isDefined(options.placeholderSize) ? options.placeholderSize - options.label.indentFromAxis : undefined;
-        if(that._isHorizontal) {
-            textWidth = convertedTickInterval;
-            textHeight = usefulSpace;
-        } else {
-            textWidth = usefulSpace;
-            textHeight = convertedTickInterval;
         }
 
         const displayMode = that._validateDisplayMode(options.label.displayMode);
@@ -1981,6 +2030,14 @@ Axis.prototype = {
         const overflowMode = options.label.textOverflow || 'none';
 
         if((wordWrapMode !== 'none' || overflowMode !== 'none') && displayMode !== ROTATE && overlappingMode !== ROTATE && overlappingMode !== 'auto') {
+            const usefulSpace = isDefined(options.placeholderSize) ? options.placeholderSize - options.label.indentFromAxis : undefined;
+            if(that._isHorizontal) {
+                textWidth = convertedTickInterval;
+                textHeight = usefulSpace;
+            } else {
+                textWidth = usefulSpace;
+                textHeight = convertedTickInterval;
+            }
             let correctByWidth = false;
             let correctByHeight = false;
             if(textWidth) {
@@ -2000,24 +2057,6 @@ Axis.prototype = {
                 measureLabels(that._majorTicks);
             }
         }
-
-        measureLabels(that._outsideConstantLines);
-        measureLabels(that._insideConstantLines);
-        measureLabels(that._strips);
-        measureLabels(that._dateMarkers);
-
-        that._adjustConstantLineLabels(that._insideConstantLines);
-        that._adjustStripLabels();
-
-        let offset = that._constantLabelOffset = that._adjustConstantLineLabels(that._outsideConstantLines);
-
-        if(!that._translator.getBusinessRange().isEmpty()) {
-            that._setLabelsPlacement();
-            offset = that._adjustLabels(offset);
-        }
-
-        offset = that._adjustDateMarkers(offset);
-        that._adjustTitle(offset);
     },
 
     _measureTitle: _noop,
@@ -2167,7 +2206,7 @@ Axis.prototype = {
 
         const viewPort = that.getViewport();
 
-        that._seriesData.breaks = that._initialBreaks = that._getScaleBreaks(that._options, {
+        that._seriesData.userBreaks = that._getScaleBreaks(that._options, {
             minVisible: viewPort.startValue,
             maxVisible: viewPort.endValue
         }, that._series, that.isArgumentAxis);
@@ -2554,6 +2593,9 @@ Axis.prototype = {
                 }
                 step = notRecastStep ? step : that._getStep(boxes, angle);
                 func = function(tick) {
+                    if(!tick.label) {
+                        return;
+                    }
                     tick.label.rotate(angle);
                     tick.labelRotationAngle = angle;
                     alignment && (tick.labelAlignment = alignment);
@@ -2647,7 +2689,7 @@ Axis.prototype = {
     _getScreenDelta: function() {
         const that = this;
         const canvas = that._getCanvasStartEnd();
-        const breaks = that._seriesData ? that._seriesData.breaks : [];
+        const breaks = that._seriesData ? that._seriesData.breaks || [] : [];
         const breaksLength = breaks.length;
         const screenDelta = _abs(canvas.start - canvas.end);
 
@@ -2655,6 +2697,8 @@ Axis.prototype = {
     },
 
     _getScaleBreaks: function() { return []; },
+
+    _filterBreaks: function() { return []; },
 
     _adjustTitle: _noop,
 

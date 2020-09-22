@@ -7,6 +7,7 @@ import animationFrame from 'animation/frame';
 import translator from 'animation/translator';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/draggable';
 import 'ui/scroll_view';
 
@@ -691,6 +692,58 @@ QUnit.module('Events', moduleConfig, () => {
 
         // assert
         assert.deepEqual(onDragEndSpy.getCall(0).args[0].toComponent, draggable, 'args - toComponent');
+    });
+
+    QUnit.test('onDragEnter - check args', function(assert) {
+        // arrange
+        const onDragEnterSpy = sinon.spy();
+
+        const draggable1 = this.createDraggable({
+            group: 'shared'
+        });
+
+        const draggable2 = this.createDraggable({
+            group: 'shared',
+            onDragEnter: onDragEnterSpy
+        }, $('#items'));
+
+        const pointer = this.pointer.down().move(0, 50);
+        onDragEnterSpy.reset();
+
+        // act
+        pointer.move(0, 250).move(0, 50);
+
+        // assert
+        assert.ok(onDragEnterSpy.calledOnce, 'event fired');
+        assert.deepEqual($(onDragEnterSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), 'itemElement');
+        assert.deepEqual(onDragEnterSpy.getCall(0).args[0].fromComponent, draggable1, 'fromComponent');
+        assert.deepEqual(onDragEnterSpy.getCall(0).args[0].toComponent, draggable2, 'toComponent');
+    });
+
+    QUnit.test('onDragLeave - check args', function(assert) {
+        // arrange
+        const onDragLeaveSpy = sinon.spy();
+
+        const draggable1 = this.createDraggable({
+            group: 'shared'
+        });
+
+        const draggable2 = this.createDraggable({
+            group: 'shared',
+            onDragLeave: onDragLeaveSpy
+        }, $('#items'));
+
+        const pointer = this.pointer.down().move(0, 300).move(0, 50);
+        onDragLeaveSpy.reset();
+
+        // act
+        pointer.move(0, -200);
+
+        // assert
+        assert.ok(onDragLeaveSpy.calledOnce, 'event fired');
+        assert.deepEqual($(onDragLeaveSpy.getCall(0).args[0].itemElement).get(0), this.$element.get(0), 'itemElement');
+        assert.deepEqual(onDragLeaveSpy.getCall(0).args[0].fromComponent, draggable1, 'fromComponent');
+        assert.deepEqual(onDragLeaveSpy.getCall(0).args[0].toComponent, draggable2, 'toComponent');
     });
 });
 

@@ -1,5 +1,7 @@
 import $ from 'jquery';
 
+import { getWindow } from 'core/utils/window';
+
 import 'common.css!';
 import 'generic_light.css!';
 
@@ -16,20 +18,17 @@ const { testStart, test, module } = QUnit;
 
 testStart(() => initTestMarkup());
 
-module('Initialization', {
-    beforeEach: function() {
-    }
-}, () => {
-    supportedViews.forEach(view => {
+module('Initialization', () => {
+    supportedViews.forEach(viewName => {
         [{
             mode: 'standard', result: false,
         }, {
             mode: 'virtual', result: true,
         }].forEach(scrolling => {
-            test(`Virtual Scrolling as the ${view} view option, scrolling.mode: ${scrolling.mode}`, function(assert) {
+            test(`Component should be correctly created in ${viewName} view if scrolling.mode: ${scrolling.mode}`, function(assert) {
                 const instance = createWrapper({
                     views: supportedViews,
-                    currentView: view,
+                    currentView: viewName,
                     dataSource: [],
                     scrolling: {
                         mode: scrolling.mode,
@@ -38,62 +37,129 @@ module('Initialization', {
                 }).instance;
 
                 assert.equal(
-                    !!instance.getWorkSpace()._virtualScrolling, scrolling.result, 'Virtual scrolling initialization',
+                    !!instance.getWorkSpace().virtualScrollingDispatcher,
+                    scrolling.result,
+                    'Virtual scrolling initialization',
                 );
-                assert.equal(instance.getWorkSpace().isRenovatedRender(), scrolling.result, 'Correct render is used');
+                assert.equal(
+                    instance.getWorkSpace().isRenovatedRender(),
+                    scrolling.result,
+                    'Correct render is used'
+                );
             });
 
-            test(`Virtual Scrolling as the ${view} view option, view.scrolling.mode: ${scrolling.mode}`, function(assert) {
+            test(`Component should be correctly created in ${viewName} view if view.scrolling.mode: ${scrolling.mode}`, function(assert) {
                 const instance = createWrapper({
                     views: [{
-                        type: view,
+                        type: viewName,
                         scrolling: {
                             mode: scrolling.mode,
                         },
                     }],
-                    currentView: view,
+                    currentView: viewName,
                     height: 400
                 }).instance;
 
                 assert.equal(
-                    !!instance.getWorkSpace()._virtualScrolling, scrolling.result, 'Virtual scrolling initialization',
+                    !!instance.getWorkSpace().virtualScrollingDispatcher,
+                    scrolling.result,
+                    'Virtual scrolling initialization',
                 );
-                assert.equal(instance.getWorkSpace().isRenovatedRender(), scrolling.result, 'Correct render is used');
+                assert.equal(
+                    instance.getWorkSpace().isRenovatedRender(),
+                    scrolling.result,
+                    'Correct render is used'
+                );
+            });
+
+            test(`Component should be correctly created after change scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
+                const instance = createWrapper({
+                    views: supportedViews,
+                    currentView: viewName,
+                    height: 400
+                }).instance;
+
+                instance.option('scrolling.mode', 'virtual');
+
+                assert.ok(
+                    !!instance.getWorkSpace().virtualScrollingDispatcher,
+                    'Virtual scrolling Initialized'
+                );
+                assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
+
+                instance.option('scrolling.mode', 'standard');
+
+                assert.notOk(
+                    !!instance.getWorkSpace().virtualScrollingDispatcher,
+                    'Virtual scrolling not initialized'
+                );
+                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+            });
+
+            test(`Component should be correctly created after change view.scrolling.mode option to ${scrolling.mode} in ${viewName} view`, function(assert) {
+                const instance = createWrapper({
+                    views: [{
+                        type: viewName,
+                    }],
+                    currentView: viewName,
+                    height: 400
+                }).instance;
+
+                instance.option('views[0].scrolling.mode', 'virtual');
+                assert.ok(
+                    !!instance.getWorkSpace().virtualScrollingDispatcher,
+                    'Virtual scrolling is initialized'
+                );
+                assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
+
+                instance.option('views[0].scrolling.mode', 'standard');
+                assert.notOk(
+                    !!instance.getWorkSpace().virtualScrollingDispatcher,
+                    'Virtual scrolling is not initialized'
+                );
+                assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
         });
 
-        test(`Virtual scrolling optional if view: ${view}`, function(assert) {
-            const instance = createWrapper({
-                views: supportedViews,
-                currentView: view,
-                height: 400
-            }).instance;
+        QUnit.module('Options', () => {
+            test(`viewportHeight should be correct if height is not set in ${viewName} view`, function(assert) {
+                const { instance } = createWrapper({
+                    views: [{
+                        type: viewName,
+                    }],
+                    scrolling: {
+                        mode: 'virtual'
+                    },
+                    currentView: viewName
+                });
 
-            instance.option('scrolling.mode', 'virtual');
-            assert.ok(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling Initialized');
-            assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
+                const { virtualScrollingDispatcher } = instance.getWorkSpace();
+                const { viewportHeight } = virtualScrollingDispatcher;
 
-            instance.option('scrolling.mode', 'standard');
-            assert.notOk(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
-            assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
-        });
+                assert.equal(viewportHeight, window.innerHeight, 'viewPortHeight is correct');
+            });
 
-        test(`Optional Virtual Scrolling as the ${view} view option`, function(assert) {
-            const instance = createWrapper({
-                views: [{
-                    type: view,
-                }],
-                currentView: view,
-                height: 400
-            }).instance;
+            test(`pageSize should be correct if height is not set in ${viewName} view`, function(assert) {
+                const { instance } = createWrapper({
+                    views: [{
+                        type: viewName,
+                    }],
+                    scrolling: {
+                        mode: 'virtual'
+                    },
 
-            instance.option('views[0].scrolling.mode', 'virtual');
-            assert.ok(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling is initialized');
-            assert.ok(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is used');
+                    currentView: viewName
+                });
 
-            instance.option('views[0].scrolling.mode', 'standard');
-            assert.notOk(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling is not initialized');
-            assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
+                const { virtualScrollingDispatcher } = instance.getWorkSpace();
+                const { pageSize } = virtualScrollingDispatcher.getState();
+                const { innerHeight } = getWindow();
+
+                const rowHeight = virtualScrollingDispatcher._virtualScrolling.getRowHeight();
+                const expectedPageSize = Math.ceil(innerHeight / rowHeight);
+
+                assert.equal(pageSize, expectedPageSize, 'Page size is correct');
+            });
         });
     });
 
@@ -113,7 +179,7 @@ module('Initialization', {
                     height: 400
                 }).instance;
 
-                assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+                assert.notOk(instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling not initialized');
                 assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
 
@@ -129,7 +195,7 @@ module('Initialization', {
                     height: 400
                 }).instance;
 
-                assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+                assert.notOk(instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling not initialized');
                 assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
         });
@@ -142,11 +208,11 @@ module('Initialization', {
             }).instance;
 
             instance.option('scrolling.mode', 'virtual');
-            assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+            assert.notOk(instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling not initialized');
             assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
 
             instance.option('scrolling.mode', 'standard');
-            assert.notOk(instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling not initialized');
+            assert.notOk(instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling not initialized');
             assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
         });
 
@@ -160,11 +226,11 @@ module('Initialization', {
             }).instance;
 
             instance.option('views[0].scrolling.mode', 'virtual');
-            assert.notOk(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling is not initialized');
+            assert.notOk(!!instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling is not initialized');
             assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
 
             instance.option('views[0].scrolling.mode', 'standard');
-            assert.notOk(!!instance.getWorkSpace()._virtualScrolling, 'Virtual scrolling is not initialized');
+            assert.notOk(!!instance.getWorkSpace().virtualScrollingDispatcher, 'Virtual scrolling is not initialized');
             assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
         });
     });
@@ -176,8 +242,8 @@ QUnit.module('AppointmentSettings', {
             this.scheduler = createWrapper(options);
             this.scheduler.instance
                 .getWorkSpace()
-                ._virtualScrolling
-                ._getRenderTimeout = () => -1;
+                .virtualScrollingDispatcher
+                .getRenderTimeout = () => -1;
         };
     }
 }, function() {
@@ -337,7 +403,7 @@ QUnit.module('AppointmentSettings', {
                         endDate: new Date(2015, 2, 4, 23, 50)
                     };
 
-                    workspace._virtualScrolling._getRenderTimeout = () => -1;
+                    workspace.virtualScrollingDispatcher.getRenderTimeout = () => -1;
 
                     scrollable.scrollTo({ y: option.y });
 
@@ -656,7 +722,7 @@ QUnit.module('Appointment filtering', function() {
 
                 options = options || {};
 
-                $.extend(true, options, {
+                options = $.extend(false, {
                     dataSource: this.data,
                     currentDate: new Date(2016, 9, 5),
                     views: [{
@@ -668,14 +734,14 @@ QUnit.module('Appointment filtering', function() {
                         mode: 'virtual'
                     },
                     height: 400
-                });
+                }, options);
 
                 this.instance = createWrapper(options).instance;
 
                 this.instance
                     .getWorkSpace()
-                    ._virtualScrolling
-                    ._getRenderTimeout = () => -1;
+                    .virtualScrollingDispatcher
+                    .getRenderTimeout = () => -1;
             };
         }
     }, function() {
@@ -760,6 +826,7 @@ QUnit.module('Appointment filtering', function() {
                         dataSource: [
                             { text: 'Rc0_0', id: 0, color: '#727bd2' },
                             { text: 'Rc0_1', id: 1, color: '#32c9ed' },
+                            { text: 'Rc0_2', id: 2, color: '#52c9ed' },
                         ],
                         label: 'Resource0'
                     }],
@@ -821,6 +888,50 @@ QUnit.module('Appointment filtering', function() {
                         const expected = this.data[expectedIndices[index]];
                         assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
                     });
+                });
+            });
+
+            [0, 300, 900, 1700, 2400, 2700, 3000, 3300, 4300 ].forEach(scrollY => {
+                QUnit.test(`Next day appointments should be filtered if grouping, groupOrientation: 'vertical', scrollY: ${scrollY}`, function(assert) {
+                    this.createInstance({
+                        groups: ['resourceId0'],
+                        dataSource: [{
+                            startDate: new Date(2016, 9, 6, 23),
+                            endDate: new Date(2016, 9, 6, 23, 23),
+                            resourceId0: 0,
+                            text: 'test_00'
+                        }, {
+                            startDate: new Date(2016, 9, 6, 23),
+                            endDate: new Date(2016, 9, 6, 23, 23),
+                            resourceId0: 1,
+                            text: 'test_10'
+                        }],
+                        resources: [{
+                            fieldExpr: 'resourceId0',
+                            dataSource: [
+                                { text: 'Rc0_0', id: 0, color: '#727bd2' },
+                                { text: 'Rc0_1', id: 1, color: '#32c9ed' }
+                            ],
+                            label: 'Resource0'
+                        }],
+                    });
+
+                    try {
+                        const { instance } = this;
+
+                        instance.getWorkSpaceScrollable().scrollTo({ y: scrollY });
+
+                        checkResultByDeviceType(assert, () => {
+                            assert.equal(
+                                instance.getFilteredItems().length,
+                                0,
+                                'Filtered items length is correct'
+                            );
+                        });
+
+                    } catch(e) {
+                        assert.ok(false, `Exception: ${e.message}`);
+                    }
                 });
             });
         });

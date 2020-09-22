@@ -65,6 +65,7 @@
     "dxFileUploader-upload": "上传",
     "dxFileUploader-uploaded": "已上传",
     "dxFileUploader-readyToUpload": "准备上传",
+    "dxFileUploader-uploadAbortedMessage": "TODO",
     "dxFileUploader-uploadFailedMessage": "上传失败",
     "dxFileUploader-invalidFileExtension": "文件类型错误",
     "dxFileUploader-invalidMaxFileSize": "文件过大",

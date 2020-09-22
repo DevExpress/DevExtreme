@@ -408,6 +408,38 @@ QUnit.module('Events', moduleConfig, () => {
 
         assert.equal(onContentReadyHandler.callCount, 1, 'onContentReadyHandler was called 1 times');
     });
+    test('task click', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option('onTaskClick', (e) => {
+            keyFromEvent = e.key;
+        });
+        const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
+        $cellElement.trigger('dxclick');
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+    });
+
+    test('task double click', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.clock.tick();
+
+        const key = 2;
+        let keyFromEvent;
+        this.instance.option('onTaskDblClick', (e) => {
+            keyFromEvent = e.key;
+            e.cancel = true;
+        });
+        const $cellElement = $(this.instance._treeList.getCellElement(key - 1, 0));
+        $cellElement.trigger('dxdblclick');
+        this.clock.tick();
+        assert.equal(keyFromEvent, key);
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 0, 'dialog is not shown');
+    });
 });
 
 QUnit.module('Actions', moduleConfig, () => {
@@ -1599,6 +1631,34 @@ QUnit.module('Context Menu', moduleConfig, () => {
         this.instance.option('contextMenu.items', []);
         assert.equal(getItems().length, 4, 'there are 4 items by default');
     });
+    test('cancel ContextMenuPreparing', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        this.instance.option('onContextMenuPreparing', (e) => {
+            e.cancel = true;
+        });
+        this.clock.tick();
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        assert.equal(getContextMenuElement().length, 0, 'menu is hidden after right click');
+    });
+    test('add item in ContextMenuPreparing', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+
+        const getContextMenuElement = () => {
+            return $('body').find(OVERLAY_WRAPPER_SELECTOR).find(CONTEXT_MENU_SELECTOR);
+        };
+        this.instance.option('onContextMenuPreparing', (e) => {
+            e.items.push({ text: 'My Command', name: 'Custom' });
+        });
+        this.instance._showPopupMenu({ position: { x: 0, y: 0 } });
+        const items = getContextMenuElement().find(CONTEXT_MENU_ITEM_SELECTOR);
+        assert.equal(items.eq(items.length - 1).text(), 'My Command', 'custom item was rendered');
+    });
 });
 QUnit.module('Strip Lines', moduleConfig, () => {
     test('render', function(assert) {
@@ -2119,7 +2179,7 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
-        this.instance.option('tooltipTemplate', customTooltipText);
+        this.instance.option('taskTooltipContentTemplate', customTooltipText);
 
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
@@ -2134,7 +2194,7 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestCustomTooltipJQuery';
         const customTooltipJQuery = $('<div>TestCustomTooltipJQuery</div>');
-        this.instance.option('tooltipTemplate', customTooltipJQuery);
+        this.instance.option('taskTooltipContentTemplate', customTooltipJQuery);
 
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
@@ -2143,5 +2203,81 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
         assert.equal(tooltipText, customTooltipText, 'Custom template with jQuery works correctly');
+    });
+});
+
+QUnit.module('Root Value', moduleConfig, () => {
+    test('Default value with parentId as 0', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-26'), 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: customTasks }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
+        assert.strictEqual(treeListElements.length, 3);
+    });
+    test('Default value with parentId as undefined', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': undefined, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-26'), 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: customTasks }
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
+        assert.strictEqual(treeListElements.length, 3);
+    });
+    test('Root Value is 0', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-26'), 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: customTasks },
+            rootValue: 0
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
+        assert.strictEqual(treeListElements.length, 3);
+    });
+    test('Root Value is undefined', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': undefined, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-26'), 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: customTasks },
+            rootValue: undefined
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
+        assert.strictEqual(treeListElements.length, 3);
+    });
+    test('Root Value is null', function(assert) {
+        const customTasks = [
+            { 'id': 1, 'parentId': null, 'title': 'Software Development', 'start': new Date('2019-02-21'), 'end': new Date('2019-03-26'), 'progress': 0 },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-23'), 'progress': 0 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21'), 'end': new Date('2019-02-26'), 'progress': 50 }
+        ];
+        const options = {
+            tasks: { dataSource: customTasks },
+            rootValue: null
+        };
+        this.createInstance(options);
+        this.clock.tick();
+        const treeListElements = this.$element.find(TREELIST_DATA_ROW_SELECTOR);
+        assert.strictEqual(treeListElements.length, 3);
     });
 });

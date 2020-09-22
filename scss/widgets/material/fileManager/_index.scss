@@ -91,6 +91,10 @@
     }
   }
 
+  .dx-filemanager-fileuploader-dropzone-placeholder {
+    border: 2px solid $base-accent;
+  }
+
   .dx-filemanager-container {
     border-top-color: $filemanager-border-color;
   }

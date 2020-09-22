@@ -6,6 +6,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import { createBlobFile } from '../../helpers/fileHelper.js';
 import '../../helpers/xmlHttpRequestMock.js';
 import 'common.css!';
+import 'generic_light.css!';
 
 const { test } = QUnit;
 
@@ -340,6 +341,119 @@ QUnit.module('custom uploading', moduleConfig, () => {
         assert.strictEqual(onUploadAbortedSpy.callCount, 1, 'upload aborted event raised once');
     });
 
+    test('cancel chunked uploading with removeFile(number) method', function(assert) {
+        const chunkSize = 20000;
+        const fileSize = 50100;
+        const uploadChunkSpy = sinon.spy(() => executeAfterDelay());
+        const abortUploadSpy = sinon.spy((file, chunksInfo) => {
+            lastArgsInfo = getUploadChunkArgumentsSummary(file, chunksInfo);
+            return executeAfterDelay();
+        });
+        const onProgressSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadAbortedSpy = sinon.spy();
+
+        let lastArgsInfo = null;
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            multiple: false,
+            uploadMode: 'useButtons',
+            chunkSize: chunkSize,
+            uploadChunk: uploadChunkSpy,
+            abortUpload: abortUploadSpy,
+            onProgress: onProgressSpy,
+            onUploaded: onUploadedSpy,
+            onUploadAborted: onUploadAbortedSpy
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        const file = createBlobFile('image1.png', fileSize);
+        simulateFileChoose($fileUploader, [file]);
+        instance.upload();
+
+        this.clock.tick(1500);
+        assert.strictEqual(uploadChunkSpy.callCount, 2, 'custom function called for 2nd chunk');
+        assert.strictEqual(abortUploadSpy.callCount, 0, 'abort upload not called');
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event called for 1st chunk');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event is not raised');
+
+        instance.removeFile(0);
+
+        this.clock.tick(100);
+        assert.strictEqual(uploadChunkSpy.callCount, 2, 'custom function is not called after cancel');
+        assert.strictEqual(abortUploadSpy.callCount, 1, 'abort upload called once');
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event is not called after cancel');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after cancel');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event is not raised');
+        const expectedArgsInfo = { fileName: 'image1.png', bytesUploaded: 20000, chunkCount: 3, blobSize: 20000, chunkIndex: 1 };
+        assert.deepEqual(expectedArgsInfo, lastArgsInfo, 'custom function has valid arguments');
+
+        this.clock.tick(1000);
+        assert.strictEqual(onUploadAbortedSpy.callCount, 1, 'upload aborted event raised once');
+
+        this.clock.tick(5000);
+        assert.strictEqual(uploadChunkSpy.callCount, 2, 'custom function is not called after error');
+        assert.strictEqual(abortUploadSpy.callCount, 1, 'abort upload called once');
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event is not called after error');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after error');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 1, 'upload aborted event raised once');
+    });
+
+    test('cancel chunked uploading with removeFile(file) method', function(assert) {
+        const chunkSize = 20000;
+        const fileSize = 50100;
+        const uploadChunkSpy = sinon.spy(() => executeAfterDelay());
+        const abortUploadSpy = sinon.spy((file, chunksInfo) => {
+            lastArgsInfo = getUploadChunkArgumentsSummary(file, chunksInfo);
+            return executeAfterDelay();
+        });
+        const onProgressSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadAbortedSpy = sinon.spy();
+
+        let lastArgsInfo = null;
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            multiple: false,
+            uploadMode: 'instantly',
+            chunkSize: chunkSize,
+            uploadChunk: uploadChunkSpy,
+            abortUpload: abortUploadSpy,
+            onProgress: onProgressSpy,
+            onUploaded: onUploadedSpy,
+            onUploadAborted: onUploadAbortedSpy
+        });
+        const file = createBlobFile('image1.png', fileSize);
+        simulateFileChoose($fileUploader, [file]);
+
+        this.clock.tick(1500);
+        assert.strictEqual(uploadChunkSpy.callCount, 2, 'custom function called for 2nd chunk');
+        assert.strictEqual(abortUploadSpy.callCount, 0, 'abort upload not called');
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event called for 1st chunk');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event is not raised');
+
+        $fileUploader.dxFileUploader('instance').removeFile(file);
+
+        this.clock.tick(100);
+        assert.strictEqual(uploadChunkSpy.callCount, 2, 'custom function is not called after cancel');
+        assert.strictEqual(abortUploadSpy.callCount, 1, 'abort upload called once');
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event is not called after cancel');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after cancel');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 0, 'upload aborted event is not raised');
+        const expectedArgsInfo = { fileName: 'image1.png', bytesUploaded: 20000, chunkCount: 3, blobSize: 20000, chunkIndex: 1 };
+        assert.deepEqual(expectedArgsInfo, lastArgsInfo, 'custom function has valid arguments');
+
+        this.clock.tick(1000);
+        assert.strictEqual(onUploadAbortedSpy.callCount, 1, 'upload aborted event raised once');
+
+        this.clock.tick(5000);
+        assert.strictEqual(uploadChunkSpy.callCount, 2, 'custom function is not called after error');
+        assert.strictEqual(abortUploadSpy.callCount, 1, 'abort upload called once');
+        assert.strictEqual(onProgressSpy.callCount, 1, 'progress event is not called after error');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised after error');
+        assert.strictEqual(onUploadAbortedSpy.callCount, 1, 'upload aborted event raised once');
+    });
+
     test('custom state available during upload aborting', function(assert) {
         let lastCustomData = null;
         const chunkSize = 20000;
@@ -522,6 +636,80 @@ QUnit.module('custom uploading', moduleConfig, () => {
         assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
     });
 
+    test('whole file upload allows canceling with removeFile(number) method', function(assert) {
+        const fileSize = 50100;
+        const uploadFileSpy = sinon.spy(() => executeAfterDelay());
+        const abortUploadSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            multiple: false,
+            uploadMode: 'useButtons',
+            uploadFile: uploadFileSpy,
+            abortUpload: abortUploadSpy,
+            onUploaded: onUploadedSpy
+        });
+        const instance = $fileUploader.dxFileUploader('instance');
+
+        const file = createBlobFile('image1.png', fileSize);
+        simulateFileChoose($fileUploader, [file]);
+        instance.upload();
+
+        this.clock.tick(500);
+        assert.strictEqual(uploadFileSpy.callCount, 1, 'custom function called');
+        assert.strictEqual(abortUploadSpy.callCount, 0, 'abort upload not called');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+
+        instance.removeFile(0);
+
+        this.clock.tick(100);
+        assert.strictEqual(uploadFileSpy.callCount, 1, 'custom function called');
+        assert.strictEqual(abortUploadSpy.callCount, 1, 'abort upload called');
+        assert.strictEqual(abortUploadSpy.args[0][0].name, 'image1.png', 'abort upload has valid args');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+
+        this.clock.tick(1000);
+        assert.strictEqual(uploadFileSpy.callCount, 1, 'custom function called');
+        assert.strictEqual(abortUploadSpy.callCount, 1, 'abort upload called');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+    });
+
+    test('whole file upload allows canceling with removeFile(file) method', function(assert) {
+        const fileSize = 50100;
+        const uploadFileSpy = sinon.spy(() => executeAfterDelay());
+        const abortUploadSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            multiple: false,
+            uploadMode: 'instantly',
+            uploadFile: uploadFileSpy,
+            abortUpload: abortUploadSpy,
+            onUploaded: onUploadedSpy
+        });
+
+        const file = createBlobFile('image1.png', fileSize);
+        simulateFileChoose($fileUploader, [file]);
+
+        this.clock.tick(500);
+        assert.strictEqual(uploadFileSpy.callCount, 1, 'custom function called');
+        assert.strictEqual(abortUploadSpy.callCount, 0, 'abort upload not called');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+
+        $fileUploader.dxFileUploader('instance').removeFile(file);
+
+        this.clock.tick(100);
+        assert.strictEqual(uploadFileSpy.callCount, 1, 'custom function called');
+        assert.strictEqual(abortUploadSpy.callCount, 1, 'abort upload called');
+        assert.strictEqual(abortUploadSpy.args[0][0].name, 'image1.png', 'abort upload has valid args');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+
+        this.clock.tick(1000);
+        assert.strictEqual(uploadFileSpy.callCount, 1, 'custom function called');
+        assert.strictEqual(abortUploadSpy.callCount, 1, 'abort upload called');
+        assert.strictEqual(onUploadedSpy.callCount, 0, 'uploaded event is not raised');
+    });
+
     test('uploaded files are not aborted after resetting value', function(assert) {
         const chunkSize = 20000;
         const fileSize = 50100;
@@ -649,6 +837,21 @@ QUnit.module('custom uploading', moduleConfig, () => {
         assert.strictEqual(items[0], '.pic', 'attachHandlers args is valid');
 
         instance._attachSelectFileDialogHandler.restore();
+    });
+
+    QUnit.test('it is possible to drop files using custom dropzone', function(assert) {
+        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            multiple: true,
+            dropZone: '.drop'
+        });
+        const files = [fakeFile, fakeFile1];
+        const event = $.Event($.Event('drop', { dataTransfer: { files: files } }));
+
+        customDropZone.trigger(event);
+        assert.deepEqual($fileUploader.dxFileUploader('option', 'value'), files, 'files are correct');
+        customDropZone.remove();
     });
 
 });
@@ -1212,6 +1415,224 @@ QUnit.module('allowCanceling', moduleConfig, () => {
 
         assert.deepEqual(fileUploader.option('value'), [newFile], 'file list was cleared');
     });
+
+    QUnit.test('cancel of all files with abortUpload method', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        const instance = $element.dxFileUploader('instance');
+
+        instance.upload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadAbortedSpy.calledTwice, 'upload is cancelled');
+        assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
+    });
+
+    QUnit.test('cancel of specific file by file from value option with abortUpload method', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        const instance = $element.dxFileUploader('instance');
+        const files = [fakeFile, fakeFile1];
+
+        simulateFileChoose($element, files);
+
+        instance.upload();
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload(1);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadAbortedSpy.calledOnce, 'upload is cancelled');
+        assert.strictEqual(onUploadAbortedSpy.args[0][0].file.name, files[1].name, 'correct file is cancelled');
+        assert.ok(onUploadedSpy.calledOnce, 'upload is finished');
+        assert.strictEqual(onUploadedSpy.args[0][0].file.name, files[0].name, 'correct file is uploaded');
+    });
+
+    QUnit.test('cancel of specific file by file index with abortUpload method', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        const instance = $element.dxFileUploader('instance');
+        const files = [fakeFile, fakeFile1];
+
+        simulateFileChoose($element, files);
+
+        instance.upload();
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload(instance.option('value[1]'));
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadAbortedSpy.calledOnce, 'upload is cancelled');
+        assert.strictEqual(onUploadAbortedSpy.args[0][0].file.name, files[1].name, 'correct file is cancelled');
+        assert.ok(onUploadedSpy.calledOnce, 'upload is finished');
+        assert.strictEqual(onUploadedSpy.args[0][0].file.name, files[0].name, 'correct file is uploaded');
+    });
+
+    QUnit.test('useButtons: cancel of a file with abortUpload method leads to resetting file state', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        const instance = $element.dxFileUploader('instance');
+
+        instance.upload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        assert.ok(onUploadAbortedSpy.calledTwice, 'upload is cancelled');
+        assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
+
+        const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        const $progressBar = $element.find('.dx-progressbar');
+        const $uploadButton = $element.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+
+        assert.strictEqual($fileStatusMessage.eq(0).text(), instance.option('readyToUploadMessage'), 'status message is returned to original state');
+        assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
+        assert.strictEqual($fileStatusMessage.eq(1).text(), instance.option('readyToUploadMessage'), 'status message is return to original state');
+        assert.ok($fileStatusMessage.eq(1).is(':visible'), 'status message is visible');
+        assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
+        assert.ok($uploadButton.eq(1).is(':visible'), '\'upload\' button 1 is visible');
+        assert.notOk($uploadButton.eq(1).hasClass('dx-state-disabled'), '\'upload\' button 1 is enabled');
+        assert.ok($uploadButton.eq(2).is(':visible'), '\'upload\' button 2 is visible');
+        assert.notOk($uploadButton.eq(2).hasClass('dx-state-disabled'), '\'upload\' button 2 is enabled');
+    });
+
+    QUnit.test('instantly: cancel of a file with abortUpload method sets file in aborted state', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            multiple: true,
+            uploadMode: 'instantly',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile, fakeFile1]);
+        const instance = $element.dxFileUploader('instance');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        assert.ok(onUploadAbortedSpy.calledTwice, 'upload is cancelled');
+        assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
+
+        const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        const $progressBar = $element.find('.dx-progressbar');
+
+        assert.strictEqual($fileStatusMessage.eq(0).text(), instance.option('uploadAbortedMessage'), 'has aborted status message');
+        assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
+        assert.strictEqual($fileStatusMessage.eq(1).text(), instance.option('uploadAbortedMessage'), 'has aborted status message');
+        assert.ok($fileStatusMessage.eq(1).is(':visible'), 'status message is visible');
+        assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
+    });
+
+    QUnit.test('useButtons: upload can be restarted with button after abortUpload() called', function(assert) {
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile]);
+        const instance = $element.dxFileUploader('instance');
+
+        instance.upload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        instance.abortUpload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        assert.ok(onUploadAbortedSpy.calledOnce, 'upload is cancelled');
+        assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
+
+        onUploadAbortedSpy.reset();
+        onUploadedSpy.reset();
+
+        let $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        let $progressBar = $element.find('.dx-progressbar');
+        let $uploadButton = $element.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+
+        assert.strictEqual($fileStatusMessage.eq(0).text(), instance.option('readyToUploadMessage'), 'status message is returned to original state');
+        assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
+        assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
+        assert.ok($uploadButton.eq(1).is(':visible'), '\'upload\' button is visible');
+        assert.notOk($uploadButton.eq(1).hasClass('dx-state-disabled'), '\'upload\' button is enabled');
+
+        $uploadButton.eq(1).trigger('dxclick');
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        assert.ok(onUploadAbortedSpy.notCalled, 'upload is not cancelled');
+        assert.ok(onUploadedSpy.calledOnce, 'upload is finished');
+
+
+        $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        $progressBar = $element.find('.dx-progressbar');
+        $uploadButton = $element.find('.' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+
+        assert.strictEqual($fileStatusMessage.eq(0).text(), instance.option('uploadedMessage'), 'has uploaded status message');
+        assert.ok($fileStatusMessage.eq(0).is(':visible'), 'status message is visible');
+        assert.strictEqual($progressBar.length, 0, 'there is no progressbar');
+        assert.notOk($uploadButton.eq(1).is(':visible'), '\'upload\' button is invisible');
+        assert.ok($uploadButton.eq(1).hasClass('dx-state-disabled'), '\'upload\' button is disabled');
+    });
+
+    QUnit.test('its possible to remove file with removeFile() method when showFileList = false', function(assert) {
+        const onUploadedSpy = sinon.spy();
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            showFileList: false,
+            onUploaded: onUploadedSpy
+        });
+        simulateFileChoose($element, [fakeFile]);
+        const instance = $element.dxFileUploader('instance');
+
+        instance.upload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        assert.ok(onUploadedSpy.calledOnce, 'upload is finished');
+
+        instance.removeFile(0);
+        assert.strictEqual(instance.option('value').length, 0, 'file is removed');
+    });
+
 });
 
 QUnit.module('autoUpload', moduleConfig, () => {
@@ -1558,7 +1979,7 @@ QUnit.module('file uploading', moduleConfig, () => {
         assert.strictEqual(request.loadedSize, files[1].size, 'correct file was uploaded');
     });
 
-    QUnit.test('file upload buttons should be removed after upload started', function(assert) {
+    QUnit.test('file upload buttons should become disabled and invisible after upload started', function(assert) {
         const $element = $('#fileuploader').dxFileUploader({
             uploadMode: 'useButtons'
         });
@@ -1566,15 +1987,24 @@ QUnit.module('file uploading', moduleConfig, () => {
 
         simulateFileChoose($element, files);
 
-        const $uploadButtons = $element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+        let $uploadButtons = $element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
 
         $uploadButtons.eq(0).trigger('dxclick');
-        assert.equal($element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).length, 1, 'clicked button is removed');
+        assert.strictEqual($uploadButtons.length, 2, 'both buttons are still here');
+        assert.ok($uploadButtons.eq(0).hasClass('dx-state-disabled'), 'clicked button is disabled');
+        assert.notOk($uploadButtons.eq(0).is(':visible'), 'clicked button is invisible');
+        assert.ok($uploadButtons.eq(1).is(':visible'), 'other button is visible');
+        assert.notOk($uploadButtons.eq(1).hasClass('dx-state-disabled'), 'other button is enabled');
 
         const $commonUploadButton = $element.find('.' + FILEUPLOADER_CONTENT_CLASS + ' > .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
         $commonUploadButton.trigger('dxclick');
 
-        assert.equal($element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS).length, 0, 'upload buttons related to files are removed');
+        $uploadButtons = $element.find('.' + FILEUPLOADER_FILES_CONTAINER_CLASS + ' .' + FILEUPLOADER_UPLOAD_BUTTON_CLASS);
+        assert.strictEqual($uploadButtons.length, 2, 'both buttons are still here');
+        assert.ok($uploadButtons.eq(0).hasClass('dx-state-disabled'), 'first button is still disabled');
+        assert.notOk($uploadButtons.eq(0).is(':visible'), 'first button is still invisible');
+        assert.notOk($uploadButtons.eq(1).is(':visible'), 'clicked button is invisible');
+        assert.ok($uploadButtons.eq(1).hasClass('dx-state-disabled'), 'clicked button is disabled');
     });
 
     QUnit.test('progressBar should reflect file upload progress', function(assert) {
@@ -2655,6 +3085,55 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         assert.equal($fileUploader.dxFileUploader('option', 'value').length, 1, 'files count is correct');
         assert.equal($fileUploader.dxFileUploader('option', 'value[0]').name, firstFile.name, 'added file is correct');
+    });
+
+    QUnit.test('dropZoneEnter and dropZoneLeave events should fire on correspondent interactions in a custom drop zone', function(assert) {
+        const customDropZone = $('<div>').addClass('drop').appendTo('#qunit-fixture');
+        const onDropZoneEnterSpy = sinon.spy();
+        const onDropZoneLeaveSpy = sinon.spy();
+        $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            dropZone: '.drop',
+            onDropZoneEnter: onDropZoneEnterSpy,
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+        const files = [fakeFile];
+        const enterEvent = $.Event($.Event('dragenter', { dataTransfer: { files: files } }));
+        const leaveEvent = $.Event($.Event('dragleave', { dataTransfer: { files: files } }));
+
+        customDropZone.trigger(enterEvent);
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
+
+        customDropZone.trigger(leaveEvent);
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone[0], 'dropZone argument is correct');
+
+        customDropZone.remove();
+    });
+
+    QUnit.test('dropZoneEnter and dropZoneLeave events should fire on correspondent interactions in the deafult drop zone', function(assert) {
+        const onDropZoneEnterSpy = sinon.spy();
+        const onDropZoneLeaveSpy = sinon.spy();
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            onDropZoneEnter: onDropZoneEnterSpy,
+            onDropZoneLeave: onDropZoneLeaveSpy
+        });
+        const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
+
+        const files = [fakeFile];
+        const enterEvent = $.Event($.Event('dragenter', { dataTransfer: { files: files } }));
+        const leaveEvent = $.Event($.Event('dragleave', { dataTransfer: { files: files } }));
+
+        $inputWrapper.trigger(enterEvent);
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called');
+        assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
+
+        $inputWrapper.trigger(leaveEvent);
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called');
+        assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
+
     });
 });
 

@@ -2,9 +2,11 @@ import {
   Component,
   JSXComponent,
   Fragment,
+  Consumer,
 } from 'devextreme-generator/component_declaration/common';
 import { Page, PageProps } from './page';
 import PagerProps from '../common/pager_props';
+import { ConfigContextValue, ConfigContext } from '../../common/config_context';
 
 const PAGER_PAGE_SEPARATOR_CLASS = 'dx-separator';
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
@@ -88,10 +90,13 @@ function createPageIndexes(startIndex: number, slidingWindowSize: number, pageCo
 }
 
 type PagesLargePropsType = Pick<PagerProps,
-'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'|'rtlEnabled'>;
+'maxPagesCount' | 'pageCount' | 'pageIndex' | 'pageIndexChange'>;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
+  @Consumer(ConfigContext)
+  config?: ConfigContextValue;
+
   get pages(): PageType[] {
     const { pageIndex } = this.props;
     const createPage = (index: PageIndex): PageType => {
@@ -106,7 +111,7 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
         pageProps: pagerProps,
       };
     };
-    const rtlPageIndexes = this.props.rtlEnabled
+    const rtlPageIndexes = this.config?.rtlEnabled
       ? [...this.pageIndexes].reverse() : this.pageIndexes;
     return rtlPageIndexes.map((index): PageType => createPage(index));
   }
