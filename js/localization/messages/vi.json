@@ -293,6 +293,9 @@
         "dxHtmlEditor-dialogImageAltField": "Văn bản thay thế",
         "dxHtmlEditor-dialogImageWidthField": "Rộng (px)",
         "dxHtmlEditor-dialogImageHeightField": "Cao (px)",
+        "dxHtmlEditor-dialogInsertTableRowsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableColumnsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableCaption": "!TODO",
         "dxHtmlEditor-heading": "Tiêu đề",
         "dxHtmlEditor-normalText": "Chữ bình thường",
 

@@ -291,6 +291,9 @@
         "dxHtmlEditor-dialogImageAltField": "Dodatno besedilo",
         "dxHtmlEditor-dialogImageWidthField": "Širina (px)",
         "dxHtmlEditor-dialogImageHeightField": "Višina (px)",
+        "dxHtmlEditor-dialogInsertTableRowsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableColumnsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableCaption": "!TODO",
         "dxHtmlEditor-heading": "Naslov",
         "dxHtmlEditor-normalText": "Običajno besedilo",
 

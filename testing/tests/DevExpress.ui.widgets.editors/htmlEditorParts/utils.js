@@ -1,4 +1,4 @@
-export const checkLink = (assert, { content, href, afterLink }, text) => {
+function checkLink(assert, { content, href, afterLink }, text) {
     if(href) {
         const matcher = new RegExp(`href="${href}"`);
         assert.ok(!!text.match(matcher), 'HREF OK');
@@ -13,4 +13,10 @@ export const checkLink = (assert, { content, href, afterLink }, text) => {
         const matcher = new RegExp(`</a>${afterLink}</p>`);
         assert.ok(!!text.match(matcher), 'After link content OK');
     }
-};
+}
+
+function prepareTableValue(value) {
+    return value.replace(/(\s?style="[^"]*")|(\s?data-row="[^"]*")/ig, '');
+}
+
+export { checkLink, prepareTableValue };
