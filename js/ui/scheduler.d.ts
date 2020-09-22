@@ -805,11 +805,35 @@ interface JQuery {
 }
 }
 
+export interface dxSchedulerTimeZone {
+    /**
+     * @docid dxSchedulerTimeZone.id
+     * @type string
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    id: string;
+    /**
+     * @docid dxSchedulerTimeZone.offset
+     * @type number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    offset: number;
+    /**
+     * @docid dxSchedulerTimeZone.title
+     * @type string
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    title: string;
+}
+
 /**
  * @docid ui.dxScheduler.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
- * @return Array<Object>
+ * @return Array<dxSchedulerTimeZone>
  * @namespace DevExpress.ui.dxScheduler
  * @module ui/scheduler
  * @export dxScheduler.getTimeZones
@@ -817,7 +841,7 @@ interface JQuery {
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export function getTimeZones(date?: Date): Array<{id?: string, title?: string, offset?: number}>;
+export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
 
 export type Options = dxSchedulerOptions;
 
