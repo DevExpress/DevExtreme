@@ -1,8 +1,8 @@
 <dx-diagram #diagram id="diagram">
-    <dxo-nodes [dataSource]="orgItemsDataSource" keyExpr="ID" textExpr="Text" typeExpr="Type">
-        <dxo-auto-layout type="tree"></dxo-auto-layout>
+    <dxo-nodes [dataSource]="flowNodesDataSource" keyExpr="id" textExpr="text" typeExpr="type">
+        <dxo-auto-layout type="layered"></dxo-auto-layout>
     </dxo-nodes>
-    <dxo-edges [dataSource]="orgLinksDataSource" keyExpr="ID" fromExpr="From" toExpr="To"></dxo-edges>
+    <dxo-edges [dataSource]="flowEdgesDataSource" keyExpr="id" fromExpr="fromId" toExpr="toId" textExpr="text"></dxo-edges>
     <dxo-toolbox>
         <dxi-group category="general" title="General"></dxi-group>
     </dxo-toolbox>

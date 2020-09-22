@@ -1,164 +1,147 @@
 import { Injectable } from '@angular/core';
 
-export class OrgItem {
-    ID: string;
-    Text: string;
-    Type: string;
+export class FlowNode {
+    id: string;
+    text: string;
+    type: string;
 }
 
-export class OrgLink {
-    ID: string;
-    From: string;
-    To: string;
+export class FlowEdge {
+    id: string;
+    fromId: string;
+    toId: string;
+    text: string;
 }
 
-let orgItems: OrgItem[] = [
+let flowNodes: FlowNode[] = [
     {
-        "ID": "106",
-        "Text": "Development",
-        "Type": "ellipse"
+        "id": 107,
+        "text": "A new ticket",
+        "type": "terminator"
     },
     {
-        "ID": "107",
-        "Text": "WinForms\nTeam",
-        "Type": "ellipse"
+        "id": 108,
+        "text": "Analyze the issue",
+        "type": "process"
     },
     {
-        "ID": "108",
-        "Text": "WPF\nTeam",
-        "Type": "ellipse"
+        "id": 118,
+        "text": "Do we have all information to work with?",
+        "type": "diamond"
     },
     {
-        "ID": "109",
-        "Text": "Javascript\nTeam",
-        "Type": "ellipse"
+        "id": 120,
+        "text": "Answered",
+        "type": "terminator"
     },
     {
-        "ID": "110",
-        "Text": "ASP.NET\nTeam",
-        "Type": "ellipse"
+        "id": 121,
+        "text": "Request additional information or clarify the scenario",
+        "type": "rectangle"
     },
     {
-        "ID": "112",
-        "Text": "Ana\nTrujillo",
-        "Type": "rectangle"
+        "id": 125,
+        "text": "Prepare an example in Code Central",
+        "type": "rectangle"
     },
     {
-        "ID": "113",
-        "Text": "Antonio\nMoreno",
-        "Type": "rectangle"
+        "id": 127,
+        "text": "Update the documentation",
+        "type": "rectangle"
     },
     {
-        "ID": "115",
-        "Text": "Christina\nBerglund",
-        "Type": "rectangle"
+        "id": 131,
+        "text": "Process the ticket",
+        "type": "rectangle"
     },
     {
-        "ID": "116",
-        "Text": "Hanna\nMoos",
-        "Type": "rectangle"
-    },
-    {
-        "ID": "117",
-        "Text": "Frederique\nCiteaux",
-        "Type": "rectangle"
-    },
-    {
-        "ID": "119",
-        "Text": "Laurence\nLebihan",
-        "Type": "rectangle"
-    },
-    {
-        "ID": "120",
-        "Text": "Elizabeth\nLincoln",
-        "Type": "rectangle"
-    },
-    {
-        "ID": "122",
-        "Text": "Patricio\nSimpson",
-        "Type": "rectangle"
-    },
-    {
-        "ID": "123",
-        "Text": "Francisco\nChang",
-        "Type": "rectangle"
+        "id": 133,
+        "text": "Work with the R&D team",
+        "type": "rectangle"
     }
 ];
 
-var orgLinks: OrgLink[] = [
+var flowEdges: FlowEdge[] = [
     {
-        "ID": "124",
-        "From": "106",
-        "To": "108",
+        "fromId": 107,
+        "id": 116,
+        "text": null,
+        "toId": 108
     },
     {
-        "ID": "125",
-        "From": "106",
-        "To": "109",
+        "fromId": 108,
+        "id": 117,
+        "text": null,
+        "toId": 118
     },
     {
-        "ID": "126",
-        "From": "106",
-        "To": "107",
+        "fromId": 118,
+        "id": 122,
+        "text": "No",
+        "toId": 121
     },
     {
-        "ID": "127",
-        "From": "106",
-        "To": "110",
+        "fromId": 121,
+        "id": 123,
+        "text": null,
+        "toId": 108
     },
     {
-        "ID": "129",
-        "From": "110",
-        "To": "112",
+        "fromId": 131,
+        "id": 124,
+        "text": null,
+        "toId": 120
     },
     {
-        "ID": "130",
-        "From": "110",
-        "To": "113",
+        "fromId": 120,
+        "id": 126,
+        "text": "",
+        "toId": 125
     },
     {
-        "ID": "132",
-        "From": "107",
-        "To": "115",
+        "fromId": 120,
+        "id": 128,
+        "text": null,
+        "toId": 120
     },
     {
-        "ID": "133",
-        "From": "107",
-        "To": "116",
+        "fromId": 127,
+        "id": 129,
+        "text": null,
+        "toId": 127
     },
     {
-        "ID": "134",
-        "From": "107",
-        "To": "117",
+        "fromId": 120,
+        "id": 130,
+        "text": "",
+        "toId": 127
     },
     {
-        "ID": "136",
-        "From": "108",
-        "To": "119",
+        "fromId": 118,
+        "id": 132,
+        "text": "Yes",
+        "toId": 131
     },
     {
-        "ID": "137",
-        "From": "108",
-        "To": "120",
+        "fromId": 131,
+        "id": 134,
+        "text": "Need developer assistance?",
+        "toId": 133
     },
     {
-        "ID": "139",
-        "From": "109",
-        "To": "122",
-    },
-    {
-        "ID": "140",
-        "From": "109",
-        "To": "123",
+        "fromId": 133,
+        "id": 135,
+        "text": null,
+        "toId": 120
     }
 ];
 
 @Injectable()
 export class Service {
-    getOrgItems() {
-        return orgItems;
+    getFlowNodes() {
+        return flowNodes;
     }
-    getOrgLinks() {
-        return orgLinks;
+    getFlowEdges() {
+        return flowEdges;
     }
 }

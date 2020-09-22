@@ -7,23 +7,23 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.orgItemsDataSource = new ArrayStore({
+    this.flowNodesDataSource = new ArrayStore({
       key: 'this',
-      data: service.getOrgItems()
+      data: service.getFlowNodes()
     });
-    this.orgLinksDataSource = new ArrayStore({
+    this.flowEdgesDataSource = new ArrayStore({
       key: 'this',
-      data: service.getOrgLinks()
+      data: service.getFlowEdges()
     });
   }
 
   render() {
     return (
       <Diagram id="diagram">
-        <Nodes dataSource={this.orgItemsDataSource}>
-          <AutoLayout type="tree" />
+        <Nodes dataSource={this.flowNodesDataSource} idExpr="id" typeExpr="type" textExpr="text">
+          <AutoLayout type="layered" />
         </Nodes>
-        <Edges dataSource={this.orgLinksDataSource} />
+        <Edges dataSource={this.flowEdgesDataSource} idExpr="id" textExpr="text" fromExpr="fromId" toExpr="toId" />
         <Toolbox>
           <Group category="general" title="General" />
         </Toolbox>
