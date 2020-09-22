@@ -3668,6 +3668,28 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.deepEqual(list.getDataSource().items(), [222], 'dataSource was updated');
     });
 
+    QUnit.testInActiveWindow('TagBox with selection controls should search value when minSearchLength is exceeded and there are selected items (T932182)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [111, 222],
+            value: [111],
+            searchEnabled: true,
+            minSearchLength: 2,
+            showSelectionControls: true
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $tagBox.dxTagBox('instance');
+        const $input = $(instance._input());
+        const keyboard = keyboardMock($input);
+
+        $input.focusin();
+        keyboard
+            .type('22');
+        this.clock.tick(TIME_TO_WAIT);
+        const list = $tagBox.dxTagBox('instance')._list;
+        assert.deepEqual(list.getDataSource().items(), [222], 'dataSource was updated');
+    });
+
     QUnit.test('load tags data should not raise an error after widget has been disposed', function(assert) {
         assert.expect(1);
 
