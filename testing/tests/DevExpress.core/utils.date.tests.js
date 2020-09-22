@@ -601,6 +601,14 @@ QUnit.test('the getDatesBetween method should return array of dates', function(a
 
 QUnit.module('Dates creation');
 
+QUnit.test('createDate', function(assert) {
+    const expectedDate = new Date(18, 7, 31, 12, 13, 23);
+    expectedDate.setFullYear(18);
+    const testDate = dateUtils.createDate(expectedDate);
+
+    assert.deepEqual(testDate, expectedDate, 'correct date is created');
+});
+
 QUnit.test('createDateWithFullYear', function(assert) {
     const testDate = dateUtils.createDateWithFullYear(18, 7, 31, 12, 13, 23);
     const expectedDate = new Date(18, 7, 31, 12, 13, 23);

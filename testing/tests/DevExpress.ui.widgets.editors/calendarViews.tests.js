@@ -318,7 +318,7 @@ QUnit.module('DecadeView', {
         });
     });
 
-    QUnit.test('data-value after render for cells in decade view for the first century (T929559)', function(assert) {
+    QUnit.test('text and data-value after render for cells in decade view for the first century (T929559)', function(assert) {
         let startYear = 9;
         const startDate = new Date(14, 9, 16);
         startDate.setFullYear(14);
