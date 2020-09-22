@@ -1,4 +1,5 @@
 import { extend } from 'core/utils/extend';
+import { errors } from 'data/errors';
 import applyChanges from 'data/apply_changes';
 
 QUnit.module('Apply Changes', {
@@ -106,5 +107,60 @@ QUnit.module('Apply Changes', {
             assert.deepEqual(this.data[3], { id: 5, name: 'test5' }, 'fourth item value of the original array');
             assert.deepEqual(this.data[4], { id: 345, name: 'test new' }, 'first item value of the original array');
         });
+    });
+
+    QUnit.test('Errors should be logged in the console when key values are not correct', function(assert) {
+        // arrange
+        this.data = [
+            {
+                id: 1,
+                name: 'test1'
+            },
+            {
+                id: 2,
+                name: 'test2'
+            },
+            {
+                id: 3,
+                name: 'test3'
+            },
+            {
+                id: 4,
+                name: 'test4'
+            },
+            {
+                id: 345,
+                name: 'test5'
+            }
+        ];
+        this.changes = [
+            {
+                type: 'insert',
+                data: {
+                    id: 345,
+                    name: 'test new'
+                }
+            },
+            {
+                type: 'remove',
+                key: 3
+            },
+            {
+                type: 'update',
+                key: 43,
+                data: {
+                    name: 'new name'
+                }
+            }
+        ];
+        const errorsLogSpy = sinon.spy(errors, 'log');
+
+        // act
+        applyChanges(this.data, this.changes);
+
+        // assert
+        assert.equal(errorsLogSpy.callCount, 2);
+        assert.equal(errorsLogSpy.getCall(0).args[0], 'E4008');
+        assert.equal(errorsLogSpy.getCall(1).args[0], 'E4009');
     });
 });
