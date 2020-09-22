@@ -64,10 +64,10 @@ describe('compile', () => {
 }`);
       // collected variables
       expect(data.changedVariables).toEqual({
-        '$base-font-family': '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
-        '$base-accent': 'rgba(255,0,0,1)', // red
-        '$accordion-title-color': 'rgba(255,0,0,1)', // red
-        '$accordion-item-title-opened-bg': 'rgba(0,128,0,1)', // green
+        '$base-font-family': '"Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif',
+        '$base-accent': 'red',
+        '$accordion-title-color': 'red',
+        '$accordion-item-title-opened-bg': 'green',
       });
     });
   });

@@ -58,15 +58,19 @@ describe('Sass features', () => {
     // null variable
     map.setKey(5, new sass.types.String('$var6'));
     map.setValue(5, sass.types.Null.NULL);
+    // next variable after null
+    map.setKey(6, new sass.types.String('$var7'));
+    map.setValue(6, new sass.types.Number(200, 'px'));
 
     compiler.collector(map);
 
     expect(compiler.changedVariables).toEqual({
       $var1: '300px',
       $var2: 'Helvetica',
-      $var3: 'rgba(50,60,70,0.4)',
-      $var4: '10px,15px,32px',
+      $var3: 'rgba(50, 60, 70, 0.4)',
+      $var4: '10px, 15px, 32px',
       $var5: '10px 15px 32px',
+      $var7: '200px',
     });
   });
 

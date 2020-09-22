@@ -89,26 +89,12 @@ export default class Compiler {
 
   collector(map: sass.types.Map): sass.types.ReturnValue {
     for (let mapIndex = 0; mapIndex < map.getLength(); mapIndex += 1) {
-      const value = map.getValue(mapIndex);
-      let variableValue;
-
-      if (value instanceof sass.types.Color) {
-        variableValue = `rgba(${value.getR()},${value.getG()},${value.getB()},${value.getA()})`;
-      } else if (value instanceof sass.types.String) {
-        variableValue = value.getValue();
-      } else if (value instanceof sass.types.Number) {
-        variableValue = `${value.getValue()}${value.getUnit()}`;
-      } else if (value instanceof sass.types.List) {
-        const listValues = [];
-        for (let listIndex = 0; listIndex < value.getLength(); listIndex += 1) {
-          listValues.push(value.getValue(listIndex));
-        }
-        variableValue = listValues.join(value.getSeparator() ? ',' : ' ');
-      } else {
-        return sass.types.Null.NULL;
-      }
-
       const variableKey = (map.getKey(mapIndex) as sass.types.String).getValue();
+      const variableValue = map.getValue(mapIndex).toString();
+
+      // eslint-disable-next-line no-continue
+      if (variableValue === 'null') continue;
+
       this.changedVariables[variableKey] = variableValue;
     }
     return sass.types.Null.NULL;
