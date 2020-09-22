@@ -2033,7 +2033,7 @@ class Scheduler extends Widget {
         }).show();
     }
 
-    _getUpdatedData(options) {
+    _getUpdatedData(options) { // TODO: method needs to be refactoring
         const target = options.data || options;
         const cellData = this.getTargetCellData();
         const targetAllDay = this.fire('getField', 'allDay', target);
