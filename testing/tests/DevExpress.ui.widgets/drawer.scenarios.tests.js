@@ -218,35 +218,35 @@ configs.forEach(config => {
             const drawerRect = drawerElement.getBoundingClientRect();
             if(config.minSize) {
                 if(drawer.option('openedStateMode') === 'overlap') {
-                    const panelParentRect = panelTemplateElement.parentElement.getBoundingClientRect();
-                    const expectedPanelParentRect = extend({}, drawerRect);
+                    const panelRect = panelTemplateElement.parentElement.getBoundingClientRect();
+                    const expectedPanelRect = extend({}, drawerRect);
                     if(drawer.option('minSize')) {
                         switch(drawer.option('position')) {
                             case 'left':
-                                expectedPanelParentRect.width = drawer.option('minSize');
+                                expectedPanelRect.width = drawer.option('minSize');
                                 break;
                             case 'right':
-                                expectedPanelParentRect.left += drawerRect.wight - drawer.option('minSize');
-                                expectedPanelParentRect.width = drawer.option('minSize');
+                                expectedPanelRect.left += drawerRect.wight - drawer.option('minSize');
+                                expectedPanelRect.width = drawer.option('minSize');
                                 break;
                             case 'top':
-                                expectedPanelParentRect.height = drawer.option('minSize');
+                                expectedPanelRect.height = drawer.option('minSize');
                                 break;
                             case 'bottom':
-                                expectedPanelParentRect.top = drawerRect.bottom - drawer.option('minSize');
-                                expectedPanelParentRect.height = drawer.option('minSize');
+                                expectedPanelRect.top = drawerRect.bottom - drawer.option('minSize');
+                                expectedPanelRect.height = drawer.option('minSize');
                                 break;
                         }
                     }
                     assert.strictEqual(
-                        panelParentRect.left === expectedPanelParentRect.left
-                        && panelParentRect.top === expectedPanelParentRect.top
-                        && panelParentRect.width === expectedPanelParentRect.width
-                        && panelParentRect.height === expectedPanelParentRect.height,
+                        panelRect.left === expectedPanelRect.left
+                        && panelRect.top === expectedPanelRect.top
+                        && panelRect.width === expectedPanelRect.width
+                        && panelRect.height === expectedPanelRect.height,
                         true,
-                        'panelTemplateRect/expectedRect: ' +
-                        `left:[${panelParentRect.left}/${expectedPanelParentRect.left}], top:[${panelParentRect.top}/${expectedPanelParentRect.top}], ` +
-                        `width:[${panelParentRect.width}/${expectedPanelParentRect.width}], height:[${panelParentRect.height}/${expectedPanelParentRect.height}]`);
+                        'panelRect/expectedRect: ' +
+                        `left:[${panelRect.left}/${expectedPanelRect.left}], top:[${panelRect.top}/${expectedPanelRect.top}], ` +
+                        `width:[${panelRect.width}/${expectedPanelRect.width}], height:[${panelRect.height}/${expectedPanelRect.height}]`);
                 }
             } else {
                 if(drawer.option('openedStateMode') !== 'overlap') {
