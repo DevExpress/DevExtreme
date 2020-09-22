@@ -322,8 +322,8 @@ QUnit.module('render', {
                 const toolbarItems = this.element.find('.dx-toolbar-after').children();
                 assert.equal(toolbarItems.length, 2, 'All items are rendered');
 
-                assert.equal(toolbarItems[0].innerText, 'item1', 'first item is simple item');
-                assert.equal(toolbarItems[1].innerText, '', 'second item is menu button');
+                assert.equal(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
+                assert.equal(toolbarItems[1].innerText.trim(), '', 'second item is menu button');
             });
 
             QUnit.test(`Toolbar simple items rendered correctly in asynchronous template. Items position: before, templatesRenderAsynchronously=${templatesRenderAsynchronously}, deferRendering=${deferRendering}.`, function(assert) {
@@ -338,8 +338,8 @@ QUnit.module('render', {
                 } ]);
 
                 const toolbarItems = this.element.find('.dx-toolbar-before').children();
-                assert.equal(toolbarItems[0].innerText, 'item1', 'first item is simple item');
-                assert.equal(toolbarItems[1].innerText, 'item2', 'second item is simple item');
+                assert.equal(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
+                assert.equal(toolbarItems[1].innerText.trim(), 'item2', 'second item is simple item');
             });
 
             QUnit.test(`Toolbar simple items rendered correctly in asynchronous template. Items position: after, templatesRenderAsynchronously=${templatesRenderAsynchronously}, deferRendering=${deferRendering}.`, function(assert) {
@@ -354,8 +354,8 @@ QUnit.module('render', {
                 } ]);
 
                 const toolbarItems = this.element.find('.dx-toolbar-after').children();
-                assert.equal(toolbarItems[0].innerText, 'item1', 'first item is simple item');
-                assert.equal(toolbarItems[1].innerText, 'item2', 'second item is simple item');
+                assert.equal(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
+                assert.equal(toolbarItems[1].innerText.trim(), 'item2', 'second item is simple item');
             });
         });
     });
