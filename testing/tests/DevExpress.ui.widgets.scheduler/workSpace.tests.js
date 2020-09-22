@@ -3007,8 +3007,6 @@ QUnit.module('Workspace Mouse Interaction', () => {
             });
         });
     });
-
-
 });
 
 

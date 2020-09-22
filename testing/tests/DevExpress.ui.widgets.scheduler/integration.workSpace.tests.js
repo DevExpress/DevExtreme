@@ -1680,75 +1680,96 @@ QUnit.test('WorkSpace should be refreshed after groups changed', function(assert
     }
 });
 
-QUnit.test('SelectedCellData option should have rigth data of focused cell', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        showAllDayPanel: true,
-        currentDate: new Date(2018, 3, 11),
-        height: 600
-    });
+['standard', 'virtual'].forEach((scrollingMode) => {
+    QUnit.test(`SelectedCellData option should have rigth data of focused cell when scrolling is ${scrollingMode}`, function(assert) {
+        this.createInstance({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            currentDate: new Date(2018, 3, 11),
+            height: 600,
+            scrolling: { mode: scrollingMode },
+        });
 
-    const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
+        const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
-    $($cells.eq(0)).trigger('dxpointerdown');
+        $($cells.eq(0)).trigger('dxpointerdown');
 
-    assert.deepEqual(this.instance.option('selectedCellData'), [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }], 'option has right value');
-});
-
-QUnit.test('SelectedCellData option should be applied correctly in ungrouped workspace', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        showAllDayPanel: true,
-        groups: undefined,
-        currentDate: new Date(2018, 3, 11),
-        height: 600,
-        selectedCellData: [{
-            allDay: false,
+        const baseData = {
             startDate: new Date(2018, 3, 8),
             endDate: new Date(2018, 3, 8, 0, 30),
-            groups: {
-                groupId: 1
-            }
-        }]
+            allDay: false,
+        };
+
+        if(scrollingMode === 'standard') {
+            assert.deepEqual(this.instance.option('selectedCellData'), [baseData], 'option has right value');
+        } else {
+            assert.deepEqual(this.instance.option('selectedCellData'), [{
+                ...baseData,
+                groupIndex: 0,
+                index: 0,
+                text: '12:00 AM',
+            }], 'option has right value');
+        }
     });
 
-    assert.ok(true, 'WorkSpace works correctly');
-});
+    QUnit.test(`SelectedCellData option should be applied correctly in ungrouped workspace when scrolling is ${scrollingMode}`, function(assert) {
+        this.createInstance({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            groups: undefined,
+            currentDate: new Date(2018, 3, 11),
+            height: 600,
+            selectedCellData: [{
+                allDay: false,
+                startDate: new Date(2018, 3, 8),
+                endDate: new Date(2018, 3, 8, 0, 30),
+                groups: {
+                    groupId: 1
+                }
+            }],
+            scrolling: { mode: scrollingMode },
+        });
 
-QUnit.test('SelectedCellData option should make cell in focused state', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        showAllDayPanel: true,
-        selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
-        currentDate: new Date(2018, 3, 11),
-        height: 600
+        assert.ok(true, 'WorkSpace works correctly');
     });
 
-    const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
+    QUnit.test(`SelectedCellData option should make cell in focused state when scrolling is ${scrollingMode}`, function(assert) {
+        this.createInstance({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
+            currentDate: new Date(2018, 3, 11),
+            height: 600,
+            scrolling: { mode: scrollingMode },
+        });
 
-    assert.ok($($cells.eq(0)).hasClass('dx-state-focused', 'correct cell is focused'));
-});
+        const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
-QUnit.test('Focused cells cash should be correct (T640466)', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        showAllDayPanel: true,
-        selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
-        currentDate: new Date(2018, 3, 11),
-        height: 600
+        assert.ok($($cells.eq(0)).hasClass('dx-state-focused', 'correct cell is focused'));
     });
-    const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-    const workSpace = this.instance.getWorkSpace();
 
-    assert.deepEqual(workSpace._selectedCells[0], $cells.eq(0).get(0), 'Cashed cells is correct');
+    QUnit.test(`Focused cells cash should be correct (T640466) when scrolling is ${scrollingMode}`, function(assert) {
+        this.createInstance({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
+            currentDate: new Date(2018, 3, 11),
+            height: 600,
+            scrolling: { mode: scrollingMode },
+        });
+        const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
+        const workSpace = this.instance.getWorkSpace();
+
+        assert.deepEqual(workSpace._selectedCells[0], $cells.eq(0).get(0), 'Cashed cells is correct');
+    });
 });
 
 QUnit.test('Scheduler timeline workweek should contain two spans in header panel cell in Material theme', function(assert) {
@@ -1975,6 +1996,46 @@ if(devices.real().deviceType === 'desktop') {
                         startCell.cellData, endCell.cellData,
                     ], 'correct cells have been selected');
             });
+
+            if(view !== 'month') {
+                QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, function(assert) {
+                    const instance = createWrapper({
+                        dataSource: [],
+                        views: [view],
+                        currentView: view,
+                        showAllDayPanel: true,
+                        currentDate: new Date(2018, 3, 8),
+                        height: 600,
+                        editing: { allowDragging: false },
+                        scrolling: { mode: 'virtual' },
+                    });
+
+                    const $cells = instance.workSpace.getCells();
+                    const $table = instance.workSpace.getDateTable();
+
+                    $($table).trigger(
+                        $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
+                    );
+                    $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+
+                    assert.deepEqual(
+                        instance.option('selectedCellData'),
+                        [
+                            {
+                                ...startCell.cellData,
+                                index: startCell.index,
+                                groupIndex: 0,
+                                text: '12:00 AM',
+                            },
+                            {
+                                ...endCell.cellData,
+                                index: endCell.index,
+                                groupIndex: 0,
+                                text: '',
+                            },
+                        ], 'correct cells have been selected');
+                });
+            }
         });
     });
 }
