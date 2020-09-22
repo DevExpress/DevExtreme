@@ -71,7 +71,7 @@ const environment = {
                     };
                     return this.template;
                 },
-                _requestChange: sinon.spy()
+                _addToDeferred: sinon.spy()
             },
             itemGroupClass: this.itemGroupClass,
             backgroundClass: this.backgroundClass,
@@ -2752,11 +2752,5 @@ QUnit.test('Request change if template is asynchronous, first drawing', function
 
     const widget = this.legend._widget;
 
-    assert.ok(!widget._requestChange.called);
-    widget.template.render.lastCall.args[0].onRendered();
-    assert.deepEqual(widget._requestChange.lastCall.args[0], [
-        'LAYOUT',
-        'FULL_RENDER',
-        'FORCE_FIRST_DRAWING'
-    ]);
+    assert.ok(widget._addToDeferred.called);
 });

@@ -42,7 +42,8 @@ QUnit.module('Legend', {
                         }
                     };
                     return this.template;
-                }
+                },
+                _addToDeferred: sinon.spy()
             }
         });
         this.updateLayout = this.legend.updateLayout = sinon.spy($.proxy(function() {

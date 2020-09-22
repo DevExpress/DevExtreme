@@ -15,6 +15,7 @@ import rendererModule from './renderers/renderer';
 import _Layout from './layout';
 import devices from '../../core/devices';
 import eventsEngine from '../../events/core/events_engine';
+import { when } from '../../core/utils/deferred';
 import {
     createEventTrigger,
     createResizeHandler,
@@ -104,6 +105,10 @@ const getEmptyComponent = function() {
 
     return EmptyComponent;
 };
+
+function callForEach(functions) {
+    functions.forEach(c => c());
+}
 
 const isServerSide = !hasWindow();
 
@@ -200,6 +205,11 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const that = this;
 
         if(--that._changesLocker === 0 && that._changes.count() > 0 && !that._applyingChanges) {
+            that._deferredElements = {
+                elements: [],
+                beforeRequestChangesCallbacks: [],
+                afterRequestChangesCallbacks: []
+            };
             that._renderer.lock();
             that._applyingChanges = true;
             that._applyChanges();
@@ -212,7 +222,37 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             that._optionChangedLocker++;
             that._notify();
             that._optionChangedLocker--;
+            that._resolveDeferred();
         }
+    },
+
+    _resolveDeferred() {
+        const that = this;
+
+        if(that._changesApplying) {
+            that._changesApplying = false;
+            callForEach(that._deferredElements.afterRequestChangesCallbacks);
+            return;
+        }
+
+        let syncRendering = true;
+        when.apply(that, that._deferredElements.elements).done(() => {
+            if(syncRendering) {
+                return;
+            }
+            callForEach(that._deferredElements.beforeRequestChangesCallbacks);
+            that._changesApplying = true;
+            that._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
+        });
+        syncRendering = false;
+    },
+
+    _addToDeferred({ elements, beforeRequestChanges, afterRequestChanges }) {
+        const deferredElements = this._deferredElements;
+
+        deferredElements.elements = deferredElements.elements.concat(elements);
+        deferredElements.beforeRequestChangesCallbacks.push(beforeRequestChanges);
+        deferredElements.afterRequestChangesCallbacks.push(afterRequestChanges);
     },
 
     _applyQueuedOptions: function() {

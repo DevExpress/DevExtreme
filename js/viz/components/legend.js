@@ -9,7 +9,7 @@ import { processHatchingAttrs, getFuncIri } from '../core/renderers/renderer';
 ///#DEBUG
 import { debug } from '../../core/utils/console';
 ///#ENDDEBUG
-import { Deferred, when } from '../../core/utils/deferred';
+import { Deferred } from '../../core/utils/deferred';
 
 const _Number = Number;
 
@@ -582,14 +582,12 @@ extend(legendPrototype, {
             return item;
         });
 
-        let syncRendering = true;
-        when.apply(this, deferredItems).done(() => {
-            if(syncRendering) {
-                return;
-            }
-            that._widget._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
+        that._widget._addToDeferred({
+            elements: deferredItems,
+            beforeRequestChanges() {},
+            afterRequestChanges() {}
         });
-        syncRendering = false;
+
     },
 
     _getItemData: function() {

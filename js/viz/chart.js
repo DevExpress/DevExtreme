@@ -21,7 +21,6 @@ import crosshairModule from './chart_components/crosshair';
 import { getViewPortFilter } from './series/helpers/range_data_calculator';
 import LayoutManagerModule from './chart_components/layout_manager';
 import rangeModule from './translators/range';
-import { when } from '../core/utils/deferred';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
 const DEFAULT_PANES = [{
@@ -1012,26 +1011,19 @@ const dxChart = AdvancedChart.inherit({
         const that = this;
         const allAxes = (that._argumentAxes || []).concat(that._valueAxes || []);
 
-        if(that._changesApplying) {
-            that._changesApplying = false;
-            allAxes.forEach(function(a) {
-                a.setRenderedState(false);
-            });
-            return;
-        }
-        let syncRendering = true;
-        when.apply(that, allAxes.map(axis => axis.getTemplatesDef())).done(() => {
-            if(syncRendering) {
-                return;
+        that._addToDeferred({
+            elements: allAxes.map(axis => axis.getTemplatesDef()),
+            beforeRequestChanges() {
+                allAxes.forEach(function(a) {
+                    a.setRenderedState(true);
+                });
+            },
+            afterRequestChanges() {
+                allAxes.forEach(function(a) {
+                    a.setRenderedState(false);
+                });
             }
-            allAxes.forEach(function(a) {
-                a.setRenderedState(true);
-            });
-            that._changesApplying = true;
-
-            that._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
         });
-        syncRendering = false;
     },
 
     _estimateTickIntervals(axes, canvases) {
