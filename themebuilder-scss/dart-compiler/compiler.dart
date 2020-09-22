@@ -25,9 +25,11 @@ void main(List<String> arguments) {
 @use "./box";
 ''';
 
-  var userItems = new List<MetaItem>();
+  var userItems = List<MetaItem>();
   userItems.add(MetaItem('\$base-bg', '#abcdef'));
   userItems.add(MetaItem('\$base-accent', '#abcdef'));
+
+  var collector = Collector();
 
   var result = sass.compile(
     'bundles/dx.light.scss',
@@ -36,9 +38,10 @@ void main(List<String> arguments) {
       ThemeBuilderImporter(indexFileContent, userItems)
     ],
     functions: [
-      Collector().collector
+      collector.collector
     ]
   );
   print('end - ${(DateTime.now().microsecondsSinceEpoch - time) / 1000}ms');
-  new File('./out.css').writeAsStringSync(result);
+  print(collector.changedVariables);
+  File('./out.css').writeAsStringSync(result);
 }
