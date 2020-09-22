@@ -1464,14 +1464,14 @@ QUnit.module('adaptivity without hiding in menu', {
         };
 
         this.MEASURE_SAFE_TEXT = 'xyvxyv';
-        const arialStyles = '<style>\
+        const fontStyles = '<style>\
         .dx-toolbar-label > div,\
         .dx-toolbar-label .dx-toolbar-item-content > div {\
             font-family: arial !important;\
         }\
         </style>';
 
-        this.styles = $(arialStyles).appendTo('head');
+        this.styles = $(fontStyles).appendTo('head');
     },
     afterEach: function() {
         this.styles.remove();
