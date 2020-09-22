@@ -41,7 +41,7 @@ const moduleConfigWithTable = {
         };
 
         this.applyTableMethod = (methodName, ...restArgs) => {
-            return this.instance && this.instance.getModule('table')[methodName](...restArgs);
+            return this.instance?.getModule('table')[methodName](...restArgs);
         };
 
         this.getValue = () => prepareTableValue(this.instance.option('value'));
