@@ -5,6 +5,7 @@ QUnit.test('data', function(assert) {
     $.each([
         'Guid',
         'base64_encode',
+        'applyChanges',
         'query',
         'Store',
         'ArrayStore',

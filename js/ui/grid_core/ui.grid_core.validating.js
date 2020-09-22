@@ -1,7 +1,8 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
-import { createObjectWithChanges, getIndexByKey, getWidgetInstance } from './ui.grid_core.utils';
+import { getIndexByKey, getWidgetInstance } from './ui.grid_core.utils';
+import { createObjectWithChanges } from '../../data/array_utils';
 import { deferUpdate, equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isDefined, isEmptyObject } from '../../core/utils/type';
@@ -14,7 +15,6 @@ import ValidationEngine from '../validation_engine';
 import Validator from '../validator';
 import Tooltip from '../tooltip';
 import Overlay from '../overlay';
-import themes from '../themes';
 import errors from '../widget/ui.errors';
 import { Deferred, when } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
@@ -27,7 +27,6 @@ const INVALID_MESSAGE_CLASS = 'dx-invalid-message';
 const WIDGET_INVALID_MESSAGE_CLASS = 'invalid-message';
 const INVALID_MESSAGE_ALWAYS_CLASS = 'dx-invalid-message-always';
 const REVERT_BUTTON_CLASS = 'dx-revert-button';
-const CELL_HIGHLIGHT_OUTLINE = 'dx-highlight-outline';
 const VALIDATOR_CLASS = 'validator';
 const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
 const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
@@ -52,6 +51,7 @@ const VALIDATION_STATUS = {
 };
 
 const EDIT_DATA_INSERT_TYPE = 'insert';
+const EDIT_DATA_REMOVE_TYPE = 'remove';
 const VALIDATION_CANCELLED = 'cancel';
 
 const validationResultIsValid = function(result) {
@@ -244,10 +244,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         renderCellPendingIndicator: function($container) {
             let $indicator = $container.find('.' + PENDING_INDICATOR_CLASS);
             if(!$indicator.length) {
-                let $indicatorContainer = $container.find('.' + CELL_HIGHLIGHT_OUTLINE);
-                if(!$indicatorContainer.length) {
-                    $indicatorContainer = $container;
-                }
+                const $indicatorContainer = $container;
                 $indicator = $('<div>').appendTo($indicatorContainer)
                     .addClass(PENDING_INDICATOR_CLASS);
                 this._createComponent($indicator, LoadIndicator);
@@ -321,7 +318,6 @@ const ValidatingController = modules.Controller.inherit((function() {
                 }
                 if(result.status === VALIDATION_STATUS.invalid) {
                     const $focus = $container.find(':focus');
-                    this._editingController.showHighlighting($container, true);
                     if(!focused($focus)) {
                         eventsEngine.trigger($focus, 'focus');
                         eventsEngine.trigger($focus, pointerEvents.down);
@@ -329,7 +325,6 @@ const ValidatingController = modules.Controller.inherit((function() {
                 }
                 const editor = !column.editCellTemplate && this.getController('editorFactory').getEditorInstance($container);
                 if(result.status === VALIDATION_STATUS.pending) {
-                    this._editingController.showHighlighting($container, true);
                     if(editor) {
                         editor.option('validationStatus', VALIDATION_STATUS.pending);
                     } else {
@@ -380,7 +375,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
                 const getValue = () => {
                     editData = editingController.getEditDataByKey(validationData?.key);
-                    const value = column.calculateCellValue(editData.data || {});
+                    const value = column.calculateCellValue(editData?.data || {});
                     return value !== undefined ? value : parameters.value;
                 };
 
@@ -576,12 +571,24 @@ export default {
                     const validatingController = that.getController('validating');
                     const editDataIndex = that.callBase(options, row);
 
-                    if(editDataIndex >= 0) {
+                    if(editDataIndex >= 0 && options.type !== EDIT_DATA_REMOVE_TYPE) {
                         const editData = this.getChanges()[editDataIndex];
                         validatingController.updateValidationState(editData);
                     }
 
                     return editDataIndex;
+                },
+
+                _handleChangesChange: function(args) {
+                    this.callBase.apply(this, arguments);
+
+                    const validatingController = this.getController('validating');
+
+                    args.value.forEach(change => {
+                        if(validatingController._getValidationData(change.key) === undefined) {
+                            validatingController.updateValidationState(change);
+                        }
+                    });
                 },
 
                 _updateRowAndPageIndices: function() {
@@ -912,47 +919,24 @@ export default {
                     return deferred.promise();
                 },
 
-                showHighlighting: function($cell, skipValidation) {
-                    let isValid = true;
-                    const callBase = this.callBase;
-                    const deferred = new Deferred();
-
-                    if(!skipValidation) {
-                        const validator = $cell.data('dxValidator');
-                        if(validator) {
-                            when(this.getController('validating').validateCell(validator)).done((validationResult) => {
-                                isValid = validationResult.status === VALIDATION_STATUS.valid;
-                                if(isValid) {
-                                    callBase.call(this, $cell);
-                                }
-                                deferred.resolve();
-                            });
-                            return deferred.promise();
-                        }
-                    }
-
-                    if(isValid) {
-                        callBase.call(this, $cell);
-                    }
-                    return deferred.resolve().promise();
-                },
-
                 highlightDataCell: function($cell, parameters) {
-                    const isEditableCell = !!parameters.setValue;
-                    const cellModified = this.isCellModified(parameters);
+                    this.callBase.apply(this, arguments);
                     const validatingController = this.getController('validating');
 
+                    validatingController.setCellValidationStatus(parameters);
 
-                    if(!cellModified && isEditableCell) {
-                        validatingController.setCellValidationStatus(parameters);
-                        const isValidated = isDefined(parameters.validationStatus);
-                        const skipValidation = parameters.row.isNewRow || !isValidated;
-                        when(this.showHighlighting($cell, skipValidation)).done(() => {
-                            validatingController.setCellValidationStatus(parameters);
-                        });
-                        return;
+                    const isEditableCell = !!parameters.setValue;
+                    const cellModified = this.isCellModified(parameters);
+                    const isValidated = isDefined(parameters.validationStatus);
+                    const needValidation = (cellModified && parameters.column.setCellValue) || (isEditableCell && !cellModified && !(parameters.row.isNewRow || !isValidated));
+                    if(needValidation) {
+                        const validator = $cell.data('dxValidator');
+                        if(validator) {
+                            when(this.getController('validating').validateCell(validator)).done(() => {
+                                validatingController.setCellValidationStatus(parameters);
+                            });
+                        }
                     }
-                    this.callBase.apply(this, arguments);
                 },
 
                 getEditDataByKey: function(key) {
@@ -997,8 +981,8 @@ export default {
                 };
 
                 return {
-                    _showRevertButton: function($container, $targetElement) {
-                        if(!$targetElement || !$targetElement.length) {
+                    _showRevertButton: function($container) {
+                        if(!$container || !$container.length) {
                             return;
                         }
 
@@ -1011,7 +995,7 @@ export default {
                         const tooltipOptions = {
                             animation: null,
                             visible: true,
-                            target: $targetElement,
+                            target: $container,
                             container: $container,
                             closeOnOutsideClick: false,
                             closeOnTargetScroll: false,
@@ -1029,7 +1013,7 @@ export default {
                             position: {
                                 my: 'left top',
                                 at: 'right top',
-                                of: $targetElement,
+                                of: $container,
                                 offset: '1 0',
                                 collision: 'flip',
                                 boundary: this._rowsView.element()
@@ -1081,9 +1065,6 @@ export default {
                     },
 
                     _showValidationMessage: function($cell, messages, alignment, revertTooltip) {
-                        const $highlightContainer = $cell.find('.' + CELL_HIGHLIGHT_OUTLINE);
-                        const isMaterial = themes.isMaterial();
-                        const overlayTarget = $highlightContainer.length && !isMaterial ? $highlightContainer : $cell;
                         const editorPopup = $cell.find('.dx-dropdowneditor-overlay').data('dxPopup');
                         const isOverlayVisible = editorPopup && editorPopup.option('visible');
                         const myPosition = isOverlayVisible ? 'top right' : 'top ' + alignment;
@@ -1102,7 +1083,7 @@ export default {
                             .appendTo($cell);
 
                         const overlayOptions = {
-                            target: overlayTarget,
+                            target: $cell,
                             container: $cell,
                             shading: false,
                             width: 'auto',
@@ -1209,7 +1190,7 @@ export default {
                         if((validationResult && validationResult.status === VALIDATION_STATUS.invalid)
                             || (editData && editData.type === 'update' && !this._editingController.isSaving())) {
                             if(this._editingController.getEditMode() === EDIT_MODE_CELL) {
-                                revertTooltip = this._showRevertButton($focus, $cell ? $focus.find('.' + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
+                                revertTooltip = this._showRevertButton($focus);
                             }
                         }
 

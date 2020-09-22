@@ -6,6 +6,7 @@ import { each } from '../../core/utils/iterator';
 import dataCoreUtils from '../../core/utils/data';
 import { extend } from '../../core/utils/extend';
 import gridCoreUtils from '../grid_core/ui.grid_core.utils';
+import { createObjectWithChanges } from '../../data/array_utils';
 import ArrayStore from '../../data/array_store';
 import query from '../../data/query';
 import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
@@ -185,7 +186,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
                 result = result || [];
 
                 for(let i = 0; i < data.length; i++) {
-                    const item = gridCoreUtils.createObjectWithChanges(data[i]);
+                    const item = createObjectWithChanges(data[i]);
 
                     key = this._keyGetter(item);
                     if(key === undefined) {

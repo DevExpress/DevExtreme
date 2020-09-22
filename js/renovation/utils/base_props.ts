@@ -1,7 +1,6 @@
 import {
   Event, OneWay, ComponentBindings,
 } from 'devextreme-generator/component_declaration/common';
-import config from '../../core/config';
 
 @ComponentBindings()
 export default class BaseWidgetProps {
@@ -27,7 +26,7 @@ export default class BaseWidgetProps {
 
   @Event() onKeyDown?: (e: any) => any;
 
-  @OneWay() rtlEnabled?: boolean = config().rtlEnabled;
+  @OneWay() rtlEnabled?: boolean;
 
   @OneWay() tabIndex?: number = 0;
 

@@ -26,7 +26,6 @@ describe('Pager size selector', () => {
       displayExpr: 'text',
       valueExpr: 'value',
       dataSource: [{ text: '5', value: 5 }, { text: '10', value: 10 }],
-      rtlEnabled: true,
       valueChange: props.props?.pageSizeChange,
       value: 5,
       width: 30,

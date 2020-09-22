@@ -43,7 +43,7 @@ export default class PagerProps {
 
   @OneWay() pageSizes: (number | 'all')[] = [5, 10];
 
-  @OneWay() rtlEnabled = false;
+  @OneWay() rtlEnabled?: boolean;
 
   @OneWay() showNavigationButtons = false;
 

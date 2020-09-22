@@ -474,13 +474,6 @@ interface JQuery {
     dxValidationGroup(options: DevExpress.ui.dxValidationGroupOptions): JQuery;
 }
 interface JQuery {
-    dxValidationMessage(): JQuery;
-    dxValidationMessage(options: "instance"): DevExpress.ui.dxValidationMessage;
-    dxValidationMessage(options: string): any;
-    dxValidationMessage(options: string, ...params: any[]): any;
-    dxValidationMessage(options: DevExpress.ui.dxValidationMessageOptions): JQuery;
-}
-interface JQuery {
     dxValidationSummary(): JQuery;
     dxValidationSummary(options: "instance"): DevExpress.ui.dxValidationSummary;
     dxValidationSummary(options: string): any;
@@ -2347,6 +2340,10 @@ declare module DevExpress.data {
     export class XmlaStore {
         constructor(options?: XmlaStoreOptions)
     }
+    /**
+     * [descr:Utils.applyChanges(data, changes, options)]
+     */
+    export function applyChanges(data: Array<any>, changes: Array<any>, options?: { keyExpr?: string | Array<string>, immutable?: boolean }): Array<any>;
     /**
      * [descr:Utils.base64_encode(input)]
      */
@@ -6917,6 +6914,10 @@ declare module DevExpress.ui {
          * [descr:dxFileUploader.Options.uploadChunk]
          */
         uploadChunk?: ((file: File, uploadInfo: DevExpress.fileManagement.UploadInfo) => Promise<any> | JQueryPromise<any> | any);
+        /**
+         * [descr:dxFileUploader.Options.uploadCustomData]
+         */
+        uploadCustomData?: any;
         /**
          * [descr:dxFileUploader.Options.uploadFailedMessage]
          */
@@ -12297,38 +12298,6 @@ declare module DevExpress.ui {
          * [descr:dxValidationGroupResult.validators]
          */
         validators?: Array<any>;
-    }
-    /**
-     * [descr:dxValidationMessage.Options]
-     */
-    export interface dxValidationMessageOptions extends dxOverlayOptions<dxValidationMessage> {
-        /**
-         * [descr:dxValidationMessage.Options.boundary]
-         */
-        boundary?: string | Element | JQuery;
-        /**
-         * [descr:dxValidationMessage.Options.mode]
-         */
-        mode?: string;
-        /**
-         * [descr:dxValidationMessage.Options.offset]
-         */
-        offset?: any;
-        /**
-         * [descr:dxValidationMessage.Options.positionRequest]
-         */
-        positionRequest?: string;
-        /**
-         * [descr:dxValidationMessage.Options.validationErrors]
-         */
-        validationErrors?: Array<any> | null;
-    }
-    /**
-     * [descr:dxValidationMessage]
-     */
-    export class dxValidationMessage extends dxOverlay {
-        constructor(element: Element, options?: dxValidationMessageOptions)
-        constructor(element: JQuery, options?: dxValidationMessageOptions)
     }
     /**
      * [descr:dxValidationSummary.Options]

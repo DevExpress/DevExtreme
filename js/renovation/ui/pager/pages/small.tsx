@@ -27,7 +27,7 @@ export const viewFunction = ({
   width,
   value,
   pagesCountText,
-  props: { pageCount, rtlEnabled },
+  props: { pageCount },
 }: PagesSmall) => (
   <div className={LIGHT_PAGES_CLASS}>
     <NumberBox
@@ -37,7 +37,6 @@ export const viewFunction = ({
       max={pageCount}
       width={width}
       value={value}
-      rtlEnabled={rtlEnabled}
       valueChange={valueChange}
     />
     <span className={PAGER_INFO_TEXT_CLASS}>{pagesCountText}</span>
@@ -51,7 +50,7 @@ export const viewFunction = ({
 );
 
 type PagesSmallPropsType = Pick<PagerProps,
-'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' |'rtlEnabled'>;
+'pageCount' | 'pageIndex' | 'pageIndexChange' | 'pagesCountText' >;
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesSmall extends JSXComponent<PagesSmallPropsType>() {

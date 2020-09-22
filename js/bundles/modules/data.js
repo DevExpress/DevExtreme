@@ -29,6 +29,7 @@ DevExpress.data.ArrayStore = require('../../data/array_store');
 DevExpress.data.CustomStore = require('../../data/custom_store');
 DevExpress.data.LocalStore = require('../../data/local_store');
 DevExpress.data.base64_encode = require('../../data/utils').base64_encode;
+DevExpress.data.applyChanges = require('../../data/apply_changes');
 
 DevExpress.data.Guid = require('../../core/guid');
 

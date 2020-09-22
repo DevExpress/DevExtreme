@@ -257,9 +257,14 @@ $generic-grid-base-checkbox-icon-size: 16px;
       border-radius: 0;
     }
 
-    &.dx-editor-inline-block .dx-highlight-outline::before {
-      padding-top: $generic-grid-base-cell-padding;
-      padding-bottom: $generic-grid-base-cell-padding;
+    &.dx-editor-inline-block {
+      .dx-cell-modified,
+      .dx-#{$widget-name}-invalid {
+        &::before {
+          padding-top: $generic-grid-base-cell-padding;
+          padding-bottom: $generic-grid-base-cell-padding;
+        }
+      }
     }
   }
 
@@ -473,7 +478,9 @@ $generic-grid-base-checkbox-icon-size: 16px;
       }
     }
 
-    .dx-highlight-outline {
+    .dx-highlight-outline,
+    .dx-cell-modified,
+    .dx-#{$widget-name}-invalid {
       &::after {
         border-color: $datagrid-cell-modified-border-color;
       }
@@ -496,9 +503,14 @@ $generic-grid-base-checkbox-icon-size: 16px;
       overflow: inherit;
       box-shadow: 2px 2px 3px $datagrid-overlay-content-shadow-color;
 
-      .dx-editor-container.dx-highlight-outline::after {
-        border-color: $datagrid-cell-modified-border-color;
-        left: 0;
+      .dx-editor-container {
+        &.dx-cell-modified,
+        &.dx-#{$widget-name}-invalid {
+          &::after {
+            border-color: $datagrid-cell-modified-border-color;
+            left: 0;
+          }
+        }
       }
 
       .dx-texteditor {
@@ -545,7 +557,8 @@ $generic-grid-base-checkbox-icon-size: 16px;
     }
   }
 
-  .dx-highlight-outline {
+  .dx-cell-modified,
+  .dx-#{$widget-name}-invalid {
     padding: $generic-grid-base-cell-padding;
   }
 
@@ -658,12 +671,20 @@ $generic-grid-base-checkbox-icon-size: 16px;
 
     .dx-data-row {
       .dx-validator.dx-#{$widget-name}-invalid {
-        .dx-highlight-outline::after {
-          border: 1px solid $datagrid-row-invalid-faded-border-color;
+        &.dx-cell-modified,
+        &.dx-#{$widget-name}-invalid {
+          &::after {
+            border: 1px solid $datagrid-row-invalid-faded-border-color;
+          }
         }
 
-        &.dx-focused > .dx-highlight-outline::after {
-          border: 1px solid $datagrid-row-invalid-border-color;
+        &.dx-focused {
+          &.dx-cell-modified,
+          &.dx-#{$widget-name}-invalid {
+            &::after {
+              border: 1px solid $datagrid-row-invalid-border-color;
+            }
+          }
         }
       }
 
@@ -674,16 +695,11 @@ $generic-grid-base-checkbox-icon-size: 16px;
       }
 
       .dx-cell-modified {
-        .dx-highlight-outline {
+        &.dx-cell-modified,
+        &.dx-#{$widget-name}-invalid {
           &::after {
             border-color: $datagrid-cell-modified-border-color;
           }
-        }
-      }
-
-      td:not(.dx-cell-modified):not(.dx-validation-pending):not(.dx-#{$widget-name}-invalid) {
-        .dx-highlight-outline {
-          padding: 0;
         }
       }
     }
@@ -843,13 +859,15 @@ $generic-grid-base-checkbox-icon-size: 16px;
         position: relative;
         padding: 0;
 
-        .dx-highlight-outline {
+        &.dx-cell-modified,
+        &.dx-#{$widget-name}-invalid {
+          padding: $generic-grid-base-cell-padding;
           padding-right: $generic-texteditor-invalid-badge-size;
 
           @at-root #{selector-append(".dx-rtl", &)},
           .dx-rtl & {
             padding-left: $generic-texteditor-invalid-badge-size;
-            padding-right: 0;
+            padding-right: $generic-grid-base-cell-padding;
           }
         }
 
@@ -858,6 +876,24 @@ $generic-grid-base-checkbox-icon-size: 16px;
           @include texteditor-validation-icon-offset();
 
           background-color: $datagrid-base-background-color;
+        }
+      }
+
+      &.dx-editor-cell {
+        .dx-texteditor {
+          &.dx-validation-pending {
+            .dx-texteditor-input {
+              padding-right: $generic-texteditor-invalid-badge-size;
+            }
+
+            &.dx-rtl {
+              .dx-texteditor-input {
+                padding-right: $generic-grid-base-cell-padding;
+                padding-bottom: $generic-grid-base-cell-padding;
+                padding-left: $generic-texteditor-invalid-badge-size;
+              }
+            }
+          }
         }
       }
     }
