@@ -523,9 +523,10 @@ const subscribes = {
             });
         });
 
-        const result = this._appointmentModel.virtual_filterLoadedAppointments(
+        const result = this._appointmentModel.filterLoadedVirtualAppointments(
             filterOptions,
-            this.timeZoneCalculator
+            this.timeZoneCalculator,
+            workspace._getGroupCount()
         );
 
         return result;
