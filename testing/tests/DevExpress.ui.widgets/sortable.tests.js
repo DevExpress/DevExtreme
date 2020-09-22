@@ -41,8 +41,8 @@ QUnit.testStart(function() {
                 <div id="item13" class="draggable" style="background: blue;">item3</div>
             </div>
         </div>
-        <div id="scroll" style="height: 250px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
-            <div id="itemsWithScroll" style="width: 300px;">
+        <div id="scroll" style="height: 250px; width: 300px; overflow: auto; background: grey; position: absolute; left: 0; top: 0;">
+            <div id="itemsWithScroll">
                 <div id="item21" class="draggable" style="height: 50px; background: yellow;">item1
                 </div><div id="item22" class="draggable" style="height: 50px; background: red;">item2
                 </div><div id="item23" class="draggable" style="height: 50px; background: blue;">item3
