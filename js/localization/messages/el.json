@@ -293,6 +293,9 @@
         "dxHtmlEditor-dialogImageAltField": "Εναλλακτικό κείμενο",
         "dxHtmlEditor-dialogImageWidthField": "Πλάτος (px)",
         "dxHtmlEditor-dialogImageHeightField": "Υψος (px)",
+        "dxHtmlEditor-dialogInsertTableRowsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableColumnsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableCaption": "!TODO",
         "dxHtmlEditor-heading": "Επικεφαλίδα",
         "dxHtmlEditor-normalText": "Κανονικό κείμενο",
 

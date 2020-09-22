@@ -293,6 +293,9 @@
     "dxHtmlEditor-dialogImageAltField": "替代文字",
     "dxHtmlEditor-dialogImageWidthField": "宽 (px)",
     "dxHtmlEditor-dialogImageHeightField": "长 (px)",
+    "dxHtmlEditor-dialogInsertTableRowsField": "!TODO",
+    "dxHtmlEditor-dialogInsertTableColumnsField": "!TODO",
+    "dxHtmlEditor-dialogInsertTableCaption": "!TODO",
     "dxHtmlEditor-heading": "标题",
     "dxHtmlEditor-normalText": "正文",
 

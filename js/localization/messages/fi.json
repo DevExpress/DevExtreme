@@ -294,6 +294,9 @@
         "dxHtmlEditor-dialogImageAltField": "!TODO!",
         "dxHtmlEditor-dialogImageWidthField": "!TODO!",
         "dxHtmlEditor-dialogImageHeightField": "!TODO!",
+        "dxHtmlEditor-dialogInsertTableRowsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableColumnsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableCaption": "!TODO",
         "dxHtmlEditor-heading": "!TODO!",
         "dxHtmlEditor-normalText": "!TODO!",
 

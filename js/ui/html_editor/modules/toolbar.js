@@ -5,6 +5,7 @@ import $ from '../../../core/renderer';
 import Toolbar from '../../toolbar';
 import '../../select_box';
 import '../../color_box/color_view';
+import '../../number_box';
 
 import WidgetCollector from './widget_collector';
 import { each } from '../../../core/utils/iterator';
@@ -45,6 +46,9 @@ if(Quill) {
     const DIALOG_IMAGE_FIELD_ALT = 'dxHtmlEditor-dialogImageAltField';
     const DIALOG_IMAGE_FIELD_WIDTH = 'dxHtmlEditor-dialogImageWidthField';
     const DIALOG_IMAGE_FIELD_HEIGHT = 'dxHtmlEditor-dialogImageHeightField';
+    const DIALOG_TABLE_FIELD_COLUMNS = 'dxHtmlEditor-dialogInsertTableRowsField';
+    const DIALOG_TABLE_FIELD_ROWS = 'dxHtmlEditor-dialogInsertTableColumnsField';
+    const DIALOG_TABLE_CAPTION = 'dxHtmlEditor-dialogInsertTableCaption';
 
     const TABLE_OPERATIONS = [
         'insertTable',
@@ -166,8 +170,7 @@ if(Quill) {
                 },
                 superscript: this._prepareShortcutHandler('script', 'super'),
                 subscript: this._prepareShortcutHandler('script', 'sub'),
-                // ToDo: add the table wizard and\or table picker
-                insertTable: this._getTableOperationHandler('insertTable', 3, 3),
+                insertTable: this._prepareInsertTableHandler(),
                 insertRowAbove: this._getTableOperationHandler('insertRowAbove'),
                 insertRowBelow: this._getTableOperationHandler('insertRowBelow'),
                 insertColumnLeft: this._getTableOperationHandler('insertColumnLeft'),
@@ -293,6 +296,63 @@ if(Quill) {
 
                         this.quill.insertEmbed(index, 'extendedImage', formData, USER_ACTION);
                         this.quill.setSelection(index + 1, 0, USER_ACTION);
+                    })
+                    .always(() => {
+                        this.quill.focus();
+                    });
+            };
+        }
+
+        get _insertTableFormItems() {
+            return [
+                {
+                    dataField: 'columns',
+                    editorType: 'dxNumberBox',
+                    editorOptions: {
+                        min: 1
+                    },
+                    label: { text: format(DIALOG_TABLE_FIELD_COLUMNS) }
+                },
+                {
+                    dataField: 'rows',
+                    editorType: 'dxNumberBox',
+                    editorOptions: {
+                        min: 1
+                    },
+                    label: { text: format(DIALOG_TABLE_FIELD_ROWS) }
+                }
+            ];
+        }
+
+        _prepareInsertTableHandler() {
+            return () => {
+                const formats = this.quill.getFormat();
+                const isTableFocused = Object.prototype.hasOwnProperty.call(formats, 'table');
+                const formData = { rows: 1, columns: 1 };
+
+                if(isTableFocused) {
+                    this.quill.focus();
+                    return;
+                }
+
+                this._editorInstance.formDialogOption('title', format(DIALOG_TABLE_CAPTION));
+
+                const promise = this._editorInstance.showFormDialog({
+                    formData,
+                    items: this._insertTableFormItems
+                });
+
+                promise
+                    .done((formData, event) => {
+                        this.quill.focus();
+
+                        const table = this.quill.getModule('table');
+                        if(table) {
+                            this._editorInstance._saveValueChangeEvent(event);
+
+                            const { columns, rows } = formData;
+                            table.insertTable(columns, rows);
+                        }
                     })
                     .always(() => {
                         this.quill.focus();

@@ -1,6 +1,7 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
+import { prepareTableValue } from './utils.js';
 
 const { test, module: testModule } = QUnit;
 
@@ -43,7 +44,7 @@ const moduleConfigWithTable = {
             return this.instance && this.instance.getModule('table')[methodName](...restArgs);
         };
 
-        this.getValue = () => this.instance.option('value').replace(/(\s?style="[^"]*")|(\s?data-row="[^"]*")/ig, '');
+        this.getValue = () => prepareTableValue(this.instance.option('value'));
     },
     afterEach: function() {
         this.clock.restore();

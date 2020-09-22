@@ -132,11 +132,22 @@ const dialogModuleConfig = {
             },
             on: noop,
             off: noop,
+            table: {
+                insertTable: sinon.stub(),
+                insertRowAbove: sinon.stub(),
+                insertRowBelow: sinon.stub(),
+                insertColumnLeft: sinon.stub(),
+                insertColumnRight: sinon.stub(),
+                deleteTable: sinon.stub(),
+                deleteRow: sinon.stub(),
+                deleteColumn: sinon.stub()
+            },
             focus: this.focusStub,
             getSelection: noop,
             setSelection: (index, length) => { this.log.push({ setSelection: [index, length] }); },
             getFormat: () => { return {}; },
-            getLength: () => { return 1; }
+            getLength: () => { return 1; },
+            getModule: (moduleName) => this.quillMock[moduleName]
         };
         this.formDialogOptionStub = sinon.stub();
 
@@ -1112,6 +1123,41 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         assert.equal($fields.length, 2, 'Form with 2 fields shown');
         assert.equal(fieldsText, 'URL:Open link in new window', 'Check labels');
     });
+
+    test('show insertTable dialog', function(assert) {
+        this.options.items = ['insertTable'];
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        const $form = $(`.${FORM_CLASS}`);
+        const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
+        const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}`).text();
+
+        assert.equal($fields.length, 2, 'Form with 2 fields shown');
+        assert.equal(fieldsText, 'Rows:Columns:', 'Check labels');
+    });
+
+    test('do not show insertTable dialog when a table focused', function(assert) {
+        this.quillMock.getFormat = () => {
+            return {
+                table: true
+            };
+        };
+        this.quillMock.getSelection = () => true;
+
+        this.options.items = ['insertTable'];
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`).is(':visible');
+        const isFieldsVisible = Boolean($fieldInputs.length);
+
+        assert.notOk(isFieldsVisible, 'insertTable dialog is hidden');
+    });
 });
 
 testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
@@ -1248,7 +1294,8 @@ testModule('tables', simpleModuleConfig, function() {
     });
 
     test('buttons interaction', function(assert) {
-        this.options.items = TABLE_OPERATIONS;
+        const simpleOperations = TABLE_OPERATIONS.slice(1);
+        this.options.items = simpleOperations;
         this.quillMock.getFormat = () => {
             return { table: true };
         };
@@ -1259,7 +1306,7 @@ testModule('tables', simpleModuleConfig, function() {
         const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
 
         $formatWidgets.each((index, element) => {
-            const operationName = TABLE_OPERATIONS[index];
+            const operationName = simpleOperations[index];
             const isMethodCalled = () => this.quillMock.table[operationName].calledOnce;
 
             assert.notOk(isMethodCalled(), `${operationName} isn't called before clicking on toolbar item`);

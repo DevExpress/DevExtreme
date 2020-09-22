@@ -262,6 +262,9 @@
         "dxHtmlEditor-dialogImageAltField": "Alternativer Text",
         "dxHtmlEditor-dialogImageWidthField": "Breite (px)",
         "dxHtmlEditor-dialogImageHeightField": "Bildhöhe (px)",
+        "dxHtmlEditor-dialogInsertTableRowsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableColumnsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableCaption": "!TODO",
         "dxHtmlEditor-heading": "Überschrift",
         "dxHtmlEditor-normalText": "Normaler Text",
 
