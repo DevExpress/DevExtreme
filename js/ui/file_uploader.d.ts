@@ -344,6 +344,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadHeaders?: any;
     /**
+     * @docid dxFileUploaderOptions.uploadCustomData
+     * @type object
+     * @default {}
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    uploadCustomData?: any;
+    /**
      * @docid dxFileUploaderOptions.uploadMethod
      * @type Enums.UploadHttpMethod
      * @default "POST"

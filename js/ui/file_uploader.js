@@ -125,6 +125,8 @@ class FileUploader extends Editor {
 
             uploadHeaders: {},
 
+            uploadCustomData: {},
+
             onUploadStarted: null,
 
             onUploaded: null,
@@ -1290,6 +1292,7 @@ class FileUploader extends Editor {
             case 'progress':
             case 'uploadMethod':
             case 'uploadHeaders':
+            case 'uploadCustomData':
             case 'extendSelection':
                 break;
             case 'allowCanceling':
@@ -1529,6 +1532,15 @@ class FileUploadStrategyBase {
             currentSegmentSize: currentSegmentSize
         };
     }
+
+    _extendFormData(formData) {
+        const formDataEntries = this.fileUploader.option('uploadCustomData');
+        for(const entryName in formDataEntries) {
+            if(Object.prototype.hasOwnProperty.call(formDataEntries, entryName) && isDefined(formDataEntries[entryName])) {
+                formData.append(entryName, formDataEntries[entryName]);
+            }
+        }
+    }
 }
 
 class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
@@ -1644,6 +1656,7 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
             FileType: options.type,
             FileGuid: options.guid
         }));
+        this._extendFormData(formData);
         return formData;
     }
 
@@ -1749,6 +1762,7 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
     _createFormData(fieldName, fieldValue) {
         const formData = new window.FormData();
         formData.append(fieldName, fieldValue, fieldValue.name);
+        this._extendFormData(formData);
         return formData;
     }
 
