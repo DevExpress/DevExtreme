@@ -4,7 +4,7 @@ import {
 import { WidgetProps } from './common/widget';
 // https://github.com/benmosher/eslint-plugin-import/issues/1699
 /* eslint-disable import/named */
-import LegacyValidationMessage, { Options } from '../../ui/validationMessage';
+import LegacyValidationMessage, { Options } from '../../ui/validation_message';
 /* eslint-enable import/named */
 
 export const viewFunction = ({ widgetRef }: ValidationMessage) => (<div ref={widgetRef as any} />);

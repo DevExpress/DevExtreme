@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React, { createRef } from 'react';
 import { mount } from 'enzyme';
-import DxValidationMessage from '../../../ui/validationMessage';
-import { viewFunction as ValidationMessageView, ValidationMessageProps, ValidationMessage } from '../validationMessage';
+import DxValidationMessage from '../../../ui/validation_message';
+import { viewFunction as ValidationMessageView, ValidationMessageProps, ValidationMessage } from '../validation_message';
 
-jest.mock('../../../ui/validationMessage');
+jest.mock('../../../ui/validation_message');
 
 describe('ValidationMessage', () => {
   beforeEach(() => {

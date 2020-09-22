@@ -20,7 +20,7 @@ import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
 import noop from '../utils/noop';
-import { ValidationMessage } from './validationMessage';
+import { ValidationMessage } from './validation_message';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {

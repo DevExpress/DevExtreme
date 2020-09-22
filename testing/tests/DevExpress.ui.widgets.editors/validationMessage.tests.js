@@ -1,4 +1,4 @@
-import ValidationMessage from 'ui/validationMessage';
+import ValidationMessage from 'ui/validation_message';
 import $ from 'jquery';
 
 const moduleSetup = {
