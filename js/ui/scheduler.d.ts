@@ -805,27 +805,37 @@ interface JQuery {
 }
 }
 
+// export interface dxSchedulerTimeZone {
+//     /**
+//      * @docid dxSchedulerTimeZone.id
+//      * @type string
+//      * @prevFileNamespace DevExpress.ui
+//      * @public
+//      */
+//     id: string;
+//     /**
+//      * @docid dxSchedulerTimeZone.offset
+//      * @type number
+//      * @prevFileNamespace DevExpress.ui
+//      * @public
+//      */
+//     offset: number;
+//     /**
+//      * @docid dxSchedulerTimeZone.title
+//      * @type string
+//      * @prevFileNamespace DevExpress.ui
+//      * @public
+//      */
+//     title: string;
+// }
+
+/** @name dxSchedulerTimeZone */
 export interface dxSchedulerTimeZone {
-    /**
-     * @docid dxSchedulerTimeZone.id
-     * @type string
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
+    /** @name dxSchedulerTimeZone.id */
     id: string;
-    /**
-     * @docid dxSchedulerTimeZone.offset
-     * @type number
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
+    /** @name dxSchedulerTimeZone.offset */
     offset: number;
-    /**
-     * @docid dxSchedulerTimeZone.title
-     * @type string
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
+    /** @name dxSchedulerTimeZone.title */
     title: string;
 }
 
