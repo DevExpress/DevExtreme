@@ -611,7 +611,7 @@ const getDatesOfInterval = function(startDate, endDate, step) {
 };
 
 const createDate = function(date) {
-    return new Date(isIE11 ? (date && date.getTime()) : date);
+    return new Date(isIE11 ? date?.getTime() : date);
 };
 
 const createDateWithFullYear = function(year) {
