@@ -7,6 +7,9 @@ const isObject = typeUtils.isObject;
 const isString = typeUtils.isString;
 const isDate = typeUtils.isDate;
 const isDefined = typeUtils.isDefined;
+const browser = require('./browser');
+
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
 
 const dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'week', 'month', 'quarter', 'year'];
 
@@ -295,21 +298,21 @@ const getSequenceByInterval = function(min, max, interval) {
 };
 
 const getViewFirstCellDate = function(viewType, date) {
-    if(viewType === 'month') { return new Date(date.getFullYear(), date.getMonth(), 1); }
-    if(viewType === 'year') { return new Date(date.getFullYear(), 0, date.getDate()); }
-    if(viewType === 'decade') { return new Date(getFirstYearInDecade(date), date.getMonth(), date.getDate()); }
-    if(viewType === 'century') { return new Date(getFirstDecadeInCentury(date), date.getMonth(), date.getDate()); }
+    if(viewType === 'month') { return createDateWithFullYear(date.getFullYear(), date.getMonth(), 1); }
+    if(viewType === 'year') { return createDateWithFullYear(date.getFullYear(), 0, date.getDate()); }
+    if(viewType === 'decade') { return createDateWithFullYear(getFirstYearInDecade(date), date.getMonth(), date.getDate()); }
+    if(viewType === 'century') { return createDateWithFullYear(getFirstDecadeInCentury(date), date.getMonth(), date.getDate()); }
 };
 
 const getViewLastCellDate = function(viewType, date) {
-    if(viewType === 'month') { return new Date(date.getFullYear(), date.getMonth(), getLastMonthDay(date)); }
-    if(viewType === 'year') { return new Date(date.getFullYear(), 11, date.getDate()); }
-    if(viewType === 'decade') { return new Date(getFirstYearInDecade(date) + 9, date.getMonth(), date.getDate()); }
-    if(viewType === 'century') { return new Date(getFirstDecadeInCentury(date) + 90, date.getMonth(), date.getDate()); }
+    if(viewType === 'month') { return createDateWithFullYear(date.getFullYear(), date.getMonth(), getLastMonthDay(date)); }
+    if(viewType === 'year') { return createDateWithFullYear(date.getFullYear(), 11, date.getDate()); }
+    if(viewType === 'decade') { return createDateWithFullYear(getFirstYearInDecade(date) + 9, date.getMonth(), date.getDate()); }
+    if(viewType === 'century') { return createDateWithFullYear(getFirstDecadeInCentury(date) + 90, date.getMonth(), date.getDate()); }
 };
 
 const getViewMinBoundaryDate = function(viewType, date) {
-    const resultDate = new Date(date.getFullYear(), date.getMonth(), 1);
+    const resultDate = createDateWithFullYear(date.getFullYear(), date.getMonth(), 1);
 
     if(viewType === 'month') {
         return resultDate;
@@ -359,7 +362,7 @@ const getViewMaxBoundaryDate = function(viewType, date) {
 };
 
 function getLastMonthDay(date) {
-    const resultDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    const resultDate = createDateWithFullYear(date.getFullYear(), date.getMonth() + 1, 0);
     return resultDate.getDate();
 }
 
@@ -486,14 +489,12 @@ const getShortDateFormat = function() {
 
 const getFirstMonthDate = function(date) {
     if(!isDefined(date)) return;
-    const newDate = new Date(date.getFullYear(), date.getMonth(), 1);
-    return newDate;
+    return createDateWithFullYear(date.getFullYear(), date.getMonth(), 1);
 };
 
 const getLastMonthDate = function(date) {
     if(!isDefined(date)) return;
-    const newDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    return newDate;
+    return createDateWithFullYear(date.getFullYear(), date.getMonth() + 1, 0);
 };
 
 function getFirstWeekDate(date, firstDayOfWeek) {
@@ -619,6 +620,16 @@ const getDatesOfInterval = function(startDate, endDate, step) {
     return result;
 };
 
+const createDate = function(date) {
+    return new Date(isIE11 && isDate(date) ? date.getTime() : date);
+};
+
+const createDateWithFullYear = function(year) {
+    const result = new Date(...arguments);
+    result.setFullYear(year);
+    return result;
+};
+
 const dateUtils = {
     dateUnitIntervals: dateUnitIntervals,
 
@@ -674,7 +685,10 @@ const dateUtils = {
 
     getDatesInterval: getDatesInterval,
 
-    getDatesOfInterval: getDatesOfInterval
+    getDatesOfInterval: getDatesOfInterval,
+
+    createDate: createDate,
+    createDateWithFullYear: createDateWithFullYear
 };
 
 dateUtils.sameView = function(view, date1, date2) {
