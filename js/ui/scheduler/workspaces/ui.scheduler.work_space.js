@@ -346,7 +346,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(isMultiSelection) {
             $correctedCell = this._correctCellForGroup($cell);
         }
-        if($correctedCell.is(this._$focusedCell)) {
+        if($correctedCell.hasClass(DATE_TABLE_FOCUSED_CELL_CLASS)) {
             return;
         }
 
@@ -376,10 +376,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _setSelectedCells($firstCell, $lastCell, isMultiSelection) {
-        if($firstCell && $firstCell.is(this._$focusedCell)) {
-            return;
-        }
-
         this._releaseSelectedCells();
         this._selectedCells = [];
 
