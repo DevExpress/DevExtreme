@@ -6922,6 +6922,10 @@ declare module DevExpress.ui {
          */
         uploadChunk?: ((file: File, uploadInfo: DevExpress.fileManagement.UploadInfo) => Promise<any> | JQueryPromise<any> | any);
         /**
+         * [descr:dxFileUploader.Options.uploadCustomData]
+         */
+        uploadCustomData?: any;
+        /**
          * [descr:dxFileUploader.Options.uploadFailedMessage]
          */
         uploadFailedMessage?: string;
