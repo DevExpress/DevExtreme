@@ -1213,13 +1213,13 @@ QUnit.module('Real DataController and ColumnsController', {
         that.editCell(0, 0);
         that.clock.tick();
 
+        browser.msie && $(that.getCellElement(0, 0)).focus(); // should be removed after the IE death
+
         const $input = $(that.getCellElement(0, 0)).find('input');
         $input.val('test').trigger('change');
-
         that.clock.tick();
 
         $input.trigger($.Event('keydown', { key: 'Enter' }));
-
         that.clock.tick();
 
         // assert
