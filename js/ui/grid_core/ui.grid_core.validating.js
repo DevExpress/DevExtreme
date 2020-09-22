@@ -368,6 +368,10 @@ const ValidatingController = modules.Controller.inherit((function() {
                 if(isCellOrBatchEditingAllowed && showEditorAlways) {
                     editingController._addInternalData({ key: parameters.key, oldData: parameters.data });
                 }
+
+                if(this.option('editing.editRowKey') === parameters.key) {
+                    editIndex = 0;
+                }
             }
 
             if(needCreateValidator) {
