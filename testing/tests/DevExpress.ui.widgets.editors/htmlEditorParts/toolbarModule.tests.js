@@ -1135,8 +1135,8 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
         const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}`).text();
 
-        assert.equal($fields.length, 2, 'Form with 2 fields shown');
-        assert.equal(fieldsText, 'Rows:Columns:', 'Check labels');
+        assert.strictEqual($fields.length, 2, 'Form with 2 fields shown');
+        assert.strictEqual(fieldsText, 'Rows:Columns:', 'Check labels');
     });
 
     test('do not show insertTable dialog when a table focused', function(assert) {
