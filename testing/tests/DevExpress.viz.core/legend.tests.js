@@ -71,7 +71,7 @@ const environment = {
                     };
                     return this.template;
                 },
-                _requestChange: sinon.spy()
+                _addToDeferred: sinon.spy()
             },
             itemGroupClass: this.itemGroupClass,
             backgroundClass: this.backgroundClass,
@@ -2752,51 +2752,5 @@ QUnit.test('Request change if template is asynchronous, first drawing', function
 
     const widget = this.legend._widget;
 
-    assert.ok(!widget._requestChange.called);
-    widget.template.render.lastCall.args[0].onRendered();
-    assert.deepEqual(widget._requestChange.lastCall.args[0], [
-        'LAYOUT',
-        'FULL_RENDER',
-        'FORCE_FIRST_DRAWING'
-    ]);
+    assert.ok(widget._addToDeferred.called);
 });
-
-QUnit.test('Request change if template is asynchronous, subsequent drawing', function(assert) {
-    this.options.customizeItems = items => {
-        items.forEach(i => i.marker.size = 60);
-    };
-
-    const legend = this.createAndDrawLegend();
-
-    const widget = this.legend._widget;
-
-    assert.ok(!widget._requestChange.called);
-    widget.template.render.lastCall.args[0].onRendered();
-
-    legend.draw(this.size.width, this.size.height);
-    widget.template.render.lastCall.args[0].onRendered();
-
-    assert.deepEqual(widget._requestChange.lastCall.args[0], [
-        'LAYOUT',
-        'FULL_RENDER',
-        'FORCE_DRAWING'
-    ]);
-});
-
-QUnit.test('Do not request change if template is asynchronous but marker group is not empty', function(assert) {
-    this.options.markerTemplate = function(_, container) {
-        container.appendChild(document.createElement('svg'));
-    };
-    this.options.customizeItems = items => {
-        items.forEach(i => i.marker.size = 60);
-    };
-
-    this.createAndDrawLegend();
-
-    const widget = this.legend._widget;
-
-    assert.ok(!widget._requestChange.called);
-    widget.template.render.lastCall.args[0].onRendered();
-    assert.ok(!widget._requestChange.called);
-});
-
