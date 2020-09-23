@@ -793,6 +793,11 @@
             "DocUrl": "Guide/Widgets/DataGrid/Client-Side_Exporting/",
             "Widget": "DataGrid",
             "Modules": "jspdf&jspdf-autotable",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridCustomersController.cs",
+              "/Models/Customer.cs",
+              "/Models/SampleData/Customers.cs"
+            ],
             "DemoType": "Web"
           }
         ]
