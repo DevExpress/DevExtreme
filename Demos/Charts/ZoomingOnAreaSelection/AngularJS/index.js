@@ -57,7 +57,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.buttonOptions = {
         text: "Reset",
         onClick: function() {
-            $scope.chart.resetVisualRange();
+            $("#chart").dxChart("resetVisualRange");
         }
     };
 
