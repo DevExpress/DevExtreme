@@ -1,6 +1,5 @@
 export default class VirtualSelectionState {
-    constructor(workspace, viewDataProvider) {
-        this._workspace = workspace;
+    constructor(viewDataProvider) {
         this._viewDataProvider = viewDataProvider;
 
         this._focusedCell = null;
@@ -17,13 +16,13 @@ export default class VirtualSelectionState {
         this._focusedCell = cell;
     }
 
-    getFocusedCell() {
+    getFocusedCell(isVerticalGroupOrientation) {
         const { _focusedCell } = this;
         if(!_focusedCell) {
             return {};
         }
 
-        const columnIndex = this._getColumnIndexByCellData(_focusedCell);
+        const columnIndex = this._getColumnIndexByCellData(_focusedCell, isVerticalGroupOrientation);
         const rowIndex = this._getRowIndexByColumnAndData(_focusedCell, columnIndex);
 
         return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: _focusedCell };
@@ -116,8 +115,7 @@ export default class VirtualSelectionState {
         return groupIndex === nextGroupIndex && allDay === nextAllDay;
     }
 
-    _getColumnIndexByCellData(cellData) {
-        const isVerticalGrouping = this._workspace._isVerticalGroupedWorkSpace();
+    _getColumnIndexByCellData(cellData, isVerticalGroupOrientation) {
         const { viewDataMap } = this._viewDataProvider;
         const { startDate, groupIndex } = cellData;
 
@@ -125,7 +123,7 @@ export default class VirtualSelectionState {
             cellData: { startDate: currentStartDate, groupIndex: currentGroupIndex },
         }) => {
             return startDate.getDate() === currentStartDate.getDate()
-              && ((groupIndex === currentGroupIndex) || isVerticalGrouping);
+              && ((groupIndex === currentGroupIndex) || isVerticalGroupOrientation);
         });
     }
 
