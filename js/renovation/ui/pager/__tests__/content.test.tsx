@@ -7,7 +7,9 @@ import { PageIndexSelector } from '../pages/page_index_selector';
 import { PageSizeSelector } from '../page_size/selector';
 import { InfoText } from '../info';
 import { Widget } from '../../common/widget';
+import { registerKeyboardAction } from '../../../../ui/shared/accessibility';
 
+jest.mock('../../../../ui/shared/accessibility', () => ({ registerKeyboardAction: jest.fn() }));
 jest.mock('../pages/page_index_selector', () => ({ PageIndexSelector: () => null }));
 jest.mock('../page_size/selector', () => ({ PageSizeSelector: forwardRef(() => null) }));
 jest.mock('../info', () => ({ InfoText: forwardRef(() => null) }));
@@ -140,7 +142,7 @@ describe('PagerContent', () => {
     });
 
     it('refs', () => {
-      const parentRef = createRef();
+      const widgetRef = createRef();
       const pageSizesRef = createRef();
       const pagesRef = createRef();
       const infoTextRef = createRef();
@@ -148,17 +150,17 @@ describe('PagerContent', () => {
         pagesContainerVisible: true,
         isLargeDisplayMode: true,
         infoVisible: true,
+        widgetRef,
         props: {
           rtlEnabled: false,
           showPageSizes: true,
-          parentRef,
           pageSizesRef,
           pagesRef,
           infoTextRef,
         },
       } as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />).childAt(0);
-      expect(tree.instance()).toBe(parentRef.current);
+      expect(tree.instance()).toBe(widgetRef.current);
       const childrenContainer = tree.find('div').first();
       expect(childrenContainer.childAt(0).instance()).toBe(pageSizesRef.current);
       expect(childrenContainer.childAt(1).instance()).toBe(pagesRef.current);
@@ -167,6 +169,42 @@ describe('PagerContent', () => {
   });
 
   describe('Logic', () => {
+    it('setParentRef', () => {
+      const props = {
+        parentRef: {},
+      } as PagerContentProps;
+      const component = new PagerContent(props);
+      component.widgetRef = {} as HTMLElement;
+      component.setParentRef();
+      expect(component.props.parentRef).toBe(component.widgetRef);
+    });
+
+    it('keyboardAction provider', () => {
+      const parentElement = { el: 1 };
+      const widgetRef = { getHtmlElement: () => parentElement };
+      const element = {} as HTMLElement;
+      const action = jest.fn();
+      const component = new PagerContent({
+        pageCount: 1,
+        pagesNavigatorVisible: 'auto',
+      } as PagerContentProps);
+      component.widgetRef = widgetRef;
+      component.keyboardAction.registerKeyboardAction(element, action);
+      expect(registerKeyboardAction).toBeCalledWith(
+        'pager',
+        {
+          option: expect.any(Function),
+          element: expect.any(Function),
+          _createActionByOption: expect.any(Function),
+        },
+        element,
+        undefined,
+        action,
+      );
+      const fakeComponent = (registerKeyboardAction as jest.Mock).mock.calls[0][1];
+      expect(fakeComponent.element()).toBe(parentElement);
+    });
+
     describe('pagesContainerVisible', () => {
       it('pagesNavigatorVisible', () => {
         const component = new PagerContent({
