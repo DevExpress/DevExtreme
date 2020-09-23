@@ -9490,7 +9490,7 @@ QUnit.module('Editing with real dataController', {
                     'stateId': 0
                 },
                 'type': 'update'
-            }], 'no changes');
+            }], 'row change');
         });
 
         QUnit.test('editCell should not create empty changes object', function(assert) {
@@ -9532,7 +9532,7 @@ QUnit.module('Editing with real dataController', {
                     'stateId': 0
                 },
                 'type': 'update'
-            }], 'no changes');
+            }], 'row change');
         });
     });
 
