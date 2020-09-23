@@ -115,12 +115,12 @@ const isEqualLocalTimeZone = (timeZoneName) => {
 };
 
 const hasDSTInLocalTimeZone = () => {
-    const [startDate, endDate] = getExtremeDatesWithPossibleDifferentOffsets();
+    const [startDate, endDate] = getExtremeDates();
     return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
 };
 
 const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
-    const [startDate, endDate] = getExtremeDatesWithPossibleDifferentOffsets();
+    const [startDate, endDate] = getExtremeDates();
 
     const startDateLocalOffset = -startDate.getTimezoneOffset() / 60;
     const endDateLocalOffset = -endDate.getTimezoneOffset() / 60;
@@ -135,7 +135,9 @@ const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
     return false;
 };
 
-const getExtremeDatesWithPossibleDifferentOffsets = () => {
+
+// TODO: Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
+const getExtremeDates = () => {
     const nowDate = new Date(Date.now());
 
     const startDate = new Date();
