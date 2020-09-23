@@ -70,36 +70,42 @@ const Slider = TrackBar.inherit({
             leftArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                this._saveValueChangeEvent(e);
 
                 moveHandleLeft(this.option('step'));
             },
             rightArrow: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                this._saveValueChangeEvent(e);
 
                 moveHandleRight(this.option('step'));
             },
             pageUp: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                this._saveValueChangeEvent(e);
 
                 moveHandleRight(this.option('step') * this.option('keyStep'));
             },
             pageDown: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                this._saveValueChangeEvent(e);
 
                 moveHandleLeft(this.option('step') * this.option('keyStep'));
             },
             home: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                this._saveValueChangeEvent(e);
                 const min = this.option('min');
                 this.option('value', min);
             },
             end: function(e) {
                 e.preventDefault();
                 e.stopPropagation();
+                this._saveValueChangeEvent(e);
                 const max = this.option('max');
                 this.option('value', max);
             }
@@ -483,6 +489,7 @@ const Slider = TrackBar.inherit({
 
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
         delete this._needPreventAnimation;
+        this._saveValueChangeEvent(e);
         this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
         delete this._startOffset;
         this._renderValue();
@@ -555,6 +562,8 @@ const Slider = TrackBar.inherit({
             newValue = Number((stepCount * step + min).toFixed(exponentLength));
             this._setValueOnSwipe(Math.max(Math.min(newValue, max), min));
         }
+
+        this._saveValueChangeEvent(undefined);
     },
 
     _setValueOnSwipe: function(value) {
