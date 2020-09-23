@@ -86,7 +86,7 @@ export class PagerContentProps extends PagerProps {
 
   @ForwardRef() pageSizesRef: any = null;
 
-  @ForwardRef() parentRef: any = null;
+  @ForwardRef() rootElementRef: any = null;
 
   @ForwardRef() pagesRef: any = null;
 
@@ -113,10 +113,10 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
     };
   }
 
-  @Effect({ run: 'once' }) setParentRef(): void {
-    const { parentRef } = this.props;
-    if (parentRef) {
-      this.props.parentRef = this.widgetRef;
+  @Effect({ run: 'once' }) setRootElementRef(): void {
+    const { rootElementRef } = this.props;
+    if (rootElementRef) {
+      this.props.rootElementRef = this.widgetRef;
     }
   }
 

@@ -91,7 +91,7 @@ describe('PagerContent', () => {
           pagesContainerVisible: true,
           pagesContainerVisibility: 'hidden',
           props: {
-            parentRef,
+            rootElementRef: parentRef,
           },
         } as Partial<PagerContent> as any}
       /> as any).childAt(0);
@@ -133,7 +133,7 @@ describe('PagerContent', () => {
         {...{
           props: {
             showPageSizes: false,
-            parentRef,
+            rootElementRef: parentRef,
           },
         } as PagerContent as any}
       />).childAt(0);
@@ -169,14 +169,18 @@ describe('PagerContent', () => {
   });
 
   describe('Logic', () => {
-    it('setParentRef', () => {
-      const props = {
-        parentRef: {},
-      } as PagerContentProps;
-      const component = new PagerContent(props);
+    it('setRootElementRef, has parentRef', () => {
+      const component = new PagerContent({ rootElementRef: {} } as PagerContentProps);
       component.widgetRef = {} as HTMLElement;
-      component.setParentRef();
-      expect(component.props.parentRef).toBe(component.widgetRef);
+      component.setRootElementRef();
+      expect(component.props.rootElementRef).toBe(component.widgetRef);
+    });
+
+    it('setRootElementRef, hasnt parentRef', () => {
+      const component = new PagerContent({ rootElementRef: null } as PagerContentProps);
+      component.widgetRef = {} as HTMLElement;
+      component.setRootElementRef();
+      expect(component.props.rootElementRef).toBe(null);
     });
 
     it('keyboardAction provider', () => {
@@ -203,6 +207,9 @@ describe('PagerContent', () => {
       );
       const fakeComponent = (registerKeyboardAction as jest.Mock).mock.calls[0][1];
       expect(fakeComponent.element()).toBe(parentElement);
+      expect(fakeComponent.option()).toBe(false);
+      // eslint-disable-next-line no-underscore-dangle
+      expect(fakeComponent._createActionByOption()).toEqual(expect.any(Function));
     });
 
     describe('pagesContainerVisible', () => {
