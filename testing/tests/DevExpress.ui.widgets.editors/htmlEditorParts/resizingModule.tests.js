@@ -299,6 +299,19 @@ module('Resizing module', moduleConfig, () => {
         assert.strictEqual(frameTop + BORDER_PADDING_WIDTH, imageTop, 'Frame positioned correctly by the top');
     });
 
+    test('widget should not fire focusout event on resize frame click (T930996)', function(assert) {
+        this.options.enabled = true;
+        new Resizing(this.quillMock, this.options);
+        const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
+
+        this.$element.on('mousedown', (e) => {
+            assert.ok(e.isDefaultPrevented(), 'Default prevented');
+        });
+
+        $resizeFrame
+            .trigger('mousedown');
+    });
+
     test('resize frame should have specific class on mobile devices', function(assert) {
         const currentDevice = devices.current();
 

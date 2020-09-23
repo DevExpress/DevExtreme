@@ -14,6 +14,7 @@ const MODULE_NAMESPACE = 'dxHtmlResizingModule';
 
 const KEYDOWN_EVENT = addNamespace('keydown', MODULE_NAMESPACE);
 const SCROLL_EVENT = addNamespace('scroll', MODULE_NAMESPACE);
+const MOUSEDOWN_EVENT = addNamespace('mousedown', MODULE_NAMESPACE);
 
 const FRAME_PADDING = 1;
 
@@ -119,6 +120,11 @@ class ResizingModule {
             .toggleClass(DX_TOUCH_DEVICE_CLASS, deviceType !== 'desktop')
             .appendTo(this.editorInstance._getQuillContainer())
             .hide();
+
+
+        eventsEngine.on(this._$resizeFrame, MOUSEDOWN_EVENT, (e) => {
+            e.preventDefault();
+        });
 
         this.editorInstance._createComponent(this._$resizeFrame, Resizable, {
             onResize: (e) => {
