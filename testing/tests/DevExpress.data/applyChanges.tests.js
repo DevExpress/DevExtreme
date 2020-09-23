@@ -129,7 +129,7 @@ QUnit.module('Apply Changes', {
                 name: 'test4'
             },
             {
-                id: 345,
+                id: 5,
                 name: 'test5'
             }
         ];
@@ -137,17 +137,17 @@ QUnit.module('Apply Changes', {
             {
                 type: 'insert',
                 data: {
-                    id: 345,
+                    id: 5,
                     name: 'test new'
                 }
             },
             {
                 type: 'remove',
-                key: 3
+                key: 6
             },
             {
                 type: 'update',
-                key: 43,
+                key: 7,
                 data: {
                     name: 'new name'
                 }
@@ -156,11 +156,13 @@ QUnit.module('Apply Changes', {
         const errorsLogSpy = sinon.spy(errors, 'log');
 
         // act
-        applyChanges(this.data, this.changes);
+        const result = applyChanges(this.data, this.changes);
 
         // assert
-        assert.equal(errorsLogSpy.callCount, 2);
-        assert.equal(errorsLogSpy.getCall(0).args[0], 'E4008');
-        assert.equal(errorsLogSpy.getCall(1).args[0], 'E4009');
+        assert.deepEqual(result, this.data, 'result and data should be the same');
+        assert.equal(errorsLogSpy.callCount, 3, 'error.log call count');
+        assert.equal(errorsLogSpy.getCall(0).args[0], 'E4008', 'insert error');
+        assert.equal(errorsLogSpy.getCall(1).args[0], 'E4009', 'remove error');
+        assert.equal(errorsLogSpy.getCall(2).args[0], 'E4009', 'update error');
     });
 });

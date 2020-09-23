@@ -145,8 +145,9 @@ function update(keyInfo, array, key, data, isBatch, immutable) {
             target = array[index];
 
             if(immutable === true && isDefined(target)) {
-                array[index] = createObjectWithChanges(target, data);
-                return;
+                const newTarget = createObjectWithChanges(target, data);
+                array[index] = newTarget;
+                return !isBatch && trivialPromise(newTarget, key);
             }
         }
     } else {
@@ -204,6 +205,8 @@ function remove(keyInfo, array, key, isBatch) {
     }
     if(!isBatch) {
         return trivialPromise(key);
+    } else if(index < 0) {
+        return getErrorResult(isBatch, 'E4009');
     }
 }
 
