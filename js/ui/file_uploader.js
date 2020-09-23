@@ -177,6 +177,8 @@ class FileUploader extends Editor {
 
             abortUpload: null,
 
+            beforeUpload: null,
+
             validationMessageOffset: { h: 0, v: 0 },
 
             useNativeInputClick: false,
@@ -1288,6 +1290,7 @@ class FileUploader extends Editor {
                 this._setUploadStrategy();
                 break;
             case 'abortUpload':
+            case 'beforeUpload':
             case 'uploadUrl':
             case 'progress':
             case 'uploadMethod':
