@@ -186,7 +186,6 @@ QUnit.module('action sheet', {
         assert.equal(popup.option('visible'), true, 'shown before click');
 
         $($cancelButton).trigger('dxclick');
-
         assert.equal(popup.option('visible'), false, 'hides on click');
     });
 

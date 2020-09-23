@@ -13,6 +13,7 @@ import Drawer from 'ui/drawer';
 import { animation } from 'ui/drawer/ui.drawer.animation';
 import Overlay from 'ui/overlay';
 
+
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
 const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
