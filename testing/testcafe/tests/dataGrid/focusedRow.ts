@@ -705,4 +705,6 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
       },
     };
   });
-});
+}).after(() => ClientFunction(() => {
+  $('button').remove();
+})());
