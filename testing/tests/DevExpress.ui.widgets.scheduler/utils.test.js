@@ -19,8 +19,8 @@ module('Time zone utils', {}, () => {
     });
 
     test('isEqualLocalTimeZone', function(assert) {
-        const result = timeZoneUtils.isEqualLocalTimeZone('Africa/Abidjan');
+        const result = timeZoneUtils.isEqualLocalTimeZone('Canada/Yukon');
 
-        assert.notOk(result, 'local time zone shouldn\'t equal \'Africa/Abidjan\'');
+        assert.notOk(result, 'local time zone shouldn\'t equal \'Canada/Yukon\'');
     });
 });
