@@ -35,7 +35,8 @@ class JSPdfDataGridTestHelper {
             const expectedCellStyles = cell.styles || {};
             const actualCellStyles = actualAutoTableOptions[rowType][rowIndex][columnIndex].styles;
             assert.strictEqual(actualCellStyles['halign'], expectedCellStyles['halign'], `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
-            assert.strictEqual(actualCellStyles.fontStyle, expectedCellStyles.fontStyle, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
+            assert.strictEqual(actualCellStyles.fontStyle, expectedCellStyles.fontStyle, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.fontStyle`);
+            // assert.strictEqual(actualCellStyles.cellWidth, expectedCellStyles.cellWidth, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.cellWidth`); // TODO: fix all tests
         });
     }
 
