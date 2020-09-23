@@ -1,4 +1,4 @@
-﻿import React from 'react';
+﻿import React, { useState } from 'react';
 import { Button } from 'devextreme-react';
 import { Sortable } from 'devextreme-react/sortable';
 import TabPanel from 'devextreme-react/tab-panel';
@@ -6,114 +6,98 @@ import 'devextreme/data/odata/store';
 
 import service from './data.js';
 import EmployeeTemplate from './EmployeeTemplate.js';
-import { CloseButton } from './CloseButton.js';
 
 const allEmployees = service.getEmployees();
 
-class App extends React.Component {
-  constructor() {
-    super();
+function App() {
+  const [employees, setEmployees] = useState(allEmployees.slice(0, 3));
+  const [selectedItem, setSelectedItem] = useState(allEmployees[0]);
 
-    this.state = {
-      employees: allEmployees.slice(0, 3),
-      selectedItem: allEmployees[0]
-    };
+  function addButtonHandler() {
+    const newItem = allEmployees
+      .filter((employee) => employees.indexOf(employee) === -1)[0];
+
+    setEmployees([...employees, newItem]);
+    setSelectedItem(newItem);
   }
 
-  render() {
+  function needDisableAddButton() {
+    return employees.length === allEmployees.length;
+  }
+
+  function closeButtonHandler() {
+    const newEmployees = [...employees];
+    const index = newEmployees.indexOf(selectedItem);
+
+    newEmployees.splice(index, 1);
+    setEmployees(newEmployees);
+
+    setSelectedItem(newEmployees[index - 1]);
+  }
+
+  function renderTitle(data) {
     return (
-      <div>
-        <div id="container">
-          <Button
-            disabled={this.disableButton()}
-            text="Add Tab"
-            icon="add"
-            type="default"
-            onClick={this.addButtonHandler}
-          />
+      <React.Fragment>
+        <div>
+          <span>
+            {data.FirstName} {data.LastName}
+          </span>
+          {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={closeButtonHandler} />}
         </div>
-        <Sortable
-          filter=".dx-tab"
-          data={this.state.employees}
-          itemOrientation ="horizontal"
-          dragDirection="horizontal"
-          onDragStart={this.onTabDragStart}
-          onReorder={this.onTabDrop}
-        >
-          <TabPanel
-            dataSource={this.state.employees}
-            height={472}
-            itemTitleRender={this.renderTitle}
-            deferRendering={false}
-            showNavButtons={true}
-            selectedItem={this.state.selectedItem}
-            repaintChangesOnly={true}
-            onSelectionChanged={this.onSelectionChanged}
-            itemComponent={EmployeeTemplate}>
-          </TabPanel>
-        </Sortable>
-      </div>
+      </React.Fragment>
     );
   }
 
-  onTabDragStart = (e) => {
+  function onSelectionChanged(args) {
+    setSelectedItem(args.addedItems[0]);
+  }
+
+  function onTabDragStart(e) {
     e.itemData = e.fromData[e.fromIndex];
   }
 
-  onTabDrop = (e) => {
-    const employees = [...this.state.employees];
-    const selectedItem = employees[e.fromIndex];
+  function onTabDrop(e) {
+    const newEmployees = [...employees];
 
-    employees.splice(e.fromIndex, 1);
-    employees.splice(e.toIndex, 0, e.itemData);
+    newEmployees.splice(e.fromIndex, 1);
+    newEmployees.splice(e.toIndex, 0, e.itemData);
 
-    this.setState({
-      selectedItem,
-      employees,
-     
-    });
+    setEmployees(newEmployees);
   }
 
-  renderTitle = (data) => {
-    return (
-      <div>
-        <span>{data.FirstName} {data.LastName}</span>
-        <CloseButton showCloseButton={this.state.employees.length > 1} onItemClick={this.closeButtonHandler} data={data} />
+  return (
+    <React.Fragment>
+      <div id="container">
+        <Button
+          disabled={needDisableAddButton()}
+          text="Add Tab"
+          icon="add"
+          type="default"
+          onClick={addButtonHandler}
+        />
       </div>
-    );
-  }
-
-  addButtonHandler = () => {
-    const newItem = allEmployees.filter(employee => this.state.employees.indexOf(employee) === -1)[0];
-    const employees = [...this.state.employees, newItem];
-
-    this.setState({
-      employees,
-      selectedItem: newItem
-    });
-  }
-
-  closeButtonHandler = (itemData) => {
-    const employees = [...this.state.employees];
-    const index = employees.indexOf(itemData);
-
-    employees.splice(index, 1);
-
-    this.setState({
-      employees,
-      selectedItem: employees.length ? employees[index] ? employees[index] : employees[index - 1] : null
-    });
-  }
-
-  disableButton() {
-    return this.state.employees.length === allEmployees.length;
-  }
-
-  onSelectionChanged = (args) => {
-    this.setState({
-      selectedItem: args.addedItems[0]
-    });
-  }
+      <Sortable
+        filter=".dx-tab"
+        data={employees}
+        itemOrientation="horizontal"
+        dragDirection="horizontal"
+        onDragStart={onTabDragStart}
+        onReorder={onTabDrop}
+      >
+        <TabPanel
+          dataSource={employees}
+          height={472}
+          itemTitleRender={renderTitle}
+          deferRendering={false}
+          showNavButtons={true}
+          selectedItem={selectedItem}
+          repaintChangesOnly={true}
+          onSelectionChanged={onSelectionChanged}
+          itemComponent={EmployeeTemplate}
+        />
+      </Sortable>
+    </React.Fragment>
+  );
 }
 
 export default App;
