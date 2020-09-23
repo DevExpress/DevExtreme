@@ -19,8 +19,8 @@ module('Time zone utils', {}, () => {
     });
 
     test('isEqualLocalTimeZone', function(assert) {
-        const result = timeZoneUtils.isEqualLocalTimeZone('Canada/Yukon');
+        const result = timeZoneUtils.isEqualLocalTimeZone('Brazil/Acre');
 
-        assert.notOk(result, 'local time zone shouldn\'t equal \'Canada/Yukon\'');
+        assert.notOk(result, 'local time zone shouldn\'t equal \'Brazil/Acre\'');
     });
 });
