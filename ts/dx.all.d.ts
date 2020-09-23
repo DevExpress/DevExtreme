@@ -6803,6 +6803,10 @@ declare module DevExpress.ui {
          */
         allowedFileExtensions?: Array<string>;
         /**
+         * [descr:dxFileUploader.Options.beforeUpload]
+         */
+        beforeUpload?: ((request: XMLHttpRequest, file: File, uploadInfo?: DevExpress.fileManagement.UploadInfo) => XMLHttpRequest);
+        /**
          * [descr:dxFileUploader.Options.chunkSize]
          */
         chunkSize?: number;

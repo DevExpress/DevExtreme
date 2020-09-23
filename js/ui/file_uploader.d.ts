@@ -50,6 +50,17 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     allowedFileExtensions?: Array<string>;
     /**
+     * @docid dxFileUploaderOptions.beforeUpload
+     * @type function
+     * @type_function_param1 request: XMLHttpRequest
+     * @type_function_param2 file:File
+     * @type_function_param3 uploadInfo?:UploadInfo
+     * @type_function_return XMLHttpRequest
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    beforeUpload?: ((request: XMLHttpRequest, file: File, uploadInfo?: UploadInfo) => XMLHttpRequest);
+    /**
      * @docid dxFileUploaderOptions.chunkSize
      * @type number
      * @default 0
