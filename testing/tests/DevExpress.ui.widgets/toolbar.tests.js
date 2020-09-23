@@ -5,12 +5,10 @@ import errors from 'core/errors';
 import $ from 'jquery';
 import Toolbar from 'ui/toolbar';
 import ToolbarBase from 'ui/toolbar/ui.toolbar.base';
-
 import fx from 'animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import eventsEngine from 'events/core/events_engine';
-
 import { deferUpdate } from 'core/utils/common';
 
 import 'ui/button_group';
