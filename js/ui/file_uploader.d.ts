@@ -50,17 +50,6 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     allowedFileExtensions?: Array<string>;
     /**
-     * @docid dxFileUploaderOptions.beforeUpload
-     * @type function
-     * @type_function_param1 request: XMLHttpRequest
-     * @type_function_param2 file:File
-     * @type_function_param3 uploadInfo?:UploadInfo
-     * @type_function_return XMLHttpRequest
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    beforeUpload?: ((request: XMLHttpRequest, file: File, uploadInfo?: UploadInfo) => XMLHttpRequest);
-    /**
      * @docid dxFileUploaderOptions.chunkSize
      * @type number
      * @default 0
@@ -148,6 +137,19 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @public
      */
     name?: string;
+    /**
+     * @docid dxFileUploaderOptions.onBeforeSend
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field4 request: XMLHttpRequest
+     * @type_function_param1_field5 file:File
+     * @type_function_param1_field6 uploadInfo:UploadInfo
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onBeforeSend?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, request?: XMLHttpRequest, file?: File, uploadInfo?: UploadInfo }) => any);
     /**
      * @docid dxFileUploaderOptions.onDropZoneEnter
      * @extends Action

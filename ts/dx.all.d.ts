@@ -6803,10 +6803,6 @@ declare module DevExpress.ui {
          */
         allowedFileExtensions?: Array<string>;
         /**
-         * [descr:dxFileUploader.Options.beforeUpload]
-         */
-        beforeUpload?: ((request: XMLHttpRequest, file: File, uploadInfo?: DevExpress.fileManagement.UploadInfo) => XMLHttpRequest);
-        /**
          * [descr:dxFileUploader.Options.chunkSize]
          */
         chunkSize?: number;
@@ -6858,6 +6854,10 @@ declare module DevExpress.ui {
          * [descr:dxFileUploader.Options.name]
          */
         name?: string;
+        /**
+         * [descr:dxFileUploader.Options.onBeforeSend]
+         */
+        onBeforeSend?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, request?: XMLHttpRequest, file?: File, uploadInfo?: DevExpress.fileManagement.UploadInfo }) => any);
         /**
          * [descr:dxFileUploader.Options.onDropZoneEnter]
          */

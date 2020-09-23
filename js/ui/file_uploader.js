@@ -127,6 +127,8 @@ class FileUploader extends Editor {
 
             uploadCustomData: {},
 
+            onBeforeSend: null,
+
             onUploadStarted: null,
 
             onUploaded: null,
@@ -176,8 +178,6 @@ class FileUploader extends Editor {
             uploadChunk: null,
 
             abortUpload: null,
-
-            beforeUpload: null,
 
             validationMessageOffset: { h: 0, v: 0 },
 
@@ -241,6 +241,7 @@ class FileUploader extends Editor {
 
         this._setUploadStrategy();
         this._createFiles();
+        this._createBeforeSendAction();
         this._createUploadStartedAction();
         this._createUploadedAction();
         this._createProgressAction();
@@ -471,6 +472,10 @@ class FileUploader extends Editor {
         const fileSize = file.value.size;
         const minFileSize = this.option('minFileSize');
         return minFileSize > 0 ? fileSize >= minFileSize : true;
+    }
+
+    _createBeforeSendAction() {
+        this._beforeSendAction = this._createActionByOption('onBeforeSend', { excludeValidators: ['readOnly'] });
     }
 
     _createUploadStartedAction() {
@@ -1290,7 +1295,6 @@ class FileUploader extends Editor {
                 this._setUploadStrategy();
                 break;
             case 'abortUpload':
-            case 'beforeUpload':
             case 'uploadUrl':
             case 'progress':
             case 'uploadMethod':
@@ -1302,6 +1306,9 @@ class FileUploader extends Editor {
             case 'uploadMode':
                 this.reset();
                 this._invalidate();
+                break;
+            case 'onBeforeSend':
+                this._createBeforeSendAction();
                 break;
             case 'onUploadStarted':
                 this._createUploadStartedAction();
@@ -1438,11 +1445,12 @@ class FileUploadStrategyBase {
     }
 
     _beforeSend(xhr, file) {
-        if(this._isCustomCallback('beforeUpload')) {
-            const beforeUpload = this.fileUploader.option('beforeUpload');
-            const arg = this._createUploadArgument(file);
-            xhr = beforeUpload(xhr, file.value, arg);
-        }
+        const arg = this._createUploadArgument(file);
+        this.fileUploader._beforeSendAction({
+            request: xhr,
+            file: file.value,
+            uploadInfo: arg
+        });
         file.request = xhr;
     }
 
