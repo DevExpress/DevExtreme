@@ -155,6 +155,11 @@ const KeyboardNavigationController = core.ViewController.inherit({
         });
     },
 
+    _resetFocusedView: function() {
+        this._focusedView = null;
+        this._resetFocusedCell();
+    },
+
     _initDocumentHandlers: function() {
         const that = this;
         const document = domAdapter.getDocument();
@@ -164,7 +169,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
             const isCurrentRowsViewClick = that._isEventInCurrentGrid(e.event) && $target.closest(`.${that.addWidgetPrefix(ROWS_VIEW_CLASS)}`).length;
             const isEditorOverlay = $target.closest(`.${DROPDOWN_EDITOR_OVERLAY_CLASS}`).length;
             if(!isCurrentRowsViewClick && !isEditorOverlay) {
-                that._resetFocusedCell();
+                that._resetFocusedView();
             }
         });
 
