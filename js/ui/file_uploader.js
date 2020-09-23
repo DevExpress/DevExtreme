@@ -1421,7 +1421,7 @@ class FileUploadStrategyBase {
 
         if(this._isCustomCallback('abortUpload')) {
             const abortUpload = this.fileUploader.option('abortUpload');
-            const arg = this._createChunksUploadInfo(file);
+            const arg = this._createUploadArgument(file);
 
             let deferred = null;
             try {
@@ -1440,13 +1440,13 @@ class FileUploadStrategyBase {
     _beforeSend(xhr, file) {
         if(this._isCustomCallback('beforeUpload')) {
             const beforeUpload = this.fileUploader.option('beforeUpload');
-            const arg = this._createChunksUploadInfo(file);
+            const arg = this._createUploadArgument(file);
             xhr = beforeUpload(xhr, file.value, arg);
         }
         file.request = xhr;
     }
 
-    _createChunksUploadInfo(file) {
+    _createUploadArgument(file) {
     }
 
     _uploadCore(file) {
@@ -1625,7 +1625,7 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
         return null;
     }
 
-    _createChunksUploadInfo(file) {
+    _createUploadArgument(file) {
         return this._createChunksInfo(file.chunksData);
     }
 
