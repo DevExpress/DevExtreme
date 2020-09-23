@@ -67,7 +67,7 @@ describe('resizable-container', () => {
         isLargeDisplayMode: true,
         pageSizesRef: 'pageSizesRef',
         pagesRef: 'pagesRef',
-        parentRef: 'parentRef',
+        rootElementRef: 'parentRef',
       });
     });
   });

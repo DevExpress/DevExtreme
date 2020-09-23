@@ -22,7 +22,7 @@ export const viewFunction = ({
   restAttributes,
 }: ResizableContainer) => (
   <Content
-    parentRef={parentRef}
+    rootElementRef={parentRef}
     pageSizesRef={pageSizesRef}
     infoTextRef={infoTextRef}
     pagesRef={pagesRef}
