@@ -44,12 +44,6 @@ export const checkResultByDeviceType = (assert, callback) => {
     }
 };
 
-export const checkResultsAsynchronously = (callback) => {
-    setTimeout(() => {
-        callback();
-    }, 0);
-};
-
 
 class ElementWrapper {
     constructor(selector, parent) {
