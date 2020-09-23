@@ -179,7 +179,7 @@ const Appointment = DOMComponent.inherit({
     _renderRecurrenceClass: function() {
         const rule = this.invoke('getField', 'recurrenceRule', this.option('data'));
 
-        if(getRecurrenceProcessor().evalRecurrenceRule(rule).isValid) {
+        if(getRecurrenceProcessor().isValidRecurrenceRule(rule)) {
             this.$element().addClass(RECURRENCE_APPOINTMENT_CLASS);
         }
     },

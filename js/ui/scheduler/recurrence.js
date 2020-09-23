@@ -79,6 +79,10 @@ class RecurrenceProcessor {
         return result;
     }
 
+    isValidRecurrenceRule(rule) {
+        return this.evalRecurrenceRule(rule).isValid;
+    }
+
     daysFromByDayRule(rule) {
         let result = [];
 

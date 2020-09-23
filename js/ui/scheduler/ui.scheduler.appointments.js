@@ -582,7 +582,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         const modifiedAppointmentAdapter = scheduler.createAppointmentAdapter(sourceAppointment).clone();
 
-        const startDate = info.appointment.startDate;
+        const startDate = this._getEndResizeAppointmentStartDate(e, sourceAppointment, info.appointment);
         const endDate = info.appointment.endDate;
 
         const dateRange = this._getDateRange(e, startDate, endDate);
@@ -595,6 +595,23 @@ const SchedulerAppointments = CollectionWidget.inherit({
             data: modifiedAppointmentAdapter.clone({ pathTimeZone: 'fromGrid' }).source(),
             $appointment: $element
         });
+    },
+    _getEndResizeAppointmentStartDate: function(e, rawAppointment, appointmentInfo) {
+        let startDate = appointmentInfo.startDate;
+        const recurrenceProcessor = getRecurrenceProcessor();
+        const recurrenceRule = this.invoke('getField', 'recurrenceRule', rawAppointment);
+        const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
+        const isAllDay = this.invoke('isAllDay', rawAppointment);
+
+        if(!e.handles.top && !isRecurrent && !isAllDay) {
+            const scheduler = this.option('observer');
+            startDate = scheduler.timeZoneCalculator.createDate(rawAppointment.startDate, {
+                appointmentTimeZone: rawAppointment.startDateTimeZone,
+                path: 'toGrid'
+            });
+        }
+
+        return startDate;
     },
 
     _getDateRange: function(e, startDate, endDate) {

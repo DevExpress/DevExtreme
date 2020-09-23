@@ -3626,6 +3626,35 @@ QUnit.module('Integration: Appointments', {
                 assert.roughEqual($appointment.position().left, 0, 1.1, 'Left coordinate is correct');
             });
 
+            QUnit.test('A long appointment should not change start date if resized from the bottom', function(assert) {
+                const expectedStartDate = new Date(2018, 4, 21, 0, 30);
+                this.createInstance({
+                    views: ['day'],
+                    currentView: 'day',
+                    currentDate: new Date(2018, 4, 21),
+                    dataSource: [{
+                        text: 'Test',
+                        startDate: expectedStartDate,
+                        endDate: new Date(2018, 4, 21, 23, 30),
+                    }]
+                });
+
+                const $element = $(this.instance.element());
+
+                const workspace = this.instance.getWorkSpace();
+                workspace.getScrollable().scrollTo({ y: 3000 });
+
+                const cellWidth = $element.find(`.${DATE_TABLE_CELL_CLASS}`).eq(0).outerHeight();
+                const pointer = pointerMock($element.find('.dx-resizable-handle-bottom').eq(0)).start();
+
+                pointer.dragStart().drag(0, -cellWidth);
+                pointer.dragEnd();
+
+                const { startDate } = this.instance.option('dataSource')[0];
+
+                assert.deepEqual(startDate, expectedStartDate);
+            });
+
             // Timezone-sensitive test, use US/Pacific for proper testing
             [{
                 handle: CLASSES.resizableHandle.left,
