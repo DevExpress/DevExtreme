@@ -50,32 +50,27 @@ const RangeSlider = Slider.inherit({
 
         return extend(this.callBase(), {
             leftArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyBoardEvent(e);
 
                 moveHandleLeft(e, this.option('step'));
             },
             rightArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyBoardEvent(e);
 
                 moveHandleRight(e, this.option('step'));
             },
             pageUp: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyBoardEvent(e);
 
                 moveHandleRight(e, this.option('step') * this.option('keyStep'));
             },
             pageDown: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyBoardEvent(e);
 
                 moveHandleLeft(e, this.option('step') * this.option('keyStep'));
             },
             home: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyBoardEvent(e);
                 const isStart = $(e.target).hasClass(RANGE_SLIDER_START_HANDLE_CLASS);
                 const valueOption = isStart ? 'start' : 'end';
                 const startOption = isStart ? 'min' : 'start';
@@ -84,8 +79,7 @@ const RangeSlider = Slider.inherit({
                 this.option(valueOption, val);
             },
             end: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyBoardEvent(e);
                 const isStart = $(e.target).hasClass(RANGE_SLIDER_START_HANDLE_CLASS);
                 const valueOption = isStart ? 'start' : 'end';
                 const endOption = isStart ? 'end' : 'max';
