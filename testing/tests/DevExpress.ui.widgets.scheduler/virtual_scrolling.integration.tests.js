@@ -8,7 +8,8 @@ import 'generic_light.css!';
 import {
     createWrapper,
     initTestMarkup,
-    checkResultByDeviceType
+    checkResultByDeviceType,
+    checkResultsAsynchronously,
 } from '../../helpers/scheduler/helpers.js';
 
 const supportedViews = ['day', 'week', 'workWeek'];
@@ -938,3 +939,76 @@ QUnit.module('Appointment filtering', function() {
     });
 });
 
+module('Cells Selection', {
+    // beforeEach: function() {
+    //     fx.off = true;
+    //     this.clock = sinon.useFakeTimers();
+    // },
+    // afterEach: function() {
+    //     fx.off = false;
+    //     this.clock.restore();
+    // }
+}, () => {
+    test('Cells should be saved after selection correctly in basic case', function(assert) {
+        const done = assert.async();
+        const scheduler = createWrapper({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            scrolling: { mode: 'virtual' },
+            height: 300,
+            currentDate: new Date(2020, 8, 20),
+            showAllDayPanel: false,
+        });
+
+        let $cells = scheduler.workSpace.getCells();
+        const $table = scheduler.workSpace.getDateTable();
+        const workspace = scheduler.instance.getWorkSpace();
+        workspace.virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+        $($table).trigger(
+            $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
+        );
+        $($table).trigger($.Event('dxpointermove', { target: $cells.eq(1).get(0), which: 1 }));
+
+        let $selectedCells = scheduler.workSpace.getSelectedCells();
+
+        assert.equal($selectedCells.length, 8, 'Correct number of selected cells');
+        assert.ok($cells.eq(0).hasClass('dx-state-focused'), 'First selected cell is correct');
+        assert.ok($cells.eq(42).hasClass('dx-state-focused'), 'Botommost selected cell is correct');
+        assert.ok($cells.eq(1).hasClass('dx-state-focused'), 'Last selected cell is correct');
+        assert.ok($cells.eq(1).hasClass('dx-scheduler-focused-cell'), 'Focused cell is correct');
+
+        const scrollable = scheduler.workSpace.getScrollable();
+
+        scrollable.scrollTo({ y: 500 });
+
+        checkResultsAsynchronously(() => {
+            $cells = scheduler.workSpace.getCells();
+            $selectedCells = scheduler.workSpace.getSelectedCells();
+            const $focusedCell = scheduler.workSpace.getFocusedCell();
+
+            assert.equal($selectedCells.length, 9, 'Correct number of selected cells');
+            assert.ok($cells.eq(0).hasClass('dx-state-focused'), 'First selected cell is correct');
+            assert.ok($cells.eq(56).hasClass('dx-state-focused'), 'Botommost selected cell is correct');
+            assert.notOk($cells.eq(1).hasClass('dx-state-focused'), 'Last selected cell is not in the viewport');
+            assert.notOk($cells.eq(1).hasClass('dx-scheduler-focused-cell'), 'Focused cell is not in the viewport');
+            assert.equal($focusedCell.length, 0, 'Focused cell is not visible');
+
+            scrollable.scrollTo({ y: 0 });
+
+            checkResultsAsynchronously(() => {
+                $cells = scheduler.workSpace.getCells();
+                $selectedCells = scheduler.workSpace.getSelectedCells();
+
+                assert.equal($selectedCells.length, 8, 'Correct number of selected cells');
+                assert.ok($cells.eq(0).hasClass('dx-state-focused'), 'First selected cell is correct');
+                assert.ok($cells.eq(42).hasClass('dx-state-focused'), 'Botommost selected cell is correct');
+                assert.ok($cells.eq(1).hasClass('dx-state-focused'), 'Last selected cell is correct');
+                assert.ok($cells.eq(1).hasClass('dx-scheduler-focused-cell'), 'Focused cell is correct');
+
+                done();
+            });
+        });
+    });
+});
