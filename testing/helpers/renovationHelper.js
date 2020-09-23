@@ -1,77 +1,54 @@
-import $ from 'jquery';
 import registerComponent from 'core/component_registrator';
 import { name as getName } from 'core/utils/public_component';
 import { act } from 'preact/test-utils';
 
-const TICK_TIME = 1000;
-let clock = null;
+function functionWrapper() {
+    let res;
+    const that = this;
+    act(() => {
+        res = that.callBase.apply(that, arguments);
+    });
+    return res;
+}
 
-const skipWidgetAsyncFunctions = (widget) => {
-    return widget.inherit({
-        ctor: function() {
-            const res = this.callBase.apply(this, arguments);
-            clock.tick(TICK_TIME);
-            return res;
-        },
-        option: function() {
-            const res = this.callBase.apply(this, arguments);
-            clock.tick(TICK_TIME);
-            return res;
-        },
-        focus: function() {
-            const res = this.callBase.apply(this, arguments);
-            clock.tick(TICK_TIME);
-            return res;
-        },
-        repaint: function() {
-            const res = this.callBase.apply(this, arguments);
-            clock.tick(TICK_TIME);
-            return res;
-        },
+export const setupRenovation = (widget) => {
+    const widgetName = getName(widget);
+
+    QUnit.moduleStart(() => {
+        registerComponent(widgetName, skipRenovationAsyncMethods(widget));
+    });
+
+    QUnit.moduleDone(() => {
+        registerComponent(widgetName, widget);
     });
 };
 
-export const createRenovationHook = (oldWidget, hooks) => {
-    const widgetName = getName(oldWidget);
-    hooks.beforeEach(function() {
-        clock = sinon.useFakeTimers();
-        this.triggerOld = $.prototype.trigger;
-        const that = this;
+const skipRenovationAsyncMethods = (widget) => {
+    const methodNames = {
+        ctor: true,
+        option: true,
+        focus: true,
+        repaint: true,
+        _createComponent: true,
+    };
 
-        $.prototype.trigger = function(args) {
-            that.triggerOld.call(this, args);
-            clock.tick(TICK_TIME);
-        };
+    const wrappedMethods = Object.keys(methodNames).reduce((methods, methodName) => {
+        methods[methodName] = functionWrapper;
+        return methods;
+    }, {});
 
-        registerComponent(widgetName, skipWidgetAsyncFunctions(oldWidget));
-    });
-    hooks.afterEach(function() {
-        $.prototype.trigger = this.triggerOld;
-        registerComponent(widgetName, oldWidget);
-        clock.restore();
-    });
+    return widget.inherit(wrappedMethods);
 };
 
-export const createRenovationConfig = (oldWidget, config) => {
+export const createRenovationConfig = (oldWidget, config = {}) => {
     const widgetName = getName(oldWidget);
     return {
         beforeEach: function() {
-            clock = sinon.useFakeTimers();
-            this.triggerOld = $.prototype.trigger;
-            const that = this;
-
-            $.prototype.trigger = function(args) {
-                that.triggerOld.call(this, args);
-                clock.tick(TICK_TIME);
-            };
-
-            registerComponent(widgetName, skipWidgetAsyncFunctions(oldWidget));
+            registerComponent(widgetName, skipRenovationAsyncMethods(oldWidget));
             config.beforeEach && config.beforeEach.apply(this);
         },
         afterEach: function() {
-            $.prototype.trigger = this.triggerOld;
             registerComponent(widgetName, oldWidget);
-            clock.restore();
             config.afterEach && config.afterEach.apply(this);
         },
     };

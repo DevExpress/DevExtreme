@@ -14,7 +14,6 @@ import config from 'core/config';
 import { noop } from 'core/utils/common';
 import { DataSource } from 'data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
-import { createRenovationConfig } from '../../helpers/renovationHelper.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -42,13 +41,12 @@ const moduleConfig = function(usePopover) {
             executeAsyncMock.setup();
             fx.off = true;
 
-            // this.clock = sinon.useFakeTimers();
+            this.clock = sinon.useFakeTimers();
 
             this.element = $('#dropDownMenu').dxDropDownMenu({
                 usePopover: usePopover
             });
             this.ddMenu = this.element.dxDropDownMenu('instance');
-
 
             this.button = this.ddMenu._button;
             this.$button = $(this.button.$element());
@@ -68,14 +66,14 @@ const moduleConfig = function(usePopover) {
         },
         afterEach: function() {
             executeAsyncMock.teardown();
-            // this.clock.restore();
+            this.clock.restore();
             fx.off = false;
         }
     };
 };
 
 const testRendering = function(usePopover) {
-    QUnit.module('render ' + (usePopover ? 'with popover' : 'with popup'), createRenovationConfig(DropDownMenu, moduleConfig(usePopover)), () => {
+    QUnit.module('render ' + (usePopover ? 'with popover' : 'with popup'), moduleConfig(usePopover), () => {
         QUnit.test('default', function(assert) {
             assert.ok(this.button instanceof Button);
             assert.ok(this.element.hasClass(DROP_DOWN_MENU_CLASS));
@@ -229,8 +227,7 @@ const testRendering = function(usePopover) {
 testRendering(false);
 testRendering(true);
 
-QUnit.module('render', createRenovationConfig(DropDownMenu, moduleConfig()), (hooks) => {
-
+QUnit.module('render', moduleConfig(), () => {
     QUnit.test('w/ options - button text', function(assert) {
         this.ddMenu.option('buttonText', 'some text');
         assert.equal(this.$button.find('.dx-button-content').text(), 'some text');
@@ -452,7 +449,7 @@ QUnit.module('render', createRenovationConfig(DropDownMenu, moduleConfig()), (ho
     });
 });
 
-QUnit.module('position', createRenovationConfig(DropDownMenu, {
+QUnit.module('position', {
     beforeEach: function() {
         executeAsyncMock.setup();
         fx.off = true;
@@ -461,7 +458,7 @@ QUnit.module('position', createRenovationConfig(DropDownMenu, {
         executeAsyncMock.teardown();
         fx.off = false;
     }
-}), () => {
+}, () => {
     QUnit.test('check default position', function(assert) {
         if(devices.real().deviceType !== 'desktop') {
             assert.ok(true, 'unnecessary test on mobile devices');
@@ -495,7 +492,7 @@ QUnit.module('position', createRenovationConfig(DropDownMenu, {
     });
 });
 
-QUnit.module('behavior', createRenovationConfig(DropDownMenu, moduleConfig()), () => {
+QUnit.module('behavior', moduleConfig(), () => {
     QUnit.test('first click on button shows drop-down list, second click hides', function(assert) {
         this.toggleMenu();
 
@@ -552,7 +549,7 @@ QUnit.module('behavior', createRenovationConfig(DropDownMenu, moduleConfig()), (
     });
 });
 
-QUnit.module('integration', createRenovationConfig(DropDownMenu, moduleConfig()), () => {
+QUnit.module('integration', () => {
     QUnit.test('list defaults', function(assert) {
         const list = $('#dropDownMenu').dxList().dxList('instance');
         assert.strictEqual(list.option('pullRefreshEnabled'), false);
@@ -703,7 +700,7 @@ QUnit.module('integration', createRenovationConfig(DropDownMenu, moduleConfig())
     });
 });
 
-QUnit.module('regression', createRenovationConfig(DropDownMenu, moduleConfig()), () => {
+QUnit.module('regression', moduleConfig(), () => {
     QUnit.test('B233109: dropDownMenu menu interference', function(assert) {
         const ddMenu1 = $('#dropDownMenu').dxDropDownMenu({ items: [{ text: 'test1' }], opened: true }).dxDropDownMenu('instance');
         const ddMenu2 = $('#dropDownMenuSecond').dxDropDownMenu({ items: [{ text: 'test2' }], opened: true }).dxDropDownMenu('instance');
