@@ -3390,7 +3390,7 @@ QUnit.test('Rotated labels', function(assert) {
 
     const settings = chart.getArgumentAxis()._majorTicks[0].getContentContainer()._settings;
 
-    assert.strictEqual(Math.ceil(settings.translateX), 257);
+    assert.roughEqual(settings.translateX, 256, 1.5);
     assert.strictEqual(Math.round(settings.translateY), 391);
     assert.strictEqual(settings.rotate, 90);
 });
