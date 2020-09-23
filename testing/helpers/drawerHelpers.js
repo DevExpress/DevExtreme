@@ -1,5 +1,3 @@
-import { extend } from 'core/utils/extend';
-
 function checkBoundingClientRect(assert, element, expectedRect, elementName) {
     assert.ok(!!element, elementName + ' is defined');
     if(element) {
@@ -306,11 +304,11 @@ const RightDrawerTester = {
     },
 
     checkWhenPanelContentRendered: function(assert, drawer, drawerElement, panelTemplateElement) {
-        const drawerRect = drawerElement.getBoundingClientRect();
-        const expectedPanelRect = extend({}, drawerRect);
-        const expectedViewRect = extend({}, drawerRect);
+        const { top, left, width, height } = drawerElement.getBoundingClientRect();
+        const expectedPanelRect = { top, left, width, height };
+        const expectedViewRect = { top, left, width, height };
         if(drawer.option('minSize')) {
-            expectedPanelRect.left += drawerRect.wight - drawer.option('minSize');
+            expectedPanelRect.left += expectedPanelRect.wight - drawer.option('minSize');
             expectedPanelRect.width = drawer.option('minSize');
             expectedViewRect.width -= drawer.option('minSize');
         }
@@ -437,9 +435,9 @@ const TopDrawerTester = {
     },
 
     checkWhenPanelContentRendered: function(assert, drawer, drawerElement, panelTemplateElement) {
-        const drawerRect = drawerElement.getBoundingClientRect();
-        const expectedPanelRect = extend({}, drawerRect);
-        const expectedViewRect = extend({}, drawerRect);
+        const { top, left, width, height } = drawerElement.getBoundingClientRect();
+        const expectedPanelRect = { top, left, width, height };
+        const expectedViewRect = { top, left, width, height };
         if(drawer.option('minSize')) {
             expectedPanelRect.height = drawer.option('minSize');
             expectedViewRect.top += drawer.option('minSize');
