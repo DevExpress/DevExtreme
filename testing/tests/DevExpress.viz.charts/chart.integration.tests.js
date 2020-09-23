@@ -3365,6 +3365,36 @@ QUnit.test('Two axes syncronization with margins', function(assert) {
     this.compareTickCoords(assert, axis2._majorTicks.map(t => t.coords.y), axis1._majorTicks.map(t => t.coords.y));
 });
 
+QUnit.module('Axis templates', moduleSetup);
+
+QUnit.test('Rotated labels', function(assert) {
+    function renderText(opt, g) {
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+
+        text.setAttribute('style', 'fill: green; font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 15px;');
+        text.textContent = opt.text;
+
+        g.appendChild(text);
+    }
+
+    const chart = this.createChart({
+        series: [{}],
+        dataSource: [{ arg: 1, val: 10 }],
+        argumentAxis: {
+            label: {
+                template: renderText,
+                displayMode: 'rotate'
+            }
+        }
+    });
+
+    const settings = chart.getArgumentAxis()._majorTicks[0].getContentContainer()._settings;
+
+    assert.roughEqual(Math.ceil(settings.translateX), 256, 1.5);
+    assert.strictEqual(Math.round(settings.translateY), 391);
+    assert.strictEqual(settings.rotate, 90);
+});
+
 QUnit.module('Discrete axis label layout', $.extend({}, moduleSetup, {
     beforeEach() {
         moduleSetup.beforeEach.call(this);
