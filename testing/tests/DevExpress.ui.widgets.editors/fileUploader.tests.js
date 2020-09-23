@@ -2788,6 +2788,53 @@ QUnit.module('uploading events', moduleConfig, () => {
         simulateFileChoose($element, fakeFile);
         $element.find('.' + FILEUPLOADER_CANCEL_BUTTON_CLASS).trigger('dxclick');
     });
+
+    QUnit.test('onBeforeSend event should contain request which is instance of XMLHttpRequest', function(assert) {
+        assert.expect(1);
+
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            onBeforeSend: function(e) {
+                assert.ok(e.request instanceof XMLHttpRequest, 'request is correct');
+            }
+        });
+
+        simulateFileChoose($element, fakeFile);
+    });
+
+    QUnit.test('onBeforeSend event should be able to set properties of XMLHttpRequest', function(assert) {
+        assert.expect(2);
+
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            onBeforeSend: function(e) {
+                e.request.withCredentials = true;
+                e.request.customXhrField = 'Some string';
+            },
+            onUploadStarted: function(e) {
+                assert.ok(e.request.withCredentials, 'withCredentials is correct');
+                assert.strictEqual(e.request.customXhrField, 'Some string', 'other custom field is correct');
+            }
+        });
+
+        simulateFileChoose($element, fakeFile);
+    });
+
+    QUnit.test('onBeforeSend event should rise before upload started', function(assert) {
+        const onUploadStartedSpy = sinon.spy();
+        assert.expect(1);
+
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            onBeforeSend: function(e) {
+                assert.ok(onUploadStartedSpy.notCalled, 'upload is not started');
+            },
+            onUploadStarted: onUploadStartedSpy
+        });
+
+        simulateFileChoose($element, fakeFile);
+    });
+
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {
