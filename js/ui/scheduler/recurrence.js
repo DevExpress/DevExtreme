@@ -38,10 +38,10 @@ class RecurrenceProcessor {
             return result;
         }
 
-        const startDateUtc = timeZoneUtils.createUTCDate(options.start);
-        const endDateUtc = timeZoneUtils.createUTCDate(options.end);
-        const minDateUtc = timeZoneUtils.createUTCDate(options.min);
-        const maxDateUtc = timeZoneUtils.createUTCDate(options.max);
+        const startDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.start);
+        const endDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.end);
+        const minDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.min);
+        const maxDateUtc = timeZoneUtils.createUTCDateWithLocalOffset(options.max);
 
         const duration = endDateUtc ? endDateUtc.getTime() - startDateUtc.getTime() : 0;
 
@@ -53,7 +53,7 @@ class RecurrenceProcessor {
             const endAppointmentTime = date.getTime() + duration;
 
             if(endAppointmentTime >= minTime) {
-                const correctDate = timeZoneUtils.createDateFromUTC(date);
+                const correctDate = timeZoneUtils.createDateFromUTCWithLocalOffset(date);
                 result.push(correctDate);
             }
         });
@@ -186,7 +186,7 @@ class RecurrenceProcessor {
             const splitDates = options.exception.split(',');
             const exceptDates = this._getDatesByRecurrenceException(splitDates, startDateUtc);
             exceptDates.forEach(date => {
-                const utcDate = timeZoneUtils.createUTCDate(date);
+                const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
                 this.rRuleSet.exdate(utcDate);
             });
         }

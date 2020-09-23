@@ -2496,7 +2496,7 @@ const getTimeZones = (date) => {
         date = new Date();
     }
 
-    const dateInUTC = timeZoneUtils.createUTCDate(date);
+    const dateInUTC = timeZoneUtils.createUTCDateWithLocalOffset(date);
     return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
 };
 /**
