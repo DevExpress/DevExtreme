@@ -662,19 +662,19 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
 
   await t
     .expect(scrollTop).gt(0)
-    .click("button")
+    .click('button')
     .click(dataGrid.getDataCell(9, 0).element)
-    .click("button")
+    .click('button')
     .expect(dataGrid.getScrollTop()).eql(scrollTop);
 
 }).before(async () => {
   await ClientFunction(() => {
-    $("<button>").text("Delete").on("click", function () {
+    $('<button>').text('Delete').on('click', function () {
       const { widget } = window as any;
-      const focusedRowKey = widget.option("focusedRowKey");
-      widget.option("focusedRowKey", undefined);
-      widget.getDataSource().store().push([{ type: "remove", key: focusedRowKey }]);
-    }).prependTo("body");
+      const focusedRowKey = widget.option('focusedRowKey');
+      widget.option('focusedRowKey', undefined);
+      widget.getDataSource().store().push([{ type: 'remove', key: focusedRowKey }]);
+    }).prependTo('body');
   })();
   await createWidget('dxDataGrid', () => {
     const data = (function () {
@@ -704,4 +704,6 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
       }
     };
   });
-});
+}).after(() => ClientFunction(() => {
+  $('button').remove();
+})());
