@@ -562,12 +562,11 @@ const Slider = TrackBar.inherit({
             newValue = Number((stepCount * step + min).toFixed(exponentLength));
             this._setValueOnSwipe(Math.max(Math.min(newValue, max), min));
         }
-
-        this._saveValueChangeEvent(undefined);
     },
 
     _setValueOnSwipe: function(value) {
         this.option('value', value);
+        this._saveValueChangeEvent(undefined);
     },
 
     _startHandler: function(args) {
