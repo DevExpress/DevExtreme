@@ -220,4 +220,32 @@ module('Virtual Selection State', () => {
             'Correct focused cell',
         );
     });
+
+    test('"setSelectedCells" should work correctly', function(assert) {
+        const virtualSelectionState = new VirtualSelectionState({
+            ...horizontalGroupingViewDataProviderMock,
+            getCellsByGroupIndexAndAllDay: () => [[
+                testViewDataMap.horizontalGrouping[1][0].cellData,
+                testViewDataMap.horizontalGrouping[1][1].cellData,
+            ]],
+        });
+
+        virtualSelectionState.setSelectedCells({
+            rowIndex: 1,
+            columnIndex: 0,
+            allDay: false,
+        }, {
+            rowIndex: 1,
+            columnIndex: 1,
+            allDay: false,
+        });
+
+        const selectedCells = virtualSelectionState.getSelectedCells();
+
+        assert.deepEqual(
+            selectedCells,
+            [testViewDataMap.horizontalGrouping[1][0].cellData, testViewDataMap.horizontalGrouping[1][1].cellData],
+            'Correct focused cell',
+        );
+    });
 });
