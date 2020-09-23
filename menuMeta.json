@@ -2562,7 +2562,6 @@
           {
             "Title": "Points Aggregation",
             "Name": "PointsAggregationFinancialChart",
-            "DocUrl": "Guide/Widgets/Chart/Data_Aggregation/",
             "Credits": "www.google.com",
             "Widget": "Charts",
             "MvcAdditionalFiles": [
