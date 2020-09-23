@@ -583,9 +583,9 @@ extend(legendPrototype, {
         });
 
         that._widget._addToDeferred({
-            elements: deferredItems,
-            beforeRequestChanges() {},
-            afterRequestChanges() {}
+            items: deferredItems,
+            launchRequest() {},
+            doneRequest() {}
         });
 
     },

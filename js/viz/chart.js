@@ -1007,18 +1007,18 @@ const dxChart = AdvancedChart.inherit({
         return cleanPanesCanvases;
     },
 
-    _waitTemplates() {
+    _resolveDeferredItems() {
         const that = this;
         const allAxes = (that._argumentAxes || []).concat(that._valueAxes || []);
 
         that._addToDeferred({
-            elements: allAxes.map(axis => axis.getTemplatesDef()),
-            beforeRequestChanges() {
+            items: allAxes.map(axis => axis.getTemplatesDef()),
+            launchRequest() {
                 allAxes.forEach(function(a) {
                     a.setRenderedState(true);
                 });
             },
-            afterRequestChanges() {
+            doneRequest() {
                 allAxes.forEach(function(a) {
                     a.setRenderedState(false);
                 });
