@@ -68,48 +68,44 @@ const Slider = TrackBar.inherit({
 
         return extend(this.callBase(), {
             leftArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._saveValueChangeEvent(e);
+                this._processKeyBoardEvent(e);
 
                 moveHandleLeft(this.option('step'));
             },
             rightArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._saveValueChangeEvent(e);
+                this._processKeyBoardEvent(e);
 
                 moveHandleRight(this.option('step'));
             },
             pageUp: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._saveValueChangeEvent(e);
+                this._processKeyBoardEvent(e);
 
                 moveHandleRight(this.option('step') * this.option('keyStep'));
             },
             pageDown: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._saveValueChangeEvent(e);
+                this._processKeyBoardEvent(e);
 
                 moveHandleLeft(this.option('step') * this.option('keyStep'));
             },
             home: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._saveValueChangeEvent(e);
+                this._processKeyBoardEvent(e);
+
                 const min = this.option('min');
                 this.option('value', min);
             },
             end: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                this._saveValueChangeEvent(e);
+                this._processKeyBoardEvent(e);
+
                 const max = this.option('max');
                 this.option('value', max);
             }
         });
+    },
+
+    _processKeyBoardEvent: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._saveValueChangeEvent(e);
     },
 
     _getDefaultOptions: function() {
