@@ -15,12 +15,12 @@ module('Time zone utils', {}, () => {
         startDate.setFullYear(nowDate.getFullYear(), 0, 1);
         endDate.setFullYear(nowDate.getFullYear(), 6, 1);
 
-        assert.equal(hasDST, startDate.getTimezoneOffset() !== endDate.getTimezoneOffset(), 'function should be return valid result');
+        assert.equal(hasDST, startDate.getTimezoneOffset() !== endDate.getTimezoneOffset(), 'function should return valid result');
     });
 
     test('isEqualLocalTimeZone', function(assert) {
         const result = timeZoneUtils.isEqualLocalTimeZone('Brazil/Acre');
 
-        assert.notOk(result, 'local time zone shouldn\'t equal \'Brazil/Acre\'');
+        assert.notOk(result, 'local time zone shouldn\'t equal to \'Brazil/Acre\'');
     });
 });

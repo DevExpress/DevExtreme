@@ -115,12 +115,12 @@ const isEqualLocalTimeZone = (timeZoneName) => {
 };
 
 const hasDSTInLocalTimeZone = () => {
-    const [startDate, endDate] = getExtremeDates();
+    const [startDate, endDate] = getExtremeDatesWithPossibleDifferentOffsets();
     return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
 };
 
 const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
-    const [startDate, endDate] = getExtremeDates();
+    const [startDate, endDate] = getExtremeDatesWithPossibleDifferentOffsets();
 
     const startDateLocalOffset = -startDate.getTimezoneOffset() / 60;
     const endDateLocalOffset = -endDate.getTimezoneOffset() / 60;
@@ -135,7 +135,7 @@ const isEqualLocalTimeZoneByNativeDate = (timeZoneName) => {
     return false;
 };
 
-const getExtremeDates = () => {
+const getExtremeDatesWithPossibleDifferentOffsets = () => {
     const nowDate = new Date(Date.now());
 
     const startDate = new Date();
