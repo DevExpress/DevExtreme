@@ -1025,6 +1025,13 @@ QUnit.test('from. Scale breaks. Values in the breaks and should be untranslated 
     assert.deepEqual(translator.from(950, 1), new Date(2012, 8, 1, 11));
 });
 
+QUnit.test('from. decimal (T932222)', function(assert) {
+    const translator = this.createTranslator({ min: new Date(2020, 8, 1, 0, 0, 0, 10), max: new Date(2020, 8, 1, 0, 0, 0, 18) });
+
+    assert.deepEqual(translator.from(350), new Date(2020, 8, 1, 0, 0, 0, 9));
+    assert.deepEqual(translator.from(1700), new Date(2020, 8, 1, 0, 0, 0, 20));
+});
+
 QUnit.test('GetInterval', function(assert) {
     const translator = this.createTranslator({ min: new Date(2012, 8, 1), max: new Date(2012, 8, 2), interval: 1000 * 60 * 60 });
 
@@ -2735,6 +2742,21 @@ QUnit.test('getMinScale', function(assert) {
 
     assert.strictEqual(new translator2DModule.Translator2D(logarithmicRange, canvas, optionsHorizontal).getMinScale(false), 0.9, 'logarithmic zoom out');
     assert.strictEqual(new translator2DModule.Translator2D(logarithmicRange, canvas, optionsHorizontal).getMinScale(true), 1.1, 'logarithmic zoom in');
+});
+
+QUnit.test('getDateTimeMinScale (T932222)', function(assert) {
+    const canvas = $.extend({}, canvasTemplate);
+
+    const range = {
+        min: new Date(2020, 9, 1, 0, 0, 0, 10),
+        max: new Date(2020, 9, 1, 0, 0, 0, 18),
+        axisType: 'continuous',
+        dataType: 'datetime',
+        interval: 1
+    };
+
+    assert.strictEqual(new translator2DModule.Translator2D(range, canvas, optionsHorizontal).getDateTimeMinScale(false), 0.8, 'dateTime zoom out');
+    assert.strictEqual(new translator2DModule.Translator2D(range, canvas, optionsHorizontal).getDateTimeMinScale(true), 4 / 3, 'dateTime zoom in');
 });
 
 QUnit.test('Zoom. Min in the break after zoom', function(assert) {
