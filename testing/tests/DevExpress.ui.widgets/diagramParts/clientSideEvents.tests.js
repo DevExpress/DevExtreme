@@ -31,6 +31,7 @@ QUnit.module('ClientSideEvents', {
         });
         this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findShape('107').toNative(DiagramUnit.In));
         assert.equal(clickedItem.id, '107');
+        assert.equal(clickedItem.key, undefined);
         assert.equal(clickedItem.text, 'A new ticket');
         assert.equal(clickedItem.dataItem, undefined);
         assert.equal(clickedItem.position.x, 1);
@@ -42,7 +43,7 @@ QUnit.module('ClientSideEvents', {
         for(const key in clickedItem) {
             if(Object.prototype.hasOwnProperty.call(clickedItem, key)) count++;
         }
-        assert.equal(count, 8);
+        assert.equal(count, 9);
     });
     test('selectionchanged on unbound diagram', function(assert) {
         this.instance._diagramInstance.commandManager.getCommand(DiagramCommand.Import).execute(Consts.SIMPLE_DIAGRAM);
@@ -79,6 +80,7 @@ QUnit.module('ClientSideEvents', {
             dblClickedItem = e.item;
         });
         this.instance._diagramInstance.onNativeAction.raise('notifyItemClick', this.instance._diagramInstance.model.findShapeByDataKey('123').toNative(DiagramUnit.In));
+        assert.equal(clickedItem.key, '123');
         assert.equal(clickedItem.dataItem.key, '123');
         assert.equal(clickedItem.dataItem.foo, 'bar');
         assert.equal(clickedItem.text, 'mytext');
@@ -87,10 +89,11 @@ QUnit.module('ClientSideEvents', {
         for(const key in clickedItem) {
             if(Object.prototype.hasOwnProperty.call(clickedItem, key)) count++;
         }
-        assert.equal(count, 8);
+        assert.equal(count, 9);
         assert.equal(dblClickedItem, undefined);
 
         this.instance._diagramInstance.onNativeAction.raise('notifyItemDblClick', this.instance._diagramInstance.model.findShapeByDataKey('123').toNative(DiagramUnit.In));
+        assert.equal(dblClickedItem.key, '123');
         assert.equal(dblClickedItem.dataItem.key, '123');
         assert.equal(dblClickedItem.dataItem.foo, 'bar');
         assert.equal(dblClickedItem.text, 'mytext');

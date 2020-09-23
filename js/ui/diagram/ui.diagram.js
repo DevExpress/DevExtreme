@@ -803,7 +803,7 @@ class Diagram extends Widget {
         this._bindDiagramData();
     }
     _getChangesKeys(changes) {
-        return changes.map(change => change.type === 'update' && change.key).filter(key => !!key);
+        return changes.map(change => change.internalKey || change.key).filter(key => !!key);
     }
 
     _createOptionGetter(optionName) {
@@ -1989,6 +1989,10 @@ class Diagram extends Widget {
                 * @name dxDiagramOptions.customShapes.templateHeight
                 * @type Number
                 */
+                /**
+                * @name dxDiagramOptions.customShapes.keepRatioOnAutoSize
+                * @type Boolean
+                */
             ],
             toolbox: {
                 /**
@@ -2535,6 +2539,7 @@ class Diagram extends Widget {
             this._nativeConnectorToDiagramConnector.bind(this);
         return extend({
             id: nativeItem.id,
+            key: nativeItem.key,
             dataItem: undefined
         }, createMethod(nativeItem));
     }

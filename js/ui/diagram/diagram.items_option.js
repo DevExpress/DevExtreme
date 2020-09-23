@@ -1,3 +1,4 @@
+import { extend } from '../../core/utils/extend';
 import Component from '../../core/component';
 import DataHelperMixin from '../../data_helper';
 
@@ -16,7 +17,7 @@ class ItemsOption extends Component {
         if(e && e.changes) {
             const changes = e.changes.filter(change => !change.internalChange);
             if(changes.length) {
-                this._diagramWidget._reloadContentByChanges(changes, true);
+                this._reloadContentByChanges(changes, true);
             }
         } else {
             this._diagramWidget._onDataSourceChanged();
@@ -47,7 +48,7 @@ class ItemsOption extends Component {
             (data, key) => {
                 const changes = [{ type: 'insert', key, data, internalChange: true }];
                 store.push(changes);
-                this._diagramWidget._reloadContentByChanges(changes, false);
+                this._reloadContentByChanges(changes, false);
                 if(callback) {
                     callback(data);
                 }
@@ -64,12 +65,12 @@ class ItemsOption extends Component {
     }
     update(key, data, callback, errorCallback) {
         const store = this._getStore();
-        const storeKey = this._getStoreKey(store, data);
+        const storeKey = this._getStoreKey(store, key, data);
         store.update(storeKey, this._prepareData(data)).done(
             (data, key) => {
                 const changes = [{ type: 'update', key, data, internalChange: true }];
                 store.push(changes);
-                this._diagramWidget._reloadContentByChanges(changes, false);
+                this._reloadContentByChanges(changes, false);
                 if(callback) {
                     callback(key, data);
                 }
@@ -85,12 +86,12 @@ class ItemsOption extends Component {
     remove(key, data, callback, errorCallback) {
         this._resetCache();
         const store = this._getStore();
-        const storeKey = this._getStoreKey(store, data);
+        const storeKey = this._getStoreKey(store, key, data);
         store.remove(storeKey).done(
             (key) => {
                 const changes = [{ type: 'remove', key, internalChange: true }];
                 store.push(changes);
-                this._diagramWidget._reloadContentByChanges(changes, false);
+                this._reloadContentByChanges(changes, false);
                 if(callback) {
                     callback(key);
                 }
@@ -118,6 +119,10 @@ class ItemsOption extends Component {
         return !!this._items;
     }
 
+    _reloadContentByChanges(changes, isExternalChanges) {
+        changes = changes.map(change => extend(change, { internalKey: this._getInternalKey(change.key) }));
+        this._diagramWidget._reloadContentByChanges(changes, isExternalChanges);
+    }
     _getItemByKey(key) {
         this._ensureCache();
 
@@ -189,14 +194,20 @@ class ItemsOption extends Component {
     _getStore() {
         return this._dataSource && this._dataSource.store();
     }
-    _getStoreKey(store, data) {
+    _getStoreKey(store, internalKey, data) {
         let storeKey = store.keyOf(data);
         if(storeKey === data) {
-            const index = this._items.indexOf(data);
-            if(index > -1) {
-                const key = this._dataSourceItems[index];
-                if(key) storeKey = key;
-            }
+            const keyExpr = this._getKeyExpr();
+            this._dataSourceItems.forEach(item => {
+                if(keyExpr(item) === internalKey) storeKey = item;
+            });
+        }
+        return storeKey;
+    }
+    _getInternalKey(storeKey) {
+        if(typeof storeKey === 'object') {
+            const keyExpr = this._getKeyExpr();
+            return keyExpr(storeKey);
         }
         return storeKey;
     }
