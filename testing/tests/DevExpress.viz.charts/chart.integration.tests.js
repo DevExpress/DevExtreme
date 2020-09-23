@@ -3388,7 +3388,11 @@ QUnit.test('Rotated labels', function(assert) {
         }
     });
 
-    assert.deepEqual(chart.getArgumentAxis()._majorTicks[0].getContentContainer()._settings, { translateX: 256.5, translateY: 391, rotate: 90 });
+    const settings = chart.getArgumentAxis()._majorTicks[0].getContentContainer()._settings;
+
+    assert.strictEqual(Math.ceil(settings.translateX), 257);
+    assert.strictEqual(Math.round(settings.translateY), 391);
+    assert.strictEqual(settings.rotate, 90);
 });
 
 QUnit.module('Discrete axis label layout', $.extend({}, moduleSetup, {
