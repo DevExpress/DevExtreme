@@ -598,7 +598,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
     _getEndResizeAppointmentStartDate: function(e, rawAppointment, appointmentInfo) {
         let startDate = appointmentInfo.startDate;
-        const isRecurrent = isDefined(rawAppointment.recurrenceRule);
+        const recurrenceProcessor = getRecurrenceProcessor();
+        const recurrenceRule = this.invoke('getField', 'recurrenceRule', rawAppointment);
+        const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
         const isAllDay = this.invoke('isAllDay', rawAppointment);
 
         if(!e.handles.top && !isRecurrent && !isAllDay) {
