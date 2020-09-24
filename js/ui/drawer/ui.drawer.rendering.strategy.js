@@ -227,6 +227,8 @@ class DrawerStrategy {
     isViewContentFirst() {
         return false;
     }
+
+    onViewContentWrapperCreated() {}
 }
 
 module.exports = DrawerStrategy;
