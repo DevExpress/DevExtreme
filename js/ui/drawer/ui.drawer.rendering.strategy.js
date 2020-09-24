@@ -141,6 +141,8 @@ class DrawerStrategy {
     isViewContentFirst() {
         return false;
     }
+
+    onViewContentWrapperCreated() {}
 }
 
 export default DrawerStrategy;
