@@ -228,19 +228,6 @@ QUnit.test('deleteItem should remove item by index', function(assert) {
     assert.deepEqual(list.option('items'), groupedListData.itemsAfterDelete, 'item deleted');
 });
 
-QUnit.test('deleteItem should remove item by index', function(assert) {
-    const $list = $('#templated-list').dxList({
-        items: groupedListData.data,
-        grouped: true,
-        editEnabled: true
-    });
-    const list = $list.dxList('instance');
-
-    list.deleteItem({ group: 1, item: 2 });
-
-    assert.deepEqual(list.option('items'), groupedListData.itemsAfterDelete, 'item deleted');
-});
-
 QUnit.module('keyboard navigation', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

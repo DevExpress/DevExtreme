@@ -1455,6 +1455,28 @@ QUnit.module('events', moduleSetup, () => {
         assert.equal(contentReadyFired, 2);
     });
 
+    QUnit.test('onItemRendered', function(assert) {
+        const itemRenderedSpy = sinon.spy();
+
+        const instance = $('#list').dxList({
+            onItemRendered: itemRenderedSpy
+        }).dxList('instance');
+
+        instance.option('items', ['a', 'b']);
+        assert.strictEqual(itemRenderedSpy.callCount, 2);
+    });
+
+    QUnit.test('itemRendered event', function(assert) {
+        const itemRenderedSpy = sinon.spy();
+
+        const instance = $('#list').dxList({}).dxList('instance');
+
+        instance.on('itemRendered', itemRenderedSpy);
+
+        instance.option('items', ['a', 'b']);
+        assert.strictEqual(itemRenderedSpy.callCount, 2);
+    });
+
     QUnit.test('onGroupRendered should fired with correct params', function(assert) {
         const items = [
             {
@@ -1476,6 +1498,32 @@ QUnit.module('events', moduleSetup, () => {
         });
 
         assert.equal(groupRendered, 1, 'event triggered');
+        assert.strictEqual(isRenderer(eventData.groupElement), !!config().useJQuery, 'groupElement is correct');
+        assert.strictEqual($(eventData.groupElement)[0], $list.find('.dx-list-group')[0], 'groupElement is correct');
+        assert.strictEqual(eventData.groupData, items[0], 'groupData is correct');
+        assert.strictEqual(eventData.groupIndex, 0, 'groupIndex is correct');
+    });
+
+    QUnit.test('groupRendered event should fired with correct params', function(assert) {
+        const items = [
+            {
+                key: 'first',
+                items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+            }
+        ];
+
+        const groupRenderedSpy = sinon.spy();
+
+        const $list = $('#list').dxList({
+            items
+        });
+        const list = $list.dxList('instance');
+
+        list.on('groupRendered', groupRenderedSpy);
+        list.option('grouped', true);
+        const eventData = groupRenderedSpy.firstCall.args[0];
+
+        assert.ok(groupRenderedSpy.calledOnce, 'event triggered');
         assert.strictEqual(isRenderer(eventData.groupElement), !!config().useJQuery, 'groupElement is correct');
         assert.strictEqual($(eventData.groupElement)[0], $list.find('.dx-list-group')[0], 'groupElement is correct');
         assert.strictEqual(eventData.groupData, items[0], 'groupData is correct');
@@ -2153,11 +2201,39 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
 
         element.dxScrollView('instance').pullDown();
         assert.ok(reloaded, 'dataSource reloaded');
-        assert.equal(pullRefreshActionFired, 1, 'onPullRefresh fired');
+        assert.strictEqual(pullRefreshActionFired, 1, 'onPullRefresh fired');
 
         element.dxScrollView('instance').scrollBottom();
         assert.ok(nextPageCalled, 'next page loaded');
-        assert.equal(pageLoadingActionFired, 1, 'onPageLoading fired');
+        assert.strictEqual(pageLoadingActionFired, 1, 'onPageLoading fired');
+    });
+
+    QUnit.test('scrollView callbacks with subscription by "on" method ', function(assert) {
+        const pullRefreshActionSpy = sinon.spy();
+        const pageLoadingActionSpy = sinon.spy();
+
+        const dataSource = new DataSource({
+            store: [1, 2, 3],
+            pageSize: 2
+        });
+
+        const element = this.element;
+
+        const instance = element.dxList({
+            dataSource,
+            pullRefreshEnabled: true,
+            pageLoadMode: 'scrollBottom',
+            scrollingEnabled: true
+        }).dxList('instance');
+
+        instance.on('pullRefresh', pullRefreshActionSpy);
+        instance.on('pageLoading', pageLoadingActionSpy);
+
+        element.dxScrollView('instance').pullDown();
+        assert.strictEqual(pullRefreshActionSpy.callCount, 1, 'onPullRefresh fired');
+
+        element.dxScrollView('instance').scrollBottom();
+        assert.strictEqual(pageLoadingActionSpy.callCount, 1, 'onPageLoading fired');
     });
 
     QUnit.test('rtlEnabled option should be passed to scrollView', function(assert) {
@@ -2314,6 +2390,31 @@ QUnit.module('scrollView integration', {
         this.clock.tick(100);
 
         assert.deepEqual($element.find('.dx-list-item').length, 6, 'all data loaded');
+    });
+
+    QUnit.test('onScroll', function(assert) {
+        const scrollActionSpy = sinon.spy();
+        const list = $('#list').dxList({
+            height: 100,
+            dataSource: [1, 2, 3, 4, 5, 6],
+            onScroll: scrollActionSpy
+        }).dxList('instance');
+
+        list.scrollToItem(5);
+        assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
+    });
+
+    QUnit.test('scroll event', function(assert) {
+        const scrollActionSpy = sinon.spy();
+        const list = $('#list').dxList({
+            height: 100,
+            dataSource: [1, 2, 3, 4, 5, 6]
+        }).dxList('instance');
+
+        list.on('scroll', scrollActionSpy);
+
+        list.scrollToItem(5);
+        assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
     QUnit.test('list should be scrolled to item from bottom by scrollToItem', function(assert) {
