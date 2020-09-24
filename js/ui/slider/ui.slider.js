@@ -68,42 +68,44 @@ const Slider = TrackBar.inherit({
 
         return extend(this.callBase(), {
             leftArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleLeft(this.option('step'));
             },
             rightArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleRight(this.option('step'));
             },
             pageUp: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleRight(this.option('step') * this.option('keyStep'));
             },
             pageDown: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleLeft(this.option('step') * this.option('keyStep'));
             },
             home: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
+
                 const min = this.option('min');
                 this.option('value', min);
             },
             end: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
+
                 const max = this.option('max');
                 this.option('value', max);
             }
         });
+    },
+
+    _processKeyboardEvent: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._saveValueChangeEvent(e);
     },
 
     _getDefaultOptions: function() {
@@ -483,6 +485,7 @@ const Slider = TrackBar.inherit({
 
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
         delete this._needPreventAnimation;
+        this._saveValueChangeEvent(e);
         this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
         delete this._startOffset;
         this._renderValue();
@@ -559,6 +562,7 @@ const Slider = TrackBar.inherit({
 
     _setValueOnSwipe: function(value) {
         this.option('value', value);
+        this._saveValueChangeEvent(undefined);
     },
 
     _startHandler: function(args) {
