@@ -10,6 +10,7 @@
 @use "../button/sizes" as *;
 @use "../checkBox/sizes" as *;
 @use "mixins" as *;
+@use "../../base/toolbar";
 
 // adduse
 @use "../dropDownMenu";

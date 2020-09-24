@@ -9,6 +9,7 @@ QUnit.testStart(function() {
 
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
 
@@ -276,15 +277,16 @@ QUnit.module('Header panel', {
 
         headerPanel.render(testElement);
 
-        const oldHeight = testElement.find('.dx-datagrid-group-panel').height();
+        const groupHeader = testElement.find('.dx-datagrid-group-panel');
+        const oldHeight = groupHeader.height();
 
         // act
-        testElement.css('font-size', '10px');
+        groupHeader.css('font-size', '10px');
 
         headerPanel.resize();
 
         // assert
-        assert.ok(oldHeight > testElement.find('.dx-datagrid-group-panel').height(), 'sort indicator height changed');
+        assert.ok(oldHeight > groupHeader.height(), 'sort indicator height changed');
     });
 
     QUnit.test('Draw header panel with group panel and search panel', function(assert) {
