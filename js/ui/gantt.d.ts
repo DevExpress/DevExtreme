@@ -91,6 +91,22 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     onCustomCommand?: ((e: { component?: dxGantt, element?: dxElement, name?: string }) => any);    
+        /**
+     * @docid dxGanttOptions.onContextMenuPreparing
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @type_function_param1_field3 cancel:boolean
+     * @type_function_param1_field4 event:event
+     * @type_function_param1_field5 targetKey:any
+     * @type_function_param1_field6 targetType:string
+     * @type_function_param1_field7 data:any
+     * @type_function_param1_field8 items:Array<object>
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onContextMenuPreparing?: ((e: { component?: dxGantt, element?: dxElement, cancel?: boolean, event?: event, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => any);   
     /**
      * @docid dxGanttOptions.onTaskInserting
      * @extends Action
@@ -373,6 +389,14 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @public
      */
     taskTooltipContentTemplate?: template | ((container: dxElement, task: any) => string | Element | JQuery);
+    /**
+     * @docid dxGanttOptions.rootValue
+     * @type any
+     * @default 0
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    rootValue?: any;
 }
 /**
  * @docid dxGantt

@@ -581,812 +581,812 @@ interface JQuery {
 /* #EndJQueryAugmentation */
 declare module DevExpress {
     /**
-     * <-Component.Options->
+     * [descr:Component.Options]
      */
     export interface ComponentOptions<T = Component> {
         /**
-         * <-Component.Options.onDisposing->
+         * [descr:Component.Options.onDisposing]
          */
         onDisposing?: ((e: { component?: T }) => any);
         /**
-         * <-Component.Options.onInitialized->
+         * [descr:Component.Options.onInitialized]
          */
         onInitialized?: ((e: { component?: T, element?: DevExpress.core.dxElement }) => any);
         /**
-         * <-Component.Options.onOptionChanged->
+         * [descr:Component.Options.onOptionChanged]
          */
         onOptionChanged?: ((e: { component?: T, name?: string, fullName?: string, value?: any }) => any);
     }
     /**
-     * <-Component->
+     * [descr:Component]
      */
     export class Component {
         constructor(options?: ComponentOptions);
         /**
-         * <-Component.beginUpdate()->
+         * [descr:Component.beginUpdate()]
          */
         beginUpdate(): void;
         /**
-         * <-Component.endUpdate()->
+         * [descr:Component.endUpdate()]
          */
         endUpdate(): void;
         /**
-         * <-Component.instance()->
+         * [descr:Component.instance()]
          */
         instance(): this;
         /**
-         * <-Component.off(eventName)->
+         * [descr:Component.off(eventName)]
          */
         off(eventName: string): this;
         /**
-         * <-Component.off(eventName, eventHandler)->
+         * [descr:Component.off(eventName, eventHandler)]
          */
         off(eventName: string, eventHandler: Function): this;
         /**
-         * <-Component.on(eventName, eventHandler)->
+         * [descr:Component.on(eventName, eventHandler)]
          */
         on(eventName: string, eventHandler: Function): this;
         /**
-         * <-Component.on(events)->
+         * [descr:Component.on(events)]
          */
         on(events: any): this;
         /**
-         * <-Component.option()->
+         * [descr:Component.option()]
          */
         option(): any;
         /**
-         * <-Component.option(optionName)->
+         * [descr:Component.option(optionName)]
          */
         option(optionName: string): any;
         /**
-         * <-Component.option(optionName, optionValue)->
+         * [descr:Component.option(optionName, optionValue)]
          */
         option(optionName: string, optionValue: any): void;
         /**
-         * <-Component.option(options)->
+         * [descr:Component.option(options)]
          */
         option(options: any): void;
         /**
-         * <-Component.resetOption(optionName)->
+         * [descr:Component.resetOption(optionName)]
          */
         resetOption(optionName: string): void;
     }
     /**
-     * <-DOMComponent.Options->
+     * [descr:DOMComponent.Options]
      */
     export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
         /**
-         * <-DOMComponent.Options.bindingOptions->
+         * [descr:DOMComponent.Options.bindingOptions]
          */
         bindingOptions?: any;
         /**
-         * <-DOMComponent.Options.elementAttr->
+         * [descr:DOMComponent.Options.elementAttr]
          */
         elementAttr?: any;
         /**
-         * <-DOMComponent.Options.height->
+         * [descr:DOMComponent.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-DOMComponent.Options.onDisposing->
+         * [descr:DOMComponent.Options.onDisposing]
          */
         onDisposing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-DOMComponent.Options.onOptionChanged->
+         * [descr:DOMComponent.Options.onOptionChanged]
          */
         onOptionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
         /**
-         * <-DOMComponent.Options.rtlEnabled->
+         * [descr:DOMComponent.Options.rtlEnabled]
          */
         rtlEnabled?: boolean;
         /**
-         * <-DOMComponent.Options.width->
+         * [descr:DOMComponent.Options.width]
          */
         width?: number | string | (() => number | string);
     }
     /**
-     * <-DOMComponent->
+     * [descr:DOMComponent]
      */
     export class DOMComponent extends Component {
         constructor(element: Element | JQuery, options?: DOMComponentOptions);
         /**
-         * <-DOMComponent.defaultOptions(rule)->
+         * [descr:DOMComponent.defaultOptions(rule)]
          */
         static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
         /**
-         * <-DOMComponent.dispose()->
+         * [descr:DOMComponent.dispose()]
          */
         dispose(): void;
         /**
-         * <-DOMComponent.element()->
+         * [descr:DOMComponent.element()]
          */
         element(): DevExpress.core.dxElement;
         /**
-         * <-DOMComponent.getInstance(element)->
+         * [descr:DOMComponent.getInstance(element)]
          */
         static getInstance(element: Element | JQuery): DOMComponent;
     }
     /**
-     * <-DataHelperMixin->
+     * [descr:DataHelperMixin]
      */
     export class DataHelperMixin {
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
     }
     /**
-     * <-Device->
+     * [descr:Device]
      */
     export interface Device {
         /**
-         * <-Device.android->
+         * [descr:Device.android]
          */
         android?: boolean;
         /**
-         * <-Device.deviceType->
+         * [descr:Device.deviceType]
          */
         deviceType?: 'phone' | 'tablet' | 'desktop';
         /**
-         * <-Device.generic->
+         * [descr:Device.generic]
          */
         generic?: boolean;
         /**
-         * <-Device.grade->
+         * [descr:Device.grade]
          */
         grade?: 'A' | 'B' | 'C';
         /**
-         * <-Device.ios->
+         * [descr:Device.ios]
          */
         ios?: boolean;
         /**
-         * <-Device.phone->
+         * [descr:Device.phone]
          */
         phone?: boolean;
         /**
-         * <-Device.platform->
+         * [descr:Device.platform]
          */
         platform?: 'android' | 'ios' | 'generic';
         /**
-         * <-Device.tablet->
+         * [descr:Device.tablet]
          */
         tablet?: boolean;
         /**
-         * <-Device.version->
+         * [descr:Device.version]
          */
         version?: Array<number>;
     }
     /**
-     * <-DevicesObject->
+     * [descr:DevicesObject]
      */
     export class DevicesObject {
         constructor(options: { window?: Window });
         /**
-         * <-DevicesObject.current()->
+         * [descr:DevicesObject.current()]
          */
         current(): Device;
         /**
-         * <-DevicesObject.current(deviceName)->
+         * [descr:DevicesObject.current(deviceName)]
          */
         current(deviceName: string | Device): void;
         /**
-         * <-DevicesObject.off(eventName)->
+         * [descr:DevicesObject.off(eventName)]
          */
         off(eventName: string): this;
         /**
-         * <-DevicesObject.off(eventName, eventHandler)->
+         * [descr:DevicesObject.off(eventName, eventHandler)]
          */
         off(eventName: string, eventHandler: Function): this;
         /**
-         * <-DevicesObject.on(eventName, eventHandler)->
+         * [descr:DevicesObject.on(eventName, eventHandler)]
          */
         on(eventName: string, eventHandler: Function): this;
         /**
-         * <-DevicesObject.on(events)->
+         * [descr:DevicesObject.on(events)]
          */
         on(events: any): this;
         /**
-         * <-DevicesObject.orientation()->
+         * [descr:DevicesObject.orientation()]
          */
         orientation(): string;
         /**
-         * <-DevicesObject.real()->
+         * [descr:DevicesObject.real()]
          */
         real(): Device;
     }
     /**
-     * <-EndpointSelector->
+     * [descr:EndpointSelector]
      */
     export class EndpointSelector {
         constructor(options: any);
         /**
-         * <-EndpointSelector.urlFor(key)->
+         * [descr:EndpointSelector.urlFor(key)]
          */
         urlFor(key: string): string;
     }
     /**
-     * <-TransitionExecutor->
+     * [descr:TransitionExecutor]
      */
     export class TransitionExecutor {
         /**
-         * <-TransitionExecutor.enter(elements, animation)->
+         * [descr:TransitionExecutor.enter(elements, animation)]
          */
         enter(elements: JQuery, animation: animationConfig | string): void;
         /**
-         * <-TransitionExecutor.leave(elements, animation)->
+         * [descr:TransitionExecutor.leave(elements, animation)]
          */
         leave(elements: JQuery, animation: animationConfig | string): void;
         /**
-         * <-TransitionExecutor.reset()->
+         * [descr:TransitionExecutor.reset()]
          */
         reset(): void;
         /**
-         * <-TransitionExecutor.start()->
+         * [descr:TransitionExecutor.start()]
          */
         start(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-TransitionExecutor.stop()->
+         * [descr:TransitionExecutor.stop()]
          */
         stop(): void;
     }
     /**
-     * <-animationConfig->
+     * [descr:animationConfig]
      */
     export interface animationConfig {
         /**
-         * <-animationConfig.complete->
+         * [descr:animationConfig.complete]
          */
         complete?: (($element: DevExpress.core.dxElement, config: any) => any);
         /**
-         * <-animationConfig.delay->
+         * [descr:animationConfig.delay]
          */
         delay?: number;
         /**
-         * <-animationConfig.direction->
+         * [descr:animationConfig.direction]
          */
         direction?: 'bottom' | 'left' | 'right' | 'top';
         /**
-         * <-animationConfig.duration->
+         * [descr:animationConfig.duration]
          */
         duration?: number;
         /**
-         * <-animationConfig.easing->
+         * [descr:animationConfig.easing]
          */
         easing?: string;
         /**
-         * <-animationConfig.from->
+         * [descr:animationConfig.from]
          */
         from?: number | string | any;
         /**
-         * <-animationConfig.staggerDelay->
+         * [descr:animationConfig.staggerDelay]
          */
         staggerDelay?: number;
         /**
-         * <-animationConfig.start->
+         * [descr:animationConfig.start]
          */
         start?: (($element: DevExpress.core.dxElement, config: any) => any);
         /**
-         * <-animationConfig.to->
+         * [descr:animationConfig.to]
          */
         to?: number | string | any;
         /**
-         * <-animationConfig.type->
+         * [descr:animationConfig.type]
          */
         type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
     }
     /**
-     * <-animationPresets->
+     * [descr:animationPresets]
      */
     export class animationPresets {
         /**
-         * <-animationPresets.applyChanges()->
+         * [descr:animationPresets.applyChanges()]
          */
         applyChanges(): void;
         /**
-         * <-animationPresets.clear()->
+         * [descr:animationPresets.clear()]
          */
         clear(): void;
         /**
-         * <-animationPresets.clear(name)->
+         * [descr:animationPresets.clear(name)]
          */
         clear(name: string): void;
         /**
-         * <-animationPresets.getPreset(name)->
+         * [descr:animationPresets.getPreset(name)]
          */
         getPreset(name: string): any;
         /**
-         * <-animationPresets.registerDefaultPresets()->
+         * [descr:animationPresets.registerDefaultPresets()]
          */
         registerDefaultPresets(): void;
         /**
-         * <-animationPresets.registerPreset(name, config)->
+         * [descr:animationPresets.registerPreset(name, config)]
          */
         registerPreset(name: string, config: { animation?: animationConfig, device?: Device }): void;
         /**
-         * <-animationPresets.resetToDefaults()->
+         * [descr:animationPresets.resetToDefaults()]
          */
         resetToDefaults(): void;
     }
     /**
-     * <-config()->
+     * [descr:config()]
      */
     export function config(): globalConfig;
     /**
-     * <-config(config)->
+     * [descr:config(config)]
      */
     export function config(config: globalConfig): void;
     /**
-     * <-devices->
+     * [descr:devices]
      */
     export var devices: DevicesObject;
     /**
-     * <-globalConfig->
+     * [descr:globalConfig]
      */
     export interface globalConfig {
         /**
-         * <-globalConfig.decimalSeparator->
-         * @deprecated <-globalConfig.decimalSeparator:depNote->
+         * [descr:globalConfig.decimalSeparator]
+         * @deprecated [depNote:globalConfig.decimalSeparator]
          */
         decimalSeparator?: string;
         /**
-         * <-globalConfig.defaultCurrency->
+         * [descr:globalConfig.defaultCurrency]
          */
         defaultCurrency?: string;
         /**
-         * <-globalConfig.editorStylingMode->
+         * [descr:globalConfig.editorStylingMode]
          */
         editorStylingMode?: 'outlined' | 'underlined' | 'filled';
         /**
-         * <-globalConfig.floatingActionButtonConfig->
+         * [descr:globalConfig.floatingActionButtonConfig]
          */
         floatingActionButtonConfig?: { closeIcon?: string, direction?: 'auto' | 'up' | 'down', icon?: string, label?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function, shading?: boolean };
         /**
-         * <-globalConfig.forceIsoDateParsing->
+         * [descr:globalConfig.forceIsoDateParsing]
          */
         forceIsoDateParsing?: boolean;
         /**
-         * <-globalConfig.oDataFilterToLower->
+         * [descr:globalConfig.oDataFilterToLower]
          */
         oDataFilterToLower?: boolean;
         /**
-         * <-globalConfig.rtlEnabled->
+         * [descr:globalConfig.rtlEnabled]
          */
         rtlEnabled?: boolean;
         /**
-         * <-globalConfig.serverDecimalSeparator->
+         * [descr:globalConfig.serverDecimalSeparator]
          */
         serverDecimalSeparator?: string;
         /**
-         * <-globalConfig.thousandsSeparator->
-         * @deprecated <-globalConfig.thousandsSeparator:depNote->
+         * [descr:globalConfig.thousandsSeparator]
+         * @deprecated [depNote:globalConfig.thousandsSeparator]
          */
         thousandsSeparator?: string;
         /**
-         * <-globalConfig.useLegacyStoreResult->
+         * [descr:globalConfig.useLegacyStoreResult]
          */
         useLegacyStoreResult?: boolean;
         /**
-         * <-globalConfig.useLegacyVisibleIndex->
+         * [descr:globalConfig.useLegacyVisibleIndex]
          */
         useLegacyVisibleIndex?: boolean;
     }
     /**
-     * <-hideTopOverlay()->
+     * [descr:hideTopOverlay()]
      */
     export function hideTopOverlay(): boolean;
     /**
-     * <-localization->
+     * [descr:localization]
      */
     export class localization {
         /**
-         * <-localization.formatDate(value, format)->
+         * [descr:localization.formatDate(value, format)]
          */
         static formatDate(value: Date, format: DevExpress.ui.format): string;
         /**
-         * <-localization.formatMessage(key, value)->
+         * [descr:localization.formatMessage(key, value)]
          */
         static formatMessage(key: string, value: string | Array<string>): string;
         /**
-         * <-localization.formatNumber(value, format)->
+         * [descr:localization.formatNumber(value, format)]
          */
         static formatNumber(value: number, format: DevExpress.ui.format): string;
         /**
-         * <-localization.loadMessages(messages)->
+         * [descr:localization.loadMessages(messages)]
          */
         static loadMessages(messages: any): void;
         /**
-         * <-localization.locale()->
+         * [descr:localization.locale()]
          */
         static locale(): string;
         /**
-         * <-localization.locale(locale)->
+         * [descr:localization.locale(locale)]
          */
         static locale(locale: string): void;
         /**
-         * <-localization.parseDate(text, format)->
+         * [descr:localization.parseDate(text, format)]
          */
         static parseDate(text: string, format: DevExpress.ui.format): Date;
         /**
-         * <-localization.parseNumber(text, format)->
+         * [descr:localization.parseNumber(text, format)]
          */
         static parseNumber(text: string, format: DevExpress.ui.format): number;
     }
     /**
-     * <-positionConfig->
+     * [descr:positionConfig]
      */
     export interface positionConfig {
         /**
-         * <-positionConfig.at->
+         * [descr:positionConfig.at]
          */
         at?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
         /**
-         * <-positionConfig.boundary->
+         * [descr:positionConfig.boundary]
          */
         boundary?: string | Element | JQuery | Window;
         /**
-         * <-positionConfig.boundaryOffset->
+         * [descr:positionConfig.boundaryOffset]
          */
         boundaryOffset?: string | { x?: number, y?: number };
         /**
-         * <-positionConfig.collision->
+         * [descr:positionConfig.collision]
          */
         collision?: 'fit' | 'fit flip' | 'fit flipfit' | 'fit none' | 'flip' | 'flip fit' | 'flip none' | 'flipfit' | 'flipfit fit' | 'flipfit none' | 'none' | 'none fit' | 'none flip' | 'none flipfit' | { x?: 'fit' | 'flip' | 'flipfit' | 'none', y?: 'fit' | 'flip' | 'flipfit' | 'none' };
         /**
-         * <-positionConfig.my->
+         * [descr:positionConfig.my]
          */
         my?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
         /**
-         * <-positionConfig.of->
+         * [descr:positionConfig.of]
          */
         of?: string | Element | JQuery | Window;
         /**
-         * <-positionConfig.offset->
+         * [descr:positionConfig.offset]
          */
         offset?: string | { x?: number, y?: number };
     }
     /**
-     * <-registerComponent(name, componentClass)->
+     * [descr:registerComponent(name, componentClass)]
      */
     export function registerComponent(name: string, componentClass: any): void;
     /**
-     * <-registerComponent(name, namespace, componentClass)->
+     * [descr:registerComponent(name, namespace, componentClass)]
      */
     export function registerComponent(name: string, namespace: any, componentClass: any): void;
     /**
-     * <-setTemplateEngine(name)->
+     * [descr:setTemplateEngine(name)]
      */
     export function setTemplateEngine(templateEngineName: string): void;
     /**
-     * <-setTemplateEngine(options)->
+     * [descr:setTemplateEngine(options)]
      */
     export function setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
     /**
-     * <-ui->
+     * [descr:ui]
      */
     export class ui {
         /**
-         * <-ui.notify(message,type,displayTime)->
+         * [descr:ui.notify(message,type,displayTime)]
          */
         static notify(message: string, type?: string, displayTime?: number): void;
         /**
-         * <-ui.notify(options,type,displayTime)->
+         * [descr:ui.notify(options,type,displayTime)]
          */
         static notify(options: any, type?: string, displayTime?: number): void;
         /**
-         * <-ui.repaintFloatingActionButton()->
+         * [descr:ui.repaintFloatingActionButton()]
          */
         static repaintFloatingActionButton(): void;
         /**
-         * <-ui.setTemplateEngine(name)->
+         * [descr:ui.setTemplateEngine(name)]
          */
         static setTemplateEngine(templateEngineName: string): void;
         /**
-         * <-ui.setTemplateEngine(options)->
+         * [descr:ui.setTemplateEngine(options)]
          */
         static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
     }
     /**
-     * <-validationEngine->
+     * [descr:validationEngine]
      */
     export class validationEngine {
         /**
-         * <-validationEngine.getGroupConfig()->
+         * [descr:validationEngine.getGroupConfig()]
          */
         static getGroupConfig(): any;
         /**
-         * <-validationEngine.getGroupConfig(group)->
+         * [descr:validationEngine.getGroupConfig(group)]
          */
         static getGroupConfig(group: string | any): any;
         /**
-         * <-validationEngine.registerModelForValidation(model)->
+         * [descr:validationEngine.registerModelForValidation(model)]
          */
         static registerModelForValidation(model: any): void;
         /**
-         * <-validationEngine.resetGroup()->
+         * [descr:validationEngine.resetGroup()]
          */
         static resetGroup(): void;
         /**
-         * <-validationEngine.resetGroup(group)->
+         * [descr:validationEngine.resetGroup(group)]
          */
         static resetGroup(group: string | any): void;
         /**
-         * <-validationEngine.unregisterModelForValidation(model)->
+         * [descr:validationEngine.unregisterModelForValidation(model)]
          */
         static unregisterModelForValidation(model: any): void;
         /**
-         * <-validationEngine.validateGroup()->
+         * [descr:validationEngine.validateGroup()]
          */
         static validateGroup(): DevExpress.ui.dxValidationGroupResult;
         /**
-         * <-validationEngine.validateGroup(group)->
+         * [descr:validationEngine.validateGroup(group)]
          */
         static validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
         /**
-         * <-validationEngine.validateModel(model)->
+         * [descr:validationEngine.validateModel(model)]
          */
         static validateModel(model: any): any;
     }
     /**
-     * <-viz->
+     * [descr:viz]
      */
     export class viz {
         /**
-         * <-viz.currentPalette()->
+         * [descr:viz.currentPalette()]
          */
         static currentPalette(): string;
         /**
-         * <-viz.currentPalette(paletteName)->
+         * [descr:viz.currentPalette(paletteName)]
          */
         static currentPalette(paletteName: string): void;
         /**
-         * <-viz.currentTheme()->
+         * [descr:viz.currentTheme()]
          */
         static currentTheme(): string;
         /**
-         * <-viz.currentTheme(platform, colorScheme)->
+         * [descr:viz.currentTheme(platform, colorScheme)]
          */
         static currentTheme(platform: string, colorScheme: string): void;
         /**
-         * <-viz.currentTheme(theme)->
+         * [descr:viz.currentTheme(theme)]
          */
         static currentTheme(theme: string): void;
         /**
-         * <-viz.exportFromMarkup(markup, options)->
+         * [descr:viz.exportFromMarkup(markup, options)]
          */
         static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
         /**
-         * <-viz.exportWidgets(widgetInstances)->
+         * [descr:viz.exportWidgets(widgetInstances)]
          */
         static exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
         /**
-         * <-viz.exportWidgets(widgetInstances, options)->
+         * [descr:viz.exportWidgets(widgetInstances, options)]
          */
         static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
         /**
-         * <-viz.generateColors(palette, count, options)->
+         * [descr:viz.generateColors(palette, count, options)]
          */
         static generateColors(palette: 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
         /**
-         * <-viz.getMarkup(widgetInstances)->
+         * [descr:viz.getMarkup(widgetInstances)]
          */
         static getMarkup(widgetInstances: Array<DOMComponent>): string;
         /**
-         * <-viz.getPalette(paletteName)->
+         * [descr:viz.getPalette(paletteName)]
          */
         static getPalette(paletteName: string): any;
         /**
-         * <-viz.getTheme(theme)->
+         * [descr:viz.getTheme(theme)]
          */
         static getTheme(theme: string): any;
         /**
-         * <-viz.refreshPaths()->
+         * [descr:viz.refreshPaths()]
          */
         static refreshPaths(): void;
         /**
-         * <-viz.refreshTheme()->
+         * [descr:viz.refreshTheme()]
          */
         static refreshTheme(): void;
         /**
-         * <-viz.registerPalette(paletteName, palette)->
+         * [descr:viz.registerPalette(paletteName, palette)]
          */
         static registerPalette(paletteName: string, palette: any): void;
         /**
-         * <-viz.registerTheme(customTheme, baseTheme)->
+         * [descr:viz.registerTheme(customTheme, baseTheme)]
          */
         static registerTheme(customTheme: any, baseTheme: string): void;
     }
 }
 declare module DevExpress.core {
     /**
-     * <-dxElement->
+     * [descr:dxElement]
      */
     export type dxElement = HTMLElement & JQuery;
     /**
-     * <-dxSVGElement->
+     * [descr:dxSVGElement]
      */
     export type dxSVGElement = SVGElement & JQuery;
     /**
-     * <-dxTemplate.Options->
+     * [descr:dxTemplate.Options]
      */
     export interface dxTemplateOptions {
         /**
-         * <-dxTemplate.Options.name->
+         * [descr:dxTemplate.Options.name]
          */
         name?: string;
     }
     /**
-     * <-dxTemplate->
+     * [descr:dxTemplate]
      */
     export class dxTemplate {
         constructor(options?: dxTemplateOptions)
     }
     /**
-     * <-template->
+     * [descr:template]
      */
     export type template = string | Function | Element | JQuery;
 }
 declare module DevExpress.data {
     /**
-     * <-ArrayStore.Options->
+     * [descr:ArrayStore.Options]
      */
     export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
         /**
-         * <-ArrayStore.Options.data->
+         * [descr:ArrayStore.Options.data]
          */
         data?: Array<any>;
     }
     /**
-     * <-ArrayStore->
+     * [descr:ArrayStore]
      */
     export class ArrayStore extends Store {
         constructor(options?: ArrayStoreOptions)
         /**
-         * <-ArrayStore.clear()->
+         * [descr:ArrayStore.clear()]
          */
         clear(): void;
         /**
-         * <-ArrayStore.createQuery()->
+         * [descr:ArrayStore.createQuery()]
          */
         createQuery(): any;
     }
     /**
-     * <-CustomStore.Options->
+     * [descr:CustomStore.Options]
      */
     export interface CustomStoreOptions extends StoreOptions<CustomStore> {
         /**
-         * <-CustomStore.Options.byKey->
+         * [descr:CustomStore.Options.byKey]
          */
         byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
         /**
-         * <-CustomStore.Options.cacheRawData->
+         * [descr:CustomStore.Options.cacheRawData]
          */
         cacheRawData?: boolean;
         /**
-         * <-CustomStore.Options.insert->
+         * [descr:CustomStore.Options.insert]
          */
         insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
         /**
-         * <-CustomStore.Options.load->
+         * [descr:CustomStore.Options.load]
          */
         load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any> | Array<any>);
         /**
-         * <-CustomStore.Options.loadMode->
+         * [descr:CustomStore.Options.loadMode]
          */
         loadMode?: 'processed' | 'raw';
         /**
-         * <-CustomStore.Options.remove->
+         * [descr:CustomStore.Options.remove]
          */
         remove?: ((key: any | string | number) => Promise<void> | JQueryPromise<void>);
         /**
-         * <-CustomStore.Options.totalCount->
+         * [descr:CustomStore.Options.totalCount]
          */
         totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> | JQueryPromise<number>);
         /**
-         * <-CustomStore.Options.update->
+         * [descr:CustomStore.Options.update]
          */
         update?: ((key: any | string | number, values: any) => Promise<any> | JQueryPromise<any>);
         /**
-         * <-CustomStore.Options.useDefaultSearch->
+         * [descr:CustomStore.Options.useDefaultSearch]
          */
         useDefaultSearch?: boolean;
     }
     /**
-     * <-CustomStore->
+     * [descr:CustomStore]
      */
     export class CustomStore extends Store {
         constructor(options?: CustomStoreOptions)
         /**
-         * <-CustomStore.clearRawDataCache()->
+         * [descr:CustomStore.clearRawDataCache()]
          */
         clearRawDataCache(): void;
     }
     /**
-     * <-DataSource.Options->
+     * [descr:DataSource.Options]
      */
     export interface DataSourceOptions {
         /**
-         * <-DataSource.Options.customQueryParams->
+         * [descr:DataSource.Options.customQueryParams]
          */
         customQueryParams?: any;
         /**
-         * <-DataSource.Options.expand->
+         * [descr:DataSource.Options.expand]
          */
         expand?: Array<string> | string;
         /**
-         * <-DataSource.Options.filter->
+         * [descr:DataSource.Options.filter]
          */
         filter?: string | Array<any> | Function;
         /**
-         * <-DataSource.Options.group->
+         * [descr:DataSource.Options.group]
          */
         group?: string | Array<any> | Function;
         /**
-         * <-DataSource.Options.map->
+         * [descr:DataSource.Options.map]
          */
         map?: ((dataItem: any) => any);
         /**
-         * <-DataSource.Options.onChanged->
+         * [descr:DataSource.Options.onChanged]
          */
         onChanged?: ((e: { changes?: Array<any> }) => any);
         /**
-         * <-DataSource.Options.onLoadError->
+         * [descr:DataSource.Options.onLoadError]
          */
         onLoadError?: ((error: { message?: string }) => any);
         /**
-         * <-DataSource.Options.onLoadingChanged->
+         * [descr:DataSource.Options.onLoadingChanged]
          */
         onLoadingChanged?: ((isLoading: boolean) => any);
         /**
-         * <-DataSource.Options.pageSize->
+         * [descr:DataSource.Options.pageSize]
          */
         pageSize?: number;
         /**
-         * <-DataSource.Options.paginate->
+         * [descr:DataSource.Options.paginate]
          */
         paginate?: boolean;
         /**
-         * <-DataSource.Options.postProcess->
+         * [descr:DataSource.Options.postProcess]
          */
         postProcess?: ((data: Array<any>) => Array<any>);
         /**
-         * <-DataSource.Options.pushAggregationTimeout->
+         * [descr:DataSource.Options.pushAggregationTimeout]
          */
         pushAggregationTimeout?: number;
         /**
-         * <-DataSource.Options.requireTotalCount->
+         * [descr:DataSource.Options.requireTotalCount]
          */
         requireTotalCount?: boolean;
         /**
-         * <-DataSource.Options.reshapeOnPush->
+         * [descr:DataSource.Options.reshapeOnPush]
          */
         reshapeOnPush?: boolean;
         /**
-         * <-DataSource.Options.searchExpr->
+         * [descr:DataSource.Options.searchExpr]
          */
         searchExpr?: string | Function | Array<string | Function>;
         /**
-         * <-DataSource.Options.searchOperation->
+         * [descr:DataSource.Options.searchOperation]
          */
         searchOperation?: string;
         /**
-         * <-DataSource.Options.searchValue->
+         * [descr:DataSource.Options.searchValue]
          */
         searchValue?: any;
         /**
-         * <-DataSource.Options.select->
+         * [descr:DataSource.Options.select]
          */
         select?: string | Array<any> | Function;
         /**
-         * <-DataSource.Options.sort->
+         * [descr:DataSource.Options.sort]
          */
         sort?: string | Array<any> | Function;
         /**
-         * <-DataSource.Options.store->
+         * [descr:DataSource.Options.store]
          */
         store?: Store | StoreOptions | Array<any> | any;
     }
     /**
-     * <-DataSource->
+     * [descr:DataSource]
      */
     export class DataSource {
         constructor(data: Array<any>);
@@ -1394,18178 +1394,18246 @@ declare module DevExpress.data {
         constructor(store: Store);
         constructor(url: string);
         /**
-         * <-DataSource.cancel(operationId)->
+         * [descr:DataSource.cancel(operationId)]
          */
         cancel(): boolean;
         /**
-         * <-DataSource.dispose()->
+         * [descr:DataSource.dispose()]
          */
         dispose(): void;
         /**
-         * <-DataSource.filter()->
+         * [descr:DataSource.filter()]
          */
         filter(): any;
         /**
-         * <-DataSource.filter(filterExpr)->
+         * [descr:DataSource.filter(filterExpr)]
          */
         filter(filterExpr: any): void;
         /**
-         * <-DataSource.group()->
+         * [descr:DataSource.group()]
          */
         group(): any;
         /**
-         * <-DataSource.group(groupExpr)->
+         * [descr:DataSource.group(groupExpr)]
          */
         group(groupExpr: any): void;
         /**
-         * <-DataSource.isLastPage()->
+         * [descr:DataSource.isLastPage()]
          */
         isLastPage(): boolean;
         /**
-         * <-DataSource.isLoaded()->
+         * [descr:DataSource.isLoaded()]
          */
         isLoaded(): boolean;
         /**
-         * <-DataSource.isLoading()->
+         * [descr:DataSource.isLoading()]
          */
         isLoading(): boolean;
         /**
-         * <-DataSource.items()->
+         * [descr:DataSource.items()]
          */
         items(): Array<any>;
         /**
-         * <-DataSource.key()->
+         * [descr:DataSource.key()]
          */
         key(): any & string & number;
         /**
-         * <-DataSource.load()->
+         * [descr:DataSource.load()]
          */
         load(): Promise<any> & JQueryPromise<any>;
         /**
-         * <-DataSource.loadOptions()->
+         * [descr:DataSource.loadOptions()]
          */
         loadOptions(): any;
         /**
-         * <-DataSource.off(eventName)->
+         * [descr:DataSource.off(eventName)]
          */
         off(eventName: string): this;
         /**
-         * <-DataSource.off(eventName, eventHandler)->
+         * [descr:DataSource.off(eventName, eventHandler)]
          */
         off(eventName: string, eventHandler: Function): this;
         /**
-         * <-DataSource.on(eventName, eventHandler)->
+         * [descr:DataSource.on(eventName, eventHandler)]
          */
         on(eventName: string, eventHandler: Function): this;
         /**
-         * <-DataSource.on(events)->
+         * [descr:DataSource.on(events)]
          */
         on(events: any): this;
         /**
-         * <-DataSource.pageIndex()->
+         * [descr:DataSource.pageIndex()]
          */
         pageIndex(): number;
         /**
-         * <-DataSource.pageIndex(newIndex)->
+         * [descr:DataSource.pageIndex(newIndex)]
          */
         pageIndex(newIndex: number): void;
         /**
-         * <-DataSource.pageSize()->
+         * [descr:DataSource.pageSize()]
          */
         pageSize(): number;
         /**
-         * <-DataSource.pageSize(value)->
+         * [descr:DataSource.pageSize(value)]
          */
         pageSize(value: number): void;
         /**
-         * <-DataSource.paginate()->
+         * [descr:DataSource.paginate()]
          */
         paginate(): boolean;
         /**
-         * <-DataSource.paginate(value)->
+         * [descr:DataSource.paginate(value)]
          */
         paginate(value: boolean): void;
         /**
-         * <-DataSource.reload()->
+         * [descr:DataSource.reload()]
          */
         reload(): Promise<any> & JQueryPromise<any>;
         /**
-         * <-DataSource.requireTotalCount()->
+         * [descr:DataSource.requireTotalCount()]
          */
         requireTotalCount(): boolean;
         /**
-         * <-DataSource.requireTotalCount(value)->
+         * [descr:DataSource.requireTotalCount(value)]
          */
         requireTotalCount(value: boolean): void;
         /**
-         * <-DataSource.searchExpr()->
+         * [descr:DataSource.searchExpr()]
          */
         searchExpr(): string & Function & Array<string | Function>;
         /**
-         * <-DataSource.searchExpr(expr)->
+         * [descr:DataSource.searchExpr(expr)]
          */
         searchExpr(expr: string | Function | Array<string | Function>): void;
         /**
-         * <-DataSource.searchOperation()->
+         * [descr:DataSource.searchOperation()]
          */
         searchOperation(): string;
         /**
-         * <-DataSource.searchOperation(op)->
+         * [descr:DataSource.searchOperation(op)]
          */
         searchOperation(op: string): void;
         /**
-         * <-DataSource.searchValue()->
+         * [descr:DataSource.searchValue()]
          */
         searchValue(): any;
         /**
-         * <-DataSource.searchValue(value)->
+         * [descr:DataSource.searchValue(value)]
          */
         searchValue(value: any): void;
         /**
-         * <-DataSource.select()->
+         * [descr:DataSource.select()]
          */
         select(): any;
         /**
-         * <-DataSource.select(expr)->
+         * [descr:DataSource.select(expr)]
          */
         select(expr: any): void;
         /**
-         * <-DataSource.sort()->
+         * [descr:DataSource.sort()]
          */
         sort(): any;
         /**
-         * <-DataSource.sort(sortExpr)->
+         * [descr:DataSource.sort(sortExpr)]
          */
         sort(sortExpr: any): void;
         /**
-         * <-DataSource.store()->
+         * [descr:DataSource.store()]
          */
         store(): any;
         /**
-         * <-DataSource.totalCount()->
+         * [descr:DataSource.totalCount()]
          */
         totalCount(): number;
     }
     /**
-     * <-EdmLiteral->
+     * [descr:EdmLiteral]
      */
     export class EdmLiteral {
         constructor(value: string);
         /**
-         * <-EdmLiteral.valueOf()->
+         * [descr:EdmLiteral.valueOf()]
          */
         valueOf(): string;
     }
     /**
-     * <-Guid->
+     * [descr:Guid]
      */
     export class Guid {
         constructor();
         constructor(value: string);
         /**
-         * <-Guid.toString()->
+         * [descr:Guid.toString()]
          */
         toString(): string;
         /**
-         * <-Guid.valueOf()->
+         * [descr:Guid.valueOf()]
          */
         valueOf(): string;
     }
     /**
-     * <-LoadOptions->
+     * [descr:LoadOptions]
      */
     export interface LoadOptions {
         /**
-         * <-LoadOptions.customQueryParams->
+         * [descr:LoadOptions.customQueryParams]
          */
         customQueryParams?: any;
         /**
-         * <-LoadOptions.expand->
+         * [descr:LoadOptions.expand]
          */
         expand?: any;
         /**
-         * <-LoadOptions.filter->
+         * [descr:LoadOptions.filter]
          */
         filter?: any;
         /**
-         * <-LoadOptions.group->
+         * [descr:LoadOptions.group]
          */
         group?: any;
         /**
-         * <-LoadOptions.groupSummary->
+         * [descr:LoadOptions.groupSummary]
          */
         groupSummary?: any;
         /**
-         * <-LoadOptions.parentIds->
+         * [descr:LoadOptions.parentIds]
          */
         parentIds?: Array<any>;
         /**
-         * <-LoadOptions.requireGroupCount->
+         * [descr:LoadOptions.requireGroupCount]
          */
         requireGroupCount?: boolean;
         /**
-         * <-LoadOptions.requireTotalCount->
+         * [descr:LoadOptions.requireTotalCount]
          */
         requireTotalCount?: boolean;
         /**
-         * <-LoadOptions.searchExpr->
+         * [descr:LoadOptions.searchExpr]
          */
         searchExpr?: string | Function | Array<string | Function>;
         /**
-         * <-LoadOptions.searchOperation->
+         * [descr:LoadOptions.searchOperation]
          */
         searchOperation?: string;
         /**
-         * <-LoadOptions.searchValue->
+         * [descr:LoadOptions.searchValue]
          */
         searchValue?: any;
         /**
-         * <-LoadOptions.select->
+         * [descr:LoadOptions.select]
          */
         select?: any;
         /**
-         * <-LoadOptions.skip->
+         * [descr:LoadOptions.skip]
          */
         skip?: number;
         /**
-         * <-LoadOptions.sort->
+         * [descr:LoadOptions.sort]
          */
         sort?: any;
         /**
-         * <-LoadOptions.take->
+         * [descr:LoadOptions.take]
          */
         take?: number;
         /**
-         * <-LoadOptions.totalSummary->
+         * [descr:LoadOptions.totalSummary]
          */
         totalSummary?: any;
         /**
-         * <-LoadOptions.userData->
+         * [descr:LoadOptions.userData]
          */
         userData?: any;
     }
     /**
-     * <-LocalStore.Options->
+     * [descr:LocalStore.Options]
      */
     export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
         /**
-         * <-LocalStore.Options.flushInterval->
+         * [descr:LocalStore.Options.flushInterval]
          */
         flushInterval?: number;
         /**
-         * <-LocalStore.Options.immediate->
+         * [descr:LocalStore.Options.immediate]
          */
         immediate?: boolean;
         /**
-         * <-LocalStore.Options.name->
+         * [descr:LocalStore.Options.name]
          */
         name?: string;
     }
     /**
-     * <-LocalStore->
+     * [descr:LocalStore]
      */
     export class LocalStore extends ArrayStore {
         constructor(options?: LocalStoreOptions)
         /**
-         * <-LocalStore.clear()->
+         * [descr:LocalStore.clear()]
          */
         clear(): void;
     }
     /**
-     * <-ODataContext.Options->
+     * [descr:ODataContext.Options]
      */
     export interface ODataContextOptions {
         /**
-         * <-ODataContext.Options.beforeSend->
+         * [descr:ODataContext.Options.beforeSend]
          */
         beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
         /**
-         * <-ODataContext.Options.deserializeDates->
+         * [descr:ODataContext.Options.deserializeDates]
          */
         deserializeDates?: boolean;
         /**
-         * <-ODataContext.Options.entities->
+         * [descr:ODataContext.Options.entities]
          */
         entities?: any;
         /**
-         * <-ODataContext.Options.errorHandler->
+         * [descr:ODataContext.Options.errorHandler]
          */
         errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
         /**
-         * <-ODataContext.Options.filterToLower->
+         * [descr:ODataContext.Options.filterToLower]
          */
         filterToLower?: boolean;
         /**
-         * <-ODataContext.Options.jsonp->
+         * [descr:ODataContext.Options.jsonp]
          */
         jsonp?: boolean;
         /**
-         * <-ODataContext.Options.url->
+         * [descr:ODataContext.Options.url]
          */
         url?: string;
         /**
-         * <-ODataContext.Options.version->
+         * [descr:ODataContext.Options.version]
          */
         version?: number;
         /**
-         * <-ODataContext.Options.withCredentials->
+         * [descr:ODataContext.Options.withCredentials]
          */
         withCredentials?: boolean;
     }
     /**
-     * <-ODataContext->
+     * [descr:ODataContext]
      */
     export class ODataContext {
         constructor(options?: ODataContextOptions)
         /**
-         * <-ODataContext.get(operationName, params)->
+         * [descr:ODataContext.get(operationName, params)]
          */
         get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
         /**
-         * <-ODataContext.invoke(operationName, params, httpMethod)->
+         * [descr:ODataContext.invoke(operationName, params, httpMethod)]
          */
         invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-ODataContext.objectLink(entityAlias, key)->
+         * [descr:ODataContext.objectLink(entityAlias, key)]
          */
         objectLink(entityAlias: string, key: any | string | number): any;
     }
     /**
-     * <-ODataStore.Options->
+     * [descr:ODataStore.Options]
      */
     export interface ODataStoreOptions extends StoreOptions<ODataStore> {
         /**
-         * <-ODataStore.Options.beforeSend->
+         * [descr:ODataStore.Options.beforeSend]
          */
         beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
         /**
-         * <-ODataStore.Options.deserializeDates->
+         * [descr:ODataStore.Options.deserializeDates]
          */
         deserializeDates?: boolean;
         /**
-         * <-ODataStore.Options.errorHandler->
+         * [descr:ODataStore.Options.errorHandler]
          */
         errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
         /**
-         * <-ODataStore.Options.fieldTypes->
+         * [descr:ODataStore.Options.fieldTypes]
          */
         fieldTypes?: any;
         /**
-         * <-ODataStore.Options.filterToLower->
+         * [descr:ODataStore.Options.filterToLower]
          */
         filterToLower?: boolean;
         /**
-         * <-ODataStore.Options.jsonp->
+         * [descr:ODataStore.Options.jsonp]
          */
         jsonp?: boolean;
         /**
-         * <-ODataStore.Options.keyType->
+         * [descr:ODataStore.Options.keyType]
          */
         keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
         /**
-         * <-ODataStore.Options.onLoading->
+         * [descr:ODataStore.Options.onLoading]
          */
         onLoading?: ((loadOptions: LoadOptions) => any);
         /**
-         * <-ODataStore.Options.url->
+         * [descr:ODataStore.Options.url]
          */
         url?: string;
         /**
-         * <-ODataStore.Options.version->
+         * [descr:ODataStore.Options.version]
          */
         version?: number;
         /**
-         * <-ODataStore.Options.withCredentials->
+         * [descr:ODataStore.Options.withCredentials]
          */
         withCredentials?: boolean;
     }
     /**
-     * <-ODataStore->
+     * [descr:ODataStore]
      */
     export class ODataStore extends Store {
         constructor(options?: ODataStoreOptions)
         /**
-         * <-Store.byKey(key)->
+         * [descr:Store.byKey(key)]
          */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
         /**
-         * <-ODataStore.byKey(key, extraOptions)->
+         * [descr:ODataStore.byKey(key, extraOptions)]
          */
         byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
         /**
-         * <-ODataStore.createQuery(loadOptions)->
+         * [descr:ODataStore.createQuery(loadOptions)]
          */
         createQuery(loadOptions: any): any;
     }
     /**
-     * <-PivotGridDataSource.Options->
+     * [descr:PivotGridDataSource.Options]
      */
     export interface PivotGridDataSourceOptions {
         /**
-         * <-PivotGridDataSource.Options.fields->
+         * [descr:PivotGridDataSource.Options.fields]
          */
         fields?: Array<PivotGridDataSourceField>;
         /**
-         * <-PivotGridDataSource.Options.filter->
+         * [descr:PivotGridDataSource.Options.filter]
          */
         filter?: string | Array<any> | Function;
         /**
-         * <-PivotGridDataSource.Options.onChanged->
+         * [descr:PivotGridDataSource.Options.onChanged]
          */
         onChanged?: Function;
         /**
-         * <-PivotGridDataSource.Options.onFieldsPrepared->
+         * [descr:PivotGridDataSource.Options.onFieldsPrepared]
          */
         onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => any);
         /**
-         * <-PivotGridDataSource.Options.onLoadError->
+         * [descr:PivotGridDataSource.Options.onLoadError]
          */
         onLoadError?: ((error: any) => any);
         /**
-         * <-PivotGridDataSource.Options.onLoadingChanged->
+         * [descr:PivotGridDataSource.Options.onLoadingChanged]
          */
         onLoadingChanged?: ((isLoading: boolean) => any);
         /**
-         * <-PivotGridDataSource.Options.paginate->
+         * [descr:PivotGridDataSource.Options.paginate]
          */
         paginate?: boolean;
         /**
-         * <-PivotGridDataSource.Options.remoteOperations->
+         * [descr:PivotGridDataSource.Options.remoteOperations]
          */
         remoteOperations?: boolean;
         /**
-         * <-PivotGridDataSource.Options.retrieveFields->
+         * [descr:PivotGridDataSource.Options.retrieveFields]
          */
         retrieveFields?: boolean;
         /**
-         * <-PivotGridDataSource.Options.store->
+         * [descr:PivotGridDataSource.Options.store]
          */
         store?: Store | StoreOptions | XmlaStore | XmlaStoreOptions | Array<{ type?: 'array' | 'local' | 'odata' | 'xmla' }> | { type?: 'array' | 'local' | 'odata' | 'xmla' };
     }
     /**
-     * <-PivotGridDataSource.Options.fields->
+     * [descr:PivotGridDataSource.Options.fields]
      */
     export interface PivotGridDataSourceField {
         /**
-         * <-PivotGridDataSource.Options.fields.allowCrossGroupCalculation->
+         * [descr:PivotGridDataSource.Options.fields.allowCrossGroupCalculation]
          */
         allowCrossGroupCalculation?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.allowExpandAll->
+         * [descr:PivotGridDataSource.Options.fields.allowExpandAll]
          */
         allowExpandAll?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.allowFiltering->
+         * [descr:PivotGridDataSource.Options.fields.allowFiltering]
          */
         allowFiltering?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.allowSorting->
+         * [descr:PivotGridDataSource.Options.fields.allowSorting]
          */
         allowSorting?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.allowSortingBySummary->
+         * [descr:PivotGridDataSource.Options.fields.allowSortingBySummary]
          */
         allowSortingBySummary?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.area->
+         * [descr:PivotGridDataSource.Options.fields.area]
          */
         area?: 'column' | 'data' | 'filter' | 'row' | undefined;
         /**
-         * <-PivotGridDataSource.Options.fields.areaIndex->
+         * [descr:PivotGridDataSource.Options.fields.areaIndex]
          */
         areaIndex?: number;
         /**
-         * <-PivotGridDataSource.Options.fields.calculateCustomSummary->
+         * [descr:PivotGridDataSource.Options.fields.calculateCustomSummary]
          */
         calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
         /**
-         * <-PivotGridDataSource.Options.fields.calculateSummaryValue->
+         * [descr:PivotGridDataSource.Options.fields.calculateSummaryValue]
          */
         calculateSummaryValue?: ((e: DevExpress.ui.dxPivotGridSummaryCell) => number);
         /**
-         * <-PivotGridDataSource.Options.fields.caption->
+         * [descr:PivotGridDataSource.Options.fields.caption]
          */
         caption?: string;
         /**
-         * <-PivotGridDataSource.Options.fields.customizeText->
+         * [descr:PivotGridDataSource.Options.fields.customizeText]
          */
         customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
         /**
-         * <-PivotGridDataSource.Options.fields.dataField->
+         * [descr:PivotGridDataSource.Options.fields.dataField]
          */
         dataField?: string;
         /**
-         * <-PivotGridDataSource.Options.fields.dataType->
+         * [descr:PivotGridDataSource.Options.fields.dataType]
          */
         dataType?: 'date' | 'number' | 'string';
         /**
-         * <-PivotGridDataSource.Options.fields.displayFolder->
+         * [descr:PivotGridDataSource.Options.fields.displayFolder]
          */
         displayFolder?: string;
         /**
-         * <-PivotGridDataSource.Options.fields.expanded->
+         * [descr:PivotGridDataSource.Options.fields.expanded]
          */
         expanded?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.filterType->
+         * [descr:PivotGridDataSource.Options.fields.filterType]
          */
         filterType?: 'exclude' | 'include';
         /**
-         * <-PivotGridDataSource.Options.fields.filterValues->
+         * [descr:PivotGridDataSource.Options.fields.filterValues]
          */
         filterValues?: Array<any>;
         /**
-         * <-PivotGridDataSource.Options.fields.format->
+         * [descr:PivotGridDataSource.Options.fields.format]
          */
         format?: DevExpress.ui.format;
         /**
-         * <-PivotGridDataSource.Options.fields.groupIndex->
+         * [descr:PivotGridDataSource.Options.fields.groupIndex]
          */
         groupIndex?: number;
         /**
-         * <-PivotGridDataSource.Options.fields.groupInterval->
+         * [descr:PivotGridDataSource.Options.fields.groupInterval]
          */
         groupInterval?: 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year' | number;
         /**
-         * <-PivotGridDataSource.Options.fields.groupName->
+         * [descr:PivotGridDataSource.Options.fields.groupName]
          */
         groupName?: string;
         /**
-         * <-PivotGridDataSource.Options.fields.headerFilter->
+         * [descr:PivotGridDataSource.Options.fields.headerFilter]
          */
         headerFilter?: { allowSearch?: boolean, height?: number, width?: number };
         /**
-         * <-PivotGridDataSource.Options.fields.isMeasure->
+         * [descr:PivotGridDataSource.Options.fields.isMeasure]
          */
         isMeasure?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.name->
+         * [descr:PivotGridDataSource.Options.fields.name]
          */
         name?: string;
         /**
-         * <-PivotGridDataSource.Options.fields.runningTotal->
+         * [descr:PivotGridDataSource.Options.fields.runningTotal]
          */
         runningTotal?: 'column' | 'row';
         /**
-         * <-PivotGridDataSource.Options.fields.selector->
+         * [descr:PivotGridDataSource.Options.fields.selector]
          */
         selector?: Function;
         /**
-         * <-PivotGridDataSource.Options.fields.showGrandTotals->
+         * [descr:PivotGridDataSource.Options.fields.showGrandTotals]
          */
         showGrandTotals?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.showTotals->
+         * [descr:PivotGridDataSource.Options.fields.showTotals]
          */
         showTotals?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.showValues->
+         * [descr:PivotGridDataSource.Options.fields.showValues]
          */
         showValues?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.sortBy->
+         * [descr:PivotGridDataSource.Options.fields.sortBy]
          */
         sortBy?: 'displayText' | 'value' | 'none';
         /**
-         * <-PivotGridDataSource.Options.fields.sortBySummaryField->
+         * [descr:PivotGridDataSource.Options.fields.sortBySummaryField]
          */
         sortBySummaryField?: string;
         /**
-         * <-PivotGridDataSource.Options.fields.sortBySummaryPath->
+         * [descr:PivotGridDataSource.Options.fields.sortBySummaryPath]
          */
         sortBySummaryPath?: Array<number | string>;
         /**
-         * <-PivotGridDataSource.Options.fields.sortOrder->
+         * [descr:PivotGridDataSource.Options.fields.sortOrder]
          */
         sortOrder?: 'asc' | 'desc';
         /**
-         * <-PivotGridDataSource.Options.fields.sortingMethod->
+         * [descr:PivotGridDataSource.Options.fields.sortingMethod]
          */
         sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
         /**
-         * <-PivotGridDataSource.Options.fields.summaryDisplayMode->
+         * [descr:PivotGridDataSource.Options.fields.summaryDisplayMode]
          */
         summaryDisplayMode?: 'absoluteVariation' | 'percentOfColumnGrandTotal' | 'percentOfColumnTotal' | 'percentOfGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfRowTotal' | 'percentVariation';
         /**
-         * <-PivotGridDataSource.Options.fields.summaryType->
+         * [descr:PivotGridDataSource.Options.fields.summaryType]
          */
         summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
         /**
-         * <-PivotGridDataSource.Options.fields.visible->
+         * [descr:PivotGridDataSource.Options.fields.visible]
          */
         visible?: boolean;
         /**
-         * <-PivotGridDataSource.Options.fields.width->
+         * [descr:PivotGridDataSource.Options.fields.width]
          */
         width?: number;
         /**
-         * <-PivotGridDataSource.Options.fields.wordWrapEnabled->
+         * [descr:PivotGridDataSource.Options.fields.wordWrapEnabled]
          */
         wordWrapEnabled?: boolean;
     }
     /**
-     * <-PivotGridDataSource->
+     * [descr:PivotGridDataSource]
      */
     export class PivotGridDataSource {
         constructor(options?: PivotGridDataSourceOptions)
         /**
-         * <-PivotGridDataSource.collapseAll(id)->
+         * [descr:PivotGridDataSource.collapseAll(id)]
          */
         collapseAll(id: number | string): void;
         /**
-         * <-PivotGridDataSource.collapseHeaderItem(area, path)->
+         * [descr:PivotGridDataSource.collapseHeaderItem(area, path)]
          */
         collapseHeaderItem(area: string, path: Array<string | number | Date>): void;
         /**
-         * <-PivotGridDataSource.createDrillDownDataSource(options)->
+         * [descr:PivotGridDataSource.createDrillDownDataSource(options)]
          */
         createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>, rowPath?: Array<string | number | Date>, dataIndex?: number, maxRowCount?: number, customColumns?: Array<string> }): DataSource;
         /**
-         * <-PivotGridDataSource.dispose()->
+         * [descr:PivotGridDataSource.dispose()]
          */
         dispose(): void;
         /**
-         * <-PivotGridDataSource.expandAll(id)->
+         * [descr:PivotGridDataSource.expandAll(id)]
          */
         expandAll(id: number | string): void;
         /**
-         * <-PivotGridDataSource.expandHeaderItem(area, path)->
+         * [descr:PivotGridDataSource.expandHeaderItem(area, path)]
          */
         expandHeaderItem(area: string, path: Array<any>): void;
         /**
-         * <-PivotGridDataSource.field(id)->
+         * [descr:PivotGridDataSource.field(id)]
          */
         field(id: number | string): any;
         /**
-         * <-PivotGridDataSource.field(id, options)->
+         * [descr:PivotGridDataSource.field(id, options)]
          */
         field(id: number | string, options: any): void;
         /**
-         * <-PivotGridDataSource.fields()->
+         * [descr:PivotGridDataSource.fields()]
          */
         fields(): Array<PivotGridDataSourceField>;
         /**
-         * <-PivotGridDataSource.fields(fields)->
+         * [descr:PivotGridDataSource.fields(fields)]
          */
         fields(fields: Array<PivotGridDataSourceField>): void;
         /**
-         * <-PivotGridDataSource.filter()->
+         * [descr:PivotGridDataSource.filter()]
          */
         filter(): any;
         /**
-         * <-PivotGridDataSource.filter(filterExpr)->
+         * [descr:PivotGridDataSource.filter(filterExpr)]
          */
         filter(filterExpr: any): void;
         /**
-         * <-PivotGridDataSource.getAreaFields(area, collectGroups)->
+         * [descr:PivotGridDataSource.getAreaFields(area, collectGroups)]
          */
         getAreaFields(area: string, collectGroups: boolean): Array<PivotGridDataSourceField>;
         /**
-         * <-PivotGridDataSource.getData()->
+         * [descr:PivotGridDataSource.getData()]
          */
         getData(): any;
         /**
-         * <-PivotGridDataSource.isLoading()->
+         * [descr:PivotGridDataSource.isLoading()]
          */
         isLoading(): boolean;
         /**
-         * <-PivotGridDataSource.load()->
+         * [descr:PivotGridDataSource.load()]
          */
         load(): Promise<any> & JQueryPromise<any>;
         /**
-         * <-PivotGridDataSource.off(eventName)->
+         * [descr:PivotGridDataSource.off(eventName)]
          */
         off(eventName: string): this;
         /**
-         * <-PivotGridDataSource.off(eventName, eventHandler)->
+         * [descr:PivotGridDataSource.off(eventName, eventHandler)]
          */
         off(eventName: string, eventHandler: Function): this;
         /**
-         * <-PivotGridDataSource.on(eventName, eventHandler)->
+         * [descr:PivotGridDataSource.on(eventName, eventHandler)]
          */
         on(eventName: string, eventHandler: Function): this;
         /**
-         * <-PivotGridDataSource.on(events)->
+         * [descr:PivotGridDataSource.on(events)]
          */
         on(events: any): this;
         /**
-         * <-PivotGridDataSource.reload()->
+         * [descr:PivotGridDataSource.reload()]
          */
         reload(): Promise<any> & JQueryPromise<any>;
         /**
-         * <-PivotGridDataSource.state()->
+         * [descr:PivotGridDataSource.state()]
          */
         state(): any;
         /**
-         * <-PivotGridDataSource.state(state)->
+         * [descr:PivotGridDataSource.state(state)]
          */
         state(state: any): void;
     }
     /**
-     * <-Query->
+     * [descr:Query]
      */
     export class Query {
         /**
-         * <-Query.aggregate(seed, step, finalize)->
+         * [descr:Query.aggregate(seed, step, finalize)]
          */
         aggregate(seed: any, step: Function, finalize: Function): Promise<any> & JQueryPromise<any>;
         /**
-         * <-Query.aggregate(step)->
+         * [descr:Query.aggregate(step)]
          */
         aggregate(step: Function): Promise<any> & JQueryPromise<any>;
         /**
-         * <-Query.avg()->
+         * [descr:Query.avg()]
          */
         avg(): Promise<number> & JQueryPromise<number>;
         /**
-         * <-Query.avg(getter)->
+         * [descr:Query.avg(getter)]
          */
         avg(getter: any): Promise<number> & JQueryPromise<number>;
         /**
-         * <-Query.count()->
+         * [descr:Query.count()]
          */
         count(): Promise<number> & JQueryPromise<number>;
         /**
-         * <-Query.enumerate()->
+         * [descr:Query.enumerate()]
          */
         enumerate(): Promise<any> & JQueryPromise<any>;
         /**
-         * <-Query.filter(criteria)->
+         * [descr:Query.filter(criteria)]
          */
         filter(criteria: Array<any>): Query;
         /**
-         * <-Query.filter(predicate)->
+         * [descr:Query.filter(predicate)]
          */
         filter(predicate: Function): Query;
         /**
-         * <-Query.groupBy(getter)->
+         * [descr:Query.groupBy(getter)]
          */
         groupBy(getter: any): Query;
         /**
-         * <-Query.max()->
+         * [descr:Query.max()]
          */
         max(): Promise<number | Date> & JQueryPromise<number | Date>;
         /**
-         * <-Query.max(getter)->
+         * [descr:Query.max(getter)]
          */
         max(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
         /**
-         * <-Query.min()->
+         * [descr:Query.min()]
          */
         min(): Promise<number | Date> & JQueryPromise<number | Date>;
         /**
-         * <-Query.min(getter)->
+         * [descr:Query.min(getter)]
          */
         min(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
         /**
-         * <-Query.select(getter)->
+         * [descr:Query.select(getter)]
          */
         select(getter: any): Query;
         /**
-         * <-Query.slice(skip, take)->
+         * [descr:Query.slice(skip, take)]
          */
         slice(skip: number, take?: number): Query;
         /**
-         * <-Query.sortBy(getter)->
+         * [descr:Query.sortBy(getter)]
          */
         sortBy(getter: any): Query;
         /**
-         * <-Query.sortBy(getter, desc)->
+         * [descr:Query.sortBy(getter, desc)]
          */
         sortBy(getter: any, desc: boolean): Query;
         /**
-         * <-Query.sum()->
+         * [descr:Query.sum()]
          */
         sum(): Promise<number> & JQueryPromise<number>;
         /**
-         * <-Query.sum(getter)->
+         * [descr:Query.sum(getter)]
          */
         sum(getter: any): Promise<number> & JQueryPromise<number>;
         /**
-         * <-Query.thenBy(getter)->
+         * [descr:Query.thenBy(getter)]
          */
         thenBy(getter: any): Query;
         /**
-         * <-Query.thenBy(getter, desc)->
+         * [descr:Query.thenBy(getter, desc)]
          */
         thenBy(getter: any, desc: boolean): Query;
         /**
-         * <-Query.toArray()->
+         * [descr:Query.toArray()]
          */
         toArray(): Array<any>;
     }
     /**
-     * <-Store.Options->
+     * [descr:Store.Options]
      */
     export interface StoreOptions<T = Store> {
         /**
-         * <-Store.Options.errorHandler->
+         * [descr:Store.Options.errorHandler]
          */
         errorHandler?: Function;
         /**
-         * <-Store.Options.key->
+         * [descr:Store.Options.key]
          */
         key?: string | Array<string>;
         /**
-         * <-Store.Options.onInserted->
+         * [descr:Store.Options.onInserted]
          */
         onInserted?: ((values: any, key: any | string | number) => any);
         /**
-         * <-Store.Options.onInserting->
+         * [descr:Store.Options.onInserting]
          */
         onInserting?: ((values: any) => any);
         /**
-         * <-Store.Options.onLoaded->
+         * [descr:Store.Options.onLoaded]
          */
         onLoaded?: ((result: Array<any>) => any);
         /**
-         * <-Store.Options.onLoading->
+         * [descr:Store.Options.onLoading]
          */
         onLoading?: ((loadOptions: LoadOptions) => any);
         /**
-         * <-Store.Options.onModified->
+         * [descr:Store.Options.onModified]
          */
         onModified?: Function;
         /**
-         * <-Store.Options.onModifying->
+         * [descr:Store.Options.onModifying]
          */
         onModifying?: Function;
         /**
-         * <-Store.Options.onPush->
+         * [descr:Store.Options.onPush]
          */
         onPush?: ((changes: Array<any>) => any);
         /**
-         * <-Store.Options.onRemoved->
+         * [descr:Store.Options.onRemoved]
          */
         onRemoved?: ((key: any | string | number) => any);
         /**
-         * <-Store.Options.onRemoving->
+         * [descr:Store.Options.onRemoving]
          */
         onRemoving?: ((key: any | string | number) => any);
         /**
-         * <-Store.Options.onUpdated->
+         * [descr:Store.Options.onUpdated]
          */
         onUpdated?: ((key: any | string | number, values: any) => any);
         /**
-         * <-Store.Options.onUpdating->
+         * [descr:Store.Options.onUpdating]
          */
         onUpdating?: ((key: any | string | number, values: any) => any);
     }
     /**
-     * <-Store->
+     * [descr:Store]
      */
     export class Store {
         constructor(options?: StoreOptions)
         /**
-         * <-Store.byKey(key)->
+         * [descr:Store.byKey(key)]
          */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
         /**
-         * <-Store.insert(values)->
+         * [descr:Store.insert(values)]
          */
         insert(values: any): Promise<any> & JQueryPromise<any>;
         /**
-         * <-Store.key()->
+         * [descr:Store.key()]
          */
         key(): any;
         /**
-         * <-Store.keyOf(obj)->
+         * [descr:Store.keyOf(obj)]
          */
         keyOf(obj: any): any;
         /**
-         * <-Store.load()->
+         * [descr:Store.load()]
          */
         load(): Promise<any> & JQueryPromise<any>;
         /**
-         * <-Store.load(options)->
+         * [descr:Store.load(options)]
          */
         load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
         /**
-         * <-Store.off(eventName)->
+         * [descr:Store.off(eventName)]
          */
         off(eventName: string): this;
         /**
-         * <-Store.off(eventName, eventHandler)->
+         * [descr:Store.off(eventName, eventHandler)]
          */
         off(eventName: string, eventHandler: Function): this;
         /**
-         * <-Store.on(eventName, eventHandler)->
+         * [descr:Store.on(eventName, eventHandler)]
          */
         on(eventName: string, eventHandler: Function): this;
         /**
-         * <-Store.on(events)->
+         * [descr:Store.on(events)]
          */
         on(events: any): this;
         /**
-         * <-Store.push(changes)->
+         * [descr:Store.push(changes)]
          */
         push(changes: Array<any>): void;
         /**
-         * <-Store.remove(key)->
+         * [descr:Store.remove(key)]
          */
         remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
         /**
-         * <-Store.totalCount(options)->
+         * [descr:Store.totalCount(options)]
          */
         totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
         /**
-         * <-Store.update(key, values)->
+         * [descr:Store.update(key, values)]
          */
         update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
     }
     /**
-     * <-XmlaStore.Options->
+     * [descr:XmlaStore.Options]
      */
     export interface XmlaStoreOptions {
         /**
-         * <-XmlaStore.Options.beforeSend->
+         * [descr:XmlaStore.Options.beforeSend]
          */
         beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
         /**
-         * <-XmlaStore.Options.catalog->
+         * [descr:XmlaStore.Options.catalog]
          */
         catalog?: string;
         /**
-         * <-XmlaStore.Options.cube->
+         * [descr:XmlaStore.Options.cube]
          */
         cube?: string;
         /**
-         * <-XmlaStore.Options.url->
+         * [descr:XmlaStore.Options.url]
          */
         url?: string;
     }
     /**
-     * <-XmlaStore->
+     * [descr:XmlaStore]
      */
     export class XmlaStore {
         constructor(options?: XmlaStoreOptions)
     }
     /**
-     * <-Utils.base64_encode(input)->
+     * [descr:Utils.applyChanges(data, changes, options)]
+     */
+    export function applyChanges(data: Array<any>, changes: Array<any>, options?: { keyExpr?: string | Array<string>, immutable?: boolean }): Array<any>;
+    /**
+     * [descr:Utils.base64_encode(input)]
      */
     export function base64_encode(input: string | Array<number>): string;
     /**
-     * <-Utils.errorHandler->
+     * [descr:Utils.errorHandler]
      */
     export function errorHandler(e: Error): void;
     /**
-     * <-Utils.query(array)->
+     * [descr:Utils.query(array)]
      */
     export function query(array: Array<any>): Query;
     /**
-     * <-Utils.query(url, queryOptions)->
+     * [descr:Utils.query(url, queryOptions)]
      */
     export function query(url: string, queryOptions: any): Query;
 }
 declare module DevExpress.data.utils {
     /**
-     * <-Utils.compileGetter(expr)->
+     * [descr:Utils.compileGetter(expr)]
      */
     export function compileGetter(expr: string | Array<string>): Function;
     /**
-     * <-Utils.compileSetter(expr)->
+     * [descr:Utils.compileSetter(expr)]
      */
     export function compileSetter(expr: string | Array<string>): Function;
 }
 declare module DevExpress.data.utils.odata {
     /**
-     * <-Utils.keyConverters->
+     * [descr:Utils.keyConverters]
      */
     export var keyConverters: any;
 }
 declare module DevExpress.events {
     /**
-     * <-dxEvent->
+     * [descr:dxEvent]
      */
     export class dxEvent {
         /**
-         * <-dxEvent.currentTarget->
+         * [descr:dxEvent.currentTarget]
          */
         currentTarget: Element;
         /**
-         * <-dxEvent.data->
+         * [descr:dxEvent.data]
          */
         data: any;
         /**
-         * <-dxEvent.delegateTarget->
+         * [descr:dxEvent.delegateTarget]
          */
         delegateTarget: Element;
         /**
-         * <-dxEvent.target->
+         * [descr:dxEvent.target]
          */
         target: Element;
         /**
-         * <-dxEvent.isDefaultPrevented()->
+         * [descr:dxEvent.isDefaultPrevented()]
          */
         isDefaultPrevented(): boolean;
         /**
-         * <-dxEvent.isImmediatePropagationStopped()->
+         * [descr:dxEvent.isImmediatePropagationStopped()]
          */
         isImmediatePropagationStopped(): boolean;
         /**
-         * <-dxEvent.isPropagationStopped()->
+         * [descr:dxEvent.isPropagationStopped()]
          */
         isPropagationStopped(): boolean;
         /**
-         * <-dxEvent.preventDefault()->
+         * [descr:dxEvent.preventDefault()]
          */
         preventDefault(): void;
         /**
-         * <-dxEvent.stopImmediatePropagation()->
+         * [descr:dxEvent.stopImmediatePropagation()]
          */
         stopImmediatePropagation(): void;
         /**
-         * <-dxEvent.stopPropagation()->
+         * [descr:dxEvent.stopPropagation()]
          */
         stopPropagation(): void;
     }
     /**
-     * <-event->
+     * [descr:event]
      */
     export type event = dxEvent | JQueryEventObject;
     /**
-     * <-eventsHandler->
+     * [descr:eventsHandler]
      */
     export function eventsHandler(event: dxEvent, extraParameters: any): boolean;
     /**
-     * <-events.off(element)->
+     * [descr:events.off(element)]
      */
     export function off(element: Element | Array<Element>): void;
     /**
-     * <-events.off(element, eventName)->
+     * [descr:events.off(element, eventName)]
      */
     export function off(element: Element | Array<Element>, eventName: string): void;
     /**
-     * <-events.off(element, eventName, handler)->
+     * [descr:events.off(element, eventName, handler)]
      */
     export function off(element: Element | Array<Element>, eventName: string, handler: Function): void;
     /**
-     * <-events.off(element, eventName, selector)->
+     * [descr:events.off(element, eventName, selector)]
      */
     export function off(element: Element | Array<Element>, eventName: string, selector: string): void;
     /**
-     * <-events.off(element, eventName, selector, handler)->
+     * [descr:events.off(element, eventName, selector, handler)]
      */
     export function off(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
     /**
-     * <-events.on(element, eventName, data, handler)->
+     * [descr:events.on(element, eventName, data, handler)]
      */
     export function on(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
     /**
-     * <-events.on(element, eventName, handler)->
+     * [descr:events.on(element, eventName, handler)]
      */
     export function on(element: Element | Array<Element>, eventName: string, handler: Function): void;
     /**
-     * <-events.on(element, eventName, selector, data, handler)->
+     * [descr:events.on(element, eventName, selector, data, handler)]
      */
     export function on(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
     /**
-     * <-events.on(element, eventName, selector, handler)->
+     * [descr:events.on(element, eventName, selector, handler)]
      */
     export function on(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
     /**
-     * <-events.one(element, eventName, data, handler)->
+     * [descr:events.one(element, eventName, data, handler)]
      */
     export function one(element: Element | Array<Element>, eventName: string, data: any, handler: Function): void;
     /**
-     * <-events.one(element, eventName, handler)->
+     * [descr:events.one(element, eventName, handler)]
      */
     export function one(element: Element | Array<Element>, eventName: string, handler: Function): void;
     /**
-     * <-events.one(element, eventName, selector, data, handler)->
+     * [descr:events.one(element, eventName, selector, data, handler)]
      */
     export function one(element: Element | Array<Element>, eventName: string, selector: string, data: any, handler: Function): void;
     /**
-     * <-events.one(element, eventName, selector, handler)->
+     * [descr:events.one(element, eventName, selector, handler)]
      */
     export function one(element: Element | Array<Element>, eventName: string, selector: string, handler: Function): void;
     /**
-     * <-events.trigger(element, event)->
+     * [descr:events.trigger(element, event)]
      */
     export function trigger(element: Element | Array<Element>, event: string | event): void;
     /**
-     * <-events.trigger(element, event, extraParameters)->
+     * [descr:events.trigger(element, event, extraParameters)]
      */
     export function trigger(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
     /**
-     * <-events.triggerHandler(element, event)->
+     * [descr:events.triggerHandler(element, event)]
      */
     export function triggerHandler(element: Element | Array<Element>, event: string | event): void;
     /**
-     * <-events.triggerHandler(element, event, extraParameters)->
+     * [descr:events.triggerHandler(element, event, extraParameters)]
      */
     export function triggerHandler(element: Element | Array<Element>, event: string | event, extraParameters: any): void;
 }
 declare module DevExpress.excelExporter {
     /**
-     * <-CellAddress->
+     * [descr:CellAddress]
      */
     export interface CellAddress {
         /**
-         * <-CellAddress.column->
+         * [descr:CellAddress.column]
          */
         column?: number;
         /**
-         * <-CellAddress.row->
+         * [descr:CellAddress.row]
          */
         row?: number;
     }
     /**
-     * <-CellRange->
+     * [descr:CellRange]
      */
     export interface CellRange {
         /**
-         * <-CellRange.from->
+         * [descr:CellRange.from]
          */
         from?: CellAddress;
         /**
-         * <-CellRange.to->
+         * [descr:CellRange.to]
          */
         to?: CellAddress;
     }
     /**
-     * <-ExcelDataGridCell->
+     * [descr:ExcelDataGridCell]
      */
     export interface ExcelDataGridCell {
         /**
-         * <-ExcelDataGridCell.column->
+         * [descr:ExcelDataGridCell.column]
          */
         column?: DevExpress.ui.dxDataGridColumn;
         /**
-         * <-ExcelDataGridCell.data->
+         * [descr:ExcelDataGridCell.data]
          */
         data?: any;
         /**
-         * <-ExcelDataGridCell.groupIndex->
+         * [descr:ExcelDataGridCell.groupIndex]
          */
         groupIndex?: number;
         /**
-         * <-ExcelDataGridCell.groupSummaryItems->
+         * [descr:ExcelDataGridCell.groupSummaryItems]
          */
         groupSummaryItems?: Array<{ name?: string, value?: any }>;
         /**
-         * <-ExcelDataGridCell.rowType->
+         * [descr:ExcelDataGridCell.rowType]
          */
         rowType?: string;
         /**
-         * <-ExcelDataGridCell.totalSummaryItemName->
+         * [descr:ExcelDataGridCell.totalSummaryItemName]
          */
         totalSummaryItemName?: string;
         /**
-         * <-ExcelDataGridCell.value->
+         * [descr:ExcelDataGridCell.value]
          */
         value?: any;
     }
     /**
-     * <-ExcelPivotGridCell->
+     * [descr:ExcelPivotGridCell]
      */
     export interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGridPivotGridCell {
         /**
-         * <-ExcelPivotGridCell.area->
+         * [descr:ExcelPivotGridCell.area]
          */
         area?: string;
         /**
-         * <-ExcelPivotGridCell.columnIndex->
+         * [descr:ExcelPivotGridCell.columnIndex]
          */
         columnIndex?: number;
         /**
-         * <-ExcelPivotGridCell.rowIndex->
+         * [descr:ExcelPivotGridCell.rowIndex]
          */
         rowIndex?: number;
     }
     /**
-     * <-ExportBaseProps->
+     * [descr:ExportBaseProps]
      */
     export interface ExportBaseProps {
         /**
-         * <-ExportBaseProps.keepColumnWidths->
+         * [descr:ExportBaseProps.keepColumnWidths]
          */
         keepColumnWidths?: boolean;
         /**
-         * <-ExportBaseProps.loadPanel->
+         * [descr:ExportBaseProps.loadPanel]
          */
         loadPanel?: ExportLoadPanel;
         /**
-         * <-ExportBaseProps.topLeftCell->
+         * [descr:ExportBaseProps.topLeftCell]
          */
         topLeftCell?: CellAddress | string;
         /**
-         * <-ExportBaseProps.worksheet->
+         * [descr:ExportBaseProps.worksheet]
          */
         worksheet?: any;
     }
     /**
-     * <-ExportDataGridProps->
+     * [descr:ExportDataGridProps]
      */
     export interface ExportDataGridProps extends ExportBaseProps {
         /**
-         * <-ExportDataGridProps.autoFilterEnabled->
+         * [descr:ExportDataGridProps.autoFilterEnabled]
          */
         autoFilterEnabled?: boolean;
         /**
-         * <-ExportDataGridProps.component->
+         * [descr:ExportDataGridProps.component]
          */
         component?: DevExpress.ui.dxDataGrid;
         /**
-         * <-ExportDataGridProps.customizeCell->
+         * [descr:ExportDataGridProps.customizeCell]
          */
         customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
         /**
-         * <-ExportDataGridProps.selectedRowsOnly->
+         * [descr:ExportDataGridProps.selectedRowsOnly]
          */
         selectedRowsOnly?: boolean;
     }
     /**
-     * <-ExportLoadPanel->
+     * [descr:ExportLoadPanel]
      */
     export interface ExportLoadPanel {
         /**
-         * <-ExportLoadPanel.enabled->
+         * [descr:ExportLoadPanel.enabled]
          */
         enabled?: boolean;
         /**
-         * <-ExportLoadPanel.height->
+         * [descr:ExportLoadPanel.height]
          */
         height?: number;
         /**
-         * <-ExportLoadPanel.indicatorSrc->
+         * [descr:ExportLoadPanel.indicatorSrc]
          */
         indicatorSrc?: string;
         /**
-         * <-ExportLoadPanel.shading->
+         * [descr:ExportLoadPanel.shading]
          */
         shading?: boolean;
         /**
-         * <-ExportLoadPanel.shadingColor->
+         * [descr:ExportLoadPanel.shadingColor]
          */
         shadingColor?: string;
         /**
-         * <-ExportLoadPanel.showIndicator->
+         * [descr:ExportLoadPanel.showIndicator]
          */
         showIndicator?: boolean;
         /**
-         * <-ExportLoadPanel.showPane->
+         * [descr:ExportLoadPanel.showPane]
          */
         showPane?: boolean;
         /**
-         * <-ExportLoadPanel.text->
+         * [descr:ExportLoadPanel.text]
          */
         text?: string;
         /**
-         * <-ExportLoadPanel.width->
+         * [descr:ExportLoadPanel.width]
          */
         width?: number;
     }
     /**
-     * <-ExportPivotGridProps->
+     * [descr:ExportPivotGridProps]
      */
     export interface ExportPivotGridProps extends ExportBaseProps {
         /**
-         * <-ExportPivotGridProps.component->
+         * [descr:ExportPivotGridProps.component]
          */
         component?: DevExpress.ui.dxPivotGrid;
         /**
-         * <-ExportPivotGridProps.customizeCell->
+         * [descr:ExportPivotGridProps.customizeCell]
          */
         customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
     }
     /**
-     * <-excelExporter.exportDataGrid(options)->
+     * [descr:excelExporter.exportDataGrid(options)]
      */
     export function exportDataGrid(options: ExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
     /**
-     * <-excelExporter.exportPivotGrid(options)->
+     * [descr:excelExporter.exportPivotGrid(options)]
      */
     export function exportPivotGrid(options: ExportPivotGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
 }
 declare module DevExpress.exporter {
     /**
-     * <-ExcelFont->
+     * [descr:ExcelFont]
      */
     export interface ExcelFont {
         /**
-         * <-ExcelFont.bold->
+         * [descr:ExcelFont.bold]
          */
         bold?: boolean;
         /**
-         * <-ExcelFont.color->
+         * [descr:ExcelFont.color]
          */
         color?: string;
         /**
-         * <-ExcelFont.italic->
+         * [descr:ExcelFont.italic]
          */
         italic?: boolean;
         /**
-         * <-ExcelFont.name->
+         * [descr:ExcelFont.name]
          */
         name?: string;
         /**
-         * <-ExcelFont.size->
+         * [descr:ExcelFont.size]
          */
         size?: number;
         /**
-         * <-ExcelFont.underline->
+         * [descr:ExcelFont.underline]
          */
         underline?: 'double' | 'doubleAccounting' | 'none' | 'single' | 'singleAccounting';
     }
 }
 declare module DevExpress.fileManagement {
     /**
-     * <-CustomFileSystemProvider.Options->
+     * [descr:CustomFileSystemProvider.Options]
      */
     export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
         /**
-         * <-CustomFileSystemProvider.Options.abortFileUpload->
+         * [descr:CustomFileSystemProvider.Options.abortFileUpload]
          */
         abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-CustomFileSystemProvider.Options.copyItem->
+         * [descr:CustomFileSystemProvider.Options.copyItem]
          */
         copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-CustomFileSystemProvider.Options.createDirectory->
+         * [descr:CustomFileSystemProvider.Options.createDirectory]
          */
         createDirectory?: ((parentDirectory: FileSystemItem, name: string) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-CustomFileSystemProvider.Options.deleteItem->
+         * [descr:CustomFileSystemProvider.Options.deleteItem]
          */
         deleteItem?: ((item: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-CustomFileSystemProvider.Options.downloadItems->
+         * [descr:CustomFileSystemProvider.Options.downloadItems]
          */
         downloadItems?: ((items: Array<FileSystemItem>) => any);
         /**
-         * <-CustomFileSystemProvider.Options.getItems->
+         * [descr:CustomFileSystemProvider.Options.getItems]
          */
         getItems?: ((parentDirectory: FileSystemItem) => Promise<Array<any>> | JQueryPromise<Array<any>> | Array<any>);
         /**
-         * <-CustomFileSystemProvider.Options.getItemsContent->
+         * [descr:CustomFileSystemProvider.Options.getItemsContent]
          */
         getItemsContent?: ((items: Array<FileSystemItem>) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-CustomFileSystemProvider.Options.hasSubDirectoriesExpr->
+         * [descr:CustomFileSystemProvider.Options.hasSubDirectoriesExpr]
          */
         hasSubDirectoriesExpr?: string | Function;
         /**
-         * <-CustomFileSystemProvider.Options.moveItem->
+         * [descr:CustomFileSystemProvider.Options.moveItem]
          */
         moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-CustomFileSystemProvider.Options.renameItem->
+         * [descr:CustomFileSystemProvider.Options.renameItem]
          */
         renameItem?: ((item: FileSystemItem, newName: string) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-CustomFileSystemProvider.Options.uploadFileChunk->
+         * [descr:CustomFileSystemProvider.Options.uploadFileChunk]
          */
         uploadFileChunk?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
     }
     /**
-     * <-CustomFileSystemProvider->
+     * [descr:CustomFileSystemProvider]
      */
     export class CustomFileSystemProvider extends FileSystemProviderBase {
         constructor(options?: CustomFileSystemProviderOptions)
     }
     /**
-     * <-FileSystemItem->
+     * [descr:FileSystemItem]
      */
     export class FileSystemItem {
         /**
-         * <-FileSystemItem.dataItem->
+         * [descr:FileSystemItem.dataItem]
          */
         dataItem: any;
         /**
-         * <-FileSystemItem.dateModified->
+         * [descr:FileSystemItem.dateModified]
          */
         dateModified: Date;
         /**
-         * <-FileSystemItem.hasSubDirectories->
+         * [descr:FileSystemItem.hasSubDirectories]
          */
         hasSubDirectories: boolean;
         /**
-         * <-FileSystemItem.isDirectory->
+         * [descr:FileSystemItem.isDirectory]
          */
         isDirectory: boolean;
         /**
-         * <-FileSystemItem.key->
+         * [descr:FileSystemItem.key]
          */
         key: string;
         /**
-         * <-FileSystemItem.name->
+         * [descr:FileSystemItem.name]
          */
         name: string;
         /**
-         * <-FileSystemItem.path->
+         * [descr:FileSystemItem.path]
          */
         path: string;
         /**
-         * <-FileSystemItem.pathKeys->
+         * [descr:FileSystemItem.pathKeys]
          */
         pathKeys: Array<string>;
         /**
-         * <-FileSystemItem.size->
+         * [descr:FileSystemItem.size]
          */
         size: number;
         /**
-         * <-FileSystemItem.thumbnail->
+         * [descr:FileSystemItem.thumbnail]
          */
         thumbnail: string;
         /**
-         * <-FileSystemItem.getFileExtension()->
+         * [descr:FileSystemItem.getFileExtension()]
          */
         getFileExtension(): string;
     }
     /**
-     * <-FileSystemProviderBase.Options->
+     * [descr:FileSystemProviderBase.Options]
      */
     export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
         /**
-         * <-FileSystemProviderBase.Options.dateModifiedExpr->
+         * [descr:FileSystemProviderBase.Options.dateModifiedExpr]
          */
         dateModifiedExpr?: string | Function;
         /**
-         * <-FileSystemProviderBase.Options.isDirectoryExpr->
+         * [descr:FileSystemProviderBase.Options.isDirectoryExpr]
          */
         isDirectoryExpr?: string | Function;
         /**
-         * <-FileSystemProviderBase.Options.keyExpr->
+         * [descr:FileSystemProviderBase.Options.keyExpr]
          */
         keyExpr?: string | Function;
         /**
-         * <-FileSystemProviderBase.Options.nameExpr->
+         * [descr:FileSystemProviderBase.Options.nameExpr]
          */
         nameExpr?: string | Function;
         /**
-         * <-FileSystemProviderBase.Options.sizeExpr->
+         * [descr:FileSystemProviderBase.Options.sizeExpr]
          */
         sizeExpr?: string | Function;
         /**
-         * <-FileSystemProviderBase.Options.thumbnailExpr->
+         * [descr:FileSystemProviderBase.Options.thumbnailExpr]
          */
         thumbnailExpr?: string | Function;
     }
     /**
-     * <-FileSystemProviderBase->
+     * [descr:FileSystemProviderBase]
      */
     export class FileSystemProviderBase {
         constructor(options?: FileSystemProviderBaseOptions)
         /**
-         * <-FileSystemProviderBase.abortFileUpload()->
+         * [descr:FileSystemProviderBase.abortFileUpload()]
          */
         abortFileUpload(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
         /**
-         * <-FileSystemProviderBase.copyItems()->
+         * [descr:FileSystemProviderBase.copyItems()]
          */
         copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> | JQueryPromise<any>>;
         /**
-         * <-FileSystemProviderBase.createDirectory()->
+         * [descr:FileSystemProviderBase.createDirectory()]
          */
         createDirectory(parentDirectory: FileSystemItem, name: string): Promise<any> & JQueryPromise<any>;
         /**
-         * <-FileSystemProviderBase.deleteItems()->
+         * [descr:FileSystemProviderBase.deleteItems()]
          */
         deleteItems(items: Array<FileSystemItem>): Array<Promise<any> | JQueryPromise<any>>;
         /**
-         * <-FileSystemProviderBase.downloadItems()->
+         * [descr:FileSystemProviderBase.downloadItems()]
          */
         downloadItems(items: Array<FileSystemItem>): void;
         /**
-         * <-FileSystemProviderBase.getItems()->
+         * [descr:FileSystemProviderBase.getItems()]
          */
         getItems(parentDirectory: FileSystemItem): Promise<Array<FileSystemItem>> & JQueryPromise<Array<FileSystemItem>>;
         /**
-         * <-FileSystemProviderBase.getItemsContent()->
+         * [descr:FileSystemProviderBase.getItemsContent()]
          */
         getItemsContent(items: Array<FileSystemItem>): Promise<any> & JQueryPromise<any>;
         /**
-         * <-FileSystemProviderBase.moveItems()->
+         * [descr:FileSystemProviderBase.moveItems()]
          */
         moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> | JQueryPromise<any>>;
         /**
-         * <-FileSystemProviderBase.renameItem()->
+         * [descr:FileSystemProviderBase.renameItem()]
          */
         renameItem(item: FileSystemItem, newName: string): Promise<any> & JQueryPromise<any>;
         /**
-         * <-FileSystemProviderBase.uploadFileChunk()->
+         * [descr:FileSystemProviderBase.uploadFileChunk()]
          */
         uploadFileChunk(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
     }
     /**
-     * <-ObjectFileSystemProvider.Options->
+     * [descr:ObjectFileSystemProvider.Options]
      */
     export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseOptions<ObjectFileSystemProvider> {
         /**
-         * <-ObjectFileSystemProvider.Options.contentExpr->
+         * [descr:ObjectFileSystemProvider.Options.contentExpr]
          */
         contentExpr?: string | Function;
         /**
-         * <-ObjectFileSystemProvider.Options.data->
+         * [descr:ObjectFileSystemProvider.Options.data]
          */
         data?: Array<any>;
         /**
-         * <-ObjectFileSystemProvider.Options.itemsExpr->
+         * [descr:ObjectFileSystemProvider.Options.itemsExpr]
          */
         itemsExpr?: string | Function;
     }
     /**
-     * <-ObjectFileSystemProvider->
+     * [descr:ObjectFileSystemProvider]
      */
     export class ObjectFileSystemProvider extends FileSystemProviderBase {
         constructor(options?: ObjectFileSystemProviderOptions)
     }
     /**
-     * <-RemoteFileSystemProvider.Options->
+     * [descr:RemoteFileSystemProvider.Options]
      */
     export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseOptions<RemoteFileSystemProvider> {
         /**
-         * <-RemoteFileSystemProvider.Options.endpointUrl->
+         * [descr:RemoteFileSystemProvider.Options.endpointUrl]
          */
         endpointUrl?: string;
         /**
-         * <-RemoteFileSystemProvider.Options.hasSubDirectoriesExpr->
+         * [descr:RemoteFileSystemProvider.Options.hasSubDirectoriesExpr]
          */
         hasSubDirectoriesExpr?: string | Function;
     }
     /**
-     * <-RemoteFileSystemProvider->
+     * [descr:RemoteFileSystemProvider]
      */
     export class RemoteFileSystemProvider extends FileSystemProviderBase {
         constructor(options?: RemoteFileSystemProviderOptions)
     }
     /**
-     * <-UploadInfo->
+     * [descr:UploadInfo]
      */
     export interface UploadInfo {
         /**
-         * <-UploadInfo.bytesUploaded->
+         * [descr:UploadInfo.bytesUploaded]
          */
         bytesUploaded: number;
         /**
-         * <-UploadInfo.chunkBlob->
+         * [descr:UploadInfo.chunkBlob]
          */
         chunkBlob: Blob;
         /**
-         * <-UploadInfo.chunkCount->
+         * [descr:UploadInfo.chunkCount]
          */
         chunkCount: number;
         /**
-         * <-UploadInfo.chunkIndex->
+         * [descr:UploadInfo.chunkIndex]
          */
         chunkIndex: number;
         /**
-         * <-UploadInfo.customData->
+         * [descr:UploadInfo.customData]
          */
         customData: any;
     }
 }
 declare module DevExpress.fx {
     /**
-     * <-fx.animate(element, config)->
+     * [descr:fx.animate(element, config)]
      */
     export function animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
     /**
-     * <-fx.isAnimating(element)->
+     * [descr:fx.isAnimating(element)]
      */
     export function isAnimating(element: Element): boolean;
     /**
-     * <-fx.stop(element, jumpToEnd)->
+     * [descr:fx.stop(element, jumpToEnd)]
      */
     export function stop(element: Element, jumpToEnd: boolean): void;
 }
 declare module DevExpress.ui {
     /**
-     * <-AsyncRule->
+     * [descr:AsyncRule]
      */
     export interface AsyncRule {
         /**
-         * <-AsyncRule.ignoreEmptyValue->
+         * [descr:AsyncRule.ignoreEmptyValue]
          */
         ignoreEmptyValue?: boolean;
         /**
-         * <-AsyncRule.message->
+         * [descr:AsyncRule.message]
          */
         message?: string;
         /**
-         * <-AsyncRule.reevaluate->
+         * [descr:AsyncRule.reevaluate]
          */
         reevaluate?: boolean;
         /**
-         * <-AsyncRule.type->
+         * [descr:AsyncRule.type]
          */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /**
-         * <-AsyncRule.validationCallback->
+         * [descr:AsyncRule.validationCallback]
          */
         validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => Promise<any> | JQueryPromise<any>);
     }
     /**
-     * <-ColCountResponsible->
+     * [descr:ColCountResponsible]
      */
     export interface ColCountResponsible {
         /**
-         * <-ColCountResponsible.lg->
+         * [descr:ColCountResponsible.lg]
          */
         lg?: number;
         /**
-         * <-ColCountResponsible.md->
+         * [descr:ColCountResponsible.md]
          */
         md?: number;
         /**
-         * <-ColCountResponsible.sm->
+         * [descr:ColCountResponsible.sm]
          */
         sm?: number;
         /**
-         * <-ColCountResponsible.xs->
+         * [descr:ColCountResponsible.xs]
          */
         xs?: number;
     }
     /**
-     * <-CollectionWidget.Options->
+     * [descr:CollectionWidget.Options]
      */
     export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
         /**
-         * <-CollectionWidget.Options.dataSource->
+         * [descr:CollectionWidget.Options.dataSource]
          */
         dataSource?: string | Array<string | CollectionWidgetItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-CollectionWidget.Options.itemHoldTimeout->
+         * [descr:CollectionWidget.Options.itemHoldTimeout]
          */
         itemHoldTimeout?: number;
         /**
-         * <-CollectionWidget.Options.itemTemplate->
+         * [descr:CollectionWidget.Options.itemTemplate]
          */
         itemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-CollectionWidget.Options.items->
+         * [descr:CollectionWidget.Options.items]
          */
         items?: Array<string | CollectionWidgetItem | any>;
         /**
-         * <-CollectionWidget.Options.keyExpr->
+         * [descr:CollectionWidget.Options.keyExpr]
          */
         keyExpr?: string | Function;
         /**
-         * <-CollectionWidget.Options.noDataText->
+         * [descr:CollectionWidget.Options.noDataText]
          */
         noDataText?: string;
         /**
-         * <-CollectionWidget.Options.onItemClick->
+         * [descr:CollectionWidget.Options.onItemClick]
          */
         onItemClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any) | string;
         /**
-         * <-CollectionWidget.Options.onItemContextMenu->
+         * [descr:CollectionWidget.Options.onItemContextMenu]
          */
         onItemContextMenu?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any);
         /**
-         * <-CollectionWidget.Options.onItemHold->
+         * [descr:CollectionWidget.Options.onItemHold]
          */
         onItemHold?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any);
         /**
-         * <-CollectionWidget.Options.onItemRendered->
+         * [descr:CollectionWidget.Options.onItemRendered]
          */
         onItemRendered?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any);
         /**
-         * <-CollectionWidget.Options.onSelectionChanged->
+         * [descr:CollectionWidget.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
         /**
-         * <-CollectionWidget.Options.selectedIndex->
+         * [descr:CollectionWidget.Options.selectedIndex]
          */
         selectedIndex?: number;
         /**
-         * <-CollectionWidget.Options.selectedItem->
+         * [descr:CollectionWidget.Options.selectedItem]
          */
         selectedItem?: any;
         /**
-         * <-CollectionWidget.Options.selectedItemKeys->
+         * [descr:CollectionWidget.Options.selectedItemKeys]
          */
         selectedItemKeys?: Array<any>;
         /**
-         * <-CollectionWidget.Options.selectedItems->
+         * [descr:CollectionWidget.Options.selectedItems]
          */
         selectedItems?: Array<any>;
     }
     /**
-     * <-CollectionWidget->
+     * [descr:CollectionWidget]
      */
     export class CollectionWidget extends Widget {
         constructor(element: Element, options?: CollectionWidgetOptions)
         constructor(element: JQuery, options?: CollectionWidgetOptions)
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
     }
     /**
-     * <-CollectionWidgetItem->
+     * [descr:CollectionWidgetItem]
      */
     export interface CollectionWidgetItem {
         /**
-         * <-CollectionWidgetItem.disabled->
+         * [descr:CollectionWidgetItem.disabled]
          */
         disabled?: boolean;
         /**
-         * <-CollectionWidgetItem.html->
+         * [descr:CollectionWidgetItem.html]
          */
         html?: string;
         /**
-         * <-CollectionWidgetItem.template->
+         * [descr:CollectionWidgetItem.template]
          */
         template?: DevExpress.core.template | (() => string | Element | JQuery);
         /**
-         * <-CollectionWidgetItem.text->
+         * [descr:CollectionWidgetItem.text]
          */
         text?: string;
         /**
-         * <-CollectionWidgetItem.visible->
+         * [descr:CollectionWidgetItem.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-CompareRule->
+     * [descr:CompareRule]
      */
     export interface CompareRule {
         /**
-         * <-CompareRule.comparisonTarget->
+         * [descr:CompareRule.comparisonTarget]
          */
         comparisonTarget?: (() => any);
         /**
-         * <-CompareRule.comparisonType->
+         * [descr:CompareRule.comparisonType]
          */
         comparisonType?: '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
         /**
-         * <-CompareRule.ignoreEmptyValue->
+         * [descr:CompareRule.ignoreEmptyValue]
          */
         ignoreEmptyValue?: boolean;
         /**
-         * <-CompareRule.message->
+         * [descr:CompareRule.message]
          */
         message?: string;
         /**
-         * <-CompareRule.reevaluate->
+         * [descr:CompareRule.reevaluate]
          */
         reevaluate?: boolean;
         /**
-         * <-CompareRule.type->
+         * [descr:CompareRule.type]
          */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
-     * <-CustomRule->
+     * [descr:CustomRule]
      */
     export interface CustomRule {
         /**
-         * <-CustomRule.ignoreEmptyValue->
+         * [descr:CustomRule.ignoreEmptyValue]
          */
         ignoreEmptyValue?: boolean;
         /**
-         * <-CustomRule.message->
+         * [descr:CustomRule.message]
          */
         message?: string;
         /**
-         * <-CustomRule.reevaluate->
+         * [descr:CustomRule.reevaluate]
          */
         reevaluate?: boolean;
         /**
-         * <-CustomRule.type->
+         * [descr:CustomRule.type]
          */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
         /**
-         * <-CustomRule.validationCallback->
+         * [descr:CustomRule.validationCallback]
          */
         validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => boolean);
     }
     /**
-     * <-DataExpressionMixin.Options->
+     * [descr:DataExpressionMixin.Options]
      */
     export interface DataExpressionMixinOptions<T = DataExpressionMixin> {
         /**
-         * <-DataExpressionMixin.Options.dataSource->
+         * [descr:DataExpressionMixin.Options.dataSource]
          */
         dataSource?: string | Array<CollectionWidgetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-DataExpressionMixin.Options.displayExpr->
+         * [descr:DataExpressionMixin.Options.displayExpr]
          */
         displayExpr?: string | ((item: any) => string);
         /**
-         * <-DataExpressionMixin.Options.itemTemplate->
+         * [descr:DataExpressionMixin.Options.itemTemplate]
          */
         itemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-DataExpressionMixin.Options.items->
+         * [descr:DataExpressionMixin.Options.items]
          */
         items?: Array<CollectionWidgetItem | any>;
         /**
-         * <-DataExpressionMixin.Options.value->
+         * [descr:DataExpressionMixin.Options.value]
          */
         value?: any;
         /**
-         * <-DataExpressionMixin.Options.valueExpr->
+         * [descr:DataExpressionMixin.Options.valueExpr]
          */
         valueExpr?: string | ((item: any) => string | number | boolean);
     }
     /**
-     * <-DataExpressionMixin->
+     * [descr:DataExpressionMixin]
      */
     export class DataExpressionMixin {
         constructor(options?: DataExpressionMixinOptions)
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
     }
     /**
-     * <-DraggableBase.Options->
+     * [descr:DraggableBase.Options]
      */
     export interface DraggableBaseOptions<T = DraggableBase> extends DOMComponentOptions<T> {
         /**
-         * <-DraggableBase.Options.autoScroll->
+         * [descr:DraggableBase.Options.autoScroll]
          */
         autoScroll?: boolean;
         /**
-         * <-DraggableBase.Options.boundary->
+         * [descr:DraggableBase.Options.boundary]
          */
         boundary?: string | Element | JQuery;
         /**
-         * <-DraggableBase.Options.container->
+         * [descr:DraggableBase.Options.container]
          */
         container?: string | Element | JQuery;
         /**
-         * <-DraggableBase.Options.cursorOffset->
+         * [descr:DraggableBase.Options.cursorOffset]
          */
         cursorOffset?: string | { x?: number, y?: number };
         /**
-         * <-DraggableBase.Options.data->
+         * [descr:DraggableBase.Options.data]
          */
         data?: any;
         /**
-         * <-DraggableBase.Options.dragDirection->
+         * [descr:DraggableBase.Options.dragDirection]
          */
         dragDirection?: 'both' | 'horizontal' | 'vertical';
         /**
-         * <-DraggableBase.Options.group->
+         * [descr:DraggableBase.Options.group]
          */
         group?: string;
         /**
-         * <-DraggableBase.Options.handle->
+         * [descr:DraggableBase.Options.handle]
          */
         handle?: string;
         /**
-         * <-DraggableBase.Options.scrollSensitivity->
+         * [descr:DraggableBase.Options.scrollSensitivity]
          */
         scrollSensitivity?: number;
         /**
-         * <-DraggableBase.Options.scrollSpeed->
+         * [descr:DraggableBase.Options.scrollSpeed]
          */
         scrollSpeed?: number;
     }
     /**
-     * <-DraggableBase->
+     * [descr:DraggableBase]
      */
     export class DraggableBase extends DOMComponent {
         constructor(element: Element, options?: DraggableBaseOptions)
         constructor(element: JQuery, options?: DraggableBaseOptions)
     }
     /**
-     * <-Editor.Options->
+     * [descr:Editor.Options]
      */
     export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
         /**
-         * <-Editor.Options.isValid->
+         * [descr:Editor.Options.isValid]
          */
         isValid?: boolean;
         /**
-         * <-Editor.Options.onValueChanged->
+         * [descr:Editor.Options.onValueChanged]
          */
         onValueChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-Editor.Options.readOnly->
+         * [descr:Editor.Options.readOnly]
          */
         readOnly?: boolean;
         /**
-         * <-Editor.Options.validationError->
+         * [descr:Editor.Options.validationError]
          */
         validationError?: any;
         /**
-         * <-Editor.Options.validationErrors->
+         * [descr:Editor.Options.validationErrors]
          */
         validationErrors?: Array<any>;
         /**
-         * <-Editor.Options.validationMessageMode->
+         * [descr:Editor.Options.validationMessageMode]
          */
         validationMessageMode?: 'always' | 'auto';
         /**
-         * <-Editor.Options.validationStatus->
+         * [descr:Editor.Options.validationStatus]
          */
         validationStatus?: 'valid' | 'invalid' | 'pending';
         /**
-         * <-Editor.Options.value->
+         * [descr:Editor.Options.value]
          */
         value?: any;
     }
     /**
-     * <-Editor->
+     * [descr:Editor]
      */
     export class Editor extends Widget {
         constructor(element: Element, options?: EditorOptions)
         constructor(element: JQuery, options?: EditorOptions)
         /**
-         * <-Editor.reset()->
+         * [descr:Editor.reset()]
          */
         reset(): void;
     }
     /**
-     * <-EmailRule->
+     * [descr:EmailRule]
      */
     export interface EmailRule {
         /**
-         * <-EmailRule.ignoreEmptyValue->
+         * [descr:EmailRule.ignoreEmptyValue]
          */
         ignoreEmptyValue?: boolean;
         /**
-         * <-EmailRule.message->
+         * [descr:EmailRule.message]
          */
         message?: string;
         /**
-         * <-EmailRule.type->
+         * [descr:EmailRule.type]
          */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
-     * <-GridBase.Options->
+     * [descr:GridBase.Options]
      */
     export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
         /**
-         * <-GridBase.Options.allowColumnReordering->
+         * [descr:GridBase.Options.allowColumnReordering]
          */
         allowColumnReordering?: boolean;
         /**
-         * <-GridBase.Options.allowColumnResizing->
+         * [descr:GridBase.Options.allowColumnResizing]
          */
         allowColumnResizing?: boolean;
         /**
-         * <-GridBase.Options.autoNavigateToFocusedRow->
+         * [descr:GridBase.Options.autoNavigateToFocusedRow]
          */
         autoNavigateToFocusedRow?: boolean;
         /**
-         * <-GridBase.Options.cacheEnabled->
+         * [descr:GridBase.Options.cacheEnabled]
          */
         cacheEnabled?: boolean;
         /**
-         * <-GridBase.Options.cellHintEnabled->
+         * [descr:GridBase.Options.cellHintEnabled]
          */
         cellHintEnabled?: boolean;
         /**
-         * <-GridBase.Options.columnAutoWidth->
+         * [descr:GridBase.Options.columnAutoWidth]
          */
         columnAutoWidth?: boolean;
         /**
-         * <-GridBase.Options.columnChooser->
+         * [descr:GridBase.Options.columnChooser]
          */
         columnChooser?: { allowSearch?: boolean, emptyPanelText?: string, enabled?: boolean, height?: number, mode?: 'dragAndDrop' | 'select', searchTimeout?: number, title?: string, width?: number };
         /**
-         * <-GridBase.Options.columnFixing->
+         * [descr:GridBase.Options.columnFixing]
          */
         columnFixing?: { enabled?: boolean, texts?: { fix?: string, leftPosition?: string, rightPosition?: string, unfix?: string } };
         /**
-         * <-GridBase.Options.columnHidingEnabled->
+         * [descr:GridBase.Options.columnHidingEnabled]
          */
         columnHidingEnabled?: boolean;
         /**
-         * <-GridBase.Options.columnMinWidth->
+         * [descr:GridBase.Options.columnMinWidth]
          */
         columnMinWidth?: number;
         /**
-         * <-GridBase.Options.columnResizingMode->
+         * [descr:GridBase.Options.columnResizingMode]
          */
         columnResizingMode?: 'nextColumn' | 'widget';
         /**
-         * <-GridBase.Options.columnWidth->
+         * [descr:GridBase.Options.columnWidth]
          */
         columnWidth?: number;
         /**
-         * <-GridBase.Options.columns->
+         * [descr:GridBase.Options.columns]
          */
         columns?: Array<GridBaseColumn | string>;
         /**
-         * <-GridBase.Options.dataSource->
+         * [descr:GridBase.Options.dataSource]
          */
         dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-GridBase.Options.dateSerializationFormat->
+         * [descr:GridBase.Options.dateSerializationFormat]
          */
         dateSerializationFormat?: string;
         /**
-         * <-GridBase.Options.editing->
+         * [descr:GridBase.Options.editing]
          */
         editing?: GridBaseEditing;
         /**
-         * <-GridBase.Options.errorRowEnabled->
+         * [descr:GridBase.Options.errorRowEnabled]
          */
         errorRowEnabled?: boolean;
         /**
-         * <-GridBase.Options.filterBuilder->
+         * [descr:GridBase.Options.filterBuilder]
          */
         filterBuilder?: dxFilterBuilderOptions;
         /**
-         * <-GridBase.Options.filterBuilderPopup->
+         * [descr:GridBase.Options.filterBuilderPopup]
          */
         filterBuilderPopup?: dxPopupOptions;
         /**
-         * <-GridBase.Options.filterPanel->
+         * [descr:GridBase.Options.filterPanel]
          */
         filterPanel?: { customizeText?: ((e: { component?: T, filterValue?: any, text?: string }) => string), filterEnabled?: boolean, texts?: { clearFilter?: string, createFilter?: string, filterEnabledHint?: string }, visible?: boolean };
         /**
-         * <-GridBase.Options.filterRow->
+         * [descr:GridBase.Options.filterRow]
          */
         filterRow?: { applyFilter?: 'auto' | 'onClick', applyFilterText?: string, betweenEndText?: string, betweenStartText?: string, operationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string }, resetOperationText?: string, showAllText?: string, showOperationChooser?: boolean, visible?: boolean };
         /**
-         * <-GridBase.Options.filterSyncEnabled->
+         * [descr:GridBase.Options.filterSyncEnabled]
          */
         filterSyncEnabled?: boolean | 'auto';
         /**
-         * <-GridBase.Options.filterValue->
+         * [descr:GridBase.Options.filterValue]
          */
         filterValue?: string | Array<any> | Function;
         /**
-         * <-GridBase.Options.focusedColumnIndex->
+         * [descr:GridBase.Options.focusedColumnIndex]
          */
         focusedColumnIndex?: number;
         /**
-         * <-GridBase.Options.focusedRowEnabled->
+         * [descr:GridBase.Options.focusedRowEnabled]
          */
         focusedRowEnabled?: boolean;
         /**
-         * <-GridBase.Options.focusedRowIndex->
+         * [descr:GridBase.Options.focusedRowIndex]
          */
         focusedRowIndex?: number;
         /**
-         * <-GridBase.Options.focusedRowKey->
+         * [descr:GridBase.Options.focusedRowKey]
          */
         focusedRowKey?: any;
         /**
-         * <-GridBase.Options.headerFilter->
+         * [descr:GridBase.Options.headerFilter]
          */
         headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number };
         /**
-         * <-GridBase.Options.highlightChanges->
+         * [descr:GridBase.Options.highlightChanges]
          */
         highlightChanges?: boolean;
         /**
-         * <-GridBase.Options.keyboardNavigation->
+         * [descr:GridBase.Options.keyboardNavigation]
          */
         keyboardNavigation?: { editOnKeyPress?: boolean, enabled?: boolean, enterKeyAction?: 'startEdit' | 'moveFocus', enterKeyDirection?: 'none' | 'column' | 'row' };
         /**
-         * <-GridBase.Options.loadPanel->
+         * [descr:GridBase.Options.loadPanel]
          */
         loadPanel?: { enabled?: boolean | 'auto', height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number };
         /**
-         * <-GridBase.Options.noDataText->
+         * [descr:GridBase.Options.noDataText]
          */
         noDataText?: string;
         /**
-         * <-GridBase.Options.onAdaptiveDetailRowPreparing->
+         * [descr:GridBase.Options.onAdaptiveDetailRowPreparing]
          */
         onAdaptiveDetailRowPreparing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, formOptions?: any }) => any);
         /**
-         * <-GridBase.Options.onDataErrorOccurred->
+         * [descr:GridBase.Options.onDataErrorOccurred]
          */
         onDataErrorOccurred?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, error?: Error }) => any);
         /**
-         * <-GridBase.Options.onEditCanceled->
+         * [descr:GridBase.Options.onEditCanceled]
          */
         onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-GridBase.Options.onEditCanceling->
+         * [descr:GridBase.Options.onEditCanceling]
          */
         onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
         /**
-         * <-GridBase.Options.onInitNewRow->
+         * [descr:GridBase.Options.onInitNewRow]
          */
         onInitNewRow?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, data?: any, promise?: Promise<void> | JQueryPromise<void> }) => any);
         /**
-         * <-GridBase.Options.onKeyDown->
+         * [descr:GridBase.Options.onKeyDown]
          */
         onKeyDown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, handled?: boolean }) => any);
         /**
-         * <-GridBase.Options.onRowCollapsed->
+         * [descr:GridBase.Options.onRowCollapsed]
          */
         onRowCollapsed?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, key?: any }) => any);
         /**
-         * <-GridBase.Options.onRowCollapsing->
+         * [descr:GridBase.Options.onRowCollapsing]
          */
         onRowCollapsing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, key?: any, cancel?: boolean }) => any);
         /**
-         * <-GridBase.Options.onRowExpanded->
+         * [descr:GridBase.Options.onRowExpanded]
          */
         onRowExpanded?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, key?: any }) => any);
         /**
-         * <-GridBase.Options.onRowExpanding->
+         * [descr:GridBase.Options.onRowExpanding]
          */
         onRowExpanding?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, key?: any, cancel?: boolean }) => any);
         /**
-         * <-GridBase.Options.onRowInserted->
+         * [descr:GridBase.Options.onRowInserted]
          */
         onRowInserted?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, error?: Error }) => any);
         /**
-         * <-GridBase.Options.onRowInserting->
+         * [descr:GridBase.Options.onRowInserting]
          */
         onRowInserting?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, data?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /**
-         * <-GridBase.Options.onRowRemoved->
+         * [descr:GridBase.Options.onRowRemoved]
          */
         onRowRemoved?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, error?: Error }) => any);
         /**
-         * <-GridBase.Options.onRowRemoving->
+         * [descr:GridBase.Options.onRowRemoving]
          */
         onRowRemoving?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /**
-         * <-GridBase.Options.onRowUpdated->
+         * [descr:GridBase.Options.onRowUpdated]
          */
         onRowUpdated?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, error?: Error }) => any);
         /**
-         * <-GridBase.Options.onRowUpdating->
+         * [descr:GridBase.Options.onRowUpdating]
          */
         onRowUpdating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /**
-         * <-GridBase.Options.onRowValidating->
+         * [descr:GridBase.Options.onRowValidating]
          */
         onRowValidating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string, promise?: Promise<void> | JQueryPromise<void> }) => any);
         /**
-         * <-GridBase.Options.onSaved->
+         * [descr:GridBase.Options.onSaved]
          */
         onSaved?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-GridBase.Options.onSaving->
+         * [descr:GridBase.Options.onSaving]
          */
         onSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
         /**
-         * <-GridBase.Options.onSelectionChanged->
+         * [descr:GridBase.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
         /**
-         * <-GridBase.Options.onToolbarPreparing->
+         * [descr:GridBase.Options.onToolbarPreparing]
          */
         onToolbarPreparing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, toolbarOptions?: dxToolbarOptions }) => any);
         /**
-         * <-GridBase.Options.pager->
+         * [descr:GridBase.Options.pager]
          */
         pager?: { allowedPageSizes?: Array<number | 'all'> | 'auto', displayMode?: 'adaptive' | 'compact' | 'full', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
         /**
-         * <-GridBase.Options.paging->
+         * [descr:GridBase.Options.paging]
          */
         paging?: GridBasePaging;
         /**
-         * <-GridBase.Options.renderAsync->
+         * [descr:GridBase.Options.renderAsync]
          */
         renderAsync?: boolean;
         /**
-         * <-GridBase.Options.repaintChangesOnly->
+         * [descr:GridBase.Options.repaintChangesOnly]
          */
         repaintChangesOnly?: boolean;
         /**
-         * <-GridBase.Options.rowAlternationEnabled->
+         * [descr:GridBase.Options.rowAlternationEnabled]
          */
         rowAlternationEnabled?: boolean;
         /**
-         * <-GridBase.Options.rowDragging->
+         * [descr:GridBase.Options.rowDragging]
          */
         rowDragging?: { allowDropInsideItem?: boolean, allowReordering?: boolean, autoScroll?: boolean, boundary?: string | Element | JQuery, container?: string | Element | JQuery, cursorOffset?: string | { x?: number, y?: number }, data?: any, dragDirection?: 'both' | 'horizontal' | 'vertical', dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery), dropFeedbackMode?: 'push' | 'indicate', filter?: string, group?: string, handle?: string, onAdd?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragChange?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragEnd?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragMove?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any), onDragStart?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any), onRemove?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onReorder?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any), scrollSensitivity?: number, scrollSpeed?: number, showDragIcons?: boolean };
         /**
-         * <-GridBase.Options.scrolling->
+         * [descr:GridBase.Options.scrolling]
          */
         scrolling?: GridBaseScrolling;
         /**
-         * <-GridBase.Options.searchPanel->
+         * [descr:GridBase.Options.searchPanel]
          */
         searchPanel?: { highlightCaseSensitive?: boolean, highlightSearchText?: boolean, placeholder?: string, searchVisibleColumnsOnly?: boolean, text?: string, visible?: boolean, width?: number };
         /**
-         * <-GridBase.Options.selectedRowKeys->
+         * [descr:GridBase.Options.selectedRowKeys]
          */
         selectedRowKeys?: Array<any>;
         /**
-         * <-GridBase.Options.selection->
+         * [descr:GridBase.Options.selection]
          */
         selection?: GridBaseSelection;
         /**
-         * <-GridBase.Options.showBorders->
+         * [descr:GridBase.Options.showBorders]
          */
         showBorders?: boolean;
         /**
-         * <-GridBase.Options.showColumnHeaders->
+         * [descr:GridBase.Options.showColumnHeaders]
          */
         showColumnHeaders?: boolean;
         /**
-         * <-GridBase.Options.showColumnLines->
+         * [descr:GridBase.Options.showColumnLines]
          */
         showColumnLines?: boolean;
         /**
-         * <-GridBase.Options.showRowLines->
+         * [descr:GridBase.Options.showRowLines]
          */
         showRowLines?: boolean;
         /**
-         * <-GridBase.Options.sorting->
+         * [descr:GridBase.Options.sorting]
          */
         sorting?: { ascendingText?: string, clearText?: string, descendingText?: string, mode?: 'multiple' | 'none' | 'single', showSortIndexes?: boolean };
         /**
-         * <-GridBase.Options.stateStoring->
+         * [descr:GridBase.Options.stateStoring]
          */
         stateStoring?: { customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((gridState: any) => any), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: 'custom' | 'localStorage' | 'sessionStorage' };
         /**
-         * <-GridBase.Options.twoWayBindingEnabled->
+         * [descr:GridBase.Options.twoWayBindingEnabled]
          */
         twoWayBindingEnabled?: boolean;
         /**
-         * <-GridBase.Options.wordWrapEnabled->
+         * [descr:GridBase.Options.wordWrapEnabled]
          */
         wordWrapEnabled?: boolean;
     }
     /**
-     * <-GridBase.Options.editing->
+     * [descr:GridBase.Options.editing]
      */
     export interface GridBaseEditing {
         /**
-         * <-GridBase.Options.editing.changes->
+         * [descr:GridBase.Options.editing.changes]
          */
         changes?: Array<any>;
         /**
-         * <-GridBase.Options.editing.confirmDelete->
+         * [descr:GridBase.Options.editing.confirmDelete]
          */
         confirmDelete?: boolean;
         /**
-         * <-GridBase.Options.editing.editColumnName->
+         * [descr:GridBase.Options.editing.editColumnName]
          */
         editColumnName?: string;
         /**
-         * <-GridBase.Options.editing.editRowKey->
+         * [descr:GridBase.Options.editing.editRowKey]
          */
         editRowKey?: any;
         /**
-         * <-GridBase.Options.editing.form->
+         * [descr:GridBase.Options.editing.form]
          */
         form?: dxFormOptions;
         /**
-         * <-GridBase.Options.editing.mode->
+         * [descr:GridBase.Options.editing.mode]
          */
         mode?: 'batch' | 'cell' | 'row' | 'form' | 'popup';
         /**
-         * <-GridBase.Options.editing.popup->
+         * [descr:GridBase.Options.editing.popup]
          */
         popup?: dxPopupOptions;
         /**
-         * <-GridBase.Options.editing.refreshMode->
+         * [descr:GridBase.Options.editing.refreshMode]
          */
         refreshMode?: 'full' | 'reshape' | 'repaint';
         /**
-         * <-GridBase.Options.editing.selectTextOnEditStart->
+         * [descr:GridBase.Options.editing.selectTextOnEditStart]
          */
         selectTextOnEditStart?: boolean;
         /**
-         * <-GridBase.Options.editing.startEditAction->
+         * [descr:GridBase.Options.editing.startEditAction]
          */
         startEditAction?: 'click' | 'dblClick';
         /**
-         * <-GridBase.Options.editing.texts->
+         * [descr:GridBase.Options.editing.texts]
          */
         texts?: GridBaseEditingTexts;
         /**
-         * <-GridBase.Options.editing.useIcons->
+         * [descr:GridBase.Options.editing.useIcons]
          */
         useIcons?: boolean;
     }
     /**
-     * <-GridBase.Options.editing.texts->
+     * [descr:GridBase.Options.editing.texts]
      */
     export interface GridBaseEditingTexts {
         /**
-         * <-GridBase.Options.editing.texts.addRow->
+         * [descr:GridBase.Options.editing.texts.addRow]
          */
         addRow?: string;
         /**
-         * <-GridBase.Options.editing.texts.cancelAllChanges->
+         * [descr:GridBase.Options.editing.texts.cancelAllChanges]
          */
         cancelAllChanges?: string;
         /**
-         * <-GridBase.Options.editing.texts.cancelRowChanges->
+         * [descr:GridBase.Options.editing.texts.cancelRowChanges]
          */
         cancelRowChanges?: string;
         /**
-         * <-GridBase.Options.editing.texts.confirmDeleteMessage->
+         * [descr:GridBase.Options.editing.texts.confirmDeleteMessage]
          */
         confirmDeleteMessage?: string;
         /**
-         * <-GridBase.Options.editing.texts.confirmDeleteTitle->
+         * [descr:GridBase.Options.editing.texts.confirmDeleteTitle]
          */
         confirmDeleteTitle?: string;
         /**
-         * <-GridBase.Options.editing.texts.deleteRow->
+         * [descr:GridBase.Options.editing.texts.deleteRow]
          */
         deleteRow?: string;
         /**
-         * <-GridBase.Options.editing.texts.editRow->
+         * [descr:GridBase.Options.editing.texts.editRow]
          */
         editRow?: string;
         /**
-         * <-GridBase.Options.editing.texts.saveAllChanges->
+         * [descr:GridBase.Options.editing.texts.saveAllChanges]
          */
         saveAllChanges?: string;
         /**
-         * <-GridBase.Options.editing.texts.saveRowChanges->
+         * [descr:GridBase.Options.editing.texts.saveRowChanges]
          */
         saveRowChanges?: string;
         /**
-         * <-GridBase.Options.editing.texts.undeleteRow->
+         * [descr:GridBase.Options.editing.texts.undeleteRow]
          */
         undeleteRow?: string;
         /**
-         * <-GridBase.Options.editing.texts.validationCancelChanges->
+         * [descr:GridBase.Options.editing.texts.validationCancelChanges]
          */
         validationCancelChanges?: string;
     }
     /**
-     * <-GridBase.Options.paging->
+     * [descr:GridBase.Options.paging]
      */
     export interface GridBasePaging {
         /**
-         * <-GridBase.Options.paging.enabled->
+         * [descr:GridBase.Options.paging.enabled]
          */
         enabled?: boolean;
         /**
-         * <-GridBase.Options.paging.pageIndex->
+         * [descr:GridBase.Options.paging.pageIndex]
          */
         pageIndex?: number;
         /**
-         * <-GridBase.Options.paging.pageSize->
+         * [descr:GridBase.Options.paging.pageSize]
          */
         pageSize?: number;
     }
     /**
-     * <-GridBase.Options.scrolling->
+     * [descr:GridBase.Options.scrolling]
      */
     export interface GridBaseScrolling {
         /**
-         * <-GridBase.Options.scrolling.columnRenderingMode->
+         * [descr:GridBase.Options.scrolling.columnRenderingMode]
          */
         columnRenderingMode?: 'standard' | 'virtual';
         /**
-         * <-GridBase.Options.scrolling.preloadEnabled->
+         * [descr:GridBase.Options.scrolling.preloadEnabled]
          */
         preloadEnabled?: boolean;
         /**
-         * <-GridBase.Options.scrolling.rowRenderingMode->
+         * [descr:GridBase.Options.scrolling.rowRenderingMode]
          */
         rowRenderingMode?: 'standard' | 'virtual';
         /**
-         * <-GridBase.Options.scrolling.scrollByContent->
+         * [descr:GridBase.Options.scrolling.scrollByContent]
          */
         scrollByContent?: boolean;
         /**
-         * <-GridBase.Options.scrolling.scrollByThumb->
+         * [descr:GridBase.Options.scrolling.scrollByThumb]
          */
         scrollByThumb?: boolean;
         /**
-         * <-GridBase.Options.scrolling.showScrollbar->
+         * [descr:GridBase.Options.scrolling.showScrollbar]
          */
         showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
         /**
-         * <-GridBase.Options.scrolling.useNative->
+         * [descr:GridBase.Options.scrolling.useNative]
          */
         useNative?: boolean | 'auto';
     }
     /**
-     * <-GridBase.Options.selection->
+     * [descr:GridBase.Options.selection]
      */
     export interface GridBaseSelection {
         /**
-         * <-GridBase.Options.selection.allowSelectAll->
+         * [descr:GridBase.Options.selection.allowSelectAll]
          */
         allowSelectAll?: boolean;
         /**
-         * <-GridBase.Options.selection.mode->
+         * [descr:GridBase.Options.selection.mode]
          */
         mode?: 'multiple' | 'none' | 'single';
     }
     /**
-     * <-GridBase->
+     * [descr:GridBase]
      */
     export class GridBase extends Widget {
         constructor(element: Element, options?: GridBaseOptions)
         constructor(element: JQuery, options?: GridBaseOptions)
         /**
-         * <-GridBase.beginCustomLoading(messageText)->
+         * [descr:GridBase.beginCustomLoading(messageText)]
          */
         beginCustomLoading(messageText: string): void;
         /**
-         * <-GridBase.byKey(key)->
+         * [descr:GridBase.byKey(key)]
          */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
         /**
-         * <-GridBase.cancelEditData()->
+         * [descr:GridBase.cancelEditData()]
          */
         cancelEditData(): void;
         /**
-         * <-GridBase.cellValue(rowIndex, dataField)->
+         * [descr:GridBase.cellValue(rowIndex, dataField)]
          */
         cellValue(rowIndex: number, dataField: string): any;
         /**
-         * <-GridBase.cellValue(rowIndex, dataField, value)->
+         * [descr:GridBase.cellValue(rowIndex, dataField, value)]
          */
         cellValue(rowIndex: number, dataField: string, value: any): void;
         /**
-         * <-GridBase.cellValue(rowIndex, visibleColumnIndex)->
+         * [descr:GridBase.cellValue(rowIndex, visibleColumnIndex)]
          */
         cellValue(rowIndex: number, visibleColumnIndex: number): any;
         /**
-         * <-GridBase.cellValue(rowIndex, visibleColumnIndex, value)->
+         * [descr:GridBase.cellValue(rowIndex, visibleColumnIndex, value)]
          */
         cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
         /**
-         * <-GridBase.clearFilter()->
+         * [descr:GridBase.clearFilter()]
          */
         clearFilter(): void;
         /**
-         * <-GridBase.clearFilter(filterName)->
+         * [descr:GridBase.clearFilter(filterName)]
          */
         clearFilter(filterName: string): void;
         /**
-         * <-GridBase.clearSelection()->
+         * [descr:GridBase.clearSelection()]
          */
         clearSelection(): void;
         /**
-         * <-GridBase.clearSorting()->
+         * [descr:GridBase.clearSorting()]
          */
         clearSorting(): void;
         /**
-         * <-GridBase.closeEditCell()->
+         * [descr:GridBase.closeEditCell()]
          */
         closeEditCell(): void;
         /**
-         * <-GridBase.collapseAdaptiveDetailRow()->
+         * [descr:GridBase.collapseAdaptiveDetailRow()]
          */
         collapseAdaptiveDetailRow(): void;
         /**
-         * <-GridBase.columnCount()->
+         * [descr:GridBase.columnCount()]
          */
         columnCount(): number;
         /**
-         * <-GridBase.columnOption(id)->
+         * [descr:GridBase.columnOption(id)]
          */
         columnOption(id: number | string): any;
         /**
-         * <-GridBase.columnOption(id, optionName)->
+         * [descr:GridBase.columnOption(id, optionName)]
          */
         columnOption(id: number | string, optionName: string): any;
         /**
-         * <-GridBase.columnOption(id, optionName, optionValue)->
+         * [descr:GridBase.columnOption(id, optionName, optionValue)]
          */
         columnOption(id: number | string, optionName: string, optionValue: any): void;
         /**
-         * <-GridBase.columnOption(id, options)->
+         * [descr:GridBase.columnOption(id, options)]
          */
         columnOption(id: number | string, options: any): void;
         /**
-         * <-GridBase.deleteColumn(id)->
+         * [descr:GridBase.deleteColumn(id)]
          */
         deleteColumn(id: number | string): void;
         /**
-         * <-GridBase.deleteRow(rowIndex)->
+         * [descr:GridBase.deleteRow(rowIndex)]
          */
         deleteRow(rowIndex: number): void;
         /**
-         * <-GridBase.deselectAll()->
+         * [descr:GridBase.deselectAll()]
          */
         deselectAll(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-GridBase.deselectRows(keys)->
+         * [descr:GridBase.deselectRows(keys)]
          */
         deselectRows(keys: Array<any>): Promise<any> & JQueryPromise<any>;
         /**
-         * <-GridBase.editCell(rowIndex, dataField)->
+         * [descr:GridBase.editCell(rowIndex, dataField)]
          */
         editCell(rowIndex: number, dataField: string): void;
         /**
-         * <-GridBase.editCell(rowIndex, visibleColumnIndex)->
+         * [descr:GridBase.editCell(rowIndex, visibleColumnIndex)]
          */
         editCell(rowIndex: number, visibleColumnIndex: number): void;
         /**
-         * <-GridBase.editRow(rowIndex)->
+         * [descr:GridBase.editRow(rowIndex)]
          */
         editRow(rowIndex: number): void;
         /**
-         * <-GridBase.endCustomLoading()->
+         * [descr:GridBase.endCustomLoading()]
          */
         endCustomLoading(): void;
         /**
-         * <-GridBase.expandAdaptiveDetailRow(key)->
+         * [descr:GridBase.expandAdaptiveDetailRow(key)]
          */
         expandAdaptiveDetailRow(key: any): void;
         /**
-         * <-GridBase.filter()->
+         * [descr:GridBase.filter()]
          */
         filter(): any;
         /**
-         * <-GridBase.filter(filterExpr)->
+         * [descr:GridBase.filter(filterExpr)]
          */
         filter(filterExpr: any): void;
         /**
-         * <-Widget.focus()->
+         * [descr:Widget.focus()]
          */
         focus(): void;
         /**
-         * <-GridBase.focus(element)->
+         * [descr:GridBase.focus(element)]
          */
         focus(element: Element | JQuery): void;
         /**
-         * <-GridBase.getCellElement(rowIndex, dataField)->
+         * [descr:GridBase.getCellElement(rowIndex, dataField)]
          */
         getCellElement(rowIndex: number, dataField: string): DevExpress.core.dxElement | undefined;
         /**
-         * <-GridBase.getCellElement(rowIndex, visibleColumnIndex)->
+         * [descr:GridBase.getCellElement(rowIndex, visibleColumnIndex)]
          */
         getCellElement(rowIndex: number, visibleColumnIndex: number): DevExpress.core.dxElement | undefined;
         /**
-         * <-GridBase.getCombinedFilter()->
+         * [descr:GridBase.getCombinedFilter()]
          */
         getCombinedFilter(): any;
         /**
-         * <-GridBase.getCombinedFilter(returnDataField)->
+         * [descr:GridBase.getCombinedFilter(returnDataField)]
          */
         getCombinedFilter(returnDataField: boolean): any;
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
         /**
-         * <-GridBase.getKeyByRowIndex(rowIndex)->
+         * [descr:GridBase.getKeyByRowIndex(rowIndex)]
          */
         getKeyByRowIndex(rowIndex: number): any;
         /**
-         * <-GridBase.getRowElement(rowIndex)->
+         * [descr:GridBase.getRowElement(rowIndex)]
          */
         getRowElement(rowIndex: number): Array<Element> & JQuery | undefined;
         /**
-         * <-GridBase.getRowIndexByKey(key)->
+         * [descr:GridBase.getRowIndexByKey(key)]
          */
         getRowIndexByKey(key: any | string | number): number;
         /**
-         * <-GridBase.getScrollable()->
+         * [descr:GridBase.getScrollable()]
          */
         getScrollable(): dxScrollable;
         /**
-         * <-GridBase.getVisibleColumnIndex(id)->
+         * [descr:GridBase.getVisibleColumnIndex(id)]
          */
         getVisibleColumnIndex(id: number | string): number;
         /**
-         * <-GridBase.hasEditData()->
+         * [descr:GridBase.hasEditData()]
          */
         hasEditData(): boolean;
         /**
-         * <-GridBase.hideColumnChooser()->
+         * [descr:GridBase.hideColumnChooser()]
          */
         hideColumnChooser(): void;
         /**
-         * <-GridBase.isAdaptiveDetailRowExpanded(key)->
+         * [descr:GridBase.isAdaptiveDetailRowExpanded(key)]
          */
         isAdaptiveDetailRowExpanded(key: any): boolean;
         /**
-         * <-GridBase.isRowFocused(key)->
+         * [descr:GridBase.isRowFocused(key)]
          */
         isRowFocused(key: any): boolean;
         /**
-         * <-GridBase.isRowSelected(key)->
+         * [descr:GridBase.isRowSelected(key)]
          */
         isRowSelected(key: any): boolean;
         /**
-         * <-GridBase.keyOf(obj)->
+         * [descr:GridBase.keyOf(obj)]
          */
         keyOf(obj: any): any;
         /**
-         * <-GridBase.navigateToRow(key)->
+         * [descr:GridBase.navigateToRow(key)]
          */
         navigateToRow(key: any): void;
         /**
-         * <-GridBase.pageCount()->
+         * [descr:GridBase.pageCount()]
          */
         pageCount(): number;
         /**
-         * <-GridBase.pageIndex()->
+         * [descr:GridBase.pageIndex()]
          */
         pageIndex(): number;
         /**
-         * <-GridBase.pageIndex(newIndex)->
+         * [descr:GridBase.pageIndex(newIndex)]
          */
         pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
         /**
-         * <-GridBase.pageSize()->
+         * [descr:GridBase.pageSize()]
          */
         pageSize(): number;
         /**
-         * <-GridBase.pageSize(value)->
+         * [descr:GridBase.pageSize(value)]
          */
         pageSize(value: number): void;
         /**
-         * <-GridBase.refresh()->
+         * [descr:GridBase.refresh()]
          */
         refresh(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-GridBase.refresh(changesOnly)->
+         * [descr:GridBase.refresh(changesOnly)]
          */
         refresh(changesOnly: boolean): Promise<void> & JQueryPromise<void>;
         /**
-         * <-GridBase.repaintRows(rowIndexes)->
+         * [descr:GridBase.repaintRows(rowIndexes)]
          */
         repaintRows(rowIndexes: Array<number>): void;
         /**
-         * <-GridBase.saveEditData()->
+         * [descr:GridBase.saveEditData()]
          */
         saveEditData(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-GridBase.searchByText(text)->
+         * [descr:GridBase.searchByText(text)]
          */
         searchByText(text: string): void;
         /**
-         * <-GridBase.selectAll()->
+         * [descr:GridBase.selectAll()]
          */
         selectAll(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-GridBase.selectRows(keys, preserve)->
+         * [descr:GridBase.selectRows(keys, preserve)]
          */
         selectRows(keys: Array<any>, preserve: boolean): Promise<any> & JQueryPromise<any>;
         /**
-         * <-GridBase.selectRowsByIndexes(indexes)->
+         * [descr:GridBase.selectRowsByIndexes(indexes)]
          */
         selectRowsByIndexes(indexes: Array<number>): Promise<any> & JQueryPromise<any>;
         /**
-         * <-GridBase.showColumnChooser()->
+         * [descr:GridBase.showColumnChooser()]
          */
         showColumnChooser(): void;
         /**
-         * <-GridBase.state()->
+         * [descr:GridBase.state()]
          */
         state(): any;
         /**
-         * <-GridBase.state(state)->
+         * [descr:GridBase.state(state)]
          */
         state(state: any): void;
         /**
-         * <-GridBase.undeleteRow(rowIndex)->
+         * [descr:GridBase.undeleteRow(rowIndex)]
          */
         undeleteRow(rowIndex: number): void;
         /**
-         * <-GridBase.updateDimensions()->
+         * [descr:GridBase.updateDimensions()]
          */
         updateDimensions(): void;
     }
     /**
-     * <-GridBaseColumn->
+     * [descr:GridBaseColumn]
      */
     export interface GridBaseColumn {
         /**
-         * <-GridBaseColumn.alignment->
+         * [descr:GridBaseColumn.alignment]
          */
         alignment?: 'center' | 'left' | 'right' | undefined;
         /**
-         * <-GridBaseColumn.allowEditing->
+         * [descr:GridBaseColumn.allowEditing]
          */
         allowEditing?: boolean;
         /**
-         * <-GridBaseColumn.allowFiltering->
+         * [descr:GridBaseColumn.allowFiltering]
          */
         allowFiltering?: boolean;
         /**
-         * <-GridBaseColumn.allowFixing->
+         * [descr:GridBaseColumn.allowFixing]
          */
         allowFixing?: boolean;
         /**
-         * <-GridBaseColumn.allowHeaderFiltering->
+         * [descr:GridBaseColumn.allowHeaderFiltering]
          */
         allowHeaderFiltering?: boolean;
         /**
-         * <-GridBaseColumn.allowHiding->
+         * [descr:GridBaseColumn.allowHiding]
          */
         allowHiding?: boolean;
         /**
-         * <-GridBaseColumn.allowReordering->
+         * [descr:GridBaseColumn.allowReordering]
          */
         allowReordering?: boolean;
         /**
-         * <-GridBaseColumn.allowResizing->
+         * [descr:GridBaseColumn.allowResizing]
          */
         allowResizing?: boolean;
         /**
-         * <-GridBaseColumn.allowSearch->
+         * [descr:GridBaseColumn.allowSearch]
          */
         allowSearch?: boolean;
         /**
-         * <-GridBaseColumn.allowSorting->
+         * [descr:GridBaseColumn.allowSorting]
          */
         allowSorting?: boolean;
         /**
-         * <-GridBaseColumn.calculateCellValue->
+         * [descr:GridBaseColumn.calculateCellValue]
          */
         calculateCellValue?: ((rowData: any) => any);
         /**
-         * <-GridBaseColumn.calculateDisplayValue->
+         * [descr:GridBaseColumn.calculateDisplayValue]
          */
         calculateDisplayValue?: string | ((rowData: any) => any);
         /**
-         * <-GridBaseColumn.calculateFilterExpression->
+         * [descr:GridBaseColumn.calculateFilterExpression]
          */
         calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any> | Function);
         /**
-         * <-GridBaseColumn.calculateSortValue->
+         * [descr:GridBaseColumn.calculateSortValue]
          */
         calculateSortValue?: string | ((rowData: any) => any);
         /**
-         * <-GridBaseColumn.caption->
+         * [descr:GridBaseColumn.caption]
          */
         caption?: string;
         /**
-         * <-GridBaseColumn.cssClass->
+         * [descr:GridBaseColumn.cssClass]
          */
         cssClass?: string;
         /**
-         * <-GridBaseColumn.customizeText->
+         * [descr:GridBaseColumn.customizeText]
          */
         customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string, target?: string, groupInterval?: string | number }) => string);
         /**
-         * <-GridBaseColumn.dataField->
+         * [descr:GridBaseColumn.dataField]
          */
         dataField?: string;
         /**
-         * <-GridBaseColumn.dataType->
+         * [descr:GridBaseColumn.dataType]
          */
         dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
         /**
-         * <-GridBaseColumn.editorOptions->
+         * [descr:GridBaseColumn.editorOptions]
          */
         editorOptions?: any;
         /**
-         * <-GridBaseColumn.encodeHtml->
+         * [descr:GridBaseColumn.encodeHtml]
          */
         encodeHtml?: boolean;
         /**
-         * <-GridBaseColumn.falseText->
+         * [descr:GridBaseColumn.falseText]
          */
         falseText?: string;
         /**
-         * <-GridBaseColumn.filterOperations->
+         * [descr:GridBaseColumn.filterOperations]
          */
         filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | 'anyof' | 'noneof' | string>;
         /**
-         * <-GridBaseColumn.filterType->
+         * [descr:GridBaseColumn.filterType]
          */
         filterType?: 'exclude' | 'include';
         /**
-         * <-GridBaseColumn.filterValue->
+         * [descr:GridBaseColumn.filterValue]
          */
         filterValue?: any;
         /**
-         * <-GridBaseColumn.filterValues->
+         * [descr:GridBaseColumn.filterValues]
          */
         filterValues?: Array<any>;
         /**
-         * <-GridBaseColumn.fixed->
+         * [descr:GridBaseColumn.fixed]
          */
         fixed?: boolean;
         /**
-         * <-GridBaseColumn.fixedPosition->
+         * [descr:GridBaseColumn.fixedPosition]
          */
         fixedPosition?: 'left' | 'right';
         /**
-         * <-GridBaseColumn.formItem->
+         * [descr:GridBaseColumn.formItem]
          */
         formItem?: dxFormSimpleItem;
         /**
-         * <-GridBaseColumn.format->
+         * [descr:GridBaseColumn.format]
          */
         format?: format;
         /**
-         * <-GridBaseColumn.headerFilter->
+         * [descr:GridBaseColumn.headerFilter]
          */
         headerFilter?: { allowSearch?: boolean, dataSource?: Array<any> | ((options: { component?: any, dataSource?: DevExpress.data.DataSourceOptions }) => any) | DevExpress.data.DataSourceOptions, groupInterval?: 'day' | 'hour' | 'minute' | 'month' | 'quarter' | 'second' | 'year' | number, height?: number, searchMode?: 'contains' | 'startswith' | 'equals', width?: number };
         /**
-         * <-GridBaseColumn.hidingPriority->
+         * [descr:GridBaseColumn.hidingPriority]
          */
         hidingPriority?: number;
         /**
-         * <-GridBaseColumn.isBand->
+         * [descr:GridBaseColumn.isBand]
          */
         isBand?: boolean;
         /**
-         * <-GridBaseColumn.lookup->
+         * [descr:GridBaseColumn.lookup]
          */
         lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store | ((options: { data?: any, key?: any }) => Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store), displayExpr?: string | ((data: any) => string), valueExpr?: string };
         /**
-         * <-GridBaseColumn.minWidth->
+         * [descr:GridBaseColumn.minWidth]
          */
         minWidth?: number;
         /**
-         * <-GridBaseColumn.name->
+         * [descr:GridBaseColumn.name]
          */
         name?: string;
         /**
-         * <-GridBaseColumn.ownerBand->
+         * [descr:GridBaseColumn.ownerBand]
          */
         ownerBand?: number;
         /**
-         * <-GridBaseColumn.renderAsync->
+         * [descr:GridBaseColumn.renderAsync]
          */
         renderAsync?: boolean;
         /**
-         * <-GridBaseColumn.selectedFilterOperation->
+         * [descr:GridBaseColumn.selectedFilterOperation]
          */
         selectedFilterOperation?: '<' | '<=' | '<>' | '=' | '>' | '>=' | 'between' | 'contains' | 'endswith' | 'notcontains' | 'startswith';
         /**
-         * <-GridBaseColumn.setCellValue->
+         * [descr:GridBaseColumn.setCellValue]
          */
         setCellValue?: ((newData: any, value: any, currentRowData: any) => void | Promise<void> | JQueryPromise<void>);
         /**
-         * <-GridBaseColumn.showEditorAlways->
+         * [descr:GridBaseColumn.showEditorAlways]
          */
         showEditorAlways?: boolean;
         /**
-         * <-GridBaseColumn.showInColumnChooser->
+         * [descr:GridBaseColumn.showInColumnChooser]
          */
         showInColumnChooser?: boolean;
         /**
-         * <-GridBaseColumn.sortIndex->
+         * [descr:GridBaseColumn.sortIndex]
          */
         sortIndex?: number;
         /**
-         * <-GridBaseColumn.sortOrder->
+         * [descr:GridBaseColumn.sortOrder]
          */
         sortOrder?: 'asc' | 'desc' | undefined;
         /**
-         * <-GridBaseColumn.sortingMethod->
+         * [descr:GridBaseColumn.sortingMethod]
          */
         sortingMethod?: ((value1: any, value2: any) => number);
         /**
-         * <-GridBaseColumn.trueText->
+         * [descr:GridBaseColumn.trueText]
          */
         trueText?: string;
         /**
-         * <-GridBaseColumn.validationRules->
+         * [descr:GridBaseColumn.validationRules]
          */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
         /**
-         * <-GridBaseColumn.visible->
+         * [descr:GridBaseColumn.visible]
          */
         visible?: boolean;
         /**
-         * <-GridBaseColumn.visibleIndex->
+         * [descr:GridBaseColumn.visibleIndex]
          */
         visibleIndex?: number;
         /**
-         * <-GridBaseColumn.width->
+         * [descr:GridBaseColumn.width]
          */
         width?: number | string;
     }
     /**
-     * <-GridBaseColumnButton->
+     * [descr:GridBaseColumnButton]
      */
     export interface GridBaseColumnButton {
         /**
-         * <-GridBaseColumnButton.cssClass->
+         * [descr:GridBaseColumnButton.cssClass]
          */
         cssClass?: string;
         /**
-         * <-GridBaseColumnButton.hint->
+         * [descr:GridBaseColumnButton.hint]
          */
         hint?: string;
         /**
-         * <-GridBaseColumnButton.icon->
+         * [descr:GridBaseColumnButton.icon]
          */
         icon?: string;
         /**
-         * <-GridBaseColumnButton.text->
+         * [descr:GridBaseColumnButton.text]
          */
         text?: string;
     }
     /**
-     * <-HierarchicalCollectionWidget.Options->
+     * [descr:HierarchicalCollectionWidget.Options]
      */
     export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
         /**
-         * <-HierarchicalCollectionWidget.Options.disabledExpr->
+         * [descr:HierarchicalCollectionWidget.Options.disabledExpr]
          */
         disabledExpr?: string | Function;
         /**
-         * <-HierarchicalCollectionWidget.Options.displayExpr->
+         * [descr:HierarchicalCollectionWidget.Options.displayExpr]
          */
         displayExpr?: string | ((item: any) => string);
         /**
-         * <-HierarchicalCollectionWidget.Options.focusStateEnabled->
+         * [descr:HierarchicalCollectionWidget.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-HierarchicalCollectionWidget.Options.hoverStateEnabled->
+         * [descr:HierarchicalCollectionWidget.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-HierarchicalCollectionWidget.Options.itemsExpr->
+         * [descr:HierarchicalCollectionWidget.Options.itemsExpr]
          */
         itemsExpr?: string | Function;
         /**
-         * <-HierarchicalCollectionWidget.Options.keyExpr->
+         * [descr:HierarchicalCollectionWidget.Options.keyExpr]
          */
         keyExpr?: string | Function;
         /**
-         * <-HierarchicalCollectionWidget.Options.selectedExpr->
+         * [descr:HierarchicalCollectionWidget.Options.selectedExpr]
          */
         selectedExpr?: string | Function;
     }
     /**
-     * <-HierarchicalCollectionWidget->
+     * [descr:HierarchicalCollectionWidget]
      */
     export class HierarchicalCollectionWidget extends CollectionWidget {
         constructor(element: Element, options?: HierarchicalCollectionWidgetOptions)
         constructor(element: JQuery, options?: HierarchicalCollectionWidgetOptions)
     }
     /**
-     * <-MapLocation->
+     * [descr:MapLocation]
      */
     export interface MapLocation {
         /**
-         * <-MapLocation.lat->
+         * [descr:MapLocation.lat]
          */
         lat?: number;
         /**
-         * <-MapLocation.lng->
+         * [descr:MapLocation.lng]
          */
         lng?: number;
     }
     /**
-     * <-NumericRule->
+     * [descr:NumericRule]
      */
     export interface NumericRule {
         /**
-         * <-NumericRule.ignoreEmptyValue->
+         * [descr:NumericRule.ignoreEmptyValue]
          */
         ignoreEmptyValue?: boolean;
         /**
-         * <-NumericRule.message->
+         * [descr:NumericRule.message]
          */
         message?: string;
         /**
-         * <-NumericRule.type->
+         * [descr:NumericRule.type]
          */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
-     * <-PatternRule->
+     * [descr:PatternRule]
      */
     export interface PatternRule {
         /**
-         * <-PatternRule.ignoreEmptyValue->
+         * [descr:PatternRule.ignoreEmptyValue]
          */
         ignoreEmptyValue?: boolean;
         /**
-         * <-PatternRule.message->
+         * [descr:PatternRule.message]
          */
         message?: string;
         /**
-         * <-PatternRule.pattern->
+         * [descr:PatternRule.pattern]
          */
         pattern?: RegExp | string;
         /**
-         * <-PatternRule.type->
+         * [descr:PatternRule.type]
          */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
-     * <-RangeRule->
+     * [descr:RangeRule]
      */
     export interface RangeRule {
         /**
-         * <-RangeRule.ignoreEmptyValue->
+         * [descr:RangeRule.ignoreEmptyValue]
          */
         ignoreEmptyValue?: boolean;
         /**
-         * <-RangeRule.max->
+         * [descr:RangeRule.max]
          */
         max?: Date | number;
         /**
-         * <-RangeRule.message->
+         * [descr:RangeRule.message]
          */
         message?: string;
         /**
-         * <-RangeRule.min->
+         * [descr:RangeRule.min]
          */
         min?: Date | number;
         /**
-         * <-RangeRule.reevaluate->
+         * [descr:RangeRule.reevaluate]
          */
         reevaluate?: boolean;
         /**
-         * <-RangeRule.type->
+         * [descr:RangeRule.type]
          */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
-     * <-RequiredRule->
+     * [descr:RequiredRule]
      */
     export interface RequiredRule {
         /**
-         * <-RequiredRule.message->
+         * [descr:RequiredRule.message]
          */
         message?: string;
         /**
-         * <-RequiredRule.trim->
+         * [descr:RequiredRule.trim]
          */
         trim?: boolean;
         /**
-         * <-RequiredRule.type->
+         * [descr:RequiredRule.type]
          */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
-     * <-SearchBoxMixin.Options->
+     * [descr:SearchBoxMixin.Options]
      */
     export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
         /**
-         * <-SearchBoxMixin.Options.searchEditorOptions->
+         * [descr:SearchBoxMixin.Options.searchEditorOptions]
          */
         searchEditorOptions?: dxTextBoxOptions;
         /**
-         * <-SearchBoxMixin.Options.searchEnabled->
+         * [descr:SearchBoxMixin.Options.searchEnabled]
          */
         searchEnabled?: boolean;
         /**
-         * <-SearchBoxMixin.Options.searchExpr->
+         * [descr:SearchBoxMixin.Options.searchExpr]
          */
         searchExpr?: string | Function | Array<string | Function>;
         /**
-         * <-SearchBoxMixin.Options.searchMode->
+         * [descr:SearchBoxMixin.Options.searchMode]
          */
         searchMode?: 'contains' | 'startswith' | 'equals';
         /**
-         * <-SearchBoxMixin.Options.searchTimeout->
+         * [descr:SearchBoxMixin.Options.searchTimeout]
          */
         searchTimeout?: number;
         /**
-         * <-SearchBoxMixin.Options.searchValue->
+         * [descr:SearchBoxMixin.Options.searchValue]
          */
         searchValue?: string;
     }
     /**
-     * <-SearchBoxMixin->
+     * [descr:SearchBoxMixin]
      */
     export class SearchBoxMixin {
         constructor(options?: SearchBoxMixinOptions)
     }
     /**
-     * <-StringLengthRule->
+     * [descr:StringLengthRule]
      */
     export interface StringLengthRule {
         /**
-         * <-StringLengthRule.ignoreEmptyValue->
+         * [descr:StringLengthRule.ignoreEmptyValue]
          */
         ignoreEmptyValue?: boolean;
         /**
-         * <-StringLengthRule.max->
+         * [descr:StringLengthRule.max]
          */
         max?: number;
         /**
-         * <-StringLengthRule.message->
+         * [descr:StringLengthRule.message]
          */
         message?: string;
         /**
-         * <-StringLengthRule.min->
+         * [descr:StringLengthRule.min]
          */
         min?: number;
         /**
-         * <-StringLengthRule.trim->
+         * [descr:StringLengthRule.trim]
          */
         trim?: boolean;
         /**
-         * <-StringLengthRule.type->
+         * [descr:StringLengthRule.type]
          */
         type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     }
     /**
-     * <-Widget.Options->
+     * [descr:Widget.Options]
      */
     export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
         /**
-         * <-Widget.Options.accessKey->
+         * [descr:Widget.Options.accessKey]
          */
         accessKey?: string;
         /**
-         * <-Widget.Options.activeStateEnabled->
+         * [descr:Widget.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-Widget.Options.disabled->
+         * [descr:Widget.Options.disabled]
          */
         disabled?: boolean;
         /**
-         * <-Widget.Options.focusStateEnabled->
+         * [descr:Widget.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-Widget.Options.hint->
+         * [descr:Widget.Options.hint]
          */
         hint?: string;
         /**
-         * <-Widget.Options.hoverStateEnabled->
+         * [descr:Widget.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-Widget.Options.onContentReady->
+         * [descr:Widget.Options.onContentReady]
          */
         onContentReady?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-Widget.Options.tabIndex->
+         * [descr:Widget.Options.tabIndex]
          */
         tabIndex?: number;
         /**
-         * <-Widget.Options.visible->
+         * [descr:Widget.Options.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-Widget->
+     * [descr:Widget]
      */
     export class Widget extends DOMComponent {
         constructor(element: Element, options?: WidgetOptions)
         constructor(element: JQuery, options?: WidgetOptions)
         /**
-         * <-Widget.focus()->
+         * [descr:Widget.focus()]
          */
         focus(): void;
         /**
-         * <-Widget.registerKeyHandler(key, handler)->
+         * [descr:Widget.registerKeyHandler(key, handler)]
          */
         registerKeyHandler(key: string, handler: Function): void;
         /**
-         * <-Widget.repaint()->
+         * [descr:Widget.repaint()]
          */
         repaint(): void;
     }
     /**
-     * <-dxAccordion.Options->
+     * [descr:dxAccordion.Options]
      */
     export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
         /**
-         * <-dxAccordion.Options.animationDuration->
+         * [descr:dxAccordion.Options.animationDuration]
          */
         animationDuration?: number;
         /**
-         * <-dxAccordion.Options.collapsible->
+         * [descr:dxAccordion.Options.collapsible]
          */
         collapsible?: boolean;
         /**
-         * <-dxAccordion.Options.dataSource->
+         * [descr:dxAccordion.Options.dataSource]
          */
         dataSource?: string | Array<string | dxAccordionItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxAccordion.Options.deferRendering->
+         * [descr:dxAccordion.Options.deferRendering]
          */
         deferRendering?: boolean;
         /**
-         * <-dxAccordion.Options.focusStateEnabled->
+         * [descr:dxAccordion.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxAccordion.Options.height->
+         * [descr:dxAccordion.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxAccordion.Options.hoverStateEnabled->
+         * [descr:dxAccordion.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxAccordion.Options.itemTemplate->
+         * [descr:dxAccordion.Options.itemTemplate]
          */
         itemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxAccordion.Options.itemTitleTemplate->
+         * [descr:dxAccordion.Options.itemTitleTemplate]
          */
         itemTitleTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxAccordion.Options.items->
+         * [descr:dxAccordion.Options.items]
          */
         items?: Array<string | dxAccordionItem | any>;
         /**
-         * <-dxAccordion.Options.multiple->
+         * [descr:dxAccordion.Options.multiple]
          */
         multiple?: boolean;
         /**
-         * <-dxAccordion.Options.onItemTitleClick->
+         * [descr:dxAccordion.Options.onItemTitleClick]
          */
         onItemTitleClick?: ((e: { component?: dxAccordion, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any) | string;
         /**
-         * <-dxAccordion.Options.repaintChangesOnly->
+         * [descr:dxAccordion.Options.repaintChangesOnly]
          */
         repaintChangesOnly?: boolean;
         /**
-         * <-dxAccordion.Options.selectedIndex->
+         * [descr:dxAccordion.Options.selectedIndex]
          */
         selectedIndex?: number;
     }
     /**
-     * <-dxAccordion->
+     * [descr:dxAccordion]
      */
     export class dxAccordion extends CollectionWidget {
         constructor(element: Element, options?: dxAccordionOptions)
         constructor(element: JQuery, options?: dxAccordionOptions)
         /**
-         * <-dxAccordion.collapseItem(index)->
+         * [descr:dxAccordion.collapseItem(index)]
          */
         collapseItem(index: number): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxAccordion.expandItem(index)->
+         * [descr:dxAccordion.expandItem(index)]
          */
         expandItem(index: number): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxAccordion.updateDimensions()->
+         * [descr:dxAccordion.updateDimensions()]
          */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxAccordionItem->
+     * [descr:dxAccordionItem]
      */
     export interface dxAccordionItem extends CollectionWidgetItem {
         /**
-         * <-dxAccordionItem.icon->
+         * [descr:dxAccordionItem.icon]
          */
         icon?: string;
         /**
-         * <-dxAccordionItem.title->
+         * [descr:dxAccordionItem.title]
          */
         title?: string;
     }
     /**
-     * <-dxActionSheet.Options->
+     * [descr:dxActionSheet.Options]
      */
     export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
         /**
-         * <-dxActionSheet.Options.cancelText->
+         * [descr:dxActionSheet.Options.cancelText]
          */
         cancelText?: string;
         /**
-         * <-dxActionSheet.Options.dataSource->
+         * [descr:dxActionSheet.Options.dataSource]
          */
         dataSource?: string | Array<string | dxActionSheetItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxActionSheet.Options.items->
+         * [descr:dxActionSheet.Options.items]
          */
         items?: Array<string | dxActionSheetItem | any>;
         /**
-         * <-dxActionSheet.Options.onCancelClick->
+         * [descr:dxActionSheet.Options.onCancelClick]
          */
         onCancelClick?: ((e: { component?: dxActionSheet, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any) | string;
         /**
-         * <-dxActionSheet.Options.showCancelButton->
+         * [descr:dxActionSheet.Options.showCancelButton]
          */
         showCancelButton?: boolean;
         /**
-         * <-dxActionSheet.Options.showTitle->
+         * [descr:dxActionSheet.Options.showTitle]
          */
         showTitle?: boolean;
         /**
-         * <-dxActionSheet.Options.target->
+         * [descr:dxActionSheet.Options.target]
          */
         target?: string | Element | JQuery;
         /**
-         * <-dxActionSheet.Options.title->
+         * [descr:dxActionSheet.Options.title]
          */
         title?: string;
         /**
-         * <-dxActionSheet.Options.usePopover->
+         * [descr:dxActionSheet.Options.usePopover]
          */
         usePopover?: boolean;
         /**
-         * <-dxActionSheet.Options.visible->
+         * [descr:dxActionSheet.Options.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxActionSheet->
+     * [descr:dxActionSheet]
      */
     export class dxActionSheet extends CollectionWidget {
         constructor(element: Element, options?: dxActionSheetOptions)
         constructor(element: JQuery, options?: dxActionSheetOptions)
         /**
-         * <-dxActionSheet.hide()->
+         * [descr:dxActionSheet.hide()]
          */
         hide(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxActionSheet.show()->
+         * [descr:dxActionSheet.show()]
          */
         show(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxActionSheet.toggle(showing)->
+         * [descr:dxActionSheet.toggle(showing)]
          */
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxActionSheetItem->
+     * [descr:dxActionSheetItem]
      */
     export interface dxActionSheetItem extends CollectionWidgetItem {
         /**
-         * <-dxActionSheetItem.icon->
+         * [descr:dxActionSheetItem.icon]
          */
         icon?: string;
         /**
-         * <-dxActionSheetItem.onClick->
+         * [descr:dxActionSheetItem.onClick]
          */
         onClick?: ((e: { component?: dxActionSheet, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any) | string;
         /**
-         * <-dxActionSheetItem.type->
+         * [descr:dxActionSheetItem.type]
          */
         type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     }
     /**
-     * <-dxAutocomplete.Options->
+     * [descr:dxAutocomplete.Options]
      */
     export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
         /**
-         * <-dxAutocomplete.Options.maxItemCount->
+         * [descr:dxAutocomplete.Options.maxItemCount]
          */
         maxItemCount?: number;
         /**
-         * <-dxAutocomplete.Options.minSearchLength->
+         * [descr:dxAutocomplete.Options.minSearchLength]
          */
         minSearchLength?: number;
         /**
-         * <-dxAutocomplete.Options.showDropDownButton->
+         * [descr:dxAutocomplete.Options.showDropDownButton]
          */
         showDropDownButton?: boolean;
         /**
-         * <-dxAutocomplete.Options.value->
+         * [descr:dxAutocomplete.Options.value]
          */
         value?: string;
     }
     /**
-     * <-dxAutocomplete->
+     * [descr:dxAutocomplete]
      */
     export class dxAutocomplete extends dxDropDownList {
         constructor(element: Element, options?: dxAutocompleteOptions)
         constructor(element: JQuery, options?: dxAutocompleteOptions)
     }
     /**
-     * <-dxBox.Options->
+     * [descr:dxBox.Options]
      */
     export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
         /**
-         * <-dxBox.Options.align->
+         * [descr:dxBox.Options.align]
          */
         align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
         /**
-         * <-dxBox.Options.crossAlign->
+         * [descr:dxBox.Options.crossAlign]
          */
         crossAlign?: 'center' | 'end' | 'start' | 'stretch';
         /**
-         * <-dxBox.Options.dataSource->
+         * [descr:dxBox.Options.dataSource]
          */
         dataSource?: string | Array<string | dxBoxItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxBox.Options.direction->
+         * [descr:dxBox.Options.direction]
          */
         direction?: 'col' | 'row';
         /**
-         * <-dxBox.Options.items->
+         * [descr:dxBox.Options.items]
          */
         items?: Array<string | dxBoxItem | any>;
     }
     /**
-     * <-dxBox->
+     * [descr:dxBox]
      */
     export class dxBox extends CollectionWidget {
         constructor(element: Element, options?: dxBoxOptions)
         constructor(element: JQuery, options?: dxBoxOptions)
     }
     /**
-     * <-dxBoxItem->
+     * [descr:dxBoxItem]
      */
     export interface dxBoxItem extends CollectionWidgetItem {
         /**
-         * <-dxBoxItem.baseSize->
+         * [descr:dxBoxItem.baseSize]
          */
         baseSize?: number | 'auto';
         /**
-         * <-dxBoxItem.box->
+         * [descr:dxBoxItem.box]
          */
         box?: dxBoxOptions;
         /**
-         * <-dxBoxItem.ratio->
+         * [descr:dxBoxItem.ratio]
          */
         ratio?: number;
         /**
-         * <-dxBoxItem.shrink->
+         * [descr:dxBoxItem.shrink]
          */
         shrink?: number;
     }
     /**
-     * <-dxButton.Options->
+     * [descr:dxButton.Options]
      */
     export interface dxButtonOptions extends WidgetOptions<dxButton> {
         /**
-         * <-dxButton.Options.activeStateEnabled->
+         * [descr:dxButton.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxButton.Options.focusStateEnabled->
+         * [descr:dxButton.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxButton.Options.hoverStateEnabled->
+         * [descr:dxButton.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxButton.Options.icon->
+         * [descr:dxButton.Options.icon]
          */
         icon?: string;
         /**
-         * <-dxButton.Options.onClick->
+         * [descr:dxButton.Options.onClick]
          */
         onClick?: ((e: { component?: dxButton, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, validationGroup?: any }) => any);
         /**
-         * <-dxButton.Options.stylingMode->
+         * [descr:dxButton.Options.stylingMode]
          */
         stylingMode?: 'text' | 'outlined' | 'contained';
         /**
-         * <-dxButton.Options.template->
+         * [descr:dxButton.Options.template]
          */
         template?: DevExpress.core.template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxButton.Options.text->
+         * [descr:dxButton.Options.text]
          */
         text?: string;
         /**
-         * <-dxButton.Options.type->
+         * [descr:dxButton.Options.type]
          */
         type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
         /**
-         * <-dxButton.Options.useSubmitBehavior->
+         * [descr:dxButton.Options.useSubmitBehavior]
          */
         useSubmitBehavior?: boolean;
         /**
-         * <-dxButton.Options.validationGroup->
+         * [descr:dxButton.Options.validationGroup]
          */
         validationGroup?: string;
     }
     /**
-     * <-dxButton->
+     * [descr:dxButton]
      */
     export class dxButton extends Widget {
         constructor(element: Element, options?: dxButtonOptions)
         constructor(element: JQuery, options?: dxButtonOptions)
     }
     /**
-     * <-dxButtonGroup.Options->
+     * [descr:dxButtonGroup.Options]
      */
     export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
         /**
-         * <-dxButtonGroup.Options.buttonTemplate->
+         * [descr:dxButtonGroup.Options.buttonTemplate]
          */
         buttonTemplate?: DevExpress.core.template | ((buttonData: any, buttonContent: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxButtonGroup.Options.focusStateEnabled->
+         * [descr:dxButtonGroup.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxButtonGroup.Options.hoverStateEnabled->
+         * [descr:dxButtonGroup.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxButtonGroup.Options.items->
+         * [descr:dxButtonGroup.Options.items]
          */
         items?: Array<dxButtonGroupItem>;
         /**
-         * <-dxButtonGroup.Options.keyExpr->
+         * [descr:dxButtonGroup.Options.keyExpr]
          */
         keyExpr?: string | Function;
         /**
-         * <-dxButtonGroup.Options.onItemClick->
+         * [descr:dxButtonGroup.Options.onItemClick]
          */
         onItemClick?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxButtonGroup.Options.onSelectionChanged->
+         * [descr:dxButtonGroup.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
         /**
-         * <-dxButtonGroup.Options.selectedItemKeys->
+         * [descr:dxButtonGroup.Options.selectedItemKeys]
          */
         selectedItemKeys?: Array<any>;
         /**
-         * <-dxButtonGroup.Options.selectedItems->
+         * [descr:dxButtonGroup.Options.selectedItems]
          */
         selectedItems?: Array<any>;
         /**
-         * <-dxButtonGroup.Options.selectionMode->
+         * [descr:dxButtonGroup.Options.selectionMode]
          */
         selectionMode?: 'multiple' | 'single';
         /**
-         * <-dxButtonGroup.Options.stylingMode->
+         * [descr:dxButtonGroup.Options.stylingMode]
          */
         stylingMode?: 'text' | 'outlined' | 'contained';
     }
     /**
-     * <-dxButtonGroup->
+     * [descr:dxButtonGroup]
      */
     export class dxButtonGroup extends Widget {
         constructor(element: Element, options?: dxButtonGroupOptions)
         constructor(element: JQuery, options?: dxButtonGroupOptions)
     }
     /**
-     * <-dxButtonGroupItem->
+     * [descr:dxButtonGroupItem]
      */
     export interface dxButtonGroupItem extends CollectionWidgetItem {
         /**
-         * <-dxButtonGroupItem.hint->
+         * [descr:dxButtonGroupItem.hint]
          */
         hint?: string;
         /**
-         * <-dxButtonGroupItem.icon->
+         * [descr:dxButtonGroupItem.icon]
          */
         icon?: string;
         /**
-         * <-dxButtonGroupItem.type->
+         * [descr:dxButtonGroupItem.type]
          */
         type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     }
     /**
-     * <-dxCalendar.Options->
+     * [descr:dxCalendar.Options]
      */
     export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
         /**
-         * <-dxCalendar.Options.activeStateEnabled->
+         * [descr:dxCalendar.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxCalendar.Options.cellTemplate->
+         * [descr:dxCalendar.Options.cellTemplate]
          */
         cellTemplate?: DevExpress.core.template | ((itemData: { date?: Date, view?: string, text?: string }, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxCalendar.Options.dateSerializationFormat->
+         * [descr:dxCalendar.Options.dateSerializationFormat]
          */
         dateSerializationFormat?: string;
         /**
-         * <-dxCalendar.Options.disabledDates->
+         * [descr:dxCalendar.Options.disabledDates]
          */
         disabledDates?: Array<Date> | ((data: { component?: any, date?: Date, view?: string }) => boolean);
         /**
-         * <-dxCalendar.Options.firstDayOfWeek->
+         * [descr:dxCalendar.Options.firstDayOfWeek]
          */
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /**
-         * <-dxCalendar.Options.focusStateEnabled->
+         * [descr:dxCalendar.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxCalendar.Options.hoverStateEnabled->
+         * [descr:dxCalendar.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxCalendar.Options.max->
+         * [descr:dxCalendar.Options.max]
          */
         max?: Date | number | string;
         /**
-         * <-dxCalendar.Options.maxZoomLevel->
+         * [descr:dxCalendar.Options.maxZoomLevel]
          */
         maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /**
-         * <-dxCalendar.Options.min->
+         * [descr:dxCalendar.Options.min]
          */
         min?: Date | number | string;
         /**
-         * <-dxCalendar.Options.minZoomLevel->
+         * [descr:dxCalendar.Options.minZoomLevel]
          */
         minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
         /**
-         * <-dxCalendar.Options.name->
+         * [descr:dxCalendar.Options.name]
          */
         name?: string;
         /**
-         * <-dxCalendar.Options.showTodayButton->
+         * [descr:dxCalendar.Options.showTodayButton]
          */
         showTodayButton?: boolean;
         /**
-         * <-dxCalendar.Options.value->
+         * [descr:dxCalendar.Options.value]
          */
         value?: Date | number | string;
         /**
-         * <-dxCalendar.Options.zoomLevel->
+         * [descr:dxCalendar.Options.zoomLevel]
          */
         zoomLevel?: 'century' | 'decade' | 'month' | 'year';
     }
     /**
-     * <-dxCalendar->
+     * [descr:dxCalendar]
      */
     export class dxCalendar extends Editor {
         constructor(element: Element, options?: dxCalendarOptions)
         constructor(element: JQuery, options?: dxCalendarOptions)
     }
     /**
-     * <-dxCheckBox.Options->
+     * [descr:dxCheckBox.Options]
      */
     export interface dxCheckBoxOptions extends EditorOptions<dxCheckBox> {
         /**
-         * <-dxCheckBox.Options.activeStateEnabled->
+         * [descr:dxCheckBox.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxCheckBox.Options.focusStateEnabled->
+         * [descr:dxCheckBox.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxCheckBox.Options.hoverStateEnabled->
+         * [descr:dxCheckBox.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxCheckBox.Options.name->
+         * [descr:dxCheckBox.Options.name]
          */
         name?: string;
         /**
-         * <-dxCheckBox.Options.text->
+         * [descr:dxCheckBox.Options.text]
          */
         text?: string;
         /**
-         * <-dxCheckBox.Options.value->
+         * [descr:dxCheckBox.Options.value]
          */
         value?: boolean;
     }
     /**
-     * <-dxCheckBox->
+     * [descr:dxCheckBox]
      */
     export class dxCheckBox extends Editor {
         constructor(element: Element, options?: dxCheckBoxOptions)
         constructor(element: JQuery, options?: dxCheckBoxOptions)
     }
     /**
-     * <-dxColorBox.Options->
+     * [descr:dxColorBox.Options]
      */
     export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
         /**
-         * <-dxColorBox.Options.applyButtonText->
+         * [descr:dxColorBox.Options.applyButtonText]
          */
         applyButtonText?: string;
         /**
-         * <-dxColorBox.Options.applyValueMode->
+         * [descr:dxColorBox.Options.applyValueMode]
          */
         applyValueMode?: 'instantly' | 'useButtons';
         /**
-         * <-dxColorBox.Options.cancelButtonText->
+         * [descr:dxColorBox.Options.cancelButtonText]
          */
         cancelButtonText?: string;
         /**
-         * <-dxColorBox.Options.editAlphaChannel->
+         * [descr:dxColorBox.Options.editAlphaChannel]
          */
         editAlphaChannel?: boolean;
         /**
-         * <-dxColorBox.Options.fieldTemplate->
+         * [descr:dxColorBox.Options.fieldTemplate]
          */
         fieldTemplate?: DevExpress.core.template | ((value: string, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxColorBox.Options.keyStep->
+         * [descr:dxColorBox.Options.keyStep]
          */
         keyStep?: number;
         /**
-         * <-dxColorBox.Options.value->
+         * [descr:dxColorBox.Options.value]
          */
         value?: string;
     }
     /**
-     * <-dxColorBox->
+     * [descr:dxColorBox]
      */
     export class dxColorBox extends dxDropDownEditor {
         constructor(element: Element, options?: dxColorBoxOptions)
         constructor(element: JQuery, options?: dxColorBoxOptions)
     }
     /**
-     * <-dxContextMenu.Options->
+     * [descr:dxContextMenu.Options]
      */
     export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
         /**
-         * <-dxContextMenu.Options.closeOnOutsideClick->
+         * [descr:dxContextMenu.Options.closeOnOutsideClick]
          */
         closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
-         * <-dxContextMenu.Options.dataSource->
+         * [descr:dxContextMenu.Options.dataSource]
          */
         dataSource?: string | Array<dxContextMenuItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxContextMenu.Options.items->
+         * [descr:dxContextMenu.Options.items]
          */
         items?: Array<dxContextMenuItem>;
         /**
-         * <-dxContextMenu.Options.onHidden->
+         * [descr:dxContextMenu.Options.onHidden]
          */
         onHidden?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxContextMenu.Options.onHiding->
+         * [descr:dxContextMenu.Options.onHiding]
          */
         onHiding?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
         /**
-         * <-dxContextMenu.Options.onPositioning->
+         * [descr:dxContextMenu.Options.onPositioning]
          */
         onPositioning?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, position?: positionConfig }) => any);
         /**
-         * <-dxContextMenu.Options.onShowing->
+         * [descr:dxContextMenu.Options.onShowing]
          */
         onShowing?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
         /**
-         * <-dxContextMenu.Options.onShown->
+         * [descr:dxContextMenu.Options.onShown]
          */
         onShown?: ((e: { component?: dxContextMenu, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxContextMenu.Options.position->
+         * [descr:dxContextMenu.Options.position]
          */
         position?: positionConfig;
         /**
-         * <-dxContextMenu.Options.showEvent->
+         * [descr:dxContextMenu.Options.showEvent]
          */
         showEvent?: { delay?: number, name?: string } | string;
         /**
-         * <-dxContextMenu.Options.submenuDirection->
+         * [descr:dxContextMenu.Options.submenuDirection]
          */
         submenuDirection?: 'auto' | 'left' | 'right';
         /**
-         * <-dxContextMenu.Options.target->
+         * [descr:dxContextMenu.Options.target]
          */
         target?: string | Element | JQuery;
         /**
-         * <-dxContextMenu.Options.visible->
+         * [descr:dxContextMenu.Options.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxContextMenu->
+     * [descr:dxContextMenu]
      */
     export class dxContextMenu extends dxMenuBase {
         constructor(element: Element, options?: dxContextMenuOptions)
         constructor(element: JQuery, options?: dxContextMenuOptions)
         /**
-         * <-dxContextMenu.hide()->
+         * [descr:dxContextMenu.hide()]
          */
         hide(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxContextMenu.show()->
+         * [descr:dxContextMenu.show()]
          */
         show(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxContextMenu.toggle(showing)->
+         * [descr:dxContextMenu.toggle(showing)]
          */
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxContextMenuItem->
+     * [descr:dxContextMenuItem]
      */
     export interface dxContextMenuItem extends dxMenuBaseItem {
         /**
-         * <-dxContextMenuItem.items->
+         * [descr:dxContextMenuItem.items]
          */
         items?: Array<dxContextMenuItem>;
     }
     /**
-     * <-dxDataGrid.Options->
+     * [descr:dxDataGrid.Options]
      */
     export interface dxDataGridOptions extends GridBaseOptions<dxDataGrid> {
         /**
-         * <-dxDataGrid.Options.columns->
+         * [descr:dxDataGrid.Options.columns]
          */
         columns?: Array<dxDataGridColumn | string>;
         /**
-         * <-dxDataGrid.Options.customizeColumns->
+         * [descr:dxDataGrid.Options.customizeColumns]
          */
         customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
         /**
-         * <-dxDataGrid.Options.customizeExportData->
-         * @deprecated <-dxDataGrid.Options.customizeExportData:depNote->
+         * [descr:dxDataGrid.Options.customizeExportData]
+         * @deprecated [depNote:dxDataGrid.Options.customizeExportData]
          */
         customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
         /**
-         * <-dxDataGrid.Options.editing->
+         * [descr:dxDataGrid.Options.editing]
          */
         editing?: dxDataGridEditing;
         /**
-         * <-dxDataGrid.Options.export->
+         * [descr:dxDataGrid.Options.export]
          */
         export?: { allowExportSelectedData?: boolean, customizeExcelCell?: ((options: { component?: dxDataGrid, horizontalAlignment?: 'center' | 'centerContinuous' | 'distributed' | 'fill' | 'general' | 'justify' | 'left' | 'right', verticalAlignment?: 'bottom' | 'center' | 'distributed' | 'justify' | 'top', wrapTextEnabled?: boolean, backgroundColor?: string, fillPatternType?: 'darkDown' | 'darkGray' | 'darkGrid' | 'darkHorizontal' | 'darkTrellis' | 'darkUp' | 'darkVertical' | 'gray0625' | 'gray125' | 'lightDown' | 'lightGray' | 'lightGrid' | 'lightHorizontal' | 'lightTrellis' | 'lightUp' | 'lightVertical' | 'mediumGray' | 'none' | 'solid', fillPatternColor?: string, font?: DevExpress.exporter.ExcelFont, value?: string | number | Date, numberFormat?: string, gridCell?: DevExpress.excelExporter.ExcelDataGridCell }) => any), enabled?: boolean, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, fileName?: string, ignoreExcelErrors?: boolean, proxyUrl?: string, texts?: { exportAll?: string, exportSelectedRows?: string, exportTo?: string } };
         /**
-         * <-dxDataGrid.Options.groupPanel->
+         * [descr:dxDataGrid.Options.groupPanel]
          */
         groupPanel?: { allowColumnDragging?: boolean, emptyPanelText?: string, visible?: boolean | 'auto' };
         /**
-         * <-dxDataGrid.Options.grouping->
+         * [descr:dxDataGrid.Options.grouping]
          */
         grouping?: { allowCollapsing?: boolean, autoExpandAll?: boolean, contextMenuEnabled?: boolean, expandMode?: 'buttonClick' | 'rowClick', texts?: { groupByThisColumn?: string, groupContinuedMessage?: string, groupContinuesMessage?: string, ungroup?: string, ungroupAll?: string } };
         /**
-         * <-dxDataGrid.Options.keyExpr->
+         * [descr:dxDataGrid.Options.keyExpr]
          */
         keyExpr?: string | Array<string>;
         /**
-         * <-dxDataGrid.Options.masterDetail->
+         * [descr:dxDataGrid.Options.masterDetail]
          */
         masterDetail?: { autoExpandAll?: boolean, enabled?: boolean, template?: DevExpress.core.template | ((detailElement: DevExpress.core.dxElement, detailInfo: { key?: any, data?: any, watch?: Function }) => any) };
         /**
-         * <-dxDataGrid.Options.onCellClick->
+         * [descr:dxDataGrid.Options.onCellClick]
          */
         onCellClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any) | string;
         /**
-         * <-dxDataGrid.Options.onCellDblClick->
+         * [descr:dxDataGrid.Options.onCellDblClick]
          */
         onCellDblClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /**
-         * <-dxDataGrid.Options.onCellHoverChanged->
+         * [descr:dxDataGrid.Options.onCellHoverChanged]
          */
         onCellHoverChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /**
-         * <-dxDataGrid.Options.onCellPrepared->
+         * [descr:dxDataGrid.Options.onCellPrepared]
          */
         onCellPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function, oldValue?: any }) => any);
         /**
-         * <-dxDataGrid.Options.onContextMenuPreparing->
+         * [descr:dxDataGrid.Options.onContextMenuPreparing]
          */
         onContextMenuPreparing?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /**
-         * <-dxDataGrid.Options.onEditingStart->
+         * [descr:dxDataGrid.Options.onEditingStart]
          */
         onEditingStart?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
         /**
-         * <-dxDataGrid.Options.onEditorPrepared->
+         * [descr:dxDataGrid.Options.onEditorPrepared]
          */
         onEditorPrepared?: ((options: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, dataField?: string, row?: dxDataGridRowObject }) => any);
         /**
-         * <-dxDataGrid.Options.onEditorPreparing->
+         * [descr:dxDataGrid.Options.onEditorPreparing]
          */
         onEditorPreparing?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxDataGridRowObject }) => any);
         /**
-         * <-dxDataGrid.Options.onExported->
-         * @deprecated <-dxDataGrid.Options.onExported:depNote->
+         * [descr:dxDataGrid.Options.onExported]
+         * @deprecated [depNote:dxDataGrid.Options.onExported]
          */
         onExported?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxDataGrid.Options.onExporting->
+         * [descr:dxDataGrid.Options.onExporting]
          */
         onExporting?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
         /**
-         * <-dxDataGrid.Options.onFileSaving->
-         * @deprecated <-dxDataGrid.Options.onFileSaving:depNote->
+         * [descr:dxDataGrid.Options.onFileSaving]
+         * @deprecated [depNote:dxDataGrid.Options.onFileSaving]
          */
         onFileSaving?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /**
-         * <-dxDataGrid.Options.onFocusedCellChanged->
+         * [descr:dxDataGrid.Options.onFocusedCellChanged]
          */
         onFocusedCellChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any);
         /**
-         * <-dxDataGrid.Options.onFocusedCellChanging->
+         * [descr:dxDataGrid.Options.onFocusedCellChanging]
          */
         onFocusedCellChanging?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: DevExpress.events.event, rows?: Array<dxDataGridRowObject>, columns?: Array<dxDataGridColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
         /**
-         * <-dxDataGrid.Options.onFocusedRowChanged->
+         * [descr:dxDataGrid.Options.onFocusedRowChanged]
          */
         onFocusedRowChanged?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /**
-         * <-dxDataGrid.Options.onFocusedRowChanging->
+         * [descr:dxDataGrid.Options.onFocusedRowChanging]
          */
         onFocusedRowChanging?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, prevRowIndex?: number, newRowIndex?: number, event?: DevExpress.events.event, rows?: Array<dxDataGridRowObject>, cancel?: boolean }) => any);
         /**
-         * <-dxDataGrid.Options.onRowClick->
+         * [descr:dxDataGrid.Options.onRowClick]
          */
         onRowClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement, handled?: boolean }) => any) | string;
         /**
-         * <-dxDataGrid.Options.onRowDblClick->
+         * [descr:dxDataGrid.Options.onRowDblClick]
          */
         onRowDblClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, groupIndex?: number, rowElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxDataGrid.Options.onRowPrepared->
+         * [descr:dxDataGrid.Options.onRowPrepared]
          */
         onRowPrepared?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxDataGridColumn>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxDataGrid.Options.remoteOperations->
+         * [descr:dxDataGrid.Options.remoteOperations]
          */
         remoteOperations?: boolean | { filtering?: boolean, groupPaging?: boolean, grouping?: boolean, paging?: boolean, sorting?: boolean, summary?: boolean } | 'auto';
         /**
-         * <-dxDataGrid.Options.rowTemplate->
+         * [descr:dxDataGrid.Options.rowTemplate]
          */
         rowTemplate?: DevExpress.core.template | ((rowElement: DevExpress.core.dxElement, rowInfo: any) => any);
         /**
-         * <-dxDataGrid.Options.scrolling->
+         * [descr:dxDataGrid.Options.scrolling]
          */
         scrolling?: dxDataGridScrolling;
         /**
-         * <-dxDataGrid.Options.selection->
+         * [descr:dxDataGrid.Options.selection]
          */
         selection?: dxDataGridSelection;
         /**
-         * <-dxDataGrid.Options.selectionFilter->
+         * [descr:dxDataGrid.Options.selectionFilter]
          */
         selectionFilter?: string | Array<any> | Function;
         /**
-         * <-dxDataGrid.Options.sortByGroupSummaryInfo->
+         * [descr:dxDataGrid.Options.sortByGroupSummaryInfo]
          */
         sortByGroupSummaryInfo?: Array<{ groupColumn?: string, sortOrder?: 'asc' | 'desc', summaryItem?: string | number }>;
         /**
-         * <-dxDataGrid.Options.summary->
+         * [descr:dxDataGrid.Options.summary]
          */
         summary?: { calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any, groupIndex?: number }) => any), groupItems?: Array<{ alignByColumn?: boolean, column?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, showInGroupFooter?: boolean, skipEmptyValues?: boolean, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string, valueFormat?: format }>, recalculateWhileEditing?: boolean, skipEmptyValues?: boolean, texts?: { avg?: string, avgOtherColumn?: string, count?: string, max?: string, maxOtherColumn?: string, min?: string, minOtherColumn?: string, sum?: string, sumOtherColumn?: string }, totalItems?: Array<{ alignment?: 'center' | 'left' | 'right', column?: string, cssClass?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), displayFormat?: string, name?: string, showInColumn?: string, skipEmptyValues?: boolean, summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string, valueFormat?: format }> };
     }
     /**
-     * <-dxDataGrid.Options.editing->
+     * [descr:dxDataGrid.Options.editing]
      */
     export interface dxDataGridEditing extends GridBaseEditing {
         /**
-         * <-dxDataGrid.Options.editing.allowAdding->
+         * [descr:dxDataGrid.Options.editing.allowAdding]
          */
         allowAdding?: boolean;
         /**
-         * <-dxDataGrid.Options.editing.allowDeleting->
+         * [descr:dxDataGrid.Options.editing.allowDeleting]
          */
         allowDeleting?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
         /**
-         * <-dxDataGrid.Options.editing.allowUpdating->
+         * [descr:dxDataGrid.Options.editing.allowUpdating]
          */
         allowUpdating?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject }) => boolean);
         /**
-         * <-dxDataGrid.Options.editing.texts->
+         * [descr:dxDataGrid.Options.editing.texts]
          */
         texts?: any;
     }
     /**
-     * <-dxDataGrid.Options.scrolling->
+     * [descr:dxDataGrid.Options.scrolling]
      */
     export interface dxDataGridScrolling extends GridBaseScrolling {
         /**
-         * <-dxDataGrid.Options.scrolling.mode->
+         * [descr:dxDataGrid.Options.scrolling.mode]
          */
         mode?: 'infinite' | 'standard' | 'virtual';
     }
     /**
-     * <-dxDataGrid.Options.selection->
+     * [descr:dxDataGrid.Options.selection]
      */
     export interface dxDataGridSelection extends GridBaseSelection {
         /**
-         * <-dxDataGrid.Options.selection.deferred->
+         * [descr:dxDataGrid.Options.selection.deferred]
          */
         deferred?: boolean;
         /**
-         * <-dxDataGrid.Options.selection.selectAllMode->
+         * [descr:dxDataGrid.Options.selection.selectAllMode]
          */
         selectAllMode?: 'allPages' | 'page';
         /**
-         * <-dxDataGrid.Options.selection.showCheckBoxesMode->
+         * [descr:dxDataGrid.Options.selection.showCheckBoxesMode]
          */
         showCheckBoxesMode?: 'always' | 'none' | 'onClick' | 'onLongTap';
     }
     /**
-     * <-dxDataGrid->
+     * [descr:dxDataGrid]
      */
     export class dxDataGrid extends GridBase {
         constructor(element: Element, options?: dxDataGridOptions)
         constructor(element: JQuery, options?: dxDataGridOptions)
         /**
-         * <-dxDataGrid.addColumn(columnOptions)->
+         * [descr:dxDataGrid.addColumn(columnOptions)]
          */
         addColumn(columnOptions: any | string): void;
         /**
-         * <-dxDataGrid.addRow()->
+         * [descr:dxDataGrid.addRow()]
          */
         addRow(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxDataGrid.clearGrouping()->
+         * [descr:dxDataGrid.clearGrouping()]
          */
         clearGrouping(): void;
         /**
-         * <-dxDataGrid.collapseAll(groupIndex)->
+         * [descr:dxDataGrid.collapseAll(groupIndex)]
          */
         collapseAll(groupIndex?: number): void;
         /**
-         * <-dxDataGrid.collapseRow(key)->
+         * [descr:dxDataGrid.collapseRow(key)]
          */
         collapseRow(key: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxDataGrid.expandAll(groupIndex)->
+         * [descr:dxDataGrid.expandAll(groupIndex)]
          */
         expandAll(groupIndex?: number): void;
         /**
-         * <-dxDataGrid.expandRow(key)->
+         * [descr:dxDataGrid.expandRow(key)]
          */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxDataGrid.exportToExcel(selectionOnly)->
-         * @deprecated <-dxDataGrid.exportToExcel(selectionOnly):depNote->
+         * [descr:dxDataGrid.exportToExcel(selectionOnly)]
+         * @deprecated [depNote:dxDataGrid.exportToExcel(selectionOnly)]
          */
         exportToExcel(selectionOnly: boolean): void;
         /**
-         * <-dxDataGrid.getSelectedRowKeys()->
+         * [descr:dxDataGrid.getSelectedRowKeys()]
          */
         getSelectedRowKeys(): Array<any> & Promise<any> & JQueryPromise<any>;
         /**
-         * <-dxDataGrid.getSelectedRowsData()->
+         * [descr:dxDataGrid.getSelectedRowsData()]
          */
         getSelectedRowsData(): Array<any> & Promise<any> & JQueryPromise<any>;
         /**
-         * <-dxDataGrid.getTotalSummaryValue(summaryItemName)->
+         * [descr:dxDataGrid.getTotalSummaryValue(summaryItemName)]
          */
         getTotalSummaryValue(summaryItemName: string): any;
         /**
-         * <-dxDataGrid.getVisibleColumns()->
+         * [descr:dxDataGrid.getVisibleColumns()]
          */
         getVisibleColumns(): Array<dxDataGridColumn>;
         /**
-         * <-dxDataGrid.getVisibleColumns(headerLevel)->
+         * [descr:dxDataGrid.getVisibleColumns(headerLevel)]
          */
         getVisibleColumns(headerLevel: number): Array<dxDataGridColumn>;
         /**
-         * <-dxDataGrid.getVisibleRows()->
+         * [descr:dxDataGrid.getVisibleRows()]
          */
         getVisibleRows(): Array<dxDataGridRowObject>;
         /**
-         * <-dxDataGrid.isRowExpanded(key)->
+         * [descr:dxDataGrid.isRowExpanded(key)]
          */
         isRowExpanded(key: any): boolean;
         /**
-         * <-dxDataGrid.isRowSelected(data)->
+         * [descr:dxDataGrid.isRowSelected(data)]
          */
         isRowSelected(data: any): boolean;
         /**
-         * <-GridBase.isRowSelected(key)->
+         * [descr:GridBase.isRowSelected(key)]
          */
         isRowSelected(key: any): boolean;
         /**
-         * <-dxDataGrid.totalCount()->
+         * [descr:dxDataGrid.totalCount()]
          */
         totalCount(): number;
     }
     /**
-     * <-dxDataGridColumn->
+     * [descr:dxDataGridColumn]
      */
     export interface dxDataGridColumn extends GridBaseColumn {
         /**
-         * <-dxDataGridColumn.allowExporting->
+         * [descr:dxDataGridColumn.allowExporting]
          */
         allowExporting?: boolean;
         /**
-         * <-dxDataGridColumn.allowGrouping->
+         * [descr:dxDataGridColumn.allowGrouping]
          */
         allowGrouping?: boolean;
         /**
-         * <-dxDataGridColumn.autoExpandGroup->
+         * [descr:dxDataGridColumn.autoExpandGroup]
          */
         autoExpandGroup?: boolean;
         /**
-         * <-dxDataGridColumn.buttons->
+         * [descr:dxDataGridColumn.buttons]
          */
         buttons?: Array<'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxDataGridColumnButton>;
         /**
-         * <-dxDataGridColumn.calculateGroupValue->
+         * [descr:dxDataGridColumn.calculateGroupValue]
          */
         calculateGroupValue?: string | ((rowData: any) => any);
         /**
-         * <-dxDataGridColumn.cellTemplate->
+         * [descr:dxDataGridColumn.cellTemplate]
          */
         cellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { data?: any, component?: dxDataGrid, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, row?: dxDataGridRowObject, rowType?: string, watch?: Function }) => any);
         /**
-         * <-dxDataGridColumn.columns->
+         * [descr:dxDataGridColumn.columns]
          */
         columns?: Array<dxDataGridColumn | string>;
         /**
-         * <-dxDataGridColumn.editCellTemplate->
+         * [descr:dxDataGridColumn.editCellTemplate]
          */
         editCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { setValue?: any, data?: any, component?: dxDataGrid, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, row?: dxDataGridRowObject, rowType?: string, watch?: Function }) => any);
         /**
-         * <-dxDataGridColumn.groupCellTemplate->
+         * [descr:dxDataGridColumn.groupCellTemplate]
          */
         groupCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { data?: any, component?: dxDataGrid, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, row?: dxDataGridRowObject, summaryItems?: Array<any>, groupContinuesMessage?: string, groupContinuedMessage?: string }) => any);
         /**
-         * <-dxDataGridColumn.groupIndex->
+         * [descr:dxDataGridColumn.groupIndex]
          */
         groupIndex?: number;
         /**
-         * <-dxDataGridColumn.headerCellTemplate->
+         * [descr:dxDataGridColumn.headerCellTemplate]
          */
         headerCellTemplate?: DevExpress.core.template | ((columnHeader: DevExpress.core.dxElement, headerInfo: { component?: dxDataGrid, columnIndex?: number, column?: dxDataGridColumn }) => any);
         /**
-         * <-dxDataGridColumn.showWhenGrouped->
+         * [descr:dxDataGridColumn.showWhenGrouped]
          */
         showWhenGrouped?: boolean;
         /**
-         * <-dxDataGridColumn.type->
+         * [descr:dxDataGridColumn.type]
          */
         type?: 'adaptive' | 'buttons' | 'detailExpand' | 'groupExpand' | 'selection' | 'drag';
     }
     /**
-     * <-dxDataGridColumnButton->
+     * [descr:dxDataGridColumnButton]
      */
     export interface dxDataGridColumnButton extends GridBaseColumnButton {
         /**
-         * <-dxDataGridColumnButton.name->
+         * [descr:dxDataGridColumnButton.name]
          */
         name?: 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
         /**
-         * <-dxDataGridColumnButton.onClick->
+         * [descr:dxDataGridColumnButton.onClick]
          */
         onClick?: ((e: { component?: dxDataGrid, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => any) | string;
         /**
-         * <-dxDataGridColumnButton.template->
+         * [descr:dxDataGridColumnButton.template]
          */
         template?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { component?: dxDataGrid, data?: any, key?: any, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject }) => string | Element | JQuery);
         /**
-         * <-dxDataGridColumnButton.visible->
+         * [descr:dxDataGridColumnButton.visible]
          */
         visible?: boolean | ((options: { component?: dxDataGrid, row?: dxDataGridRowObject, column?: dxDataGridColumn }) => boolean);
     }
     /**
-     * <-dxDataGridRowObject->
+     * [descr:dxDataGridRowObject]
      */
     export interface dxDataGridRowObject {
         /**
-         * <-dxDataGridRowObject.data->
+         * [descr:dxDataGridRowObject.data]
          */
         data?: any;
         /**
-         * <-dxDataGridRowObject.groupIndex->
+         * [descr:dxDataGridRowObject.groupIndex]
          */
         groupIndex?: number;
         /**
-         * <-dxDataGridRowObject.isEditing->
+         * [descr:dxDataGridRowObject.isEditing]
          */
         isEditing?: boolean;
         /**
-         * <-dxDataGridRowObject.isExpanded->
+         * [descr:dxDataGridRowObject.isExpanded]
          */
         isExpanded?: boolean;
         /**
-         * <-dxDataGridRowObject.isNewRow->
+         * [descr:dxDataGridRowObject.isNewRow]
          */
         isNewRow?: boolean;
         /**
-         * <-dxDataGridRowObject.isSelected->
+         * [descr:dxDataGridRowObject.isSelected]
          */
         isSelected?: boolean;
         /**
-         * <-dxDataGridRowObject.key->
+         * [descr:dxDataGridRowObject.key]
          */
         key?: any;
         /**
-         * <-dxDataGridRowObject.rowIndex->
+         * [descr:dxDataGridRowObject.rowIndex]
          */
         rowIndex?: number;
         /**
-         * <-dxDataGridRowObject.rowType->
+         * [descr:dxDataGridRowObject.rowType]
          */
         rowType?: string;
         /**
-         * <-dxDataGridRowObject.values->
+         * [descr:dxDataGridRowObject.values]
          */
         values?: Array<any>;
     }
     /**
-     * <-dxDateBox.Options->
+     * [descr:dxDateBox.Options]
      */
     export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
         /**
-         * <-dxDateBox.Options.adaptivityEnabled->
+         * [descr:dxDateBox.Options.adaptivityEnabled]
          */
         adaptivityEnabled?: boolean;
         /**
-         * <-dxDateBox.Options.applyButtonText->
+         * [descr:dxDateBox.Options.applyButtonText]
          */
         applyButtonText?: string;
         /**
-         * <-dxDateBox.Options.calendarOptions->
+         * [descr:dxDateBox.Options.calendarOptions]
          */
         calendarOptions?: dxCalendarOptions;
         /**
-         * <-dxDateBox.Options.cancelButtonText->
+         * [descr:dxDateBox.Options.cancelButtonText]
          */
         cancelButtonText?: string;
         /**
-         * <-dxDateBox.Options.dateOutOfRangeMessage->
+         * [descr:dxDateBox.Options.dateOutOfRangeMessage]
          */
         dateOutOfRangeMessage?: string;
         /**
-         * <-dxDateBox.Options.dateSerializationFormat->
+         * [descr:dxDateBox.Options.dateSerializationFormat]
          */
         dateSerializationFormat?: string;
         /**
-         * <-dxDateBox.Options.disabledDates->
+         * [descr:dxDateBox.Options.disabledDates]
          */
         disabledDates?: Array<Date> | ((data: { component?: dxDateBox, date?: Date, view?: string }) => boolean);
         /**
-         * <-dxDateBox.Options.displayFormat->
+         * [descr:dxDateBox.Options.displayFormat]
          */
         displayFormat?: format;
         /**
-         * <-dxDateBox.Options.interval->
+         * [descr:dxDateBox.Options.interval]
          */
         interval?: number;
         /**
-         * <-dxDateBox.Options.invalidDateMessage->
+         * [descr:dxDateBox.Options.invalidDateMessage]
          */
         invalidDateMessage?: string;
         /**
-         * <-dxDateBox.Options.max->
+         * [descr:dxDateBox.Options.max]
          */
         max?: Date | number | string;
         /**
-         * <-dxDateBox.Options.min->
+         * [descr:dxDateBox.Options.min]
          */
         min?: Date | number | string;
         /**
-         * <-dxDateBox.Options.pickerType->
+         * [descr:dxDateBox.Options.pickerType]
          */
         pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
         /**
-         * <-dxDateBox.Options.placeholder->
+         * [descr:dxDateBox.Options.placeholder]
          */
         placeholder?: string;
         /**
-         * <-dxDateBox.Options.showAnalogClock->
+         * [descr:dxDateBox.Options.showAnalogClock]
          */
         showAnalogClock?: boolean;
         /**
-         * <-dxDateBox.Options.type->
+         * [descr:dxDateBox.Options.type]
          */
         type?: 'date' | 'datetime' | 'time';
         /**
-         * <-dxDateBox.Options.useMaskBehavior->
+         * [descr:dxDateBox.Options.useMaskBehavior]
          */
         useMaskBehavior?: boolean;
         /**
-         * <-dxDateBox.Options.value->
+         * [descr:dxDateBox.Options.value]
          */
         value?: Date | number | string;
     }
     /**
-     * <-dxDateBox->
+     * [descr:dxDateBox]
      */
     export class dxDateBox extends dxDropDownEditor {
         constructor(element: Element, options?: dxDateBoxOptions)
         constructor(element: JQuery, options?: dxDateBoxOptions)
         /**
-         * <-dxDateBox.close()->
+         * [descr:dxDateBox.close()]
          */
         close(): void;
         /**
-         * <-dxDateBox.open()->
+         * [descr:dxDateBox.open()]
          */
         open(): void;
     }
     /**
-     * <-dxDeferRendering.Options->
+     * [descr:dxDeferRendering.Options]
      */
     export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
         /**
-         * <-dxDeferRendering.Options.animation->
+         * [descr:dxDeferRendering.Options.animation]
          */
         animation?: animationConfig;
         /**
-         * <-dxDeferRendering.Options.onRendered->
+         * [descr:dxDeferRendering.Options.onRendered]
          */
         onRendered?: ((e: { component?: dxDeferRendering, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxDeferRendering.Options.onShown->
+         * [descr:dxDeferRendering.Options.onShown]
          */
         onShown?: ((e: { component?: dxDeferRendering, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxDeferRendering.Options.renderWhen->
+         * [descr:dxDeferRendering.Options.renderWhen]
          */
         renderWhen?: Promise<void> | JQueryPromise<void> | boolean;
         /**
-         * <-dxDeferRendering.Options.showLoadIndicator->
+         * [descr:dxDeferRendering.Options.showLoadIndicator]
          */
         showLoadIndicator?: boolean;
         /**
-         * <-dxDeferRendering.Options.staggerItemSelector->
+         * [descr:dxDeferRendering.Options.staggerItemSelector]
          */
         staggerItemSelector?: string;
     }
     /**
-     * <-dxDeferRendering->
+     * [descr:dxDeferRendering]
      */
     export class dxDeferRendering extends Widget {
         constructor(element: Element, options?: dxDeferRenderingOptions)
         constructor(element: JQuery, options?: dxDeferRenderingOptions)
     }
     /**
-     * <-dxDiagram.Options->
+     * [descr:dxDiagram.Options]
      */
     export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
-         * <-dxDiagram.Options.autoZoomMode->
+         * [descr:dxDiagram.Options.autoZoomMode]
          */
         autoZoomMode?: 'fitContent' | 'fitWidth' | 'disabled';
         /**
-         * <-dxDiagram.Options.contextMenu->
+         * [descr:dxDiagram.Options.contextMenu]
          */
         contextMenu?: { commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, enabled?: boolean };
         /**
-         * <-dxDiagram.Options.contextToolbox->
+         * [descr:dxDiagram.Options.contextToolbox]
          */
         contextToolbox?: { category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, displayMode?: 'icons' | 'texts', enabled?: boolean, shapeIconsPerRow?: number, shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>, width?: number };
         /**
-         * <-dxDiagram.Options.customShapeTemplate->
+         * [descr:dxDiagram.Options.customShapeTemplate]
          */
         customShapeTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxSVGElement, data: { item?: dxDiagramShape }) => any);
         /**
-         * <-dxDiagram.Options.customShapeToolboxTemplate->
+         * [descr:dxDiagram.Options.customShapeToolboxTemplate]
          */
         customShapeToolboxTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxSVGElement, data: { item?: dxDiagramShape }) => any);
         /**
-         * <-dxDiagram.Options.customShapes->
+         * [descr:dxDiagram.Options.customShapes]
          */
         customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageToolboxUrl?: string, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: DevExpress.core.template | ((container: DevExpress.core.dxSVGElement, data: { item?: dxDiagramShape }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, toolboxTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxSVGElement, data: { item?: dxDiagramShape }) => any), toolboxWidthToHeightRatio?: number, type?: string }>;
         /**
-         * <-dxDiagram.Options.defaultItemProperties->
+         * [descr:dxDiagram.Options.defaultItemProperties]
          */
         defaultItemProperties?: { connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineType?: 'straight' | 'orthogonal', style?: any, textStyle?: any };
         /**
-         * <-dxDiagram.Options.edges->
+         * [descr:dxDiagram.Options.edges]
          */
         edges?: { customDataExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, fromExpr?: string | ((data: any) => any), fromLineEndExpr?: string | ((data: any) => any), fromPointIndexExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), lineTypeExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), pointsExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any), toLineEndExpr?: string | ((data: any) => any), toPointIndexExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /**
-         * <-dxDiagram.Options.editing->
+         * [descr:dxDiagram.Options.editing]
          */
         editing?: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowResizeShape?: boolean };
         /**
-         * <-dxDiagram.Options.export->
+         * [descr:dxDiagram.Options.export]
          */
         export?: { fileName?: string, proxyUrl?: string };
         /**
-         * <-dxDiagram.Options.fullScreen->
+         * [descr:dxDiagram.Options.fullScreen]
          */
         fullScreen?: boolean;
         /**
-         * <-dxDiagram.Options.gridSize->
+         * [descr:dxDiagram.Options.gridSize]
          */
         gridSize?: number | { items?: Array<number>, value?: number };
         /**
-         * <-dxDiagram.Options.hasChanges->
+         * [descr:dxDiagram.Options.hasChanges]
          */
         hasChanges?: boolean;
         /**
-         * <-dxDiagram.Options.historyToolbar->
+         * [descr:dxDiagram.Options.historyToolbar]
          */
         historyToolbar?: { commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, visible?: boolean };
         /**
-         * <-dxDiagram.Options.mainToolbar->
+         * [descr:dxDiagram.Options.mainToolbar]
          */
         mainToolbar?: { commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, visible?: boolean };
         /**
-         * <-dxDiagram.Options.nodes->
+         * [descr:dxDiagram.Options.nodes]
          */
         nodes?: { autoLayout?: 'auto' | 'off' | 'tree' | 'layered' | { orientation?: 'auto' | 'vertical' | 'horizontal', type?: 'auto' | 'off' | 'tree' | 'layered' }, autoSizeEnabled?: boolean, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), customDataExpr?: string | ((data: any) => any), dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
         /**
-         * <-dxDiagram.Options.onCustomCommand->
+         * [descr:dxDiagram.Options.onCustomCommand]
          */
         onCustomCommand?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, name?: string }) => any);
         /**
-         * <-dxDiagram.Options.onItemClick->
+         * [descr:dxDiagram.Options.onItemClick]
          */
         onItemClick?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, item?: dxDiagramItem }) => any);
         /**
-         * <-dxDiagram.Options.onItemDblClick->
+         * [descr:dxDiagram.Options.onItemDblClick]
          */
         onItemDblClick?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, item?: dxDiagramItem }) => any);
         /**
-         * <-dxDiagram.Options.onRequestEditOperation->
+         * [descr:dxDiagram.Options.onRequestEditOperation]
          */
         onRequestEditOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape', args?: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs, updateUI?: boolean, allowed?: boolean }) => any);
         /**
-         * <-dxDiagram.Options.onRequestLayoutUpdate->
+         * [descr:dxDiagram.Options.onRequestLayoutUpdate]
          */
         onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, changes?: Array<any>, allowed?: boolean }) => any);
         /**
-         * <-dxDiagram.Options.onSelectionChanged->
+         * [descr:dxDiagram.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, items?: Array<dxDiagramItem> }) => any);
         /**
-         * <-dxDiagram.Options.pageColor->
+         * [descr:dxDiagram.Options.pageColor]
          */
         pageColor?: string;
         /**
-         * <-dxDiagram.Options.pageOrientation->
+         * [descr:dxDiagram.Options.pageOrientation]
          */
         pageOrientation?: 'portrait' | 'landscape';
         /**
-         * <-dxDiagram.Options.pageSize->
+         * [descr:dxDiagram.Options.pageSize]
          */
         pageSize?: { height?: number, items?: Array<{ height?: number, text?: string, width?: number }>, width?: number };
         /**
-         * <-dxDiagram.Options.propertiesPanel->
+         * [descr:dxDiagram.Options.propertiesPanel]
          */
         propertiesPanel?: { tabs?: Array<{ commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, groups?: Array<{ commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, title?: string }>, title?: string }>, visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled' };
         /**
-         * <-dxDiagram.Options.readOnly->
+         * [descr:dxDiagram.Options.readOnly]
          */
         readOnly?: boolean;
         /**
-         * <-dxDiagram.Options.showGrid->
+         * [descr:dxDiagram.Options.showGrid]
          */
         showGrid?: boolean;
         /**
-         * <-dxDiagram.Options.simpleView->
+         * [descr:dxDiagram.Options.simpleView]
          */
         simpleView?: boolean;
         /**
-         * <-dxDiagram.Options.snapToGrid->
+         * [descr:dxDiagram.Options.snapToGrid]
          */
         snapToGrid?: boolean;
         /**
-         * <-dxDiagram.Options.toolbox->
+         * [descr:dxDiagram.Options.toolbox]
          */
         toolbox?: { groups?: Array<{ category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, displayMode?: 'icons' | 'texts', expanded?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string>, title?: string }> | Array<'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom'>, shapeIconsPerRow?: number, showSearch?: boolean, visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled', width?: number };
         /**
-         * <-dxDiagram.Options.units->
+         * [descr:dxDiagram.Options.units]
          */
         units?: 'in' | 'cm' | 'px';
         /**
-         * <-dxDiagram.Options.viewToolbar->
+         * [descr:dxDiagram.Options.viewToolbar]
          */
         viewToolbar?: { commands?: Array<dxDiagramCustomCommand> | Array<'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor'>, visible?: boolean };
         /**
-         * <-dxDiagram.Options.viewUnits->
+         * [descr:dxDiagram.Options.viewUnits]
          */
         viewUnits?: 'in' | 'cm' | 'px';
         /**
-         * <-dxDiagram.Options.zoomLevel->
+         * [descr:dxDiagram.Options.zoomLevel]
          */
         zoomLevel?: number | { items?: Array<number>, value?: number };
     }
     /**
-     * <-dxDiagram->
+     * [descr:dxDiagram]
      */
     export class dxDiagram extends Widget {
         constructor(element: Element, options?: dxDiagramOptions)
         constructor(element: JQuery, options?: dxDiagramOptions)
         /**
-         * <-dxDiagram.export()->
+         * [descr:dxDiagram.export()]
          */
         export(): string;
         /**
-         * <-dxDiagram.exportTo(format, callback)->
+         * [descr:dxDiagram.exportTo(format, callback)]
          */
         exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
         /**
-         * <-dxDiagram.getEdgeDataSource()->
+         * [descr:dxDiagram.getEdgeDataSource()]
          */
         getEdgeDataSource(): DevExpress.data.DataSource;
         /**
-         * <-dxDiagram.getNodeDataSource()->
+         * [descr:dxDiagram.getItemById(id)]
+         */
+        getItemById(id: string): dxDiagramItem;
+        /**
+         * [descr:dxDiagram.getItemByKey(key)]
+         */
+        getItemByKey(key: any): dxDiagramItem;
+        /**
+         * [descr:dxDiagram.getNodeDataSource()]
          */
         getNodeDataSource(): DevExpress.data.DataSource;
         /**
-         * <-dxDiagram.import(data, updateExistingItemsOnly)->
+         * [descr:dxDiagram.import(data, updateExistingItemsOnly)]
          */
         import(data: string, updateExistingItemsOnly?: boolean): void;
     }
     /**
-     * <-dxDiagramAddShapeArgs->
+     * [descr:dxDiagramAddShapeArgs]
      */
     export interface dxDiagramAddShapeArgs {
         /**
-         * <-dxDiagramAddShapeArgs.position->
+         * [descr:dxDiagramAddShapeArgs.position]
          */
         position?: any;
         /**
-         * <-dxDiagramAddShapeArgs.shape->
+         * [descr:dxDiagramAddShapeArgs.shape]
          */
         shape?: dxDiagramShape;
     }
     /**
-     * <-dxDiagramAddShapeFromToolboxArgs->
+     * [descr:dxDiagramAddShapeFromToolboxArgs]
      */
     export interface dxDiagramAddShapeFromToolboxArgs {
         /**
-         * <-dxDiagramAddShapeFromToolboxArgs.shapeType->
+         * [descr:dxDiagramAddShapeFromToolboxArgs.shapeType]
          */
         shapeType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
     }
     /**
-     * <-dxDiagramBeforeChangeConnectorTextArgs->
+     * [descr:dxDiagramBeforeChangeConnectorTextArgs]
      */
     export interface dxDiagramBeforeChangeConnectorTextArgs {
         /**
-         * <-dxDiagramBeforeChangeConnectorTextArgs.connector->
+         * [descr:dxDiagramBeforeChangeConnectorTextArgs.connector]
          */
         connector?: dxDiagramConnector;
         /**
-         * <-dxDiagramBeforeChangeConnectorTextArgs.index->
+         * [descr:dxDiagramBeforeChangeConnectorTextArgs.index]
          */
         index?: number;
     }
     /**
-     * <-dxDiagramBeforeChangeShapeTextArgs->
+     * [descr:dxDiagramBeforeChangeShapeTextArgs]
      */
     export interface dxDiagramBeforeChangeShapeTextArgs {
         /**
-         * <-dxDiagramBeforeChangeShapeTextArgs.shape->
+         * [descr:dxDiagramBeforeChangeShapeTextArgs.shape]
          */
         shape?: dxDiagramShape;
     }
     /**
-     * <-dxDiagramChangeConnectionArgs->
+     * [descr:dxDiagramChangeConnectionArgs]
      */
     export interface dxDiagramChangeConnectionArgs {
         /**
-         * <-dxDiagramChangeConnectionArgs.connectionPointIndex->
+         * [descr:dxDiagramChangeConnectionArgs.connectionPointIndex]
          */
         connectionPointIndex?: number;
         /**
-         * <-dxDiagramChangeConnectionArgs.connector->
+         * [descr:dxDiagramChangeConnectionArgs.connector]
          */
         connector?: dxDiagramConnector;
         /**
-         * <-dxDiagramChangeConnectionArgs.connectorPosition->
+         * [descr:dxDiagramChangeConnectionArgs.connectorPosition]
          */
         connectorPosition?: 'start' | 'end';
         /**
-         * <-dxDiagramChangeConnectionArgs.shape->
+         * [descr:dxDiagramChangeConnectionArgs.shape]
          */
         shape?: dxDiagramShape;
     }
     /**
-     * <-dxDiagramChangeConnectorPointsArgs->
+     * [descr:dxDiagramChangeConnectorPointsArgs]
      */
     export interface dxDiagramChangeConnectorPointsArgs {
         /**
-         * <-dxDiagramChangeConnectorPointsArgs.connector->
+         * [descr:dxDiagramChangeConnectorPointsArgs.connector]
          */
         connector?: dxDiagramConnector;
         /**
-         * <-dxDiagramChangeConnectorPointsArgs.newPoints->
+         * [descr:dxDiagramChangeConnectorPointsArgs.newPoints]
          */
         newPoints?: Array<any>;
         /**
-         * <-dxDiagramChangeConnectorPointsArgs.oldPoints->
+         * [descr:dxDiagramChangeConnectorPointsArgs.oldPoints]
          */
         oldPoints?: Array<any>;
     }
     /**
-     * <-dxDiagramChangeConnectorTextArgs->
+     * [descr:dxDiagramChangeConnectorTextArgs]
      */
     export interface dxDiagramChangeConnectorTextArgs {
         /**
-         * <-dxDiagramChangeConnectorTextArgs.connector->
+         * [descr:dxDiagramChangeConnectorTextArgs.connector]
          */
         connector?: dxDiagramConnector;
         /**
-         * <-dxDiagramChangeConnectorTextArgs.index->
+         * [descr:dxDiagramChangeConnectorTextArgs.index]
          */
         index?: number;
         /**
-         * <-dxDiagramChangeConnectorTextArgs.text->
+         * [descr:dxDiagramChangeConnectorTextArgs.text]
          */
         text?: string;
     }
     /**
-     * <-dxDiagramChangeShapeTextArgs->
+     * [descr:dxDiagramChangeShapeTextArgs]
      */
     export interface dxDiagramChangeShapeTextArgs {
         /**
-         * <-dxDiagramChangeShapeTextArgs.shape->
+         * [descr:dxDiagramChangeShapeTextArgs.shape]
          */
         shape?: dxDiagramShape;
         /**
-         * <-dxDiagramChangeShapeTextArgs.text->
+         * [descr:dxDiagramChangeShapeTextArgs.text]
          */
         text?: string;
     }
     /**
-     * <-dxDiagramConnector->
+     * [descr:dxDiagramConnector]
      */
     export interface dxDiagramConnector extends dxDiagramItem {
         /**
-         * <-dxDiagramConnector.fromKey->
+         * [descr:dxDiagramConnector.fromId]
+         */
+        fromId?: string;
+        /**
+         * [descr:dxDiagramConnector.fromKey]
          */
         fromKey?: any;
         /**
-         * <-dxDiagramConnector.texts->
+         * [descr:dxDiagramConnector.fromPointIndex]
+         */
+        fromPointIndex?: number;
+        /**
+         * [descr:dxDiagramConnector.points]
+         */
+        points?: Array<any>;
+        /**
+         * [descr:dxDiagramConnector.texts]
          */
         texts?: Array<string>;
         /**
-         * <-dxDiagramConnector.toKey->
+         * [descr:dxDiagramConnector.toId]
+         */
+        toId?: string;
+        /**
+         * [descr:dxDiagramConnector.toKey]
          */
         toKey?: any;
+        /**
+         * [descr:dxDiagramConnector.toPointIndex]
+         */
+        toPointIndex?: number;
     }
     /**
-     * <-dxDiagramCustomCommand->
+     * [descr:dxDiagramCustomCommand]
      */
     export interface dxDiagramCustomCommand {
         /**
-         * <-dxDiagramCustomCommand.icon->
+         * [descr:dxDiagramCustomCommand.icon]
          */
         icon?: string;
         /**
-         * <-dxDiagramCustomCommand.items->
+         * [descr:dxDiagramCustomCommand.items]
          */
         items?: Array<dxDiagramCustomCommand>;
         /**
-         * <-dxDiagramCustomCommand.name->
+         * [descr:dxDiagramCustomCommand.name]
          */
         name?: string | 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor';
         /**
-         * <-dxDiagramCustomCommand.text->
+         * [descr:dxDiagramCustomCommand.text]
          */
         text?: string;
     }
     /**
-     * <-dxDiagramDeleteConnectorArgs->
+     * [descr:dxDiagramDeleteConnectorArgs]
      */
     export interface dxDiagramDeleteConnectorArgs {
         /**
-         * <-dxDiagramDeleteConnectorArgs.connector->
+         * [descr:dxDiagramDeleteConnectorArgs.connector]
          */
         connector?: dxDiagramConnector;
     }
     /**
-     * <-dxDiagramDeleteShapeArgs->
+     * [descr:dxDiagramDeleteShapeArgs]
      */
     export interface dxDiagramDeleteShapeArgs {
         /**
-         * <-dxDiagramDeleteShapeArgs.shape->
+         * [descr:dxDiagramDeleteShapeArgs.shape]
          */
         shape?: dxDiagramShape;
     }
     /**
-     * <-dxDiagramItem->
+     * [descr:dxDiagramItem]
      */
     export interface dxDiagramItem {
         /**
-         * <-dxDiagramItem.dataItem->
+         * [descr:dxDiagramItem.dataItem]
          */
         dataItem?: any;
         /**
-         * <-dxDiagramItem.id->
+         * [descr:dxDiagramItem.id]
          */
         id?: string;
         /**
-         * <-dxDiagramItem.itemType->
+         * [descr:dxDiagramItem.itemType]
          */
         itemType?: 'shape' | 'connector';
     }
     /**
-     * <-dxDiagramResizeShapeArgs->
+     * [descr:dxDiagramResizeShapeArgs]
      */
     export interface dxDiagramResizeShapeArgs {
         /**
-         * <-dxDiagramResizeShapeArgs.newSize->
+         * [descr:dxDiagramResizeShapeArgs.newSize]
          */
         newSize?: Array<any>;
         /**
-         * <-dxDiagramResizeShapeArgs.oldSize->
+         * [descr:dxDiagramResizeShapeArgs.oldSize]
          */
         oldSize?: Array<any>;
         /**
-         * <-dxDiagramResizeShapeArgs.shape->
+         * [descr:dxDiagramResizeShapeArgs.shape]
          */
         shape?: dxDiagramShape;
     }
     /**
-     * <-dxDiagramShape->
+     * [descr:dxDiagramShape]
      */
     export interface dxDiagramShape extends dxDiagramItem {
         /**
-         * <-dxDiagramShape.text->
+         * [descr:dxDiagramShape.attachedConnectorIds]
+         */
+        attachedConnectorIds?: Array<string>;
+        /**
+         * [descr:dxDiagramShape.position]
+         */
+        position?: any;
+        /**
+         * [descr:dxDiagramShape.size]
+         */
+        size?: any;
+        /**
+         * [descr:dxDiagramShape.text]
          */
         text?: string;
         /**
-         * <-dxDiagramShape.type->
+         * [descr:dxDiagramShape.type]
          */
         type?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
     }
     /**
-     * <-dxDraggable.Options->
+     * [descr:dxDraggable.Options]
      */
     export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
         /**
-         * <-dxDraggable.Options.clone->
+         * [descr:dxDraggable.Options.clone]
          */
         clone?: boolean;
         /**
-         * <-dxDraggable.Options.dragTemplate->
+         * [descr:dxDraggable.Options.dragTemplate]
          */
         dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxDraggable.Options.onDragEnd->
+         * [descr:dxDraggable.Options.onDragEnd]
          */
         onDragEnd?: ((e: { component?: dxDraggable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
         /**
-         * <-dxDraggable.Options.onDragMove->
+         * [descr:dxDraggable.Options.onDragMove]
          */
         onDragMove?: ((e: { component?: dxDraggable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
         /**
-         * <-dxDraggable.Options.onDragStart->
+         * [descr:dxDraggable.Options.onDragStart]
          */
         onDragStart?: ((e: { component?: dxDraggable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromData?: any }) => any);
     }
     /**
-     * <-dxDraggable->
+     * [descr:dxDraggable]
      */
     export class dxDraggable extends DraggableBase {
         constructor(element: Element, options?: dxDraggableOptions)
         constructor(element: JQuery, options?: dxDraggableOptions)
     }
     /**
-     * <-dxDrawer.Options->
+     * [descr:dxDrawer.Options]
      */
     export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
         /**
-         * <-dxDrawer.Options.animationDuration->
+         * [descr:dxDrawer.Options.animationDuration]
          */
         animationDuration?: number;
         /**
-         * <-dxDrawer.Options.animationEnabled->
+         * [descr:dxDrawer.Options.animationEnabled]
          */
         animationEnabled?: boolean;
         /**
-         * <-dxDrawer.Options.closeOnOutsideClick->
+         * [descr:dxDrawer.Options.closeOnOutsideClick]
          */
         closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
-         * <-dxDrawer.Options.maxSize->
+         * [descr:dxDrawer.Options.maxSize]
          */
         maxSize?: number;
         /**
-         * <-dxDrawer.Options.minSize->
+         * [descr:dxDrawer.Options.minSize]
          */
         minSize?: number;
         /**
-         * <-dxDrawer.Options.opened->
+         * [descr:dxDrawer.Options.opened]
          */
         opened?: boolean;
         /**
-         * <-dxDrawer.Options.openedStateMode->
+         * [descr:dxDrawer.Options.openedStateMode]
          */
         openedStateMode?: 'overlap' | 'shrink' | 'push';
         /**
-         * <-dxDrawer.Options.position->
+         * [descr:dxDrawer.Options.position]
          */
         position?: 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
         /**
-         * <-dxDrawer.Options.revealMode->
+         * [descr:dxDrawer.Options.revealMode]
          */
         revealMode?: 'slide' | 'expand';
         /**
-         * <-dxDrawer.Options.shading->
+         * [descr:dxDrawer.Options.shading]
          */
         shading?: boolean;
         /**
-         * <-dxDrawer.Options.target->
-         * @deprecated <-dxDrawer.Options.target:depNote->
+         * [descr:dxDrawer.Options.target]
+         * @deprecated [depNote:dxDrawer.Options.target]
          */
         target?: string | Element | JQuery;
         /**
-         * <-dxDrawer.Options.template->
+         * [descr:dxDrawer.Options.template]
          */
         template?: DevExpress.core.template | ((Element: DevExpress.core.dxElement) => any);
     }
     /**
-     * <-dxDrawer->
+     * [descr:dxDrawer]
      */
     export class dxDrawer extends Widget {
         constructor(element: Element, options?: dxDrawerOptions)
         constructor(element: JQuery, options?: dxDrawerOptions)
         /**
-         * <-dxDrawer.content()->
+         * [descr:dxDrawer.content()]
          */
         content(): DevExpress.core.dxElement;
         /**
-         * <-dxDrawer.hide()->
+         * [descr:dxDrawer.hide()]
          */
         hide(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxDrawer.show()->
+         * [descr:dxDrawer.show()]
          */
         show(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxDrawer.toggle()->
+         * [descr:dxDrawer.toggle()]
          */
         toggle(): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxDropDownBox.Options->
+     * [descr:dxDropDownBox.Options]
      */
     export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
         /**
-         * <-dxDropDownBox.Options.acceptCustomValue->
+         * [descr:dxDropDownBox.Options.acceptCustomValue]
          */
         acceptCustomValue?: boolean;
         /**
-         * <-dxDropDownBox.Options.contentTemplate->
+         * [descr:dxDropDownBox.Options.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxDropDownBox.Options.displayValueFormatter->
+         * [descr:dxDropDownBox.Options.displayValueFormatter]
          */
         displayValueFormatter?: ((value: string | Array<any>) => string);
         /**
-         * <-dxDropDownBox.Options.fieldTemplate->
+         * [descr:dxDropDownBox.Options.fieldTemplate]
          */
         fieldTemplate?: DevExpress.core.template | ((value: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxDropDownBox.Options.openOnFieldClick->
+         * [descr:dxDropDownBox.Options.openOnFieldClick]
          */
         openOnFieldClick?: boolean;
         /**
-         * <-dxDropDownBox.Options.valueChangeEvent->
+         * [descr:dxDropDownBox.Options.valueChangeEvent]
          */
         valueChangeEvent?: string;
     }
     /**
-     * <-dxDropDownBox->
+     * [descr:dxDropDownBox]
      */
     export class dxDropDownBox extends dxDropDownEditor {
         constructor(element: Element, options?: dxDropDownBoxOptions)
         constructor(element: JQuery, options?: dxDropDownBoxOptions)
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
     }
     /**
-     * <-dxDropDownButton.Options->
+     * [descr:dxDropDownButton.Options]
      */
     export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
         /**
-         * <-dxDropDownButton.Options.dataSource->
+         * [descr:dxDropDownButton.Options.dataSource]
          */
         dataSource?: string | Array<dxDropDownButtonItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxDropDownButton.Options.deferRendering->
+         * [descr:dxDropDownButton.Options.deferRendering]
          */
         deferRendering?: boolean;
         /**
-         * <-dxDropDownButton.Options.displayExpr->
+         * [descr:dxDropDownButton.Options.displayExpr]
          */
         displayExpr?: string | ((itemData: any) => string);
         /**
-         * <-dxDropDownButton.Options.dropDownContentTemplate->
+         * [descr:dxDropDownButton.Options.dropDownContentTemplate]
          */
         dropDownContentTemplate?: DevExpress.core.template | ((data: Array<string | number | any> | DevExpress.data.DataSource, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxDropDownButton.Options.dropDownOptions->
+         * [descr:dxDropDownButton.Options.dropDownOptions]
          */
         dropDownOptions?: dxPopupOptions;
         /**
-         * <-dxDropDownButton.Options.focusStateEnabled->
+         * [descr:dxDropDownButton.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxDropDownButton.Options.hoverStateEnabled->
+         * [descr:dxDropDownButton.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxDropDownButton.Options.icon->
+         * [descr:dxDropDownButton.Options.icon]
          */
         icon?: string;
         /**
-         * <-dxDropDownButton.Options.itemTemplate->
+         * [descr:dxDropDownButton.Options.itemTemplate]
          */
         itemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxDropDownButton.Options.items->
+         * [descr:dxDropDownButton.Options.items]
          */
         items?: Array<dxDropDownButtonItem | any>;
         /**
-         * <-dxDropDownButton.Options.keyExpr->
+         * [descr:dxDropDownButton.Options.keyExpr]
          */
         keyExpr?: string;
         /**
-         * <-dxDropDownButton.Options.noDataText->
+         * [descr:dxDropDownButton.Options.noDataText]
          */
         noDataText?: string;
         /**
-         * <-dxDropDownButton.Options.onButtonClick->
+         * [descr:dxDropDownButton.Options.onButtonClick]
          */
         onButtonClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, selectedItem?: any }) => any) | string;
         /**
-         * <-dxDropDownButton.Options.onItemClick->
+         * [descr:dxDropDownButton.Options.onItemClick]
          */
         onItemClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any) | string;
         /**
-         * <-dxDropDownButton.Options.onSelectionChanged->
+         * [descr:dxDropDownButton.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, item?: any, previousItem?: any }) => any) | string;
         /**
-         * <-dxDropDownButton.Options.opened->
+         * [descr:dxDropDownButton.Options.opened]
          */
         opened?: boolean;
         /**
-         * <-dxDropDownButton.Options.selectedItem->
+         * [descr:dxDropDownButton.Options.selectedItem]
          */
         selectedItem?: string | number | any;
         /**
-         * <-dxDropDownButton.Options.selectedItemKey->
+         * [descr:dxDropDownButton.Options.selectedItemKey]
          */
         selectedItemKey?: string | number;
         /**
-         * <-dxDropDownButton.Options.showArrowIcon->
+         * [descr:dxDropDownButton.Options.showArrowIcon]
          */
         showArrowIcon?: boolean;
         /**
-         * <-dxDropDownButton.Options.splitButton->
+         * [descr:dxDropDownButton.Options.splitButton]
          */
         splitButton?: boolean;
         /**
-         * <-dxDropDownButton.Options.stylingMode->
+         * [descr:dxDropDownButton.Options.stylingMode]
          */
         stylingMode?: 'text' | 'outlined' | 'contained';
         /**
-         * <-dxDropDownButton.Options.text->
+         * [descr:dxDropDownButton.Options.text]
          */
         text?: string;
         /**
-         * <-dxDropDownButton.Options.useSelectMode->
+         * [descr:dxDropDownButton.Options.useSelectMode]
          */
         useSelectMode?: boolean;
         /**
-         * <-dxDropDownButton.Options.wrapItemText->
+         * [descr:dxDropDownButton.Options.wrapItemText]
          */
         wrapItemText?: boolean;
     }
     /**
-     * <-dxDropDownButton->
+     * [descr:dxDropDownButton]
      */
     export class dxDropDownButton extends Widget {
         constructor(element: Element, options?: dxDropDownButtonOptions)
         constructor(element: JQuery, options?: dxDropDownButtonOptions)
         /**
-         * <-dxDropDownButton.close()->
+         * [descr:dxDropDownButton.close()]
          */
         close(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
         /**
-         * <-dxDropDownButton.open()->
+         * [descr:dxDropDownButton.open()]
          */
         open(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxDropDownButton.toggle()->
+         * [descr:dxDropDownButton.toggle()]
          */
         toggle(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxDropDownButton.toggle(visibility)->
+         * [descr:dxDropDownButton.toggle(visibility)]
          */
         toggle(visibility: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxDropDownButtonItem->
+     * [descr:dxDropDownButtonItem]
      */
     export interface dxDropDownButtonItem extends dxListItem {
         /**
-         * <-dxDropDownButtonItem.onClick->
+         * [descr:dxDropDownButtonItem.onClick]
          */
         onClick?: ((e: { component?: dxDropDownButton, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any) | string;
     }
     /**
-     * <-dxDropDownEditor.Options->
+     * [descr:dxDropDownEditor.Options]
      */
     export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
         /**
-         * <-dxDropDownEditor.Options.acceptCustomValue->
+         * [descr:dxDropDownEditor.Options.acceptCustomValue]
          */
         acceptCustomValue?: boolean;
         /**
-         * <-dxDropDownEditor.Options.activeStateEnabled->
+         * [descr:dxDropDownEditor.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxDropDownEditor.Options.applyValueMode->
+         * [descr:dxDropDownEditor.Options.applyValueMode]
          */
         applyValueMode?: 'instantly' | 'useButtons';
         /**
-         * <-dxDropDownEditor.Options.buttons->
+         * [descr:dxDropDownEditor.Options.buttons]
          */
         buttons?: Array<'clear' | 'dropDown' | dxTextEditorButton>;
         /**
-         * <-dxDropDownEditor.Options.deferRendering->
+         * [descr:dxDropDownEditor.Options.deferRendering]
          */
         deferRendering?: boolean;
         /**
-         * <-dxDropDownEditor.Options.dropDownButtonTemplate->
+         * [descr:dxDropDownEditor.Options.dropDownButtonTemplate]
          */
         dropDownButtonTemplate?: DevExpress.core.template | ((buttonData: { text?: string, icon?: string }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxDropDownEditor.Options.dropDownOptions->
+         * [descr:dxDropDownEditor.Options.dropDownOptions]
          */
         dropDownOptions?: dxPopupOptions;
         /**
-         * <-dxDropDownEditor.Options.onClosed->
+         * [descr:dxDropDownEditor.Options.onClosed]
          */
         onClosed?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxDropDownEditor.Options.onOpened->
+         * [descr:dxDropDownEditor.Options.onOpened]
          */
         onOpened?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxDropDownEditor.Options.openOnFieldClick->
+         * [descr:dxDropDownEditor.Options.openOnFieldClick]
          */
         openOnFieldClick?: boolean;
         /**
-         * <-dxDropDownEditor.Options.opened->
+         * [descr:dxDropDownEditor.Options.opened]
          */
         opened?: boolean;
         /**
-         * <-dxDropDownEditor.Options.showDropDownButton->
+         * [descr:dxDropDownEditor.Options.showDropDownButton]
          */
         showDropDownButton?: boolean;
         /**
-         * <-dxDropDownEditor.Options.value->
+         * [descr:dxDropDownEditor.Options.value]
          */
         value?: any;
     }
     /**
-     * <-dxDropDownEditor->
+     * [descr:dxDropDownEditor]
      */
     export class dxDropDownEditor extends dxTextBox {
         constructor(element: Element, options?: dxDropDownEditorOptions)
         constructor(element: JQuery, options?: dxDropDownEditorOptions)
         /**
-         * <-dxDropDownEditor.close()->
+         * [descr:dxDropDownEditor.close()]
          */
         close(): void;
         /**
-         * <-dxDropDownEditor.content()->
+         * [descr:dxDropDownEditor.content()]
          */
         content(): DevExpress.core.dxElement;
         /**
-         * <-dxDropDownEditor.field()->
+         * [descr:dxDropDownEditor.field()]
          */
         field(): DevExpress.core.dxElement;
         /**
-         * <-dxDropDownEditor.open()->
+         * [descr:dxDropDownEditor.open()]
          */
         open(): void;
     }
     /**
-     * <-dxDropDownList.Options->
+     * [descr:dxDropDownList.Options]
      */
     export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressionMixinOptions<T>, dxDropDownEditorOptions<T> {
         /**
-         * <-dxDropDownList.Options.displayValue->
+         * [descr:dxDropDownList.Options.displayValue]
          */
         displayValue?: string;
         /**
-         * <-dxDropDownList.Options.groupTemplate->
+         * [descr:dxDropDownList.Options.groupTemplate]
          */
         groupTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxDropDownList.Options.grouped->
+         * [descr:dxDropDownList.Options.grouped]
          */
         grouped?: boolean;
         /**
-         * <-dxDropDownList.Options.minSearchLength->
+         * [descr:dxDropDownList.Options.minSearchLength]
          */
         minSearchLength?: number;
         /**
-         * <-dxDropDownList.Options.noDataText->
+         * [descr:dxDropDownList.Options.noDataText]
          */
         noDataText?: string;
         /**
-         * <-dxDropDownList.Options.onItemClick->
+         * [descr:dxDropDownList.Options.onItemClick]
          */
         onItemClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxDropDownList.Options.onSelectionChanged->
+         * [descr:dxDropDownList.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, selectedItem?: any }) => any);
         /**
-         * <-dxDropDownList.Options.onValueChanged->
+         * [descr:dxDropDownList.Options.onValueChanged]
          */
         onValueChanged?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxDropDownList.Options.searchEnabled->
+         * [descr:dxDropDownList.Options.searchEnabled]
          */
         searchEnabled?: boolean;
         /**
-         * <-dxDropDownList.Options.searchExpr->
+         * [descr:dxDropDownList.Options.searchExpr]
          */
         searchExpr?: string | Function | Array<string | Function>;
         /**
-         * <-dxDropDownList.Options.searchMode->
+         * [descr:dxDropDownList.Options.searchMode]
          */
         searchMode?: 'contains' | 'startswith';
         /**
-         * <-dxDropDownList.Options.searchTimeout->
+         * [descr:dxDropDownList.Options.searchTimeout]
          */
         searchTimeout?: number;
         /**
-         * <-dxDropDownList.Options.selectedItem->
+         * [descr:dxDropDownList.Options.selectedItem]
          */
         selectedItem?: any;
         /**
-         * <-dxDropDownList.Options.showDataBeforeSearch->
+         * [descr:dxDropDownList.Options.showDataBeforeSearch]
          */
         showDataBeforeSearch?: boolean;
         /**
-         * <-dxDropDownList.Options.value->
+         * [descr:dxDropDownList.Options.value]
          */
         value?: any;
         /**
-         * <-dxDropDownList.Options.valueChangeEvent->
+         * [descr:dxDropDownList.Options.valueChangeEvent]
          */
         valueChangeEvent?: string;
         /**
-         * <-dxDropDownList.Options.wrapItemText->
+         * [descr:dxDropDownList.Options.wrapItemText]
          */
         wrapItemText?: boolean;
     }
     /**
-     * <-dxDropDownList->
+     * [descr:dxDropDownList]
      */
     export class dxDropDownList extends dxDropDownEditor {
         constructor(element: Element, options?: dxDropDownListOptions)
         constructor(element: JQuery, options?: dxDropDownListOptions)
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
     }
     /**
-     * <-dxFileManager.Options->
+     * [descr:dxFileManager.Options]
      */
     export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
         /**
-         * <-dxFileManager.Options.allowedFileExtensions->
+         * [descr:dxFileManager.Options.allowedFileExtensions]
          */
         allowedFileExtensions?: Array<string>;
         /**
-         * <-dxFileManager.Options.contextMenu->
+         * [descr:dxFileManager.Options.contextMenu]
          */
         contextMenu?: dxFileManagerContextMenu;
         /**
-         * <-dxFileManager.Options.currentPath->
+         * [descr:dxFileManager.Options.currentPath]
          */
         currentPath?: string;
         /**
-         * <-dxFileManager.Options.currentPathKeys->
+         * [descr:dxFileManager.Options.currentPathKeys]
          */
         currentPathKeys?: Array<string>;
         /**
-         * <-dxFileManager.Options.customizeDetailColumns->
+         * [descr:dxFileManager.Options.customizeDetailColumns]
          */
         customizeDetailColumns?: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>);
         /**
-         * <-dxFileManager.Options.customizeThumbnail->
+         * [descr:dxFileManager.Options.customizeThumbnail]
          */
         customizeThumbnail?: ((fileSystemItem: DevExpress.fileManagement.FileSystemItem) => string);
         /**
-         * <-dxFileManager.Options.fileSystemProvider->
+         * [descr:dxFileManager.Options.fileSystemProvider]
          */
         fileSystemProvider?: any;
         /**
-         * <-dxFileManager.Options.focusedItemKey->
+         * [descr:dxFileManager.Options.focusedItemKey]
          */
         focusedItemKey?: string;
         /**
-         * <-dxFileManager.Options.itemView->
+         * [descr:dxFileManager.Options.itemView]
          */
         itemView?: { details?: { columns?: Array<dxFileManagerDetailsColumn | string> }, mode?: 'details' | 'thumbnails', showFolders?: boolean, showParentFolder?: boolean };
         /**
-         * <-dxFileManager.Options.onContextMenuItemClick->
+         * [descr:dxFileManager.Options.onContextMenuItemClick]
          */
         onContextMenuItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event, fileSystemItem?: DevExpress.fileManagement.FileSystemItem, viewArea?: 'navPane' | 'itemView' }) => any);
         /**
-         * <-dxFileManager.Options.onCurrentDirectoryChanged->
+         * [descr:dxFileManager.Options.onCurrentDirectoryChanged]
          */
         onCurrentDirectoryChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, directory?: DevExpress.fileManagement.FileSystemItem }) => any);
         /**
-         * <-dxFileManager.Options.onErrorOccurred->
+         * [descr:dxFileManager.Options.onErrorOccurred]
          */
         onErrorOccurred?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, errorCode?: number, errorText?: string, fileSystemItem?: DevExpress.fileManagement.FileSystemItem }) => any);
         /**
-         * <-dxFileManager.Options.onFocusedItemChanged->
+         * [descr:dxFileManager.Options.onFocusedItemChanged]
          */
         onFocusedItemChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, item?: DevExpress.fileManagement.FileSystemItem, itemElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxFileManager.Options.onSelectedFileOpened->
+         * [descr:dxFileManager.Options.onSelectedFileOpened]
          */
         onSelectedFileOpened?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, file?: DevExpress.fileManagement.FileSystemItem }) => any);
         /**
-         * <-dxFileManager.Options.onSelectionChanged->
+         * [descr:dxFileManager.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, currentSelectedItemKeys?: Array<string>, currentDeselectedItemKeys?: Array<string>, selectedItems?: Array<DevExpress.fileManagement.FileSystemItem>, selectedItemKeys?: Array<string> }) => any);
         /**
-         * <-dxFileManager.Options.onToolbarItemClick->
+         * [descr:dxFileManager.Options.onToolbarItemClick]
          */
         onToolbarItemClick?: ((e: { component?: dxFileManager, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxFileManager.Options.permissions->
+         * [descr:dxFileManager.Options.permissions]
          */
         permissions?: { copy?: boolean, create?: boolean, delete?: boolean, download?: boolean, move?: boolean, rename?: boolean, upload?: boolean };
         /**
-         * <-dxFileManager.Options.rootFolderName->
+         * [descr:dxFileManager.Options.rootFolderName]
          */
         rootFolderName?: string;
         /**
-         * <-dxFileManager.Options.selectedItemKeys->
+         * [descr:dxFileManager.Options.selectedItemKeys]
          */
         selectedItemKeys?: Array<string>;
         /**
-         * <-dxFileManager.Options.selectionMode->
+         * [descr:dxFileManager.Options.selectionMode]
          */
         selectionMode?: 'multiple' | 'single';
         /**
-         * <-dxFileManager.Options.toolbar->
+         * [descr:dxFileManager.Options.toolbar]
          */
         toolbar?: dxFileManagerToolbar;
         /**
-         * <-dxFileManager.Options.upload->
+         * [descr:dxFileManager.Options.upload]
          */
         upload?: { chunkSize?: number, maxFileSize?: number };
     }
     /**
-     * <-dxFileManager->
+     * [descr:dxFileManager]
      */
     export class dxFileManager extends Widget {
         constructor(element: Element, options?: dxFileManagerOptions)
         constructor(element: JQuery, options?: dxFileManagerOptions)
         /**
-         * <-dxFileManager.getCurrentDirectory()->
+         * [descr:dxFileManager.getCurrentDirectory()]
          */
         getCurrentDirectory(): any;
         /**
-         * <-dxFileManager.getSelectedItems()->
+         * [descr:dxFileManager.getSelectedItems()]
          */
         getSelectedItems(): Array<any>;
         /**
-         * <-dxFileManager.refresh()->
+         * [descr:dxFileManager.refresh()]
          */
         refresh(): Promise<any> & JQueryPromise<any>;
     }
     /**
-     * <-dxFileManagerContextMenu->
+     * [descr:dxFileManagerContextMenu]
      */
     export interface dxFileManagerContextMenu {
         /**
-         * <-dxFileManagerContextMenu.items->
+         * [descr:dxFileManagerContextMenu.items]
          */
         items?: Array<dxFileManagerContextMenuItem | 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete'>;
     }
     /**
-     * <-dxFileManagerContextMenuItem->
+     * [descr:dxFileManagerContextMenuItem]
      */
     export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
         /**
-         * <-dxFileManagerContextMenuItem.items->
+         * [descr:dxFileManagerContextMenuItem.items]
          */
         items?: Array<dxFileManagerContextMenuItem>;
         /**
-         * <-dxFileManagerContextMenuItem.name->
+         * [descr:dxFileManagerContextMenuItem.name]
          */
         name?: 'create' | 'upload' | 'refresh' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | string;
         /**
-         * <-dxFileManagerContextMenuItem.visible->
+         * [descr:dxFileManagerContextMenuItem.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxFileManagerDetailsColumn->
+     * [descr:dxFileManagerDetailsColumn]
      */
     export interface dxFileManagerDetailsColumn {
         /**
-         * <-dxFileManagerDetailsColumn.alignment->
+         * [descr:dxFileManagerDetailsColumn.alignment]
          */
         alignment?: 'center' | 'left' | 'right' | undefined;
         /**
-         * <-dxFileManagerDetailsColumn.caption->
+         * [descr:dxFileManagerDetailsColumn.caption]
          */
         caption?: string;
         /**
-         * <-dxFileManagerDetailsColumn.cssClass->
+         * [descr:dxFileManagerDetailsColumn.cssClass]
          */
         cssClass?: string;
         /**
-         * <-dxFileManagerDetailsColumn.dataField->
+         * [descr:dxFileManagerDetailsColumn.dataField]
          */
         dataField?: string;
         /**
-         * <-dxFileManagerDetailsColumn.dataType->
+         * [descr:dxFileManagerDetailsColumn.dataType]
          */
         dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
         /**
-         * <-dxFileManagerDetailsColumn.hidingPriority->
+         * [descr:dxFileManagerDetailsColumn.hidingPriority]
          */
         hidingPriority?: number;
         /**
-         * <-dxFileManagerDetailsColumn.sortIndex->
+         * [descr:dxFileManagerDetailsColumn.sortIndex]
          */
         sortIndex?: number;
         /**
-         * <-dxFileManagerDetailsColumn.sortOrder->
+         * [descr:dxFileManagerDetailsColumn.sortOrder]
          */
         sortOrder?: 'asc' | 'desc' | undefined;
         /**
-         * <-dxFileManagerDetailsColumn.visible->
+         * [descr:dxFileManagerDetailsColumn.visible]
          */
         visible?: boolean;
         /**
-         * <-dxFileManagerDetailsColumn.visibleIndex->
+         * [descr:dxFileManagerDetailsColumn.visibleIndex]
          */
         visibleIndex?: number;
         /**
-         * <-dxFileManagerDetailsColumn.width->
+         * [descr:dxFileManagerDetailsColumn.width]
          */
         width?: number | string;
     }
     /**
-     * <-dxFileManagerToolbar->
+     * [descr:dxFileManagerToolbar]
      */
     export interface dxFileManagerToolbar {
         /**
-         * <-dxFileManagerToolbar.fileSelectionItems->
+         * [descr:dxFileManagerToolbar.fileSelectionItems]
          */
         fileSelectionItems?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
         /**
-         * <-dxFileManagerToolbar.items->
+         * [descr:dxFileManagerToolbar.items]
          */
         items?: Array<dxFileManagerToolbarItem | 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator'>;
     }
     /**
-     * <-dxFileManagerToolbarItem->
+     * [descr:dxFileManagerToolbarItem]
      */
     export interface dxFileManagerToolbarItem extends dxToolbarItem {
         /**
-         * <-dxFileManagerToolbarItem.icon->
+         * [descr:dxFileManagerToolbarItem.icon]
          */
         icon?: string;
         /**
-         * <-dxFileManagerToolbarItem.location->
+         * [descr:dxFileManagerToolbarItem.location]
          */
         location?: 'after' | 'before' | 'center';
         /**
-         * <-dxFileManagerToolbarItem.name->
+         * [descr:dxFileManagerToolbarItem.name]
          */
         name?: 'showNavPane' | 'create' | 'upload' | 'refresh' | 'switchView' | 'download' | 'move' | 'copy' | 'rename' | 'delete' | 'clearSelection' | 'separator' | string;
         /**
-         * <-dxFileManagerToolbarItem.visible->
+         * [descr:dxFileManagerToolbarItem.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxFileUploader.Options->
+     * [descr:dxFileUploader.Options]
      */
     export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
         /**
-         * <-dxFileUploader.Options.abortUpload->
+         * [descr:dxFileUploader.Options.abortUpload]
          */
         abortUpload?: ((file: File, uploadInfo?: DevExpress.fileManagement.UploadInfo) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-dxFileUploader.Options.accept->
+         * [descr:dxFileUploader.Options.accept]
          */
         accept?: string;
         /**
-         * <-dxFileUploader.Options.allowCanceling->
+         * [descr:dxFileUploader.Options.allowCanceling]
          */
         allowCanceling?: boolean;
         /**
-         * <-dxFileUploader.Options.allowedFileExtensions->
+         * [descr:dxFileUploader.Options.allowedFileExtensions]
          */
         allowedFileExtensions?: Array<string>;
         /**
-         * <-dxFileUploader.Options.chunkSize->
+         * [descr:dxFileUploader.Options.chunkSize]
          */
         chunkSize?: number;
         /**
-         * <-dxFileUploader.Options.dialogTrigger->
+         * [descr:dxFileUploader.Options.dialogTrigger]
          */
         dialogTrigger?: string | Element | JQuery;
         /**
-         * <-dxFileUploader.Options.dropZone->
+         * [descr:dxFileUploader.Options.dropZone]
          */
         dropZone?: string | Element | JQuery;
         /**
-         * <-dxFileUploader.Options.focusStateEnabled->
+         * [descr:dxFileUploader.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxFileUploader.Options.inputAttr->
+         * [descr:dxFileUploader.Options.inputAttr]
          */
         inputAttr?: any;
         /**
-         * <-dxFileUploader.Options.invalidFileExtensionMessage->
+         * [descr:dxFileUploader.Options.invalidFileExtensionMessage]
          */
         invalidFileExtensionMessage?: string;
         /**
-         * <-dxFileUploader.Options.invalidMaxFileSizeMessage->
+         * [descr:dxFileUploader.Options.invalidMaxFileSizeMessage]
          */
         invalidMaxFileSizeMessage?: string;
         /**
-         * <-dxFileUploader.Options.invalidMinFileSizeMessage->
+         * [descr:dxFileUploader.Options.invalidMinFileSizeMessage]
          */
         invalidMinFileSizeMessage?: string;
         /**
-         * <-dxFileUploader.Options.labelText->
+         * [descr:dxFileUploader.Options.labelText]
          */
         labelText?: string;
         /**
-         * <-dxFileUploader.Options.maxFileSize->
+         * [descr:dxFileUploader.Options.maxFileSize]
          */
         maxFileSize?: number;
         /**
-         * <-dxFileUploader.Options.minFileSize->
+         * [descr:dxFileUploader.Options.minFileSize]
          */
         minFileSize?: number;
         /**
-         * <-dxFileUploader.Options.multiple->
+         * [descr:dxFileUploader.Options.multiple]
          */
         multiple?: boolean;
         /**
-         * <-dxFileUploader.Options.name->
+         * [descr:dxFileUploader.Options.name]
          */
         name?: string;
         /**
-         * <-dxFileUploader.Options.onDropZoneEnter->
+         * [descr:dxFileUploader.Options.onDropZoneEnter]
          */
         onDropZoneEnter?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, dropZoneElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxFileUploader.Options.onDropZoneLeave->
+         * [descr:dxFileUploader.Options.onDropZoneLeave]
          */
         onDropZoneLeave?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, dropZoneElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxFileUploader.Options.onProgress->
+         * [descr:dxFileUploader.Options.onProgress]
          */
         onProgress?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, segmentSize?: number, bytesLoaded?: number, bytesTotal?: number, event?: DevExpress.events.event, request?: XMLHttpRequest }) => any);
         /**
-         * <-dxFileUploader.Options.onUploadAborted->
+         * [descr:dxFileUploader.Options.onUploadAborted]
          */
         onUploadAborted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, event?: DevExpress.events.event, request?: XMLHttpRequest }) => any);
         /**
-         * <-dxFileUploader.Options.onUploadError->
+         * [descr:dxFileUploader.Options.onUploadError]
          */
         onUploadError?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, event?: DevExpress.events.event, request?: XMLHttpRequest, error?: any }) => any);
         /**
-         * <-dxFileUploader.Options.onUploadStarted->
+         * [descr:dxFileUploader.Options.onUploadStarted]
          */
         onUploadStarted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, event?: DevExpress.events.event, request?: XMLHttpRequest }) => any);
         /**
-         * <-dxFileUploader.Options.onUploaded->
+         * [descr:dxFileUploader.Options.onUploaded]
          */
         onUploaded?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, event?: DevExpress.events.event, request?: XMLHttpRequest }) => any);
         /**
-         * <-dxFileUploader.Options.onValueChanged->
+         * [descr:dxFileUploader.Options.onValueChanged]
          */
         onValueChanged?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, value?: Array<File>, previousValue?: Array<File>, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxFileUploader.Options.progress->
+         * [descr:dxFileUploader.Options.progress]
          */
         progress?: number;
         /**
-         * <-dxFileUploader.Options.readyToUploadMessage->
+         * [descr:dxFileUploader.Options.readyToUploadMessage]
          */
         readyToUploadMessage?: string;
         /**
-         * <-dxFileUploader.Options.selectButtonText->
+         * [descr:dxFileUploader.Options.selectButtonText]
          */
         selectButtonText?: string;
         /**
-         * <-dxFileUploader.Options.showFileList->
+         * [descr:dxFileUploader.Options.showFileList]
          */
         showFileList?: boolean;
         /**
-         * <-dxFileUploader.Options.uploadAbortedMessage->
+         * [descr:dxFileUploader.Options.uploadAbortedMessage]
          */
         uploadAbortedMessage?: string;
         /**
-         * <-dxFileUploader.Options.uploadButtonText->
+         * [descr:dxFileUploader.Options.uploadButtonText]
          */
         uploadButtonText?: string;
         /**
-         * <-dxFileUploader.Options.uploadChunk->
+         * [descr:dxFileUploader.Options.uploadChunk]
          */
         uploadChunk?: ((file: File, uploadInfo: DevExpress.fileManagement.UploadInfo) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-dxFileUploader.Options.uploadFailedMessage->
+         * [descr:dxFileUploader.Options.uploadCustomData]
+         */
+        uploadCustomData?: any;
+        /**
+         * [descr:dxFileUploader.Options.uploadFailedMessage]
          */
         uploadFailedMessage?: string;
         /**
-         * <-dxFileUploader.Options.uploadFile->
+         * [descr:dxFileUploader.Options.uploadFile]
          */
         uploadFile?: ((file: File, progressCallback: Function) => Promise<any> | JQueryPromise<any> | any);
         /**
-         * <-dxFileUploader.Options.uploadHeaders->
+         * [descr:dxFileUploader.Options.uploadHeaders]
          */
         uploadHeaders?: any;
         /**
-         * <-dxFileUploader.Options.uploadMethod->
+         * [descr:dxFileUploader.Options.uploadMethod]
          */
         uploadMethod?: 'POST' | 'PUT';
         /**
-         * <-dxFileUploader.Options.uploadMode->
+         * [descr:dxFileUploader.Options.uploadMode]
          */
         uploadMode?: 'instantly' | 'useButtons' | 'useForm';
         /**
-         * <-dxFileUploader.Options.uploadUrl->
+         * [descr:dxFileUploader.Options.uploadUrl]
          */
         uploadUrl?: string;
         /**
-         * <-dxFileUploader.Options.uploadedMessage->
+         * [descr:dxFileUploader.Options.uploadedMessage]
          */
         uploadedMessage?: string;
         /**
-         * <-dxFileUploader.Options.value->
+         * [descr:dxFileUploader.Options.value]
          */
         value?: Array<File>;
     }
     /**
-     * <-dxFileUploader->
+     * [descr:dxFileUploader]
      */
     export class dxFileUploader extends Editor {
         constructor(element: Element, options?: dxFileUploaderOptions)
         constructor(element: JQuery, options?: dxFileUploaderOptions)
         /**
-         * <-dxFileUploader.abortUpload()->
+         * [descr:dxFileUploader.abortUpload()]
          */
         abortUpload(): void;
         /**
-         * <-dxFileUploader.abortUpload(file)->
+         * [descr:dxFileUploader.abortUpload(file)]
          */
         abortUpload(file: File): void;
         /**
-         * <-dxFileUploader.abortUpload(fileIndex)->
+         * [descr:dxFileUploader.abortUpload(fileIndex)]
          */
         abortUpload(fileIndex: number): void;
         /**
-         * <-dxFileUploader.upload()->
+         * [descr:dxFileUploader.removeFile(file)]
+         */
+        removeFile(file: File): void;
+        /**
+         * [descr:dxFileUploader.removeFile(fileIndex)]
+         */
+        removeFile(fileIndex: number): void;
+        /**
+         * [descr:dxFileUploader.upload()]
          */
         upload(): void;
         /**
-         * <-dxFileUploader.upload(file)->
+         * [descr:dxFileUploader.upload(file)]
          */
         upload(file: File): void;
         /**
-         * <-dxFileUploader.upload(fileIndex)->
+         * [descr:dxFileUploader.upload(fileIndex)]
          */
         upload(fileIndex: number): void;
     }
     /**
-     * <-dxFilterBuilder.Options->
+     * [descr:dxFilterBuilder.Options]
      */
     export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
         /**
-         * <-dxFilterBuilder.Options.allowHierarchicalFields->
+         * [descr:dxFilterBuilder.Options.allowHierarchicalFields]
          */
         allowHierarchicalFields?: boolean;
         /**
-         * <-dxFilterBuilder.Options.customOperations->
+         * [descr:dxFilterBuilder.Options.customOperations]
          */
         customOperations?: Array<dxFilterBuilderCustomOperation>;
         /**
-         * <-dxFilterBuilder.Options.fields->
+         * [descr:dxFilterBuilder.Options.fields]
          */
         fields?: Array<dxFilterBuilderField>;
         /**
-         * <-dxFilterBuilder.Options.filterOperationDescriptions->
+         * [descr:dxFilterBuilder.Options.filterOperationDescriptions]
          */
         filterOperationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string };
         /**
-         * <-dxFilterBuilder.Options.groupOperationDescriptions->
+         * [descr:dxFilterBuilder.Options.groupOperationDescriptions]
          */
         groupOperationDescriptions?: { and?: string, notAnd?: string, notOr?: string, or?: string };
         /**
-         * <-dxFilterBuilder.Options.groupOperations->
+         * [descr:dxFilterBuilder.Options.groupOperations]
          */
         groupOperations?: Array<'and' | 'or' | 'notAnd' | 'notOr'>;
         /**
-         * <-dxFilterBuilder.Options.maxGroupLevel->
+         * [descr:dxFilterBuilder.Options.maxGroupLevel]
          */
         maxGroupLevel?: number;
         /**
-         * <-dxFilterBuilder.Options.onEditorPrepared->
+         * [descr:dxFilterBuilder.Options.onEditorPrepared]
          */
         onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, editorElement?: DevExpress.core.dxElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
         /**
-         * <-dxFilterBuilder.Options.onEditorPreparing->
+         * [descr:dxFilterBuilder.Options.onEditorPreparing]
          */
         onEditorPreparing?: ((e: { component?: dxFilterBuilder, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: DevExpress.core.dxElement, editorName?: string, editorOptions?: any, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
         /**
-         * <-dxFilterBuilder.Options.onValueChanged->
+         * [descr:dxFilterBuilder.Options.onValueChanged]
          */
         onValueChanged?: ((e: { component?: dxFilterBuilder, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any }) => any);
         /**
-         * <-dxFilterBuilder.Options.value->
+         * [descr:dxFilterBuilder.Options.value]
          */
         value?: string | Array<any> | Function;
     }
     /**
-     * <-dxFilterBuilder->
+     * [descr:dxFilterBuilder]
      */
     export class dxFilterBuilder extends Widget {
         constructor(element: Element, options?: dxFilterBuilderOptions)
         constructor(element: JQuery, options?: dxFilterBuilderOptions)
         /**
-         * <-dxFilterBuilder.getFilterExpression()->
+         * [descr:dxFilterBuilder.getFilterExpression()]
          */
         getFilterExpression(): string | Array<any> | Function;
     }
     /**
-     * <-dxFilterBuilderCustomOperation->
+     * [descr:dxFilterBuilderCustomOperation]
      */
     export interface dxFilterBuilderCustomOperation {
         /**
-         * <-dxFilterBuilderCustomOperation.calculateFilterExpression->
+         * [descr:dxFilterBuilderCustomOperation.calculateFilterExpression]
          */
         calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | Array<any> | Function);
         /**
-         * <-dxFilterBuilderCustomOperation.caption->
+         * [descr:dxFilterBuilderCustomOperation.caption]
          */
         caption?: string;
         /**
-         * <-dxFilterBuilderCustomOperation.customizeText->
+         * [descr:dxFilterBuilderCustomOperation.customizeText]
          */
         customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string, field?: dxFilterBuilderField }) => string);
         /**
-         * <-dxFilterBuilderCustomOperation.dataTypes->
+         * [descr:dxFilterBuilderCustomOperation.dataTypes]
          */
         dataTypes?: Array<'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime'>;
         /**
-         * <-dxFilterBuilderCustomOperation.editorTemplate->
+         * [descr:dxFilterBuilderCustomOperation.editorTemplate]
          */
         editorTemplate?: DevExpress.core.template | ((conditionInfo: { value?: string | number | Date, field?: dxFilterBuilderField, setValue?: Function }, container: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxFilterBuilderCustomOperation.hasValue->
+         * [descr:dxFilterBuilderCustomOperation.hasValue]
          */
         hasValue?: boolean;
         /**
-         * <-dxFilterBuilderCustomOperation.icon->
+         * [descr:dxFilterBuilderCustomOperation.icon]
          */
         icon?: string;
         /**
-         * <-dxFilterBuilderCustomOperation.name->
+         * [descr:dxFilterBuilderCustomOperation.name]
          */
         name?: string;
     }
     /**
-     * <-dxFilterBuilderField->
+     * [descr:dxFilterBuilderField]
      */
     export interface dxFilterBuilderField {
         /**
-         * <-dxFilterBuilderField.calculateFilterExpression->
+         * [descr:dxFilterBuilderField.calculateFilterExpression]
          */
         calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | Array<any> | Function);
         /**
-         * <-dxFilterBuilderField.caption->
+         * [descr:dxFilterBuilderField.caption]
          */
         caption?: string;
         /**
-         * <-dxFilterBuilderField.customizeText->
+         * [descr:dxFilterBuilderField.customizeText]
          */
         customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string }) => string);
         /**
-         * <-dxFilterBuilderField.dataField->
+         * [descr:dxFilterBuilderField.dataField]
          */
         dataField?: string;
         /**
-         * <-dxFilterBuilderField.dataType->
+         * [descr:dxFilterBuilderField.dataType]
          */
         dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
         /**
-         * <-dxFilterBuilderField.editorOptions->
+         * [descr:dxFilterBuilderField.editorOptions]
          */
         editorOptions?: any;
         /**
-         * <-dxFilterBuilderField.editorTemplate->
+         * [descr:dxFilterBuilderField.editorTemplate]
          */
         editorTemplate?: DevExpress.core.template | ((conditionInfo: { value?: string | number | Date, filterOperation?: string, field?: dxFilterBuilderField, setValue?: Function }, container: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxFilterBuilderField.falseText->
+         * [descr:dxFilterBuilderField.falseText]
          */
         falseText?: string;
         /**
-         * <-dxFilterBuilderField.filterOperations->
+         * [descr:dxFilterBuilderField.filterOperations]
          */
         filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | string>;
         /**
-         * <-dxFilterBuilderField.format->
+         * [descr:dxFilterBuilderField.format]
          */
         format?: format;
         /**
-         * <-dxFilterBuilderField.lookup->
+         * [descr:dxFilterBuilderField.lookup]
          */
         lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DevExpress.data.DataSourceOptions | DevExpress.data.Store, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string | number | boolean) };
         /**
-         * <-dxFilterBuilderField.name->
+         * [descr:dxFilterBuilderField.name]
          */
         name?: string;
         /**
-         * <-dxFilterBuilderField.trueText->
+         * [descr:dxFilterBuilderField.trueText]
          */
         trueText?: string;
     }
     /**
-     * <-dxForm.Options->
+     * [descr:dxForm.Options]
      */
     export interface dxFormOptions extends WidgetOptions<dxForm> {
         /**
-         * <-dxForm.Options.alignItemLabels->
+         * [descr:dxForm.Options.alignItemLabels]
          */
         alignItemLabels?: boolean;
         /**
-         * <-dxForm.Options.alignItemLabelsInAllGroups->
+         * [descr:dxForm.Options.alignItemLabelsInAllGroups]
          */
         alignItemLabelsInAllGroups?: boolean;
         /**
-         * <-dxForm.Options.colCount->
+         * [descr:dxForm.Options.colCount]
          */
         colCount?: number | 'auto';
         /**
-         * <-dxForm.Options.colCountByScreen->
+         * [descr:dxForm.Options.colCountByScreen]
          */
         colCountByScreen?: any;
         /**
-         * <-dxForm.Options.customizeItem->
+         * [descr:dxForm.Options.customizeItem]
          */
         customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => any);
         /**
-         * <-dxForm.Options.formData->
+         * [descr:dxForm.Options.formData]
          */
         formData?: any;
         /**
-         * <-dxForm.Options.items->
+         * [descr:dxForm.Options.items]
          */
         items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>;
         /**
-         * <-dxForm.Options.labelLocation->
+         * [descr:dxForm.Options.labelLocation]
          */
         labelLocation?: 'left' | 'right' | 'top';
         /**
-         * <-dxForm.Options.minColWidth->
+         * [descr:dxForm.Options.minColWidth]
          */
         minColWidth?: number;
         /**
-         * <-dxForm.Options.onEditorEnterKey->
+         * [descr:dxForm.Options.onEditorEnterKey]
          */
         onEditorEnterKey?: ((e: { component?: dxForm, element?: DevExpress.core.dxElement, model?: any, dataField?: string }) => any);
         /**
-         * <-dxForm.Options.onFieldDataChanged->
+         * [descr:dxForm.Options.onFieldDataChanged]
          */
         onFieldDataChanged?: ((e: { component?: dxForm, element?: DevExpress.core.dxElement, model?: any, dataField?: string, value?: any }) => any);
         /**
-         * <-dxForm.Options.optionalMark->
+         * [descr:dxForm.Options.optionalMark]
          */
         optionalMark?: string;
         /**
-         * <-dxForm.Options.readOnly->
+         * [descr:dxForm.Options.readOnly]
          */
         readOnly?: boolean;
         /**
-         * <-dxForm.Options.requiredMark->
+         * [descr:dxForm.Options.requiredMark]
          */
         requiredMark?: string;
         /**
-         * <-dxForm.Options.requiredMessage->
+         * [descr:dxForm.Options.requiredMessage]
          */
         requiredMessage?: string;
         /**
-         * <-dxForm.Options.screenByWidth->
+         * [descr:dxForm.Options.screenByWidth]
          */
         screenByWidth?: Function;
         /**
-         * <-dxForm.Options.scrollingEnabled->
+         * [descr:dxForm.Options.scrollingEnabled]
          */
         scrollingEnabled?: boolean;
         /**
-         * <-dxForm.Options.showColonAfterLabel->
+         * [descr:dxForm.Options.showColonAfterLabel]
          */
         showColonAfterLabel?: boolean;
         /**
-         * <-dxForm.Options.showOptionalMark->
+         * [descr:dxForm.Options.showOptionalMark]
          */
         showOptionalMark?: boolean;
         /**
-         * <-dxForm.Options.showRequiredMark->
+         * [descr:dxForm.Options.showRequiredMark]
          */
         showRequiredMark?: boolean;
         /**
-         * <-dxForm.Options.showValidationSummary->
+         * [descr:dxForm.Options.showValidationSummary]
          */
         showValidationSummary?: boolean;
         /**
-         * <-dxForm.Options.validationGroup->
+         * [descr:dxForm.Options.validationGroup]
          */
         validationGroup?: string;
     }
     /**
-     * <-dxForm->
+     * [descr:dxForm]
      */
     export class dxForm extends Widget {
         constructor(element: Element, options?: dxFormOptions)
         constructor(element: JQuery, options?: dxFormOptions)
         /**
-         * <-dxForm.getButton(name)->
+         * [descr:dxForm.getButton(name)]
          */
         getButton(name: string): dxButton | undefined;
         /**
-         * <-dxForm.getEditor(dataField)->
+         * [descr:dxForm.getEditor(dataField)]
          */
         getEditor(dataField: string): Editor | undefined;
         /**
-         * <-dxForm.itemOption(id)->
+         * [descr:dxForm.itemOption(id)]
          */
         itemOption(id: string): any;
         /**
-         * <-dxForm.itemOption(id, option, value)->
+         * [descr:dxForm.itemOption(id, option, value)]
          */
         itemOption(id: string, option: string, value: any): void;
         /**
-         * <-dxForm.itemOption(id, options)->
+         * [descr:dxForm.itemOption(id, options)]
          */
         itemOption(id: string, options: any): void;
         /**
-         * <-dxForm.resetValues()->
+         * [descr:dxForm.resetValues()]
          */
         resetValues(): void;
         /**
-         * <-dxForm.updateData(data)->
+         * [descr:dxForm.updateData(data)]
          */
         updateData(data: any): void;
         /**
-         * <-dxForm.updateData(dataField, value)->
+         * [descr:dxForm.updateData(dataField, value)]
          */
         updateData(dataField: string, value: any): void;
         /**
-         * <-dxForm.updateDimensions()->
+         * [descr:dxForm.updateDimensions()]
          */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxForm.validate()->
+         * [descr:dxForm.validate()]
          */
         validate(): dxValidationGroupResult;
     }
     /**
-     * <-dxFormButtonItem->
+     * [descr:dxFormButtonItem]
      */
     export interface dxFormButtonItem {
         /**
-         * <-dxFormButtonItem.buttonOptions->
+         * [descr:dxFormButtonItem.buttonOptions]
          */
         buttonOptions?: dxButtonOptions;
         /**
-         * <-dxFormButtonItem.colSpan->
+         * [descr:dxFormButtonItem.colSpan]
          */
         colSpan?: number;
         /**
-         * <-dxFormButtonItem.cssClass->
+         * [descr:dxFormButtonItem.cssClass]
          */
         cssClass?: string;
         /**
-         * <-dxFormButtonItem.horizontalAlignment->
+         * [descr:dxFormButtonItem.horizontalAlignment]
          */
         horizontalAlignment?: 'center' | 'left' | 'right';
         /**
-         * <-dxFormButtonItem.itemType->
+         * [descr:dxFormButtonItem.itemType]
          */
         itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
         /**
-         * <-dxFormButtonItem.name->
+         * [descr:dxFormButtonItem.name]
          */
         name?: string;
         /**
-         * <-dxFormButtonItem.verticalAlignment->
+         * [descr:dxFormButtonItem.verticalAlignment]
          */
         verticalAlignment?: 'bottom' | 'center' | 'top';
         /**
-         * <-dxFormButtonItem.visible->
+         * [descr:dxFormButtonItem.visible]
          */
         visible?: boolean;
         /**
-         * <-dxFormButtonItem.visibleIndex->
+         * [descr:dxFormButtonItem.visibleIndex]
          */
         visibleIndex?: number;
     }
     /**
-     * <-dxFormEmptyItem->
+     * [descr:dxFormEmptyItem]
      */
     export interface dxFormEmptyItem {
         /**
-         * <-dxFormEmptyItem.colSpan->
+         * [descr:dxFormEmptyItem.colSpan]
          */
         colSpan?: number;
         /**
-         * <-dxFormEmptyItem.cssClass->
+         * [descr:dxFormEmptyItem.cssClass]
          */
         cssClass?: string;
         /**
-         * <-dxFormEmptyItem.itemType->
+         * [descr:dxFormEmptyItem.itemType]
          */
         itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
         /**
-         * <-dxFormEmptyItem.name->
+         * [descr:dxFormEmptyItem.name]
          */
         name?: string;
         /**
-         * <-dxFormEmptyItem.visible->
+         * [descr:dxFormEmptyItem.visible]
          */
         visible?: boolean;
         /**
-         * <-dxFormEmptyItem.visibleIndex->
+         * [descr:dxFormEmptyItem.visibleIndex]
          */
         visibleIndex?: number;
     }
     /**
-     * <-dxFormGroupItem->
+     * [descr:dxFormGroupItem]
      */
     export interface dxFormGroupItem {
         /**
-         * <-dxFormGroupItem.alignItemLabels->
+         * [descr:dxFormGroupItem.alignItemLabels]
          */
         alignItemLabels?: boolean;
         /**
-         * <-dxFormGroupItem.caption->
+         * [descr:dxFormGroupItem.caption]
          */
         caption?: string;
         /**
-         * <-dxFormGroupItem.colCount->
+         * [descr:dxFormGroupItem.colCount]
          */
         colCount?: number;
         /**
-         * <-dxFormGroupItem.colCountByScreen->
+         * [descr:dxFormGroupItem.colCountByScreen]
          */
         colCountByScreen?: any;
         /**
-         * <-dxFormGroupItem.colSpan->
+         * [descr:dxFormGroupItem.colSpan]
          */
         colSpan?: number;
         /**
-         * <-dxFormGroupItem.cssClass->
+         * [descr:dxFormGroupItem.cssClass]
          */
         cssClass?: string;
         /**
-         * <-dxFormGroupItem.itemType->
+         * [descr:dxFormGroupItem.itemType]
          */
         itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
         /**
-         * <-dxFormGroupItem.items->
+         * [descr:dxFormGroupItem.items]
          */
         items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>;
         /**
-         * <-dxFormGroupItem.name->
+         * [descr:dxFormGroupItem.name]
          */
         name?: string;
         /**
-         * <-dxFormGroupItem.template->
+         * [descr:dxFormGroupItem.template]
          */
         template?: DevExpress.core.template | ((data: { component?: dxForm, formData?: any }, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxFormGroupItem.visible->
+         * [descr:dxFormGroupItem.visible]
          */
         visible?: boolean;
         /**
-         * <-dxFormGroupItem.visibleIndex->
+         * [descr:dxFormGroupItem.visibleIndex]
          */
         visibleIndex?: number;
     }
     /**
-     * <-dxFormSimpleItem->
+     * [descr:dxFormSimpleItem]
      */
     export interface dxFormSimpleItem {
         /**
-         * <-dxFormSimpleItem.colSpan->
+         * [descr:dxFormSimpleItem.colSpan]
          */
         colSpan?: number;
         /**
-         * <-dxFormSimpleItem.cssClass->
+         * [descr:dxFormSimpleItem.cssClass]
          */
         cssClass?: string;
         /**
-         * <-dxFormSimpleItem.dataField->
+         * [descr:dxFormSimpleItem.dataField]
          */
         dataField?: string;
         /**
-         * <-dxFormSimpleItem.editorOptions->
+         * [descr:dxFormSimpleItem.editorOptions]
          */
         editorOptions?: any;
         /**
-         * <-dxFormSimpleItem.editorType->
+         * [descr:dxFormSimpleItem.editorType]
          */
         editorType?: 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
         /**
-         * <-dxFormSimpleItem.helpText->
+         * [descr:dxFormSimpleItem.helpText]
          */
         helpText?: string;
         /**
-         * <-dxFormSimpleItem.isRequired->
+         * [descr:dxFormSimpleItem.isRequired]
          */
         isRequired?: boolean;
         /**
-         * <-dxFormSimpleItem.itemType->
+         * [descr:dxFormSimpleItem.itemType]
          */
         itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
         /**
-         * <-dxFormSimpleItem.label->
+         * [descr:dxFormSimpleItem.label]
          */
         label?: { alignment?: 'center' | 'left' | 'right', location?: 'left' | 'right' | 'top', showColon?: boolean, text?: string, visible?: boolean };
         /**
-         * <-dxFormSimpleItem.name->
+         * [descr:dxFormSimpleItem.name]
          */
         name?: string;
         /**
-         * <-dxFormSimpleItem.template->
+         * [descr:dxFormSimpleItem.template]
          */
         template?: DevExpress.core.template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxFormSimpleItem.validationRules->
+         * [descr:dxFormSimpleItem.validationRules]
          */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
         /**
-         * <-dxFormSimpleItem.visible->
+         * [descr:dxFormSimpleItem.visible]
          */
         visible?: boolean;
         /**
-         * <-dxFormSimpleItem.visibleIndex->
+         * [descr:dxFormSimpleItem.visibleIndex]
          */
         visibleIndex?: number;
     }
     /**
-     * <-dxFormTabbedItem->
+     * [descr:dxFormTabbedItem]
      */
     export interface dxFormTabbedItem {
         /**
-         * <-dxFormTabbedItem.colSpan->
+         * [descr:dxFormTabbedItem.colSpan]
          */
         colSpan?: number;
         /**
-         * <-dxFormTabbedItem.cssClass->
+         * [descr:dxFormTabbedItem.cssClass]
          */
         cssClass?: string;
         /**
-         * <-dxFormTabbedItem.itemType->
+         * [descr:dxFormTabbedItem.itemType]
          */
         itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
         /**
-         * <-dxFormTabbedItem.name->
+         * [descr:dxFormTabbedItem.name]
          */
         name?: string;
         /**
-         * <-dxFormTabbedItem.tabPanelOptions->
+         * [descr:dxFormTabbedItem.tabPanelOptions]
          */
         tabPanelOptions?: dxTabPanelOptions;
         /**
-         * <-dxFormTabbedItem.tabs->
+         * [descr:dxFormTabbedItem.tabs]
          */
         tabs?: Array<{ alignItemLabels?: boolean, badge?: string, colCount?: number, colCountByScreen?: any, disabled?: boolean, icon?: string, items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>, tabTemplate?: DevExpress.core.template | ((tabData: any, tabIndex: number, tabElement: DevExpress.core.dxElement) => any), template?: DevExpress.core.template | ((tabData: any, tabIndex: number, tabElement: DevExpress.core.dxElement) => any), title?: string }>;
         /**
-         * <-dxFormTabbedItem.visible->
+         * [descr:dxFormTabbedItem.visible]
          */
         visible?: boolean;
         /**
-         * <-dxFormTabbedItem.visibleIndex->
+         * [descr:dxFormTabbedItem.visibleIndex]
          */
         visibleIndex?: number;
     }
     /**
-     * <-dxGallery.Options->
+     * [descr:dxGallery.Options]
      */
     export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
         /**
-         * <-dxGallery.Options.animationDuration->
+         * [descr:dxGallery.Options.animationDuration]
          */
         animationDuration?: number;
         /**
-         * <-dxGallery.Options.animationEnabled->
+         * [descr:dxGallery.Options.animationEnabled]
          */
         animationEnabled?: boolean;
         /**
-         * <-dxGallery.Options.dataSource->
+         * [descr:dxGallery.Options.dataSource]
          */
         dataSource?: string | Array<string | dxGalleryItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxGallery.Options.focusStateEnabled->
+         * [descr:dxGallery.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxGallery.Options.indicatorEnabled->
+         * [descr:dxGallery.Options.indicatorEnabled]
          */
         indicatorEnabled?: boolean;
         /**
-         * <-dxGallery.Options.initialItemWidth->
+         * [descr:dxGallery.Options.initialItemWidth]
          */
         initialItemWidth?: number;
         /**
-         * <-dxGallery.Options.items->
+         * [descr:dxGallery.Options.items]
          */
         items?: Array<string | dxGalleryItem | any>;
         /**
-         * <-dxGallery.Options.loop->
+         * [descr:dxGallery.Options.loop]
          */
         loop?: boolean;
         /**
-         * <-dxGallery.Options.noDataText->
+         * [descr:dxGallery.Options.noDataText]
          */
         noDataText?: string;
         /**
-         * <-dxGallery.Options.selectedIndex->
+         * [descr:dxGallery.Options.selectedIndex]
          */
         selectedIndex?: number;
         /**
-         * <-dxGallery.Options.showIndicator->
+         * [descr:dxGallery.Options.showIndicator]
          */
         showIndicator?: boolean;
         /**
-         * <-dxGallery.Options.showNavButtons->
+         * [descr:dxGallery.Options.showNavButtons]
          */
         showNavButtons?: boolean;
         /**
-         * <-dxGallery.Options.slideshowDelay->
+         * [descr:dxGallery.Options.slideshowDelay]
          */
         slideshowDelay?: number;
         /**
-         * <-dxGallery.Options.stretchImages->
+         * [descr:dxGallery.Options.stretchImages]
          */
         stretchImages?: boolean;
         /**
-         * <-dxGallery.Options.swipeEnabled->
+         * [descr:dxGallery.Options.swipeEnabled]
          */
         swipeEnabled?: boolean;
         /**
-         * <-dxGallery.Options.wrapAround->
+         * [descr:dxGallery.Options.wrapAround]
          */
         wrapAround?: boolean;
     }
     /**
-     * <-dxGallery->
+     * [descr:dxGallery]
      */
     export class dxGallery extends CollectionWidget {
         constructor(element: Element, options?: dxGalleryOptions)
         constructor(element: JQuery, options?: dxGalleryOptions)
         /**
-         * <-dxGallery.goToItem(itemIndex, animation)->
+         * [descr:dxGallery.goToItem(itemIndex, animation)]
          */
         goToItem(itemIndex: number, animation: boolean): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxGallery.nextItem(animation)->
+         * [descr:dxGallery.nextItem(animation)]
          */
         nextItem(animation: boolean): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxGallery.prevItem(animation)->
+         * [descr:dxGallery.prevItem(animation)]
          */
         prevItem(animation: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxGalleryItem->
+     * [descr:dxGalleryItem]
      */
     export interface dxGalleryItem extends CollectionWidgetItem {
         /**
-         * <-dxGalleryItem.imageAlt->
+         * [descr:dxGalleryItem.imageAlt]
          */
         imageAlt?: string;
         /**
-         * <-dxGalleryItem.imageSrc->
+         * [descr:dxGalleryItem.imageSrc]
          */
         imageSrc?: string;
     }
     /**
-     * <-dxGantt.Options->
+     * [descr:dxGantt.Options]
      */
     export interface dxGanttOptions extends WidgetOptions<dxGantt> {
         /**
-         * <-dxGantt.Options.allowSelection->
+         * [descr:dxGantt.Options.allowSelection]
          */
         allowSelection?: boolean;
         /**
-         * <-dxGantt.Options.columns->
+         * [descr:dxGantt.Options.columns]
          */
         columns?: Array<dxTreeListColumn | string>;
         /**
-         * <-dxGantt.Options.contextMenu->
+         * [descr:dxGantt.Options.contextMenu]
          */
         contextMenu?: dxGanttContextMenu;
         /**
-         * <-dxGantt.Options.dependencies->
+         * [descr:dxGantt.Options.dependencies]
          */
         dependencies?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, predecessorIdExpr?: string | Function, successorIdExpr?: string | Function, typeExpr?: string | Function };
         /**
-         * <-dxGantt.Options.editing->
+         * [descr:dxGantt.Options.editing]
          */
         editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
         /**
-         * <-dxGantt.Options.firstDayOfWeek->
+         * [descr:dxGantt.Options.firstDayOfWeek]
          */
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /**
-         * <-dxGantt.Options.onCustomCommand->
+         * [descr:dxGantt.Options.onContextMenuPreparing]
+         */
+        onContextMenuPreparing?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, cancel?: boolean, event?: DevExpress.events.event, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => any);
+        /**
+         * [descr:dxGantt.Options.onCustomCommand]
          */
         onCustomCommand?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, name?: string }) => any);
         /**
-         * <-dxGantt.Options.onDependencyDeleting->
+         * [descr:dxGantt.Options.onDependencyDeleting]
          */
         onDependencyDeleting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
         /**
-         * <-dxGantt.Options.onDependencyInserting->
+         * [descr:dxGantt.Options.onDependencyInserting]
          */
         onDependencyInserting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any }) => any);
         /**
-         * <-dxGantt.Options.onResourceAssigning->
+         * [descr:dxGantt.Options.onResourceAssigning]
          */
         onResourceAssigning?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any }) => any);
         /**
-         * <-dxGantt.Options.onResourceDeleting->
+         * [descr:dxGantt.Options.onResourceDeleting]
          */
         onResourceDeleting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
         /**
-         * <-dxGantt.Options.onResourceInserting->
+         * [descr:dxGantt.Options.onResourceInserting]
          */
         onResourceInserting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any }) => any);
         /**
-         * <-dxGantt.Options.onResourceUnassigning->
+         * [descr:dxGantt.Options.onResourceUnassigning]
          */
         onResourceUnassigning?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
         /**
-         * <-dxGantt.Options.onSelectionChanged->
+         * [descr:dxGantt.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, selectedRowKey?: any }) => any);
         /**
-         * <-dxGantt.Options.onTaskClick->
+         * [descr:dxGantt.Options.onTaskClick]
          */
         onTaskClick?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, key?: any, data?: any }) => any);
         /**
-         * <-dxGantt.Options.onTaskDblClick->
+         * [descr:dxGantt.Options.onTaskDblClick]
          */
         onTaskDblClick?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, event?: DevExpress.events.event, key?: any, data?: any }) => any);
         /**
-         * <-dxGantt.Options.onTaskDeleting->
+         * [descr:dxGantt.Options.onTaskDeleting]
          */
         onTaskDeleting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any }) => any);
         /**
-         * <-dxGantt.Options.onTaskEditDialogShowing->
+         * [descr:dxGantt.Options.onTaskEditDialogShowing]
          */
         onTaskEditDialogShowing?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any, key?: any, readOnlyFields?: Array<string>, hiddenFields?: Array<string> }) => any);
         /**
-         * <-dxGantt.Options.onTaskInserting->
+         * [descr:dxGantt.Options.onTaskInserting]
          */
         onTaskInserting?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, values?: any }) => any);
         /**
-         * <-dxGantt.Options.onTaskMoving->
+         * [descr:dxGantt.Options.onTaskMoving]
          */
         onTaskMoving?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => any);
         /**
-         * <-dxGantt.Options.onTaskUpdating->
+         * [descr:dxGantt.Options.onTaskUpdating]
          */
         onTaskUpdating?: ((e: { component?: dxGantt, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean, newValues?: any, values?: any, key?: any }) => any);
         /**
-         * <-dxGantt.Options.resourceAssignments->
+         * [descr:dxGantt.Options.resourceAssignments]
          */
         resourceAssignments?: { dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, resourceIdExpr?: string | Function, taskIdExpr?: string | Function };
         /**
-         * <-dxGantt.Options.resources->
+         * [descr:dxGantt.Options.resources]
          */
         resources?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, keyExpr?: string | Function, textExpr?: string | Function };
         /**
-         * <-dxGantt.Options.scaleType->
+         * [descr:dxGantt.Options.rootValue]
+         */
+        rootValue?: any;
+        /**
+         * [descr:dxGantt.Options.scaleType]
          */
         scaleType?: 'auto' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'quarters' | 'years';
         /**
-         * <-dxGantt.Options.selectedRowKey->
+         * [descr:dxGantt.Options.selectedRowKey]
          */
         selectedRowKey?: any;
         /**
-         * <-dxGantt.Options.showResources->
+         * [descr:dxGantt.Options.showResources]
          */
         showResources?: boolean;
         /**
-         * <-dxGantt.Options.showRowLines->
+         * [descr:dxGantt.Options.showRowLines]
          */
         showRowLines?: boolean;
         /**
-         * <-dxGantt.Options.stripLines->
+         * [descr:dxGantt.Options.stripLines]
          */
         stripLines?: Array<dxGanttStripLine>;
         /**
-         * <-dxGantt.Options.taskListWidth->
+         * [descr:dxGantt.Options.taskListWidth]
          */
         taskListWidth?: number;
         /**
-         * <-dxGantt.Options.taskTitlePosition->
+         * [descr:dxGantt.Options.taskTitlePosition]
          */
         taskTitlePosition?: 'inside' | 'outside' | 'none';
         /**
-         * <-dxGantt.Options.taskTooltipContentTemplate->
+         * [descr:dxGantt.Options.taskTooltipContentTemplate]
          */
         taskTooltipContentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement, task: any) => any);
         /**
-         * <-dxGantt.Options.tasks->
+         * [descr:dxGantt.Options.tasks]
          */
         tasks?: { colorExpr?: string | Function, dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, endExpr?: string | Function, keyExpr?: string | Function, parentIdExpr?: string | Function, progressExpr?: string | Function, startExpr?: string | Function, titleExpr?: string | Function };
         /**
-         * <-dxGantt.Options.toolbar->
+         * [descr:dxGantt.Options.toolbar]
          */
         toolbar?: dxGanttToolbar;
         /**
-         * <-dxGantt.Options.validation->
+         * [descr:dxGantt.Options.validation]
          */
         validation?: { autoUpdateParentTasks?: boolean, validateDependencies?: boolean };
     }
     /**
-     * <-dxGantt->
+     * [descr:dxGantt]
      */
     export class dxGantt extends Widget {
         constructor(element: Element, options?: dxGanttOptions)
         constructor(element: JQuery, options?: dxGanttOptions)
         /**
-         * <-dxGantt.assignResourceToTask(resourceKey, taskKey)->
+         * [descr:dxGantt.assignResourceToTask(resourceKey, taskKey)]
          */
         assignResourceToTask(resourceKey: any, taskKey: any): void;
         /**
-         * <-dxGantt.deleteDependency(key)->
+         * [descr:dxGantt.deleteDependency(key)]
          */
         deleteDependency(key: any): void;
         /**
-         * <-dxGantt.deleteResource(key)->
+         * [descr:dxGantt.deleteResource(key)]
          */
         deleteResource(key: any): void;
         /**
-         * <-dxGantt.deleteTask(key)->
+         * [descr:dxGantt.deleteTask(key)]
          */
         deleteTask(key: any): void;
         /**
-         * <-dxGantt.getDependencyData(key)->
+         * [descr:dxGantt.getDependencyData(key)]
          */
         getDependencyData(key: any): any;
         /**
-         * <-dxGantt.getResourceAssignmentData(key)->
+         * [descr:dxGantt.getResourceAssignmentData(key)]
          */
         getResourceAssignmentData(key: any): any;
         /**
-         * <-dxGantt.getResourceData(key)->
+         * [descr:dxGantt.getResourceData(key)]
          */
         getResourceData(key: any): any;
         /**
-         * <-dxGantt.getTaskData(key)->
+         * [descr:dxGantt.getTaskData(key)]
          */
         getTaskData(key: any): any;
         /**
-         * <-dxGantt.insertDependency(data)->
+         * [descr:dxGantt.insertDependency(data)]
          */
         insertDependency(data: any): void;
         /**
-         * <-dxGantt.insertResource(data, taskKeys)->
+         * [descr:dxGantt.insertResource(data, taskKeys)]
          */
         insertResource(data: any, taskKeys?: Array<any>): void;
         /**
-         * <-dxGantt.insertTask(data)->
+         * [descr:dxGantt.insertTask(data)]
          */
         insertTask(data: any): void;
         /**
-         * <-dxGantt.unassignResourceFromTask(resourceKey, taskKey)->
+         * [descr:dxGantt.unassignResourceFromTask(resourceKey, taskKey)]
          */
         unassignResourceFromTask(resourceKey: any, taskKey: any): void;
         /**
-         * <-dxGantt.updateTask(key, data)->
+         * [descr:dxGantt.updateTask(key, data)]
          */
         updateTask(key: any, data: any): void;
     }
     /**
-     * <-dxGanttContextMenu->
+     * [descr:dxGanttContextMenu]
      */
     export interface dxGanttContextMenu {
         /**
-         * <-dxGanttContextMenu.enabled->
+         * [descr:dxGanttContextMenu.enabled]
          */
         enabled?: boolean;
         /**
-         * <-dxGanttContextMenu.items->
+         * [descr:dxGanttContextMenu.items]
          */
         items?: Array<dxGanttContextMenuItem | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails'>;
     }
     /**
-     * <-dxGanttContextMenuItem->
+     * [descr:dxGanttContextMenuItem]
      */
     export interface dxGanttContextMenuItem extends dxContextMenuItem {
         /**
-         * <-dxGanttContextMenuItem.name->
+         * [descr:dxGanttContextMenuItem.name]
          */
         name?: 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | 'deleteDependency' | 'taskDetails' | string;
     }
     /**
-     * <-dxGanttStripLine->
+     * [descr:dxGanttStripLine]
      */
     export interface dxGanttStripLine {
         /**
-         * <-dxGanttStripLine.cssClass->
+         * [descr:dxGanttStripLine.cssClass]
          */
         cssClass?: string;
         /**
-         * <-dxGanttStripLine.end->
+         * [descr:dxGanttStripLine.end]
          */
         end?: Date | number | string | (() => Date | number | string);
         /**
-         * <-dxGanttStripLine.start->
+         * [descr:dxGanttStripLine.start]
          */
         start?: Date | number | string | (() => Date | number | string);
         /**
-         * <-dxGanttStripLine.title->
+         * [descr:dxGanttStripLine.title]
          */
         title?: string;
     }
     /**
-     * <-dxGanttToolbar->
+     * [descr:dxGanttToolbar]
      */
     export interface dxGanttToolbar {
         /**
-         * <-dxGanttToolbar.items->
+         * [descr:dxGanttToolbar.items]
          */
         items?: Array<dxGanttToolbarItem | 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut'>;
     }
     /**
-     * <-dxGanttToolbarItem->
+     * [descr:dxGanttToolbarItem]
      */
     export interface dxGanttToolbarItem extends dxToolbarItem {
         /**
-         * <-dxGanttToolbarItem.location->
+         * [descr:dxGanttToolbarItem.location]
          */
         location?: 'after' | 'before' | 'center';
         /**
-         * <-dxGanttToolbarItem.name->
+         * [descr:dxGanttToolbarItem.name]
          */
         name?: 'separator' | 'undo' | 'redo' | 'expandAll' | 'collapseAll' | 'addTask' | 'deleteTask' | 'zoomIn' | 'zoomOut' | string;
     }
     /**
-     * <-dxHtmlEditor.Options->
+     * [descr:dxHtmlEditor.Options]
      */
     export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
         /**
-         * <-dxHtmlEditor.Options.customizeModules->
+         * [descr:dxHtmlEditor.Options.customizeModules]
          */
         customizeModules?: ((config: any) => any);
         /**
-         * <-dxHtmlEditor.Options.focusStateEnabled->
+         * [descr:dxHtmlEditor.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxHtmlEditor.Options.mediaResizing->
+         * [descr:dxHtmlEditor.Options.mediaResizing]
          */
         mediaResizing?: dxHtmlEditorMediaResizing;
         /**
-         * <-dxHtmlEditor.Options.mentions->
+         * [descr:dxHtmlEditor.Options.mentions]
          */
         mentions?: Array<dxHtmlEditorMention>;
         /**
-         * <-dxHtmlEditor.Options.name->
+         * [descr:dxHtmlEditor.Options.name]
          */
         name?: string;
         /**
-         * <-dxHtmlEditor.Options.onFocusIn->
+         * [descr:dxHtmlEditor.Options.onFocusIn]
          */
         onFocusIn?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxHtmlEditor.Options.onFocusOut->
+         * [descr:dxHtmlEditor.Options.onFocusOut]
          */
         onFocusOut?: ((e: { component?: dxHtmlEditor, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxHtmlEditor.Options.placeholder->
+         * [descr:dxHtmlEditor.Options.placeholder]
          */
         placeholder?: string;
         /**
-         * <-dxHtmlEditor.Options.toolbar->
+         * [descr:dxHtmlEditor.Options.toolbar]
          */
         toolbar?: dxHtmlEditorToolbar;
         /**
-         * <-dxHtmlEditor.Options.valueType->
+         * [descr:dxHtmlEditor.Options.valueType]
          */
         valueType?: 'html' | 'markdown';
         /**
-         * <-dxHtmlEditor.Options.variables->
+         * [descr:dxHtmlEditor.Options.variables]
          */
         variables?: dxHtmlEditorVariables;
     }
     /**
-     * <-dxHtmlEditor->
+     * [descr:dxHtmlEditor]
      */
     export class dxHtmlEditor extends Editor {
         constructor(element: Element, options?: dxHtmlEditorOptions)
         constructor(element: JQuery, options?: dxHtmlEditorOptions)
         /**
-         * <-dxHtmlEditor.clearHistory()->
+         * [descr:dxHtmlEditor.clearHistory()]
          */
         clearHistory(): void;
         /**
-         * <-dxHtmlEditor.delete(index, length)->
+         * [descr:dxHtmlEditor.delete(index, length)]
          */
         delete(index: number, length: number): void;
         /**
-         * <-dxHtmlEditor.format(formatName, formatValue)->
+         * [descr:dxHtmlEditor.format(formatName, formatValue)]
          */
         format(formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
         /**
-         * <-dxHtmlEditor.formatLine(index, length, formatName, formatValue)->
+         * [descr:dxHtmlEditor.formatLine(index, length, formatName, formatValue)]
          */
         formatLine(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
         /**
-         * <-dxHtmlEditor.formatLine(index, length, formats)->
+         * [descr:dxHtmlEditor.formatLine(index, length, formats)]
          */
         formatLine(index: number, length: number, formats: any): void;
         /**
-         * <-dxHtmlEditor.formatText(index, length, formatName, formatValue)->
+         * [descr:dxHtmlEditor.formatText(index, length, formatName, formatValue)]
          */
         formatText(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
         /**
-         * <-dxHtmlEditor.formatText(index, length, formats)->
+         * [descr:dxHtmlEditor.formatText(index, length, formats)]
          */
         formatText(index: number, length: number, formats: any): void;
         /**
-         * <-dxHtmlEditor.get(componentPath)->
+         * [descr:dxHtmlEditor.get(componentPath)]
          */
         get(componentPath: string): any;
         /**
-         * <-dxHtmlEditor.getFormat(index, length)->
+         * [descr:dxHtmlEditor.getFormat(index, length)]
          */
         getFormat(index: number, length: number): any;
         /**
-         * <-dxHtmlEditor.getLength()->
+         * [descr:dxHtmlEditor.getLength()]
          */
         getLength(): number;
         /**
-         * <-dxHtmlEditor.getModule(moduleName)->
+         * [descr:dxHtmlEditor.getModule(moduleName)]
          */
         getModule(moduleName: string): any;
         /**
-         * <-dxHtmlEditor.getQuillInstance()->
+         * [descr:dxHtmlEditor.getQuillInstance()]
          */
         getQuillInstance(): any;
         /**
-         * <-dxHtmlEditor.getSelection()->
+         * [descr:dxHtmlEditor.getSelection()]
          */
         getSelection(): any;
         /**
-         * <-dxHtmlEditor.insertEmbed(index, type, config)->
+         * [descr:dxHtmlEditor.insertEmbed(index, type, config)]
          */
         insertEmbed(index: number, type: string, config: any): void;
         /**
-         * <-dxHtmlEditor.insertText(index, text, formats)->
+         * [descr:dxHtmlEditor.insertText(index, text, formats)]
          */
         insertText(index: number, text: string, formats: any): void;
         /**
-         * <-dxHtmlEditor.redo()->
+         * [descr:dxHtmlEditor.redo()]
          */
         redo(): void;
         /**
-         * <-dxHtmlEditor.register(components)->
+         * [descr:dxHtmlEditor.register(components)]
          */
         register(modules: any): void;
         /**
-         * <-dxHtmlEditor.removeFormat(index, length)->
+         * [descr:dxHtmlEditor.removeFormat(index, length)]
          */
         removeFormat(index: number, length: number): void;
         /**
-         * <-dxHtmlEditor.setSelection(index, length)->
+         * [descr:dxHtmlEditor.setSelection(index, length)]
          */
         setSelection(index: number, length: number): void;
         /**
-         * <-dxHtmlEditor.undo()->
+         * [descr:dxHtmlEditor.undo()]
          */
         undo(): void;
     }
     /**
-     * <-dxHtmlEditorMediaResizing->
+     * [descr:dxHtmlEditorMediaResizing]
      */
     export interface dxHtmlEditorMediaResizing {
         /**
-         * <-dxHtmlEditorMediaResizing.allowedTargets->
+         * [descr:dxHtmlEditorMediaResizing.allowedTargets]
          */
         allowedTargets?: Array<string>;
         /**
-         * <-dxHtmlEditorMediaResizing.enabled->
+         * [descr:dxHtmlEditorMediaResizing.enabled]
          */
         enabled?: boolean;
     }
     /**
-     * <-dxHtmlEditorMention->
+     * [descr:dxHtmlEditorMention]
      */
     export interface dxHtmlEditorMention {
         /**
-         * <-dxHtmlEditorMention.dataSource->
+         * [descr:dxHtmlEditorMention.dataSource]
          */
         dataSource?: Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxHtmlEditorMention.displayExpr->
+         * [descr:dxHtmlEditorMention.displayExpr]
          */
         displayExpr?: string | ((item: any) => string);
         /**
-         * <-dxHtmlEditorMention.itemTemplate->
+         * [descr:dxHtmlEditorMention.itemTemplate]
          */
         itemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxHtmlEditorMention.marker->
+         * [descr:dxHtmlEditorMention.marker]
          */
         marker?: string;
         /**
-         * <-dxHtmlEditorMention.minSearchLength->
+         * [descr:dxHtmlEditorMention.minSearchLength]
          */
         minSearchLength?: number;
         /**
-         * <-dxHtmlEditorMention.searchExpr->
+         * [descr:dxHtmlEditorMention.searchExpr]
          */
         searchExpr?: string | Function | Array<string | Function>;
         /**
-         * <-dxHtmlEditorMention.searchTimeout->
+         * [descr:dxHtmlEditorMention.searchTimeout]
          */
         searchTimeout?: number;
         /**
-         * <-dxHtmlEditorMention.template->
+         * [descr:dxHtmlEditorMention.template]
          */
         template?: DevExpress.core.template | ((mentionData: { marker?: string, id?: string | number, value?: any }, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxHtmlEditorMention.valueExpr->
+         * [descr:dxHtmlEditorMention.valueExpr]
          */
         valueExpr?: string | Function;
     }
     /**
-     * <-dxHtmlEditorToolbar->
+     * [descr:dxHtmlEditorToolbar]
      */
     export interface dxHtmlEditorToolbar {
         /**
-         * <-dxHtmlEditorToolbar.container->
+         * [descr:dxHtmlEditorToolbar.container]
          */
         container?: string | Element | JQuery;
         /**
-         * <-dxHtmlEditorToolbar.items->
+         * [descr:dxHtmlEditorToolbar.items]
          */
         items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear'>;
         /**
-         * <-dxHtmlEditorToolbar.multiline->
+         * [descr:dxHtmlEditorToolbar.multiline]
          */
         multiline?: boolean;
     }
     /**
-     * <-dxHtmlEditorToolbarItem->
+     * [descr:dxHtmlEditorToolbarItem]
      */
     export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
         /**
-         * <-dxHtmlEditorToolbarItem.formatName->
+         * [descr:dxHtmlEditorToolbarItem.formatName]
          */
         formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | string;
         /**
-         * <-dxHtmlEditorToolbarItem.formatValues->
+         * [descr:dxHtmlEditorToolbarItem.formatValues]
          */
         formatValues?: Array<string | number | boolean>;
         /**
-         * <-dxHtmlEditorToolbarItem.location->
+         * [descr:dxHtmlEditorToolbarItem.location]
          */
         location?: 'after' | 'before' | 'center';
     }
     /**
-     * <-dxHtmlEditorVariables->
+     * [descr:dxHtmlEditorVariables]
      */
     export interface dxHtmlEditorVariables {
         /**
-         * <-dxHtmlEditorVariables.dataSource->
+         * [descr:dxHtmlEditorVariables.dataSource]
          */
         dataSource?: string | Array<string> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxHtmlEditorVariables.escapeChar->
+         * [descr:dxHtmlEditorVariables.escapeChar]
          */
         escapeChar?: string | Array<string>;
     }
     /**
-     * <-dxItem->
+     * [descr:dxItem]
      */
     export var dxItem: any;
     /**
-     * <-dxList.Options->
+     * [descr:dxList.Options]
      */
     export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
         /**
-         * <-dxList.Options.activeStateEnabled->
+         * [descr:dxList.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxList.Options.allowItemDeleting->
+         * [descr:dxList.Options.allowItemDeleting]
          */
         allowItemDeleting?: boolean;
         /**
-         * <-dxList.Options.bounceEnabled->
+         * [descr:dxList.Options.bounceEnabled]
          */
         bounceEnabled?: boolean;
         /**
-         * <-dxList.Options.collapsibleGroups->
+         * [descr:dxList.Options.collapsibleGroups]
          */
         collapsibleGroups?: boolean;
         /**
-         * <-dxList.Options.dataSource->
+         * [descr:dxList.Options.dataSource]
          */
         dataSource?: string | Array<string | dxListItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxList.Options.displayExpr->
+         * [descr:dxList.Options.displayExpr]
          */
         displayExpr?: string | ((item: any) => string);
         /**
-         * <-dxList.Options.focusStateEnabled->
+         * [descr:dxList.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxList.Options.groupTemplate->
+         * [descr:dxList.Options.groupTemplate]
          */
         groupTemplate?: DevExpress.core.template | ((groupData: any, groupIndex: number, groupElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxList.Options.grouped->
+         * [descr:dxList.Options.grouped]
          */
         grouped?: boolean;
         /**
-         * <-dxList.Options.hoverStateEnabled->
+         * [descr:dxList.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxList.Options.indicateLoading->
+         * [descr:dxList.Options.indicateLoading]
          */
         indicateLoading?: boolean;
         /**
-         * <-dxList.Options.itemDeleteMode->
+         * [descr:dxList.Options.itemDeleteMode]
          */
         itemDeleteMode?: 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
         /**
-         * <-dxList.Options.itemDragging->
+         * [descr:dxList.Options.itemDragging]
          */
         itemDragging?: dxSortableOptions;
         /**
-         * <-dxList.Options.items->
+         * [descr:dxList.Options.items]
          */
         items?: Array<string | dxListItem | any>;
         /**
-         * <-dxList.Options.menuItems->
+         * [descr:dxList.Options.menuItems]
          */
         menuItems?: Array<{ action?: ((itemElement: DevExpress.core.dxElement, itemData: any) => any), text?: string }>;
         /**
-         * <-dxList.Options.menuMode->
+         * [descr:dxList.Options.menuMode]
          */
         menuMode?: 'context' | 'slide';
         /**
-         * <-dxList.Options.nextButtonText->
+         * [descr:dxList.Options.nextButtonText]
          */
         nextButtonText?: string;
         /**
-         * <-dxList.Options.onGroupRendered->
+         * [descr:dxList.Options.onGroupRendered]
          */
         onGroupRendered?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, groupData?: any, groupElement?: DevExpress.core.dxElement, groupIndex?: number }) => any);
         /**
-         * <-dxList.Options.onItemClick->
+         * [descr:dxList.Options.onItemClick]
          */
         onItemClick?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, event?: DevExpress.events.event }) => any) | string;
         /**
-         * <-dxList.Options.onItemContextMenu->
+         * [descr:dxList.Options.onItemContextMenu]
          */
         onItemContextMenu?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxList.Options.onItemDeleted->
+         * [descr:dxList.Options.onItemDeleted]
          */
         onItemDeleted?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any }) => any);
         /**
-         * <-dxList.Options.onItemDeleting->
+         * [descr:dxList.Options.onItemDeleting]
          */
         onItemDeleting?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /**
-         * <-dxList.Options.onItemHold->
+         * [descr:dxList.Options.onItemHold]
          */
         onItemHold?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxList.Options.onItemReordered->
+         * [descr:dxList.Options.onItemReordered]
          */
         onItemReordered?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number }) => any);
         /**
-         * <-dxList.Options.onItemSwipe->
+         * [descr:dxList.Options.onItemSwipe]
          */
         onItemSwipe?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, direction?: string }) => any);
         /**
-         * <-dxList.Options.onPageLoading->
+         * [descr:dxList.Options.onPageLoading]
          */
         onPageLoading?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxList.Options.onPullRefresh->
+         * [descr:dxList.Options.onPullRefresh]
          */
         onPullRefresh?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxList.Options.onScroll->
+         * [descr:dxList.Options.onScroll]
          */
         onScroll?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
         /**
-         * <-dxList.Options.onSelectAllValueChanged->
+         * [descr:dxList.Options.onSelectAllValueChanged]
          */
         onSelectAllValueChanged?: ((e: { component?: dxList, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
         /**
-         * <-dxList.Options.pageLoadMode->
+         * [descr:dxList.Options.pageLoadMode]
          */
         pageLoadMode?: 'nextButton' | 'scrollBottom';
         /**
-         * <-dxList.Options.pageLoadingText->
+         * [descr:dxList.Options.pageLoadingText]
          */
         pageLoadingText?: string;
         /**
-         * <-dxList.Options.pullRefreshEnabled->
+         * [descr:dxList.Options.pullRefreshEnabled]
          */
         pullRefreshEnabled?: boolean;
         /**
-         * <-dxList.Options.pulledDownText->
+         * [descr:dxList.Options.pulledDownText]
          */
         pulledDownText?: string;
         /**
-         * <-dxList.Options.pullingDownText->
+         * [descr:dxList.Options.pullingDownText]
          */
         pullingDownText?: string;
         /**
-         * <-dxList.Options.refreshingText->
+         * [descr:dxList.Options.refreshingText]
          */
         refreshingText?: string;
         /**
-         * <-dxList.Options.repaintChangesOnly->
+         * [descr:dxList.Options.repaintChangesOnly]
          */
         repaintChangesOnly?: boolean;
         /**
-         * <-dxList.Options.scrollByContent->
+         * [descr:dxList.Options.scrollByContent]
          */
         scrollByContent?: boolean;
         /**
-         * <-dxList.Options.scrollByThumb->
+         * [descr:dxList.Options.scrollByThumb]
          */
         scrollByThumb?: boolean;
         /**
-         * <-dxList.Options.scrollingEnabled->
+         * [descr:dxList.Options.scrollingEnabled]
          */
         scrollingEnabled?: boolean;
         /**
-         * <-dxList.Options.selectAllMode->
+         * [descr:dxList.Options.selectAllMode]
          */
         selectAllMode?: 'allPages' | 'page';
         /**
-         * <-dxList.Options.selectionMode->
+         * [descr:dxList.Options.selectionMode]
          */
         selectionMode?: 'all' | 'multiple' | 'none' | 'single';
         /**
-         * <-dxList.Options.showScrollbar->
+         * [descr:dxList.Options.showScrollbar]
          */
         showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
         /**
-         * <-dxList.Options.showSelectionControls->
+         * [descr:dxList.Options.showSelectionControls]
          */
         showSelectionControls?: boolean;
         /**
-         * <-dxList.Options.useNativeScrolling->
+         * [descr:dxList.Options.useNativeScrolling]
          */
         useNativeScrolling?: boolean;
     }
     /**
-     * <-dxList->
+     * [descr:dxList]
      */
     export class dxList extends CollectionWidget {
         constructor(element: Element, options?: dxListOptions)
         constructor(element: JQuery, options?: dxListOptions)
         /**
-         * <-dxList.clientHeight()->
+         * [descr:dxList.clientHeight()]
          */
         clientHeight(): number;
         /**
-         * <-dxList.collapseGroup(groupIndex)->
+         * [descr:dxList.collapseGroup(groupIndex)]
          */
         collapseGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxList.deleteItem(itemElement)->
+         * [descr:dxList.deleteItem(itemElement)]
          */
         deleteItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxList.deleteItem(itemIndex)->
+         * [descr:dxList.deleteItem(itemIndex)]
          */
         deleteItem(itemIndex: number | any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxList.expandGroup(groupIndex)->
+         * [descr:dxList.expandGroup(groupIndex)]
          */
         expandGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxList.isItemSelected(itemElement)->
+         * [descr:dxList.isItemSelected(itemElement)]
          */
         isItemSelected(itemElement: Element): boolean;
         /**
-         * <-dxList.isItemSelected(itemIndex)->
+         * [descr:dxList.isItemSelected(itemIndex)]
          */
         isItemSelected(itemIndex: number | any): boolean;
         /**
-         * <-dxList.reload()->
+         * [descr:dxList.reload()]
          */
         reload(): void;
         /**
-         * <-dxList.reorderItem(itemElement, toItemElement)->
+         * [descr:dxList.reorderItem(itemElement, toItemElement)]
          */
         reorderItem(itemElement: Element, toItemElement: Element): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxList.reorderItem(itemIndex, toItemIndex)->
+         * [descr:dxList.reorderItem(itemIndex, toItemIndex)]
          */
         reorderItem(itemIndex: number | any, toItemIndex: number | any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxList.scrollBy(distance)->
+         * [descr:dxList.scrollBy(distance)]
          */
         scrollBy(distance: number): void;
         /**
-         * <-dxList.scrollHeight()->
+         * [descr:dxList.scrollHeight()]
          */
         scrollHeight(): number;
         /**
-         * <-dxList.scrollTo(location)->
+         * [descr:dxList.scrollTo(location)]
          */
         scrollTo(location: number): void;
         /**
-         * <-dxList.scrollToItem(itemElement)->
+         * [descr:dxList.scrollToItem(itemElement)]
          */
         scrollToItem(itemElement: Element): void;
         /**
-         * <-dxList.scrollToItem(itemIndex)->
+         * [descr:dxList.scrollToItem(itemIndex)]
          */
         scrollToItem(itemIndex: number | any): void;
         /**
-         * <-dxList.scrollTop()->
+         * [descr:dxList.scrollTop()]
          */
         scrollTop(): number;
         /**
-         * <-dxList.selectAll()->
+         * [descr:dxList.selectAll()]
          */
         selectAll(): void;
         /**
-         * <-dxList.selectItem(itemElement)->
+         * [descr:dxList.selectItem(itemElement)]
          */
         selectItem(itemElement: Element): void;
         /**
-         * <-dxList.selectItem(itemIndex)->
+         * [descr:dxList.selectItem(itemIndex)]
          */
         selectItem(itemIndex: number | any): void;
         /**
-         * <-dxList.unselectAll()->
+         * [descr:dxList.unselectAll()]
          */
         unselectAll(): void;
         /**
-         * <-dxList.unselectItem(itemElement)->
+         * [descr:dxList.unselectItem(itemElement)]
          */
         unselectItem(itemElement: Element): void;
         /**
-         * <-dxList.unselectItem(itemIndex)->
+         * [descr:dxList.unselectItem(itemIndex)]
          */
         unselectItem(itemIndex: number | any): void;
         /**
-         * <-dxList.updateDimensions()->
+         * [descr:dxList.updateDimensions()]
          */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxListItem->
+     * [descr:dxListItem]
      */
     export interface dxListItem extends CollectionWidgetItem {
         /**
-         * <-dxListItem.badge->
+         * [descr:dxListItem.badge]
          */
         badge?: string;
         /**
-         * <-dxListItem.icon->
+         * [descr:dxListItem.icon]
          */
         icon?: string;
         /**
-         * <-dxListItem.key->
+         * [descr:dxListItem.key]
          */
         key?: string;
         /**
-         * <-dxListItem.showChevron->
+         * [descr:dxListItem.showChevron]
          */
         showChevron?: boolean;
     }
     /**
-     * <-dxLoadIndicator.Options->
+     * [descr:dxLoadIndicator.Options]
      */
     export interface dxLoadIndicatorOptions extends WidgetOptions<dxLoadIndicator> {
         /**
-         * <-dxLoadIndicator.Options.indicatorSrc->
+         * [descr:dxLoadIndicator.Options.indicatorSrc]
          */
         indicatorSrc?: string;
     }
     /**
-     * <-dxLoadIndicator->
+     * [descr:dxLoadIndicator]
      */
     export class dxLoadIndicator extends Widget {
         constructor(element: Element, options?: dxLoadIndicatorOptions)
         constructor(element: JQuery, options?: dxLoadIndicatorOptions)
     }
     /**
-     * <-dxLoadPanel.Options->
+     * [descr:dxLoadPanel.Options]
      */
     export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
         /**
-         * <-dxLoadPanel.Options.animation->
+         * [descr:dxLoadPanel.Options.animation]
          */
         animation?: dxLoadPanelAnimation;
         /**
-         * <-dxLoadPanel.Options.container->
+         * [descr:dxLoadPanel.Options.container]
          */
         container?: string | Element | JQuery;
         /**
-         * <-dxLoadPanel.Options.delay->
+         * [descr:dxLoadPanel.Options.delay]
          */
         delay?: number;
         /**
-         * <-dxLoadPanel.Options.focusStateEnabled->
+         * [descr:dxLoadPanel.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxLoadPanel.Options.height->
+         * [descr:dxLoadPanel.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxLoadPanel.Options.indicatorSrc->
+         * [descr:dxLoadPanel.Options.indicatorSrc]
          */
         indicatorSrc?: string;
         /**
-         * <-dxLoadPanel.Options.maxHeight->
+         * [descr:dxLoadPanel.Options.maxHeight]
          */
         maxHeight?: number | string | (() => number | string);
         /**
-         * <-dxLoadPanel.Options.maxWidth->
+         * [descr:dxLoadPanel.Options.maxWidth]
          */
         maxWidth?: number | string | (() => number | string);
         /**
-         * <-dxLoadPanel.Options.message->
+         * [descr:dxLoadPanel.Options.message]
          */
         message?: string;
         /**
-         * <-dxLoadPanel.Options.position->
+         * [descr:dxLoadPanel.Options.position]
          */
         position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
         /**
-         * <-dxLoadPanel.Options.shadingColor->
+         * [descr:dxLoadPanel.Options.shadingColor]
          */
         shadingColor?: string;
         /**
-         * <-dxLoadPanel.Options.showIndicator->
+         * [descr:dxLoadPanel.Options.showIndicator]
          */
         showIndicator?: boolean;
         /**
-         * <-dxLoadPanel.Options.showPane->
+         * [descr:dxLoadPanel.Options.showPane]
          */
         showPane?: boolean;
         /**
-         * <-dxLoadPanel.Options.width->
+         * [descr:dxLoadPanel.Options.width]
          */
         width?: number | string | (() => number | string);
     }
     /**
-     * <-dxLoadPanel.Options.animation->
+     * [descr:dxLoadPanel.Options.animation]
      */
     export interface dxLoadPanelAnimation extends dxOverlayAnimation {
         /**
-         * <-dxLoadPanel.Options.animation.hide->
+         * [descr:dxLoadPanel.Options.animation.hide]
          */
         hide?: animationConfig;
         /**
-         * <-dxLoadPanel.Options.animation.show->
+         * [descr:dxLoadPanel.Options.animation.show]
          */
         show?: animationConfig;
     }
     /**
-     * <-dxLoadPanel->
+     * [descr:dxLoadPanel]
      */
     export class dxLoadPanel extends dxOverlay {
         constructor(element: Element, options?: dxLoadPanelOptions)
         constructor(element: JQuery, options?: dxLoadPanelOptions)
     }
     /**
-     * <-dxLookup.Options->
+     * [descr:dxLookup.Options]
      */
     export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
         /**
-         * <-dxLookup.Options.animation->
-         * @deprecated <-dxLookup.Options.animation:depNote->
+         * [descr:dxLookup.Options.animation]
+         * @deprecated [depNote:dxLookup.Options.animation]
          */
         animation?: { hide?: animationConfig, show?: animationConfig };
         /**
-         * <-dxLookup.Options.applyButtonText->
+         * [descr:dxLookup.Options.applyButtonText]
          */
         applyButtonText?: string;
         /**
-         * <-dxLookup.Options.applyValueMode->
+         * [descr:dxLookup.Options.applyValueMode]
          */
         applyValueMode?: 'instantly' | 'useButtons';
         /**
-         * <-dxLookup.Options.cancelButtonText->
+         * [descr:dxLookup.Options.cancelButtonText]
          */
         cancelButtonText?: string;
         /**
-         * <-dxLookup.Options.cleanSearchOnOpening->
+         * [descr:dxLookup.Options.cleanSearchOnOpening]
          */
         cleanSearchOnOpening?: boolean;
         /**
-         * <-dxLookup.Options.clearButtonText->
+         * [descr:dxLookup.Options.clearButtonText]
          */
         clearButtonText?: string;
         /**
-         * <-dxLookup.Options.closeOnOutsideClick->
-         * @deprecated <-dxLookup.Options.closeOnOutsideClick:depNote->
+         * [descr:dxLookup.Options.closeOnOutsideClick]
+         * @deprecated [depNote:dxLookup.Options.closeOnOutsideClick]
          */
         closeOnOutsideClick?: boolean | (() => boolean);
         /**
-         * <-dxLookup.Options.dropDownCentered->
+         * [descr:dxLookup.Options.dropDownCentered]
          */
         dropDownCentered?: boolean;
         /**
-         * <-dxLookup.Options.dropDownOptions->
+         * [descr:dxLookup.Options.dropDownOptions]
          */
         dropDownOptions?: dxPopoverOptions;
         /**
-         * <-dxLookup.Options.fieldTemplate->
+         * [descr:dxLookup.Options.fieldTemplate]
          */
         fieldTemplate?: DevExpress.core.template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxLookup.Options.focusStateEnabled->
+         * [descr:dxLookup.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxLookup.Options.fullScreen->
-         * @deprecated <-dxLookup.Options.fullScreen:depNote->
+         * [descr:dxLookup.Options.fullScreen]
+         * @deprecated [depNote:dxLookup.Options.fullScreen]
          */
         fullScreen?: boolean;
         /**
-         * <-dxLookup.Options.groupTemplate->
+         * [descr:dxLookup.Options.groupTemplate]
          */
         groupTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxLookup.Options.grouped->
+         * [descr:dxLookup.Options.grouped]
          */
         grouped?: boolean;
         /**
-         * <-dxLookup.Options.nextButtonText->
+         * [descr:dxLookup.Options.nextButtonText]
          */
         nextButtonText?: string;
         /**
-         * <-dxLookup.Options.onPageLoading->
+         * [descr:dxLookup.Options.onPageLoading]
          */
         onPageLoading?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxLookup.Options.onPullRefresh->
+         * [descr:dxLookup.Options.onPullRefresh]
          */
         onPullRefresh?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxLookup.Options.onScroll->
+         * [descr:dxLookup.Options.onScroll]
          */
         onScroll?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
         /**
-         * <-dxLookup.Options.onTitleRendered->
-         * @deprecated <-dxLookup.Options.onTitleRendered:depNote->
+         * [descr:dxLookup.Options.onTitleRendered]
+         * @deprecated [depNote:dxLookup.Options.onTitleRendered]
          */
         onTitleRendered?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any, titleElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxLookup.Options.onValueChanged->
+         * [descr:dxLookup.Options.onValueChanged]
          */
         onValueChanged?: ((e: { component?: dxLookup, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxLookup.Options.pageLoadMode->
+         * [descr:dxLookup.Options.pageLoadMode]
          */
         pageLoadMode?: 'nextButton' | 'scrollBottom';
         /**
-         * <-dxLookup.Options.pageLoadingText->
+         * [descr:dxLookup.Options.pageLoadingText]
          */
         pageLoadingText?: string;
         /**
-         * <-dxLookup.Options.placeholder->
+         * [descr:dxLookup.Options.placeholder]
          */
         placeholder?: string;
         /**
-         * <-dxLookup.Options.popupHeight->
-         * @deprecated <-dxLookup.Options.popupHeight:depNote->
+         * [descr:dxLookup.Options.popupHeight]
+         * @deprecated [depNote:dxLookup.Options.popupHeight]
          */
         popupHeight?: number | string | (() => number | string);
         /**
-         * <-dxLookup.Options.popupWidth->
-         * @deprecated <-dxLookup.Options.popupWidth:depNote->
+         * [descr:dxLookup.Options.popupWidth]
+         * @deprecated [depNote:dxLookup.Options.popupWidth]
          */
         popupWidth?: number | string | (() => number | string);
         /**
-         * <-dxLookup.Options.position->
-         * @deprecated <-dxLookup.Options.position:depNote->
+         * [descr:dxLookup.Options.position]
+         * @deprecated [depNote:dxLookup.Options.position]
          */
         position?: positionConfig;
         /**
-         * <-dxLookup.Options.pullRefreshEnabled->
+         * [descr:dxLookup.Options.pullRefreshEnabled]
          */
         pullRefreshEnabled?: boolean;
         /**
-         * <-dxLookup.Options.pulledDownText->
+         * [descr:dxLookup.Options.pulledDownText]
          */
         pulledDownText?: string;
         /**
-         * <-dxLookup.Options.pullingDownText->
+         * [descr:dxLookup.Options.pullingDownText]
          */
         pullingDownText?: string;
         /**
-         * <-dxLookup.Options.refreshingText->
+         * [descr:dxLookup.Options.refreshingText]
          */
         refreshingText?: string;
         /**
-         * <-dxLookup.Options.searchEnabled->
+         * [descr:dxLookup.Options.searchEnabled]
          */
         searchEnabled?: boolean;
         /**
-         * <-dxLookup.Options.searchPlaceholder->
+         * [descr:dxLookup.Options.searchPlaceholder]
          */
         searchPlaceholder?: string;
         /**
-         * <-dxLookup.Options.shading->
-         * @deprecated <-dxLookup.Options.shading:depNote->
+         * [descr:dxLookup.Options.shading]
+         * @deprecated [depNote:dxLookup.Options.shading]
          */
         shading?: boolean;
         /**
-         * <-dxLookup.Options.showCancelButton->
+         * [descr:dxLookup.Options.showCancelButton]
          */
         showCancelButton?: boolean;
         /**
-         * <-dxLookup.Options.showClearButton->
+         * [descr:dxLookup.Options.showClearButton]
          */
         showClearButton?: boolean;
         /**
-         * <-dxLookup.Options.showPopupTitle->
-         * @deprecated <-dxLookup.Options.showPopupTitle:depNote->
+         * [descr:dxLookup.Options.showPopupTitle]
+         * @deprecated [depNote:dxLookup.Options.showPopupTitle]
          */
         showPopupTitle?: boolean;
         /**
-         * <-dxLookup.Options.title->
-         * @deprecated <-dxLookup.Options.title:depNote->
+         * [descr:dxLookup.Options.title]
+         * @deprecated [depNote:dxLookup.Options.title]
          */
         title?: string;
         /**
-         * <-dxLookup.Options.titleTemplate->
-         * @deprecated <-dxLookup.Options.titleTemplate:depNote->
+         * [descr:dxLookup.Options.titleTemplate]
+         * @deprecated [depNote:dxLookup.Options.titleTemplate]
          */
         titleTemplate?: DevExpress.core.template | ((titleElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxLookup.Options.useNativeScrolling->
+         * [descr:dxLookup.Options.useNativeScrolling]
          */
         useNativeScrolling?: boolean;
         /**
-         * <-dxLookup.Options.usePopover->
+         * [descr:dxLookup.Options.usePopover]
          */
         usePopover?: boolean;
     }
     /**
-     * <-dxLookup->
+     * [descr:dxLookup]
      */
     export class dxLookup extends dxDropDownList {
         constructor(element: Element, options?: dxLookupOptions)
         constructor(element: JQuery, options?: dxLookupOptions)
     }
     /**
-     * <-dxMap.Options->
+     * [descr:dxMap.Options]
      */
     export interface dxMapOptions extends WidgetOptions<dxMap> {
         /**
-         * <-dxMap.Options.autoAdjust->
+         * [descr:dxMap.Options.autoAdjust]
          */
         autoAdjust?: boolean;
         /**
-         * <-dxMap.Options.center->
+         * [descr:dxMap.Options.center]
          */
         center?: any | string | Array<number>;
         /**
-         * <-dxMap.Options.controls->
+         * [descr:dxMap.Options.controls]
          */
         controls?: boolean;
         /**
-         * <-dxMap.Options.focusStateEnabled->
+         * [descr:dxMap.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxMap.Options.height->
+         * [descr:dxMap.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxMap.Options.key->
+         * [descr:dxMap.Options.key]
          */
         key?: string | { bing?: string, google?: string, googleStatic?: string };
         /**
-         * <-dxMap.Options.markerIconSrc->
+         * [descr:dxMap.Options.markerIconSrc]
          */
         markerIconSrc?: string;
         /**
-         * <-dxMap.Options.markers->
+         * [descr:dxMap.Options.markers]
          */
         markers?: Array<{ iconSrc?: string, location?: any | string | Array<number>, onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }>;
         /**
-         * <-dxMap.Options.onClick->
+         * [descr:dxMap.Options.onClick]
          */
         onClick?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, location?: any, event?: DevExpress.events.event }) => any) | string;
         /**
-         * <-dxMap.Options.onMarkerAdded->
+         * [descr:dxMap.Options.onMarkerAdded]
          */
         onMarkerAdded?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, options?: any, originalMarker?: any }) => any);
         /**
-         * <-dxMap.Options.onMarkerRemoved->
+         * [descr:dxMap.Options.onMarkerRemoved]
          */
         onMarkerRemoved?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, options?: any }) => any);
         /**
-         * <-dxMap.Options.onReady->
+         * [descr:dxMap.Options.onReady]
          */
         onReady?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, originalMap?: any }) => any);
         /**
-         * <-dxMap.Options.onRouteAdded->
+         * [descr:dxMap.Options.onRouteAdded]
          */
         onRouteAdded?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, options?: any, originalRoute?: any }) => any);
         /**
-         * <-dxMap.Options.onRouteRemoved->
+         * [descr:dxMap.Options.onRouteRemoved]
          */
         onRouteRemoved?: ((e: { component?: dxMap, element?: DevExpress.core.dxElement, model?: any, options?: any }) => any);
         /**
-         * <-dxMap.Options.provider->
+         * [descr:dxMap.Options.provider]
          */
         provider?: 'bing' | 'google' | 'googleStatic';
         /**
-         * <-dxMap.Options.routes->
+         * [descr:dxMap.Options.routes]
          */
         routes?: Array<{ color?: string, locations?: Array<any>, mode?: 'driving' | 'walking', opacity?: number, weight?: number }>;
         /**
-         * <-dxMap.Options.type->
+         * [descr:dxMap.Options.type]
          */
         type?: 'hybrid' | 'roadmap' | 'satellite';
         /**
-         * <-dxMap.Options.width->
+         * [descr:dxMap.Options.width]
          */
         width?: number | string | (() => number | string);
         /**
-         * <-dxMap.Options.zoom->
+         * [descr:dxMap.Options.zoom]
          */
         zoom?: number;
     }
     /**
-     * <-dxMap->
+     * [descr:dxMap]
      */
     export class dxMap extends Widget {
         constructor(element: Element, options?: dxMapOptions)
         constructor(element: JQuery, options?: dxMapOptions)
         /**
-         * <-dxMap.addMarker(markerOptions)->
+         * [descr:dxMap.addMarker(markerOptions)]
          */
         addMarker(markerOptions: any | Array<any>): Promise<any> & JQueryPromise<any>;
         /**
-         * <-dxMap.addRoute(routeOptions)->
+         * [descr:dxMap.addRoute(routeOptions)]
          */
         addRoute(options: any | Array<any>): Promise<any> & JQueryPromise<any>;
         /**
-         * <-dxMap.removeMarker(marker)->
+         * [descr:dxMap.removeMarker(marker)]
          */
         removeMarker(marker: any | number | Array<any>): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxMap.removeRoute(route)->
+         * [descr:dxMap.removeRoute(route)]
          */
         removeRoute(route: any | number | Array<any>): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxMenu.Options->
+     * [descr:dxMenu.Options]
      */
     export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
         /**
-         * <-dxMenu.Options.adaptivityEnabled->
+         * [descr:dxMenu.Options.adaptivityEnabled]
          */
         adaptivityEnabled?: boolean;
         /**
-         * <-dxMenu.Options.dataSource->
+         * [descr:dxMenu.Options.dataSource]
          */
         dataSource?: string | Array<dxMenuItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxMenu.Options.hideSubmenuOnMouseLeave->
+         * [descr:dxMenu.Options.hideSubmenuOnMouseLeave]
          */
         hideSubmenuOnMouseLeave?: boolean;
         /**
-         * <-dxMenu.Options.items->
+         * [descr:dxMenu.Options.items]
          */
         items?: Array<dxMenuItem>;
         /**
-         * <-dxMenu.Options.onSubmenuHidden->
+         * [descr:dxMenu.Options.onSubmenuHidden]
          */
         onSubmenuHidden?: ((e: { component?: dxMenu, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxMenu.Options.onSubmenuHiding->
+         * [descr:dxMenu.Options.onSubmenuHiding]
          */
         onSubmenuHiding?: ((e: { component?: dxMenu, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement, cancel?: boolean }) => any);
         /**
-         * <-dxMenu.Options.onSubmenuShowing->
+         * [descr:dxMenu.Options.onSubmenuShowing]
          */
         onSubmenuShowing?: ((e: { component?: dxMenu, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxMenu.Options.onSubmenuShown->
+         * [descr:dxMenu.Options.onSubmenuShown]
          */
         onSubmenuShown?: ((e: { component?: dxMenu, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxMenu.Options.orientation->
+         * [descr:dxMenu.Options.orientation]
          */
         orientation?: 'horizontal' | 'vertical';
         /**
-         * <-dxMenu.Options.showFirstSubmenuMode->
+         * [descr:dxMenu.Options.showFirstSubmenuMode]
          */
         showFirstSubmenuMode?: { delay?: { hide?: number, show?: number } | number, name?: 'onClick' | 'onHover' } | 'onClick' | 'onHover';
         /**
-         * <-dxMenu.Options.submenuDirection->
+         * [descr:dxMenu.Options.submenuDirection]
          */
         submenuDirection?: 'auto' | 'leftOrTop' | 'rightOrBottom';
     }
     /**
-     * <-dxMenu->
+     * [descr:dxMenu]
      */
     export class dxMenu extends dxMenuBase {
         constructor(element: Element, options?: dxMenuOptions)
         constructor(element: JQuery, options?: dxMenuOptions)
     }
     /**
-     * <-dxMenuBase.Options->
+     * [descr:dxMenuBase.Options]
      */
     export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectionWidgetOptions<T> {
         /**
-         * <-dxMenuBase.Options.activeStateEnabled->
+         * [descr:dxMenuBase.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxMenuBase.Options.animation->
+         * [descr:dxMenuBase.Options.animation]
          */
         animation?: { hide?: animationConfig, show?: animationConfig };
         /**
-         * <-dxMenuBase.Options.cssClass->
+         * [descr:dxMenuBase.Options.cssClass]
          */
         cssClass?: string;
         /**
-         * <-dxMenuBase.Options.dataSource->
+         * [descr:dxMenuBase.Options.dataSource]
          */
         dataSource?: string | Array<dxMenuBaseItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxMenuBase.Options.items->
+         * [descr:dxMenuBase.Options.items]
          */
         items?: Array<dxMenuBaseItem>;
         /**
-         * <-dxMenuBase.Options.selectByClick->
+         * [descr:dxMenuBase.Options.selectByClick]
          */
         selectByClick?: boolean;
         /**
-         * <-dxMenuBase.Options.selectionMode->
+         * [descr:dxMenuBase.Options.selectionMode]
          */
         selectionMode?: 'none' | 'single';
         /**
-         * <-dxMenuBase.Options.showSubmenuMode->
+         * [descr:dxMenuBase.Options.showSubmenuMode]
          */
         showSubmenuMode?: { delay?: { hide?: number, show?: number } | number, name?: 'onClick' | 'onHover' } | 'onClick' | 'onHover';
     }
     /**
-     * <-dxMenuBase->
+     * [descr:dxMenuBase]
      */
     export class dxMenuBase extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxMenuBaseOptions)
         constructor(element: JQuery, options?: dxMenuBaseOptions)
         /**
-         * <-dxMenuBase.selectItem(itemElement)->
+         * [descr:dxMenuBase.selectItem(itemElement)]
          */
         selectItem(itemElement: Element): void;
         /**
-         * <-dxMenuBase.unselectItem(itemElement)->
+         * [descr:dxMenuBase.unselectItem(itemElement)]
          */
         unselectItem(itemElement: Element): void;
     }
     /**
-     * <-dxMenuBaseItem->
+     * [descr:dxMenuBaseItem]
      */
     export interface dxMenuBaseItem extends CollectionWidgetItem {
         /**
-         * <-dxMenuBaseItem.beginGroup->
+         * [descr:dxMenuBaseItem.beginGroup]
          */
         beginGroup?: boolean;
         /**
-         * <-dxMenuBaseItem.closeMenuOnClick->
+         * [descr:dxMenuBaseItem.closeMenuOnClick]
          */
         closeMenuOnClick?: boolean;
         /**
-         * <-dxMenuBaseItem.disabled->
+         * [descr:dxMenuBaseItem.disabled]
          */
         disabled?: boolean;
         /**
-         * <-dxMenuBaseItem.icon->
+         * [descr:dxMenuBaseItem.icon]
          */
         icon?: string;
         /**
-         * <-dxMenuBaseItem.items->
+         * [descr:dxMenuBaseItem.items]
          */
         items?: Array<dxMenuBaseItem>;
         /**
-         * <-dxMenuBaseItem.selectable->
+         * [descr:dxMenuBaseItem.selectable]
          */
         selectable?: boolean;
         /**
-         * <-dxMenuBaseItem.selected->
+         * [descr:dxMenuBaseItem.selected]
          */
         selected?: boolean;
         /**
-         * <-dxMenuBaseItem.text->
+         * [descr:dxMenuBaseItem.text]
          */
         text?: string;
         /**
-         * <-dxMenuBaseItem.visible->
+         * [descr:dxMenuBaseItem.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxMenuItem->
+     * [descr:dxMenuItem]
      */
     export interface dxMenuItem extends dxMenuBaseItem {
         /**
-         * <-dxMenuItem.items->
+         * [descr:dxMenuItem.items]
          */
         items?: Array<dxMenuItem>;
     }
     /**
-     * <-dxMultiView.Options->
+     * [descr:dxMultiView.Options]
      */
     export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
         /**
-         * <-dxMultiView.Options.animationEnabled->
+         * [descr:dxMultiView.Options.animationEnabled]
          */
         animationEnabled?: boolean;
         /**
-         * <-dxMultiView.Options.dataSource->
+         * [descr:dxMultiView.Options.dataSource]
          */
         dataSource?: string | Array<string | dxMultiViewItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxMultiView.Options.deferRendering->
+         * [descr:dxMultiView.Options.deferRendering]
          */
         deferRendering?: boolean;
         /**
-         * <-dxMultiView.Options.focusStateEnabled->
+         * [descr:dxMultiView.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxMultiView.Options.items->
+         * [descr:dxMultiView.Options.items]
          */
         items?: Array<string | dxMultiViewItem | any>;
         /**
-         * <-dxMultiView.Options.loop->
+         * [descr:dxMultiView.Options.loop]
          */
         loop?: boolean;
         /**
-         * <-dxMultiView.Options.selectedIndex->
+         * [descr:dxMultiView.Options.selectedIndex]
          */
         selectedIndex?: number;
         /**
-         * <-dxMultiView.Options.swipeEnabled->
+         * [descr:dxMultiView.Options.swipeEnabled]
          */
         swipeEnabled?: boolean;
     }
     /**
-     * <-dxMultiView->
+     * [descr:dxMultiView]
      */
     export class dxMultiView extends CollectionWidget {
         constructor(element: Element, options?: dxMultiViewOptions)
         constructor(element: JQuery, options?: dxMultiViewOptions)
     }
     /**
-     * <-dxMultiViewItem->
+     * [descr:dxMultiViewItem]
      */
     export interface dxMultiViewItem extends CollectionWidgetItem {
     }
     /**
-     * <-dxNavBar.Options->
+     * [descr:dxNavBar.Options]
      */
     export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
         /**
-         * <-dxNavBar.Options.scrollByContent->
+         * [descr:dxNavBar.Options.scrollByContent]
          */
         scrollByContent?: boolean;
     }
     /**
-     * <-dxNavBar->
+     * [descr:dxNavBar]
      */
     export class dxNavBar extends dxTabs {
         constructor(element: Element, options?: dxNavBarOptions)
         constructor(element: JQuery, options?: dxNavBarOptions)
     }
     /**
-     * <-dxNavBarItem->
+     * [descr:dxNavBarItem]
      */
     export interface dxNavBarItem extends dxTabsItem {
         /**
-         * <-dxNavBarItem.badge->
+         * [descr:dxNavBarItem.badge]
          */
         badge?: string;
     }
     /**
-     * <-dxNumberBox.Options->
+     * [descr:dxNumberBox.Options]
      */
     export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
         /**
-         * <-dxNumberBox.Options.buttons->
+         * [descr:dxNumberBox.Options.buttons]
          */
         buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
         /**
-         * <-dxNumberBox.Options.format->
+         * [descr:dxNumberBox.Options.format]
          */
         format?: format;
         /**
-         * <-dxNumberBox.Options.invalidValueMessage->
+         * [descr:dxNumberBox.Options.invalidValueMessage]
          */
         invalidValueMessage?: string;
         /**
-         * <-dxNumberBox.Options.max->
+         * [descr:dxNumberBox.Options.max]
          */
         max?: number;
         /**
-         * <-dxNumberBox.Options.min->
+         * [descr:dxNumberBox.Options.min]
          */
         min?: number;
         /**
-         * <-dxNumberBox.Options.mode->
+         * [descr:dxNumberBox.Options.mode]
          */
         mode?: 'number' | 'text' | 'tel';
         /**
-         * <-dxNumberBox.Options.showSpinButtons->
+         * [descr:dxNumberBox.Options.showSpinButtons]
          */
         showSpinButtons?: boolean;
         /**
-         * <-dxNumberBox.Options.step->
+         * [descr:dxNumberBox.Options.step]
          */
         step?: number;
         /**
-         * <-dxNumberBox.Options.useLargeSpinButtons->
+         * [descr:dxNumberBox.Options.useLargeSpinButtons]
          */
         useLargeSpinButtons?: boolean;
         /**
-         * <-dxNumberBox.Options.value->
+         * [descr:dxNumberBox.Options.value]
          */
         value?: number;
     }
     /**
-     * <-dxNumberBox->
+     * [descr:dxNumberBox]
      */
     export class dxNumberBox extends dxTextEditor {
         constructor(element: Element, options?: dxNumberBoxOptions)
         constructor(element: JQuery, options?: dxNumberBoxOptions)
     }
     /**
-     * <-dxOverlay.Options->
+     * [descr:dxOverlay.Options]
      */
     export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
         /**
-         * <-dxOverlay.Options.animation->
+         * [descr:dxOverlay.Options.animation]
          */
         animation?: dxOverlayAnimation;
         /**
-         * <-dxOverlay.Options.closeOnOutsideClick->
+         * [descr:dxOverlay.Options.closeOnOutsideClick]
          */
         closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
-         * <-dxOverlay.Options.contentTemplate->
+         * [descr:dxOverlay.Options.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxOverlay.Options.deferRendering->
+         * [descr:dxOverlay.Options.deferRendering]
          */
         deferRendering?: boolean;
         /**
-         * <-dxOverlay.Options.dragEnabled->
+         * [descr:dxOverlay.Options.dragEnabled]
          */
         dragEnabled?: boolean;
         /**
-         * <-dxOverlay.Options.height->
+         * [descr:dxOverlay.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxOverlay.Options.maxHeight->
+         * [descr:dxOverlay.Options.maxHeight]
          */
         maxHeight?: number | string | (() => number | string);
         /**
-         * <-dxOverlay.Options.maxWidth->
+         * [descr:dxOverlay.Options.maxWidth]
          */
         maxWidth?: number | string | (() => number | string);
         /**
-         * <-dxOverlay.Options.minHeight->
+         * [descr:dxOverlay.Options.minHeight]
          */
         minHeight?: number | string | (() => number | string);
         /**
-         * <-dxOverlay.Options.minWidth->
+         * [descr:dxOverlay.Options.minWidth]
          */
         minWidth?: number | string | (() => number | string);
         /**
-         * <-dxOverlay.Options.onHidden->
+         * [descr:dxOverlay.Options.onHidden]
          */
         onHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxOverlay.Options.onHiding->
+         * [descr:dxOverlay.Options.onHiding]
          */
         onHiding?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
         /**
-         * <-dxOverlay.Options.onShowing->
+         * [descr:dxOverlay.Options.onShowing]
          */
         onShowing?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxOverlay.Options.onShown->
+         * [descr:dxOverlay.Options.onShown]
          */
         onShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxOverlay.Options.position->
+         * [descr:dxOverlay.Options.position]
          */
         position?: any;
         /**
-         * <-dxOverlay.Options.shading->
+         * [descr:dxOverlay.Options.shading]
          */
         shading?: boolean;
         /**
-         * <-dxOverlay.Options.shadingColor->
+         * [descr:dxOverlay.Options.shadingColor]
          */
         shadingColor?: string;
         /**
-         * <-dxOverlay.Options.visible->
+         * [descr:dxOverlay.Options.visible]
          */
         visible?: boolean;
         /**
-         * <-dxOverlay.Options.width->
+         * [descr:dxOverlay.Options.width]
          */
         width?: number | string | (() => number | string);
     }
     /**
-     * <-dxOverlay.Options.animation->
+     * [descr:dxOverlay.Options.animation]
      */
     export interface dxOverlayAnimation {
         /**
-         * <-dxOverlay.Options.animation.hide->
+         * [descr:dxOverlay.Options.animation.hide]
          */
         hide?: animationConfig;
         /**
-         * <-dxOverlay.Options.animation.show->
+         * [descr:dxOverlay.Options.animation.show]
          */
         show?: animationConfig;
     }
     /**
-     * <-dxOverlay->
+     * [descr:dxOverlay]
      */
     export class dxOverlay extends Widget {
         constructor(element: Element, options?: dxOverlayOptions)
         constructor(element: JQuery, options?: dxOverlayOptions)
         /**
-         * <-dxOverlay.content()->
+         * [descr:dxOverlay.content()]
          */
         content(): DevExpress.core.dxElement;
         /**
-         * <-dxOverlay.hide()->
+         * [descr:dxOverlay.hide()]
          */
         hide(): Promise<boolean> & JQueryPromise<boolean>;
         /**
-         * <-dxOverlay.repaint()->
+         * [descr:dxOverlay.repaint()]
          */
         repaint(): void;
         /**
-         * <-dxOverlay.show()->
+         * [descr:dxOverlay.show()]
          */
         show(): Promise<boolean> & JQueryPromise<boolean>;
         /**
-         * <-dxOverlay.toggle(showing)->
+         * [descr:dxOverlay.toggle(showing)]
          */
         toggle(showing: boolean): Promise<boolean> & JQueryPromise<boolean>;
     }
     /**
-     * <-dxPivotGrid.Options->
+     * [descr:dxPivotGrid.Options]
      */
     export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
         /**
-         * <-dxPivotGrid.Options.allowExpandAll->
+         * [descr:dxPivotGrid.Options.allowExpandAll]
          */
         allowExpandAll?: boolean;
         /**
-         * <-dxPivotGrid.Options.allowFiltering->
+         * [descr:dxPivotGrid.Options.allowFiltering]
          */
         allowFiltering?: boolean;
         /**
-         * <-dxPivotGrid.Options.allowSorting->
+         * [descr:dxPivotGrid.Options.allowSorting]
          */
         allowSorting?: boolean;
         /**
-         * <-dxPivotGrid.Options.allowSortingBySummary->
+         * [descr:dxPivotGrid.Options.allowSortingBySummary]
          */
         allowSortingBySummary?: boolean;
         /**
-         * <-dxPivotGrid.Options.dataFieldArea->
+         * [descr:dxPivotGrid.Options.dataFieldArea]
          */
         dataFieldArea?: 'column' | 'row';
         /**
-         * <-dxPivotGrid.Options.dataSource->
+         * [descr:dxPivotGrid.Options.dataSource]
          */
         dataSource?: Array<any> | DevExpress.data.PivotGridDataSource | DevExpress.data.PivotGridDataSourceOptions;
         /**
-         * <-dxPivotGrid.Options.export->
+         * [descr:dxPivotGrid.Options.export]
          */
         export?: { enabled?: boolean, fileName?: string, ignoreExcelErrors?: boolean, proxyUrl?: string };
         /**
-         * <-dxPivotGrid.Options.fieldChooser->
+         * [descr:dxPivotGrid.Options.fieldChooser]
          */
         fieldChooser?: { allowSearch?: boolean, applyChangesMode?: 'instantly' | 'onDemand', enabled?: boolean, height?: number, layout?: 0 | 1 | 2, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number };
         /**
-         * <-dxPivotGrid.Options.fieldPanel->
+         * [descr:dxPivotGrid.Options.fieldPanel]
          */
         fieldPanel?: { allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean };
         /**
-         * <-dxPivotGrid.Options.headerFilter->
+         * [descr:dxPivotGrid.Options.headerFilter]
          */
         headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
         /**
-         * <-dxPivotGrid.Options.hideEmptySummaryCells->
+         * [descr:dxPivotGrid.Options.hideEmptySummaryCells]
          */
         hideEmptySummaryCells?: boolean;
         /**
-         * <-dxPivotGrid.Options.loadPanel->
+         * [descr:dxPivotGrid.Options.loadPanel]
          */
         loadPanel?: { enabled?: boolean, height?: number, indicatorSrc?: string, shading?: boolean, shadingColor?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number };
         /**
-         * <-dxPivotGrid.Options.onCellClick->
+         * [descr:dxPivotGrid.Options.onCellClick]
          */
         onCellClick?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, event?: DevExpress.events.event, cancel?: boolean }) => any);
         /**
-         * <-dxPivotGrid.Options.onCellPrepared->
+         * [descr:dxPivotGrid.Options.onCellPrepared]
          */
         onCellPrepared?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
         /**
-         * <-dxPivotGrid.Options.onContextMenuPreparing->
+         * [descr:dxPivotGrid.Options.onContextMenuPreparing]
          */
         onContextMenuPreparing?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, field?: DevExpress.data.PivotGridDataSourceField }) => any);
         /**
-         * <-dxPivotGrid.Options.onExported->
-         * @deprecated <-dxPivotGrid.Options.onExported:depNote->
+         * [descr:dxPivotGrid.Options.onExported]
+         * @deprecated [depNote:dxPivotGrid.Options.onExported]
          */
         onExported?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxPivotGrid.Options.onExporting->
+         * [descr:dxPivotGrid.Options.onExporting]
          */
         onExporting?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
         /**
-         * <-dxPivotGrid.Options.onFileSaving->
-         * @deprecated <-dxPivotGrid.Options.onFileSaving:depNote->
+         * [descr:dxPivotGrid.Options.onFileSaving]
+         * @deprecated [depNote:dxPivotGrid.Options.onFileSaving]
          */
         onFileSaving?: ((e: { component?: dxPivotGrid, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /**
-         * <-dxPivotGrid.Options.rowHeaderLayout->
+         * [descr:dxPivotGrid.Options.rowHeaderLayout]
          */
         rowHeaderLayout?: 'standard' | 'tree';
         /**
-         * <-dxPivotGrid.Options.scrolling->
+         * [descr:dxPivotGrid.Options.scrolling]
          */
         scrolling?: { mode?: 'standard' | 'virtual', useNative?: boolean | 'auto' };
         /**
-         * <-dxPivotGrid.Options.showBorders->
+         * [descr:dxPivotGrid.Options.showBorders]
          */
         showBorders?: boolean;
         /**
-         * <-dxPivotGrid.Options.showColumnGrandTotals->
+         * [descr:dxPivotGrid.Options.showColumnGrandTotals]
          */
         showColumnGrandTotals?: boolean;
         /**
-         * <-dxPivotGrid.Options.showColumnTotals->
+         * [descr:dxPivotGrid.Options.showColumnTotals]
          */
         showColumnTotals?: boolean;
         /**
-         * <-dxPivotGrid.Options.showRowGrandTotals->
+         * [descr:dxPivotGrid.Options.showRowGrandTotals]
          */
         showRowGrandTotals?: boolean;
         /**
-         * <-dxPivotGrid.Options.showRowTotals->
+         * [descr:dxPivotGrid.Options.showRowTotals]
          */
         showRowTotals?: boolean;
         /**
-         * <-dxPivotGrid.Options.showTotalsPrior->
+         * [descr:dxPivotGrid.Options.showTotalsPrior]
          */
         showTotalsPrior?: 'both' | 'columns' | 'none' | 'rows';
         /**
-         * <-dxPivotGrid.Options.stateStoring->
+         * [descr:dxPivotGrid.Options.stateStoring]
          */
         stateStoring?: { customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((state: any) => any), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: 'custom' | 'localStorage' | 'sessionStorage' };
         /**
-         * <-dxPivotGrid.Options.texts->
+         * [descr:dxPivotGrid.Options.texts]
          */
         texts?: { collapseAll?: string, dataNotAvailable?: string, expandAll?: string, exportToExcel?: string, grandTotal?: string, noData?: string, removeAllSorting?: string, showFieldChooser?: string, sortColumnBySummary?: string, sortRowBySummary?: string, total?: string };
         /**
-         * <-dxPivotGrid.Options.wordWrapEnabled->
+         * [descr:dxPivotGrid.Options.wordWrapEnabled]
          */
         wordWrapEnabled?: boolean;
     }
     /**
-     * <-dxPivotGrid->
+     * [descr:dxPivotGrid]
      */
     export class dxPivotGrid extends Widget {
         constructor(element: Element, options?: dxPivotGridOptions)
         constructor(element: JQuery, options?: dxPivotGridOptions)
         /**
-         * <-dxPivotGrid.bindChart(chart, integrationOptions)->
+         * [descr:dxPivotGrid.bindChart(chart, integrationOptions)]
          */
         bindChart(chart: string | JQuery | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
         /**
-         * <-dxPivotGrid.exportToExcel()->
-         * @deprecated <-dxPivotGrid.exportToExcel():depNote->
+         * [descr:dxPivotGrid.exportToExcel()]
+         * @deprecated [depNote:dxPivotGrid.exportToExcel()]
          */
         exportToExcel(): void;
         /**
-         * <-dxPivotGrid.getDataSource()->
+         * [descr:dxPivotGrid.getDataSource()]
          */
         getDataSource(): DevExpress.data.PivotGridDataSource;
         /**
-         * <-dxPivotGrid.getFieldChooserPopup()->
+         * [descr:dxPivotGrid.getFieldChooserPopup()]
          */
         getFieldChooserPopup(): dxPopup;
         /**
-         * <-dxPivotGrid.updateDimensions()->
+         * [descr:dxPivotGrid.updateDimensions()]
          */
         updateDimensions(): void;
     }
     /**
-     * <-dxPivotGridFieldChooser.Options->
+     * [descr:dxPivotGridFieldChooser.Options]
      */
     export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
         /**
-         * <-dxPivotGridFieldChooser.Options.allowSearch->
+         * [descr:dxPivotGridFieldChooser.Options.allowSearch]
          */
         allowSearch?: boolean;
         /**
-         * <-dxPivotGridFieldChooser.Options.applyChangesMode->
+         * [descr:dxPivotGridFieldChooser.Options.applyChangesMode]
          */
         applyChangesMode?: 'instantly' | 'onDemand';
         /**
-         * <-dxPivotGridFieldChooser.Options.dataSource->
+         * [descr:dxPivotGridFieldChooser.Options.dataSource]
          */
         dataSource?: DevExpress.data.PivotGridDataSource;
         /**
-         * <-dxPivotGridFieldChooser.Options.headerFilter->
+         * [descr:dxPivotGridFieldChooser.Options.headerFilter]
          */
         headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
         /**
-         * <-dxPivotGridFieldChooser.Options.height->
+         * [descr:dxPivotGridFieldChooser.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxPivotGridFieldChooser.Options.layout->
+         * [descr:dxPivotGridFieldChooser.Options.layout]
          */
         layout?: 0 | 1 | 2;
         /**
-         * <-dxPivotGridFieldChooser.Options.onContextMenuPreparing->
+         * [descr:dxPivotGridFieldChooser.Options.onContextMenuPreparing]
          */
         onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceField, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxPivotGridFieldChooser.Options.searchTimeout->
+         * [descr:dxPivotGridFieldChooser.Options.searchTimeout]
          */
         searchTimeout?: number;
         /**
-         * <-dxPivotGridFieldChooser.Options.state->
+         * [descr:dxPivotGridFieldChooser.Options.state]
          */
         state?: any;
         /**
-         * <-dxPivotGridFieldChooser.Options.texts->
+         * [descr:dxPivotGridFieldChooser.Options.texts]
          */
         texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string };
     }
     /**
-     * <-dxPivotGridFieldChooser->
+     * [descr:dxPivotGridFieldChooser]
      */
     export class dxPivotGridFieldChooser extends Widget {
         constructor(element: Element, options?: dxPivotGridFieldChooserOptions)
         constructor(element: JQuery, options?: dxPivotGridFieldChooserOptions)
         /**
-         * <-dxPivotGridFieldChooser.applyChanges()->
+         * [descr:dxPivotGridFieldChooser.applyChanges()]
          */
         applyChanges(): void;
         /**
-         * <-dxPivotGridFieldChooser.cancelChanges()->
+         * [descr:dxPivotGridFieldChooser.cancelChanges()]
          */
         cancelChanges(): void;
         /**
-         * <-dxPivotGridFieldChooser.getDataSource()->
+         * [descr:dxPivotGridFieldChooser.getDataSource()]
          */
         getDataSource(): DevExpress.data.PivotGridDataSource;
         /**
-         * <-dxPivotGridFieldChooser.updateDimensions()->
+         * [descr:dxPivotGridFieldChooser.updateDimensions()]
          */
         updateDimensions(): void;
     }
     /**
-     * <-dxPivotGridPivotGridCell->
+     * [descr:dxPivotGridPivotGridCell]
      */
     export interface dxPivotGridPivotGridCell {
         /**
-         * <-dxPivotGridPivotGridCell.columnPath->
+         * [descr:dxPivotGridPivotGridCell.columnPath]
          */
         columnPath?: Array<string | number | Date>;
         /**
-         * <-dxPivotGridPivotGridCell.columnType->
+         * [descr:dxPivotGridPivotGridCell.columnType]
          */
         columnType?: 'D' | 'T' | 'GT';
         /**
-         * <-dxPivotGridPivotGridCell.dataIndex->
+         * [descr:dxPivotGridPivotGridCell.dataIndex]
          */
         dataIndex?: number;
         /**
-         * <-dxPivotGridPivotGridCell.expanded->
+         * [descr:dxPivotGridPivotGridCell.expanded]
          */
         expanded?: boolean;
         /**
-         * <-dxPivotGridPivotGridCell.path->
+         * [descr:dxPivotGridPivotGridCell.path]
          */
         path?: Array<string | number | Date>;
         /**
-         * <-dxPivotGridPivotGridCell.rowPath->
+         * [descr:dxPivotGridPivotGridCell.rowPath]
          */
         rowPath?: Array<string | number | Date>;
         /**
-         * <-dxPivotGridPivotGridCell.rowType->
+         * [descr:dxPivotGridPivotGridCell.rowType]
          */
         rowType?: 'D' | 'T' | 'GT';
         /**
-         * <-dxPivotGridPivotGridCell.text->
+         * [descr:dxPivotGridPivotGridCell.text]
          */
         text?: string;
         /**
-         * <-dxPivotGridPivotGridCell.type->
+         * [descr:dxPivotGridPivotGridCell.type]
          */
         type?: 'D' | 'T' | 'GT';
         /**
-         * <-dxPivotGridPivotGridCell.value->
+         * [descr:dxPivotGridPivotGridCell.value]
          */
         value?: any;
     }
     /**
-     * <-dxPivotGridSummaryCell->
+     * [descr:dxPivotGridSummaryCell]
      */
     export class dxPivotGridSummaryCell {
         /**
-         * <-dxPivotGridSummaryCell.child(direction, fieldValue)->
+         * [descr:dxPivotGridSummaryCell.child(direction, fieldValue)]
          */
         child(direction: string, fieldValue: number | string): dxPivotGridSummaryCell;
         /**
-         * <-dxPivotGridSummaryCell.children(direction)->
+         * [descr:dxPivotGridSummaryCell.children(direction)]
          */
         children(direction: string): Array<dxPivotGridSummaryCell>;
         /**
-         * <-dxPivotGridSummaryCell.field(area)->
+         * [descr:dxPivotGridSummaryCell.field(area)]
          */
         field(area: string): DevExpress.data.PivotGridDataSourceField;
         /**
-         * <-dxPivotGridSummaryCell.grandTotal()->
+         * [descr:dxPivotGridSummaryCell.grandTotal()]
          */
         grandTotal(): dxPivotGridSummaryCell;
         /**
-         * <-dxPivotGridSummaryCell.grandTotal(direction)->
+         * [descr:dxPivotGridSummaryCell.grandTotal(direction)]
          */
         grandTotal(direction: string): dxPivotGridSummaryCell;
         /**
-         * <-dxPivotGridSummaryCell.isPostProcessed(field)->
+         * [descr:dxPivotGridSummaryCell.isPostProcessed(field)]
          */
         isPostProcessed(field: DevExpress.data.PivotGridDataSourceField | string): boolean;
         /**
-         * <-dxPivotGridSummaryCell.next(direction)->
+         * [descr:dxPivotGridSummaryCell.next(direction)]
          */
         next(direction: string): dxPivotGridSummaryCell;
         /**
-         * <-dxPivotGridSummaryCell.next(direction, allowCrossGroup)->
+         * [descr:dxPivotGridSummaryCell.next(direction, allowCrossGroup)]
          */
         next(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
         /**
-         * <-dxPivotGridSummaryCell.parent(direction)->
+         * [descr:dxPivotGridSummaryCell.parent(direction)]
          */
         parent(direction: string): dxPivotGridSummaryCell;
         /**
-         * <-dxPivotGridSummaryCell.prev(direction)->
+         * [descr:dxPivotGridSummaryCell.prev(direction)]
          */
         prev(direction: string): dxPivotGridSummaryCell;
         /**
-         * <-dxPivotGridSummaryCell.prev(direction, allowCrossGroup)->
+         * [descr:dxPivotGridSummaryCell.prev(direction, allowCrossGroup)]
          */
         prev(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
         /**
-         * <-dxPivotGridSummaryCell.slice(field, value)->
+         * [descr:dxPivotGridSummaryCell.slice(field, value)]
          */
         slice(field: DevExpress.data.PivotGridDataSourceField, value: number | string): dxPivotGridSummaryCell;
         /**
-         * <-dxPivotGridSummaryCell.value()->
+         * [descr:dxPivotGridSummaryCell.value()]
          */
         value(): any;
         /**
-         * <-dxPivotGridSummaryCell.value(field)->
+         * [descr:dxPivotGridSummaryCell.value(field)]
          */
         value(field: DevExpress.data.PivotGridDataSourceField | string): any;
         /**
-         * <-dxPivotGridSummaryCell.value(field, postProcessed)->
+         * [descr:dxPivotGridSummaryCell.value(field, postProcessed)]
          */
         value(field: DevExpress.data.PivotGridDataSourceField | string, postProcessed: boolean): any;
         /**
-         * <-dxPivotGridSummaryCell.value(postProcessed)->
+         * [descr:dxPivotGridSummaryCell.value(postProcessed)]
          */
         value(postProcessed: boolean): any;
     }
     /**
-     * <-dxPopover.Options->
+     * [descr:dxPopover.Options]
      */
     export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
         /**
-         * <-dxPopover.Options.animation->
+         * [descr:dxPopover.Options.animation]
          */
         animation?: dxPopoverAnimation;
         /**
-         * <-dxPopover.Options.closeOnOutsideClick->
+         * [descr:dxPopover.Options.closeOnOutsideClick]
          */
         closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
-         * <-dxPopover.Options.height->
+         * [descr:dxPopover.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxPopover.Options.hideEvent->
+         * [descr:dxPopover.Options.hideEvent]
          */
         hideEvent?: { delay?: number, name?: string } | string;
         /**
-         * <-dxPopover.Options.position->
+         * [descr:dxPopover.Options.position]
          */
         position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
         /**
-         * <-dxPopover.Options.shading->
+         * [descr:dxPopover.Options.shading]
          */
         shading?: boolean;
         /**
-         * <-dxPopover.Options.showEvent->
+         * [descr:dxPopover.Options.showEvent]
          */
         showEvent?: { delay?: number, name?: string } | string;
         /**
-         * <-dxPopover.Options.showTitle->
+         * [descr:dxPopover.Options.showTitle]
          */
         showTitle?: boolean;
         /**
-         * <-dxPopover.Options.target->
+         * [descr:dxPopover.Options.target]
          */
         target?: string | Element | JQuery;
         /**
-         * <-dxPopover.Options.width->
+         * [descr:dxPopover.Options.width]
          */
         width?: number | string | (() => number | string);
     }
     /**
-     * <-dxPopover.Options.animation->
+     * [descr:dxPopover.Options.animation]
      */
     export interface dxPopoverAnimation extends dxPopupAnimation {
         /**
-         * <-dxPopover.Options.animation.hide->
+         * [descr:dxPopover.Options.animation.hide]
          */
         hide?: animationConfig;
         /**
-         * <-dxPopover.Options.animation.show->
+         * [descr:dxPopover.Options.animation.show]
          */
         show?: animationConfig;
     }
     /**
-     * <-dxPopover->
+     * [descr:dxPopover]
      */
     export class dxPopover extends dxPopup {
         constructor(element: Element, options?: dxPopoverOptions)
         constructor(element: JQuery, options?: dxPopoverOptions)
         /**
-         * <-dxOverlay.show()->
+         * [descr:dxOverlay.show()]
          */
         show(): Promise<boolean> & JQueryPromise<boolean>;
         /**
-         * <-dxPopover.show(target)->
+         * [descr:dxPopover.show(target)]
          */
         show(target: string | Element | JQuery): Promise<boolean> & JQueryPromise<boolean>;
     }
     /**
-     * <-dxPopup.Options->
+     * [descr:dxPopup.Options]
      */
     export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
         /**
-         * <-dxPopup.Options.animation->
+         * [descr:dxPopup.Options.animation]
          */
         animation?: dxPopupAnimation;
         /**
-         * <-dxPopup.Options.container->
+         * [descr:dxPopup.Options.container]
          */
         container?: string | Element | JQuery;
         /**
-         * <-dxPopup.Options.dragEnabled->
+         * [descr:dxPopup.Options.dragEnabled]
          */
         dragEnabled?: boolean;
         /**
-         * <-dxPopup.Options.focusStateEnabled->
+         * [descr:dxPopup.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxPopup.Options.fullScreen->
+         * [descr:dxPopup.Options.fullScreen]
          */
         fullScreen?: boolean;
         /**
-         * <-dxPopup.Options.height->
+         * [descr:dxPopup.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxPopup.Options.onResize->
+         * [descr:dxPopup.Options.onResize]
          */
         onResize?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxPopup.Options.onResizeEnd->
+         * [descr:dxPopup.Options.onResizeEnd]
          */
         onResizeEnd?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxPopup.Options.onResizeStart->
+         * [descr:dxPopup.Options.onResizeStart]
          */
         onResizeStart?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxPopup.Options.onTitleRendered->
+         * [descr:dxPopup.Options.onTitleRendered]
          */
         onTitleRendered?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, titleElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxPopup.Options.position->
+         * [descr:dxPopup.Options.position]
          */
         position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
         /**
-         * <-dxPopup.Options.resizeEnabled->
+         * [descr:dxPopup.Options.resizeEnabled]
          */
         resizeEnabled?: boolean;
         /**
-         * <-dxPopup.Options.showCloseButton->
+         * [descr:dxPopup.Options.showCloseButton]
          */
         showCloseButton?: boolean;
         /**
-         * <-dxPopup.Options.showTitle->
+         * [descr:dxPopup.Options.showTitle]
          */
         showTitle?: boolean;
         /**
-         * <-dxPopup.Options.title->
+         * [descr:dxPopup.Options.title]
          */
         title?: string;
         /**
-         * <-dxPopup.Options.titleTemplate->
+         * [descr:dxPopup.Options.titleTemplate]
          */
         titleTemplate?: DevExpress.core.template | ((titleElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxPopup.Options.toolbarItems->
+         * [descr:dxPopup.Options.toolbarItems]
          */
         toolbarItems?: Array<dxPopupToolbarItem>;
         /**
-         * <-dxPopup.Options.width->
+         * [descr:dxPopup.Options.width]
          */
         width?: number | string | (() => number | string);
     }
     /**
-     * <-dxPopup.Options.animation->
+     * [descr:dxPopup.Options.animation]
      */
     export interface dxPopupAnimation extends dxOverlayAnimation {
         /**
-         * <-dxPopup.Options.animation.hide->
+         * [descr:dxPopup.Options.animation.hide]
          */
         hide?: animationConfig;
         /**
-         * <-dxPopup.Options.animation.show->
+         * [descr:dxPopup.Options.animation.show]
          */
         show?: animationConfig;
     }
     /**
-     * <-dxPopup.Options.toolbarItems->
+     * [descr:dxPopup.Options.toolbarItems]
      */
     export interface dxPopupToolbarItem {
         /**
-         * <-dxPopup.Options.toolbarItems.disabled->
+         * [descr:dxPopup.Options.toolbarItems.disabled]
          */
         disabled?: boolean;
         /**
-         * <-dxPopup.Options.toolbarItems.html->
+         * [descr:dxPopup.Options.toolbarItems.html]
          */
         html?: string;
         /**
-         * <-dxPopup.Options.toolbarItems.location->
+         * [descr:dxPopup.Options.toolbarItems.location]
          */
         location?: 'after' | 'before' | 'center';
         /**
-         * <-dxPopup.Options.toolbarItems.options->
+         * [descr:dxPopup.Options.toolbarItems.options]
          */
         options?: any;
         /**
-         * <-dxPopup.Options.toolbarItems.template->
+         * [descr:dxPopup.Options.toolbarItems.template]
          */
         template?: DevExpress.core.template;
         /**
-         * <-dxPopup.Options.toolbarItems.text->
+         * [descr:dxPopup.Options.toolbarItems.text]
          */
         text?: string;
         /**
-         * <-dxPopup.Options.toolbarItems.toolbar->
+         * [descr:dxPopup.Options.toolbarItems.toolbar]
          */
         toolbar?: 'bottom' | 'top';
         /**
-         * <-dxPopup.Options.toolbarItems.visible->
+         * [descr:dxPopup.Options.toolbarItems.visible]
          */
         visible?: boolean;
         /**
-         * <-dxPopup.Options.toolbarItems.widget->
+         * [descr:dxPopup.Options.toolbarItems.widget]
          */
         widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
     }
     /**
-     * <-dxPopup->
+     * [descr:dxPopup]
      */
     export class dxPopup extends dxOverlay {
         constructor(element: Element, options?: dxPopupOptions)
         constructor(element: JQuery, options?: dxPopupOptions)
     }
     /**
-     * <-dxProgressBar.Options->
+     * [descr:dxProgressBar.Options]
      */
     export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
         /**
-         * <-dxProgressBar.Options.onComplete->
+         * [descr:dxProgressBar.Options.onComplete]
          */
         onComplete?: ((e: { component?: dxProgressBar, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxProgressBar.Options.showStatus->
+         * [descr:dxProgressBar.Options.showStatus]
          */
         showStatus?: boolean;
         /**
-         * <-dxProgressBar.Options.statusFormat->
+         * [descr:dxProgressBar.Options.statusFormat]
          */
         statusFormat?: string | ((ratio: number, value: number) => string);
         /**
-         * <-dxProgressBar.Options.value->
+         * [descr:dxProgressBar.Options.value]
          */
         value?: number;
     }
     /**
-     * <-dxProgressBar->
+     * [descr:dxProgressBar]
      */
     export class dxProgressBar extends dxTrackBar {
         constructor(element: Element, options?: dxProgressBarOptions)
         constructor(element: JQuery, options?: dxProgressBarOptions)
     }
     /**
-     * <-dxRadioGroup.Options->
+     * [descr:dxRadioGroup.Options]
      */
     export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
         /**
-         * <-dxRadioGroup.Options.activeStateEnabled->
+         * [descr:dxRadioGroup.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxRadioGroup.Options.focusStateEnabled->
+         * [descr:dxRadioGroup.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxRadioGroup.Options.hoverStateEnabled->
+         * [descr:dxRadioGroup.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxRadioGroup.Options.layout->
+         * [descr:dxRadioGroup.Options.layout]
          */
         layout?: 'horizontal' | 'vertical';
         /**
-         * <-dxRadioGroup.Options.name->
+         * [descr:dxRadioGroup.Options.name]
          */
         name?: string;
         /**
-         * <-dxRadioGroup.Options.value->
+         * [descr:dxRadioGroup.Options.value]
          */
         value?: any;
     }
     /**
-     * <-dxRadioGroup->
+     * [descr:dxRadioGroup]
      */
     export class dxRadioGroup extends Editor {
         constructor(element: Element, options?: dxRadioGroupOptions)
         constructor(element: JQuery, options?: dxRadioGroupOptions)
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
     }
     /**
-     * <-dxRangeSlider.Options->
+     * [descr:dxRangeSlider.Options]
      */
     export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
         /**
-         * <-dxRangeSlider.Options.end->
+         * [descr:dxRangeSlider.Options.end]
          */
         end?: number;
         /**
-         * <-dxRangeSlider.Options.endName->
+         * [descr:dxRangeSlider.Options.endName]
          */
         endName?: string;
         /**
-         * <-dxRangeSlider.Options.onValueChanged->
+         * [descr:dxRangeSlider.Options.onValueChanged]
          */
         onValueChanged?: ((e: { component?: dxRangeSlider, element?: DevExpress.core.dxElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
         /**
-         * <-dxRangeSlider.Options.start->
+         * [descr:dxRangeSlider.Options.start]
          */
         start?: number;
         /**
-         * <-dxRangeSlider.Options.startName->
+         * [descr:dxRangeSlider.Options.startName]
          */
         startName?: string;
         /**
-         * <-dxRangeSlider.Options.value->
+         * [descr:dxRangeSlider.Options.value]
          */
         value?: Array<number>;
     }
     /**
-     * <-dxRangeSlider->
+     * [descr:dxRangeSlider]
      */
     export class dxRangeSlider extends dxSliderBase {
         constructor(element: Element, options?: dxRangeSliderOptions)
         constructor(element: JQuery, options?: dxRangeSliderOptions)
     }
     /**
-     * <-dxRecurrenceEditor.Options->
+     * [descr:dxRecurrenceEditor.Options]
      */
     export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
         /**
-         * <-dxRecurrenceEditor.Options.value->
+         * [descr:dxRecurrenceEditor.Options.value]
          */
         value?: string;
     }
     /**
-     * <-dxRecurrenceEditor->
+     * [descr:dxRecurrenceEditor]
      */
     export class dxRecurrenceEditor extends Editor {
         constructor(element: Element, options?: dxRecurrenceEditorOptions)
         constructor(element: JQuery, options?: dxRecurrenceEditorOptions)
     }
     /**
-     * <-dxResizable.Options->
+     * [descr:dxResizable.Options]
      */
     export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
         /**
-         * <-dxResizable.Options.handles->
+         * [descr:dxResizable.Options.handles]
          */
         handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
         /**
-         * <-dxResizable.Options.height->
+         * [descr:dxResizable.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxResizable.Options.maxHeight->
+         * [descr:dxResizable.Options.maxHeight]
          */
         maxHeight?: number;
         /**
-         * <-dxResizable.Options.maxWidth->
+         * [descr:dxResizable.Options.maxWidth]
          */
         maxWidth?: number;
         /**
-         * <-dxResizable.Options.minHeight->
+         * [descr:dxResizable.Options.minHeight]
          */
         minHeight?: number;
         /**
-         * <-dxResizable.Options.minWidth->
+         * [descr:dxResizable.Options.minWidth]
          */
         minWidth?: number;
         /**
-         * <-dxResizable.Options.onResize->
+         * [descr:dxResizable.Options.onResize]
          */
         onResize?: ((e: { component?: dxResizable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, width?: number, height?: number }) => any);
         /**
-         * <-dxResizable.Options.onResizeEnd->
+         * [descr:dxResizable.Options.onResizeEnd]
          */
         onResizeEnd?: ((e: { component?: dxResizable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, width?: number, height?: number }) => any);
         /**
-         * <-dxResizable.Options.onResizeStart->
+         * [descr:dxResizable.Options.onResizeStart]
          */
         onResizeStart?: ((e: { component?: dxResizable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, width?: number, height?: number }) => any);
         /**
-         * <-dxResizable.Options.width->
+         * [descr:dxResizable.Options.width]
          */
         width?: number | string | (() => number | string);
     }
     /**
-     * <-dxResizable->
+     * [descr:dxResizable]
      */
     export class dxResizable extends DOMComponent {
         constructor(element: Element, options?: dxResizableOptions)
         constructor(element: JQuery, options?: dxResizableOptions)
     }
     /**
-     * <-dxResponsiveBox.Options->
+     * [descr:dxResponsiveBox.Options]
      */
     export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
         /**
-         * <-dxResponsiveBox.Options.cols->
+         * [descr:dxResponsiveBox.Options.cols]
          */
         cols?: Array<{ baseSize?: number | 'auto', ratio?: number, screen?: string, shrink?: number }>;
         /**
-         * <-dxResponsiveBox.Options.dataSource->
+         * [descr:dxResponsiveBox.Options.dataSource]
          */
         dataSource?: string | Array<string | dxResponsiveBoxItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxResponsiveBox.Options.height->
+         * [descr:dxResponsiveBox.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxResponsiveBox.Options.items->
+         * [descr:dxResponsiveBox.Options.items]
          */
         items?: Array<string | dxResponsiveBoxItem | any>;
         /**
-         * <-dxResponsiveBox.Options.rows->
+         * [descr:dxResponsiveBox.Options.rows]
          */
         rows?: Array<{ baseSize?: number | 'auto', ratio?: number, screen?: string, shrink?: number }>;
         /**
-         * <-dxResponsiveBox.Options.screenByWidth->
+         * [descr:dxResponsiveBox.Options.screenByWidth]
          */
         screenByWidth?: Function;
         /**
-         * <-dxResponsiveBox.Options.singleColumnScreen->
+         * [descr:dxResponsiveBox.Options.singleColumnScreen]
          */
         singleColumnScreen?: string;
         /**
-         * <-dxResponsiveBox.Options.width->
+         * [descr:dxResponsiveBox.Options.width]
          */
         width?: number | string | (() => number | string);
     }
     /**
-     * <-dxResponsiveBox->
+     * [descr:dxResponsiveBox]
      */
     export class dxResponsiveBox extends CollectionWidget {
         constructor(element: Element, options?: dxResponsiveBoxOptions)
         constructor(element: JQuery, options?: dxResponsiveBoxOptions)
     }
     /**
-     * <-dxResponsiveBoxItem->
+     * [descr:dxResponsiveBoxItem]
      */
     export interface dxResponsiveBoxItem extends CollectionWidgetItem {
         /**
-         * <-dxResponsiveBoxItem.location->
+         * [descr:dxResponsiveBoxItem.location]
          */
         location?: { col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string } | Array<{ col?: number, colspan?: number, row?: number, rowspan?: number, screen?: string }>;
     }
     /**
-     * <-dxScheduler.Options->
+     * [descr:dxScheduler.Options]
      */
     export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
         /**
-         * <-dxScheduler.Options.adaptivityEnabled->
+         * [descr:dxScheduler.Options.adaptivityEnabled]
          */
         adaptivityEnabled?: boolean;
         /**
-         * <-dxScheduler.Options.allDayExpr->
+         * [descr:dxScheduler.Options.allDayExpr]
          */
         allDayExpr?: string;
         /**
-         * <-dxScheduler.Options.appointmentCollectorTemplate->
+         * [descr:dxScheduler.Options.appointmentCollectorTemplate]
          */
         appointmentCollectorTemplate?: DevExpress.core.template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxScheduler.Options.appointmentDragging->
+         * [descr:dxScheduler.Options.appointmentDragging]
          */
         appointmentDragging?: { autoScroll?: boolean, data?: any, group?: string, onAdd?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragEnd?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragMove?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any), onDragStart?: ((e: { event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromData?: any }) => any), onRemove?: ((e: { event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any }) => any), scrollSensitivity?: number, scrollSpeed?: number };
         /**
-         * <-dxScheduler.Options.appointmentTemplate->
+         * [descr:dxScheduler.Options.appointmentTemplate]
          */
         appointmentTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxScheduler.Options.appointmentTooltipTemplate->
+         * [descr:dxScheduler.Options.appointmentTooltipTemplate]
          */
         appointmentTooltipTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxScheduler.Options.cellDuration->
+         * [descr:dxScheduler.Options.cellDuration]
          */
         cellDuration?: number;
         /**
-         * <-dxScheduler.Options.crossScrollingEnabled->
+         * [descr:dxScheduler.Options.crossScrollingEnabled]
          */
         crossScrollingEnabled?: boolean;
         /**
-         * <-dxScheduler.Options.currentDate->
+         * [descr:dxScheduler.Options.currentDate]
          */
         currentDate?: Date | number | string;
         /**
-         * <-dxScheduler.Options.currentView->
+         * [descr:dxScheduler.Options.currentView]
          */
         currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
         /**
-         * <-dxScheduler.Options.customizeDateNavigatorText->
+         * [descr:dxScheduler.Options.customizeDateNavigatorText]
          */
         customizeDateNavigatorText?: ((info: { startDate?: Date, endDate?: Date, text?: string }) => string);
         /**
-         * <-dxScheduler.Options.dataCellTemplate->
+         * [descr:dxScheduler.Options.dataCellTemplate]
          */
         dataCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxScheduler.Options.dataSource->
+         * [descr:dxScheduler.Options.dataSource]
          */
         dataSource?: string | Array<dxSchedulerAppointment> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxScheduler.Options.dateCellTemplate->
+         * [descr:dxScheduler.Options.dateCellTemplate]
          */
         dateCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxScheduler.Options.dateSerializationFormat->
+         * [descr:dxScheduler.Options.dateSerializationFormat]
          */
         dateSerializationFormat?: string;
         /**
-         * <-dxScheduler.Options.descriptionExpr->
+         * [descr:dxScheduler.Options.descriptionExpr]
          */
         descriptionExpr?: string;
         /**
-         * <-dxScheduler.Options.dropDownAppointmentTemplate->
-         * @deprecated <-dxScheduler.Options.dropDownAppointmentTemplate:depNote->
+         * [descr:dxScheduler.Options.dropDownAppointmentTemplate]
+         * @deprecated [depNote:dxScheduler.Options.dropDownAppointmentTemplate]
          */
         dropDownAppointmentTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxScheduler.Options.editing->
+         * [descr:dxScheduler.Options.editing]
          */
         editing?: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowEditingTimeZones?: boolean, allowResizing?: boolean, allowTimeZoneEditing?: boolean, allowUpdating?: boolean };
         /**
-         * <-dxScheduler.Options.endDateExpr->
+         * [descr:dxScheduler.Options.endDateExpr]
          */
         endDateExpr?: string;
         /**
-         * <-dxScheduler.Options.endDateTimeZoneExpr->
+         * [descr:dxScheduler.Options.endDateTimeZoneExpr]
          */
         endDateTimeZoneExpr?: string;
         /**
-         * <-dxScheduler.Options.endDayHour->
+         * [descr:dxScheduler.Options.endDayHour]
          */
         endDayHour?: number;
         /**
-         * <-dxScheduler.Options.firstDayOfWeek->
+         * [descr:dxScheduler.Options.firstDayOfWeek]
          */
         firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
         /**
-         * <-dxScheduler.Options.focusStateEnabled->
+         * [descr:dxScheduler.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxScheduler.Options.groupByDate->
+         * [descr:dxScheduler.Options.groupByDate]
          */
         groupByDate?: boolean;
         /**
-         * <-dxScheduler.Options.groups->
+         * [descr:dxScheduler.Options.groups]
          */
         groups?: Array<string>;
         /**
-         * <-dxScheduler.Options.indicatorUpdateInterval->
+         * [descr:dxScheduler.Options.indicatorUpdateInterval]
          */
         indicatorUpdateInterval?: number;
         /**
-         * <-dxScheduler.Options.max->
+         * [descr:dxScheduler.Options.max]
          */
         max?: Date | number | string;
         /**
-         * <-dxScheduler.Options.maxAppointmentsPerCell->
+         * [descr:dxScheduler.Options.maxAppointmentsPerCell]
          */
         maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
         /**
-         * <-dxScheduler.Options.min->
+         * [descr:dxScheduler.Options.min]
          */
         min?: Date | number | string;
         /**
-         * <-dxScheduler.Options.noDataText->
+         * [descr:dxScheduler.Options.noDataText]
          */
         noDataText?: string;
         /**
-         * <-dxScheduler.Options.onAppointmentAdded->
+         * [descr:dxScheduler.Options.onAppointmentAdded]
          */
         onAppointmentAdded?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /**
-         * <-dxScheduler.Options.onAppointmentAdding->
+         * [descr:dxScheduler.Options.onAppointmentAdding]
          */
         onAppointmentAdding?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
         /**
-         * <-dxScheduler.Options.onAppointmentClick->
+         * [descr:dxScheduler.Options.onAppointmentClick]
          */
         onAppointmentClick?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement, event?: DevExpress.events.event, cancel?: boolean }) => any) | string;
         /**
-         * <-dxScheduler.Options.onAppointmentContextMenu->
+         * [descr:dxScheduler.Options.onAppointmentContextMenu]
          */
         onAppointmentContextMenu?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any) | string;
         /**
-         * <-dxScheduler.Options.onAppointmentDblClick->
+         * [descr:dxScheduler.Options.onAppointmentDblClick]
          */
         onAppointmentDblClick?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any, appointmentElement?: DevExpress.core.dxElement, event?: DevExpress.events.event, cancel?: boolean }) => any) | string;
         /**
-         * <-dxScheduler.Options.onAppointmentDeleted->
+         * [descr:dxScheduler.Options.onAppointmentDeleted]
          */
         onAppointmentDeleted?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /**
-         * <-dxScheduler.Options.onAppointmentDeleting->
+         * [descr:dxScheduler.Options.onAppointmentDeleting]
          */
         onAppointmentDeleting?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
         /**
-         * <-dxScheduler.Options.onAppointmentFormOpening->
+         * [descr:dxScheduler.Options.onAppointmentFormOpening]
          */
         onAppointmentFormOpening?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, form?: dxForm, popup?: dxPopup, cancel?: boolean }) => any);
         /**
-         * <-dxScheduler.Options.onAppointmentRendered->
+         * [descr:dxScheduler.Options.onAppointmentRendered]
          */
         onAppointmentRendered?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, targetedAppointmentData?: any | undefined, appointmentElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxScheduler.Options.onAppointmentUpdated->
+         * [descr:dxScheduler.Options.onAppointmentUpdated]
          */
         onAppointmentUpdated?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, appointmentData?: any, error?: Error }) => any);
         /**
-         * <-dxScheduler.Options.onAppointmentUpdating->
+         * [descr:dxScheduler.Options.onAppointmentUpdating]
          */
         onAppointmentUpdating?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
         /**
-         * <-dxScheduler.Options.onCellClick->
+         * [descr:dxScheduler.Options.onCellClick]
          */
         onCellClick?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, cellData?: any, cellElement?: DevExpress.core.dxElement, event?: DevExpress.events.event, cancel?: boolean }) => any) | string;
         /**
-         * <-dxScheduler.Options.onCellContextMenu->
+         * [descr:dxScheduler.Options.onCellContextMenu]
          */
         onCellContextMenu?: ((e: { component?: dxScheduler, element?: DevExpress.core.dxElement, model?: any, cellData?: any, cellElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any) | string;
         /**
-         * <-dxScheduler.Options.recurrenceEditMode->
+         * [descr:dxScheduler.Options.recurrenceEditMode]
          */
         recurrenceEditMode?: 'dialog' | 'occurrence' | 'series';
         /**
-         * <-dxScheduler.Options.recurrenceExceptionExpr->
+         * [descr:dxScheduler.Options.recurrenceExceptionExpr]
          */
         recurrenceExceptionExpr?: string;
         /**
-         * <-dxScheduler.Options.recurrenceRuleExpr->
+         * [descr:dxScheduler.Options.recurrenceRuleExpr]
          */
         recurrenceRuleExpr?: string;
         /**
-         * <-dxScheduler.Options.remoteFiltering->
+         * [descr:dxScheduler.Options.remoteFiltering]
          */
         remoteFiltering?: boolean;
         /**
-         * <-dxScheduler.Options.resourceCellTemplate->
+         * [descr:dxScheduler.Options.resourceCellTemplate]
          */
         resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxScheduler.Options.resources->
+         * [descr:dxScheduler.Options.resources]
          */
         resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, displayExpr?: string | ((resource: any) => string), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
         /**
-         * <-dxScheduler.Options.scrolling->
+         * [descr:dxScheduler.Options.scrolling]
          */
         scrolling?: dxSchedulerScrolling;
         /**
-         * <-dxScheduler.Options.selectedCellData->
+         * [descr:dxScheduler.Options.selectedCellData]
          */
         selectedCellData?: Array<any>;
         /**
-         * <-dxScheduler.Options.shadeUntilCurrentTime->
+         * [descr:dxScheduler.Options.shadeUntilCurrentTime]
          */
         shadeUntilCurrentTime?: boolean;
         /**
-         * <-dxScheduler.Options.showAllDayPanel->
+         * [descr:dxScheduler.Options.showAllDayPanel]
          */
         showAllDayPanel?: boolean;
         /**
-         * <-dxScheduler.Options.showCurrentTimeIndicator->
+         * [descr:dxScheduler.Options.showCurrentTimeIndicator]
          */
         showCurrentTimeIndicator?: boolean;
         /**
-         * <-dxScheduler.Options.startDateExpr->
+         * [descr:dxScheduler.Options.startDateExpr]
          */
         startDateExpr?: string;
         /**
-         * <-dxScheduler.Options.startDateTimeZoneExpr->
+         * [descr:dxScheduler.Options.startDateTimeZoneExpr]
          */
         startDateTimeZoneExpr?: string;
         /**
-         * <-dxScheduler.Options.startDayHour->
+         * [descr:dxScheduler.Options.startDayHour]
          */
         startDayHour?: number;
         /**
-         * <-dxScheduler.Options.textExpr->
+         * [descr:dxScheduler.Options.textExpr]
          */
         textExpr?: string;
         /**
-         * <-dxScheduler.Options.timeCellTemplate->
+         * [descr:dxScheduler.Options.timeCellTemplate]
          */
         timeCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxScheduler.Options.timeZone->
+         * [descr:dxScheduler.Options.timeZone]
          */
         timeZone?: string;
         /**
-         * <-dxScheduler.Options.useDropDownViewSwitcher->
+         * [descr:dxScheduler.Options.useDropDownViewSwitcher]
          */
         useDropDownViewSwitcher?: boolean;
         /**
-         * <-dxScheduler.Options.views->
+         * [descr:dxScheduler.Options.views]
          */
         views?: Array<'day' | 'week' | 'workWeek' | 'month' | 'timelineDay' | 'timelineWeek' | 'timelineWorkWeek' | 'timelineMonth' | 'agenda' | { agendaDuration?: number, appointmentCollectorTemplate?: DevExpress.core.template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), appointmentTooltipTemplate?: DevExpress.core.template | ((model: { appointmentData?: any, targetedAppointmentData?: any }, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), cellDuration?: number, dataCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dateCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), dropDownAppointmentTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, contentElement: DevExpress.core.dxElement) => string | Element | JQuery), endDayHour?: number, firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6, groupByDate?: boolean, groupOrientation?: 'horizontal' | 'vertical', groups?: Array<string>, intervalCount?: number, maxAppointmentsPerCell?: number | 'auto' | 'unlimited', name?: string, resourceCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), scrolling?: dxSchedulerScrolling, startDate?: Date | number | string, startDayHour?: number, timeCellTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery), type?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' }>;
     }
     /**
-     * <-dxScheduler->
+     * [descr:dxScheduler]
      */
     export class dxScheduler extends Widget {
         constructor(element: Element, options?: dxSchedulerOptions)
         constructor(element: JQuery, options?: dxSchedulerOptions)
         /**
-         * <-dxScheduler.addAppointment(appointment)->
+         * [descr:dxScheduler.addAppointment(appointment)]
          */
         addAppointment(appointment: any): void;
         /**
-         * <-dxScheduler.deleteAppointment(appointment)->
+         * [descr:dxScheduler.deleteAppointment(appointment)]
          */
         deleteAppointment(appointment: any): void;
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
         /**
-         * <-dxScheduler.getEndViewDate()->
+         * [descr:dxScheduler.getEndViewDate()]
          */
         getEndViewDate(): Date;
         /**
-         * <-dxScheduler.getStartViewDate()->
+         * [descr:dxScheduler.getStartViewDate()]
          */
         getStartViewDate(): Date;
         /**
-         * <-dxScheduler.hideAppointmentPopup(saveChanges)->
+         * [descr:dxScheduler.hideAppointmentPopup(saveChanges)]
          */
         hideAppointmentPopup(saveChanges?: boolean): void;
         /**
-         * <-dxScheduler.hideAppointmentTooltip()->
+         * [descr:dxScheduler.hideAppointmentTooltip()]
          */
         hideAppointmentTooltip(): void;
         /**
-         * <-dxScheduler.scrollToTime(hours, minutes, date)->
+         * [descr:dxScheduler.scrollToTime(hours, minutes, date)]
          */
         scrollToTime(hours: number, minutes: number, date?: Date): void;
         /**
-         * <-dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)->
+         * [descr:dxScheduler.showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)]
          */
         showAppointmentPopup(appointmentData?: any, createNewAppointment?: boolean, currentAppointmentData?: any): void;
         /**
-         * <-dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData)->
+         * [descr:dxScheduler.showAppointmentTooltip(appointmentData, target, currentAppointmentData)]
          */
         showAppointmentTooltip(appointmentData: any, target: string | Element | JQuery, currentAppointmentData?: any): void;
         /**
-         * <-dxScheduler.updateAppointment(target, appointment)->
+         * [descr:dxScheduler.updateAppointment(target, appointment)]
          */
         updateAppointment(target: any, appointment: any): void;
     }
     /**
-     * <-dxSchedulerAppointment->
+     * [descr:dxSchedulerAppointment]
      */
     export interface dxSchedulerAppointment extends CollectionWidgetItem {
         /**
-         * <-dxSchedulerAppointment.allDay->
+         * [descr:dxSchedulerAppointment.allDay]
          */
         allDay?: boolean;
         /**
-         * <-dxSchedulerAppointment.description->
+         * [descr:dxSchedulerAppointment.description]
          */
         description?: string;
         /**
-         * <-dxSchedulerAppointment.disabled->
+         * [descr:dxSchedulerAppointment.disabled]
          */
         disabled?: boolean;
         /**
-         * <-dxSchedulerAppointment.endDate->
+         * [descr:dxSchedulerAppointment.endDate]
          */
         endDate?: Date;
         /**
-         * <-dxSchedulerAppointment.endDateTimeZone->
+         * [descr:dxSchedulerAppointment.endDateTimeZone]
          */
         endDateTimeZone?: string;
         /**
-         * <-dxSchedulerAppointment.html->
+         * [descr:dxSchedulerAppointment.html]
          */
         html?: string;
         /**
-         * <-dxSchedulerAppointment.recurrenceException->
+         * [descr:dxSchedulerAppointment.recurrenceException]
          */
         recurrenceException?: string;
         /**
-         * <-dxSchedulerAppointment.recurrenceRule->
+         * [descr:dxSchedulerAppointment.recurrenceRule]
          */
         recurrenceRule?: string;
         /**
-         * <-dxSchedulerAppointment.startDate->
+         * [descr:dxSchedulerAppointment.startDate]
          */
         startDate?: Date;
         /**
-         * <-dxSchedulerAppointment.startDateTimeZone->
+         * [descr:dxSchedulerAppointment.startDateTimeZone]
          */
         startDateTimeZone?: string;
         /**
-         * <-dxSchedulerAppointment.template->
+         * [descr:dxSchedulerAppointment.template]
          */
         template?: DevExpress.core.template;
         /**
-         * <-dxSchedulerAppointment.text->
+         * [descr:dxSchedulerAppointment.text]
          */
         text?: string;
         /**
-         * <-dxSchedulerAppointment.visible->
+         * [descr:dxSchedulerAppointment.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxSchedulerScrolling->
+     * [descr:dxSchedulerScrolling]
      */
     export interface dxSchedulerScrolling {
         /**
-         * <-dxSchedulerScrolling.mode->
+         * [descr:dxSchedulerScrolling.mode]
          */
         mode?: 'standard' | 'virtual';
     }
     /**
-     * <-dxScrollView.Options->
+     * [descr:dxScrollView.Options]
      */
     export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
         /**
-         * <-dxScrollView.Options.onPullDown->
+         * [descr:dxScrollView.Options.onPullDown]
          */
         onPullDown?: ((e: { component?: dxScrollView, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxScrollView.Options.onReachBottom->
+         * [descr:dxScrollView.Options.onReachBottom]
          */
         onReachBottom?: ((e: { component?: dxScrollView, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxScrollView.Options.pulledDownText->
+         * [descr:dxScrollView.Options.pulledDownText]
          */
         pulledDownText?: string;
         /**
-         * <-dxScrollView.Options.pullingDownText->
+         * [descr:dxScrollView.Options.pullingDownText]
          */
         pullingDownText?: string;
         /**
-         * <-dxScrollView.Options.reachBottomText->
+         * [descr:dxScrollView.Options.reachBottomText]
          */
         reachBottomText?: string;
         /**
-         * <-dxScrollView.Options.refreshingText->
+         * [descr:dxScrollView.Options.refreshingText]
          */
         refreshingText?: string;
     }
     /**
-     * <-dxScrollView->
+     * [descr:dxScrollView]
      */
     export class dxScrollView extends dxScrollable {
         constructor(element: Element, options?: dxScrollViewOptions)
         constructor(element: JQuery, options?: dxScrollViewOptions)
         /**
-         * <-dxScrollView.refresh()->
+         * [descr:dxScrollView.refresh()]
          */
         refresh(): void;
         /**
-         * <-dxScrollView.release(preventScrollBottom)->
+         * [descr:dxScrollView.release(preventScrollBottom)]
          */
         release(preventScrollBottom: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxScrollable.Options->
+     * [descr:dxScrollable.Options]
      */
     export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptions<T> {
         /**
-         * <-dxScrollable.Options.bounceEnabled->
+         * [descr:dxScrollable.Options.bounceEnabled]
          */
         bounceEnabled?: boolean;
         /**
-         * <-dxScrollable.Options.direction->
+         * [descr:dxScrollable.Options.direction]
          */
         direction?: 'both' | 'horizontal' | 'vertical';
         /**
-         * <-dxScrollable.Options.disabled->
+         * [descr:dxScrollable.Options.disabled]
          */
         disabled?: boolean;
         /**
-         * <-dxScrollable.Options.onScroll->
+         * [descr:dxScrollable.Options.onScroll]
          */
         onScroll?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
         /**
-         * <-dxScrollable.Options.onUpdated->
+         * [descr:dxScrollable.Options.onUpdated]
          */
         onUpdated?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
         /**
-         * <-dxScrollable.Options.scrollByContent->
+         * [descr:dxScrollable.Options.scrollByContent]
          */
         scrollByContent?: boolean;
         /**
-         * <-dxScrollable.Options.scrollByThumb->
+         * [descr:dxScrollable.Options.scrollByThumb]
          */
         scrollByThumb?: boolean;
         /**
-         * <-dxScrollable.Options.showScrollbar->
+         * [descr:dxScrollable.Options.showScrollbar]
          */
         showScrollbar?: 'onScroll' | 'onHover' | 'always' | 'never';
         /**
-         * <-dxScrollable.Options.useNative->
+         * [descr:dxScrollable.Options.useNative]
          */
         useNative?: boolean;
     }
     /**
-     * <-dxScrollable->
+     * [descr:dxScrollable]
      */
     export class dxScrollable extends DOMComponent {
         constructor(element: Element, options?: dxScrollableOptions)
         constructor(element: JQuery, options?: dxScrollableOptions)
         /**
-         * <-dxScrollable.clientHeight()->
+         * [descr:dxScrollable.clientHeight()]
          */
         clientHeight(): number;
         /**
-         * <-dxScrollable.clientWidth()->
+         * [descr:dxScrollable.clientWidth()]
          */
         clientWidth(): number;
         /**
-         * <-dxScrollable.content()->
+         * [descr:dxScrollable.content()]
          */
         content(): DevExpress.core.dxElement;
         /**
-         * <-dxScrollable.scrollBy(distance)->
+         * [descr:dxScrollable.scrollBy(distance)]
          */
         scrollBy(distance: number): void;
         /**
-         * <-dxScrollable.scrollBy(distanceObject)->
+         * [descr:dxScrollable.scrollBy(distanceObject)]
          */
         scrollBy(distanceObject: any): void;
         /**
-         * <-dxScrollable.scrollHeight()->
+         * [descr:dxScrollable.scrollHeight()]
          */
         scrollHeight(): number;
         /**
-         * <-dxScrollable.scrollLeft()->
+         * [descr:dxScrollable.scrollLeft()]
          */
         scrollLeft(): number;
         /**
-         * <-dxScrollable.scrollOffset()->
+         * [descr:dxScrollable.scrollOffset()]
          */
         scrollOffset(): any;
         /**
-         * <-dxScrollable.scrollTo(targetLocation)->
+         * [descr:dxScrollable.scrollTo(targetLocation)]
          */
         scrollTo(targetLocation: number): void;
         /**
-         * <-dxScrollable.scrollTo(targetLocationObject)->
+         * [descr:dxScrollable.scrollTo(targetLocationObject)]
          */
         scrollTo(targetLocation: any): void;
         /**
-         * <-dxScrollable.scrollToElement(targetLocation)->
+         * [descr:dxScrollable.scrollToElement(targetLocation)]
          */
         scrollToElement(element: Element | JQuery): void;
         /**
-         * <-dxScrollable.scrollTop()->
+         * [descr:dxScrollable.scrollTop()]
          */
         scrollTop(): number;
         /**
-         * <-dxScrollable.scrollWidth()->
+         * [descr:dxScrollable.scrollWidth()]
          */
         scrollWidth(): number;
         /**
-         * <-dxScrollable.update()->
+         * [descr:dxScrollable.update()]
          */
         update(): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxSelectBox.Options->
+     * [descr:dxSelectBox.Options]
      */
     export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptions<T> {
         /**
-         * <-dxSelectBox.Options.acceptCustomValue->
+         * [descr:dxSelectBox.Options.acceptCustomValue]
          */
         acceptCustomValue?: boolean;
         /**
-         * <-dxSelectBox.Options.fieldTemplate->
+         * [descr:dxSelectBox.Options.fieldTemplate]
          */
         fieldTemplate?: DevExpress.core.template | ((selectedItem: any, fieldElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxSelectBox.Options.onCustomItemCreating->
+         * [descr:dxSelectBox.Options.onCustomItemCreating]
          */
         onCustomItemCreating?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, text?: string, customItem?: string | any | Promise<any> | JQueryPromise<any> }) => any);
         /**
-         * <-dxSelectBox.Options.openOnFieldClick->
+         * [descr:dxSelectBox.Options.openOnFieldClick]
          */
         openOnFieldClick?: boolean;
         /**
-         * <-dxSelectBox.Options.placeholder->
+         * [descr:dxSelectBox.Options.placeholder]
          */
         placeholder?: string;
         /**
-         * <-dxSelectBox.Options.showDropDownButton->
+         * [descr:dxSelectBox.Options.showDropDownButton]
          */
         showDropDownButton?: boolean;
         /**
-         * <-dxSelectBox.Options.showSelectionControls->
+         * [descr:dxSelectBox.Options.showSelectionControls]
          */
         showSelectionControls?: boolean;
         /**
-         * <-dxSelectBox.Options.valueChangeEvent->
+         * [descr:dxSelectBox.Options.valueChangeEvent]
          */
         valueChangeEvent?: string;
     }
     /**
-     * <-dxSelectBox->
+     * [descr:dxSelectBox]
      */
     export class dxSelectBox extends dxDropDownList {
         constructor(element: Element, options?: dxSelectBoxOptions)
         constructor(element: JQuery, options?: dxSelectBoxOptions)
     }
     /**
-     * <-dxSlideOut.Options->
+     * [descr:dxSlideOut.Options]
      */
     export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
         /**
-         * <-dxSlideOut.Options.activeStateEnabled->
+         * [descr:dxSlideOut.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxSlideOut.Options.contentTemplate->
+         * [descr:dxSlideOut.Options.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((container: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxSlideOut.Options.dataSource->
+         * [descr:dxSlideOut.Options.dataSource]
          */
         dataSource?: string | Array<string | dxSlideOutItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxSlideOut.Options.items->
+         * [descr:dxSlideOut.Options.items]
          */
         items?: Array<string | dxSlideOutItem | any>;
         /**
-         * <-dxSlideOut.Options.menuGroupTemplate->
+         * [descr:dxSlideOut.Options.menuGroupTemplate]
          */
         menuGroupTemplate?: DevExpress.core.template | ((groupData: any, groupIndex: number, groupElement: any) => string | Element | JQuery);
         /**
-         * <-dxSlideOut.Options.menuGrouped->
+         * [descr:dxSlideOut.Options.menuGrouped]
          */
         menuGrouped?: boolean;
         /**
-         * <-dxSlideOut.Options.menuItemTemplate->
+         * [descr:dxSlideOut.Options.menuItemTemplate]
          */
         menuItemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxSlideOut.Options.menuPosition->
+         * [descr:dxSlideOut.Options.menuPosition]
          */
         menuPosition?: 'inverted' | 'normal';
         /**
-         * <-dxSlideOut.Options.menuVisible->
+         * [descr:dxSlideOut.Options.menuVisible]
          */
         menuVisible?: boolean;
         /**
-         * <-dxSlideOut.Options.onMenuGroupRendered->
+         * [descr:dxSlideOut.Options.onMenuGroupRendered]
          */
         onMenuGroupRendered?: ((e: { component?: dxSlideOut, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxSlideOut.Options.onMenuItemRendered->
+         * [descr:dxSlideOut.Options.onMenuItemRendered]
          */
         onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxSlideOut.Options.selectedIndex->
+         * [descr:dxSlideOut.Options.selectedIndex]
          */
         selectedIndex?: number;
         /**
-         * <-dxSlideOut.Options.swipeEnabled->
+         * [descr:dxSlideOut.Options.swipeEnabled]
          */
         swipeEnabled?: boolean;
     }
     /**
-     * <-dxSlideOut->
+     * [descr:dxSlideOut]
      */
     export class dxSlideOut extends CollectionWidget {
         constructor(element: Element, options?: dxSlideOutOptions)
         constructor(element: JQuery, options?: dxSlideOutOptions)
         /**
-         * <-dxSlideOut.hideMenu()->
+         * [descr:dxSlideOut.hideMenu()]
          */
         hideMenu(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxSlideOut.showMenu()->
+         * [descr:dxSlideOut.showMenu()]
          */
         showMenu(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxSlideOut.toggleMenuVisibility(showing)->
+         * [descr:dxSlideOut.toggleMenuVisibility(showing)]
          */
         toggleMenuVisibility(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxSlideOutItem->
+     * [descr:dxSlideOutItem]
      */
     export interface dxSlideOutItem extends CollectionWidgetItem {
         /**
-         * <-dxSlideOutItem.menuTemplate->
+         * [descr:dxSlideOutItem.menuTemplate]
          */
         menuTemplate?: DevExpress.core.template | (() => string | Element | JQuery);
     }
     /**
-     * <-dxSlideOutView.Options->
+     * [descr:dxSlideOutView.Options]
      */
     export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
         /**
-         * <-dxSlideOutView.Options.contentTemplate->
+         * [descr:dxSlideOutView.Options.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((contentElement: DevExpress.core.dxElement) => any);
         /**
-         * <-dxSlideOutView.Options.menuPosition->
+         * [descr:dxSlideOutView.Options.menuPosition]
          */
         menuPosition?: 'inverted' | 'normal';
         /**
-         * <-dxSlideOutView.Options.menuTemplate->
+         * [descr:dxSlideOutView.Options.menuTemplate]
          */
         menuTemplate?: DevExpress.core.template | ((menuElement: DevExpress.core.dxElement) => any);
         /**
-         * <-dxSlideOutView.Options.menuVisible->
+         * [descr:dxSlideOutView.Options.menuVisible]
          */
         menuVisible?: boolean;
         /**
-         * <-dxSlideOutView.Options.swipeEnabled->
+         * [descr:dxSlideOutView.Options.swipeEnabled]
          */
         swipeEnabled?: boolean;
     }
     /**
-     * <-dxSlideOutView->
+     * [descr:dxSlideOutView]
      */
     export class dxSlideOutView extends Widget {
         constructor(element: Element, options?: dxSlideOutViewOptions)
         constructor(element: JQuery, options?: dxSlideOutViewOptions)
         /**
-         * <-dxSlideOutView.content()->
+         * [descr:dxSlideOutView.content()]
          */
         content(): DevExpress.core.dxElement;
         /**
-         * <-dxSlideOutView.hideMenu()->
+         * [descr:dxSlideOutView.hideMenu()]
          */
         hideMenu(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxSlideOutView.menuContent()->
+         * [descr:dxSlideOutView.menuContent()]
          */
         menuContent(): DevExpress.core.dxElement;
         /**
-         * <-dxSlideOutView.showMenu()->
+         * [descr:dxSlideOutView.showMenu()]
          */
         showMenu(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxSlideOutView.toggleMenuVisibility()->
+         * [descr:dxSlideOutView.toggleMenuVisibility()]
          */
         toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxSlider.Options->
+     * [descr:dxSlider.Options]
      */
     export interface dxSliderOptions extends dxSliderBaseOptions<dxSlider> {
         /**
-         * <-dxSlider.Options.value->
+         * [descr:dxSlider.Options.value]
          */
         value?: number;
     }
     /**
-     * <-dxSlider->
+     * [descr:dxSlider]
      */
     export class dxSlider extends dxSliderBase {
         constructor(element: Element, options?: dxSliderOptions)
         constructor(element: JQuery, options?: dxSliderOptions)
     }
     /**
-     * <-dxSliderBase.Options->
+     * [descr:dxSliderBase.Options]
      */
     export interface dxSliderBaseOptions<T = dxSliderBase> extends dxTrackBarOptions<T> {
         /**
-         * <-dxSliderBase.Options.activeStateEnabled->
+         * [descr:dxSliderBase.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxSliderBase.Options.focusStateEnabled->
+         * [descr:dxSliderBase.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxSliderBase.Options.hoverStateEnabled->
+         * [descr:dxSliderBase.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxSliderBase.Options.keyStep->
+         * [descr:dxSliderBase.Options.keyStep]
          */
         keyStep?: number;
         /**
-         * <-dxSliderBase.Options.label->
+         * [descr:dxSliderBase.Options.label]
          */
         label?: { format?: format, position?: 'bottom' | 'top', visible?: boolean };
         /**
-         * <-dxSliderBase.Options.name->
+         * [descr:dxSliderBase.Options.name]
          */
         name?: string;
         /**
-         * <-dxSliderBase.Options.showRange->
+         * [descr:dxSliderBase.Options.showRange]
          */
         showRange?: boolean;
         /**
-         * <-dxSliderBase.Options.step->
+         * [descr:dxSliderBase.Options.step]
          */
         step?: number;
         /**
-         * <-dxSliderBase.Options.tooltip->
+         * [descr:dxSliderBase.Options.tooltip]
          */
         tooltip?: { enabled?: boolean, format?: format, position?: 'bottom' | 'top', showMode?: 'always' | 'onHover' };
     }
     /**
-     * <-dxSliderBase->
+     * [descr:dxSliderBase]
      */
     export class dxSliderBase extends dxTrackBar {
         constructor(element: Element, options?: dxSliderBaseOptions)
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
     /**
-     * <-dxSortable.Options->
+     * [descr:dxSortable.Options]
      */
     export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
         /**
-         * <-dxSortable.Options.allowDropInsideItem->
+         * [descr:dxSortable.Options.allowDropInsideItem]
          */
         allowDropInsideItem?: boolean;
         /**
-         * <-dxSortable.Options.allowReordering->
+         * [descr:dxSortable.Options.allowReordering]
          */
         allowReordering?: boolean;
         /**
-         * <-dxSortable.Options.dragTemplate->
+         * [descr:dxSortable.Options.dragTemplate]
          */
         dragTemplate?: DevExpress.core.template | ((dragInfo: { itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number }, containerElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxSortable.Options.dropFeedbackMode->
+         * [descr:dxSortable.Options.dropFeedbackMode]
          */
         dropFeedbackMode?: 'push' | 'indicate';
         /**
-         * <-dxSortable.Options.filter->
+         * [descr:dxSortable.Options.filter]
          */
         filter?: string;
         /**
-         * <-dxSortable.Options.itemOrientation->
+         * [descr:dxSortable.Options.itemOrientation]
          */
         itemOrientation?: 'horizontal' | 'vertical';
         /**
-         * <-dxSortable.Options.moveItemOnDrop->
+         * [descr:dxSortable.Options.moveItemOnDrop]
          */
         moveItemOnDrop?: boolean;
         /**
-         * <-dxSortable.Options.onAdd->
+         * [descr:dxSortable.Options.onAdd]
          */
         onAdd?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
         /**
-         * <-dxSortable.Options.onDragChange->
+         * [descr:dxSortable.Options.onDragChange]
          */
         onDragChange?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
         /**
-         * <-dxSortable.Options.onDragEnd->
+         * [descr:dxSortable.Options.onDragEnd]
          */
         onDragEnd?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
         /**
-         * <-dxSortable.Options.onDragMove->
+         * [descr:dxSortable.Options.onDragMove]
          */
         onDragMove?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
         /**
-         * <-dxSortable.Options.onDragStart->
+         * [descr:dxSortable.Options.onDragStart]
          */
         onDragStart?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, cancel?: boolean, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, fromData?: any }) => any);
         /**
-         * <-dxSortable.Options.onRemove->
+         * [descr:dxSortable.Options.onRemove]
          */
         onRemove?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
         /**
-         * <-dxSortable.Options.onReorder->
+         * [descr:dxSortable.Options.onReorder]
          */
         onReorder?: ((e: { component?: dxSortable, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, itemData?: any, itemElement?: DevExpress.core.dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean, promise?: Promise<void> | JQueryPromise<void> }) => any);
     }
     /**
-     * <-dxSortable->
+     * [descr:dxSortable]
      */
     export class dxSortable extends DraggableBase {
         constructor(element: Element, options?: dxSortableOptions)
         constructor(element: JQuery, options?: dxSortableOptions)
+        /**
+         * [descr:dxSortable.update()]
+         */
+        update(): void;
     }
     /**
-     * <-dxSpeedDialAction.Options->
+     * [descr:dxSpeedDialAction.Options]
      */
     export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
         /**
-         * <-dxSpeedDialAction.Options.icon->
+         * [descr:dxSpeedDialAction.Options.icon]
          */
         icon?: string;
         /**
-         * <-dxSpeedDialAction.Options.index->
+         * [descr:dxSpeedDialAction.Options.index]
          */
         index?: number;
         /**
-         * <-dxSpeedDialAction.Options.label->
+         * [descr:dxSpeedDialAction.Options.label]
          */
         label?: string;
         /**
-         * <-dxSpeedDialAction.Options.onClick->
+         * [descr:dxSpeedDialAction.Options.onClick]
          */
         onClick?: ((e: { event?: DevExpress.events.event, component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, actionElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxSpeedDialAction.Options.onContentReady->
+         * [descr:dxSpeedDialAction.Options.onContentReady]
          */
         onContentReady?: ((e: { component?: dxSpeedDialAction, element?: DevExpress.core.dxElement, model?: any, actionElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxSpeedDialAction.Options.visible->
+         * [descr:dxSpeedDialAction.Options.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxSpeedDialAction->
+     * [descr:dxSpeedDialAction]
      */
     export class dxSpeedDialAction extends Widget {
         constructor(element: Element, options?: dxSpeedDialActionOptions)
         constructor(element: JQuery, options?: dxSpeedDialActionOptions)
     }
     /**
-     * <-dxSwitch.Options->
+     * [descr:dxSwitch.Options]
      */
     export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
         /**
-         * <-dxSwitch.Options.activeStateEnabled->
+         * [descr:dxSwitch.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxSwitch.Options.focusStateEnabled->
+         * [descr:dxSwitch.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxSwitch.Options.hoverStateEnabled->
+         * [descr:dxSwitch.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxSwitch.Options.name->
+         * [descr:dxSwitch.Options.name]
          */
         name?: string;
         /**
-         * <-dxSwitch.Options.switchedOffText->
+         * [descr:dxSwitch.Options.switchedOffText]
          */
         switchedOffText?: string;
         /**
-         * <-dxSwitch.Options.switchedOnText->
+         * [descr:dxSwitch.Options.switchedOnText]
          */
         switchedOnText?: string;
         /**
-         * <-dxSwitch.Options.value->
+         * [descr:dxSwitch.Options.value]
          */
         value?: boolean;
     }
     /**
-     * <-dxSwitch->
+     * [descr:dxSwitch]
      */
     export class dxSwitch extends Editor {
         constructor(element: Element, options?: dxSwitchOptions)
         constructor(element: JQuery, options?: dxSwitchOptions)
     }
     /**
-     * <-dxTabPanel.Options->
+     * [descr:dxTabPanel.Options]
      */
     export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
         /**
-         * <-dxTabPanel.Options.animationEnabled->
+         * [descr:dxTabPanel.Options.animationEnabled]
          */
         animationEnabled?: boolean;
         /**
-         * <-dxTabPanel.Options.dataSource->
+         * [descr:dxTabPanel.Options.dataSource]
          */
         dataSource?: string | Array<string | dxTabPanelItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxTabPanel.Options.focusStateEnabled->
+         * [descr:dxTabPanel.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxTabPanel.Options.hoverStateEnabled->
+         * [descr:dxTabPanel.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxTabPanel.Options.itemTitleTemplate->
+         * [descr:dxTabPanel.Options.itemTitleTemplate]
          */
         itemTitleTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxTabPanel.Options.items->
+         * [descr:dxTabPanel.Options.items]
          */
         items?: Array<string | dxTabPanelItem | any>;
         /**
-         * <-dxTabPanel.Options.onTitleClick->
+         * [descr:dxTabPanel.Options.onTitleClick]
          */
         onTitleClick?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any) | string;
         /**
-         * <-dxTabPanel.Options.onTitleHold->
+         * [descr:dxTabPanel.Options.onTitleHold]
          */
         onTitleHold?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTabPanel.Options.onTitleRendered->
+         * [descr:dxTabPanel.Options.onTitleRendered]
          */
         onTitleRendered?: ((e: { component?: dxTabPanel, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxTabPanel.Options.repaintChangesOnly->
+         * [descr:dxTabPanel.Options.repaintChangesOnly]
          */
         repaintChangesOnly?: boolean;
         /**
-         * <-dxTabPanel.Options.scrollByContent->
+         * [descr:dxTabPanel.Options.scrollByContent]
          */
         scrollByContent?: boolean;
         /**
-         * <-dxTabPanel.Options.scrollingEnabled->
+         * [descr:dxTabPanel.Options.scrollingEnabled]
          */
         scrollingEnabled?: boolean;
         /**
-         * <-dxTabPanel.Options.showNavButtons->
+         * [descr:dxTabPanel.Options.showNavButtons]
          */
         showNavButtons?: boolean;
         /**
-         * <-dxTabPanel.Options.swipeEnabled->
+         * [descr:dxTabPanel.Options.swipeEnabled]
          */
         swipeEnabled?: boolean;
     }
     /**
-     * <-dxTabPanel->
+     * [descr:dxTabPanel]
      */
     export class dxTabPanel extends dxMultiView {
         constructor(element: Element, options?: dxTabPanelOptions)
         constructor(element: JQuery, options?: dxTabPanelOptions)
     }
     /**
-     * <-dxTabPanelItem->
+     * [descr:dxTabPanelItem]
      */
     export interface dxTabPanelItem extends dxMultiViewItem {
         /**
-         * <-dxTabPanelItem.badge->
+         * [descr:dxTabPanelItem.badge]
          */
         badge?: string;
         /**
-         * <-dxTabPanelItem.icon->
+         * [descr:dxTabPanelItem.icon]
          */
         icon?: string;
         /**
-         * <-dxTabPanelItem.tabTemplate->
+         * [descr:dxTabPanelItem.tabTemplate]
          */
         tabTemplate?: DevExpress.core.template | (() => string | Element | JQuery);
         /**
-         * <-dxTabPanelItem.title->
+         * [descr:dxTabPanelItem.title]
          */
         title?: string;
     }
     /**
-     * <-dxTabs.Options->
+     * [descr:dxTabs.Options]
      */
     export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
         /**
-         * <-dxTabs.Options.dataSource->
+         * [descr:dxTabs.Options.dataSource]
          */
         dataSource?: string | Array<string | dxTabsItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxTabs.Options.focusStateEnabled->
+         * [descr:dxTabs.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxTabs.Options.hoverStateEnabled->
+         * [descr:dxTabs.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxTabs.Options.items->
+         * [descr:dxTabs.Options.items]
          */
         items?: Array<string | dxTabsItem | any>;
         /**
-         * <-dxTabs.Options.repaintChangesOnly->
+         * [descr:dxTabs.Options.repaintChangesOnly]
          */
         repaintChangesOnly?: boolean;
         /**
-         * <-dxTabs.Options.scrollByContent->
+         * [descr:dxTabs.Options.scrollByContent]
          */
         scrollByContent?: boolean;
         /**
-         * <-dxTabs.Options.scrollingEnabled->
+         * [descr:dxTabs.Options.scrollingEnabled]
          */
         scrollingEnabled?: boolean;
         /**
-         * <-dxTabs.Options.selectedItems->
+         * [descr:dxTabs.Options.selectedItems]
          */
         selectedItems?: Array<string | number | any>;
         /**
-         * <-dxTabs.Options.selectionMode->
+         * [descr:dxTabs.Options.selectionMode]
          */
         selectionMode?: 'multiple' | 'single';
         /**
-         * <-dxTabs.Options.showNavButtons->
+         * [descr:dxTabs.Options.showNavButtons]
          */
         showNavButtons?: boolean;
     }
     /**
-     * <-dxTabs->
+     * [descr:dxTabs]
      */
     export class dxTabs extends CollectionWidget {
         constructor(element: Element, options?: dxTabsOptions)
         constructor(element: JQuery, options?: dxTabsOptions)
     }
     /**
-     * <-dxTabsItem->
+     * [descr:dxTabsItem]
      */
     export interface dxTabsItem extends CollectionWidgetItem {
         /**
-         * <-dxTabsItem.badge->
+         * [descr:dxTabsItem.badge]
          */
         badge?: string;
         /**
-         * <-dxTabsItem.icon->
+         * [descr:dxTabsItem.icon]
          */
         icon?: string;
     }
     /**
-     * <-dxTagBox.Options->
+     * [descr:dxTagBox.Options]
      */
     export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
         /**
-         * <-dxTagBox.Options.applyValueMode->
+         * [descr:dxTagBox.Options.applyValueMode]
          */
         applyValueMode?: 'instantly' | 'useButtons';
         /**
-         * <-dxTagBox.Options.hideSelectedItems->
+         * [descr:dxTagBox.Options.hideSelectedItems]
          */
         hideSelectedItems?: boolean;
         /**
-         * <-dxTagBox.Options.maxDisplayedTags->
+         * [descr:dxTagBox.Options.maxDisplayedTags]
          */
         maxDisplayedTags?: number;
         /**
-         * <-dxTagBox.Options.multiline->
+         * [descr:dxTagBox.Options.multiline]
          */
         multiline?: boolean;
         /**
-         * <-dxTagBox.Options.onMultiTagPreparing->
+         * [descr:dxTagBox.Options.onMultiTagPreparing]
          */
         onMultiTagPreparing?: ((e: { component?: dxTagBox, element?: DevExpress.core.dxElement, model?: any, multiTagElement?: DevExpress.core.dxElement, selectedItems?: Array<string | number | any>, text?: string, cancel?: boolean }) => any);
         /**
-         * <-dxTagBox.Options.onSelectAllValueChanged->
+         * [descr:dxTagBox.Options.onSelectAllValueChanged]
          */
         onSelectAllValueChanged?: ((e: { component?: dxTagBox, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
         /**
-         * <-dxTagBox.Options.onSelectionChanged->
+         * [descr:dxTagBox.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxTagBox, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<string | number | any>, removedItems?: Array<string | number | any> }) => any);
         /**
-         * <-dxTagBox.Options.selectAllMode->
+         * [descr:dxTagBox.Options.selectAllMode]
          */
         selectAllMode?: 'allPages' | 'page';
         /**
-         * <-dxTagBox.Options.selectedItems->
+         * [descr:dxTagBox.Options.selectedItems]
          */
         selectedItems?: Array<string | number | any>;
         /**
-         * <-dxTagBox.Options.showDropDownButton->
+         * [descr:dxTagBox.Options.showDropDownButton]
          */
         showDropDownButton?: boolean;
         /**
-         * <-dxTagBox.Options.showMultiTagOnly->
+         * [descr:dxTagBox.Options.showMultiTagOnly]
          */
         showMultiTagOnly?: boolean;
         /**
-         * <-dxTagBox.Options.tagTemplate->
+         * [descr:dxTagBox.Options.tagTemplate]
          */
         tagTemplate?: DevExpress.core.template | ((itemData: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxTagBox.Options.value->
+         * [descr:dxTagBox.Options.value]
          */
         value?: Array<string | number | any>;
     }
     /**
-     * <-dxTagBox->
+     * [descr:dxTagBox]
      */
     export class dxTagBox extends dxSelectBox {
         constructor(element: Element, options?: dxTagBoxOptions)
         constructor(element: JQuery, options?: dxTagBoxOptions)
     }
     /**
-     * <-dxTextArea.Options->
+     * [descr:dxTextArea.Options]
      */
     export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
         /**
-         * <-dxTextArea.Options.autoResizeEnabled->
+         * [descr:dxTextArea.Options.autoResizeEnabled]
          */
         autoResizeEnabled?: boolean;
         /**
-         * <-dxTextArea.Options.maxHeight->
+         * [descr:dxTextArea.Options.maxHeight]
          */
         maxHeight?: number | string;
         /**
-         * <-dxTextArea.Options.minHeight->
+         * [descr:dxTextArea.Options.minHeight]
          */
         minHeight?: number | string;
         /**
-         * <-dxTextArea.Options.spellcheck->
+         * [descr:dxTextArea.Options.spellcheck]
          */
         spellcheck?: boolean;
     }
     /**
-     * <-dxTextArea->
+     * [descr:dxTextArea]
      */
     export class dxTextArea extends dxTextBox {
         constructor(element: Element, options?: dxTextAreaOptions)
         constructor(element: JQuery, options?: dxTextAreaOptions)
     }
     /**
-     * <-dxTextBox.Options->
+     * [descr:dxTextBox.Options]
      */
     export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
         /**
-         * <-dxTextBox.Options.maxLength->
+         * [descr:dxTextBox.Options.maxLength]
          */
         maxLength?: string | number;
         /**
-         * <-dxTextBox.Options.mode->
+         * [descr:dxTextBox.Options.mode]
          */
         mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
         /**
-         * <-dxTextBox.Options.value->
+         * [descr:dxTextBox.Options.value]
          */
         value?: string;
     }
     /**
-     * <-dxTextBox->
+     * [descr:dxTextBox]
      */
     export class dxTextBox extends dxTextEditor {
         constructor(element: Element, options?: dxTextBoxOptions)
         constructor(element: JQuery, options?: dxTextBoxOptions)
     }
     /**
-     * <-dxTextEditor.Options->
+     * [descr:dxTextEditor.Options]
      */
     export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
         /**
-         * <-dxTextEditor.Options.buttons->
+         * [descr:dxTextEditor.Options.buttons]
          */
         buttons?: Array<string | 'clear' | dxTextEditorButton>;
         /**
-         * <-dxTextEditor.Options.focusStateEnabled->
+         * [descr:dxTextEditor.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxTextEditor.Options.hoverStateEnabled->
+         * [descr:dxTextEditor.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxTextEditor.Options.inputAttr->
+         * [descr:dxTextEditor.Options.inputAttr]
          */
         inputAttr?: any;
         /**
-         * <-dxTextEditor.Options.mask->
+         * [descr:dxTextEditor.Options.mask]
          */
         mask?: string;
         /**
-         * <-dxTextEditor.Options.maskChar->
+         * [descr:dxTextEditor.Options.maskChar]
          */
         maskChar?: string;
         /**
-         * <-dxTextEditor.Options.maskInvalidMessage->
+         * [descr:dxTextEditor.Options.maskInvalidMessage]
          */
         maskInvalidMessage?: string;
         /**
-         * <-dxTextEditor.Options.maskRules->
+         * [descr:dxTextEditor.Options.maskRules]
          */
         maskRules?: any;
         /**
-         * <-dxTextEditor.Options.name->
+         * [descr:dxTextEditor.Options.name]
          */
         name?: string;
         /**
-         * <-dxTextEditor.Options.onChange->
+         * [descr:dxTextEditor.Options.onChange]
          */
         onChange?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onCopy->
+         * [descr:dxTextEditor.Options.onCopy]
          */
         onCopy?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onCut->
+         * [descr:dxTextEditor.Options.onCut]
          */
         onCut?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onEnterKey->
+         * [descr:dxTextEditor.Options.onEnterKey]
          */
         onEnterKey?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onFocusIn->
+         * [descr:dxTextEditor.Options.onFocusIn]
          */
         onFocusIn?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onFocusOut->
+         * [descr:dxTextEditor.Options.onFocusOut]
          */
         onFocusOut?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onInput->
+         * [descr:dxTextEditor.Options.onInput]
          */
         onInput?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onKeyDown->
+         * [descr:dxTextEditor.Options.onKeyDown]
          */
         onKeyDown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onKeyPress->
-         * @deprecated <-dxTextEditor.Options.onKeyPress:depNote->
+         * [descr:dxTextEditor.Options.onKeyPress]
+         * @deprecated [depNote:dxTextEditor.Options.onKeyPress]
          */
         onKeyPress?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onKeyUp->
+         * [descr:dxTextEditor.Options.onKeyUp]
          */
         onKeyUp?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.onPaste->
+         * [descr:dxTextEditor.Options.onPaste]
          */
         onPaste?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxTextEditor.Options.placeholder->
+         * [descr:dxTextEditor.Options.placeholder]
          */
         placeholder?: string;
         /**
-         * <-dxTextEditor.Options.showClearButton->
+         * [descr:dxTextEditor.Options.showClearButton]
          */
         showClearButton?: boolean;
         /**
-         * <-dxTextEditor.Options.showMaskMode->
+         * [descr:dxTextEditor.Options.showMaskMode]
          */
         showMaskMode?: 'always' | 'onFocus';
         /**
-         * <-dxTextEditor.Options.spellcheck->
+         * [descr:dxTextEditor.Options.spellcheck]
          */
         spellcheck?: boolean;
         /**
-         * <-dxTextEditor.Options.stylingMode->
+         * [descr:dxTextEditor.Options.stylingMode]
          */
         stylingMode?: 'outlined' | 'underlined' | 'filled';
         /**
-         * <-dxTextEditor.Options.text->
+         * [descr:dxTextEditor.Options.text]
          */
         text?: string;
         /**
-         * <-dxTextEditor.Options.useMaskedValue->
+         * [descr:dxTextEditor.Options.useMaskedValue]
          */
         useMaskedValue?: boolean;
         /**
-         * <-dxTextEditor.Options.value->
+         * [descr:dxTextEditor.Options.value]
          */
         value?: any;
         /**
-         * <-dxTextEditor.Options.valueChangeEvent->
+         * [descr:dxTextEditor.Options.valueChangeEvent]
          */
         valueChangeEvent?: string;
     }
     /**
-     * <-dxTextEditor->
+     * [descr:dxTextEditor]
      */
     export class dxTextEditor extends Editor {
         constructor(element: Element, options?: dxTextEditorOptions)
         constructor(element: JQuery, options?: dxTextEditorOptions)
         /**
-         * <-dxTextEditor.blur()->
+         * [descr:dxTextEditor.blur()]
          */
         blur(): void;
         /**
-         * <-dxTextEditor.focus()->
+         * [descr:dxTextEditor.focus()]
          */
         focus(): void;
         /**
-         * <-dxTextEditor.getButton(name)->
+         * [descr:dxTextEditor.getButton(name)]
          */
         getButton(name: string): dxButton | undefined;
     }
     /**
-     * <-dxTextEditorButton->
+     * [descr:dxTextEditorButton]
      */
     export interface dxTextEditorButton {
         /**
-         * <-dxTextEditorButton.location->
+         * [descr:dxTextEditorButton.location]
          */
         location?: 'after' | 'before';
         /**
-         * <-dxTextEditorButton.name->
+         * [descr:dxTextEditorButton.name]
          */
         name?: string;
         /**
-         * <-dxTextEditorButton.options->
+         * [descr:dxTextEditorButton.options]
          */
         options?: dxButtonOptions;
     }
     /**
-     * <-dxTileView.Options->
+     * [descr:dxTileView.Options]
      */
     export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
         /**
-         * <-dxTileView.Options.activeStateEnabled->
+         * [descr:dxTileView.Options.activeStateEnabled]
          */
         activeStateEnabled?: boolean;
         /**
-         * <-dxTileView.Options.baseItemHeight->
+         * [descr:dxTileView.Options.baseItemHeight]
          */
         baseItemHeight?: number;
         /**
-         * <-dxTileView.Options.baseItemWidth->
+         * [descr:dxTileView.Options.baseItemWidth]
          */
         baseItemWidth?: number;
         /**
-         * <-dxTileView.Options.dataSource->
+         * [descr:dxTileView.Options.dataSource]
          */
         dataSource?: string | Array<string | dxTileViewItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxTileView.Options.direction->
+         * [descr:dxTileView.Options.direction]
          */
         direction?: 'horizontal' | 'vertical';
         /**
-         * <-dxTileView.Options.focusStateEnabled->
+         * [descr:dxTileView.Options.focusStateEnabled]
          */
         focusStateEnabled?: boolean;
         /**
-         * <-dxTileView.Options.height->
+         * [descr:dxTileView.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxTileView.Options.hoverStateEnabled->
+         * [descr:dxTileView.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
         /**
-         * <-dxTileView.Options.itemMargin->
+         * [descr:dxTileView.Options.itemMargin]
          */
         itemMargin?: number;
         /**
-         * <-dxTileView.Options.items->
+         * [descr:dxTileView.Options.items]
          */
         items?: Array<string | dxTileViewItem | any>;
         /**
-         * <-dxTileView.Options.showScrollbar->
+         * [descr:dxTileView.Options.showScrollbar]
          */
         showScrollbar?: boolean;
     }
     /**
-     * <-dxTileView->
+     * [descr:dxTileView]
      */
     export class dxTileView extends CollectionWidget {
         constructor(element: Element, options?: dxTileViewOptions)
         constructor(element: JQuery, options?: dxTileViewOptions)
         /**
-         * <-dxTileView.scrollPosition()->
+         * [descr:dxTileView.scrollPosition()]
          */
         scrollPosition(): number;
     }
     /**
-     * <-dxTileViewItem->
+     * [descr:dxTileViewItem]
      */
     export interface dxTileViewItem extends CollectionWidgetItem {
         /**
-         * <-dxTileViewItem.heightRatio->
+         * [descr:dxTileViewItem.heightRatio]
          */
         heightRatio?: number;
         /**
-         * <-dxTileViewItem.widthRatio->
+         * [descr:dxTileViewItem.widthRatio]
          */
         widthRatio?: number;
     }
     /**
-     * <-dxToast.Options->
+     * [descr:dxToast.Options]
      */
     export interface dxToastOptions extends dxOverlayOptions<dxToast> {
         /**
-         * <-dxToast.Options.animation->
+         * [descr:dxToast.Options.animation]
          */
         animation?: dxToastAnimation;
         /**
-         * <-dxToast.Options.closeOnClick->
+         * [descr:dxToast.Options.closeOnClick]
          */
         closeOnClick?: boolean;
         /**
-         * <-dxToast.Options.closeOnOutsideClick->
+         * [descr:dxToast.Options.closeOnOutsideClick]
          */
         closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
-         * <-dxToast.Options.closeOnSwipe->
+         * [descr:dxToast.Options.closeOnSwipe]
          */
         closeOnSwipe?: boolean;
         /**
-         * <-dxToast.Options.displayTime->
+         * [descr:dxToast.Options.displayTime]
          */
         displayTime?: number;
         /**
-         * <-dxToast.Options.height->
+         * [descr:dxToast.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxToast.Options.maxWidth->
+         * [descr:dxToast.Options.maxWidth]
          */
         maxWidth?: number | string | (() => number | string);
         /**
-         * <-dxToast.Options.message->
+         * [descr:dxToast.Options.message]
          */
         message?: string;
         /**
-         * <-dxToast.Options.minWidth->
+         * [descr:dxToast.Options.minWidth]
          */
         minWidth?: number | string | (() => number | string);
         /**
-         * <-dxToast.Options.position->
+         * [descr:dxToast.Options.position]
          */
         position?: positionConfig | string;
         /**
-         * <-dxToast.Options.shading->
+         * [descr:dxToast.Options.shading]
          */
         shading?: boolean;
         /**
-         * <-dxToast.Options.type->
+         * [descr:dxToast.Options.type]
          */
         type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
         /**
-         * <-dxToast.Options.width->
+         * [descr:dxToast.Options.width]
          */
         width?: number | string | (() => number | string);
     }
     /**
-     * <-dxToast.Options.animation->
+     * [descr:dxToast.Options.animation]
      */
     export interface dxToastAnimation extends dxOverlayAnimation {
         /**
-         * <-dxToast.Options.animation.hide->
+         * [descr:dxToast.Options.animation.hide]
          */
         hide?: animationConfig;
         /**
-         * <-dxToast.Options.animation.show->
+         * [descr:dxToast.Options.animation.show]
          */
         show?: animationConfig;
     }
     /**
-     * <-dxToast->
+     * [descr:dxToast]
      */
     export class dxToast extends dxOverlay {
         constructor(element: Element, options?: dxToastOptions)
         constructor(element: JQuery, options?: dxToastOptions)
     }
     /**
-     * <-dxToolbar.Options->
+     * [descr:dxToolbar.Options]
      */
     export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
         /**
-         * <-dxToolbar.Options.dataSource->
+         * [descr:dxToolbar.Options.dataSource]
          */
         dataSource?: string | Array<string | dxToolbarItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxToolbar.Options.height->
-         * @deprecated <-dxToolbar.Options.height:depNote->
+         * [descr:dxToolbar.Options.height]
+         * @deprecated [depNote:dxToolbar.Options.height]
          */
         height?: number | string | (() => number | string);
         /**
-         * <-dxToolbar.Options.items->
+         * [descr:dxToolbar.Options.items]
          */
         items?: Array<string | dxToolbarItem | any>;
         /**
-         * <-dxToolbar.Options.menuItemTemplate->
+         * [descr:dxToolbar.Options.menuItemTemplate]
          */
         menuItemTemplate?: DevExpress.core.template | ((itemData: any, itemIndex: number, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /**
-     * <-dxToolbar->
+     * [descr:dxToolbar]
      */
     export class dxToolbar extends CollectionWidget {
         constructor(element: Element, options?: dxToolbarOptions)
         constructor(element: JQuery, options?: dxToolbarOptions)
     }
     /**
-     * <-dxToolbarItem->
+     * [descr:dxToolbarItem]
      */
     export interface dxToolbarItem extends CollectionWidgetItem {
         /**
-         * <-dxToolbarItem.cssClass->
+         * [descr:dxToolbarItem.cssClass]
          */
         cssClass?: string;
         /**
-         * <-dxToolbarItem.locateInMenu->
+         * [descr:dxToolbarItem.locateInMenu]
          */
         locateInMenu?: 'always' | 'auto' | 'never';
         /**
-         * <-dxToolbarItem.location->
+         * [descr:dxToolbarItem.location]
          */
         location?: 'after' | 'before' | 'center';
         /**
-         * <-dxToolbarItem.menuItemTemplate->
+         * [descr:dxToolbarItem.menuItemTemplate]
          */
         menuItemTemplate?: DevExpress.core.template | (() => string | Element | JQuery);
         /**
-         * <-dxToolbarItem.options->
+         * [descr:dxToolbarItem.options]
          */
         options?: any;
         /**
-         * <-dxToolbarItem.showText->
+         * [descr:dxToolbarItem.showText]
          */
         showText?: 'always' | 'inMenu';
         /**
-         * <-dxToolbarItem.widget->
+         * [descr:dxToolbarItem.widget]
          */
         widget?: 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
     }
     /**
-     * <-dxTooltip.Options->
+     * [descr:dxTooltip.Options]
      */
     export interface dxTooltipOptions extends dxPopoverOptions<dxTooltip> {
     }
     /**
-     * <-dxTooltip->
+     * [descr:dxTooltip]
      */
     export class dxTooltip extends dxPopover {
         constructor(element: Element, options?: dxTooltipOptions)
         constructor(element: JQuery, options?: dxTooltipOptions)
     }
     /**
-     * <-dxTrackBar.Options->
+     * [descr:dxTrackBar.Options]
      */
     export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
         /**
-         * <-dxTrackBar.Options.max->
+         * [descr:dxTrackBar.Options.max]
          */
         max?: number;
         /**
-         * <-dxTrackBar.Options.min->
+         * [descr:dxTrackBar.Options.min]
          */
         min?: number;
     }
     /**
-     * <-dxTrackBar->
+     * [descr:dxTrackBar]
      */
     export class dxTrackBar extends Editor {
         constructor(element: Element, options?: dxTrackBarOptions)
         constructor(element: JQuery, options?: dxTrackBarOptions)
     }
     /**
-     * <-dxTreeList.Options->
+     * [descr:dxTreeList.Options]
      */
     export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
         /**
-         * <-dxTreeList.Options.autoExpandAll->
+         * [descr:dxTreeList.Options.autoExpandAll]
          */
         autoExpandAll?: boolean;
         /**
-         * <-dxTreeList.Options.columns->
+         * [descr:dxTreeList.Options.columns]
          */
         columns?: Array<dxTreeListColumn | string>;
         /**
-         * <-dxTreeList.Options.customizeColumns->
+         * [descr:dxTreeList.Options.customizeColumns]
          */
         customizeColumns?: ((columns: Array<dxTreeListColumn>) => any);
         /**
-         * <-dxTreeList.Options.dataStructure->
+         * [descr:dxTreeList.Options.dataStructure]
          */
         dataStructure?: 'plain' | 'tree';
         /**
-         * <-dxTreeList.Options.editing->
+         * [descr:dxTreeList.Options.editing]
          */
         editing?: dxTreeListEditing;
         /**
-         * <-dxTreeList.Options.expandNodesOnFiltering->
+         * [descr:dxTreeList.Options.expandNodesOnFiltering]
          */
         expandNodesOnFiltering?: boolean;
         /**
-         * <-dxTreeList.Options.expandedRowKeys->
+         * [descr:dxTreeList.Options.expandedRowKeys]
          */
         expandedRowKeys?: Array<any>;
         /**
-         * <-dxTreeList.Options.filterMode->
+         * [descr:dxTreeList.Options.filterMode]
          */
         filterMode?: 'fullBranch' | 'withAncestors' | 'matchOnly';
         /**
-         * <-dxTreeList.Options.hasItemsExpr->
+         * [descr:dxTreeList.Options.hasItemsExpr]
          */
         hasItemsExpr?: string | Function;
         /**
-         * <-dxTreeList.Options.itemsExpr->
+         * [descr:dxTreeList.Options.itemsExpr]
          */
         itemsExpr?: string | Function;
         /**
-         * <-dxTreeList.Options.keyExpr->
+         * [descr:dxTreeList.Options.keyExpr]
          */
         keyExpr?: string | Function;
         /**
-         * <-dxTreeList.Options.onCellClick->
+         * [descr:dxTreeList.Options.onCellClick]
          */
         onCellClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any) | string;
         /**
-         * <-dxTreeList.Options.onCellDblClick->
+         * [descr:dxTreeList.Options.onCellDblClick]
          */
         onCellDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
         /**
-         * <-dxTreeList.Options.onCellHoverChanged->
+         * [descr:dxTreeList.Options.onCellHoverChanged]
          */
         onCellHoverChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: any, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
         /**
-         * <-dxTreeList.Options.onCellPrepared->
+         * [descr:dxTreeList.Options.onCellPrepared]
          */
         onCellPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: any, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, cellElement?: DevExpress.core.dxElement, watch?: Function, oldValue?: any }) => any);
         /**
-         * <-dxTreeList.Options.onContextMenuPreparing->
+         * [descr:dxTreeList.Options.onContextMenuPreparing]
          */
         onContextMenuPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /**
-         * <-dxTreeList.Options.onEditingStart->
+         * [descr:dxTreeList.Options.onEditingStart]
          */
         onEditingStart?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
         /**
-         * <-dxTreeList.Options.onEditorPrepared->
+         * [descr:dxTreeList.Options.onEditorPrepared]
          */
         onEditorPrepared?: ((options: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, dataField?: string, row?: dxTreeListRowObject }) => any);
         /**
-         * <-dxTreeList.Options.onEditorPreparing->
+         * [descr:dxTreeList.Options.onEditorPreparing]
          */
         onEditorPreparing?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.dxElement, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
         /**
-         * <-dxTreeList.Options.onFocusedCellChanged->
+         * [descr:dxTreeList.Options.onFocusedCellChanged]
          */
         onFocusedCellChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any);
         /**
-         * <-dxTreeList.Options.onFocusedCellChanging->
+         * [descr:dxTreeList.Options.onFocusedCellChanging]
          */
         onFocusedCellChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, cellElement?: DevExpress.core.dxElement, prevColumnIndex?: number, prevRowIndex?: number, newColumnIndex?: number, newRowIndex?: number, event?: DevExpress.events.event, rows?: Array<dxTreeListRowObject>, columns?: Array<dxTreeListColumn>, cancel?: boolean, isHighlighted?: boolean }) => any);
         /**
-         * <-dxTreeList.Options.onFocusedRowChanged->
+         * [descr:dxTreeList.Options.onFocusedRowChanged]
          */
         onFocusedRowChanged?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /**
-         * <-dxTreeList.Options.onFocusedRowChanging->
+         * [descr:dxTreeList.Options.onFocusedRowChanging]
          */
         onFocusedRowChanging?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, rowElement?: DevExpress.core.dxElement, prevRowIndex?: number, newRowIndex?: number, event?: DevExpress.events.event, rows?: Array<dxTreeListRowObject>, cancel?: boolean }) => any);
         /**
-         * <-dxTreeList.Options.onNodesInitialized->
+         * [descr:dxTreeList.Options.onNodesInitialized]
          */
         onNodesInitialized?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeListNode }) => any);
         /**
-         * <-dxTreeList.Options.onRowClick->
+         * [descr:dxTreeList.Options.onRowClick]
          */
         onRowClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement, handled?: boolean, node?: dxTreeListNode, level?: number }) => any) | string;
         /**
-         * <-dxTreeList.Options.onRowDblClick->
+         * [descr:dxTreeList.Options.onRowDblClick]
          */
         onRowDblClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxTreeList.Options.onRowPrepared->
+         * [descr:dxTreeList.Options.onRowPrepared]
          */
         onRowPrepared?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<dxTreeListColumn>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, isNewRow?: boolean, rowElement?: DevExpress.core.dxElement, node?: dxTreeListNode, level?: number }) => any);
         /**
-         * <-dxTreeList.Options.paging->
+         * [descr:dxTreeList.Options.paging]
          */
         paging?: dxTreeListPaging;
         /**
-         * <-dxTreeList.Options.parentIdExpr->
+         * [descr:dxTreeList.Options.parentIdExpr]
          */
         parentIdExpr?: string | Function;
         /**
-         * <-dxTreeList.Options.remoteOperations->
+         * [descr:dxTreeList.Options.remoteOperations]
          */
         remoteOperations?: { filtering?: boolean, grouping?: boolean, sorting?: boolean } | 'auto';
         /**
-         * <-dxTreeList.Options.rootValue->
+         * [descr:dxTreeList.Options.rootValue]
          */
         rootValue?: any;
         /**
-         * <-dxTreeList.Options.scrolling->
+         * [descr:dxTreeList.Options.scrolling]
          */
         scrolling?: dxTreeListScrolling;
         /**
-         * <-dxTreeList.Options.selection->
+         * [descr:dxTreeList.Options.selection]
          */
         selection?: dxTreeListSelection;
     }
     /**
-     * <-dxTreeList.Options.editing->
+     * [descr:dxTreeList.Options.editing]
      */
     export interface dxTreeListEditing extends GridBaseEditing {
         /**
-         * <-dxTreeList.Options.editing.allowAdding->
+         * [descr:dxTreeList.Options.editing.allowAdding]
          */
         allowAdding?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
         /**
-         * <-dxTreeList.Options.editing.allowDeleting->
+         * [descr:dxTreeList.Options.editing.allowDeleting]
          */
         allowDeleting?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
         /**
-         * <-dxTreeList.Options.editing.allowUpdating->
+         * [descr:dxTreeList.Options.editing.allowUpdating]
          */
         allowUpdating?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject }) => boolean);
         /**
-         * <-dxTreeList.Options.editing.texts->
+         * [descr:dxTreeList.Options.editing.texts]
          */
         texts?: dxTreeListEditingTexts;
     }
     /**
-     * <-dxTreeList.Options.editing.texts->
+     * [descr:dxTreeList.Options.editing.texts]
      */
     export interface dxTreeListEditingTexts extends GridBaseEditingTexts {
         /**
-         * <-dxTreeList.Options.editing.texts.addRowToNode->
+         * [descr:dxTreeList.Options.editing.texts.addRowToNode]
          */
         addRowToNode?: string;
     }
     /**
-     * <-dxTreeList.Options.paging->
+     * [descr:dxTreeList.Options.paging]
      */
     export interface dxTreeListPaging extends GridBasePaging {
         /**
-         * <-dxTreeList.Options.paging.enabled->
+         * [descr:dxTreeList.Options.paging.enabled]
          */
         enabled?: boolean;
     }
     /**
-     * <-dxTreeList.Options.scrolling->
+     * [descr:dxTreeList.Options.scrolling]
      */
     export interface dxTreeListScrolling extends GridBaseScrolling {
         /**
-         * <-dxTreeList.Options.scrolling.mode->
+         * [descr:dxTreeList.Options.scrolling.mode]
          */
         mode?: 'standard' | 'virtual';
     }
     /**
-     * <-dxTreeList.Options.selection->
+     * [descr:dxTreeList.Options.selection]
      */
     export interface dxTreeListSelection extends GridBaseSelection {
         /**
-         * <-dxTreeList.Options.selection.recursive->
+         * [descr:dxTreeList.Options.selection.recursive]
          */
         recursive?: boolean;
     }
     /**
-     * <-dxTreeList->
+     * [descr:dxTreeList]
      */
     export class dxTreeList extends GridBase {
         constructor(element: Element, options?: dxTreeListOptions)
         constructor(element: JQuery, options?: dxTreeListOptions)
         /**
-         * <-dxTreeList.addColumn(columnOptions)->
+         * [descr:dxTreeList.addColumn(columnOptions)]
          */
         addColumn(columnOptions: any | string): void;
         /**
-         * <-dxTreeList.addRow()->
+         * [descr:dxTreeList.addRow()]
          */
         addRow(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeList.addRow(parentId)->
+         * [descr:dxTreeList.addRow(parentId)]
          */
         addRow(parentId: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeList.collapseRow(key)->
+         * [descr:dxTreeList.collapseRow(key)]
          */
         collapseRow(key: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeList.expandRow(key)->
+         * [descr:dxTreeList.expandRow(key)]
          */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeList.forEachNode(callback)->
+         * [descr:dxTreeList.forEachNode(callback)]
          */
         forEachNode(callback: Function): void;
         /**
-         * <-dxTreeList.forEachNode(nodes, callback)->
+         * [descr:dxTreeList.forEachNode(nodes, callback)]
          */
         forEachNode(nodes: Array<dxTreeListNode>, callback: Function): void;
         /**
-         * <-dxTreeList.getNodeByKey(key)->
+         * [descr:dxTreeList.getNodeByKey(key)]
          */
         getNodeByKey(key: any | string | number): dxTreeListNode;
         /**
-         * <-dxTreeList.getRootNode()->
+         * [descr:dxTreeList.getRootNode()]
          */
         getRootNode(): dxTreeListNode;
         /**
-         * <-dxTreeList.getSelectedRowKeys()->
+         * [descr:dxTreeList.getSelectedRowKeys()]
          */
         getSelectedRowKeys(): Array<any>;
         /**
-         * <-dxTreeList.getSelectedRowKeys(mode)->
+         * [descr:dxTreeList.getSelectedRowKeys(mode)]
          */
         getSelectedRowKeys(mode: string): Array<any>;
         /**
-         * <-dxTreeList.getSelectedRowsData()->
+         * [descr:dxTreeList.getSelectedRowsData()]
          */
         getSelectedRowsData(): Array<any>;
         /**
-         * <-dxTreeList.getSelectedRowsData(mode)->
+         * [descr:dxTreeList.getSelectedRowsData(mode)]
          */
         getSelectedRowsData(mode: string): Array<any>;
         /**
-         * <-dxTreeList.getVisibleColumns()->
+         * [descr:dxTreeList.getVisibleColumns()]
          */
         getVisibleColumns(): Array<dxTreeListColumn>;
         /**
-         * <-dxTreeList.getVisibleColumns(headerLevel)->
+         * [descr:dxTreeList.getVisibleColumns(headerLevel)]
          */
         getVisibleColumns(headerLevel: number): Array<dxTreeListColumn>;
         /**
-         * <-dxTreeList.getVisibleRows()->
+         * [descr:dxTreeList.getVisibleRows()]
          */
         getVisibleRows(): Array<dxTreeListRowObject>;
         /**
-         * <-dxTreeList.isRowExpanded(key)->
+         * [descr:dxTreeList.isRowExpanded(key)]
          */
         isRowExpanded(key: any): boolean;
         /**
-         * <-dxTreeList.loadDescendants()->
+         * [descr:dxTreeList.loadDescendants()]
          */
         loadDescendants(): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeList.loadDescendants(keys)->
+         * [descr:dxTreeList.loadDescendants(keys)]
          */
         loadDescendants(keys: Array<any>): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeList.loadDescendants(keys, childrenOnly)->
+         * [descr:dxTreeList.loadDescendants(keys, childrenOnly)]
          */
         loadDescendants(keys: Array<any>, childrenOnly: boolean): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxTreeListColumn->
+     * [descr:dxTreeListColumn]
      */
     export interface dxTreeListColumn extends GridBaseColumn {
         /**
-         * <-dxTreeListColumn.buttons->
+         * [descr:dxTreeListColumn.buttons]
          */
         buttons?: Array<'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | dxTreeListColumnButton>;
         /**
-         * <-dxTreeListColumn.cellTemplate->
+         * [descr:dxTreeListColumn.cellTemplate]
          */
         cellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { data?: any, component?: dxTreeList, value?: any, oldValue?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
         /**
-         * <-dxTreeListColumn.columns->
+         * [descr:dxTreeListColumn.columns]
          */
         columns?: Array<dxTreeListColumn | string>;
         /**
-         * <-dxTreeListColumn.editCellTemplate->
+         * [descr:dxTreeListColumn.editCellTemplate]
          */
         editCellTemplate?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { setValue?: any, data?: any, component?: dxTreeList, value?: any, displayValue?: any, text?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, row?: dxTreeListRowObject, rowType?: string, watch?: Function }) => any);
         /**
-         * <-dxTreeListColumn.headerCellTemplate->
+         * [descr:dxTreeListColumn.headerCellTemplate]
          */
         headerCellTemplate?: DevExpress.core.template | ((columnHeader: DevExpress.core.dxElement, headerInfo: { component?: dxTreeList, columnIndex?: number, column?: dxTreeListColumn }) => any);
         /**
-         * <-dxTreeListColumn.type->
+         * [descr:dxTreeListColumn.type]
          */
         type?: 'adaptive' | 'buttons' | 'drag';
     }
     /**
-     * <-dxTreeListColumnButton->
+     * [descr:dxTreeListColumnButton]
      */
     export interface dxTreeListColumnButton extends GridBaseColumnButton {
         /**
-         * <-dxTreeListColumnButton.name->
+         * [descr:dxTreeListColumnButton.name]
          */
         name?: 'add' | 'cancel' | 'delete' | 'edit' | 'save' | 'undelete' | string;
         /**
-         * <-dxTreeListColumnButton.onClick->
+         * [descr:dxTreeListColumnButton.onClick]
          */
         onClick?: ((e: { component?: dxTreeList, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => any) | string;
         /**
-         * <-dxTreeListColumnButton.template->
+         * [descr:dxTreeListColumnButton.template]
          */
         template?: DevExpress.core.template | ((cellElement: DevExpress.core.dxElement, cellInfo: { component?: dxTreeList, data?: any, key?: any, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject }) => string | Element | JQuery);
         /**
-         * <-dxTreeListColumnButton.visible->
+         * [descr:dxTreeListColumnButton.visible]
          */
         visible?: boolean | ((options: { component?: dxTreeList, row?: dxTreeListRowObject, column?: dxTreeListColumn }) => boolean);
     }
     /**
-     * <-dxTreeListNode->
+     * [descr:dxTreeListNode]
      */
     export interface dxTreeListNode {
         /**
-         * <-dxTreeListNode.children->
+         * [descr:dxTreeListNode.children]
          */
         children?: Array<dxTreeListNode>;
         /**
-         * <-dxTreeListNode.data->
+         * [descr:dxTreeListNode.data]
          */
         data?: any;
         /**
-         * <-dxTreeListNode.hasChildren->
+         * [descr:dxTreeListNode.hasChildren]
          */
         hasChildren?: boolean;
         /**
-         * <-dxTreeListNode.key->
+         * [descr:dxTreeListNode.key]
          */
         key?: any;
         /**
-         * <-dxTreeListNode.level->
+         * [descr:dxTreeListNode.level]
          */
         level?: number;
         /**
-         * <-dxTreeListNode.parent->
+         * [descr:dxTreeListNode.parent]
          */
         parent?: dxTreeListNode;
         /**
-         * <-dxTreeListNode.visible->
+         * [descr:dxTreeListNode.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxTreeListRowObject->
+     * [descr:dxTreeListRowObject]
      */
     export interface dxTreeListRowObject {
         /**
-         * <-dxTreeListRowObject.isEditing->
+         * [descr:dxTreeListRowObject.isEditing]
          */
         isEditing?: boolean;
         /**
-         * <-dxTreeListRowObject.isExpanded->
+         * [descr:dxTreeListRowObject.isExpanded]
          */
         isExpanded?: boolean;
         /**
-         * <-dxTreeListRowObject.isNewRow->
+         * [descr:dxTreeListRowObject.isNewRow]
          */
         isNewRow?: boolean;
         /**
-         * <-dxTreeListRowObject.isSelected->
+         * [descr:dxTreeListRowObject.isSelected]
          */
         isSelected?: boolean;
         /**
-         * <-dxTreeListRowObject.key->
+         * [descr:dxTreeListRowObject.key]
          */
         key?: any;
         /**
-         * <-dxTreeListRowObject.level->
+         * [descr:dxTreeListRowObject.level]
          */
         level?: number;
         /**
-         * <-dxTreeListRowObject.node->
+         * [descr:dxTreeListRowObject.node]
          */
         node?: dxTreeListNode;
         /**
-         * <-dxTreeListRowObject.rowIndex->
+         * [descr:dxTreeListRowObject.rowIndex]
          */
         rowIndex?: number;
         /**
-         * <-dxTreeListRowObject.rowType->
+         * [descr:dxTreeListRowObject.rowType]
          */
         rowType?: string;
         /**
-         * <-dxTreeListRowObject.values->
+         * [descr:dxTreeListRowObject.values]
          */
         values?: Array<any>;
     }
     /**
-     * <-dxTreeView.Options->
+     * [descr:dxTreeView.Options]
      */
     export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
         /**
-         * <-dxTreeView.Options.animationEnabled->
+         * [descr:dxTreeView.Options.animationEnabled]
          */
         animationEnabled?: boolean;
         /**
-         * <-dxTreeView.Options.createChildren->
+         * [descr:dxTreeView.Options.createChildren]
          */
         createChildren?: ((parentNode: dxTreeViewNode) => Promise<any> | JQueryPromise<any> | Array<any>);
         /**
-         * <-dxTreeView.Options.dataSource->
+         * [descr:dxTreeView.Options.dataSource]
          */
         dataSource?: string | Array<dxTreeViewItem> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * <-dxTreeView.Options.dataStructure->
+         * [descr:dxTreeView.Options.dataStructure]
          */
         dataStructure?: 'plain' | 'tree';
         /**
-         * <-dxTreeView.Options.expandAllEnabled->
+         * [descr:dxTreeView.Options.expandAllEnabled]
          */
         expandAllEnabled?: boolean;
         /**
-         * <-dxTreeView.Options.expandEvent->
+         * [descr:dxTreeView.Options.expandEvent]
          */
         expandEvent?: 'dblclick' | 'click';
         /**
-         * <-dxTreeView.Options.expandNodesRecursive->
+         * [descr:dxTreeView.Options.expandNodesRecursive]
          */
         expandNodesRecursive?: boolean;
         /**
-         * <-dxTreeView.Options.expandedExpr->
+         * [descr:dxTreeView.Options.expandedExpr]
          */
         expandedExpr?: string | Function;
         /**
-         * <-dxTreeView.Options.hasItemsExpr->
+         * [descr:dxTreeView.Options.hasItemsExpr]
          */
         hasItemsExpr?: string | Function;
         /**
-         * <-dxTreeView.Options.items->
+         * [descr:dxTreeView.Options.items]
          */
         items?: Array<dxTreeViewItem>;
         /**
-         * <-dxTreeView.Options.onItemClick->
+         * [descr:dxTreeView.Options.onItemClick]
          */
         onItemClick?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, event?: DevExpress.events.event, node?: dxTreeViewNode }) => any);
         /**
-         * <-dxTreeView.Options.onItemCollapsed->
+         * [descr:dxTreeView.Options.onItemCollapsed]
          */
         onItemCollapsed?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event, node?: dxTreeViewNode }) => any);
         /**
-         * <-dxTreeView.Options.onItemContextMenu->
+         * [descr:dxTreeView.Options.onItemContextMenu]
          */
         onItemContextMenu?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number | any, event?: DevExpress.events.event, node?: dxTreeViewNode }) => any);
         /**
-         * <-dxTreeView.Options.onItemExpanded->
+         * [descr:dxTreeView.Options.onItemExpanded]
          */
         onItemExpanded?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event, node?: dxTreeViewNode }) => any);
         /**
-         * <-dxTreeView.Options.onItemHold->
+         * [descr:dxTreeView.Options.onItemHold]
          */
         onItemHold?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, event?: DevExpress.events.event, node?: dxTreeViewNode }) => any);
         /**
-         * <-dxTreeView.Options.onItemRendered->
+         * [descr:dxTreeView.Options.onItemRendered]
          */
         onItemRendered?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, node?: dxTreeViewNode }) => any);
         /**
-         * <-dxTreeView.Options.onItemSelectionChanged->
+         * [descr:dxTreeView.Options.onItemSelectionChanged]
          */
         onItemSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
         /**
-         * <-dxTreeView.Options.onSelectAllValueChanged->
+         * [descr:dxTreeView.Options.onSelectAllValueChanged]
          */
         onSelectAllValueChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any, value?: boolean }) => any);
         /**
-         * <-dxTreeView.Options.onSelectionChanged->
+         * [descr:dxTreeView.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxTreeView, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-dxTreeView.Options.parentIdExpr->
+         * [descr:dxTreeView.Options.parentIdExpr]
          */
         parentIdExpr?: string | Function;
         /**
-         * <-dxTreeView.Options.rootValue->
+         * [descr:dxTreeView.Options.rootValue]
          */
         rootValue?: any;
         /**
-         * <-dxTreeView.Options.scrollDirection->
+         * [descr:dxTreeView.Options.scrollDirection]
          */
         scrollDirection?: 'both' | 'horizontal' | 'vertical';
         /**
-         * <-dxTreeView.Options.selectAllText->
+         * [descr:dxTreeView.Options.selectAllText]
          */
         selectAllText?: string;
         /**
-         * <-dxTreeView.Options.selectByClick->
+         * [descr:dxTreeView.Options.selectByClick]
          */
         selectByClick?: boolean;
         /**
-         * <-dxTreeView.Options.selectNodesRecursive->
+         * [descr:dxTreeView.Options.selectNodesRecursive]
          */
         selectNodesRecursive?: boolean;
         /**
-         * <-dxTreeView.Options.selectionMode->
+         * [descr:dxTreeView.Options.selectionMode]
          */
         selectionMode?: 'multiple' | 'single';
         /**
-         * <-dxTreeView.Options.showCheckBoxesMode->
+         * [descr:dxTreeView.Options.showCheckBoxesMode]
          */
         showCheckBoxesMode?: 'none' | 'normal' | 'selectAll';
         /**
-         * <-dxTreeView.Options.virtualModeEnabled->
+         * [descr:dxTreeView.Options.virtualModeEnabled]
          */
         virtualModeEnabled?: boolean;
     }
     /**
-     * <-dxTreeView->
+     * [descr:dxTreeView]
      */
     export class dxTreeView extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxTreeViewOptions)
         constructor(element: JQuery, options?: dxTreeViewOptions)
         /**
-         * <-dxTreeView.collapseAll()->
+         * [descr:dxTreeView.collapseAll()]
          */
         collapseAll(): void;
         /**
-         * <-dxTreeView.collapseItem(itemData)->
+         * [descr:dxTreeView.collapseItem(itemData)]
          */
         collapseItem(itemData: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeView.collapseItem(itemElement)->
+         * [descr:dxTreeView.collapseItem(itemElement)]
          */
         collapseItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeView.collapseItem(key)->
+         * [descr:dxTreeView.collapseItem(key)]
          */
         collapseItem(key: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeView.expandAll()->
+         * [descr:dxTreeView.expandAll()]
          */
         expandAll(): void;
         /**
-         * <-dxTreeView.expandItem(itemData)->
+         * [descr:dxTreeView.expandItem(itemData)]
          */
         expandItem(itemData: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeView.expandItem(itemElement)->
+         * [descr:dxTreeView.expandItem(itemElement)]
          */
         expandItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeView.expandItem(key)->
+         * [descr:dxTreeView.expandItem(key)]
          */
         expandItem(key: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeView.getNodes()->
+         * [descr:dxTreeView.getNodes()]
          */
         getNodes(): Array<dxTreeViewNode>;
         /**
-         * <-dxTreeView.getSelectedNodeKeys()->
+         * [descr:dxTreeView.getSelectedNodeKeys()]
          */
         getSelectedNodeKeys(): Array<any>;
         /**
-         * <-dxTreeView.getSelectedNodes()->
+         * [descr:dxTreeView.getSelectedNodes()]
          */
         getSelectedNodes(): Array<dxTreeViewNode>;
         /**
-         * <-dxTreeView.scrollToItem(itemData)->
+         * [descr:dxTreeView.scrollToItem(itemData)]
          */
         scrollToItem(itemData: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeView.scrollToItem(itemElement)->
+         * [descr:dxTreeView.scrollToItem(itemElement)]
          */
         scrollToItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeView.scrollToItem(key)->
+         * [descr:dxTreeView.scrollToItem(key)]
          */
         scrollToItem(key: any): Promise<void> & JQueryPromise<void>;
         /**
-         * <-dxTreeView.selectAll()->
+         * [descr:dxTreeView.selectAll()]
          */
         selectAll(): void;
         /**
-         * <-dxTreeView.selectItem(itemData)->
+         * [descr:dxTreeView.selectItem(itemData)]
          */
         selectItem(itemData: any): boolean;
         /**
-         * <-dxTreeView.selectItem(itemElement)->
+         * [descr:dxTreeView.selectItem(itemElement)]
          */
         selectItem(itemElement: Element): boolean;
         /**
-         * <-dxTreeView.selectItem(key)->
+         * [descr:dxTreeView.selectItem(key)]
          */
         selectItem(key: any): boolean;
         /**
-         * <-dxTreeView.unselectAll()->
+         * [descr:dxTreeView.unselectAll()]
          */
         unselectAll(): void;
         /**
-         * <-dxTreeView.unselectItem(itemData)->
+         * [descr:dxTreeView.unselectItem(itemData)]
          */
         unselectItem(itemData: any): boolean;
         /**
-         * <-dxTreeView.unselectItem(itemElement)->
+         * [descr:dxTreeView.unselectItem(itemElement)]
          */
         unselectItem(itemElement: Element): boolean;
         /**
-         * <-dxTreeView.unselectItem(key)->
+         * [descr:dxTreeView.unselectItem(key)]
          */
         unselectItem(key: any): boolean;
         /**
-         * <-dxTreeView.updateDimensions()->
+         * [descr:dxTreeView.updateDimensions()]
          */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
     }
     /**
-     * <-dxTreeViewItem->
+     * [descr:dxTreeViewItem]
      */
     export interface dxTreeViewItem extends CollectionWidgetItem {
         /**
-         * <-dxTreeViewItem.expanded->
+         * [descr:dxTreeViewItem.expanded]
          */
         expanded?: boolean;
         /**
-         * <-dxTreeViewItem.hasItems->
+         * [descr:dxTreeViewItem.hasItems]
          */
         hasItems?: boolean;
         /**
-         * <-dxTreeViewItem.icon->
+         * [descr:dxTreeViewItem.icon]
          */
         icon?: string;
         /**
-         * <-dxTreeViewItem.items->
+         * [descr:dxTreeViewItem.items]
          */
         items?: Array<dxTreeViewItem>;
         /**
-         * <-dxTreeViewItem.parentId->
+         * [descr:dxTreeViewItem.parentId]
          */
         parentId?: number | string;
         /**
-         * <-dxTreeViewItem.selected->
+         * [descr:dxTreeViewItem.selected]
          */
         selected?: boolean;
     }
     /**
-     * <-dxTreeViewNode->
+     * [descr:dxTreeViewNode]
      */
     export interface dxTreeViewNode {
         /**
-         * <-dxTreeViewNode.children->
+         * [descr:dxTreeViewNode.children]
          */
         children?: Array<dxTreeViewNode>;
         /**
-         * <-dxTreeViewNode.disabled->
+         * [descr:dxTreeViewNode.disabled]
          */
         disabled?: boolean;
         /**
-         * <-dxTreeViewNode.expanded->
+         * [descr:dxTreeViewNode.expanded]
          */
         expanded?: boolean;
         /**
-         * <-dxTreeViewNode.itemData->
+         * [descr:dxTreeViewNode.itemData]
          */
         itemData?: any;
         /**
-         * <-dxTreeViewNode.key->
+         * [descr:dxTreeViewNode.key]
          */
         key?: any;
         /**
-         * <-dxTreeViewNode.parent->
+         * [descr:dxTreeViewNode.parent]
          */
         parent?: dxTreeViewNode;
         /**
-         * <-dxTreeViewNode.selected->
+         * [descr:dxTreeViewNode.selected]
          */
         selected?: boolean;
         /**
-         * <-dxTreeViewNode.text->
+         * [descr:dxTreeViewNode.text]
          */
         text?: string;
     }
     /**
-     * <-dxValidationGroup.Options->
+     * [descr:dxValidationGroup.Options]
      */
     export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
     }
     /**
-     * <-dxValidationGroup->
+     * [descr:dxValidationGroup]
      */
     export class dxValidationGroup extends DOMComponent {
         constructor(element: Element, options?: dxValidationGroupOptions)
         constructor(element: JQuery, options?: dxValidationGroupOptions)
         /**
-         * <-dxValidationGroup.reset()->
+         * [descr:dxValidationGroup.reset()]
          */
         reset(): void;
         /**
-         * <-dxValidationGroup.validate()->
+         * [descr:dxValidationGroup.validate()]
          */
         validate(): dxValidationGroupResult;
     }
     /**
-     * <-dxValidationGroupResult->
+     * [descr:dxValidationGroupResult]
      */
     export interface dxValidationGroupResult {
         /**
-         * <-dxValidationGroupResult.brokenRules->
+         * [descr:dxValidationGroupResult.brokenRules]
          */
         brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
         /**
-         * <-dxValidationGroupResult.complete->
+         * [descr:dxValidationGroupResult.complete]
          */
         complete?: Promise<dxValidationGroupResult> | JQueryPromise<dxValidationGroupResult>;
         /**
-         * <-dxValidationGroupResult.isValid->
+         * [descr:dxValidationGroupResult.isValid]
          */
         isValid?: boolean;
         /**
-         * <-dxValidationGroupResult.status->
+         * [descr:dxValidationGroupResult.status]
          */
         status?: 'valid' | 'invalid' | 'pending';
         /**
-         * <-dxValidationGroupResult.validators->
+         * [descr:dxValidationGroupResult.validators]
          */
         validators?: Array<any>;
     }
     /**
-     * <-dxValidationSummary.Options->
+     * [descr:dxValidationSummary.Options]
      */
     export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
         /**
-         * <-dxValidationSummary.Options.validationGroup->
+         * [descr:dxValidationSummary.Options.validationGroup]
          */
         validationGroup?: string;
     }
     /**
-     * <-dxValidationSummary->
+     * [descr:dxValidationSummary]
      */
     export class dxValidationSummary extends CollectionWidget {
         constructor(element: Element, options?: dxValidationSummaryOptions)
         constructor(element: JQuery, options?: dxValidationSummaryOptions)
     }
     /**
-     * <-dxValidator.Options->
+     * [descr:dxValidator.Options]
      */
     export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
         /**
-         * <-dxValidator.Options.adapter->
+         * [descr:dxValidator.Options.adapter]
          */
         adapter?: { applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<Function> };
         /**
-         * <-dxValidator.Options.name->
+         * [descr:dxValidator.Options.name]
          */
         name?: string;
         /**
-         * <-dxValidator.Options.onValidated->
+         * [descr:dxValidator.Options.onValidated]
          */
         onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, status?: 'valid' | 'invalid' | 'pending' }) => any);
         /**
-         * <-dxValidator.Options.validationGroup->
+         * [descr:dxValidator.Options.validationGroup]
          */
         validationGroup?: string;
         /**
-         * <-dxValidator.Options.validationRules->
+         * [descr:dxValidator.Options.validationRules]
          */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     }
     /**
-     * <-dxValidator->
+     * [descr:dxValidator]
      */
     export class dxValidator extends DOMComponent {
         constructor(element: Element, options?: dxValidatorOptions)
         constructor(element: JQuery, options?: dxValidatorOptions)
         /**
-         * <-dxValidator.focus()->
+         * [descr:dxValidator.focus()]
          */
         focus(): void;
         /**
-         * <-dxValidator.reset()->
+         * [descr:dxValidator.reset()]
          */
         reset(): void;
         /**
-         * <-dxValidator.validate()->
+         * [descr:dxValidator.validate()]
          */
         validate(): dxValidatorResult;
     }
     /**
-     * <-dxValidatorResult->
+     * [descr:dxValidatorResult]
      */
     export interface dxValidatorResult {
         /**
-         * <-dxValidatorResult.brokenRule->
+         * [descr:dxValidatorResult.brokenRule]
          */
         brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule;
         /**
-         * <-dxValidatorResult.brokenRules->
+         * [descr:dxValidatorResult.brokenRules]
          */
         brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
         /**
-         * <-dxValidatorResult.complete->
+         * [descr:dxValidatorResult.complete]
          */
         complete?: Promise<dxValidatorResult> | JQueryPromise<dxValidatorResult>;
         /**
-         * <-dxValidatorResult.isValid->
+         * [descr:dxValidatorResult.isValid]
          */
         isValid?: boolean;
         /**
-         * <-dxValidatorResult.pendingRules->
+         * [descr:dxValidatorResult.pendingRules]
          */
         pendingRules?: Array<AsyncRule>;
         /**
-         * <-dxValidatorResult.status->
+         * [descr:dxValidatorResult.status]
          */
         status?: 'valid' | 'invalid' | 'pending';
         /**
-         * <-dxValidatorResult.validationRules->
+         * [descr:dxValidatorResult.validationRules]
          */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
         /**
-         * <-dxValidatorResult.value->
+         * [descr:dxValidatorResult.value]
          */
         value?: any;
     }
     /**
-     * <-format->
+     * [descr:format]
      */
     export type format = 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' | string | ((value: number | Date) => string) | { currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date), precision?: number, type?: 'billions' | 'currency' | 'day' | 'decimal' | 'exponential' | 'fixedPoint' | 'largeNumber' | 'longDate' | 'longTime' | 'millions' | 'millisecond' | 'month' | 'monthAndDay' | 'monthAndYear' | 'percent' | 'quarter' | 'quarterAndYear' | 'shortDate' | 'shortTime' | 'thousands' | 'trillions' | 'year' | 'dayOfWeek' | 'hour' | 'longDateLongTime' | 'minute' | 'second' | 'shortDateShortTime' };
     /**
-     * <-ui.template->
-     * @deprecated <-ui.template:depNote->
+     * [descr:ui.template]
+     * @deprecated [depNote:ui.template]
      */
     export type template = DevExpress.core.template;
     /**
-     * <-ui.themes->
+     * [descr:ui.themes]
      */
     export class themes {
         /**
-         * <-ui.themes.current()->
+         * [descr:ui.themes.current()]
          */
         static current(): string;
         /**
-         * <-ui.themes.current(themeName)->
+         * [descr:ui.themes.current(themeName)]
          */
         static current(themeName: string): void;
         /**
-         * <-ui.themes.initialized(callback)->
+         * [descr:ui.themes.initialized(callback)]
          */
         static initialized(callback: Function): void;
         /**
-         * <-ui.themes.ready(callback)->
+         * [descr:ui.themes.ready(callback)]
          */
         static ready(callback: Function): void;
     }
 }
 declare module DevExpress.ui.dialog {
     /**
-     * <-ui.dialog.alert(messageHtml,title)->
+     * [descr:ui.dialog.alert(messageHtml,title)]
      */
     export function alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
     /**
-     * <-ui.dialog.confirm(messageHtml,title)->
+     * [descr:ui.dialog.confirm(messageHtml,title)]
      */
     export function confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
     /**
-     * <-ui.dialog.custom(options)->
+     * [descr:ui.dialog.custom(options)]
      */
     export function custom(options: { title?: string, messageHtml?: string, buttons?: Array<dxButtonOptions>, showTitle?: boolean, message?: string, dragEnabled?: boolean }): any;
 }
 declare module DevExpress.ui.dxOverlay {
     /**
-     * <-ui.dxOverlay.baseZIndex(zIndex)->
+     * [descr:ui.dxOverlay.baseZIndex(zIndex)]
      */
     export function baseZIndex(zIndex: number): void;
 }
 declare module DevExpress.ui.dxScheduler {
     /**
-     * <-ui.dxScheduler.getTimeZones(date)->
+     * [descr:ui.dxScheduler.getTimeZones(date)]
      */
     export function getTimeZones(date?: Date): Array<any>;
 }
 declare module DevExpress.utils {
     /**
-     * <-utils.cancelAnimationFrame(requestID)->
+     * [descr:utils.cancelAnimationFrame(requestID)]
      */
     export function cancelAnimationFrame(requestID: number): void;
     /**
-     * <-utils.initMobileViewport(options)->
+     * [descr:utils.initMobileViewport(options)]
      */
     export function initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;
     /**
-     * <-utils.requestAnimationFrame(callback)->
+     * [descr:utils.requestAnimationFrame(callback)]
      */
     export function requestAnimationFrame(callback: Function): number;
 }
 declare module DevExpress.viz {
     /**
-     * <-BarGaugeBarInfo->
+     * [descr:BarGaugeBarInfo]
      */
     export interface BarGaugeBarInfo {
         /**
-         * <-BarGaugeBarInfo.color->
+         * [descr:BarGaugeBarInfo.color]
          */
         color?: string;
         /**
-         * <-BarGaugeBarInfo.index->
+         * [descr:BarGaugeBarInfo.index]
          */
         index?: number;
         /**
-         * <-BarGaugeBarInfo.value->
+         * [descr:BarGaugeBarInfo.value]
          */
         value?: number;
     }
     /**
-     * <-BarGaugeLegendItem->
+     * [descr:BarGaugeLegendItem]
      */
     export interface BarGaugeLegendItem extends BaseLegendItem {
         /**
-         * <-BarGaugeLegendItem.item->
+         * [descr:BarGaugeLegendItem.item]
          */
         item?: BarGaugeBarInfo;
     }
     /**
-     * <-BaseChart.Options->
+     * [descr:BaseChart.Options]
      */
     export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
         /**
-         * <-BaseChart.Options.adaptiveLayout->
+         * [descr:BaseChart.Options.adaptiveLayout]
          */
         adaptiveLayout?: BaseChartAdaptiveLayout;
         /**
-         * <-BaseChart.Options.animation->
+         * [descr:BaseChart.Options.animation]
          */
         animation?: { duration?: number, easing?: 'easeOutCubic' | 'linear', enabled?: boolean, maxPointCountSupported?: number } | boolean;
         /**
-         * <-BaseChart.Options.customizeLabel->
+         * [descr:BaseChart.Options.customizeLabel]
          */
         customizeLabel?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesLabel);
         /**
-         * <-BaseChart.Options.customizePoint->
+         * [descr:BaseChart.Options.customizePoint]
          */
         customizePoint?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesPoint);
         /**
-         * <-BaseChart.Options.dataSource->
+         * [descr:BaseChart.Options.dataSource]
          */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /**
-         * <-BaseChart.Options.legend->
+         * [descr:BaseChart.Options.legend]
          */
         legend?: BaseChartLegend;
         /**
-         * <-BaseChart.Options.onDone->
+         * [descr:BaseChart.Options.onDone]
          */
         onDone?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-BaseChart.Options.onPointClick->
+         * [descr:BaseChart.Options.onPointClick]
          */
         onPointClick?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, target?: basePointObject }) => any) | string;
         /**
-         * <-BaseChart.Options.onPointHoverChanged->
+         * [descr:BaseChart.Options.onPointHoverChanged]
          */
         onPointHoverChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
         /**
-         * <-BaseChart.Options.onPointSelectionChanged->
+         * [descr:BaseChart.Options.onPointSelectionChanged]
          */
         onPointSelectionChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
         /**
-         * <-BaseChart.Options.onTooltipHidden->
+         * [descr:BaseChart.Options.onTooltipHidden]
          */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
         /**
-         * <-BaseChart.Options.onTooltipShown->
+         * [descr:BaseChart.Options.onTooltipShown]
          */
         onTooltipShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: basePointObject | dxChartAnnotationConfig | any }) => any);
         /**
-         * <-BaseChart.Options.palette->
+         * [descr:BaseChart.Options.palette]
          */
         palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
-         * <-BaseChart.Options.paletteExtensionMode->
+         * [descr:BaseChart.Options.paletteExtensionMode]
          */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /**
-         * <-BaseChart.Options.pointSelectionMode->
+         * [descr:BaseChart.Options.pointSelectionMode]
          */
         pointSelectionMode?: 'multiple' | 'single';
         /**
-         * <-BaseChart.Options.series->
+         * [descr:BaseChart.Options.series]
          */
         series?: any | Array<any>;
         /**
-         * <-BaseChart.Options.tooltip->
+         * [descr:BaseChart.Options.tooltip]
          */
         tooltip?: BaseChartTooltip;
     }
     /**
-     * <-BaseChart.Options.adaptiveLayout->
+     * [descr:BaseChart.Options.adaptiveLayout]
      */
     interface BaseChartAdaptiveLayout {
         /**
-         * <-BaseChart.Options.adaptiveLayout.height->
+         * [descr:BaseChart.Options.adaptiveLayout.height]
          */
         height?: number;
         /**
-         * <-BaseChart.Options.adaptiveLayout.keepLabels->
+         * [descr:BaseChart.Options.adaptiveLayout.keepLabels]
          */
         keepLabels?: boolean;
         /**
-         * <-BaseChart.Options.adaptiveLayout.width->
+         * [descr:BaseChart.Options.adaptiveLayout.width]
          */
         width?: number;
     }
     /**
-     * <-BaseChart.Options.legend->
+     * [descr:BaseChart.Options.legend]
      */
     interface BaseChartLegend extends BaseLegend {
         /**
-         * <-BaseChart.Options.legend.customizeItems->
+         * [descr:BaseChart.Options.legend.customizeItems]
          */
         customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
         /**
-         * <-BaseChart.Options.legend.markerTemplate->
+         * [descr:BaseChart.Options.legend.markerTemplate]
          */
         markerTemplate?: DevExpress.core.template | ((legendItem: BaseChartLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
     }
     /**
-     * <-BaseChart.Options.tooltip->
+     * [descr:BaseChart.Options.tooltip]
      */
     interface BaseChartTooltip extends BaseWidgetTooltip {
         /**
-         * <-BaseChart.Options.tooltip.argumentFormat->
+         * [descr:BaseChart.Options.tooltip.argumentFormat]
          */
         argumentFormat?: DevExpress.ui.format;
         /**
-         * <-BaseChart.Options.tooltip.contentTemplate->
+         * [descr:BaseChart.Options.tooltip.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((pointInfo: any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-BaseChart.Options.tooltip.customizeTooltip->
+         * [descr:BaseChart.Options.tooltip.customizeTooltip]
          */
         customizeTooltip?: ((pointInfo: any) => any);
         /**
-         * <-BaseChart.Options.tooltip.interactive->
+         * [descr:BaseChart.Options.tooltip.interactive]
          */
         interactive?: boolean;
         /**
-         * <-BaseChart.Options.tooltip.shared->
+         * [descr:BaseChart.Options.tooltip.shared]
          */
         shared?: boolean;
     }
     /**
-     * <-BaseChart->
+     * [descr:BaseChart]
      */
     export class BaseChart extends BaseWidget {
         constructor(element: Element, options?: BaseChartOptions)
         constructor(element: JQuery, options?: BaseChartOptions)
         /**
-         * <-BaseChart.clearSelection()->
+         * [descr:BaseChart.clearSelection()]
          */
         clearSelection(): void;
         /**
-         * <-BaseChart.getAllSeries()->
+         * [descr:BaseChart.getAllSeries()]
          */
         getAllSeries(): Array<baseSeriesObject>;
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
         /**
-         * <-BaseChart.getSeriesByName(seriesName)->
+         * [descr:BaseChart.getSeriesByName(seriesName)]
          */
         getSeriesByName(seriesName: any): chartSeriesObject;
         /**
-         * <-BaseChart.getSeriesByPos(seriesIndex)->
+         * [descr:BaseChart.getSeriesByPos(seriesIndex)]
          */
         getSeriesByPos(seriesIndex: number): chartSeriesObject;
         /**
-         * <-BaseChart.hideTooltip()->
+         * [descr:BaseChart.hideTooltip()]
          */
         hideTooltip(): void;
         /**
-         * <-BaseChart.refresh()->
+         * [descr:BaseChart.refresh()]
          */
         refresh(): void;
         /**
-         * <-BaseWidget.render()->
+         * [descr:BaseWidget.render()]
          */
         render(): void;
         /**
-         * <-BaseChart.render(renderOptions)->
+         * [descr:BaseChart.render(renderOptions)]
          */
         render(renderOptions: any): void;
     }
     /**
-     * <-BaseChartAnnotationConfig->
+     * [descr:BaseChartAnnotationConfig]
      */
     export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
         /**
-         * <-BaseChartAnnotationConfig.argument->
+         * [descr:BaseChartAnnotationConfig.argument]
          */
         argument?: number | Date | string;
         /**
-         * <-BaseChartAnnotationConfig.series->
+         * [descr:BaseChartAnnotationConfig.series]
          */
         series?: string;
         /**
-         * <-BaseChartAnnotationConfig.value->
+         * [descr:BaseChartAnnotationConfig.value]
          */
         value?: number | Date | string;
     }
     /**
-     * <-BaseChartLegendItem->
+     * [descr:BaseChartLegendItem]
      */
     export interface BaseChartLegendItem extends BaseLegendItem {
         /**
-         * <-BaseChartLegendItem.series->
+         * [descr:BaseChartLegendItem.series]
          */
         series?: baseSeriesObject;
     }
     /**
-     * <-BaseGauge.Options->
+     * [descr:BaseGauge.Options]
      */
     export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
         /**
-         * <-BaseGauge.Options.animation->
+         * [descr:BaseGauge.Options.animation]
          */
         animation?: BaseGaugeAnimation;
         /**
-         * <-BaseGauge.Options.containerBackgroundColor->
+         * [descr:BaseGauge.Options.containerBackgroundColor]
          */
         containerBackgroundColor?: string;
         /**
-         * <-BaseGauge.Options.loadingIndicator->
+         * [descr:BaseGauge.Options.loadingIndicator]
          */
         loadingIndicator?: BaseGaugeLoadingIndicator;
         /**
-         * <-BaseGauge.Options.onTooltipHidden->
+         * [descr:BaseGauge.Options.onTooltipHidden]
          */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /**
-         * <-BaseGauge.Options.onTooltipShown->
+         * [descr:BaseGauge.Options.onTooltipShown]
          */
         onTooltipShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /**
-         * <-BaseGauge.Options.rangeContainer->
+         * [descr:BaseGauge.Options.rangeContainer]
          */
         rangeContainer?: BaseGaugeRangeContainer;
         /**
-         * <-BaseGauge.Options.scale->
+         * [descr:BaseGauge.Options.scale]
          */
         scale?: BaseGaugeScale;
         /**
-         * <-BaseGauge.Options.subvalues->
+         * [descr:BaseGauge.Options.subvalues]
          */
         subvalues?: Array<number>;
         /**
-         * <-BaseGauge.Options.tooltip->
+         * [descr:BaseGauge.Options.tooltip]
          */
         tooltip?: BaseGaugeTooltip;
         /**
-         * <-BaseGauge.Options.value->
+         * [descr:BaseGauge.Options.value]
          */
         value?: number;
     }
     /**
-     * <-BaseGauge.Options.animation->
+     * [descr:BaseGauge.Options.animation]
      */
     interface BaseGaugeAnimation {
         /**
-         * <-BaseGauge.Options.animation.duration->
+         * [descr:BaseGauge.Options.animation.duration]
          */
         duration?: number;
         /**
-         * <-BaseGauge.Options.animation.easing->
+         * [descr:BaseGauge.Options.animation.easing]
          */
         easing?: 'easeOutCubic' | 'linear';
         /**
-         * <-BaseGauge.Options.animation.enabled->
+         * [descr:BaseGauge.Options.animation.enabled]
          */
         enabled?: boolean;
     }
     /**
-     * <-BaseGauge.Options.loadingIndicator->
+     * [descr:BaseGauge.Options.loadingIndicator]
      */
     interface BaseGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     }
     /**
-     * <-BaseGauge.Options.rangeContainer->
+     * [descr:BaseGauge.Options.rangeContainer]
      */
     interface BaseGaugeRangeContainer {
         /**
-         * <-BaseGauge.Options.rangeContainer.backgroundColor->
+         * [descr:BaseGauge.Options.rangeContainer.backgroundColor]
          */
         backgroundColor?: string;
         /**
-         * <-BaseGauge.Options.rangeContainer.offset->
+         * [descr:BaseGauge.Options.rangeContainer.offset]
          */
         offset?: number;
         /**
-         * <-BaseGauge.Options.rangeContainer.palette->
+         * [descr:BaseGauge.Options.rangeContainer.palette]
          */
         palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
-         * <-BaseGauge.Options.rangeContainer.paletteExtensionMode->
+         * [descr:BaseGauge.Options.rangeContainer.paletteExtensionMode]
          */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /**
-         * <-BaseGauge.Options.rangeContainer.ranges->
+         * [descr:BaseGauge.Options.rangeContainer.ranges]
          */
         ranges?: Array<{ color?: string, endValue?: number, startValue?: number }>;
     }
     /**
-     * <-BaseGauge.Options.scale->
+     * [descr:BaseGauge.Options.scale]
      */
     interface BaseGaugeScale {
         /**
-         * <-BaseGauge.Options.scale.allowDecimals->
+         * [descr:BaseGauge.Options.scale.allowDecimals]
          */
         allowDecimals?: boolean;
         /**
-         * <-BaseGauge.Options.scale.customMinorTicks->
+         * [descr:BaseGauge.Options.scale.customMinorTicks]
          */
         customMinorTicks?: Array<number>;
         /**
-         * <-BaseGauge.Options.scale.customTicks->
+         * [descr:BaseGauge.Options.scale.customTicks]
          */
         customTicks?: Array<number>;
         /**
-         * <-BaseGauge.Options.scale.endValue->
+         * [descr:BaseGauge.Options.scale.endValue]
          */
         endValue?: number;
         /**
-         * <-BaseGauge.Options.scale.label->
+         * [descr:BaseGauge.Options.scale.label]
          */
         label?: BaseGaugeScaleLabel;
         /**
-         * <-BaseGauge.Options.scale.minorTick->
+         * [descr:BaseGauge.Options.scale.minorTick]
          */
         minorTick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number };
         /**
-         * <-BaseGauge.Options.scale.minorTickInterval->
+         * [descr:BaseGauge.Options.scale.minorTickInterval]
          */
         minorTickInterval?: number;
         /**
-         * <-BaseGauge.Options.scale.scaleDivisionFactor->
+         * [descr:BaseGauge.Options.scale.scaleDivisionFactor]
          */
         scaleDivisionFactor?: number;
         /**
-         * <-BaseGauge.Options.scale.startValue->
+         * [descr:BaseGauge.Options.scale.startValue]
          */
         startValue?: number;
         /**
-         * <-BaseGauge.Options.scale.tick->
+         * [descr:BaseGauge.Options.scale.tick]
          */
         tick?: { color?: string, length?: number, opacity?: number, visible?: boolean, width?: number };
         /**
-         * <-BaseGauge.Options.scale.tickInterval->
+         * [descr:BaseGauge.Options.scale.tickInterval]
          */
         tickInterval?: number;
     }
     /**
-     * <-BaseGauge.Options.scale.label->
+     * [descr:BaseGauge.Options.scale.label]
      */
     interface BaseGaugeScaleLabel {
         /**
-         * <-BaseGauge.Options.scale.label.customizeText->
+         * [descr:BaseGauge.Options.scale.label.customizeText]
          */
         customizeText?: ((scaleValue: { value?: number, valueText?: string }) => string);
         /**
-         * <-BaseGauge.Options.scale.label.font->
+         * [descr:BaseGauge.Options.scale.label.font]
          */
         font?: Font;
         /**
-         * <-BaseGauge.Options.scale.label.format->
+         * [descr:BaseGauge.Options.scale.label.format]
          */
         format?: DevExpress.ui.format;
         /**
-         * <-BaseGauge.Options.scale.label.overlappingBehavior->
+         * [descr:BaseGauge.Options.scale.label.overlappingBehavior]
          */
         overlappingBehavior?: 'hide' | 'none';
         /**
-         * <-BaseGauge.Options.scale.label.useRangeColors->
+         * [descr:BaseGauge.Options.scale.label.useRangeColors]
          */
         useRangeColors?: boolean;
         /**
-         * <-BaseGauge.Options.scale.label.visible->
+         * [descr:BaseGauge.Options.scale.label.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-BaseGauge.Options.tooltip->
+     * [descr:BaseGauge.Options.tooltip]
      */
     interface BaseGaugeTooltip extends BaseWidgetTooltip {
         /**
-         * <-BaseGauge.Options.tooltip.contentTemplate->
+         * [descr:BaseGauge.Options.tooltip.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((scaleValue: { value?: number, valueText?: string }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-BaseGauge.Options.tooltip.customizeTooltip->
+         * [descr:BaseGauge.Options.tooltip.customizeTooltip]
          */
         customizeTooltip?: ((scaleValue: { value?: number, valueText?: string }) => any);
         /**
-         * <-BaseGauge.Options.tooltip.interactive->
+         * [descr:BaseGauge.Options.tooltip.interactive]
          */
         interactive?: boolean;
     }
     /**
-     * <-BaseGauge->
+     * [descr:BaseGauge]
      */
     export class BaseGauge extends BaseWidget {
         constructor(element: Element, options?: BaseGaugeOptions)
         constructor(element: JQuery, options?: BaseGaugeOptions)
         /**
-         * <-BaseGauge.subvalues()->
+         * [descr:BaseGauge.subvalues()]
          */
         subvalues(): Array<number>;
         /**
-         * <-BaseGauge.subvalues(subvalues)->
+         * [descr:BaseGauge.subvalues(subvalues)]
          */
         subvalues(subvalues: Array<number>): void;
         /**
-         * <-BaseGauge.value()->
+         * [descr:BaseGauge.value()]
          */
         value(): number;
         /**
-         * <-BaseGauge.value(value)->
+         * [descr:BaseGauge.value(value)]
          */
         value(value: number): void;
     }
     /**
-     * <-BaseLegend->
+     * [descr:BaseLegend]
      */
     export interface BaseLegend {
         /**
-         * <-BaseLegend.backgroundColor->
+         * [descr:BaseLegend.backgroundColor]
          */
         backgroundColor?: string;
         /**
-         * <-BaseLegend.border->
+         * [descr:BaseLegend.border]
          */
         border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /**
-         * <-BaseLegend.columnCount->
+         * [descr:BaseLegend.columnCount]
          */
         columnCount?: number;
         /**
-         * <-BaseLegend.columnItemSpacing->
+         * [descr:BaseLegend.columnItemSpacing]
          */
         columnItemSpacing?: number;
         /**
-         * <-BaseLegend.font->
+         * [descr:BaseLegend.font]
          */
         font?: Font;
         /**
-         * <-BaseLegend.horizontalAlignment->
+         * [descr:BaseLegend.horizontalAlignment]
          */
         horizontalAlignment?: 'center' | 'left' | 'right';
         /**
-         * <-BaseLegend.itemTextPosition->
+         * [descr:BaseLegend.itemTextPosition]
          */
         itemTextPosition?: 'bottom' | 'left' | 'right' | 'top';
         /**
-         * <-BaseLegend.itemsAlignment->
+         * [descr:BaseLegend.itemsAlignment]
          */
         itemsAlignment?: 'center' | 'left' | 'right';
         /**
-         * <-BaseLegend.margin->
+         * [descr:BaseLegend.margin]
          */
         margin?: number | { bottom?: number, left?: number, right?: number, top?: number };
         /**
-         * <-BaseLegend.markerSize->
+         * [descr:BaseLegend.markerSize]
          */
         markerSize?: number;
         /**
-         * <-BaseLegend.orientation->
+         * [descr:BaseLegend.orientation]
          */
         orientation?: 'horizontal' | 'vertical';
         /**
-         * <-BaseLegend.paddingLeftRight->
+         * [descr:BaseLegend.paddingLeftRight]
          */
         paddingLeftRight?: number;
         /**
-         * <-BaseLegend.paddingTopBottom->
+         * [descr:BaseLegend.paddingTopBottom]
          */
         paddingTopBottom?: number;
         /**
-         * <-BaseLegend.rowCount->
+         * [descr:BaseLegend.rowCount]
          */
         rowCount?: number;
         /**
-         * <-BaseLegend.rowItemSpacing->
+         * [descr:BaseLegend.rowItemSpacing]
          */
         rowItemSpacing?: number;
         /**
-         * <-BaseLegend.title->
+         * [descr:BaseLegend.title]
          */
         title?: { font?: Font, horizontalAlignment?: 'center' | 'left' | 'right', margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, offset?: number, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
         /**
-         * <-BaseLegend.verticalAlignment->
+         * [descr:BaseLegend.verticalAlignment]
          */
         verticalAlignment?: 'bottom' | 'top';
         /**
-         * <-BaseLegend.visible->
+         * [descr:BaseLegend.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-BaseLegendItem->
+     * [descr:BaseLegendItem]
      */
     export interface BaseLegendItem {
         /**
-         * <-BaseLegendItem.marker->
+         * [descr:BaseLegendItem.marker]
          */
         marker?: { fill?: string, opacity?: number, size?: number, state?: 'normal' | 'hovered' | 'selected' };
         /**
-         * <-BaseLegendItem.text->
+         * [descr:BaseLegendItem.text]
          */
         text?: string;
         /**
-         * <-BaseLegendItem.visible->
+         * [descr:BaseLegendItem.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-BaseSparkline.Options->
+     * [descr:BaseSparkline.Options]
      */
     export interface BaseSparklineOptions<T = BaseSparkline> extends BaseWidgetOptions<T> {
         /**
-         * <-BaseSparkline.Options.onTooltipHidden->
+         * [descr:BaseSparkline.Options.onTooltipHidden]
          */
         onTooltipHidden?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-BaseSparkline.Options.onTooltipShown->
+         * [descr:BaseSparkline.Options.onTooltipShown]
          */
         onTooltipShown?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-BaseSparkline.Options.tooltip->
+         * [descr:BaseSparkline.Options.tooltip]
          */
         tooltip?: BaseSparklineTooltip;
     }
     /**
-     * <-BaseSparkline.Options.tooltip->
+     * [descr:BaseSparkline.Options.tooltip]
      */
     interface BaseSparklineTooltip extends BaseWidgetTooltip {
         /**
-         * <-BaseSparkline.Options.tooltip.contentTemplate->
+         * [descr:BaseSparkline.Options.tooltip.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((pointsInfo: any, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-BaseSparkline.Options.tooltip.customizeTooltip->
+         * [descr:BaseSparkline.Options.tooltip.customizeTooltip]
          */
         customizeTooltip?: ((pointsInfo: any) => any);
         /**
-         * <-BaseSparkline.Options.tooltip.enabled->
+         * [descr:BaseSparkline.Options.tooltip.enabled]
          */
         enabled?: boolean;
         /**
-         * <-BaseSparkline.Options.tooltip.interactive->
+         * [descr:BaseSparkline.Options.tooltip.interactive]
          */
         interactive?: boolean;
     }
     /**
-     * <-BaseSparkline->
+     * [descr:BaseSparkline]
      */
     export class BaseSparkline extends BaseWidget {
         constructor(element: Element, options?: BaseSparklineOptions)
         constructor(element: JQuery, options?: BaseSparklineOptions)
     }
     /**
-     * <-BaseWidget.Options->
+     * [descr:BaseWidget.Options]
      */
     export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T> {
         /**
-         * <-BaseWidget.Options.disabled->
+         * [descr:BaseWidget.Options.disabled]
          */
         disabled?: boolean;
         /**
-         * <-BaseWidget.Options.export->
+         * [descr:BaseWidget.Options.export]
          */
         export?: BaseWidgetExport;
         /**
-         * <-BaseWidget.Options.loadingIndicator->
+         * [descr:BaseWidget.Options.loadingIndicator]
          */
         loadingIndicator?: BaseWidgetLoadingIndicator;
         /**
-         * <-BaseWidget.Options.margin->
+         * [descr:BaseWidget.Options.margin]
          */
         margin?: BaseWidgetMargin;
         /**
-         * <-BaseWidget.Options.onDrawn->
+         * [descr:BaseWidget.Options.onDrawn]
          */
         onDrawn?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-BaseWidget.Options.onExported->
+         * [descr:BaseWidget.Options.onExported]
          */
         onExported?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
-         * <-BaseWidget.Options.onExporting->
+         * [descr:BaseWidget.Options.onExporting]
          */
         onExporting?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => any);
         /**
-         * <-BaseWidget.Options.onFileSaving->
+         * [descr:BaseWidget.Options.onFileSaving]
          */
         onFileSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /**
-         * <-BaseWidget.Options.onIncidentOccurred->
+         * [descr:BaseWidget.Options.onIncidentOccurred]
          */
         onIncidentOccurred?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /**
-         * <-BaseWidget.Options.pathModified->
+         * [descr:BaseWidget.Options.pathModified]
          */
         pathModified?: boolean;
         /**
-         * <-BaseWidget.Options.redrawOnResize->
+         * [descr:BaseWidget.Options.redrawOnResize]
          */
         redrawOnResize?: boolean;
         /**
-         * <-BaseWidget.Options.rtlEnabled->
+         * [descr:BaseWidget.Options.rtlEnabled]
          */
         rtlEnabled?: boolean;
         /**
-         * <-BaseWidget.Options.size->
+         * [descr:BaseWidget.Options.size]
          */
         size?: BaseWidgetSize;
         /**
-         * <-BaseWidget.Options.theme->
+         * [descr:BaseWidget.Options.theme]
          */
         theme?: 'generic.dark' | 'generic.light' | 'generic.contrast' | 'generic.carmine' | 'generic.darkmoon' | 'generic.darkviolet' | 'generic.greenmist' | 'generic.softblue' | 'material.blue.light' | 'material.lime.light' | 'material.orange.light' | 'material.purple.light' | 'material.teal.light';
         /**
-         * <-BaseWidget.Options.title->
+         * [descr:BaseWidget.Options.title]
          */
         title?: BaseWidgetTitle | string;
         /**
-         * <-BaseWidget.Options.tooltip->
+         * [descr:BaseWidget.Options.tooltip]
          */
         tooltip?: BaseWidgetTooltip;
     }
     /**
-     * <-BaseWidget.Options.export->
+     * [descr:BaseWidget.Options.export]
      */
     interface BaseWidgetExport {
         /**
-         * <-BaseWidget.Options.export.backgroundColor->
+         * [descr:BaseWidget.Options.export.backgroundColor]
          */
         backgroundColor?: string;
         /**
-         * <-BaseWidget.Options.export.enabled->
+         * [descr:BaseWidget.Options.export.enabled]
          */
         enabled?: boolean;
         /**
-         * <-BaseWidget.Options.export.fileName->
+         * [descr:BaseWidget.Options.export.fileName]
          */
         fileName?: string;
         /**
-         * <-BaseWidget.Options.export.formats->
+         * [descr:BaseWidget.Options.export.formats]
          */
         formats?: Array<'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG'>;
         /**
-         * <-BaseWidget.Options.export.margin->
+         * [descr:BaseWidget.Options.export.margin]
          */
         margin?: number;
         /**
-         * <-BaseWidget.Options.export.printingEnabled->
+         * [descr:BaseWidget.Options.export.printingEnabled]
          */
         printingEnabled?: boolean;
         /**
-         * <-BaseWidget.Options.export.proxyUrl->
-         * @deprecated <-BaseWidget.Options.export.proxyUrl:depNote->
+         * [descr:BaseWidget.Options.export.proxyUrl]
+         * @deprecated [depNote:BaseWidget.Options.export.proxyUrl]
          */
         proxyUrl?: string;
         /**
-         * <-BaseWidget.Options.export.svgToCanvas->
+         * [descr:BaseWidget.Options.export.svgToCanvas]
          */
         svgToCanvas?: ((svg: SVGElement, canvas: HTMLCanvasElement) => Promise<void> | JQueryPromise<void>);
     }
     /**
-     * <-BaseWidget.Options.loadingIndicator->
+     * [descr:BaseWidget.Options.loadingIndicator]
      */
     interface BaseWidgetLoadingIndicator {
         /**
-         * <-BaseWidget.Options.loadingIndicator.backgroundColor->
+         * [descr:BaseWidget.Options.loadingIndicator.backgroundColor]
          */
         backgroundColor?: string;
         /**
-         * <-BaseWidget.Options.loadingIndicator.enabled->
+         * [descr:BaseWidget.Options.loadingIndicator.enabled]
          */
         enabled?: boolean;
         /**
-         * <-BaseWidget.Options.loadingIndicator.font->
+         * [descr:BaseWidget.Options.loadingIndicator.font]
          */
         font?: Font;
         /**
-         * <-BaseWidget.Options.loadingIndicator.show->
+         * [descr:BaseWidget.Options.loadingIndicator.show]
          */
         show?: boolean;
         /**
-         * <-BaseWidget.Options.loadingIndicator.text->
+         * [descr:BaseWidget.Options.loadingIndicator.text]
          */
         text?: string;
     }
     /**
-     * <-BaseWidget.Options.margin->
+     * [descr:BaseWidget.Options.margin]
      */
     interface BaseWidgetMargin {
         /**
-         * <-BaseWidget.Options.margin.bottom->
+         * [descr:BaseWidget.Options.margin.bottom]
          */
         bottom?: number;
         /**
-         * <-BaseWidget.Options.margin.left->
+         * [descr:BaseWidget.Options.margin.left]
          */
         left?: number;
         /**
-         * <-BaseWidget.Options.margin.right->
+         * [descr:BaseWidget.Options.margin.right]
          */
         right?: number;
         /**
-         * <-BaseWidget.Options.margin.top->
+         * [descr:BaseWidget.Options.margin.top]
          */
         top?: number;
     }
     /**
-     * <-BaseWidget.Options.size->
+     * [descr:BaseWidget.Options.size]
      */
     interface BaseWidgetSize {
         /**
-         * <-BaseWidget.Options.size.height->
+         * [descr:BaseWidget.Options.size.height]
          */
         height?: number;
         /**
-         * <-BaseWidget.Options.size.width->
+         * [descr:BaseWidget.Options.size.width]
          */
         width?: number;
     }
     /**
-     * <-BaseWidget.Options.title->
+     * [descr:BaseWidget.Options.title]
      */
     interface BaseWidgetTitle {
         /**
-         * <-BaseWidget.Options.title.font->
+         * [descr:BaseWidget.Options.title.font]
          */
         font?: Font;
         /**
-         * <-BaseWidget.Options.title.horizontalAlignment->
+         * [descr:BaseWidget.Options.title.horizontalAlignment]
          */
         horizontalAlignment?: 'center' | 'left' | 'right';
         /**
-         * <-BaseWidget.Options.title.margin->
+         * [descr:BaseWidget.Options.title.margin]
          */
         margin?: number | { bottom?: number, left?: number, right?: number, top?: number };
         /**
-         * <-BaseWidget.Options.title.placeholderSize->
+         * [descr:BaseWidget.Options.title.placeholderSize]
          */
         placeholderSize?: number;
         /**
-         * <-BaseWidget.Options.title.subtitle->
+         * [descr:BaseWidget.Options.title.subtitle]
          */
         subtitle?: { font?: Font, offset?: number, text?: string, textOverflow?: 'ellipsis' | 'hide' | 'none', wordWrap?: 'normal' | 'breakWord' | 'none' } | string;
         /**
-         * <-BaseWidget.Options.title.text->
+         * [descr:BaseWidget.Options.title.text]
          */
         text?: string;
         /**
-         * <-BaseWidget.Options.title.textOverflow->
+         * [descr:BaseWidget.Options.title.textOverflow]
          */
         textOverflow?: 'ellipsis' | 'hide' | 'none';
         /**
-         * <-BaseWidget.Options.title.verticalAlignment->
+         * [descr:BaseWidget.Options.title.verticalAlignment]
          */
         verticalAlignment?: 'bottom' | 'top';
         /**
-         * <-BaseWidget.Options.title.wordWrap->
+         * [descr:BaseWidget.Options.title.wordWrap]
          */
         wordWrap?: 'normal' | 'breakWord' | 'none';
     }
     /**
-     * <-BaseWidget.Options.tooltip->
+     * [descr:BaseWidget.Options.tooltip]
      */
     interface BaseWidgetTooltip {
         /**
-         * <-BaseWidget.Options.tooltip.arrowLength->
+         * [descr:BaseWidget.Options.tooltip.arrowLength]
          */
         arrowLength?: number;
         /**
-         * <-BaseWidget.Options.tooltip.border->
+         * [descr:BaseWidget.Options.tooltip.border]
          */
         border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /**
-         * <-BaseWidget.Options.tooltip.color->
+         * [descr:BaseWidget.Options.tooltip.color]
          */
         color?: string;
         /**
-         * <-BaseWidget.Options.tooltip.container->
+         * [descr:BaseWidget.Options.tooltip.container]
          */
         container?: string | Element | JQuery;
         /**
-         * <-BaseWidget.Options.tooltip.cornerRadius->
+         * [descr:BaseWidget.Options.tooltip.cornerRadius]
          */
         cornerRadius?: number;
         /**
-         * <-BaseWidget.Options.tooltip.enabled->
+         * [descr:BaseWidget.Options.tooltip.enabled]
          */
         enabled?: boolean;
         /**
-         * <-BaseWidget.Options.tooltip.font->
+         * [descr:BaseWidget.Options.tooltip.font]
          */
         font?: Font;
         /**
-         * <-BaseWidget.Options.tooltip.format->
+         * [descr:BaseWidget.Options.tooltip.format]
          */
         format?: DevExpress.ui.format;
         /**
-         * <-BaseWidget.Options.tooltip.opacity->
+         * [descr:BaseWidget.Options.tooltip.opacity]
          */
         opacity?: number;
         /**
-         * <-BaseWidget.Options.tooltip.paddingLeftRight->
+         * [descr:BaseWidget.Options.tooltip.paddingLeftRight]
          */
         paddingLeftRight?: number;
         /**
-         * <-BaseWidget.Options.tooltip.paddingTopBottom->
+         * [descr:BaseWidget.Options.tooltip.paddingTopBottom]
          */
         paddingTopBottom?: number;
         /**
-         * <-BaseWidget.Options.tooltip.shadow->
+         * [descr:BaseWidget.Options.tooltip.shadow]
          */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
         /**
-         * <-BaseWidget.Options.tooltip.zIndex->
+         * [descr:BaseWidget.Options.tooltip.zIndex]
          */
         zIndex?: number;
     }
     /**
-     * <-BaseWidget->
+     * [descr:BaseWidget]
      */
     export class BaseWidget extends DOMComponent {
         constructor(element: Element, options?: BaseWidgetOptions)
         constructor(element: JQuery, options?: BaseWidgetOptions)
         /**
-         * <-BaseWidget.exportTo(fileName, format)->
+         * [descr:BaseWidget.exportTo(fileName, format)]
          */
         exportTo(fileName: string, format: string): void;
         /**
-         * <-BaseWidget.getSize()->
+         * [descr:BaseWidget.getSize()]
          */
         getSize(): BaseWidgetSize;
         /**
-         * <-BaseWidget.hideLoadingIndicator()->
+         * [descr:BaseWidget.hideLoadingIndicator()]
          */
         hideLoadingIndicator(): void;
         /**
-         * <-BaseWidget.print()->
+         * [descr:BaseWidget.print()]
          */
         print(): void;
         /**
-         * <-BaseWidget.render()->
+         * [descr:BaseWidget.render()]
          */
         render(): void;
         /**
-         * <-BaseWidget.showLoadingIndicator()->
+         * [descr:BaseWidget.showLoadingIndicator()]
          */
         showLoadingIndicator(): void;
         /**
-         * <-BaseWidget.svg()->
+         * [descr:BaseWidget.svg()]
          */
         svg(): string;
     }
     /**
-     * <-BaseWidgetAnnotationConfig->
+     * [descr:BaseWidgetAnnotationConfig]
      */
     export interface BaseWidgetAnnotationConfig {
         /**
-         * <-BaseWidgetAnnotationConfig.allowDragging->
+         * [descr:BaseWidgetAnnotationConfig.allowDragging]
          */
         allowDragging?: boolean;
         /**
-         * <-BaseWidgetAnnotationConfig.arrowLength->
+         * [descr:BaseWidgetAnnotationConfig.arrowLength]
          */
         arrowLength?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.arrowWidth->
+         * [descr:BaseWidgetAnnotationConfig.arrowWidth]
          */
         arrowWidth?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.border->
+         * [descr:BaseWidgetAnnotationConfig.border]
          */
         border?: { color?: string, cornerRadius?: number, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', opacity?: number, visible?: boolean, width?: number };
         /**
-         * <-BaseWidgetAnnotationConfig.color->
+         * [descr:BaseWidgetAnnotationConfig.color]
          */
         color?: string;
         /**
-         * <-BaseWidgetAnnotationConfig.data->
+         * [descr:BaseWidgetAnnotationConfig.data]
          */
         data?: any;
         /**
-         * <-BaseWidgetAnnotationConfig.description->
+         * [descr:BaseWidgetAnnotationConfig.description]
          */
         description?: string;
         /**
-         * <-BaseWidgetAnnotationConfig.font->
+         * [descr:BaseWidgetAnnotationConfig.font]
          */
         font?: Font;
         /**
-         * <-BaseWidgetAnnotationConfig.height->
+         * [descr:BaseWidgetAnnotationConfig.height]
          */
         height?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.image->
+         * [descr:BaseWidgetAnnotationConfig.image]
          */
         image?: string | { height?: number, url?: string, width?: number };
         /**
-         * <-BaseWidgetAnnotationConfig.offsetX->
+         * [descr:BaseWidgetAnnotationConfig.offsetX]
          */
         offsetX?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.offsetY->
+         * [descr:BaseWidgetAnnotationConfig.offsetY]
          */
         offsetY?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.opacity->
+         * [descr:BaseWidgetAnnotationConfig.opacity]
          */
         opacity?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.paddingLeftRight->
+         * [descr:BaseWidgetAnnotationConfig.paddingLeftRight]
          */
         paddingLeftRight?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.paddingTopBottom->
+         * [descr:BaseWidgetAnnotationConfig.paddingTopBottom]
          */
         paddingTopBottom?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.shadow->
+         * [descr:BaseWidgetAnnotationConfig.shadow]
          */
         shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number };
         /**
-         * <-BaseWidgetAnnotationConfig.text->
+         * [descr:BaseWidgetAnnotationConfig.text]
          */
         text?: string;
         /**
-         * <-BaseWidgetAnnotationConfig.textOverflow->
+         * [descr:BaseWidgetAnnotationConfig.textOverflow]
          */
         textOverflow?: 'ellipsis' | 'hide' | 'none';
         /**
-         * <-BaseWidgetAnnotationConfig.tooltipEnabled->
+         * [descr:BaseWidgetAnnotationConfig.tooltipEnabled]
          */
         tooltipEnabled?: boolean;
         /**
-         * <-BaseWidgetAnnotationConfig.type->
+         * [descr:BaseWidgetAnnotationConfig.type]
          */
         type?: 'text' | 'image' | 'custom';
         /**
-         * <-BaseWidgetAnnotationConfig.width->
+         * [descr:BaseWidgetAnnotationConfig.width]
          */
         width?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.wordWrap->
+         * [descr:BaseWidgetAnnotationConfig.wordWrap]
          */
         wordWrap?: 'normal' | 'breakWord' | 'none';
         /**
-         * <-BaseWidgetAnnotationConfig.x->
+         * [descr:BaseWidgetAnnotationConfig.x]
          */
         x?: number;
         /**
-         * <-BaseWidgetAnnotationConfig.y->
+         * [descr:BaseWidgetAnnotationConfig.y]
          */
         y?: number;
     }
     /**
-     * <-ChartSeries->
+     * [descr:ChartSeries]
      */
     export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-ChartSeries.name->
+         * [descr:ChartSeries.name]
          */
         name?: string;
         /**
-         * <-ChartSeries.tag->
+         * [descr:ChartSeries.tag]
          */
         tag?: any;
         /**
-         * <-ChartSeries.type->
+         * [descr:ChartSeries.type]
          */
         type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
     }
     /**
-     * <-CommonIndicator->
+     * [descr:CommonIndicator]
      */
     export interface CommonIndicator {
         /**
-         * <-CommonIndicator.arrowLength->
+         * [descr:CommonIndicator.arrowLength]
          */
         arrowLength?: number;
         /**
-         * <-CommonIndicator.backgroundColor->
+         * [descr:CommonIndicator.backgroundColor]
          */
         backgroundColor?: string;
         /**
-         * <-CommonIndicator.baseValue->
+         * [descr:CommonIndicator.baseValue]
          */
         baseValue?: number;
         /**
-         * <-CommonIndicator.beginAdaptingAtRadius->
+         * [descr:CommonIndicator.beginAdaptingAtRadius]
          */
         beginAdaptingAtRadius?: number;
         /**
-         * <-CommonIndicator.color->
+         * [descr:CommonIndicator.color]
          */
         color?: string;
         /**
-         * <-CommonIndicator.horizontalOrientation->
+         * [descr:CommonIndicator.horizontalOrientation]
          */
         horizontalOrientation?: 'left' | 'right';
         /**
-         * <-CommonIndicator.indentFromCenter->
+         * [descr:CommonIndicator.indentFromCenter]
          */
         indentFromCenter?: number;
         /**
-         * <-CommonIndicator.length->
+         * [descr:CommonIndicator.length]
          */
         length?: number;
         /**
-         * <-CommonIndicator.offset->
+         * [descr:CommonIndicator.offset]
          */
         offset?: number;
         /**
-         * <-CommonIndicator.palette->
+         * [descr:CommonIndicator.palette]
          */
         palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
-         * <-CommonIndicator.secondColor->
+         * [descr:CommonIndicator.secondColor]
          */
         secondColor?: string;
         /**
-         * <-CommonIndicator.secondFraction->
+         * [descr:CommonIndicator.secondFraction]
          */
         secondFraction?: number;
         /**
-         * <-CommonIndicator.size->
+         * [descr:CommonIndicator.size]
          */
         size?: number;
         /**
-         * <-CommonIndicator.spindleGapSize->
+         * [descr:CommonIndicator.spindleGapSize]
          */
         spindleGapSize?: number;
         /**
-         * <-CommonIndicator.spindleSize->
+         * [descr:CommonIndicator.spindleSize]
          */
         spindleSize?: number;
         /**
-         * <-CommonIndicator.text->
+         * [descr:CommonIndicator.text]
          */
         text?: { customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, indent?: number };
         /**
-         * <-CommonIndicator.verticalOrientation->
+         * [descr:CommonIndicator.verticalOrientation]
          */
         verticalOrientation?: 'bottom' | 'top';
         /**
-         * <-CommonIndicator.width->
+         * [descr:CommonIndicator.width]
          */
         width?: number;
     }
     /**
-     * <-Font->
+     * [descr:Font]
      */
     export interface Font {
         /**
-         * <-Font.color->
+         * [descr:Font.color]
          */
         color?: string;
         /**
-         * <-Font.family->
+         * [descr:Font.family]
          */
         family?: string;
         /**
-         * <-Font.opacity->
+         * [descr:Font.opacity]
          */
         opacity?: number;
         /**
-         * <-Font.size->
+         * [descr:Font.size]
          */
         size?: string | number;
         /**
-         * <-Font.weight->
+         * [descr:Font.weight]
          */
         weight?: number;
     }
     /**
-     * <-FunnelLegendItem->
+     * [descr:FunnelLegendItem]
      */
     export interface FunnelLegendItem extends BaseLegendItem {
         /**
-         * <-FunnelLegendItem.item->
+         * [descr:FunnelLegendItem.item]
          */
         item?: dxFunnelItem;
     }
     /**
-     * <-GaugeIndicator->
+     * [descr:GaugeIndicator]
      */
     export interface GaugeIndicator extends CommonIndicator {
         /**
-         * <-GaugeIndicator.type->
+         * [descr:GaugeIndicator.type]
          */
         type?: 'circle' | 'rangeBar' | 'rectangle' | 'rectangleNeedle' | 'rhombus' | 'textCloud' | 'triangleMarker' | 'triangleNeedle' | 'twoColorNeedle';
     }
     /**
-     * <-MapLayer->
+     * [descr:MapLayer]
      */
     export class MapLayer {
         /**
-         * <-MapLayer.elementType->
+         * [descr:MapLayer.elementType]
          */
         elementType?: string;
         /**
-         * <-MapLayer.index->
+         * [descr:MapLayer.index]
          */
         index?: number;
         /**
-         * <-MapLayer.name->
+         * [descr:MapLayer.name]
          */
         name?: string;
         /**
-         * <-MapLayer.type->
+         * [descr:MapLayer.type]
          */
         type?: string;
         /**
-         * <-MapLayer.clearSelection()->
+         * [descr:MapLayer.clearSelection()]
          */
         clearSelection(): void;
         /**
-         * <-MapLayer.getDataSource()->
+         * [descr:MapLayer.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
         /**
-         * <-MapLayer.getElements()->
+         * [descr:MapLayer.getElements()]
          */
         getElements(): Array<MapLayerElement>;
     }
     /**
-     * <-MapLayerElement->
+     * [descr:MapLayerElement]
      */
     export class MapLayerElement {
         /**
-         * <-MapLayerElement.layer->
+         * [descr:MapLayerElement.layer]
          */
         layer?: any;
         /**
-         * <-MapLayerElement.applySettings(settings)->
+         * [descr:MapLayerElement.applySettings(settings)]
          */
         applySettings(settings: any): void;
         /**
-         * <-MapLayerElement.attribute(name)->
+         * [descr:MapLayerElement.attribute(name)]
          */
         attribute(name: string): any;
         /**
-         * <-MapLayerElement.attribute(name, value)->
+         * [descr:MapLayerElement.attribute(name, value)]
          */
         attribute(name: string, value: any): void;
         /**
-         * <-MapLayerElement.coordinates()->
+         * [descr:MapLayerElement.coordinates()]
          */
         coordinates(): any;
         /**
-         * <-MapLayerElement.selected()->
+         * [descr:MapLayerElement.selected()]
          */
         selected(): boolean;
         /**
-         * <-MapLayerElement.selected(state)->
+         * [descr:MapLayerElement.selected(state)]
          */
         selected(state: boolean): void;
     }
     /**
-     * <-PieChartLegendItem->
+     * [descr:PieChartLegendItem]
      */
     export interface PieChartLegendItem extends BaseLegendItem {
         /**
-         * <-PieChartLegendItem.argument->
+         * [descr:PieChartLegendItem.argument]
          */
         argument?: string | Date | number;
         /**
-         * <-PieChartLegendItem.argumentIndex->
+         * [descr:PieChartLegendItem.argumentIndex]
          */
         argumentIndex?: number;
         /**
-         * <-PieChartLegendItem.points->
+         * [descr:PieChartLegendItem.points]
          */
         points?: Array<piePointObject>;
         /**
-         * <-PieChartLegendItem.text->
+         * [descr:PieChartLegendItem.text]
          */
         text?: any;
     }
     /**
-     * <-PieChartSeries->
+     * [descr:PieChartSeries]
      */
     export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
         /**
-         * <-PieChartSeries.name->
+         * [descr:PieChartSeries.name]
          */
         name?: string;
         /**
-         * <-PieChartSeries.tag->
+         * [descr:PieChartSeries.tag]
          */
         tag?: any;
     }
     /**
-     * <-PolarChartSeries->
+     * [descr:PolarChartSeries]
      */
     export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /**
-         * <-PolarChartSeries.name->
+         * [descr:PolarChartSeries.name]
          */
         name?: string;
         /**
-         * <-PolarChartSeries.tag->
+         * [descr:PolarChartSeries.tag]
          */
         tag?: any;
         /**
-         * <-PolarChartSeries.type->
+         * [descr:PolarChartSeries.type]
          */
         type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
     }
     /**
-     * <-ScaleBreak->
+     * [descr:ScaleBreak]
      */
     export interface ScaleBreak {
         /**
-         * <-ScaleBreak.endValue->
+         * [descr:ScaleBreak.endValue]
          */
         endValue?: number | Date | string;
         /**
-         * <-ScaleBreak.startValue->
+         * [descr:ScaleBreak.startValue]
          */
         startValue?: number | Date | string;
     }
     /**
-     * <-VectorMapLegendItem->
+     * [descr:VectorMapLegendItem]
      */
     export interface VectorMapLegendItem extends BaseLegendItem {
         /**
-         * <-VectorMapLegendItem.color->
+         * [descr:VectorMapLegendItem.color]
          */
         color?: string;
         /**
-         * <-VectorMapLegendItem.end->
+         * [descr:VectorMapLegendItem.end]
          */
         end?: number;
         /**
-         * <-VectorMapLegendItem.size->
+         * [descr:VectorMapLegendItem.size]
          */
         size?: number;
         /**
-         * <-VectorMapLegendItem.start->
+         * [descr:VectorMapLegendItem.start]
          */
         start?: number;
     }
     /**
-     * <-VectorMapProjectionConfig->
+     * [descr:VectorMapProjectionConfig]
      */
     export interface VectorMapProjectionConfig {
         /**
-         * <-VectorMapProjectionConfig.aspectRatio->
+         * [descr:VectorMapProjectionConfig.aspectRatio]
          */
         aspectRatio?: number;
         /**
-         * <-VectorMapProjectionConfig.from->
+         * [descr:VectorMapProjectionConfig.from]
          */
         from?: ((coordinates: Array<number>) => Array<number>);
         /**
-         * <-VectorMapProjectionConfig.to->
+         * [descr:VectorMapProjectionConfig.to]
          */
         to?: ((coordinates: Array<number>) => Array<number>);
     }
     /**
-     * <-VizRange->
+     * [descr:VizRange]
      */
     export interface VizRange {
         /**
-         * <-VizRange.endValue->
+         * [descr:VizRange.endValue]
          */
         endValue?: number | Date | string;
         /**
-         * <-VizRange.length->
+         * [descr:VizRange.length]
          */
         length?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-VizRange.startValue->
+         * [descr:VizRange.startValue]
          */
         startValue?: number | Date | string;
     }
     /**
-     * <-VizTimeInterval->
+     * [descr:VizTimeInterval]
      */
     export type VizTimeInterval = number | { days?: number, hours?: number, milliseconds?: number, minutes?: number, months?: number, quarters?: number, seconds?: number, weeks?: number, years?: number } | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
     /**
-     * <-baseLabelObject->
+     * [descr:baseLabelObject]
      */
     export class baseLabelObject {
         /**
-         * <-baseLabelObject.getBoundingRect()->
+         * [descr:baseLabelObject.getBoundingRect()]
          */
         getBoundingRect(): any;
         /**
-         * <-baseLabelObject.hide()->
+         * [descr:baseLabelObject.hide()]
          */
         hide(): void;
         /**
-         * <-baseLabelObject.hide(holdInvisible)->
+         * [descr:baseLabelObject.hide(holdInvisible)]
          */
         hide(holdInvisible: boolean): void;
         /**
-         * <-baseLabelObject.isVisible()->
+         * [descr:baseLabelObject.isVisible()]
          */
         isVisible(): boolean;
         /**
-         * <-baseLabelObject.show()->
+         * [descr:baseLabelObject.show()]
          */
         show(): void;
         /**
-         * <-baseLabelObject.show(holdVisible)->
+         * [descr:baseLabelObject.show(holdVisible)]
          */
         show(holdVisible: boolean): void;
     }
     /**
-     * <-basePointObject->
+     * [descr:basePointObject]
      */
     export class basePointObject {
         /**
-         * <-basePointObject.data->
+         * [descr:basePointObject.data]
          */
         data?: any;
         /**
-         * <-basePointObject.fullState->
+         * [descr:basePointObject.fullState]
          */
         fullState?: number;
         /**
-         * <-basePointObject.originalArgument->
+         * [descr:basePointObject.originalArgument]
          */
         originalArgument?: string | number | Date;
         /**
-         * <-basePointObject.originalValue->
+         * [descr:basePointObject.originalValue]
          */
         originalValue?: string | number | Date;
         /**
-         * <-basePointObject.series->
+         * [descr:basePointObject.series]
          */
         series?: any;
         /**
-         * <-basePointObject.tag->
+         * [descr:basePointObject.tag]
          */
         tag?: any;
         /**
-         * <-basePointObject.clearHover()->
+         * [descr:basePointObject.clearHover()]
          */
         clearHover(): void;
         /**
-         * <-basePointObject.clearSelection()->
+         * [descr:basePointObject.clearSelection()]
          */
         clearSelection(): void;
         /**
-         * <-basePointObject.getColor()->
+         * [descr:basePointObject.getColor()]
          */
         getColor(): string;
         /**
-         * <-basePointObject.getLabel()->
+         * [descr:basePointObject.getLabel()]
          */
         getLabel(): baseLabelObject & Array<baseLabelObject>;
         /**
-         * <-basePointObject.hideTooltip()->
+         * [descr:basePointObject.hideTooltip()]
          */
         hideTooltip(): void;
         /**
-         * <-basePointObject.hover()->
+         * [descr:basePointObject.hover()]
          */
         hover(): void;
         /**
-         * <-basePointObject.isHovered()->
+         * [descr:basePointObject.isHovered()]
          */
         isHovered(): boolean;
         /**
-         * <-basePointObject.isSelected()->
+         * [descr:basePointObject.isSelected()]
          */
         isSelected(): boolean;
         /**
-         * <-basePointObject.select()->
+         * [descr:basePointObject.select()]
          */
         select(): void;
         /**
-         * <-basePointObject.showTooltip()->
+         * [descr:basePointObject.showTooltip()]
          */
         showTooltip(): void;
     }
     /**
-     * <-baseSeriesObject->
+     * [descr:baseSeriesObject]
      */
     export class baseSeriesObject {
         /**
-         * <-baseSeriesObject.fullState->
+         * [descr:baseSeriesObject.fullState]
          */
         fullState?: number;
         /**
-         * <-baseSeriesObject.name->
+         * [descr:baseSeriesObject.name]
          */
         name?: any;
         /**
-         * <-baseSeriesObject.tag->
+         * [descr:baseSeriesObject.tag]
          */
         tag?: any;
         /**
-         * <-baseSeriesObject.type->
+         * [descr:baseSeriesObject.type]
          */
         type?: string;
         /**
-         * <-baseSeriesObject.clearHover()->
+         * [descr:baseSeriesObject.clearHover()]
          */
         clearHover(): void;
         /**
-         * <-baseSeriesObject.clearSelection()->
+         * [descr:baseSeriesObject.clearSelection()]
          */
         clearSelection(): void;
         /**
-         * <-baseSeriesObject.deselectPoint(point)->
+         * [descr:baseSeriesObject.deselectPoint(point)]
          */
         deselectPoint(point: basePointObject): void;
         /**
-         * <-baseSeriesObject.getAllPoints()->
+         * [descr:baseSeriesObject.getAllPoints()]
          */
         getAllPoints(): Array<basePointObject>;
         /**
-         * <-baseSeriesObject.getColor()->
+         * [descr:baseSeriesObject.getColor()]
          */
         getColor(): string;
         /**
-         * <-baseSeriesObject.getPointByPos(positionIndex)->
+         * [descr:baseSeriesObject.getPointByPos(positionIndex)]
          */
         getPointByPos(positionIndex: number): basePointObject;
         /**
-         * <-baseSeriesObject.getPointsByArg(pointArg)->
+         * [descr:baseSeriesObject.getPointsByArg(pointArg)]
          */
         getPointsByArg(pointArg: number | string | Date): Array<basePointObject>;
         /**
-         * <-baseSeriesObject.getVisiblePoints()->
+         * [descr:baseSeriesObject.getVisiblePoints()]
          */
         getVisiblePoints(): Array<basePointObject>;
         /**
-         * <-baseSeriesObject.hide()->
+         * [descr:baseSeriesObject.hide()]
          */
         hide(): void;
         /**
-         * <-baseSeriesObject.hover()->
+         * [descr:baseSeriesObject.hover()]
          */
         hover(): void;
         /**
-         * <-baseSeriesObject.isHovered()->
+         * [descr:baseSeriesObject.isHovered()]
          */
         isHovered(): boolean;
         /**
-         * <-baseSeriesObject.isSelected()->
+         * [descr:baseSeriesObject.isSelected()]
          */
         isSelected(): boolean;
         /**
-         * <-baseSeriesObject.isVisible()->
+         * [descr:baseSeriesObject.isVisible()]
          */
         isVisible(): boolean;
         /**
-         * <-baseSeriesObject.select()->
+         * [descr:baseSeriesObject.select()]
          */
         select(): void;
         /**
-         * <-baseSeriesObject.selectPoint(point)->
+         * [descr:baseSeriesObject.selectPoint(point)]
          */
         selectPoint(point: basePointObject): void;
         /**
-         * <-baseSeriesObject.show()->
+         * [descr:baseSeriesObject.show()]
          */
         show(): void;
     }
     /**
-     * <-chartAxisObject->
+     * [descr:chartAxisObject]
      */
     export class chartAxisObject {
         /**
-         * <-chartAxisObject.visualRange()->
+         * [descr:chartAxisObject.visualRange()]
          */
         visualRange(): VizRange;
         /**
-         * <-chartAxisObject.visualRange(visualRange)->
+         * [descr:chartAxisObject.visualRange(visualRange)]
          */
         visualRange(visualRange: Array<number | string | Date> | VizRange): void;
     }
     /**
-     * <-chartPointAggregationInfoObject->
+     * [descr:chartPointAggregationInfoObject]
      */
     export interface chartPointAggregationInfoObject {
         /**
-         * <-chartPointAggregationInfoObject.aggregationInterval->
+         * [descr:chartPointAggregationInfoObject.aggregationInterval]
          */
         aggregationInterval?: any;
         /**
-         * <-chartPointAggregationInfoObject.data->
+         * [descr:chartPointAggregationInfoObject.data]
          */
         data?: Array<any>;
         /**
-         * <-chartPointAggregationInfoObject.intervalEnd->
+         * [descr:chartPointAggregationInfoObject.intervalEnd]
          */
         intervalEnd?: any;
         /**
-         * <-chartPointAggregationInfoObject.intervalStart->
+         * [descr:chartPointAggregationInfoObject.intervalStart]
          */
         intervalStart?: any;
     }
     /**
-     * <-chartPointObject->
+     * [descr:chartPointObject]
      */
     export class chartPointObject extends basePointObject {
         /**
-         * <-chartPointObject.aggregationInfo->
+         * [descr:chartPointObject.aggregationInfo]
          */
         aggregationInfo?: chartPointAggregationInfoObject;
         /**
-         * <-chartPointObject.originalCloseValue->
+         * [descr:chartPointObject.originalCloseValue]
          */
         originalCloseValue?: number | string;
         /**
-         * <-chartPointObject.originalHighValue->
+         * [descr:chartPointObject.originalHighValue]
          */
         originalHighValue?: number | string;
         /**
-         * <-chartPointObject.originalLowValue->
+         * [descr:chartPointObject.originalLowValue]
          */
         originalLowValue?: number | string;
         /**
-         * <-chartPointObject.originalMinValue->
+         * [descr:chartPointObject.originalMinValue]
          */
         originalMinValue?: string | number | Date;
         /**
-         * <-chartPointObject.originalOpenValue->
+         * [descr:chartPointObject.originalOpenValue]
          */
         originalOpenValue?: number | string;
         /**
-         * <-chartPointObject.size->
+         * [descr:chartPointObject.size]
          */
         size?: number | string;
         /**
-         * <-chartPointObject.getBoundingRect()->
+         * [descr:chartPointObject.getBoundingRect()]
          */
         getBoundingRect(): any;
     }
     /**
-     * <-chartSeriesObject->
+     * [descr:chartSeriesObject]
      */
     export class chartSeriesObject extends baseSeriesObject {
         /**
-         * <-chartSeriesObject.axis->
+         * [descr:chartSeriesObject.axis]
          */
         axis?: string;
         /**
-         * <-chartSeriesObject.barOverlapGroup->
+         * [descr:chartSeriesObject.barOverlapGroup]
          */
         barOverlapGroup?: string;
         /**
-         * <-chartSeriesObject.pane->
+         * [descr:chartSeriesObject.pane]
          */
         pane?: string;
         /**
-         * <-chartSeriesObject.stack->
+         * [descr:chartSeriesObject.stack]
          */
         stack?: string;
         /**
-         * <-chartSeriesObject.getArgumentAxis()->
+         * [descr:chartSeriesObject.getArgumentAxis()]
          */
         getArgumentAxis(): chartAxisObject;
         /**
-         * <-chartSeriesObject.getValueAxis()->
+         * [descr:chartSeriesObject.getValueAxis()]
          */
         getValueAxis(): chartAxisObject;
     }
     /**
-     * <-circularRangeBar->
+     * [descr:circularRangeBar]
      */
     export type circularRangeBar = CommonIndicator;
     /**
-     * <-circularRectangleNeedle->
+     * [descr:circularRectangleNeedle]
      */
     export type circularRectangleNeedle = CommonIndicator;
     /**
-     * <-circularTextCloud->
+     * [descr:circularTextCloud]
      */
     export type circularTextCloud = CommonIndicator;
     /**
-     * <-circularTriangleMarker->
+     * [descr:circularTriangleMarker]
      */
     export type circularTriangleMarker = CommonIndicator;
     /**
-     * <-circularTriangleNeedle->
+     * [descr:circularTriangleNeedle]
      */
     export type circularTriangleNeedle = CommonIndicator;
     /**
-     * <-circularTwoColorNeedle->
+     * [descr:circularTwoColorNeedle]
      */
     export type circularTwoColorNeedle = CommonIndicator;
     /**
-     * <-dxBarGauge.Options->
+     * [descr:dxBarGauge.Options]
      */
     export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
         /**
-         * <-dxBarGauge.Options.animation->
+         * [descr:dxBarGauge.Options.animation]
          */
         animation?: any;
         /**
-         * <-dxBarGauge.Options.backgroundColor->
+         * [descr:dxBarGauge.Options.backgroundColor]
          */
         backgroundColor?: string;
         /**
-         * <-dxBarGauge.Options.barSpacing->
+         * [descr:dxBarGauge.Options.barSpacing]
          */
         barSpacing?: number;
         /**
-         * <-dxBarGauge.Options.baseValue->
+         * [descr:dxBarGauge.Options.baseValue]
          */
         baseValue?: number;
         /**
-         * <-dxBarGauge.Options.endValue->
+         * [descr:dxBarGauge.Options.endValue]
          */
         endValue?: number;
         /**
-         * <-dxBarGauge.Options.geometry->
+         * [descr:dxBarGauge.Options.geometry]
          */
         geometry?: { endAngle?: number, startAngle?: number };
         /**
-         * <-dxBarGauge.Options.label->
+         * [descr:dxBarGauge.Options.label]
          */
         label?: { connectorColor?: string, connectorWidth?: number, customizeText?: ((barValue: { value?: number, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, indent?: number, visible?: boolean };
         /**
-         * <-dxBarGauge.Options.legend->
+         * [descr:dxBarGauge.Options.legend]
          */
         legend?: dxBarGaugeLegend;
         /**
-         * <-dxBarGauge.Options.loadingIndicator->
+         * [descr:dxBarGauge.Options.loadingIndicator]
          */
         loadingIndicator?: dxBarGaugeLoadingIndicator;
         /**
-         * <-dxBarGauge.Options.onTooltipHidden->
+         * [descr:dxBarGauge.Options.onTooltipHidden]
          */
         onTooltipHidden?: ((e: { component?: dxBarGauge, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /**
-         * <-dxBarGauge.Options.onTooltipShown->
+         * [descr:dxBarGauge.Options.onTooltipShown]
          */
         onTooltipShown?: ((e: { component?: dxBarGauge, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /**
-         * <-dxBarGauge.Options.palette->
+         * [descr:dxBarGauge.Options.palette]
          */
         palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
-         * <-dxBarGauge.Options.paletteExtensionMode->
+         * [descr:dxBarGauge.Options.paletteExtensionMode]
          */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /**
-         * <-dxBarGauge.Options.relativeInnerRadius->
+         * [descr:dxBarGauge.Options.relativeInnerRadius]
          */
         relativeInnerRadius?: number;
         /**
-         * <-dxBarGauge.Options.resolveLabelOverlapping->
+         * [descr:dxBarGauge.Options.resolveLabelOverlapping]
          */
         resolveLabelOverlapping?: 'hide' | 'none';
         /**
-         * <-dxBarGauge.Options.startValue->
+         * [descr:dxBarGauge.Options.startValue]
          */
         startValue?: number;
         /**
-         * <-dxBarGauge.Options.tooltip->
+         * [descr:dxBarGauge.Options.tooltip]
          */
         tooltip?: dxBarGaugeTooltip;
         /**
-         * <-dxBarGauge.Options.values->
+         * [descr:dxBarGauge.Options.values]
          */
         values?: Array<number>;
     }
     /**
-     * <-dxBarGauge.Options.legend->
+     * [descr:dxBarGauge.Options.legend]
      */
     export interface dxBarGaugeLegend extends BaseLegend {
         /**
-         * <-dxBarGauge.Options.legend.customizeHint->
+         * [descr:dxBarGauge.Options.legend.customizeHint]
          */
         customizeHint?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
         /**
-         * <-dxBarGauge.Options.legend.customizeItems->
+         * [descr:dxBarGauge.Options.legend.customizeItems]
          */
         customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>);
         /**
-         * <-dxBarGauge.Options.legend.customizeText->
+         * [descr:dxBarGauge.Options.legend.customizeText]
          */
         customizeText?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
         /**
-         * <-dxBarGauge.Options.legend.itemTextFormat->
+         * [descr:dxBarGauge.Options.legend.itemTextFormat]
          */
         itemTextFormat?: DevExpress.ui.format;
         /**
-         * <-dxBarGauge.Options.legend.markerTemplate->
+         * [descr:dxBarGauge.Options.legend.markerTemplate]
          */
         markerTemplate?: DevExpress.core.template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
         /**
-         * <-dxBarGauge.Options.legend.visible->
+         * [descr:dxBarGauge.Options.legend.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxBarGauge.Options.loadingIndicator->
+     * [descr:dxBarGauge.Options.loadingIndicator]
      */
     export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
     }
     /**
-     * <-dxBarGauge.Options.tooltip->
+     * [descr:dxBarGauge.Options.tooltip]
      */
     export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
         /**
-         * <-dxBarGauge.Options.tooltip.contentTemplate->
+         * [descr:dxBarGauge.Options.tooltip.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((scaleValue: { value?: number, valueText?: string, index?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxBarGauge.Options.tooltip.customizeTooltip->
+         * [descr:dxBarGauge.Options.tooltip.customizeTooltip]
          */
         customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
         /**
-         * <-dxBarGauge.Options.tooltip.interactive->
+         * [descr:dxBarGauge.Options.tooltip.interactive]
          */
         interactive?: boolean;
     }
     /**
-     * <-dxBarGauge->
+     * [descr:dxBarGauge]
      */
     export class dxBarGauge extends BaseWidget {
         constructor(element: Element, options?: dxBarGaugeOptions)
         constructor(element: JQuery, options?: dxBarGaugeOptions)
         /**
-         * <-dxBarGauge.values()->
+         * [descr:dxBarGauge.values()]
          */
         values(): Array<number>;
         /**
-         * <-dxBarGauge.values(newValues)->
+         * [descr:dxBarGauge.values(newValues)]
          */
         values(values: Array<number>): void;
     }
     /**
-     * <-dxBullet.Options->
+     * [descr:dxBullet.Options]
      */
     export interface dxBulletOptions extends BaseSparklineOptions<dxBullet> {
         /**
-         * <-dxBullet.Options.color->
+         * [descr:dxBullet.Options.color]
          */
         color?: string;
         /**
-         * <-dxBullet.Options.endScaleValue->
+         * [descr:dxBullet.Options.endScaleValue]
          */
         endScaleValue?: number;
         /**
-         * <-dxBullet.Options.showTarget->
+         * [descr:dxBullet.Options.showTarget]
          */
         showTarget?: boolean;
         /**
-         * <-dxBullet.Options.showZeroLevel->
+         * [descr:dxBullet.Options.showZeroLevel]
          */
         showZeroLevel?: boolean;
         /**
-         * <-dxBullet.Options.startScaleValue->
+         * [descr:dxBullet.Options.startScaleValue]
          */
         startScaleValue?: number;
         /**
-         * <-dxBullet.Options.target->
+         * [descr:dxBullet.Options.target]
          */
         target?: number;
         /**
-         * <-dxBullet.Options.targetColor->
+         * [descr:dxBullet.Options.targetColor]
          */
         targetColor?: string;
         /**
-         * <-dxBullet.Options.targetWidth->
+         * [descr:dxBullet.Options.targetWidth]
          */
         targetWidth?: number;
         /**
-         * <-dxBullet.Options.value->
+         * [descr:dxBullet.Options.value]
          */
         value?: number;
     }
     /**
-     * <-dxBullet->
+     * [descr:dxBullet]
      */
     export class dxBullet extends BaseSparkline {
         constructor(element: Element, options?: dxBulletOptions)
         constructor(element: JQuery, options?: dxBulletOptions)
     }
     /**
-     * <-dxChart.Options->
+     * [descr:dxChart.Options]
      */
     export interface dxChartOptions extends BaseChartOptions<dxChart> {
         /**
-         * <-dxChart.Options.adjustOnZoom->
+         * [descr:dxChart.Options.adjustOnZoom]
          */
         adjustOnZoom?: boolean;
         /**
-         * <-dxChart.Options.annotations->
+         * [descr:dxChart.Options.annotations]
          */
         annotations?: Array<dxChartAnnotationConfig | any>;
         /**
-         * <-dxChart.Options.argumentAxis->
+         * [descr:dxChart.Options.argumentAxis]
          */
         argumentAxis?: dxChartArgumentAxis;
         /**
-         * <-dxChart.Options.autoHidePointMarkers->
+         * [descr:dxChart.Options.autoHidePointMarkers]
          */
         autoHidePointMarkers?: boolean;
         /**
-         * <-dxChart.Options.barGroupPadding->
+         * [descr:dxChart.Options.barGroupPadding]
          */
         barGroupPadding?: number;
         /**
-         * <-dxChart.Options.barGroupWidth->
+         * [descr:dxChart.Options.barGroupWidth]
          */
         barGroupWidth?: number;
         /**
-         * <-dxChart.Options.commonAnnotationSettings->
+         * [descr:dxChart.Options.commonAnnotationSettings]
          */
         commonAnnotationSettings?: dxChartCommonAnnotationConfig;
         /**
-         * <-dxChart.Options.commonAxisSettings->
+         * [descr:dxChart.Options.commonAxisSettings]
          */
         commonAxisSettings?: dxChartCommonAxisSettings;
         /**
-         * <-dxChart.Options.commonPaneSettings->
+         * [descr:dxChart.Options.commonPaneSettings]
          */
         commonPaneSettings?: dxChartCommonPaneSettings;
         /**
-         * <-dxChart.Options.commonSeriesSettings->
+         * [descr:dxChart.Options.commonSeriesSettings]
          */
         commonSeriesSettings?: dxChartCommonSeriesSettings;
         /**
-         * <-dxChart.Options.containerBackgroundColor->
+         * [descr:dxChart.Options.containerBackgroundColor]
          */
         containerBackgroundColor?: string;
         /**
-         * <-dxChart.Options.crosshair->
+         * [descr:dxChart.Options.crosshair]
          */
         crosshair?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', enabled?: boolean, horizontalLine?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: DevExpress.ui.format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: DevExpress.ui.format, visible?: boolean }, opacity?: number, verticalLine?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', label?: { backgroundColor?: string, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font, format?: DevExpress.ui.format, visible?: boolean }, opacity?: number, visible?: boolean, width?: number } | boolean, width?: number };
         /**
-         * <-dxChart.Options.customizeAnnotation->
+         * [descr:dxChart.Options.customizeAnnotation]
          */
         customizeAnnotation?: ((annotation: dxChartAnnotationConfig | any) => dxChartAnnotationConfig);
         /**
-         * <-dxChart.Options.dataPrepareSettings->
+         * [descr:dxChart.Options.dataPrepareSettings]
          */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /**
-         * <-dxChart.Options.defaultPane->
+         * [descr:dxChart.Options.defaultPane]
          */
         defaultPane?: string;
         /**
-         * <-dxChart.Options.legend->
+         * [descr:dxChart.Options.legend]
          */
         legend?: dxChartLegend;
         /**
-         * <-dxChart.Options.maxBubbleSize->
+         * [descr:dxChart.Options.maxBubbleSize]
          */
         maxBubbleSize?: number;
         /**
-         * <-dxChart.Options.minBubbleSize->
+         * [descr:dxChart.Options.minBubbleSize]
          */
         minBubbleSize?: number;
         /**
-         * <-dxChart.Options.negativesAsZeroes->
+         * [descr:dxChart.Options.negativesAsZeroes]
          */
         negativesAsZeroes?: boolean;
         /**
-         * <-dxChart.Options.onArgumentAxisClick->
+         * [descr:dxChart.Options.onArgumentAxisClick]
          */
         onArgumentAxisClick?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, argument?: Date | number | string }) => any) | string;
         /**
-         * <-dxChart.Options.onLegendClick->
+         * [descr:dxChart.Options.onLegendClick]
          */
         onLegendClick?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, target?: chartSeriesObject }) => any) | string;
         /**
-         * <-dxChart.Options.onSeriesClick->
+         * [descr:dxChart.Options.onSeriesClick]
          */
         onSeriesClick?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, target?: chartSeriesObject }) => any) | string;
         /**
-         * <-dxChart.Options.onSeriesHoverChanged->
+         * [descr:dxChart.Options.onSeriesHoverChanged]
          */
         onSeriesHoverChanged?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, target?: chartSeriesObject }) => any);
         /**
-         * <-dxChart.Options.onSeriesSelectionChanged->
+         * [descr:dxChart.Options.onSeriesSelectionChanged]
          */
         onSeriesSelectionChanged?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, target?: chartSeriesObject }) => any);
         /**
-         * <-dxChart.Options.onZoomEnd->
+         * [descr:dxChart.Options.onZoomEnd]
          */
         onZoomEnd?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, rangeStart?: Date | number, rangeEnd?: Date | number, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
         /**
-         * <-dxChart.Options.onZoomStart->
+         * [descr:dxChart.Options.onZoomStart]
          */
         onZoomStart?: ((e: { component?: dxChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
         /**
-         * <-dxChart.Options.panes->
+         * [descr:dxChart.Options.panes]
          */
         panes?: dxChartPanes | Array<dxChartPanes>;
         /**
-         * <-dxChart.Options.resizePanesOnZoom->
+         * [descr:dxChart.Options.resizePanesOnZoom]
          */
         resizePanesOnZoom?: boolean;
         /**
-         * <-dxChart.Options.resolveLabelOverlapping->
+         * [descr:dxChart.Options.resolveLabelOverlapping]
          */
         resolveLabelOverlapping?: 'hide' | 'none' | 'stack';
         /**
-         * <-dxChart.Options.rotated->
+         * [descr:dxChart.Options.rotated]
          */
         rotated?: boolean;
         /**
-         * <-dxChart.Options.scrollBar->
+         * [descr:dxChart.Options.scrollBar]
          */
         scrollBar?: { color?: string, offset?: number, opacity?: number, position?: 'bottom' | 'left' | 'right' | 'top', visible?: boolean, width?: number };
         /**
-         * <-dxChart.Options.series->
+         * [descr:dxChart.Options.series]
          */
         series?: ChartSeries | Array<ChartSeries>;
         /**
-         * <-dxChart.Options.seriesSelectionMode->
+         * [descr:dxChart.Options.seriesSelectionMode]
          */
         seriesSelectionMode?: 'multiple' | 'single';
         /**
-         * <-dxChart.Options.seriesTemplate->
+         * [descr:dxChart.Options.seriesTemplate]
          */
         seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string };
         /**
-         * <-dxChart.Options.stickyHovering->
+         * [descr:dxChart.Options.stickyHovering]
          */
         stickyHovering?: boolean;
         /**
-         * <-dxChart.Options.synchronizeMultiAxes->
+         * [descr:dxChart.Options.synchronizeMultiAxes]
          */
         synchronizeMultiAxes?: boolean;
         /**
-         * <-dxChart.Options.tooltip->
+         * [descr:dxChart.Options.tooltip]
          */
         tooltip?: dxChartTooltip;
         /**
-         * <-dxChart.Options.valueAxis->
+         * [descr:dxChart.Options.valueAxis]
          */
         valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
         /**
-         * <-dxChart.Options.zoomAndPan->
+         * [descr:dxChart.Options.zoomAndPan]
          */
         zoomAndPan?: { allowMouseWheel?: boolean, allowTouchGestures?: boolean, argumentAxis?: 'both' | 'none' | 'pan' | 'zoom', dragBoxStyle?: { color?: string, opacity?: number }, dragToZoom?: boolean, panKey?: 'alt' | 'ctrl' | 'meta' | 'shift', valueAxis?: 'both' | 'none' | 'pan' | 'zoom' };
     }
     /**
-     * <-dxChart.Options.argumentAxis->
+     * [descr:dxChart.Options.argumentAxis]
      */
     export interface dxChartArgumentAxis extends dxChartCommonAxisSettings {
         /**
-         * <-dxChart.Options.argumentAxis.aggregateByCategory->
+         * [descr:dxChart.Options.argumentAxis.aggregateByCategory]
          */
         aggregateByCategory?: boolean;
         /**
-         * <-dxChart.Options.argumentAxis.aggregationGroupWidth->
+         * [descr:dxChart.Options.argumentAxis.aggregationGroupWidth]
          */
         aggregationGroupWidth?: number;
         /**
-         * <-dxChart.Options.argumentAxis.aggregationInterval->
+         * [descr:dxChart.Options.argumentAxis.aggregationInterval]
          */
         aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxChart.Options.argumentAxis.argumentType->
+         * [descr:dxChart.Options.argumentAxis.argumentType]
          */
         argumentType?: 'datetime' | 'numeric' | 'string';
         /**
-         * <-dxChart.Options.argumentAxis.axisDivisionFactor->
+         * [descr:dxChart.Options.argumentAxis.axisDivisionFactor]
          */
         axisDivisionFactor?: number;
         /**
-         * <-dxChart.Options.argumentAxis.breaks->
+         * [descr:dxChart.Options.argumentAxis.breaks]
          */
         breaks?: Array<ScaleBreak>;
         /**
-         * <-dxChart.Options.argumentAxis.categories->
+         * [descr:dxChart.Options.argumentAxis.categories]
          */
         categories?: Array<number | string | Date>;
         /**
-         * <-dxChart.Options.argumentAxis.constantLineStyle->
+         * [descr:dxChart.Options.argumentAxis.constantLineStyle]
          */
         constantLineStyle?: dxChartArgumentAxisConstantLineStyle;
         /**
-         * <-dxChart.Options.argumentAxis.constantLines->
+         * [descr:dxChart.Options.argumentAxis.constantLines]
          */
         constantLines?: Array<dxChartArgumentAxisConstantLines>;
         /**
-         * <-dxChart.Options.argumentAxis.customPosition->
+         * [descr:dxChart.Options.argumentAxis.customPosition]
          */
         customPosition?: number | Date | string;
         /**
-         * <-dxChart.Options.argumentAxis.customPositionAxis->
+         * [descr:dxChart.Options.argumentAxis.customPositionAxis]
          */
         customPositionAxis?: string;
         /**
-         * <-dxChart.Options.argumentAxis.endOnTick->
+         * [descr:dxChart.Options.argumentAxis.endOnTick]
          */
         endOnTick?: boolean;
         /**
-         * <-dxChart.Options.argumentAxis.holidays->
+         * [descr:dxChart.Options.argumentAxis.holidays]
          */
         holidays?: Array<Date | string> | Array<number>;
         /**
-         * <-dxChart.Options.argumentAxis.hoverMode->
+         * [descr:dxChart.Options.argumentAxis.hoverMode]
          */
         hoverMode?: 'allArgumentPoints' | 'none';
         /**
-         * <-dxChart.Options.argumentAxis.label->
+         * [descr:dxChart.Options.argumentAxis.label]
          */
         label?: dxChartArgumentAxisLabel;
         /**
-         * <-dxChart.Options.argumentAxis.linearThreshold->
+         * [descr:dxChart.Options.argumentAxis.linearThreshold]
          */
         linearThreshold?: number;
         /**
-         * <-dxChart.Options.argumentAxis.logarithmBase->
+         * [descr:dxChart.Options.argumentAxis.logarithmBase]
          */
         logarithmBase?: number;
         /**
-         * <-dxChart.Options.argumentAxis.minVisualRangeLength->
+         * [descr:dxChart.Options.argumentAxis.minVisualRangeLength]
          */
         minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxChart.Options.argumentAxis.minorTickCount->
+         * [descr:dxChart.Options.argumentAxis.minorTickCount]
          */
         minorTickCount?: number;
         /**
-         * <-dxChart.Options.argumentAxis.minorTickInterval->
+         * [descr:dxChart.Options.argumentAxis.minorTickInterval]
          */
         minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxChart.Options.argumentAxis.offset->
+         * [descr:dxChart.Options.argumentAxis.offset]
          */
         offset?: number;
         /**
-         * <-dxChart.Options.argumentAxis.position->
+         * [descr:dxChart.Options.argumentAxis.position]
          */
         position?: 'bottom' | 'left' | 'right' | 'top';
         /**
-         * <-dxChart.Options.argumentAxis.singleWorkdays->
+         * [descr:dxChart.Options.argumentAxis.singleWorkdays]
          */
         singleWorkdays?: Array<Date | string> | Array<number>;
         /**
-         * <-dxChart.Options.argumentAxis.strips->
+         * [descr:dxChart.Options.argumentAxis.strips]
          */
         strips?: Array<dxChartArgumentAxisStrips>;
         /**
-         * <-dxChart.Options.argumentAxis.tickInterval->
+         * [descr:dxChart.Options.argumentAxis.tickInterval]
          */
         tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxChart.Options.argumentAxis.title->
+         * [descr:dxChart.Options.argumentAxis.title]
          */
         title?: dxChartArgumentAxisTitle;
         /**
-         * <-dxChart.Options.argumentAxis.type->
+         * [descr:dxChart.Options.argumentAxis.type]
          */
         type?: 'continuous' | 'discrete' | 'logarithmic';
         /**
-         * <-dxChart.Options.argumentAxis.visualRange->
+         * [descr:dxChart.Options.argumentAxis.visualRange]
          */
         visualRange?: VizRange | Array<number | string | Date>;
         /**
-         * <-dxChart.Options.argumentAxis.visualRangeUpdateMode->
+         * [descr:dxChart.Options.argumentAxis.visualRangeUpdateMode]
          */
         visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
         /**
-         * <-dxChart.Options.argumentAxis.wholeRange->
+         * [descr:dxChart.Options.argumentAxis.wholeRange]
          */
         wholeRange?: VizRange | Array<number | string | Date>;
         /**
-         * <-dxChart.Options.argumentAxis.workWeek->
+         * [descr:dxChart.Options.argumentAxis.workWeek]
          */
         workWeek?: Array<number>;
         /**
-         * <-dxChart.Options.argumentAxis.workdaysOnly->
+         * [descr:dxChart.Options.argumentAxis.workdaysOnly]
          */
         workdaysOnly?: boolean;
     }
     /**
-     * <-dxChart.Options.argumentAxis.constantLineStyle->
+     * [descr:dxChart.Options.argumentAxis.constantLineStyle]
      */
     export interface dxChartArgumentAxisConstantLineStyle extends dxChartCommonAxisSettingsConstantLineStyle {
         /**
-         * <-dxChart.Options.argumentAxis.constantLineStyle.label->
+         * [descr:dxChart.Options.argumentAxis.constantLineStyle.label]
          */
         label?: dxChartArgumentAxisConstantLineStyleLabel;
     }
     /**
-     * <-dxChart.Options.argumentAxis.constantLineStyle.label->
+     * [descr:dxChart.Options.argumentAxis.constantLineStyle.label]
      */
     export interface dxChartArgumentAxisConstantLineStyleLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
         /**
-         * <-dxChart.Options.argumentAxis.constantLineStyle.label.horizontalAlignment->
+         * [descr:dxChart.Options.argumentAxis.constantLineStyle.label.horizontalAlignment]
          */
         horizontalAlignment?: 'center' | 'left' | 'right';
         /**
-         * <-dxChart.Options.argumentAxis.constantLineStyle.label.verticalAlignment->
+         * [descr:dxChart.Options.argumentAxis.constantLineStyle.label.verticalAlignment]
          */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
     /**
-     * <-dxChart.Options.argumentAxis.constantLines->
+     * [descr:dxChart.Options.argumentAxis.constantLines]
      */
     export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
         /**
-         * <-dxChart.Options.argumentAxis.constantLines.displayBehindSeries->
+         * [descr:dxChart.Options.argumentAxis.constantLines.displayBehindSeries]
          */
         displayBehindSeries?: boolean;
         /**
-         * <-dxChart.Options.argumentAxis.constantLines.extendAxis->
+         * [descr:dxChart.Options.argumentAxis.constantLines.extendAxis]
          */
         extendAxis?: boolean;
         /**
-         * <-dxChart.Options.argumentAxis.constantLines.label->
+         * [descr:dxChart.Options.argumentAxis.constantLines.label]
          */
         label?: dxChartArgumentAxisConstantLinesLabel;
         /**
-         * <-dxChart.Options.argumentAxis.constantLines.value->
+         * [descr:dxChart.Options.argumentAxis.constantLines.value]
          */
         value?: number | Date | string;
     }
     /**
-     * <-dxChart.Options.argumentAxis.constantLines.label->
+     * [descr:dxChart.Options.argumentAxis.constantLines.label]
      */
     export interface dxChartArgumentAxisConstantLinesLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
         /**
-         * <-dxChart.Options.argumentAxis.constantLines.label.horizontalAlignment->
+         * [descr:dxChart.Options.argumentAxis.constantLines.label.horizontalAlignment]
          */
         horizontalAlignment?: 'center' | 'left' | 'right';
         /**
-         * <-dxChart.Options.argumentAxis.constantLines.label.text->
+         * [descr:dxChart.Options.argumentAxis.constantLines.label.text]
          */
         text?: string;
         /**
-         * <-dxChart.Options.argumentAxis.constantLines.label.verticalAlignment->
+         * [descr:dxChart.Options.argumentAxis.constantLines.label.verticalAlignment]
          */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
     /**
-     * <-dxChart.Options.argumentAxis.label->
+     * [descr:dxChart.Options.argumentAxis.label]
      */
     export interface dxChartArgumentAxisLabel extends dxChartCommonAxisSettingsLabel {
         /**
-         * <-dxChart.Options.argumentAxis.label.customizeHint->
+         * [descr:dxChart.Options.argumentAxis.label.customizeHint]
          */
         customizeHint?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
         /**
-         * <-dxChart.Options.argumentAxis.label.customizeText->
+         * [descr:dxChart.Options.argumentAxis.label.customizeText]
          */
         customizeText?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
         /**
-         * <-dxChart.Options.argumentAxis.label.format->
+         * [descr:dxChart.Options.argumentAxis.label.format]
          */
         format?: DevExpress.ui.format;
     }
     /**
-     * <-dxChart.Options.argumentAxis.strips->
+     * [descr:dxChart.Options.argumentAxis.strips]
      */
     export interface dxChartArgumentAxisStrips extends dxChartCommonAxisSettingsStripStyle {
         /**
-         * <-dxChart.Options.argumentAxis.strips.color->
+         * [descr:dxChart.Options.argumentAxis.strips.color]
          */
         color?: string;
         /**
-         * <-dxChart.Options.argumentAxis.strips.endValue->
+         * [descr:dxChart.Options.argumentAxis.strips.endValue]
          */
         endValue?: number | Date | string;
         /**
-         * <-dxChart.Options.argumentAxis.strips.label->
+         * [descr:dxChart.Options.argumentAxis.strips.label]
          */
         label?: dxChartArgumentAxisStripsLabel;
         /**
-         * <-dxChart.Options.argumentAxis.strips.startValue->
+         * [descr:dxChart.Options.argumentAxis.strips.startValue]
          */
         startValue?: number | Date | string;
     }
     /**
-     * <-dxChart.Options.argumentAxis.strips.label->
+     * [descr:dxChart.Options.argumentAxis.strips.label]
      */
     export interface dxChartArgumentAxisStripsLabel extends dxChartCommonAxisSettingsStripStyleLabel {
         /**
-         * <-dxChart.Options.argumentAxis.strips.label.text->
+         * [descr:dxChart.Options.argumentAxis.strips.label.text]
          */
         text?: string;
     }
     /**
-     * <-dxChart.Options.argumentAxis.title->
+     * [descr:dxChart.Options.argumentAxis.title]
      */
     export interface dxChartArgumentAxisTitle extends dxChartCommonAxisSettingsTitle {
         /**
-         * <-dxChart.Options.argumentAxis.title.text->
+         * [descr:dxChart.Options.argumentAxis.title.text]
          */
         text?: string;
     }
     /**
-     * <-dxChart.Options.commonAxisSettings->
+     * [descr:dxChart.Options.commonAxisSettings]
      */
     export interface dxChartCommonAxisSettings {
         /**
-         * <-dxChart.Options.commonAxisSettings.allowDecimals->
+         * [descr:dxChart.Options.commonAxisSettings.allowDecimals]
          */
         allowDecimals?: boolean;
         /**
-         * <-dxChart.Options.commonAxisSettings.breakStyle->
+         * [descr:dxChart.Options.commonAxisSettings.breakStyle]
          */
         breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number };
         /**
-         * <-dxChart.Options.commonAxisSettings.color->
+         * [descr:dxChart.Options.commonAxisSettings.color]
          */
         color?: string;
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle]
          */
         constantLineStyle?: dxChartCommonAxisSettingsConstantLineStyle;
         /**
-         * <-dxChart.Options.commonAxisSettings.discreteAxisDivisionMode->
+         * [descr:dxChart.Options.commonAxisSettings.discreteAxisDivisionMode]
          */
         discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
         /**
-         * <-dxChart.Options.commonAxisSettings.endOnTick->
+         * [descr:dxChart.Options.commonAxisSettings.endOnTick]
          */
         endOnTick?: boolean;
         /**
-         * <-dxChart.Options.commonAxisSettings.grid->
+         * [descr:dxChart.Options.commonAxisSettings.grid]
          */
         grid?: { color?: string, opacity?: number, visible?: boolean, width?: number };
         /**
-         * <-dxChart.Options.commonAxisSettings.inverted->
+         * [descr:dxChart.Options.commonAxisSettings.inverted]
          */
         inverted?: boolean;
         /**
-         * <-dxChart.Options.commonAxisSettings.label->
+         * [descr:dxChart.Options.commonAxisSettings.label]
          */
         label?: dxChartCommonAxisSettingsLabel;
         /**
-         * <-dxChart.Options.commonAxisSettings.maxValueMargin->
+         * [descr:dxChart.Options.commonAxisSettings.maxValueMargin]
          */
         maxValueMargin?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.minValueMargin->
+         * [descr:dxChart.Options.commonAxisSettings.minValueMargin]
          */
         minValueMargin?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.minorGrid->
+         * [descr:dxChart.Options.commonAxisSettings.minorGrid]
          */
         minorGrid?: { color?: string, opacity?: number, visible?: boolean, width?: number };
         /**
-         * <-dxChart.Options.commonAxisSettings.minorTick->
+         * [descr:dxChart.Options.commonAxisSettings.minorTick]
          */
         minorTick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number };
         /**
-         * <-dxChart.Options.commonAxisSettings.opacity->
+         * [descr:dxChart.Options.commonAxisSettings.opacity]
          */
         opacity?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.placeholderSize->
+         * [descr:dxChart.Options.commonAxisSettings.placeholderSize]
          */
         placeholderSize?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.stripStyle->
+         * [descr:dxChart.Options.commonAxisSettings.stripStyle]
          */
         stripStyle?: dxChartCommonAxisSettingsStripStyle;
         /**
-         * <-dxChart.Options.commonAxisSettings.tick->
+         * [descr:dxChart.Options.commonAxisSettings.tick]
          */
         tick?: { color?: string, length?: number, opacity?: number, shift?: number, visible?: boolean, width?: number };
         /**
-         * <-dxChart.Options.commonAxisSettings.title->
+         * [descr:dxChart.Options.commonAxisSettings.title]
          */
         title?: dxChartCommonAxisSettingsTitle;
         /**
-         * <-dxChart.Options.commonAxisSettings.valueMarginsEnabled->
+         * [descr:dxChart.Options.commonAxisSettings.valueMarginsEnabled]
          */
         valueMarginsEnabled?: boolean;
         /**
-         * <-dxChart.Options.commonAxisSettings.visible->
+         * [descr:dxChart.Options.commonAxisSettings.visible]
          */
         visible?: boolean;
         /**
-         * <-dxChart.Options.commonAxisSettings.width->
+         * [descr:dxChart.Options.commonAxisSettings.width]
          */
         width?: number;
     }
     /**
-     * <-dxChart.Options.commonAxisSettings.constantLineStyle->
+     * [descr:dxChart.Options.commonAxisSettings.constantLineStyle]
      */
     export interface dxChartCommonAxisSettingsConstantLineStyle {
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle.color->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.color]
          */
         color?: string;
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle.dashStyle->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.dashStyle]
          */
         dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle.label->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.label]
          */
         label?: dxChartCommonAxisSettingsConstantLineStyleLabel;
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle.paddingLeftRight->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.paddingLeftRight]
          */
         paddingLeftRight?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle.paddingTopBottom->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.paddingTopBottom]
          */
         paddingTopBottom?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle.width->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.width]
          */
         width?: number;
     }
     /**
-     * <-dxChart.Options.commonAxisSettings.constantLineStyle.label->
+     * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.label]
      */
     export interface dxChartCommonAxisSettingsConstantLineStyleLabel {
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle.label.font->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.label.font]
          */
         font?: Font;
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle.label.position->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.label.position]
          */
         position?: 'inside' | 'outside';
         /**
-         * <-dxChart.Options.commonAxisSettings.constantLineStyle.label.visible->
+         * [descr:dxChart.Options.commonAxisSettings.constantLineStyle.label.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChart.Options.commonAxisSettings.label->
+     * [descr:dxChart.Options.commonAxisSettings.label]
      */
     export interface dxChartCommonAxisSettingsLabel {
         /**
-         * <-dxChart.Options.commonAxisSettings.label.alignment->
+         * [descr:dxChart.Options.commonAxisSettings.label.alignment]
          */
         alignment?: 'center' | 'left' | 'right';
         /**
-         * <-dxChart.Options.commonAxisSettings.label.displayMode->
+         * [descr:dxChart.Options.commonAxisSettings.label.displayMode]
          */
         displayMode?: 'rotate' | 'stagger' | 'standard';
         /**
-         * <-dxChart.Options.commonAxisSettings.label.font->
+         * [descr:dxChart.Options.commonAxisSettings.label.font]
          */
         font?: Font;
         /**
-         * <-dxChart.Options.commonAxisSettings.label.indentFromAxis->
+         * [descr:dxChart.Options.commonAxisSettings.label.indentFromAxis]
          */
         indentFromAxis?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.label.overlappingBehavior->
+         * [descr:dxChart.Options.commonAxisSettings.label.overlappingBehavior]
          */
         overlappingBehavior?: 'rotate' | 'stagger' | 'none' | 'hide';
         /**
-         * <-dxChart.Options.commonAxisSettings.label.position->
+         * [descr:dxChart.Options.commonAxisSettings.label.position]
          */
         position?: 'inside' | 'outside' | 'bottom' | 'left' | 'right' | 'top';
         /**
-         * <-dxChart.Options.commonAxisSettings.label.rotationAngle->
+         * [descr:dxChart.Options.commonAxisSettings.label.rotationAngle]
          */
         rotationAngle?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.label.staggeringSpacing->
+         * [descr:dxChart.Options.commonAxisSettings.label.staggeringSpacing]
          */
         staggeringSpacing?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.label.template->
+         * [descr:dxChart.Options.commonAxisSettings.label.template]
          */
         template?: DevExpress.core.template | ((model: any, element: SVGGElement) => string | SVGElement | JQuery);
         /**
-         * <-dxChart.Options.commonAxisSettings.label.textOverflow->
+         * [descr:dxChart.Options.commonAxisSettings.label.textOverflow]
          */
         textOverflow?: 'ellipsis' | 'hide' | 'none';
         /**
-         * <-dxChart.Options.commonAxisSettings.label.visible->
+         * [descr:dxChart.Options.commonAxisSettings.label.visible]
          */
         visible?: boolean;
         /**
-         * <-dxChart.Options.commonAxisSettings.label.wordWrap->
+         * [descr:dxChart.Options.commonAxisSettings.label.wordWrap]
          */
         wordWrap?: 'normal' | 'breakWord' | 'none';
     }
     /**
-     * <-dxChart.Options.commonAxisSettings.stripStyle->
+     * [descr:dxChart.Options.commonAxisSettings.stripStyle]
      */
     export interface dxChartCommonAxisSettingsStripStyle {
         /**
-         * <-dxChart.Options.commonAxisSettings.stripStyle.label->
+         * [descr:dxChart.Options.commonAxisSettings.stripStyle.label]
          */
         label?: dxChartCommonAxisSettingsStripStyleLabel;
         /**
-         * <-dxChart.Options.commonAxisSettings.stripStyle.paddingLeftRight->
+         * [descr:dxChart.Options.commonAxisSettings.stripStyle.paddingLeftRight]
          */
         paddingLeftRight?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.stripStyle.paddingTopBottom->
+         * [descr:dxChart.Options.commonAxisSettings.stripStyle.paddingTopBottom]
          */
         paddingTopBottom?: number;
     }
     /**
-     * <-dxChart.Options.commonAxisSettings.stripStyle.label->
+     * [descr:dxChart.Options.commonAxisSettings.stripStyle.label]
      */
     export interface dxChartCommonAxisSettingsStripStyleLabel {
         /**
-         * <-dxChart.Options.commonAxisSettings.stripStyle.label.font->
+         * [descr:dxChart.Options.commonAxisSettings.stripStyle.label.font]
          */
         font?: Font;
         /**
-         * <-dxChart.Options.commonAxisSettings.stripStyle.label.horizontalAlignment->
+         * [descr:dxChart.Options.commonAxisSettings.stripStyle.label.horizontalAlignment]
          */
         horizontalAlignment?: 'center' | 'left' | 'right';
         /**
-         * <-dxChart.Options.commonAxisSettings.stripStyle.label.verticalAlignment->
+         * [descr:dxChart.Options.commonAxisSettings.stripStyle.label.verticalAlignment]
          */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
     /**
-     * <-dxChart.Options.commonAxisSettings.title->
+     * [descr:dxChart.Options.commonAxisSettings.title]
      */
     export interface dxChartCommonAxisSettingsTitle {
         /**
-         * <-dxChart.Options.commonAxisSettings.title.alignment->
+         * [descr:dxChart.Options.commonAxisSettings.title.alignment]
          */
         alignment?: 'center' | 'left' | 'right';
         /**
-         * <-dxChart.Options.commonAxisSettings.title.font->
+         * [descr:dxChart.Options.commonAxisSettings.title.font]
          */
         font?: Font;
         /**
-         * <-dxChart.Options.commonAxisSettings.title.margin->
+         * [descr:dxChart.Options.commonAxisSettings.title.margin]
          */
         margin?: number;
         /**
-         * <-dxChart.Options.commonAxisSettings.title.textOverflow->
+         * [descr:dxChart.Options.commonAxisSettings.title.textOverflow]
          */
         textOverflow?: 'ellipsis' | 'hide' | 'none';
         /**
-         * <-dxChart.Options.commonAxisSettings.title.wordWrap->
+         * [descr:dxChart.Options.commonAxisSettings.title.wordWrap]
          */
         wordWrap?: 'normal' | 'breakWord' | 'none';
     }
     /**
-     * <-dxChart.Options.commonPaneSettings->
+     * [descr:dxChart.Options.commonPaneSettings]
      */
     export interface dxChartCommonPaneSettings {
         /**
-         * <-dxChart.Options.commonPaneSettings.backgroundColor->
+         * [descr:dxChart.Options.commonPaneSettings.backgroundColor]
          */
         backgroundColor?: string;
         /**
-         * <-dxChart.Options.commonPaneSettings.border->
+         * [descr:dxChart.Options.commonPaneSettings.border]
          */
         border?: { bottom?: boolean, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', left?: boolean, opacity?: number, right?: boolean, top?: boolean, visible?: boolean, width?: number };
     }
     /**
-     * <-dxChart.Options.commonSeriesSettings->
+     * [descr:dxChart.Options.commonSeriesSettings]
      */
     export interface dxChartCommonSeriesSettings extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChart.Options.commonSeriesSettings.area->
+         * [descr:dxChart.Options.commonSeriesSettings.area]
          */
         area?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.bar->
+         * [descr:dxChart.Options.commonSeriesSettings.bar]
          */
         bar?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.bubble->
+         * [descr:dxChart.Options.commonSeriesSettings.bubble]
          */
         bubble?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.candlestick->
+         * [descr:dxChart.Options.commonSeriesSettings.candlestick]
          */
         candlestick?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.fullstackedarea->
+         * [descr:dxChart.Options.commonSeriesSettings.fullstackedarea]
          */
         fullstackedarea?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.fullstackedbar->
+         * [descr:dxChart.Options.commonSeriesSettings.fullstackedbar]
          */
         fullstackedbar?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.fullstackedline->
+         * [descr:dxChart.Options.commonSeriesSettings.fullstackedline]
          */
         fullstackedline?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.fullstackedspline->
+         * [descr:dxChart.Options.commonSeriesSettings.fullstackedspline]
          */
         fullstackedspline?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.fullstackedsplinearea->
+         * [descr:dxChart.Options.commonSeriesSettings.fullstackedsplinearea]
          */
         fullstackedsplinearea?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.line->
+         * [descr:dxChart.Options.commonSeriesSettings.line]
          */
         line?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.rangearea->
+         * [descr:dxChart.Options.commonSeriesSettings.rangearea]
          */
         rangearea?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.rangebar->
+         * [descr:dxChart.Options.commonSeriesSettings.rangebar]
          */
         rangebar?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.scatter->
+         * [descr:dxChart.Options.commonSeriesSettings.scatter]
          */
         scatter?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.spline->
+         * [descr:dxChart.Options.commonSeriesSettings.spline]
          */
         spline?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.splinearea->
+         * [descr:dxChart.Options.commonSeriesSettings.splinearea]
          */
         splinearea?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.stackedarea->
+         * [descr:dxChart.Options.commonSeriesSettings.stackedarea]
          */
         stackedarea?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.stackedbar->
+         * [descr:dxChart.Options.commonSeriesSettings.stackedbar]
          */
         stackedbar?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.stackedline->
+         * [descr:dxChart.Options.commonSeriesSettings.stackedline]
          */
         stackedline?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.stackedspline->
+         * [descr:dxChart.Options.commonSeriesSettings.stackedspline]
          */
         stackedspline?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.stackedsplinearea->
+         * [descr:dxChart.Options.commonSeriesSettings.stackedsplinearea]
          */
         stackedsplinearea?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.steparea->
+         * [descr:dxChart.Options.commonSeriesSettings.steparea]
          */
         steparea?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.stepline->
+         * [descr:dxChart.Options.commonSeriesSettings.stepline]
          */
         stepline?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.stock->
+         * [descr:dxChart.Options.commonSeriesSettings.stock]
          */
         stock?: any;
         /**
-         * <-dxChart.Options.commonSeriesSettings.type->
+         * [descr:dxChart.Options.commonSeriesSettings.type]
          */
         type?: 'area' | 'bar' | 'bubble' | 'candlestick' | 'fullstackedarea' | 'fullstackedbar' | 'fullstackedline' | 'fullstackedspline' | 'fullstackedsplinearea' | 'line' | 'rangearea' | 'rangebar' | 'scatter' | 'spline' | 'splinearea' | 'stackedarea' | 'stackedbar' | 'stackedline' | 'stackedspline' | 'stackedsplinearea' | 'steparea' | 'stepline' | 'stock';
     }
     /**
-     * <-dxChart.Options.legend->
+     * [descr:dxChart.Options.legend]
      */
     export interface dxChartLegend extends BaseChartLegend {
         /**
-         * <-dxChart.Options.legend.customizeHint->
+         * [descr:dxChart.Options.legend.customizeHint]
          */
         customizeHint?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
         /**
-         * <-dxChart.Options.legend.customizeText->
+         * [descr:dxChart.Options.legend.customizeText]
          */
         customizeText?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
         /**
-         * <-dxChart.Options.legend.hoverMode->
+         * [descr:dxChart.Options.legend.hoverMode]
          */
         hoverMode?: 'excludePoints' | 'includePoints' | 'none';
         /**
-         * <-dxChart.Options.legend.position->
+         * [descr:dxChart.Options.legend.position]
          */
         position?: 'inside' | 'outside';
     }
     /**
-     * <-dxChart.Options.panes->
+     * [descr:dxChart.Options.panes]
      */
     export interface dxChartPanes extends dxChartCommonPaneSettings {
         /**
-         * <-dxChart.Options.panes.height->
+         * [descr:dxChart.Options.panes.height]
          */
         height?: number | string;
         /**
-         * <-dxChart.Options.panes.name->
+         * [descr:dxChart.Options.panes.name]
          */
         name?: string;
     }
     /**
-     * <-dxChart.Options.tooltip->
+     * [descr:dxChart.Options.tooltip]
      */
     export interface dxChartTooltip extends BaseChartTooltip {
         /**
-         * <-dxChart.Options.tooltip.location->
+         * [descr:dxChart.Options.tooltip.location]
          */
         location?: 'center' | 'edge';
     }
     /**
-     * <-dxChart.Options.valueAxis->
+     * [descr:dxChart.Options.valueAxis]
      */
     export interface dxChartValueAxis extends dxChartCommonAxisSettings {
         /**
-         * <-dxChart.Options.valueAxis.autoBreaksEnabled->
+         * [descr:dxChart.Options.valueAxis.autoBreaksEnabled]
          */
         autoBreaksEnabled?: boolean;
         /**
-         * <-dxChart.Options.valueAxis.axisDivisionFactor->
+         * [descr:dxChart.Options.valueAxis.axisDivisionFactor]
          */
         axisDivisionFactor?: number;
         /**
-         * <-dxChart.Options.valueAxis.breaks->
+         * [descr:dxChart.Options.valueAxis.breaks]
          */
         breaks?: Array<ScaleBreak>;
         /**
-         * <-dxChart.Options.valueAxis.categories->
+         * [descr:dxChart.Options.valueAxis.categories]
          */
         categories?: Array<number | string | Date>;
         /**
-         * <-dxChart.Options.valueAxis.constantLineStyle->
+         * [descr:dxChart.Options.valueAxis.constantLineStyle]
          */
         constantLineStyle?: dxChartValueAxisConstantLineStyle;
         /**
-         * <-dxChart.Options.valueAxis.constantLines->
+         * [descr:dxChart.Options.valueAxis.constantLines]
          */
         constantLines?: Array<dxChartValueAxisConstantLines>;
         /**
-         * <-dxChart.Options.valueAxis.customPosition->
+         * [descr:dxChart.Options.valueAxis.customPosition]
          */
         customPosition?: number | Date | string;
         /**
-         * <-dxChart.Options.valueAxis.endOnTick->
+         * [descr:dxChart.Options.valueAxis.endOnTick]
          */
         endOnTick?: boolean;
         /**
-         * <-dxChart.Options.valueAxis.label->
+         * [descr:dxChart.Options.valueAxis.label]
          */
         label?: dxChartValueAxisLabel;
         /**
-         * <-dxChart.Options.valueAxis.linearThreshold->
+         * [descr:dxChart.Options.valueAxis.linearThreshold]
          */
         linearThreshold?: number;
         /**
-         * <-dxChart.Options.valueAxis.logarithmBase->
+         * [descr:dxChart.Options.valueAxis.logarithmBase]
          */
         logarithmBase?: number;
         /**
-         * <-dxChart.Options.valueAxis.maxAutoBreakCount->
+         * [descr:dxChart.Options.valueAxis.maxAutoBreakCount]
          */
         maxAutoBreakCount?: number;
         /**
-         * <-dxChart.Options.valueAxis.minVisualRangeLength->
+         * [descr:dxChart.Options.valueAxis.minVisualRangeLength]
          */
         minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxChart.Options.valueAxis.minorTickCount->
+         * [descr:dxChart.Options.valueAxis.minorTickCount]
          */
         minorTickCount?: number;
         /**
-         * <-dxChart.Options.valueAxis.minorTickInterval->
+         * [descr:dxChart.Options.valueAxis.minorTickInterval]
          */
         minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxChart.Options.valueAxis.multipleAxesSpacing->
+         * [descr:dxChart.Options.valueAxis.multipleAxesSpacing]
          */
         multipleAxesSpacing?: number;
         /**
-         * <-dxChart.Options.valueAxis.name->
+         * [descr:dxChart.Options.valueAxis.name]
          */
         name?: string;
         /**
-         * <-dxChart.Options.valueAxis.offset->
+         * [descr:dxChart.Options.valueAxis.offset]
          */
         offset?: number;
         /**
-         * <-dxChart.Options.valueAxis.pane->
+         * [descr:dxChart.Options.valueAxis.pane]
          */
         pane?: string;
         /**
-         * <-dxChart.Options.valueAxis.position->
+         * [descr:dxChart.Options.valueAxis.position]
          */
         position?: 'bottom' | 'left' | 'right' | 'top';
         /**
-         * <-dxChart.Options.valueAxis.showZero->
+         * [descr:dxChart.Options.valueAxis.showZero]
          */
         showZero?: boolean;
         /**
-         * <-dxChart.Options.valueAxis.strips->
+         * [descr:dxChart.Options.valueAxis.strips]
          */
         strips?: Array<dxChartValueAxisStrips>;
         /**
-         * <-dxChart.Options.valueAxis.synchronizedValue->
+         * [descr:dxChart.Options.valueAxis.synchronizedValue]
          */
         synchronizedValue?: number;
         /**
-         * <-dxChart.Options.valueAxis.tickInterval->
+         * [descr:dxChart.Options.valueAxis.tickInterval]
          */
         tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxChart.Options.valueAxis.title->
+         * [descr:dxChart.Options.valueAxis.title]
          */
         title?: dxChartValueAxisTitle;
         /**
-         * <-dxChart.Options.valueAxis.type->
+         * [descr:dxChart.Options.valueAxis.type]
          */
         type?: 'continuous' | 'discrete' | 'logarithmic';
         /**
-         * <-dxChart.Options.valueAxis.valueType->
+         * [descr:dxChart.Options.valueAxis.valueType]
          */
         valueType?: 'datetime' | 'numeric' | 'string';
         /**
-         * <-dxChart.Options.valueAxis.visualRange->
+         * [descr:dxChart.Options.valueAxis.visualRange]
          */
         visualRange?: VizRange | Array<number | string | Date>;
         /**
-         * <-dxChart.Options.valueAxis.visualRangeUpdateMode->
+         * [descr:dxChart.Options.valueAxis.visualRangeUpdateMode]
          */
         visualRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
         /**
-         * <-dxChart.Options.valueAxis.wholeRange->
+         * [descr:dxChart.Options.valueAxis.wholeRange]
          */
         wholeRange?: VizRange | Array<number | string | Date>;
     }
     /**
-     * <-dxChart.Options.valueAxis.constantLineStyle->
+     * [descr:dxChart.Options.valueAxis.constantLineStyle]
      */
     export interface dxChartValueAxisConstantLineStyle extends dxChartCommonAxisSettingsConstantLineStyle {
         /**
-         * <-dxChart.Options.valueAxis.constantLineStyle.label->
+         * [descr:dxChart.Options.valueAxis.constantLineStyle.label]
          */
         label?: dxChartValueAxisConstantLineStyleLabel;
     }
     /**
-     * <-dxChart.Options.valueAxis.constantLineStyle.label->
+     * [descr:dxChart.Options.valueAxis.constantLineStyle.label]
      */
     export interface dxChartValueAxisConstantLineStyleLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
         /**
-         * <-dxChart.Options.valueAxis.constantLineStyle.label.horizontalAlignment->
+         * [descr:dxChart.Options.valueAxis.constantLineStyle.label.horizontalAlignment]
          */
         horizontalAlignment?: 'center' | 'left' | 'right';
         /**
-         * <-dxChart.Options.valueAxis.constantLineStyle.label.verticalAlignment->
+         * [descr:dxChart.Options.valueAxis.constantLineStyle.label.verticalAlignment]
          */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
     /**
-     * <-dxChart.Options.valueAxis.constantLines->
+     * [descr:dxChart.Options.valueAxis.constantLines]
      */
     export interface dxChartValueAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
         /**
-         * <-dxChart.Options.valueAxis.constantLines.displayBehindSeries->
+         * [descr:dxChart.Options.valueAxis.constantLines.displayBehindSeries]
          */
         displayBehindSeries?: boolean;
         /**
-         * <-dxChart.Options.valueAxis.constantLines.extendAxis->
+         * [descr:dxChart.Options.valueAxis.constantLines.extendAxis]
          */
         extendAxis?: boolean;
         /**
-         * <-dxChart.Options.valueAxis.constantLines.label->
+         * [descr:dxChart.Options.valueAxis.constantLines.label]
          */
         label?: dxChartValueAxisConstantLinesLabel;
         /**
-         * <-dxChart.Options.valueAxis.constantLines.value->
+         * [descr:dxChart.Options.valueAxis.constantLines.value]
          */
         value?: number | Date | string;
     }
     /**
-     * <-dxChart.Options.valueAxis.constantLines.label->
+     * [descr:dxChart.Options.valueAxis.constantLines.label]
      */
     export interface dxChartValueAxisConstantLinesLabel extends dxChartCommonAxisSettingsConstantLineStyleLabel {
         /**
-         * <-dxChart.Options.valueAxis.constantLines.label.horizontalAlignment->
+         * [descr:dxChart.Options.valueAxis.constantLines.label.horizontalAlignment]
          */
         horizontalAlignment?: 'center' | 'left' | 'right';
         /**
-         * <-dxChart.Options.valueAxis.constantLines.label.text->
+         * [descr:dxChart.Options.valueAxis.constantLines.label.text]
          */
         text?: string;
         /**
-         * <-dxChart.Options.valueAxis.constantLines.label.verticalAlignment->
+         * [descr:dxChart.Options.valueAxis.constantLines.label.verticalAlignment]
          */
         verticalAlignment?: 'bottom' | 'center' | 'top';
     }
     /**
-     * <-dxChart.Options.valueAxis.label->
+     * [descr:dxChart.Options.valueAxis.label]
      */
     export interface dxChartValueAxisLabel extends dxChartCommonAxisSettingsLabel {
         /**
-         * <-dxChart.Options.valueAxis.label.customizeHint->
+         * [descr:dxChart.Options.valueAxis.label.customizeHint]
          */
         customizeHint?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
         /**
-         * <-dxChart.Options.valueAxis.label.customizeText->
+         * [descr:dxChart.Options.valueAxis.label.customizeText]
          */
         customizeText?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
         /**
-         * <-dxChart.Options.valueAxis.label.format->
+         * [descr:dxChart.Options.valueAxis.label.format]
          */
         format?: DevExpress.ui.format;
     }
     /**
-     * <-dxChart.Options.valueAxis.strips->
+     * [descr:dxChart.Options.valueAxis.strips]
      */
     export interface dxChartValueAxisStrips extends dxChartCommonAxisSettingsStripStyle {
         /**
-         * <-dxChart.Options.valueAxis.strips.color->
+         * [descr:dxChart.Options.valueAxis.strips.color]
          */
         color?: string;
         /**
-         * <-dxChart.Options.valueAxis.strips.endValue->
+         * [descr:dxChart.Options.valueAxis.strips.endValue]
          */
         endValue?: number | Date | string;
         /**
-         * <-dxChart.Options.valueAxis.strips.label->
+         * [descr:dxChart.Options.valueAxis.strips.label]
          */
         label?: dxChartValueAxisStripsLabel;
         /**
-         * <-dxChart.Options.valueAxis.strips.startValue->
+         * [descr:dxChart.Options.valueAxis.strips.startValue]
          */
         startValue?: number | Date | string;
     }
     /**
-     * <-dxChart.Options.valueAxis.strips.label->
+     * [descr:dxChart.Options.valueAxis.strips.label]
      */
     export interface dxChartValueAxisStripsLabel extends dxChartCommonAxisSettingsStripStyleLabel {
         /**
-         * <-dxChart.Options.valueAxis.strips.label.text->
+         * [descr:dxChart.Options.valueAxis.strips.label.text]
          */
         text?: string;
     }
     /**
-     * <-dxChart.Options.valueAxis.title->
+     * [descr:dxChart.Options.valueAxis.title]
      */
     export interface dxChartValueAxisTitle extends dxChartCommonAxisSettingsTitle {
         /**
-         * <-dxChart.Options.valueAxis.title.text->
+         * [descr:dxChart.Options.valueAxis.title.text]
          */
         text?: string;
     }
     /**
-     * <-dxChart->
+     * [descr:dxChart]
      */
     export class dxChart extends BaseChart {
         constructor(element: Element, options?: dxChartOptions)
         constructor(element: JQuery, options?: dxChartOptions)
         /**
-         * <-dxChart.getArgumentAxis()->
+         * [descr:dxChart.getArgumentAxis()]
          */
         getArgumentAxis(): chartAxisObject;
         /**
-         * <-dxChart.getValueAxis()->
+         * [descr:dxChart.getValueAxis()]
          */
         getValueAxis(): chartAxisObject;
         /**
-         * <-dxChart.getValueAxis(name)->
+         * [descr:dxChart.getValueAxis(name)]
          */
         getValueAxis(name: string): chartAxisObject;
         /**
-         * <-dxChart.resetVisualRange()->
+         * [descr:dxChart.resetVisualRange()]
          */
         resetVisualRange(): void;
         /**
-         * <-dxChart.zoomArgument(startValue,endValue)->
+         * [descr:dxChart.zoomArgument(startValue,endValue)]
          */
         zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;
     }
     /**
-     * <-dxChartAnnotationConfig->
+     * [descr:dxChartAnnotationConfig]
      */
     export interface dxChartAnnotationConfig extends dxChartCommonAnnotationConfig {
         /**
-         * <-dxChartAnnotationConfig.name->
+         * [descr:dxChartAnnotationConfig.name]
          */
         name?: string;
     }
     /**
-     * <-dxChartCommonAnnotationConfig->
+     * [descr:dxChartCommonAnnotationConfig]
      */
     export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /**
-         * <-dxChartCommonAnnotationConfig.axis->
+         * [descr:dxChartCommonAnnotationConfig.axis]
          */
         axis?: string;
         /**
-         * <-dxChartCommonAnnotationConfig.customizeTooltip->
+         * [descr:dxChartCommonAnnotationConfig.customizeTooltip]
          */
         customizeTooltip?: ((annotation: dxChartAnnotationConfig | any) => any);
         /**
-         * <-dxChartCommonAnnotationConfig.template->
+         * [descr:dxChartCommonAnnotationConfig.template]
          */
         template?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /**
-         * <-dxChartCommonAnnotationConfig.tooltipTemplate->
+         * [descr:dxChartCommonAnnotationConfig.tooltipTemplate]
          */
         tooltipTemplate?: DevExpress.core.template | ((annotation: dxChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /**
-     * <-dxChartSeriesTypes->
+     * [descr:dxChartSeriesTypes]
      */
     interface dxChartSeriesTypes {
         /**
-         * <-dxChartSeriesTypes.AreaSeries->
+         * [descr:dxChartSeriesTypes.AreaSeries]
          */
         AreaSeries?: dxChartSeriesTypesAreaSeries;
         /**
-         * <-dxChartSeriesTypes.BarSeries->
+         * [descr:dxChartSeriesTypes.BarSeries]
          */
         BarSeries?: dxChartSeriesTypesBarSeries;
         /**
-         * <-dxChartSeriesTypes.BubbleSeries->
+         * [descr:dxChartSeriesTypes.BubbleSeries]
          */
         BubbleSeries?: dxChartSeriesTypesBubbleSeries;
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries->
+         * [descr:dxChartSeriesTypes.CandleStickSeries]
          */
         CandleStickSeries?: dxChartSeriesTypesCandleStickSeries;
         /**
-         * <-dxChartSeriesTypes.CommonSeries->
+         * [descr:dxChartSeriesTypes.CommonSeries]
          */
         CommonSeries?: dxChartSeriesTypesCommonSeries;
         /**
-         * <-dxChartSeriesTypes.FullStackedAreaSeries->
+         * [descr:dxChartSeriesTypes.FullStackedAreaSeries]
          */
         FullStackedAreaSeries?: dxChartSeriesTypesFullStackedAreaSeries;
         /**
-         * <-dxChartSeriesTypes.FullStackedBarSeries->
+         * [descr:dxChartSeriesTypes.FullStackedBarSeries]
          */
         FullStackedBarSeries?: dxChartSeriesTypesFullStackedBarSeries;
         /**
-         * <-dxChartSeriesTypes.FullStackedLineSeries->
+         * [descr:dxChartSeriesTypes.FullStackedLineSeries]
          */
         FullStackedLineSeries?: dxChartSeriesTypesFullStackedLineSeries;
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineAreaSeries->
+         * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries]
          */
         FullStackedSplineAreaSeries?: dxChartSeriesTypesFullStackedSplineAreaSeries;
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineSeries->
+         * [descr:dxChartSeriesTypes.FullStackedSplineSeries]
          */
         FullStackedSplineSeries?: dxChartSeriesTypesFullStackedSplineSeries;
         /**
-         * <-dxChartSeriesTypes.LineSeries->
+         * [descr:dxChartSeriesTypes.LineSeries]
          */
         LineSeries?: dxChartSeriesTypesLineSeries;
         /**
-         * <-dxChartSeriesTypes.RangeAreaSeries->
+         * [descr:dxChartSeriesTypes.RangeAreaSeries]
          */
         RangeAreaSeries?: dxChartSeriesTypesRangeAreaSeries;
         /**
-         * <-dxChartSeriesTypes.RangeBarSeries->
+         * [descr:dxChartSeriesTypes.RangeBarSeries]
          */
         RangeBarSeries?: dxChartSeriesTypesRangeBarSeries;
         /**
-         * <-dxChartSeriesTypes.ScatterSeries->
+         * [descr:dxChartSeriesTypes.ScatterSeries]
          */
         ScatterSeries?: dxChartSeriesTypesScatterSeries;
         /**
-         * <-dxChartSeriesTypes.SplineAreaSeries->
+         * [descr:dxChartSeriesTypes.SplineAreaSeries]
          */
         SplineAreaSeries?: dxChartSeriesTypesSplineAreaSeries;
         /**
-         * <-dxChartSeriesTypes.SplineSeries->
+         * [descr:dxChartSeriesTypes.SplineSeries]
          */
         SplineSeries?: dxChartSeriesTypesSplineSeries;
         /**
-         * <-dxChartSeriesTypes.StackedAreaSeries->
+         * [descr:dxChartSeriesTypes.StackedAreaSeries]
          */
         StackedAreaSeries?: dxChartSeriesTypesStackedAreaSeries;
         /**
-         * <-dxChartSeriesTypes.StackedBarSeries->
+         * [descr:dxChartSeriesTypes.StackedBarSeries]
          */
         StackedBarSeries?: dxChartSeriesTypesStackedBarSeries;
         /**
-         * <-dxChartSeriesTypes.StackedLineSeries->
+         * [descr:dxChartSeriesTypes.StackedLineSeries]
          */
         StackedLineSeries?: dxChartSeriesTypesStackedLineSeries;
         /**
-         * <-dxChartSeriesTypes.StackedSplineAreaSeries->
+         * [descr:dxChartSeriesTypes.StackedSplineAreaSeries]
          */
         StackedSplineAreaSeries?: dxChartSeriesTypesStackedSplineAreaSeries;
         /**
-         * <-dxChartSeriesTypes.StackedSplineSeries->
+         * [descr:dxChartSeriesTypes.StackedSplineSeries]
          */
         StackedSplineSeries?: dxChartSeriesTypesStackedSplineSeries;
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries->
+         * [descr:dxChartSeriesTypes.StepAreaSeries]
          */
         StepAreaSeries?: dxChartSeriesTypesStepAreaSeries;
         /**
-         * <-dxChartSeriesTypes.StepLineSeries->
+         * [descr:dxChartSeriesTypes.StepLineSeries]
          */
         StepLineSeries?: dxChartSeriesTypesStepLineSeries;
         /**
-         * <-dxChartSeriesTypes.StockSeries->
+         * [descr:dxChartSeriesTypes.StockSeries]
          */
         StockSeries?: dxChartSeriesTypesStockSeries;
     }
     /**
-     * <-dxChartSeriesTypes.AreaSeries->
+     * [descr:dxChartSeriesTypes.AreaSeries]
      */
     interface dxChartSeriesTypesAreaSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.AreaSeries.aggregation->
+         * [descr:dxChartSeriesTypes.AreaSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesAreaSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.AreaSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.AreaSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.AreaSeries.label->
+         * [descr:dxChartSeriesTypes.AreaSeries.label]
          */
         label?: dxChartSeriesTypesAreaSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.AreaSeries.point->
+         * [descr:dxChartSeriesTypes.AreaSeries.point]
          */
         point?: dxChartSeriesTypesAreaSeriesPoint;
         /**
-         * <-dxChartSeriesTypes.AreaSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.AreaSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.AreaSeries.aggregation->
+     * [descr:dxChartSeriesTypes.AreaSeries.aggregation]
      */
     interface dxChartSeriesTypesAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.AreaSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.AreaSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.AreaSeries.label->
+     * [descr:dxChartSeriesTypes.AreaSeries.label]
      */
     interface dxChartSeriesTypesAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.AreaSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.AreaSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.AreaSeries.point->
+     * [descr:dxChartSeriesTypes.AreaSeries.point]
      */
     interface dxChartSeriesTypesAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /**
-         * <-dxChartSeriesTypes.AreaSeries.point.visible->
+         * [descr:dxChartSeriesTypes.AreaSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.BarSeries->
+     * [descr:dxChartSeriesTypes.BarSeries]
      */
     interface dxChartSeriesTypesBarSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.BarSeries.aggregation->
+         * [descr:dxChartSeriesTypes.BarSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesBarSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.BarSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.BarSeries.hoverMode]
          */
         hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.BarSeries.label->
+         * [descr:dxChartSeriesTypes.BarSeries.label]
          */
         label?: dxChartSeriesTypesBarSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.BarSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.BarSeries.selectionMode]
          */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.BarSeries.aggregation->
+     * [descr:dxChartSeriesTypes.BarSeries.aggregation]
      */
     interface dxChartSeriesTypesBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.BarSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.BarSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.BarSeries.label->
+     * [descr:dxChartSeriesTypes.BarSeries.label]
      */
     interface dxChartSeriesTypesBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.BarSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.BarSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.BubbleSeries->
+     * [descr:dxChartSeriesTypes.BubbleSeries]
      */
     interface dxChartSeriesTypesBubbleSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.BubbleSeries.aggregation->
+         * [descr:dxChartSeriesTypes.BubbleSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesBubbleSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.BubbleSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.BubbleSeries.hoverMode]
          */
         hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.BubbleSeries.label->
+         * [descr:dxChartSeriesTypes.BubbleSeries.label]
          */
         label?: dxChartSeriesTypesBubbleSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.BubbleSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.BubbleSeries.selectionMode]
          */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.BubbleSeries.aggregation->
+     * [descr:dxChartSeriesTypes.BubbleSeries.aggregation]
      */
     interface dxChartSeriesTypesBubbleSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.BubbleSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.BubbleSeries.aggregation.method]
          */
         method?: 'avg' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.BubbleSeries.label->
+     * [descr:dxChartSeriesTypes.BubbleSeries.label]
      */
     interface dxChartSeriesTypesBubbleSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.BubbleSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.BubbleSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.CandleStickSeries->
+     * [descr:dxChartSeriesTypes.CandleStickSeries]
      */
     interface dxChartSeriesTypesCandleStickSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.aggregation->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesCandleStickSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.argumentField->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.argumentField]
          */
         argumentField?: string;
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.hoverMode]
          */
         hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.hoverStyle->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle]
          */
         hoverStyle?: dxChartSeriesTypesCandleStickSeriesHoverStyle;
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.label->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.label]
          */
         label?: dxChartSeriesTypesCandleStickSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.selectionMode]
          */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.selectionStyle->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle]
          */
         selectionStyle?: dxChartSeriesTypesCandleStickSeriesSelectionStyle;
     }
     /**
-     * <-dxChartSeriesTypes.CandleStickSeries.aggregation->
+     * [descr:dxChartSeriesTypes.CandleStickSeries.aggregation]
      */
     interface dxChartSeriesTypesCandleStickSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.aggregation.method]
          */
         method?: 'ohlc' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.CandleStickSeries.hoverStyle->
+     * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle]
      */
     interface dxChartSeriesTypesCandleStickSeriesHoverStyle extends dxChartSeriesTypesCommonSeriesHoverStyle {
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching]
          */
         hatching?: dxChartSeriesTypesCandleStickSeriesHoverStyleHatching;
     }
     /**
-     * <-dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching->
+     * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching]
      */
     interface dxChartSeriesTypesCandleStickSeriesHoverStyleHatching extends dxChartSeriesTypesCommonSeriesHoverStyleHatching {
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.hoverStyle.hatching.direction]
          */
         direction?: 'left' | 'none' | 'right';
     }
     /**
-     * <-dxChartSeriesTypes.CandleStickSeries.label->
+     * [descr:dxChartSeriesTypes.CandleStickSeries.label]
      */
     interface dxChartSeriesTypesCandleStickSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.CandleStickSeries.selectionStyle->
+     * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle]
      */
     interface dxChartSeriesTypesCandleStickSeriesSelectionStyle extends dxChartSeriesTypesCommonSeriesSelectionStyle {
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching]
          */
         hatching?: dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching;
     }
     /**
-     * <-dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching->
+     * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching]
      */
     interface dxChartSeriesTypesCandleStickSeriesSelectionStyleHatching extends dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
         /**
-         * <-dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction->
+         * [descr:dxChartSeriesTypes.CandleStickSeries.selectionStyle.hatching.direction]
          */
         direction?: 'left' | 'none' | 'right';
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries->
+     * [descr:dxChartSeriesTypes.CommonSeries]
      */
     interface dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.aggregation->
+         * [descr:dxChartSeriesTypes.CommonSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesCommonSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.argumentField->
+         * [descr:dxChartSeriesTypes.CommonSeries.argumentField]
          */
         argumentField?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.axis->
+         * [descr:dxChartSeriesTypes.CommonSeries.axis]
          */
         axis?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.barOverlapGroup->
+         * [descr:dxChartSeriesTypes.CommonSeries.barOverlapGroup]
          */
         barOverlapGroup?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.barPadding->
+         * [descr:dxChartSeriesTypes.CommonSeries.barPadding]
          */
         barPadding?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.barWidth->
+         * [descr:dxChartSeriesTypes.CommonSeries.barWidth]
          */
         barWidth?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.border->
+         * [descr:dxChartSeriesTypes.CommonSeries.border]
          */
         border?: dxChartSeriesTypesCommonSeriesBorder;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.closeValueField->
+         * [descr:dxChartSeriesTypes.CommonSeries.closeValueField]
          */
         closeValueField?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.color->
+         * [descr:dxChartSeriesTypes.CommonSeries.color]
          */
         color?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.cornerRadius->
+         * [descr:dxChartSeriesTypes.CommonSeries.cornerRadius]
          */
         cornerRadius?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.dashStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.dashStyle]
          */
         dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.highValueField->
+         * [descr:dxChartSeriesTypes.CommonSeries.highValueField]
          */
         highValueField?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverMode]
          */
         hoverMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'excludePoints' | 'includePoints' | 'nearestPoint' | 'none' | 'onlyPoint';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle]
          */
         hoverStyle?: dxChartSeriesTypesCommonSeriesHoverStyle;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.ignoreEmptyPoints->
+         * [descr:dxChartSeriesTypes.CommonSeries.ignoreEmptyPoints]
          */
         ignoreEmptyPoints?: boolean;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.innerColor->
+         * [descr:dxChartSeriesTypes.CommonSeries.innerColor]
          */
         innerColor?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label->
+         * [descr:dxChartSeriesTypes.CommonSeries.label]
          */
         label?: dxChartSeriesTypesCommonSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.lowValueField->
+         * [descr:dxChartSeriesTypes.CommonSeries.lowValueField]
          */
         lowValueField?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.maxLabelCount->
+         * [descr:dxChartSeriesTypes.CommonSeries.maxLabelCount]
          */
         maxLabelCount?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.minBarSize->
+         * [descr:dxChartSeriesTypes.CommonSeries.minBarSize]
          */
         minBarSize?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.opacity->
+         * [descr:dxChartSeriesTypes.CommonSeries.opacity]
          */
         opacity?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.openValueField->
+         * [descr:dxChartSeriesTypes.CommonSeries.openValueField]
          */
         openValueField?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.pane->
+         * [descr:dxChartSeriesTypes.CommonSeries.pane]
          */
         pane?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point->
+         * [descr:dxChartSeriesTypes.CommonSeries.point]
          */
         point?: dxChartSeriesTypesCommonSeriesPoint;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.rangeValue1Field->
+         * [descr:dxChartSeriesTypes.CommonSeries.rangeValue1Field]
          */
         rangeValue1Field?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.rangeValue2Field->
+         * [descr:dxChartSeriesTypes.CommonSeries.rangeValue2Field]
          */
         rangeValue2Field?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.reduction->
+         * [descr:dxChartSeriesTypes.CommonSeries.reduction]
          */
         reduction?: { color?: string, level?: 'close' | 'high' | 'low' | 'open' };
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionMode]
          */
         selectionMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'excludePoints' | 'includePoints' | 'none' | 'onlyPoint';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle]
          */
         selectionStyle?: dxChartSeriesTypesCommonSeriesSelectionStyle;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.showInLegend->
+         * [descr:dxChartSeriesTypes.CommonSeries.showInLegend]
          */
         showInLegend?: boolean;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.sizeField->
+         * [descr:dxChartSeriesTypes.CommonSeries.sizeField]
          */
         sizeField?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.stack->
+         * [descr:dxChartSeriesTypes.CommonSeries.stack]
          */
         stack?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.tagField->
+         * [descr:dxChartSeriesTypes.CommonSeries.tagField]
          */
         tagField?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.valueErrorBar->
+         * [descr:dxChartSeriesTypes.CommonSeries.valueErrorBar]
          */
         valueErrorBar?: { color?: string, displayMode?: 'auto' | 'high' | 'low' | 'none', edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance', value?: number };
         /**
-         * <-dxChartSeriesTypes.CommonSeries.valueField->
+         * [descr:dxChartSeriesTypes.CommonSeries.valueField]
          */
         valueField?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.visible->
+         * [descr:dxChartSeriesTypes.CommonSeries.visible]
          */
         visible?: boolean;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.width->
+         * [descr:dxChartSeriesTypes.CommonSeries.width]
          */
         width?: number;
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.aggregation->
+     * [descr:dxChartSeriesTypes.CommonSeries.aggregation]
      */
     interface dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.aggregation.calculate->
+         * [descr:dxChartSeriesTypes.CommonSeries.aggregation.calculate]
          */
         calculate?: ((aggregationInfo: chartPointAggregationInfoObject, series: chartSeriesObject) => any | Array<any>);
         /**
-         * <-dxChartSeriesTypes.CommonSeries.aggregation.enabled->
+         * [descr:dxChartSeriesTypes.CommonSeries.aggregation.enabled]
          */
         enabled?: boolean;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.CommonSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'ohlc' | 'range' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.border->
+     * [descr:dxChartSeriesTypes.CommonSeries.border]
      */
     interface dxChartSeriesTypesCommonSeriesBorder {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.border.color->
+         * [descr:dxChartSeriesTypes.CommonSeries.border.color]
          */
         color?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.border.dashStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.border.dashStyle]
          */
         dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.border.visible->
+         * [descr:dxChartSeriesTypes.CommonSeries.border.visible]
          */
         visible?: boolean;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.border.width->
+         * [descr:dxChartSeriesTypes.CommonSeries.border.width]
          */
         width?: number;
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.hoverStyle->
+     * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle]
      */
     interface dxChartSeriesTypesCommonSeriesHoverStyle {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.border->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border]
          */
         border?: dxChartSeriesTypesCommonSeriesHoverStyleBorder;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.color->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.color]
          */
         color?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.dashStyle]
          */
         dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.hatching->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching]
          */
         hatching?: dxChartSeriesTypesCommonSeriesHoverStyleHatching;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.width->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.width]
          */
         width?: number;
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.hoverStyle.border->
+     * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border]
      */
     interface dxChartSeriesTypesCommonSeriesHoverStyleBorder {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.border.color->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.color]
          */
         color?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.dashStyle]
          */
         dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.visible]
          */
         visible?: boolean;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.border.width->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.border.width]
          */
         width?: number;
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.hoverStyle.hatching->
+     * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching]
      */
     interface dxChartSeriesTypesCommonSeriesHoverStyleHatching {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.direction->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.direction]
          */
         direction?: 'left' | 'none' | 'right';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.opacity]
          */
         opacity?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.step->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.step]
          */
         step?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.width->
+         * [descr:dxChartSeriesTypes.CommonSeries.hoverStyle.hatching.width]
          */
         width?: number;
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.label->
+     * [descr:dxChartSeriesTypes.CommonSeries.label]
      */
     interface dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.alignment->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.alignment]
          */
         alignment?: 'center' | 'left' | 'right';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.argumentFormat->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.argumentFormat]
          */
         argumentFormat?: DevExpress.ui.format;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.backgroundColor->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.backgroundColor]
          */
         backgroundColor?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.border->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.border]
          */
         border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number };
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.connector->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.connector]
          */
         connector?: { color?: string, visible?: boolean, width?: number };
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.font->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.font]
          */
         font?: Font;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.format->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.format]
          */
         format?: DevExpress.ui.format;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.horizontalOffset->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.horizontalOffset]
          */
         horizontalOffset?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.position->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.position]
          */
         position?: 'inside' | 'outside';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.rotationAngle->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.rotationAngle]
          */
         rotationAngle?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.showForZeroValues->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.showForZeroValues]
          */
         showForZeroValues?: boolean;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.verticalOffset->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.verticalOffset]
          */
         verticalOffset?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.label.visible->
+         * [descr:dxChartSeriesTypes.CommonSeries.label.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.point->
+     * [descr:dxChartSeriesTypes.CommonSeries.point]
      */
     interface dxChartSeriesTypesCommonSeriesPoint {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.border->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.border]
          */
         border?: { color?: string, visible?: boolean, width?: number };
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.color->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.color]
          */
         color?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.hoverMode->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverMode]
          */
         hoverMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'none' | 'onlyPoint';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.hoverStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.hoverStyle]
          */
         hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, size?: number };
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.image->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.image]
          */
         image?: string | { height?: number | { rangeMaxPoint?: number, rangeMinPoint?: number }, url?: string | { rangeMaxPoint?: string, rangeMinPoint?: string }, width?: number | { rangeMaxPoint?: number, rangeMinPoint?: number } };
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.selectionMode->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionMode]
          */
         selectionMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'none' | 'onlyPoint';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.selectionStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.selectionStyle]
          */
         selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, size?: number };
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.size->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.size]
          */
         size?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.symbol->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.symbol]
          */
         symbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangleDown' | 'triangleUp';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.point.visible->
+         * [descr:dxChartSeriesTypes.CommonSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.selectionStyle->
+     * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle]
      */
     interface dxChartSeriesTypesCommonSeriesSelectionStyle {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.border->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border]
          */
         border?: dxChartSeriesTypesCommonSeriesSelectionStyleBorder;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.color->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.color]
          */
         color?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.dashStyle]
          */
         dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.hatching->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching]
          */
         hatching?: dxChartSeriesTypesCommonSeriesSelectionStyleHatching;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.width->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.width]
          */
         width?: number;
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.selectionStyle.border->
+     * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border]
      */
     interface dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.border.color->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.color]
          */
         color?: string;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.dashStyle]
          */
         dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.visible]
          */
         visible?: boolean;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.border.width->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.border.width]
          */
         width?: number;
     }
     /**
-     * <-dxChartSeriesTypes.CommonSeries.selectionStyle.hatching->
+     * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching]
      */
     interface dxChartSeriesTypesCommonSeriesSelectionStyleHatching {
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.direction->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.direction]
          */
         direction?: 'left' | 'none' | 'right';
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.opacity]
          */
         opacity?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.step->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.step]
          */
         step?: number;
         /**
-         * <-dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.width->
+         * [descr:dxChartSeriesTypes.CommonSeries.selectionStyle.hatching.width]
          */
         width?: number;
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedAreaSeries->
+     * [descr:dxChartSeriesTypes.FullStackedAreaSeries]
      */
     interface dxChartSeriesTypesFullStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.FullStackedAreaSeries.aggregation->
+         * [descr:dxChartSeriesTypes.FullStackedAreaSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesFullStackedAreaSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.FullStackedAreaSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.FullStackedAreaSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.FullStackedAreaSeries.label->
+         * [descr:dxChartSeriesTypes.FullStackedAreaSeries.label]
          */
         label?: dxChartSeriesTypesFullStackedAreaSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.FullStackedAreaSeries.point->
+         * [descr:dxChartSeriesTypes.FullStackedAreaSeries.point]
          */
         point?: dxChartSeriesTypesFullStackedAreaSeriesPoint;
         /**
-         * <-dxChartSeriesTypes.FullStackedAreaSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.FullStackedAreaSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedAreaSeries.aggregation->
+     * [descr:dxChartSeriesTypes.FullStackedAreaSeries.aggregation]
      */
     interface dxChartSeriesTypesFullStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.FullStackedAreaSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.FullStackedAreaSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedAreaSeries.label->
+     * [descr:dxChartSeriesTypes.FullStackedAreaSeries.label]
      */
     interface dxChartSeriesTypesFullStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.FullStackedAreaSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.FullStackedAreaSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedAreaSeries.point->
+     * [descr:dxChartSeriesTypes.FullStackedAreaSeries.point]
      */
     interface dxChartSeriesTypesFullStackedAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /**
-         * <-dxChartSeriesTypes.FullStackedAreaSeries.point.visible->
+         * [descr:dxChartSeriesTypes.FullStackedAreaSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedBarSeries->
+     * [descr:dxChartSeriesTypes.FullStackedBarSeries]
      */
     interface dxChartSeriesTypesFullStackedBarSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.FullStackedBarSeries.aggregation->
+         * [descr:dxChartSeriesTypes.FullStackedBarSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesFullStackedBarSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.FullStackedBarSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.FullStackedBarSeries.hoverMode]
          */
         hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.FullStackedBarSeries.label->
+         * [descr:dxChartSeriesTypes.FullStackedBarSeries.label]
          */
         label?: dxChartSeriesTypesFullStackedBarSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.FullStackedBarSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.FullStackedBarSeries.selectionMode]
          */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedBarSeries.aggregation->
+     * [descr:dxChartSeriesTypes.FullStackedBarSeries.aggregation]
      */
     interface dxChartSeriesTypesFullStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.FullStackedBarSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.FullStackedBarSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedBarSeries.label->
+     * [descr:dxChartSeriesTypes.FullStackedBarSeries.label]
      */
     interface dxChartSeriesTypesFullStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.FullStackedBarSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.FullStackedBarSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
         /**
-         * <-dxChartSeriesTypes.FullStackedBarSeries.label.position->
+         * [descr:dxChartSeriesTypes.FullStackedBarSeries.label.position]
          */
         position?: 'inside' | 'outside';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedLineSeries->
+     * [descr:dxChartSeriesTypes.FullStackedLineSeries]
      */
     interface dxChartSeriesTypesFullStackedLineSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.FullStackedLineSeries.aggregation->
+         * [descr:dxChartSeriesTypes.FullStackedLineSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesFullStackedLineSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.FullStackedLineSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.FullStackedLineSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.FullStackedLineSeries.label->
+         * [descr:dxChartSeriesTypes.FullStackedLineSeries.label]
          */
         label?: dxChartSeriesTypesFullStackedLineSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.FullStackedLineSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.FullStackedLineSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedLineSeries.aggregation->
+     * [descr:dxChartSeriesTypes.FullStackedLineSeries.aggregation]
      */
     interface dxChartSeriesTypesFullStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.FullStackedLineSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.FullStackedLineSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedLineSeries.label->
+     * [descr:dxChartSeriesTypes.FullStackedLineSeries.label]
      */
     interface dxChartSeriesTypesFullStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.FullStackedLineSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.FullStackedLineSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedSplineAreaSeries->
+     * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries]
      */
     interface dxChartSeriesTypesFullStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation->
+         * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.label->
+         * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.label]
          */
         label?: dxChartSeriesTypesFullStackedSplineAreaSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.point->
+         * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.point]
          */
         point?: dxChartSeriesTypesFullStackedSplineAreaSeriesPoint;
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation->
+     * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation]
      */
     interface dxChartSeriesTypesFullStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.label->
+     * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.label]
      */
     interface dxChartSeriesTypesFullStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.point->
+     * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.point]
      */
     interface dxChartSeriesTypesFullStackedSplineAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineAreaSeries.point.visible->
+         * [descr:dxChartSeriesTypes.FullStackedSplineAreaSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedSplineSeries->
+     * [descr:dxChartSeriesTypes.FullStackedSplineSeries]
      */
     interface dxChartSeriesTypesFullStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineSeries.aggregation->
+         * [descr:dxChartSeriesTypes.FullStackedSplineSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesFullStackedSplineSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.FullStackedSplineSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineSeries.label->
+         * [descr:dxChartSeriesTypes.FullStackedSplineSeries.label]
          */
         label?: dxChartSeriesTypesFullStackedSplineSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.FullStackedSplineSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedSplineSeries.aggregation->
+     * [descr:dxChartSeriesTypes.FullStackedSplineSeries.aggregation]
      */
     interface dxChartSeriesTypesFullStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.FullStackedSplineSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.FullStackedSplineSeries.label->
+     * [descr:dxChartSeriesTypes.FullStackedSplineSeries.label]
      */
     interface dxChartSeriesTypesFullStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.FullStackedSplineSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.FullStackedSplineSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.LineSeries->
+     * [descr:dxChartSeriesTypes.LineSeries]
      */
     interface dxChartSeriesTypesLineSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.LineSeries.aggregation->
+         * [descr:dxChartSeriesTypes.LineSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesLineSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.LineSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.LineSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.LineSeries.label->
+         * [descr:dxChartSeriesTypes.LineSeries.label]
          */
         label?: dxChartSeriesTypesLineSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.LineSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.LineSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.LineSeries.aggregation->
+     * [descr:dxChartSeriesTypes.LineSeries.aggregation]
      */
     interface dxChartSeriesTypesLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.LineSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.LineSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.LineSeries.label->
+     * [descr:dxChartSeriesTypes.LineSeries.label]
      */
     interface dxChartSeriesTypesLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.LineSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.LineSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.RangeAreaSeries->
+     * [descr:dxChartSeriesTypes.RangeAreaSeries]
      */
     interface dxChartSeriesTypesRangeAreaSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.RangeAreaSeries.aggregation->
+         * [descr:dxChartSeriesTypes.RangeAreaSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesRangeAreaSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.RangeAreaSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.RangeAreaSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.RangeAreaSeries.label->
+         * [descr:dxChartSeriesTypes.RangeAreaSeries.label]
          */
         label?: dxChartSeriesTypesRangeAreaSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.RangeAreaSeries.point->
+         * [descr:dxChartSeriesTypes.RangeAreaSeries.point]
          */
         point?: dxChartSeriesTypesRangeAreaSeriesPoint;
         /**
-         * <-dxChartSeriesTypes.RangeAreaSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.RangeAreaSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.RangeAreaSeries.aggregation->
+     * [descr:dxChartSeriesTypes.RangeAreaSeries.aggregation]
      */
     interface dxChartSeriesTypesRangeAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.RangeAreaSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.RangeAreaSeries.aggregation.method]
          */
         method?: 'range' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.RangeAreaSeries.label->
+     * [descr:dxChartSeriesTypes.RangeAreaSeries.label]
      */
     interface dxChartSeriesTypesRangeAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.RangeAreaSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.RangeAreaSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.RangeAreaSeries.point->
+     * [descr:dxChartSeriesTypes.RangeAreaSeries.point]
      */
     interface dxChartSeriesTypesRangeAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /**
-         * <-dxChartSeriesTypes.RangeAreaSeries.point.visible->
+         * [descr:dxChartSeriesTypes.RangeAreaSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.RangeBarSeries->
+     * [descr:dxChartSeriesTypes.RangeBarSeries]
      */
     interface dxChartSeriesTypesRangeBarSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.RangeBarSeries.aggregation->
+         * [descr:dxChartSeriesTypes.RangeBarSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesRangeBarSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.RangeBarSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.RangeBarSeries.hoverMode]
          */
         hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.RangeBarSeries.label->
+         * [descr:dxChartSeriesTypes.RangeBarSeries.label]
          */
         label?: dxChartSeriesTypesRangeBarSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.RangeBarSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.RangeBarSeries.selectionMode]
          */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.RangeBarSeries.aggregation->
+     * [descr:dxChartSeriesTypes.RangeBarSeries.aggregation]
      */
     interface dxChartSeriesTypesRangeBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.RangeBarSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.RangeBarSeries.aggregation.method]
          */
         method?: 'range' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.RangeBarSeries.label->
+     * [descr:dxChartSeriesTypes.RangeBarSeries.label]
      */
     interface dxChartSeriesTypesRangeBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.RangeBarSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.RangeBarSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.ScatterSeries->
+     * [descr:dxChartSeriesTypes.ScatterSeries]
      */
     interface dxChartSeriesTypesScatterSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.ScatterSeries.aggregation->
+         * [descr:dxChartSeriesTypes.ScatterSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesScatterSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.ScatterSeries.label->
+         * [descr:dxChartSeriesTypes.ScatterSeries.label]
          */
         label?: dxChartSeriesTypesScatterSeriesLabel;
     }
     /**
-     * <-dxChartSeriesTypes.ScatterSeries.aggregation->
+     * [descr:dxChartSeriesTypes.ScatterSeries.aggregation]
      */
     interface dxChartSeriesTypesScatterSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.ScatterSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.ScatterSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.ScatterSeries.label->
+     * [descr:dxChartSeriesTypes.ScatterSeries.label]
      */
     interface dxChartSeriesTypesScatterSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.ScatterSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.ScatterSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.SplineAreaSeries->
+     * [descr:dxChartSeriesTypes.SplineAreaSeries]
      */
     interface dxChartSeriesTypesSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.SplineAreaSeries.aggregation->
+         * [descr:dxChartSeriesTypes.SplineAreaSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesSplineAreaSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.SplineAreaSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.SplineAreaSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.SplineAreaSeries.label->
+         * [descr:dxChartSeriesTypes.SplineAreaSeries.label]
          */
         label?: dxChartSeriesTypesSplineAreaSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.SplineAreaSeries.point->
+         * [descr:dxChartSeriesTypes.SplineAreaSeries.point]
          */
         point?: dxChartSeriesTypesSplineAreaSeriesPoint;
         /**
-         * <-dxChartSeriesTypes.SplineAreaSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.SplineAreaSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.SplineAreaSeries.aggregation->
+     * [descr:dxChartSeriesTypes.SplineAreaSeries.aggregation]
      */
     interface dxChartSeriesTypesSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.SplineAreaSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.SplineAreaSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.SplineAreaSeries.label->
+     * [descr:dxChartSeriesTypes.SplineAreaSeries.label]
      */
     interface dxChartSeriesTypesSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.SplineAreaSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.SplineAreaSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.SplineAreaSeries.point->
+     * [descr:dxChartSeriesTypes.SplineAreaSeries.point]
      */
     interface dxChartSeriesTypesSplineAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /**
-         * <-dxChartSeriesTypes.SplineAreaSeries.point.visible->
+         * [descr:dxChartSeriesTypes.SplineAreaSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.SplineSeries->
+     * [descr:dxChartSeriesTypes.SplineSeries]
      */
     interface dxChartSeriesTypesSplineSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.SplineSeries.aggregation->
+         * [descr:dxChartSeriesTypes.SplineSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesSplineSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.SplineSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.SplineSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.SplineSeries.label->
+         * [descr:dxChartSeriesTypes.SplineSeries.label]
          */
         label?: dxChartSeriesTypesSplineSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.SplineSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.SplineSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.SplineSeries.aggregation->
+     * [descr:dxChartSeriesTypes.SplineSeries.aggregation]
      */
     interface dxChartSeriesTypesSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.SplineSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.SplineSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.SplineSeries.label->
+     * [descr:dxChartSeriesTypes.SplineSeries.label]
      */
     interface dxChartSeriesTypesSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.SplineSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.SplineSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.StackedAreaSeries->
+     * [descr:dxChartSeriesTypes.StackedAreaSeries]
      */
     interface dxChartSeriesTypesStackedAreaSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.StackedAreaSeries.aggregation->
+         * [descr:dxChartSeriesTypes.StackedAreaSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesStackedAreaSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.StackedAreaSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.StackedAreaSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.StackedAreaSeries.label->
+         * [descr:dxChartSeriesTypes.StackedAreaSeries.label]
          */
         label?: dxChartSeriesTypesStackedAreaSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.StackedAreaSeries.point->
+         * [descr:dxChartSeriesTypes.StackedAreaSeries.point]
          */
         point?: dxChartSeriesTypesStackedAreaSeriesPoint;
         /**
-         * <-dxChartSeriesTypes.StackedAreaSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.StackedAreaSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.StackedAreaSeries.aggregation->
+     * [descr:dxChartSeriesTypes.StackedAreaSeries.aggregation]
      */
     interface dxChartSeriesTypesStackedAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.StackedAreaSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.StackedAreaSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.StackedAreaSeries.label->
+     * [descr:dxChartSeriesTypes.StackedAreaSeries.label]
      */
     interface dxChartSeriesTypesStackedAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.StackedAreaSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.StackedAreaSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.StackedAreaSeries.point->
+     * [descr:dxChartSeriesTypes.StackedAreaSeries.point]
      */
     interface dxChartSeriesTypesStackedAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /**
-         * <-dxChartSeriesTypes.StackedAreaSeries.point.visible->
+         * [descr:dxChartSeriesTypes.StackedAreaSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.StackedBarSeries->
+     * [descr:dxChartSeriesTypes.StackedBarSeries]
      */
     interface dxChartSeriesTypesStackedBarSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.StackedBarSeries.aggregation->
+         * [descr:dxChartSeriesTypes.StackedBarSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesStackedBarSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.StackedBarSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.StackedBarSeries.hoverMode]
          */
         hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.StackedBarSeries.label->
+         * [descr:dxChartSeriesTypes.StackedBarSeries.label]
          */
         label?: dxChartSeriesTypesStackedBarSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.StackedBarSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.StackedBarSeries.selectionMode]
          */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.StackedBarSeries.aggregation->
+     * [descr:dxChartSeriesTypes.StackedBarSeries.aggregation]
      */
     interface dxChartSeriesTypesStackedBarSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.StackedBarSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.StackedBarSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.StackedBarSeries.label->
+     * [descr:dxChartSeriesTypes.StackedBarSeries.label]
      */
     interface dxChartSeriesTypesStackedBarSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.StackedBarSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.StackedBarSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
         /**
-         * <-dxChartSeriesTypes.StackedBarSeries.label.position->
+         * [descr:dxChartSeriesTypes.StackedBarSeries.label.position]
          */
         position?: 'inside' | 'outside';
     }
     /**
-     * <-dxChartSeriesTypes.StackedLineSeries->
+     * [descr:dxChartSeriesTypes.StackedLineSeries]
      */
     interface dxChartSeriesTypesStackedLineSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.StackedLineSeries.aggregation->
+         * [descr:dxChartSeriesTypes.StackedLineSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesStackedLineSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.StackedLineSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.StackedLineSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.StackedLineSeries.label->
+         * [descr:dxChartSeriesTypes.StackedLineSeries.label]
          */
         label?: dxChartSeriesTypesStackedLineSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.StackedLineSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.StackedLineSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.StackedLineSeries.aggregation->
+     * [descr:dxChartSeriesTypes.StackedLineSeries.aggregation]
      */
     interface dxChartSeriesTypesStackedLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.StackedLineSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.StackedLineSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.StackedLineSeries.label->
+     * [descr:dxChartSeriesTypes.StackedLineSeries.label]
      */
     interface dxChartSeriesTypesStackedLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.StackedLineSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.StackedLineSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.StackedSplineAreaSeries->
+     * [descr:dxChartSeriesTypes.StackedSplineAreaSeries]
      */
     interface dxChartSeriesTypesStackedSplineAreaSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.StackedSplineAreaSeries.aggregation->
+         * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesStackedSplineAreaSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.StackedSplineAreaSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.StackedSplineAreaSeries.label->
+         * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.label]
          */
         label?: dxChartSeriesTypesStackedSplineAreaSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.StackedSplineAreaSeries.point->
+         * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.point]
          */
         point?: dxChartSeriesTypesStackedSplineAreaSeriesPoint;
         /**
-         * <-dxChartSeriesTypes.StackedSplineAreaSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.StackedSplineAreaSeries.aggregation->
+     * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.aggregation]
      */
     interface dxChartSeriesTypesStackedSplineAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.StackedSplineAreaSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.StackedSplineAreaSeries.label->
+     * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.label]
      */
     interface dxChartSeriesTypesStackedSplineAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.StackedSplineAreaSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.StackedSplineAreaSeries.point->
+     * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.point]
      */
     interface dxChartSeriesTypesStackedSplineAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /**
-         * <-dxChartSeriesTypes.StackedSplineAreaSeries.point.visible->
+         * [descr:dxChartSeriesTypes.StackedSplineAreaSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.StackedSplineSeries->
+     * [descr:dxChartSeriesTypes.StackedSplineSeries]
      */
     interface dxChartSeriesTypesStackedSplineSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.StackedSplineSeries.aggregation->
+         * [descr:dxChartSeriesTypes.StackedSplineSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesStackedSplineSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.StackedSplineSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.StackedSplineSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.StackedSplineSeries.label->
+         * [descr:dxChartSeriesTypes.StackedSplineSeries.label]
          */
         label?: dxChartSeriesTypesStackedSplineSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.StackedSplineSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.StackedSplineSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.StackedSplineSeries.aggregation->
+     * [descr:dxChartSeriesTypes.StackedSplineSeries.aggregation]
      */
     interface dxChartSeriesTypesStackedSplineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.StackedSplineSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.StackedSplineSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.StackedSplineSeries.label->
+     * [descr:dxChartSeriesTypes.StackedSplineSeries.label]
      */
     interface dxChartSeriesTypesStackedSplineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.StackedSplineSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.StackedSplineSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.StepAreaSeries->
+     * [descr:dxChartSeriesTypes.StepAreaSeries]
      */
     interface dxChartSeriesTypesStepAreaSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.aggregation->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesStepAreaSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.border->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.border]
          */
         border?: dxChartSeriesTypesStepAreaSeriesBorder;
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.hoverStyle->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.hoverStyle]
          */
         hoverStyle?: dxChartSeriesTypesStepAreaSeriesHoverStyle;
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.label->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.label]
          */
         label?: dxChartSeriesTypesStepAreaSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.point->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.point]
          */
         point?: dxChartSeriesTypesStepAreaSeriesPoint;
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.selectionStyle->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.selectionStyle]
          */
         selectionStyle?: dxChartSeriesTypesStepAreaSeriesSelectionStyle;
     }
     /**
-     * <-dxChartSeriesTypes.StepAreaSeries.aggregation->
+     * [descr:dxChartSeriesTypes.StepAreaSeries.aggregation]
      */
     interface dxChartSeriesTypesStepAreaSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.StepAreaSeries.border->
+     * [descr:dxChartSeriesTypes.StepAreaSeries.border]
      */
     interface dxChartSeriesTypesStepAreaSeriesBorder extends dxChartSeriesTypesCommonSeriesBorder {
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.border.visible->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.border.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.StepAreaSeries.hoverStyle->
+     * [descr:dxChartSeriesTypes.StepAreaSeries.hoverStyle]
      */
     interface dxChartSeriesTypesStepAreaSeriesHoverStyle extends dxChartSeriesTypesCommonSeriesHoverStyle {
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.hoverStyle.border->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.hoverStyle.border]
          */
         border?: dxChartSeriesTypesStepAreaSeriesHoverStyleBorder;
     }
     /**
-     * <-dxChartSeriesTypes.StepAreaSeries.hoverStyle.border->
+     * [descr:dxChartSeriesTypes.StepAreaSeries.hoverStyle.border]
      */
     interface dxChartSeriesTypesStepAreaSeriesHoverStyleBorder extends dxChartSeriesTypesCommonSeriesHoverStyleBorder {
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.hoverStyle.border.visible->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.hoverStyle.border.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.StepAreaSeries.label->
+     * [descr:dxChartSeriesTypes.StepAreaSeries.label]
      */
     interface dxChartSeriesTypesStepAreaSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.StepAreaSeries.point->
+     * [descr:dxChartSeriesTypes.StepAreaSeries.point]
      */
     interface dxChartSeriesTypesStepAreaSeriesPoint extends dxChartSeriesTypesCommonSeriesPoint {
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.point.visible->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.StepAreaSeries.selectionStyle->
+     * [descr:dxChartSeriesTypes.StepAreaSeries.selectionStyle]
      */
     interface dxChartSeriesTypesStepAreaSeriesSelectionStyle extends dxChartSeriesTypesCommonSeriesSelectionStyle {
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.selectionStyle.border->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.selectionStyle.border]
          */
         border?: dxChartSeriesTypesStepAreaSeriesSelectionStyleBorder;
     }
     /**
-     * <-dxChartSeriesTypes.StepAreaSeries.selectionStyle.border->
+     * [descr:dxChartSeriesTypes.StepAreaSeries.selectionStyle.border]
      */
     interface dxChartSeriesTypesStepAreaSeriesSelectionStyleBorder extends dxChartSeriesTypesCommonSeriesSelectionStyleBorder {
         /**
-         * <-dxChartSeriesTypes.StepAreaSeries.selectionStyle.border.visible->
+         * [descr:dxChartSeriesTypes.StepAreaSeries.selectionStyle.border.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxChartSeriesTypes.StepLineSeries->
+     * [descr:dxChartSeriesTypes.StepLineSeries]
      */
     interface dxChartSeriesTypesStepLineSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.StepLineSeries.aggregation->
+         * [descr:dxChartSeriesTypes.StepLineSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesStepLineSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.StepLineSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.StepLineSeries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.StepLineSeries.label->
+         * [descr:dxChartSeriesTypes.StepLineSeries.label]
          */
         label?: dxChartSeriesTypesStepLineSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.StepLineSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.StepLineSeries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.StepLineSeries.aggregation->
+     * [descr:dxChartSeriesTypes.StepLineSeries.aggregation]
      */
     interface dxChartSeriesTypesStepLineSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.StepLineSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.StepLineSeries.aggregation.method]
          */
         method?: 'avg' | 'count' | 'max' | 'min' | 'sum' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.StepLineSeries.label->
+     * [descr:dxChartSeriesTypes.StepLineSeries.label]
      */
     interface dxChartSeriesTypesStepLineSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.StepLineSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.StepLineSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxChartSeriesTypes.StockSeries->
+     * [descr:dxChartSeriesTypes.StockSeries]
      */
     interface dxChartSeriesTypesStockSeries extends dxChartSeriesTypesCommonSeries {
         /**
-         * <-dxChartSeriesTypes.StockSeries.aggregation->
+         * [descr:dxChartSeriesTypes.StockSeries.aggregation]
          */
         aggregation?: dxChartSeriesTypesStockSeriesAggregation;
         /**
-         * <-dxChartSeriesTypes.StockSeries.argumentField->
+         * [descr:dxChartSeriesTypes.StockSeries.argumentField]
          */
         argumentField?: string;
         /**
-         * <-dxChartSeriesTypes.StockSeries.hoverMode->
+         * [descr:dxChartSeriesTypes.StockSeries.hoverMode]
          */
         hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxChartSeriesTypes.StockSeries.label->
+         * [descr:dxChartSeriesTypes.StockSeries.label]
          */
         label?: dxChartSeriesTypesStockSeriesLabel;
         /**
-         * <-dxChartSeriesTypes.StockSeries.selectionMode->
+         * [descr:dxChartSeriesTypes.StockSeries.selectionMode]
          */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
     /**
-     * <-dxChartSeriesTypes.StockSeries.aggregation->
+     * [descr:dxChartSeriesTypes.StockSeries.aggregation]
      */
     interface dxChartSeriesTypesStockSeriesAggregation extends dxChartSeriesTypesCommonSeriesAggregation {
         /**
-         * <-dxChartSeriesTypes.StockSeries.aggregation.method->
+         * [descr:dxChartSeriesTypes.StockSeries.aggregation.method]
          */
         method?: 'ohlc' | 'custom';
     }
     /**
-     * <-dxChartSeriesTypes.StockSeries.label->
+     * [descr:dxChartSeriesTypes.StockSeries.label]
      */
     interface dxChartSeriesTypesStockSeriesLabel extends dxChartSeriesTypesCommonSeriesLabel {
         /**
-         * <-dxChartSeriesTypes.StockSeries.label.customizeText->
+         * [descr:dxChartSeriesTypes.StockSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
     }
     /**
-     * <-dxCircularGauge.Options->
+     * [descr:dxCircularGauge.Options]
      */
     export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
         /**
-         * <-dxCircularGauge.Options.geometry->
+         * [descr:dxCircularGauge.Options.geometry]
          */
         geometry?: { endAngle?: number, startAngle?: number };
         /**
-         * <-dxCircularGauge.Options.rangeContainer->
+         * [descr:dxCircularGauge.Options.rangeContainer]
          */
         rangeContainer?: dxCircularGaugeRangeContainer;
         /**
-         * <-dxCircularGauge.Options.scale->
+         * [descr:dxCircularGauge.Options.scale]
          */
         scale?: dxCircularGaugeScale;
         /**
-         * <-dxCircularGauge.Options.subvalueIndicator->
+         * [descr:dxCircularGauge.Options.subvalueIndicator]
          */
         subvalueIndicator?: GaugeIndicator;
         /**
-         * <-dxCircularGauge.Options.valueIndicator->
+         * [descr:dxCircularGauge.Options.valueIndicator]
          */
         valueIndicator?: GaugeIndicator;
     }
     /**
-     * <-dxCircularGauge.Options.rangeContainer->
+     * [descr:dxCircularGauge.Options.rangeContainer]
      */
     export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
         /**
-         * <-dxCircularGauge.Options.rangeContainer.orientation->
+         * [descr:dxCircularGauge.Options.rangeContainer.orientation]
          */
         orientation?: 'center' | 'inside' | 'outside';
         /**
-         * <-dxCircularGauge.Options.rangeContainer.width->
+         * [descr:dxCircularGauge.Options.rangeContainer.width]
          */
         width?: number;
     }
     /**
-     * <-dxCircularGauge.Options.scale->
+     * [descr:dxCircularGauge.Options.scale]
      */
     export interface dxCircularGaugeScale extends BaseGaugeScale {
         /**
-         * <-dxCircularGauge.Options.scale.label->
+         * [descr:dxCircularGauge.Options.scale.label]
          */
         label?: dxCircularGaugeScaleLabel;
         /**
-         * <-dxCircularGauge.Options.scale.orientation->
+         * [descr:dxCircularGauge.Options.scale.orientation]
          */
         orientation?: 'center' | 'inside' | 'outside';
     }
     /**
-     * <-dxCircularGauge.Options.scale.label->
+     * [descr:dxCircularGauge.Options.scale.label]
      */
     export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
         /**
-         * <-dxCircularGauge.Options.scale.label.hideFirstOrLast->
+         * [descr:dxCircularGauge.Options.scale.label.hideFirstOrLast]
          */
         hideFirstOrLast?: 'first' | 'last';
         /**
-         * <-dxCircularGauge.Options.scale.label.indentFromTick->
+         * [descr:dxCircularGauge.Options.scale.label.indentFromTick]
          */
         indentFromTick?: number;
     }
     /**
-     * <-dxCircularGauge->
+     * [descr:dxCircularGauge]
      */
     export class dxCircularGauge extends BaseGauge {
         constructor(element: Element, options?: dxCircularGaugeOptions)
         constructor(element: JQuery, options?: dxCircularGaugeOptions)
     }
     /**
-     * <-dxFunnel.Options->
+     * [descr:dxFunnel.Options]
      */
     export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
         /**
-         * <-dxFunnel.Options.adaptiveLayout->
+         * [descr:dxFunnel.Options.adaptiveLayout]
          */
         adaptiveLayout?: { height?: number, keepLabels?: boolean, width?: number };
         /**
-         * <-dxFunnel.Options.algorithm->
+         * [descr:dxFunnel.Options.algorithm]
          */
         algorithm?: 'dynamicHeight' | 'dynamicSlope';
         /**
-         * <-dxFunnel.Options.argumentField->
+         * [descr:dxFunnel.Options.argumentField]
          */
         argumentField?: string;
         /**
-         * <-dxFunnel.Options.colorField->
+         * [descr:dxFunnel.Options.colorField]
          */
         colorField?: string;
         /**
-         * <-dxFunnel.Options.dataSource->
+         * [descr:dxFunnel.Options.dataSource]
          */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /**
-         * <-dxFunnel.Options.hoverEnabled->
+         * [descr:dxFunnel.Options.hoverEnabled]
          */
         hoverEnabled?: boolean;
         /**
-         * <-dxFunnel.Options.inverted->
+         * [descr:dxFunnel.Options.inverted]
          */
         inverted?: boolean;
         /**
-         * <-dxFunnel.Options.item->
+         * [descr:dxFunnel.Options.item]
          */
         item?: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } } };
         /**
-         * <-dxFunnel.Options.label->
+         * [descr:dxFunnel.Options.label]
          */
         label?: { backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, opacity?: number, visible?: boolean, width?: number }, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font, format?: DevExpress.ui.format, horizontalAlignment?: 'left' | 'right', horizontalOffset?: number, position?: 'columns' | 'inside' | 'outside', showForZeroValues?: boolean, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' };
         /**
-         * <-dxFunnel.Options.legend->
+         * [descr:dxFunnel.Options.legend]
          */
         legend?: dxFunnelLegend;
         /**
-         * <-dxFunnel.Options.neckHeight->
+         * [descr:dxFunnel.Options.neckHeight]
          */
         neckHeight?: number;
         /**
-         * <-dxFunnel.Options.neckWidth->
+         * [descr:dxFunnel.Options.neckWidth]
          */
         neckWidth?: number;
         /**
-         * <-dxFunnel.Options.onHoverChanged->
+         * [descr:dxFunnel.Options.onHoverChanged]
          */
         onHoverChanged?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, item?: dxFunnelItem }) => any);
         /**
-         * <-dxFunnel.Options.onItemClick->
+         * [descr:dxFunnel.Options.onItemClick]
          */
         onItemClick?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, item?: dxFunnelItem }) => any) | string;
         /**
-         * <-dxFunnel.Options.onLegendClick->
+         * [descr:dxFunnel.Options.onLegendClick]
          */
         onLegendClick?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, item?: dxFunnelItem }) => any) | string;
         /**
-         * <-dxFunnel.Options.onSelectionChanged->
+         * [descr:dxFunnel.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxFunnel, element?: DevExpress.core.dxElement, model?: any, item?: dxFunnelItem }) => any);
         /**
-         * <-dxFunnel.Options.palette->
+         * [descr:dxFunnel.Options.palette]
          */
         palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
-         * <-dxFunnel.Options.paletteExtensionMode->
+         * [descr:dxFunnel.Options.paletteExtensionMode]
          */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /**
-         * <-dxFunnel.Options.resolveLabelOverlapping->
+         * [descr:dxFunnel.Options.resolveLabelOverlapping]
          */
         resolveLabelOverlapping?: 'hide' | 'none' | 'shift';
         /**
-         * <-dxFunnel.Options.selectionMode->
+         * [descr:dxFunnel.Options.selectionMode]
          */
         selectionMode?: 'multiple' | 'none' | 'single';
         /**
-         * <-dxFunnel.Options.sortData->
+         * [descr:dxFunnel.Options.sortData]
          */
         sortData?: boolean;
         /**
-         * <-dxFunnel.Options.tooltip->
+         * [descr:dxFunnel.Options.tooltip]
          */
         tooltip?: dxFunnelTooltip;
         /**
-         * <-dxFunnel.Options.valueField->
+         * [descr:dxFunnel.Options.valueField]
          */
         valueField?: string;
     }
     /**
-     * <-dxFunnel.Options.legend->
+     * [descr:dxFunnel.Options.legend]
      */
     export interface dxFunnelLegend extends BaseLegend {
         /**
-         * <-dxFunnel.Options.legend.customizeHint->
+         * [descr:dxFunnel.Options.legend.customizeHint]
          */
         customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
         /**
-         * <-dxFunnel.Options.legend.customizeItems->
+         * [descr:dxFunnel.Options.legend.customizeItems]
          */
         customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>);
         /**
-         * <-dxFunnel.Options.legend.customizeText->
+         * [descr:dxFunnel.Options.legend.customizeText]
          */
         customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
         /**
-         * <-dxFunnel.Options.legend.markerTemplate->
+         * [descr:dxFunnel.Options.legend.markerTemplate]
          */
         markerTemplate?: DevExpress.core.template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
         /**
-         * <-dxFunnel.Options.legend.visible->
+         * [descr:dxFunnel.Options.legend.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxFunnel.Options.tooltip->
+     * [descr:dxFunnel.Options.tooltip]
      */
     export interface dxFunnelTooltip extends BaseWidgetTooltip {
         /**
-         * <-dxFunnel.Options.tooltip.contentTemplate->
+         * [descr:dxFunnel.Options.tooltip.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxFunnel.Options.tooltip.customizeTooltip->
+         * [descr:dxFunnel.Options.tooltip.customizeTooltip]
          */
         customizeTooltip?: ((info: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => any);
     }
     /**
-     * <-dxFunnel->
+     * [descr:dxFunnel]
      */
     export class dxFunnel extends BaseWidget {
         constructor(element: Element, options?: dxFunnelOptions)
         constructor(element: JQuery, options?: dxFunnelOptions)
         /**
-         * <-dxFunnel.clearSelection()->
+         * [descr:dxFunnel.clearSelection()]
          */
         clearSelection(): void;
         /**
-         * <-dxFunnel.getAllItems()->
+         * [descr:dxFunnel.getAllItems()]
          */
         getAllItems(): Array<dxFunnelItem>;
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
         /**
-         * <-dxFunnel.hideTooltip()->
+         * [descr:dxFunnel.hideTooltip()]
          */
         hideTooltip(): void;
     }
     /**
-     * <-dxFunnelItem->
+     * [descr:dxFunnelItem]
      */
     export class dxFunnelItem {
         /**
-         * <-dxFunnelItem.argument->
+         * [descr:dxFunnelItem.argument]
          */
         argument?: string | Date | number;
         /**
-         * <-dxFunnelItem.data->
+         * [descr:dxFunnelItem.data]
          */
         data?: any;
         /**
-         * <-dxFunnelItem.percent->
+         * [descr:dxFunnelItem.percent]
          */
         percent?: number;
         /**
-         * <-dxFunnelItem.value->
+         * [descr:dxFunnelItem.value]
          */
         value?: number;
         /**
-         * <-dxFunnelItem.getColor()->
+         * [descr:dxFunnelItem.getColor()]
          */
         getColor(): string;
         /**
-         * <-dxFunnelItem.hover(state)->
+         * [descr:dxFunnelItem.hover(state)]
          */
         hover(state: boolean): void;
         /**
-         * <-dxFunnelItem.isHovered()->
+         * [descr:dxFunnelItem.isHovered()]
          */
         isHovered(): boolean;
         /**
-         * <-dxFunnelItem.isSelected()->
+         * [descr:dxFunnelItem.isSelected()]
          */
         isSelected(): boolean;
         /**
-         * <-dxFunnelItem.select(state)->
+         * [descr:dxFunnelItem.select(state)]
          */
         select(state: boolean): void;
         /**
-         * <-dxFunnelItem.showTooltip()->
+         * [descr:dxFunnelItem.showTooltip()]
          */
         showTooltip(): void;
     }
     /**
-     * <-dxLinearGauge.Options->
+     * [descr:dxLinearGauge.Options]
      */
     export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
         /**
-         * <-dxLinearGauge.Options.geometry->
+         * [descr:dxLinearGauge.Options.geometry]
          */
         geometry?: { orientation?: 'horizontal' | 'vertical' };
         /**
-         * <-dxLinearGauge.Options.rangeContainer->
+         * [descr:dxLinearGauge.Options.rangeContainer]
          */
         rangeContainer?: dxLinearGaugeRangeContainer;
         /**
-         * <-dxLinearGauge.Options.scale->
+         * [descr:dxLinearGauge.Options.scale]
          */
         scale?: dxLinearGaugeScale;
         /**
-         * <-dxLinearGauge.Options.subvalueIndicator->
+         * [descr:dxLinearGauge.Options.subvalueIndicator]
          */
         subvalueIndicator?: GaugeIndicator;
         /**
-         * <-dxLinearGauge.Options.valueIndicator->
+         * [descr:dxLinearGauge.Options.valueIndicator]
          */
         valueIndicator?: GaugeIndicator;
     }
     /**
-     * <-dxLinearGauge.Options.rangeContainer->
+     * [descr:dxLinearGauge.Options.rangeContainer]
      */
     export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
         /**
-         * <-dxLinearGauge.Options.rangeContainer.horizontalOrientation->
+         * [descr:dxLinearGauge.Options.rangeContainer.horizontalOrientation]
          */
         horizontalOrientation?: 'center' | 'left' | 'right';
         /**
-         * <-dxLinearGauge.Options.rangeContainer.verticalOrientation->
+         * [descr:dxLinearGauge.Options.rangeContainer.verticalOrientation]
          */
         verticalOrientation?: 'bottom' | 'center' | 'top';
         /**
-         * <-dxLinearGauge.Options.rangeContainer.width->
+         * [descr:dxLinearGauge.Options.rangeContainer.width]
          */
         width?: { end?: number, start?: number } | number;
     }
     /**
-     * <-dxLinearGauge.Options.scale->
+     * [descr:dxLinearGauge.Options.scale]
      */
     export interface dxLinearGaugeScale extends BaseGaugeScale {
         /**
-         * <-dxLinearGauge.Options.scale.horizontalOrientation->
+         * [descr:dxLinearGauge.Options.scale.horizontalOrientation]
          */
         horizontalOrientation?: 'center' | 'left' | 'right';
         /**
-         * <-dxLinearGauge.Options.scale.label->
+         * [descr:dxLinearGauge.Options.scale.label]
          */
         label?: dxLinearGaugeScaleLabel;
         /**
-         * <-dxLinearGauge.Options.scale.scaleDivisionFactor->
+         * [descr:dxLinearGauge.Options.scale.scaleDivisionFactor]
          */
         scaleDivisionFactor?: number;
         /**
-         * <-dxLinearGauge.Options.scale.verticalOrientation->
+         * [descr:dxLinearGauge.Options.scale.verticalOrientation]
          */
         verticalOrientation?: 'bottom' | 'center' | 'top';
     }
     /**
-     * <-dxLinearGauge.Options.scale.label->
+     * [descr:dxLinearGauge.Options.scale.label]
      */
     export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
         /**
-         * <-dxLinearGauge.Options.scale.label.indentFromTick->
+         * [descr:dxLinearGauge.Options.scale.label.indentFromTick]
          */
         indentFromTick?: number;
     }
     /**
-     * <-dxLinearGauge->
+     * [descr:dxLinearGauge]
      */
     export class dxLinearGauge extends BaseGauge {
         constructor(element: Element, options?: dxLinearGaugeOptions)
         constructor(element: JQuery, options?: dxLinearGaugeOptions)
     }
     /**
-     * <-dxPieChart.Options->
+     * [descr:dxPieChart.Options]
      */
     export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
         /**
-         * <-dxPieChart.Options.adaptiveLayout->
+         * [descr:dxPieChart.Options.adaptiveLayout]
          */
         adaptiveLayout?: dxPieChartAdaptiveLayout;
         /**
-         * <-dxPieChart.Options.annotations->
+         * [descr:dxPieChart.Options.annotations]
          */
         annotations?: Array<dxPieChartAnnotationConfig | any>;
         /**
-         * <-dxPieChart.Options.centerTemplate->
+         * [descr:dxPieChart.Options.centerTemplate]
          */
         centerTemplate?: DevExpress.core.template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
         /**
-         * <-dxPieChart.Options.commonAnnotationSettings->
+         * [descr:dxPieChart.Options.commonAnnotationSettings]
          */
         commonAnnotationSettings?: dxPieChartCommonAnnotationConfig;
         /**
-         * <-dxPieChart.Options.commonSeriesSettings->
+         * [descr:dxPieChart.Options.commonSeriesSettings]
          */
         commonSeriesSettings?: any;
         /**
-         * <-dxPieChart.Options.customizeAnnotation->
+         * [descr:dxPieChart.Options.customizeAnnotation]
          */
         customizeAnnotation?: ((annotation: dxPieChartAnnotationConfig | any) => dxPieChartAnnotationConfig);
         /**
-         * <-dxPieChart.Options.diameter->
+         * [descr:dxPieChart.Options.diameter]
          */
         diameter?: number;
         /**
-         * <-dxPieChart.Options.innerRadius->
+         * [descr:dxPieChart.Options.innerRadius]
          */
         innerRadius?: number;
         /**
-         * <-dxPieChart.Options.legend->
+         * [descr:dxPieChart.Options.legend]
          */
         legend?: dxPieChartLegend;
         /**
-         * <-dxPieChart.Options.minDiameter->
+         * [descr:dxPieChart.Options.minDiameter]
          */
         minDiameter?: number;
         /**
-         * <-dxPieChart.Options.onLegendClick->
+         * [descr:dxPieChart.Options.onLegendClick]
          */
         onLegendClick?: ((e: { component?: dxPieChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, target?: string | number, points?: Array<piePointObject> }) => any) | string;
         /**
-         * <-dxPieChart.Options.palette->
+         * [descr:dxPieChart.Options.palette]
          */
         palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
-         * <-dxPieChart.Options.resolveLabelOverlapping->
+         * [descr:dxPieChart.Options.resolveLabelOverlapping]
          */
         resolveLabelOverlapping?: 'hide' | 'none' | 'shift';
         /**
-         * <-dxPieChart.Options.segmentsDirection->
+         * [descr:dxPieChart.Options.segmentsDirection]
          */
         segmentsDirection?: 'anticlockwise' | 'clockwise';
         /**
-         * <-dxPieChart.Options.series->
+         * [descr:dxPieChart.Options.series]
          */
         series?: PieChartSeries | Array<PieChartSeries>;
         /**
-         * <-dxPieChart.Options.seriesTemplate->
+         * [descr:dxPieChart.Options.seriesTemplate]
          */
         seriesTemplate?: { customizeSeries?: ((seriesName: any) => PieChartSeries), nameField?: string };
         /**
-         * <-dxPieChart.Options.sizeGroup->
+         * [descr:dxPieChart.Options.sizeGroup]
          */
         sizeGroup?: string;
         /**
-         * <-dxPieChart.Options.startAngle->
+         * [descr:dxPieChart.Options.startAngle]
          */
         startAngle?: number;
         /**
-         * <-dxPieChart.Options.type->
+         * [descr:dxPieChart.Options.type]
          */
         type?: 'donut' | 'doughnut' | 'pie';
     }
     /**
-     * <-dxPieChart.Options.adaptiveLayout->
+     * [descr:dxPieChart.Options.adaptiveLayout]
      */
     export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
         /**
-         * <-dxPieChart.Options.adaptiveLayout.keepLabels->
+         * [descr:dxPieChart.Options.adaptiveLayout.keepLabels]
          */
         keepLabels?: boolean;
     }
     /**
-     * <-dxPieChart.Options.legend->
+     * [descr:dxPieChart.Options.legend]
      */
     export interface dxPieChartLegend extends BaseChartLegend {
         /**
-         * <-dxPieChart.Options.legend.customizeHint->
+         * [descr:dxPieChart.Options.legend.customizeHint]
          */
         customizeHint?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
         /**
-         * <-dxPieChart.Options.legend.customizeItems->
+         * [descr:dxPieChart.Options.legend.customizeItems]
          */
         customizeItems?: ((items: Array<PieChartLegendItem>) => Array<PieChartLegendItem>);
         /**
-         * <-dxPieChart.Options.legend.customizeText->
+         * [descr:dxPieChart.Options.legend.customizeText]
          */
         customizeText?: ((pointInfo: { pointName?: any, pointIndex?: number, pointColor?: string }) => string);
         /**
-         * <-dxPieChart.Options.legend.hoverMode->
+         * [descr:dxPieChart.Options.legend.hoverMode]
          */
         hoverMode?: 'none' | 'allArgumentPoints';
         /**
-         * <-dxPieChart.Options.legend.markerTemplate->
+         * [descr:dxPieChart.Options.legend.markerTemplate]
          */
         markerTemplate?: DevExpress.core.template | ((legendItem: PieChartLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
     }
     /**
-     * <-dxPieChart->
+     * [descr:dxPieChart]
      */
     export class dxPieChart extends BaseChart {
         constructor(element: Element, options?: dxPieChartOptions)
         constructor(element: JQuery, options?: dxPieChartOptions)
         /**
-         * <-dxPieChart.getInnerRadius()->
+         * [descr:dxPieChart.getInnerRadius()]
          */
         getInnerRadius(): number;
     }
     /**
-     * <-dxPieChartAnnotationConfig->
+     * [descr:dxPieChartAnnotationConfig]
      */
     export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationConfig {
         /**
-         * <-dxPieChartAnnotationConfig.name->
+         * [descr:dxPieChartAnnotationConfig.name]
          */
         name?: string;
     }
     /**
-     * <-dxPieChartCommonAnnotationConfig->
+     * [descr:dxPieChartCommonAnnotationConfig]
      */
     export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
         /**
-         * <-dxPieChartCommonAnnotationConfig.argument->
+         * [descr:dxPieChartCommonAnnotationConfig.argument]
          */
         argument?: number | Date | string;
         /**
-         * <-dxPieChartCommonAnnotationConfig.customizeTooltip->
+         * [descr:dxPieChartCommonAnnotationConfig.customizeTooltip]
          */
         customizeTooltip?: ((annotation: dxPieChartAnnotationConfig | any) => any);
         /**
-         * <-dxPieChartCommonAnnotationConfig.location->
+         * [descr:dxPieChartCommonAnnotationConfig.location]
          */
         location?: 'center' | 'edge';
         /**
-         * <-dxPieChartCommonAnnotationConfig.series->
+         * [descr:dxPieChartCommonAnnotationConfig.series]
          */
         series?: string;
         /**
-         * <-dxPieChartCommonAnnotationConfig.template->
+         * [descr:dxPieChartCommonAnnotationConfig.template]
          */
         template?: DevExpress.core.template | ((annotation: dxPieChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /**
-         * <-dxPieChartCommonAnnotationConfig.tooltipTemplate->
+         * [descr:dxPieChartCommonAnnotationConfig.tooltipTemplate]
          */
         tooltipTemplate?: DevExpress.core.template | ((annotation: dxPieChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /**
-     * <-dxPieChartSeriesTypes->
+     * [descr:dxPieChartSeriesTypes]
      */
     export interface dxPieChartSeriesTypes {
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries]
          */
         CommonPieChartSeries?: dxPieChartSeriesTypesCommonPieChartSeries;
         /**
-         * <-dxPieChartSeriesTypes.DoughnutSeries->
+         * [descr:dxPieChartSeriesTypes.DoughnutSeries]
          */
         DoughnutSeries?: any;
         /**
-         * <-dxPieChartSeriesTypes.PieSeries->
+         * [descr:dxPieChartSeriesTypes.PieSeries]
          */
         PieSeries?: any;
     }
     /**
-     * <-dxPieChartSeriesTypes.CommonPieChartSeries->
+     * [descr:dxPieChartSeriesTypes.CommonPieChartSeries]
      */
     export interface dxPieChartSeriesTypesCommonPieChartSeries {
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.argumentField->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.argumentField]
          */
         argumentField?: string;
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.argumentType->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.argumentType]
          */
         argumentType?: 'datetime' | 'numeric' | 'string';
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.border->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.border]
          */
         border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number };
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.color->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.color]
          */
         color?: string;
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverMode]
          */
         hoverMode?: 'none' | 'onlyPoint';
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle]
          */
         hoverStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } };
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.label->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.label]
          */
         label?: { argumentFormat?: DevExpress.ui.format, backgroundColor?: string, border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, connector?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), font?: Font, format?: DevExpress.ui.format, position?: 'columns' | 'inside' | 'outside', radialOffset?: number, rotationAngle?: number, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' };
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount]
          */
         maxLabelCount?: number;
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.minSegmentSize->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.minSegmentSize]
          */
         minSegmentSize?: number;
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.selectionMode->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionMode]
          */
         selectionMode?: 'none' | 'onlyPoint';
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle]
          */
         selectionStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number } };
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping]
          */
         smallValuesGrouping?: { groupName?: string, mode?: 'none' | 'smallValueThreshold' | 'topN', threshold?: number, topCount?: number };
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.tagField->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.tagField]
          */
         tagField?: string;
         /**
-         * <-dxPieChartSeriesTypes.CommonPieChartSeries.valueField->
+         * [descr:dxPieChartSeriesTypes.CommonPieChartSeries.valueField]
          */
         valueField?: string;
     }
     /**
-     * <-dxPolarChart.Options->
+     * [descr:dxPolarChart.Options]
      */
     export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
         /**
-         * <-dxPolarChart.Options.adaptiveLayout->
+         * [descr:dxPolarChart.Options.adaptiveLayout]
          */
         adaptiveLayout?: dxPolarChartAdaptiveLayout;
         /**
-         * <-dxPolarChart.Options.annotations->
+         * [descr:dxPolarChart.Options.annotations]
          */
         annotations?: Array<dxPolarChartAnnotationConfig | any>;
         /**
-         * <-dxPolarChart.Options.argumentAxis->
+         * [descr:dxPolarChart.Options.argumentAxis]
          */
         argumentAxis?: dxPolarChartArgumentAxis;
         /**
-         * <-dxPolarChart.Options.barGroupPadding->
+         * [descr:dxPolarChart.Options.barGroupPadding]
          */
         barGroupPadding?: number;
         /**
-         * <-dxPolarChart.Options.barGroupWidth->
+         * [descr:dxPolarChart.Options.barGroupWidth]
          */
         barGroupWidth?: number;
         /**
-         * <-dxPolarChart.Options.commonAnnotationSettings->
+         * [descr:dxPolarChart.Options.commonAnnotationSettings]
          */
         commonAnnotationSettings?: dxPolarChartCommonAnnotationConfig;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings->
+         * [descr:dxPolarChart.Options.commonAxisSettings]
          */
         commonAxisSettings?: dxPolarChartCommonAxisSettings;
         /**
-         * <-dxPolarChart.Options.commonSeriesSettings->
+         * [descr:dxPolarChart.Options.commonSeriesSettings]
          */
         commonSeriesSettings?: dxPolarChartCommonSeriesSettings;
         /**
-         * <-dxPolarChart.Options.containerBackgroundColor->
+         * [descr:dxPolarChart.Options.containerBackgroundColor]
          */
         containerBackgroundColor?: string;
         /**
-         * <-dxPolarChart.Options.customizeAnnotation->
+         * [descr:dxPolarChart.Options.customizeAnnotation]
          */
         customizeAnnotation?: ((annotation: dxPolarChartAnnotationConfig | any) => dxPolarChartAnnotationConfig);
         /**
-         * <-dxPolarChart.Options.dataPrepareSettings->
+         * [descr:dxPolarChart.Options.dataPrepareSettings]
          */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
         /**
-         * <-dxPolarChart.Options.legend->
+         * [descr:dxPolarChart.Options.legend]
          */
         legend?: dxPolarChartLegend;
         /**
-         * <-dxPolarChart.Options.negativesAsZeroes->
+         * [descr:dxPolarChart.Options.negativesAsZeroes]
          */
         negativesAsZeroes?: boolean;
         /**
-         * <-dxPolarChart.Options.onArgumentAxisClick->
+         * [descr:dxPolarChart.Options.onArgumentAxisClick]
          */
         onArgumentAxisClick?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, argument?: Date | number | string }) => any) | string;
         /**
-         * <-dxPolarChart.Options.onLegendClick->
+         * [descr:dxPolarChart.Options.onLegendClick]
          */
         onLegendClick?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, target?: polarChartSeriesObject }) => any) | string;
         /**
-         * <-dxPolarChart.Options.onSeriesClick->
+         * [descr:dxPolarChart.Options.onSeriesClick]
          */
         onSeriesClick?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, target?: polarChartSeriesObject }) => any) | string;
         /**
-         * <-dxPolarChart.Options.onSeriesHoverChanged->
+         * [descr:dxPolarChart.Options.onSeriesHoverChanged]
          */
         onSeriesHoverChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
         /**
-         * <-dxPolarChart.Options.onSeriesSelectionChanged->
+         * [descr:dxPolarChart.Options.onSeriesSelectionChanged]
          */
         onSeriesSelectionChanged?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, target?: polarChartSeriesObject }) => any);
         /**
-         * <-dxPolarChart.Options.onZoomEnd->
+         * [descr:dxPolarChart.Options.onZoomEnd]
          */
         onZoomEnd?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, axis?: chartAxisObject, range?: VizRange, previousRange?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan', zoomFactor?: number, shift?: number }) => any);
         /**
-         * <-dxPolarChart.Options.onZoomStart->
+         * [descr:dxPolarChart.Options.onZoomStart]
          */
         onZoomStart?: ((e: { component?: dxPolarChart, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, axis?: chartAxisObject, range?: VizRange, cancel?: boolean, actionType?: 'zoom' | 'pan' }) => any);
         /**
-         * <-dxPolarChart.Options.resolveLabelOverlapping->
+         * [descr:dxPolarChart.Options.resolveLabelOverlapping]
          */
         resolveLabelOverlapping?: 'hide' | 'none';
         /**
-         * <-dxPolarChart.Options.series->
+         * [descr:dxPolarChart.Options.series]
          */
         series?: PolarChartSeries | Array<PolarChartSeries>;
         /**
-         * <-dxPolarChart.Options.seriesSelectionMode->
+         * [descr:dxPolarChart.Options.seriesSelectionMode]
          */
         seriesSelectionMode?: 'multiple' | 'single';
         /**
-         * <-dxPolarChart.Options.seriesTemplate->
+         * [descr:dxPolarChart.Options.seriesTemplate]
          */
         seriesTemplate?: { customizeSeries?: ((seriesName: any) => PolarChartSeries), nameField?: string };
         /**
-         * <-dxPolarChart.Options.tooltip->
+         * [descr:dxPolarChart.Options.tooltip]
          */
         tooltip?: dxPolarChartTooltip;
         /**
-         * <-dxPolarChart.Options.useSpiderWeb->
+         * [descr:dxPolarChart.Options.useSpiderWeb]
          */
         useSpiderWeb?: boolean;
         /**
-         * <-dxPolarChart.Options.valueAxis->
+         * [descr:dxPolarChart.Options.valueAxis]
          */
         valueAxis?: dxPolarChartValueAxis;
     }
     /**
-     * <-dxPolarChart.Options.adaptiveLayout->
+     * [descr:dxPolarChart.Options.adaptiveLayout]
      */
     export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
         /**
-         * <-dxPolarChart.Options.adaptiveLayout.height->
+         * [descr:dxPolarChart.Options.adaptiveLayout.height]
          */
         height?: number;
         /**
-         * <-dxPolarChart.Options.adaptiveLayout.width->
+         * [descr:dxPolarChart.Options.adaptiveLayout.width]
          */
         width?: number;
     }
     /**
-     * <-dxPolarChart.Options.argumentAxis->
+     * [descr:dxPolarChart.Options.argumentAxis]
      */
     export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings {
         /**
-         * <-dxPolarChart.Options.argumentAxis.argumentType->
+         * [descr:dxPolarChart.Options.argumentAxis.argumentType]
          */
         argumentType?: 'datetime' | 'numeric' | 'string';
         /**
-         * <-dxPolarChart.Options.argumentAxis.axisDivisionFactor->
+         * [descr:dxPolarChart.Options.argumentAxis.axisDivisionFactor]
          */
         axisDivisionFactor?: number;
         /**
-         * <-dxPolarChart.Options.argumentAxis.categories->
+         * [descr:dxPolarChart.Options.argumentAxis.categories]
          */
         categories?: Array<number | string | Date>;
         /**
-         * <-dxPolarChart.Options.argumentAxis.constantLines->
+         * [descr:dxPolarChart.Options.argumentAxis.constantLines]
          */
         constantLines?: Array<dxPolarChartArgumentAxisConstantLines>;
         /**
-         * <-dxPolarChart.Options.argumentAxis.firstPointOnStartAngle->
+         * [descr:dxPolarChart.Options.argumentAxis.firstPointOnStartAngle]
          */
         firstPointOnStartAngle?: boolean;
         /**
-         * <-dxPolarChart.Options.argumentAxis.hoverMode->
+         * [descr:dxPolarChart.Options.argumentAxis.hoverMode]
          */
         hoverMode?: 'allArgumentPoints' | 'none';
         /**
-         * <-dxPolarChart.Options.argumentAxis.label->
+         * [descr:dxPolarChart.Options.argumentAxis.label]
          */
         label?: dxPolarChartArgumentAxisLabel;
         /**
-         * <-dxPolarChart.Options.argumentAxis.linearThreshold->
+         * [descr:dxPolarChart.Options.argumentAxis.linearThreshold]
          */
         linearThreshold?: number;
         /**
-         * <-dxPolarChart.Options.argumentAxis.logarithmBase->
+         * [descr:dxPolarChart.Options.argumentAxis.logarithmBase]
          */
         logarithmBase?: number;
         /**
-         * <-dxPolarChart.Options.argumentAxis.minorTick->
+         * [descr:dxPolarChart.Options.argumentAxis.minorTick]
          */
         minorTick?: dxPolarChartArgumentAxisMinorTick;
         /**
-         * <-dxPolarChart.Options.argumentAxis.minorTickCount->
+         * [descr:dxPolarChart.Options.argumentAxis.minorTickCount]
          */
         minorTickCount?: number;
         /**
-         * <-dxPolarChart.Options.argumentAxis.minorTickInterval->
+         * [descr:dxPolarChart.Options.argumentAxis.minorTickInterval]
          */
         minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxPolarChart.Options.argumentAxis.originValue->
+         * [descr:dxPolarChart.Options.argumentAxis.originValue]
          */
         originValue?: number;
         /**
-         * <-dxPolarChart.Options.argumentAxis.period->
+         * [descr:dxPolarChart.Options.argumentAxis.period]
          */
         period?: number;
         /**
-         * <-dxPolarChart.Options.argumentAxis.startAngle->
+         * [descr:dxPolarChart.Options.argumentAxis.startAngle]
          */
         startAngle?: number;
         /**
-         * <-dxPolarChart.Options.argumentAxis.strips->
+         * [descr:dxPolarChart.Options.argumentAxis.strips]
          */
         strips?: Array<dxPolarChartArgumentAxisStrips>;
         /**
-         * <-dxPolarChart.Options.argumentAxis.tick->
+         * [descr:dxPolarChart.Options.argumentAxis.tick]
          */
         tick?: dxPolarChartArgumentAxisTick;
         /**
-         * <-dxPolarChart.Options.argumentAxis.tickInterval->
+         * [descr:dxPolarChart.Options.argumentAxis.tickInterval]
          */
         tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxPolarChart.Options.argumentAxis.type->
+         * [descr:dxPolarChart.Options.argumentAxis.type]
          */
         type?: 'continuous' | 'discrete' | 'logarithmic';
     }
     /**
-     * <-dxPolarChart.Options.argumentAxis.constantLines->
+     * [descr:dxPolarChart.Options.argumentAxis.constantLines]
      */
     export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
         /**
-         * <-dxPolarChart.Options.argumentAxis.constantLines.displayBehindSeries->
+         * [descr:dxPolarChart.Options.argumentAxis.constantLines.displayBehindSeries]
          */
         displayBehindSeries?: boolean;
         /**
-         * <-dxPolarChart.Options.argumentAxis.constantLines.extendAxis->
+         * [descr:dxPolarChart.Options.argumentAxis.constantLines.extendAxis]
          */
         extendAxis?: boolean;
         /**
-         * <-dxPolarChart.Options.argumentAxis.constantLines.label->
+         * [descr:dxPolarChart.Options.argumentAxis.constantLines.label]
          */
         label?: dxPolarChartArgumentAxisConstantLinesLabel;
         /**
-         * <-dxPolarChart.Options.argumentAxis.constantLines.value->
+         * [descr:dxPolarChart.Options.argumentAxis.constantLines.value]
          */
         value?: number | Date | string;
     }
     /**
-     * <-dxPolarChart.Options.argumentAxis.constantLines.label->
+     * [descr:dxPolarChart.Options.argumentAxis.constantLines.label]
      */
     export interface dxPolarChartArgumentAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
         /**
-         * <-dxPolarChart.Options.argumentAxis.constantLines.label.text->
+         * [descr:dxPolarChart.Options.argumentAxis.constantLines.label.text]
          */
         text?: string;
     }
     /**
-     * <-dxPolarChart.Options.argumentAxis.label->
+     * [descr:dxPolarChart.Options.argumentAxis.label]
      */
     export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
         /**
-         * <-dxPolarChart.Options.argumentAxis.label.customizeHint->
+         * [descr:dxPolarChart.Options.argumentAxis.label.customizeHint]
          */
         customizeHint?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
         /**
-         * <-dxPolarChart.Options.argumentAxis.label.customizeText->
+         * [descr:dxPolarChart.Options.argumentAxis.label.customizeText]
          */
         customizeText?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
         /**
-         * <-dxPolarChart.Options.argumentAxis.label.format->
+         * [descr:dxPolarChart.Options.argumentAxis.label.format]
          */
         format?: DevExpress.ui.format;
     }
     /**
-     * <-dxPolarChart.Options.argumentAxis.minorTick->
+     * [descr:dxPolarChart.Options.argumentAxis.minorTick]
      */
     export interface dxPolarChartArgumentAxisMinorTick extends dxPolarChartCommonAxisSettingsMinorTick {
         /**
-         * <-dxPolarChart.Options.argumentAxis.minorTick.shift->
+         * [descr:dxPolarChart.Options.argumentAxis.minorTick.shift]
          */
         shift?: number;
     }
     /**
-     * <-dxPolarChart.Options.argumentAxis.strips->
+     * [descr:dxPolarChart.Options.argumentAxis.strips]
      */
     export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
         /**
-         * <-dxPolarChart.Options.argumentAxis.strips.color->
+         * [descr:dxPolarChart.Options.argumentAxis.strips.color]
          */
         color?: string;
         /**
-         * <-dxPolarChart.Options.argumentAxis.strips.endValue->
+         * [descr:dxPolarChart.Options.argumentAxis.strips.endValue]
          */
         endValue?: number | Date | string;
         /**
-         * <-dxPolarChart.Options.argumentAxis.strips.label->
+         * [descr:dxPolarChart.Options.argumentAxis.strips.label]
          */
         label?: dxPolarChartArgumentAxisStripsLabel;
         /**
-         * <-dxPolarChart.Options.argumentAxis.strips.startValue->
+         * [descr:dxPolarChart.Options.argumentAxis.strips.startValue]
          */
         startValue?: number | Date | string;
     }
     /**
-     * <-dxPolarChart.Options.argumentAxis.strips.label->
+     * [descr:dxPolarChart.Options.argumentAxis.strips.label]
      */
     export interface dxPolarChartArgumentAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
         /**
-         * <-dxPolarChart.Options.argumentAxis.strips.label.text->
+         * [descr:dxPolarChart.Options.argumentAxis.strips.label.text]
          */
         text?: string;
     }
     /**
-     * <-dxPolarChart.Options.argumentAxis.tick->
+     * [descr:dxPolarChart.Options.argumentAxis.tick]
      */
     export interface dxPolarChartArgumentAxisTick extends dxPolarChartCommonAxisSettingsTick {
         /**
-         * <-dxPolarChart.Options.argumentAxis.tick.shift->
+         * [descr:dxPolarChart.Options.argumentAxis.tick.shift]
          */
         shift?: number;
     }
     /**
-     * <-dxPolarChart.Options.commonAxisSettings->
+     * [descr:dxPolarChart.Options.commonAxisSettings]
      */
     export interface dxPolarChartCommonAxisSettings {
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.allowDecimals->
+         * [descr:dxPolarChart.Options.commonAxisSettings.allowDecimals]
          */
         allowDecimals?: boolean;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.color->
+         * [descr:dxPolarChart.Options.commonAxisSettings.color]
          */
         color?: string;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.constantLineStyle->
+         * [descr:dxPolarChart.Options.commonAxisSettings.constantLineStyle]
          */
         constantLineStyle?: dxPolarChartCommonAxisSettingsConstantLineStyle;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.discreteAxisDivisionMode->
+         * [descr:dxPolarChart.Options.commonAxisSettings.discreteAxisDivisionMode]
          */
         discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.endOnTick->
+         * [descr:dxPolarChart.Options.commonAxisSettings.endOnTick]
          */
         endOnTick?: boolean;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.grid->
+         * [descr:dxPolarChart.Options.commonAxisSettings.grid]
          */
         grid?: { color?: string, opacity?: number, visible?: boolean, width?: number };
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.inverted->
+         * [descr:dxPolarChart.Options.commonAxisSettings.inverted]
          */
         inverted?: boolean;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.label->
+         * [descr:dxPolarChart.Options.commonAxisSettings.label]
          */
         label?: dxPolarChartCommonAxisSettingsLabel;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.minorGrid->
+         * [descr:dxPolarChart.Options.commonAxisSettings.minorGrid]
          */
         minorGrid?: { color?: string, opacity?: number, visible?: boolean, width?: number };
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.minorTick->
+         * [descr:dxPolarChart.Options.commonAxisSettings.minorTick]
          */
         minorTick?: dxPolarChartCommonAxisSettingsMinorTick;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.opacity->
+         * [descr:dxPolarChart.Options.commonAxisSettings.opacity]
          */
         opacity?: number;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.stripStyle->
+         * [descr:dxPolarChart.Options.commonAxisSettings.stripStyle]
          */
         stripStyle?: dxPolarChartCommonAxisSettingsStripStyle;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.tick->
+         * [descr:dxPolarChart.Options.commonAxisSettings.tick]
          */
         tick?: dxPolarChartCommonAxisSettingsTick;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.visible->
+         * [descr:dxPolarChart.Options.commonAxisSettings.visible]
          */
         visible?: boolean;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.width->
+         * [descr:dxPolarChart.Options.commonAxisSettings.width]
          */
         width?: number;
     }
     /**
-     * <-dxPolarChart.Options.commonAxisSettings.constantLineStyle->
+     * [descr:dxPolarChart.Options.commonAxisSettings.constantLineStyle]
      */
     export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.constantLineStyle.color->
+         * [descr:dxPolarChart.Options.commonAxisSettings.constantLineStyle.color]
          */
         color?: string;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.constantLineStyle.dashStyle->
+         * [descr:dxPolarChart.Options.commonAxisSettings.constantLineStyle.dashStyle]
          */
         dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.constantLineStyle.label->
+         * [descr:dxPolarChart.Options.commonAxisSettings.constantLineStyle.label]
          */
         label?: dxPolarChartCommonAxisSettingsConstantLineStyleLabel;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.constantLineStyle.width->
+         * [descr:dxPolarChart.Options.commonAxisSettings.constantLineStyle.width]
          */
         width?: number;
     }
     /**
-     * <-dxPolarChart.Options.commonAxisSettings.constantLineStyle.label->
+     * [descr:dxPolarChart.Options.commonAxisSettings.constantLineStyle.label]
      */
     export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.constantLineStyle.label.font->
+         * [descr:dxPolarChart.Options.commonAxisSettings.constantLineStyle.label.font]
          */
         font?: Font;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.constantLineStyle.label.visible->
+         * [descr:dxPolarChart.Options.commonAxisSettings.constantLineStyle.label.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxPolarChart.Options.commonAxisSettings.label->
+     * [descr:dxPolarChart.Options.commonAxisSettings.label]
      */
     export interface dxPolarChartCommonAxisSettingsLabel {
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.label.font->
+         * [descr:dxPolarChart.Options.commonAxisSettings.label.font]
          */
         font?: Font;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.label.indentFromAxis->
+         * [descr:dxPolarChart.Options.commonAxisSettings.label.indentFromAxis]
          */
         indentFromAxis?: number;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.label.overlappingBehavior->
+         * [descr:dxPolarChart.Options.commonAxisSettings.label.overlappingBehavior]
          */
         overlappingBehavior?: 'none' | 'hide';
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.label.visible->
+         * [descr:dxPolarChart.Options.commonAxisSettings.label.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxPolarChart.Options.commonAxisSettings.minorTick->
+     * [descr:dxPolarChart.Options.commonAxisSettings.minorTick]
      */
     export interface dxPolarChartCommonAxisSettingsMinorTick {
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.minorTick.color->
+         * [descr:dxPolarChart.Options.commonAxisSettings.minorTick.color]
          */
         color?: string;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.minorTick.length->
+         * [descr:dxPolarChart.Options.commonAxisSettings.minorTick.length]
          */
         length?: number;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.minorTick.opacity->
+         * [descr:dxPolarChart.Options.commonAxisSettings.minorTick.opacity]
          */
         opacity?: number;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.minorTick.visible->
+         * [descr:dxPolarChart.Options.commonAxisSettings.minorTick.visible]
          */
         visible?: boolean;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.minorTick.width->
+         * [descr:dxPolarChart.Options.commonAxisSettings.minorTick.width]
          */
         width?: number;
     }
     /**
-     * <-dxPolarChart.Options.commonAxisSettings.stripStyle->
+     * [descr:dxPolarChart.Options.commonAxisSettings.stripStyle]
      */
     export interface dxPolarChartCommonAxisSettingsStripStyle {
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.stripStyle.label->
+         * [descr:dxPolarChart.Options.commonAxisSettings.stripStyle.label]
          */
         label?: dxPolarChartCommonAxisSettingsStripStyleLabel;
     }
     /**
-     * <-dxPolarChart.Options.commonAxisSettings.stripStyle.label->
+     * [descr:dxPolarChart.Options.commonAxisSettings.stripStyle.label]
      */
     export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.stripStyle.label.font->
+         * [descr:dxPolarChart.Options.commonAxisSettings.stripStyle.label.font]
          */
         font?: Font;
     }
     /**
-     * <-dxPolarChart.Options.commonAxisSettings.tick->
+     * [descr:dxPolarChart.Options.commonAxisSettings.tick]
      */
     export interface dxPolarChartCommonAxisSettingsTick {
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.tick.color->
+         * [descr:dxPolarChart.Options.commonAxisSettings.tick.color]
          */
         color?: string;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.tick.length->
+         * [descr:dxPolarChart.Options.commonAxisSettings.tick.length]
          */
         length?: number;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.tick.opacity->
+         * [descr:dxPolarChart.Options.commonAxisSettings.tick.opacity]
          */
         opacity?: number;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.tick.visible->
+         * [descr:dxPolarChart.Options.commonAxisSettings.tick.visible]
          */
         visible?: boolean;
         /**
-         * <-dxPolarChart.Options.commonAxisSettings.tick.width->
+         * [descr:dxPolarChart.Options.commonAxisSettings.tick.width]
          */
         width?: number;
     }
     /**
-     * <-dxPolarChart.Options.commonSeriesSettings->
+     * [descr:dxPolarChart.Options.commonSeriesSettings]
      */
     export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /**
-         * <-dxPolarChart.Options.commonSeriesSettings.area->
+         * [descr:dxPolarChart.Options.commonSeriesSettings.area]
          */
         area?: any;
         /**
-         * <-dxPolarChart.Options.commonSeriesSettings.bar->
+         * [descr:dxPolarChart.Options.commonSeriesSettings.bar]
          */
         bar?: any;
         /**
-         * <-dxPolarChart.Options.commonSeriesSettings.line->
+         * [descr:dxPolarChart.Options.commonSeriesSettings.line]
          */
         line?: any;
         /**
-         * <-dxPolarChart.Options.commonSeriesSettings.scatter->
+         * [descr:dxPolarChart.Options.commonSeriesSettings.scatter]
          */
         scatter?: any;
         /**
-         * <-dxPolarChart.Options.commonSeriesSettings.stackedbar->
+         * [descr:dxPolarChart.Options.commonSeriesSettings.stackedbar]
          */
         stackedbar?: any;
         /**
-         * <-dxPolarChart.Options.commonSeriesSettings.type->
+         * [descr:dxPolarChart.Options.commonSeriesSettings.type]
          */
         type?: 'area' | 'bar' | 'line' | 'scatter' | 'stackedbar';
     }
     /**
-     * <-dxPolarChart.Options.legend->
+     * [descr:dxPolarChart.Options.legend]
      */
     export interface dxPolarChartLegend extends BaseChartLegend {
         /**
-         * <-dxPolarChart.Options.legend.customizeHint->
+         * [descr:dxPolarChart.Options.legend.customizeHint]
          */
         customizeHint?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
         /**
-         * <-dxPolarChart.Options.legend.customizeText->
+         * [descr:dxPolarChart.Options.legend.customizeText]
          */
         customizeText?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
         /**
-         * <-dxPolarChart.Options.legend.hoverMode->
+         * [descr:dxPolarChart.Options.legend.hoverMode]
          */
         hoverMode?: 'excludePoints' | 'includePoints' | 'none';
     }
     /**
-     * <-dxPolarChart.Options.tooltip->
+     * [descr:dxPolarChart.Options.tooltip]
      */
     export interface dxPolarChartTooltip extends BaseChartTooltip {
         /**
-         * <-dxPolarChart.Options.tooltip.shared->
+         * [descr:dxPolarChart.Options.tooltip.shared]
          */
         shared?: boolean;
     }
     /**
-     * <-dxPolarChart.Options.valueAxis->
+     * [descr:dxPolarChart.Options.valueAxis]
      */
     export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
         /**
-         * <-dxPolarChart.Options.valueAxis.axisDivisionFactor->
+         * [descr:dxPolarChart.Options.valueAxis.axisDivisionFactor]
          */
         axisDivisionFactor?: number;
         /**
-         * <-dxPolarChart.Options.valueAxis.categories->
+         * [descr:dxPolarChart.Options.valueAxis.categories]
          */
         categories?: Array<number | string | Date>;
         /**
-         * <-dxPolarChart.Options.valueAxis.constantLines->
+         * [descr:dxPolarChart.Options.valueAxis.constantLines]
          */
         constantLines?: Array<dxPolarChartValueAxisConstantLines>;
         /**
-         * <-dxPolarChart.Options.valueAxis.endOnTick->
+         * [descr:dxPolarChart.Options.valueAxis.endOnTick]
          */
         endOnTick?: boolean;
         /**
-         * <-dxPolarChart.Options.valueAxis.label->
+         * [descr:dxPolarChart.Options.valueAxis.label]
          */
         label?: dxPolarChartValueAxisLabel;
         /**
-         * <-dxPolarChart.Options.valueAxis.linearThreshold->
+         * [descr:dxPolarChart.Options.valueAxis.linearThreshold]
          */
         linearThreshold?: number;
         /**
-         * <-dxPolarChart.Options.valueAxis.logarithmBase->
+         * [descr:dxPolarChart.Options.valueAxis.logarithmBase]
          */
         logarithmBase?: number;
         /**
-         * <-dxPolarChart.Options.valueAxis.maxValueMargin->
+         * [descr:dxPolarChart.Options.valueAxis.maxValueMargin]
          */
         maxValueMargin?: number;
         /**
-         * <-dxPolarChart.Options.valueAxis.minValueMargin->
+         * [descr:dxPolarChart.Options.valueAxis.minValueMargin]
          */
         minValueMargin?: number;
         /**
-         * <-dxPolarChart.Options.valueAxis.minVisualRangeLength->
+         * [descr:dxPolarChart.Options.valueAxis.minVisualRangeLength]
          */
         minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxPolarChart.Options.valueAxis.minorTickCount->
+         * [descr:dxPolarChart.Options.valueAxis.minorTickCount]
          */
         minorTickCount?: number;
         /**
-         * <-dxPolarChart.Options.valueAxis.minorTickInterval->
+         * [descr:dxPolarChart.Options.valueAxis.minorTickInterval]
          */
         minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxPolarChart.Options.valueAxis.showZero->
+         * [descr:dxPolarChart.Options.valueAxis.showZero]
          */
         showZero?: boolean;
         /**
-         * <-dxPolarChart.Options.valueAxis.strips->
+         * [descr:dxPolarChart.Options.valueAxis.strips]
          */
         strips?: Array<dxPolarChartValueAxisStrips>;
         /**
-         * <-dxPolarChart.Options.valueAxis.tick->
+         * [descr:dxPolarChart.Options.valueAxis.tick]
          */
         tick?: dxPolarChartValueAxisTick;
         /**
-         * <-dxPolarChart.Options.valueAxis.tickInterval->
+         * [descr:dxPolarChart.Options.valueAxis.tickInterval]
          */
         tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
-         * <-dxPolarChart.Options.valueAxis.type->
+         * [descr:dxPolarChart.Options.valueAxis.type]
          */
         type?: 'continuous' | 'discrete' | 'logarithmic';
         /**
-         * <-dxPolarChart.Options.valueAxis.valueMarginsEnabled->
+         * [descr:dxPolarChart.Options.valueAxis.valueMarginsEnabled]
          */
         valueMarginsEnabled?: boolean;
         /**
-         * <-dxPolarChart.Options.valueAxis.valueType->
+         * [descr:dxPolarChart.Options.valueAxis.valueType]
          */
         valueType?: 'datetime' | 'numeric' | 'string';
         /**
-         * <-dxPolarChart.Options.valueAxis.visualRange->
+         * [descr:dxPolarChart.Options.valueAxis.visualRange]
          */
         visualRange?: VizRange | Array<number | string | Date>;
         /**
-         * <-dxPolarChart.Options.valueAxis.visualRangeUpdateMode->
+         * [descr:dxPolarChart.Options.valueAxis.visualRangeUpdateMode]
          */
         visualRangeUpdateMode?: 'auto' | 'keep' | 'reset';
         /**
-         * <-dxPolarChart.Options.valueAxis.wholeRange->
+         * [descr:dxPolarChart.Options.valueAxis.wholeRange]
          */
         wholeRange?: VizRange | Array<number | string | Date>;
     }
     /**
-     * <-dxPolarChart.Options.valueAxis.constantLines->
+     * [descr:dxPolarChart.Options.valueAxis.constantLines]
      */
     export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
         /**
-         * <-dxPolarChart.Options.valueAxis.constantLines.displayBehindSeries->
+         * [descr:dxPolarChart.Options.valueAxis.constantLines.displayBehindSeries]
          */
         displayBehindSeries?: boolean;
         /**
-         * <-dxPolarChart.Options.valueAxis.constantLines.extendAxis->
+         * [descr:dxPolarChart.Options.valueAxis.constantLines.extendAxis]
          */
         extendAxis?: boolean;
         /**
-         * <-dxPolarChart.Options.valueAxis.constantLines.label->
+         * [descr:dxPolarChart.Options.valueAxis.constantLines.label]
          */
         label?: dxPolarChartValueAxisConstantLinesLabel;
         /**
-         * <-dxPolarChart.Options.valueAxis.constantLines.value->
+         * [descr:dxPolarChart.Options.valueAxis.constantLines.value]
          */
         value?: number | Date | string;
     }
     /**
-     * <-dxPolarChart.Options.valueAxis.constantLines.label->
+     * [descr:dxPolarChart.Options.valueAxis.constantLines.label]
      */
     export interface dxPolarChartValueAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
         /**
-         * <-dxPolarChart.Options.valueAxis.constantLines.label.text->
+         * [descr:dxPolarChart.Options.valueAxis.constantLines.label.text]
          */
         text?: string;
     }
     /**
-     * <-dxPolarChart.Options.valueAxis.label->
+     * [descr:dxPolarChart.Options.valueAxis.label]
      */
     export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
         /**
-         * <-dxPolarChart.Options.valueAxis.label.customizeHint->
+         * [descr:dxPolarChart.Options.valueAxis.label.customizeHint]
          */
         customizeHint?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
         /**
-         * <-dxPolarChart.Options.valueAxis.label.customizeText->
+         * [descr:dxPolarChart.Options.valueAxis.label.customizeText]
          */
         customizeText?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
         /**
-         * <-dxPolarChart.Options.valueAxis.label.format->
+         * [descr:dxPolarChart.Options.valueAxis.label.format]
          */
         format?: DevExpress.ui.format;
     }
     /**
-     * <-dxPolarChart.Options.valueAxis.strips->
+     * [descr:dxPolarChart.Options.valueAxis.strips]
      */
     export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
         /**
-         * <-dxPolarChart.Options.valueAxis.strips.color->
+         * [descr:dxPolarChart.Options.valueAxis.strips.color]
          */
         color?: string;
         /**
-         * <-dxPolarChart.Options.valueAxis.strips.endValue->
+         * [descr:dxPolarChart.Options.valueAxis.strips.endValue]
          */
         endValue?: number | Date | string;
         /**
-         * <-dxPolarChart.Options.valueAxis.strips.label->
+         * [descr:dxPolarChart.Options.valueAxis.strips.label]
          */
         label?: dxPolarChartValueAxisStripsLabel;
         /**
-         * <-dxPolarChart.Options.valueAxis.strips.startValue->
+         * [descr:dxPolarChart.Options.valueAxis.strips.startValue]
          */
         startValue?: number | Date | string;
     }
     /**
-     * <-dxPolarChart.Options.valueAxis.strips.label->
+     * [descr:dxPolarChart.Options.valueAxis.strips.label]
      */
     export interface dxPolarChartValueAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
         /**
-         * <-dxPolarChart.Options.valueAxis.strips.label.text->
+         * [descr:dxPolarChart.Options.valueAxis.strips.label.text]
          */
         text?: string;
     }
     /**
-     * <-dxPolarChart.Options.valueAxis.tick->
+     * [descr:dxPolarChart.Options.valueAxis.tick]
      */
     export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSettingsTick {
         /**
-         * <-dxPolarChart.Options.valueAxis.tick.visible->
+         * [descr:dxPolarChart.Options.valueAxis.tick.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxPolarChart->
+     * [descr:dxPolarChart]
      */
     export class dxPolarChart extends BaseChart {
         constructor(element: Element, options?: dxPolarChartOptions)
         constructor(element: JQuery, options?: dxPolarChartOptions)
         /**
-         * <-dxPolarChart.getValueAxis()->
+         * [descr:dxPolarChart.getValueAxis()]
          */
         getValueAxis(): chartAxisObject;
         /**
-         * <-dxPolarChart.resetVisualRange()->
+         * [descr:dxPolarChart.resetVisualRange()]
          */
         resetVisualRange(): void;
     }
     /**
-     * <-dxPolarChartAnnotationConfig->
+     * [descr:dxPolarChartAnnotationConfig]
      */
     export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotationConfig {
         /**
-         * <-dxPolarChartAnnotationConfig.name->
+         * [descr:dxPolarChartAnnotationConfig.name]
          */
         name?: string;
     }
     /**
-     * <-dxPolarChartCommonAnnotationConfig->
+     * [descr:dxPolarChartCommonAnnotationConfig]
      */
     export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
         /**
-         * <-dxPolarChartCommonAnnotationConfig.angle->
+         * [descr:dxPolarChartCommonAnnotationConfig.angle]
          */
         angle?: number;
         /**
-         * <-dxPolarChartCommonAnnotationConfig.customizeTooltip->
+         * [descr:dxPolarChartCommonAnnotationConfig.customizeTooltip]
          */
         customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any);
         /**
-         * <-dxPolarChartCommonAnnotationConfig.radius->
+         * [descr:dxPolarChartCommonAnnotationConfig.radius]
          */
         radius?: number;
         /**
-         * <-dxPolarChartCommonAnnotationConfig.template->
+         * [descr:dxPolarChartCommonAnnotationConfig.template]
          */
         template?: DevExpress.core.template | ((annotation: dxPolarChartCommonAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /**
-         * <-dxPolarChartCommonAnnotationConfig.tooltipTemplate->
+         * [descr:dxPolarChartCommonAnnotationConfig.tooltipTemplate]
          */
         tooltipTemplate?: DevExpress.core.template | ((annotation: dxPolarChartAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /**
-     * <-dxPolarChartSeriesTypes->
+     * [descr:dxPolarChartSeriesTypes]
      */
     export interface dxPolarChartSeriesTypes {
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries]
          */
         CommonPolarChartSeries?: dxPolarChartSeriesTypesCommonPolarChartSeries;
         /**
-         * <-dxPolarChartSeriesTypes.areapolarseries->
+         * [descr:dxPolarChartSeriesTypes.areapolarseries]
          */
         areapolarseries?: dxPolarChartSeriesTypesAreapolarseries;
         /**
-         * <-dxPolarChartSeriesTypes.barpolarseries->
+         * [descr:dxPolarChartSeriesTypes.barpolarseries]
          */
         barpolarseries?: dxPolarChartSeriesTypesBarpolarseries;
         /**
-         * <-dxPolarChartSeriesTypes.linepolarseries->
+         * [descr:dxPolarChartSeriesTypes.linepolarseries]
          */
         linepolarseries?: dxPolarChartSeriesTypesLinepolarseries;
         /**
-         * <-dxPolarChartSeriesTypes.scatterpolarseries->
+         * [descr:dxPolarChartSeriesTypes.scatterpolarseries]
          */
         scatterpolarseries?: any;
         /**
-         * <-dxPolarChartSeriesTypes.stackedbarpolarseries->
+         * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries]
          */
         stackedbarpolarseries?: dxPolarChartSeriesTypesStackedbarpolarseries;
     }
     /**
-     * <-dxPolarChartSeriesTypes.CommonPolarChartSeries->
+     * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries]
      */
     export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.argumentField->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.argumentField]
          */
         argumentField?: string;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.barPadding->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.barPadding]
          */
         barPadding?: number;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.barWidth->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.barWidth]
          */
         barWidth?: number;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.border->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.border]
          */
         border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.closed->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.closed]
          */
         closed?: boolean;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.color->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.color]
          */
         color?: string;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.dashStyle]
          */
         dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid';
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverMode]
          */
         hoverMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'excludePoints' | 'includePoints' | 'nearestPoint' | 'none' | 'onlyPoint';
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.hoverStyle]
          */
         hoverStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, width?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints]
          */
         ignoreEmptyPoints?: boolean;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label]
          */
         label?: dxPolarChartSeriesTypesCommonPolarChartSeriesLabel;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.maxLabelCount->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.maxLabelCount]
          */
         maxLabelCount?: number;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.minBarSize->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.minBarSize]
          */
         minBarSize?: number;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.opacity->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.opacity]
          */
         opacity?: number;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point]
          */
         point?: dxPolarChartSeriesTypesCommonPolarChartSeriesPoint;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionMode->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionMode]
          */
         selectionMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'excludePoints' | 'includePoints' | 'none' | 'onlyPoint';
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.selectionStyle]
          */
         selectionStyle?: { border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number }, color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, width?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.showInLegend->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.showInLegend]
          */
         showInLegend?: boolean;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.stack->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.stack]
          */
         stack?: string;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.tagField->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.tagField]
          */
         tagField?: string;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueErrorBar]
          */
         valueErrorBar?: { color?: string, displayMode?: 'auto' | 'high' | 'low' | 'none', edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance', value?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.valueField->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.valueField]
          */
         valueField?: string;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.visible->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.visible]
          */
         visible?: boolean;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.width->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.width]
          */
         width?: number;
     }
     /**
-     * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label->
+     * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label]
      */
     export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.argumentFormat]
          */
         argumentFormat?: DevExpress.ui.format;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor]
          */
         backgroundColor?: string;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.border]
          */
         border?: { color?: string, dashStyle?: 'dash' | 'dot' | 'longDash' | 'solid', visible?: boolean, width?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.connector]
          */
         connector?: { color?: string, visible?: boolean, width?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.customizeText->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.customizeText]
          */
         customizeText?: ((pointInfo: any) => string);
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font]
          */
         font?: Font;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.format]
          */
         format?: DevExpress.ui.format;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.position]
          */
         position?: 'inside' | 'outside';
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.rotationAngle->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.rotationAngle]
          */
         rotationAngle?: number;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.showForZeroValues->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.showForZeroValues]
          */
         showForZeroValues?: boolean;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.label.visible->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.label.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point->
+     * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point]
      */
     export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.border]
          */
         border?: { color?: string, visible?: boolean, width?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.color->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.color]
          */
         color?: string;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverMode->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverMode]
          */
         hoverMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'none' | 'onlyPoint';
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.hoverStyle]
          */
         hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, size?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image]
          */
         image?: string | { height?: number, url?: string, width?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionMode->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionMode]
          */
         selectionMode?: 'allArgumentPoints' | 'allSeriesPoints' | 'none' | 'onlyPoint';
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.selectionStyle]
          */
         selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, size?: number };
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.size->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.size]
          */
         size?: number;
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.symbol->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.symbol]
          */
         symbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
         /**
-         * <-dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible->
+         * [descr:dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxPolarChartSeriesTypes.areapolarseries->
+     * [descr:dxPolarChartSeriesTypes.areapolarseries]
      */
     export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /**
-         * <-dxPolarChartSeriesTypes.areapolarseries.hoverMode->
+         * [descr:dxPolarChartSeriesTypes.areapolarseries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxPolarChartSeriesTypes.areapolarseries.point->
+         * [descr:dxPolarChartSeriesTypes.areapolarseries.point]
          */
         point?: dxPolarChartSeriesTypesAreapolarseriesPoint;
         /**
-         * <-dxPolarChartSeriesTypes.areapolarseries.selectionMode->
+         * [descr:dxPolarChartSeriesTypes.areapolarseries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxPolarChartSeriesTypes.areapolarseries.point->
+     * [descr:dxPolarChartSeriesTypes.areapolarseries.point]
      */
     export interface dxPolarChartSeriesTypesAreapolarseriesPoint extends dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
         /**
-         * <-dxPolarChartSeriesTypes.areapolarseries.point.visible->
+         * [descr:dxPolarChartSeriesTypes.areapolarseries.point.visible]
          */
         visible?: boolean;
     }
     /**
-     * <-dxPolarChartSeriesTypes.barpolarseries->
+     * [descr:dxPolarChartSeriesTypes.barpolarseries]
      */
     export interface dxPolarChartSeriesTypesBarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /**
-         * <-dxPolarChartSeriesTypes.barpolarseries.hoverMode->
+         * [descr:dxPolarChartSeriesTypes.barpolarseries.hoverMode]
          */
         hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxPolarChartSeriesTypes.barpolarseries.selectionMode->
+         * [descr:dxPolarChartSeriesTypes.barpolarseries.selectionMode]
          */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
     /**
-     * <-dxPolarChartSeriesTypes.linepolarseries->
+     * [descr:dxPolarChartSeriesTypes.linepolarseries]
      */
     export interface dxPolarChartSeriesTypesLinepolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /**
-         * <-dxPolarChartSeriesTypes.linepolarseries.hoverMode->
+         * [descr:dxPolarChartSeriesTypes.linepolarseries.hoverMode]
          */
         hoverMode?: 'nearestPoint' | 'includePoints' | 'excludePoints' | 'none';
         /**
-         * <-dxPolarChartSeriesTypes.linepolarseries.selectionMode->
+         * [descr:dxPolarChartSeriesTypes.linepolarseries.selectionMode]
          */
         selectionMode?: 'includePoints' | 'excludePoints' | 'none';
     }
     /**
-     * <-dxPolarChartSeriesTypes.stackedbarpolarseries->
+     * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries]
      */
     export interface dxPolarChartSeriesTypesStackedbarpolarseries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
         /**
-         * <-dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode->
+         * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries.hoverMode]
          */
         hoverMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
         /**
-         * <-dxPolarChartSeriesTypes.stackedbarpolarseries.label->
+         * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries.label]
          */
         label?: dxPolarChartSeriesTypesStackedbarpolarseriesLabel;
         /**
-         * <-dxPolarChartSeriesTypes.stackedbarpolarseries.selectionMode->
+         * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries.selectionMode]
          */
         selectionMode?: 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none';
     }
     /**
-     * <-dxPolarChartSeriesTypes.stackedbarpolarseries.label->
+     * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries.label]
      */
     export interface dxPolarChartSeriesTypesStackedbarpolarseriesLabel extends dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
         /**
-         * <-dxPolarChartSeriesTypes.stackedbarpolarseries.label.position->
+         * [descr:dxPolarChartSeriesTypes.stackedbarpolarseries.label.position]
          */
         position?: 'inside' | 'outside';
     }
     /**
-     * <-dxRangeSelector.Options->
+     * [descr:dxRangeSelector.Options]
      */
     export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
         /**
-         * <-dxRangeSelector.Options.background->
+         * [descr:dxRangeSelector.Options.background]
          */
         background?: { color?: string, image?: { location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string }, visible?: boolean };
         /**
-         * <-dxRangeSelector.Options.behavior->
+         * [descr:dxRangeSelector.Options.behavior]
          */
         behavior?: { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: 'onMoving' | 'onMovingComplete', manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean };
         /**
-         * <-dxRangeSelector.Options.chart->
+         * [descr:dxRangeSelector.Options.chart]
          */
         chart?: { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: 'continuous' | 'logarithmic', valueType?: 'datetime' | 'numeric' | 'string' } };
         /**
-         * <-dxRangeSelector.Options.containerBackgroundColor->
+         * [descr:dxRangeSelector.Options.containerBackgroundColor]
          */
         containerBackgroundColor?: string;
         /**
-         * <-dxRangeSelector.Options.dataSource->
+         * [descr:dxRangeSelector.Options.dataSource]
          */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /**
-         * <-dxRangeSelector.Options.dataSourceField->
+         * [descr:dxRangeSelector.Options.dataSourceField]
          */
         dataSourceField?: string;
         /**
-         * <-dxRangeSelector.Options.indent->
+         * [descr:dxRangeSelector.Options.indent]
          */
         indent?: { left?: number, right?: number };
         /**
-         * <-dxRangeSelector.Options.onValueChanged->
+         * [descr:dxRangeSelector.Options.onValueChanged]
          */
         onValueChanged?: ((e: { component?: dxRangeSelector, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: DevExpress.events.event }) => any);
         /**
-         * <-dxRangeSelector.Options.scale->
+         * [descr:dxRangeSelector.Options.scale]
          */
         scale?: { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: DevExpress.ui.format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minRange?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year', type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
         /**
-         * <-dxRangeSelector.Options.selectedRangeColor->
+         * [descr:dxRangeSelector.Options.selectedRangeColor]
          */
         selectedRangeColor?: string;
         /**
-         * <-dxRangeSelector.Options.selectedRangeUpdateMode->
+         * [descr:dxRangeSelector.Options.selectedRangeUpdateMode]
          */
         selectedRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
         /**
-         * <-dxRangeSelector.Options.shutter->
+         * [descr:dxRangeSelector.Options.shutter]
          */
         shutter?: { color?: string, opacity?: number };
         /**
-         * <-dxRangeSelector.Options.sliderHandle->
+         * [descr:dxRangeSelector.Options.sliderHandle]
          */
         sliderHandle?: { color?: string, opacity?: number, width?: number };
         /**
-         * <-dxRangeSelector.Options.sliderMarker->
+         * [descr:dxRangeSelector.Options.sliderMarker]
          */
         sliderMarker?: { color?: string, customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string), font?: Font, format?: DevExpress.ui.format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean };
         /**
-         * <-dxRangeSelector.Options.value->
+         * [descr:dxRangeSelector.Options.value]
          */
         value?: Array<number | string | Date> | VizRange;
     }
     /**
-     * <-dxRangeSelector->
+     * [descr:dxRangeSelector]
      */
     export class dxRangeSelector extends BaseWidget {
         constructor(element: Element, options?: dxRangeSelectorOptions)
         constructor(element: JQuery, options?: dxRangeSelectorOptions)
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
         /**
-         * <-dxRangeSelector.getValue()->
+         * [descr:dxRangeSelector.getValue()]
          */
         getValue(): Array<number | string | Date>;
         /**
-         * <-BaseWidget.render()->
+         * [descr:BaseWidget.render()]
          */
         render(): void;
         /**
-         * <-dxRangeSelector.render(skipChartAnimation)->
+         * [descr:dxRangeSelector.render(skipChartAnimation)]
          */
         render(skipChartAnimation: boolean): void;
         /**
-         * <-dxRangeSelector.setValue(value)->
+         * [descr:dxRangeSelector.setValue(value)]
          */
         setValue(value: Array<number | string | Date> | VizRange): void;
     }
     /**
-     * <-dxSankey.Options->
+     * [descr:dxSankey.Options]
      */
     export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
         /**
-         * <-dxSankey.Options.adaptiveLayout->
+         * [descr:dxSankey.Options.adaptiveLayout]
          */
         adaptiveLayout?: { height?: number, keepLabels?: boolean, width?: number };
         /**
-         * <-dxSankey.Options.alignment->
+         * [descr:dxSankey.Options.alignment]
          */
         alignment?: 'bottom' | 'center' | 'top' | Array<'bottom' | 'center' | 'top'>;
         /**
-         * <-dxSankey.Options.dataSource->
+         * [descr:dxSankey.Options.dataSource]
          */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /**
-         * <-dxSankey.Options.hoverEnabled->
+         * [descr:dxSankey.Options.hoverEnabled]
          */
         hoverEnabled?: boolean;
         /**
-         * <-dxSankey.Options.label->
+         * [descr:dxSankey.Options.label]
          */
         label?: { border?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((itemInfo: dxSankeyNode) => string), font?: Font, horizontalOffset?: number, overlappingBehavior?: 'ellipsis' | 'hide' | 'none', shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean };
         /**
-         * <-dxSankey.Options.link->
+         * [descr:dxSankey.Options.link]
          */
         link?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, colorMode?: 'none' | 'source' | 'target' | 'gradient', hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number };
         /**
-         * <-dxSankey.Options.node->
+         * [descr:dxSankey.Options.node]
          */
         node?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: 'left' | 'none' | 'right', opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number, padding?: number, width?: number };
         /**
-         * <-dxSankey.Options.onLinkClick->
+         * [descr:dxSankey.Options.onLinkClick]
          */
         onLinkClick?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, target?: dxSankeyLink }) => any) | string;
         /**
-         * <-dxSankey.Options.onLinkHoverChanged->
+         * [descr:dxSankey.Options.onLinkHoverChanged]
          */
         onLinkHoverChanged?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, target?: dxSankeyLink }) => any);
         /**
-         * <-dxSankey.Options.onNodeClick->
+         * [descr:dxSankey.Options.onNodeClick]
          */
         onNodeClick?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, target?: dxSankeyNode }) => any) | string;
         /**
-         * <-dxSankey.Options.onNodeHoverChanged->
+         * [descr:dxSankey.Options.onNodeHoverChanged]
          */
         onNodeHoverChanged?: ((e: { component?: dxSankey, element?: DevExpress.core.dxElement, model?: any, target?: dxSankeyNode }) => any);
         /**
-         * <-dxSankey.Options.palette->
+         * [descr:dxSankey.Options.palette]
          */
         palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
-         * <-dxSankey.Options.paletteExtensionMode->
+         * [descr:dxSankey.Options.paletteExtensionMode]
          */
         paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate';
         /**
-         * <-dxSankey.Options.sortData->
+         * [descr:dxSankey.Options.sortData]
          */
         sortData?: any;
         /**
-         * <-dxSankey.Options.sourceField->
+         * [descr:dxSankey.Options.sourceField]
          */
         sourceField?: string;
         /**
-         * <-dxSankey.Options.targetField->
+         * [descr:dxSankey.Options.targetField]
          */
         targetField?: string;
         /**
-         * <-dxSankey.Options.tooltip->
+         * [descr:dxSankey.Options.tooltip]
          */
         tooltip?: dxSankeyTooltip;
         /**
-         * <-dxSankey.Options.weightField->
+         * [descr:dxSankey.Options.weightField]
          */
         weightField?: string;
     }
     /**
-     * <-dxSankey.Options.tooltip->
+     * [descr:dxSankey.Options.tooltip]
      */
     export interface dxSankeyTooltip extends BaseWidgetTooltip {
         /**
-         * <-dxSankey.Options.tooltip.customizeLinkTooltip->
+         * [descr:dxSankey.Options.tooltip.customizeLinkTooltip]
          */
         customizeLinkTooltip?: ((info: { source?: string, target?: string, weight?: number }) => any);
         /**
-         * <-dxSankey.Options.tooltip.customizeNodeTooltip->
+         * [descr:dxSankey.Options.tooltip.customizeNodeTooltip]
          */
         customizeNodeTooltip?: ((info: { title?: string, label?: string, weightIn?: number, weightOut?: number }) => any);
         /**
-         * <-dxSankey.Options.tooltip.enabled->
+         * [descr:dxSankey.Options.tooltip.enabled]
          */
         enabled?: boolean;
         /**
-         * <-dxSankey.Options.tooltip.linkTooltipTemplate->
+         * [descr:dxSankey.Options.tooltip.linkTooltipTemplate]
          */
         linkTooltipTemplate?: DevExpress.core.template | ((info: { source?: string, target?: string, weight?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxSankey.Options.tooltip.nodeTooltipTemplate->
+         * [descr:dxSankey.Options.tooltip.nodeTooltipTemplate]
          */
         nodeTooltipTemplate?: DevExpress.core.template | ((info: { label?: string, weightIn?: number, weightOut?: number }, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /**
-     * <-dxSankey->
+     * [descr:dxSankey]
      */
     export class dxSankey extends BaseWidget {
         constructor(element: Element, options?: dxSankeyOptions)
         constructor(element: JQuery, options?: dxSankeyOptions)
         /**
-         * <-dxSankey.getAllLinks()->
+         * [descr:dxSankey.getAllLinks()]
          */
         getAllLinks(): Array<dxSankeyLink>;
         /**
-         * <-dxSankey.getAllNodes()->
+         * [descr:dxSankey.getAllNodes()]
          */
         getAllNodes(): Array<dxSankeyNode>;
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
         /**
-         * <-dxSankey.hideTooltip()->
+         * [descr:dxSankey.hideTooltip()]
          */
         hideTooltip(): void;
     }
     /**
-     * <-dxSankeyConnectionInfoObject->
+     * [descr:dxSankeyConnectionInfoObject]
      */
     export interface dxSankeyConnectionInfoObject {
         /**
-         * <-dxSankeyConnectionInfoObject.source->
+         * [descr:dxSankeyConnectionInfoObject.source]
          */
         source?: string;
         /**
-         * <-dxSankeyConnectionInfoObject.target->
+         * [descr:dxSankeyConnectionInfoObject.target]
          */
         target?: string;
         /**
-         * <-dxSankeyConnectionInfoObject.weight->
+         * [descr:dxSankeyConnectionInfoObject.weight]
          */
         weight?: number;
     }
     /**
-     * <-dxSankeyLink->
+     * [descr:dxSankeyLink]
      */
     export class dxSankeyLink {
         /**
-         * <-dxSankeyLink.connection->
+         * [descr:dxSankeyLink.connection]
          */
         connection?: dxSankeyConnectionInfoObject;
         /**
-         * <-dxSankeyLink.hideTooltip()->
+         * [descr:dxSankeyLink.hideTooltip()]
          */
         hideTooltip(): void;
         /**
-         * <-dxSankeyLink.hover(state)->
+         * [descr:dxSankeyLink.hover(state)]
          */
         hover(state: boolean): void;
         /**
-         * <-dxSankeyLink.isHovered()->
+         * [descr:dxSankeyLink.isHovered()]
          */
         isHovered(): boolean;
         /**
-         * <-dxSankeyLink.showTooltip()->
+         * [descr:dxSankeyLink.showTooltip()]
          */
         showTooltip(): void;
     }
     /**
-     * <-dxSankeyNode->
+     * [descr:dxSankeyNode]
      */
     export class dxSankeyNode {
         /**
-         * <-dxSankeyNode.label->
+         * [descr:dxSankeyNode.label]
          */
         label?: string;
         /**
-         * <-dxSankeyNode.linksIn->
+         * [descr:dxSankeyNode.linksIn]
          */
         linksIn?: Array<any>;
         /**
-         * <-dxSankeyNode.linksOut->
+         * [descr:dxSankeyNode.linksOut]
          */
         linksOut?: Array<any>;
         /**
-         * <-dxSankeyNode.title->
-         * @deprecated <-dxSankeyNode.title:depNote->
+         * [descr:dxSankeyNode.title]
+         * @deprecated [depNote:dxSankeyNode.title]
          */
         title?: string;
         /**
-         * <-dxSankeyNode.hideTooltip()->
+         * [descr:dxSankeyNode.hideTooltip()]
          */
         hideTooltip(): void;
         /**
-         * <-dxSankeyNode.hover(state)->
+         * [descr:dxSankeyNode.hover(state)]
          */
         hover(state: boolean): void;
         /**
-         * <-dxSankeyNode.isHovered()->
+         * [descr:dxSankeyNode.isHovered()]
          */
         isHovered(): boolean;
         /**
-         * <-dxSankeyNode.showTooltip()->
+         * [descr:dxSankeyNode.showTooltip()]
          */
         showTooltip(): void;
     }
     /**
-     * <-dxSparkline.Options->
+     * [descr:dxSparkline.Options]
      */
     export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
         /**
-         * <-dxSparkline.Options.argumentField->
+         * [descr:dxSparkline.Options.argumentField]
          */
         argumentField?: string;
         /**
-         * <-dxSparkline.Options.barNegativeColor->
+         * [descr:dxSparkline.Options.barNegativeColor]
          */
         barNegativeColor?: string;
         /**
-         * <-dxSparkline.Options.barPositiveColor->
+         * [descr:dxSparkline.Options.barPositiveColor]
          */
         barPositiveColor?: string;
         /**
-         * <-dxSparkline.Options.dataSource->
+         * [descr:dxSparkline.Options.dataSource]
          */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /**
-         * <-dxSparkline.Options.firstLastColor->
+         * [descr:dxSparkline.Options.firstLastColor]
          */
         firstLastColor?: string;
         /**
-         * <-dxSparkline.Options.ignoreEmptyPoints->
+         * [descr:dxSparkline.Options.ignoreEmptyPoints]
          */
         ignoreEmptyPoints?: boolean;
         /**
-         * <-dxSparkline.Options.lineColor->
+         * [descr:dxSparkline.Options.lineColor]
          */
         lineColor?: string;
         /**
-         * <-dxSparkline.Options.lineWidth->
+         * [descr:dxSparkline.Options.lineWidth]
          */
         lineWidth?: number;
         /**
-         * <-dxSparkline.Options.lossColor->
+         * [descr:dxSparkline.Options.lossColor]
          */
         lossColor?: string;
         /**
-         * <-dxSparkline.Options.maxColor->
+         * [descr:dxSparkline.Options.maxColor]
          */
         maxColor?: string;
         /**
-         * <-dxSparkline.Options.maxValue->
+         * [descr:dxSparkline.Options.maxValue]
          */
         maxValue?: number;
         /**
-         * <-dxSparkline.Options.minColor->
+         * [descr:dxSparkline.Options.minColor]
          */
         minColor?: string;
         /**
-         * <-dxSparkline.Options.minValue->
+         * [descr:dxSparkline.Options.minValue]
          */
         minValue?: number;
         /**
-         * <-dxSparkline.Options.pointColor->
+         * [descr:dxSparkline.Options.pointColor]
          */
         pointColor?: string;
         /**
-         * <-dxSparkline.Options.pointSize->
+         * [descr:dxSparkline.Options.pointSize]
          */
         pointSize?: number;
         /**
-         * <-dxSparkline.Options.pointSymbol->
+         * [descr:dxSparkline.Options.pointSymbol]
          */
         pointSymbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
         /**
-         * <-dxSparkline.Options.showFirstLast->
+         * [descr:dxSparkline.Options.showFirstLast]
          */
         showFirstLast?: boolean;
         /**
-         * <-dxSparkline.Options.showMinMax->
+         * [descr:dxSparkline.Options.showMinMax]
          */
         showMinMax?: boolean;
         /**
-         * <-dxSparkline.Options.type->
+         * [descr:dxSparkline.Options.type]
          */
         type?: 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
         /**
-         * <-dxSparkline.Options.valueField->
+         * [descr:dxSparkline.Options.valueField]
          */
         valueField?: string;
         /**
-         * <-dxSparkline.Options.winColor->
+         * [descr:dxSparkline.Options.winColor]
          */
         winColor?: string;
         /**
-         * <-dxSparkline.Options.winlossThreshold->
+         * [descr:dxSparkline.Options.winlossThreshold]
          */
         winlossThreshold?: number;
     }
     /**
-     * <-dxSparkline->
+     * [descr:dxSparkline]
      */
     export class dxSparkline extends BaseSparkline {
         constructor(element: Element, options?: dxSparklineOptions)
         constructor(element: JQuery, options?: dxSparklineOptions)
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
     }
     /**
-     * <-dxTreeMap.Options->
+     * [descr:dxTreeMap.Options]
      */
     export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
         /**
-         * <-dxTreeMap.Options.childrenField->
+         * [descr:dxTreeMap.Options.childrenField]
          */
         childrenField?: string;
         /**
-         * <-dxTreeMap.Options.colorField->
+         * [descr:dxTreeMap.Options.colorField]
          */
         colorField?: string;
         /**
-         * <-dxTreeMap.Options.colorizer->
+         * [descr:dxTreeMap.Options.colorizer]
          */
         colorizer?: { colorCodeField?: string, colorizeGroups?: boolean, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', range?: Array<number>, type?: 'discrete' | 'gradient' | 'none' | 'range' };
         /**
-         * <-dxTreeMap.Options.dataSource->
+         * [descr:dxTreeMap.Options.dataSource]
          */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /**
-         * <-dxTreeMap.Options.group->
+         * [descr:dxTreeMap.Options.group]
          */
         group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /**
-         * <-dxTreeMap.Options.hoverEnabled->
+         * [descr:dxTreeMap.Options.hoverEnabled]
          */
         hoverEnabled?: boolean;
         /**
-         * <-dxTreeMap.Options.idField->
+         * [descr:dxTreeMap.Options.idField]
          */
         idField?: string;
         /**
-         * <-dxTreeMap.Options.interactWithGroup->
+         * [descr:dxTreeMap.Options.interactWithGroup]
          */
         interactWithGroup?: boolean;
         /**
-         * <-dxTreeMap.Options.labelField->
+         * [descr:dxTreeMap.Options.labelField]
          */
         labelField?: string;
         /**
-         * <-dxTreeMap.Options.layoutAlgorithm->
+         * [descr:dxTreeMap.Options.layoutAlgorithm]
          */
         layoutAlgorithm?: 'sliceanddice' | 'squarified' | 'strip' | ((e: { rect?: Array<number>, sum?: number, items?: Array<any> }) => any);
         /**
-         * <-dxTreeMap.Options.layoutDirection->
+         * [descr:dxTreeMap.Options.layoutDirection]
          */
         layoutDirection?: 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
         /**
-         * <-dxTreeMap.Options.maxDepth->
+         * [descr:dxTreeMap.Options.maxDepth]
          */
         maxDepth?: number;
         /**
-         * <-dxTreeMap.Options.onClick->
+         * [descr:dxTreeMap.Options.onClick]
          */
         onClick?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, node?: dxTreeMapNode }) => any) | string;
         /**
-         * <-dxTreeMap.Options.onDrill->
+         * [descr:dxTreeMap.Options.onDrill]
          */
         onDrill?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /**
-         * <-dxTreeMap.Options.onHoverChanged->
+         * [descr:dxTreeMap.Options.onHoverChanged]
          */
         onHoverChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /**
-         * <-dxTreeMap.Options.onNodesInitialized->
+         * [descr:dxTreeMap.Options.onNodesInitialized]
          */
         onNodesInitialized?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, root?: dxTreeMapNode }) => any);
         /**
-         * <-dxTreeMap.Options.onNodesRendering->
+         * [descr:dxTreeMap.Options.onNodesRendering]
          */
         onNodesRendering?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /**
-         * <-dxTreeMap.Options.onSelectionChanged->
+         * [descr:dxTreeMap.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxTreeMap, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeMapNode }) => any);
         /**
-         * <-dxTreeMap.Options.parentField->
+         * [descr:dxTreeMap.Options.parentField]
          */
         parentField?: string;
         /**
-         * <-dxTreeMap.Options.selectionMode->
+         * [descr:dxTreeMap.Options.selectionMode]
          */
         selectionMode?: 'multiple' | 'none' | 'single';
         /**
-         * <-dxTreeMap.Options.tile->
+         * [descr:dxTreeMap.Options.tile]
          */
         tile?: { border?: { color?: string, width?: number }, color?: string, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: 'ellipsis' | 'hide' | 'none', visible?: boolean, wordWrap?: 'normal' | 'breakWord' | 'none' }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
         /**
-         * <-dxTreeMap.Options.tooltip->
+         * [descr:dxTreeMap.Options.tooltip]
          */
         tooltip?: dxTreeMapTooltip;
         /**
-         * <-dxTreeMap.Options.valueField->
+         * [descr:dxTreeMap.Options.valueField]
          */
         valueField?: string;
     }
     /**
-     * <-dxTreeMap.Options.tooltip->
+     * [descr:dxTreeMap.Options.tooltip]
      */
     export interface dxTreeMapTooltip extends BaseWidgetTooltip {
         /**
-         * <-dxTreeMap.Options.tooltip.contentTemplate->
+         * [descr:dxTreeMap.Options.tooltip.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxTreeMap.Options.tooltip.customizeTooltip->
+         * [descr:dxTreeMap.Options.tooltip.customizeTooltip]
          */
         customizeTooltip?: ((info: { value?: number, valueText?: string, node?: dxTreeMapNode }) => any);
     }
     /**
-     * <-dxTreeMap->
+     * [descr:dxTreeMap]
      */
     export class dxTreeMap extends BaseWidget {
         constructor(element: Element, options?: dxTreeMapOptions)
         constructor(element: JQuery, options?: dxTreeMapOptions)
         /**
-         * <-dxTreeMap.clearSelection()->
+         * [descr:dxTreeMap.clearSelection()]
          */
         clearSelection(): void;
         /**
-         * <-dxTreeMap.drillUp()->
+         * [descr:dxTreeMap.drillUp()]
          */
         drillUp(): void;
         /**
-         * <-dxTreeMap.getCurrentNode()->
+         * [descr:dxTreeMap.getCurrentNode()]
          */
         getCurrentNode(): dxTreeMapNode;
         /**
-         * <-DataHelperMixin.getDataSource()->
+         * [descr:DataHelperMixin.getDataSource()]
          */
         getDataSource(): DevExpress.data.DataSource;
         /**
-         * <-dxTreeMap.getRootNode()->
+         * [descr:dxTreeMap.getRootNode()]
          */
         getRootNode(): dxTreeMapNode;
         /**
-         * <-dxTreeMap.hideTooltip()->
+         * [descr:dxTreeMap.hideTooltip()]
          */
         hideTooltip(): void;
         /**
-         * <-dxTreeMap.resetDrillDown()->
+         * [descr:dxTreeMap.resetDrillDown()]
          */
         resetDrillDown(): void;
     }
     /**
-     * <-dxTreeMapNode->
+     * [descr:dxTreeMapNode]
      */
     export class dxTreeMapNode {
         /**
-         * <-dxTreeMapNode.data->
+         * [descr:dxTreeMapNode.data]
          */
         data?: any;
         /**
-         * <-dxTreeMapNode.index->
+         * [descr:dxTreeMapNode.index]
          */
         index?: number;
         /**
-         * <-dxTreeMapNode.level->
+         * [descr:dxTreeMapNode.level]
          */
         level?: number;
         /**
-         * <-dxTreeMapNode.customize(options)->
+         * [descr:dxTreeMapNode.customize(options)]
          */
         customize(options: any): void;
         /**
-         * <-dxTreeMapNode.drillDown()->
+         * [descr:dxTreeMapNode.drillDown()]
          */
         drillDown(): void;
         /**
-         * <-dxTreeMapNode.getAllChildren()->
+         * [descr:dxTreeMapNode.getAllChildren()]
          */
         getAllChildren(): Array<dxTreeMapNode>;
         /**
-         * <-dxTreeMapNode.getAllNodes()->
+         * [descr:dxTreeMapNode.getAllNodes()]
          */
         getAllNodes(): Array<dxTreeMapNode>;
         /**
-         * <-dxTreeMapNode.getChild(index)->
+         * [descr:dxTreeMapNode.getChild(index)]
          */
         getChild(index: number): dxTreeMapNode;
         /**
-         * <-dxTreeMapNode.getChildrenCount()->
+         * [descr:dxTreeMapNode.getChildrenCount()]
          */
         getChildrenCount(): number;
         /**
-         * <-dxTreeMapNode.getParent()->
+         * [descr:dxTreeMapNode.getParent()]
          */
         getParent(): dxTreeMapNode;
         /**
-         * <-dxTreeMapNode.isActive()->
+         * [descr:dxTreeMapNode.isActive()]
          */
         isActive(): boolean;
         /**
-         * <-dxTreeMapNode.isHovered()->
+         * [descr:dxTreeMapNode.isHovered()]
          */
         isHovered(): boolean;
         /**
-         * <-dxTreeMapNode.isLeaf()->
+         * [descr:dxTreeMapNode.isLeaf()]
          */
         isLeaf(): boolean;
         /**
-         * <-dxTreeMapNode.isSelected()->
+         * [descr:dxTreeMapNode.isSelected()]
          */
         isSelected(): boolean;
         /**
-         * <-dxTreeMapNode.label()->
+         * [descr:dxTreeMapNode.label()]
          */
         label(): string;
         /**
-         * <-dxTreeMapNode.label(label)->
+         * [descr:dxTreeMapNode.label(label)]
          */
         label(label: string): void;
         /**
-         * <-dxTreeMapNode.resetCustomization()->
+         * [descr:dxTreeMapNode.resetCustomization()]
          */
         resetCustomization(): void;
         /**
-         * <-dxTreeMapNode.select(state)->
+         * [descr:dxTreeMapNode.select(state)]
          */
         select(state: boolean): void;
         /**
-         * <-dxTreeMapNode.showTooltip()->
+         * [descr:dxTreeMapNode.showTooltip()]
          */
         showTooltip(): void;
         /**
-         * <-dxTreeMapNode.value()->
+         * [descr:dxTreeMapNode.value()]
          */
         value(): number;
     }
     /**
-     * <-dxVectorMap.Options->
+     * [descr:dxVectorMap.Options]
      */
     export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
         /**
-         * <-dxVectorMap.Options.annotations->
+         * [descr:dxVectorMap.Options.annotations]
          */
         annotations?: Array<dxVectorMapAnnotationConfig | any>;
         /**
-         * <-dxVectorMap.Options.background->
+         * [descr:dxVectorMap.Options.background]
          */
         background?: { borderColor?: string, color?: string };
         /**
-         * <-dxVectorMap.Options.bounds->
+         * [descr:dxVectorMap.Options.bounds]
          */
         bounds?: Array<number>;
         /**
-         * <-dxVectorMap.Options.center->
+         * [descr:dxVectorMap.Options.center]
          */
         center?: Array<number>;
         /**
-         * <-dxVectorMap.Options.commonAnnotationSettings->
+         * [descr:dxVectorMap.Options.commonAnnotationSettings]
          */
         commonAnnotationSettings?: dxVectorMapCommonAnnotationConfig;
         /**
-         * <-dxVectorMap.Options.controlBar->
+         * [descr:dxVectorMap.Options.controlBar]
          */
         controlBar?: { borderColor?: string, color?: string, enabled?: boolean, horizontalAlignment?: 'center' | 'left' | 'right', margin?: number, opacity?: number, verticalAlignment?: 'bottom' | 'top' };
         /**
-         * <-dxVectorMap.Options.customizeAnnotation->
+         * [descr:dxVectorMap.Options.customizeAnnotation]
          */
         customizeAnnotation?: ((annotation: dxVectorMapAnnotationConfig | any) => dxVectorMapAnnotationConfig);
         /**
-         * <-dxVectorMap.Options.layers->
+         * [descr:dxVectorMap.Options.layers]
          */
         layers?: Array<{ borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' }> | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string, colorGroups?: Array<number>, customize?: ((elements: Array<MapLayerElement>) => any), dataField?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string | Array<any>, elementType?: 'bubble' | 'dot' | 'image' | 'pie', hoverEnabled?: boolean, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office', paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: 'multiple' | 'none' | 'single', size?: number, sizeGroupingField?: string, sizeGroups?: Array<number>, type?: 'area' | 'line' | 'marker' };
         /**
-         * <-dxVectorMap.Options.legends->
+         * [descr:dxVectorMap.Options.legends]
          */
         legends?: Array<dxVectorMapLegends>;
         /**
-         * <-dxVectorMap.Options.maxZoomFactor->
+         * [descr:dxVectorMap.Options.maxZoomFactor]
          */
         maxZoomFactor?: number;
         /**
-         * <-dxVectorMap.Options.onCenterChanged->
+         * [descr:dxVectorMap.Options.onCenterChanged]
          */
         onCenterChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, center?: Array<number> }) => any);
         /**
-         * <-dxVectorMap.Options.onClick->
+         * [descr:dxVectorMap.Options.onClick]
          */
         onClick?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, event?: DevExpress.events.event, target?: MapLayerElement }) => any) | string;
         /**
-         * <-dxVectorMap.Options.onSelectionChanged->
+         * [descr:dxVectorMap.Options.onSelectionChanged]
          */
         onSelectionChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
         /**
-         * <-dxVectorMap.Options.onTooltipHidden->
+         * [descr:dxVectorMap.Options.onTooltipHidden]
          */
         onTooltipHidden?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig }) => any);
         /**
-         * <-dxVectorMap.Options.onTooltipShown->
+         * [descr:dxVectorMap.Options.onTooltipShown]
          */
         onTooltipShown?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement | dxVectorMapAnnotationConfig }) => any);
         /**
-         * <-dxVectorMap.Options.onZoomFactorChanged->
+         * [descr:dxVectorMap.Options.onZoomFactorChanged]
          */
         onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: DevExpress.core.dxElement, model?: any, zoomFactor?: number }) => any);
         /**
-         * <-dxVectorMap.Options.panningEnabled->
+         * [descr:dxVectorMap.Options.panningEnabled]
          */
         panningEnabled?: boolean;
         /**
-         * <-dxVectorMap.Options.projection->
+         * [descr:dxVectorMap.Options.projection]
          */
         projection?: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | VectorMapProjectionConfig | string | any;
         /**
-         * <-dxVectorMap.Options.tooltip->
+         * [descr:dxVectorMap.Options.tooltip]
          */
         tooltip?: dxVectorMapTooltip;
         /**
-         * <-dxVectorMap.Options.touchEnabled->
+         * [descr:dxVectorMap.Options.touchEnabled]
          */
         touchEnabled?: boolean;
         /**
-         * <-dxVectorMap.Options.wheelEnabled->
+         * [descr:dxVectorMap.Options.wheelEnabled]
          */
         wheelEnabled?: boolean;
         /**
-         * <-dxVectorMap.Options.zoomFactor->
+         * [descr:dxVectorMap.Options.zoomFactor]
          */
         zoomFactor?: number;
         /**
-         * <-dxVectorMap.Options.zoomingEnabled->
+         * [descr:dxVectorMap.Options.zoomingEnabled]
          */
         zoomingEnabled?: boolean;
     }
     /**
-     * <-dxVectorMap.Options.legends->
+     * [descr:dxVectorMap.Options.legends]
      */
     export interface dxVectorMapLegends extends BaseLegend {
         /**
-         * <-dxVectorMap.Options.legends.customizeHint->
+         * [descr:dxVectorMap.Options.legends.customizeHint]
          */
         customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
         /**
-         * <-dxVectorMap.Options.legends.customizeItems->
+         * [descr:dxVectorMap.Options.legends.customizeItems]
          */
         customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>);
         /**
-         * <-dxVectorMap.Options.legends.customizeText->
+         * [descr:dxVectorMap.Options.legends.customizeText]
          */
         customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
         /**
-         * <-dxVectorMap.Options.legends.font->
+         * [descr:dxVectorMap.Options.legends.font]
          */
         font?: Font;
         /**
-         * <-dxVectorMap.Options.legends.markerColor->
+         * [descr:dxVectorMap.Options.legends.markerColor]
          */
         markerColor?: string;
         /**
-         * <-dxVectorMap.Options.legends.markerShape->
+         * [descr:dxVectorMap.Options.legends.markerShape]
          */
         markerShape?: 'circle' | 'square';
         /**
-         * <-dxVectorMap.Options.legends.markerSize->
+         * [descr:dxVectorMap.Options.legends.markerSize]
          */
         markerSize?: number;
         /**
-         * <-dxVectorMap.Options.legends.markerTemplate->
+         * [descr:dxVectorMap.Options.legends.markerTemplate]
          */
         markerTemplate?: DevExpress.core.template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
         /**
-         * <-dxVectorMap.Options.legends.source->
+         * [descr:dxVectorMap.Options.legends.source]
          */
         source?: { grouping?: string, layer?: string };
     }
     /**
-     * <-dxVectorMap.Options.tooltip->
+     * [descr:dxVectorMap.Options.tooltip]
      */
     export interface dxVectorMapTooltip extends BaseWidgetTooltip {
         /**
-         * <-dxVectorMap.Options.tooltip.contentTemplate->
+         * [descr:dxVectorMap.Options.tooltip.contentTemplate]
          */
         contentTemplate?: DevExpress.core.template | ((info: MapLayerElement, element: DevExpress.core.dxElement) => string | Element | JQuery);
         /**
-         * <-dxVectorMap.Options.tooltip.customizeTooltip->
+         * [descr:dxVectorMap.Options.tooltip.customizeTooltip]
          */
         customizeTooltip?: ((info: MapLayerElement) => any);
     }
     /**
-     * <-dxVectorMap->
+     * [descr:dxVectorMap]
      */
     export class dxVectorMap extends BaseWidget {
         constructor(element: Element, options?: dxVectorMapOptions)
         constructor(element: JQuery, options?: dxVectorMapOptions)
         /**
-         * <-dxVectorMap.center()->
+         * [descr:dxVectorMap.center()]
          */
         center(): Array<number>;
         /**
-         * <-dxVectorMap.center(centerCoordinates)->
+         * [descr:dxVectorMap.center(centerCoordinates)]
          */
         center(centerCoordinates: Array<number>): void;
         /**
-         * <-dxVectorMap.clearSelection()->
+         * [descr:dxVectorMap.clearSelection()]
          */
         clearSelection(): void;
         /**
-         * <-dxVectorMap.convertCoordinates(x, y)->
-         * @deprecated <-dxVectorMap.convertCoordinates(x, y):depNote->
+         * [descr:dxVectorMap.convertCoordinates(x, y)]
+         * @deprecated [depNote:dxVectorMap.convertCoordinates(x, y)]
          */
         convertCoordinates(x: number, y: number): Array<number>;
         /**
-         * <-dxVectorMap.convertToGeo(x, y)->
+         * [descr:dxVectorMap.convertToGeo(x, y)]
          */
         convertToGeo(x: number, y: number): Array<number>;
         /**
-         * <-dxVectorMap.convertToXY(longitude, latitude)->
+         * [descr:dxVectorMap.convertToXY(longitude, latitude)]
          */
         convertToXY(longitude: number, latitude: number): Array<number>;
         /**
-         * <-dxVectorMap.getLayerByIndex(index)->
+         * [descr:dxVectorMap.getLayerByIndex(index)]
          */
         getLayerByIndex(index: number): MapLayer;
         /**
-         * <-dxVectorMap.getLayerByName(name)->
+         * [descr:dxVectorMap.getLayerByName(name)]
          */
         getLayerByName(name: string): MapLayer;
         /**
-         * <-dxVectorMap.getLayers()->
+         * [descr:dxVectorMap.getLayers()]
          */
         getLayers(): Array<MapLayer>;
         /**
-         * <-dxVectorMap.viewport()->
+         * [descr:dxVectorMap.viewport()]
          */
         viewport(): Array<number>;
         /**
-         * <-dxVectorMap.viewport(viewportCoordinates)->
+         * [descr:dxVectorMap.viewport(viewportCoordinates)]
          */
         viewport(viewportCoordinates: Array<number>): void;
         /**
-         * <-dxVectorMap.zoomFactor()->
+         * [descr:dxVectorMap.zoomFactor()]
          */
         zoomFactor(): number;
         /**
-         * <-dxVectorMap.zoomFactor(zoomFactor)->
+         * [descr:dxVectorMap.zoomFactor(zoomFactor)]
          */
         zoomFactor(zoomFactor: number): void;
     }
     /**
-     * <-dxVectorMapAnnotationConfig->
+     * [descr:dxVectorMapAnnotationConfig]
      */
     export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
         /**
-         * <-dxVectorMapAnnotationConfig.name->
+         * [descr:dxVectorMapAnnotationConfig.name]
          */
         name?: string;
     }
     /**
-     * <-dxVectorMapCommonAnnotationConfig->
+     * [descr:dxVectorMapCommonAnnotationConfig]
      */
     export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
         /**
-         * <-dxVectorMapCommonAnnotationConfig.coordinates->
+         * [descr:dxVectorMapCommonAnnotationConfig.coordinates]
          */
         coordinates?: Array<number>;
         /**
-         * <-dxVectorMapCommonAnnotationConfig.customizeTooltip->
+         * [descr:dxVectorMapCommonAnnotationConfig.customizeTooltip]
          */
         customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
         /**
-         * <-dxVectorMapCommonAnnotationConfig.template->
+         * [descr:dxVectorMapCommonAnnotationConfig.template]
          */
         template?: DevExpress.core.template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
         /**
-         * <-dxVectorMapCommonAnnotationConfig.tooltipTemplate->
+         * [descr:dxVectorMapCommonAnnotationConfig.tooltipTemplate]
          */
         tooltipTemplate?: DevExpress.core.template | ((annotation: dxVectorMapAnnotationConfig | any, element: DevExpress.core.dxElement) => string | Element | JQuery);
     }
     /**
-     * <-linearCircle->
+     * [descr:linearCircle]
      */
     export type linearCircle = CommonIndicator;
     /**
-     * <-linearRangeBar->
+     * [descr:linearRangeBar]
      */
     export type linearRangeBar = CommonIndicator;
     /**
-     * <-linearRectangle->
+     * [descr:linearRectangle]
      */
     export type linearRectangle = CommonIndicator;
     /**
-     * <-linearRhombus->
+     * [descr:linearRhombus]
      */
     export type linearRhombus = CommonIndicator;
     /**
-     * <-linearTextCloud->
+     * [descr:linearTextCloud]
      */
     export type linearTextCloud = CommonIndicator;
     /**
-     * <-linearTriangleMarker->
+     * [descr:linearTriangleMarker]
      */
     export type linearTriangleMarker = CommonIndicator;
     /**
-     * <-pieChartSeriesObject->
+     * [descr:pieChartSeriesObject]
      */
     export class pieChartSeriesObject extends baseSeriesObject {
     }
     /**
-     * <-piePointObject->
+     * [descr:piePointObject]
      */
     export class piePointObject extends basePointObject {
         /**
-         * <-piePointObject.percent->
+         * [descr:piePointObject.percent]
          */
         percent?: string | number | Date;
         /**
-         * <-piePointObject.hide()->
+         * [descr:piePointObject.hide()]
          */
         hide(): void;
         /**
-         * <-piePointObject.isVisible()->
+         * [descr:piePointObject.isVisible()]
          */
         isVisible(): boolean;
         /**
-         * <-piePointObject.show()->
+         * [descr:piePointObject.show()]
          */
         show(): void;
     }
     /**
-     * <-polarChartSeriesObject->
+     * [descr:polarChartSeriesObject]
      */
     export class polarChartSeriesObject extends baseSeriesObject {
     }
     /**
-     * <-polarPointObject->
+     * [descr:polarPointObject]
      */
     export class polarPointObject extends basePointObject {
     }
 }
 declare module DevExpress.viz.map {
     /**
-     * <-viz.map.projection(data)->
+     * [descr:viz.map.projection(data)]
      */
     export function projection(data: VectorMapProjectionConfig): any;
 }
 declare module DevExpress.viz.map.projection {
     /**
-     * <-viz.map.projection.add(name, projection)->
+     * [descr:viz.map.projection.add(name, projection)]
      */
     export function add(name: string, projection: VectorMapProjectionConfig | any): void;
     /**
-     * <-viz.map.projection.get(name)->
+     * [descr:viz.map.projection.get(name)]
      */
     export function get(name: 'equirectangular' | 'lambert' | 'mercator' | 'miller' | string): any;
 }

@@ -125,6 +125,8 @@ class FileUploader extends Editor {
 
             uploadHeaders: {},
 
+            uploadCustomData: {},
+
             onUploadStarted: null,
 
             onUploaded: null,
@@ -549,7 +551,7 @@ class FileUploader extends Editor {
         this._toggleFileUploaderEmptyClassName();
         this._updateFileNameMaxWidth();
 
-        this._$validationMessage && this._$validationMessage.dxOverlay('instance').repaint();
+        this._validationMessage?.repaint();
     }
 
     _renderFile(file) {
@@ -679,7 +681,7 @@ class FileUploader extends Editor {
     }
 
     _removeFile(file) {
-        file.$file.parent().remove();
+        file.$file?.parent().remove();
 
         this._files.splice(inArray(file, this._files), 1);
 
@@ -695,6 +697,19 @@ class FileUploader extends Editor {
         this._doPreventInputChange = true;
         this._$fileInput.val('');
         this._doPreventInputChange = false;
+    }
+
+    removeFile(fileData) {
+        if(this.option('uploadMode') === 'useForm' || !isDefined(fileData)) {
+            return;
+        }
+        const file = this._getFile(fileData);
+        if(file) {
+            if(file.uploadStarted) {
+                this._preventFilesUploading([file]);
+            }
+            this._removeFile(file);
+        }
     }
 
     _toggleFileUploaderEmptyClassName() {
@@ -1277,6 +1292,7 @@ class FileUploader extends Editor {
             case 'progress':
             case 'uploadMethod':
             case 'uploadHeaders':
+            case 'uploadCustomData':
             case 'extendSelection':
                 break;
             case 'allowCanceling':
@@ -1516,6 +1532,15 @@ class FileUploadStrategyBase {
             currentSegmentSize: currentSegmentSize
         };
     }
+
+    _extendFormData(formData) {
+        const formDataEntries = this.fileUploader.option('uploadCustomData');
+        for(const entryName in formDataEntries) {
+            if(Object.prototype.hasOwnProperty.call(formDataEntries, entryName) && isDefined(formDataEntries[entryName])) {
+                formData.append(entryName, formDataEntries[entryName]);
+            }
+        }
+    }
 }
 
 class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
@@ -1631,6 +1656,7 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
             FileType: options.type,
             FileGuid: options.guid
         }));
+        this._extendFormData(formData);
         return formData;
     }
 
@@ -1736,6 +1762,7 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
     _createFormData(fieldName, fieldValue) {
         const formData = new window.FormData();
         formData.append(fieldName, fieldValue, fieldValue.name);
+        this._extendFormData(formData);
         return formData;
     }
 

@@ -60,17 +60,21 @@ class FileManagerEditingControl extends Widget {
         const $fileUploader = $('<div>').appendTo(this.$element());
         return this._createComponent($fileUploader, this._getFileUploaderComponent(), {
             getController: this._getFileUploaderController.bind(this),
+            dropZonePlaceholderContainer: this.option('uploadDropZonePlaceholderContainer'),
             onUploadSessionStarted: e => this._onUploadSessionStarted(e),
             onUploadProgress: e => this._onUploadProgress(e)
         });
     }
 
+    setUploaderDropZone($element) {
+        this._fileUploader.option('dropZone', $element);
+    }
+
     _getFileUploaderController() {
-        const uploadDirectory = this._uploadDirectoryInfo && this._uploadDirectoryInfo.fileItem;
         return {
             chunkSize: this._controller.getFileUploadChunkSize(),
-            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
-            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, uploadDirectory)
+            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, this.uploadDirectoryInfo?.fileItem),
+            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, this.uploadDirectoryInfo?.fileItem)
         };
     }
 
@@ -188,7 +192,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _onUploadSessionStarted({ sessionInfo }) {
-        this._controller.processUploadSession(sessionInfo, this._uploadDirectoryInfo);
+        this._controller.processUploadSession(sessionInfo, this.uploadDirectoryInfo);
     }
 
     _onEditActionStarting(actionInfo) {
@@ -274,7 +278,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _tryUpload(destinationFolder) {
-        this._uploadDirectoryInfo = destinationFolder && destinationFolder[0] || this._getCurrentDirectory();
+        this._uploadDirectoryInfo = destinationFolder?.[0];
         this._fileUploader.tryUpload();
     }
 
@@ -416,6 +420,9 @@ class FileManagerEditingControl extends Widget {
                 break;
             case 'getItemThumbnail':
                 break;
+            case 'uploadDropZonePlaceholderContainer':
+                this._fileUploader.option('dropZonePlaceholderContainer', args.value);
+                break;
             case 'onSuccess':
             case 'onError':
             case 'onCreating':
@@ -436,6 +443,10 @@ class FileManagerEditingControl extends Widget {
 
     _getCurrentDirectory() {
         return this._controller.getCurrentDirectory();
+    }
+
+    get uploadDirectoryInfo() {
+        return this._uploadDirectoryInfo || this._getCurrentDirectory();
     }
 
 }

@@ -294,6 +294,9 @@
     "dxHtmlEditor-dialogImageAltField": "Alternatív szöveg",
     "dxHtmlEditor-dialogImageWidthField": "Szélesség (px)",
     "dxHtmlEditor-dialogImageHeightField": "Magasság (px)",
+    "dxHtmlEditor-dialogInsertTableRowsField": "!TODO",
+    "dxHtmlEditor-dialogInsertTableColumnsField": "!TODO",
+    "dxHtmlEditor-dialogInsertTableCaption": "!TODO",
     "dxHtmlEditor-heading": "Fejléc",
     "dxHtmlEditor-normalText": "Normál szöveg",
 

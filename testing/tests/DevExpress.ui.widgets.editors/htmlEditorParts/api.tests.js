@@ -1,8 +1,9 @@
 import $ from 'jquery';
 
 import 'ui/html_editor';
+import { prepareTableValue } from './utils.js';
 
-const { test } = QUnit;
+const { test, module: testModule } = QUnit;
 
 const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
 
@@ -25,7 +26,32 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('API', moduleConfig, () => {
+const moduleConfigWithTable = {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.options = {
+            value: '<table><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></table>'
+        };
+
+        this.createEditor = () => {
+            this.instance = $('#htmlEditor')
+                .dxHtmlEditor(this.options)
+                .dxHtmlEditor('instance');
+        };
+
+        this.applyTableMethod = (methodName, ...restArgs) => {
+            return this.instance && this.instance.getModule('table')[methodName](...restArgs);
+        };
+
+        this.getValue = () => prepareTableValue(this.instance.option('value'));
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+};
+
+testModule('API', moduleConfig, () => {
     test('get registered module', function(assert) {
         this.createEditor();
         const Bold = this.instance.get('formats/bold');
@@ -327,7 +353,7 @@ QUnit.module('API', moduleConfig, () => {
     });
 });
 
-QUnit.module('Private API', moduleConfig, () => {
+testModule('Private API', moduleConfig, () => {
     test('cleanCallback should trigger on refresh', function(assert) {
         const cleanCallback = sinon.stub();
 
@@ -371,5 +397,88 @@ QUnit.module('Private API', moduleConfig, () => {
         assert.ok(contentInitializedCallback.calledOnce, 'contentInitialized was called once');
         this.instance.repaint();
         assert.ok(contentInitializedCallback.calledOnce, 'contentInitialized wasn\'t called twice');
+    });
+});
+
+testModule('Table API', moduleConfigWithTable, function() {
+    test('insertTable', function(assert) {
+        const expectedValue = '<table><tbody><tr><td><br></td><td><br></td></tr></tbody></table><p><br></p>';
+        this.options.value = '';
+        this.createEditor();
+        this.instance.focus();
+
+        this.applyTableMethod('insertTable', 1, 2);
+
+        assert.strictEqual(this.getValue(), expectedValue);
+    });
+
+    test('insertRowBelow', function(assert) {
+        const expectedValue = '<table><tbody><tr><td>1</td><td>2</td></tr><tr><td><br></td><td><br></td></tr><tr><td>3</td><td>4</td></tr></tbody></table>';
+        this.createEditor();
+        this.instance.setSelection(1, 0);
+
+        this.applyTableMethod('insertRowBelow');
+
+        assert.strictEqual(this.getValue(), expectedValue);
+    });
+
+    test('insertRowAbove', function(assert) {
+        const expectedValue = '<table><tbody><tr><td><br></td><td><br></td></tr><tr><td>1</td><td>2</td></tr><tr><td>3</td><td>4</td></tr></tbody></table>';
+        this.createEditor();
+        this.instance.setSelection(1, 0);
+
+        this.applyTableMethod('insertRowAbove');
+
+        assert.strictEqual(this.getValue(), expectedValue);
+    });
+
+    test('insertColumnLeft', function(assert) {
+        const expectedValue = '<table><tbody><tr><td><br></td><td>1</td><td>2</td></tr><tr><td><br></td><td>3</td><td>4</td></tr></tbody></table>';
+        this.createEditor();
+        this.instance.setSelection(1, 0);
+
+        this.applyTableMethod('insertColumnLeft');
+
+        assert.strictEqual(this.getValue(), expectedValue);
+    });
+
+    test('insertColumnRight', function(assert) {
+        const expectedValue = '<table><tbody><tr><td>1</td><td><br></td><td>2</td></tr><tr><td>3</td><td><br></td><td>4</td></tr></tbody></table>';
+        this.createEditor();
+        this.instance.setSelection(1, 0);
+
+        this.applyTableMethod('insertColumnRight');
+
+        assert.strictEqual(this.getValue(), expectedValue);
+    });
+
+    test('deleteColumn', function(assert) {
+        const expectedValue = '<table><tbody><tr><td>2</td></tr><tr><td>4</td></tr></tbody></table>';
+        this.createEditor();
+        this.instance.setSelection(1, 0);
+
+        this.applyTableMethod('deleteColumn');
+
+        assert.strictEqual(this.getValue(), expectedValue);
+    });
+
+    test('deleteRow', function(assert) {
+        const expectedValue = '<table><tbody><tr><td>3</td><td>4</td></tr></tbody></table>';
+        this.createEditor();
+        this.instance.setSelection(1, 0);
+
+        this.applyTableMethod('deleteRow');
+
+        assert.strictEqual(this.getValue(), expectedValue);
+    });
+
+    test('deleteTable', function(assert) {
+        const expectedValue = '';
+        this.createEditor();
+        this.instance.setSelection(1, 0);
+
+        this.applyTableMethod('deleteTable');
+
+        assert.strictEqual(this.getValue(), expectedValue);
     });
 });

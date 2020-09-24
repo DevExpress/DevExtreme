@@ -68,6 +68,17 @@ const ModuleItem = Class.inherit({
         return component.option.apply(component, arguments);
     },
 
+    _silentOption: function(name, value) {
+        const component = this.component;
+        const optionCache = component._optionCache;
+
+        if(optionCache) {
+            optionCache[name] = value;
+        }
+
+        return component._setOptionWithoutOptionChange(name, value);
+    },
+
     localize: function(name) {
         const optionCache = this.component._optionCache;
 

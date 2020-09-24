@@ -77,7 +77,8 @@ export const Consts = {
     SCROLLABLE_ClASS: 'dx-scrollable',
     SCROLLABLE_CONTAINER_ClASS: 'dx-scrollable-container',
     EDITING_CONTAINER: 'dx-filemanager-editing-container',
-    FILE_UPLOADER_INPUT: 'dx-fileuploader-input'
+    FILE_UPLOADER_INPUT: 'dx-fileuploader-input',
+    FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS: 'dx-filemanager-fileuploader-dropzone-placeholder'
 };
 const showMoreButtonText = '\u22EE';
 
@@ -101,6 +102,10 @@ export class FileManagerWrapper {
 
     getItemsView() {
         return this._$element.find(`.${Consts.ITEMS_VIEW_CLASS}`);
+    }
+
+    getItemsViewPanel() {
+        return this._$element.find(`.${Consts.ITEMS_PANEL_CLASS}`);
     }
 
     getFolderNodes(inDialog) {
@@ -442,6 +447,10 @@ export class FileManagerWrapper {
         $input.val(files[0].name);
         $input.prop('files', files);
         $input.trigger('change');
+    }
+
+    getUploaderDropZonePlaceholder() {
+        return this._$element.find(`.${Consts.FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS}`);
     }
 
 }

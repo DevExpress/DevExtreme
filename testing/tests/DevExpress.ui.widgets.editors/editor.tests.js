@@ -327,9 +327,10 @@ QUnit.module('Validation - UI', {
 
         assert.ok(editor._$validationMessage, 'Tooltip should be created');
         assert.ok(editor._$validationMessage.hasClass(INVALID_MESSAGE_CLASS), 'Tooltip should be marked with auto');
+        assert.ok(editor._$validationMessage.find(`.${INVALID_MESSAGE_CLASS}.dx-overlay-wrapper`), 'overlay wrapper should also have dx-invalid-message class');
         assert.ok(editor._$validationMessage.hasClass('dx-invalid-message-auto'), 'Tooltip should be marked with auto');
         assert.ok(!editor._$validationMessage.hasClass('dx-invalid-message-always'), 'Tooltip should not be marked with always');
-        assert.equal(editor._$validationMessage.dxOverlay('instance').$content().text(), message, 'Correct message should be set');
+        assert.equal(editor._validationMessage.$content().text(), message, 'Correct message should be set');
     });
 
     QUnit.test('Widget message (tooltip) should be created and always shown', function(assert) {
@@ -353,6 +354,72 @@ QUnit.module('Validation - UI', {
         assert.ok(editor._$validationMessage.hasClass(INVALID_MESSAGE_CLASS), 'Tooltip should be marked with auto');
         assert.ok(editor._$validationMessage.hasClass('dx-invalid-message-always'), 'Tooltip should be marked with always');
         assert.ok(!editor._$validationMessage.hasClass('dx-invalid-message-auto'), 'Tooltip should not be marked with auto');
+    });
+
+    QUnit.test('validationMessage mode option should be updated after editor validationMessageMode option change', function(assert) {
+        const message = 'That is very bad editor';
+
+        const editor = this.fixture.createEditor({
+            validationMessageMode: 'always'
+        });
+
+        editor.option({
+            isValid: false,
+            validationError: {
+                message
+            }
+        });
+        assert.strictEqual(editor._validationMessage.option('mode'), 'always', 'validationMessage has correct "mode" option');
+        assert.ok(editor._$validationMessage.hasClass('dx-invalid-message-always'), 'validation message has correct mode class');
+        assert.notOk(editor._$validationMessage.hasClass('dx-invalid-message-auto'), 'validation message has correct mode class');
+
+        editor.option('validationMessageMode', 'auto');
+        assert.strictEqual(editor._validationMessage.option('mode'), 'auto', 'validationMessage has correct "mode" option');
+        assert.notOk(editor._$validationMessage.hasClass('dx-invalid-message-always'), 'validation message has correct mode class');
+        assert.ok(editor._$validationMessage.hasClass('dx-invalid-message-auto'), 'validation message has correct mode class');
+    });
+
+    QUnit.test('validationMessage position.offset should be updated after editor validationMessageOffset option change', function(assert) {
+        const message = 'That is very bad editor';
+        const defaultOffset = { v: 0, h: 0 };
+
+        const editor = this.fixture.createEditor({
+            validationMessageMode: 'always'
+        });
+
+        editor.option({
+            isValid: false,
+            validationError: {
+                message
+            }
+        });
+        assert.deepEqual(editor._validationMessage.option('position.offset'), defaultOffset, 'validationMessage has correct "offset" option');
+
+        const newOffset = { v: 18, h: -12 };
+        editor.option('validationMessageOffset', newOffset);
+        assert.deepEqual(editor._validationMessage.option('position.offset'), newOffset, 'validationMessage has correct "offset" option');
+    });
+
+    QUnit.test('validationMessage position.offset should be updated after editor rtlEnabled option change', function(assert) {
+        const message = 'That is very bad editor';
+        const offset = { v: 10, h: 20 };
+
+        const editor = this.fixture.createEditor({
+            validationMessageMode: 'always'
+        });
+
+        editor.option({
+            isValid: false,
+            validationError: {
+                message
+            },
+            validationMessageOffset: offset
+        });
+        assert.deepEqual(editor._validationMessage.option('position.offset'), offset, 'validationMessage has correct "offset" option');
+
+        editor.option('rtlEnabled', true);
+        offset.h = -offset.h;
+        assert.deepEqual(editor._validationMessage.option('position.offset'), offset, 'validationMessage has correct "offset" option');
     });
 
     QUnit.test('Widget message (tooltip) should be created but never shown', function(assert) {
@@ -379,7 +446,6 @@ QUnit.module('Validation - UI', {
     });
 
     QUnit.test('Widget message (tooltip) should be destroyed after editor become valid', function(assert) {
-        // assign
         const message = 'That is very bad editor';
 
         const editor = this.fixture.createEditor({
@@ -393,11 +459,53 @@ QUnit.module('Validation - UI', {
             }
         });
 
-        // act
         editor.option({ isValid: true });
-
-        // assert
         assert.ok(!editor._$validationMessage, 'Tooltip should be destroyed; reference should be removed');
+    });
+
+    QUnit.test('Widget message (tooltip) should be destroyed after validationErrors was gone', function(assert) {
+        const message = 'That is very bad editor';
+
+        const editor = this.fixture.createEditor({
+            validationMessageMode: 'always'
+        });
+
+        editor.option({
+            isValid: false,
+            validationError: {
+                message
+            }
+        });
+
+        editor.option({ validationError: null });
+        assert.ok(!editor._$validationMessage, 'Tooltip should be destroyed; reference should be removed');
+
+        editor.option({ validationErrors: [{ message: '1' }, { message: '2' }] });
+        assert.ok(editor._$validationMessage, 'validation message was rendered');
+
+        editor.option({ validationErrors: null });
+        assert.ok(!editor._$validationMessage, 'validation message was destroyed');
+    });
+
+    QUnit.test('validation state should be rerendered after validationStatus change', function(assert) {
+        const message = 'That is very bad editor';
+
+        const editor = this.fixture.createEditor({
+            validationMessageMode: 'always'
+        });
+
+        editor.option({
+            isValid: true,
+            validationError: {
+                message
+            },
+            validationStatus: 'pending'
+        });
+
+        assert.ok(!editor._$validationMessage, 'validation message is not rendered');
+
+        editor.option({ validationStatus: 'invalid' });
+        assert.ok(editor._$validationMessage, 'validation message is rendered after "validation status" option change');
     });
 
     QUnit.test('Validation message should flip if it is out of boundary validationBoundary', function(assert) {
@@ -420,6 +528,26 @@ QUnit.module('Validation - UI', {
 
         // assert
         assert.ok($validationMessage.offset().top < $element.offset().top, 'validation message was flipped');
+    });
+
+    QUnit.test('Validation message boundary should be updated after editor validationBoundary runtime change', function(assert) {
+        const $parent = this.fixture.createOnlyElement().css({
+            paddingTop: '100px'
+        });
+        const $element = $('<div>').appendTo($parent);
+
+        const editor = new Editor($element, {
+            validationMessageMode: 'always',
+            validationError: {
+                message: 'Flip'
+            },
+        });
+
+        editor.option({ isValid: false });
+        assert.strictEqual(editor._validationMessage.option('position.boundary'), undefined, 'validation message boundary is null');
+
+        editor.option({ validationBoundary: $parent });
+        assert.strictEqual(editor._validationMessage.option('position.boundary'), $parent, 'validation message boundary was changed after editor validationBoundary change');
     });
 
     QUnit.test('Validation message should have the same with editor width', function(assert) {
@@ -490,6 +618,21 @@ QUnit.module('Validation - UI', {
         assert.equal($content.css('whiteSpace'), 'normal', 'text is not wrapped');
     });
 
+    QUnit.test('Validation message overlay content position should be absolute (T931335)', function(assert) {
+        const $element = this.fixture.createOnlyElement();
+
+        new Editor($element, {
+            validationMessageMode: 'always',
+            validationError: {
+                message: 'Error message'
+            },
+            isValid: false
+        });
+
+        const $content = $element.find(`.${INVALID_MESSAGE_CLASS} > .dx-overlay-content`);
+        assert.strictEqual($content.css('position'), 'absolute', 'overlay content position is absolute');
+    });
+
     QUnit.test('Validation message should have correct width for small content', function(assert) {
         const $element = this.fixture.createOnlyElement();
 
@@ -508,7 +651,7 @@ QUnit.module('Validation - UI', {
         assert.equal($content.css('width', 'auto').outerWidth(), contentWidth, 'validation message width is correct');
     });
 
-    QUnit.test('T376114 - Validation message should have the 100px max height if the editor has smaller size', function(assert) {
+    QUnit.test('T376114 - Validation message should have the 100px max width if the editor has smaller size', function(assert) {
         const $element = this.fixture.createOnlyElement();
 
         new Editor($element, {
@@ -525,6 +668,27 @@ QUnit.module('Validation - UI', {
         assert.equal($content.outerWidth(), 100, 'the validation message width is correct');
     });
 
+    QUnit.test('Validation message should update max width after editor width runtime change', function(assert) {
+        const $element = this.fixture.createOnlyElement();
+
+        const editor = new Editor($element, {
+            width: 20,
+            validationMessageMode: 'always',
+            validationError: {
+                message: 'ErrorErrorErrorErrorErrorErrorError'
+            },
+            isValid: false
+        });
+
+        editor.option('width', 200);
+        let $content = $element.find(`.${INVALID_MESSAGE_CONTENT_CLASS}`);
+        assert.equal($content.outerWidth(), 200, 'the validation message width is correct');
+
+        editor.option('width', 80);
+        $content = $element.find(`.${INVALID_MESSAGE_CONTENT_CLASS}`);
+        assert.equal($content.outerWidth(), 100, 'the validation message width is correct');
+    });
+
     QUnit.test('Validation overlay should have the \'propagateOutsideClick\' with true ', function(assert) {
         const $element = this.fixture.createOnlyElement();
 
@@ -536,7 +700,7 @@ QUnit.module('Validation - UI', {
             isValid: false
         });
 
-        assert.equal($element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxOverlay('option', 'propagateOutsideClick'), true, '\'propagateOutsideClick\' option has correct value');
+        assert.equal($element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxValidationMessage('option', 'propagateOutsideClick'), true, '\'propagateOutsideClick\' option has correct value');
     });
 
     QUnit.test('Validation overlay should not inherit templates from the editor', function(assert) {
@@ -642,7 +806,7 @@ QUnit.module('Validation overlay options', {
             isValid: false
         });
 
-        const overlay = $element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxOverlay('instance');
+        const overlay = $element.find(`.${INVALID_MESSAGE_CLASS}.dx-widget`).dxValidationMessage('instance');
 
         assert.equal(overlay.option('customOption'), 'Test', 'a custom option has been created');
         assert.equal(overlay.option('width'), 200, 'a default option has been redefined');

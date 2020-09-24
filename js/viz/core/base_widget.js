@@ -15,6 +15,7 @@ import rendererModule from './renderers/renderer';
 import _Layout from './layout';
 import devices from '../../core/devices';
 import eventsEngine from '../../events/core/events_engine';
+import { when } from '../../core/utils/deferred';
 import {
     createEventTrigger,
     createResizeHandler,
@@ -104,6 +105,10 @@ const getEmptyComponent = function() {
 
     return EmptyComponent;
 };
+
+function callForEach(functions) {
+    functions.forEach(c => c());
+}
 
 const isServerSide = !hasWindow();
 
@@ -200,6 +205,11 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const that = this;
 
         if(--that._changesLocker === 0 && that._changes.count() > 0 && !that._applyingChanges) {
+            that._deferredElements = {
+                items: [],
+                launchRequestCallbacks: [],
+                doneRequestCallbacks: []
+            };
             that._renderer.lock();
             that._applyingChanges = true;
             that._applyChanges();
@@ -212,7 +222,38 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             that._optionChangedLocker++;
             that._notify();
             that._optionChangedLocker--;
+            that._resolveDeferred();
         }
+    },
+
+    _resolveDeferred() {
+        const that = this;
+        const deferredElements = that._deferredElements;
+
+        if(that._changesApplying) {
+            that._changesApplying = false;
+            callForEach(deferredElements.doneRequestCallbacks);
+            return;
+        }
+
+        let syncRendering = true;
+        when.apply(that, deferredElements.items).done(() => {
+            if(syncRendering) {
+                return;
+            }
+            callForEach(deferredElements.launchRequestCallbacks);
+            that._changesApplying = true;
+            that._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
+        });
+        syncRendering = false;
+    },
+
+    _addToDeferred({ items, launchRequest, doneRequest }) {
+        const deferredElements = this._deferredElements;
+
+        deferredElements.items = deferredElements.items.concat(items);
+        deferredElements.launchRequestCallbacks.push(launchRequest);
+        deferredElements.doneRequestCallbacks.push(doneRequest);
     },
 
     _applyQueuedOptions: function() {

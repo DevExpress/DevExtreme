@@ -221,8 +221,8 @@ export class GanttContextMenuBar extends Bar {
         };
     }
 
-    show(point) {
-        this._menu.option('items', this._items);
+    show(point, items) {
+        this._menu.option('items', items || this._items);
         this._menu.option('position.offset', { x: point.x, y: point.y });
         this._menu.show();
     }

@@ -2,6 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
+import { hasWindow } from '../../core/utils/window';
 import Guid from '../../core/guid';
 
 import Widget from '../widget/ui.widget';
@@ -10,6 +11,7 @@ import FileUploader from '../file_uploader';
 import { whenSome } from './ui.file_manager.common';
 
 const FILE_MANAGER_FILE_UPLOADER_CLASS = 'dx-filemanager-fileuploader';
+const FILE_MANAGER_FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS = 'dx-filemanager-fileuploader-dropzone-placeholder';
 
 class FileManagerFileUploader extends Widget {
 
@@ -19,8 +21,11 @@ class FileManagerFileUploader extends Widget {
         this.$element().addClass(FILE_MANAGER_FILE_UPLOADER_CLASS);
 
         this._uploaderInfos = [];
+        this._dropZoneEnterCounter = 1;
 
         this._createInternalFileUploader();
+        this._createDropZonePlaceholder();
+        this._setDropZonePlaceholderVisible(false);
 
         super._initMarkup();
     }
@@ -46,7 +51,9 @@ class FileManagerFileUploader extends Widget {
             onProgress: e => this._onFileUploaderProgress(e),
             onUploaded: e => this._onFileUploaderUploaded(e),
             onUploadAborted: e => this._onFileUploaderUploadAborted(e),
-            onUploadError: e => this._onFileUploaderUploadError(e)
+            onUploadError: e => this._onFileUploaderUploadError(e),
+            onDropZoneEnter: () => this._setDropZonePlaceholderVisible(true),
+            onDropZoneLeave: () => this._setDropZonePlaceholderVisible(false)
         });
 
         fileUploader.option({
@@ -142,7 +149,49 @@ class FileManagerFileUploader extends Widget {
         deferred.reject(error);
     }
 
+    _createDropZonePlaceholder() {
+        this._$dropZonePlaceholder = $('<div>')
+            .addClass(FILE_MANAGER_FILE_UPLOADER_DROPZONE_PLACEHOLER_CLASS)
+            .appendTo(this.option('dropZonePlaceholderContainer'));
+    }
+
+    _adjustDropZonePlaceholder() {
+        if(!hasWindow()) {
+            return;
+        }
+        const $dropZoneTarget = this.option('dropZone');
+        const targetOffsetTop = $dropZoneTarget.offset().top;
+        const targetOffsetLeft = $dropZoneTarget.offset().left;
+        const placeholderBorderTopWidth = parseInt(this._$dropZonePlaceholder.css('borderTopWidth'));
+        const placeholderBorderLeftWidth = parseInt(this._$dropZonePlaceholder.css('borderLeftWidth'));
+
+        this._$dropZonePlaceholder.css('top', targetOffsetTop);
+        this._$dropZonePlaceholder.css('left', targetOffsetLeft);
+        this._$dropZonePlaceholder.height($dropZoneTarget.get(0).offsetHeight - placeholderBorderTopWidth * 2);
+        this._$dropZonePlaceholder.width($dropZoneTarget.get(0).offsetWidth - placeholderBorderLeftWidth * 2);
+    }
+
+    _setDropZonePlaceholderVisible(visible) {
+        this._dropZoneEnterCounter += visible ? 1 : -1;
+        if(this._dropZoneEnterCounter < 0) {
+            this._resetDropZoneEnterCounter();
+        }
+        if(visible && this._dropZoneEnterCounter === 1) {
+            this._adjustDropZonePlaceholder();
+            this._$dropZonePlaceholder.css('display', '');
+            return;
+        }
+        if(!visible && this._dropZoneEnterCounter === 0) {
+            this._$dropZonePlaceholder.css('display', 'none');
+        }
+    }
+
+    _resetDropZoneEnterCounter() {
+        this._dropZoneEnterCounter = 0;
+    }
+
     _uploadFiles(uploaderInfo, files) {
+        this._setDropZonePlaceholderVisible(false);
         const sessionId = new Guid().toString();
         const controller = this._getController();
         const deferreds = files.map(() => new Deferred());
@@ -247,6 +296,15 @@ class FileManagerFileUploader extends Widget {
             case 'onUploadSessionStarted':
             case 'onUploadProgress':
                 this._actions[name] = this._createActionByOption(name);
+                break;
+            case 'dropZone':
+                this._uploaderInfos[0].fileUploader.option('dropZone', args.value);
+                this._adjustDropZonePlaceholder();
+                this._resetDropZoneEnterCounter();
+                break;
+            case 'dropZonePlaceholderContainer':
+                this._$dropZonePlaceholder.detach();
+                this._$dropZonePlaceholder.appendTo(args.value);
                 break;
             default:
                 super._optionChanged(args);

@@ -1,4 +1,5 @@
 /* eslint-disable jest/no-standalone-expect */
+import * as React from 'react';
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
 import devices from '../../../core/devices';
@@ -12,8 +13,11 @@ import {
 } from '../check_box';
 import { Widget } from '../common/widget';
 import { InkRipple } from '../common/ink_ripple';
+import { ValidationMessage } from '../validation_message';
 
 type Mock = jest.Mock;
+
+jest.mock('../validation_message', () => ({ ValidationMessage: () => null }));
 
 jest.mock('../../../core/devices', () => {
   const actualDevices = require.requireActual('../../../core/devices').default;
@@ -147,6 +151,68 @@ describe('CheckBox', () => {
         onClick: onWidgetClick,
       });
     });
+
+    describe('validation', () => {
+      it('widget should pass correct props to validationMessage', () => {
+        const ref = React.createRef();
+        const validationErrors = [{ message: 'error message' }];
+        const CustomTree = ({ target }: any) => (
+          <div ref={ref as any}>
+            {viewFunction({
+              rendered: true,
+              target,
+              validationErrors,
+              props: {
+                isValid: false,
+                validationErrors,
+                validationStatus: 'invalid',
+                validationMessageMode: 'always',
+                rtlEnabled: false,
+              },
+              shouldShowValidationMessage: true,
+            } as any)}
+          </div>
+        );
+        const tree = mount(<CustomTree />);
+        tree.setProps({ target: ref.current });
+        tree.update();
+
+        const validationMessage = tree.find(ValidationMessage);
+        const props = validationMessage.props();
+        expect(props.container).toBe(ref.current);
+        expect(props.target).toBe(ref.current);
+        expect(props.boundary).toBe(ref.current);
+        expect(props.positionRequest).toBe('below');
+        expect(props.mode).toBe('always');
+        expect(props.rtlEnabled).toBe(false);
+        expect(props.validationErrors).toEqual(validationErrors);
+      });
+    });
+
+    it('validationMessage should not be rendered when widget is not rendered yet', () => {
+      const ref = React.createRef();
+      const validationErrors = [{ message: 'error message' }];
+      const CustomTree = ({ target }: any) => (
+        <div ref={ref as any}>
+          {viewFunction({
+            rendered: false,
+            target,
+            validationErrors,
+            props: {
+              isValid: false,
+              validationErrors,
+              validationStatus: 'invalid',
+            },
+          } as any)}
+        </div>
+      );
+      const tree = mount(<CustomTree />);
+      tree.setProps({ target: ref.current });
+      tree.update();
+
+      const validationMessage = tree.find(ValidationMessage);
+      expect(validationMessage.exists()).toBe(false);
+    });
   });
 
   describe('Behavior', () => {
@@ -165,6 +231,16 @@ describe('CheckBox', () => {
         it('should not raise any error if contentReady is not defined', () => {
           const checkBox = new CheckBox({ onContentReady: undefined });
           expect(checkBox.contentReadyEffect.bind(checkBox)).not.toThrow();
+        });
+      });
+
+      describe('afterInitEffect', () => {
+        it('should set "rendered" to true', () => {
+          const checkBox = new CheckBox({});
+          expect(checkBox.rendered).toBe(false);
+
+          checkBox.afterInitEffect();
+          expect(checkBox.rendered).toBe(true);
         });
       });
 
@@ -401,6 +477,32 @@ describe('CheckBox', () => {
             expect(new CheckBox({ isValid }).aria)
               .toMatchObject({ invalid: `${!isValid}` });
           });
+
+        /* eslint-disable spellcheck/spell-checker */
+        it('should have no "describedby" when widget is valid', () => {
+          expect(new CheckBox({}).aria)
+            .toMatchObject({ describedby: undefined });
+        });
+
+        it('should have no "describedby" when widget "validationStatus" is not "invalid"', () => {
+          expect(new CheckBox({ isValid: false, validationStatus: 'pending' }).aria)
+            .toMatchObject({ describedby: undefined });
+        });
+
+        it('should have no "describedby" when there is no validation errors', () => {
+          expect(new CheckBox({ isValid: false, validationStatus: 'invalid' }).aria)
+            .toMatchObject({ describedby: undefined });
+        });
+
+        it('should have "describedby" when widget is invalid', () => {
+          const { aria } = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+            validationErrors: [{ message: 'error message' }],
+          });
+          expect(aria.describedby).not.toBe(undefined);
+        });
+        /* eslint-enable spellcheck/spell-checker */
       });
 
       describe('cssClasses', () => {
@@ -432,6 +534,81 @@ describe('CheckBox', () => {
         it('should have "dx-invalid" class if isValid option is false', () => {
           expect(new CheckBox({ isValid: false }).cssClasses)
             .toEqual(expect.stringMatching('dx-invalid'));
+        });
+      });
+
+      describe('validationErrors', () => {
+        it('should return "validationErrors" props value when it is specified', () => {
+          const validationErrors = [{ message: 'error message' }];
+          expect(new CheckBox({ validationErrors }).validationErrors)
+            .toEqual(validationErrors);
+        });
+
+        it('should return array with one element equal to "validationError" props value when "validationErrors" is not specified', () => {
+          const validationError = { message: 'error message' };
+          expect(new CheckBox({ validationError }).validationErrors)
+            .toEqual([validationError]);
+        });
+      });
+
+      describe('target', () => {
+        it('should return widget "rootElement" call result', () => {
+          const checkBox = new CheckBox({});
+          const targetMock = 'result';
+          checkBox.widgetRef = { getRootElement: jest.fn(() => targetMock) } as any;
+
+          const { target } = checkBox;
+          expect(target).toBe(targetMock);
+          expect(checkBox.widgetRef.getRootElement).toHaveBeenCalledTimes(1);
+          expect(checkBox.widgetRef.getRootElement).toHaveBeenCalledWith();
+        });
+
+        it('should return undefined when widgetRef is not defined', () => {
+          const checkBox = new CheckBox({});
+
+          const { target } = checkBox;
+          expect(target).toBe(undefined);
+        });
+      });
+
+      describe('shouldShowValidationMessage', () => {
+        it('should return true when isValid=false, validationStatus="invalid" and there are validation errors', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          expect(checkBox.shouldShowValidationMessage).toBe(true);
+        });
+
+        it('should return false if there is no validation errors', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'invalid',
+          });
+
+          expect(checkBox.shouldShowValidationMessage).toBe(false);
+        });
+
+        it('should return false if validationStatis not equal to "invalid"', () => {
+          const checkBox = new CheckBox({
+            isValid: false,
+            validationStatus: 'pending',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          expect(checkBox.shouldShowValidationMessage).toBe(false);
+        });
+
+        it('should return false if isValid is true', () => {
+          const checkBox = new CheckBox({
+            isValid: true,
+            validationStatus: 'invalid',
+            validationErrors: [{ message: 'error message' }],
+          });
+
+          expect(checkBox.shouldShowValidationMessage).toBe(false);
         });
       });
     });

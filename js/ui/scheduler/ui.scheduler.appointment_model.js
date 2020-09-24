@@ -214,11 +214,11 @@ class AppointmentModel {
             max = new Date(trimmedDates.max.getTime() - toMs('minute'));
         }
 
-        if(recurrenceRule && !recurrenceProcessor.evalRecurrenceRule(recurrenceRule).isValid) {
+        if(recurrenceRule && !recurrenceProcessor.isValidRecurrenceRule(recurrenceRule)) {
             result = (appointmentEndDate > min) && (appointmentStartDate <= max);
         }
 
-        if(result && recurrenceProcessor.evalRecurrenceRule(recurrenceRule).isValid) {
+        if(result && recurrenceProcessor.isValidRecurrenceRule(recurrenceRule)) {
             result = recurrenceProcessor.hasRecurrence({
                 rule: recurrenceRule,
                 exception: recurrenceException,

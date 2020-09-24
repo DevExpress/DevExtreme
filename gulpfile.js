@@ -24,8 +24,11 @@ require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 require('./build/gulp/generator/gulpfile');
 require('./build/gulp/check_licenses');
-require('./build/gulp/create_timezones_data');
-require('./build/gulp/test_timezones_data');
+
+if(!env.TEST_CI && !env.DOCKER_CI) {
+    require('./build/gulp/create_timezones_data');
+    require('./build/gulp/test_timezones_data');
+}
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');

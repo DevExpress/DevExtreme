@@ -532,7 +532,6 @@ QUnit.module('DataBinding', {
         this.clock.tick(100);
         assert.ok(onRequestLayoutUpdate.called);
     });
-
     test('databinding should auto-size items if widthExpr is not specified or enableAutoSize = false', function(assert) {
         const store = new ArrayStore({
             key: 'id',
@@ -550,8 +549,7 @@ QUnit.module('DataBinding', {
             ],
         });
         const dataSource = new DataSource({
-            store,
-            paginate: false
+            store
         });
         this.instance.option({
             nodes: {
@@ -560,7 +558,7 @@ QUnit.module('DataBinding', {
             }
         });
         const defaultWidth = this.instance._diagramInstance.model.findShapeByDataKey('2').size.width;
-        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+        assert.notEqual(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
 
         this.instance.option({
             nodes: {
@@ -578,10 +576,10 @@ QUnit.module('DataBinding', {
                 dataSource: dataSource,
                 textExpr: function(obj) { return obj.text; },
                 widthExpr: null,
-                autoSizeEnabled: true
+                autoSizeEnabled: false
             }
         });
 
-        assert.notEqual(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
     });
 });

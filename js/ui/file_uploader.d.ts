@@ -344,6 +344,14 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadHeaders?: any;
     /**
+     * @docid dxFileUploaderOptions.uploadCustomData
+     * @type object
+     * @default {}
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    uploadCustomData?: any;
+    /**
      * @docid dxFileUploaderOptions.uploadMethod
      * @type Enums.UploadHttpMethod
      * @default "POST"
@@ -441,6 +449,22 @@ export default class dxFileUploader extends Editor {
      * @public
      */
     abortUpload(file: File): void;
+    /**
+     * @docid dxFileUploaderMethods.removeFile
+     * @publicName removeFile(fileIndex)
+     * @param1 fileIndex:number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    removeFile(fileIndex: number): void;
+    /**
+     * @docid dxFileUploaderMethods.removeFile
+     * @publicName removeFile(file)
+     * @param1 file:File
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    removeFile(file: File): void;
 }
 
 declare global {
