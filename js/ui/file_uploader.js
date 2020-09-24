@@ -133,6 +133,8 @@ class FileUploader extends Editor {
 
             onUploaded: null,
 
+            onUploadCompleted: null,
+
             onProgress: null,
 
             onUploadError: null,
@@ -244,6 +246,7 @@ class FileUploader extends Editor {
         this._createBeforeSendAction();
         this._createUploadStartedAction();
         this._createUploadedAction();
+        this._createUploadCompleteAction();
         this._createProgressAction();
         this._createUploadErrorAction();
         this._createUploadAbortedAction();
@@ -484,6 +487,10 @@ class FileUploader extends Editor {
 
     _createUploadedAction() {
         this._uploadedAction = this._createActionByOption('onUploaded', { excludeValidators: ['readOnly'] });
+    }
+
+    _createUploadCompleteAction() {
+        this._uploadCompletedAction = this._createActionByOption('onUploadCompleted', { excludeValidators: ['readOnly'] });
     }
 
     _createProgressAction() {
@@ -999,6 +1006,13 @@ class FileUploader extends Editor {
         }
     }
 
+    _fireUploadCompletedAction() {
+        const areAllFilesLoaded = this._files.every(file => file._isError || file._isLoaded || file.isAborted);
+        if(areAllFilesLoaded) {
+            this._uploadCompletedAction({ files: this._files.map(file => file.value) });
+        }
+    }
+
     _filterFiles(files) {
         if(!files.length) {
             return files;
@@ -1316,6 +1330,9 @@ class FileUploader extends Editor {
             case 'onUploaded':
                 this._createUploadedAction();
                 break;
+            case 'onUploadCompleted':
+                this._createUploadCompleteAction();
+                break;
             case 'onProgress':
                 this._createProgressAction();
                 break;
@@ -1509,6 +1526,7 @@ class FileUploadStrategyBase {
             event: e,
             request: file.request
         });
+        this.fileUploader._fireUploadCompletedAction();
     }
 
     _onErrorHandler(file, error) {
@@ -1519,6 +1537,7 @@ class FileUploadStrategyBase {
             request: file.request,
             error
         });
+        this.fileUploader._fireUploadCompletedAction();
     }
 
     _onLoadedHandler(file, e) {
@@ -1529,6 +1548,7 @@ class FileUploadStrategyBase {
             event: e,
             request: file.request
         });
+        this.fileUploader._fireUploadCompletedAction();
     }
 
     _onProgressHandler(file, e) {
