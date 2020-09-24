@@ -69,6 +69,7 @@ function createDefaultBatch(useRenovation) {
         tasks.push('npm');
         useRenovation && tasks.push('renovation-npm');
         tasks.push('themebuilder-npm');
+        tasks.push('check-license-notices');
     }
     return gulp.series(tasks);
 }
