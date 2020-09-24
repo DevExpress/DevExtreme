@@ -278,6 +278,10 @@ const EditingController = modules.ViewController.inherit((function() {
             that._updateEditColumn();
             that._updateEditButtons();
 
+            if(!this._internalState) {
+                this._internalState = [];
+            }
+
             this.component._optionsByReference['editing.editRowKey'] = true;
             this.component._optionsByReference['editing.changes'] = true;
         },
@@ -290,8 +294,24 @@ const EditingController = modules.ViewController.inherit((function() {
             const changes = this.getChanges();
             const needReset = changes?.length;
             if(needReset) {
+                this._internalState = [];
                 this._silentOption('editing.changes', []);
             }
+        },
+
+        _getInternalData: function(key) {
+            let internalData = this._internalState.filter(item => item.key === key)[0];
+
+            if(!internalData) {
+                internalData = { key };
+                this._internalState.push(internalData);
+            }
+
+            return internalData;
+        },
+
+        _getOldData: function(key) {
+            return this._getInternalData(key).oldData;
         },
 
         getUpdatedData: function(data) {
@@ -314,8 +334,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
         getRemovedData: function() {
             return this.getChanges()
-                .filter(change => change.oldData && change.type === DATA_EDIT_DATA_REMOVE_TYPE)
-                .map(change => change.oldData);
+                .filter(change => this._getOldData(change.key) && change.type === DATA_EDIT_DATA_REMOVE_TYPE)
+                .map(change => this._getOldData(change.key));
         },
 
         _fireDataErrorOccurred: function(arg) {
@@ -1287,9 +1307,21 @@ const EditingController = modules.ViewController.inherit((function() {
             };
         },
 
+        _removeInternalData: function(key) {
+            const internalData = this._getInternalData(key);
+            const index = this._internalState.indexOf(internalData);
+
+            if(index > -1) {
+                this._internalState.splice(index, 1);
+            }
+        },
+
         _removeEditDataItem: function(index) {
             if(index >= 0) {
                 const changes = [...this.getChanges()];
+
+                this._removeInternalData(changes[index].key);
+
                 changes.splice(index, 1);
                 this._silentOption('editing.changes', changes);
             }
@@ -1627,7 +1659,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             each(changes, (index, editData) => {
                 const data = editData.data;
-                const oldData = editData.oldData;
+                const oldData = this._getOldData(editData.key);
                 const type = editData.type;
                 let deferred;
                 let params;
@@ -1701,7 +1733,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 if(isError) {
                     if(editData) {
-                        editData.error = arg;
+                        this._getInternalData(editData.key, true).error = arg;
                     }
                     that._fireDataErrorOccurred(arg);
                     if(editMode !== EDIT_MODE_BATCH) {
@@ -1733,15 +1765,16 @@ const EditingController = modules.ViewController.inherit((function() {
                 const data = itemData.data;
                 const key = itemData.key;
                 const type = itemData.type;
+                const internalData = that._getInternalData(key);
                 const params = { key: key, data: data };
 
-                if(itemData.error) {
-                    params.error = itemData.error;
+                if(internalData.error) {
+                    params.error = internalData.error;
                 }
 
                 switch(type) {
                     case DATA_EDIT_DATA_REMOVE_TYPE:
-                        that.executeAction('onRowRemoved', extend({}, params, { data: itemData.oldData }));
+                        that.executeAction('onRowRemoved', extend({}, params, { data: internalData.oldData }));
                         break;
                     case DATA_EDIT_DATA_INSERT_TYPE:
                         that.executeAction('onRowInserted', params);
@@ -1898,6 +1931,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 changesOnly: this.option('repaintChangesOnly')
             })).always(() => {
                 this._fireSaveEditDataEvents(changes);
+                this._internalState = [];
             }).done(() => {
                 this._resolveAfterSave(deferred);
             }).fail((error) => {
@@ -2274,6 +2308,12 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(editDataIndex < 0) {
                 editDataIndex = changes.length;
+
+                const internalData = this._getInternalData(options.key, true);
+                internalData.oldData = options.oldData;
+
+                delete options.oldData;
+
                 changes.push(options);
             }
 
@@ -2287,7 +2327,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     change.type = options.type;
                 }
                 if(row) {
-                    row.oldData = change.oldData;
+                    row.oldData = this._getOldData(row.key);
                     row.data = createObjectWithChanges(row.data, options.data);
                 }
             }
