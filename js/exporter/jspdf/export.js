@@ -131,10 +131,16 @@ export const Export = {
         const align = (rowType === 'header') ? columnAlignment : cellAlignment;
         const pdfCellStyle = {};
 
-        if(align) { pdfCellStyle['halign'] = align; }
+        if(align) {
+            pdfCellStyle['halign'] = align;
+        }
         if(rowType !== 'header') {
-            if(bold) { pdfCellStyle.fontStyle = 'bold'; }
-            if(wrapText) { pdfCellStyle.cellWidth = 'wrap'; }
+            if(bold) {
+                pdfCellStyle.fontStyle = 'bold';
+            }
+            if(wrapText) {
+                pdfCellStyle.cellWidth = 'wrap';
+            }
         }
 
         return pdfCellStyle;
