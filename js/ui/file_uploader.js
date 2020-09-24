@@ -246,7 +246,7 @@ class FileUploader extends Editor {
         this._createBeforeSendAction();
         this._createUploadStartedAction();
         this._createUploadedAction();
-        this._createUploadCompleteAction();
+        this._createFilesUploadedAction();
         this._createProgressAction();
         this._createUploadErrorAction();
         this._createUploadAbortedAction();
@@ -489,7 +489,7 @@ class FileUploader extends Editor {
         this._uploadedAction = this._createActionByOption('onUploaded', { excludeValidators: ['readOnly'] });
     }
 
-    _createUploadCompleteAction() {
+    _createFilesUploadedAction() {
         this._filesUploadedAction = this._createActionByOption('onFilesUploaded', { excludeValidators: ['readOnly'] });
     }
 
@@ -1331,7 +1331,7 @@ class FileUploader extends Editor {
                 this._createUploadedAction();
                 break;
             case 'onFilesUploaded':
-                this._createUploadCompleteAction();
+                this._createFilesUploadedAction();
                 break;
             case 'onProgress':
                 this._createProgressAction();
