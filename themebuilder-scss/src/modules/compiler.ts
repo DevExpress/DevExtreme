@@ -2,6 +2,7 @@ import * as sass from 'sass';
 import fiber from 'fibers';
 // eslint-disable-next-line import/extensions
 import { metadata } from '../data/metadata/dx-theme-builder-metadata';
+import DartClient from './dart-client';
 
 export enum ImportType {
   Index,
@@ -20,7 +21,9 @@ export default class Compiler {
 
   indexFileContent: string;
 
-  compile(
+  dartClient = new DartClient();
+
+  async compile(
     items: ConfigMetaItem[],
     options: sass.Options,
   ): Promise<CompilerResult> {
@@ -37,17 +40,56 @@ export default class Compiler {
 
     compilerOptions = { ...compilerOptions, ...options };
 
+    await this.dartClient.check();
+
     return new Promise((resolve, reject) => {
-      sass.render(compilerOptions, (error, result) => {
-        this.importerCache = {};
-        if (error) reject(error);
-        else {
-          resolve({
-            result,
-            changedVariables: this.changedVariables,
-          });
-        }
-      });
+      const compiler = this.dartClient.isServerAvailable
+        ? this.dartCompiler
+        : this.nodeCompiler;
+
+      compiler.bind(this)(compilerOptions, resolve, reject);
+    });
+  }
+
+  dartCompiler(
+    options: sass.Options,
+    resolve: (result: CompilerResult) => void,
+    reject: (result?: sass.SassError) => void,
+  ): void {
+    this.dartClient.send({
+      items: this.userItems,
+      index: this.indexFileContent,
+      file: options.file,
+      data: options.data,
+    }).then((reply) => {
+      if (reply.error) reject();
+      else {
+        resolve({
+          result: {
+            css: reply.css,
+            map: null,
+            stats: null,
+          },
+          changedVariables: reply.changedVariables,
+        });
+      }
+    });
+  }
+
+  nodeCompiler(
+    options: sass.Options,
+    resolve: (result: CompilerResult) => void,
+    reject: (result: sass.SassError) => void,
+  ): void {
+    sass.render(options, (error, result) => {
+      this.importerCache = {};
+      if (error) reject(error);
+      else {
+        resolve({
+          result,
+          changedVariables: this.changedVariables,
+        });
+      }
     });
   }
 

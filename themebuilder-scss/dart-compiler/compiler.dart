@@ -1,47 +1,38 @@
-import 'dart:io';
 import 'package:sass/sass.dart' as sass;
-import 'package:path/path.dart' as path;
 import './importer.dart';
 import './collector.dart';
 
-void main(List<String> arguments) {
-  Directory.current = path.absolute('../src/data/scss/');
-  var time = DateTime.now().microsecondsSinceEpoch;
+class SassOptions {
+  String file, data;
+  SassOptions(this.file, this.data);
+}
 
-  var indexFileContent = '''
-\$color: null !default;
-\$size: null !default;
+class CompilerResult {
+  String css;
+  Map<String, String> changedVariables;
+  CompilerResult(this.css, this.changedVariables);
+}
 
-@use "./_colors.scss" with (\$color: \$color);
-@use "./_sizes.scss" with (\$size: \$size);
-@use "./typography";
-@use "./icons";
-@use "./widget";
-@use "./card";
-@use "./fieldset";
-@use "./common";
+class Compiler {
+  Collector collector = Collector();
 
-// public widgets
-@use "./box";
-''';
+  CompilerResult compile(List<MetaItem> items, String indexFileContent, SassOptions options) {
+    String css;
+    if(options.file != null) {
+      css = sass.compile(
+        options.file, //'bundles/dx.light.scss'
+        charset: true,
+        importers: [
+          ThemeBuilderImporter(indexFileContent, items)
+        ],
+        functions: [
+          collector.collector
+        ]
+      );
+    } else if(options.data != null) {
+      css = sass.compileString(options.data, charset: true);
+    }
 
-  var userItems = List<MetaItem>();
-  userItems.add(MetaItem('\$base-bg', '#abcdef'));
-  userItems.add(MetaItem('\$base-accent', '#abcdef'));
-
-  var collector = Collector();
-
-  var result = sass.compile(
-    'bundles/dx.light.scss',
-    charset: false,
-    importers: [
-      ThemeBuilderImporter(indexFileContent, userItems)
-    ],
-    functions: [
-      collector.collector
-    ]
-  );
-  print('end - ${(DateTime.now().microsecondsSinceEpoch - time) / 1000}ms');
-  print(collector.changedVariables);
-  File('./out.css').writeAsStringSync(result);
+    return CompilerResult(css, collector.changedVariables);
+  }
 }
