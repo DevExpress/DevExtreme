@@ -1145,11 +1145,6 @@ const EditingController = modules.ViewController.inherit((function() {
             that.init();
             that._resetEditColumnName();
             that._pageIndex = dataController.pageIndex();
-            that._addEditData({
-                data: {},
-                key: item.key,
-                oldData: item.data
-            });
 
             this._setEditRowKey(item.key);
         },
@@ -1410,11 +1405,13 @@ const EditingController = modules.ViewController.inherit((function() {
                 return false;
             }
 
-            that._addEditData({
-                data: {},
-                key: item.key,
-                oldData: item.data
-            });
+            if(params.column.showEditorAlways) {
+                that._addEditData({
+                    data: {},
+                    key: item.key,
+                    oldData: item.data
+                });
+            }
 
             that._pageIndex = that._dataController.pageIndex();
 

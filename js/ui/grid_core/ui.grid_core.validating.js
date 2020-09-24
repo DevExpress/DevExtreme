@@ -79,8 +79,15 @@ const ValidatingController = modules.Controller.inherit((function() {
             return !!validationData && !!validationData.validated;
         },
 
-        _getValidationData: function(key) {
-            return this._validationState.filter(data => data.key === key)[0];
+        _getValidationData: function(key, create) {
+            let validationData = this._validationState.filter(data => data.key === key)[0];
+
+            if(!validationData && create) {
+                validationData = { key, isValid: true };
+                this._validationState.push(validationData);
+            }
+
+            return validationData;
         },
 
         _getBrokenRules: function(editData, validationResults) {
@@ -207,12 +214,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         updateValidationState: function(editData) {
             const editMode = this._editingController.getEditMode();
             const key = editData.key;
-            let validationData = this._getValidationData(key);
-
-            if(!validationData) {
-                validationData = { key };
-                this._validationState.push(validationData);
-            }
+            const validationData = this._getValidationData(key, true);
 
             if(FORM_BASED_MODES.indexOf(editMode) === -1) {
                 if(editData.type === EDIT_DATA_INSERT_TYPE && !this.isRowDataModified(editData)) {
@@ -342,7 +344,6 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         createValidator: function(parameters, $container) {
-            let editData;
             let editIndex;
             const editingController = this._editingController;
             const column = parameters.column;
@@ -355,8 +356,12 @@ const ValidatingController = modules.Controller.inherit((function() {
             if(editIndex < 0) {
                 if(!showEditorAlways) {
                     const columnsController = this.getController('columns');
-                    const visibleColumns = columnsController && columnsController.getVisibleColumns() || [];
+                    const visibleColumns = columnsController?.getVisibleColumns() || [];
                     showEditorAlways = visibleColumns.some(function(column) { return column.showEditorAlways; });
+                }
+
+                if(this.option('editing.editRowKey') === parameters.key) {
+                    editIndex = 0;
                 }
 
                 if(showEditorAlways && editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row })) {
@@ -370,11 +375,10 @@ const ValidatingController = modules.Controller.inherit((function() {
                     return;
                 }
 
-                editData = editingController.getChanges()[editIndex];
-                const validationData = this._getValidationData(editData.key);
+                const validationData = this._getValidationData(parameters.key, true);
 
                 const getValue = () => {
-                    editData = editingController.getEditDataByKey(validationData?.key);
+                    const editData = editingController.getEditDataByKey(validationData?.key);
                     const value = column.calculateCellValue(editData?.data || {});
                     return value !== undefined ? value : parameters.value;
                 };
@@ -392,7 +396,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                         }
                     },
                     dataGetter: function() {
-                        editData = editingController.getEditDataByKey(validationData?.key);
+                        const editData = editingController.getEditDataByKey(validationData?.key);
                         return {
                             data: createObjectWithChanges(editData?.oldData, editData?.data),
                             column
@@ -483,7 +487,7 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         getCellValidationResult: function({ rowKey, columnIndex }) {
-            const validationData = this._getValidationData(rowKey);
+            const validationData = this._getValidationData(rowKey, true);
             return validationData?.validationResults?.[columnIndex];
         },
 
@@ -567,9 +571,8 @@ export default {
         controllers: {
             editing: {
                 _addEditData: function(options, row) {
-                    const that = this;
-                    const validatingController = that.getController('validating');
-                    const editDataIndex = that.callBase(options, row);
+                    const editDataIndex = this.callBase(options, row);
+                    const validatingController = this.getController('validating');
 
                     if(editDataIndex >= 0 && options.type !== EDIT_DATA_REMOVE_TYPE) {
                         const editData = this.getChanges()[editDataIndex];
@@ -613,9 +616,10 @@ export default {
                 getEditFormOptions: function(detailOptions) {
                     const editFormOptions = this.callBase.apply(this, arguments);
                     const validatingController = this.getController('validating');
+                    const validationData = validatingController._getValidationData(detailOptions.key, true);
 
                     return extend({}, editFormOptions, {
-                        validationGroup: validatingController._getValidationData(detailOptions.key)
+                        validationGroup: validationData
                     });
                 },
 
