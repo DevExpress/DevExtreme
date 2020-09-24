@@ -112,7 +112,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                 isValid: isValid,
                 key: editData.key,
                 newData: editData.data,
-                oldData: editData.oldData,
+                oldData: this._editingController._getOldData(editData.key),
                 promise: null,
                 errorText: this.getHiddenValidatorsErrorText(brokenRules)
             };
@@ -402,9 +402,11 @@ const ValidatingController = modules.Controller.inherit((function() {
                         }
                     },
                     dataGetter: function() {
-                        const editData = editingController.getEditDataByKey(validationData?.key);
+                        const key = validationData?.key;
+                        const editData = editingController.getEditDataByKey(key);
+                        const oldData = editingController._getOldData(key);
                         return {
-                            data: createObjectWithChanges(editData?.oldData, editData?.data),
+                            data: createObjectWithChanges(oldData, editData?.data),
                             column
                         };
                     },
@@ -712,7 +714,8 @@ export default {
                             const editData = changes[editIndex];
 
                             if(editData.type !== EDIT_DATA_INSERT_TYPE) {
-                                item.data = extend(true, {}, editData.oldData, editData.data);
+                                const oldData = this._getOldData(editData.key);
+                                item.data = extend(true, {}, oldData, editData.data);
                                 item.key = key;
                             }
                         }
@@ -738,6 +741,7 @@ export default {
                 },
 
                 _createInvisibleColumnValidators: function(editData) {
+                    const that = this;
                     const validatingController = this.getController('validating');
                     const columnsController = this.getController('columns');
                     const invisibleColumns = this._getInvisibleColumns(editData).filter((column) => !column.isBand);
@@ -753,7 +757,8 @@ export default {
                                 if(options.type === EDIT_DATA_INSERT_TYPE) {
                                     data = options.data;
                                 } else if(options.type === 'update') {
-                                    data = createObjectWithChanges(options.oldData, options.data);
+                                    const oldData = that._getOldData(options.key);
+                                    data = createObjectWithChanges(oldData, options.data);
                                 }
                                 if(data) {
                                     const validator = validatingController.createValidator({
