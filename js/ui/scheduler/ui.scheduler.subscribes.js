@@ -491,13 +491,12 @@ const subscribes = {
 
         let allDay = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
 
-        const result = [];
-
         const { viewDataProvider } = workspace;
         const { groupedData } = viewDataProvider.viewData;
         const groupedDataToRender = groupedData.filter(({ dateTable }) => dateTable.length > 0);
         const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
         const endViewDate = workspace.getEndViewDateByEndDayHour();
+        const filterOptions = [];
 
         groupedDataToRender.forEach(({ groupIndex, allDayPanel }) => {
             const startDate = viewDataProvider.getGroupStartDate(groupIndex);
@@ -512,7 +511,7 @@ const subscribes = {
                 ? resourcesManager.getResourcesDataByGroups(groups)
                 : resourcesManager.getResourcesData();
 
-            const filterOptions = {
+            filterOptions.push({
                 startDayHour,
                 endDayHour,
                 min: startDate,
@@ -521,15 +520,14 @@ const subscribes = {
                 allDay: allDay,
                 firstDayOfWeek: this.getFirstDayOfWeek(),
                 recurrenceException: this._getRecurrenceException.bind(this)
-            };
-
-            const currentGroupAppointments = this._appointmentModel.filterLoadedAppointments(
-                filterOptions,
-                this.timeZoneCalculator
-            );
-
-            result.push(...currentGroupAppointments);
+            });
         });
+
+        const result = this._appointmentModel.filterLoadedVirtualAppointments(
+            filterOptions,
+            this.timeZoneCalculator,
+            workspace._getGroupCount()
+        );
 
         return result;
     },
