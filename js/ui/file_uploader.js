@@ -1440,8 +1440,8 @@ class FileUploadStrategyBase {
             return;
         }
 
-        file.request && file.request.abort();
         file.isAborted = true;
+        file.request && file.request.abort();
 
         if(this._isCustomCallback('abortUpload')) {
             const abortUpload = this.fileUploader.option('abortUpload');
