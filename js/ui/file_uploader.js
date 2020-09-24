@@ -133,7 +133,7 @@ class FileUploader extends Editor {
 
             onUploaded: null,
 
-            onUploadCompleted: null,
+            onFilesUploaded: null,
 
             onProgress: null,
 
@@ -490,7 +490,7 @@ class FileUploader extends Editor {
     }
 
     _createUploadCompleteAction() {
-        this._uploadCompletedAction = this._createActionByOption('onUploadCompleted', { excludeValidators: ['readOnly'] });
+        this._filesUploadedAction = this._createActionByOption('onFilesUploaded', { excludeValidators: ['readOnly'] });
     }
 
     _createProgressAction() {
@@ -1009,7 +1009,7 @@ class FileUploader extends Editor {
     _handleAllFilesUploaded() {
         const areAllFilesLoaded = this._files.every(file => !file.isValid() || file._isError || file._isLoaded || file.isAborted);
         if(areAllFilesLoaded) {
-            this._uploadCompletedAction();
+            this._filesUploadedAction();
         }
     }
 
@@ -1330,7 +1330,7 @@ class FileUploader extends Editor {
             case 'onUploaded':
                 this._createUploadedAction();
                 break;
-            case 'onUploadCompleted':
+            case 'onFilesUploaded':
                 this._createUploadCompleteAction();
                 break;
             case 'onProgress':

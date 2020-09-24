@@ -6879,9 +6879,9 @@ declare module DevExpress.ui {
          */
         onUploadAborted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, event?: DevExpress.events.event, request?: XMLHttpRequest }) => any);
         /**
-         * [descr:dxFileUploader.Options.onUploadCompleted]
+         * [descr:dxFileUploader.Options.onFilesUploaded]
          */
-        onUploadCompleted?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any }) => any);
+        onFilesUploaded?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any }) => any);
         /**
          * [descr:dxFileUploader.Options.onUploadError]
          */

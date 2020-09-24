@@ -2835,7 +2835,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         simulateFileChoose($element, fakeFile);
     });
 
-    QUnit.test('onUploadCompleted event should rise when all files are successfully uploaded', function(assert) {
+    QUnit.test('onFilesUploaded event should rise when all files are successfully uploaded', function(assert) {
         const chunkSize = 1000;
         const onUploadedSpy = sinon.spy();
         const onUploadCompletedSpy = sinon.spy();
@@ -2844,7 +2844,7 @@ QUnit.module('uploading events', moduleConfig, () => {
             chunkSize,
             uploadMode: 'instantly',
             multiple: true,
-            onUploadCompleted: onUploadCompletedSpy,
+            onFilesUploaded: onUploadCompletedSpy,
             onUploaded: onUploadedSpy
         });
 
@@ -2866,7 +2866,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
     });
 
-    QUnit.test('onUploadCompleted event should rise when files are both successfully uploaded and aborted', function(assert) {
+    QUnit.test('onFilesUploaded event should rise when files are both successfully uploaded and aborted', function(assert) {
         const chunkSize = 1000;
         const onUploadAbortedSpy = sinon.spy();
         const onUploadedSpy = sinon.spy();
@@ -2876,7 +2876,7 @@ QUnit.module('uploading events', moduleConfig, () => {
             chunkSize,
             uploadMode: 'instantly',
             multiple: true,
-            onUploadCompleted: onUploadCompletedSpy,
+            onFilesUploaded: onUploadCompletedSpy,
             onUploadAborted: onUploadAbortedSpy,
             onUploaded: onUploadedSpy
         });
@@ -2902,7 +2902,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
     });
 
-    QUnit.test('onUploadCompleted event should rise when files are both successfully uploaded and has error', function(assert) {
+    QUnit.test('onFilesUploaded event should rise when files are both successfully uploaded and has error', function(assert) {
         const chunkSize = 1000;
         const uploadChunkSpy = sinon.spy((file, uploadInfo) => executeAfterDelay(() => {
             if(file.name === 'file 2' && uploadInfo.chunkIndex === 1) {
@@ -2918,7 +2918,7 @@ QUnit.module('uploading events', moduleConfig, () => {
             uploadMode: 'instantly',
             uploadChunk: uploadChunkSpy,
             multiple: true,
-            onUploadCompleted: onUploadCompletedSpy,
+            onFilesUploaded: onUploadCompletedSpy,
             onUploadError: onUploadErrorSpy,
             onUploaded: onUploadedSpy
         });
@@ -2944,7 +2944,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
     });
 
-    QUnit.test('onUploadCompleted event should rise when files are both successfully uploaded and invalid', function(assert) {
+    QUnit.test('onFilesUploaded event should rise when files are both successfully uploaded and invalid', function(assert) {
         const chunkSize = 1000;
         const onUploadedSpy = sinon.spy();
         const onUploadCompletedSpy = sinon.spy();
@@ -2954,7 +2954,7 @@ QUnit.module('uploading events', moduleConfig, () => {
             uploadMode: 'instantly',
             multiple: true,
             maxFileSize: chunkSize,
-            onUploadCompleted: onUploadCompletedSpy,
+            onFilesUploaded: onUploadCompletedSpy,
             onUploaded: onUploadedSpy
         });
 
@@ -2981,7 +2981,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called again');
     });
 
-    QUnit.test('onUploadCompleted event should rise when files are all successfully uploaded, invalid and has error', function(assert) {
+    QUnit.test('onFilesUploaded event should rise when files are all successfully uploaded, invalid and has error', function(assert) {
         const chunkSize = 1000;
         const uploadChunkSpy = sinon.spy((file, uploadInfo) => executeAfterDelay(() => {
             if(file.name === 'file 2' && uploadInfo.chunkIndex === 1) {
@@ -2998,7 +2998,7 @@ QUnit.module('uploading events', moduleConfig, () => {
             uploadChunk: uploadChunkSpy,
             multiple: true,
             maxFileSize: chunkSize * 2,
-            onUploadCompleted: onUploadCompletedSpy,
+            onFilesUploaded: onUploadCompletedSpy,
             onUploadError: onUploadErrorSpy,
             onUploaded: onUploadedSpy
         });
