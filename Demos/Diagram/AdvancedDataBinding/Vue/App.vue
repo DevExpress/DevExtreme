@@ -43,11 +43,11 @@ export default {
   data() {
     return {
       orgItemsDataSource: new ArrayStore({
-        key: 'this',
+        key: 'id',
         data: service.getOrgItems()
       }),
       orgLinksDataSource: new ArrayStore({
-        key: 'this',
+        key: 'id',
         data: service.getOrgLinks()
       })
     };

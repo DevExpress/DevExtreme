@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       dataSource: new ArrayStore({
-        key: 'this',
+        key: 'ID',
         data: service.getEmployees()
       }),
       selectedItemNames: 'Nobody has been selected'

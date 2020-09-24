@@ -2,7 +2,7 @@ $(function() {
     $("#diagram").dxDiagram({
         nodes: {
             dataSource: new DevExpress.data.ArrayStore({
-                key: "this",
+                key: "id",
                 data: orgItems
             }),
             imageUrlExpr: "picture",
@@ -13,7 +13,7 @@ $(function() {
         },
         edges: {
             dataSource: new DevExpress.data.ArrayStore({
-                key: "this",
+                key: "id",
                 data: orgLinks
             })
         },

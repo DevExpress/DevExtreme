@@ -8,11 +8,11 @@ class App extends React.Component {
     super(props);
 
     this.orgItemsDataSource = new ArrayStore({
-      key: 'this',
+      key: 'id',
       data: service.getOrgItems()
     });
     this.orgLinksDataSource = new ArrayStore({
-      key: 'this',
+      key: 'id',
       data: service.getOrgLinks()
     });
   }

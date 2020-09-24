@@ -26,11 +26,11 @@ export class AppComponent {
 
     constructor(service: Service) {
         this.flowNodesDataSource = new ArrayStore({
-            key: "this",
+            key: "id",
             data: service.getFlowNodes()
         });
         this.flowEdgesDataSource = new ArrayStore({
-            key: "this",
+            key: "id",
             data: service.getFlowEdges()
         });
     }

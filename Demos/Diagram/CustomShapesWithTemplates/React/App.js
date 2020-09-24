@@ -11,7 +11,7 @@ class App extends React.Component {
 
     this.employees = service.getEmployees();
     this.dataSource = new ArrayStore({
-      key: 'this',
+      key: 'ID',
       data: this.employees
     });
 

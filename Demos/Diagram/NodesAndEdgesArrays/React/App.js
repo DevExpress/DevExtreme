@@ -8,11 +8,11 @@ class App extends React.Component {
     super(props);
 
     this.flowNodesDataSource = new ArrayStore({
-      key: 'this',
+      key: 'id',
       data: service.getFlowNodes()
     });
     this.flowEdgesDataSource = new ArrayStore({
-      key: 'this',
+      key: 'id',
       data: service.getFlowEdges()
     });
   }

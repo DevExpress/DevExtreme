@@ -28,7 +28,7 @@ export class AppComponent {
     constructor(service: Service) {
         this.employees = service.getEmployees();
         this.dataSource = new ArrayStore({
-            key: "this",
+            key: "ID",
             data: service.getEmployees()
         });
     }

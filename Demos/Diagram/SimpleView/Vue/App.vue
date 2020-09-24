@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       dataSource: new ArrayStore({
-        key: 'this',
+        key: 'ID',
         data: service.getEmployees()
       })
     };

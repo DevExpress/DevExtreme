@@ -2,7 +2,7 @@ $(function() {
     $("#diagram").dxDiagram({
         nodes: {
             dataSource: new DevExpress.data.ArrayStore({
-                key: "this",
+                key: "ID",
                 data: employees
             }),
             keyExpr: "ID",

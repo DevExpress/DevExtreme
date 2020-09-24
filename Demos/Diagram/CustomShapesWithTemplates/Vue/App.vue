@@ -66,7 +66,7 @@ export default {
     return {
       employees: service.getEmployees(),
       dataSource: new ArrayStore({
-        key: 'this',
+        key: 'ID',
         data: service.getEmployees()
       }),
       currentEmployee: {},

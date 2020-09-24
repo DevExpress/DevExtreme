@@ -36,11 +36,11 @@ export default {
   data() {
     return {
       flowNodesDataSource: new ArrayStore({
-        key: 'this',
+        key: 'id',
         data: service.getFlowNodes()
       }),
       flowEdgesDataSource: new ArrayStore({
-        key: 'this',
+        key: 'id',
         data: service.getFlowEdges()
       })
     };

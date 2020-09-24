@@ -26,11 +26,11 @@ export class AppComponent {
 
     constructor(service: Service) {
         this.orgItemsDataSource = new ArrayStore({
-            key: "this",
+            key: "ID",
             data: service.getOrgItems()
         });
         this.orgLinksDataSource = new ArrayStore({
-            key: "this",
+            key: "ID",
             data: service.getOrgLinks()
         });
     }
