@@ -127,18 +127,17 @@ export const Export = {
     },
 
     _getPDFCellStyles: function(rowType, columnAlignment, cellStyle) {
-        const { alignment: horizontalAlignment, bold, wrapText } = cellStyle;
+        const { alignment: cellAlignment, bold, wrapText } = cellStyle;
+        const align = (rowType === 'header') ? columnAlignment : cellAlignment;
+        const pdfCellStyle = {};
 
-        if(rowType === 'header') {
-            return {
-                'halign': columnAlignment
-            };
+        if(align) { pdfCellStyle['halign'] = align; }
+        if(rowType !== 'header') {
+            if(bold) { pdfCellStyle.fontStyle = 'bold'; }
+            if(wrapText) { pdfCellStyle.cellWidth = 'wrap'; }
         }
-        return {
-            'halign': horizontalAlignment,
-            fontStyle: bold ? 'bold' : undefined,
-            cellWidth: wrapText ? 'wrap' : undefined
-        };
+
+        return pdfCellStyle;
     },
 
     _tryGetPdfColumnWidths(autoTableWidth, columnWidths) {
