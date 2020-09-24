@@ -1006,7 +1006,7 @@ class FileUploader extends Editor {
         }
     }
 
-    _fireUploadCompletedAction() {
+    _handleAllFilesUploaded() {
         const areAllFilesLoaded = this._files.every(file => file._isError || file._isLoaded || file.isAborted);
         if(areAllFilesLoaded) {
             this._uploadCompletedAction();
@@ -1526,7 +1526,7 @@ class FileUploadStrategyBase {
             event: e,
             request: file.request
         });
-        this.fileUploader._fireUploadCompletedAction();
+        this.fileUploader._handleAllFilesUploaded();
     }
 
     _onErrorHandler(file, error) {
@@ -1537,7 +1537,7 @@ class FileUploadStrategyBase {
             request: file.request,
             error
         });
-        this.fileUploader._fireUploadCompletedAction();
+        this.fileUploader._handleAllFilesUploaded();
     }
 
     _onLoadedHandler(file, e) {
@@ -1548,7 +1548,7 @@ class FileUploadStrategyBase {
             event: e,
             request: file.request
         });
-        this.fileUploader._fireUploadCompletedAction();
+        this.fileUploader._handleAllFilesUploaded();
     }
 
     _onProgressHandler(file, e) {
