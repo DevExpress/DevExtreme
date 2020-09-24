@@ -685,10 +685,10 @@ if(Quill) {
             const selection = this.quill.getSelection();
             const isTableOperationsEnabled = selection && Boolean(this.quill.getFormat(selection)?.table);
             TABLE_OPERATIONS.forEach((operationName) => {
-                if(operationName !== 'insertTable') {
-                    const widget = this._toolbarWidgets.getByName(operationName);
-                    this._updateManipulationWidget(widget, isTableOperationsEnabled);
-                }
+                const isInsertTable = operationName === 'insertTable';
+
+                const widget = this._toolbarWidgets.getByName(operationName);
+                this._updateManipulationWidget(widget, isInsertTable ? !isTableOperationsEnabled : isTableOperationsEnabled);
             });
         }
 
