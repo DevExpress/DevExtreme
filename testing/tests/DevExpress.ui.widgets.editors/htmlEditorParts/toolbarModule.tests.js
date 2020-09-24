@@ -1272,7 +1272,14 @@ testModule('tables', simpleModuleConfig, function() {
         $formatWidgets.each((index, element) => {
             const operationName = TABLE_OPERATIONS[index];
             const isElementExist = Boolean($(element).find(`.dx-icon-${operationName.toLowerCase()}`).length);
+            const expectedDisabledState = operationName === 'insertTable' ? false : true;
+
             assert.ok(isElementExist, `${operationName} item has an related icon`);
+            assert.strictEqual(
+                $(element).hasClass(DISABLED_STATE_CLASS),
+                expectedDisabledState,
+                `${operationName} item should ${expectedDisabledState ? '' : 'not'} be disabled in case the table is not focused`
+            );
         });
     });
 
@@ -1288,9 +1295,11 @@ testModule('tables', simpleModuleConfig, function() {
         toolbar.updateTableWidgets();
 
         const $disabledFormatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}.${DISABLED_STATE_CLASS}`);
-        const toolbarHasDisabledItems = Boolean($disabledFormatWidgets.length);
+        const disabledItemsCount = $disabledFormatWidgets.length;
+        const isInsertTableOperationDisabled = $disabledFormatWidgets.first().hasClass('dx-inserttable-format');
 
-        assert.notOk(toolbarHasDisabledItems, 'table focused -> all table operation buttons are enabled');
+        assert.strictEqual(disabledItemsCount, 1, 'table focused -> all table operation buttons are enabled (except "insertTable")');
+        assert.ok(isInsertTableOperationDisabled);
     });
 
     test('buttons interaction', function(assert) {
