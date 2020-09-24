@@ -1009,7 +1009,7 @@ class FileUploader extends Editor {
     _fireUploadCompletedAction() {
         const areAllFilesLoaded = this._files.every(file => file._isError || file._isLoaded || file.isAborted);
         if(areAllFilesLoaded) {
-            this._uploadCompletedAction({ files: this._files.map(file => file.value) });
+            this._uploadCompletedAction();
         }
     }
 
