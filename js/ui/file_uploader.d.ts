@@ -204,6 +204,16 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onUploadAborted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest }) => any);
     /**
+     * @docid dxFileUploaderOptions.onUploadCompleted
+     * @extends Action
+     * @type function(e)
+     * @type_function_param1 e:object
+     * @action
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    onUploadCompleted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any }) => any);
+    /**
      * @docid dxFileUploaderOptions.onUploadError
      * @extends Action
      * @type function(e)
