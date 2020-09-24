@@ -2,6 +2,15 @@ import registerComponent from 'core/component_registrator';
 import { name as getName } from 'core/utils/public_component';
 import { act } from 'preact/test-utils';
 
+const WRAPPED_METHOD_NAMES = {
+    ctor: true,
+    option: true,
+    focus: true,
+    repaint: true,
+    render: true,
+    _createComponent: true,
+};
+
 function functionWrapper() {
     let res;
     const that = this;
@@ -10,6 +19,15 @@ function functionWrapper() {
     });
     return res;
 }
+
+const skipRenovationAsyncMethods = (widget) => {
+    const wrappedMethods = Object.keys(WRAPPED_METHOD_NAMES).reduce((methods, methodName) => {
+        methods[methodName] = functionWrapper;
+        return methods;
+    }, {});
+
+    return widget.inherit(wrappedMethods);
+};
 
 export const setupRenovation = (widget) => {
     const widgetName = getName(widget);
@@ -21,37 +39,6 @@ export const setupRenovation = (widget) => {
     QUnit.moduleDone(() => {
         registerComponent(widgetName, widget);
     });
-};
-
-const skipRenovationAsyncMethods = (widget) => {
-    const methodNames = {
-        ctor: true,
-        option: true,
-        focus: true,
-        repaint: true,
-        _createComponent: true,
-    };
-
-    const wrappedMethods = Object.keys(methodNames).reduce((methods, methodName) => {
-        methods[methodName] = functionWrapper;
-        return methods;
-    }, {});
-
-    return widget.inherit(wrappedMethods);
-};
-
-export const createRenovationConfig = (oldWidget, config = {}) => {
-    const widgetName = getName(oldWidget);
-    return {
-        beforeEach: function() {
-            registerComponent(widgetName, skipRenovationAsyncMethods(oldWidget));
-            config.beforeEach && config.beforeEach.apply(this);
-        },
-        afterEach: function() {
-            registerComponent(widgetName, oldWidget);
-            config.afterEach && config.afterEach.apply(this);
-        },
-    };
 };
 
 export const createRenovationModuleConfig = (oldWidget, renovatedWidget, config = {}) => {
