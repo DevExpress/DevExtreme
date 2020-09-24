@@ -127,6 +127,8 @@ class FileUploader extends Editor {
 
             uploadCustomData: {},
 
+            onBeforeSend: null,
+
             onUploadStarted: null,
 
             onUploaded: null,
@@ -239,6 +241,7 @@ class FileUploader extends Editor {
 
         this._setUploadStrategy();
         this._createFiles();
+        this._createBeforeSendAction();
         this._createUploadStartedAction();
         this._createUploadedAction();
         this._createProgressAction();
@@ -469,6 +472,10 @@ class FileUploader extends Editor {
         const fileSize = file.value.size;
         const minFileSize = this.option('minFileSize');
         return minFileSize > 0 ? fileSize >= minFileSize : true;
+    }
+
+    _createBeforeSendAction() {
+        this._beforeSendAction = this._createActionByOption('onBeforeSend', { excludeValidators: ['readOnly'] });
     }
 
     _createUploadStartedAction() {
@@ -1300,6 +1307,9 @@ class FileUploader extends Editor {
                 this.reset();
                 this._invalidate();
                 break;
+            case 'onBeforeSend':
+                this._createBeforeSendAction();
+                break;
             case 'onUploadStarted':
                 this._createUploadStartedAction();
                 break;
@@ -1416,9 +1426,9 @@ class FileUploadStrategyBase {
         file.request && file.request.abort();
         file.isAborted = true;
 
-        if(this._isCustomAbortUpload()) {
+        if(this._isCustomCallback('abortUpload')) {
             const abortUpload = this.fileUploader.option('abortUpload');
-            const arg = this._createAbortUploadArgument(file);
+            const arg = this._createUploadArgument(file);
 
             let deferred = null;
             try {
@@ -1434,14 +1444,24 @@ class FileUploadStrategyBase {
         }
     }
 
-    _createAbortUploadArgument(file) {
+    _beforeSend(xhr, file) {
+        const arg = this._createUploadArgument(file);
+        this.fileUploader._beforeSendAction({
+            request: xhr,
+            file: file.value,
+            uploadInfo: arg
+        });
+        file.request = xhr;
+    }
+
+    _createUploadArgument(file) {
     }
 
     _uploadCore(file) {
     }
 
-    _isCustomAbortUpload() {
-        const callback = this.fileUploader.option('abortUpload');
+    _isCustomCallback(name) {
+        const callback = this.fileUploader.option(name);
         return callback && isFunction(callback);
     }
 
@@ -1612,6 +1632,21 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     _getEvent(e) {
         return null;
     }
+
+    _createUploadArgument(file) {
+        return this._createChunksInfo(file.chunksData);
+    }
+
+    _createChunksInfo(chunksData) {
+        return {
+            bytesUploaded: chunksData.loadedBytes,
+            chunkCount: chunksData.count,
+            customData: chunksData.customData,
+            chunkBlob: chunksData.currentChunk.blob,
+            chunkIndex: chunksData.currentChunk.index
+        };
+    }
+
 }
 
 class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
@@ -1621,9 +1656,7 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
             url: this.fileUploader.option('uploadUrl'),
             method: this.fileUploader.option('uploadMethod'),
             headers: this.fileUploader.option('uploadHeaders'),
-            beforeSend: xhr => {
-                file.request = xhr;
-            },
+            beforeSend: xhr => this._beforeSend(xhr, file),
             upload: {
                 'onloadstart': () => this._tryRaiseStartLoad(file),
                 'onabort': () => file.onAbort.fire()
@@ -1677,24 +1710,9 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
         }
     }
 
-    _createAbortUploadArgument(file) {
-        return this._createChunksInfo(file.chunksData);
-    }
-
     _shouldHandleError(e) {
         return true;
     }
-
-    _createChunksInfo(chunksData) {
-        return {
-            bytesUploaded: chunksData.loadedBytes,
-            chunkCount: chunksData.count,
-            customData: chunksData.customData,
-            chunkBlob: chunksData.currentChunk.blob,
-            chunkIndex: chunksData.currentChunk.index
-        };
-    }
-
 }
 
 class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
@@ -1743,9 +1761,7 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
             url: this.fileUploader.option('uploadUrl'),
             method: this.fileUploader.option('uploadMethod'),
             headers: this.fileUploader.option('uploadHeaders'),
-            beforeSend: xhr => {
-                file.request = xhr;
-            },
+            beforeSend: xhr => this._beforeSend(xhr, file),
             upload: {
                 'onprogress': e => this._handleProgress(file, e),
                 'onloadstart': () => file.onLoadStart.fire(),

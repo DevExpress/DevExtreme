@@ -6859,6 +6859,10 @@ declare module DevExpress.ui {
          */
         name?: string;
         /**
+         * [descr:dxFileUploader.Options.onBeforeSend]
+         */
+        onBeforeSend?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, request?: XMLHttpRequest, file?: File, uploadInfo?: DevExpress.fileManagement.UploadInfo }) => any);
+        /**
          * [descr:dxFileUploader.Options.onDropZoneEnter]
          */
         onDropZoneEnter?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, dropZoneElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any);
