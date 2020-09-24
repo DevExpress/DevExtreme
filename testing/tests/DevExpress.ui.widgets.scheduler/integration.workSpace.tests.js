@@ -149,20 +149,25 @@ QUnit.test('Scheduler work space should have a single type class', function(asse
     assert.ok(check('dx-scheduler-work-space-month'), 'Work space has a right type class');
 });
 
-QUnit.test('Pointer down on workspace cell should focus cell', function(assert) {
-    this.createInstance({ currentDate: new Date(2015, 1, 10) });
+['standard', 'virtual'].forEach((scrollingMode) => {
+    QUnit.test(`Pointer down on workspace cell should focus cell in ${scrollingMode} mode`, function(assert) {
+        this.createInstance({
+            currentDate: new Date(2015, 1, 10),
+            scrolling: { mode: scrollingMode },
+        });
 
-    const $firstCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0);
-    const $otherCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(1);
+        const $firstCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0);
+        const $otherCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(1);
 
-    $firstCell.trigger('dxpointerdown');
+        $firstCell.trigger('dxpointerdown');
 
-    assert.ok($firstCell.hasClass('dx-state-focused'), 'first cell was focused after first pointerdown');
+        assert.ok($firstCell.hasClass('dx-state-focused'), 'first cell was focused after first pointerdown');
 
-    $otherCell.trigger('dxpointerdown');
+        $otherCell.trigger('dxpointerdown');
 
-    assert.ok(!$firstCell.hasClass('dx-state-focused'), 'first cell is not focused');
-    assert.ok($otherCell.hasClass('dx-state-focused'), 'other cell is focused');
+        assert.ok(!$firstCell.hasClass('dx-state-focused'), 'first cell is not focused');
+        assert.ok($otherCell.hasClass('dx-state-focused'), 'other cell is focused');
+    });
 });
 
 QUnit.test('Double click on workspace cell should call scheduler.showAppointmentPopup method in day view', function(assert) {
