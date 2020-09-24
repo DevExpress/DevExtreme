@@ -1278,7 +1278,7 @@ testModule('tables', simpleModuleConfig, function() {
             assert.strictEqual(
                 $(element).hasClass(DISABLED_STATE_CLASS),
                 expectedDisabledState,
-                `${operationName} item should be disabled in case the table is not focused`
+                `${operationName} item should ${expectedDisabledState ? '' : 'not'} be disabled in case the table is not focused`
             );
         });
     });
