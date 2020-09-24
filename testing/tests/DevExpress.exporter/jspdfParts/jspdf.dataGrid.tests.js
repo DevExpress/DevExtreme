@@ -518,7 +518,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
                 [{ content: 'f1', }, { content: 'f2', styles: { 'halign': 'right' } }]
             ],
             body: [
-                [{ content: '1', styles: { 'halign': 'left' } }, { content: '2', styles: { 'halign': 'right' } }]
+                [{ content: '1', styles: { 'halign': 'left', cellWidth: 'wrap' } }, { content: '2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
             ]
         };
 
@@ -1414,9 +1414,9 @@ QUnit.module('Grouping', moduleConfig, () => {
             head: [[ { content: 'f2', styles: { 'halign': 'right' } } ]],
             body: [
                 [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_1', styles: { 'halign': 'right' } }],
+                [{ content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }],
                 [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_2', styles: { 'halign': 'right' } }]
+                [{ content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
             ]
         };
 
@@ -1453,9 +1453,9 @@ QUnit.module('Grouping', moduleConfig, () => {
             head: [[ { content: 'f2', styles: { 'halign': 'right' } } ]],
             body: [
                 [{ content: 'f1: f1_1', styles: { 'halign': 'right', fontStyle: 'bold' } }],
-                [{ content: 'f2_1', styles: { 'halign': 'right' } }],
+                [{ content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }],
                 [{ content: 'f1: f1_2', styles: { 'halign': 'right', fontStyle: 'bold' } }],
-                [{ content: 'f2_2', styles: { 'halign': 'right' } }]
+                [{ content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
             ]
         };
 
@@ -1892,20 +1892,20 @@ QUnit.module('Grouping', moduleConfig, () => {
             body: [
                 [
                     { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f4_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f5_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                    { content: 'Max: f4_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                    { content: 'Max: f5_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
                 ], [
                     { content: 'f2: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f4_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f5_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                    { content: 'Max: f4_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                    { content: 'Max: f5_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
                 ], [
                     { content: 'f3_1', styles: { 'halign': 'left' } },
                     { content: 'f4_1', styles: { 'halign': 'left' } },
                     { content: 'f5_1', styles: { 'halign': 'left' } }
                 ], [
                     { content: 'f2: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f4_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f5_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                    { content: 'Max: f4_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                    { content: 'Max: f5_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
                 ], [
                     { content: 'f3_2', styles: { 'halign': 'left' } },
                     { content: 'f4_2', styles: { 'halign': 'left' } },
@@ -2287,9 +2287,9 @@ QUnit.module('Group summary', moduleConfig, () => {
                 { content: 'f2_2', styles: { 'halign': 'left' } },
                 { content: 'f3_2', styles: { 'halign': 'left' } }
             ], [
-                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
             ]]
         };
 
@@ -2330,7 +2330,7 @@ QUnit.module('Group summary', moduleConfig, () => {
         const expectedCells = {
             body: [[
                 { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
             ], [
                 { content: 'f1_1', styles: { 'halign': 'left' } },
                 { content: 'f2_1', styles: { 'halign': 'left' } },
@@ -2386,8 +2386,8 @@ QUnit.module('Group summary', moduleConfig, () => {
                 { content: 'f2_2', styles: { 'halign': 'left' } },
                 { content: 'f3_2', styles: { 'halign': 'left' } }
             ], [
-                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
             ]]
         };
 
@@ -2435,8 +2435,8 @@ QUnit.module('Group summary', moduleConfig, () => {
                 { content: 'f2_2', styles: { 'halign': 'left' } },
                 { content: 'f3_2', styles: { 'halign': 'left' } }
             ], [
-                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
             ]]
         };
 
@@ -2477,7 +2477,7 @@ QUnit.module('Group summary', moduleConfig, () => {
         const expectedCells = {
             body: [[
                 { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
             ], [
                 { content: 'f2_1', styles: { 'halign': 'left' } },
                 { content: 'f3_1', styles: { 'halign': 'left' } }
@@ -2531,8 +2531,8 @@ QUnit.module('Group summary', moduleConfig, () => {
                 { content: 'f1_2', styles: { 'halign': 'left' } },
                 { content: 'f3_2', styles: { 'halign': 'left' } }
             ], [
-                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
             ]]
         };
 
@@ -2573,7 +2573,7 @@ QUnit.module('Group summary', moduleConfig, () => {
         const expectedCells = {
             body: [[
                 { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
             ], [
                 { content: 'f1_1', styles: { 'halign': 'left' } },
                 { content: 'f3_1', styles: { 'halign': 'left' } }
