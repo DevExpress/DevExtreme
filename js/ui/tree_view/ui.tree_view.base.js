@@ -18,7 +18,6 @@ import fx from '../../animation/fx';
 import Scrollable from '../scroll_view/ui.scrollable';
 import LoadIndicator from '../load_indicator';
 import { fromPromise, Deferred, when } from '../../core/utils/deferred';
-import errors from '../widget/ui.errors';
 
 const WIDGET_CLASS = 'dx-treeview';
 
@@ -1576,9 +1575,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
         });
     },
 
-    // Deprecated. Will bew removed in near future - use getSelectedNodeKeys method instead
     getSelectedNodesKeys: function() {
-        errors.log('W0002', 'dxTreeView', 'getSelectedNodesKeys', '20.1', 'Use the \'getSelectedNodeKeys\' method instead');
         return this.getSelectedNodeKeys();
     },
 
