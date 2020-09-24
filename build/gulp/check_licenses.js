@@ -13,11 +13,8 @@ const checkRruleLicenseNotice = lazyPipe()
         const separator = '\\s*\\*\\s';
 
         const fileContent = file.contents.toString();
-
-        // const re1 = new RegExp('\\*!\\s*.*' + name + '\\s*\\*\\s' + url + '\\s*\\*\\s*\\*\\s' + copyright + '\\s*\\*\\s' + licenceType + '\\s*\\*\\s' + licenseUrl);
-        // const re = new RegExp('\\*!\\s*.*' + name + separator + url + separator + '*\\*\\s' + copyright + separator + licenseType + separator + licenseUrl);
-
         const re = new RegExp(`\\*!\\s*.*${name}${separator}${url}${separator}*\\*\\s${copyright}${separator}${licenseType}${separator}${licenseUrl}`);
+
         if(fileContent.search(re) === -1) {
             throw new Error(`RRule license header wasn't found in ${file.stem}`);
         }
