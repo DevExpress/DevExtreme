@@ -1007,7 +1007,7 @@ class FileUploader extends Editor {
     }
 
     _handleAllFilesUploaded() {
-        const areAllFilesLoaded = this._files.every(file => file._isError || file._isLoaded || file.isAborted);
+        const areAllFilesLoaded = this._files.every(file => !file.isValid() || file._isError || file._isLoaded || file.isAborted);
         if(areAllFilesLoaded) {
             this._uploadCompletedAction();
         }
