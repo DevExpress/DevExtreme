@@ -13,8 +13,8 @@ import { initializeDxObjectAssign, clearDxObjectAssign } from './objectAssignHel
 import { initializeDxArrayFind, clearDxArrayFind } from './arrayFindHelper.js';
 import ExcelJSLocalizationFormatTests from './exceljs.format.tests.js';
 import { ExcelJSOptionTests } from './exceljs.option.tests.js';
+import { isDefined } from 'core/utils/type';
 
-import typeUtils from 'core/utils/type';
 import 'ui/data_grid/ui.data_grid';
 
 import 'common.css!';
@@ -88,7 +88,7 @@ const moduleConfig = {
                 worksheet: context.worksheet,
                 topLeftCell: topLeftCell,
                 customizeCell: (eventArgs) => {
-                    if(typeUtils.isDefined(expectedCustomizeCellArgs)) {
+                    if(isDefined(expectedCustomizeCellArgs)) {
                         helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
                     }
                 },
