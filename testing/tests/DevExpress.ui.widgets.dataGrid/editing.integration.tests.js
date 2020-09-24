@@ -3962,3 +3962,255 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         assert.equal(rowsView.synchronizeRows.callCount, 2, 'synchronizeRows call count after editCell');
     });
 });
+
+QUnit.module('Editing state', baseModuleConfig, () => {
+    QUnit.test('editRowKey in init configuration (editMode = row)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'row',
+                editRowKey: 1
+            },
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        // assert
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editRowKey was not overwritten');
+        assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'editing row');
+        assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
+    });
+
+    QUnit.test('editRowKey in init configuration (editMode = form)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'form',
+                editRowKey: 1
+            },
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        // assert
+        const $firstRow = $(dataGrid.getRowElement(0));
+
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editRowKey was not overwritten');
+        assert.ok($firstRow.hasClass('dx-datagrid-edit-form'), 'edit form');
+        assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
+    });
+
+    QUnit.skip('editRowKey in init configuration (editMode = popup)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: [{ id: 1 }, { id: 2 }],
+            keyExpr: 'id',
+            editing: {
+                allowUpdating: true,
+                mode: 'popup',
+                editRowKey: 1
+            },
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        // assert
+        assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editRowKey was not overwritten');
+        assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'editing row');
+        assert.ok($('.dx-datagrid-edit-popup').length, 'popup is shown');
+        assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
+    });
+
+    ['cell', 'batch'].forEach(editMode => {
+        QUnit.test(`editRowKey in init configuration (editMode = ${editMode})`, function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                editing: {
+                    allowUpdating: true,
+                    mode: editMode,
+                    editRowKey: 1
+                },
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // assert
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+
+            assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editRowKey was not overwritten');
+            assert.notOk($firstCell.hasClass('dx-editor-cell'), 'edit cell');
+            assert.notOk($firstCell.find('input').length, 'no input');
+            assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
+        });
+
+        QUnit.test(`editRowKey in init configuration (editMode = ${editMode})`, function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                editing: {
+                    allowUpdating: true,
+                    mode: editMode,
+                    editColumnName: 'id'
+                },
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // assert
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+
+            assert.equal(dataGrid.option('editing.editColumnName'), 'id', 'editColumnName was not overwritten');
+            assert.notOk($firstCell.hasClass('dx-editor-cell'), 'edit cell');
+            assert.notOk($firstCell.find('input').length, 'no input');
+            assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
+        });
+
+        QUnit.test(`editColumnName and editRowKey in init configuration (editMode = ${editMode})`, function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                editing: {
+                    allowUpdating: true,
+                    mode: editMode,
+                    editRowKey: 1,
+                    editColumnName: 'id'
+                },
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // assert
+            const $firstCell = $(dataGrid.getCellElement(0, 0));
+
+            assert.equal(dataGrid.option('editing.editRowKey'), 1, 'editRowKey was not overwritten');
+            assert.ok($firstCell.hasClass('dx-editor-cell'), 'edit cell');
+            assert.ok($firstCell.find('input').length, 'has input');
+            assert.deepEqual(dataGrid.option('editing.changes'), [], 'no changes');
+        });
+    });
+
+    ['cell', 'form', 'row', 'popup', 'batch'].forEach(editMode => {
+        QUnit.test(`change with type = 'remove' in init configuration (editMode = ${editMode})`, function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ id: 1 }, { id: 2 }],
+                keyExpr: 'id',
+                editing: {
+                    allowUpdating: true,
+                    mode: editMode,
+                    changes: [{ type: 'remove', key: 1 }]
+                },
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // assert
+            assert.equal(dataGrid.getVisibleRows().length, 2, 'two rows');
+            assert.deepEqual(dataGrid.option('editing.changes')[0], { type: 'remove', key: 1 }, 'change was not overwritten');
+
+            if(editMode === 'batch') {
+                assert.ok($(dataGrid.getRowElement(0)).hasClass('dx-row-removed'), 'row is highlighted');
+            }
+
+            // act
+            dataGrid.saveEditData();
+
+            // assert
+            assert.equal(dataGrid.getVisibleRows().length, 1, 'one row');
+            assert.equal(dataGrid.getVisibleRows()[0].key, 2, 'key of the remaining row');
+            assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+        });
+
+        if(editMode !== 'popup') {
+            QUnit.test(`change with type = 'insert' in init configuration (editMode = ${editMode})`, function(assert) {
+            // arrange
+                const changes = [{
+                    data: { field: 'test' },
+                    key: {
+                        '__DX_INSERT_INDEX__': 1,
+                        'dataRowIndex': 0,
+                        'pageIndex': 0,
+                        'parentKey': undefined,
+                        'rowIndex': 0
+                    },
+                    type: 'insert'
+                }];
+                const data = [{ field: '111', id: 1 }, { field: '222', id: 2 }];
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: data,
+                    keyExpr: 'id',
+                    editing: {
+                        allowUpdating: true,
+                        mode: editMode,
+                        changes
+                    },
+                    loadingTimeout: undefined
+                }).dxDataGrid('instance');
+
+                // assert
+                let visibleRows = dataGrid.getVisibleRows();
+                const $insertedRow = $(dataGrid.getRowElement(0));
+                const $cells = $insertedRow.find('td');
+
+                assert.equal(visibleRows.length, 3, 'three rows');
+                assert.ok(visibleRows[0].isNewRow, 'new row');
+                assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+                assert.equal(data.length, 2, 'row count in datasource');
+
+                if(editMode !== 'popup') {
+                    assert.ok($insertedRow.hasClass('dx-row-inserted'), 'inserted row class');
+                    assert.ok($cells.eq(0).hasClass('dx-cell-modified'), 'first cell is modified');
+                    assert.equal($cells.eq(0).text(), 'test', 'first cell\'s text');
+                }
+
+                // act
+                dataGrid.saveEditData();
+
+                // assert
+                assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+
+                visibleRows = dataGrid.getVisibleRows();
+                assert.equal(visibleRows.length, 3, 'three rows');
+                assert.notOk(visibleRows[0].isNewRow, 'not new row');
+                assert.equal(data.length, 3, 'row count in datasource');
+                assert.equal(data[2].field, 'test', 'field value was posted');
+            });
+        }
+
+        QUnit.test(`change with type = 'update' in init configuration (editMode = ${editMode})`, function(assert) {
+            // arrange
+            const data = [{ id: 1, field: '111' }, { id: 2, field: '222' }];
+            const changes = [{
+                key: 1,
+                type: 'update',
+                data: { field: 'test' }
+            }];
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: data,
+                keyExpr: 'id',
+                editing: {
+                    allowUpdating: true,
+                    mode: editMode,
+                    changes
+                },
+                loadingTimeout: undefined
+            }).dxDataGrid('instance');
+
+            // assert
+            assert.equal(data[0].field, '111', 'change was not posted to datasource');
+            assert.deepEqual(dataGrid.option('editing.changes'), changes, 'change was not overwritten');
+            assert.ok($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'cell has modified class');
+
+            // act
+            dataGrid.saveEditData();
+
+            // assert
+            assert.equal(data[0].field, 'test', 'change was posted to datasource');
+            assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
+            assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'cell has not modified class');
+        });
+    });
+});
