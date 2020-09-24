@@ -68,33 +68,33 @@ const Slider = TrackBar.inherit({
 
         return extend(this.callBase(), {
             leftArrow: function(e) {
-                this._processKeyBoardEvent(e);
+                this._processKeyboardEvent(e);
 
                 moveHandleLeft(this.option('step'));
             },
             rightArrow: function(e) {
-                this._processKeyBoardEvent(e);
+                this._processKeyboardEvent(e);
 
                 moveHandleRight(this.option('step'));
             },
             pageUp: function(e) {
-                this._processKeyBoardEvent(e);
+                this._processKeyboardEvent(e);
 
                 moveHandleRight(this.option('step') * this.option('keyStep'));
             },
             pageDown: function(e) {
-                this._processKeyBoardEvent(e);
+                this._processKeyboardEvent(e);
 
                 moveHandleLeft(this.option('step') * this.option('keyStep'));
             },
             home: function(e) {
-                this._processKeyBoardEvent(e);
+                this._processKeyboardEvent(e);
 
                 const min = this.option('min');
                 this.option('value', min);
             },
             end: function(e) {
-                this._processKeyBoardEvent(e);
+                this._processKeyboardEvent(e);
 
                 const max = this.option('max');
                 this.option('value', max);
@@ -102,7 +102,7 @@ const Slider = TrackBar.inherit({
         });
     },
 
-    _processKeyBoardEvent: function(e) {
+    _processKeyboardEvent: function(e) {
         e.preventDefault();
         e.stopPropagation();
         this._saveValueChangeEvent(e);
