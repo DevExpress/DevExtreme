@@ -10,7 +10,7 @@ import Editor from '../editor/editor';
 import Swipeable from '../../events/gesture/swipeable';
 import Navigator from './ui.calendar.navigator';
 import Views from './ui.calendar.views';
-import translator from '../../animation/translator';
+import { move } from '../../animation/translator';
 import browser from '../../core/utils/browser';
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
@@ -662,14 +662,14 @@ const Calendar = Editor.inherit({
     },
 
     _translateViews: function() {
-        translator.move(this._view.$element(), { left: 0, top: 0 });
+        move(this._view.$element(), { left: 0, top: 0 });
 
-        this._beforeView && translator.move(this._beforeView.$element(), {
+        this._beforeView && move(this._beforeView.$element(), {
             left: this._getViewPosition(-1),
             top: 0
         });
 
-        this._afterView && translator.move(this._afterView.$element(), {
+        this._afterView && move(this._afterView.$element(), {
             left: this._getViewPosition(1),
             top: 0
         });
@@ -835,7 +835,7 @@ const Calendar = Editor.inherit({
     _swipeUpdateHandler: function(e) {
         const offset = e.event.offset;
 
-        translator.move(this._$viewsWrapper, { left: offset * this._viewWidth(), top: 0 });
+        move(this._$viewsWrapper, { left: offset * this._viewWidth(), top: 0 });
         this._updateNavigatorCaption(offset);
     },
 
@@ -1075,7 +1075,7 @@ const Calendar = Editor.inherit({
     },
 
     _resetLocation: function() {
-        translator.move(this._$viewsWrapper, { left: 0, top: 0 });
+        move(this._$viewsWrapper, { left: 0, top: 0 });
     },
 
     _clean: function() {

@@ -11,7 +11,7 @@ import { dasherize } from '../core/utils/inflector';
 import { extend } from '../core/utils/extend';
 import DOMComponent from '../core/dom_component';
 import { getPublicElement } from '../core/element';
-import { addNamespace, needSkipEvent } from '../events/utils';
+import { addNamespace, needSkipEvent } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
 import {
     start as dragEventStart,

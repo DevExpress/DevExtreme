@@ -4,7 +4,7 @@ import domAdapter from '../core/dom_adapter';
 import Class from '../core/class';
 import registerEvent from './core/event_registrator';
 import { name as clickEventName } from './click';
-import { addNamespace, fireEvent } from './utils';
+import { addNamespace, fireEvent } from './utils/index';
 
 const DBLCLICK_EVENT_NAME = 'dxdblclick';
 const DBLCLICK_NAMESPACE = 'dxDblClick';

@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import { noop } from '../core/utils/common';
 import { name as clickEventName } from '../events/click';
-import translator from '../animation/translator';
+import { move } from '../animation/translator';
 import { getPublicElement } from '../core/element';
 import { hideCallback as hideTopOverlayCallback } from '../mobile/hide_callback';
 import registerComponent from '../core/component_registrator';
@@ -254,7 +254,7 @@ const SlideOutView = Widget.inherit({
             this._toggleShieldVisibility(true);
             animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
         } else {
-            translator.move($(this.content()), { left: pos });
+            move($(this.content()), { left: pos });
         }
     },
 

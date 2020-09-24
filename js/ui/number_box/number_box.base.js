@@ -9,7 +9,7 @@ import { inArray } from '../../core/utils/array';
 import devices from '../../core/devices';
 import browser from '../../core/utils/browser';
 import TextEditor from '../text_box/ui.text_editor';
-import { addNamespace, getChar, normalizeKeyName } from '../../events/utils';
+import { addNamespace, getChar, normalizeKeyName } from '../../events/utils/index';
 import SpinButtons from './number_box.spins';
 import messageLocalization from '../../localization/message';
 import { Deferred } from '../../core/utils/deferred';

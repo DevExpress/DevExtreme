@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import support from '../../core/utils/support';
+import { nativeScrolling } from '../../core/utils/support';
 import browser from '../../core/utils/browser';
 import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common';
 import { isPlainObject, isDefined } from '../../core/utils/type';
@@ -12,7 +12,7 @@ import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
 import { focusable } from '../widget/selectors';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import scrollEvents from './ui.events.emitter.gesture.scroll';
 import { SimulatedStrategy } from './ui.scrollable.simulated';
 import NativeStrategy from './ui.scrollable.native';
@@ -72,7 +72,7 @@ const Scrollable = DOMComponent.inherit({
         return this.callBase().concat(deviceDependentOptions(), [
             {
                 device: function() {
-                    return support.nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
+                    return nativeScrolling && devices.real().platform === 'android' && !browser.mozilla;
                 },
                 options: {
                     useSimulatedScrollbar: true

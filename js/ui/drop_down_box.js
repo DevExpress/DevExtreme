@@ -10,7 +10,7 @@ import eventsEngine from '../events/core/events_engine';
 import { extend } from '../core/utils/extend';
 import { getElementMaxHeightByWindow } from '../ui/overlay/utils';
 import registerComponent from '../core/component_registrator';
-import { normalizeKeyName } from '../events/utils';
+import { normalizeKeyName } from '../events/utils/index';
 import { keyboard } from '../events/short';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';

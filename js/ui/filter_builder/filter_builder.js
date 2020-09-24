@@ -13,7 +13,7 @@ import TreeView from '../tree_view';
 import Popup from '../popup';
 import { getElementMaxHeightByWindow } from '../overlay/utils';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
-import { normalizeKeyName } from '../../events/utils';
+import { normalizeKeyName } from '../../events/utils/index';
 import { renderValueText } from './utils';
 
 // STYLE filterBuilder
