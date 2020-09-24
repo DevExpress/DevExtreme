@@ -100,6 +100,10 @@ class OverlapStrategy extends DrawerStrategy {
         }
     }
 
+    onViewContentWrapperCreated($viewContentWrapper, panelPosition) {
+        this._setupContent($viewContentWrapper, panelPosition);
+    }
+
     _setupContent($content, position) {
         $content.css('padding' + camelize(position, true), this.getDrawerInstance().option('minSize'));
         $content.css('transform', 'inherit');
