@@ -374,6 +374,7 @@ _Translator2d.prototype = {
 
     _calculateUnProjection: function(distance) {
         const canvasOptions = this._canvasOptions;
+        this._businessRange.dataType === 'datetime' && (distance = Math.round(distance));
         return canvasOptions.invert ? canvasOptions.rangeMaxVisible.valueOf() - distance : canvasOptions.rangeMinVisible.valueOf() + distance;
     },
 
@@ -507,7 +508,19 @@ _Translator2d.prototype = {
     },
 
     getMinScale: function(zoom) {
+        const { dataType, interval } = this._businessRange;
+        if(dataType === 'datetime' && interval === 1) {
+            return this.getDateTimeMinScale(zoom);
+        }
         return zoom ? 1.1 : 0.9;
+    },
+
+    getDateTimeMinScale(zoom) {
+        const canvasOptions = this._canvasOptions;
+        let length = canvasOptions.canvasLength / canvasOptions.ratioOfCanvasRange;
+        length += (parseInt(length * 0.1) || 1) * (zoom ? -2 : 2);
+
+        return canvasOptions.canvasLength / (Math.max(length, 1) * canvasOptions.ratioOfCanvasRange);
     },
 
     getScale: function(val1, val2) {
