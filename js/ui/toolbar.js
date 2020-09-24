@@ -8,6 +8,7 @@ import ActionSheetStrategy from './toolbar/ui.toolbar.strategy.action_sheet';
 import DropDownMenuStrategy from './toolbar/ui.toolbar.strategy.drop_down_menu';
 import ToolbarBase from './toolbar/ui.toolbar.base';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
+import { deferRender } from '../core/utils/common';
 
 // STYLE toolbar
 
@@ -122,7 +123,9 @@ const Toolbar = ToolbarBase.inherit({
         this._hideOverflowItems();
         this._menuStrategy._updateMenuVisibility();
         this.callBase();
-        this._menuStrategy.renderMenuItems();
+        deferRender(() => {
+            this._menuStrategy.renderMenuItems();
+        });
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
@@ -204,7 +207,9 @@ const Toolbar = ToolbarBase.inherit({
 
     _renderMenu: function() {
         this._renderMenuStrategy();
-        this._menuStrategy.render();
+        deferRender(() => {
+            this._menuStrategy.render();
+        });
     },
 
     _renderMenuStrategy: function() {
