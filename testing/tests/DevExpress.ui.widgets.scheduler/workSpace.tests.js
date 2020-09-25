@@ -1835,8 +1835,8 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 const $element = this.createInstance({
                     focusStateEnabled: true,
                     firstDayOfWeek: 1,
-                    startDayHour: 3,
-                    endDayHour: 10,
+                    startDayHour: 0,
+                    endDayHour: 2,
                     hoursInterval: 0.5,
                     currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceWeek');
@@ -1856,11 +1856,11 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                 assert.equal(cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
                 assert.equal(cells.slice(8, 16).filter('.dx-state-focused').length, 2, 'right cells are focused');
                 keyboard.keyDown('left', { shiftKey: true });
-                assert.equal(cells.filter('.dx-state-focused').length, 16, 'right quantity of focused cells');
+                assert.equal(cells.filter('.dx-state-focused').length, 6, 'right quantity of focused cells');
                 keyboard.keyDown('right', { shiftKey: true });
                 assert.equal(cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
                 keyboard.keyDown('right', { shiftKey: true });
-                assert.equal(cells.filter('.dx-state-focused').length, 14, 'right quantity of focused cells');
+                assert.equal(cells.filter('.dx-state-focused').length, 4, 'right quantity of focused cells');
             });
 
 
@@ -1869,8 +1869,8 @@ QUnit.module('Workspace Keyboard Navigation', () => {
                     focusStateEnabled: true,
                     rtlEnabled: true,
                     firstDayOfWeek: 1,
-                    startDayHour: 3,
-                    endDayHour: 10,
+                    startDayHour: 0,
+                    endDayHour: 2,
                     hoursInterval: 0.5,
                     currentDate: new Date(2015, 3, 1)
                 }, 'dxSchedulerWorkSpaceWeek');
@@ -1880,13 +1880,13 @@ QUnit.module('Workspace Keyboard Navigation', () => {
 
                 pointerMock(cells.eq(14)).start().click();
                 keyboard.keyDown('left', { shiftKey: true });
-                assert.equal(cells.filter('.dx-state-focused').length, 15, 'right quantity of focused cells');
+                assert.equal(cells.filter('.dx-state-focused').length, 5, 'right quantity of focused cells');
                 keyboard.keyDown('up', { shiftKey: true });
-                assert.equal(cells.filter('.dx-state-focused').length, 14, 'right quantity of focused cells');
+                assert.equal(cells.filter('.dx-state-focused').length, 4, 'right quantity of focused cells');
                 keyboard.keyDown('down', { shiftKey: true });
-                assert.equal(cells.filter('.dx-state-focused').length, 15, 'right quantity of focused cells');
+                assert.equal(cells.filter('.dx-state-focused').length, 5, 'right quantity of focused cells');
                 keyboard.keyDown('down', { shiftKey: true });
-                assert.equal(cells.filter('.dx-state-focused').length, 16, 'right quantity of focused cells');
+                assert.equal(cells.filter('.dx-state-focused').length, 6, 'right quantity of focused cells');
                 keyboard.keyDown('right', { shiftKey: true });
                 assert.equal(cells.filter('.dx-state-focused').length, 2, 'right quantity of focused cells');
             });
