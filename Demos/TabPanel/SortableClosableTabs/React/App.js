@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+﻿import React from 'react';
 import { Button } from 'devextreme-react';
 import { Sortable } from 'devextreme-react/sortable';
 import TabPanel from 'devextreme-react/tab-panel';
@@ -10,8 +10,8 @@ import EmployeeTemplate from './EmployeeTemplate.js';
 const allEmployees = service.getEmployees();
 
 function App() {
-  const [employees, setEmployees] = useState(allEmployees.slice(0, 3));
-  const [selectedItem, setSelectedItem] = useState(allEmployees[0]);
+  const [employees, setEmployees] = React.useState(allEmployees.slice(0, 3));
+  const [selectedItem, setSelectedItem] = React.useState(allEmployees[0]);
 
   function addButtonHandler() {
     const newItem = allEmployees
@@ -21,28 +21,33 @@ function App() {
     setSelectedItem(newItem);
   }
 
-  function needDisableAddButton() {
+  function disableButton() {
     return employees.length === allEmployees.length;
   }
 
-  function closeButtonHandler() {
+  function closeButtonHandler(item) {
     const newEmployees = [...employees];
-    const index = newEmployees.indexOf(selectedItem);
+    const index = newEmployees.indexOf(item);
 
     newEmployees.splice(index, 1);
     setEmployees(newEmployees);
 
-    setSelectedItem(newEmployees[index - 1]);
+    if (index >= newEmployees.length && index > 0) {
+      setSelectedItem(newEmployees[index - 1]);
+    }
   }
 
   function renderTitle(data) {
+    function closeHandler() {
+      closeButtonHandler(data);
+    }
     return (
       <React.Fragment>
         <div>
           <span>
             {data.FirstName} {data.LastName}
           </span>
-          {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={closeButtonHandler} />}
+          {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={closeHandler} />}
         </div>
       </React.Fragment>
     );
@@ -69,7 +74,7 @@ function App() {
     <React.Fragment>
       <div id="container">
         <Button
-          disabled={needDisableAddButton()}
+          disabled={disableButton()}
           text="Add Tab"
           icon="add"
           type="default"
