@@ -109,7 +109,7 @@ export const Export = {
         });
     },
 
-    setLoadPanelOption: function(component, options, privateOptions) {
+    setLoadPanelOptions: function(component, options, privateOptions) {
         if(!hasWindow()) {
             return;
         }
@@ -135,7 +135,7 @@ export const Export = {
             loadPanel.animation = null;
         }
 
-        this.setLoadPanelOption(component, loadPanel, privateOptions);
+        this.setLoadPanelOptions(component, loadPanel, privateOptions);
 
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -199,7 +199,7 @@ export const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                this.setLoadPanelOption(component, initialLoadPanelOptions, privateOptions);
+                this.setLoadPanelOptions(component, initialLoadPanelOptions, privateOptions);
             });
         });
     },
