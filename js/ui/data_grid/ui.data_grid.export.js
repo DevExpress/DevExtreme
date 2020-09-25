@@ -500,13 +500,13 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
 
         for(let i = 0; i < items.length; i++) {
             const item = items[i];
-            let isMasterDetailColumn = false;
+            let isDetailExpandColumn = false;
             values = [];
             summaryCells = [];
 
             for(let j = 0; j < columns.length; j++) {
                 const column = columns[j];
-                isMasterDetailColumn = isMasterDetailColumn || column.type === 'detailExpand';
+                isDetailExpandColumn = isDetailExpandColumn || column.type === 'detailExpand';
 
                 if(this._needColumnExporting(column)) {
                     if(item.values) {
@@ -520,7 +520,7 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
                         if(item.rowType === 'group' && !summaryCells.length) {
                             const index = j - groupColumns.length + item.groupIndex;
 
-                            summaryCells.push(item.summaryCells[isMasterDetailColumn ? index - 1 : index]);
+                            summaryCells.push(item.summaryCells[isDetailExpandColumn ? index - 1 : index]);
                         } else {
                             summaryCells.push(item.summaryCells[j]);
                         }
