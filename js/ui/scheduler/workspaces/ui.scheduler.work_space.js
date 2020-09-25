@@ -1313,9 +1313,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $cells = this._getAllCells(data?.[0]?.allDay);
         const cellsInRow = this._getTotalCellCount(this._getGroupCount());
 
-        for(let i = 0; i < data.length; i++) {
-            const { groups, startDate, allDay } = data[i];
-            let { groupIndex } = data[i];
+        data.forEach((cellData) => {
+            const { groups, startDate, allDay } = cellData;
+            let { groupIndex } = cellData;
 
             if(!groupIndex) {
                 groupIndex = this.option('groups').length && groups
@@ -1339,7 +1339,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                     cells.push($cell);
                 }
             }
-        }
+        });
+
         this._selectedCells = cells;
     }
 
