@@ -9,6 +9,7 @@ import fx from 'animation/fx';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import themes from 'ui/themes';
 import eventsEngine from 'events/core/events_engine';
+import { deferUpdate } from 'core/utils/common';
 
 import 'ui/button_group';
 
@@ -293,6 +294,71 @@ QUnit.module('render', {
 
         assert.ok(templateUsed);
         assert.equal(this.element.find('.custom-template').length, 1);
+    });
+
+
+    [true, false].forEach(deferRendering => {
+        function renderToolbar(container, toolbarItems) {
+            const renderer = deferRendering
+                ? (func) => deferUpdate(() => func(), 100)
+                : (func) => func();
+
+            renderer(() => {
+                $(container).dxToolbar({
+                    items: toolbarItems
+                });
+            });
+        }
+
+        QUnit.test(`Toolbar menu icon rendered correctly in asynchronous template. Second item located in menu, deferRendering=${deferRendering}.`, function(assert) {
+            renderToolbar(this.element, [{
+                location: 'after',
+                locateInMenu: 'never',
+                text: 'item1'
+            }, {
+                location: 'after',
+                locateInMenu: 'always',
+                text: 'item2'
+            }]);
+
+            const toolbarItems = this.element.find('.dx-toolbar-after').children();
+            assert.equal(toolbarItems.length, 2, 'All items are rendered');
+
+            assert.equal(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
+            assert.equal(toolbarItems[1].innerText.trim(), '', 'second item is menu button');
+        });
+
+        QUnit.test(`Toolbar simple items rendered correctly in asynchronous template. Items position: before, deferRendering=${deferRendering}.`, function(assert) {
+            renderToolbar(this.element, [{
+                location: 'before',
+                locateInMenu: 'never',
+                text: 'item1'
+            }, {
+                location: 'before',
+                locateInMenu: 'never',
+                text: 'item2'
+            } ]);
+
+            const toolbarItems = this.element.find('.dx-toolbar-before').children();
+            assert.equal(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
+            assert.equal(toolbarItems[1].innerText.trim(), 'item2', 'second item is simple item');
+        });
+
+        QUnit.test(`Toolbar simple items rendered correctly in asynchronous template. Items position: after, deferRendering=${deferRendering}.`, function(assert) {
+            renderToolbar(this.element, [{
+                location: 'after',
+                locateInMenu: 'never',
+                text: 'item1'
+            }, {
+                location: 'after',
+                locateInMenu: 'never',
+                text: 'item2'
+            } ]);
+
+            const toolbarItems = this.element.find('.dx-toolbar-after').children();
+            assert.equal(toolbarItems[0].innerText.trim(), 'item1', 'first item is simple item');
+            assert.equal(toolbarItems[1].innerText.trim(), 'item2', 'second item is simple item');
+        });
     });
 });
 
