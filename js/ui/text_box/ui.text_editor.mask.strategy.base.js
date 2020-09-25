@@ -1,5 +1,5 @@
 import EventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import browser from '../../core/utils/browser';
 import { inArray } from '../../core/utils/array';
 import { clipboardText as getClipboardText } from '../../core/utils/dom';

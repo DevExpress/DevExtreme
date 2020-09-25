@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import TextEditorButton from './texteditor_button_collection/button';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { down as pointerDown } from '../../events/pointer';
 import { name as click } from '../../events/click';
 

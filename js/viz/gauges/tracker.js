@@ -3,7 +3,7 @@ import Class from '../../core/class';
 import domAdapter from '../../core/dom_adapter';
 import wheelEvent from '../../events/core/wheel';
 import { add as ready } from '../../core/utils/ready_callbacks';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 ///#DEBUG
 import { debug } from '../../core/utils/console';

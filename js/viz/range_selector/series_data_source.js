@@ -4,7 +4,7 @@ import { isNumeric, isDate, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
-import vizUtils from '../core/utils';
+import { mergeMarginOptions, processSeriesTemplate } from '../core/utils';
 import rangeModule from '../translators/range';
 import dataValidatorModule from '../components/data_validator';
 import { ThemeManager as ChartThemeManager } from '../components/chart_theme_manager';
@@ -75,7 +75,7 @@ SeriesDataSource.prototype = {
         let parsedData;
         const chartThemeManager = that._themeManager;
         const seriesTemplate = chartThemeManager.getOptions('seriesTemplate');
-        let allSeriesOptions = seriesTemplate ? vizUtils.processSeriesTemplate(seriesTemplate, data) : options.chart.series;
+        let allSeriesOptions = seriesTemplate ? processSeriesTemplate(seriesTemplate, data) : options.chart.series;
         let dataSourceField;
         const valueAxis = that._valueAxis;
         let i;
@@ -237,7 +237,7 @@ SeriesDataSource.prototype = {
             if(seriesOptions.processBubbleSize === true) {
                 seriesOptions.size = bubbleSize;
             }
-            return vizUtils.mergeMarginOptions(marginOptions, seriesOptions);
+            return mergeMarginOptions(marginOptions, seriesOptions);
         }, {});
     },
 

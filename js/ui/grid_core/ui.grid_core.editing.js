@@ -12,7 +12,7 @@ import { name as doubleClickEvent } from '../../events/double_click';
 import pointerEvents from '../../events/pointer';
 import { getIndexByKey, setEmptyText, getSelectionRange, setSelectionRange, focusAndSelectElement } from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import dialog from '../dialog';
 import messageLocalization from '../../localization/message';
 import Button from '../button';

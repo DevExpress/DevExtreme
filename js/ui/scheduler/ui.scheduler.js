@@ -8,7 +8,7 @@ import { inArray } from '../../core/utils/array';
 import browser from '../../core/utils/browser';
 import Callbacks from '../../core/utils/callbacks';
 import { noop } from '../../core/utils/common';
-import dataCoreUtils from '../../core/utils/data';
+import { compileGetter, compileSetter } from '../../core/utils/data';
 import { getBoundingRect } from '../../core/utils/position';
 import dateUtils from '../../core/utils/date';
 import dateSerialization from '../../core/utils/date_serialization';
@@ -16,7 +16,15 @@ import { Deferred, when, fromPromise } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { touch } from '../../core/utils/support';
-import { isDefined, isString, isObject, isFunction, isEmptyObject, isDeferred, isPromise } from '../../core/utils/type';
+import {
+    isDefined,
+    isString,
+    isObject,
+    isFunction,
+    isEmptyObject,
+    isDeferred,
+    isPromise
+} from '../../core/utils/type';
 import { hasWindow } from '../../core/utils/window';
 import DataHelperMixin from '../../data_helper';
 import { triggerResizeEvent } from '../../events/visibility_change';
@@ -1261,7 +1269,7 @@ class Scheduler extends Widget {
 
     _initAppointmentTemplate() {
         const { expr } = this._dataAccessors;
-        const createGetter = (property) => dataCoreUtils.compileGetter(`appointmentData.${property}`);
+        const createGetter = (property) => compileGetter(`appointmentData.${property}`);
 
         this._templateManager.addDefaultTemplates({
             ['item']: new BindableTemplate(($container, data, model) => {
@@ -1369,8 +1377,8 @@ class Scheduler extends Widget {
         each(fields, (function(name, expr) {
             if(expr) {
 
-                const getter = dataCoreUtils.compileGetter(expr);
-                const setter = dataCoreUtils.compileSetter(expr);
+                const getter = compileGetter(expr);
+                const setter = compileSetter(expr);
 
                 let dateGetter;
                 let dateSetter;
@@ -1999,6 +2007,7 @@ class Scheduler extends Widget {
 
         return result.join();
     }
+
 
     _serializeRecurrenceException(exceptionDate, targetStartDate, isAllDay) {
         isAllDay && exceptionDate.setHours(targetStartDate.getHours(),

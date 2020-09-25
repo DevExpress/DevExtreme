@@ -8,11 +8,11 @@ import { isPlainObject, isFunction, isDefined } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import iteratorUtils from '../../core/utils/iterator';
+import { each } from '../../core/utils/iterator';
 import Action from '../../core/action';
 import Guid from '../../core/guid';
 import Widget from '../widget/ui.widget';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 import DataHelperMixin from '../../data_helper';
 import CollectionWidgetItem from './item';
@@ -803,7 +803,7 @@ const CollectionWidget = Widget.inherit({
 
     _renderItems: function(items) {
         if(items.length) {
-            iteratorUtils.each(items, function(index, itemData) {
+            each(items, function(index, itemData) {
                 this._renderItem(this._renderedItemsCount + index, itemData);
             }.bind(this));
         }
@@ -1045,7 +1045,7 @@ const CollectionWidget = Widget.inherit({
         let result = 0;
 
         if(items) {
-            iteratorUtils.each(items, function(_, item) {
+            each(items, function(_, item) {
                 result += $(item).outerWidth(includeMargin || false);
             });
         }

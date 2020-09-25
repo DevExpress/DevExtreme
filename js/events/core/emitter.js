@@ -3,7 +3,7 @@ import { noop } from '../../core/utils/common';
 import Class from '../../core/class';
 import Callbacks from '../../core/utils/callbacks';
 import { extend } from '../../core/utils/extend';
-import { isDxMouseWheelEvent, hasTouches, fireEvent } from '../utils';
+import { isDxMouseWheelEvent, hasTouches, fireEvent } from '../utils/index';
 
 const Emitter = Class.inherit({
 

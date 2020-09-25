@@ -7,22 +7,18 @@ import registerComponentCallbacks from '../../core/component_registrator_callbac
 import Class from '../../core/class';
 import Callbacks from '../../core/utils/callbacks';
 import { type, isDefined, isNumeric } from '../../core/utils/type';
-import iterator from '../../core/utils/iterator';
-const each = iterator.each;
-import arrayUtils from '../../core/utils/array';
-const inArray = arrayUtils.inArray;
+import { each } from '../../core/utils/iterator';
+import { inArray } from '../../core/utils/array';
 import Locker from '../../core/utils/locker';
 import Editor from '../../ui/editor/editor';
 import { NgTemplate } from './template';
 import ngModule from './module';
 import CollectionWidget from '../../ui/collection/ui.collection_widget.edit';
-import dataUtils from '../../core/utils/data';
+import { compileGetter, compileSetter } from '../../core/utils/data';
+import { extendFromObject } from '../../core/utils/extend';
 import { equals } from '../../core/utils/comparator';
-const compileSetter = dataUtils.compileSetter;
-const compileGetter = dataUtils.compileGetter;
-import extendUtils from '../../core/utils/extend';
-const extendFromObject = extendUtils.extendFromObject;
-import inflector from '../../core/utils/inflector';
+import { dasherize } from '../../core/utils/inflector';
+
 const ITEM_ALIAS_ATTRIBUTE_NAME = 'dxItemAlias';
 const SKIP_APPLY_ACTION_CATEGORIES = ['rendering'];
 const NG_MODEL_OPTION = 'value';
@@ -486,7 +482,7 @@ if(angular) {
                                 return;
                             }
 
-                            const markup = $('<div>').attr(inflector.dasherize(widgetName), 'options').get(0);
+                            const markup = $('<div>').attr(dasherize(widgetName), 'options').get(0);
                             const newScope = this._scope.$new();
 
                             newScope.options = options.model.options;

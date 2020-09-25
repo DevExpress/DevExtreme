@@ -15,7 +15,7 @@ import { format } from '../../../localization/message';
 import { titleize } from '../../../core/utils/inflector';
 
 import eventsEngine from '../../../events/core/events_engine';
-import { addNamespace } from '../../../events/utils';
+import { addNamespace } from '../../../events/utils/index';
 
 let ToolbarModule = {};
 
