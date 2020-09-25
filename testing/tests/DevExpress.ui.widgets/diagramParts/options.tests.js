@@ -494,7 +494,6 @@ QUnit.module('Options (initially set)', {}, () => {
             onOptionChanged: onOptionChanged,
             simpleView: true,
             zoomLevel: 2,
-            fullScreen: true,
             showGrid: false,
             snapToGrid: false,
             gridSize: 0.25,
@@ -507,7 +506,6 @@ QUnit.module('Options (initially set)', {}, () => {
 
         assert.ok(instance._diagramInstance.settings.simpleView);
         assert.equal(instance._diagramInstance.settings.zoomLevel, 2);
-        assert.ok(instance._diagramInstance.settings.fullscreen);
         assert.notOk(instance._diagramInstance.settings.showGrid);
         assert.notOk(instance._diagramInstance.settings.snapToGrid);
         assert.equal(instance._diagramInstance.settings.gridSize, 142);
