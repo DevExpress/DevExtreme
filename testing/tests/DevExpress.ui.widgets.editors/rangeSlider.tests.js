@@ -372,6 +372,47 @@ QUnit.module('keyboard navigation', moduleOptions, () => {
         assert.equal(rangeSlider.option('end'), 90, 'value is correct after end press');
     });
 
+    QUnit.test('correct event should be passed to valueChanged when it is raised by keyboard navigation', function(assert) {
+        assert.expect(12);
+
+        const $rangeSlider = $('#slider').dxRangeSlider({
+            min: 10,
+            max: 90,
+            start: 50,
+            end: 80,
+            step: 3,
+            focusStateEnabled: true,
+            useInkRipple: false,
+            onValueChanged: (data) => {
+                assert.strictEqual(data.event.type, 'keydown', 'correct event has been passed');
+            }
+        });
+
+        const $handles = $rangeSlider.find('.' + SLIDER_HANDLE_CLASS);
+        const $leftHandle = $handles.eq(0);
+        const $rightHandle = $handles.eq(1);
+        let keyboard = keyboardMock($leftHandle);
+
+        $leftHandle.trigger('focusin');
+
+        keyboard.keyDown('right');
+        keyboard.keyDown('left');
+        keyboard.keyDown('home');
+        keyboard.keyDown('end');
+        keyboard.keyDown('pageUp');
+        keyboard.keyDown('pageDown');
+
+        keyboard = keyboardMock($rightHandle);
+        $rightHandle.trigger('focusin');
+
+        keyboard.keyDown('right');
+        keyboard.keyDown('left');
+        keyboard.keyDown('home');
+        keyboard.keyDown('end');
+        keyboard.keyDown('pageUp');
+        keyboard.keyDown('pageDown');
+    });
+
     QUnit.test('pageUp/pageDown keys test', function(assert) {
         assert.expect(6);
 
