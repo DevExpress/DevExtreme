@@ -166,7 +166,7 @@ class VirtualScrolling {
 
         this._state = {
             pageSize: this._getPageSize(),
-            scrollPosition: scrollPosition,
+            prevScrollPosition: scrollPosition,
             startIndex: -1,
             rowCount: 0,
             topVirtualRowCount: 0,
@@ -185,7 +185,7 @@ class VirtualScrolling {
     needUpdateState(scrollPosition) {
         const state = this.getState();
         const top = scrollPosition.top;
-        const currentTopPosition = state.scrollPosition.top;
+        const currentTopPosition = state.prevScrollPosition.top;
         const rowHeight = this.getRowHeight();
         const currentTopRowsCount = Math.floor(currentTopPosition / rowHeight);
         const isFirstInitialization = state.startIndex < 0;
@@ -220,7 +220,7 @@ class VirtualScrolling {
 
         const state = this.getState();
 
-        state.scrollPosition = scrollPosition;
+        state.prevScrollPosition = scrollPosition;
         state.startIndex = topRowsCount - topOutlineCount;
         state.topVirtualRowCount = topVirtualRowCount;
         state.topOutlineCount = topOutlineCount;
