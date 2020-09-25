@@ -2340,11 +2340,6 @@ declare module DevExpress.data {
     export class XmlaStore {
         constructor(options?: XmlaStoreOptions)
     }
-
-    /**
-     * [descr:Utils.getTimeZones(date)]
-     */
-    export function getTimeZones(date?: Date): Array<any>;
     /**
      * [descr:Utils.applyChanges(data, changes, options)]
      */
@@ -2979,6 +2974,12 @@ declare module DevExpress.fx {
      * [descr:fx.stop(element, jumpToEnd)]
      */
     export function stop(element: Element, jumpToEnd: boolean): void;
+}
+declare module DevExpress.scheduler.utils {
+    /**
+     * [descr:Utils.getTimeZones(date)]
+     */
+    export function getTimeZones(date?: Date): Array<any>;
 }
 declare module DevExpress.ui {
     /**
