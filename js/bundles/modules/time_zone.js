@@ -1,7 +1,7 @@
 /* eslint-disable import/no-commonjs */
 import DevExpress from './core';
 
-module.exports = DevExpress.timeZones = DevExpress.timeZones || {};
+module.exports = DevExpress.timeZone = DevExpress.timeZone || {};
 
 // DevExpress.timeZones.getTimeZones = require('../../ui/scheduler/utils').getTimeZones;
-DevExpress.timeZones.getTimeZones = require('../../time_zone').getTimeZones;
+DevExpress.timeZone.getTimeZones = require('../../time_zone').getTimeZones;
