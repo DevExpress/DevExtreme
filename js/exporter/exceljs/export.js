@@ -108,6 +108,13 @@ export const Export = {
         });
     },
 
+    setLoadPanelOption: function(component, options) {
+        component._setOptionWithoutOptionChange('loadPanel', options);
+
+        const rowViews = component.getView('rowsView');
+        rowViews._renderLoadPanel(rowViews.element(), rowViews.element().parent());
+    },
+
     export: function(options, privateOptions) {
         const {
             customizeCell,
@@ -124,7 +131,8 @@ export const Export = {
         if('animation' in component.option('loadPanel')) {
             loadPanel.animation = null;
         }
-        component.option('loadPanel', loadPanel);
+
+        this.setLoadPanelOption(component, loadPanel);
 
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -134,7 +142,7 @@ export const Export = {
         };
 
         const cellRange = {
-            from: { row: topLeftCell.row, column: topLeftCell.column },
+            from: topLeftCell,
             to: { row: topLeftCell.row, column: topLeftCell.column }
         };
 
@@ -188,7 +196,7 @@ export const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                component.option('loadPanel', initialLoadPanelOptions);
+                this.setLoadPanelOption(component, initialLoadPanelOptions);
             });
         });
     },
