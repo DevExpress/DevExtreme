@@ -12455,9 +12455,9 @@ declare module DevExpress.ui.dxOverlay {
      */
     export function baseZIndex(zIndex: number): void;
 }
-declare module DevExpress.scheduler.utils {
+declare module DevExpress.ui.dxScheduler.utils {
     /**
-     * [descr:Utils.getTimeZones(date)]
+     * [descr:ui.dxScheduler.utils.getTimeZones(date)]
      */
     export function getTimeZones(date?: Date): Array<any>;
 }

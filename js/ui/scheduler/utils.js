@@ -1,19 +1,16 @@
-import $ from '../../core/renderer';
+import timeZoneUtils from './utils.timeZone';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
+import { isDefined } from '../../core/utils/type';
 
-const KEYS = {
-    SETTINGS: 'dxAppointmentSettings'
-};
-
-const utils = {
-    dataAccessors: {
-        getAppointmentSettings: element => {
-            return $(element).data(KEYS.SETTINGS);
-        },
-        getAppointmentInfo: element => {
-            const settings = utils.dataAccessors.getAppointmentSettings(element);
-            return settings?.info;
-        }
+/**
+* @name ui.dxScheduler
+* @section utils
+*/
+export const getTimeZones = (date) => {
+    if(!isDefined(date)) {
+        date = new Date();
     }
-};
 
-export default utils;
+    const dateInUTC = timeZoneUtils.createUTCDateWithLocalOffset(date);
+    return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
+};

@@ -12,7 +12,7 @@ import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
 import { AGENDA_LAST_IN_DATE_APPOINTMENT_CLASS } from './constants';
-import utils from './utils';
+import utils from './utils_data';
 
 const HOURS_IN_DAY = 24;
 const MINUTES_IN_HOUR = 60;

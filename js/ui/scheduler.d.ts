@@ -1,4 +1,5 @@
 import '../jquery_augmentation';
+import './scheduler/utils';
 
 import {
     dxElement
@@ -806,15 +807,15 @@ interface JQuery {
 }
 
 /**
- * @docid utils.getTimeZones
+ * @docid ui.dxScheduler.utils.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
  * @return Array<Object>
- * @namespace DevExpress.scheduler.utils
- * @module utils
+ * @namespace DevExpress.ui.dxScheduler.utils
+ * @module ui/scheduler/utils
  * @export getTimeZones
  * @static
- * @prevFileNamespace DevExpress
+ * @prevFileNamespace DevExpress.ui.dxScheduler
  * @public
  */
 export function getTimeZones(date?: Date): Array<{id?: string, title?: string, offset?: number}>;
