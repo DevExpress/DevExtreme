@@ -723,7 +723,8 @@ class Diagram extends Widget {
         if(this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
             this._updateAutoZoomState();
         }
-        if(this.option('fullScreen')) {
+        const window = getWindow();
+        if(this.option('fullScreen') && window.self === window.top) {
             this._updateFullscreenState();
         }
 
@@ -1187,10 +1188,7 @@ class Diagram extends Widget {
         const body = window.self.document.body;
         if(on) {
             if(body.requestFullscreen) {
-                body.requestFullscreen()
-                    .catch(() => {
-                        this._executeDiagramFullscreenCommand(false);
-                    });
+                body.requestFullscreen();
             } else if(body.mozRequestFullscreen) {
                 body.mozRequestFullscreen();
             } else if(body.webkitRequestFullscreen) {
@@ -1200,10 +1198,7 @@ class Diagram extends Widget {
             }
         } else {
             if(document.exitFullscreen) {
-                document.exitFullscreen()
-                    .catch(() => {
-                        this._executeDiagramFullscreenCommand(true);
-                    });
+                document.exitFullscreen();
             } else if(document.mozCancelFullscreen) {
                 document.mozCancelFullscreen();
             } else if(document.webkitExitFullscreen) {
