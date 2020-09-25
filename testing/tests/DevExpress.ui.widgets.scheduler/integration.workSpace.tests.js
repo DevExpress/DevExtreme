@@ -2773,7 +2773,8 @@ QUnit.test('SelectedCellData option should be correct when virtual scrolling is 
 });
 
 QUnit.test('SelectedCellData option should not change when dateTable is scrolled', function(assert) {
-    const instance = createWrapper({
+    const done = assert.async();
+    const scheduler = createWrapper({
         dataSource: [],
         views: ['week'],
         currentView: 'week',
@@ -2782,9 +2783,10 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
         height: 300,
         scrolling: { mode: 'virtual' },
     });
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
 
-    const $cells = instance.workSpace.getCells();
-    const $table = instance.workSpace.getDateTable();
+    const $cells = scheduler.workSpace.getCells();
+    const $table = scheduler.workSpace.getDateTable();
 
     $($table).trigger(
         $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
@@ -2799,13 +2801,17 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
         text: '12:00 AM',
     }];
 
-    assert.deepEqual(instance.option('selectedCellData'), selectedCells, 'Correct selected cells');
+    assert.deepEqual(scheduler.option('selectedCellData'), selectedCells, 'Correct selected cells');
 
-    const dateTableScrollable = instance.workSpace.getDateTableScrollable().dxScrollable('instance');
+    const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
 
-    dateTableScrollable.scrollBy(400);
+    dateTableScrollable.scrollTo({ y: 400 });
 
-    assert.deepEqual(instance.option('selectedCellData'), selectedCells, 'Correct selected cells');
+    setTimeout(() => {
+        assert.deepEqual(scheduler.option('selectedCellData'), selectedCells, 'Correct selected cells');
+
+        done();
+    });
 });
 
 QUnit.test('"onOptionChanged" should not be called on scroll when virtual scrolling is enabled', function(assert) {
