@@ -3,6 +3,7 @@ import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
 import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
 import devices from 'core/devices';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -2807,9 +2808,10 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
     assert.deepEqual(instance.option('selectedCellData'), selectedCells, 'Correct selected cells');
 });
 
-QUnit.test('"onOptionChanged" should not be called on scroll', function(assert) {
+QUnit.test('"onOptionChanged" should not be called on scroll when virtual scrolling is enabled', function(assert) {
+    const done = assert.async();
     let onOptionChangedCalls = 0;
-    const instance = createWrapper({
+    const scheduler = createWrapper({
         dataSource: [],
         views: ['week'],
         currentView: 'week',
@@ -2821,13 +2823,14 @@ QUnit.test('"onOptionChanged" should not be called on scroll', function(assert) 
             onOptionChangedCalls += 1;
         },
     });
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
 
-    const $cells = instance.workSpace.getCells();
-    const $table = instance.workSpace.getDateTable();
+    const $cells = scheduler.workSpace.getCells();
+    const $table = scheduler.workSpace.getDateTable();
 
     const onOptionChangedSpy = sinon.spy();
 
-    instance.onOptionChanged = onOptionChangedSpy;
+    scheduler.onOptionChanged = onOptionChangedSpy;
 
     $($table).trigger(
         $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
@@ -2835,12 +2838,63 @@ QUnit.test('"onOptionChanged" should not be called on scroll', function(assert) 
 
     assert.equal(onOptionChangedCalls, 1, '"onOptionChanged" was triggered because selected cells have been changed');
 
-    const dateTableScrollable = instance.workSpace.getDateTableScrollable().dxScrollable('instance');
+    const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
 
-    dateTableScrollable.scrollBy(400);
+    dateTableScrollable.scrollTo({ y: 400 });
 
-    assert.equal(
-        onOptionChangedCalls, 1,
-        '"onOptionChanged" was not triggered again because selected cells have not been changed',
+    setTimeout(() => {
+        assert.equal(
+            onOptionChangedCalls, 1,
+            '"onOptionChanged" was not triggered again because selected cells have not been changed',
+        );
+        done();
+    });
+
+});
+
+QUnit.test('Appointment popup should be opened with correct parameters if virtual scrolling is enabled', function(assert) {
+    const done = assert.async();
+    const scheduler = createWrapper({
+        dataSource: [],
+        views: ['week'],
+        currentView: 'week',
+        showAllDayPanel: true,
+        currentDate: new Date(2020, 8, 20),
+        height: 300,
+        scrolling: { mode: 'virtual' },
+    });
+
+    const { instance } = scheduler;
+    instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+    const showAppointmentPopupSpy = sinon.spy();
+    instance.showAppointmentPopup = showAppointmentPopupSpy;
+
+    const $cells = scheduler.workSpace.getCells();
+    const $table = scheduler.workSpace.getDateTable();
+
+    $($table).trigger(
+        $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
     );
+    $($table).trigger($.Event('dxpointermove', { target: $cells.eq(1).get(0), which: 1 }));
+
+    const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+
+    dateTableScrollable.scrollTo({ y: 400 });
+
+    setTimeout(() => {
+        const keyboard = keyboardMock(instance.getWorkSpace().$element());
+        keyboard.keyDown('enter');
+
+        assert.ok(showAppointmentPopupSpy.calledOnce, '"showAppointmentPopup" was called');
+        assert.deepEqual(
+            showAppointmentPopupSpy.getCall(0).args[0],
+            {
+                allDay: false,
+                endDate: new Date(2020, 8, 21, 0, 30),
+                startDate: new Date(2020, 8, 20, 0, 0),
+            },
+            '"showAppointmentPopup" was called with correct parameters',
+        );
+        done();
+    });
 });
