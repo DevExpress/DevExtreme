@@ -446,8 +446,11 @@
         }
       }
 
-      .dx-editor-cell:not(.dx-command-select) {
-        overflow: visible;
+      .dx-editor-cell {
+        &:not(.dx-command-select) {
+          overflow: visible;
+        }
+
         max-width: 0;
         padding: 0;
         vertical-align: middle;
@@ -565,15 +568,12 @@
     }
 
     &.dx-editor-inline-block {
-      &.dx-cell-modified,
-      &.dx-#{$widget-name}-invalid {
-        &::before {
-          display: inline-block;
-          content: '\200b';
-          vertical-align: middle;
-          padding-top: $grid-cell-padding;
-          padding-bottom: $grid-cell-padding;
-        }
+      &::before {
+        display: inline-block;
+        content: '\200b';
+        vertical-align: middle;
+        padding-top: $grid-cell-padding;
+        padding-bottom: $grid-cell-padding;
       }
     }
   }
