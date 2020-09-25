@@ -45,7 +45,7 @@ const privateOptions = {
         return rowIndex < headerRowCount;
     },
 
-    _updateLoadPanel: function(component) {
+    _renderLoadPanel: function(component) {
         const rowsView = component.getView('rowsView');
         rowsView._renderLoadPanel(rowsView.element(), rowsView.element().parent());
     }
