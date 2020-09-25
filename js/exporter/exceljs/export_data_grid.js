@@ -46,8 +46,8 @@ const privateOptions = {
     },
 
     _updateLoadPanel: function(component) {
-        const rowViews = component.getView('rowsView');
-        rowViews._renderLoadPanel(rowViews.element(), rowViews.element().parent());
+        const rowsView = component.getView('rowsView');
+        rowsView._renderLoadPanel(rowsView.element(), rowsView.element().parent());
     }
 };
 
