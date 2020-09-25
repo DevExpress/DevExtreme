@@ -23,7 +23,7 @@ export default class VirtualSelectionState {
         }
 
         const columnIndex = this._getColumnIndexByCellData(_focusedCell, isVerticalGroupOrientation);
-        const rowIndex = this._getRowIndexByColumnAndData(_focusedCell, columnIndex);
+        const rowIndex = this._getRowIndexByColumnAndData(_focusedCell, columnIndex, isVerticalGroupOrientation);
 
         return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: _focusedCell };
     }
@@ -118,30 +118,41 @@ export default class VirtualSelectionState {
     _getColumnIndexByCellData(cellData, isVerticalGroupOrientation) {
         const { viewDataMap } = this._viewDataProvider;
         const { startDate, groupIndex } = cellData;
+        const firstRow = viewDataMap[0];
 
-        return viewDataMap[0].findIndex(({
-            cellData: { startDate: currentStartDate, groupIndex: currentGroupIndex },
-        }) => {
-            return startDate.getDate() === currentStartDate.getDate()
-              && ((groupIndex === currentGroupIndex) || isVerticalGroupOrientation);
-        });
+        for(let columnIndex = 0; columnIndex < firstRow.length; columnIndex += 1) {
+            const {
+                cellData: { startDate: currentStartDate, groupIndex: currentGroupIndex },
+            } = firstRow[columnIndex];
+
+            if(startDate.getDate() === currentStartDate.getDate()
+                && ((groupIndex === currentGroupIndex) || isVerticalGroupOrientation)) {
+                return columnIndex;
+            }
+        }
     }
 
-    _getRowIndexByColumnAndData(cellData, columnIndex) {
+    _getRowIndexByColumnAndData(cellData, columnIndex, isVerticalGroupOrientation) {
         const { viewDataMap } = this._viewDataProvider;
         const { startDate, groupIndex, allDay } = cellData;
 
-        return viewDataMap.findIndex((cellsRow) => {
-            const { cellData: currentCellData } = cellsRow[columnIndex];
+        if(allDay && !isVerticalGroupOrientation) {
+            return -1;
+        }
+
+        for(let rowIndex = 0; rowIndex < viewDataMap.length; rowIndex += 1) {
+            const { cellData: currentCellData } = viewDataMap[rowIndex][columnIndex];
             const {
                 startDate: currentStartDate,
                 groupIndex: currentGroupIndex,
                 allDay: currentAllDay
             } = currentCellData;
 
-            return startDate.getTime() === currentStartDate.getTime()
-              && groupIndex === currentGroupIndex
-              && allDay === currentAllDay;
-        });
+            if(startDate.getTime() === currentStartDate.getTime()
+                && groupIndex === currentGroupIndex
+                && allDay === currentAllDay) {
+                return rowIndex;
+            }
+        }
     }
 }
