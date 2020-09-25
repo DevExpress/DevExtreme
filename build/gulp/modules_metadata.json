@@ -566,7 +566,7 @@
   {
     "name": "ui/scheduler/utils",
     "exports": {
-      "getTimeZones": { "path": "ui/dxScheduler/utils.getTimeZones"}
+      "getTimeZones": { "path": "ui.dxScheduler.utils.getTimeZones"}
     }
   },
   {
