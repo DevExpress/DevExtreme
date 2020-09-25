@@ -1,0 +1,16 @@
+import timeZoneUtils from './utils.timeZone';
+import timeZoneDataUtils from './timezones/utils.timezones_data';
+import { isDefined } from '../../core/utils/type';
+
+/**
+* @name ui.dxScheduler
+* @section utils
+*/
+export const getTimeZones = (date) => {
+    if(!isDefined(date)) {
+        date = new Date();
+    }
+
+    const dateInUTC = timeZoneUtils.createUTCDateWithLocalOffset(date);
+    return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
+};
