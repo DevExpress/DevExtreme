@@ -452,12 +452,9 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     &.dx-editor-inline-block {
-      .dx-cell-modified,
-      .dx-#{$widget-name}-invalid {
-        &::before {
-          padding-top: $material-grid-base-cell-vertical-padding;
-          padding-bottom: $material-grid-base-cell-vertical-padding;
-        }
+      &::before {
+        padding-top: $material-grid-base-cell-vertical-padding;
+        padding-bottom: $material-grid-base-cell-vertical-padding;
       }
     }
   }

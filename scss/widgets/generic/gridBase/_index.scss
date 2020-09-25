@@ -258,12 +258,9 @@ $generic-grid-base-checkbox-icon-size: 16px;
     }
 
     &.dx-editor-inline-block {
-      .dx-cell-modified,
-      .dx-#{$widget-name}-invalid {
-        &::before {
-          padding-top: $generic-grid-base-cell-padding;
-          padding-bottom: $generic-grid-base-cell-padding;
-        }
+      &::before {
+        padding-top: $generic-grid-base-cell-padding;
+        padding-bottom: $generic-grid-base-cell-padding;
       }
     }
   }
