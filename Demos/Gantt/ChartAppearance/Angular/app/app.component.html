@@ -18,6 +18,12 @@
                 text="Show Resources"
                 [(value)]="showResources"></dx-check-box>
         </div>
+        <div class="option">
+            <dx-check-box
+                text="Customize Task Tooltip"
+                [value]="true"
+                (onValueChanged)="onShowCustomTaskTooltip($event)"></dx-check-box>
+        </div>
     </div>
     <div class="widget-container">
         <dx-gantt 
@@ -25,7 +31,8 @@
             height="700"
             [taskTitlePosition]="titlePosition"
             [scaleType]="scaleType"
-            [showResources]="showResources">
+            [showResources]="showResources"
+            [taskTooltipContentTemplate]="taskTooltipContentTemplate">
 
             <dxo-tasks [dataSource]="tasks"></dxo-tasks>
             <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>

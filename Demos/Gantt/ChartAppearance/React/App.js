@@ -10,18 +10,22 @@ class App extends React.Component {
     this.state = {
       scaleType: 'quarters',
       taskTitlePosition: 'outside',
-      showResources: true
+      showResources: true,
+      taskTooltipContentTemplate: this.getTaskTooltipContentTemplate
     };
     this.onScaleTypeChanged = this.onScaleTypeChanged.bind(this);
     this.onTaskTitlePositionChanged = this.onTaskTitlePositionChanged.bind(this);
     this.onShowResourcesChanged = this.onShowResourcesChanged.bind(this);
+    this.getTaskTooltipContentTemplate = this.getTaskTooltipContentTemplate.bind(this);
+    this.onShowCustomTaskTooltip = this.onShowCustomTaskTooltip.bind(this);
   }
 
   render() {
     const {
       scaleType,
       taskTitlePosition,
-      showResources
+      showResources,
+      taskTooltipContentTemplate
     } = this.state;
     return (
       <div id="form-demo">
@@ -50,6 +54,13 @@ class App extends React.Component {
               onValueChanged={this.onShowResourcesChanged}
             />
           </div>
+          <div className="option">
+            <CheckBox
+              text="Customize Task Tooltip"
+              defaultValue={true}
+              onValueChanged={this.onShowCustomTaskTooltip}
+            />
+          </div>
         </div>
         <div className="widget-container">
           <Gantt
@@ -57,7 +68,8 @@ class App extends React.Component {
             height={700}
             taskTitlePosition={taskTitlePosition}
             scaleType={scaleType}
-            showResources={showResources}>
+            showResources={showResources}
+            taskTooltipContentTemplate = {taskTooltipContentTemplate}>
 
             <Tasks dataSource={tasks} />
             <Dependencies dataSource={dependencies} />
@@ -89,6 +101,19 @@ class App extends React.Component {
     this.setState({
       showResources: e.value
     });
+  }
+  onShowCustomTaskTooltip(e) {
+      this.setState({
+        taskTooltipContentTemplate: e.value ? this.getTaskTooltipContentTemplate : undefined
+      });    
+  }
+  getTaskTooltipContentTemplate(model) {
+    var timeEstimate = Math.abs(model.start - model.end) / 36e5;
+    var timeLeft = Math.floor((100 - model.progress) / 100 * timeEstimate);
+
+    return "<div style='font-size:14px'>" + model.title + "</div>"                
+        + "<p style='font-size:10px'>" + "<span> Estimate: </span>" + timeEstimate + "<span> hours </span>" + "</p>"
+        + "<p style='font-size:10px'>" + "<span> Left: </span>" + timeLeft + "<span> hours </span>" + "</p>";
   }
 }
 
