@@ -1,3 +1,5 @@
+import dateUtils from '../../../core/utils/date';
+
 export default class VirtualSelectionState {
     constructor(viewDataProvider) {
         this._viewDataProvider = viewDataProvider;
@@ -119,13 +121,14 @@ export default class VirtualSelectionState {
         const { viewDataMap } = this._viewDataProvider;
         const { startDate, groupIndex } = cellData;
         const firstRow = viewDataMap[0];
+        const startTime = dateUtils.trimTime(startDate).getTime();
 
         for(let columnIndex = 0; columnIndex < firstRow.length; columnIndex += 1) {
             const {
                 cellData: { startDate: currentStartDate, groupIndex: currentGroupIndex },
             } = firstRow[columnIndex];
 
-            if(startDate.getDate() === currentStartDate.getDate()
+            if(startTime === dateUtils.trimTime(currentStartDate).getTime()
                 && ((groupIndex === currentGroupIndex) || isVerticalGroupOrientation)) {
                 return columnIndex;
             }
