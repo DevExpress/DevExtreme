@@ -564,12 +564,6 @@
     }
   },
   {
-    "name": "ui/scheduler/utils",
-    "exports": {
-      "getTimeZones": { "path": "ui.dxScheduler.utils.getTimeZones"}
-    }
-  },
-  {
     "name": "ui/scroll_view",
     "exports": {
       "default": { "path": "ui.dxScrollView", "isWidget": true }

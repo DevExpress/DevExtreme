@@ -805,21 +805,6 @@ interface JQuery {
     dxScheduler(options: dxSchedulerOptions): JQuery;
 }
 }
-
-/**
- * @docid ui.dxScheduler.utils.getTimeZones
- * @publicName getTimeZones(date)
- * @param1 date:Date|undefined
- * @return Array<Object>
- * @namespace DevExpress.ui.dxScheduler.utils
- * @module ui/scheduler/utils
- * @export getTimeZones
- * @static
- * @prevFileNamespace DevExpress.ui.dxScheduler
- * @public
- */
-export function getTimeZones(date?: Date): Array<{id?: string, title?: string, offset?: number}>;
-
 export type Options = dxSchedulerOptions;
 
 /**
