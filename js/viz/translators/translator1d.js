@@ -1,7 +1,7 @@
 const _Number = Number;
 
 function Translator1D() {
-    this.setDomain(arguments[0], arguments[1]).setCodomain(arguments[2], arguments[3]);
+    this.setDomain(arguments[0], arguments[1]).setCodomain(arguments[2], arguments[3]).setInverted(false);
 }
 
 Translator1D.prototype = {
@@ -21,6 +21,10 @@ Translator1D.prototype = {
         that._codomain2 = _Number(codomain2);
         that._codomainDelta = that._codomain2 - that._codomain1;
         return that;
+    },
+
+    setInverted(state) {
+        this.inverted = state;
     },
 
     getDomain: function() {
@@ -56,7 +60,8 @@ Translator1D.prototype = {
     },
 
     translate: function(value) {
-        const ratio = (_Number(value) - this._domain1) / this._domainDelta;
+        let ratio = (_Number(value) - this._domain1) / this._domainDelta;
+        this.inverted && (ratio = 1 - ratio);
         return 0 <= ratio && ratio <= 1 ? this._codomain1 + ratio * this._codomainDelta : NaN;
     },
 
