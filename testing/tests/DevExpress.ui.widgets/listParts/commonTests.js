@@ -27,6 +27,9 @@ const LIST_GROUP_CLASS = 'dx-list-group';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const LIST_GROUP_BODY_CLASS = 'dx-list-group-body';
 const LIST_NEXT_BUTTON_CLASS = 'dx-list-next-button';
+const LIST_SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
+const LIST_CONTEXT_MENUCONTENT_CLASS = 'dx-list-context-menucontent';
+const LIST_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -1286,6 +1289,161 @@ QUnit.module('options changed', moduleSetup, () => {
 
         assert.deepEqual(instance.option('items'), [{ text: 'item 2' }], 'updated items');
     });
+
+    QUnit.test('showSelectionControls', function(assert) {
+        let $selectionControls;
+        const instance = $('#list').dxList({
+            items: [{ text: 'test 1' }, { text: 'test 2' }],
+            displayExpr: 'text',
+            selectionMode: 'multiple',
+            showSelectionControls: true
+        }).dxList('instance');
+
+        $selectionControls = $(instance.element()).find(`.${LIST_SELECT_CHECKBOX_CLASS}`);
+        assert.strictEqual($selectionControls.length, 2);
+
+        instance.option('showSelectionControls', false);
+        $selectionControls = $(instance.element()).find(`.${LIST_SELECT_CHECKBOX_CLASS}`);
+        assert.strictEqual($selectionControls.length, 0);
+
+        instance.option('showSelectionControls', true);
+        $selectionControls = $(instance.element()).find(`.${LIST_SELECT_CHECKBOX_CLASS}`);
+        assert.strictEqual($selectionControls.length, 2);
+    });
+
+    QUnit.test('selectAllText', function(assert) {
+        const $list = $('#list').dxList({
+            items: [{ text: 'test 1' }, { text: 'test 2' }],
+            displayExpr: 'text',
+            selectionMode: 'all',
+            showSelectionControls: true,
+            selectAllText: 'custom text'
+        });
+        const list = $list.dxList('instance');
+
+        assert.strictEqual($list.find(`.${LIST_SELECT_ALL_LABEL_CLASS}`).text(), 'custom text');
+
+        list.option('selectAllText', 'Select All');
+        assert.strictEqual($list.find(`.${LIST_SELECT_ALL_LABEL_CLASS}`).text(), 'Select All');
+    });
+
+    QUnit.test('menuItems', function(assert) {
+        const actionSpy = sinon.spy();
+        const menuItems = [{ text: 'action', action: actionSpy }];
+
+        const $list = $('#list').dxList({
+            items: [{ text: 'test 1' }, { text: 'test 2' }],
+            displayExpr: 'text',
+            menuMode: 'context',
+            menuItems
+        });
+
+        let $item = $list.find('.dx-list-item').eq(0);
+        const list = $list.dxList('instance');
+
+        let contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
+        $item.trigger(contextMenuEvent);
+
+        let $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
+        assert.strictEqual($menuItems.length, 1, 'items count is correct');
+        $menuItems.eq(0).trigger('dxclick');
+        assert.strictEqual(actionSpy.callCount, 1, 'action is called once');
+
+        list.option('menuItems', []);
+        $item = $list.find('.dx-list-item').eq(0);
+        contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
+        $item.trigger(contextMenuEvent);
+        $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
+        assert.strictEqual($menuItems.length, 0, 'items count is correct');
+
+        list.option('menuItems', menuItems);
+        $item = $list.find('.dx-list-item').eq(0);
+        contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
+        $item.trigger(contextMenuEvent);
+        $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
+        assert.strictEqual($menuItems.length, 1, 'items count is correct');
+        $menuItems.eq(0).trigger('dxclick');
+        assert.strictEqual(actionSpy.callCount, 2, 'action is called twise');
+    });
+
+    QUnit.test('menuMode', function(assert) {
+        const actionSpy = sinon.spy();
+        const menuItems = [{ text: 'action', action: actionSpy }];
+        const $list = $('#list').dxList({
+            items: [{ text: 'test 1' }, { text: 'test 2' }],
+            displayExpr: 'text',
+            menuMode: 'context',
+            menuItems
+        });
+
+        const list = $list.dxList('instance');
+
+        list.option('menuMode', 'slide');
+
+        let $item = $list.find('.dx-list-item').eq(0);
+        let pointer = pointerMock($item);
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
+
+        let $actionButtons = $item.find('.dx-list-slide-menu-button');
+        assert.strictEqual($actionButtons.length, 1, 'items count is correct');
+        $actionButtons.eq(0).trigger('dxclick');
+        assert.strictEqual(actionSpy.callCount, 1, 'action is called once');
+
+        list.option('menuMode', 'context');
+        $item = $list.find('.dx-list-item').eq(0);
+        pointer = pointerMock($item);
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
+        $actionButtons = $item.find('.dx-list-slide-menu-button');
+        assert.strictEqual($actionButtons.length, 0, 'items count is correct');
+        const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
+        $item.trigger(contextMenuEvent);
+        const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
+        assert.strictEqual($menuItems.length, 1, 'items count is correct');
+    });
+
+    QUnit.test('deleteItem should remove an item', function(assert) {
+        const $list = $('#list').dxList({
+            items: [1, 2, 3, 4],
+            allowItemDeleting: true
+        });
+        const list = $list.dxList('instance');
+
+        $list.focusin();
+        let keyboard = keyboardMock($list);
+        keyboard.keyDown('del');
+        assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
+
+        list.option('allowItemDeleting', false);
+        $list.focusin();
+        keyboard = keyboardMock($list);
+        keyboard.keyDown('del');
+        assert.deepEqual(list.option('items'), [2, 3, 4], 'item is not deleted');
+
+        list.option('allowItemDeleting', true);
+        $list.focusin();
+        keyboard = keyboardMock($list);
+        keyboard.keyDown('del');
+        assert.deepEqual(list.option('items'), [3, 4], 'delete item by index');
+    });
+
+    QUnit.test('itemDragging option changed', function(assert) {
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
+            itemDragging: { allowReordering: true }
+        });
+        const list = $list.dxList('instance');
+        let $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        assert.strictEqual($items.eq(0).find('.dx-list-reorder-handle').length, 1);
+
+        list.option('itemDragging', { allowReordering: false });
+        $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        assert.strictEqual($items.eq(0).find('.dx-list-reorder-handle').length, 0);
+
+        list.option('itemDragging', { allowReordering: true });
+        $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        assert.strictEqual($items.eq(0).find('.dx-list-reorder-handle').length, 1);
+    });
+
 });
 
 QUnit.module('selection', moduleSetup, () => {

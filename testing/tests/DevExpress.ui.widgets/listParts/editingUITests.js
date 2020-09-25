@@ -4,6 +4,7 @@ import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
 import translator from 'animation/translator';
 import holdEvent from 'events/hold';
+import { noop } from 'core/utils/common';
 import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
@@ -1053,6 +1054,7 @@ QUnit.test('click on menu item should open menu', function(assert) {
     assert.strictEqual(menu.option('visible'), true, 'menu is shown');
     assert.strictEqual($menuItems.text(), 'menumenu', 'menu text is correct');
 });
+
 
 QUnit.test('click on menu toggle should not turn off ready to delete', function(assert) {
     const $list = $('#templated-list').dxList({
@@ -2206,18 +2208,54 @@ QUnit.test('selectAll selects all items', function(assert) {
 
 QUnit.test('selectAll triggers callback when selects all items', function(assert) {
     const items = [0, 1];
+    const selectAllSpy = sinon.spy();
 
     const $list = $('#list').dxList({
         items: items,
         showSelectionControls: true,
         selectionMode: 'all',
-        onSelectAllValueChanged: (args) => {
-            assert.strictEqual(args.value, true, 'all items selected');
-        }
+        onSelectAllValueChanged: selectAllSpy
     });
 
     const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
     $checkbox.trigger('dxclick');
+    assert.strictEqual(selectAllSpy.callCount, 1);
+    assert.strictEqual(selectAllSpy.firstCall.args[0].value, true, 'all items selected');
+});
+
+QUnit.test('selectAll triggers changed callback when selects all items', function(assert) {
+    const items = [0, 1];
+    const selectAllSpy = sinon.spy();
+
+    const $list = $('#list').dxList({
+        items: items,
+        showSelectionControls: true,
+        selectionMode: 'all',
+        onSelectAllValueChanged: noop
+    });
+    const list = $list.dxList('instance');
+    list.option('onSelectAllValueChanged', selectAllSpy);
+
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    $checkbox.trigger('dxclick');
+    assert.strictEqual(selectAllSpy.callCount, 1);
+});
+
+QUnit.test('selectAll triggers selectAllValueChanged event when selects all items', function(assert) {
+    const items = [0, 1];
+    const selectAllSpy = sinon.spy();
+
+    const $list = $('#list').dxList({
+        items: items,
+        showSelectionControls: true,
+        selectionMode: 'all'
+    });
+    const list = $list.dxList('instance');
+    list.on('selectAllValueChanged', selectAllSpy);
+
+    const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
+    $checkbox.trigger('dxclick');
+    assert.strictEqual(selectAllSpy.callCount, 1);
 });
 
 QUnit.test('selectAll unselect all items when all items selected', function(assert) {
@@ -2970,3 +3008,8 @@ QUnit.test('Drag and drop item to the top of the list should not work when allow
         assert.equal($item.text(), index, 'item text');
     });
 });
+
+
+QUnit.module('option changed');
+
+
