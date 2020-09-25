@@ -145,7 +145,7 @@ export const Export = {
         };
 
         const cellRange = {
-            from: topLeftCell,
+            from: { row: topLeftCell.row, column: topLeftCell.column },
             to: { row: topLeftCell.row, column: topLeftCell.column }
         };
 
