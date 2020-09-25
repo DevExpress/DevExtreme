@@ -208,11 +208,12 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @type_function_param1_field6 request:XMLHttpRequest
+     * @type_function_param1_field7 message:string
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploadAborted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest }) => any);
+    onUploadAborted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest, message?: string }) => any);
     /**
      * @docid dxFileUploaderOptions.onUploadError
      * @extends Action
@@ -222,11 +223,12 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @type_function_param1_field5 event:event
      * @type_function_param1_field6 request:XMLHttpRequest
      * @type_function_param1_field7 error:any
+     * @type_function_param1_field8 message:string
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploadError?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest, error?: any }) => any);
+    onUploadError?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest, error?: any, message?: string }) => any);
     /**
      * @docid dxFileUploaderOptions.onUploadStarted
      * @extends Action
@@ -248,11 +250,12 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      * @type_function_param1_field4 file:File
      * @type_function_param1_field5 event:event
      * @type_function_param1_field6 request:XMLHttpRequest
+     * @type_function_param1_field7 message:string
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onUploaded?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest }) => any);
+    onUploaded?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest, message?: string }) => any);
     /**
      * @docid dxFileUploaderOptions.onValueChanged
      * @extends Action
