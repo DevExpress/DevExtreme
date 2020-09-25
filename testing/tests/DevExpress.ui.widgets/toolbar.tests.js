@@ -14,7 +14,6 @@ import { deferUpdate } from 'core/utils/common';
 import 'ui/button_group';
 
 import 'common.css!';
-import 'generic_light.css!';
 import 'ui/button';
 import 'ui/tabs';
 
@@ -79,36 +78,7 @@ QUnit.module('render', {
                 { location: 'after', widget: 'dxButton', options: { text: 'After Button' } },
                 { location: 'center', text: 'Very very very very very very very very very very very long label' }
             ],
-            width: '500px'
-        });
-
-        const $label = this.element.find('.' + TOOLBAR_LABEL_CLASS);
-
-        assert.equal($label.children().eq(0).css('text-overflow'), 'ellipsis');
-        assert.equal($label.children().eq(0).css('overflow'), 'hidden');
-
-        const $centerSection = this.element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS);
-        const beforeSectionWidth = this.element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width;
-        const afterSectionWidth = this.element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
-
-        assert.roughEqual(parseFloat($centerSection.css('margin-left')), beforeSectionWidth, 0.1);
-        assert.roughEqual(parseFloat($centerSection.css('margin-right')), afterSectionWidth, 0.1);
-
-        const maxLabelWidth = this.element.width() - beforeSectionWidth - afterSectionWidth;
-
-        assert.ok(parseFloat($label.css('max-width')) <= maxLabelWidth);
-
-    });
-
-    QUnit.test('items - long custom html', function(assert) {
-        this.element.dxToolbar({
-            items: [
-                { location: 'before', widget: 'dxButton', options: { text: 'Before Button' } },
-                { location: 'before', widget: 'dxButton', options: { text: 'Second Before Button' } },
-                { location: 'after', widget: 'dxButton', options: { text: 'After Button' } },
-                { location: 'center', html: '<b>Very very very very very very very very very very very long label</b>' }
-            ],
-            width: 500
+            width: '400px'
         });
 
         const $label = this.element.find('.' + TOOLBAR_LABEL_CLASS);
@@ -123,7 +93,34 @@ QUnit.module('render', {
 
         const maxLabelWidth = this.element.width() - beforeSectionWidth - afterSectionWidth;
 
-        assert.ok(parseFloat($label.css('max-width')) <= maxLabelWidth);
+        assert.ok(parseFloat($label.css('max-width')) < maxLabelWidth);
+
+    });
+
+    QUnit.test('items - long custom html', function(assert) {
+        this.element.dxToolbar({
+            items: [
+                { location: 'before', widget: 'dxButton', options: { text: 'Before Button' } },
+                { location: 'before', widget: 'dxButton', options: { text: 'Second Before Button' } },
+                { location: 'after', widget: 'dxButton', options: { text: 'After Button' } },
+                { location: 'center', html: '<b>Very very very very very very very very very very very long label</b>' }
+            ],
+            width: 400
+        });
+
+        const $label = this.element.find('.' + TOOLBAR_LABEL_CLASS);
+
+        assert.equal($label.children().eq(0).css('text-overflow'), 'ellipsis');
+        assert.equal($label.children().eq(0).css('overflow'), 'hidden');
+
+        const $centerSection = this.element.find('.' + TOOLBAR_CENTER_CONTAINER_CLASS); const beforeSectionWidth = this.element.find('.' + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width; const afterSectionWidth = this.element.find('.' + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
+
+        assert.roughEqual(parseFloat($centerSection.css('margin-left')), beforeSectionWidth, 0.1);
+        assert.roughEqual(parseFloat($centerSection.css('margin-right')), afterSectionWidth, 0.1);
+
+        const maxLabelWidth = this.element.width() - beforeSectionWidth - afterSectionWidth;
+
+        assert.ok(parseFloat($label.css('max-width')) < maxLabelWidth);
     });
 
     QUnit.test('Center element has correct margin with RTL', function(assert) {
@@ -214,22 +211,8 @@ QUnit.module('render', {
     QUnit.test('Toolbar with compact mode has the compact class', function(assert) {
         const $toolbar = this.element.dxToolbar({
             items: [
-                {
-                    location: 'before',
-                    widget: 'dxButton',
-                    options: {
-                        type: 'default',
-                        text: 'before'
-                    }
-                },
-                {
-                    location: 'center',
-                    widget: 'dxButton',
-                    options: {
-                        type: 'default',
-                        text: 'center'
-                    }
-                }
+                { location: 'before', text: 'before' },
+                { location: 'center', text: 'center' }
             ],
             compactMode: true,
             width: 20
@@ -619,11 +602,10 @@ QUnit.module('widget sizing render', () => {
         const instance = $element.dxToolbar('instance');
         const $before = $element.find('.dx-toolbar-before').eq(0);
         const $after = $element.find('.dx-toolbar-after').eq(0);
-        const afterPadding = parseInt($after.css('paddingLeft'));
 
         instance.option('width', 100);
 
-        assert.roughEqual($before.width(), 100 - $after.width() - afterPadding, 1.001, 'width of before element should be changed');
+        assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1.001, 'width of before element should be changed');
     });
 
     QUnit.test('text should crop in the label inside the toolbar on window\'s width changing', function(assert) {
@@ -635,12 +617,11 @@ QUnit.module('widget sizing render', () => {
         });
         const $before = $element.find('.dx-toolbar-before').eq(0);
         const $after = $element.find('.dx-toolbar-after').eq(0);
-        const afterPadding = parseInt($after.css('paddingLeft'));
 
         $element.width(100);
         resizeCallbacks.fire();
 
-        assert.roughEqual($before.width(), 100 - $after.width() - afterPadding, 1.001, 'width of before element should be changed');
+        assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1.001, 'width of before element should be changed');
     });
 
     QUnit.test('label should positioned correctly inside the toolbar if toolbar-before section is empty', function(assert) {
@@ -676,10 +657,10 @@ QUnit.module('widget sizing render', () => {
         });
 
         const $center = $element.find('.dx-toolbar-center').eq(0);
-        assert.equal(parseInt($center.css('margin-left')), 115);
-        assert.equal(parseInt($center.css('margin-right')), 65);
+        assert.equal(parseInt($center.css('margin-left')), 110);
+        assert.equal(parseInt($center.css('margin-right')), 60);
         assert.equal($center.css('float'), 'none');
-        assert.equal($center.width(), 220);
+        assert.equal($center.width(), 230);
     });
 
     QUnit.test('title should be centered considering different before/after block widths (big after case)', function(assert) {
@@ -700,10 +681,10 @@ QUnit.module('widget sizing render', () => {
         });
 
         const $center = $element.find('.dx-toolbar-center').eq(0);
-        assert.equal(parseInt($center.css('margin-left')), 65);
-        assert.equal(parseInt($center.css('margin-right')), 115);
+        assert.equal(parseInt($center.css('margin-left')), 60);
+        assert.equal(parseInt($center.css('margin-right')), 110);
         assert.equal($center.css('float'), 'right');
-        assert.equal($center.width(), 220);
+        assert.equal($center.width(), 230);
     });
 
     QUnit.test('title should be centered considering different before/after block widths after visible option change', function(assert) {
@@ -719,7 +700,7 @@ QUnit.module('widget sizing render', () => {
         $element.dxToolbar('option', 'items[0].visible', true);
 
         const $center = $element.find('.dx-toolbar-center').eq(0);
-        assert.equal(parseInt($center.css('margin-left')), 65);
+        assert.equal(parseInt($center.css('margin-left')), 60);
     });
 
     QUnit.test('items should be arranged after rendering in the dxToolbarBase used in the dxPopup', function(assert) {
@@ -748,10 +729,10 @@ QUnit.module('widget sizing render', () => {
         });
 
         const $center = $element.find('.dx-toolbar-center').eq(0);
-        assert.equal(parseInt($center.css('margin-left')), 115);
-        assert.equal(parseInt($center.css('margin-right')), 65);
+        assert.equal(parseInt($center.css('margin-left')), 110);
+        assert.equal(parseInt($center.css('margin-right')), 60);
         assert.equal($center.css('float'), 'none');
-        assert.equal($center.width(), 220);
+        assert.equal($center.width(), 230);
     });
 });
 
@@ -942,12 +923,12 @@ QUnit.module('adaptivity', {
             width: 400
         });
 
-        $element.dxToolbar('option', 'width', 230);
+        $element.dxToolbar('option', 'width', 190);
 
         const $dropDownMenu = $element.find('.' + DROP_DOWN_MENU_CLASS);
         $dropDownMenu.dxDropDownMenu('open');
         $dropDownMenu.dxDropDownMenu('close');
-        $element.dxToolbar('option', 'width', 228);
+        $element.dxToolbar('option', 'width', 188);
 
         assert.equal($dropDownMenu.dxDropDownMenu('option', 'items').length, 1);
     });
@@ -1530,17 +1511,6 @@ QUnit.module('adaptivity without hiding in menu', {
         };
 
         this.MEASURE_SAFE_TEXT = 'xyvxyv';
-        const fontStyles = '<style>\
-        .dx-toolbar-label > div,\
-        .dx-toolbar-label .dx-toolbar-item-content > div {\
-            font-family: arial !important;\
-        }\
-        </style>';
-
-        this.styles = $(fontStyles).appendTo('head');
-    },
-    afterEach: function() {
-        this.styles.remove();
     }
 }, () => {
     QUnit.test('items in before section should have correct sizes, width decreases', function(assert) {
@@ -1555,28 +1525,24 @@ QUnit.module('adaptivity without hiding in menu', {
         }).dxToolbar('instance');
 
         $.each(this.getToolbarItems(), function(index, $item) {
-            if(index < 2) {
-                assert.roughEqual($($item).outerWidth(), 65, 1, 'Width is correct');
-            } else {
-                assert.roughEqual($($item).outerWidth(), 60, 1, 'Width is correct');
-            }
+            assert.roughEqual($($item).outerWidth(), 58, 2, 'Width is correct');
         });
 
         toolBar.option('width', 180);
 
         $.each(this.getToolbarItems(), function(index, $item) {
             if(index < 2) {
-                assert.roughEqual($($item).outerWidth(), 65, 1, 'Width is correct');
+                assert.roughEqual($($item).outerWidth(), 58, 1, 'Width is correct');
             } else {
-                assert.roughEqual($($item).outerWidth(), 40, 1, 'Width is correct');
+                assert.roughEqual($($item).outerWidth(), 44, 1, 'Width is correct');
             }
         });
 
         toolBar.option('width', 100);
 
-        assert.roughEqual(this.getToolbarItems().eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual(this.getToolbarItems().eq(1).outerWidth(), 30, 1, 'Width of the second item is correct');
-        assert.roughEqual(this.getToolbarItems().eq(2).outerWidth(), 0, 1, 'Width of the third item is correct');
+        assert.roughEqual(this.getToolbarItems().eq(0).outerWidth(), 58, 1, 'Width of the first item is correct');
+        assert.roughEqual(this.getToolbarItems().eq(1).outerWidth(), 22, 1, 'Width of the second item is correct');
+        assert.roughEqual(this.getToolbarItems().eq(2).outerWidth(), 10, 1, 'Width of the third item is correct');
     });
 
     QUnit.test('items in center section should have correct sizes, width decreases', function(assert) {
@@ -1591,18 +1557,14 @@ QUnit.module('adaptivity without hiding in menu', {
         }).dxToolbar('instance');
 
         $.each(this.getToolbarItems(), function(index, $item) {
-            if(index < 2) {
-                assert.roughEqual($($item).outerWidth(), 65, 1, 'Width is correct');
-            } else {
-                assert.roughEqual($($item).outerWidth(), 60, 1, 'Width is correct');
-            }
+            assert.roughEqual($($item).outerWidth(), 58, 2, 'Width is correct');
         });
 
-        toolBar.option('width', 150);
+        toolBar.option('width', 140);
 
         $.each(this.getToolbarItems(), function(index, $item) {
             if(index < 2) {
-                assert.roughEqual($($item).outerWidth(), 65, 1, 'Width is correct');
+                assert.roughEqual($($item).outerWidth(), 58, 1, 'Width is correct');
             } else {
                 assert.roughEqual($($item).outerWidth(), 10, 1, 'Width is correct');
             }
@@ -1612,9 +1574,9 @@ QUnit.module('adaptivity without hiding in menu', {
 
         const $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 30, 2, 'Width of the second item is correct');
-        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 0, 1, 'Width of the third item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 22, 2, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 1, 'Width of the third item is correct');
     });
 
     QUnit.test('items in before section should have correct sizes, width increases', function(assert) {
@@ -1632,17 +1594,17 @@ QUnit.module('adaptivity without hiding in menu', {
 
         let $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 45, 1, 'Width of the second item is correct');
-        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 0, 1, 'Width of the third item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 34, 1, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 1, 'Width of the third item is correct');
 
-        toolBar.option('width', 260);
+        toolBar.option('width', 250);
 
         $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 65, 1, 'Width of the second item is correct');
-        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 1, 'Width of the third item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 58, 1, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 22, 1, 'Width of the third item is correct');
     });
 
     QUnit.test('items in center section should have correct sizes, width increases', function(assert) {
@@ -1660,17 +1622,17 @@ QUnit.module('adaptivity without hiding in menu', {
 
         let $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 20, 1, 'Width of the second item is correct');
-        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 0, 1, 'Width of the third item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 10, 1, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 1, 'Width of the third item is correct');
 
         toolBar.option('width', 250);
 
         $toolbarItems = this.getToolbarItems();
 
-        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 65, 1, 'Width of the first item is correct');
-        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 65, 1, 'Width of the second item is correct');
-        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 25, 1, 'Width of the third item is correct');
+        assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, 'Width of the first item is correct');
+        assert.roughEqual($toolbarItems.eq(1).outerWidth(), 58, 1, 'Width of the second item is correct');
+        assert.roughEqual($toolbarItems.eq(2).outerWidth(), 46, 1, 'Width of the third item is correct');
     });
 });
 
