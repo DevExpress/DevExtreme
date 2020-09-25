@@ -13,6 +13,7 @@ QUnit.test('construction', function(assert) {
     const translator = new Translator1D();
     assert.deepEqual(translator.getDomain(), [NaN, NaN], 'domain');
     assert.deepEqual(translator.getCodomain(), [NaN, NaN], 'codomain');
+    assert.equal(translator.inverted, false, 'inverted');
 });
 
 QUnit.test('setDomain', function(assert) {
@@ -70,6 +71,19 @@ QUnit.test('translate', function(assert) {
     assert.roughEqual(translator.translate(100), 0, EPSILON, '100');
     assert.roughEqual(translator.translate(100 / 180), 179, EPSILON, '100 / 180');
     assert.roughEqual(translator.translate(17900 / 180), 1, EPSILON, '17900 / 180');
+});
+
+QUnit.test('translate.inverted', function(assert) {
+    const translator = new Translator1D();
+    translator.setDomain(0, 100).setCodomain(180, 0).setInverted(true);
+
+    assert.roughEqual(translator.translate(0), 0, EPSILON, '0');
+    assert.roughEqual(translator.translate('25'), 45, EPSILON, '25');
+    assert.roughEqual(translator.translate(50), 90, EPSILON, '50');
+    assert.roughEqual(translator.translate('75'), 135, EPSILON, '75');
+    assert.roughEqual(translator.translate(100), 180, EPSILON, '100');
+    assert.roughEqual(translator.translate(100 / 180), 1, EPSILON, '100 / 180');
+    assert.roughEqual(translator.translate(17900 / 180), 179, EPSILON, '17900 / 180');
 });
 
 QUnit.test('translate - out of ranges', function(assert) {
