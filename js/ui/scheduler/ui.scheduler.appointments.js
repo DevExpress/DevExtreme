@@ -219,25 +219,41 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _repaintAppointments: function(appointments) {
-        const isRepaintAll = this._isRepaintAll(appointments);
+        this._renderByFragments(($commonFragment, $allDayFragment) => {
+            const isRepaintAll = this._isRepaintAll(appointments);
 
-        const allDayFragment = $(this._getAppointmentContainer(true));
-        const commonFragment = $(this._getAppointmentContainer(false));
+            if(isRepaintAll) {
+                this._getAppointmentContainer(true).html('');
+                this._getAppointmentContainer(false).html('');
+            }
 
-        if(isRepaintAll) {
-            this._getAppointmentContainer(true).html('');
-            this._getAppointmentContainer(false).html('');
-        }
+            !appointments.length && this._cleanItemContainer();
 
-        !appointments.length && this._cleanItemContainer();
-
-        appointments.forEach((appointment, index) => {
-            const container = this._isAllDayAppointment(appointment) ? allDayFragment : commonFragment;
-            this._onEachAppointment(appointment, index, container, isRepaintAll);
+            appointments.forEach((appointment, index) => {
+                const container = this._isAllDayAppointment(appointment)
+                    ? $allDayFragment
+                    : $commonFragment;
+                this._onEachAppointment(appointment, index, container, isRepaintAll);
+            });
         });
+    },
 
-        this._applyFragment(allDayFragment, true);
-        this._applyFragment(commonFragment, false);
+    _renderByFragments: function(renderFunction) {
+        const isVirtualScrolling = this.invoke('isVirtualScrolling');
+        if(isVirtualScrolling) {
+            const $commonFragment = $(domAdapter.createDocumentFragment());
+            const $allDayFragment = $(domAdapter.createDocumentFragment());
+
+            renderFunction($commonFragment, $allDayFragment);
+
+            this._applyFragment($commonFragment, false);
+            this._applyFragment($allDayFragment, true);
+        } else {
+            renderFunction(
+                this._getAppointmentContainer(false),
+                this._getAppointmentContainer(true)
+            );
+        }
     },
 
     _attachAppointmentsEvents: function() {
@@ -749,33 +765,35 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderDropDownAppointments: function() {
-        each(this._virtualAppointments, (function(groupIndex) {
-            const virtualGroup = this._virtualAppointments[groupIndex];
-            const virtualItems = virtualGroup.items;
-            const virtualCoordinates = virtualGroup.coordinates;
-            const $container = virtualGroup.isAllDay ? this.option('allDayContainer') : this.$element();
-            const left = virtualCoordinates.left;
-            const buttonWidth = this.invoke('getDropDownAppointmentWidth', virtualGroup.isAllDay);
-            const buttonHeight = this.invoke('getDropDownAppointmentHeight');
-            const rtlOffset = this.option('rtlEnabled') ? buttonWidth : 0;
+        this._renderByFragments(($commonFragment, $allDayFragment) => {
+            each(this._virtualAppointments, (function(groupIndex) {
+                const virtualGroup = this._virtualAppointments[groupIndex];
+                const virtualItems = virtualGroup.items;
+                const virtualCoordinates = virtualGroup.coordinates;
+                const $fragment = virtualGroup.isAllDay ? $allDayFragment : $commonFragment;
+                const left = virtualCoordinates.left;
+                const buttonWidth = this.invoke('getDropDownAppointmentWidth', virtualGroup.isAllDay);
+                const buttonHeight = this.invoke('getDropDownAppointmentHeight');
+                const rtlOffset = this.option('rtlEnabled') ? buttonWidth : 0;
 
-            this.notifyObserver('renderCompactAppointments', {
-                $container: $container,
-                coordinates: {
-                    top: virtualCoordinates.top,
-                    left: left + rtlOffset
-                },
-                items: virtualItems,
-                buttonColor: virtualGroup.buttonColor,
-                width: buttonWidth - this.option('_collectorOffset'),
-                height: buttonHeight,
-                onAppointmentClick: this.option('onItemClick'),
-                allowDrag: this.option('allowDrag'),
-                cellWidth: this.invoke('getCellWidth'),
-                isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
-                applyOffset: !virtualGroup.isAllDay && this.invoke('isApplyCompactAppointmentOffset')
-            });
-        }).bind(this));
+                this.notifyObserver('renderCompactAppointments', {
+                    $container: $fragment,
+                    coordinates: {
+                        top: virtualCoordinates.top,
+                        left: left + rtlOffset
+                    },
+                    items: virtualItems,
+                    buttonColor: virtualGroup.buttonColor,
+                    width: buttonWidth - this.option('_collectorOffset'),
+                    height: buttonHeight,
+                    onAppointmentClick: this.option('onItemClick'),
+                    allowDrag: this.option('allowDrag'),
+                    cellWidth: this.invoke('getCellWidth'),
+                    isCompact: this.invoke('isAdaptive') || this._isGroupCompact(virtualGroup),
+                    applyOffset: !virtualGroup.isAllDay && this.invoke('isApplyCompactAppointmentOffset')
+                });
+            }).bind(this));
+        });
     },
 
     _isGroupCompact: function(virtualGroup) {

@@ -35,6 +35,10 @@ const subscribes = {
         return this.option(name);
     },
 
+    isVirtualScrolling: function() {
+        return this.isVirtualScrolling();
+    },
+
     setCellDataCacheAlias: function(appointment, geometry) {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
