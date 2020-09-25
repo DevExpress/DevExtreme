@@ -405,11 +405,11 @@ class FileUploader extends Editor {
         this._ensureCancelButtonInitialized(file);
     }
 
-    _setStatusMessage(file, key) {
+    _setStatusMessage(file, message) {
         setTimeout(() => {
             if(this.option('showFileList')) {
                 if(file.$statusMessage) {
-                    file.$statusMessage.text(this.option(key));
+                    file.$statusMessage.text(message);
                     file.$statusMessage.css('display', '');
                     file.progressBar.$element().remove();
                 }
@@ -417,9 +417,10 @@ class FileUploader extends Editor {
         }, FILEUPLOADER_AFTER_LOAD_DELAY);
     }
 
-    _setUploadAbortedStatusMessage(file) {
-        const key = this.option('uploadMode') === 'instantly' ? 'uploadAbortedMessage' : 'readyToUploadMessage';
-        this._setStatusMessage(file, key);
+    _getUploadAbortedStatusMessage() {
+        return this.option('uploadMode') === 'instantly'
+            ? this.option('uploadAbortedMessage')
+            : this.option('readyToUploadMessage');
     }
 
     _createFiles() {
@@ -1520,34 +1521,40 @@ class FileUploadStrategyBase {
     }
 
     _onAbortHandler(file, e) {
-        this.fileUploader._setUploadAbortedStatusMessage(file);
-        this.fileUploader._uploadAbortedAction({
+        const args = {
             file: file.value,
             event: e,
-            request: file.request
-        });
+            request: file.request,
+            message: this.fileUploader._getUploadAbortedStatusMessage()
+        };
+        this.fileUploader._uploadAbortedAction(args);
+        this.fileUploader._setStatusMessage(file, args.message);
         this.fileUploader._handleAllFilesUploaded();
     }
 
     _onErrorHandler(file, error) {
-        this.fileUploader._setStatusMessage(file, 'uploadFailedMessage');
-        this.fileUploader._uploadErrorAction({
+        const args = {
             file: file.value,
             event: undefined,
             request: file.request,
-            error
-        });
+            error,
+            message: this.fileUploader.option('uploadFailedMessage')
+        };
+        this.fileUploader._uploadErrorAction(args);
+        this.fileUploader._setStatusMessage(file, args.message);
         this.fileUploader._handleAllFilesUploaded();
     }
 
     _onLoadedHandler(file, e) {
-        file._isLoaded = true;
-        this.fileUploader._setStatusMessage(file, 'uploadedMessage');
-        this.fileUploader._uploadedAction({
+        const args = {
             file: file.value,
             event: e,
-            request: file.request
-        });
+            request: file.request,
+            message: this.fileUploader.option('uploadedMessage')
+        };
+        file._isLoaded = true;
+        this.fileUploader._uploadedAction(args);
+        this.fileUploader._setStatusMessage(file, args.message);
         this.fileUploader._handleAllFilesUploaded();
     }
 
