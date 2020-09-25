@@ -723,9 +723,13 @@ class Diagram extends Widget {
         if(this.option('autoZoomMode') !== DIAGRAM_DEFAULT_AUTOZOOM_MODE) {
             this._updateAutoZoomState();
         }
-        const window = getWindow();
-        if(this.option('fullScreen') && window.self === window.top) {
-            this._updateFullscreenState();
+        if(this.option('fullScreen')) {
+            const window = getWindow();
+            if(window.self !== window.top) {
+                this.option('fullScreen', false);
+            } else {
+                this._updateFullscreenState();
+            }
         }
 
         this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
