@@ -59,6 +59,3 @@ DevExpress.data.utils.multiLevelGroup = require('../../data/store_helper').multi
 DevExpress.data.utils.arrangeSortingInfo = require('../../data/store_helper').arrangeSortingInfo;
 
 DevExpress.data.utils.normalizeDataSourceOptions = require('../../data/data_source/utils').normalizeDataSourceOptions;
-
-DevExpress.scheduler.utils = {};
-DevExpress.scheduler.utils.getTimeZones = require('../../ui/scheduler/utils').getTimeZones;

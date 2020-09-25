@@ -3,8 +3,8 @@
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
  * @return Array<Object>
- * @namespace DevExpress.scheduler.utils
- * @module scheduler/utils
+ * @namespace DevExpress.timeZone
+ * @module time_zone
  * @export getTimeZones
  * @static
  * @prevFileNamespace DevExpress
