@@ -2835,6 +2835,199 @@ QUnit.module('uploading events', moduleConfig, () => {
         simulateFileChoose($element, fakeFile);
     });
 
+    QUnit.test('onFilesUploaded event should rise when all files are successfully uploaded', function(assert) {
+        const chunkSize = 1000;
+        const onUploadedSpy = sinon.spy();
+        const onUploadCompletedSpy = sinon.spy();
+
+        const $element = $('#fileuploader').dxFileUploader({
+            chunkSize,
+            uploadMode: 'instantly',
+            multiple: true,
+            onFilesUploaded: onUploadCompletedSpy,
+            onUploaded: onUploadedSpy
+        });
+
+        const file1 = createBlobFile('file 1', chunkSize);
+        const file2 = createBlobFile('file 2', chunkSize * 2);
+        simulateFileChoose($element, [file1, file2]);
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadedSpy.calledOnce, 'file 1 uploaded');
+        assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
+
+        onUploadedSpy.reset();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+
+        assert.ok(onUploadedSpy.calledOnce, 'file 2 uploaded');
+        assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
+    });
+
+    QUnit.test('onFilesUploaded event should rise when files are both successfully uploaded and aborted', function(assert) {
+        const chunkSize = 1000;
+        const onUploadAbortedSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadCompletedSpy = sinon.spy();
+
+        const $element = $('#fileuploader').dxFileUploader({
+            chunkSize,
+            uploadMode: 'instantly',
+            multiple: true,
+            onFilesUploaded: onUploadCompletedSpy,
+            onUploadAborted: onUploadAbortedSpy,
+            onUploaded: onUploadedSpy
+        });
+
+        const file1 = createBlobFile('file 1', chunkSize);
+        const file2 = createBlobFile('file 2', chunkSize * 2);
+        simulateFileChoose($element, [file1, file2]);
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadedSpy.calledOnce, 'file 1 was uploaded');
+        assert.ok(onUploadAbortedSpy.notCalled, 'none files was aborted');
+        assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
+
+        onUploadedSpy.reset();
+        $element.dxFileUploader('instance').abortUpload();
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+
+        assert.ok(onUploadedSpy.notCalled, 'none files was uploaded');
+        assert.ok(onUploadAbortedSpy.calledOnce, 'file 2 was aborted');
+        assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
+    });
+
+    QUnit.test('onFilesUploaded event should rise when files are both successfully uploaded and has error', function(assert) {
+        const chunkSize = 1000;
+        const uploadChunkSpy = sinon.spy((file, uploadInfo) => executeAfterDelay(() => {
+            if(file.name === 'file 2' && uploadInfo.chunkIndex === 1) {
+                throw 'Some error.';
+            }
+        }, this.xhrMock.LOAD_TIMEOUT));
+        const onUploadErrorSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadCompletedSpy = sinon.spy();
+
+        const $element = $('#fileuploader').dxFileUploader({
+            chunkSize,
+            uploadMode: 'instantly',
+            uploadChunk: uploadChunkSpy,
+            multiple: true,
+            onFilesUploaded: onUploadCompletedSpy,
+            onUploadError: onUploadErrorSpy,
+            onUploaded: onUploadedSpy
+        });
+
+        const file1 = createBlobFile('file 1', chunkSize);
+        const file2 = createBlobFile('file 2', chunkSize * 2);
+        simulateFileChoose($element, [file1, file2]);
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadedSpy.calledOnce, 'file 1 was uploaded');
+        assert.ok(onUploadErrorSpy.notCalled, 'none files has error');
+        assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
+
+        onUploadedSpy.reset();
+        this.clock.tick(1000);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+
+        assert.ok(onUploadedSpy.notCalled, 'none files was uploaded');
+        assert.ok(onUploadErrorSpy.calledOnce, 'file 2 has error');
+        assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
+    });
+
+    QUnit.test('onFilesUploaded event should rise when files are both successfully uploaded and invalid', function(assert) {
+        const chunkSize = 1000;
+        const onUploadedSpy = sinon.spy();
+        const onUploadCompletedSpy = sinon.spy();
+
+        const $element = $('#fileuploader').dxFileUploader({
+            chunkSize,
+            uploadMode: 'instantly',
+            multiple: true,
+            maxFileSize: chunkSize,
+            onFilesUploaded: onUploadCompletedSpy,
+            onUploaded: onUploadedSpy
+        });
+
+        const file1 = createBlobFile('file 1', chunkSize);
+        const file2 = createBlobFile('file 2', chunkSize * 2);
+        simulateFileChoose($element, [file1, file2]);
+
+        assert.equal($element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).not('.' + FILEUPLOADER_INVALID_CLASS).length, 1, 'One files is valid');
+        assert.equal($element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS + '.' + FILEUPLOADER_INVALID_CLASS).length, 1, 'One file is invalid');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadedSpy.calledOnce, 'file 1 was uploaded');
+        assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
+
+        onUploadedSpy.reset();
+        onUploadCompletedSpy.reset();
+        this.clock.tick(1000);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+
+        assert.ok(onUploadedSpy.notCalled, 'none files was uploaded');
+        assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called again');
+    });
+
+    QUnit.test('onFilesUploaded event should rise when files are all successfully uploaded, invalid and has error', function(assert) {
+        const chunkSize = 1000;
+        const uploadChunkSpy = sinon.spy((file, uploadInfo) => executeAfterDelay(() => {
+            if(file.name === 'file 2' && uploadInfo.chunkIndex === 1) {
+                throw 'Some error.';
+            }
+        }, this.xhrMock.LOAD_TIMEOUT));
+        const onUploadErrorSpy = sinon.spy();
+        const onUploadedSpy = sinon.spy();
+        const onUploadCompletedSpy = sinon.spy();
+
+        const $element = $('#fileuploader').dxFileUploader({
+            chunkSize,
+            uploadMode: 'instantly',
+            uploadChunk: uploadChunkSpy,
+            multiple: true,
+            maxFileSize: chunkSize * 2,
+            onFilesUploaded: onUploadCompletedSpy,
+            onUploadError: onUploadErrorSpy,
+            onUploaded: onUploadedSpy
+        });
+
+        const file1 = createBlobFile('file 1', chunkSize);
+        const file2 = createBlobFile('file 2', chunkSize * 2);
+        const file3 = createBlobFile('file 3', chunkSize * 3);
+        simulateFileChoose($element, [file1, file2, file3]);
+
+        assert.equal($element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS).not('.' + FILEUPLOADER_INVALID_CLASS).length, 2, 'Two files are valid');
+        assert.equal($element.find('.' + FILEUPLOADER_FILE_CONTAINER_CLASS + '.' + FILEUPLOADER_INVALID_CLASS).length, 1, 'One file is invalid');
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+
+        assert.ok(onUploadedSpy.calledOnce, 'file 1 was uploaded');
+        assert.ok(onUploadErrorSpy.notCalled, 'none files has error');
+        assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
+
+        onUploadedSpy.reset();
+        this.clock.tick(1000);
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+
+        assert.ok(onUploadedSpy.notCalled, 'none files was uploaded');
+        assert.ok(onUploadErrorSpy.calledOnce, 'file 2 has error');
+        assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
+    });
+
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {

@@ -133,6 +133,8 @@ class FileUploader extends Editor {
 
             onUploaded: null,
 
+            onFilesUploaded: null,
+
             onProgress: null,
 
             onUploadError: null,
@@ -244,6 +246,7 @@ class FileUploader extends Editor {
         this._createBeforeSendAction();
         this._createUploadStartedAction();
         this._createUploadedAction();
+        this._createFilesUploadedAction();
         this._createProgressAction();
         this._createUploadErrorAction();
         this._createUploadAbortedAction();
@@ -484,6 +487,10 @@ class FileUploader extends Editor {
 
     _createUploadedAction() {
         this._uploadedAction = this._createActionByOption('onUploaded', { excludeValidators: ['readOnly'] });
+    }
+
+    _createFilesUploadedAction() {
+        this._filesUploadedAction = this._createActionByOption('onFilesUploaded', { excludeValidators: ['readOnly'] });
     }
 
     _createProgressAction() {
@@ -999,6 +1006,13 @@ class FileUploader extends Editor {
         }
     }
 
+    _handleAllFilesUploaded() {
+        const areAllFilesLoaded = this._files.every(file => !file.isValid() || file._isError || file._isLoaded || file.isAborted);
+        if(areAllFilesLoaded) {
+            this._filesUploadedAction();
+        }
+    }
+
     _filterFiles(files) {
         if(!files.length) {
             return files;
@@ -1316,6 +1330,9 @@ class FileUploader extends Editor {
             case 'onUploaded':
                 this._createUploadedAction();
                 break;
+            case 'onFilesUploaded':
+                this._createFilesUploadedAction();
+                break;
             case 'onProgress':
                 this._createProgressAction();
                 break;
@@ -1423,8 +1440,8 @@ class FileUploadStrategyBase {
             return;
         }
 
-        file.request && file.request.abort();
         file.isAborted = true;
+        file.request && file.request.abort();
 
         if(this._isCustomCallback('abortUpload')) {
             const abortUpload = this.fileUploader.option('abortUpload');
@@ -1509,6 +1526,7 @@ class FileUploadStrategyBase {
             event: e,
             request: file.request
         });
+        this.fileUploader._handleAllFilesUploaded();
     }
 
     _onErrorHandler(file, error) {
@@ -1519,6 +1537,7 @@ class FileUploadStrategyBase {
             request: file.request,
             error
         });
+        this.fileUploader._handleAllFilesUploaded();
     }
 
     _onLoadedHandler(file, e) {
@@ -1529,6 +1548,7 @@ class FileUploadStrategyBase {
             event: e,
             request: file.request
         });
+        this.fileUploader._handleAllFilesUploaded();
     }
 
     _onProgressHandler(file, e) {

@@ -6871,6 +6871,10 @@ declare module DevExpress.ui {
          */
         onDropZoneLeave?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, dropZoneElement?: DevExpress.core.dxElement, event?: DevExpress.events.event }) => any);
         /**
+         * [descr:dxFileUploader.Options.onFilesUploaded]
+         */
+        onFilesUploaded?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any }) => any);
+        /**
          * [descr:dxFileUploader.Options.onProgress]
          */
         onProgress?: ((e: { component?: dxFileUploader, element?: DevExpress.core.dxElement, model?: any, file?: File, segmentSize?: number, bytesLoaded?: number, bytesTotal?: number, event?: DevExpress.events.event, request?: XMLHttpRequest }) => any);
