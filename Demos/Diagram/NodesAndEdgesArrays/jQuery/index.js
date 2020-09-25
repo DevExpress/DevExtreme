@@ -16,8 +16,9 @@ $(function() {
                 key: "id",
                 data: flowEdges
             }),
-			fromExpr: "fromId",
-			toExpr: "toId",
+            textExpr: "text",
+            fromExpr: "fromId",
+            toExpr: "toId",
         },
         toolbox: {
             groups: [ "general" ]
