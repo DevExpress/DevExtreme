@@ -3,7 +3,7 @@
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
  * @return Array<Object>
- * @namespace DevExpress.timeZone
+ * @namespace DevExpress.timeZoneUtils
  * @module time_zone
  * @export getTimeZones
  * @static
