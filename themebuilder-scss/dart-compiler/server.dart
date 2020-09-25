@@ -1,59 +1,54 @@
 import 'dart:io';
+import 'dart:convert';
 import './compiler.dart';
 import './importer.dart';
+import './compiler-result.dart';
 
 class Server {
   ServerSocket server;
 
-  void start() {
-    ServerSocket.bind(InternetAddress.loopbackIPv4, 22000)
-        .then((ServerSocket socket) {
-      this.server = socket;
-      this.server.listen((client) {
-        handleConnection(client);
-      });
+  void start() async {
+    this.server = await ServerSocket.bind(InternetAddress.loopbackIPv4, 22000);
+    this.server.listen((client) async {
+      await handleConnection(client);
     });
   }
 
-  void handleConnection(Socket client) {
-    print('Connection from '
-        '${client.remoteAddress.address}:${client.remotePort}');
+  void handleConnection(Socket client) async {
+    var request = await utf8.decoder.bind(client).join('');
+    var options = json.decode(request);
 
-    client.write("Welcome to server!");
-  }
+    var indexFileContent = options['index'].toString();
 
-  void start1() {
-    print('Hi! I\'m server!');
+    var items = (options['items'] as List<dynamic>)
+        .map((item) => MetaItem(item['key'], item['value']))
+        .toList();
 
-    var time = DateTime.now().microsecondsSinceEpoch;
+    String file = options['file'] ?? '';
+    String data = options['data'] ?? '';
 
-    var indexFileContent = '''
-\$color: null !default;
-\$size: null !default;
+    if (file.isNotEmpty) {
+      var bundles = 'bundles';
+      var fileParts = file.split(bundles);
 
-@use "./_colors.scss" with (\$color: \$color);
-@use "./_sizes.scss" with (\$size: \$size);
-@use "./typography";
-@use "./icons";
-@use "./widget";
-@use "./card";
-@use "./fieldset";
-@use "./common";
+      if (fileParts.length == 2) {
+        var cwd = fileParts[0];
+        file = bundles + fileParts[1];
+        Directory.current = cwd;
+      }
+    }
 
-// public widgets
-@use "./box";
-''';
+    CompilerResult result;
+    try {
+      result = Compiler().compile(items, indexFileContent, SassOptions(file, data));
+    } catch(e) {
+      result = CompilerResult(null, null, true);
+    }
 
-    var userItems = List<MetaItem>();
-    userItems.add(MetaItem('\$base-bg', '#abcdef'));
-    userItems.add(MetaItem('\$base-accent', '#abcdef'));
-
-    var result = Compiler().compile(userItems, indexFileContent,
-        SassOptions('bundles/dx.light.scss', null));
-    //var result = Compiler().compile(userItems, indexFileContent, SassOptions(null, '\$r:20px;div{height: \$r;}'));
-
-    print('end - ${(DateTime.now().microsecondsSinceEpoch - time) / 1000}ms');
-    print(result.changedVariables);
-    File('./out.css').writeAsStringSync(result.css);
+    try {
+      client.write(json.encode(result)); 
+    } finally {
+      client.close();
+    }
   }
 }

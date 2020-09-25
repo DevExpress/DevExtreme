@@ -61,7 +61,6 @@ export default class DartClient {
 
       this.client.on('data', (d) => {
         data += d.toString();
-        this.client.end();
       });
 
       this.client.on('end', () => {
@@ -75,6 +74,7 @@ export default class DartClient {
       });
 
       this.client.write(JSON.stringify(message));
+      this.client.end();
     });
   }
 }

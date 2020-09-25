@@ -14,7 +14,7 @@ class Collector {
 
   collect(SassMap map) {
     map.contents.entries.forEach((item) {
-      var key = item.key.toString();
+      var key = (item.key as SassString).text;
       var value = item.value.toString();
 
       if(value == 'null') return;
