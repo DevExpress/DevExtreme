@@ -41,11 +41,6 @@
                 <span class="link" data-bind="click: handleUnselectAll">none</span>
             | <a target="_blank" href="" data-bind="attr: { href: runSelectedUrl }">RUN</a>
         </div>
-         <div>
-            <label>
-                Hide passed tests: <input type="checkbox" data-bind="checked: hidePassed" />
-            </label>
-        </div>
         <div>
             <label>
                 IE mode: <select data-bind="options: IE_MODES, value: ieMode"></select>
@@ -171,7 +166,6 @@
             this.ieMode = ko.observable(this.IE_MODES[0]);
             this.noTryCatch = ko.observable(false);
             this.noGlobals = ko.observable(false);
-            this.hidePassed = ko.observable(true);
             this.noTimers = ko.observable(true);
             this.noJQuery = ko.observable(true);
             this.renovation = ko.observable(false);
@@ -232,8 +226,6 @@
 
             _runUrlExtraParams: function() {
                 var result = {};
-                if(this.hidePassed())
-                    result.hidepassed = "true";
                 if(this.ieMode() !== "edge")
                     result.ieMode = this.ieMode();
                 if(this.noGlobals())
