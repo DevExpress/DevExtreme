@@ -725,7 +725,7 @@ class Diagram extends Widget {
         }
         if(this.option('fullScreen')) {
             const window = getWindow();
-            if(window.self !== window.top) {
+            if(window && window.self !== window.top) {
                 this.option('fullScreen', false);
             } else {
                 this._updateFullscreenState();
