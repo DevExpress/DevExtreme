@@ -2975,7 +2975,7 @@ declare module DevExpress.fx {
      */
     export function stop(element: Element, jumpToEnd: boolean): void;
 }
-declare module DevExpress.timeZone {
+declare module DevExpress.timeZoneUtils {
     /**
      * [descr:Utils.getTimeZones(date)]
      */
