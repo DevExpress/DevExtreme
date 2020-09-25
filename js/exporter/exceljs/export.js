@@ -116,6 +116,7 @@ const Export = {
 
         component._setOptionWithoutOptionChange('loadPanel', options);
         privateOptions._updateLoadPanel(component);
+        privateOptions._renderLoadPanel(component);
     },
 
     export: function(options, privateOptions) {

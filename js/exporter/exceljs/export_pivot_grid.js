@@ -21,7 +21,7 @@ const privateOptions = {
         return true;
     },
 
-    _updateLoadPanel: function(component) {
+    _renderLoadPanel: function(component) {
         component._renderLoadPanel(component._dataArea.groupElement(), component.$element());
     }
 };
