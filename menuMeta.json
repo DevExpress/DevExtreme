@@ -788,9 +788,7 @@
         "Demos": [
           {
             "Title": "Overview",
-            "Hidden":  true,
             "Name": "ExportToPDF",
-            "DocUrl": "Guide/Widgets/DataGrid/Client-Side_Exporting/",
             "Widget": "DataGrid",
             "Modules": "jspdf&jspdf-autotable",
             "MvcAdditionalFiles": [
