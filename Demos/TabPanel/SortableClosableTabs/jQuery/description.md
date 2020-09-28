@@ -1,6 +1,6 @@
 This demo illustrates how you can allow end-users to reorder, add, and remove tabs within the DevExtreme [TabPanel](/Documentation/ApiReference/UI_Widgets/dxTabPanel/) widget.     
 
-**Reorder Items**
+**Reorder Items**       
 Wrap the **TabPanel** into the [Sortable](/Documentation/ApiReference/UI_Widgets/dxSortable/) widget and set the following options as needed:
 
 - [filter](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#filter)
@@ -15,7 +15,7 @@ Implement this handler to synchronize the dataSource with reordered tabs.
 - [moveItemOnDrop](/Documentation/ApiReference/UI_Widgets/dxSortable/Configuration/#moveItemOnDrop)
 Set this option to **true** to update markup after a tab is dropped.
 
-**Add or remove tabs**
+**Add or remove tabs**      
 This demo adds and removes tabs in the following two functions:
 
 - `addButtonHandler` - a click handler for the *"Add Tab"* button.
