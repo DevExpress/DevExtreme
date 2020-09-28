@@ -57,7 +57,7 @@
         "dxFileUploader-upload": "Hochladen",
         "dxFileUploader-uploaded": "Hochgeladen",
         "dxFileUploader-readyToUpload": "Bereit zum hochladen",
-        "dxFileUploader-uploadAbortedMessage": "Upload abbrechen",
+        "dxFileUploader-uploadAbortedMessage": "Upload abgebrochen",
         "dxFileUploader-uploadFailedMessage": "Fehler beim hochladen",
         "dxFileUploader-invalidFileExtension": "Unzulässiger Dateityp",
         "dxFileUploader-invalidMaxFileSize": "Datei ist zu groß",
