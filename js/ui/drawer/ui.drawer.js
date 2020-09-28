@@ -198,7 +198,7 @@ const Drawer = Widget.inherit({
                 this._$panelContentWrapper.css({ position: '', top: '', left: '', right: '', bottom: '' });
             }
 
-            this._$viewContentWrapper.children('.dx-drawer-panel-avoid-flicks').removeClass('dx-drawer-panel-avoid-flicks');
+            this._$viewContentWrapper.children('.dx-drawer-view-avoid-flicks').removeClass('dx-drawer-view-avoid-flicks');
             ///#DEBUG
             if(this.option('__debugAfterWhenPanelContentRendered')) {
                 this.option('__debugAfterWhenPanelContentRendered')({ drawer: this });
