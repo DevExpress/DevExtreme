@@ -7,9 +7,6 @@ export default class VirtualSelectionState {
         this._focusedCell = null;
         this._selectedCells = null;
 
-        this._firstSelectedCellCoordinates = null;
-        this._lastSelectedCellCoordinates = null;
-
         this._firstSelectedCell = null;
     }
 
@@ -30,25 +27,22 @@ export default class VirtualSelectionState {
         return { coordinates: { cellIndex: columnIndex, rowIndex }, cellData: _focusedCell };
     }
 
-    setSelectedCells(lastCellCoordinates, firstCellCoordinates) {
-        this._firstSelectedCellCoordinates = firstCellCoordinates || this._firstSelectedCellCoordinates;
-        this._lastSelectedCellCoordinates = lastCellCoordinates || this._lastSelectedCellCoordinates;
-
+    setSelectedCells(lastCellCoordinates, firstCellCoordinates = undefined) {
         const viewDataProvider = this._viewDataProvider;
-
-        const {
-            rowIndex: firstRowIndex, columnIndex: firstColumnIndex, allDay: isFirstCellAllDay,
-        } = this._firstSelectedCellCoordinates;
         const {
             rowIndex: lastRowIndex, columnIndex: lastColumnIndex, allDay: isLastCellAllDay,
-        } = this._lastSelectedCellCoordinates;
+        } = lastCellCoordinates;
 
-        let firstCell = viewDataProvider.getCellData(firstRowIndex, firstColumnIndex, isFirstCellAllDay);
+        let firstCell = firstCellCoordinates
+            ? viewDataProvider.getCellData(
+                firstCellCoordinates.rowIndex,
+                firstCellCoordinates.columnIndex,
+                firstCellCoordinates.allDay,
+            )
+            : this._firstSelectedCell;
         let lastCell = viewDataProvider.getCellData(lastRowIndex, lastColumnIndex, isLastCellAllDay);
 
-        this._firstSelectedCell = firstCellCoordinates ? firstCell : this._firstSelectedCell;
-
-        firstCell = this._firstSelectedCell;
+        this._firstSelectedCell = firstCell;
 
         if(firstCell.startDate.getTime() > lastCell.startDate.getTime()) {
             [firstCell, lastCell] = [lastCell, firstCell];
@@ -63,7 +57,7 @@ export default class VirtualSelectionState {
         const firstTime = firstStartDate.getTime();
         const lastTime = lastStartDate.getTime();
 
-        const cells = viewDataProvider.getCellsByGroupIndexAndAllDay(firstGroupIndex, isFirstCellAllDay);
+        const cells = viewDataProvider.getCellsByGroupIndexAndAllDay(firstGroupIndex, isLastCellAllDay);
 
         this._selectedCells = cells.reduce((selectedCells, cellsRow) => {
             selectedCells.push(...cellsRow.reduce((cellsFromRow, cell) => {
@@ -93,8 +87,6 @@ export default class VirtualSelectionState {
     releaseSelectedCells() {
         delete this._selectedCells;
         delete this._firstSelectedCell;
-        delete this._firstSelectedCellCoordinates;
-        delete this._lastSelectedCellCoordinates;
     }
 
     releaseFocusedCell() {
