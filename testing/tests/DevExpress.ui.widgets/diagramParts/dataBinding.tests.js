@@ -42,8 +42,7 @@ QUnit.module('DataBinding', {
             ],
         });
         const dataSource = new DataSource({
-            store,
-            paginate: false
+            store
         });
         this.instance.option({
             nodes: { dataSource }
@@ -172,17 +171,11 @@ QUnit.module('DataBinding', {
 
         this.instance.option({
             nodes: {
-                dataSource: new DataSource({
-                    store: nodeStore,
-                    paginate: false
-                }),
+                dataSource: nodeStore,
                 textStyleExpr: 'textStyle'
             },
             edges: {
-                dataSource: new DataSource({
-                    store: edgeStore,
-                    paginate: false
-                }),
+                dataSource: edgeStore,
                 textStyleExpr: 'textStyle'
             }
         });
@@ -253,16 +246,10 @@ QUnit.module('DataBinding', {
 
         this.instance.option({
             nodes: {
-                dataSource: new DataSource({
-                    store: nodeStore,
-                    paginate: false
-                })
+                dataSource: nodeStore
             },
             edges: {
-                dataSource: new DataSource({
-                    store: edgeStore,
-                    paginate: false
-                })
+                dataSource: edgeStore
             }
         });
 
@@ -322,10 +309,7 @@ QUnit.module('DataBinding', {
 
         this.instance.option({
             nodes: {
-                dataSource: new DataSource({
-                    store: nodeStore,
-                    paginate: false
-                }),
+                dataSource: nodeStore,
                 textStyleExpr: 'textStyle'
             }
         });
@@ -378,10 +362,7 @@ QUnit.module('DataBinding', {
 
         this.instance.option({
             nodes: {
-                dataSource: new DataSource({
-                    store: nodeStore,
-                    paginate: false
-                }),
+                dataSource: nodeStore,
                 parentKeyExpr: 'parentId'
             }
         });
@@ -415,10 +396,7 @@ QUnit.module('DataBinding', {
 
         this.instance.option({
             nodes: {
-                dataSource: new DataSource({
-                    store: nodeStore,
-                    paginate: false
-                }),
+                dataSource: nodeStore,
                 textStyleExpr: 'textStyle'
             },
             onRequestLayoutUpdate
@@ -449,10 +427,7 @@ QUnit.module('DataBinding', {
 
         this.instance.option({
             nodes: {
-                dataSource: new DataSource({
-                    store: nodeStore,
-                    paginate: false
-                }),
+                dataSource: nodeStore,
                 textStyleExpr: 'textStyle'
             }
         });
@@ -482,10 +457,7 @@ QUnit.module('DataBinding', {
 
         this.instance.option({
             nodes: {
-                dataSource: new DataSource({
-                    store: nodeStore,
-                    paginate: false
-                }),
+                dataSource: nodeStore,
                 textStyleExpr: 'textStyle'
             }
         });
@@ -516,10 +488,7 @@ QUnit.module('DataBinding', {
 
         this.instance.option({
             nodes: {
-                dataSource: new DataSource({
-                    store: nodeStore,
-                    paginate: false
-                }),
+                dataSource: nodeStore,
                 textStyleExpr: 'textStyle'
             },
             onRequestLayoutUpdate
@@ -532,7 +501,6 @@ QUnit.module('DataBinding', {
         this.clock.tick(100);
         assert.ok(onRequestLayoutUpdate.called);
     });
-
     test('databinding should auto-size items if widthExpr is not specified or enableAutoSize = false', function(assert) {
         const store = new ArrayStore({
             key: 'id',
@@ -550,8 +518,7 @@ QUnit.module('DataBinding', {
             ],
         });
         const dataSource = new DataSource({
-            store,
-            paginate: false
+            store
         });
         this.instance.option({
             nodes: {
@@ -560,7 +527,7 @@ QUnit.module('DataBinding', {
             }
         });
         const defaultWidth = this.instance._diagramInstance.model.findShapeByDataKey('2').size.width;
-        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+        assert.notEqual(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
 
         this.instance.option({
             nodes: {
@@ -578,10 +545,10 @@ QUnit.module('DataBinding', {
                 dataSource: dataSource,
                 textExpr: function(obj) { return obj.text; },
                 widthExpr: null,
-                autoSizeEnabled: true
+                autoSizeEnabled: false
             }
         });
 
-        assert.notEqual(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
+        assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
     });
 });

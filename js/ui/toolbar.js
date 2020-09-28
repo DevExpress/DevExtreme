@@ -2,12 +2,13 @@ import $ from '../core/renderer';
 import registerComponent from '../core/component_registrator';
 import { grep } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
-import arrayUtils from '../core/utils/array';
-import iteratorUtils from '../core/utils/iterator';
+import { merge } from '../core/utils/array';
+import { each } from '../core/utils/iterator';
 import ActionSheetStrategy from './toolbar/ui.toolbar.strategy.action_sheet';
 import DropDownMenuStrategy from './toolbar/ui.toolbar.strategy.drop_down_menu';
 import ToolbarBase from './toolbar/ui.toolbar.base';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
+import { deferRender } from '../core/utils/common';
 
 // STYLE toolbar
 
@@ -122,7 +123,9 @@ const Toolbar = ToolbarBase.inherit({
         this._hideOverflowItems();
         this._menuStrategy._updateMenuVisibility();
         this.callBase();
-        this._menuStrategy.renderMenuItems();
+        deferRender(() => {
+            this._menuStrategy.renderMenuItems();
+        });
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
@@ -192,7 +195,7 @@ const Toolbar = ToolbarBase.inherit({
             }, itemData);
         });
 
-        return arrayUtils.merge(overflowItems, menuItems);
+        return merge(overflowItems, menuItems);
     },
 
     _getToolbarItems: function() {
@@ -204,7 +207,9 @@ const Toolbar = ToolbarBase.inherit({
 
     _renderMenu: function() {
         this._renderMenuStrategy();
-        this._menuStrategy.render();
+        deferRender(() => {
+            this._menuStrategy.render();
+        });
     },
 
     _renderMenuStrategy: function() {
@@ -225,7 +230,7 @@ const Toolbar = ToolbarBase.inherit({
         const items = this.option('items') || [];
         let result = false;
 
-        iteratorUtils.each(items, function(index, item) {
+        each(items, function(index, item) {
             if(item.locateInMenu === 'auto') {
                 result = true;
             } else if(item.locateInMenu === 'always' && item.widget) {
@@ -246,7 +251,7 @@ const Toolbar = ToolbarBase.inherit({
             float: 'none'
         });
 
-        iteratorUtils.each(this._restoreItems || [], function(_, obj) {
+        each(this._restoreItems || [], function(_, obj) {
             $(obj.container).append(obj.item);
         });
         this._restoreItems = [];

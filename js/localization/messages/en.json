@@ -294,6 +294,9 @@
         "dxHtmlEditor-dialogImageAltField": "Alternate text",
         "dxHtmlEditor-dialogImageWidthField": "Width (px)",
         "dxHtmlEditor-dialogImageHeightField": "Height (px)",
+        "dxHtmlEditor-dialogInsertTableRowsField": "Rows",
+        "dxHtmlEditor-dialogInsertTableColumnsField": "Columns",
+        "dxHtmlEditor-dialogInsertTableCaption": "Insert Table",
         "dxHtmlEditor-heading": "Heading",
         "dxHtmlEditor-normalText": "Normal text",
 

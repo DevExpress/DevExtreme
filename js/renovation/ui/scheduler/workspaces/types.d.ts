@@ -13,6 +13,7 @@ export interface ViewCellData {
 
 interface ViewData {
   dateTable: ViewCellData[][];
+  groupIndex: number;
   allDayPanel?: ViewCellData[];
   isGroupedAllDayPanel?: boolean;
 }

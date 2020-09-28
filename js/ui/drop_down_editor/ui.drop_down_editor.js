@@ -14,7 +14,7 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import DropDownButton from './ui.drop_down_button';
 import Widget from '../widget/ui.widget';
 import { format as formatMessage } from '../../localization/message';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import TextBox from '../text_box';
 import { name as clickEventName } from '../../events/click';
 import devices from '../../core/devices';
@@ -560,19 +560,15 @@ const DropDownEditor = TextBox.inherit({
     _popupShownHandler: function() {
         this._openAction();
 
-        if(this._$validationMessage) {
-            this._$validationMessage.dxOverlay('option', 'position', this._getValidationMessagePosition());
-        }
+        this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
     },
 
     _popupHiddenHandler: function() {
         this._closeAction();
-        if(this._$validationMessage) {
-            this._$validationMessage.dxOverlay('option', 'position', this._getValidationMessagePosition());
-        }
+        this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
     },
 
-    _getValidationMessagePosition: function() {
+    _getValidationMessagePositionRequest: function() {
         let positionRequest = 'below';
 
         if(this._popup && this._popup.option('visible')) {
@@ -582,7 +578,7 @@ const DropDownEditor = TextBox.inherit({
             positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'below' : 'above';
         }
 
-        return this.callBase(positionRequest);
+        return positionRequest;
     },
 
     _closeOutsideDropDownHandler: function({ target }) {

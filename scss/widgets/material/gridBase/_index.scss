@@ -7,6 +7,7 @@
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../common/mixins" as *;
+@use "../common/sizes" as *;
 @use "../popup/colors" as *;
 @use "../menu/colors" as *;
 @use "../toolbar/colors" as *;
@@ -239,9 +240,9 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
-      > td,
-      > td.dx-cell-modified:not(.dx-field-item-content),
-      > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content) {
+      > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all),
+      > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
+      > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
         padding-right: $material-grid-base-cell-horizontal-padding;
         padding-left: $material-grid-base-cell-horizontal-padding;
         vertical-align: middle;
@@ -404,6 +405,15 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         margin-top: 0;
       }
 
+      &.dx-validation-pending {
+        .dx-texteditor-input-container {
+          .dx-texteditor-input {
+            padding-top: 0;
+            padding-bottom: 0;
+          }
+        }
+      }
+
       .dx-tag-container {
         min-height: $material-grid-base-cell-height;
         padding: 0;
@@ -441,9 +451,11 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       border-radius: 0;
     }
 
-    &.dx-editor-inline-block .dx-highlight-outline::before {
-      padding-top: $material-grid-base-cell-vertical-padding;
-      padding-bottom: $material-grid-base-cell-vertical-padding;
+    &.dx-editor-inline-block:not(.dx-command-select) {
+      &::before {
+        padding-top: $material-grid-base-cell-vertical-padding;
+        padding-bottom: $material-grid-base-cell-vertical-padding;
+      }
     }
   }
 
@@ -621,20 +633,24 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     &.dx-header-multi-row {
-      .dx-row {
-        &.dx-header-row {
-          .dx-command-select {
-            padding-bottom: ($material-grid-base-header-height - $material-grid-base-checkbox-size) / 2;
-          }
+      .dx-#{$widget-name}-content {
+        .dx-#{$widget-name}-table {
+          .dx-row {
+            &.dx-header-row {
+              .dx-command-select {
+                padding-bottom: ($material-grid-base-header-height - $material-grid-base-checkbox-size) / 2;
+              }
 
-          > td {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            vertical-align: bottom;
-            border-right: 1px solid $material-grid-base-border-color;
+              > td {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                vertical-align: bottom;
+                border-right: 1px solid $material-grid-base-border-color;
 
-            &:last-child {
-              border-right: none;
+                &:last-child {
+                  border-right: none;
+                }
+              }
             }
           }
         }
@@ -712,7 +728,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
   }
 
-  .dx-highlight-outline {
+  .dx-cell-modified,
+  .dx-#{$widget-name}-invalid {
     padding: $material-grid-base-cell-vertical-padding 0 $material-grid-base-cell-vertical-padding 0;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -869,14 +886,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       }
     }
 
-    .dx-data-row {
-      td:not(.dx-cell-modified):not(.dx-validation-pending):not(.dx-#{$widget-name}-invalid) {
-        .dx-highlight-outline {
-          padding: 0;
-        }
-      }
-    }
-
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
       border-top: 1px solid $datagrid-cell-modified-border-color;
@@ -1012,21 +1021,29 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         position: relative;
         padding: 0;
 
-        .dx-highlight-outline {
+        &.dx-cell-modified,
+        .dx-#{$widget-name}-invalid {
+          padding: $material-grid-base-cell-padding;
           padding-right: $material-texteditor-invalid-badge-size;
 
           @at-root #{selector-append(".dx-rtl", &)},
           .dx-rtl & {
             padding-left: $material-texteditor-invalid-badge-size;
-            padding-right: 0;
+            padding-right: $material-grid-base-cell-horizontal-padding;
           }
         }
 
-        .dx-pending-indicator {
+        > .dx-pending-indicator {
           @include dx-pending-indicator-material();
           @include texteditor-validation-icon-offset();
 
-          background-color: $datagrid-base-background-color;
+          right: $material-invalid-badge-size;
+          background-color: transparent;
+
+          @at-root #{selector-append(".dx-rtl", &)},
+          .dx-rtl & {
+            left: $material-invalid-badge-size;
+          }
         }
       }
     }

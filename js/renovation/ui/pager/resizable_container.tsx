@@ -22,7 +22,7 @@ export const viewFunction = ({
   restAttributes,
 }: ResizableContainer) => (
   <Content
-    parentRef={parentRef}
+    rootElementRef={parentRef}
     pageSizesRef={pageSizesRef}
     infoTextRef={infoTextRef}
     pagesRef={pagesRef}
@@ -82,7 +82,7 @@ export class ResizableContainerProps {
   view: viewFunction,
 })
 export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps' | 'contentTemplate'>() {
-  @ForwardRef() parentRef!: HTMLElement;
+  @ForwardRef() parentRef!: GetHtmlElement;
 
   @ForwardRef() pageSizesRef?: GetHtmlElement;
 
@@ -108,7 +108,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   }
 
   @Effect({ run: 'always' }) effectUpdateChildProps(): void {
-    const parentWidth = getElementWidth(this.parentRef);
+    const parentWidth = getElementWidth(this.parentRef.getHtmlElement());
     if (parentWidth > 0) {
       this.updateChildrenProps();
     }
@@ -124,7 +124,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
   updateChildrenProps(): void {
     const elementsWidth = getElementsWidth({
-      parent: this.parentRef,
+      parent: this.parentRef.getHtmlElement(),
       pageSizes: this.pageSizesRef?.getHtmlElement(),
       info: this.infoTextRef?.getHtmlElement(),
       pages: this.pagesRef,

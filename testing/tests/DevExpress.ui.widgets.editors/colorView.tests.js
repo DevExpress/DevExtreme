@@ -9,6 +9,7 @@ import fx from 'animation/fx';
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/color_box/color_view';
 
 QUnit.testStart(function() {
@@ -144,12 +145,12 @@ QUnit.module('ColorView', {
 
     QUnit.test('Hue marker position', function(assert) {
         showColorView.call(this, { value: '#2C77B8' });
-        assert.equal($('.dx-colorview-hue-scale-handle').position().top, 120);
+        assert.equal($('.dx-colorview-hue-scale-handle').position().top, 121);
     });
 
     QUnit.test('Hue marker position with #ff0000', function(assert) {
         showColorView.call(this, { value: '#ff0000' });
-        assert.equal($('.dx-colorview-hue-scale-handle').position().top, 284);
+        assert.equal($('.dx-colorview-hue-scale-handle').position().top, 286);
     });
 
     QUnit.test('Hue marker position with rgb(255, 0, 1)', function(assert) {
@@ -229,7 +230,7 @@ QUnit.module('ColorView', {
 
     QUnit.test('Position of alpha channel handle with rgba(255, 0, 0, 0)', function(assert) {
         showColorView.call(this, { editAlphaChannel: true, value: 'rgba(255, 0, 0, 0)' });
-        assert.equal(Math.round($('.dx-colorview-alpha-channel-handle').position().left), 275);
+        assert.equal(Math.round($('.dx-colorview-alpha-channel-handle').position().left), 277);
     });
 
     QUnit.test('Render colors preview', function(assert) {
@@ -266,7 +267,7 @@ QUnit.module('ColorView', {
 
     QUnit.test('T110896', function(assert) {
         showColorView.call(this, { editAlphaChannel: true, rtlEnabled: true, value: 'rgba(255, 0, 0, 1)' });
-        assert.equal(Math.round(this.element.find('.dx-colorview-alpha-channel-handle').position().left), 275);
+        assert.equal(Math.round(this.element.find('.dx-colorview-alpha-channel-handle').position().left), 277);
     });
 
     QUnit.test('Color chooser position can be negative', function(assert) {
@@ -353,10 +354,10 @@ QUnit.module('ColorView', {
         });
 
         this.checkColor({
-            r: 36,
+            r: 32,
             g: 0,
             b: 127,
-            hex: '#24007f'
+            hex: '#20007f'
         }, assert);
     });
 
@@ -368,7 +369,7 @@ QUnit.module('ColorView', {
         const $alphaScale = this.element.find('.dx-colorview-alpha-channel-scale');
 
         click($alphaScale, {
-            left: 90,
+            left: 88,
             top: 0
         });
 
@@ -415,7 +416,7 @@ QUnit.module('ColorView', {
 
         assert.equal($('.dx-colorview-palette-handle').position().top, 52);
         assert.equal($('.dx-colorview-palette-handle').position().left, 202);
-        assert.equal($('.dx-colorview-hue-scale-handle').position().top, 268);
+        assert.equal($('.dx-colorview-hue-scale-handle').position().top, 270);
         assert.ok(Math.abs($('.dx-colorview-alpha-channel-handle').position().left - 138) <= 1);
 
     });
@@ -501,7 +502,7 @@ QUnit.module('ColorView', {
         });
 
         const $paletteBackColor = new Color($palette.css('backgroundColor')).toHex();
-        assert.equal($paletteBackColor, '#4800ff');
+        assert.equal($paletteBackColor, '#4000ff');
     });
 
     QUnit.test('Changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
@@ -696,11 +697,11 @@ QUnit.module('ColorView', {
         assert.equal(Math.floor(paletteHandlePosition.left), 116);
         assert.equal(Math.floor(paletteHandlePosition.top), 186);
 
-        assert.equal(Math.floor(alphaChannelHandlePosition.left), 222);
+        assert.equal(Math.floor(alphaChannelHandlePosition.left), 224);
         assert.equal(Math.floor(alphaChannelHandlePosition.top), -6);
 
         assert.equal(Math.floor(hueScaleHandlePosition.left), -7);
-        assert.equal(Math.floor(hueScaleHandlePosition.top), 192);
+        assert.equal(Math.floor(hueScaleHandlePosition.top), 193);
     });
 
     QUnit.test('Preview for current color should be updated when value was changed', function(assert) {

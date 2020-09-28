@@ -36,10 +36,10 @@ export const getGroupCellClasses = (
 });
 
 export const getIsGroupedAllDayPanel = (
-  viewData: GroupedViewData, groupIndex: number,
+  viewData: GroupedViewData, index: number,
 ): boolean => {
   const { groupedData } = viewData;
-  const groupData = groupedData[groupIndex];
+  const groupData = groupedData[index];
   const isAllDayPanel = !!(groupData?.allDayPanel?.length);
   const isGroupedAllDayPanel = !!(groupData?.isGroupedAllDayPanel);
 

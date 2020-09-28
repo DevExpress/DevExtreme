@@ -227,10 +227,8 @@ export class GanttView extends Widget {
     getModelChangesListener() {
         return this.option('modelChangesListener');
     }
-    showPopupMenu(position) {
-        this._onPopupMenuShowing({
-            position: position
-        });
+    showPopupMenu(info) {
+        this._onPopupMenuShowing(info);
     }
     getMainElement() {
         return this.option('mainElement').get(0);

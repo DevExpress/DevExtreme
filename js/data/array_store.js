@@ -2,7 +2,7 @@ import { rejectedPromise, trivialPromise } from './utils';
 import Query from './query';
 import { errors } from './errors';
 import Store from './abstract_store';
-import arrayUtils from './array_utils';
+import { indexByKey, insert, applyBatch, update, remove } from './array_utils';
 
 const ArrayStore = Store.inherit({
     ctor: function(options) {
@@ -29,7 +29,7 @@ const ArrayStore = Store.inherit({
     },
 
     _byKeyImpl: function(key) {
-        const index = arrayUtils.indexByKey(this, this._array, key);
+        const index = indexByKey(this, this._array, key);
 
         if(index === -1) {
             return rejectedPromise(errors.Error('E4009'));
@@ -39,19 +39,23 @@ const ArrayStore = Store.inherit({
     },
 
     _insertImpl: function(values) {
-        return arrayUtils.insert(this, this._array, values);
+        return insert(this, this._array, values);
     },
 
     _pushImpl: function(changes) {
-        arrayUtils.applyBatch(this, this._array, changes);
+        applyBatch({
+            keyInfo: this,
+            data: this._array,
+            changes
+        });
     },
 
     _updateImpl: function(key, values) {
-        return arrayUtils.update(this, this._array, key, values);
+        return update(this, this._array, key, values);
     },
 
     _removeImpl: function(key) {
-        return arrayUtils.remove(this, this._array, key);
+        return remove(this, this._array, key);
     },
 
     clear: function() {

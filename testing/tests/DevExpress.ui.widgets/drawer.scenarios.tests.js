@@ -187,7 +187,9 @@ configs.forEach(config => {
     }, () => {
 
         function configIs(openedStateMode, position, revealMode) {
-            return config.openedStateMode === openedStateMode && (config.position === position || !position) && (config.revealMode === revealMode || !revealMode);
+            const isPosition = Array.isArray(position) ? (position.indexOf(config.position) >= 0) : (config.position === position || !position);
+            const isRevealMode = Array.isArray(revealMode) ? (revealMode.indexOf(config.revealMode) >= 0) : (config.revealMode === revealMode || !revealMode);
+            return config.openedStateMode === openedStateMode && isPosition && isRevealMode;
         }
 
         function testOrSkip(name, skip, callback) {
@@ -212,11 +214,15 @@ configs.forEach(config => {
             return extend({ rtlEnabled: false, animationEnabled: false }, config, targetOptions);
         }
 
-        testOrSkip('opened: false', () => configIs('push', 'top') || configIs('overlap', 'right', 'expand') && config.minSize, function(assert) {
+        testOrSkip('opened: false', () => configIs('push', 'top') || configIs('overlap', ['right', 'top'], ['expand', 'slide']) && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template,
+                __debugWhenPanelContentRendered: (e) => {
+                    drawerTesters[config.position].checkWhenPanelContentRendered(assert, e.drawer, drawerElement, document.getElementById('template'), config.minSize);
+                }
             }));
 
             this.clock.tick(100);

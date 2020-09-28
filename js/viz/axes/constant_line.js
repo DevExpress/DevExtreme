@@ -67,6 +67,10 @@ export default function createConstantLine(axis, options) {
             return this;
         },
 
+        getContentContainer() {
+            return this.label;
+        },
+
         removeLabel() {
             this.label && this.label.remove();
         },

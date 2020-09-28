@@ -63,10 +63,6 @@ export default errorUtils(errors.ERROR_MESSAGES, {
     */
     E2105: 'Invalid value of a "{0}"',
     /**
-    * @name ErrorsViz.E2106
-    */
-    E2106: 'Invalid visible range',
-    /**
     * @name ErrorsViz.E2202
     */
     E2202: 'Invalid {0} scale value',

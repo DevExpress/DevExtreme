@@ -57,7 +57,7 @@
         "dxFileUploader-upload": "Hochladen",
         "dxFileUploader-uploaded": "Hochgeladen",
         "dxFileUploader-readyToUpload": "Bereit zum hochladen",
-        "dxFileUploader-uploadAbortedMessage": "TODO",
+        "dxFileUploader-uploadAbortedMessage": "Upload abbrechen",
         "dxFileUploader-uploadFailedMessage": "Fehler beim hochladen",
         "dxFileUploader-invalidFileExtension": "Unzulässiger Dateityp",
         "dxFileUploader-invalidMaxFileSize": "Datei ist zu groß",
@@ -262,6 +262,9 @@
         "dxHtmlEditor-dialogImageAltField": "Alternativer Text",
         "dxHtmlEditor-dialogImageWidthField": "Breite (px)",
         "dxHtmlEditor-dialogImageHeightField": "Bildhöhe (px)",
+        "dxHtmlEditor-dialogInsertTableRowsField": "Zeilen",
+        "dxHtmlEditor-dialogInsertTableColumnsField": "Spalten",
+        "dxHtmlEditor-dialogInsertTableCaption": "Tabelle einfügen",
         "dxHtmlEditor-heading": "Überschrift",
         "dxHtmlEditor-normalText": "Normaler Text",
 
@@ -289,7 +292,7 @@
         "dxFileManager-commandThumbnails": "Miniaturansicht",
         "dxFileManager-commandDetails": "Detailansicht",
         "dxFileManager-commandClearSelection": "Auswahl aufheben",
-        "dxFileManager-commandShowNavPane": "TODO",
+        "dxFileManager-commandShowNavPane": "Navigationsbereich ein-/ausschalten",
 
         "dxFileManager-dialogDirectoryChooserMoveTitle": "Verschieben nach",
         "dxFileManager-dialogDirectoryChooserMoveButtonText": "Verschieben",

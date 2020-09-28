@@ -11,7 +11,7 @@ import { dasherize } from '../core/utils/inflector';
 import { extend } from '../core/utils/extend';
 import DOMComponent from '../core/dom_component';
 import { getPublicElement } from '../core/element';
-import { addNamespace, needSkipEvent } from '../events/utils';
+import { addNamespace, needSkipEvent } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
 import {
     start as dragEventStart,
@@ -57,6 +57,7 @@ class ScrollHelper {
             this._overFlowAttr = 'overflowY';
             this._sizeAttr = 'height';
             this._scrollSizeProp = 'scrollHeight';
+            this._clientSizeProp = 'clientHeight';
             this._limitProps = {
                 start: 'top',
                 end: 'bottom'
@@ -66,6 +67,7 @@ class ScrollHelper {
             this._overFlowAttr = 'overflowX';
             this._sizeAttr = 'width';
             this._scrollSizeProp = 'scrollWidth';
+            this._clientSizeProp = 'clientWidth';
             this._limitProps = {
                 start: 'left',
                 end: 'right'
@@ -151,6 +153,7 @@ class ScrollHelper {
     scrollByStep() {
         const that = this;
         let nextScrollPosition;
+        let maxScrollPosition;
 
         if(that._$scrollableAtPointer && that._scrollSpeed) {
             if(that._$scrollableAtPointer.hasClass('dx-scrollable-container')) {
@@ -158,20 +161,31 @@ class ScrollHelper {
                 const scrollableInstance = $scrollable.data('dxScrollable') || $scrollable.data('dxScrollView');
 
                 if(scrollableInstance) {
-                    nextScrollPosition = scrollableInstance.scrollOffset();
-                    nextScrollPosition[that._limitProps.start] += that._scrollSpeed;
+                    nextScrollPosition = scrollableInstance.scrollOffset()[that._limitProps.start];
+                    maxScrollPosition = scrollableInstance[this._scrollSizeProp]() - scrollableInstance[this._clientSizeProp]();
 
-                    scrollableInstance.scrollTo(nextScrollPosition);
+                    nextScrollPosition += that._scrollSpeed;
+
+                    scrollableInstance.scrollTo({ [that._limitProps.start]: nextScrollPosition });
                 }
             } else {
                 nextScrollPosition = that._$scrollableAtPointer[that._scrollValue]() + that._scrollSpeed;
+                maxScrollPosition = that._$scrollableAtPointer[0][this._scrollSizeProp] - that._$scrollableAtPointer[0][this._clientSizeProp];
 
                 that._$scrollableAtPointer[that._scrollValue](nextScrollPosition);
             }
 
             const dragMoveArgs = that._component._dragMoveArgs;
             if(dragMoveArgs) {
-                that._component._dragMoveHandler(dragMoveArgs);
+                let scrollBy = this._scrollSpeed;
+
+                if(nextScrollPosition < 0) {
+                    scrollBy -= nextScrollPosition;
+                } else if(nextScrollPosition > maxScrollPosition) {
+                    scrollBy -= (nextScrollPosition - maxScrollPosition);
+                }
+
+                that._component._dragMoveHandler(dragMoveArgs, scrollBy);
             }
         }
     }
@@ -239,6 +253,8 @@ const Draggable = DOMComponent.inherit({
             onDragStart: null,
             onDragMove: null,
             onDragEnd: null,
+            onDragEnter: null,
+            onDragLeave: null,
             /**
              * @name dxDraggableOptions.onDrop
              * @type function(e)
@@ -682,7 +698,7 @@ const Draggable = DOMComponent.inherit({
         return $(container);
     },
 
-    _dragMoveHandler: function(e) {
+    _dragMoveHandler: function(e, scrollBy) {
         this._dragMoveArgs = e;
         if(!this._$dragElement) {
             e.cancel = true;
@@ -697,7 +713,9 @@ const Draggable = DOMComponent.inherit({
             top: startPosition.top + offset.y
         });
 
-        this._updateScrollable(e);
+        if(!scrollBy) {
+            this._updateScrollable(e);
+        }
 
         const eventArgs = this._getEventArgs(e);
         this._getAction('onDragMove')(eventArgs);
@@ -707,7 +725,7 @@ const Draggable = DOMComponent.inherit({
         }
 
         const targetDraggable = this._getTargetDraggable();
-        targetDraggable.dragMove(e);
+        targetDraggable.dragMove(e, scrollBy);
     },
 
     _updateScrollable: function(e) {
@@ -873,6 +891,8 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragEnterHandler: function(e) {
+        this._fireDragEnterEvent(e);
+
         if(this._isTargetOverAnotherDraggable(e)) {
             this._setTargetDraggable();
         }
@@ -882,6 +902,8 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragLeaveHandler: function(e) {
+        this._fireDragLeaveEvent(e);
+
         this._resetTargetDraggable();
 
         if(this !== this._getSourceDraggable()) {
@@ -932,6 +954,8 @@ const Draggable = DOMComponent.inherit({
             case 'onDragMove':
             case 'onDragEnd':
             case 'onDrop':
+            case 'onDragEnter':
+            case 'onDragLeave':
                 this['_' + name + 'Action'] = this._createActionByOption(name);
                 break;
             case 'dragTemplate':
@@ -1003,6 +1027,18 @@ const Draggable = DOMComponent.inherit({
         this._resetSourceDraggable();
         this._$sourceElement = null;
         this._stopAnimator();
+    },
+
+    _fireDragEnterEvent: function(sourceEvent) {
+        const args = this._getEventArgs(sourceEvent);
+
+        this._getAction('onDragEnter')(args);
+    },
+
+    _fireDragLeaveEvent: function(sourceEvent) {
+        const args = this._getEventArgs(sourceEvent);
+
+        this._getAction('onDragLeave')(args);
     }
 });
 

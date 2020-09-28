@@ -1,7 +1,7 @@
 /* eslint-disable import/no-commonjs */
 import { extend } from './extend';
 import { logger } from './console';
-import stringUtils from './string';
+import { format } from './string';
 import version from '../version';
 
 const ERROR_URL = 'http://js.devexpress.com/error/' + version.split('.').slice(0, 2).join('_') + '/';
@@ -37,11 +37,11 @@ export default function(baseErrors, errors) {
 
     function formatDetails(id, args) {
         args = [exports.ERROR_MESSAGES[id]].concat(args);
-        return stringUtils.format.apply(this, args).replace(/\.*\s*?$/, '');
+        return format.apply(this, args).replace(/\.*\s*?$/, '');
     }
 
     function formatMessage(id, details) {
-        return stringUtils.format.apply(this, ['{0} - {1}. See:\n{2}', id, details, getErrorUrl(id)]);
+        return format.apply(this, ['{0} - {1}. See:\n{2}', id, details, getErrorUrl(id)]);
     }
 
     function makeError(args) {

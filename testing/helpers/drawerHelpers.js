@@ -2,9 +2,15 @@ function checkBoundingClientRect(assert, element, expectedRect, elementName) {
     assert.ok(!!element, elementName + ' is defined');
     if(element) {
         const rect = element.getBoundingClientRect();
+        let isCorrect = true;
+        let message = `${elementName} rect is incorrect`;
         for(const memberName in expectedRect) {
-            assert.strictEqual(rect[memberName], expectedRect[memberName], elementName + '.' + memberName);
+            message += `, ${memberName}:[${rect[memberName]}/${expectedRect[memberName]}]`;
+            if(rect[memberName] !== expectedRect[memberName]) {
+                isCorrect = false;
+            }
         }
+        assert.strictEqual(isCorrect, true, message + ', [actual/expected]');
     }
 }
 
@@ -13,6 +19,35 @@ function checkMargin(assert, element, top, right, bottom, left, message) {
     assert.strictEqual(window.getComputedStyle(element).marginTop, top + 'px', 'marginTop, ' + message);
     assert.strictEqual(window.getComputedStyle(element).marginRight, right + 'px', 'marginRight, ' + message);
     assert.strictEqual(window.getComputedStyle(element).marginBottom, bottom + 'px', 'marginBottom, ' + message);
+}
+
+function checkWhenPanelContentRendered(assert, drawer, drawerElement, panelTemplateElement, expectedPanelRect, expectedViewRect) {
+    const drawerRect = drawerElement.getBoundingClientRect();
+
+    // Check Panel element rect
+
+    if(!drawer.option('minSize') && drawer.option('openedStateMode') !== 'overlap') {
+        const panelRect = panelTemplateElement.parentElement.getBoundingClientRect();
+        assert.strictEqual(
+            panelRect.right < drawerRect.left
+            || panelRect.left > drawerRect.right
+            || panelRect.bottom < drawerRect.top
+            || panelRect.top > drawerRect.bottom,
+            true,
+            'panel should be out of drawerRect, ' +
+            `left:[${panelRect.left}/${drawerRect.left}], top:[${panelRect.top}/${drawerRect.top}], ` +
+            `right:[${panelRect.right}/${drawerRect.right}], bottom:[${panelRect.bottom}/${drawerRect.bottom}], [panel/drawer]`);
+    } else {
+        if(drawer.option('minSize') && (drawer.option('openedStateMode') === 'overlap')) {
+            checkBoundingClientRect(assert, panelTemplateElement.parentElement, expectedPanelRect, 'panel');
+        }
+    }
+
+    // Check View element rect
+
+    if(!drawer.option('minSize') || (drawer.option('openedStateMode') === 'overlap')) {
+        checkBoundingClientRect(assert, document.getElementById('view'), expectedViewRect, 'view');
+    }
 }
 
 const leftTemplateSize = 150;
@@ -128,6 +163,18 @@ const LeftDrawerTester = {
         } else {
             assert.notOk('configuration is not tested');
         }
+    },
+
+    checkWhenPanelContentRendered: function(assert, drawer, drawerElement, panelTemplateElement) {
+        const { top, left, width, height } = drawerElement.getBoundingClientRect();
+        const expectedPanelRect = { top, left, width, height };
+        const expectedViewRect = { top, left, width, height };
+        if(drawer.option('minSize')) {
+            expectedPanelRect.width = drawer.option('minSize');
+            expectedViewRect.left += drawer.option('minSize');
+            expectedViewRect.width -= drawer.option('minSize');
+        }
+        checkWhenPanelContentRendered(assert, drawer, drawerElement, panelTemplateElement, expectedPanelRect, expectedViewRect);
     }
 };
 
@@ -254,6 +301,18 @@ const RightDrawerTester = {
         } else {
             assert.notOk('configuration is not tested');
         }
+    },
+
+    checkWhenPanelContentRendered: function(assert, drawer, drawerElement, panelTemplateElement) {
+        const { top, left, width, height } = drawerElement.getBoundingClientRect();
+        const expectedPanelRect = { top, left, width, height };
+        const expectedViewRect = { top, left, width, height };
+        if(drawer.option('minSize')) {
+            expectedPanelRect.left += expectedPanelRect.wight - drawer.option('minSize');
+            expectedPanelRect.width = drawer.option('minSize');
+            expectedViewRect.width -= drawer.option('minSize');
+        }
+        checkWhenPanelContentRendered(assert, drawer, drawerElement, panelTemplateElement, expectedPanelRect, expectedViewRect);
     }
 };
 
@@ -373,6 +432,18 @@ const TopDrawerTester = {
         } else {
             assert.notOk('configuration is not tested');
         }
+    },
+
+    checkWhenPanelContentRendered: function(assert, drawer, drawerElement, panelTemplateElement) {
+        const { top, left, width, height } = drawerElement.getBoundingClientRect();
+        const expectedPanelRect = { top, left, width, height };
+        const expectedViewRect = { top, left, width, height };
+        if(drawer.option('minSize')) {
+            expectedPanelRect.height = drawer.option('minSize');
+            expectedViewRect.top += drawer.option('minSize');
+            expectedViewRect.height -= drawer.option('minSize');
+        }
+        checkWhenPanelContentRendered(assert, drawer, drawerElement, panelTemplateElement, expectedPanelRect, expectedViewRect);
     }
 };
 

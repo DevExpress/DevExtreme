@@ -8,7 +8,7 @@ import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import registerEvent from './event_registrator';
-import { addNamespace, isMouseEvent } from '../utils';
+import { addNamespace, isMouseEvent } from '../utils/index';
 import pointerEvents from '../pointer';
 import { name as wheelEventName } from './wheel';
 

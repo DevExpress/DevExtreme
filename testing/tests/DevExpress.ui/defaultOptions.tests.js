@@ -47,6 +47,7 @@ const TreeList = require('ui/tree_list');
 const TreeView = require('ui/tree_view');
 const FileUploader = require('ui/file_uploader');
 const Form = require('ui/form');
+const ValidationMessage = require('ui/validation_message');
 
 themes.setDefaultTimeout(0);
 
@@ -163,6 +164,31 @@ testComponentDefaults(Box,
     },
     function() {
         browser.msie = this._origMSIE;
+    }
+);
+
+testComponentDefaults(ValidationMessage,
+    {}, {
+        integrationOptions: {},
+        templatesRenderAsynchronously: false,
+        shading: false,
+        width: 'auto',
+        height: 'auto',
+        closeOnOutsideClick: false,
+        closeOnTargetScroll: false,
+        animation: null,
+        visible: true,
+        propagateOutsideClick: true,
+        _checkParentVisibility: false,
+        rtlEnabled: false,
+        contentTemplate: ValidationMessage._renderInnerHtml,
+        maxWidth: '100%',
+
+        mode: 'auto',
+        validationErrors: undefined,
+        positionRequest: undefined,
+        boundary: undefined,
+        offset: { h: 0, v: 0 }
     }
 );
 

@@ -11,7 +11,7 @@ import { inArray } from '../../core/utils/array';
 import DropDownEditor from './ui.drop_down_editor';
 import List from '../list';
 import errors from '../widget/ui.errors';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import devices from '../../core/devices';
 import dataQuery from '../../data/query';
 import { each } from '../../core/utils/iterator';
@@ -522,8 +522,8 @@ const DropDownList = DropDownEditor.inherit({
 
     _shouldRefreshDataSource: function() {
         const dataSourceProvided = !!this._list.option('dataSource');
-        const someItemsSelected = this.option('selectedItems')?.length > 0;
-        return dataSourceProvided !== this._needPassDataSourceToList() && !someItemsSelected;
+
+        return dataSourceProvided !== this._needPassDataSourceToList();
     },
 
     _isDesktopDevice: function() {

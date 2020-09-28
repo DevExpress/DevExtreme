@@ -23,12 +23,9 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
     className="dx-scheduler-time-panel"
   >
     {viewModel.props.viewData!
-      .groupedData.map(({ dateTable }, index) => {
-        const { groupIndex = index } = dateTable[0][0];
-
-        return (
-          <Fragment key={getKeyByGroup(groupIndex)}>
-            {getIsGroupedAllDayPanel(viewModel.props.viewData!, groupIndex) && (
+      .groupedData.map(({ dateTable, groupIndex }, index) => (
+        <Fragment key={getKeyByGroup(groupIndex)}>
+          {getIsGroupedAllDayPanel(viewModel.props.viewData!, index) && (
             <Row>
               <CellBase className="dx-scheduler-time-panel-title-cell">
                 <AllDayPanelTitle />

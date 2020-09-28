@@ -295,6 +295,8 @@ _Translator2d.prototype = {
         const that = this;
         const breaks = businessRange.breaks || [];
 
+        that._userBreaks = businessRange.userBreaks || [];
+
         that._businessRange = validateBusinessRange(businessRange);
 
         that._breaks = breaks.length ? prepareBreaks(breaks, that._businessRange) : undefined;
@@ -372,6 +374,7 @@ _Translator2d.prototype = {
 
     _calculateUnProjection: function(distance) {
         const canvasOptions = this._canvasOptions;
+        this._businessRange.dataType === 'datetime' && (distance = Math.round(distance));
         return canvasOptions.invert ? canvasOptions.rangeMaxVisible.valueOf() - distance : canvasOptions.rangeMinVisible.valueOf() + distance;
     },
 
@@ -450,6 +453,12 @@ _Translator2d.prototype = {
 
         min = isDefined(min) ? min : adjust(this.from(newStart, 1));
         max = isDefined(max) ? max : adjust(this.from(newEnd, -1));
+
+        if(scale <= 1) {
+            min = this._correctValueAboutBreaks(min, scale === 1 ? translate : -1);
+            max = this._correctValueAboutBreaks(max, scale === 1 ? translate : 1);
+        }
+
         if(min > max) {
             min = min > wholeRange.endValue ? wholeRange.endValue : min;
             max = max < wholeRange.startValue ? wholeRange.startValue : max;
@@ -463,6 +472,17 @@ _Translator2d.prototype = {
             translate: adjust(translate),
             scale: adjust(scale)
         };
+    },
+
+    _correctValueAboutBreaks(value, direction) {
+        const br = this._userBreaks.filter((br) => {
+            return value >= br.from && value <= br.to;
+        });
+        if(br.length) {
+            return direction > 0 ? br[0].to : br[0].from;
+        } else {
+            return value;
+        }
     },
 
     zoomZeroLengthRange(translate, scale) {
@@ -488,7 +508,19 @@ _Translator2d.prototype = {
     },
 
     getMinScale: function(zoom) {
+        const { dataType, interval } = this._businessRange;
+        if(dataType === 'datetime' && interval === 1) {
+            return this.getDateTimeMinScale(zoom);
+        }
         return zoom ? 1.1 : 0.9;
+    },
+
+    getDateTimeMinScale(zoom) {
+        const canvasOptions = this._canvasOptions;
+        let length = canvasOptions.canvasLength / canvasOptions.ratioOfCanvasRange;
+        length += (parseInt(length * 0.1) || 1) * (zoom ? -2 : 2);
+
+        return canvasOptions.canvasLength / (Math.max(length, 1) * canvasOptions.ratioOfCanvasRange);
     },
 
     getScale: function(val1, val2) {

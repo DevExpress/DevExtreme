@@ -1007,6 +1007,25 @@ const dxChart = AdvancedChart.inherit({
         return cleanPanesCanvases;
     },
 
+    _resolveDeferredItems() {
+        const that = this;
+        const allAxes = (that._argumentAxes || []).concat(that._valueAxes || []);
+
+        that._addToDeferred({
+            items: allAxes.map(axis => axis.getTemplatesDef()),
+            launchRequest() {
+                allAxes.forEach(function(a) {
+                    a.setRenderedState(true);
+                });
+            },
+            doneRequest() {
+                allAxes.forEach(function(a) {
+                    a.setRenderedState(false);
+                });
+            }
+        });
+    },
+
     _estimateTickIntervals(axes, canvases) {
         return axes.some(axis => axis.estimateTickInterval(canvases[axis.pane]));
     },

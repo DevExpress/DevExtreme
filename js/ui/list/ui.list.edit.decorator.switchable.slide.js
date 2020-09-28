@@ -3,8 +3,8 @@ import eventsEngine from '../../events/core/events_engine';
 import { noop } from '../../core/utils/common';
 import { name as clickEventName } from '../../events/click';
 import messageLocalization from '../../localization/message';
-import translator from '../../animation/translator';
-import { addNamespace } from '../../events/utils';
+import { locate, move } from '../../animation/translator';
+import { addNamespace } from '../../events/utils/index';
 import { active } from '../../events/core/emitter.feedback';
 import EditDecoratorMenuHelperMixin from './ui.list.edit.decorator_menu_helper';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
@@ -201,16 +201,16 @@ registerDecorator(
 
         _getCurrentPositions: function() {
             return {
-                content: translator.locate(this._$cachedContent).left,
-                buttonsContainer: translator.locate(this._$buttonsContainer).left,
-                buttons: translator.locate(this._$buttons).left
+                content: locate(this._$cachedContent).left,
+                buttonsContainer: locate(this._$buttonsContainer).left,
+                buttons: locate(this._$buttons).left
             };
         },
 
         _setPositions: function(positions) {
-            translator.move(this._$cachedContent, { left: positions.content });
-            translator.move(this._$buttonsContainer, { left: positions.buttonsContainer });
-            translator.move(this._$buttons, { left: positions.buttons });
+            move(this._$cachedContent, { left: positions.content });
+            move(this._$buttonsContainer, { left: positions.buttonsContainer });
+            move(this._$buttons, { left: positions.buttons });
         },
 
         _cacheItemData: function($itemElement) {

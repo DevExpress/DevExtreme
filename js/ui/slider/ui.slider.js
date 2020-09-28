@@ -9,12 +9,12 @@ import { lock } from '../../events/core/emitter.feedback';
 import eventsEngine from '../../events/core/events_engine';
 import Swipeable from '../../events/gesture/swipeable';
 import pointerEvents from '../../events/pointer';
-import { addNamespace, isMouseEvent, isTouchEvent, eventData } from '../../events/utils';
+import { addNamespace, isMouseEvent, isTouchEvent, eventData } from '../../events/utils/index';
 import { triggerShownEvent } from '../../events/visibility_change';
 import numberLocalization from '../../localization/number';
 import themes from '../themes';
 import TrackBar from '../track_bar';
-import inkRipple from '../widget/utils.ink_ripple';
+import { render } from '../widget/utils.ink_ripple';
 import SliderHandle from './ui.slider_handle';
 
 // STYLE slider
@@ -70,42 +70,44 @@ const Slider = TrackBar.inherit({
 
         return extend(this.callBase(), {
             leftArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleLeft(this.option('step'));
             },
             rightArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleRight(this.option('step'));
             },
             pageUp: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleRight(this.option('step') * this.option('keyStep'));
             },
             pageDown: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleLeft(this.option('step') * this.option('keyStep'));
             },
             home: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
+
                 const min = this.option('min');
                 this.option('value', min);
             },
             end: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
+
                 const max = this.option('max');
                 this.option('value', max);
             }
         });
+    },
+
+    _processKeyboardEvent: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._saveValueChangeEvent(e);
     },
 
     _getDefaultOptions: function() {
@@ -267,7 +269,7 @@ const Slider = TrackBar.inherit({
     },
 
     _renderInkRipple: function() {
-        this._inkRipple = inkRipple.render({
+        this._inkRipple = render({
             waveSizeCoefficient: 0.7,
             isCentered: true,
             wavesNumber: 2,
@@ -485,6 +487,7 @@ const Slider = TrackBar.inherit({
 
         const offsetDirection = this.option('rtlEnabled') ? -1 : 1;
         delete this._needPreventAnimation;
+        this._saveValueChangeEvent(e);
         this._changeValueOnSwipe(this._startOffset + offsetDirection * e.event.targetOffset / this._swipePixelRatio());
         delete this._startOffset;
         this._renderValue();
@@ -561,6 +564,7 @@ const Slider = TrackBar.inherit({
 
     _setValueOnSwipe: function(value) {
         this.option('value', value);
+        this._saveValueChangeEvent(undefined);
     },
 
     _startHandler: function(args) {

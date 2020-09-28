@@ -12,7 +12,7 @@ import $ from 'jquery';
 import 'common.css!';
 import 'generic_light.css!';
 import 'ui/data_grid/ui.data_grid';
-import { createEvent } from 'events/utils';
+import { createEvent } from 'events/utils/index';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import {
     CLICK_EVENT,

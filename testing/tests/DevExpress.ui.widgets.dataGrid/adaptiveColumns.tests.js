@@ -2897,8 +2897,7 @@ QUnit.module('Editing', {
 
         // assert
         assert.equal($('.dx-texteditor').length, 1, 'editor\'s count');
-        assert.equal($('.dx-editor-cell').length, 0, 'the editor cell class is not applied'); // dx-highlight-outline
-        assert.equal($('.dx-highlight-outline').length, 0, 'the highlight outline class is not applied');
+        assert.equal($('.dx-editor-cell').length, 0, 'the editor cell class is not applied');
     });
 
     QUnit.test('Edit batch. Editor is rendered only one when click on text', function(assert) {
@@ -3405,7 +3404,7 @@ QUnit.module('Editing', {
         this.resizingController.resize();
         this.clock.tick();
 
-        assert.equal($('.dx-cell-modified .dx-highlight-outline').text(), '102', 'text of modified cell');
+        assert.equal($('.dx-cell-modified').text(), '102', 'text of modified cell');
     });
 
     QUnit.test('Edit batch. Repaint form with unsaved data', function(assert) {

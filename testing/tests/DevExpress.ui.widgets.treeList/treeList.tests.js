@@ -23,7 +23,7 @@ import ArrayStore from 'data/array_store';
 import TreeList from 'ui/tree_list/ui.tree_list';
 import pointerMock from '../../helpers/pointerMock.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
-import { createEvent } from 'events/utils';
+import { createEvent } from 'events/utils/index';
 
 fx.off = true;
 

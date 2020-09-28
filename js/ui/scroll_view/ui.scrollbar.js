@@ -2,9 +2,9 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import readyCallback from '../../core/utils/ready_callbacks';
-import translator from '../../animation/translator';
+import { move } from '../../animation/translator';
 import Widget from '../widget/ui.widget';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import { deferRenderer } from '../../core/utils/common';
 import { isPlainObject } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
@@ -165,7 +165,7 @@ const Scrollbar = Widget.inherit({
 
         const scrollBarLocation = {};
         scrollBarLocation[this._prop] = this._calculateScrollBarPosition(location);
-        translator.move(this._$thumb, scrollBarLocation);
+        move(this._$thumb, scrollBarLocation);
     },
 
     _calculateScrollBarPosition: function(location) {

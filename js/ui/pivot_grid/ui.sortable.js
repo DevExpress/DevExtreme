@@ -3,7 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import registerComponent from '../../core/component_registrator';
 import DOMComponent from '../../core/dom_component';
 import {

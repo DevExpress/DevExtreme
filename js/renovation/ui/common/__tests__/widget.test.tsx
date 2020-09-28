@@ -1,18 +1,22 @@
 import React, { createRef } from 'react';
 // Should be before component import
-import { shallow, mount } from 'enzyme';
+import { mount } from 'enzyme';
+import each from 'jest-each';
+import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
   clear as clearEventHandlers, defaultEvent, emit,
   emitKeyboard, getEventHandlers, EVENT, KEY,
 } from '../../../test_utils/events_mock';
 import { Widget, viewFunction, WidgetProps } from '../widget';
-import { isFakeClickEvent } from '../../../../events/utils';
+import { isFakeClickEvent } from '../../../../events/utils/index';
 import config from '../../../../core/config';
+import { ConfigProvider } from '../config_provider';
 
-jest.mock('../../../../events/utils', () => ({
-  ...require.requireActual('../../../../events/utils'),
+jest.mock('../../../../events/utils/index', () => ({
+  ...require.requireActual('../../../../events/utils/index'),
   isFakeClickEvent: jest.fn(),
 }));
+jest.mock('../config_provider', () => ({ ConfigProvider: () => null }));
 
 describe('Widget', () => {
   describe('Render', () => {
@@ -21,17 +25,17 @@ describe('Widget', () => {
         hint: 'hint',
         visible: true,
       };
-      const widget = shallow(viewFunction({
+      const widget = mount(viewFunction({
         props,
         tabIndex: 10,
         cssClasses: 'cssClasses',
-        styles: 'styles',
+        styles: { display: 'none' },
         attributes: { attributes: 'attributes' },
       } as any) as any);
 
       expect(widget.props()).toEqual({
         attributes: 'attributes',
-        style: 'styles',
+        style: { display: 'none' },
         className: 'cssClasses',
         hidden: false,
         title: 'hint',
@@ -61,13 +65,26 @@ describe('Widget', () => {
         visible: true,
         children: <div className="child" />,
       };
-      const widget = shallow(viewFunction({
+      const widget = mount(viewFunction({
         widgetRef: mockRef,
         props,
         cssClasses: 'cssClasses',
       } as any) as any);
 
       expect(widget.find('.child').exists()).toBe(true);
+    });
+
+    it('should render ConfigProvider if shouldRenderConfigProvider is true', () => {
+      const props = {
+        hint: 'hint',
+        visible: true,
+      };
+      const widget = mount(viewFunction({
+        props,
+        shouldRenderConfigProvider: true,
+      } as any) as any);
+
+      expect(widget.find(ConfigProvider)).toHaveLength(1);
     });
   });
 
@@ -113,7 +130,7 @@ describe('Widget', () => {
           const widget = new Widget({ accessKey: 'c', focusStateEnabled: true, disabled: false });
           widget.widgetRef = {} as any;
 
-          const detach = widget.accessKeyEffect();
+          const detach = widget.accessKeyEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.dxClick).length).toBe(1);
           detach();
@@ -193,7 +210,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ activeStateEnabled: true, disabled: false });
 
-          const detach = widget.activeEffect();
+          const detach = widget.activeEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.active).length).toBe(1);
           expect(getEventHandlers(EVENT.inactive).length).toBe(1);
@@ -256,7 +273,7 @@ describe('Widget', () => {
           const onClick = jest.fn();
           const widget = new Widget({ onClick });
 
-          const detach = widget.clickEffect();
+          const detach = widget.clickEffect() as DisposeEffectReturn;
           detach();
           emit(EVENT.dxClick);
 
@@ -342,7 +359,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, disabled: false });
 
-          const detach = widget.focusEffect();
+          const detach = widget.focusEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.focus).length).toBe(1);
           expect(getEventHandlers(EVENT.blur).length).toBe(1);
@@ -396,7 +413,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ hoverStateEnabled: true, disabled: false });
           widget.active = false;
-          const detach = widget.hoverEffect();
+          const detach = widget.hoverEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.hoverStart).length).toBe(1);
           expect(getEventHandlers(EVENT.hoverEnd).length).toBe(1);
@@ -458,7 +475,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ focusStateEnabled: true, onKeyDown });
           widget.widgetRef = {} as any;
-          const detach = widget.keyboardEffect();
+          const detach = widget.keyboardEffect() as DisposeEffectReturn;
 
           emitKeyboard(KEY.enter);
           expect(onKeyDown).toHaveBeenCalledTimes(1);
@@ -502,7 +519,7 @@ describe('Widget', () => {
 
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onDimensionChanged });
-          const detach = widget.resizeEffect();
+          const detach = widget.resizeEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.resize).length).toBe(1);
           detach();
@@ -538,7 +555,7 @@ describe('Widget', () => {
         it('should return unsubscribe callback', () => {
           const widget = new Widget({ onVisibilityChange });
           widget.widgetRef = {} as any;
-          const detach = widget.visibilityEffect();
+          const detach = widget.visibilityEffect() as DisposeEffectReturn;
 
           expect(getEventHandlers(EVENT.shown).length).toBe(1);
           expect(getEventHandlers(EVENT.hiding).length).toBe(1);
@@ -571,10 +588,28 @@ describe('Widget', () => {
           expect(widget.focused).toBe(true);
         });
       });
+
+      describe('getRootElement', () => {
+        it('should return widgetRef', () => {
+          const widget = new Widget({});
+          const mockRef = jest.fn();
+          widget.widgetRef = mockRef as any;
+
+          expect(widget.getRootElement()).toBe(mockRef);
+        });
+      });
     });
   });
 
   describe('Logic', () => {
+    it('getHtmlElement', () => {
+      const widgetRef = {} as HTMLDivElement;
+      const component = new Widget({});
+      component.widgetRef = widgetRef;
+
+      expect(component.getHtmlElement()).toEqual(widgetRef);
+    });
+
     describe('Getters', () => {
       describe('attributes', () => {
         it('should return ARIA labels', () => {
@@ -723,6 +758,57 @@ describe('Widget', () => {
           expect(widget.tabIndex).toBe(10);
         });
       });
+
+      each`
+      global       | rtlEnabled   | parentRtlEnabled | expected
+      ${true}      | ${true}      | ${true}          | ${false}
+      ${undefined} | ${undefined} | ${undefined}     | ${false}
+      ${true}      | ${true}      | ${undefined}     | ${true}
+      ${true}      | ${false}     | ${undefined}     | ${true}
+      ${true}      | ${true}      | ${false}         | ${true}
+      ${true}      | ${false}     | ${true}          | ${true}
+      ${true}      | ${undefined} | ${undefined}     | ${true}
+      ${true}      | ${undefined} | ${true}          | ${false}
+      ${true}      | ${undefined} | ${false}         | ${false}
+      ${true}      | ${true}      | ${true}          | ${false}
+      `
+        .describe('shouldRenderConfigProvider', ({
+          global, rtlEnabled, parentRtlEnabled, expected,
+        }) => {
+          const name = `${JSON.stringify({
+            global, rtlEnabled, parentRtlEnabled, expected,
+          })}`;
+
+          it(name, () => {
+            config().rtlEnabled = global;
+            const widget = new Widget({ rtlEnabled });
+            widget.config = { rtlEnabled: parentRtlEnabled };
+            expect(widget.shouldRenderConfigProvider).toBe(expected);
+          });
+        });
+
+      describe('rtlEnabled', () => {
+        it('should return value from props if props has value', () => {
+          const widget = new Widget({ rtlEnabled: false });
+          // emulate context
+          widget.config = { rtlEnabled: true };
+
+          expect(widget.rtlEnabled).toBe(false);
+        });
+
+        it('should return value from parent rtlEnabled context if props isnt defined', () => {
+          const widget = new Widget({ });
+          // emulate context
+          widget.config = { rtlEnabled: true };
+          expect(widget.rtlEnabled).toBe(true);
+        });
+
+        it('should return value from config if any other props isnt defined', () => {
+          config().rtlEnabled = true;
+          const widget = new Widget({ });
+          expect(widget.rtlEnabled).toBe(true);
+        });
+      });
     });
   });
 
@@ -737,7 +823,6 @@ describe('Widget', () => {
         focusStateEnabled: false,
         hoverStateEnabled: false,
         onContentReady: expect.any(Function),
-        rtlEnabled: config().rtlEnabled,
         tabIndex: 0,
         visible: true,
         _feedbackHideTimeout: 400,

@@ -1014,6 +1014,22 @@ QUnit.test('Aggregate by category', function(assert) {
     assert.equal(points[1].value, 9);
 });
 
+QUnit.test('Discrete datetime aggregation', function(assert) {
+    const date = '2020-08-31T12:45:00Z';
+    this.getBusinessRange = () => { return { categories: [new Date(date)] }; };
+    this.argumentAxis.getAggregationInfo = sinon.spy(() => {
+        return { aggregateByCategory: true };
+    });
+
+    const points = this.aggregateData('sum', [
+        { val: 30.00, arg: new Date(date) },
+        { val: 30.00, arg: new Date(date) }
+    ], 'bar', {}, false, 'discrete');
+
+    assert.equal(points.length, 1);
+    assert.equal(points[0].value, 60);
+});
+
 QUnit.test('Aggregate by category. Check aggregation info', function(assert) {
     this.getBusinessRange = () => { return { categories: ['A', 'B'] }; };
     this.argumentAxis.getAggregationInfo = sinon.spy(() => {

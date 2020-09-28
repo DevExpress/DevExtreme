@@ -6,13 +6,11 @@ import { format } from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
-import { extendFromObject } from '../../core/utils/extend';
 import { toComparable } from '../../core/utils/data';
 import { equalByValue } from '../../core/utils/common';
 import LoadPanel from '../load_panel';
 import { normalizeSortingInfo as normalizeSorting } from '../../data/utils';
 import formatHelper from '../../format_helper';
-import { deepExtendArraySafe } from '../../core/utils/object';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
 
@@ -407,14 +405,6 @@ export default {
             columnIndex++;
         }
         return result;
-    },
-
-    createObjectWithChanges: function(target, changes) {
-        const result = target ? Object.create(Object.getPrototypeOf(target)) : {};
-        const targetWithoutPrototype = extendFromObject({}, target);
-
-        deepExtendArraySafe(result, targetWithoutPrototype, true, true);
-        return deepExtendArraySafe(result, changes, true, true);
     },
 
     getExpandCellTemplate: function() {
