@@ -30,6 +30,9 @@ const LIST_NEXT_BUTTON_CLASS = 'dx-list-next-button';
 const LIST_SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 const LIST_CONTEXT_MENUCONTENT_CLASS = 'dx-list-context-menucontent';
 const LIST_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label';
+const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
+const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
+const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -1116,7 +1119,17 @@ QUnit.module('options changed', moduleSetup, () => {
         });
 
         assert.notOk(instance.option('grouped'), 'grouped option was changed without exceptions');
+        assert.strictEqual($element.find(`.${LIST_GROUP_CLASS}`).length, 0, 'list is not grouped');
+
+        instance.option({
+            dataSource: [{ key: 'parent', items: [{ text: 'child' }] }],
+            grouped: true
+        });
+
+        assert.ok(instance.option('grouped'), 'grouped option was changed without exceptions');
+        assert.strictEqual($element.find(`.${LIST_GROUP_CLASS}`).length, 1, 'list is grouped');
     });
+
 
     QUnit.test('searchEnabled option changing', function(assert) {
         const $element = $('#list').dxList({
@@ -1401,6 +1414,69 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual($menuItems.length, 1, 'items count is correct');
     });
 
+    QUnit.test('useInkRipple', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
+            useInkRipple: true
+        });
+        const list = $list.dxList('instance');
+        let $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        let pointer = pointerMock($item);
+        pointer.start('touch').down();
+        clock.tick(100);
+        let inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
+        pointer.start('touch').up();
+
+        list.option('useInkRipple', false);
+        $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        pointer = pointerMock($item);
+        pointer.start('touch').down();
+        clock.tick(100);
+        inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        assert.strictEqual(inkRippleShowingWave.length, 0, 'inkripple feedback does not work');
+        pointer.start('touch').up();
+
+        list.option('useInkRipple', true);
+        $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        pointer = pointerMock($item);
+        pointer.start('touch').down();
+        clock.tick(100);
+        inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
+        pointer.start('touch').up();
+
+        clock.restore();
+    });
+
+    QUnit.test('groupTemplate', function(assert) {
+        const groupTemplate = (data) => {
+            return $('<div>').addClass('test-class').text(data.key);
+        };
+        const $list = $('#list').dxList({
+            dataSource: {
+                store: [
+                    { key: 'a', items: ['0', '1', '2'] },
+                    { key: 'b', items: ['0', '1', '2'] },
+                    { key: 'c', items: ['0', '1', '2'] },
+                    { key: 'd', items: ['0', '1', '2'] }],
+                paginate: true
+            },
+            grouped: true,
+            groupTemplate
+        });
+        const list = $list.dxList('instance');
+
+        assert.strictEqual($list.find('.test-class').length, 4);
+
+        list.option('groupTemplate', null);
+        assert.strictEqual($list.find('.test-class').length, 0);
+
+        list.option('groupTemplate', groupTemplate);
+        assert.strictEqual($list.find('.test-class').length, 4);
+    });
+
     QUnit.test('deleteItem should remove an item', function(assert) {
         const $list = $('#list').dxList({
             items: [1, 2, 3, 4],
@@ -1444,6 +1520,57 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual($items.eq(0).find('.dx-list-reorder-handle').length, 1);
     });
 
+    QUnit.test('showChevronExpr', function(assert) {
+        const list = $('#templated-list').dxList({
+            items: [{ showChevron: false, showChevron1: true, showChevron2: true }],
+            showChevronExpr: 'showChevron1'
+        }).dxList('instance');
+
+        let $item = list.itemElements().eq(0);
+        let $chevron = $item.find(`.${LIST_ITEM_CHEVRON_CLASS}`);
+        assert.strictEqual($chevron.length, 1);
+
+        list.option('showChevronExpr', 'new');
+        $item = list.itemElements().eq(0);
+        $chevron = $item.find(`.${LIST_ITEM_CHEVRON_CLASS}`);
+        assert.strictEqual($chevron.length, 0);
+
+        list.option('showChevronExpr', 'showChevron2');
+        $item = list.itemElements().eq(0);
+        $chevron = $item.find(`.${LIST_ITEM_CHEVRON_CLASS}`);
+        assert.strictEqual($chevron.length, 1);
+
+        list.option('showChevronExpr', 'showChevron');
+        $item = list.itemElements().eq(0);
+        $chevron = $item.find(`.${LIST_ITEM_CHEVRON_CLASS}`);
+        assert.strictEqual($chevron.length, 0);
+    });
+
+    QUnit.test('badgeExpr', function(assert) {
+        const list = $('#templated-list').dxList({
+            items: [{ badge: null, badge1: '1', badge2: '2' }],
+            badgeExpr: 'badge1'
+        }).dxList('instance');
+
+        let $item = list.itemElements().eq(0);
+        let $chevron = $item.find(`.${LIST_ITEM_BADGE_CLASS}`);
+        assert.strictEqual($chevron.length, 1);
+
+        list.option('badgeExpr', 'new');
+        $item = list.itemElements().eq(0);
+        $chevron = $item.find(`.${LIST_ITEM_BADGE_CLASS}`);
+        assert.strictEqual($chevron.length, 0);
+
+        list.option('badgeExpr', 'badge2');
+        $item = list.itemElements().eq(0);
+        $chevron = $item.find(`.${LIST_ITEM_BADGE_CLASS}`);
+        assert.strictEqual($chevron.length, 1);
+
+        list.option('badgeExpr', 'badge');
+        $item = list.itemElements().eq(0);
+        $chevron = $item.find(`.${LIST_ITEM_BADGE_CLASS}`);
+        assert.strictEqual($chevron.length, 0);
+    });
 });
 
 QUnit.module('selection', moduleSetup, () => {
@@ -2327,7 +2454,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
         let pageLoadingActionFired = 0;
 
         const dataSource = new DataSource({
-            store: [1, 2, 3],
+            store: [1, 2, 3, 4, 5],
             pageSize: 2
         });
 
@@ -2344,7 +2471,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
 
         const element = this.element;
 
-        element.dxList({
+        const list = element.dxList({
             dataSource,
             pullRefreshEnabled: true,
             pageLoadMode: 'scrollBottom',
@@ -2364,6 +2491,17 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
         element.dxScrollView('instance').scrollBottom();
         assert.ok(nextPageCalled, 'next page loaded');
         assert.strictEqual(pageLoadingActionFired, 1, 'onPageLoading fired');
+
+        list.option('onPullRefresh', null);
+        list.option('onPageLoading', null);
+
+        element.dxScrollView('instance').pullDown();
+        assert.ok(reloaded, 'dataSource reloaded');
+        assert.strictEqual(pullRefreshActionFired, 1, 'onPullRefresh is not fired');
+
+        element.dxScrollView('instance').scrollBottom();
+        assert.ok(nextPageCalled, 'next page loaded');
+        assert.strictEqual(pageLoadingActionFired, 1, 'onPageLoading is not fired');
     });
 
     QUnit.test('scrollView callbacks with subscription by "on" method ', function(assert) {
@@ -2695,6 +2833,54 @@ QUnit.module('scrollView integration', {
 
         assert.equal(scrollView.scrollTop(), scrollTop, 'position was not changed');
     });
+
+    [{ listOption: 'showScrollbar', scrollViewOption: 'showScrollbar' },
+        { listOption: 'bounceEnabled', scrollViewOption: 'bounceEnabled' },
+        { listOption: 'scrollByContent', scrollViewOption: 'scrollByContent' },
+        { listOption: 'scrollByThumb', scrollViewOption: 'scrollByThumb' },
+        { listOption: 'useNativeScrolling', scrollViewOption: 'useNative' },
+        { listOption: 'scrollingEnabled', scrollViewOption: 'disabled', reverted: true }
+    ].forEach((optionInfo) => {
+        QUnit.test(`${optionInfo.listOption} option changed`, function(assert) {
+            const startConfig = {};
+            startConfig[optionInfo.listOption] = false;
+            const $list = $('#list').dxList(startConfig);
+            const list = $list.dxList('instance');
+            const scrollView = $list.dxScrollView('instance');
+
+            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), optionInfo.reverted ? true : false);
+
+            list.option(optionInfo.listOption, true);
+            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), optionInfo.reverted ? false : true);
+
+            list.option(optionInfo.listOption, false);
+            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), optionInfo.reverted ? true : false);
+        });
+    });
+
+
+    [{ listOption: 'pulledDownText', scrollViewOption: 'pulledDownText' },
+        { listOption: 'pullingDownText', scrollViewOption: 'pullingDownText' },
+        { listOption: 'refreshingText', scrollViewOption: 'refreshingText' },
+        { listOption: 'pageLoadingText', scrollViewOption: 'reachBottomText' }].forEach((optionInfo) => {
+        QUnit.test(`${optionInfo.listOption} option changed`, function(assert) {
+            const startConfig = {};
+            startConfig[optionInfo.listOption] = 'custom text';
+            const $list = $('#list').dxList(startConfig);
+            const list = $list.dxList('instance');
+            const scrollView = $list.dxScrollView('instance');
+
+            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), 'custom text');
+
+            list.option(optionInfo.listOption, 'changed text');
+            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), 'changed text');
+
+            list.option(optionInfo.listOption, '');
+            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), '');
+        });
+    });
+
+
 });
 
 QUnit.module('regressions', moduleSetup, () => {
