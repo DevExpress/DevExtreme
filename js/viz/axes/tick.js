@@ -230,12 +230,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
             },
 
             _getTemplateCoords() {
-                return axis._getLabelAdjustedCoord(this,
-                    (axis._constantLabelOffset || 0) + (tick.labelOffset || 0),
-                    undefined,
-                    undefined,
-                    this.templateContainer.getBBox()
-                );
+                return axis._getLabelAdjustedCoord(this, (axis._constantLabelOffset || 0) + (tick.labelOffset || 0));
             },
 
             updateLabelPosition: function(animate) {

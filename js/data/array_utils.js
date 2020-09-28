@@ -104,6 +104,10 @@ function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immuta
     return resultItems;
 }
 
+function getErrorResult(isBatch, errorCode) {
+    return !isBatch ? rejectedPromise(errors.Error(errorCode)) : errors.log(errorCode);
+}
+
 function applyChanges(data, changes, options = {}) {
     const { keyExpr = 'id', immutable = true } = options;
     const keyGetter = compileGetter(keyExpr);
@@ -128,21 +132,22 @@ function update(keyInfo, array, key, data, isBatch, immutable) {
 
     if(keyExpr) {
         if(hasKey(data, keyExpr) && !keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
-            return !isBatch && rejectedPromise(errors.Error('E4017'));
+            return getErrorResult(isBatch, 'E4017');
         }
 
         target = getCacheValue(array, key);
         if(!target) {
             const index = indexByKey(keyInfo, array, key);
             if(index < 0) {
-                return !isBatch && rejectedPromise(errors.Error('E4009'));
+                return getErrorResult(isBatch, 'E4009');
             }
 
             target = array[index];
 
             if(immutable === true && isDefined(target)) {
-                array[index] = createObjectWithChanges(target, data);
-                return;
+                const newTarget = createObjectWithChanges(target, data);
+                array[index] = newTarget;
+                return !isBatch && trivialPromise(newTarget, key);
             }
         }
     } else {
@@ -174,7 +179,7 @@ function insert(keyInfo, array, data, index, isBatch) {
             keyValue = obj[keyExpr] = String(new Guid());
         } else {
             if(array[indexByKey(keyInfo, array, keyValue)] !== undefined) {
-                return !isBatch && rejectedPromise(errors.Error('E4008'));
+                return getErrorResult(isBatch, 'E4008');
             }
         }
     } else {
@@ -200,6 +205,8 @@ function remove(keyInfo, array, key, isBatch) {
     }
     if(!isBatch) {
         return trivialPromise(key);
+    } else if(index < 0) {
+        return getErrorResult(isBatch, 'E4009');
     }
 }
 

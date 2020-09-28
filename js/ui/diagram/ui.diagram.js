@@ -11,7 +11,7 @@ import { getDiagram } from './diagram.importer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import { getPublicElement } from '../../core/element';
 import eventsEngine from '../../events/core/events_engine';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import messageLocalization from '../../localization/message';
 import numberLocalization from '../../localization/number';
 import * as zIndexPool from '../overlay/z_index';
@@ -70,6 +70,7 @@ const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('mozfullscreenchange', DIA
 class Diagram extends Widget {
     _init() {
         this._updateDiagramLockCount = 0;
+        this.toggleFullscreenLock = 0;
         this._browserResizeTimer = -1;
         this._toolbars = [];
 
@@ -723,7 +724,12 @@ class Diagram extends Widget {
             this._updateAutoZoomState();
         }
         if(this.option('fullScreen')) {
-            this._updateFullscreenState();
+            const window = getWindow();
+            if(window && window.self !== window.top) {
+                this.option('fullScreen', false);
+            } else {
+                this._updateFullscreenState();
+            }
         }
 
         this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
@@ -803,7 +809,7 @@ class Diagram extends Widget {
         this._bindDiagramData();
     }
     _getChangesKeys(changes) {
-        return changes.map(change => change.type === 'update' && change.key).filter(key => !!key);
+        return changes.map(change => change.internalKey || change.key).filter(key => !!key);
     }
 
     _createOptionGetter(optionName) {
@@ -1155,6 +1161,8 @@ class Diagram extends Widget {
         }
     }
     _onToggleFullScreen(fullScreen) {
+        if(this.toggleFullscreenLock > 0) return;
+
         this._changeNativeFullscreen(fullScreen);
         this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
         this._diagramInstance.updateLayout(true);
@@ -1231,6 +1239,12 @@ class Diagram extends Widget {
             this.option('fullScreen', false);
         }
     }
+    _executeDiagramFullscreenCommand(fullscreen) {
+        const { DiagramCommand } = getDiagram();
+        this.toggleFullscreenLock++;
+        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
+        this.toggleFullscreenLock--;
+    }
     _onShowContextMenu(x, y, selection) {
         if(this._contextMenu) {
             this._contextMenu._show(x, y, selection);
@@ -1295,10 +1309,9 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.ToggleSimpleView, this.option('simpleView'));
     }
     _updateFullscreenState() {
-        const { DiagramCommand } = getDiagram();
-        const fullScreen = this.option('fullScreen');
-        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullScreen);
-        this._onToggleFullScreen(fullScreen);
+        const fullscreen = this.option('fullScreen');
+        this._executeDiagramFullscreenCommand(fullscreen);
+        this._onToggleFullScreen(fullscreen);
     }
     _updateShowGridState() {
         const { DiagramCommand } = getDiagram();
@@ -1989,6 +2002,10 @@ class Diagram extends Widget {
                 * @name dxDiagramOptions.customShapes.templateHeight
                 * @type Number
                 */
+                /**
+                * @name dxDiagramOptions.customShapes.keepRatioOnAutoSize
+                * @type Boolean
+                */
             ],
             toolbox: {
                 /**
@@ -2535,6 +2552,7 @@ class Diagram extends Widget {
             this._nativeConnectorToDiagramConnector.bind(this);
         return extend({
             id: nativeItem.id,
+            key: nativeItem.key,
             dataItem: undefined
         }, createMethod(nativeItem));
     }

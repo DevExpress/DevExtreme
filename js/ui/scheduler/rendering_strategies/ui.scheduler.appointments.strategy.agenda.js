@@ -1,6 +1,6 @@
 import dateUtils from '../../../core/utils/date';
 import { each } from '../../../core/utils/iterator';
-import arrayUtils from '../../../core/utils/array';
+import { merge } from '../../../core/utils/array';
 import BaseAppointmentsStrategy from './ui.scheduler.appointments.strategy.base';
 
 class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
@@ -186,7 +186,7 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
 
             this.instance.getAppointmentsInstance()._reduceRecurrenceAppointments(appts.indexes, currentAppointments);
 
-            arrayUtils.merge(currentAppointments, appts.parts);
+            merge(currentAppointments, appts.parts);
 
             const appointmentCount = currentAppointments.length;
             for(let i = 0; i < agendaDuration; i++) {

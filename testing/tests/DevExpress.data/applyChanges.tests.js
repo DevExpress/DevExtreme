@@ -1,4 +1,5 @@
 import { extend } from 'core/utils/extend';
+import { errors } from 'data/errors';
 import applyChanges from 'data/apply_changes';
 
 QUnit.module('Apply Changes', {
@@ -106,5 +107,62 @@ QUnit.module('Apply Changes', {
             assert.deepEqual(this.data[3], { id: 5, name: 'test5' }, 'fourth item value of the original array');
             assert.deepEqual(this.data[4], { id: 345, name: 'test new' }, 'first item value of the original array');
         });
+    });
+
+    QUnit.test('Errors should be logged in the console when key values are not correct', function(assert) {
+        // arrange
+        this.data = [
+            {
+                id: 1,
+                name: 'test1'
+            },
+            {
+                id: 2,
+                name: 'test2'
+            },
+            {
+                id: 3,
+                name: 'test3'
+            },
+            {
+                id: 4,
+                name: 'test4'
+            },
+            {
+                id: 5,
+                name: 'test5'
+            }
+        ];
+        this.changes = [
+            {
+                type: 'insert',
+                data: {
+                    id: 5,
+                    name: 'test new'
+                }
+            },
+            {
+                type: 'remove',
+                key: 6
+            },
+            {
+                type: 'update',
+                key: 7,
+                data: {
+                    name: 'new name'
+                }
+            }
+        ];
+        const errorsLogSpy = sinon.spy(errors, 'log');
+
+        // act
+        const result = applyChanges(this.data, this.changes);
+
+        // assert
+        assert.deepEqual(result, this.data, 'result and data should be the same');
+        assert.equal(errorsLogSpy.callCount, 3, 'error.log call count');
+        assert.equal(errorsLogSpy.getCall(0).args[0], 'E4008', 'insert error');
+        assert.equal(errorsLogSpy.getCall(1).args[0], 'E4009', 'remove error');
+        assert.equal(errorsLogSpy.getCall(2).args[0], 'E4009', 'update error');
     });
 });

@@ -1,4 +1,5 @@
 const { assert } = QUnit;
+import { isDefined } from 'core/utils/type';
 
 class JSPdfDataGridTestHelper {
     constructor(jsPDFDocument) {
@@ -34,8 +35,17 @@ class JSPdfDataGridTestHelper {
         this._iterateCells(expectedCells[rowType], (cell, rowIndex, columnIndex) => {
             const expectedCellStyles = cell.styles || {};
             const actualCellStyles = actualAutoTableOptions[rowType][rowIndex][columnIndex].styles;
-            assert.strictEqual(actualCellStyles['halign'], expectedCellStyles['halign'], `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
-            assert.strictEqual(actualCellStyles.fontStyle, expectedCellStyles.fontStyle, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.halign`);
+
+            ['halign', 'fontStyle', 'cellWidth'].forEach((styleName) => {
+                assert.strictEqual(
+                    actualCellStyles[styleName],
+                    expectedCellStyles[styleName],
+                    `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.${styleName}`);
+                assert.strictEqual(
+                    isDefined(actualCellStyles[styleName]),
+                    Object.prototype.hasOwnProperty.call(actualCellStyles, styleName),
+                    `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.${styleName} is defined`);
+            });
         });
     }
 

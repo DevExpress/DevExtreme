@@ -1,7 +1,7 @@
 // A lot of refs needed any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, ForwardRef,
+  Component, ComponentBindings, JSXComponent, OneWay, ForwardRef, Provider, Ref, Effect,
 } from 'devextreme-generator/component_declaration/common';
 
 import { InfoText } from './info';
@@ -11,16 +11,22 @@ import { PAGER_PAGES_CLASS, LIGHT_MODE_CLASS, PAGER_CLASS } from './common/const
 import PagerProps, { DisplayMode } from './common/pager_props';
 import { combineClasses } from '../../utils/combine_classes';
 import { Widget } from '../common/widget';
+import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { registerKeyboardAction } from '../../../ui/shared/accessibility';
+import { EventCallback } from '../common/event_callback.d';
+import { KeyboardActionContext, KeyboardActionContextType } from './common/keyboard_action_context';
+import noop from '../../utils/noop';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
+  widgetRef,
   classes,
   pagesContainerVisible,
   pagesContainerVisibility,
   isLargeDisplayMode,
   infoVisible,
   props: {
-    parentRef, pageSizesRef, pagesRef, infoTextRef,
+    pageSizesRef, pagesRef, infoTextRef,
     pageSizeChange, pageIndexChange,
     infoText, maxPagesCount, pageIndex, hasKnownLastPage,
     pageCount, showPageSizes, pageSize, pageSizes,
@@ -30,7 +36,7 @@ export const viewFunction = ({
   restAttributes,
 }: PagerContent) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <Widget ref={parentRef} rtlEnabled={rtlEnabled} classes={classes} {...restAttributes}>
+  <Widget ref={widgetRef as any} rtlEnabled={rtlEnabled} classes={classes} {...restAttributes}>
     {showPageSizes && (
     <PageSizeSelector
       ref={pageSizesRef}
@@ -80,7 +86,7 @@ export class PagerContentProps extends PagerProps {
 
   @ForwardRef() pageSizesRef: any = null;
 
-  @ForwardRef() parentRef: any = null;
+  @ForwardRef() rootElementRef: any = null;
 
   @ForwardRef() pagesRef: any = null;
 
@@ -89,6 +95,31 @@ export class PagerContentProps extends PagerProps {
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagerContent extends JSXComponent<PagerContentProps>() {
+  @Ref() widgetRef!: any;
+
+  @Provider(KeyboardActionContext)
+  get keyboardAction(): KeyboardActionContextType {
+    return {
+      registerKeyboardAction:
+        (element: HTMLElement, action: EventCallback): DisposeEffectReturn => {
+          const fakePagerInstance = {
+            option: (): boolean => false,
+            element: (): HTMLElement | null => this.widgetRef.getHtmlElement(),
+            // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+            _createActionByOption: () => noop,
+          };
+          return registerKeyboardAction('pager', fakePagerInstance, element, undefined, action);
+        },
+    };
+  }
+
+  @Effect({ run: 'once' }) setRootElementRef(): void {
+    const { rootElementRef } = this.props;
+    if (rootElementRef) {
+      this.props.rootElementRef = this.widgetRef;
+    }
+  }
+
   get infoVisible(): boolean {
     const { showInfo, infoTextVisible } = this.props;
     return showInfo && infoTextVisible && this.isLargeDisplayMode;

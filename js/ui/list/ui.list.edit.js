@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { isTouchEvent } from '../../events/utils';
+import { isTouchEvent } from '../../events/utils/index';
 import { extend } from '../../core/utils/extend';
 import GroupedEditStrategy from './ui.list.edit.strategy.grouped';
 import { format as formatMessage } from '../../localization/message';

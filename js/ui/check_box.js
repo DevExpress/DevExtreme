@@ -5,7 +5,7 @@ import { extend } from '../core/utils/extend';
 import inkRipple from './widget/utils.ink_ripple';
 import Editor from './editor/editor';
 import registerComponent from '../core/component_registrator';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
 
 // STYLE checkbox

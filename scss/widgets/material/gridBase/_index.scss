@@ -240,9 +240,9 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
-      > td:not(.dx-validation-pending),
+      > td:not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all),
       > td.dx-cell-modified:not(.dx-field-item-content):not(.dx-validation-pending),
-      > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending) {
+      > td.dx-#{$widget-name}-invalid:not(.dx-field-item-content):not(.dx-validation-pending):not(.dx-#{$widget-name}-select-all) {
         padding-right: $material-grid-base-cell-horizontal-padding;
         padding-left: $material-grid-base-cell-horizontal-padding;
         vertical-align: middle;
@@ -451,13 +451,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       border-radius: 0;
     }
 
-    &.dx-editor-inline-block {
-      .dx-cell-modified,
-      .dx-#{$widget-name}-invalid {
-        &::before {
-          padding-top: $material-grid-base-cell-vertical-padding;
-          padding-bottom: $material-grid-base-cell-vertical-padding;
-        }
+    &.dx-editor-inline-block:not(.dx-command-select) {
+      &::before {
+        padding-top: $material-grid-base-cell-vertical-padding;
+        padding-bottom: $material-grid-base-cell-vertical-padding;
       }
     }
   }
@@ -636,20 +633,24 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     &.dx-header-multi-row {
-      .dx-row {
-        &.dx-header-row {
-          .dx-command-select {
-            padding-bottom: ($material-grid-base-header-height - $material-grid-base-checkbox-size) / 2;
-          }
+      .dx-#{$widget-name}-content {
+        .dx-#{$widget-name}-table {
+          .dx-row {
+            &.dx-header-row {
+              .dx-command-select {
+                padding-bottom: ($material-grid-base-header-height - $material-grid-base-checkbox-size) / 2;
+              }
 
-          > td {
-            padding-top: 12px;
-            padding-bottom: 12px;
-            vertical-align: bottom;
-            border-right: 1px solid $material-grid-base-border-color;
+              > td {
+                padding-top: 12px;
+                padding-bottom: 12px;
+                vertical-align: bottom;
+                border-right: 1px solid $material-grid-base-border-color;
 
-            &:last-child {
-              border-right: none;
+                &:last-child {
+                  border-right: none;
+                }
+              }
             }
           }
         }

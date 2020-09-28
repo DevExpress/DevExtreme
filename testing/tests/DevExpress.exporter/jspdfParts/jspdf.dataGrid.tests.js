@@ -23,7 +23,7 @@ const moduleConfig = {
     beforeEach: function() {
         // The transpiling of the script on the drone and locally has differences that affect the imported jsPDF type.
         const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
-        this.jsPDFDocument = _jsPDF('p', 'pt', 'a4');
+        this.jsPDFDocument = _jsPDF();
 
         helper = new JSPdfDataGridTestHelper(this.jsPDFDocument);
     }
@@ -518,7 +518,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
                 [{ content: 'f1', }, { content: 'f2', styles: { 'halign': 'right' } }]
             ],
             body: [
-                [{ content: '1', styles: { 'halign': 'left' } }, { content: '2', styles: { 'halign': 'right' } }]
+                [{ content: '1', styles: { 'halign': 'left', cellWidth: 'wrap' } }, { content: '2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
             ]
         };
 
@@ -1414,9 +1414,9 @@ QUnit.module('Grouping', moduleConfig, () => {
             head: [[ { content: 'f2', styles: { 'halign': 'right' } } ]],
             body: [
                 [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_1', styles: { 'halign': 'right' } }],
+                [{ content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }],
                 [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_2', styles: { 'halign': 'right' } }]
+                [{ content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
             ]
         };
 
@@ -1453,9 +1453,9 @@ QUnit.module('Grouping', moduleConfig, () => {
             head: [[ { content: 'f2', styles: { 'halign': 'right' } } ]],
             body: [
                 [{ content: 'f1: f1_1', styles: { 'halign': 'right', fontStyle: 'bold' } }],
-                [{ content: 'f2_1', styles: { 'halign': 'right' } }],
+                [{ content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }],
                 [{ content: 'f1: f1_2', styles: { 'halign': 'right', fontStyle: 'bold' } }],
-                [{ content: 'f2_2', styles: { 'halign': 'right' } }]
+                [{ content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
             ]
         };
 
@@ -1892,20 +1892,20 @@ QUnit.module('Grouping', moduleConfig, () => {
             body: [
                 [
                     { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f4_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f5_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                    { content: 'Max: f4_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                    { content: 'Max: f5_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
                 ], [
                     { content: 'f2: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f4_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f5_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                    { content: 'Max: f4_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                    { content: 'Max: f5_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
                 ], [
                     { content: 'f3_1', styles: { 'halign': 'left' } },
                     { content: 'f4_1', styles: { 'halign': 'left' } },
                     { content: 'f5_1', styles: { 'halign': 'left' } }
                 ], [
                     { content: 'f2: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f4_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f5_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }
+                    { content: 'Max: f4_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                    { content: 'Max: f5_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
                 ], [
                     { content: 'f3_2', styles: { 'halign': 'left' } },
                     { content: 'f4_2', styles: { 'halign': 'left' } },
@@ -2237,6 +2237,350 @@ QUnit.module('Grouping', moduleConfig, () => {
                     { content: 'f2_2', styles: { 'halign': 'left' } }
                 ]
             ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+});
+
+QUnit.module('Group summary', moduleConfig, () => {
+    QUnit.test('Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0, allowExporting: false },
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                ]
+            },
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [[
+                { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
+            ], [
+                { content: 'f1_1', styles: { 'halign': 'left' } },
+                { content: 'f2_1', styles: { 'halign': 'left' } },
+                { content: 'f3_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f2_2', styles: { 'halign': 'left' } },
+                { content: 'f3_2', styles: { 'halign': 'left' } }
+            ], [
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & group.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0, allowExporting: false },
+            ],
+            summary: {
+                groupItems: [
+                    { name: 'GroupItems 1', column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: false }
+                ]
+            },
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [[
+                { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ], [
+                { content: 'f1_1', styles: { 'halign': 'left' } },
+                { content: 'f2_1', styles: { 'halign': 'left' } },
+                { content: 'f3_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f2_2', styles: { 'halign': 'left' } },
+                { content: 'f3_2', styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', allowExporting: false },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0 },
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                ]
+            },
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [[
+                { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
+            ], [
+                { content: 'f2_1', styles: { 'halign': 'left' } },
+                { content: 'f3_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f2_2', styles: { 'halign': 'left' } },
+                { content: 'f3_2', styles: { 'halign': 'left' } }
+            ], [
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & col_1.allowExporting: false, summary_col_1.alignByColumn: true x showInGroupFooter: true', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', allowExporting: false },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0 },
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'f1', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                ]
+            },
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [[
+                { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
+            ], [
+                { content: 'f2_1', styles: { 'halign': 'left' } },
+                { content: 'f3_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f2_2', styles: { 'halign': 'left' } },
+                { content: 'f3_2', styles: { 'halign': 'left' } }
+            ], [
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & col_1.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', allowExporting: false },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0 },
+            ],
+            summary: {
+                groupItems: [
+                    { name: 'GroupItems 1', column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: false }
+                ]
+            },
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [[
+                { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ], [
+                { content: 'f2_1', styles: { 'halign': 'left' } },
+                { content: 'f3_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f2_2', styles: { 'halign': 'left' } },
+                { content: 'f3_2', styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: true', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', allowExporting: false },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0 },
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                ]
+            },
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [[
+                { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
+            ], [
+                { content: 'f1_1', styles: { 'halign': 'left' } },
+                { content: 'f3_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f3_2', styles: { 'halign': 'left' } }
+            ], [
+                { content: undefined, styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {
+            const autoTableOptions = jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Grouping - 3 columns & col_2.allowExporting: false, summary_col_3.alignByColumn: true x showInGroupFooter: false', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string', allowExporting: false },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0 },
+            ],
+            summary: {
+                groupItems: [
+                    { name: 'GroupItems 1', column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: false }
+                ]
+            },
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [[
+                { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ], [
+                { content: 'f1_1', styles: { 'halign': 'left' } },
+                { content: 'f3_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f3_2', styles: { 'halign': 'left' } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid)).then((jsPDFDocument) => {

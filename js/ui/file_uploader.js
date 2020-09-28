@@ -15,7 +15,7 @@ import Button from './button';
 import ProgressBar from './progress_bar';
 import browser from '../core/utils/browser';
 import devices from '../core/devices';
-import { addNamespace } from '../events/utils';
+import { addNamespace } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
 import themes from './themes';
@@ -127,9 +127,13 @@ class FileUploader extends Editor {
 
             uploadCustomData: {},
 
+            onBeforeSend: null,
+
             onUploadStarted: null,
 
             onUploaded: null,
+
+            onFilesUploaded: null,
 
             onProgress: null,
 
@@ -239,8 +243,10 @@ class FileUploader extends Editor {
 
         this._setUploadStrategy();
         this._createFiles();
+        this._createBeforeSendAction();
         this._createUploadStartedAction();
         this._createUploadedAction();
+        this._createFilesUploadedAction();
         this._createProgressAction();
         this._createUploadErrorAction();
         this._createUploadAbortedAction();
@@ -399,11 +405,11 @@ class FileUploader extends Editor {
         this._ensureCancelButtonInitialized(file);
     }
 
-    _setStatusMessage(file, key) {
+    _setStatusMessage(file, message) {
         setTimeout(() => {
             if(this.option('showFileList')) {
                 if(file.$statusMessage) {
-                    file.$statusMessage.text(this.option(key));
+                    file.$statusMessage.text(message);
                     file.$statusMessage.css('display', '');
                     file.progressBar.$element().remove();
                 }
@@ -411,9 +417,10 @@ class FileUploader extends Editor {
         }, FILEUPLOADER_AFTER_LOAD_DELAY);
     }
 
-    _setUploadAbortedStatusMessage(file) {
-        const key = this.option('uploadMode') === 'instantly' ? 'uploadAbortedMessage' : 'readyToUploadMessage';
-        this._setStatusMessage(file, key);
+    _getUploadAbortedStatusMessage() {
+        return this.option('uploadMode') === 'instantly'
+            ? this.option('uploadAbortedMessage')
+            : this.option('readyToUploadMessage');
     }
 
     _createFiles() {
@@ -471,12 +478,20 @@ class FileUploader extends Editor {
         return minFileSize > 0 ? fileSize >= minFileSize : true;
     }
 
+    _createBeforeSendAction() {
+        this._beforeSendAction = this._createActionByOption('onBeforeSend', { excludeValidators: ['readOnly'] });
+    }
+
     _createUploadStartedAction() {
         this._uploadStartedAction = this._createActionByOption('onUploadStarted', { excludeValidators: ['readOnly'] });
     }
 
     _createUploadedAction() {
         this._uploadedAction = this._createActionByOption('onUploaded', { excludeValidators: ['readOnly'] });
+    }
+
+    _createFilesUploadedAction() {
+        this._filesUploadedAction = this._createActionByOption('onFilesUploaded', { excludeValidators: ['readOnly'] });
     }
 
     _createProgressAction() {
@@ -992,6 +1007,13 @@ class FileUploader extends Editor {
         }
     }
 
+    _handleAllFilesUploaded() {
+        const areAllFilesLoaded = this._files.every(file => !file.isValid() || file._isError || file._isLoaded || file.isAborted);
+        if(areAllFilesLoaded) {
+            this._filesUploadedAction();
+        }
+    }
+
     _filterFiles(files) {
         if(!files.length) {
             return files;
@@ -1300,11 +1322,17 @@ class FileUploader extends Editor {
                 this.reset();
                 this._invalidate();
                 break;
+            case 'onBeforeSend':
+                this._createBeforeSendAction();
+                break;
             case 'onUploadStarted':
                 this._createUploadStartedAction();
                 break;
             case 'onUploaded':
                 this._createUploadedAction();
+                break;
+            case 'onFilesUploaded':
+                this._createFilesUploadedAction();
                 break;
             case 'onProgress':
                 this._createProgressAction();
@@ -1413,12 +1441,12 @@ class FileUploadStrategyBase {
             return;
         }
 
-        file.request && file.request.abort();
         file.isAborted = true;
+        file.request && file.request.abort();
 
-        if(this._isCustomAbortUpload()) {
+        if(this._isCustomCallback('abortUpload')) {
             const abortUpload = this.fileUploader.option('abortUpload');
-            const arg = this._createAbortUploadArgument(file);
+            const arg = this._createUploadArgument(file);
 
             let deferred = null;
             try {
@@ -1434,14 +1462,24 @@ class FileUploadStrategyBase {
         }
     }
 
-    _createAbortUploadArgument(file) {
+    _beforeSend(xhr, file) {
+        const arg = this._createUploadArgument(file);
+        this.fileUploader._beforeSendAction({
+            request: xhr,
+            file: file.value,
+            uploadInfo: arg
+        });
+        file.request = xhr;
+    }
+
+    _createUploadArgument(file) {
     }
 
     _uploadCore(file) {
     }
 
-    _isCustomAbortUpload() {
-        const callback = this.fileUploader.option('abortUpload');
+    _isCustomCallback(name) {
+        const callback = this.fileUploader.option(name);
         return callback && isFunction(callback);
     }
 
@@ -1483,32 +1521,41 @@ class FileUploadStrategyBase {
     }
 
     _onAbortHandler(file, e) {
-        this.fileUploader._setUploadAbortedStatusMessage(file);
-        this.fileUploader._uploadAbortedAction({
+        const args = {
             file: file.value,
             event: e,
-            request: file.request
-        });
+            request: file.request,
+            message: this.fileUploader._getUploadAbortedStatusMessage()
+        };
+        this.fileUploader._uploadAbortedAction(args);
+        this.fileUploader._setStatusMessage(file, args.message);
+        this.fileUploader._handleAllFilesUploaded();
     }
 
     _onErrorHandler(file, error) {
-        this.fileUploader._setStatusMessage(file, 'uploadFailedMessage');
-        this.fileUploader._uploadErrorAction({
+        const args = {
             file: file.value,
             event: undefined,
             request: file.request,
-            error
-        });
+            error,
+            message: this.fileUploader.option('uploadFailedMessage')
+        };
+        this.fileUploader._uploadErrorAction(args);
+        this.fileUploader._setStatusMessage(file, args.message);
+        this.fileUploader._handleAllFilesUploaded();
     }
 
     _onLoadedHandler(file, e) {
-        file._isLoaded = true;
-        this.fileUploader._setStatusMessage(file, 'uploadedMessage');
-        this.fileUploader._uploadedAction({
+        const args = {
             file: file.value,
             event: e,
-            request: file.request
-        });
+            request: file.request,
+            message: this.fileUploader.option('uploadedMessage')
+        };
+        file._isLoaded = true;
+        this.fileUploader._uploadedAction(args);
+        this.fileUploader._setStatusMessage(file, args.message);
+        this.fileUploader._handleAllFilesUploaded();
     }
 
     _onProgressHandler(file, e) {
@@ -1612,6 +1659,21 @@ class ChunksFileUploadStrategyBase extends FileUploadStrategyBase {
     _getEvent(e) {
         return null;
     }
+
+    _createUploadArgument(file) {
+        return this._createChunksInfo(file.chunksData);
+    }
+
+    _createChunksInfo(chunksData) {
+        return {
+            bytesUploaded: chunksData.loadedBytes,
+            chunkCount: chunksData.count,
+            customData: chunksData.customData,
+            chunkBlob: chunksData.currentChunk.blob,
+            chunkIndex: chunksData.currentChunk.index
+        };
+    }
+
 }
 
 class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
@@ -1621,9 +1683,7 @@ class DefaultChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
             url: this.fileUploader.option('uploadUrl'),
             method: this.fileUploader.option('uploadMethod'),
             headers: this.fileUploader.option('uploadHeaders'),
-            beforeSend: xhr => {
-                file.request = xhr;
-            },
+            beforeSend: xhr => this._beforeSend(xhr, file),
             upload: {
                 'onloadstart': () => this._tryRaiseStartLoad(file),
                 'onabort': () => file.onAbort.fire()
@@ -1677,24 +1737,9 @@ class CustomChunksFileUploadStrategy extends ChunksFileUploadStrategyBase {
         }
     }
 
-    _createAbortUploadArgument(file) {
-        return this._createChunksInfo(file.chunksData);
-    }
-
     _shouldHandleError(e) {
         return true;
     }
-
-    _createChunksInfo(chunksData) {
-        return {
-            bytesUploaded: chunksData.loadedBytes,
-            chunkCount: chunksData.count,
-            customData: chunksData.customData,
-            chunkBlob: chunksData.currentChunk.blob,
-            chunkIndex: chunksData.currentChunk.index
-        };
-    }
-
 }
 
 class WholeFileUploadStrategyBase extends FileUploadStrategyBase {
@@ -1743,9 +1788,7 @@ class DefaultWholeFileUploadStrategy extends WholeFileUploadStrategyBase {
             url: this.fileUploader.option('uploadUrl'),
             method: this.fileUploader.option('uploadMethod'),
             headers: this.fileUploader.option('uploadHeaders'),
-            beforeSend: xhr => {
-                file.request = xhr;
-            },
+            beforeSend: xhr => this._beforeSend(xhr, file),
             upload: {
                 'onprogress': e => this._handleProgress(file, e),
                 'onloadstart': () => file.onLoadStart.fire(),

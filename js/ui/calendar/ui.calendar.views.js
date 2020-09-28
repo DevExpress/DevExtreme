@@ -12,7 +12,9 @@ import {
     getFirstDecadeInCentury,
     sameYear,
     sameDecade,
-    sameCentury
+    sameCentury,
+    createDate,
+    createDateWithFullYear
 } from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import {
@@ -135,7 +137,7 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = new Date(date);
+            date = createDate(date);
             date.setDate(date.getDate() + 1);
             return date;
         },
@@ -188,7 +190,8 @@ const Views = {
         },
 
         _getFirstCellData: function() {
-            const data = new Date(this.option('date'));
+            const currentDate = this.option('date');
+            const data = createDate(currentDate);
 
             data.setDate(1);
             data.setMonth(0);
@@ -197,13 +200,13 @@ const Views = {
         },
 
         _getNextCellData: function(date) {
-            date = new Date(date);
+            date = createDate(date);
             date.setMonth(date.getMonth() + 1);
             return date;
         },
 
         _getCellByDate: function(date) {
-            const foundDate = new Date(date);
+            const foundDate = createDate(date);
             foundDate.setDate(1);
 
             return this._$table.find(`td[data-value='${serializeDate(foundDate, getShortDateFormat())}']`);
@@ -240,7 +243,7 @@ const Views = {
         },
 
         _isOtherView: function(cellDate) {
-            const date = new Date(cellDate);
+            const date = createDate(cellDate);
             date.setMonth(1);
 
             return !sameDecade(date, this.option('date'));
@@ -252,11 +255,11 @@ const Views = {
 
         _getFirstCellData: function() {
             const year = getFirstYearInDecade(this.option('date')) - 1;
-            return new Date(year, 0, 1);
+            return createDateWithFullYear(year, 0, 1);
         },
 
         _getNextCellData: function(date) {
-            date = new Date(date);
+            date = createDate(date);
             date.setFullYear(date.getFullYear() + 1);
             return date;
         },
@@ -264,8 +267,8 @@ const Views = {
         getNavigatorCaption: function() {
             const currentDate = this.option('date');
             const firstYearInDecade = getFirstYearInDecade(currentDate);
-            const startDate = new Date(currentDate);
-            const endDate = new Date(currentDate);
+            const startDate = createDate(currentDate);
+            const endDate = createDate(currentDate);
 
             startDate.setFullYear(firstYearInDecade);
             endDate.setFullYear(firstYearInDecade + 9);
@@ -278,7 +281,7 @@ const Views = {
         },
 
         _getCellByDate: function(date) {
-            const foundDate = new Date(date);
+            const foundDate = createDate(date);
             foundDate.setDate(1);
             foundDate.setMonth(0);
 
@@ -309,7 +312,7 @@ const Views = {
         },
 
         _isOtherView: function(cellDate) {
-            const date = new Date(cellDate);
+            const date = createDate(cellDate);
             date.setMonth(1);
 
             return !sameCentury(date, this.option('date'));
@@ -317,7 +320,7 @@ const Views = {
 
         _getCellText: function(cellDate) {
             const startDate = formatMessage(cellDate, 'yyyy');
-            const endDate = new Date(cellDate);
+            const endDate = createDate(cellDate);
 
             endDate.setFullYear(endDate.getFullYear() + 9);
 
@@ -326,17 +329,17 @@ const Views = {
 
         _getFirstCellData: function() {
             const decade = getFirstDecadeInCentury(this.option('date')) - 10;
-            return new Date(decade, 0, 1);
+            return createDateWithFullYear(decade, 0, 1);
         },
 
         _getNextCellData: function(date) {
-            date = new Date(date);
+            date = createDate(date);
             date.setFullYear(date.getFullYear() + 10);
             return date;
         },
 
         _getCellByDate: function(date) {
-            const foundDate = new Date(date);
+            const foundDate = createDate(date);
             foundDate.setDate(1);
             foundDate.setMonth(0);
             foundDate.setFullYear(getFirstYearInDecade(foundDate));
@@ -347,8 +350,8 @@ const Views = {
         getNavigatorCaption: function() {
             const currentDate = this.option('date');
             const firstDecadeInCentury = getFirstDecadeInCentury(currentDate);
-            const startDate = new Date(currentDate);
-            const endDate = new Date(currentDate);
+            const startDate = createDate(currentDate);
+            const endDate = createDate(currentDate);
 
             startDate.setFullYear(firstDecadeInCentury);
             endDate.setFullYear(firstDecadeInCentury + 99);

@@ -13,11 +13,11 @@ import {
 } from '../check_box';
 import { Widget } from '../common/widget';
 import { InkRipple } from '../common/ink_ripple';
-import { ValidationMessage } from '../validationMessage';
+import { ValidationMessage } from '../validation_message';
 
 type Mock = jest.Mock;
 
-jest.mock('../validationMessage', () => ({ ValidationMessage: () => null }));
+jest.mock('../validation_message', () => ({ ValidationMessage: () => null }));
 
 jest.mock('../../../core/devices', () => {
   const actualDevices = require.requireActual('../../../core/devices').default;

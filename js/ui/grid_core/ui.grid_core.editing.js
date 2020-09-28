@@ -12,7 +12,7 @@ import { name as doubleClickEvent } from '../../events/double_click';
 import pointerEvents from '../../events/pointer';
 import { getIndexByKey, setEmptyText, getSelectionRange, setSelectionRange, focusAndSelectElement } from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
-import { addNamespace } from '../../events/utils';
+import { addNamespace } from '../../events/utils/index';
 import dialog from '../dialog';
 import messageLocalization from '../../localization/message';
 import Button from '../button';
@@ -1145,11 +1145,6 @@ const EditingController = modules.ViewController.inherit((function() {
             that.init();
             that._resetEditColumnName();
             that._pageIndex = dataController.pageIndex();
-            that._addEditData({
-                data: {},
-                key: item.key,
-                oldData: item.data
-            });
 
             this._setEditRowKey(item.key);
         },
@@ -1410,11 +1405,13 @@ const EditingController = modules.ViewController.inherit((function() {
                 return false;
             }
 
-            that._addEditData({
-                data: {},
-                key: item.key,
-                oldData: item.data
-            });
+            if(params.column.showEditorAlways) {
+                that._addEditData({
+                    data: {},
+                    key: item.key,
+                    oldData: item.data
+                });
+            }
 
             that._pageIndex = that._dataController.pageIndex();
 

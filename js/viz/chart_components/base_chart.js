@@ -4,7 +4,7 @@ import { isDefined as _isDefined, isFunction } from '../../core/utils/type';
 import { each as _each, reverseEach as _reverseEach } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
-import { isTouchEvent, isPointerEvent } from '../../events/utils';
+import { isTouchEvent, isPointerEvent } from '../../events/utils/index';
 import BaseWidget from '../core/base_widget';
 import legendModule from '../components/legend';
 import dataValidatorModule from '../components/data_validator';
@@ -13,7 +13,6 @@ import chartThemeManagerModule from '../components/chart_theme_manager';
 import LayoutManagerModule from './layout_manager';
 import trackerModule from './tracker';
 import { map as _map, setCanvasValues as _setCanvasValues, processSeriesTemplate } from '../core/utils';
-import { when } from '../../core/utils/deferred';
 const _isArray = Array.isArray;
 
 const REINIT_REFRESH_ACTION = '_reinit';
@@ -704,29 +703,7 @@ export const BaseChart = BaseWidget.inherit({
         that._renderSeries(drawOptions, isRotated, isLegendInside);
 
         that._renderer.unlock();
-
-        const allAxes = (this._argumentAxes || []).concat(this._valueAxes || []);
-
-        if(that._changesApplying) {
-            that._changesApplying = false;
-            allAxes.forEach(function(a) {
-                a.setRenderedState(false);
-            });
-            return;
-        }
-        let syncRendering = true;
-        when.apply(this, allAxes.map(axis => axis.getTemplatesDef())).done(() => {
-            if(syncRendering) {
-                return;
-            }
-            allAxes.forEach(function(a) {
-                a.setRenderedState(true);
-            });
-            that._changesApplying = true;
-
-            that._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
-        });
-        syncRendering = false;
+        that._resolveDeferredItems();
     },
 
     _updateLegendPosition: noop,
@@ -1456,7 +1433,9 @@ export const BaseChart = BaseWidget.inherit({
 
     _stopCurrentHandling: function() {
         this._tracker.stopCurrentHandling();
-    }
+    },
+
+    _resolveDeferredItems() {}
 });
 
 REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS.forEach(function(name) {

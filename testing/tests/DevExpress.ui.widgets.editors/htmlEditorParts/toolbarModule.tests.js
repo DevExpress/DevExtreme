@@ -51,6 +51,17 @@ const CLEAR_FORMAT_CLASS = 'dx-clear-format';
 const IMAGE_FORMAT_CLASS = 'dx-image-format';
 const TOOLBAR_MULTILINE_CLASS = 'dx-toolbar-multiline';
 
+const TABLE_OPERATIONS = [
+    'insertTable',
+    'insertRowAbove',
+    'insertRowBelow',
+    'insertColumnLeft',
+    'insertColumnRight',
+    'deleteColumn',
+    'deleteRow',
+    'deleteTable'
+];
+
 const simpleModuleConfig = {
     beforeEach: function() {
         fx.off = true;
@@ -61,10 +72,22 @@ const simpleModuleConfig = {
             format: (format, value) => {
                 this.log.push({ format: format, value: value });
             },
+            focus: noop,
             on: noop,
             off: noop,
+            table: {
+                insertTable: sinon.stub(),
+                insertRowAbove: sinon.stub(),
+                insertRowBelow: sinon.stub(),
+                insertColumnLeft: sinon.stub(),
+                insertColumnRight: sinon.stub(),
+                deleteTable: sinon.stub(),
+                deleteRow: sinon.stub(),
+                deleteColumn: sinon.stub()
+            },
             getSelection: () => { return { index: 0, length: 0 }; },
-            getFormat: () => { return {}; }
+            getFormat: () => { return {}; },
+            getModule: (moduleName) => this.quillMock[moduleName]
         };
 
         this.options = {
@@ -109,11 +132,22 @@ const dialogModuleConfig = {
             },
             on: noop,
             off: noop,
+            table: {
+                insertTable: sinon.stub(),
+                insertRowAbove: sinon.stub(),
+                insertRowBelow: sinon.stub(),
+                insertColumnLeft: sinon.stub(),
+                insertColumnRight: sinon.stub(),
+                deleteTable: sinon.stub(),
+                deleteRow: sinon.stub(),
+                deleteColumn: sinon.stub()
+            },
             focus: this.focusStub,
             getSelection: noop,
             setSelection: (index, length) => { this.log.push({ setSelection: [index, length] }); },
             getFormat: () => { return {}; },
-            getLength: () => { return 1; }
+            getLength: () => { return 1; },
+            getModule: (moduleName) => this.quillMock[moduleName]
         };
         this.formDialogOptionStub = sinon.stub();
 
@@ -1089,6 +1123,41 @@ testModule('Toolbar dialogs', dialogModuleConfig, () => {
         assert.equal($fields.length, 2, 'Form with 2 fields shown');
         assert.equal(fieldsText, 'URL:Open link in new window', 'Check labels');
     });
+
+    test('show insertTable dialog', function(assert) {
+        this.options.items = ['insertTable'];
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        const $form = $(`.${FORM_CLASS}`);
+        const $fields = $form.find(`.${FIELD_ITEM_CLASS}`);
+        const fieldsText = $form.find(`.${FIELD_ITEM_LABEL_CLASS}`).text();
+
+        assert.strictEqual($fields.length, 2, 'Form with 2 fields shown');
+        assert.strictEqual(fieldsText, 'Rows:Columns:', 'Check labels');
+    });
+
+    test('do not show insertTable dialog when a table focused', function(assert) {
+        this.quillMock.getFormat = () => {
+            return {
+                table: true
+            };
+        };
+        this.quillMock.getSelection = () => true;
+
+        this.options.items = ['insertTable'];
+        new Toolbar(this.quillMock, this.options);
+        this.$element
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        const $fieldInputs = $(`.${FIELD_ITEM_CLASS} .${TEXTEDITOR_INPUT_CLASS}`).is(':visible');
+        const isFieldsVisible = Boolean($fieldInputs.length);
+
+        assert.notOk(isFieldsVisible, 'insertTable dialog is hidden');
+    });
 });
 
 testModule('Toolbar with multiline mode', simpleModuleConfig, function() {
@@ -1184,5 +1253,76 @@ testModule('Toolbar with adaptive menu', simpleModuleConfig, function() {
 
         assert.equal($separator.length, 1, 'Toolbar has a separator item');
         assert.equal($menuSeparator.length, 1, 'Toolbar has a menu separator item');
+    });
+});
+
+testModule('tables', simpleModuleConfig, function() {
+    test('render table manipulation buttons', function(assert) {
+        this.options.items = TABLE_OPERATIONS;
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+        const formatWidgetsCount = $formatWidgets.length;
+        const disabledFormatWidgetsCount = $formatWidgets.filter(`.${DISABLED_STATE_CLASS}`).length;
+
+        assert.strictEqual(formatWidgetsCount, TABLE_OPERATIONS.length, 'All table operations rendered');
+        assert.strictEqual(disabledFormatWidgetsCount, formatWidgetsCount - 1, 'All operation except the "insert table" disabled');
+
+        $formatWidgets.each((index, element) => {
+            const operationName = TABLE_OPERATIONS[index];
+            const isElementExist = Boolean($(element).find(`.dx-icon-${operationName.toLowerCase()}`).length);
+            const expectedDisabledState = operationName === 'insertTable' ? false : true;
+
+            assert.ok(isElementExist, `${operationName} item has an related icon`);
+            assert.strictEqual(
+                $(element).hasClass(DISABLED_STATE_CLASS),
+                expectedDisabledState,
+                `${operationName} item should ${expectedDisabledState ? '' : 'not'} be disabled in case the table is not focused`
+            );
+        });
+    });
+
+    test('update selection -> focus table', function(assert) {
+        this.options.items = TABLE_OPERATIONS;
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+
+        this.quillMock.getFormat = () => {
+            return { table: true };
+        };
+
+        toolbar.updateTableWidgets();
+
+        const $disabledFormatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}.${DISABLED_STATE_CLASS}`);
+        const disabledItemsCount = $disabledFormatWidgets.length;
+        const isInsertTableOperationDisabled = $disabledFormatWidgets.first().hasClass('dx-inserttable-format');
+
+        assert.strictEqual(disabledItemsCount, 1, 'table focused -> all table operation buttons are enabled (except "insertTable")');
+        assert.ok(isInsertTableOperationDisabled);
+    });
+
+    test('buttons interaction', function(assert) {
+        const simpleOperations = TABLE_OPERATIONS.slice(1);
+        this.options.items = simpleOperations;
+        this.quillMock.getFormat = () => {
+            return { table: true };
+        };
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        toolbar.updateTableWidgets();
+
+        const $formatWidgets = this.$element.find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`);
+
+        $formatWidgets.each((index, element) => {
+            const operationName = simpleOperations[index];
+            const isMethodCalled = () => this.quillMock.table[operationName].calledOnce;
+
+            assert.notOk(isMethodCalled(), `${operationName} isn't called before clicking on toolbar item`);
+
+            $(element).trigger('dxclick');
+
+            assert.ok(isMethodCalled(), `${operationName} called after click on toolbar item`);
+        });
     });
 });

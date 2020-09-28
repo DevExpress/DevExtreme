@@ -5,7 +5,7 @@ import SliderHandle from './slider/ui.slider_handle';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { applyServerDecimalSeparator } from '../core/utils/common';
-import { eventData } from '../events/utils';
+import { eventData } from '../events/utils/index';
 import messageLocalization from '../localization/message';
 
 // STYLE rangeSlider
@@ -52,32 +52,27 @@ const RangeSlider = Slider.inherit({
 
         return extend(this.callBase(), {
             leftArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleLeft(e, this.option('step'));
             },
             rightArrow: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleRight(e, this.option('step'));
             },
             pageUp: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleRight(e, this.option('step') * this.option('keyStep'));
             },
             pageDown: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
 
                 moveHandleLeft(e, this.option('step') * this.option('keyStep'));
             },
             home: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
                 const isStart = $(e.target).hasClass(RANGE_SLIDER_START_HANDLE_CLASS);
                 const valueOption = isStart ? 'start' : 'end';
                 const startOption = isStart ? 'min' : 'start';
@@ -86,8 +81,7 @@ const RangeSlider = Slider.inherit({
                 this.option(valueOption, val);
             },
             end: function(e) {
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
                 const isStart = $(e.target).hasClass(RANGE_SLIDER_START_HANDLE_CLASS);
                 const valueOption = isStart ? 'start' : 'end';
                 const endOption = isStart ? 'end' : 'max';

@@ -4,7 +4,7 @@ import { isDefined, isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
-import translator from '../../animation/translator';
+import { locate } from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
@@ -412,7 +412,7 @@ const subscribes = {
 
         each(horizontalResizables, (function(_, el) {
             const $el = $(el);
-            const position = translator.locate($el);
+            const position = locate($el);
             const appointmentData = this._appointments._getItemData($el);
 
             const area = this._appointments._calculateResizableArea({
@@ -491,13 +491,12 @@ const subscribes = {
 
         let allDay = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
 
-        const result = [];
-
         const { viewDataProvider } = workspace;
         const { groupedData } = viewDataProvider.viewData;
         const groupedDataToRender = groupedData.filter(({ dateTable }) => dateTable.length > 0);
         const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
         const endViewDate = workspace.getEndViewDateByEndDayHour();
+        const filterOptions = [];
 
         groupedDataToRender.forEach(({ groupIndex, allDayPanel }) => {
             const startDate = viewDataProvider.getGroupStartDate(groupIndex);
@@ -512,7 +511,7 @@ const subscribes = {
                 ? resourcesManager.getResourcesDataByGroups(groups)
                 : resourcesManager.getResourcesData();
 
-            const filterOptions = {
+            filterOptions.push({
                 startDayHour,
                 endDayHour,
                 min: startDate,
@@ -521,15 +520,14 @@ const subscribes = {
                 allDay: allDay,
                 firstDayOfWeek: this.getFirstDayOfWeek(),
                 recurrenceException: this._getRecurrenceException.bind(this)
-            };
-
-            const currentGroupAppointments = this._appointmentModel.filterLoadedAppointments(
-                filterOptions,
-                this.timeZoneCalculator
-            );
-
-            result.push(...currentGroupAppointments);
+            });
         });
+
+        const result = this._appointmentModel.filterLoadedVirtualAppointments(
+            filterOptions,
+            this.timeZoneCalculator,
+            workspace._getGroupCount()
+        );
 
         return result;
     },

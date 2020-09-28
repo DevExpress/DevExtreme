@@ -36,6 +36,17 @@ const dxLinearGauge = dxGauge.inherit({
         return options;
     },
 
+    _getInvertedState() {
+        return !this._area.vertical && this.option('rtlEnabled');
+    },
+
+    _prepareScaleSettings: function() {
+        const scaleOptions = this.callBase();
+        scaleOptions.inverted = this._getInvertedState();
+
+        return scaleOptions;
+    },
+
     _updateScaleTickIndent: function(scaleOptions) {
         const indentFromTick = scaleOptions.label.indentFromTick;
         const length = scaleOptions.tick.length;
@@ -89,6 +100,7 @@ const dxLinearGauge = dxGauge.inherit({
             endCoord: initialEndCoord
         };
         that._rangeContainer.vertical = vertical;
+        that._translator.setInverted(that._getInvertedState());
         that._translator.setCodomain(initialStartCoord, initialEndCoord);
     },
 

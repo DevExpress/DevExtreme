@@ -6,8 +6,8 @@ import Mentions from 'ui/html_editor/modules/mentions';
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
-import { Event as dxEvent } from 'events';
-import { normalizeKeyName } from 'events/utils';
+import { Event as dxEvent } from 'events/index';
+import { normalizeKeyName } from 'events/utils/index';
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
 const LIST_ITEM_CLASS = 'dx-list-item';

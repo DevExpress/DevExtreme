@@ -47,7 +47,7 @@ const TreeList = require('ui/tree_list');
 const TreeView = require('ui/tree_view');
 const FileUploader = require('ui/file_uploader');
 const Form = require('ui/form');
-const ValidationMessage = require('ui/validationMessage');
+const ValidationMessage = require('ui/validation_message');
 
 themes.setDefaultTimeout(0);
 

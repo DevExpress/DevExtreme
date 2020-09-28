@@ -51,7 +51,7 @@ const errors = errorUtils(coreErrors.ERROR_MESSAGES, {
     /**
     * @name ErrorsData.E4008
     */
-    E4008: 'Attempt to insert an item with the a duplicated key',
+    E4008: 'Attempt to insert an item with a duplicated key',
 
     /**
     * @name ErrorsData.E4009

@@ -4,7 +4,7 @@ import 'ui/html_editor';
 import fx from 'animation/fx';
 
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import { checkLink } from './utils.js';
+import { checkLink, prepareTableValue } from './utils.js';
 
 const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
 const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
@@ -766,4 +766,33 @@ testModule('Toolbar integration', {
         });
     });
 
+    test('Add a table via dialog', function(assert) {
+        const done = assert.async();
+        const expectedValue = '<table><tbody><tr><td>t</td></tr><tr><td><br></td></tr></tbody></table><p>est</p>';
+        const instance = $('#htmlEditor').dxHtmlEditor({
+            value: '<p>test</p>',
+            toolbar: { items: ['insertTable'] },
+            onValueChanged: ({ value }) => {
+                assert.strictEqual(prepareTableValue(value), expectedValue);
+                done();
+            }
+        }).dxHtmlEditor('instance');
+
+        instance.setSelection(1, 0);
+
+        $('#htmlEditor')
+            .find(`.${TOOLBAR_FORMAT_WIDGET_CLASS}`)
+            .trigger('dxclick');
+
+        const $inputs = $(`.${DIALOG_FORM_CLASS} .${INPUT_CLASS}`);
+
+        $inputs
+            .first()
+            .val('2')
+            .change();
+
+        $(`.${DIALOG_CLASS} .${BUTTON_CLASS}`)
+            .first()
+            .trigger('dxclick');
+    });
 });
