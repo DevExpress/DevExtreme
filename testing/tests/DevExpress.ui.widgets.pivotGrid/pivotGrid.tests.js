@@ -4586,7 +4586,44 @@ QUnit.module('Field Panel', {
         assert.strictEqual($('.dx-drag').length, 1);
     });
 
+    [true, false].forEach(showDataFields => {
+        ['standard', 'virtual'].forEach(scrollingMode => {
+            [true, false].forEach(useNative => {
+                [true, false].forEach(fieldPanelVisible => {
+                    QUnit.test(`Data area has correct height. FieldPanel.visible=${fieldPanelVisible}, showDataFields=${showDataFields}, scrollingMode=${scrollingMode},useNative=${useNative} (T933699)`, function(assert) {
+                        const clock = sinon.useFakeTimers();
+                        const pivotGrid = createPivotGrid({
+                            fieldPanel: {
+                                visible: fieldPanelVisible,
+                                showDataFields: showDataFields
+                            },
+                            scrolling: {
+                                mode: scrollingMode,
+                                useNative: useNative
+                            },
+                            height: 200,
+                            dataSource: {
+                                fields: [
+                                    { dataField: 'row', area: 'row' },
+                                    { dataField: 'column', dataType: 'date', area: 'column' },
+                                    { dataField: 'value', dataType: 'number', summaryType: 'sum', area: 'data' }
+                                ],
+                                store: [ { row: 'row', column: '2013/01/06', value: 1 } ]
+                            }
+                        });
 
+                        clock.tick();
+                        $(pivotGrid.element()).trigger('dxresize');
+
+                        const $dataAreaCell = pivotGrid.$element().find('.dx-area-data-cell').first();
+                        const expectedHeight = fieldPanelVisible ? 33 : 86;
+                        assert.roughEqual($dataAreaCell.height(), expectedHeight, 1.1, 'data area has correct height');
+                        clock.restore();
+                    });
+                });
+            });
+        });
+    });
 });
 
 QUnit.module('Tests with real timer', {}, () => {
