@@ -4615,7 +4615,7 @@ QUnit.module('Field Panel', {
 
                         const $dataAreaCell = pivotGrid.$element().find('.dx-area-data-cell').first();
                         const expectedHeight = fieldPanelVisible ? 33 : 86;
-                        assert.roughEqual($dataAreaCell.height(), expectedHeight, 1.6, 'data area has correct height');
+                        assert.roughEqual($dataAreaCell.height(), expectedHeight, 1.1, 'data area has correct height');
                         clock.restore();
                     });
                 });
