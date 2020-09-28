@@ -17,7 +17,7 @@ import $ from 'jquery';
 import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
 import 'ui/scheduler/ui.scheduler';
 import dxScheduler from 'ui/scheduler/ui.scheduler';
-import { getTimeZones } from 'ui/scheduler/utils';
+import { getTimeZones } from 'time_zone_utils';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dxSchedulerWorkSpaceDay from 'ui/scheduler/workspaces/ui.scheduler.work_space_day';
@@ -4693,14 +4693,15 @@ QUnit.module('Getting timezones', {}, () => {
     });
 
     QUnit.test('getTimeZones method should return correct offsets depending on the date', function(assert) {
-        const winter = new Date(2020, 1, 8, 1);
-        const summer = new Date(2020, 6, 8, 2);
-        let timeZones = getTimeZones(winter);
+        const winter = '2020-03-08T01:00:00-08:00';
+        const summer = '2020-03-08T02:00:00-08:00';
+
+        let timeZones = getTimeZones(new Date(winter));
         let timeZone = findTimeZone(timeZones, 'America/Los_Angeles');
 
         assert.equal(timeZone.offset, -8, 'returned offset for timeZone with DST is OK');
 
-        timeZones = getTimeZones(summer);
+        timeZones = getTimeZones(new Date(summer));
         timeZone = findTimeZone(timeZones, 'America/Los_Angeles');
 
         assert.equal(timeZone.offset, -7, 'returned offset for timeZone with DST is OK');

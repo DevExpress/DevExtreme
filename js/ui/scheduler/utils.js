@@ -1,13 +1,8 @@
 import timeZoneUtils from './utils.timeZone';
 import timeZoneDataUtils from './timezones/utils.timezones_data';
-import { isDefined } from '../../core/utils/type';
 
-const getTimeZones = (date) => {
-    if(!isDefined(date)) {
-        date = new Date();
-    }
-
-    const dateInUTC = timeZoneUtils.createUTCDateWithLocalOffset(date);
+const getTimeZones = (date = new Date()) => {
+    const dateInUTC = timeZoneUtils.createUTCDate(date);
     return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
 };
 
