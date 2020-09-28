@@ -87,7 +87,7 @@ function createObjectWithChanges(target, changes) {
     return deepExtendArraySafe(result, changes, true, true);
 }
 
-function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immutable, disableCache }) {
+function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immutable, disableCache, logError }) {
     const resultItems = immutable === true ? [...data] : data;
 
     changes.forEach(item => {
@@ -96,16 +96,16 @@ function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immuta
         !disableCache && generateDataByKeyMap(keyInfo, items);
 
         switch(item.type) {
-            case 'update': update(keyInfo, items, item.key, item.data, true, immutable); break;
-            case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true); break;
-            case 'remove': remove(keyInfo, items, item.key, true); break;
+            case 'update': update(keyInfo, items, item.key, item.data, true, immutable, logError); break;
+            case 'insert': insert(keyInfo, items, item.data, useInsertIndex && isDefined(item.index) ? item.index : -1, true, logError); break;
+            case 'remove': remove(keyInfo, items, item.key, true, logError); break;
         }
     });
     return resultItems;
 }
 
-function getErrorResult(isBatch, errorCode) {
-    return !isBatch ? rejectedPromise(errors.Error(errorCode)) : errors.log(errorCode);
+function getErrorResult(isBatch, logError, errorCode) {
+    return !isBatch ? rejectedPromise(errors.Error(errorCode)) : logError === true && errors.log(errorCode);
 }
 
 function applyChanges(data, changes, options = {}) {
@@ -121,25 +121,26 @@ function applyChanges(data, changes, options = {}) {
         data,
         changes,
         immutable,
-        disableCache: true
+        disableCache: true,
+        logError: true
     });
 }
 
-function update(keyInfo, array, key, data, isBatch, immutable) {
+function update(keyInfo, array, key, data, isBatch, immutable, logError) {
     let target;
     const extendComplexObject = true;
     const keyExpr = keyInfo.key();
 
     if(keyExpr) {
         if(hasKey(data, keyExpr) && !keysEqual(keyExpr, key, keyInfo.keyOf(data))) {
-            return getErrorResult(isBatch, 'E4017');
+            return getErrorResult(isBatch, logError, 'E4017');
         }
 
         target = getCacheValue(array, key);
         if(!target) {
             const index = indexByKey(keyInfo, array, key);
             if(index < 0) {
-                return getErrorResult(isBatch, 'E4009');
+                return getErrorResult(isBatch, logError, 'E4009');
             }
 
             target = array[index];
@@ -164,7 +165,7 @@ function update(keyInfo, array, key, data, isBatch, immutable) {
     }
 }
 
-function insert(keyInfo, array, data, index, isBatch) {
+function insert(keyInfo, array, data, index, isBatch, logError) {
     let keyValue;
     const keyExpr = keyInfo.key();
 
@@ -179,7 +180,7 @@ function insert(keyInfo, array, data, index, isBatch) {
             keyValue = obj[keyExpr] = String(new Guid());
         } else {
             if(array[indexByKey(keyInfo, array, keyValue)] !== undefined) {
-                return getErrorResult(isBatch, 'E4008');
+                return getErrorResult(isBatch, logError, 'E4008');
             }
         }
     } else {
@@ -198,7 +199,7 @@ function insert(keyInfo, array, data, index, isBatch) {
     }
 }
 
-function remove(keyInfo, array, key, isBatch) {
+function remove(keyInfo, array, key, isBatch, logError) {
     const index = indexByKey(keyInfo, array, key);
     if(index > -1) {
         array.splice(index, 1);
@@ -206,7 +207,7 @@ function remove(keyInfo, array, key, isBatch) {
     if(!isBatch) {
         return trivialPromise(key);
     } else if(index < 0) {
-        return getErrorResult(isBatch, 'E4009');
+        return getErrorResult(isBatch, logError, 'E4009');
     }
 }
 

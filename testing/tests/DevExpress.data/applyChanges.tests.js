@@ -1,6 +1,7 @@
 import { extend } from 'core/utils/extend';
 import { errors } from 'data/errors';
 import applyChanges from 'data/apply_changes';
+import { applyBatch } from 'data/array_utils';
 
 QUnit.module('Apply Changes', {
     beforeEach: function() {
@@ -164,5 +165,66 @@ QUnit.module('Apply Changes', {
         assert.equal(errorsLogSpy.getCall(0).args[0], 'E4008', 'insert error');
         assert.equal(errorsLogSpy.getCall(1).args[0], 'E4009', 'remove error');
         assert.equal(errorsLogSpy.getCall(2).args[0], 'E4009', 'update error');
+
+        errorsLogSpy.restore();
+    });
+
+    QUnit.test('applyBatch should not log errors when the logError parameter is not set to true', function(assert) {
+        // arrange
+        this.data = [
+            {
+                id: 1,
+                name: 'test1'
+            },
+            {
+                id: 2,
+                name: 'test2'
+            },
+            {
+                id: 3,
+                name: 'test3'
+            },
+            {
+                id: 4,
+                name: 'test4'
+            },
+            {
+                id: 5,
+                name: 'test5'
+            }
+        ];
+        this.changes = [
+            {
+                type: 'insert',
+                data: {
+                    id: 5,
+                    name: 'test new'
+                }
+            },
+            {
+                type: 'remove',
+                key: 6
+            },
+            {
+                type: 'update',
+                key: 7,
+                data: {
+                    name: 'new name'
+                }
+            }
+        ];
+        const keyInfo = {
+            key: () => 'id',
+            keyOf: (obj) => obj.id
+        };
+        const errorsLogSpy = sinon.spy(errors, 'log');
+
+        // act
+        applyBatch({ keyInfo, data: this.data, changes: this.changes });
+
+        // assert
+        assert.equal(errorsLogSpy.callCount, 0, 'error.log should not be called');
+
+        errorsLogSpy.restore();
     });
 });
