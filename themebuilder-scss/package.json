@@ -25,7 +25,7 @@
     "semver": "^5.6.0"
   },
   "scripts": {
-    "test": "jest --coverage --verbose",
+    "test": "jest --coverage --verbose --runInBand",
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
     "build-ts": "tsc",
