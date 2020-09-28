@@ -870,7 +870,6 @@ export const ListBase = CollectionWidget.inherit({
             case 'onPullRefresh':
             case 'onPageLoading':
                 this._createScrollViewActions();
-                this._invalidate();
                 break;
             case 'grouped':
             case 'collapsibleGroups':
