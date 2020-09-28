@@ -18,7 +18,9 @@ export const createScheduler = async (options = {}) => {
   }, true);
 };
 
-export const selectCells = (table: any, firstCell: any, secondCell: any) => ClientFunction(() => {
+export const selectCells = (
+  table: Selector, firstCell: Selector, secondCell: Selector,
+): Promise<void> => ClientFunction(() => {
   const $table = $(table());
 
   $($table).trigger(
@@ -32,7 +34,7 @@ export const selectCells = (table: any, firstCell: any, secondCell: any) => Clie
   },
 })();
 
-export const moveMouse = (table: any, cell: any) => ClientFunction(() => {
+export const moveMouse = (table: Selector, cell: Selector): Promise<void> => ClientFunction(() => {
   const $table = $(table());
 
   $($table).trigger($.Event('dxpointermove', { target: $(cell()).get(0), which: 1 }));
