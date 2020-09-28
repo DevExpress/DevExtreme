@@ -19,6 +19,7 @@ const cjsConfig = require('../../cjs.babelrc.json');
 const esmConfig = require('../../esm.babelrc.json');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const fs = require('fs');
+const normalize = require('normalize-path');
 
 require('./generator/gulpfile');
 
@@ -53,13 +54,19 @@ const createModuleConfig = (name, dir, filePath) => {
     const hasGeneratedDTS = GENERATED_TS.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;
     const hasDTS = hasRealDTS || hasGeneratedDTS;
 
-    return `{
-    "sideEffects": false,
-    "main": "${cjsFile}",` +
-    (hasDTS ? `
-    "typings": "${isIndex ? '.' : '..'}/${name.replace(/\.js$/, '')}.d.ts",` : '') + `
-    "module": "${esmFile}"
-}`;
+    const result = {
+        sideEffects: false,
+        main: normalize(cjsFile),
+        module: normalize(esmFile)
+    };
+
+    if(hasDTS) {
+        const typingFile = name.replace(/\.js$/, '.d.ts');
+
+        result['typings'] = `${isIndex ? './' : '../'}${typingFile}`;
+    }
+
+    return JSON.stringify(result, null, 2);
 };
 
 function transpile(dist, replaceWidgets) {
