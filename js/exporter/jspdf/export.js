@@ -93,9 +93,7 @@ export const Export = {
                             row[0].colSpan = row[0].colSpan ?? 1;
                             row[0].colSpan++;
                         } else {
-                            if(!isDefined(pdfCell.content)) {
-                                pdfCell.content = '';
-                            }
+                            pdfCell.content = pdfCell.content ?? '';
                             row.push(pdfCell);
                         }
                     }
