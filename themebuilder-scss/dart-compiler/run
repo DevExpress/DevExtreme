@@ -1,5 +1,0 @@
-#!/bin/bash
-pub get
-dart2native main.dart -o compiler
-
-./compiler

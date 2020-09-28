@@ -29,7 +29,8 @@
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
     "build-ts": "tsc",
-    "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources"
+    "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources",
+    "dart-server": "node dart-compiler/run.js"
   },
   "devDependencies": {
     "@types/autoprefixer": "^9.7.2",

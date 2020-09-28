@@ -15,6 +15,8 @@ class Server {
   }
 
   void handleConnection(Socket client) async {
+    print('Connection from ${client.remoteAddress.address}:${client.remotePort}');
+
     var request = await utf8.decoder.bind(client).join('');
     var options = json.decode(request);
 
