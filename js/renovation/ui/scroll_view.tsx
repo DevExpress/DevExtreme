@@ -9,7 +9,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { isNumeric } from '../../core/utils/type';
 import { Widget } from './common/widget';
-import config from '../../core/config';
+import BaseWidgetProps from '../utils/base_props';
 
 const DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = 'horizontal';
@@ -73,20 +73,16 @@ export class ScrollViewProps {
 
   @OneWay() direction: 'both' | 'horizontal' | 'vertical' = 'vertical';
 
-  @OneWay() disabled = false;
-
   @OneWay() height?: string | number | (() => (string | number));
-
-  @OneWay() rtlEnabled = config().rtlEnabled;
 
   @OneWay() width?: string | number | (() => (string | number));
 }
+type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled'>;
 
 @Component({
   view: viewFunction,
 })
-
-export default class ScrollView extends JSXComponent(ScrollViewProps) {
+export default class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() containerRef!: HTMLDivElement;
