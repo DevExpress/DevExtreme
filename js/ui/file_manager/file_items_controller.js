@@ -191,7 +191,8 @@ export default class FileItemsController {
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        const actionInfo = this._createEditActionInfo('create', parentDirectoryInfo, parentDirectoryInfo);
+        const tempDirInfo = this._createDirectoryInfoByName(name, parentDirectoryInfo);
+        const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
             () => this._resetDirectoryState(parentDirectoryInfo));
@@ -335,12 +336,12 @@ export default class FileItemsController {
         });
     }
 
-    _createEditActionInfo(name, itemInfos, directory, customData) {
-        itemInfos = Array.isArray(itemInfos) ? itemInfos : [ itemInfos ];
+    _createEditActionInfo(name, targetItemInfos, directory, customData) {
+        targetItemInfos = Array.isArray(targetItemInfos) ? targetItemInfos : [ targetItemInfos ];
         customData = customData || { };
 
-        const items = itemInfos.map(itemInfo => itemInfo.fileItem);
-        return { name, itemInfos, items, directory, customData, singleRequest: true };
+        const items = targetItemInfos.map(itemInfo => itemInfo.fileItem);
+        return { name, itemInfos: targetItemInfos, items, directory, customData, singleRequest: true };
     }
 
     _getItemInfosForUploaderFiles(files, parentDirectoryInfo) {
@@ -493,6 +494,17 @@ export default class FileItemsController {
         }
 
         return selectedDirInfo;
+    }
+
+    _createDirectoryInfoByName(name, parentDirectoryInfo) {
+        const dirPathInfo = parentDirectoryInfo.fileItem.pathInfo.slice();
+        if(!parentDirectoryInfo.fileItem.isRoot()) {
+            dirPathInfo.push({
+                name,
+                key: name
+            });
+        }
+        return this._createDirectoryInfo(new FileSystemItem(dirPathInfo, name, true), parentDirectoryInfo);
     }
 
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {
