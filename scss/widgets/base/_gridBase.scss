@@ -567,7 +567,7 @@
       padding: 0;
     }
 
-    &.dx-editor-inline-block {
+    &.dx-editor-inline-block:not(.dx-command-select) {
       &::before {
         display: inline-block;
         content: '\200b';
