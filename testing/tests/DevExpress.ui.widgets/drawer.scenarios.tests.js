@@ -30,7 +30,9 @@ openedStateModes.forEach(openedStateMode => {
         ['slide', 'expand'].forEach(revealMode => {
             [true, false].forEach(shading => {
                 [undefined, 25].forEach(minSize => {
-                    configs.push({ openedStateMode, position, revealMode, shading, minSize });
+                    [false, true].forEach(useDrawerPanelHidden => {
+                        configs.push({ openedStateMode, position, revealMode, shading, minSize, useDrawerPanelHidden });
+                    });
                 });
             });
         });
@@ -174,7 +176,7 @@ QUnit.module('zIndex conflicts', {
 });
 
 configs.forEach(config => {
-    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode}, shading: ${config.shading}, minSize: ${config.minSize})`, {
+    QUnit.module(`Scenarios (${config.openedStateMode}, ${config.position}, ${config.revealMode}, shading: ${config.shading}, minSize: ${config.minSize}, useDrawerPanelHidden: ${config.useDrawerPanelHidden}})`, {
         beforeEach() {
             this.clock = sinon.useFakeTimers();
             clearStack();
@@ -211,7 +213,18 @@ configs.forEach(config => {
         }
 
         function getFullDrawerOptions(targetOptions) {
-            return extend({ rtlEnabled: false, animationEnabled: false }, config, targetOptions);
+            if(config.useDrawerPanelHidden) {
+                document.getElementById('view').classList.add('dx-drawer-panel-hidden');
+            }
+            return extend(
+                {
+                    rtlEnabled: false,
+                    animationEnabled: false,
+                    __debugAfterWhenPanelContentRendered: (e) => {
+                        QUnit.assert.strictEqual(document.getElementById('view').classList.contains('dx-drawer-panel-hidden'), false, 'view.classList.contains(dx-drawer-panel-hidden)');
+                    }
+                },
+                config, targetOptions);
         }
 
         testOrSkip('opened: false', () => configIs('push', 'top') || configIs('overlap', ['right', 'top'], ['expand', 'slide']) && config.minSize, function(assert) {

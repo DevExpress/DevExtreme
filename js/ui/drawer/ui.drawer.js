@@ -197,6 +197,13 @@ const Drawer = Widget.inherit({
                 this._$panelContentWrapper.removeAttr('manualPosition');
                 this._$panelContentWrapper.css({ position: '', top: '', left: '', right: '', bottom: '' });
             }
+
+            this._$viewContentWrapper.children('.dx-drawer-panel-hidden').removeClass('dx-drawer-panel-hidden');
+            ///#DEBUG
+            if(this.option('__debugAfterWhenPanelContentRendered')) {
+                this.option('__debugAfterWhenPanelContentRendered')({ drawer: this });
+            }
+            ///#ENDDEBUG
         });
     },
 
