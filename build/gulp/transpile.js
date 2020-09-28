@@ -17,6 +17,7 @@ const flatMap = require('gulp-flatmap');
 const gulpIf = require('gulp-if');
 const cjsConfig = require('../../cjs.babelrc.json');
 const esmConfig = require('../../esm.babelrc.json');
+const testsConfig = require('../../testing/tests.babelrc.json');
 const fs = require('fs');
 
 require('./generator/gulpfile');
@@ -145,6 +146,6 @@ gulp.task('transpile-watch', gulp.series('version-replace', function() {
 
 gulp.task('transpile-tests', gulp.series('bundler-config', function() {
     return gulp.src(TESTS_SRC)
-        .pipe(babel(cjsConfig))
+        .pipe(babel(testsConfig))
         .pipe(gulp.dest(TESTS_PATH));
 }));
