@@ -23,3 +23,11 @@
 .option:last-child {
     margin-right: 0;
 }
+
+.template-header {
+    font-size: 14px;
+}
+
+.template-item {
+    font-size: 10px;
+}
