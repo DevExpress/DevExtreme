@@ -237,6 +237,36 @@ const TestPointerElement = TestElement.inherit({
         assert.strictEqual(gauge._valueIndicator.options.baseValue, 0);
     });
 
+    QUnit.test('Pass correct \'invert\' value into scale, when startValue < endValue and rtlEnabled = true', function(assert) {
+        new dxLinearGauge(this.container, {
+            rtlEnabled: true,
+            scale: {
+                startValue: -1000,
+                endValue: 1000
+            },
+            value: 50,
+        });
+
+        const scale = axisModule.Axis.getCall(0).returnValue;
+
+        assert.strictEqual(scale.setBusinessRange.lastCall.args[0].invert, true, 'invert passed to scale');
+    });
+
+    QUnit.test('Pass correct \'invert\' value into scale, when startValue > endValue and rtlEnabled = true', function(assert) {
+        new dxLinearGauge(this.container, {
+            rtlEnabled: true,
+            scale: {
+                startValue: 1000,
+                endValue: -1000
+            },
+            value: 50,
+        });
+
+        const scale = axisModule.Axis.getCall(0).returnValue;
+
+        assert.strictEqual(scale.setBusinessRange.lastCall.args[0].invert, false, 'XOR invert passed to scale');
+    });
+
     QUnit.module('HorizontalGauge - positioning of elements', environment);
 
     QUnit.test('Default', function(assert) {
