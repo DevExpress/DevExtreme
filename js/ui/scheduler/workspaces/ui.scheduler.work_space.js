@@ -1864,6 +1864,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         let cellHeight;
         let cellWidth;
         const $element = this.$element();
+        this._attachHoverEvents();
 
         eventsEngine.off($element, SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME);
         eventsEngine.off($element, SCHEDULER_CELL_DXDRAGLEAVE_EVENT_NAME);
