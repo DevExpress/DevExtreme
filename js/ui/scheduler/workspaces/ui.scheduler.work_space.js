@@ -1276,11 +1276,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     updateRSelection() {
-        const { coordinates } = this.virtualSelectionState.getFocusedCell(this._isVerticalGroupedWorkSpace());
+        const isVerticalGrouping = this._isVerticalGroupedWorkSpace();
+        const focusedCell = this.virtualSelectionState.getFocusedCell(isVerticalGrouping);
         const selectedCells = this.virtualSelectionState.getSelectedCells();
 
-        if(coordinates && coordinates.rowIndex !== -1) {
-            const $cell = this._dom_getDateCell(coordinates);
+        if(focusedCell) {
+            const { coordinates, cellData } = focusedCell;
+            const $cell = !isVerticalGrouping && cellData.allDay
+                ? this._dom_getAllDayPanelCell(coordinates.cellIndex)
+                : this._dom_getDateCell(coordinates);
             $cell && this._setFocusedCell($cell);
         }
 

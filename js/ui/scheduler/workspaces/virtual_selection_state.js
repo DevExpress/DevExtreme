@@ -21,7 +21,7 @@ export default class VirtualSelectionState {
     getFocusedCell(isVerticalGroupOrientation) {
         const { _focusedCell } = this;
         if(!_focusedCell) {
-            return {};
+            return undefined;
         }
 
         const columnIndex = this._getColumnIndexByCellData(_focusedCell, isVerticalGroupOrientation);
@@ -140,7 +140,7 @@ export default class VirtualSelectionState {
         const { startDate, groupIndex, allDay } = cellData;
 
         if(allDay && !isVerticalGroupOrientation) {
-            return -1;
+            return 0;
         }
 
         for(let rowIndex = 0; rowIndex < viewDataMap.length; rowIndex += 1) {
