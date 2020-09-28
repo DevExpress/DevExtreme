@@ -2720,57 +2720,59 @@ QUnit.module('Cell Templates in renovated views', () => {
     });
 });
 
-QUnit.test('SelectedCellData option should be correct when virtual scrolling is enabled', function(assert) {
-    const instance = createWrapper({
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        showAllDayPanel: true,
-        currentDate: new Date(2020, 8, 21),
-        height: 300,
-        scrolling: { mode: 'virtual' },
+if(devices.real().deviceType === 'desktop') {
+    QUnit.test('SelectedCellData option should be correct when virtual scrolling is enabled', function(assert) {
+        const instance = createWrapper({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            currentDate: new Date(2020, 8, 21),
+            height: 300,
+            scrolling: { mode: 'virtual' },
+        });
+
+        const $cells = instance.workSpace.getCells();
+        const $table = instance.workSpace.getDateTable();
+
+        $($table).trigger(
+            $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
+        );
+        $($table).trigger($.Event('dxpointermove', { target: $cells.eq(1).get(0), which: 1 }));
+
+        const firstCell = {
+            allDay: false,
+            endDate: new Date(2020, 8, 20, 0, 30),
+            groupIndex: 0,
+            index: 0,
+            startDate: new Date(2020, 8, 20, 0, 0),
+            text: '12:00 AM',
+        };
+        const bottomCell = {
+            allDay: false,
+            endDate: new Date(2020, 8, 21, 0, 0),
+            groupIndex: 0,
+            index: 329,
+            startDate: new Date(2020, 8, 20, 23, 30),
+            text: '',
+        };
+        const lastCell = {
+            allDay: false,
+            endDate: new Date(2020, 8, 21, 0, 30),
+            groupIndex: 0,
+            index: 1,
+            startDate: new Date(2020, 8, 21, 0, 0),
+            text: '',
+        };
+
+        const selectedCellData = instance.option('selectedCellData');
+
+        assert.equal(selectedCellData.length, 49, 'Correct number of selected cells');
+        assert.deepEqual(selectedCellData[0], firstCell, 'First selected cell is correct');
+        assert.deepEqual(selectedCellData[47], bottomCell, 'Bottom cell is correct');
+        assert.deepEqual(selectedCellData[48], lastCell, 'Last selected cell is correct');
     });
-
-    const $cells = instance.workSpace.getCells();
-    const $table = instance.workSpace.getDateTable();
-
-    $($table).trigger(
-        $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
-    );
-    $($table).trigger($.Event('dxpointermove', { target: $cells.eq(1).get(0), which: 1 }));
-
-    const firstCell = {
-        allDay: false,
-        endDate: new Date(2020, 8, 20, 0, 30),
-        groupIndex: 0,
-        index: 0,
-        startDate: new Date(2020, 8, 20, 0, 0),
-        text: '12:00 AM',
-    };
-    const bottomCell = {
-        allDay: false,
-        endDate: new Date(2020, 8, 21, 0, 0),
-        groupIndex: 0,
-        index: 329,
-        startDate: new Date(2020, 8, 20, 23, 30),
-        text: '',
-    };
-    const lastCell = {
-        allDay: false,
-        endDate: new Date(2020, 8, 21, 0, 30),
-        groupIndex: 0,
-        index: 1,
-        startDate: new Date(2020, 8, 21, 0, 0),
-        text: '',
-    };
-
-    const selectedCellData = instance.option('selectedCellData');
-
-    assert.equal(selectedCellData.length, 49, 'Correct number of selected cells');
-    assert.deepEqual(selectedCellData[0], firstCell, 'First selected cell is correct');
-    assert.deepEqual(selectedCellData[47], bottomCell, 'Bottom cell is correct');
-    assert.deepEqual(selectedCellData[48], lastCell, 'Last selected cell is correct');
-});
+}
 
 QUnit.test('SelectedCellData option should not change when dateTable is scrolled', function(assert) {
     const done = assert.async();
