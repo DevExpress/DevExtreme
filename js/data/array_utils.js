@@ -105,7 +105,7 @@ function applyBatch({ keyInfo, data, changes, groupCount, useInsertIndex, immuta
 }
 
 function getErrorResult(isBatch, logError, errorCode) {
-    return !isBatch ? rejectedPromise(errors.Error(errorCode)) : logError === true && errors.log(errorCode);
+    return !isBatch ? rejectedPromise(errors.Error(errorCode)) : logError && errors.log(errorCode);
 }
 
 function applyChanges(data, changes, options = {}) {
