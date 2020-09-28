@@ -25,8 +25,8 @@ const INNER_CELL_MARGIN = 5;
 const OUTER_CELL_MARGIN = 20;
 
 class SchedulerAgenda extends SchedulerWorkSpace {
-    constructor(...args) {
-        super(...args);
+    _init() {
+        super._init();
         this._activeStateUnit = undefined;
     }
 
