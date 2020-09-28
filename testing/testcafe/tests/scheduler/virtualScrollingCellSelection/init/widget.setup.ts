@@ -10,6 +10,10 @@ export const createScheduler = async (options = {}) => {
     cellDuration: 60,
     height: 300,
     scrolling: { mode: 'virtual' },
+    resources: [{
+      fieldExpr: 'resourceId0',
+      dataSource: [{ id: 0 }, { id: 1 }],
+    }],
     ...options,
   }, true);
 };

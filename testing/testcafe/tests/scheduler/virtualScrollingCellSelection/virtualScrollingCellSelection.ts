@@ -64,10 +64,6 @@ const scheduler = new Scheduler('#container');
   }).before(() => createScheduler({
     showAllDayPanel,
     groups: ['resourceId0'],
-    resources: [{
-      fieldExpr: 'resourceId0',
-      dataSource: [{ id: 0 }, { id: 1 }],
-    }],
     views: [{
       type: 'week',
       groupOrientation: 'horizontal',
@@ -96,10 +92,6 @@ const scheduler = new Scheduler('#container');
   }).before(() => createScheduler({
     showAllDayPanel,
     groups: ['resourceId0'],
-    resources: [{
-      fieldExpr: 'resourceId0',
-      dataSource: [{ id: 0 }, { id: 1 }],
-    }],
     views: [{
       type: 'week',
       groupOrientation: 'vertical',
@@ -121,10 +113,6 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when horiz
 }).before(() => createScheduler({
   showAllDayPanel: true,
   groups: ['resourceId0'],
-  resources: [{
-    fieldExpr: 'resourceId0',
-    dataSource: [{ id: 0 }, { id: 1 }],
-  }],
 }));
 
 test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when vertical grouping is used', async (t) => {
@@ -141,10 +129,6 @@ test('All-day panel\'s selected cells shouldn\'t disapppear on scroll when verti
 }).before(() => createScheduler({
   showAllDayPanel: true,
   groups: ['resourceId0'],
-  resources: [{
-    fieldExpr: 'resourceId0',
-    dataSource: [{ id: 0 }, { id: 1 }],
-  }],
   views: [{
     type: 'week',
     groupOrientation: 'vertical',
@@ -169,10 +153,6 @@ test('Selection should work correctly while scrolling', async (t) => {
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 14, 6, 6);
 }).before(() => createScheduler({
   groups: ['resourceId0'],
-  resources: [{
-    fieldExpr: 'resourceId0',
-    dataSource: [{ id: 0 }, { id: 1 }],
-  }],
 }));
 
 test('Selection should work correctly while scrolling when appointments are grouped vertically', async (t) => {
@@ -193,10 +173,6 @@ test('Selection should work correctly while scrolling when appointments are grou
   await checkSelectionWhenFocusedIsNotInViewport(t, scheduler, 12, 5, 5);
 }).before(() => createScheduler({
   groups: ['resourceId0'],
-  resources: [{
-    fieldExpr: 'resourceId0',
-    dataSource: [{ id: 0 }, { id: 1 }],
-  }],
   views: [{
     type: 'week',
     groupOrientation: 'vertical',
