@@ -350,7 +350,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             return;
         }
 
-        this._setSelectedCells($correctedCell, undefined, isMultiSelection);
+        this._setSelectedCells($correctedCell, isMultiSelection);
         this._setFocusedCell($correctedCell, updateViewData);
     }
 
@@ -375,16 +375,14 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._$focusedCell = $correctedCell;
     }
 
-    _setSelectedCells($firstCell, $lastCell, isMultiSelection) {
+    _setSelectedCells($firstCell, isMultiSelection) {
         this._releaseSelectedCells();
         this._selectedCells = [];
 
         if(this.isVirtualScrolling()) {
             this._setSelectedCellsInVirtualMode($firstCell, isMultiSelection);
         } else {
-            this._setSelectedCellsInStandardMode(
-                $firstCell, $lastCell, isMultiSelection
-            );
+            this._setSelectedCellsInStandardMode($firstCell, isMultiSelection);
         }
 
         const $selectedCells = $(this._selectedCells);
@@ -397,9 +395,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._selectionChangedAction({ selectedCellData });
     }
 
-    _setSelectedCellsInStandardMode($firstCell, $lastCell, isMultiSelection) {
+    _setSelectedCellsInStandardMode($firstCell, isMultiSelection) {
         if(isMultiSelection) {
-            const $previousCell = $lastCell || this._$prevCell;
+            const $previousCell = this._$prevCell;
             const orientation = this.option('type') === 'day'
                     && (!this.option('groups').length
                     || this.option('groupOrientation') === 'vertical')
