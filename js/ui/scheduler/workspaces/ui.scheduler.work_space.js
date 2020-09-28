@@ -449,10 +449,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             return isValidFocusedCell ? $cell : this._$focusedCell;
         }
 
-        if(!this._$focusedCell) {
-            return $cell;
-        }
-
         const $focusedCell = this._$focusedCell;
         const cellGroupIndex = this._getGroupIndexByCell($cell);
         const focusedCellGroupIndex = this._getGroupIndexByCell($focusedCell);
