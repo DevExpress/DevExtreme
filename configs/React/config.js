@@ -12,6 +12,18 @@ System.config({
         'esModule': true
     },
     /**/
+
+    /** exceljs&file-saver */
+    'devextreme/excel_exporter*': {
+        'esModule': true
+    },
+    /**/
+
+    /** jspdf&jspdf-autotable */
+    'devextreme/pdf_exporter*': {
+        'esModule': true
+    },
+    /**/
 },
   paths: {
     'npm:': '../../../../node_modules/'
