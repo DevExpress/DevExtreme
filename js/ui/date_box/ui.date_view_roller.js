@@ -58,12 +58,19 @@ const DateViewRoller = Scrollable.inherit({
         this._renderItems();
         this._renderSelectedValue();
         this._renderItemsClick();
+        this._renderScrollEvent();
         this._wrapAction('_endAction', this._endActionHandler.bind(this));
         this._renderSelectedIndexChanged();
     },
 
     _renderSelectedIndexChanged: function() {
         this._selectedIndexChanged = this._createActionByOption('onSelectedIndexChanged');
+    },
+
+    _renderScrollEvent: function() {
+        eventsEngine.on(this._$container, 'scroll', (e) => {
+            this._savedScrollEvent = e;
+        });
     },
 
     _renderContainerClick: function() {
@@ -176,6 +183,11 @@ const DateViewRoller = Scrollable.inherit({
         });
     },
 
+    _shouldScrollToNeighborItem: function() {
+        return devices.real().deviceType === 'desktop'
+            && !this._savedScrollEvent?.originalEvent;
+    },
+
     _moveTo: function(targetLocation) {
         targetLocation = this._normalizeLocation(targetLocation);
         const location = this._location();
@@ -187,7 +199,7 @@ const DateViewRoller = Scrollable.inherit({
         if(this._isVisible() && (delta.x || delta.y)) {
             this._strategy._prepareDirections(true);
 
-            if(this._animation && devices.real().deviceType !== 'desktop') {
+            if(this._animation && !this._shouldScrollToNeighborItem()) {
                 const that = this;
 
                 fx.stop(this._$content);
@@ -236,7 +248,7 @@ const DateViewRoller = Scrollable.inherit({
         const currentSelectedIndex = this.option('selectedIndex');
         let newSelectedIndex;
 
-        if(devices.real().deviceType !== 'desktop') {
+        if(!this._shouldScrollToNeighborItem()) {
             const ratio = -this._location().top / this._itemHeight();
             newSelectedIndex = Math.round(ratio);
 
