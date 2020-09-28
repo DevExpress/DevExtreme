@@ -214,14 +214,14 @@ configs.forEach(config => {
 
         function getFullDrawerOptions(targetOptions) {
             if(config.useDrawerPanelHidden) {
-                document.getElementById('view').classList.add('dx-drawer-panel-hidden');
+                document.getElementById('view').classList.add('dx-drawer-panel-avoid-flicks');
             }
             return extend(
                 {
                     rtlEnabled: false,
                     animationEnabled: false,
                     __debugAfterWhenPanelContentRendered: (e) => {
-                        QUnit.assert.strictEqual(document.getElementById('view').classList.contains('dx-drawer-panel-hidden'), false, 'view.classList.contains(dx-drawer-panel-hidden)');
+                        QUnit.assert.strictEqual(document.getElementById('view').classList.contains('dx-drawer-panel-avoid-flicks'), false, 'view.classList.contains(dx-drawer-panel-avoid-flicks)');
                     }
                 },
                 config, targetOptions);
