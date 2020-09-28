@@ -111,9 +111,9 @@ class App extends React.Component {
     const timeEstimate = Math.abs(model.start - model.end) / 36e5;
     const timeLeft = Math.floor((100 - model.progress) / 100 * timeEstimate);
 
-    return `<div style="font-size:14px"> ${model.title} </div>`
-    + `<p style="font-size:10px"> <span> Estimate: </span> ${timeEstimate} <span> hours </span> </p>`
-    + `<p style="font-size:10px"> <span> Left: </span> ${timeLeft} <span> hours </span> </p>`;
+    return `<div class="template-header"> ${model.title} </div>`
+    + `<p class="template-item"> <span> Estimate: </span> ${timeEstimate} <span> hours </span> </p>`
+    + `<p class="template-item"> <span> Left: </span> ${timeLeft} <span> hours </span> </p>`;
   }
 }
 
