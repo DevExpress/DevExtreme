@@ -221,7 +221,12 @@ const DateViewRoller = Scrollable.inherit({
 
         const currentSelectedIndexPosition = currentSelectedIndex * this._itemHeight();
         const dy = locationTop - currentSelectedIndexPosition;
-        const direction = dy > 0 || dy === 0 && currentSelectedIndex > 0 ? 1 : -1;
+
+        if(dy === 0) {
+            return currentSelectedIndex;
+        }
+
+        const direction = dy > 0 ? 1 : -1;
         const newSelectedIndex = this._fitSelectedIndexInRange(currentSelectedIndex + direction);
 
         return newSelectedIndex;
