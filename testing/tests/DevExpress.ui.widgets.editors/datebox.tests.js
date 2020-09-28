@@ -3252,20 +3252,20 @@ QUnit.module('datebox with time component', {
 
         assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
 
-        pointer.start().down().move(0, deltaY).wait(500).up();
+        pointer.start().wheel(deltaY).wait(500);
         assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
 
-        pointer.start().down().move(0, -deltaY).wait(500).up();
+        pointer.start().wheel(-deltaY).wait(500);
         assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
 
-        pointer.start().down().move(0, -deltaY).wait(500).up();
+        pointer.start().wheel(-deltaY * 3).wait(500);
         assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
 
-        pointer.start().down().move(0, deltaY).wait(500).up();
+        pointer.start().wheel(deltaY * 5).wait(500);
         assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
 
-        pointer.start().down().move(0, deltaY, 5).wait(3000).up();
-        assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
+        pointer.start().wheel(-deltaY * 10).wait(500);
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
     });
 
 

@@ -58,7 +58,7 @@ const DateViewRoller = Scrollable.inherit({
         this._renderItems();
         this._renderSelectedValue();
         this._renderItemsClick();
-        this._renderScrollEvent();
+        this._renderWheelEvent();
         this._wrapAction('_endAction', this._endActionHandler.bind(this));
         this._renderSelectedIndexChanged();
     },
@@ -67,9 +67,9 @@ const DateViewRoller = Scrollable.inherit({
         this._selectedIndexChanged = this._createActionByOption('onSelectedIndexChanged');
     },
 
-    _renderScrollEvent: function() {
-        eventsEngine.on(this._$container, 'scroll', (e) => {
-            this._savedScrollEvent = e;
+    _renderWheelEvent: function() {
+        eventsEngine.on(this._$container, 'dxmousewheel', (e) => {
+            this._isWheelScrolled = true;
         });
     },
 
@@ -185,7 +185,7 @@ const DateViewRoller = Scrollable.inherit({
 
     _shouldScrollToNeighborItem: function() {
         return devices.real().deviceType === 'desktop'
-            && !this._savedScrollEvent?.originalEvent;
+            && this._isWheelScrolled;
     },
 
     _moveTo: function(targetLocation) {
@@ -234,7 +234,7 @@ const DateViewRoller = Scrollable.inherit({
         const currentSelectedIndexPosition = currentSelectedIndex * this._itemHeight();
         const dy = locationTop - currentSelectedIndexPosition;
 
-        if(dy === 0) {
+        if(-0.1 <= dy && dy <= 0.1) {
             return currentSelectedIndex;
         }
 
@@ -244,24 +244,27 @@ const DateViewRoller = Scrollable.inherit({
         return newSelectedIndex;
     },
 
+    _getNewSelectedIndex: function(currentSelectedIndex) {
+        if(this._shouldScrollToNeighborItem()) {
+            return this._getSelectedIndexAfterScroll(currentSelectedIndex);
+        }
+
+        this._animation = true;
+        const ratio = -this._location().top / this._itemHeight();
+        return Math.round(ratio);
+    },
+
     _endActionHandler: function() {
         const currentSelectedIndex = this.option('selectedIndex');
-        let newSelectedIndex;
-
-        if(!this._shouldScrollToNeighborItem()) {
-            const ratio = -this._location().top / this._itemHeight();
-            newSelectedIndex = Math.round(ratio);
-
-            this._animation = true;
-        } else {
-            newSelectedIndex = this._getSelectedIndexAfterScroll(currentSelectedIndex);
-        }
+        const newSelectedIndex = this._getNewSelectedIndex(currentSelectedIndex);
 
         if(newSelectedIndex === currentSelectedIndex) {
             this._renderSelectedValue(newSelectedIndex);
         } else {
             this.option('selectedIndex', newSelectedIndex);
         }
+
+        this._isWheelScrolled = false;
     },
 
     _itemHeight: function() {
