@@ -257,7 +257,7 @@ $generic-grid-base-checkbox-icon-size: 16px;
       border-radius: 0;
     }
 
-    &.dx-editor-inline-block {
+    &.dx-editor-inline-block:not(.dx-command-select) {
       &::before {
         padding-top: $generic-grid-base-cell-padding;
         padding-bottom: $generic-grid-base-cell-padding;
