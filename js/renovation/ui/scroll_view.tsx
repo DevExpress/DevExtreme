@@ -67,6 +67,7 @@ export const viewFunction = ({
   </Widget>
 );
 
+/* istanbul ignore next: class has only props default */
 @ComponentBindings()
 export class ScrollViewProps {
   @Slot() children?: any;
