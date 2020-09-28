@@ -3008,8 +3008,3 @@ QUnit.test('Drag and drop item to the top of the list should not work when allow
         assert.equal($item.text(), index, 'item text');
     });
 });
-
-
-QUnit.module('option changed');
-
-
