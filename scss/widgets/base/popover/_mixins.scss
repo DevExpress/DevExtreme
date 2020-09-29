@@ -5,7 +5,7 @@
   $popover-arrow-heiht: $popover-arrow-width / 2;
 
   .dx-popover-wrapper {
-    .dx-popover-arrow:after {
+    .dx-popover-arrow::after {
       width: $popover-arrow-width / $sqrt-2;
       height: $popover-arrow-width / $sqrt-2;
     }

@@ -13,7 +13,7 @@
 $generic-popover-toolbar-padding: 15px;
 
 .dx-popover-wrapper {
-  &.dx-position-bottom .dx-popover-arrow:after {
+  &.dx-position-bottom .dx-popover-arrow::after {
     background: $popover-arrow-bg;
   }
 
@@ -25,13 +25,13 @@ $generic-popover-toolbar-padding: 15px;
     }
   }
 
-  .dx-popover-arrow:after,
-  &.dx-popover-without-title .dx-popover-arrow:after {
+  .dx-popover-arrow::after,
+  &.dx-popover-without-title .dx-popover-arrow::after {
     background: $overlay-content-bg;
   }
 }
 
-.dx-popover-arrow:after {
+.dx-popover-arrow::after {
   border: 1px solid $texteditor-border-color;
 }
 

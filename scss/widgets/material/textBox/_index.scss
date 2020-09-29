@@ -16,7 +16,7 @@
     @include dx-icon(search);
     @include dx-texteditor-icon();
 
-    &:before {
+    &::before {
       position: static;
       text-indent: 0;
       color: $textbox-search-icon-color;
@@ -37,7 +37,7 @@
     }
 
     .dx-texteditor-input,
-    .dx-placeholder:before {
+    .dx-placeholder::before {
       padding-left: $material-texteditor-icon-container-size + $material-base-standard-texteditor-input-horizontal-padding;
 
       @at-root #{selector-append(".dx-rtl", &)},
@@ -61,7 +61,7 @@
     }
 
     .dx-texteditor-input,
-    .dx-placeholder:before {
+    .dx-placeholder::before {
       padding-left: $material-texteditor-icon-container-size + $material-filled-texteditor-input-horizontal-padding;
 
       @at-root #{selector-append(".dx-rtl", &)},

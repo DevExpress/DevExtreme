@@ -95,7 +95,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
   .dx-sort-up {
     font-family: inherit;
 
-    &:before {
+    &::before {
       font-family: 'DXIcons', sans-serif;
     }
   }
@@ -186,7 +186,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
     .dx-virtual-row > td {
       position: relative;
 
-      &:before {
+      &::before {
         display: block;
         height: 100%;
         content: '';
@@ -194,7 +194,7 @@ $treelist-row-error-color: $datagrid-row-error-color;
         background-repeat: no-repeat repeat;
       }
 
-      &[style*="text-align: right"]:before {
+      &[style*="text-align: right"]::before {
         @include flip-horizontally();
       }
     }
@@ -301,11 +301,11 @@ $treelist-row-error-color: $datagrid-row-error-color;
 
     .dx-treelist-rowsview {
       .dx-virtual-row > td {
-        &:before {
+        &::before {
           @include flip-horizontally();
         }
 
-        &[style*="text-align: left"]:before {
+        &[style*="text-align: left"]::before {
           transform: scale(1);
         }
       }

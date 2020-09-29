@@ -13,7 +13,7 @@
     display: inline-block;
   }
 
-  &:before {
+  &::before {
     content: '';
     background-position: center;
     float: right;
@@ -48,7 +48,7 @@
 
 .dx-rtl {
   .dx-accordion-item-title {
-    &:before {
+    &::before {
       float: left;
     }
   }

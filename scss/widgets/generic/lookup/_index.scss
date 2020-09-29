@@ -52,7 +52,7 @@ $generic-lookup-field-padding-rtl:
   @include dx-icon-font-centered-sizing($generic-base-icon-size);
 }
 
-.dx-state-readonly .dx-lookup-field:before {
+.dx-state-readonly .dx-lookup-field::before {
   opacity: 0.5,;
 }
 
@@ -96,12 +96,12 @@ $generic-lookup-field-padding-rtl:
   }
 }
 
-.dx-invalid.dx-lookup .dx-lookup-field:after {
+.dx-invalid.dx-lookup .dx-lookup-field::after {
   @include lookup-badge-offset();
   @include dx-invalid-generic-badge();
 }
 
-.dx-valid.dx-lookup .dx-lookup-field:after {
+.dx-valid.dx-lookup .dx-lookup-field::after {
   @include lookup-badge-offset();
   @include dx-valid-generic-badge();
 }

@@ -86,7 +86,7 @@ $transparent-border: 1px solid transparent;
     }
 
     .dx-diagram-toolbox-input input,
-    .dx-diagram-toolbox-input .dx-placeholder:before {
+    .dx-diagram-toolbox-input .dx-placeholder::before {
       min-height: 0;
       font-size: 0.9em;
     }

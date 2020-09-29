@@ -228,7 +228,7 @@ $pulldown-padding: 15px;
   text-align: center;
   transform: translate(0, 0);
 
-  &:before {
+  &::before {
     content: '';
     display: inline-block;
     height: 100%;

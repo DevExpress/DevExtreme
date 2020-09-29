@@ -39,7 +39,7 @@ $slider-tooltip-arrow-height: 7px;
 .dx-slider {
   line-height: 0;
 
-  &:before {
+  &::before {
     display: inline-block;
     height: 100%;
     content: '';
@@ -49,7 +49,7 @@ $slider-tooltip-arrow-height: 7px;
   .dx-overlay-content {
     height: $slider-tooltip-content-height;
 
-    &:before {
+    &::before {
       display: none;
     }
   }

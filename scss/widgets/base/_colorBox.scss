@@ -7,14 +7,14 @@
     }
   }
 
-  .dx-placeholder:before {
+  .dx-placeholder::before {
     max-width: calc(100% - 25px);
   }
 }
 
 .dx-colorbox {
   .dx-texteditor-input-container {
-    &:before {
+    &::before {
       content: "";
       display: block;
       position: absolute;
@@ -29,7 +29,7 @@
 
   .dx-colorbox-color-is-not-defined {
     .dx-texteditor-input-container {
-      &:before {
+      &::before {
         background: none;
       }
     }
@@ -92,7 +92,7 @@
         right: 13px;
       }
 
-      .dx-colorbox-input-container:before {
+      .dx-colorbox-input-container::before {
         left: auto;
         right: 14px;
       }

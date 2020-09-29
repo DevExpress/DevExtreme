@@ -138,7 +138,7 @@ $material-pivotgridfieldchooser-field-min-height: 36px;
 
     font-size: $material-pivotgrid-headers-font-size;
 
-    &:before {
+    &::before {
       visibility: hidden;
     }
   }

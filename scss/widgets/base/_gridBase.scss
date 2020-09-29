@@ -700,7 +700,7 @@
         }
 
         .dx-texteditor-input,
-        .dx-placeholder:before {
+        .dx-placeholder::before {
           padding-left: $grid-texteditor-input-padding;
         }
       }
@@ -1102,7 +1102,7 @@
       .dx-editor-cell .dx-editor-with-menu {
         .dx-texteditor {
           .dx-texteditor-input,
-          .dx-placeholder:before {
+          .dx-placeholder::before {
             padding-right: $grid-texteditor-input-padding;
           }
         }

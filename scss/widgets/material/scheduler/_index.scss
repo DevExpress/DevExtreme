@@ -56,7 +56,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 .dx-scheduler-time-panel-cell {
   height: $material-scheduler-workspace-date-table-cell-height;
 
-  &:after {
+  &::after {
     content: none;
   }
 
@@ -80,7 +80,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     padding-right: 0;
   }
 
-  &.dx-scheduler-time-panel-current-time-cell:before {
+  &.dx-scheduler-time-panel-current-time-cell::before {
     content: none;
   }
 }
@@ -164,7 +164,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 
   .dx-scheduler-date-time-indicator {
-    &:before {
+    &::before {
       display: none;
     }
 
@@ -238,7 +238,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 
   &.dx-scheduler-header-panel-current-time-cell {
-    &:before {
+    &::before {
       content: none;
     }
   }
@@ -383,7 +383,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     min-width: auto;
     width: auto;
 
-    &:before {
+    &::before {
       display: none;
     }
 
@@ -451,11 +451,11 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     }
 
     &.dx-tab-selected {
-      &:before {
+      &::before {
         bottom: 0;
       }
 
-      &:after {
+      &::after {
         content: "";
         display: inline-block;
         height: 100%;
@@ -471,7 +471,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 }
 
 .dx-scheduler-view-switcher.dx-dropdownmenu {
-  &:before {
+  &::before {
     display: none;
   }
 
@@ -555,7 +555,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
 .dx-scheduler-header-panel { // stylelint-disable-line no-duplicate-selectors
   .dx-scheduler-group-row {
-    &:before {
+    &::before {
       border-right: 1px solid $scheduler-base-border-color;
     }
   }
@@ -766,7 +766,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
         padding-bottom: $material-scheduler-header-panel-table-cell-height * 2;
         margin-bottom: -($material-scheduler-header-panel-table-cell-height * 2);
 
-        &:before {
+        &::before {
           height: $material-scheduler-header-panel-table-cell-height * 2 + 1;
           margin-top: -($material-scheduler-header-panel-table-cell-height * 2 + 1);
         }
@@ -784,7 +784,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   .dx-scheduler-all-day-title {
     background-color: $scheduler-alldaypanel-bg;
 
-    &:before {
+    &::before {
       background-color: $scheduler-workspace-background-color,;
     }
   }
@@ -834,7 +834,7 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
     .dx-scheduler-group-header-content {
       padding-top: 2px;
 
-      &:before {
+      &::before {
         display: none;
       }
     }

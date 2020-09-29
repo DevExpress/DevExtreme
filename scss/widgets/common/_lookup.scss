@@ -20,7 +20,7 @@
   }
 
   &:not(.dx-rtl) {
-    .dx-lookup-field-wrapper:before {
+    .dx-lookup-field-wrapper::before {
       display: inline-block;
       height: 100%;
       content: '';
@@ -29,7 +29,7 @@
   }
 
   .dx-rtl {
-    .dx-lookup-field-wrapper:after {
+    .dx-lookup-field-wrapper::after {
       display: inline-block;
       height: 100%;
       content: '';
@@ -48,7 +48,7 @@
 
   @include dx-overflow();
 
-  &:before {
+  &::before {
     content: ".";
     color: transparent;
     display: inline-block;

@@ -59,7 +59,7 @@ $generic-accordion-disabled-opacity: 0.5;
   & > .dx-accordion-item-title {
     background-color: $accordion-item-title-opened-bg;
 
-    &:before {
+    &::before {
       content: "\f014";
     }
   }
@@ -78,7 +78,7 @@ $generic-accordion-disabled-opacity: 0.5;
   padding: $generic-accordion-title-padding;
   font-size: $generic-s-font-size;
 
-  &:before {
+  &::before {
     font-weight: normal;
     color: $accordion-icon-color;
     content: "\f016";
@@ -124,7 +124,7 @@ $generic-accordion-disabled-opacity: 0.5;
 
 .dx-rtl {
   .dx-accordion-item-title {
-    &:before {
+    &::before {
       margin-left: 0;
       margin-right: $generic-base-icon-size / 2;
     }

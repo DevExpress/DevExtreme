@@ -44,7 +44,7 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 
     width: $treelist-empty-space-width;
 
-    &:before {
+    &::before {
       visibility: hidden;
     }
   }
@@ -59,7 +59,7 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 
     cursor: pointer;
 
-    &:before {
+    &::before {
       left: 0;
       margin-left: -$treelist-expanded-icon-margin-left;
       margin-top: -$treelist-icon-margin-top;
@@ -72,7 +72,7 @@ $treelist-icon-container-padding-right: $material-grid-base-checkbox-size + $mat
 
     cursor: pointer;
 
-    &:before {
+    &::before {
       left: 0;
       margin-left: -$treelist-collapsed-icon-margin-left;
       margin-top: -$treelist-icon-margin-top;

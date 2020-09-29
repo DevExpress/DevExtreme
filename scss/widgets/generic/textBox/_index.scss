@@ -18,7 +18,7 @@
 
     font-size: $generic-texteditor-icon-size - 1;
 
-    &:before {
+    &::before {
       position: static;
       text-indent: 0;
       color: $textbox-search-icon-color;
@@ -28,7 +28,7 @@
   }
 
   .dx-texteditor-input,
-  .dx-placeholder:before {
+  .dx-placeholder::before {
     padding-left: $generic-texteditor-icon-container-size;
 
     @at-root #{selector-append(".dx-rtl", &)},
@@ -39,7 +39,7 @@
 
   &.dx-editor-underlined {
     .dx-texteditor-input,
-    .dx-placeholder:before {
+    .dx-placeholder::before {
       @at-root #{selector-append(".dx-rtl", &)},
       .dx-rtl & {
         padding-right: 0;

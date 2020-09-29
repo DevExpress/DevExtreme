@@ -152,7 +152,7 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
 
 @mixin texteditor-container-offset() {
   .dx-texteditor-container {
-    &:after {
+    &::after {
       right: $generic-dropdowneditor-invalid-badge-offset;
 
       @at-root #{selector-append(".dx-rtl", &)},
@@ -165,7 +165,7 @@ $generic-dropdowneditor-invalid-badge-size: $generic-invalid-badge-size + $gener
 
   &.dx-show-clear-button:not(.dx-texteditor-empty) {
     .dx-texteditor-container {
-      &:after {
+      &::after {
         right: $generic-dropdowneditor-invalid-badge-with-clear-offset;
 
         @at-root #{selector-append(".dx-rtl", &)},
