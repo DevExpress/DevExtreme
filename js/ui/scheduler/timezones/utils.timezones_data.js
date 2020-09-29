@@ -14,7 +14,7 @@ const timeZoneDataUtils = {
         const timeZones = this._timeZones.map((timezone) => {
             const offset = this.getUtcOffset(timezone.offsets, timezone.offsetIndices, timezone.untils, timestamp);
 
-            const title = `(GMT ${this.formatOffset(offset)}) ${timezone.id}`;
+            const title = `(GMT ${this.formatOffset(offset)}) ${this.formatId(timezone.id)}`;
 
             return {
                 offset: offset,
@@ -35,6 +35,10 @@ const timeZoneDataUtils = {
         const minutesString = minutesInDecimal > 0 ? `:${minutesInDecimal * 60}` : ':00';
 
         return signString + hoursString + minutesString;
+    },
+
+    formatId: function(id) {
+        return id.split('/').join(' - ').split('_').join(' ');
     },
 
     getTimezoneById: function(id) {
