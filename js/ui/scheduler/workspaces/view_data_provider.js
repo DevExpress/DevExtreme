@@ -154,7 +154,8 @@ class ViewDataGenerator {
                 horizontalGroupsCount, groupOrientation, this._workspace.isGroupedByDate(),
                 rowIndexInGroup, columnIndex, cellCount,
             );
-            cellDataValue.key = this._getKeyByDateAndGroup(cellDataValue.startDate, cellDataValue.groupIndex);
+
+            cellDataValue.key = this._getKeyByRowAndColumn(rowIndex, columnIndex, cellCount);
 
             cellsRow.push(cellDataValue);
         }
@@ -179,13 +180,8 @@ class ViewDataGenerator {
         return index;
     }
 
-    _getKeyByDateAndGroup(date, groupIndex) {
-        const key = date.getTime();
-        if(!groupIndex) {
-            return key.toString();
-        }
-
-        return (key + groupIndex).toString();
+    _getKeyByRowAndColumn(rowIndex, columnIndex, cellCount) {
+        return rowIndex * cellCount + columnIndex;
     }
 
     generateGroupedDataMap(viewDataMap) {
