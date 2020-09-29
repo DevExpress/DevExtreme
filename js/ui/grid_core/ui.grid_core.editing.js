@@ -659,6 +659,10 @@ const EditingController = modules.ViewController.inherit((function() {
 
             const needResetIndexes = editMode === EDIT_MODE_BATCH || isPageChanged && this.option('scrolling.mode') !== 'virtual';
 
+            if(!isDefined(this._pageIndex)) {
+                return;
+            }
+
             if(!this.isCellOrBatchEditMode()) {
                 this.resetChanges();
                 this.init();
