@@ -58,12 +58,19 @@ const DateViewRoller = Scrollable.inherit({
         this._renderItems();
         this._renderSelectedValue();
         this._renderItemsClick();
+        this._renderWheelEvent();
         this._wrapAction('_endAction', this._endActionHandler.bind(this));
         this._renderSelectedIndexChanged();
     },
 
     _renderSelectedIndexChanged: function() {
         this._selectedIndexChanged = this._createActionByOption('onSelectedIndexChanged');
+    },
+
+    _renderWheelEvent: function() {
+        eventsEngine.on(this._$container, 'dxmousewheel', (e) => {
+            this._isWheelScrolled = true;
+        });
     },
 
     _renderContainerClick: function() {
@@ -176,6 +183,11 @@ const DateViewRoller = Scrollable.inherit({
         });
     },
 
+    _shouldScrollToNeighborItem: function() {
+        return devices.real().deviceType === 'desktop'
+            && this._isWheelScrolled;
+    },
+
     _moveTo: function(targetLocation) {
         targetLocation = this._normalizeLocation(targetLocation);
         const location = this._location();
@@ -187,7 +199,7 @@ const DateViewRoller = Scrollable.inherit({
         if(this._isVisible() && (delta.x || delta.y)) {
             this._strategy._prepareDirections(true);
 
-            if(this._animation && devices.real().deviceType !== 'desktop') {
+            if(this._animation && !this._shouldScrollToNeighborItem()) {
                 const that = this;
 
                 fx.stop(this._$content);
@@ -216,35 +228,48 @@ const DateViewRoller = Scrollable.inherit({
         return Math.max(Math.min(index, itemsCount - 1), 0);
     },
 
+    _isInNullNeighborhood: function(x) {
+        const EPS = 0.1;
+        return -EPS <= x && x <= EPS;
+    },
+
     _getSelectedIndexAfterScroll: function(currentSelectedIndex) {
         const locationTop = -this._location().top;
 
         const currentSelectedIndexPosition = currentSelectedIndex * this._itemHeight();
         const dy = locationTop - currentSelectedIndexPosition;
-        const direction = dy > 0 || dy === 0 && currentSelectedIndex > 0 ? 1 : -1;
+
+        if(this._isInNullNeighborhood(dy)) {
+            return currentSelectedIndex;
+        }
+
+        const direction = dy > 0 ? 1 : -1;
         const newSelectedIndex = this._fitSelectedIndexInRange(currentSelectedIndex + direction);
 
         return newSelectedIndex;
     },
 
+    _getNewSelectedIndex: function(currentSelectedIndex) {
+        if(this._shouldScrollToNeighborItem()) {
+            return this._getSelectedIndexAfterScroll(currentSelectedIndex);
+        }
+
+        this._animation = true;
+        const ratio = -this._location().top / this._itemHeight();
+        return Math.round(ratio);
+    },
+
     _endActionHandler: function() {
         const currentSelectedIndex = this.option('selectedIndex');
-        let newSelectedIndex;
-
-        if(devices.real().deviceType !== 'desktop') {
-            const ratio = -this._location().top / this._itemHeight();
-            newSelectedIndex = Math.round(ratio);
-
-            this._animation = true;
-        } else {
-            newSelectedIndex = this._getSelectedIndexAfterScroll(currentSelectedIndex);
-        }
+        const newSelectedIndex = this._getNewSelectedIndex(currentSelectedIndex);
 
         if(newSelectedIndex === currentSelectedIndex) {
             this._renderSelectedValue(newSelectedIndex);
         } else {
             this.option('selectedIndex', newSelectedIndex);
         }
+
+        this._isWheelScrolled = false;
     },
 
     _itemHeight: function() {
