@@ -91,7 +91,7 @@ describe('DateTableCellBase', () => {
         [true, false].forEach((isLastGroupCell) => {
           ['some-class', undefined].forEach((className) => {
             it(`should call 'getGroupCellClasses' correctly if isFirstGroupCell:
-              ${isFirstGroupCell}, isLastCell: ${isLastGroupCell}, className: ${className}`, () => {
+              ${isFirstGroupCell}, isLastGroupCell: ${isLastGroupCell}, className: ${className}`, () => {
               const cellBase = new CellBase({
                 isFirstGroupCell,
                 isLastGroupCell,
