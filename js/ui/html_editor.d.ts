@@ -316,7 +316,7 @@ export interface dxHtmlEditorMediaResizing {
     /**
      * @docid dxHtmlEditorMediaResizing.allowedTargets
      * @type Array<string>
-     * @default ["images"]
+     * @default ["image"]
      * @prevFileNamespace DevExpress.ui
      * @public
      */
