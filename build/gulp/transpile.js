@@ -48,8 +48,9 @@ const GENERATED_TS = [
 const createModuleConfig = (name, dir, filePath) => {
     const isIndex = name === 'index.js';
     const relative = path.join('./', dir.replace(SRC_DIR, ''), name);
-    const esmFile = path.relative(relative, path.join('./esm', relative));
-    const cjsFile = path.relative(relative, path.join('./cjs', relative));
+    const currentPath = isIndex ? path.join(relative, '../') : relative;
+    const esmFile = path.relative(currentPath, path.join('./esm', relative));
+    const cjsFile = path.relative(currentPath, path.join('./cjs', relative));
     const hasRealDTS = fs.existsSync(filePath.replace(/\.js$/, '.d.ts'));
     const hasGeneratedDTS = GENERATED_TS.indexOf(relative.replace(/\.js$/, '.d.ts')) !== -1;
     const hasDTS = hasRealDTS || hasGeneratedDTS;
