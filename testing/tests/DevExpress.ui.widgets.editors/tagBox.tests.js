@@ -1453,14 +1453,15 @@ QUnit.module('placeholder', () => {
             }
         });
 
-        const $input = $tagBox.find('.dx-texteditor-input');
+        let $input = $tagBox.find('.dx-texteditor-input');
         const keyboard = keyboardMock($input);
 
         keyboard
             .type('123')
             .press('enter');
+
+        $input = $tagBox.find('.dx-texteditor-input');
         $input.trigger('blur');
-        $input.trigger('focusout');
 
         const $placeholder = $tagBox.find('.dx-placeholder');
         assert.notOk($placeholder.is(':visible'), 'placeholder is not visible');
