@@ -769,6 +769,7 @@ export const ListBase = CollectionWidget.inherit({
             this._$nextButton.remove();
             this._$nextButton = null;
         }
+        delete this._inkRipple;
         this.callBase.apply(this, arguments);
     },
 
@@ -855,6 +856,7 @@ export const ListBase = CollectionWidget.inherit({
             case 'bounceEnabled':
             case 'scrollByContent':
             case 'scrollByThumb':
+            case 'useNativeScrolling':
             case 'scrollingEnabled':
             case 'pullRefreshEnabled':
                 this._initScrollView();
@@ -869,7 +871,6 @@ export const ListBase = CollectionWidget.inherit({
             case 'onPullRefresh':
             case 'onPageLoading':
                 this._createScrollViewActions();
-                this._invalidate();
                 break;
             case 'grouped':
             case 'collapsibleGroups':
