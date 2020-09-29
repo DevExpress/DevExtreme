@@ -25,7 +25,11 @@ require('./generator/gulpfile');
 
 const GLOB_TS = require('./ts').GLOB_TS;
 const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.{tsx,ts}', '!js/renovation/code_coverage/**/*.*'];
-const TRANSPILE_SRC = SRC.concat('!js/bundles/**/*');
+const TRANSPILE_SRC = SRC.concat([
+    '!js/bundles/**/*',
+    '!js/viz/docs/**/*',
+    '!**/*.json'
+]);
 const BANDLES_SRC = ['js/bundles/**/*.js'];
 const TESTS_PATH = 'testing';
 const TESTS_SRC = TESTS_PATH + '/**/*.js';

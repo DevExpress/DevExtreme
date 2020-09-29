@@ -25,7 +25,10 @@ const TRANSPILED_GLOBS = [
     '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/viz/docs/*.js'
 ];
 
-const TRANSPILED_PROD_RENOVATION_JSON_GLOB = context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.json';
+const TRANSPILED_PROD_RENOVATION_JSON_GLOB = [
+    `${context.TRANSPILED_PROD_RENOVATION_PATH}/**/*.json`,
+    `!${context.TRANSPILED_PROD_RENOVATION_PATH}/viz/vector_map.utils/**/*`
+];
 
 const JSON_GLOBS = [
     'js/**/*.json',
