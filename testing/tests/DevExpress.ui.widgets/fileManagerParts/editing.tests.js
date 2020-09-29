@@ -4,7 +4,7 @@ import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import ErrorCode from 'file_management/errors';
-import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
+import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader, NoDuplicatesFileProvider } from '../../../helpers/fileManagerHelpers.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 
 
@@ -714,6 +714,30 @@ QUnit.module('Editing operations', moduleConfig, () => {
 
         itemViewPanel.trigger('dragleave');
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+    });
+
+    test('create directory duplicate leads to an error with correct text', function(assert) {
+        const folderName = 'Folder 1';
+        this.wrapper.getInstance().option({
+            fileSystemProvider: new NoDuplicatesFileProvider(),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        const initialItemsLength = this.wrapper.getRowsInDetailsView().length;
+        this.wrapper.getToolbarButton('New directory').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val(folderName).trigger('change');
+        this.wrapper.getDialogButton('Create').trigger('dxclick');
+        this.clock.tick(800);
+
+        const items = this.wrapper.getRowsInDetailsView();
+        assert.strictEqual(items.length, initialItemsLength, 'No items added');
+        assert.strictEqual(this.wrapper.findDetailsItem(folderName).length, 1, 'No items added');
+        assert.ok(this.progressPanelWrapper.getInfos()[0].details[0].hasError, 'Info has error');
+        assert.strictEqual(this.progressPanelWrapper.getInfos()[0].details[0].errorText, `Directory '${folderName}' already exists.`, 'Error text is correct');
     });
 
 });

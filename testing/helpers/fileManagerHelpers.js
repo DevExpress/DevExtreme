@@ -2,6 +2,8 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import { deserializeDate } from 'core/utils/date_serialization';
 import FileSystemItem from 'file_management/file_system_item';
+import CustomFileSystemProvider from 'file_management/custom_provider';
+import ObjectFileSystemProvider from 'file_management/object_provider';
 
 import FileReaderMock from './fileManager/file_reader.mock.js';
 
@@ -729,6 +731,37 @@ export const createHugeFileSystem = () => {
     }
     return result;
 };
+
+export class NoDuplicatesFileProvider extends CustomFileSystemProvider {
+    constructor() {
+        const providerPredefinedOptions = {
+            getItems: function(item) {
+                return this._realProviderInstance.getItems(item);
+            },
+            createDirectory: function(parentDir, name) {
+                return this._executeIfItemNotExists(() => this._realProviderInstance.createDirectory(parentDir, name), 3, name, parentDir);
+            },
+        };
+
+        super(providerPredefinedOptions);
+        this._realProviderInstance = new ObjectFileSystemProvider({ data: createTestFileSystem() });
+    }
+
+    _executeIfItemNotExists(onSuccess, errorId, itemName, parentDir) {
+        const promise = new $.Deferred();
+
+        this.getItems(parentDir).then(items => {
+            const duplicateItems = items.filter(i => i.name === itemName);
+            if(duplicateItems.length !== 0) {
+                this.targetItem = duplicateItems[0];
+                promise.reject({ errorId, fileItem: this.targetItem }).promise();
+            } else {
+                promise.resolve(onSuccess()).promise();
+            }
+        });
+        return promise.promise();
+    }
+}
 
 export const createUploaderFiles = count => {
     const result = [];
