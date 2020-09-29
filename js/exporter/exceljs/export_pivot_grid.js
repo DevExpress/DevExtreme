@@ -19,6 +19,10 @@ const privateOptions = {
 
     _needMergeRange: function() {
         return true;
+    },
+
+    _renderLoadPanel: function(component) {
+        component._renderLoadPanel(component._dataArea.groupElement(), component.$element());
     }
 };
 

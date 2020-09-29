@@ -6550,8 +6550,10 @@ QUnit.module('LoadPanel', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             let actualLoadPanelSettingsOnExporting;
+            let loadPanelOnShownHandlerCallCount = 0;
 
             const loadPanelOnShownHandler = () => {
+                loadPanelOnShownHandlerCallCount++;
                 actualLoadPanelSettingsOnExporting = extend({}, dataGrid.option('loadPanel'));
             };
 
@@ -6564,6 +6566,7 @@ QUnit.module('LoadPanel', moduleConfig, () => {
             }
 
             exportDataGrid({ component: dataGrid, worksheet: this.worksheet, loadPanel: loadPanelConfig }).then(() => {
+                assert.strictEqual(loadPanelOnShownHandlerCallCount, 1, 'loadPanel should be shown on Exporting');
                 assert.deepEqual(actualLoadPanelSettingsOnExporting, expectedLoadPanelSettingsOnExporting, 'dataGrid loadPanel settings on exporting');
                 assert.deepEqual(dataGrid.option('loadPanel'), initialLoadPanelSettings, 'dataGrid loadPanel settings restored after exporting');
                 done();
