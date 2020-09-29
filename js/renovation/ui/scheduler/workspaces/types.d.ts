@@ -8,6 +8,8 @@ export interface ViewCellData {
   groups?: object;
   groupIndex?: number;
   index: number;
+  isFirstGroupCell: boolean;
+  isLastGroupCell: boolean;
 }
 
 interface ViewData {

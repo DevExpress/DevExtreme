@@ -29,12 +29,12 @@ export const addHeightToStyle = (
 };
 
 export const getGroupCellClasses = (
-  isFirstCell: boolean | undefined = false,
-  isLastCell: boolean | undefined = false,
+  isFirstGroupCell: boolean | undefined = false,
+  isLastGroupCell: boolean | undefined = false,
   className = '',
 ): string => combineClasses({
-  'dx-scheduler-first-group-cell': isFirstCell,
-  'dx-scheduler-last-group-cell': isLastCell,
+  'dx-scheduler-first-group-cell': isFirstGroupCell,
+  'dx-scheduler-last-group-cell': isLastGroupCell,
   [className]: true,
 });
 

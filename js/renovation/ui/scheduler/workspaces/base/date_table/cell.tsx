@@ -9,8 +9,8 @@ export const viewFunction = (viewModel: DateTableCellBase): JSX.Element => (
   <Cell
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    isFirstCell={viewModel.props.isFirstCell}
-    isLastCell={viewModel.props.isLastCell}
+    isFirstGroupCell={viewModel.props.isFirstGroupCell}
+    isLastGroupCell={viewModel.props.isLastGroupCell}
     contentTemplate={viewModel.props.dataCellTemplate}
     contentTemplateProps={viewModel.dataCellTemplateProps}
     className={viewModel.classes}

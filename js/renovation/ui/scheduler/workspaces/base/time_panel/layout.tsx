@@ -33,12 +33,10 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
               </CellBase>
             </Row>
           )}
-          {dateTable.map((cellsRow, rowIndex) => {
+          {dateTable.map((cellsRow) => {
             const { cellCountInGroupRow } = viewModel.props.viewData!;
-            const isFirstCell = rowIndex === 0;
-            const isLastCell = rowIndex === dateTable.length - 1;
             const {
-              groups, startDate, text, index: cellIndex,
+              groups, startDate, text, index: cellIndex, isFirstGroupCell, isLastGroupCell,
             } = cellsRow[0];
 
             return (
@@ -51,8 +49,8 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
                   text={text}
                   groups={viewModel.isVerticalGroupOrientation ? groups : undefined}
                   groupIndex={viewModel.isVerticalGroupOrientation ? groupIndex : undefined}
-                  isFirstCell={isFirstCell}
-                  isLastCell={isLastCell}
+                  isFirstGroupCell={viewModel.isVerticalGroupOrientation && isFirstGroupCell}
+                  isLastGroupCell={viewModel.isVerticalGroupOrientation && isLastGroupCell}
                   index={Math.floor(cellIndex / cellCountInGroupRow)}
                   timeCellTemplate={viewModel.props.timeCellTemplate}
                 />

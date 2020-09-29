@@ -110,6 +110,8 @@ class ViewDataGenerator {
             horizontalGroupsCount,
             rowCountInGroup,
             groupOrientation,
+            cellCountInGroupRow,
+            realGroupCount,
         } = options;
         const viewCellsData = [];
 
@@ -131,6 +133,13 @@ class ViewDataGenerator {
                     rowIndex % rowCountInGroup, columnIndex, cellCount,
                 );
 
+                cellDataValue.isFirstGroupCell = this._isFirstGroupCell(
+                    rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, realGroupCount,
+                );
+                cellDataValue.isLastGroupCell = this._isLastGroupCell(
+                    rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, realGroupCount
+                );
+
                 viewCellsData[i].push(cellDataValue);
             }
         }
@@ -143,17 +152,32 @@ class ViewDataGenerator {
             return null;
         }
 
-        const { horizontalGroupsCount, groupOrientation } = options;
+        const {
+            horizontalGroupsCount,
+            groupOrientation,
+            rowCountInGroup,
+            cellCountInGroupRow,
+            realGroupCount,
+        } = options;
 
         const allDayPanel = [];
 
         for(let columnIndex = 0; columnIndex < cellCount; ++columnIndex) {
             const rowIndex = Math.max(groupIndex * rowCount, 0);
             const cellDataValue = this.workspace._getAllDayCellData(undefined, rowIndex, columnIndex, groupIndex).value;
+
             cellDataValue.index = this._calculateCellIndex(
                 horizontalGroupsCount, groupOrientation, this._workspace.isGroupedByDate(),
                 0, columnIndex, cellCount,
             );
+
+            cellDataValue.isFirstGroupCell = this._isFirstGroupCell(
+                rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, realGroupCount,
+            );
+            cellDataValue.isLastGroupCell = this._isLastGroupCell(
+                rowIndex, columnIndex, rowCountInGroup, cellCountInGroupRow, realGroupCount
+            );
+
             allDayPanel.push(cellDataValue);
         }
 
@@ -212,6 +236,30 @@ class ViewDataGenerator {
         });
 
         return groupedDataMap;
+    }
+
+    _isFirstGroupCell(rowIndex, columnIndex, singleGroupRowCount, singleGroupColumnCount, groupCount) {
+        if(this.workspace.isGroupedByDate()) {
+            return columnIndex % groupCount === 0;
+        }
+
+        if(this.workspace._isHorizontalGroupedWorkSpace() || groupCount === 0) {
+            return columnIndex % singleGroupColumnCount === 0;
+        }
+
+        return rowIndex % singleGroupRowCount === 0;
+    }
+
+    _isLastGroupCell(rowIndex, columnIndex, singleGroupRowCount, singleGroupColumnCount, groupCount) {
+        if(this.workspace.isGroupedByDate()) {
+            return (columnIndex + 1) % groupCount === 0;
+        }
+
+        if(this.workspace._isHorizontalGroupedWorkSpace() || groupCount === 0) {
+            return (columnIndex + 1) % singleGroupColumnCount === 0;
+        }
+
+        return (rowIndex + 1) % singleGroupRowCount === 0;
     }
 }
 

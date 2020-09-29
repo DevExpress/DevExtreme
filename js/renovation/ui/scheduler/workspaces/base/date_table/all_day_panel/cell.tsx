@@ -13,8 +13,8 @@ export const viewFunction = (viewModel: AllDayPanelCell): JSX.Element => (
     groups={viewModel.props.groups}
     groupIndex={viewModel.props.groupIndex}
     allDay
-    isFirstCell={viewModel.props.isFirstCell}
-    isLastCell={viewModel.props.isLastCell}
+    isFirstGroupCell={viewModel.props.isFirstGroupCell}
+    isLastGroupCell={viewModel.props.isLastGroupCell}
     index={viewModel.props.index}
     dataCellTemplate={viewModel.props.dataCellTemplate}
   />
