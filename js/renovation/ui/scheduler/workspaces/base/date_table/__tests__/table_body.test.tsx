@@ -158,6 +158,7 @@ describe('DateTableBody', () => {
         .toMatchObject({
           viewData: viewData.groupedData[0].allDayPanel,
           dataCellTemplate,
+          isVerticalGroupOrientation: true,
         });
 
       expect(getIsGroupedAllDayPanel)
