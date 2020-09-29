@@ -43,7 +43,7 @@ import {
 
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
-import { exportDataGrid } from 'devextreme/pdf_exporter';
+import Exporter from 'devextreme/pdf_exporter';
 
 const dataGridRef = 'dataGrid';
 
@@ -71,7 +71,7 @@ export default {
   methods: {
     exportGrid() {
       const doc = new jsPDF();
-      exportDataGrid({
+      Exporter.exportDataGrid({
         jsPDFDocument: doc,
         component: this.dataGrid
       }).then(() => {

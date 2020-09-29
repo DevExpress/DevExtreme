@@ -22,20 +22,9 @@ System.config({
         'devextreme/dist/js/vectormap-data/*': {
             'esModule': true
         },
+		
         /**/
-        
-        /** exceljs&file-saver */
-        'devextreme/excel_exporter*': {
-            'esModule': true
-        },
-        /**/
-
-        /** jspdf&jspdf-autotable */
-        'devextreme/pdf_exporter*': {
-            'esModule': true
-        },
-        /**/
-
+		
         'devextreme/localization.js': {
             "esModule": true
         }
