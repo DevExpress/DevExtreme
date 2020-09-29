@@ -1339,43 +1339,62 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual($list.find(`.${LIST_SELECT_ALL_LABEL_CLASS}`).text(), 'Select All');
     });
 
-    QUnit.test('menuItems', function(assert) {
-        const actionSpy = sinon.spy();
-        const menuItems = [{ text: 'action', action: actionSpy }];
+    QUnit.test('menuItems can be added runtime', function(assert) {
+        const menuItems = [{ text: 'action' }];
+        const $list = $('#list').dxList({
+            items: [{ text: 'test 1' }, { text: 'test 2' }],
+            displayExpr: 'text',
+            menuMode: 'context',
+            menuItems: []
+        });
+        const list = $list.dxList('instance');
+        list.option('menuItems', menuItems);
 
+        const $item = $list.find('.dx-list-item').eq(0);
+        const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
+        $item.trigger(contextMenuEvent);
+
+        const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
+        assert.strictEqual($menuItems.length, 1, 'items count is correct');
+    });
+
+    QUnit.test('menuItems can be changed to empty array', function(assert) {
+        const menuItems = [{ text: 'action' }];
         const $list = $('#list').dxList({
             items: [{ text: 'test 1' }, { text: 'test 2' }],
             displayExpr: 'text',
             menuMode: 'context',
             menuItems
         });
-
-        let $item = $list.find('.dx-list-item').eq(0);
         const list = $list.dxList('instance');
-
-        let contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
-        $item.trigger(contextMenuEvent);
-
-        let $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
-        assert.strictEqual($menuItems.length, 1, 'items count is correct');
-        $menuItems.eq(0).trigger('dxclick');
-        assert.strictEqual(actionSpy.callCount, 1, 'action is called once');
-
         list.option('menuItems', []);
-        $item = $list.find('.dx-list-item').eq(0);
-        contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
-        $item.trigger(contextMenuEvent);
-        $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
-        assert.strictEqual($menuItems.length, 0, 'items count is correct');
 
-        list.option('menuItems', menuItems);
-        $item = $list.find('.dx-list-item').eq(0);
-        contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
+        const $item = $list.find('.dx-list-item').eq(0);
+        const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
         $item.trigger(contextMenuEvent);
-        $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
+
+        const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
+        assert.strictEqual($menuItems.length, 0, 'items count is correct');
+    });
+
+    QUnit.test('menuItems can be changed to empty array and then back', function(assert) {
+        const menuItems = [{ text: 'action' }];
+        const $list = $('#list').dxList({
+            items: [{ text: 'test 1' }, { text: 'test 2' }],
+            displayExpr: 'text',
+            menuMode: 'context',
+            menuItems
+        });
+        const list = $list.dxList('instance');
+        list.option('menuItems', []);
+        list.option('menuItems', menuItems);
+
+        const $item = $list.find('.dx-list-item').eq(0);
+        const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
+        $item.trigger(contextMenuEvent);
+
+        const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
         assert.strictEqual($menuItems.length, 1, 'items count is correct');
-        $menuItems.eq(0).trigger('dxclick');
-        assert.strictEqual(actionSpy.callCount, 2, 'action is called twise');
     });
 
     QUnit.test('menuMode', function(assert) {
