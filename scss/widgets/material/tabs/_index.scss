@@ -87,7 +87,7 @@ $material-tabs-background: darken($base-bg, 4%);
       color: $tabs-tab-icon-selected-color;
     }
 
-    &:before {
+    &::before {
       content: "";
       position: absolute;
       bottom: 0;

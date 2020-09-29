@@ -180,7 +180,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       }
     }
 
-    .dx-placeholder:before {
+    .dx-placeholder::before {
       font-size: $material-grid-base-cell-font-size;
     }
   }
@@ -361,7 +361,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
     .dx-searchbox {
       .dx-texteditor-input,
-      .dx-placeholder:before {
+      .dx-placeholder::before {
         padding-left: $material-texteditor-icon-container-size;
 
         @at-root #{selector-append(".dx-rtl", &)},
@@ -430,8 +430,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         right: 0;
       }
 
-      &:after,
-      &:before {
+      &::after,
+      &::before {
         content: none;
       }
 
@@ -704,8 +704,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
       box-shadow: $material-grid-base-drag-header-first-shadow, $material-grid-base-drag-header-second-shadow;
 
       .dx-texteditor {
-        &.dx-state-focused:after,
-        &.dx-state-hover:after {
+        &.dx-state-focused::after,
+        &.dx-state-hover::after {
           top: auto;
           bottom: 0;
         }
@@ -717,7 +717,7 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
           padding-left: $material-filter-row-between-editor-padding;
         }
 
-        .dx-placeholder:before {
+        .dx-placeholder::before {
           padding-left: $material-filter-row-between-editor-padding;
         }
       }
@@ -915,8 +915,8 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
         line-height: $material-grid-base-adaptive-column-height;
       }
 
-      .dx-texteditor:after,
-      .dx-texteditor:before {
+      .dx-texteditor::after,
+      .dx-texteditor::before {
         content: none;
       }
 

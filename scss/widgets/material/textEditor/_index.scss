@@ -80,14 +80,14 @@ $material-editor-custom-button-margin: 5px;
       @include texteditor-input-padding-filled();
 
       .dx-texteditor-input-container {
-        &:after {
+        &::after {
           @include texteditor-validation-icon-offset-filled();
         }
       }
     }
 
     .dx-texteditor-input-container {
-      &:after {
+      &::after {
         @include texteditor-validation-icon-offset();
       }
     }
@@ -134,14 +134,14 @@ $material-editor-custom-button-margin: 5px;
     position: absolute;
   }
 
-  &:before {
+  &::before {
     @include dx-texteditor-borders-position();
 
     z-index: 2;
     transform: scale(0);
   }
 
-  &:after {
+  &::after {
     @include dx-texteditor-borders-position();
   }
 
@@ -149,7 +149,7 @@ $material-editor-custom-button-margin: 5px;
   &.dx-state-active {
     background-color: $texteditor-focused-bg;
 
-    &:before {
+    &::before {
       border-bottom: 2px solid $texteditor-focused-border-color;
       transform: scale(1);
       transition: transform 0.6s cubic-bezier(0.4, 0, 0.02, 1);
@@ -178,7 +178,7 @@ $material-editor-custom-button-margin: 5px;
     }
 
     .dx-placeholder {
-      &:before {
+      &::before {
         padding: $material-filled-texteditor-input-padding;
       }
     }
@@ -202,7 +202,7 @@ $material-editor-custom-button-margin: 5px;
     &.dx-state-hover {
       background-color: $texteditor-hover-bg;
 
-      &:after {
+      &::after {
         border-bottom: 1px solid $texteditor-hover-border-color;
       }
     }
@@ -225,18 +225,18 @@ $material-editor-custom-button-margin: 5px;
       right: $material-base-standard-texteditor-input-horizontal-padding;
     }
 
-    &:after {
+    &::after {
       border-bottom: 1px solid $texteditor-border-color;
     }
 
     &.dx-state-hover {
-      &:after {
+      &::after {
         border-bottom: 2px solid $texteditor-hover-border-color;
       }
     }
 
     .dx-placeholder {
-      &:before {
+      &::before {
         padding: $material-standard-texteditor-input-padding;
       }
     }
@@ -256,14 +256,14 @@ $material-editor-custom-button-margin: 5px;
     &.dx-state-disabled,
     &.dx-state-readonly,
     &.dx-state-readonly.dx-state-hover {
-      &:after {
+      &::after {
         border-bottom-style: dotted;
         border-bottom-width: 1px;
       }
     }
 
     &.dx-invalid {
-      &:after {
+      &::after {
         border-bottom-color: $texteditor-invalid-faded-border-color;
       }
     }
@@ -274,7 +274,7 @@ $material-editor-custom-button-margin: 5px;
     border-radius: $texteditor-input-border-radius;
     box-shadow: inset 0 0 0 1px $texteditor-border-color;
 
-    &:before {
+    &::before {
       display: none;
     }
 
@@ -344,21 +344,21 @@ $material-editor-custom-button-margin: 5px;
 
 .dx-invalid.dx-texteditor {
   &.dx-state-hover {
-    &:after {
+    &::after {
       border-bottom-color: $texteditor-invalid-faded-border-color;
     }
   }
 
   &.dx-state-focused,
   &.dx-state-active {
-    &:before {
+    &::before {
       border-top: 1px solid $texteditor-invalid-focused-border-color;
       border-bottom: 1px solid $texteditor-invalid-focused-border-color;
     }
   }
 
   &.dx-show-invalid-badge .dx-texteditor-input-container {
-    &:after {
+    &::after {
       @include dx-invalid-material-badge();
     }
   }
@@ -530,7 +530,7 @@ $material-editor-custom-button-margin: 5px;
 
 .dx-valid.dx-texteditor {
   .dx-texteditor-input-container {
-    &:after {
+    &::after {
       @include dx-valid-material-badge();
     }
   }
@@ -546,7 +546,7 @@ $material-editor-custom-button-margin: 5px;
 
 .dx-rtl {
   .dx-placeholder,
-  .dx-placeholder:before {
+  .dx-placeholder::before {
     right: 0;
     left: auto;
   }

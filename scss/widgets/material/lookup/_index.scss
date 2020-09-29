@@ -87,7 +87,7 @@
   &.dx-invalid {
     border-bottom-color: $base-invalid-faded-border-color;
 
-    .dx-lookup-arrow:after {
+    .dx-lookup-arrow::after {
       @include dx-invalid-material-badge();
 
       right: $material-base-icon-size;
@@ -95,7 +95,7 @@
 
     &.dx-rtl,
     .dx-rtl & {
-      .dx-lookup-arrow:after {
+      .dx-lookup-arrow::after {
         left: $material-base-icon-size;
         right: auto;
       }
@@ -103,7 +103,7 @@
   }
 
   &.dx-valid {
-    .dx-lookup-arrow:after {
+    .dx-lookup-arrow::after {
       @include dx-valid-material-badge();
 
       right: $material-base-icon-size;
@@ -111,7 +111,7 @@
 
     &.dx-rtl,
     .dx-rtl & {
-      .dx-lookup-arrow:after {
+      .dx-lookup-arrow::after {
         left: $material-base-icon-size;
         right: auto;
       }
@@ -145,8 +145,8 @@
   .dx-texteditor {
     border: none;
 
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       content: none;
     }
 
@@ -171,7 +171,7 @@
   @include dx-icon-font-centered-sizing($material-base-icon-size);
 }
 
-.dx-state-readonly .dx-lookup-field:before {
+.dx-state-readonly .dx-lookup-field::before {
   opacity: 0.5;
 }
 

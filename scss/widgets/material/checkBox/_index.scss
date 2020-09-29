@@ -24,7 +24,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
   &.dx-state-focused,
   &.dx-state-active {
-    .dx-checkbox-icon:after {
+    .dx-checkbox-icon::after {
       background-color: color.change($checkbox-border-color, $alpha: 0.1);
       transform: scale(1);
     }
@@ -34,7 +34,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   &.dx-checkbox-indeterminate {
     &.dx-state-focused,
     &.dx-state-active {
-      .dx-checkbox-icon:after {
+      .dx-checkbox-icon::after {
         background-color: color.change($checkbox-bg, $alpha: 0.1);
         transform: scale(1);
       }
@@ -53,7 +53,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 .dx-checkbox-indeterminate,
 .dx-checkbox-checked {
   &.dx-state-readonly.dx-state-focused {
-    .dx-checkbox-icon:after {
+    .dx-checkbox-icon::after {
       background-color: color.change($checkbox-border-color, $alpha: 0.1);
       transform: scale(1);
     }
@@ -66,7 +66,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   border: 2px solid $checkbox-border-color;
   border-radius: $material-checkbox-border-radius;
 
-  &:after {
+  &::after {
     content: "";
     width: $material-checkbox-ripple-size;
     height: $material-checkbox-ripple-size;
@@ -82,7 +82,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     transition: $material-checkbox-ripple-transition;
   }
 
-  &:before {
+  &::before {
     z-index: 2;
   }
 
@@ -122,7 +122,7 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
   &.dx-state-focused {
-    .dx-checkbox-icon:after {
+    .dx-checkbox-icon::after {
       background-color: color.change($checkbox-invalid-focused-border-color, $alpha: 0.1);
       transform: scale(1);
     }

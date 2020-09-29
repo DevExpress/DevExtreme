@@ -33,7 +33,7 @@
     @include dx-overflow();
   }
 
-  &:after {
+  &::after {
     display: inline-block;
     position: relative;
     height: 100%;

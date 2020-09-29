@@ -88,8 +88,8 @@ $generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
         color: $tabs-tab-color;
       }
 
-      &:after,
-      &:before {
+      &::after,
+      &::before {
         content: none;
       }
     }

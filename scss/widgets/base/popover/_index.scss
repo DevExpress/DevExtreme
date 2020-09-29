@@ -9,7 +9,7 @@
   z-index: 2000;
   overflow: hidden;
 
-  &:after {
+  &::after {
     position: absolute;
     display: block;
     overflow: hidden;
@@ -19,25 +19,25 @@
 }
 
 .dx-popover-wrapper {
-  &.dx-position-top .dx-popover-arrow:after {
+  &.dx-position-top .dx-popover-arrow::after {
     top: 0;
     left: 0;
     transform-origin: top left;
   }
 
-  &.dx-position-bottom .dx-popover-arrow:after {
+  &.dx-position-bottom .dx-popover-arrow::after {
     right: 0;
     bottom: 0;
     transform-origin: bottom right;
   }
 
-  &.dx-position-left .dx-popover-arrow:after {
+  &.dx-position-left .dx-popover-arrow::after {
     bottom: 0;
     left: 0;
     transform-origin: bottom left;
   }
 
-  &.dx-position-right .dx-popover-arrow:after {
+  &.dx-position-right .dx-popover-arrow::after {
     top: 0;
     right: 0;
     transform-origin: top right;
@@ -53,7 +53,7 @@
 }
 
 .dx-device-ios {
-  .dx-popover-arrow:after {
+  .dx-popover-arrow::after {
 
     // NOTE: fix arrow rendering on ios (T178931)
 

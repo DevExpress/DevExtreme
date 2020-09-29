@@ -1,14 +1,14 @@
 // stylelint-disable selector-class-pattern
 
 @mixin dx-clearfix-mixin() {
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     display: table;
     content: "";
     line-height: 0;
   }
 
-  &:after {
+  &::after {
     clear: both;
   }
 }
@@ -56,7 +56,7 @@
 @mixin vertical-middle() {
   height: 100%;
 
-  &:after {
+  &::after {
     height: 100%;
     display: inline-block;
     content: '';

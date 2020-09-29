@@ -34,7 +34,7 @@ $material-navbar-focused-item-shadow: inset 0 0 0 1px $navbar-tab-focused-border
   &.dx-tab-selected,
   &.dx-state-focused,
   &.dx-state-active {
-    &:after {
+    &::after {
       content: none;
     }
   }

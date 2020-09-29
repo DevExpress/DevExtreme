@@ -11,7 +11,7 @@
 @use "../badge";
 
 @mixin dx-tabs-border-mixin($border-horizontal, $border-vertical) {
-  &:after {
+  &::after {
     content: "";
     pointer-events: none;
     position: absolute;
@@ -110,7 +110,7 @@
 
   &:not(.dx-state-focused) {
     & + & {
-      &:after {
+      &::after {
         border-left: $generic-tabs-transparent-border;
 
         .dx-rtl & {

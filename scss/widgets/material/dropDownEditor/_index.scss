@@ -56,8 +56,8 @@ $material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $mat
 
 .dx-dropdowneditor-input-wrapper {
   .dx-texteditor {
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       content: none;
     }
 
@@ -120,7 +120,7 @@ $material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $mat
 .dx-invalid.dx-dropdowneditor,
 .dx-valid.dx-dropdowneditor {
   .dx-texteditor-buttons-container {
-    &:after {
+    &::after {
       right: $material-dropdowneditor-invalid-badge-offset;
 
       @at-root #{selector-append(".dx-rtl", &)},
@@ -133,7 +133,7 @@ $material-dropdowneditor-invalid-badge-size: $material-invalid-badge-size + $mat
 
   &.dx-show-clear-button:not(.dx-texteditor-empty) {
     .dx-texteditor-buttons-container {
-      &:after {
+      &::after {
         right: $material-dropdowneditor-invalid-badge-with-clear-offset;
 
         @at-root #{selector-append(".dx-rtl", &)},

@@ -19,17 +19,17 @@
     background: transparent;
     cursor: pointer;
 
-    &.dx-state-hover:after {
+    &.dx-state-hover::after {
       background-color: $gallery-navbutton-hover-color;
     }
 
-    &.dx-state-active:after {
+    &.dx-state-active::after {
       background-color: $gallery-navbutton-active-color;
     }
 
     @include dx-icon-font-centered-sizing(32px);
 
-    &:after {
+    &::after {
       content: '';
       position: absolute;
       width: 32px;
@@ -37,7 +37,7 @@
       border-radius: $gallery-navbutton-border-radius;
     }
 
-    &:before {
+    &::before {
       position: absolute;
       z-index: 10;
       clear: both;
@@ -49,11 +49,11 @@
   .dx-gallery-nav-button-prev {
     @include dx-icon(chevronleft);
 
-    &:after {
+    &::after {
       left: 0;
     }
 
-    &:before {
+    &::before {
       left: 0;
       right: auto;
       margin-left: 0;
@@ -63,11 +63,11 @@
   .dx-gallery-nav-button-next {
     @include dx-icon(chevronright);
 
-    &:after {
+    &::after {
       right: 0;
     }
 
-    &:before {
+    &::before {
       right: 0;
       left: auto;
     }

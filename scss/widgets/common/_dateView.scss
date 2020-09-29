@@ -20,8 +20,8 @@
 }
 
 .dx-dateview-item-selected-frame {
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     pointer-events: none;
   }
 }
