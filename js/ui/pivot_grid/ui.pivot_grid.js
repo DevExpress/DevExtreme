@@ -1508,14 +1508,6 @@ const PivotGrid = Widget.inherit({
         return this.$element().find('table').first();
     },
 
-    _calculateHeight: function(elem) {
-        return getSize(elem, 'height', {
-            paddings: false,
-            borders: false,
-            margins: false
-        });
-    },
-
     addWidgetPrefix: function(className) {
         return 'dx-pivotgrid-' + className;
     },
@@ -1612,9 +1604,15 @@ const PivotGrid = Widget.inherit({
             let filterAreaHeight = 0;
             let dataAreaHeight = 0;
             if(that._hasHeight) {
-                filterAreaHeight = that._calculateHeight(filterHeaderCell.get(0));
+                filterAreaHeight = filterHeaderCell.height();
+
+                const $dataHeader = tableElement.find('.dx-data-header');
+                const dataHeaderHeight = !msie
+                    ? $dataHeader.height()
+                    : getSize($dataHeader.get(0), 'height', { paddings: false, borders: false, margins: false });
+
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
-                dataAreaHeight = that.$element().height() - filterAreaHeight - that._calculateHeight(tableElement.find('.dx-data-header').get(0)) - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
+                dataAreaHeight = that.$element().height() - filterAreaHeight - dataHeaderHeight - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
             }
 
             totalWidth = dataArea.tableElement().width();
@@ -1696,10 +1694,9 @@ const PivotGrid = Widget.inherit({
                     columnsArea.groupWidth(groupWidth - diff);
                 }
 
-                const currentFilterHeight = that._calculateHeight(filterHeaderCell.get(0));
                 if(that._hasHeight && that._filterFields.isVisible() &&
-                    currentFilterHeight !== filterAreaHeight) {
-                    const diff = currentFilterHeight - filterAreaHeight;
+                    filterHeaderCell.height() !== filterAreaHeight) {
+                    const diff = filterHeaderCell.height() - filterAreaHeight;
                     if(diff > 0) {
                         hasRowsScroll = calculateHasScroll(dataAreaHeight - diff, totalHeight);
                         const groupHeight = calculateGroupHeight(dataAreaHeight - diff, totalHeight, hasRowsScroll, hasColumnsScroll, scrollBarWidth);
