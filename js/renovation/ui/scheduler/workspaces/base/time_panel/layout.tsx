@@ -31,36 +31,35 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
                 <AllDayPanelTitle />
               </CellBase>
             </Row>
-            )}
-            {dateTable.map((cellsRow, rowIndex) => {
-              const { cellCountInGroupRow } = viewModel.props.viewData!;
-              const isFirstCell = rowIndex === 0;
-              const isLastCell = rowIndex === dateTable.length - 1;
-              const {
-                groups, startDate, text, index: cellIndex, key,
-              } = cellsRow[0];
+          )}
+          {dateTable.map((cellsRow, rowIndex) => {
+            const { cellCountInGroupRow } = viewModel.props.viewData!;
+            const isFirstCell = rowIndex === 0;
+            const isLastCell = rowIndex === dateTable.length - 1;
+            const {
+              groups, startDate, text, index: cellIndex, key,
+            } = cellsRow[0];
 
-              return (
-                <Row
-                  className="dx-scheduler-time-panel-row"
-                  key={key}
-                >
-                  <Cell
-                    startDate={startDate}
-                    text={text}
-                    groups={viewModel.isVerticalGroupOrientation ? groups : undefined}
-                    groupIndex={viewModel.isVerticalGroupOrientation ? groupIndex : undefined}
-                    isFirstCell={isFirstCell}
-                    isLastCell={isLastCell}
-                    index={Math.floor(cellIndex / cellCountInGroupRow)}
-                    timeCellTemplate={viewModel.props.timeCellTemplate}
-                  />
-                </Row>
-              );
-            })}
-          </Fragment>
-        );
-      })}
+            return (
+              <Row
+                className="dx-scheduler-time-panel-row"
+                key={key}
+              >
+                <Cell
+                  startDate={startDate}
+                  text={text}
+                  groups={viewModel.isVerticalGroupOrientation ? groups : undefined}
+                  groupIndex={viewModel.isVerticalGroupOrientation ? groupIndex : undefined}
+                  isFirstCell={isFirstCell}
+                  isLastCell={isLastCell}
+                  index={Math.floor(cellIndex / cellCountInGroupRow)}
+                  timeCellTemplate={viewModel.props.timeCellTemplate}
+                />
+              </Row>
+            );
+          })}
+        </Fragment>
+      ))}
   </Table>
 );
 
