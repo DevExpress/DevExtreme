@@ -371,4 +371,129 @@ QUnit.module('Events', function() {
         $removeButton.trigger('dxclick');
         assert.strictEqual(spy.callCount, 6);
     });
+
+    QUnit.test('valueChanged should not be raised for both widgets (T935367)', function(assert) {
+        // arrange
+        const valueChangedSpy1 = sinon.spy();
+        const valueChangedSpy2 = sinon.spy();
+        const $container1 = $('#container');
+        const $container2 = $('#container1');
+
+        const filterBuilder1 = $container1.dxFilterBuilder({
+            value: ['Zipcode', '=', '555'],
+            fields: fields
+        }).dxFilterBuilder('instance');
+        filterBuilder1.on('valueChanged', valueChangedSpy1);
+
+        const filterBuilder2 = $container2.dxFilterBuilder({
+            value: ['Zipcode', '=', '555'],
+            fields: fields
+        }).dxFilterBuilder('instance');
+        filterBuilder2.on('valueChanged', valueChangedSpy2);
+
+        // act
+        filterBuilder1.option('value', ['CompanyName', '=', 'DevExpress1']);
+        filterBuilder2.option('value', ['CompanyName', '=', 'DevExpress2']);
+
+        const args1 = valueChangedSpy1.args[0][0];
+        const args2 = valueChangedSpy2.args[0][0];
+
+        // assert
+        assert.strictEqual(valueChangedSpy1.callCount, 1, 'valueChanged of the first widget is called once');
+        assert.deepEqual(args1.value, ['CompanyName', '=', 'DevExpress1'], 'value of the first widget');
+        assert.strictEqual(valueChangedSpy2.callCount, 1, 'valueChanged of the second widget is called once');
+        assert.deepEqual(args2.value, ['CompanyName', '=', 'DevExpress2'], 'value of the second widget');
+    });
+
+    QUnit.test('editorPreparing should not be raised for both widgets (T935367)', function(assert) {
+        // arrange
+        const valueChangedSpy1 = sinon.spy();
+        const valueChangedSpy2 = sinon.spy();
+        const $container1 = $('#container');
+        const $container2 = $('#container1');
+
+        const filterBuilder1 = $container1.dxFilterBuilder({
+            value: [
+                ['CompanyName', '=', 'DevExpress']
+            ],
+            fields: fields
+        }).dxFilterBuilder('instance');
+        filterBuilder1.on('editorPreparing', valueChangedSpy1);
+
+        const filterBuilder2 = $container2.dxFilterBuilder({
+            value: [
+                ['CompanyName', '=', 'DevExpress']
+            ],
+            fields: fields
+        }).dxFilterBuilder('instance');
+        filterBuilder2.on('editorPreparing', valueChangedSpy2);
+
+        // act
+        const $companyNameValueField1 = $container1.find('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        $companyNameValueField1.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger('dxclick');
+
+        const $companyNameValueField2 = $container2.find('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        $companyNameValueField2.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger('dxclick');
+
+        const args1 = valueChangedSpy1.args[0][0];
+        const args2 = valueChangedSpy2.args[0][0];
+
+        // assert
+        assert.strictEqual(valueChangedSpy1.callCount, 1, 'editorPreparing of the first widget is called once');
+        assert.strictEqual(args1.dataField, 'CompanyName', 'args -> dataField of the first widget');
+        assert.strictEqual(args1.value, 'DevExpress', 'args -> value of the first widget');
+        assert.strictEqual(args1.filterOperation, '=', 'args -> filterOperation of the first widget');
+        assert.strictEqual(args1.component, filterBuilder1, 'args -> component of the first widget');
+        assert.strictEqual(valueChangedSpy2.callCount, 1, 'editorPreparing of the second widget is called once');
+        assert.strictEqual(args2.dataField, 'CompanyName', 'args -> dataField of the second widget');
+        assert.strictEqual(args2.value, 'DevExpress', 'args -> value of the second widget');
+        assert.strictEqual(args2.filterOperation, '=', 'args -> filterOperation of the second widget');
+        assert.strictEqual(args2.component, filterBuilder2, 'args -> component of the second widget');
+    });
+
+    QUnit.test('editorPrepared should not be raised for both widgets (T935367)', function(assert) {
+        // arrange
+        const valueChangedSpy1 = sinon.spy();
+        const valueChangedSpy2 = sinon.spy();
+        const $container1 = $('#container');
+        const $container2 = $('#container1');
+
+        const filterBuilder1 = $container1.dxFilterBuilder({
+            value: [
+                ['CompanyName', '=', 'DevExpress']
+            ],
+            fields: fields
+        }).dxFilterBuilder('instance');
+        filterBuilder1.on('editorPrepared', valueChangedSpy1);
+
+        const filterBuilder2 = $container2.dxFilterBuilder({
+            value: [
+                ['CompanyName', '=', 'DevExpress']
+            ],
+            fields: fields
+        }).dxFilterBuilder('instance');
+        filterBuilder2.on('editorPrepared', valueChangedSpy2);
+
+        // act
+        const $companyNameValueField1 = $container1.find('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        $companyNameValueField1.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger('dxclick');
+
+        const $companyNameValueField2 = $container2.find('.' + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        $companyNameValueField2.find('.' + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger('dxclick');
+
+        const args1 = valueChangedSpy1.args[0][0];
+        const args2 = valueChangedSpy2.args[0][0];
+
+        // assert
+        assert.strictEqual(valueChangedSpy1.callCount, 1, 'editorPrepared of the first widget is called once');
+        assert.strictEqual(args1.dataField, 'CompanyName', 'args -> dataField of the first widget');
+        assert.strictEqual(args1.value, 'DevExpress', 'args -> value of the first widget');
+        assert.strictEqual(args1.filterOperation, '=', 'args -> filterOperation of the first widget');
+        assert.strictEqual(args1.component, filterBuilder1, 'args -> component of the first widget');
+        assert.strictEqual(valueChangedSpy2.callCount, 1, 'editorPrepared of the second widget is called once');
+        assert.strictEqual(args2.dataField, 'CompanyName', 'args -> dataField of the second widget');
+        assert.strictEqual(args2.value, 'DevExpress', 'args -> value of the second widget');
+        assert.strictEqual(args2.filterOperation, '=', 'args -> filterOperation of the second widget');
+        assert.strictEqual(args2.component, filterBuilder2, 'args -> component of the second widget');
+    });
 });

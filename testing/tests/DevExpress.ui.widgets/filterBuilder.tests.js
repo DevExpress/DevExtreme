@@ -4,7 +4,7 @@ import 'common.css!';
 import 'generic_light.css!';
 
 QUnit.testStart(function() {
-    $('#qunit-fixture').html('<div id="container"></div>');
+    $('#qunit-fixture').html('<div id="container"></div><div id="container1"></div>');
 });
 
 import './filterBuilderParts/commonTests.js';
