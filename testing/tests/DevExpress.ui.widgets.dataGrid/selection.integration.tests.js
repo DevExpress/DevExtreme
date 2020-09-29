@@ -305,6 +305,26 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.deepEqual(dataGrid.getSelectedRowKeys(), [], 'zero items are selected');
         assert.deepEqual(dataGrid.option('selectedRowKeys'), [], 'empty array in option');
     });
+
+    QUnit.test('Checkbox should be vertically aligned at the cell center', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [{ name: true }],
+            loadingTimeout: undefined,
+            selection: {
+                mode: 'multiple'
+            }
+        });
+
+        this.clock.tick();
+
+        const $cells = $(dataGrid.element()).find('.dx-editor-inline-block');
+
+        // assert
+        assert.equal($cells.length, 3, 'checkbox cell count');
+        $cells.each((_, el) => {
+            assert.strictEqual($(el).css('vertical-align'), 'middle', 'middle vertical align');
+        });
+    });
 });
 
 QUnit.module('Virtual row rendering', baseModuleConfig, () => {

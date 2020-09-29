@@ -255,6 +255,7 @@ QUnit.test('Scale is rendered', function(assert) {
         hideFirstTick: true,
         hideLastLabel: false,
         hideLastTick: true,
+        inverted: false,
         isHorizontal: true,
         label: {
             indentFromAxis: 0,

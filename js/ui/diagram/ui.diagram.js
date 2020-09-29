@@ -70,6 +70,7 @@ const MOZ_FULLSCREEN_CHANGE_EVENT_NAME = addNamespace('mozfullscreenchange', DIA
 class Diagram extends Widget {
     _init() {
         this._updateDiagramLockCount = 0;
+        this.toggleFullscreenLock = 0;
         this._browserResizeTimer = -1;
         this._toolbars = [];
 
@@ -723,7 +724,12 @@ class Diagram extends Widget {
             this._updateAutoZoomState();
         }
         if(this.option('fullScreen')) {
-            this._updateFullscreenState();
+            const window = getWindow();
+            if(window && window.self !== window.top) {
+                this.option('fullScreen', false);
+            } else {
+                this._updateFullscreenState();
+            }
         }
 
         this.optionsUpdateBar = new DiagramOptionsUpdateBar(this);
@@ -1155,6 +1161,8 @@ class Diagram extends Widget {
         }
     }
     _onToggleFullScreen(fullScreen) {
+        if(this.toggleFullscreenLock > 0) return;
+
         this._changeNativeFullscreen(fullScreen);
         this.$element().toggleClass(DIAGRAM_FULLSCREEN_CLASS, fullScreen);
         this._diagramInstance.updateLayout(true);
@@ -1231,6 +1239,12 @@ class Diagram extends Widget {
             this.option('fullScreen', false);
         }
     }
+    _executeDiagramFullscreenCommand(fullscreen) {
+        const { DiagramCommand } = getDiagram();
+        this.toggleFullscreenLock++;
+        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullscreen);
+        this.toggleFullscreenLock--;
+    }
     _onShowContextMenu(x, y, selection) {
         if(this._contextMenu) {
             this._contextMenu._show(x, y, selection);
@@ -1295,10 +1309,9 @@ class Diagram extends Widget {
         this._executeDiagramCommand(DiagramCommand.ToggleSimpleView, this.option('simpleView'));
     }
     _updateFullscreenState() {
-        const { DiagramCommand } = getDiagram();
-        const fullScreen = this.option('fullScreen');
-        this._executeDiagramCommand(DiagramCommand.Fullscreen, fullScreen);
-        this._onToggleFullScreen(fullScreen);
+        const fullscreen = this.option('fullScreen');
+        this._executeDiagramFullscreenCommand(fullscreen);
+        this._onToggleFullScreen(fullscreen);
     }
     _updateShowGridState() {
         const { DiagramCommand } = getDiagram();

@@ -3028,6 +3028,61 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
     });
 
+    QUnit.test('File message can be changed on onUploaded event', function(assert) {
+        const customMessage = 'Custom uploaded message';
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            onUploaded: e => e.message = customMessage
+        });
+
+        simulateFileChoose($element, [fakeFile]);
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        assert.strictEqual($fileStatusMessage.text(), customMessage, 'message was applied');
+    });
+
+    QUnit.test('File message can be changed on onUploadAborted event', function(assert) {
+        const customMessage = 'Custom upload aborted message';
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            onUploadAborted: e => e.message = customMessage
+        });
+
+        simulateFileChoose($element, [fakeFile]);
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        $element.dxFileUploader('instance').abortUpload();
+
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        assert.strictEqual($fileStatusMessage.text(), customMessage, 'message was applied');
+    });
+
+    QUnit.test('File message can be changed on onUploadError event', function(assert) {
+        const customMessage = 'Custom upload error message';
+        const $element = $('#fileuploader').dxFileUploader({
+            uploadMode: 'instantly',
+            uploadFile: () => { throw customMessage; },
+            onUploadError: e => e.message = e.error
+        });
+
+        simulateFileChoose($element, [fakeFile]);
+
+        this.clock.tick(this.xhrMock.LOAD_TIMEOUT / 2);
+
+        $element.dxFileUploader('instance').abortUpload();
+
+        this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
+
+        const $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
+        assert.strictEqual($fileStatusMessage.text(), customMessage, 'message was applied');
+    });
+
 });
 
 QUnit.module('keyboard navigation', moduleConfig, () => {
