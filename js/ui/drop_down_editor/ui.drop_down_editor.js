@@ -356,6 +356,7 @@ const DropDownEditor = TextBox.inherit({
         this._refreshEvents();
         this._refreshValueChangeEvent();
         this._renderFocusState();
+        this._refreshEmptinessEvent();
     },
 
     _refreshEmptinessEvent: function() {
