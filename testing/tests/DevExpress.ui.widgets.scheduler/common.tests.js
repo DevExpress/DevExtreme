@@ -4688,7 +4688,7 @@ QUnit.module('Getting timezones', {}, () => {
         assert.deepEqual(timeZone, {
             id: 'Europe/Moscow',
             offset: 3,
-            title: '(GMT +03:00) Europe/Moscow'
+            title: '(GMT +03:00) Europe - Moscow'
         }, 'some of returned timeZone is ok');
     });
 
@@ -4700,10 +4700,12 @@ QUnit.module('Getting timezones', {}, () => {
         let timeZone = findTimeZone(timeZones, 'America/Los_Angeles');
 
         assert.equal(timeZone.offset, -8, 'returned offset for timeZone with DST is OK');
+        assert.equal(timeZone.title, '(GMT -08:00) America - Los Angeles', 'returned title for timeZone with DST is OK');
 
         timeZones = getTimeZones(new Date(summer));
         timeZone = findTimeZone(timeZones, 'America/Los_Angeles');
 
         assert.equal(timeZone.offset, -7, 'returned offset for timeZone with DST is OK');
+        assert.equal(timeZone.title, '(GMT -07:00) America - Los Angeles', 'returned title for timeZone with DST is OK');
     });
 });
