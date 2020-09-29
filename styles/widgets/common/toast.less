@@ -1,26 +1,23 @@
 @import (once) "./overlay.less";
 
 .dx-toast-content {
-    display: inline-block;
+    display: flex;
     padding: 10px;
-    vertical-align: middle;
+    align-items: center;
 }
 
 .dx-toast-icon {
-    display: table-cell;
+    display: inline-flex;
     background-size: contain;
     width: 35px;
     height: 35px;
     margin-right: 10px;
-    vertical-align: middle;
     background-position: left center;
     background-repeat: no-repeat;
 }
 
 .dx-toast-message {
-    display: table-cell;
-    vertical-align: middle;
-    padding-left: 10px;
+    display: inline-flex;
 }
 
 .dx-toast-info {
@@ -40,8 +37,8 @@
 }
 
 .dx-rtl {
-    .dx-toast-message {
-        padding-left: 0;
-        padding-right: 10px;
+    .dx-toast-icon {
+        margin-left: 10px;
+        margin-right: 0;
     }
 }

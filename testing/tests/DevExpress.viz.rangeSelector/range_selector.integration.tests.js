@@ -698,6 +698,72 @@ QUnit.test('RS with DX dataSource', function(assert) {
     });
 });
 
+// T930471
+QUnit.test('RS with async dataSource & scale settings', function(assert) {
+    const done = assert.async(1);
+    const rangeSelector = this.createRangeSelector({
+        chart: { series: [{}] },
+        value: [2, 4],
+        scale: {
+            startValue: 1,
+            endValue: 7
+        },
+        dataSource: new DataSource({
+            load: function() {
+                return new Promise(function(r) {
+                    return r([{
+                        arg: 1,
+                        val: 1
+                    }, {
+                        arg: 10,
+                        val: 1
+                    }]);
+                });
+            }
+        })
+    });
+
+    rangeSelector.on('drawn', () => {
+        assert.deepEqual(rangeSelector.getValue(), [2, 4]);
+        done();
+    });
+});
+// T930471
+QUnit.test('RS with async dataSource. value when dadaSource changed to sync', function(assert) {
+    const done = assert.async(1);
+    const rangeSelector = this.createRangeSelector({
+        chart: { series: [{}] },
+        value: [2, 4],
+        scale: {
+            startValue: 1,
+            endValue: 7
+        },
+        dataSource: new DataSource({
+            load() {
+                return new Promise(function(r) {
+                    return r([{
+                        arg: 1,
+                        val: 1
+                    }, {
+                        arg: 10,
+                        val: 1
+                    }]);
+                });
+            }
+        })
+    });
+
+    rangeSelector.on('drawn', () => {
+        rangeSelector.off('drawn');
+        setTimeout(() => {
+            rangeSelector.option('dataSource', [{ arg: 1, val: 10 }, { arg: 2, val: 10 }]);
+            assert.deepEqual(rangeSelector.getValue(), [1, 7]);
+            done();
+        }, 20);
+
+    });
+});
+
 QUnit.test('Scale from dataSource. calculate linearThreshold', function(assert) {
     const rangeSelector = this.createRangeSelector({
         dataSource: [{ arg: -100, val: 1 }, { arg: -0.0001, val: 1 }, { arg: 1000, val: 1 }],

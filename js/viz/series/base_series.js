@@ -870,7 +870,7 @@ Series.prototype = {
                 }, {});
 
                 data.forEach(dataItem => {
-                    groups[dataItem.argument].push(dataItem);
+                    groups[dataItem.argument.valueOf()].push(dataItem);
                 });
 
                 return categories.reduce((result, c) => {
@@ -878,7 +878,7 @@ Series.prototype = {
                         aggregationInterval: null,
                         intervalStart: c,
                         intervalEnd: c,
-                        data: groups[c].map(getData)
+                        data: groups[c.valueOf()].map(getData)
                     }, that));
                     return result;
                 }, []);
