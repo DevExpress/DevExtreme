@@ -666,7 +666,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
             if(_isDefined(selectedRangeUpdateMode)) {
                 selectedRangeUpdateMode = _normalizeEnum(selectedRangeUpdateMode);
                 that.__skipAnimation = true;
-            } else if(valueIsReady && that._dataSourceIsAsync !== true) { // T696409 T930471
+            } else if(valueIsReady && !that._dataSourceIsAsync) { // T696409 T930471
                 selectedRangeUpdateMode = RESET;
             }
 
