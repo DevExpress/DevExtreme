@@ -19,6 +19,8 @@ import errors from '../widget/ui.errors';
 import { Deferred, when } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import { encodeHtml } from '../../core/utils/string';
+import * as themes from '../themes';
+import browser from '../../core/utils/browser';
 
 const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
@@ -1102,6 +1104,10 @@ export default {
                                 collision: 'flip',
                                 boundary: this._rowsView.element(),
                                 boundaryOffset: '0 0',
+                                offset: {
+                                    x: 0,
+                                    y: (browser.mozilla || browser.msie) && themes.isGeneric(themes.current()) ? -1 : 0
+                                },
                                 my: myPosition,
                                 at: atPosition
                             },
