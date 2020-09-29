@@ -14860,7 +14860,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.commonAxisSettings.label.template]
          */
-        template?: DevExpress.core.template | ((model: any, element: SVGGElement) => string | SVGElement | JQuery);
+        template?: DevExpress.core.template | ((data: any, element: SVGGElement) => string | SVGElement | JQuery);
         /**
          * [descr:dxChart.Options.commonAxisSettings.label.textOverflow]
          */
