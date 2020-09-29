@@ -228,7 +228,7 @@ const DateViewRoller = Scrollable.inherit({
         return Math.max(Math.min(index, itemsCount - 1), 0);
     },
 
-    _isInNullVicinity: function(x) {
+    _isInNullNeighborhood: function(x) {
         const EPS = 0.1;
         return -EPS <= x && x <= EPS;
     },
@@ -239,7 +239,7 @@ const DateViewRoller = Scrollable.inherit({
         const currentSelectedIndexPosition = currentSelectedIndex * this._itemHeight();
         const dy = locationTop - currentSelectedIndexPosition;
 
-        if(this._isInNullVicinity(dy)) {
+        if(this._isInNullNeighborhood(dy)) {
             return currentSelectedIndex;
         }
 
