@@ -2373,15 +2373,27 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const { viewDataProvider } = this;
         const isAllDayCell = this._hasAllDayClass($cell);
+
+        let cellData;
+
         if(isAllDayCell) {
             const allDayPanel = this._isVerticalGroupedWorkSpace()
                 ? viewDataProvider.getCellData(rowIndex, cellIndex)
                 : viewDataProvider.viewData.groupedData[0].allDayPanel;
 
-            return allDayPanel[cellIndex];
+            cellData = allDayPanel[cellIndex];
+        } else {
+            cellData = viewDataProvider.getCellData(rowIndex, cellIndex);
         }
 
-        return viewDataProvider.getCellData(rowIndex, cellIndex);
+        return {
+            startDate: cellData.startDate,
+            endDate: cellData.endDate,
+            groups: cellData.groups,
+            groupIndex: cellData.groupIndex,
+            allDay: cellData.allDay,
+            text: cellData.text,
+        };
     }
 
     _getHorizontalMax(groupIndex) {

@@ -4170,7 +4170,6 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     groupIndex: 0,
-                    index: 0,
                     text: '12:00 AM',
                 };
 
@@ -4191,7 +4190,6 @@ QUnit.module('Renovated Render', {
                     endDate: new Date(2020, 6, 29, 0, 30),
                     allDay: false,
                     groupIndex: 0,
-                    index: 0,
                     text: '12:00 AM',
                 };
 
@@ -4222,7 +4220,6 @@ QUnit.module('Renovated Render', {
                     text: '',
                     groups: { res: 2 },
                     groupIndex: 1,
-                    index: 0
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4253,7 +4250,6 @@ QUnit.module('Renovated Render', {
                     text: '',
                     groups: { res: 1 },
                     groupIndex: 0,
-                    index: 1
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
