@@ -20,18 +20,24 @@ describe('DateTableBody', () => {
           groups: { id: 1 },
           groupIndex: 1,
           index: 4,
+          isFirstGroupCell: true,
+          isLastGroupCell: false,
         }], [{
           startDate: new Date(2020, 6, 9, 1),
           endDate: new Date(2020, 6, 9, 1, 30),
           groups: { id: 2 },
           groupIndex: 2,
           index: 5,
+          isFirstGroupCell: false,
+          isLastGroupCell: false,
         }], [{
           startDate: new Date(2020, 6, 9, 2),
           endDate: new Date(2020, 6, 9, 2, 30),
           groups: { id: 3 },
           groupIndex: 3,
           index: 6,
+          isFirstGroupCell: false,
+          isLastGroupCell: true,
         }]],
         allDayPanel: [{ startDate: new Date() }],
       }],
@@ -71,8 +77,8 @@ describe('DateTableBody', () => {
       const assert = (
         cells: any,
         index: number,
-        isFirstCell: boolean,
-        isLastCell: boolean,
+        isFirstGroupCell: boolean,
+        isLastGroupCell: boolean,
       ): void => {
         const cell = cells.at(index);
 
@@ -83,8 +89,8 @@ describe('DateTableBody', () => {
             groups: viewData.groupedData[0].dateTable[index][0].groups,
             groupIndex: viewData.groupedData[0].dateTable[index][0].groupIndex,
             index: viewData.groupedData[0].dateTable[index][0].index,
-            isFirstCell,
-            isLastCell,
+            isFirstGroupCell,
+            isLastGroupCell,
             dataCellTemplate,
           });
       };

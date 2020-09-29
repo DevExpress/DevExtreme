@@ -15,12 +15,16 @@ describe('AllDayPanelTableBody', () => {
       groups: { id: 1 },
       groupIndex: 1,
       index: 3,
+      isFirstGroupCell: true,
+      isLastGroupCell: false,
     }, {
       startDate: new Date(2020, 7, 29),
       endDate: new Date(2020, 7, 30),
       groups: { id: 2 },
       groupIndex: 2,
       index: 4,
+      isFirstGroupCell: false,
+      isLastGroupCell: true,
     }];
 
     const render = (viewModel): ReactWrapper<AllDayPanelTableBody> => mount(
@@ -60,8 +64,8 @@ describe('AllDayPanelTableBody', () => {
         .toHaveLength(2);
       expect(cells.at(0).props())
         .toMatchObject({
-          isFirstCell: true,
-          isLastCell: false,
+          isFirstGroupCell: true,
+          isLastGroupCell: false,
           startDate: viewData[0].startDate,
           endDate: viewData[0].endDate,
           groups: viewData[0].groups,
@@ -70,14 +74,36 @@ describe('AllDayPanelTableBody', () => {
         });
       expect(cells.at(1).props())
         .toMatchObject({
-          isFirstCell: false,
-          isLastCell: true,
+          isFirstGroupCell: false,
+          isLastGroupCell: true,
           startDate: viewData[1].startDate,
           endDate: viewData[1].endDate,
           groups: viewData[1].groups,
           groupIndex: viewData[1].groupIndex,
           index: viewData[1].index,
         });
+    });
+
+    it('should not pass "isFirstGroupCell" and "isLastGroupCell" when grouped vertically', () => {
+      const tableBody = render({ props: { isVerticalGroupOrientation: true } });
+
+      expect(tableBody.find(Row))
+        .toHaveLength(1);
+
+      const cells = tableBody.find(Cell);
+
+      expect(cells)
+        .toHaveLength(2);
+
+      expect(cells.at(0).prop('isFirstGroupCell'))
+        .toBe(false);
+      expect(cells.at(0).prop('isLastGroupCell'))
+        .toBe(false);
+
+      expect(cells.at(1).prop('isFirstGroupCell'))
+        .toBe(false);
+      expect(cells.at(1).prop('isLastGroupCell'))
+        .toBe(false);
     });
 
     it('should call getKeyByDateAndGroup with correct parameters', () => {
