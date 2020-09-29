@@ -2,15 +2,9 @@ import query from '../../../data/query';
 import errors from '../../../core/errors';
 import tzData from './timezones_data';
 import { sign } from '../../../core/utils/math';
-import timeZoneUtils from '../utils.timeZone';
 
 const timeZoneDataUtils = {
     _timeZones: tzData.zones,
-
-    getTimeZones: function(date = new Date()) {
-        const dateInUTC = timeZoneUtils.createUTCDate(date);
-        return this.getDisplayedTimeZones(dateInUTC.getTime());
-    },
 
     getDisplayedTimeZones: function(timestamp) {
         const timeZones = this._timeZones.map((timezone) => {

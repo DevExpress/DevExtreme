@@ -31,6 +31,11 @@ const createDateFromUTCWithLocalOffset = date => {
     return result.source;
 };
 
+const getTimeZones = (date = new Date()) => {
+    const dateInUTC = createUTCDate(date);
+    return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
+};
+
 const createUTCDate = (date) => {
     return new Date(Date.UTC(
         date.getUTCFullYear(),
@@ -170,7 +175,8 @@ const utils = {
     createUTCDate,
 
     hasDSTInLocalTimeZone,
-    isEqualLocalTimeZone
+    isEqualLocalTimeZone,
+    getTimeZones
 };
 
 export default utils;

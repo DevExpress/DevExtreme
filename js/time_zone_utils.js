@@ -1,4 +1,4 @@
-import { getTimeZones } from './ui/scheduler/timezones/utils.timezones_data';
+import { getTimeZones } from './ui/scheduler/utils.timeZone';
 
 
 export {
