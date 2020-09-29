@@ -63,15 +63,15 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 
     _addLastGroupCellClass(cellClass, index) {
-        const groupByDay = this._workSpace.isGroupedByDate();
+        const groupByDate = this._workSpace.isGroupedByDate();
 
-        if(groupByDay) {
+        if(groupByDate) {
             if(index % this._workSpace._getGroupCount() === 0) {
-                return cellClass + ' ' + this.getLastGroupCellClass();
+                return `${cellClass} ${this.getLastGroupCellClass()}`;
             }
         } else {
             if(index % this._workSpace._getCellCount() === 0) {
-                return cellClass + ' ' + this.getLastGroupCellClass();
+                return `${cellClass} ${this.getLastGroupCellClass()}`;
             }
         }
 
@@ -79,8 +79,16 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 
     _addFirstGroupCellClass(cellClass, index) {
-        if((index - 1) % this._workSpace._getCellCount() === 0) {
-            return cellClass + ' ' + this.getFirstGroupCellClass();
+        const groupByDate = this._workSpace.isGroupedByDate();
+
+        if(groupByDate) {
+            if((index - 1) % this._workSpace._getGroupCount() === 0) {
+                return `${cellClass} ${this.getFirstGroupCellClass()}`;
+            }
+        } else {
+            if((index - 1) % this._workSpace._getCellCount() === 0) {
+                return `${cellClass} ${this.getFirstGroupCellClass()}`;
+            }
         }
 
         return cellClass;
