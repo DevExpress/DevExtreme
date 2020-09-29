@@ -228,13 +228,18 @@ const DateViewRoller = Scrollable.inherit({
         return Math.max(Math.min(index, itemsCount - 1), 0);
     },
 
+    _isInNullVicinity: function(x) {
+        const EPS = 0.1;
+        return -EPS <= x && x <= EPS;
+    },
+
     _getSelectedIndexAfterScroll: function(currentSelectedIndex) {
         const locationTop = -this._location().top;
 
         const currentSelectedIndexPosition = currentSelectedIndex * this._itemHeight();
         const dy = locationTop - currentSelectedIndexPosition;
 
-        if(-0.1 <= dy && dy <= 0.1) {
+        if(this._isInNullVicinity(dy)) {
             return currentSelectedIndex;
         }
 
