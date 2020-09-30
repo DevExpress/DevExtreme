@@ -63,7 +63,8 @@ window.onload = function() {
           keepColumnWidths: false,
           topLeftCell: { row: 2, column: 2 },
           customizeCell: function(options) {
-            var { gridCell, excelCell } = options;
+            var gridCell = options.gridCell;
+            var excelCell = options.excelCell;
             
             if(gridCell.rowType === "data") {
               if(gridCell.column.dataField === 'Phone') {

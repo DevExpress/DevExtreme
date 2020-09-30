@@ -39,8 +39,10 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         worksheet: worksheet,
         autoFilterEnabled: true,
         topLeftCell: { row: 2, column: 2 },
-        customizeCell: (options) => {
-          var { excelCell, gridCell } = options;
+        customizeCell: function(options) {
+          var gridCell = options.gridCell;
+          var excelCell = options.excelCell;
+
           if(gridCell.rowType === "data") {
             if(gridCell.column.dataField === "Picture") {
               excelCell.value = undefined;

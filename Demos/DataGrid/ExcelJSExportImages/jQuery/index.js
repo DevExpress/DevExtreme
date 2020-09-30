@@ -37,8 +37,10 @@ $(function(){
         worksheet: worksheet,
         topLeftCell: { row: 2, column: 2 },
         autoFilterEnabled: true,
-        customizeCell: (options) => {
-          var { excelCell, gridCell } = options;
+        customizeCell: function(options) {
+          var gridCell = options.gridCell;
+          var excelCell = options.excelCell;
+
           if(gridCell.rowType === "data") {
             if(gridCell.column.dataField === "Picture") {
               excelCell.value = undefined;
