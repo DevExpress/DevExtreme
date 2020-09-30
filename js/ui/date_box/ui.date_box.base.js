@@ -2,7 +2,7 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
 import registerComponent from '../../core/component_registrator';
 import { isDefined, isDate as isDateType, isString, isNumeric } from '../../core/utils/type';
-import dom from '../../core/utils/dom';
+import { createTextElementHiddenCopy } from '../../core/utils/dom';
 import { each } from '../../core/utils/iterator';
 import { compare as compareVersions } from '../../core/utils/version';
 import { extend } from '../../core/utils/extend';
@@ -315,7 +315,7 @@ const DateBox = DropDownEditor.inherit({
         const longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
         const $input = this._input();
         const inputElement = $input.get(0);
-        const $longestValueElement = dom.createTextElementHiddenCopy($input, longestValue);
+        const $longestValueElement = createTextElementHiddenCopy($input, longestValue);
         const isPaddingStored = this._storedPadding !== undefined;
         const storedPadding = !isPaddingStored ? 0 : this._storedPadding;
 

@@ -61,5 +61,4 @@ const ContextMenu = Class.inherit({
 
 registerEvent(CONTEXTMENU_EVENT_NAME, new ContextMenu());
 
-
-export { CONTEXTMENU_EVENT_NAME as name };
+export const name = CONTEXTMENU_EVENT_NAME;

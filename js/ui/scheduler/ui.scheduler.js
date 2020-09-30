@@ -30,7 +30,7 @@ import DataHelperMixin from '../../data_helper';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
-import dialog from '../dialog';
+import { custom } from '../dialog';
 import themes from '../themes';
 import errors from '../widget/ui.errors';
 import Widget from '../widget/ui.widget';
@@ -2023,7 +2023,7 @@ class Scheduler extends Widget {
         const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
         const occurrenceText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteOccurrence' : 'dxScheduler-confirmRecurrenceEditOccurrence');
 
-        return dialog.custom({
+        return custom({
             messageHtml: message,
             showCloseButton: true,
             showTitle: true,

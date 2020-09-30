@@ -21,7 +21,7 @@ import messageLocalization from '../../localization/message';
 import holdEvent from '../../events/hold';
 import { compileGetter } from '../../core/utils/data';
 import { name as clickEventName } from '../../events/click';
-import contextMenuEvent from '../../events/contextmenu';
+import { name as contextMenuEventName } from '../../events/contextmenu';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 
 const COLLECTION_CLASS = 'dx-collection';
@@ -774,7 +774,7 @@ const CollectionWidget = Widget.inherit({
     _attachContextMenuEvent: function() {
         const $itemContainer = this._itemContainer();
         const itemSelector = this._itemSelector();
-        const eventName = addNamespace(contextMenuEvent.name, this.NAME);
+        const eventName = addNamespace(contextMenuEventName, this.NAME);
 
         eventsEngine.off($itemContainer, eventName, itemSelector);
         eventsEngine.on($itemContainer, eventName, itemSelector, this._itemContextMenuHandler.bind(this));

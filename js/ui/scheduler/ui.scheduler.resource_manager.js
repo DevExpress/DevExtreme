@@ -1,4 +1,4 @@
-import arrayUtils from '../../core/utils/array';
+import { wrapToArray } from '../../core/utils/array';
 import { grep } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import { deepExtendArraySafe } from '../../core/utils/object';
@@ -172,7 +172,7 @@ export default class ResourceManager {
         for(const name in resources) {
             if(Object.prototype.hasOwnProperty.call(resources, name)) {
                 const resourceData = resources[name];
-                resourcesSetter[name](itemData, this._isMultipleResource(name) ? arrayUtils.wrapToArray(resourceData) : resourceData);
+                resourcesSetter[name](itemData, this._isMultipleResource(name) ? wrapToArray(resourceData) : resourceData);
             }
         }
     }
@@ -198,7 +198,7 @@ export default class ResourceManager {
                         resourceData = resourceData[0];
                     }
                     if(!wrapOnlyMultipleResources || (wrapOnlyMultipleResources && this._isMultipleResource(field))) {
-                        this.getDataAccessors(field, 'setter')(tempObject, arrayUtils.wrapToArray(resourceData));
+                        this.getDataAccessors(field, 'setter')(tempObject, wrapToArray(resourceData));
                     } else {
                         this.getDataAccessors(field, 'setter')(tempObject, resourceData);
                     }

@@ -16,7 +16,7 @@ import { addNamespace, isMouseEvent } from '../../../events/utils/index';
 import pointerEvents from '../../../events/pointer';
 import errors from '../../widget/ui.errors';
 import { name as clickEventName } from '../../../events/click';
-import contextMenuEvent from '../../../events/contextmenu';
+import { name as contextMenuEventName } from '../../../events/contextmenu';
 import {
     enter as dragEventEnter,
     leave as dragEventLeave,
@@ -1356,7 +1356,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const cellSelector = '.' + DATE_TABLE_CELL_CLASS + ',.' + ALL_DAY_TABLE_CELL_CLASS;
         const $element = this.$element();
-        const eventName = addNamespace(contextMenuEvent.name, this.NAME);
+        const eventName = addNamespace(contextMenuEventName, this.NAME);
 
         eventsEngine.off($element, eventName, cellSelector);
         eventsEngine.on($element, eventName, cellSelector, this._contextMenuHandler.bind(this));

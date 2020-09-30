@@ -11,7 +11,7 @@ import stringUtils from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { inArray, normalizeIndexes } from '../../core/utils/array';
-import dataUtils from '../../core/utils/data';
+import { compileGetter } from '../../core/utils/data';
 import removeEvent from '../../core/remove_event';
 import { name as clickEventName } from '../../events/click';
 import errors from '../widget/ui.errors';
@@ -1149,7 +1149,7 @@ const LayoutManager = Widget.inherit({
                                 const dataField = itemRunTimeInfo.item.dataField;
 
                                 if(dataField && isDefined(itemRunTimeInfo.widgetInstance)) {
-                                    const valueGetter = dataUtils.compileGetter(dataField);
+                                    const valueGetter = compileGetter(dataField);
                                     const dataValue = valueGetter(args.value);
 
                                     if(dataValue !== undefined || this._isCheckboxUndefinedStateEnabled(itemRunTimeInfo.item)) {

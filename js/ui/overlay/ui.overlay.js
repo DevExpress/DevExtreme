@@ -11,7 +11,7 @@ import { inArray } from '../../core/utils/array';
 import browser from '../../core/utils/browser';
 import { noop } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
-import domUtils from '../../core/utils/dom';
+import { contains, resetActiveElement } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { fitIntoRange } from '../../core/utils/math';
@@ -408,9 +408,9 @@ const Overlay = Widget.inherit({
         }
 
         const $container = this._$content;
-        const isAttachedTarget = $(window.document).is(e.target) || domUtils.contains(window.document, e.target);
+        const isAttachedTarget = $(window.document).is(e.target) || contains(window.document, e.target);
         const isInnerOverlay = $(e.target).closest('.' + INNER_OVERLAY_CLASS).length;
-        const outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || domUtils.contains($container.get(0), e.target));
+        const outsideClick = isAttachedTarget && !isInnerOverlay && !($container.is(e.target) || contains($container.get(0), e.target));
 
         if(outsideClick && closeOnOutsideClick) {
             this._outsideClickHandler(e);
@@ -632,7 +632,7 @@ const Overlay = Widget.inherit({
         const shouldResetActiveElement = !!this._$content.find(activeElement).length;
 
         if(shouldResetActiveElement) {
-            domUtils.resetActiveElement();
+            resetActiveElement();
         }
     },
 
@@ -778,7 +778,7 @@ const Overlay = Widget.inherit({
         const isTabOnLast = !e.shiftKey && e.target === $lastTabbable.get(0);
         const isShiftTabOnFirst = e.shiftKey && e.target === $firstTabbable.get(0);
         const isEmptyTabList = tabbableElements.length === 0;
-        const isOutsideTarget = !domUtils.contains(this._$wrapper.get(0), e.target);
+        const isOutsideTarget = !contains(this._$wrapper.get(0), e.target);
 
         if(isTabOnLast || isShiftTabOnFirst ||
             isEmptyTabList || isOutsideTarget) {

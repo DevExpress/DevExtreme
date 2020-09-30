@@ -1,5 +1,5 @@
 import eventsEngine from '../events/core/events_engine';
-import domUtils from '../core/utils/dom';
+import { closestCommonParent } from '../core/utils/dom';
 import domAdapter from '../core/dom_adapter';
 import Class from '../core/class';
 import registerEvent from './core/event_registrator';
@@ -38,7 +38,7 @@ const DblClick = Class.inherit({
         if(timeStamp - this._lastClickTimeStamp < DBLCLICK_TIMEOUT) {
             fireEvent({
                 type: DBLCLICK_EVENT_NAME,
-                target: domUtils.closestCommonParent(this._firstClickTarget, e.target),
+                target: closestCommonParent(this._firstClickTarget, e.target),
                 originalEvent: e
             });
             this._forgetLastClick();

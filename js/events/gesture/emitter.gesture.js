@@ -3,7 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import devices from '../../core/devices';
 import { styleProp } from '../../core/utils/style';
 import callOnce from '../../core/utils/call_once';
-import domUtils from '../../core/utils/dom';
+import { resetActiveElement, clearSelection } from '../../core/utils/dom';
 import readyCallbacks from '../../core/utils/ready_callbacks';
 const ready = readyCallbacks.add;
 import { sign } from '../../core/utils/math';
@@ -169,7 +169,7 @@ const GestureEmitter = Emitter.inherit({
 
     _resetActiveElement: function() {
         if(devices.real().platform === 'ios' && this.getElement().find(':focus').length) {
-            domUtils.resetActiveElement();
+            resetActiveElement();
         }
     },
 
@@ -190,7 +190,7 @@ const GestureEmitter = Emitter.inherit({
             return;
         }
 
-        domUtils.clearSelection();
+        clearSelection();
     },
 
     end: function(e) {

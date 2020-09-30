@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import array from '../../core/utils/array';
+import { wrapToArray } from '../../core/utils/array';
 import { isDefined, isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
@@ -139,7 +139,7 @@ const subscribes = {
             const field = resourcesManager.getField(resourceForPainting);
             const groupIndex = options.groupIndex;
             const groups = this._workSpace._getCellGroups(groupIndex);
-            const resourceValues = array.wrapToArray(resourcesManager.getDataAccessors(field, 'getter')(options.itemData));
+            const resourceValues = wrapToArray(resourcesManager.getDataAccessors(field, 'getter')(options.itemData));
             let groupId = resourceValues.length ? resourceValues[0] : undefined;
 
             for(let i = 0; i < groups.length; i++) {
