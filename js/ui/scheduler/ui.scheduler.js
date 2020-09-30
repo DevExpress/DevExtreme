@@ -52,7 +52,7 @@ import AppointmentAdapter from './appointmentAdapter';
 import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
 import AppointmentSettingsGenerator from './appointmentSettingsGenerator';
-import utils from './utils_data';
+import utils from './utils';
 import DateAdapter from './dateAdapter';
 
 // STYLE scheduler
