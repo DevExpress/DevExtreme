@@ -56,13 +56,17 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return this._workSpace._getRowCount();
     }
 
-    addAdditionalGroupCellClasses(cellClass, index) {
-        cellClass = this._addLastGroupCellClass(cellClass, index);
+    addAdditionalGroupCellClasses(cellClass, index, i, j, applyUnconditionally = false) {
+        cellClass = this._addLastGroupCellClass(cellClass, index, applyUnconditionally);
 
-        return this._addFirstGroupCellClass(cellClass, index);
+        return this._addFirstGroupCellClass(cellClass, index, applyUnconditionally);
     }
 
-    _addLastGroupCellClass(cellClass, index) {
+    _addLastGroupCellClass(cellClass, index, applyUnconditionally) {
+        if(applyUnconditionally) {
+            return `${cellClass} ${this.getLastGroupCellClass()}`;
+        }
+
         const groupByDate = this._workSpace.isGroupedByDate();
 
         if(groupByDate) {
@@ -78,7 +82,11 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return cellClass;
     }
 
-    _addFirstGroupCellClass(cellClass, index) {
+    _addFirstGroupCellClass(cellClass, index, applyUnconditionally) {
+        if(applyUnconditionally) {
+            return `${cellClass} ${this.getFirstGroupCellClass()}`;
+        }
+
         const groupByDate = this._workSpace.isGroupedByDate();
 
         if(groupByDate) {

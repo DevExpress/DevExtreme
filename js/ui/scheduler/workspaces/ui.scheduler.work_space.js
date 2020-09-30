@@ -1528,7 +1528,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getHeaderPanelCellClass(i) {
         const cellClass = HEADER_PANEL_CELL_CLASS + ' ' + HORIZONTAL_SIZES_CLASS;
 
-        return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1);
+        return this._groupedStrategy.addAdditionalGroupCellClasses(
+            cellClass, i + 1, undefined, undefined, this.isGroupedByDate(),
+        );
     }
 
     _calculateHeaderCellRepeatCount() {

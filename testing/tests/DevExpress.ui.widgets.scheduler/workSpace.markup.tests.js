@@ -1726,13 +1726,14 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                 });
 
                 QUnit.test(`first-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped by date`, function(assert) {
-                    const instance = this.createInstance(view.class);
+                    const instance = this.createInstance(view.class, {
+                        groupByDate: true,
+                    });
 
                     instance.option('groups', [{
                         name: 'one',
                         items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
-                    instance.option('groupByDate', true);
 
                     instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
                         checkFirstGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
@@ -1831,14 +1832,15 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                     });
                 });
 
-                QUnit.test(`last-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped by time`, function(assert) {
-                    const instance = this.createInstance(view.class);
+                QUnit.test(`last-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped by date`, function(assert) {
+                    const instance = this.createInstance(view.class, {
+                        groupByDate: true,
+                    });
 
                     instance.option('groups', [{
                         name: 'one',
                         items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
                     }]);
-                    instance.option('groupByDate', true);
 
                     instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
                         checkLastGroupCell(assert, this, index, GROUP_COUNT, 'Date table');
