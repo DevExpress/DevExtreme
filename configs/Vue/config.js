@@ -6,13 +6,13 @@ System.config({
     },
     /** devextreme-aspnet-data-nojquery */
     'devextreme-aspnet-data-nojquery': {
-      "esModule": true
+      'esModule': true
     },
     /**/
 
     /** vectormap */
     'devextreme/dist/js/vectormap-data/*': {
-        'esModule': true
+      'esModule': true
     },
     /**/
   },
@@ -33,8 +33,8 @@ System.config({
     /**/
 
     /** showdown&turndown */
-    'showdown': "npm:showdown/dist/showdown.js",
-    'turndown': "npm:turndown/lib/turndown.browser.umd.js",
+    'showdown': 'npm:showdown/dist/showdown.js',
+    'turndown': 'npm:turndown/lib/turndown.browser.umd.js',
     /**/
 
     /** globalize--vue&react */
@@ -106,31 +106,31 @@ System.config({
       main: 'index'
     },
     'devextreme/events': {
-        main: 'index'
+      main: 'index'
     }/** globalize--vue&react */,
     'globalize': {
       main: '../globalize.js',
       defaultExtension: 'js'
     },
     'cldr': {
-        main: '../cldr.js',
-        defaultExtension: 'js'
+      main: '../cldr.js',
+      defaultExtension: 'js'
     }/**//** globalize */,
     'globalize': {
       main: '../globalize.js',
       defaultExtension: 'js'
     },
     'cldr': {
-        main: '../cldr.js',
-        defaultExtension: 'js'
+      main: '../cldr.js',
+      defaultExtension: 'js'
     }/**//**signalr */,
     '@aspnet/signalr': {
       main: 'index.js',
       defaultExtension: 'js'
     }/**/,
     'es6-object-assign': {
-        main: './index.js',
-        defaultExtension: 'js'
+      main: './index.js',
+      defaultExtension: 'js'
     }
   },
   babelOptions: {

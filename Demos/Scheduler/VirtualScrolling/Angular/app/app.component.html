@@ -1,0 +1,31 @@
+<dx-scheduler
+    [dataSource]="appointments"
+    [height]="600"
+    [views]="[{
+        type: 'day',
+        groupOrientation: 'vertical',
+        name: '2 Days',
+        intervalCount: 2
+    }, {
+        type: 'day',
+        groupOrientation: 'vertical',
+        name: '3 Days',
+        intervalCount: 3
+    }, {
+        type: 'workWeek',
+        name: 'Work Week',
+        groupOrientation: 'vertical'
+    }]"
+    currentView="3 Days"
+    [currentDate]="currentDate"
+    [startDayHour]="9"
+    [endDayHour]="18"
+    [scrolling]="{ mode: 'virtual' }"
+    [showAllDayPanel]="false"
+    [groups]="['resourceId']"
+    [resources]="[{
+        fieldExpr: 'resourceId',
+        dataSource: resources
+    }]"
+    >
+</dx-scheduler>

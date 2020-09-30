@@ -13,8 +13,8 @@
     <DxAnnotation
       v-for="state in statesData"
       :coordinates="state.coordinates"
-      :offsetX="state.offsetX"
-      :offsetY="state.offsetY"
+      :offset-x="state.offsetX"
+      :offset-y="state.offsetY"
       :data="state.data"
       :key="state.data.name"
     />
