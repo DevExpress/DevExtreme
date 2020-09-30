@@ -1554,10 +1554,11 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual($list.find('.test-class').length, 4);
     });
 
-    QUnit.test('deleteItem should remove an item', function(assert) {
+    QUnit.test('allowItemDeleting', function(assert) {
         const $list = $('#list').dxList({
             items: [1, 2, 3, 4],
-            allowItemDeleting: true
+            allowItemDeleting: true,
+            focusStateEnabled: true
         });
         const list = $list.dxList('instance');
 
@@ -2769,6 +2770,7 @@ QUnit.module('scrollView integration', {
         const scrollActionSpy = sinon.spy();
         const list = $('#list').dxList({
             height: 100,
+            useNativeScrolling: false,
             dataSource: [1, 2, 3, 4, 5, 6],
             onScroll: scrollActionSpy
         }).dxList('instance');
@@ -2781,6 +2783,7 @@ QUnit.module('scrollView integration', {
         const scrollActionSpy = sinon.spy();
         const list = $('#list').dxList({
             height: 100,
+            useNativeScrolling: false,
             dataSource: [1, 2, 3, 4, 5, 6]
         }).dxList('instance');
 
