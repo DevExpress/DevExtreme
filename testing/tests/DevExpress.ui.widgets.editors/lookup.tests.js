@@ -3454,6 +3454,27 @@ QUnit.module('default options', {
         }
     });
 
+    QUnit.test('Check popup height with no found data option for Material theme', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+
+        const $lookup = $('<div>').prependTo('body');
+
+        try {
+
+            const lookup = $lookup.dxLookup({ dataSource: [], searchEnabled: true }).dxLookup('instance');
+
+            $(lookup.field()).trigger('dxclick');
+
+            const $popup = $('.dx-popup-content');
+
+            assert.roughEqual($popup.height(), 91, 1, 'popup height if DataSource withot items and `searchEnabled: true`');
+        } finally {
+            $lookup.remove();
+            themes.isMaterial = origIsMaterial;
+        }
+    });
+
     QUnit.test('Check when dropDownCentered option for Material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
