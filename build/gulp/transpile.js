@@ -28,6 +28,7 @@ const SRC = ['js/**/*.*', '!' + GLOB_TS, '!js/**/*.{tsx,ts}', '!js/renovation/co
 const TRANSPILE_SRC = SRC.concat([
     '!js/bundles/**/*',
     '!js/viz/docs/**/*',
+    '!js/renovation/**/*',
     '!**/*.json'
 ]);
 const BANDLES_SRC = ['js/bundles/**/*.js'];
