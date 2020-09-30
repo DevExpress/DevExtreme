@@ -25,7 +25,7 @@ jobs:
           ${{ runner.os }}-node
 
     - name: Run npm install
-      run: yarn
+      run: npm install --no-package-lock --no-audit --no-fund
 
     - name: Build
       env:
