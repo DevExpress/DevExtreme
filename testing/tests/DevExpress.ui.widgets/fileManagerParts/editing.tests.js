@@ -710,6 +710,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
 
         itemViewPanel.trigger('dragenter');
+        assert.deepEqual(itemViewPanel.offset(), dropZonePlaceholder.offset(), 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
         itemViewPanel.trigger('dragleave');
