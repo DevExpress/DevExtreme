@@ -1747,7 +1747,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                     });
 
                     instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function(index) {
-                        checkFirstGroupCell(assert, this, index, GROUP_COUNT, 'Header panel');
+                        assert.ok($(this).hasClass(FIRST_GROUP_CELL_CLASS), 'Header panel cell has first-group class');
                     });
                 });
 
@@ -1849,11 +1849,11 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                     });
 
                     instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function() {
-                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have first-group class');
+                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have last-group class');
                     });
 
-                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function(index) {
-                        checkLastGroupCell(assert, this, index, GROUP_COUNT, 'Header panel');
+                    instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function() {
+                        assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell has last-group class');
                     });
                 });
 
