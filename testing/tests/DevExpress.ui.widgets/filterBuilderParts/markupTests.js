@@ -11,7 +11,7 @@ QUnit.test('markup init', function(assert) {
         assert.ok(true, 'This test is not actual for mobile devices, dxclick add onclick=\'void(0)\' to every button in mobile');
         return;
     }
-    const $etalon = $('<div/>').html(
+    const $etalon = $(
         '<div id="container" class="dx-filterbuilder dx-widget">'
             + '<div class="dx-filterbuilder-group">'
                 + '<div class="dx-filterbuilder-group-item">'
@@ -24,7 +24,7 @@ QUnit.test('markup init', function(assert) {
     );
 
     const element = $('#container').dxFilterBuilder();
-    assert.equal(element.parent().html(), $etalon.html());
+    assert.equal(element.html(), $etalon.html());
 });
 
 QUnit.test('filterbuilder is created by different values', function(assert) {
