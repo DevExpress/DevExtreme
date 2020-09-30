@@ -10,4 +10,4 @@
  * @prevFileNamespace DevExpress
  * @public
  */
-export function getTimeZones(date?: Date): Array<{id?: string, title?: string, offset?: number}>;
+export function getTimeZones(date?: Date): Array<{id: string, title: string, offset: number}>;
