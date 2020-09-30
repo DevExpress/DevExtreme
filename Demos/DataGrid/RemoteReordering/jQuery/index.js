@@ -28,6 +28,7 @@ $(function(){
             },
             rowDragging: {
                 allowReordering: true,
+                dropFeedbackMode: "push",
                 onReorder: function(e) {
                     var visibleRows = e.component.getVisibleRows(),
                         newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;

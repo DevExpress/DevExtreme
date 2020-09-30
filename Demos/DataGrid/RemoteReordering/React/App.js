@@ -48,6 +48,7 @@ class App extends React.Component {
           <RowDragging
             allowReordering={true}
             onReorder={this.onReorder}
+            dropFeedbackMode="push"
           />
           <Scrolling mode="virtual" />
           <Sorting mode="none" />

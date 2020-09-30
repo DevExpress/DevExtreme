@@ -410,6 +410,7 @@
         "Demos": [{
           "Title": "Local Reordering",
           "Name": "LocalReordering",
+          "Badge": "Updated",
           "Widget": "DataGrid",
           "DemoType": "Web",
           "MvcAdditionalFiles": [
@@ -420,6 +421,7 @@
         {
           "Title": "Remote Reordering",
           "Name": "RemoteReordering",
+          "Badge": "Updated",
           "Widget": "DataGrid",
           "DemoType": "Web",
           "Modules": "devextreme-aspnet-data-nojquery",

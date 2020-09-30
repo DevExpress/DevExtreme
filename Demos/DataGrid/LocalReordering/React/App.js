@@ -44,6 +44,7 @@ class App extends React.Component {
             allowReordering={true}
             onReorder={this.onReorder}
             showDragIcons={this.state.showDragIcons}
+            dropFeedbackMode="push"
           />
           <Scrolling mode="virtual" />
           <Sorting mode="none" />

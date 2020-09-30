@@ -7,6 +7,7 @@
     <DxRowDragging
       :allow-reordering="true"
       :on-reorder="onReorder"
+      drop-feedback-mode="push"
     />
     <DxSorting mode="none"/>
     <DxScrolling mode="virtual"/>
