@@ -54,6 +54,10 @@ $generic-mobile-html-editor-toolbar-height: $generic-mobile-toolbar-height;
       background: $htmleditor-variable-bg;
     }
   }
+
+  td {
+    border-color: $htmleditor-table-border-color;
+  }
 }
 
 .dx-htmleditor-toolbar {
