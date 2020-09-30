@@ -1679,7 +1679,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getTimeCellClass(i) {
         const cellClass = TIME_PANEL_CELL_CLASS + ' ' + VERTICAL_SIZES_CLASS;
 
-        return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i);
+        return this._isVerticalGroupedWorkSpace()
+            ? this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i)
+            : cellClass;
     }
 
     _getTimeCellDateAdjustedDST(i) {
