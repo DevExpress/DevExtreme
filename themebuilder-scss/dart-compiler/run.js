@@ -16,7 +16,6 @@ const runCommand = (command, args, detached = false) => {
         let errorData = '';
         process.stderr.on('data', (data) => {
             errorData += data;
-            // reject(data.toString());
         });
 
         process.on('close', (code) => {
@@ -50,4 +49,4 @@ const run = async() => {
     }
 };
 
-run();
+module.exports.run = run;
