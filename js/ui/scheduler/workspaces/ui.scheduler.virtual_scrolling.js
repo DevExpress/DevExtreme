@@ -5,7 +5,7 @@ import { addNamespace } from '../../../events/utils/index';
 
 const ROW_HEIGHT = 50;
 const MIN_SCROLL_OFFSET = 10;
-const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 0;
+const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 25;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
 
 export default class VirtualScrollingDispatcher {
@@ -166,7 +166,7 @@ class VirtualScrolling {
 
         this._state = {
             pageSize: this._getPageSize(),
-            scrollPosition: scrollPosition,
+            prevScrollPosition: scrollPosition,
             startIndex: -1,
             rowCount: 0,
             topVirtualRowCount: 0,
@@ -182,47 +182,55 @@ class VirtualScrolling {
         this.updateState(scrollPosition);
     }
 
-    updateState(scrollPosition) {
+    needUpdateState(scrollPosition) {
         const state = this.getState();
         const top = scrollPosition.top;
-        const currentStartIndex = state.startIndex;
+        const currentTopPosition = state.prevScrollPosition.top;
         const rowHeight = this.getRowHeight();
+        const currentTopRowsCount = Math.floor(currentTopPosition / rowHeight);
         const isFirstInitialization = state.startIndex < 0;
         const topRowsCount = Math.floor(top / rowHeight);
-        const isStartIndexChanged = Math.abs(currentStartIndex - topRowsCount) > 0;
+        const isStartIndexChanged = Math.abs(currentTopRowsCount - topRowsCount) > this._getOutlineCount();
 
-        state.scrollPosition = scrollPosition;
+        return isFirstInitialization || isStartIndexChanged;
+    }
 
-        const needUpdateState = isFirstInitialization || isStartIndexChanged;
-        if(needUpdateState) {
-            const topRowsInfo = this._calcTopRowsInfo(scrollPosition);
-            const topRowsDelta = this._calcTopRowsDelta(topRowsInfo);
-            const {
-                bottomOutlineCount,
-                bottomVirtualRowCount,
-                rowCountWithBottom
-            } = this._calcBottomRowsInfo(topRowsDelta);
-
-            const {
-                topVirtualRowCount,
-                topOutlineCount
-            } = topRowsInfo;
-
-            const rowCount = topOutlineCount + rowCountWithBottom + bottomOutlineCount;
-
-            state.startIndex = topRowsCount - topOutlineCount;
-            state.topVirtualRowCount = topVirtualRowCount;
-            state.topOutlineCount = topOutlineCount;
-            state.rowCount = rowCount;
-            state.bottomOutlineCount = bottomOutlineCount;
-            state.bottomVirtualRowCount = bottomVirtualRowCount;
-
-            this._updateStateCore();
-
-            return true;
+    updateState(scrollPosition) {
+        if(!this.needUpdateState(scrollPosition)) {
+            return false;
         }
 
-        return false;
+        const topRowsInfo = this._calcTopRowsInfo(scrollPosition);
+        const topRowsDelta = this._calcTopRowsDelta(topRowsInfo);
+        const {
+            bottomOutlineCount,
+            bottomVirtualRowCount,
+            rowCountWithBottom
+        } = this._calcBottomRowsInfo(topRowsDelta);
+
+        const {
+            topVirtualRowCount,
+            topOutlineCount
+        } = topRowsInfo;
+
+        const rowCount = topOutlineCount + rowCountWithBottom + bottomOutlineCount;
+
+        const { top } = scrollPosition;
+        const topRowsCount = Math.floor(top / this.getRowHeight());
+
+        const state = this.getState();
+
+        state.prevScrollPosition = scrollPosition;
+        state.startIndex = topRowsCount - topOutlineCount;
+        state.topVirtualRowCount = topVirtualRowCount;
+        state.topOutlineCount = topOutlineCount;
+        state.rowCount = rowCount;
+        state.bottomOutlineCount = bottomOutlineCount;
+        state.bottomVirtualRowCount = bottomVirtualRowCount;
+
+        this._updateStateCore();
+
+        return true;
     }
 
     _calcTopRowsInfo(scrollPosition) {
