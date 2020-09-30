@@ -615,14 +615,13 @@ const Lookup = DropDownList.inherit({
     },
 
     _calculateListHeight: function(grouped) {
-        const themeName = themes.current();
         const listItems = grouped ? this._listItemGroupedElements() : this._listItemElements();
         const selectedListItem = $('.' + LIST_ITEM_SELECTED_CLASS);
         const selectedIndex = listItems.index(selectedListItem);
         let listHeight = 0;
         let requireListItems = [];
 
-        if(themes.isMaterial(themeName) && listItems.length === 0) {
+        if(listItems.length === 0) {
             listHeight += MATERIAL_LOOKUP_LIST_PADDING;
         } else if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
             listItems.each((_, item) => {
