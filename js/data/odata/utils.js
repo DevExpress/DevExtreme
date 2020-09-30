@@ -7,7 +7,7 @@ import Guid from '../../core/guid';
 import { grep } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
 import { errors } from '../errors';
-import { XHR_ERROR_UNLOAD, errorMessageFromXhr } from '../utils';
+import Utils from '../utils';
 import { format as stringFormat } from '../../core/utils/string';
 
 const GUID_REGEX = /^(\{{0,1}([0-9a-fA-F]){8}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){4}-([0-9a-fA-F]){12}\}{0,1})$/;
@@ -215,7 +215,7 @@ export const sendRequest = (protocolVersion, request, options) => {
         let { nextUrl } = tuple;
 
         if(error) {
-            if(error.message !== XHR_ERROR_UNLOAD) {
+            if(error.message !== Utils.XHR_ERROR_UNLOAD) {
                 d.reject(error);
             }
         } else if(countOnly) {
@@ -277,7 +277,7 @@ const errorFromResponse = (obj, textStatus, ajaxOptions) => {
         const { status, responseText } = obj;
 
         httpStatus = status;
-        message = errorMessageFromXhr(obj, textStatus);
+        message = Utils.errorMessageFromXhr(obj, textStatus);
         try {
             response = JSON.parse(responseText);
         } catch(x) {

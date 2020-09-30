@@ -1,4 +1,4 @@
-import { abstract } from '../../core/class';
+import Class from '../../core/class';
 
 export default class ItemOptionAction {
     constructor(options) {
@@ -15,6 +15,6 @@ export default class ItemOptionAction {
     }
 
     tryExecute() {
-        abstract();
+        Class.abstract();
     }
 }
