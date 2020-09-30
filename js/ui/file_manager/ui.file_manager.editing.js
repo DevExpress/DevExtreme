@@ -11,6 +11,7 @@ import Widget from '../widget/ui.widget';
 import FileManagerDialogManager from './ui.file_manager.dialog_manager';
 import FileManagerFileUploader from './ui.file_manager.file_uploader';
 import { FileManagerMessages } from './ui.file_manager.messages';
+import { isDefined } from '../../core/utils/type';
 
 class FileManagerEditingControl extends Widget {
 
@@ -311,7 +312,13 @@ class FileManagerEditingControl extends Widget {
     }
 
     _handleSingleRequestActionError(operationInfo, context, errorInfo) {
-        const itemInfo = context.getItemForSingleRequestError();
+        // console.log(errorInfo);
+        let itemInfo = context.getItemForSingleRequestError();
+        if(!isDefined(itemInfo)) {
+            const errorItemInfo = this._controller.findItemInfoByFileItem(errorInfo.fileItem);
+            context.itemInfos = [errorItemInfo];
+            itemInfo = errorItemInfo;
+        }
         const errorText = this._getErrorText(errorInfo, itemInfo);
 
         context.processSingleRequestError(errorText);
@@ -358,7 +365,7 @@ class FileManagerEditingControl extends Widget {
 
     _getItemProgressDisplayInfo(itemInfo) {
         return {
-            commonText: itemInfo.fileItem.name,
+            commonText: itemInfo.fileItem.name || '&nbsp;',
             imageUrl: this._getItemThumbnail(itemInfo)
         };
     }
@@ -528,6 +535,10 @@ class FileManagerActionContext {
 
     get itemInfos() {
         return this._itemInfos;
+    }
+
+    set itemInfos(value) {
+        this._itemInfos = value;
     }
 
     get errorState() {

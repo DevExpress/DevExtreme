@@ -191,15 +191,20 @@ export default class FileItemsController {
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        const tempDirInfo = this._createDirectoryInfoByName(name, parentDirectoryInfo);
+        const tempDirInfo = this._createItemInfoByName(name, parentDirectoryInfo, true);
         const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
+        // const actionInfo = this._createEditActionInfo('create', [], parentDirectoryInfo);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
             () => this._resetDirectoryState(parentDirectoryInfo));
     }
 
     renameItem(fileItemInfo, name) {
-        const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory);
+        const tempFileInfo = this._createItemInfoByName(name, fileItemInfo.parentDirectory, fileItemInfo.fileItem.isDirectory);
+        // console.log(fileItemInfo);
+        // console.log(tempFileInfo);
+        const actionInfo = this._createEditActionInfo('rename', tempFileInfo, fileItemInfo.parentDirectory);
+        // const actionInfo = this._createEditActionInfo('rename', [], fileItemInfo.parentDirectory);
         return this._processEditAction(actionInfo,
             () => {
                 if(!fileItemInfo.fileItem.isDirectory) {
@@ -496,7 +501,14 @@ export default class FileItemsController {
         return selectedDirInfo;
     }
 
-    _createDirectoryInfoByName(name, parentDirectoryInfo) {
+    findItemInfoByFileItem(fileItem) {
+        // debugger;
+        const foundItem1 = find(this._rootDirectoryInfo.items, info => info.fileItem.key === fileItem.key);
+        const foundItem2 = find(this._currentDirectoryInfo.items, info => info.fileItem.key === fileItem.key);
+        return foundItem1 || foundItem2;
+    }
+
+    _createItemInfoByName(name, parentDirectoryInfo, isDirectory) {
         const dirPathInfo = parentDirectoryInfo.fileItem.pathInfo.slice();
         if(!parentDirectoryInfo.fileItem.isRoot()) {
             dirPathInfo.push({
@@ -504,7 +516,10 @@ export default class FileItemsController {
                 key: name
             });
         }
-        return this._createDirectoryInfo(new FileSystemItem(dirPathInfo, name, true), parentDirectoryInfo);
+        const fileItem = new FileSystemItem(dirPathInfo, name, isDirectory);
+        return isDirectory
+            ? this._createDirectoryInfo(fileItem, parentDirectoryInfo)
+            : this._createFileInfo(fileItem, parentDirectoryInfo);
     }
 
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {
