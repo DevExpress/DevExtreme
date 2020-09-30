@@ -1682,7 +1682,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                     });
 
                     instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function() {
-                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have first-group class');
+                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have last-group class');
                     });
 
                     instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function(index) {
@@ -1707,7 +1707,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                     });
 
                     instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function() {
-                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have first-group class');
+                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have last-group class');
                     });
 
                     instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function(index) {
@@ -1742,7 +1742,7 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
                     });
                 });
 
-                QUnit.test(`first-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped vertically`, function(assert) {
+                QUnit.test(`last-group-cell class should be assigned to correct cells in ${view.name} when appointments are grouped vertically`, function(assert) {
                     const instance = this.createInstance(view.class, {
                         groupOrientation: 'vertical',
                     });
@@ -1754,26 +1754,26 @@ QUnit.module('FirstGroupCell and LastGroupCell classes', () => {
 
                     instance.$element().find(toSelector(CELL_CLASS)).each(function(index) {
                         if((Math.floor(index / columnCountInGroup) + 1) % rowCountInGroup === 0) {
-                            assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell has first-group class');
+                            assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell has last-group class');
                         } else {
-                            assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell does not have first-group class');
+                            assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Date table cell does not have last-group class');
                         }
                     });
 
                     instance.$element().find(toSelector(ALL_DAY_TABLE_CELL_CLASS)).each(function() {
-                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'All-day panel cell does not have first-group class');
+                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'All-day panel cell does not have last-group class');
                     });
 
                     instance.$element().find(toSelector(TIME_PANEL_CELL_CLASS)).each(function(index) {
                         if((index + 1) % rowCountInGroup === 0) {
-                            assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell has first-group class');
+                            assert.ok($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell has last-group class');
                         } else {
-                            assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have first-group class');
+                            assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Time panel cell does not have last-group class');
                         }
                     });
 
                     instance.$element().find(toSelector(HEADER_PANEL_CELL_CLASS)).each(function() {
-                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell does not have first-group class');
+                        assert.notOk($(this).hasClass(LAST_GROUP_CELL_CLASS), 'Header panel cell does not have last-group class');
                     });
                 });
             });
