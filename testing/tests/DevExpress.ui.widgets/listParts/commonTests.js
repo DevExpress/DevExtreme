@@ -1397,7 +1397,7 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual($menuItems.length, 1, 'items count is correct');
     });
 
-    QUnit.test('menuMode', function(assert) {
+    QUnit.test('menuMode can be changed from context to slide runtime', function(assert) {
         const actionSpy = sinon.spy();
         const menuItems = [{ text: 'action', action: actionSpy }];
         const $list = $('#list').dxList({
@@ -1406,65 +1406,123 @@ QUnit.module('options changed', moduleSetup, () => {
             menuMode: 'context',
             menuItems
         });
-
         const list = $list.dxList('instance');
 
         list.option('menuMode', 'slide');
-
-        let $item = $list.find('.dx-list-item').eq(0);
-        let pointer = pointerMock($item);
+        const $item = $list.find('.dx-list-item').eq(0);
+        const pointer = pointerMock($item);
         pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
+        const $actionButtons = $item.find('.dx-list-slide-menu-button');
 
-        let $actionButtons = $item.find('.dx-list-slide-menu-button');
         assert.strictEqual($actionButtons.length, 1, 'items count is correct');
-        $actionButtons.eq(0).trigger('dxclick');
-        assert.strictEqual(actionSpy.callCount, 1, 'action is called once');
+    });
+
+    QUnit.test('menuMode can be changed from slide to context runtime', function(assert) {
+        const actionSpy = sinon.spy();
+        const menuItems = [{ text: 'action', action: actionSpy }];
+        const $list = $('#list').dxList({
+            items: [{ text: 'test 1' }, { text: 'test 2' }],
+            displayExpr: 'text',
+            menuMode: 'slide',
+            menuItems
+        });
+        const list = $list.dxList('instance');
 
         list.option('menuMode', 'context');
-        $item = $list.find('.dx-list-item').eq(0);
-        pointer = pointerMock($item);
-        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-        $actionButtons = $item.find('.dx-list-slide-menu-button');
-        assert.strictEqual($actionButtons.length, 0, 'items count is correct');
+        const $item = $list.find('.dx-list-item').eq(0);
         const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
         $item.trigger(contextMenuEvent);
         const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
+
         assert.strictEqual($menuItems.length, 1, 'items count is correct');
     });
 
-    QUnit.test('useInkRipple', function(assert) {
+    QUnit.test('menuMode can be changed from slide to context runtime and then back', function(assert) {
+        const actionSpy = sinon.spy();
+        const menuItems = [{ text: 'action', action: actionSpy }];
+        const $list = $('#list').dxList({
+            items: [{ text: 'test 1' }, { text: 'test 2' }],
+            displayExpr: 'text',
+            menuMode: 'context',
+            menuItems
+        });
+        const list = $list.dxList('instance');
+
+        list.option('menuMode', 'slide');
+        list.option('menuMode', 'context');
+        const $item = $list.find('.dx-list-item').eq(0);
+        const pointer = pointerMock($item);
+        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
+        const $actionButtons = $item.find('.dx-list-slide-menu-button');
+        const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
+        $item.trigger(contextMenuEvent);
+        const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
+
+        assert.strictEqual($actionButtons.length, 0, 'no action buttons');
+        assert.strictEqual($menuItems.length, 1, 'menu items count is correct');
+    });
+
+    QUnit.test('useInkRipple can be changed to false', function(assert) {
         const clock = sinon.useFakeTimers();
         const $list = $('#templated-list').dxList({
             items: ['0'],
             useInkRipple: true
         });
         const list = $list.dxList('instance');
-        let $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
-        let pointer = pointerMock($item);
-        pointer.start('touch').down();
-        clock.tick(100);
-        let inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
-        assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
-        pointer.start('touch').up();
 
         list.option('useInkRipple', false);
-        $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
-        pointer = pointerMock($item);
+        const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const pointer = pointerMock($item);
         pointer.start('touch').down();
         clock.tick(100);
-        inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+
         assert.strictEqual(inkRippleShowingWave.length, 0, 'inkripple feedback does not work');
+
         pointer.start('touch').up();
+        clock.restore();
+    });
+
+    QUnit.test('useInkRipple can be changed to true', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
+            useInkRipple: false
+        });
+        const list = $list.dxList('instance');
 
         list.option('useInkRipple', true);
-        $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
-        pointer = pointerMock($item);
+        const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const pointer = pointerMock($item);
         pointer.start('touch').down();
         clock.tick(100);
-        inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
-        assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
-        pointer.start('touch').up();
+        const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
 
+        assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
+
+        pointer.start('touch').up();
+        clock.restore();
+    });
+
+    QUnit.test('useInkRipple can be changed to false and then back to true at runtime', function(assert) {
+        const clock = sinon.useFakeTimers();
+        const $list = $('#templated-list').dxList({
+            items: ['0'],
+            useInkRipple: true
+        });
+        const list = $list.dxList('instance');
+
+        list.option('useInkRipple', false);
+        list.option('useInkRipple', true);
+        const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const pointer = pointerMock($item);
+        pointer.start('touch').down();
+        clock.tick(100);
+        const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+
+        assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
+
+        pointer.start('touch').up();
         clock.restore();
     });
 
