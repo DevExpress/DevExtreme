@@ -42,10 +42,8 @@ const run = async() => {
         await runCommand('dart2native', ['main.dart', '-o', 'compiler.exe']);
         runCommand('./compiler.exe', [], true);
         console.log('Dart compile server has been run');
-        process.exit(0);
     } catch(e) {
         console.log('Dart compile server has not been run.', e);
-        process.exit(1);
     }
 };
 
