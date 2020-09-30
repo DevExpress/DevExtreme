@@ -2689,28 +2689,31 @@ QUnit.module('scrollView integration', {
     });
 
     QUnit.test('onScroll', function(assert) {
-        assert.expect(1);
+        const scrollActionSpy = sinon.spy();
         const list = $('#list').dxList({
             height: 100,
-            useNative: true,
+            useNativeScrolling: false,
             dataSource: [1, 2, 3, 4, 5, 6],
-            onScroll: () => { assert.ok(true, 'onScroll fired'); }
+            onScroll: scrollActionSpy
         }).dxList('instance');
 
         list.scrollToItem(5);
+
+        assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
     QUnit.test('scroll event', function(assert) {
-        assert.expect(1);
+        const scrollActionSpy = sinon.spy();
         const list = $('#list').dxList({
             height: 100,
-            useNative: true,
+            useNativeScrolling: false,
             dataSource: [1, 2, 3, 4, 5, 6]
         }).dxList('instance');
-
-        list.on('scroll', () => { assert.ok(true, 'onScroll fired'); });
+        list.on('scroll', scrollActionSpy);
 
         list.scrollToItem(5);
+
+        assert.strictEqual(scrollActionSpy.callCount, 1, 'onScroll fired');
     });
 
     QUnit.test('list should be scrolled to item from bottom by scrollToItem', function(assert) {
