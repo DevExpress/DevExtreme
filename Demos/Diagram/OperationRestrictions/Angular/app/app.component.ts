@@ -49,13 +49,13 @@ export class AppComponent {
             }
         }
         else if(e.operation === "deleteShape") {
-            if(dataItem && dataItem.type === "root") {
+            if(dataItem && dataItem.Type === "root") {
                 !e.updateUI && notify("You cannot delete the 'Development' shape.", "warning", 1000);
                 e.allowed = false;
             }
-            if(dataItem && dataItem.type === "team") {
+            if(dataItem && dataItem.Type === "team") {
                 var children = this.items.filter(function(item) { 
-                    return item.parentId === dataItem.id;
+                    return item.ParentID === dataItem.ID;
                 });
                 if(children.length > 0) {
                     !e.updateUI && notify("You cannot delete a 'Team' shape connected to an 'Employee' shape.", "warning", 1000);
@@ -70,20 +70,20 @@ export class AppComponent {
             }
         }
         else if(e.operation === "changeConnection") {
-            if(dataItem && dataItem.type === "root" && e.args.connectorPosition === "end") {
+            if(dataItem && dataItem.Type === "root" && e.args.connectorPosition === "end") {
                 !e.updateUI && notify("The 'Development' shape cannot have an incoming connection.", "warning", 1000);
                 e.allowed = false;
             }
-            if(dataItem && dataItem.type === "team" && e.args.connectorPosition === "end") {
-                if(dataItem && dataItem.parentId !== undefined && dataItem.parentId !== null) {
+            if(dataItem && dataItem.Type === "team" && e.args.connectorPosition === "end") {
+                if(dataItem && dataItem.ParentID !== undefined && dataItem.ParentID !== null) {
                     !e.updateUI && notify("A 'Team' shape can have only one incoming connection.", "warning", 1000);
                     e.allowed = false;
                 }
             }
-            if(dataItem && dataItem.type === "employee") {
+            if(dataItem && dataItem.Type === "employee") {
                 if(e.args.connectorPosition === "start")
                     e.allowed = false;
-                if(e.args.connectorPosition === "end" && dataItem.parentId !== undefined && dataItem.parentId !== null) {
+                if(e.args.connectorPosition === "end" && dataItem.ParentID !== undefined && dataItem.ParentID !== null) {
                     !e.updateUI && notify("An 'Employee' shape can have only one incoming connection.", "warning", 1000);
                     e.allowed = false;
                 }                        
@@ -96,7 +96,7 @@ export class AppComponent {
             }
         }
         else if(e.operation === "beforeChangeShapeText") {
-            if(dataItem && dataItem.type === "root") {
+            if(dataItem && dataItem.Type === "root") {
                 !e.updateUI && notify("You cannot change the 'Development' shape's text.", "warning", 1000);
                 e.allowed = false;
             }
