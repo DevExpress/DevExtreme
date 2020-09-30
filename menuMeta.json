@@ -786,11 +786,11 @@
       {
         "Name": "Export to PDF",
         "Equivalents": "",
-        "Badge": "New",
         "Demos": [
           {
             "Title": "Overview",
             "Name": "ExportToPDF",
+            "Badge": "New",
             "Widget": "DataGrid",
             "Modules": "jspdf&jspdf-autotable",
             "MvcAdditionalFiles": [
