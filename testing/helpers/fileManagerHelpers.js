@@ -733,28 +733,34 @@ export const createHugeFileSystem = () => {
 };
 
 export class NoDuplicatesFileProvider extends CustomFileSystemProvider {
-    constructor() {
+    constructor(options) {
         const providerPredefinedOptions = {
             getItems: function(item) {
                 return this._realProviderInstance.getItems(item);
             },
             createDirectory: function(parentDir, name) {
-                return this._executeIfItemNotExists(() => this._realProviderInstance.createDirectory(parentDir, name), 3, name, parentDir);
+                return this._executeIfItemNotExists(() => this._realProviderInstance.createDirectory(parentDir, name), 3, name);
             },
+            renameItem: function(item, name) {
+                return this._executeIfItemNotExists(() => this._realProviderInstance.renameItem(item.dataItem, name), item.isDirectory ? 3 : 1, name);
+            }
         };
 
         super(providerPredefinedOptions);
         this._realProviderInstance = new ObjectFileSystemProvider({ data: createTestFileSystem() });
+        this._parentDir = options['currentDirectory'];
     }
 
-    _executeIfItemNotExists(onSuccess, errorId, itemName, parentDir) {
-        const promise = new $.Deferred();
+    get parentDir() {
+        return this._parentDir();
+    }
 
-        this.getItems(parentDir).then(items => {
+    _executeIfItemNotExists(onSuccess, errorId, itemName) {
+        const promise = new $.Deferred();
+        this.getItems(this.parentDir).then(items => {
             const duplicateItems = items.filter(i => i.name === itemName);
             if(duplicateItems.length !== 0) {
-                this.targetItem = duplicateItems[0];
-                promise.reject({ errorId, fileItem: this.targetItem }).promise();
+                promise.reject({ errorId }).promise();
             } else {
                 promise.resolve(onSuccess()).promise();
             }
