@@ -2977,30 +2977,25 @@ declare module DevExpress.fx {
 }
 declare module DevExpress.pdfExporter {
     /**
-     * [descr:PdfExportBaseProps]
-     */
-    export interface PdfExportBaseProps {
-        /**
-         * [descr:PdfExportBaseProps.autoTableOptions]
-         */
-        autoTableOptions?: any;
-        /**
-         * [descr:PdfExportBaseProps.jsPDFDocument]
-         */
-        jsPDFDocument?: any;
-        /**
-         * [descr:PdfExportBaseProps.keepColumnWidths]
-         */
-        keepColumnWidths?: boolean;
-    }
-    /**
      * [descr:PdfExportDataGridProps]
      */
-    export interface PdfExportDataGridProps extends PdfExportBaseProps {
+    export interface PdfExportDataGridProps {
+        /**
+         * [descr:PdfExportDataGridProps.autoTableOptions]
+         */
+        autoTableOptions?: any;
         /**
          * [descr:PdfExportDataGridProps.component]
          */
         component?: DevExpress.ui.dxDataGrid;
+        /**
+         * [descr:PdfExportDataGridProps.jsPDFDocument]
+         */
+        jsPDFDocument?: any;
+        /**
+         * [descr:PdfExportDataGridProps.keepColumnWidths]
+         */
+        keepColumnWidths?: boolean;
         /**
          * [descr:PdfExportDataGridProps.selectedRowsOnly]
          */

@@ -1,42 +1,26 @@
 import dxDataGrid from './ui/data_grid';
 
 /**
-* @docid PdfExportBaseProps
+* @docid PdfExportDataGridProps
 * @namespace DevExpress.pdfExporter
 * @type object
-* @hidden
+* @inherits PdfExportBaseProps
 */
-export interface PdfExportBaseProps {
-    /**
-     * @docid PdfExportBaseProps.jsPDFDocument
+export interface PdfExportDataGridProps {
+     /**
+     * @docid PdfExportDataGridProps.jsPDFDocument
      * @type Object
      * @default undefined
      * @public
      */
     jsPDFDocument?: object;
      /**
-     * @docid PdfExportBaseProps.autoTableOptions
+     * @docid PdfExportDataGridProps.autoTableOptions
      * @type Object
      * @default undefined
      * @public
      */
     autoTableOptions?: object;
-    /**
-     * @docid PdfExportBaseProps.keepColumnWidths
-     * @type boolean
-     * @default true
-     * @public
-     */
-    keepColumnWidths?: boolean;
-}
-
-/**
-* @docid PdfExportDataGridProps
-* @namespace DevExpress.pdfExporter
-* @type object
-* @inherits PdfExportBaseProps
-*/
-export interface PdfExportDataGridProps extends PdfExportBaseProps {
     /**
      * @docid PdfExportDataGridProps.component
      * @type dxDataGrid
@@ -51,6 +35,13 @@ export interface PdfExportDataGridProps extends PdfExportBaseProps {
      * @public
      */
     selectedRowsOnly?: boolean;
+    /**
+     * @docid PdfExportDataGridProps.keepColumnWidths
+     * @type boolean
+     * @default true
+     * @public
+     */
+    keepColumnWidths?: boolean;
 }
 
 /**
@@ -64,4 +55,4 @@ export interface PdfExportDataGridProps extends PdfExportBaseProps {
  * @prevFileNamespace DevExpress
  * @public
  */
-export function exportDataGrid(options: ExportDataGridProps): Promise<void> & JQueryPromise<void>;
+export function exportDataGrid(options: PdfExportDataGridProps): Promise<void> & JQueryPromise<void>;
