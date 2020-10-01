@@ -1,4 +1,3 @@
-/* eslint no-process-exit: 0 */
 'use strict';
 
 const { spawn } = require('child_process');
