@@ -31,6 +31,21 @@ const createDateFromUTCWithLocalOffset = date => {
     return result.source;
 };
 
+const getTimeZones = (date = new Date()) => {
+    const dateInUTC = createUTCDate(date);
+    return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
+};
+
+const createUTCDate = (date) => {
+    return new Date(Date.UTC(
+        date.getUTCFullYear(),
+        date.getUTCMonth(),
+        date.getUTCDate(),
+        date.getUTCHours(),
+        date.getUTCMinutes()
+    ));
+};
+
 const getTimezoneOffsetChangeInMinutes = (startDate, endDate, updatedStartDate, updatedEndDate) => {
     return getDaylightOffset(updatedStartDate, updatedEndDate) - getDaylightOffset(startDate, endDate);
 };
@@ -50,14 +65,8 @@ const getDaylightOffsetInMs = (startDate, endDate) => {
 const calculateTimezoneByValue = (timezone, date = new Date()) => {
     // NOTE: This check could be removed. We don't support numerical timezones
     if(typeof timezone === 'string') {
-        const dateUtc = Date.UTC(
-            date.getUTCFullYear(),
-            date.getUTCMonth(),
-            date.getUTCDate(),
-            date.getUTCHours(),
-            date.getUTCMinutes()
-        );
-        return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc);
+        const dateUtc = createUTCDate(date);
+        return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
     }
     return timezone;
 };
@@ -163,9 +172,11 @@ const utils = {
 
     createUTCDateWithLocalOffset,
     createDateFromUTCWithLocalOffset,
+    createUTCDate,
 
     hasDSTInLocalTimeZone,
-    isEqualLocalTimeZone
+    isEqualLocalTimeZone,
+    getTimeZones
 };
 
 export default utils;
