@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import Class from '../../core/class';
 import { each } from '../../core/utils/iterator';
-import publicComponentUtils from '../../core/utils/public_component';
+import { attachInstanceToElement, getInstanceByElement } from '../../core/utils/public_component';
 
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
@@ -33,7 +33,7 @@ const CollectionItem = Class.inherit({
         this._options = options;
         this._rawData = rawData;
 
-        publicComponentUtils.attachInstanceToElement($element, this, this._dispose);
+        attachInstanceToElement($element, this, this._dispose);
 
         this._render();
     },
@@ -102,7 +102,7 @@ const CollectionItem = Class.inherit({
 });
 
 CollectionItem.getInstance = function($element) {
-    return publicComponentUtils.getInstanceByElement($element, this);
+    return getInstanceByElement($element, this);
 };
 
 export default CollectionItem;

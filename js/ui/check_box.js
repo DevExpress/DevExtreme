@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
 import { extend } from '../core/utils/extend';
-import inkRipple from './widget/utils.ink_ripple';
+import { render } from './widget/utils.ink_ripple';
 import Editor from './editor/editor';
 import registerComponent from '../core/component_registrator';
 import { addNamespace } from '../events/utils/index';
@@ -102,7 +102,7 @@ const CheckBox = Editor.inherit({
     },
 
     _renderInkRipple: function() {
-        this._inkRipple = inkRipple.render({
+        this._inkRipple = render({
             waveSizeCoefficient: 2.5,
             useHoldAnimation: false,
             wavesNumber: 2,

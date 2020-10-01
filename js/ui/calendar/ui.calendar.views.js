@@ -4,7 +4,7 @@ import { noop } from '../../core/utils/common';
 import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
-import { serializeDate } from '../../core/utils/date_serialization';
+import dateSerialization from '../../core/utils/date_serialization';
 import { isDefined } from '../../core/utils/type';
 
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
@@ -128,7 +128,7 @@ const Views = {
         },
 
         _getCellByDate: function(date) {
-            return this._$table.find(`td[data-value='${serializeDate(date, dateUtils.getShortDateFormat())}']`);
+            return this._$table.find(`td[data-value='${dateSerialization.serializeDate(date, dateUtils.getShortDateFormat())}']`);
         },
 
         isBoundary: function(date) {
@@ -190,7 +190,7 @@ const Views = {
             const foundDate = dateUtils.createDate(date);
             foundDate.setDate(1);
 
-            return this._$table.find(`td[data-value='${serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
+            return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
         },
 
         getCellAriaLabel: function(date) {
@@ -266,7 +266,7 @@ const Views = {
             foundDate.setDate(1);
             foundDate.setMonth(0);
 
-            return this._$table.find(`td[data-value='${serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
+            return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
         },
 
         isBoundary: function(date) {
@@ -325,7 +325,7 @@ const Views = {
             foundDate.setMonth(0);
             foundDate.setFullYear(dateUtils.getFirstYearInDecade(foundDate));
 
-            return this._$table.find(`td[data-value='${serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
+            return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
         },
 
         getNavigatorCaption: function() {

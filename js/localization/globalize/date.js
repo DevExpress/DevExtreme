@@ -568,7 +568,7 @@ import Globalize from 'globalize';
 import dateLocalization from '../date';
 import { isObject } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
-import iteratorUtils from '../../core/utils/iterator';
+import * as iteratorUtils from '../../core/utils/iterator';
 
 if(Globalize && Globalize.formatDate) {
 

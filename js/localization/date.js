@@ -8,7 +8,7 @@ import { getFormat as getLDMLDateFormat } from './ldml/date.format';
 import { getParser as getLDMLDateParser } from './ldml/date.parser';
 import defaultDateNames from './default_date_names';
 import firstDayOfWeekData from './cldr-data/first_day_of_week_data';
-import { getValueByClosestLocale } from './core';
+import localizationCore from './core';
 import numberLocalization from './number';
 import intlDateLocalization from './intl/date';
 import './core';
@@ -185,7 +185,7 @@ const dateLocalization = dependencyInjector({
     },
 
     firstDayOfWeekIndex: function() {
-        const index = getValueByClosestLocale((locale) => firstDayOfWeekData[locale]);
+        const index = localizationCore.getValueByClosestLocale((locale) => firstDayOfWeekData[locale]);
 
         return index === undefined ? DEFAULT_DAY_OF_WEEK_INDEX : index;
     }
