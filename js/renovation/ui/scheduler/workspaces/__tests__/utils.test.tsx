@@ -22,7 +22,7 @@ describe('Workspaces utils', () => {
     it('should generate key from date and group', () => {
       const testGroup = 3;
       expect(getKeyByDateAndGroup(testDate, testGroup))
-        .toBe(`${time + 3}`);
+        .toBe(`${time + testGroup}`);
     });
   });
 
