@@ -22,6 +22,8 @@ import { extend } from 'core/utils/extend';
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 const ALL_DAY_TABLE_CELL_CLASS = 'dx-scheduler-all-day-table-cell';
+const DATE_TABLE_CLASS = 'dx-scheduler-date-table';
+
 const WORKSPACE_DAY = { class: 'dxSchedulerWorkSpaceDay', name: 'SchedulerWorkSpaceDay' };
 const WORKSPACE_WEEK = { class: 'dxSchedulerWorkSpaceWeek', name: 'SchedulerWorkSpaceWeek' };
 const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'SchedulerWorkSpaceMonth' };
@@ -4311,5 +4313,24 @@ QUnit.module('Renovated Render', {
         });
 
         assert.notOk(this.instance.$element().hasClass('dx-scheduler-work-space-odd-cells'), 'Workspace does not have odd-cells class');
+    });
+
+    QUnit.test('Cells should not differ in width when crossscrolling and virtual scrolling are enabled', function(assert) {
+        this.createInstance({
+            scrolling: { mode: 'virtual' },
+            width: 800,
+            startDayHour: 0,
+            endDayHour: 1,
+            crossScrollingEnabled: true,
+            intervalCount: 2,
+        });
+
+        const $element = this.instance.$element();
+        const cells = $element.find(`.${CELL_CLASS}`);
+        const dateTableWidth = $element.find(`.${DATE_TABLE_CLASS}`).outerWidth();
+
+        cells.each(function() {
+            assert.equal($(this).outerWidth(), dateTableWidth / 2, 'Correct cell width');
+        });
     });
 });
