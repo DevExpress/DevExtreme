@@ -4,7 +4,6 @@ import dxDataGrid from './ui/data_grid';
 * @docid PdfExportDataGridProps
 * @namespace DevExpress.pdfExporter
 * @type object
-* @inherits PdfExportBaseProps
 */
 export interface PdfExportDataGridProps {
      /**
