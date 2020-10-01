@@ -21,7 +21,7 @@ export class AppComponent {
     @ViewChild(DxSchedulerComponent, { static: false }) scheduler: DxSchedulerComponent;
 
     data: Data[];
-    currentDate: Date = new Date(2015, 4, 25);
+    currentDate: Date = new Date(2021, 4, 25);
     moviesData: MovieData[];
     theatreData: TheatreData[];
 

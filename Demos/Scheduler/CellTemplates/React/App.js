@@ -9,7 +9,7 @@ import DataCell from './DataCell.js';
 import DateCell from './DateCell.js';
 import TimeCell from './TimeCell.js';
 
-const currentDate = new Date(2017, 4, 25);
+const currentDate = new Date(2021, 4, 25);
 const views = ['workWeek', 'month'];
 const currentView = views[0];
 

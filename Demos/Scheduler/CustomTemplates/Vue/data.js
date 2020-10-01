@@ -61,1039 +61,1039 @@ export const data = [{
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 24, 9, 10),
-  endDate: new Date(2015, 4, 24, 11, 1)
+  startDate: new Date('2021-05-24T06:10:00.000Z'),
+  endDate: new Date('2021-05-24T08:01:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 24, 11, 30),
-  endDate: new Date(2015, 4, 24, 13, 2)
+  startDate: new Date('2021-05-24T08:30:00.000Z'),
+  endDate: new Date('2021-05-24T10:02:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 15,
-  startDate: new Date(2015, 4, 24, 13, 30),
-  endDate: new Date(2015, 4, 24, 15, 21)
+  startDate: new Date('2021-05-24T10:30:00.000Z'),
+  endDate: new Date('2021-05-24T12:21:00.000Z')
 }, {
   theatreId: 0,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 24, 16, 0),
-  endDate: new Date(2015, 4, 24, 17, 8)
+  startDate: new Date('2021-05-24T13:00:00.000Z'),
+  endDate: new Date('2021-05-24T14:08:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 10,
-  startDate: new Date(2015, 4, 24, 17, 30),
-  endDate: new Date(2015, 4, 24, 19, 3)
+  startDate: new Date('2021-05-24T14:30:00.000Z'),
+  endDate: new Date('2021-05-24T16:03:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 10,
-  startDate: new Date(2015, 4, 24, 19, 30),
-  endDate: new Date(2015, 4, 24, 21, 2)
+  startDate: new Date('2021-05-24T16:30:00.000Z'),
+  endDate: new Date('2021-05-24T18:02:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 10,
-  startDate: new Date(2015, 4, 24, 21, 20),
-  endDate: new Date(2015, 4, 24, 22, 53)
+  startDate: new Date('2021-05-24T18:20:00.000Z'),
+  endDate: new Date('2021-05-24T19:53:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 4, 25, 9, 10),
-  endDate: new Date(2015, 4, 25, 11, 20)
+  startDate: new Date('2021-05-25T06:10:00.000Z'),
+  endDate: new Date('2021-05-25T08:20:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 25, 12, 0),
-  endDate: new Date(2015, 4, 25, 13, 33)
+  startDate: new Date('2021-05-25T09:00:00.000Z'),
+  endDate: new Date('2021-05-25T10:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 5,
-  startDate: new Date(2015, 4, 25, 14, 0),
-  endDate: new Date(2015, 4, 25, 15, 51)
+  startDate: new Date('2021-05-25T11:00:00.000Z'),
+  endDate: new Date('2021-05-25T12:51:00.000Z')
 }, {
   theatreId: 0,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 25, 16, 20),
-  endDate: new Date(2015, 4, 25, 17, 28)
+  startDate: new Date('2021-05-25T13:20:00.000Z'),
+  endDate: new Date('2021-05-25T14:28:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 10,
-  startDate: new Date(2015, 4, 25, 18, 0),
-  endDate: new Date(2015, 4, 25, 19, 32)
+  startDate: new Date('2021-05-25T15:00:00.000Z'),
+  endDate: new Date('2021-05-25T16:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 15,
-  startDate: new Date(2015, 4, 25, 20, 0),
-  endDate: new Date(2015, 4, 25, 21, 33)
+  startDate: new Date('2021-05-25T17:00:00.000Z'),
+  endDate: new Date('2021-05-25T18:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 25, 21, 50),
-  endDate: new Date(2015, 4, 25, 22, 58)
+  startDate: new Date('2021-05-25T18:50:00.000Z'),
+  endDate: new Date('2021-05-25T19:58:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 26, 9, 0),
-  endDate: new Date(2015, 4, 26, 10, 32)
+  startDate: new Date('2021-05-26T06:00:00.000Z'),
+  endDate: new Date('2021-05-26T07:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 26, 11, 0),
-  endDate: new Date(2015, 4, 26, 12, 33)
+  startDate: new Date('2021-05-26T08:00:00.000Z'),
+  endDate: new Date('2021-05-26T09:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 26, 13, 20),
-  endDate: new Date(2015, 4, 26, 15, 11)
+  startDate: new Date('2021-05-26T10:20:00.000Z'),
+  endDate: new Date('2021-05-26T12:11:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 4, 26, 15, 45),
-  endDate: new Date(2015, 4, 26, 17, 55)
+  startDate: new Date('2021-05-26T12:45:00.000Z'),
+  endDate: new Date('2021-05-26T14:55:00.000Z')
 }, {
   theatreId: 0,
   movieId: 4,
   price: 10,
-  startDate: new Date(2015, 4, 26, 18, 20),
-  endDate: new Date(2015, 4, 26, 19, 28)
+  startDate: new Date('2021-05-26T15:20:00.000Z'),
+  endDate: new Date('2021-05-26T16:28:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 20,
-  startDate: new Date(2015, 4, 26, 20, 0),
-  endDate: new Date(2015, 4, 26, 22, 10)
+  startDate: new Date('2021-05-26T17:00:00.000Z'),
+  endDate: new Date('2021-05-26T19:10:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 27, 9, 0),
-  endDate: new Date(2015, 4, 27, 10, 32)
+  startDate: new Date('2021-05-27T06:00:00.000Z'),
+  endDate: new Date('2021-05-27T07:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 27, 11, 0),
-  endDate: new Date(2015, 4, 27, 12, 33)
+  startDate: new Date('2021-05-27T08:00:00.000Z'),
+  endDate: new Date('2021-05-27T09:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 27, 13, 20),
-  endDate: new Date(2015, 4, 27, 15, 11)
+  startDate: new Date('2021-05-27T10:20:00.000Z'),
+  endDate: new Date('2021-05-27T12:11:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 4, 27, 15, 45),
-  endDate: new Date(2015, 4, 27, 17, 55)
+  startDate: new Date('2021-05-27T12:45:00.000Z'),
+  endDate: new Date('2021-05-27T14:55:00.000Z')
 }, {
   theatreId: 0,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 27, 18, 20),
-  endDate: new Date(2015, 4, 27, 19, 28)
+  startDate: new Date('2021-05-27T15:20:00.000Z'),
+  endDate: new Date('2021-05-27T16:28:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 4, 27, 20, 0),
-  endDate: new Date(2015, 4, 27, 22, 10)
+  startDate: new Date('2021-05-27T17:00:00.000Z'),
+  endDate: new Date('2021-05-27T19:10:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 28, 9, 30),
-  endDate: new Date(2015, 4, 28, 11, 3)
+  startDate: new Date('2021-05-28T06:30:00.000Z'),
+  endDate: new Date('2021-05-28T08:03:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 28, 11, 30),
-  endDate: new Date(2015, 4, 28, 13, 2)
+  startDate: new Date('2021-05-28T08:30:00.000Z'),
+  endDate: new Date('2021-05-28T10:02:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 5,
-  startDate: new Date(2015, 4, 28, 13, 30),
-  endDate: new Date(2015, 4, 28, 15, 21)
+  startDate: new Date('2021-05-28T10:30:00.000Z'),
+  endDate: new Date('2021-05-28T12:21:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 4, 28, 16, 0),
-  endDate: new Date(2015, 4, 28, 18, 10)
+  startDate: new Date('2021-05-28T13:00:00.000Z'),
+  endDate: new Date('2021-05-28T15:10:00.000Z')
 }, {
   theatreId: 0,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 28, 18, 30),
-  endDate: new Date(2015, 4, 28, 19, 38)
+  startDate: new Date('2021-05-28T15:30:00.000Z'),
+  endDate: new Date('2021-05-28T16:38:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 15,
-  startDate: new Date(2015, 4, 28, 20, 20),
-  endDate: new Date(2015, 4, 28, 22, 11)
+  startDate: new Date('2021-05-28T17:20:00.000Z'),
+  endDate: new Date('2021-05-28T19:11:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 29, 9, 30),
-  endDate: new Date(2015, 4, 29, 11, 3)
+  startDate: new Date('2021-05-29T06:30:00.000Z'),
+  endDate: new Date('2021-05-29T08:03:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 10,
-  startDate: new Date(2015, 4, 29, 11, 30),
-  endDate: new Date(2015, 4, 29, 13, 2)
+  startDate: new Date('2021-05-29T08:30:00.000Z'),
+  endDate: new Date('2021-05-29T10:02:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 29, 13, 30),
-  endDate: new Date(2015, 4, 29, 15, 21)
+  startDate: new Date('2021-05-29T10:30:00.000Z'),
+  endDate: new Date('2021-05-29T12:21:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 4, 29, 16, 0),
-  endDate: new Date(2015, 4, 29, 18, 10)
+  startDate: new Date('2021-05-29T13:00:00.000Z'),
+  endDate: new Date('2021-05-29T15:10:00.000Z')
 }, {
   theatreId: 0,
   movieId: 4,
   price: 10,
-  startDate: new Date(2015, 4, 29, 18, 30),
-  endDate: new Date(2015, 4, 29, 19, 38)
+  startDate: new Date('2021-05-29T15:30:00.000Z'),
+  endDate: new Date('2021-05-29T16:38:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 29, 20, 20),
-  endDate: new Date(2015, 4, 29, 22, 11)
+  startDate: new Date('2021-05-29T17:20:00.000Z'),
+  endDate: new Date('2021-05-29T19:11:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 30, 9, 30),
-  endDate: new Date(2015, 4, 30, 11, 3)
+  startDate: new Date('2021-05-30T06:30:00.000Z'),
+  endDate: new Date('2021-05-30T08:03:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 30, 11, 30),
-  endDate: new Date(2015, 4, 30, 13, 2)
+  startDate: new Date('2021-05-30T08:30:00.000Z'),
+  endDate: new Date('2021-05-30T10:02:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 30, 13, 30),
-  endDate: new Date(2015, 4, 30, 15, 21)
+  startDate: new Date('2021-05-30T10:30:00.000Z'),
+  endDate: new Date('2021-05-30T12:21:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 4, 30, 16, 0),
-  endDate: new Date(2015, 4, 30, 18, 10)
+  startDate: new Date('2021-05-30T13:00:00.000Z'),
+  endDate: new Date('2021-05-30T15:10:00.000Z')
 }, {
   theatreId: 0,
   movieId: 4,
   price: 10,
-  startDate: new Date(2015, 4, 30, 18, 30),
-  endDate: new Date(2015, 4, 30, 19, 38)
+  startDate: new Date('2021-05-30T15:30:00.000Z'),
+  endDate: new Date('2021-05-30T16:38:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 15,
-  startDate: new Date(2015, 4, 30, 20, 20),
-  endDate: new Date(2015, 4, 30, 22, 11)
+  startDate: new Date('2021-05-30T17:20:00.000Z'),
+  endDate: new Date('2021-05-30T19:11:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 31, 9, 30),
-  endDate: new Date(2015, 4, 31, 11, 3)
+  startDate: new Date('2021-05-31T06:30:00.000Z'),
+  endDate: new Date('2021-05-31T08:03:00.000Z')
 }, {
   theatreId: 0,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 4, 31, 11, 30),
-  endDate: new Date(2015, 4, 31, 12, 57)
+  startDate: new Date('2021-05-31T08:30:00.000Z'),
+  endDate: new Date('2021-05-31T09:57:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 31, 13, 20),
-  endDate: new Date(2015, 4, 31, 15, 11)
+  startDate: new Date('2021-05-31T10:20:00.000Z'),
+  endDate: new Date('2021-05-31T12:11:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 31, 16, 0),
-  endDate: new Date(2015, 4, 31, 17, 32)
+  startDate: new Date('2021-05-31T13:00:00.000Z'),
+  endDate: new Date('2021-05-31T14:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 10,
-  startDate: new Date(2015, 4, 31, 18, 0),
-  endDate: new Date(2015, 4, 31, 19, 33)
+  startDate: new Date('2021-05-31T15:00:00.000Z'),
+  endDate: new Date('2021-05-31T16:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 6,
   price: 20,
-  startDate: new Date(2015, 4, 31, 20, 0),
-  endDate: new Date(2015, 4, 31, 21, 27)
+  startDate: new Date('2021-05-31T17:00:00.000Z'),
+  endDate: new Date('2021-05-31T18:27:00.000Z')
 }, {
   theatreId: 0,
   movieId: 4,
   price: 15,
-  startDate: new Date(2015, 4, 31, 21, 50),
-  endDate: new Date(2015, 4, 31, 22, 58)
+  startDate: new Date('2021-05-31T18:50:00.000Z'),
+  endDate: new Date('2021-05-31T19:58:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 1, 9, 0),
-  endDate: new Date(2015, 5, 1, 10, 32)
+  startDate: new Date('2021-06-01T06:00:00.000Z'),
+  endDate: new Date('2021-06-01T07:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 1, 11, 30),
-  endDate: new Date(2015, 5, 1, 13, 3)
+  startDate: new Date('2021-06-01T08:30:00.000Z'),
+  endDate: new Date('2021-06-01T10:03:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 1, 13, 30),
-  endDate: new Date(2015, 5, 1, 15, 21)
+  startDate: new Date('2021-06-01T10:30:00.000Z'),
+  endDate: new Date('2021-06-01T12:21:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 1, 15, 30),
-  endDate: new Date(2015, 5, 1, 17, 21)
+  startDate: new Date('2021-06-01T12:30:00.000Z'),
+  endDate: new Date('2021-06-01T14:21:00.000Z')
 }, {
   theatreId: 0,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 1, 17, 30),
-  endDate: new Date(2015, 5, 1, 18, 57)
+  startDate: new Date('2021-06-01T14:30:00.000Z'),
+  endDate: new Date('2021-06-01T15:57:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 5, 1, 20, 0),
-  endDate: new Date(2015, 5, 1, 22, 10)
+  startDate: new Date('2021-06-01T17:00:00.000Z'),
+  endDate: new Date('2021-06-01T19:10:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 2, 9, 0),
-  endDate: new Date(2015, 5, 2, 10, 32)
+  startDate: new Date('2021-06-02T06:00:00.000Z'),
+  endDate: new Date('2021-06-02T07:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 2, 11, 0),
-  endDate: new Date(2015, 5, 2, 12, 33)
+  startDate: new Date('2021-06-02T08:00:00.000Z'),
+  endDate: new Date('2021-06-02T09:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 2, 13, 0),
-  endDate: new Date(2015, 5, 2, 14, 51)
+  startDate: new Date('2021-06-02T10:00:00.000Z'),
+  endDate: new Date('2021-06-02T11:51:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 2, 15, 30),
-  endDate: new Date(2015, 5, 2, 17, 21)
+  startDate: new Date('2021-06-02T12:30:00.000Z'),
+  endDate: new Date('2021-06-02T14:21:00.000Z')
 }, {
   theatreId: 0,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 2, 17, 30),
-  endDate: new Date(2015, 5, 2, 18, 57)
+  startDate: new Date('2021-06-02T14:30:00.000Z'),
+  endDate: new Date('2021-06-02T15:57:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 5, 2, 20, 0),
-  endDate: new Date(2015, 5, 2, 22, 10)
+  startDate: new Date('2021-06-02T17:00:00.000Z'),
+  endDate: new Date('2021-06-02T19:10:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 3, 9, 0),
-  endDate: new Date(2015, 5, 3, 10, 32)
+  startDate: new Date('2021-06-03T06:00:00.000Z'),
+  endDate: new Date('2021-06-03T07:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 3, 11, 0),
-  endDate: new Date(2015, 5, 3, 12, 33)
+  startDate: new Date('2021-06-03T08:00:00.000Z'),
+  endDate: new Date('2021-06-03T09:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 3, 13, 0),
-  endDate: new Date(2015, 5, 3, 14, 51)
+  startDate: new Date('2021-06-03T10:00:00.000Z'),
+  endDate: new Date('2021-06-03T11:51:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 3, 15, 30),
-  endDate: new Date(2015, 5, 3, 17, 21)
+  startDate: new Date('2021-06-03T12:30:00.000Z'),
+  endDate: new Date('2021-06-03T14:21:00.000Z')
 }, {
   theatreId: 0,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 3, 17, 30),
-  endDate: new Date(2015, 5, 3, 18, 57)
+  startDate: new Date('2021-06-03T14:30:00.000Z'),
+  endDate: new Date('2021-06-03T15:57:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 5, 3, 20, 0),
-  endDate: new Date(2015, 5, 3, 22, 10)
+  startDate: new Date('2021-06-03T17:00:00.000Z'),
+  endDate: new Date('2021-06-03T19:10:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 4, 9, 0),
-  endDate: new Date(2015, 5, 4, 10, 33)
+  startDate: new Date('2021-06-04T06:00:00.000Z'),
+  endDate: new Date('2021-06-04T07:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 4, 11, 0),
-  endDate: new Date(2015, 5, 4, 12, 32)
+  startDate: new Date('2021-06-04T08:00:00.000Z'),
+  endDate: new Date('2021-06-04T09:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 4, 13, 0),
-  endDate: new Date(2015, 5, 4, 14, 51)
+  startDate: new Date('2021-06-04T10:00:00.000Z'),
+  endDate: new Date('2021-06-04T11:51:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 5, 4, 15, 30),
-  endDate: new Date(2015, 5, 4, 17, 40)
+  startDate: new Date('2021-06-04T12:30:00.000Z'),
+  endDate: new Date('2021-06-04T14:40:00.000Z')
 }, {
   theatreId: 0,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 4, 18, 0),
-  endDate: new Date(2015, 5, 4, 19, 27)
+  startDate: new Date('2021-06-04T15:00:00.000Z'),
+  endDate: new Date('2021-06-04T16:27:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 15,
-  startDate: new Date(2015, 5, 4, 20, 0),
-  endDate: new Date(2015, 5, 4, 21, 32)
+  startDate: new Date('2021-06-04T17:00:00.000Z'),
+  endDate: new Date('2021-06-04T18:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 5, 9, 0),
-  endDate: new Date(2015, 5, 5, 10, 33)
+  startDate: new Date('2021-06-05T06:00:00.000Z'),
+  endDate: new Date('2021-06-05T07:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 5, 11, 0),
-  endDate: new Date(2015, 5, 5, 12, 32)
+  startDate: new Date('2021-06-05T08:00:00.000Z'),
+  endDate: new Date('2021-06-05T09:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 5, 13, 0),
-  endDate: new Date(2015, 5, 5, 14, 51)
+  startDate: new Date('2021-06-05T10:00:00.000Z'),
+  endDate: new Date('2021-06-05T11:51:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 5, 5, 15, 30),
-  endDate: new Date(2015, 5, 5, 17, 40)
+  startDate: new Date('2021-06-05T12:30:00.000Z'),
+  endDate: new Date('2021-06-05T14:40:00.000Z')
 }, {
   theatreId: 0,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 5, 18, 0),
-  endDate: new Date(2015, 5, 5, 19, 27)
+  startDate: new Date('2021-06-05T15:00:00.000Z'),
+  endDate: new Date('2021-06-05T16:27:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 15,
-  startDate: new Date(2015, 5, 5, 20, 0),
-  endDate: new Date(2015, 5, 5, 21, 32)
+  startDate: new Date('2021-06-05T17:00:00.000Z'),
+  endDate: new Date('2021-06-05T18:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 6, 9, 0),
-  endDate: new Date(2015, 5, 6, 10, 33)
+  startDate: new Date('2021-06-06T06:00:00.000Z'),
+  endDate: new Date('2021-06-06T07:33:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 6, 11, 0),
-  endDate: new Date(2015, 5, 6, 12, 32)
+  startDate: new Date('2021-06-06T08:00:00.000Z'),
+  endDate: new Date('2021-06-06T09:32:00.000Z')
 }, {
   theatreId: 0,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 6, 13, 0),
-  endDate: new Date(2015, 5, 6, 14, 51)
+  startDate: new Date('2021-06-06T10:00:00.000Z'),
+  endDate: new Date('2021-06-06T11:51:00.000Z')
 }, {
   theatreId: 0,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 5, 6, 15, 30),
-  endDate: new Date(2015, 5, 6, 17, 40)
+  startDate: new Date('2021-06-06T12:30:00.000Z'),
+  endDate: new Date('2021-06-06T14:40:00.000Z')
 }, {
   theatreId: 0,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 6, 18, 0),
-  endDate: new Date(2015, 5, 6, 19, 27)
+  startDate: new Date('2021-06-06T15:00:00.000Z'),
+  endDate: new Date('2021-06-06T16:27:00.000Z')
 }, {
   theatreId: 0,
   movieId: 1,
   price: 15,
-  startDate: new Date(2015, 5, 6, 20, 0),
-  endDate: new Date(2015, 5, 6, 21, 32)
+  startDate: new Date('2021-06-06T17:00:00.000Z'),
+  endDate: new Date('2021-06-06T18:32:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 24, 9, 30),
-  endDate: new Date(2015, 4, 24, 11, 21)
+  startDate: new Date('2021-05-24T06:30:00.000Z'),
+  endDate: new Date('2021-05-24T08:21:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 24, 12, 0),
-  endDate: new Date(2015, 4, 24, 13, 32)
+  startDate: new Date('2021-05-24T09:00:00.000Z'),
+  endDate: new Date('2021-05-24T10:32:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 15,
-  startDate: new Date(2015, 4, 24, 14, 0),
-  endDate: new Date(2015, 4, 24, 15, 51)
+  startDate: new Date('2021-05-24T11:00:00.000Z'),
+  endDate: new Date('2021-05-24T12:51:00.000Z')
 }, {
   theatreId: 1,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 24, 16, 10),
-  endDate: new Date(2015, 4, 24, 17, 18)
+  startDate: new Date('2021-05-24T13:10:00.000Z'),
+  endDate: new Date('2021-05-24T14:18:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 10,
-  startDate: new Date(2015, 4, 24, 17, 30),
-  endDate: new Date(2015, 4, 24, 19, 3)
+  startDate: new Date('2021-05-24T14:30:00.000Z'),
+  endDate: new Date('2021-05-24T16:03:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 10,
-  startDate: new Date(2015, 4, 24, 19, 30),
-  endDate: new Date(2015, 4, 24, 21, 2)
+  startDate: new Date('2021-05-24T16:30:00.000Z'),
+  endDate: new Date('2021-05-24T18:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 10,
-  startDate: new Date(2015, 4, 24, 21, 20),
-  endDate: new Date(2015, 4, 24, 22, 53)
+  startDate: new Date('2021-05-24T18:20:00.000Z'),
+  endDate: new Date('2021-05-24T19:53:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 25, 9, 30),
-  endDate: new Date(2015, 4, 25, 11, 2)
+  startDate: new Date('2021-05-25T06:30:00.000Z'),
+  endDate: new Date('2021-05-25T08:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 25, 11, 30),
-  endDate: new Date(2015, 4, 25, 13, 3)
+  startDate: new Date('2021-05-25T08:30:00.000Z'),
+  endDate: new Date('2021-05-25T10:03:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 4, 25, 13, 30),
-  endDate: new Date(2015, 4, 25, 15, 40)
+  startDate: new Date('2021-05-25T10:30:00.000Z'),
+  endDate: new Date('2021-05-25T12:40:00.000Z')
 }, {
   theatreId: 1,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 25, 16, 0),
-  endDate: new Date(2015, 4, 25, 17, 8)
+  startDate: new Date('2021-05-25T13:00:00.000Z'),
+  endDate: new Date('2021-05-25T14:08:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 10,
-  startDate: new Date(2015, 4, 25, 17, 30),
-  endDate: new Date(2015, 4, 25, 19, 2)
+  startDate: new Date('2021-05-25T14:30:00.000Z'),
+  endDate: new Date('2021-05-25T16:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 15,
-  startDate: new Date(2015, 4, 25, 19, 40),
-  endDate: new Date(2015, 4, 25, 21, 13)
+  startDate: new Date('2021-05-25T16:40:00.000Z'),
+  endDate: new Date('2021-05-25T18:13:00.000Z')
 }, {
   theatreId: 1,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 25, 21, 40),
-  endDate: new Date(2015, 4, 25, 22, 48)
+  startDate: new Date('2021-05-25T18:40:00.000Z'),
+  endDate: new Date('2021-05-25T19:48:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 26, 9, 30),
-  endDate: new Date(2015, 4, 26, 11, 2)
+  startDate: new Date('2021-05-26T06:30:00.000Z'),
+  endDate: new Date('2021-05-26T08:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 26, 11, 30),
-  endDate: new Date(2015, 4, 26, 13, 3)
+  startDate: new Date('2021-05-26T08:30:00.000Z'),
+  endDate: new Date('2021-05-26T10:03:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 4, 26, 13, 30),
-  endDate: new Date(2015, 4, 26, 15, 41)
+  startDate: new Date('2021-05-26T10:30:00.000Z'),
+  endDate: new Date('2021-05-26T12:41:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 4, 26, 16, 0),
-  endDate: new Date(2015, 4, 26, 18, 10)
+  startDate: new Date('2021-05-26T13:00:00.000Z'),
+  endDate: new Date('2021-05-26T15:10:00.000Z')
 }, {
   theatreId: 1,
   movieId: 4,
   price: 10,
-  startDate: new Date(2015, 4, 26, 18, 30),
-  endDate: new Date(2015, 4, 26, 19, 38)
+  startDate: new Date('2021-05-26T15:30:00.000Z'),
+  endDate: new Date('2021-05-26T16:38:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 20,
-  startDate: new Date(2015, 4, 26, 20, 20),
-  endDate: new Date(2015, 4, 26, 22, 30)
+  startDate: new Date('2021-05-26T17:20:00.000Z'),
+  endDate: new Date('2021-05-26T19:30:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 27, 9, 30),
-  endDate: new Date(2015, 4, 27, 11, 2)
+  startDate: new Date('2021-05-27T06:30:00.000Z'),
+  endDate: new Date('2021-05-27T08:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 27, 11, 30),
-  endDate: new Date(2015, 4, 27, 13, 3)
+  startDate: new Date('2021-05-27T08:30:00.000Z'),
+  endDate: new Date('2021-05-27T10:03:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 4, 27, 13, 30),
-  endDate: new Date(2015, 4, 27, 15, 41)
+  startDate: new Date('2021-05-27T10:30:00.000Z'),
+  endDate: new Date('2021-05-27T12:41:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 4, 27, 16, 0),
-  endDate: new Date(2015, 4, 27, 18, 10)
+  startDate: new Date('2021-05-27T13:00:00.000Z'),
+  endDate: new Date('2021-05-27T15:10:00.000Z')
 }, {
   theatreId: 1,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 27, 18, 30),
-  endDate: new Date(2015, 4, 27, 19, 38)
+  startDate: new Date('2021-05-27T15:30:00.000Z'),
+  endDate: new Date('2021-05-27T16:38:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 4, 27, 20, 20),
-  endDate: new Date(2015, 4, 27, 22, 30)
+  startDate: new Date('2021-05-27T17:20:00.000Z'),
+  endDate: new Date('2021-05-27T19:30:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 28, 9, 10),
-  endDate: new Date(2015, 4, 28, 10, 43)
+  startDate: new Date('2021-05-28T06:10:00.000Z'),
+  endDate: new Date('2021-05-28T07:43:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 28, 11, 0),
-  endDate: new Date(2015, 4, 28, 12, 32)
+  startDate: new Date('2021-05-28T08:00:00.000Z'),
+  endDate: new Date('2021-05-28T09:32:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 5,
-  startDate: new Date(2015, 4, 28, 13, 10),
-  endDate: new Date(2015, 4, 28, 15, 1)
+  startDate: new Date('2021-05-28T10:10:00.000Z'),
+  endDate: new Date('2021-05-28T12:01:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 4, 28, 15, 40),
-  endDate: new Date(2015, 4, 28, 17, 50)
+  startDate: new Date('2021-05-28T12:40:00.000Z'),
+  endDate: new Date('2021-05-28T14:50:00.000Z')
 }, {
   theatreId: 1,
   movieId: 4,
   price: 5,
-  startDate: new Date(2015, 4, 28, 18, 20),
-  endDate: new Date(2015, 4, 28, 19, 28)
+  startDate: new Date('2021-05-28T15:20:00.000Z'),
+  endDate: new Date('2021-05-28T16:28:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 15,
-  startDate: new Date(2015, 4, 28, 20, 20),
-  endDate: new Date(2015, 4, 28, 22, 11)
+  startDate: new Date('2021-05-28T17:20:00.000Z'),
+  endDate: new Date('2021-05-28T19:11:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 29, 10, 0),
-  endDate: new Date(2015, 4, 29, 11, 33)
+  startDate: new Date('2021-05-29T07:00:00.000Z'),
+  endDate: new Date('2021-05-29T08:33:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 10,
-  startDate: new Date(2015, 4, 29, 12, 0),
-  endDate: new Date(2015, 4, 29, 13, 32)
+  startDate: new Date('2021-05-29T09:00:00.000Z'),
+  endDate: new Date('2021-05-29T10:32:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 29, 14, 0),
-  endDate: new Date(2015, 4, 29, 15, 51)
+  startDate: new Date('2021-05-29T11:00:00.000Z'),
+  endDate: new Date('2021-05-29T12:51:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 4, 29, 16, 30),
-  endDate: new Date(2015, 4, 29, 18, 40)
+  startDate: new Date('2021-05-29T13:30:00.000Z'),
+  endDate: new Date('2021-05-29T15:40:00.000Z')
 }, {
   theatreId: 1,
   movieId: 4,
   price: 10,
-  startDate: new Date(2015, 4, 29, 19, 0),
-  endDate: new Date(2015, 4, 29, 20, 8)
+  startDate: new Date('2021-05-29T16:00:00.000Z'),
+  endDate: new Date('2021-05-29T17:08:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 20,
-  startDate: new Date(2015, 4, 29, 20, 30),
-  endDate: new Date(2015, 4, 29, 22, 50)
+  startDate: new Date('2021-05-29T17:30:00.000Z'),
+  endDate: new Date('2021-05-29T19:50:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 30, 10, 0),
-  endDate: new Date(2015, 4, 30, 11, 33)
+  startDate: new Date('2021-05-30T07:00:00.000Z'),
+  endDate: new Date('2021-05-30T08:33:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 4, 30, 12, 0),
-  endDate: new Date(2015, 4, 30, 13, 32)
+  startDate: new Date('2021-05-30T09:00:00.000Z'),
+  endDate: new Date('2021-05-30T10:32:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 30, 14, 0),
-  endDate: new Date(2015, 4, 30, 15, 51)
+  startDate: new Date('2021-05-30T11:00:00.000Z'),
+  endDate: new Date('2021-05-30T12:51:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 4, 30, 16, 30),
-  endDate: new Date(2015, 4, 30, 18, 40)
+  startDate: new Date('2021-05-30T13:30:00.000Z'),
+  endDate: new Date('2021-05-30T15:40:00.000Z')
 }, {
   theatreId: 1,
   movieId: 4,
   price: 10,
-  startDate: new Date(2015, 4, 30, 19, 0),
-  endDate: new Date(2015, 4, 30, 20, 8)
+  startDate: new Date('2021-05-30T16:00:00.000Z'),
+  endDate: new Date('2021-05-30T17:08:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 4, 30, 20, 30),
-  endDate: new Date(2015, 4, 30, 22, 50)
+  startDate: new Date('2021-05-30T17:30:00.000Z'),
+  endDate: new Date('2021-05-30T19:50:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 4, 31, 10, 0),
-  endDate: new Date(2015, 4, 31, 11, 33)
+  startDate: new Date('2021-05-31T07:00:00.000Z'),
+  endDate: new Date('2021-05-31T08:33:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 4, 31, 12, 0),
-  endDate: new Date(2015, 4, 31, 13, 27)
+  startDate: new Date('2021-05-31T09:00:00.000Z'),
+  endDate: new Date('2021-05-31T10:27:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 4, 31, 14, 0),
-  endDate: new Date(2015, 4, 31, 15, 51)
+  startDate: new Date('2021-05-31T11:00:00.000Z'),
+  endDate: new Date('2021-05-31T12:51:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 10,
-  startDate: new Date(2015, 4, 31, 16, 30),
-  endDate: new Date(2015, 4, 31, 18, 2)
+  startDate: new Date('2021-05-31T13:30:00.000Z'),
+  endDate: new Date('2021-05-31T15:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 4, 31, 18, 30),
-  endDate: new Date(2015, 4, 31, 20, 40)
+  startDate: new Date('2021-05-31T15:30:00.000Z'),
+  endDate: new Date('2021-05-31T17:40:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 20,
-  startDate: new Date(2015, 4, 31, 21, 0),
-  endDate: new Date(2015, 4, 31, 22, 27)
+  startDate: new Date('2021-05-31T18:00:00.000Z'),
+  endDate: new Date('2021-05-31T19:27:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 1, 9, 30),
-  endDate: new Date(2015, 5, 1, 11, 2)
+  startDate: new Date('2021-06-01T06:30:00.000Z'),
+  endDate: new Date('2021-06-01T08:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 5,
-  startDate: new Date(2015, 5, 1, 12, 0),
-  endDate: new Date(2015, 5, 1, 13, 27)
+  startDate: new Date('2021-06-01T09:00:00.000Z'),
+  endDate: new Date('2021-06-01T10:27:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 1, 14, 0),
-  endDate: new Date(2015, 5, 1, 15, 51)
+  startDate: new Date('2021-06-01T11:00:00.000Z'),
+  endDate: new Date('2021-06-01T12:51:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 1, 16, 30),
-  endDate: new Date(2015, 5, 1, 18, 21)
+  startDate: new Date('2021-06-01T13:30:00.000Z'),
+  endDate: new Date('2021-06-01T15:21:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 1, 19, 0),
-  endDate: new Date(2015, 5, 1, 20, 27)
+  startDate: new Date('2021-06-01T16:00:00.000Z'),
+  endDate: new Date('2021-06-01T17:27:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 15,
-  startDate: new Date(2015, 5, 1, 21, 0),
-  endDate: new Date(2015, 5, 1, 22, 33)
+  startDate: new Date('2021-06-01T18:00:00.000Z'),
+  endDate: new Date('2021-06-01T19:33:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 2, 10, 0),
-  endDate: new Date(2015, 5, 2, 11, 32)
+  startDate: new Date('2021-06-02T07:00:00.000Z'),
+  endDate: new Date('2021-06-02T08:32:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 5,
-  startDate: new Date(2015, 5, 2, 12, 0),
-  endDate: new Date(2015, 5, 2, 13, 27)
+  startDate: new Date('2021-06-02T09:00:00.000Z'),
+  endDate: new Date('2021-06-02T10:27:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 2, 14, 0),
-  endDate: new Date(2015, 5, 2, 15, 51)
+  startDate: new Date('2021-06-02T11:00:00.000Z'),
+  endDate: new Date('2021-06-02T12:51:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 10,
-  startDate: new Date(2015, 5, 2, 16, 30),
-  endDate: new Date(2015, 5, 2, 18, 3)
+  startDate: new Date('2021-06-02T13:30:00.000Z'),
+  endDate: new Date('2021-06-02T15:03:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 2, 19, 0),
-  endDate: new Date(2015, 5, 2, 20, 27)
+  startDate: new Date('2021-06-02T16:00:00.000Z'),
+  endDate: new Date('2021-06-02T17:27:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 15,
-  startDate: new Date(2015, 5, 2, 21, 0),
-  endDate: new Date(2015, 5, 2, 22, 33)
+  startDate: new Date('2021-06-02T18:00:00.000Z'),
+  endDate: new Date('2021-06-02T19:33:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 3, 9, 30),
-  endDate: new Date(2015, 5, 3, 11, 2)
+  startDate: new Date('2021-06-03T06:30:00.000Z'),
+  endDate: new Date('2021-06-03T08:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 3, 11, 30),
-  endDate: new Date(2015, 5, 3, 13, 3)
+  startDate: new Date('2021-06-03T08:30:00.000Z'),
+  endDate: new Date('2021-06-03T10:03:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 10,
-  startDate: new Date(2015, 5, 3, 14, 0),
-  endDate: new Date(2015, 5, 3, 15, 27)
+  startDate: new Date('2021-06-03T11:00:00.000Z'),
+  endDate: new Date('2021-06-03T12:27:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 3, 16, 0),
-  endDate: new Date(2015, 5, 3, 17, 51)
+  startDate: new Date('2021-06-03T13:00:00.000Z'),
+  endDate: new Date('2021-06-03T14:51:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 3, 18, 10),
-  endDate: new Date(2015, 5, 3, 19, 37)
+  startDate: new Date('2021-06-03T15:10:00.000Z'),
+  endDate: new Date('2021-06-03T16:37:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 20,
-  startDate: new Date(2015, 5, 3, 20, 30),
-  endDate: new Date(2015, 5, 3, 22, 40)
+  startDate: new Date('2021-06-03T17:30:00.000Z'),
+  endDate: new Date('2021-06-03T19:40:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 4, 9, 30),
-  endDate: new Date(2015, 5, 4, 11, 2)
+  startDate: new Date('2021-06-04T06:30:00.000Z'),
+  endDate: new Date('2021-06-04T08:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 4, 11, 30),
-  endDate: new Date(2015, 5, 4, 13, 2)
+  startDate: new Date('2021-06-04T08:30:00.000Z'),
+  endDate: new Date('2021-06-04T10:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 10,
-  startDate: new Date(2015, 5, 4, 14, 0),
-  endDate: new Date(2015, 5, 4, 15, 27)
+  startDate: new Date('2021-06-04T11:00:00.000Z'),
+  endDate: new Date('2021-06-04T12:27:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 5, 4, 16, 0),
-  endDate: new Date(2015, 5, 4, 17, 51)
+  startDate: new Date('2021-06-04T13:00:00.000Z'),
+  endDate: new Date('2021-06-04T14:51:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 4, 18, 10),
-  endDate: new Date(2015, 5, 4, 19, 37)
+  startDate: new Date('2021-06-04T15:10:00.000Z'),
+  endDate: new Date('2021-06-04T16:37:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 15,
-  startDate: new Date(2015, 5, 4, 20, 20),
-  endDate: new Date(2015, 5, 4, 22, 30)
+  startDate: new Date('2021-06-04T17:20:00.000Z'),
+  endDate: new Date('2021-06-04T19:30:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 5, 9, 30),
-  endDate: new Date(2015, 5, 5, 11, 2)
+  startDate: new Date('2021-06-05T06:30:00.000Z'),
+  endDate: new Date('2021-06-05T08:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 5, 11, 30),
-  endDate: new Date(2015, 5, 5, 13, 2)
+  startDate: new Date('2021-06-05T08:30:00.000Z'),
+  endDate: new Date('2021-06-05T10:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 5, 13, 30),
-  endDate: new Date(2015, 5, 5, 15, 21)
+  startDate: new Date('2021-06-05T10:30:00.000Z'),
+  endDate: new Date('2021-06-05T12:21:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 5, 5, 16, 0),
-  endDate: new Date(2015, 5, 5, 18, 10)
+  startDate: new Date('2021-06-05T13:00:00.000Z'),
+  endDate: new Date('2021-06-05T15:10:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 5, 18, 30),
-  endDate: new Date(2015, 5, 5, 19, 57)
+  startDate: new Date('2021-06-05T15:30:00.000Z'),
+  endDate: new Date('2021-06-05T16:57:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 15,
-  startDate: new Date(2015, 5, 5, 20, 30),
-  endDate: new Date(2015, 5, 5, 22, 3)
+  startDate: new Date('2021-06-05T17:30:00.000Z'),
+  endDate: new Date('2021-06-05T19:03:00.000Z')
 }, {
   theatreId: 1,
   movieId: 2,
   price: 5,
-  startDate: new Date(2015, 5, 6, 9, 30),
-  endDate: new Date(2015, 5, 6, 11, 3)
+  startDate: new Date('2021-06-06T06:30:00.000Z'),
+  endDate: new Date('2021-06-06T08:03:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 5,
-  startDate: new Date(2015, 5, 6, 11, 30),
-  endDate: new Date(2015, 5, 6, 13, 2)
+  startDate: new Date('2021-06-06T08:30:00.000Z'),
+  endDate: new Date('2021-06-06T10:02:00.000Z')
 }, {
   theatreId: 1,
   movieId: 3,
   price: 10,
-  startDate: new Date(2015, 5, 6, 13, 30),
-  endDate: new Date(2015, 5, 6, 15, 21)
+  startDate: new Date('2021-06-06T10:30:00.000Z'),
+  endDate: new Date('2021-06-06T12:21:00.000Z')
 }, {
   theatreId: 1,
   movieId: 5,
   price: 10,
-  startDate: new Date(2015, 5, 6, 16, 0),
-  endDate: new Date(2015, 5, 6, 18, 10)
+  startDate: new Date('2021-06-06T13:00:00.000Z'),
+  endDate: new Date('2021-06-06T15:10:00.000Z')
 }, {
   theatreId: 1,
   movieId: 6,
   price: 15,
-  startDate: new Date(2015, 5, 6, 18, 30),
-  endDate: new Date(2015, 5, 6, 19, 57)
+  startDate: new Date('2021-06-06T15:30:00.000Z'),
+  endDate: new Date('2021-06-06T16:57:00.000Z')
 }, {
   theatreId: 1,
   movieId: 1,
   price: 15,
-  startDate: new Date(2015, 5, 6, 20, 30),
-  endDate: new Date(2015, 5, 6, 22, 2)
+  startDate: new Date('2021-06-06T17:30:00.000Z'),
+  endDate: new Date('2021-06-06T19:02:00.000Z')
 }
 ];

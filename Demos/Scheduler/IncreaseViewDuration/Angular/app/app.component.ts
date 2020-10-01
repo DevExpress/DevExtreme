@@ -16,9 +16,9 @@ if(!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     appointmentsData: Appointment[];
-    currentDate: Date = new Date(2017, 4, 1);
-    daysViewStartDate: Date = new Date(2017, 3, 30);
-    weeksViewStartDate: Date = new Date(2017, 3, 3);
+    currentDate: Date = new Date(2021, 3, 5);
+    daysViewStartDate: Date = new Date(2021, 3, 4);
+    weeksViewStartDate: Date = new Date(2021, 2, 4);
 
     constructor(service: Service) {
         this.appointmentsData = service.getAppointments();

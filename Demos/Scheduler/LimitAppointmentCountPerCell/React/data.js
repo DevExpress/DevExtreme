@@ -2,133 +2,133 @@ export const data = [
   {
     text: 'Google AdWords Strategy',
     roomId: 1,
-    startDate: new Date(2017, 4, 5, 9, 0),
-    endDate: new Date(2017, 4, 5, 10, 30)
+    startDate: new Date('2021-05-07T06:00:00.000Z'),
+    endDate: new Date('2021-05-07T07:30:00.000Z')
   }, {
     text: 'New Brochures',
     roomId: 5,
-    startDate: new Date(2017, 4, 5, 11, 30),
-    endDate: new Date(2017, 4, 5, 14, 15)
+    startDate: new Date('2021-05-07T08:30:00.000Z'),
+    endDate: new Date('2021-05-07T11:15:00.000Z')
   }, {
     text: 'Brochure Design Review',
     roomId: 5,
-    startDate: new Date(2017, 4, 5, 13, 15),
-    endDate: new Date(2017, 4, 5, 16, 15)
+    startDate: new Date('2021-05-07T10:15:00.000Z'),
+    endDate: new Date('2021-05-07T13:15:00.000Z')
   }, {
     text: 'Website Re-Design Plan',
     roomId: 5,
-    startDate: new Date(2017, 4, 5, 16, 45),
-    endDate: new Date(2017, 4, 5, 11, 15)
+    startDate: new Date('2021-05-07T13:45:00.000Z'),
+    endDate: new Date('2021-05-07T08:15:00.000Z')
   }, {
     text: 'Rollout of New Website and Marketing Brochures',
     roomId: 2,
-    startDate: new Date(2017, 4, 9, 8, 15),
-    endDate: new Date(2017, 4, 9, 10, 45)
+    startDate: new Date('2021-05-11T05:15:00.000Z'),
+    endDate: new Date('2021-05-11T07:45:00.000Z')
   }, {
     text: 'Update Sales Strategy Documents',
     roomId: 3,
-    startDate: new Date(2017, 4, 9, 12, 0),
-    endDate: new Date(2017, 4, 9, 13, 45)
+    startDate: new Date('2021-05-11T09:00:00.000Z'),
+    endDate: new Date('2021-05-11T10:45:00.000Z')
   }, {
     text: 'Non-Compete Agreements',
     roomId: 3,
-    startDate: new Date(2017, 4, 9, 8, 15),
-    endDate: new Date(2017, 4, 9, 9, 0)
+    startDate: new Date('2021-05-11T05:15:00.000Z'),
+    endDate: new Date('2021-05-11T06:00:00.000Z')
   }, {
     text: 'Update NDA Agreement',
     roomId: 1,
-    startDate: new Date(2017, 4, 10, 11, 45),
-    endDate: new Date(2017, 4, 10, 13, 45)
+    startDate: new Date('2021-05-12T08:45:00.000Z'),
+    endDate: new Date('2021-05-12T10:45:00.000Z')
   }, {
     text: 'Update Employee Files with New NDA',
     roomId: 4,
-    startDate: new Date(2017, 4, 18, 14, 0),
-    endDate: new Date(2017, 4, 18, 16, 45)
+    startDate: new Date('2021-05-20T11:00:00.000Z'),
+    endDate: new Date('2021-05-20T13:45:00.000Z')
   }, {
     text: 'Submit Questions Regarding New NDA',
     roomId: 4,
-    startDate: new Date(2017, 4, 18, 8, 0),
-    endDate: new Date(2017, 4, 18, 9, 30)
+    startDate: new Date('2021-05-20T05:00:00.000Z'),
+    endDate: new Date('2021-05-20T06:30:00.000Z')
   }, {
     text: 'Submit Signed NDA',
     roomId: 4,
-    startDate: new Date(2017, 4, 18, 12, 45),
-    endDate: new Date(2017, 4, 18, 14, 0)
+    startDate: new Date('2021-05-20T09:45:00.000Z'),
+    endDate: new Date('2021-05-20T11:00:00.000Z')
   }, {
     text: 'Review Revenue Projections',
     roomId: 4,
-    startDate: new Date(2017, 4, 25, 17, 15),
-    endDate: new Date(2017, 4, 25, 18, 0)
+    startDate: new Date('2021-05-27T14:15:00.000Z'),
+    endDate: new Date('2021-05-27T15:00:00.000Z')
   }, {
     text: 'Comment on Revenue Projections',
     roomId: 1,
-    startDate: new Date(2017, 4, 22, 9, 15),
-    endDate: new Date(2017, 4, 22, 11, 15)
+    startDate: new Date('2021-05-24T06:15:00.000Z'),
+    endDate: new Date('2021-05-24T08:15:00.000Z')
   }, {
     text: 'Provide New Health Insurance Docs',
     roomId: 4,
-    startDate: new Date(2017, 4, 22, 12, 45),
-    endDate: new Date(2017, 4, 22, 14, 15)
+    startDate: new Date('2021-05-24T09:45:00.000Z'),
+    endDate: new Date('2021-05-24T11:15:00.000Z')
   }, {
     text: 'Review Changes to Health Insurance Coverage',
     roomId: 4,
-    startDate: new Date(2017, 4, 25, 14, 15),
-    endDate: new Date(2017, 4, 25, 15, 30)
+    startDate: new Date('2021-05-27T11:15:00.000Z'),
+    endDate: new Date('2021-05-27T12:30:00.000Z')
   }, {
     text: 'Review Training Course for any Ommissions',
     roomId: 4,
-    startDate: new Date(2017, 4, 22, 14, 0),
-    endDate: new Date(2017, 4, 22, 12, 0)
+    startDate: new Date('2021-05-24T11:00:00.000Z'),
+    endDate: new Date('2021-05-24T09:00:00.000Z')
   }, {
     text: 'Recall Rebate Form',
     roomId: 2,
-    startDate: new Date(2017, 4, 23, 12, 45),
-    endDate: new Date(2017, 4, 23, 13, 15)
+    startDate: new Date('2021-05-25T09:45:00.000Z'),
+    endDate: new Date('2021-05-25T10:15:00.000Z')
   }, {
     text: 'Create Report on Customer Feedback',
     roomId: 3,
-    startDate: new Date(2017, 4, 23, 15, 15),
-    endDate: new Date(2017, 4, 23, 17, 30)
+    startDate: new Date('2021-05-25T12:15:00.000Z'),
+    endDate: new Date('2021-05-25T14:30:00.000Z')
   }, {
     text: 'Review Customer Feedback Report',
     roomId: 3,
-    startDate: new Date(2017, 4, 17, 16, 15),
-    endDate: new Date(2017, 4, 17, 18, 30)
+    startDate: new Date('2021-05-19T13:15:00.000Z'),
+    endDate: new Date('2021-05-19T15:30:00.000Z')
   }, {
     text: 'Customer Feedback Report Analysis',
     roomId: 3,
-    startDate: new Date(2017, 4, 17, 9, 30),
-    endDate: new Date(2017, 4, 17, 10, 30)
+    startDate: new Date('2021-05-19T06:30:00.000Z'),
+    endDate: new Date('2021-05-19T07:30:00.000Z')
   }, {
     text: 'Prepare Shipping Cost Analysis Report',
     roomId: 3,
-    startDate: new Date(2017, 4, 23, 12, 30),
-    endDate: new Date(2017, 4, 23, 13, 30)
+    startDate: new Date('2021-05-25T09:30:00.000Z'),
+    endDate: new Date('2021-05-25T10:30:00.000Z')
   }, {
     text: 'Provide Feedback on Shippers',
     roomId: 3,
-    startDate: new Date(2017, 4, 23, 14, 15),
-    endDate: new Date(2017, 4, 23, 16, 0)
+    startDate: new Date('2021-05-25T11:15:00.000Z'),
+    endDate: new Date('2021-05-25T13:00:00.000Z')
   }, {
     text: 'Select Preferred Shipper',
     roomId: 1,
-    startDate: new Date(2017, 4, 26, 17, 30),
-    endDate: new Date(2017, 4, 26, 20, 0)
+    startDate: new Date('2021-05-28T14:30:00.000Z'),
+    endDate: new Date('2021-05-28T17:00:00.000Z')
   }, {
     text: 'Complete Shipper Selection Form',
     roomId: 5,
-    startDate: new Date(2017, 4, 25, 8, 30),
-    endDate: new Date(2017, 4, 25, 10, 0)
+    startDate: new Date('2021-05-27T05:30:00.000Z'),
+    endDate: new Date('2021-05-27T07:00:00.000Z')
   }, {
     text: 'Upgrade Server Hardware',
     roomId: 5,
-    startDate: new Date(2017, 4, 26, 12, 0),
-    endDate: new Date(2017, 4, 26, 14, 15)
+    startDate: new Date('2021-05-28T09:00:00.000Z'),
+    endDate: new Date('2021-05-28T11:15:00.000Z')
   }, {
     text: 'Upgrade Personal Computers',
     roomId: 5,
-    startDate: new Date(2017, 4, 26, 14, 45),
-    endDate: new Date(2017, 4, 26, 16, 30)
+    startDate: new Date('2021-05-28T11:45:00.000Z'),
+    endDate: new Date('2021-05-28T13:30:00.000Z')
   }
 ];
 

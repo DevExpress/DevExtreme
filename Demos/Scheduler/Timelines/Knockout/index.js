@@ -4,7 +4,7 @@ window.onload = function() {
             dataSource: data,
             views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
             currentView: "timelineMonth",
-            currentDate: new Date(2017, 4, 1),
+            currentDate: new Date(2021, 4, 2),
             firstDayOfWeek: 0,
             startDayHour: 8,
             endDayHour: 20,

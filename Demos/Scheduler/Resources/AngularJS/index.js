@@ -32,7 +32,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         dataSource: data,
         views: ["workWeek"],
         currentView: "workWeek",
-        currentDate: new Date(2017, 4, 22),
+        currentDate: new Date(2021, 4, 25),
         startDayHour: 9,
         endDayHour: 19,
         height: 600

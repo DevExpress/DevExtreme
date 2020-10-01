@@ -5,7 +5,7 @@ $(function () {
         adaptivityEnabled: true,
         currentView: "month",
         height: 590,
-        currentDate: new Date(2017, 4, 25),
+        currentDate: new Date(2021, 4, 25),
         startDayHour: 9,
         resources: [{
             fieldExpr: "priorityId",

@@ -18,7 +18,7 @@ export class AppComponent {
     appointmentsData: Appointment[];
     resourcesData: Resource[];
     prioritiesData: Priority[];
-    currentDate: Date = new Date(2017, 4, 1);
+    currentDate: Date = new Date(2021, 4, 2);
 
     constructor(service: Service) {
         this.appointmentsData = service.getAppointments();

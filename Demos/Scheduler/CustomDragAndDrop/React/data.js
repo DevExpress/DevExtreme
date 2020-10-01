@@ -25,29 +25,29 @@ export const tasks = [
 export const appointments = [
   {
     text: 'Book Flights to San Fran for Sales Trip',
-    startDate: new Date(2017, 4, 22, 12, 0),
-    endDate: new Date(2017, 4, 22, 13, 0),
+    startDate: new Date('2021-05-22T09:00:00.000Z'),
+    endDate: new Date('2021-05-22T10:00:00.000Z'),
     allDay: true
   }, {
     text: 'Approve Personal Computer Upgrade Plan',
-    startDate: new Date(2017, 4, 23, 10, 0),
-    endDate: new Date(2017, 4, 23, 11, 0)
+    startDate: new Date('2021-05-23T07:00:00.000Z'),
+    endDate: new Date('2021-05-23T08:00:00.000Z')
   }, {
     text: 'Final Budget Review',
-    startDate: new Date(2017, 4, 23, 12, 0),
-    endDate: new Date(2017, 4, 23, 13, 35)
+    startDate: new Date('2021-05-23T09:00:00.000Z'),
+    endDate: new Date('2021-05-23T10:35:00.000Z')
   }, {
     text: 'Approve New Online Marketing Strategy',
-    startDate: new Date(2017, 4, 24, 12, 0),
-    endDate: new Date(2017, 4, 24, 14, 0)
+    startDate: new Date('2021-05-24T09:00:00.000Z'),
+    endDate: new Date('2021-05-24T11:00:00.000Z')
   }, {
     text: 'Customer Workshop',
-    startDate: new Date(2017, 4, 25, 11, 0),
-    endDate: new Date(2017, 4, 25, 12, 0),
+    startDate: new Date('2021-05-25T08:00:00.000Z'),
+    endDate: new Date('2021-05-25T09:00:00.000Z'),
     allDay: true
   }, {
-    text: 'Prepare 2015 Marketing Plan',
-    startDate: new Date(2017, 4, 25, 11, 0),
-    endDate: new Date(2017, 4, 25, 13, 30)
+    text: 'Prepare 2021 Marketing Plan',
+    startDate: new Date('2021-05-25T08:00:00.000Z'),
+    endDate: new Date('2021-05-25T10:30:00.000Z')
   }
 ];

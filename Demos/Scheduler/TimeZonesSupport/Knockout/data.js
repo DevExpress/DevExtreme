@@ -80,7 +80,7 @@ var data = [
     startDateTimeZone: "America/New_York",
     endDateTimeZone: "America/New_York"
 }, {
-    text: "Prepare 2017 Marketing Plan",
+    text: "Prepare 2021 Marketing Plan",
     startDate: "2017-05-22T07:00:00.000Z",
     endDate: "2017-05-22T09:30:00.000Z",
     startDateTimeZone: "Europe/Berlin",

@@ -58,7 +58,7 @@ export default {
   data() {
     return {
       views: ['workWeek'],
-      currentDate: new Date(2017, 4, 25),
+      currentDate: new Date(2021, 4, 25),
       radioGroupValue: 'Owner',
       dataSource: data,
       resources: resourcesList,

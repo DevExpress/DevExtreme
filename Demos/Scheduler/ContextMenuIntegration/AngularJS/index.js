@@ -3,7 +3,7 @@
 DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.groups = undefined;
     $scope.crossScrolling = false;
-    $scope.currentDate = new Date(2017, 4, 25);
+    $scope.currentDate = new Date(2021, 2, 25);
 
     $scope.dataSource = [];
     $scope.disabled = true;

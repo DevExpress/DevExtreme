@@ -3,7 +3,7 @@ $(function() {
         dataSource: data,
         views: ["month"],
         currentView: "month",
-        currentDate: new Date(2016, 7, 2, 11, 30),
+        currentDate: new Date(2021, 7, 2, 11, 30),
         firstDayOfWeek: 1,
         startDayHour: 8,
         endDayHour: 18,

@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       views: ['day', 'week', 'workWeek', 'month'],
-      currentDate: new Date(2017, 4, 25),
+      currentDate: new Date(2021, 4, 27),
       dataSource: data
     };
   }

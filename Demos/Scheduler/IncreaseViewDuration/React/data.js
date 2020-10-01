@@ -1,229 +1,229 @@
 export const data = [{
   text: 'Google AdWords Strategy',
-  startDate: new Date(2017, 4, 1, 9, 0, 0),
-  endDate: new Date(2017, 4, 1, 10, 30, 0)
+  startDate: new Date('2021-04-05T06:00:00.000Z'),
+  endDate: new Date('2021-04-05T07:30:00.000Z')
 }, {
   text: 'New Brochures',
-  startDate: new Date(2017, 4, 1, 11, 30, 0),
-  endDate: new Date(2017, 4, 1, 14, 15, 0)
+  startDate: new Date('2021-04-05T08:30:00.000Z'),
+  endDate: new Date('2021-04-05T11:15:00.000Z')
 }, {
   text: 'Brochure Design Review',
-  startDate: new Date(2017, 4, 30, 10, 15, 0),
-  endDate: new Date(2017, 4, 30, 12, 15, 0)
+  startDate: new Date('2021-05-04T07:15:00.000Z'),
+  endDate: new Date('2021-05-04T09:15:00.000Z')
 }, {
   text: 'Website Re-Design Plan',
-  startDate: new Date(2017, 4, 1, 16, 45, 0),
-  endDate: new Date(2017, 4, 2, 17, 15, 0)
+  startDate: new Date('2021-04-05T13:45:00.000Z'),
+  endDate: new Date('2021-04-06T14:15:00.000Z')
 }, {
   text: 'Rollout of New Website and Marketing Brochures',
-  startDate: new Date(2017, 4, 2, 8, 15, 0),
-  endDate: new Date(2017, 4, 2, 10, 45, 0)
+  startDate: new Date('2021-04-06T05:15:00.000Z'),
+  endDate: new Date('2021-04-06T07:45:00.000Z')
 }, {
   text: 'Update Sales Strategy Documents',
-  startDate: new Date(2017, 4, 31, 9, 0, 0),
-  endDate: new Date(2017, 4, 31, 10, 45, 0)
+  startDate: new Date('2021-05-05T06:00:00.000Z'),
+  endDate: new Date('2021-05-05T07:45:00.000Z')
 }, {
   text: 'Non-Compete Agreements',
-  startDate: new Date(2017, 4, 3, 8, 15, 0),
-  endDate: new Date(2017, 4, 3, 9, 0, 0)
+  startDate: new Date('2021-04-07T05:15:00.000Z'),
+  endDate: new Date('2021-04-07T06:00:00.000Z')
 }, {
   text: 'Approve Hiring of John Jeffers',
-  startDate: new Date(2017, 4, 3, 10, 0, 0),
-  endDate: new Date(2017, 4, 3, 11, 15, 0)
+  startDate: new Date('2021-04-07T07:00:00.000Z'),
+  endDate: new Date('2021-04-07T08:15:00.000Z')
 }, {
   text: 'Update NDA Agreement',
-  startDate: new Date(2017, 5, 1, 9, 45, 0),
-  endDate: new Date(2017, 5, 1, 11, 45, 0)
+  startDate: new Date('2021-05-05T06:45:00.000Z'),
+  endDate: new Date('2021-05-05T08:45:00.000Z')
 }, {
   text: 'Update Employee Files with New NDA',
-  startDate: new Date(2017, 5, 1, 12, 0, 0),
-  endDate: new Date(2017, 5, 1, 14, 45, 0)
+  startDate: new Date('2021-05-05T09:00:00.000Z'),
+  endDate: new Date('2021-05-05T11:45:00.000Z')
 }, {
   text: 'Submit Questions Regarding New NDA',
-  startDate: new Date(2017, 4, 4, 8, 0, 0),
-  endDate: new Date(2017, 4, 4, 9, 30, 0)
+  startDate: new Date('2021-04-08T05:00:00.000Z'),
+  endDate: new Date('2021-04-08T06:30:00.000Z')
 }, {
   text: 'Submit Signed NDA',
-  startDate: new Date(2017, 5, 5, 9, 45, 0),
-  endDate: new Date(2017, 5, 5, 11, 0, 0)
+  startDate: new Date('2021-05-09T06:45:00.000Z'),
+  endDate: new Date('2021-05-09T08:00:00.000Z')
 }, {
   text: 'Review Revenue Projections',
-  startDate: new Date(2017, 4, 4, 17, 15, 0),
-  endDate: new Date(2017, 4, 4, 18, 0, 0)
+  startDate: new Date('2021-04-08T14:15:00.000Z'),
+  endDate: new Date('2021-04-08T15:00:00.000Z')
 }, {
   text: 'Comment on Revenue Projections',
-  startDate: new Date(2017, 4, 5, 9, 15, 0),
-  endDate: new Date(2017, 4, 5, 11, 15, 0)
+  startDate: new Date('2021-04-09T06:15:00.000Z'),
+  endDate: new Date('2021-04-09T08:15:00.000Z')
 }, {
   text: 'Provide New Health Insurance Docs',
-  startDate: new Date(2017, 5, 6, 9, 15, 0),
-  endDate: new Date(2017, 5, 6, 10, 45, 0)
+  startDate: new Date('2021-05-10T06:15:00.000Z'),
+  endDate: new Date('2021-05-10T07:45:00.000Z')
 }, {
   text: 'Review Changes to Health Insurance Coverage',
-  startDate: new Date(2017, 5, 6, 10, 50, 0),
-  endDate: new Date(2017, 5, 6, 12, 30, 0)
+  startDate: new Date('2021-05-10T07:50:00.000Z'),
+  endDate: new Date('2021-05-10T09:30:00.000Z')
 }, {
   text: 'Review Training Course for any Ommissions',
-  startDate: new Date(2017, 4, 8, 14, 0, 0),
-  endDate: new Date(2017, 4, 9, 14, 0, 0)
+  startDate: new Date('2021-04-12T11:00:00.000Z'),
+  endDate: new Date('2021-04-13T11:00:00.000Z')
 }, {
   text: 'Recall Rebate Form',
-  startDate: new Date(2017, 5, 7, 10, 0, 0),
-  endDate: new Date(2017, 5, 7, 11, 15, 0)
+  startDate: new Date('2021-05-11T07:00:00.000Z'),
+  endDate: new Date('2021-05-11T08:15:00.000Z')
 }, {
   text: 'Create Report on Customer Feedback',
-  startDate: new Date(2017, 4, 9, 15, 15, 0),
-  endDate: new Date(2017, 4, 9, 17, 30, 0)
+  startDate: new Date('2021-04-13T12:15:00.000Z'),
+  endDate: new Date('2021-04-13T14:30:00.000Z')
 }, {
   text: 'Review Customer Feedback Report',
-  startDate: new Date(2017, 4, 9, 16, 15, 0),
-  endDate: new Date(2017, 4, 9, 18, 30, 0)
+  startDate: new Date('2021-04-13T13:15:00.000Z'),
+  endDate: new Date('2021-04-13T15:30:00.000Z')
 }, {
   text: 'Customer Feedback Report Analysis',
-  startDate: new Date(2017, 4, 10, 9, 30, 0),
-  endDate: new Date(2017, 4, 10, 10, 30, 0)
+  startDate: new Date('2021-04-14T06:30:00.000Z'),
+  endDate: new Date('2021-04-14T07:30:00.000Z')
 }, {
   text: 'Prepare Shipping Cost Analysis Report',
-  startDate: new Date(2017, 5, 8, 11, 30, 0),
-  endDate: new Date(2017, 5, 8, 12, 30, 0)
+  startDate: new Date('2021-05-12T08:30:00.000Z'),
+  endDate: new Date('2021-05-12T09:30:00.000Z')
 }, {
   text: 'Provide Feedback on Shippers',
-  startDate: new Date(2017, 5, 9, 10, 15, 0),
-  endDate: new Date(2017, 5, 9, 12, 0, 0)
+  startDate: new Date('2021-05-13T07:15:00.000Z'),
+  endDate: new Date('2021-05-13T09:00:00.000Z')
 }, {
   text: 'Select Preferred Shipper',
-  startDate: new Date(2017, 5, 9, 12, 30, 0),
-  endDate: new Date(2017, 5, 9, 14, 0, 0)
+  startDate: new Date('2021-05-13T09:30:00.000Z'),
+  endDate: new Date('2021-05-13T11:00:00.000Z')
 }, {
   text: 'Complete Shipper Selection Form',
-  startDate: new Date(2017, 5, 12, 8, 30, 0),
-  endDate: new Date(2017, 5, 12, 10, 0, 0)
+  startDate: new Date('2021-05-16T05:30:00.000Z'),
+  endDate: new Date('2021-05-16T07:00:00.000Z')
 }, {
   text: 'Upgrade Server Hardware',
-  startDate: new Date(2017, 4, 11, 12, 0, 0),
-  endDate: new Date(2017, 4, 11, 14, 15, 0)
+  startDate: new Date('2021-04-15T09:00:00.000Z'),
+  endDate: new Date('2021-04-15T11:15:00.000Z')
 }, {
   text: 'Upgrade Personal Computers',
-  startDate: new Date(2017, 4, 11, 14, 45, 0),
-  endDate: new Date(2017, 4, 11, 16, 30, 0)
+  startDate: new Date('2021-04-15T11:45:00.000Z'),
+  endDate: new Date('2021-04-15T13:30:00.000Z')
 }, {
   text: 'Upgrade Apps to Windows RT or stay with WinForms',
-  startDate: new Date(2017, 4, 12, 10, 30, 0),
-  endDate: new Date(2017, 4, 12, 13, 0, 0)
+  startDate: new Date('2021-04-16T07:30:00.000Z'),
+  endDate: new Date('2021-04-16T10:00:00.000Z')
 }, {
   text: 'Estimate Time Required to Touch-Enable Apps',
-  startDate: new Date(2017, 5, 13, 9, 45, 0),
-  endDate: new Date(2017, 5, 13, 11, 0, 0)
+  startDate: new Date('2021-05-17T06:45:00.000Z'),
+  endDate: new Date('2021-05-17T08:00:00.000Z')
 }, {
   text: 'Report on Tranistion to Touch-Based Apps',
-  startDate: new Date(2017, 5, 14, 11, 30, 0),
-  endDate: new Date(2017, 5, 14, 12, 30, 0)
+  startDate: new Date('2021-05-18T08:30:00.000Z'),
+  endDate: new Date('2021-05-18T09:30:00.000Z')
 }, {
   text: 'Submit New Website Design',
-  startDate: new Date(2017, 4, 15, 8, 0, 0),
-  endDate: new Date(2017, 4, 15, 10, 0, 0)
+  startDate: new Date('2021-04-19T05:00:00.000Z'),
+  endDate: new Date('2021-04-19T07:00:00.000Z')
 }, {
   text: 'Create Icons for Website',
-  startDate: new Date(2017, 5, 15, 11, 30, 0),
-  endDate: new Date(2017, 5, 15, 13, 15, 0)
+  startDate: new Date('2021-05-19T08:30:00.000Z'),
+  endDate: new Date('2021-05-19T10:15:00.000Z')
 }, {
   text: 'Create New Product Pages',
-  startDate: new Date(2017, 4, 16, 9, 45, 0),
-  endDate: new Date(2017, 4, 16, 11, 45, 0)
+  startDate: new Date('2021-04-20T06:45:00.000Z'),
+  endDate: new Date('2021-04-20T08:45:00.000Z')
 }, {
   text: 'Approve Website Launch',
-  startDate: new Date(2017, 5, 16, 12, 0, 0),
-  endDate: new Date(2017, 5, 16, 15, 15, 0)
+  startDate: new Date('2021-05-20T09:00:00.000Z'),
+  endDate: new Date('2021-05-20T12:15:00.000Z')
 }, {
   text: 'Update Customer Shipping Profiles',
-  startDate: new Date(2017, 4, 17, 9, 30, 0),
-  endDate: new Date(2017, 4, 17, 11, 0, 0)
+  startDate: new Date('2021-04-21T06:30:00.000Z'),
+  endDate: new Date('2021-04-21T08:00:00.000Z')
 }, {
   text: 'Create New Shipping Return Labels',
-  startDate: new Date(2017, 4, 17, 12, 45, 0),
-  endDate: new Date(2017, 4, 17, 14, 0, 0)
+  startDate: new Date('2021-04-21T09:45:00.000Z'),
+  endDate: new Date('2021-04-21T11:00:00.000Z')
 }, {
   text: 'Get Design for Shipping Return Labels',
-  startDate: new Date(2017, 4, 17, 15, 0, 0),
-  endDate: new Date(2017, 4, 17, 16, 30, 0)
+  startDate: new Date('2021-04-21T12:00:00.000Z'),
+  endDate: new Date('2021-04-21T13:30:00.000Z')
 }, {
   text: 'PSD needed for Shipping Return Labels',
-  startDate: new Date(2017, 4, 18, 8, 30, 0),
-  endDate: new Date(2017, 4, 18, 9, 15, 0)
+  startDate: new Date('2021-04-22T05:30:00.000Z'),
+  endDate: new Date('2021-04-22T06:15:00.000Z')
 }, {
   text: 'Contact ISP and Discuss Payment Options',
-  startDate: new Date(2017, 5, 19, 11, 30, 0),
-  endDate: new Date(2017, 5, 19, 16, 0, 0)
+  startDate: new Date('2021-05-23T08:30:00.000Z'),
+  endDate: new Date('2021-05-23T13:00:00.000Z')
 }, {
   text: 'Prepare Year-End Support Summary Report',
-  startDate: new Date(2017, 5, 19, 10, 0, 0),
-  endDate: new Date(2017, 5, 19, 12, 0, 0)
+  startDate: new Date('2021-05-23T07:00:00.000Z'),
+  endDate: new Date('2021-05-23T09:00:00.000Z')
 }, {
   text: 'Review New Training Material',
-  startDate: new Date(2017, 4, 22, 8, 0, 0),
-  endDate: new Date(2017, 4, 22, 9, 15, 0)
+  startDate: new Date('2021-04-26T05:00:00.000Z'),
+  endDate: new Date('2021-04-26T06:15:00.000Z')
 }, {
   text: 'Distribute Training Material to Support Staff',
-  startDate: new Date(2017, 4, 19, 12, 45, 0),
-  endDate: new Date(2017, 4, 19, 14, 0, 0)
+  startDate: new Date('2021-04-23T09:45:00.000Z'),
+  endDate: new Date('2021-04-23T11:00:00.000Z')
 }, {
   text: 'Training Material Distribution Schedule',
-  startDate: new Date(2017, 5, 20, 14, 15, 0),
-  endDate: new Date(2017, 5, 20, 16, 15, 0)
+  startDate: new Date('2021-05-24T11:15:00.000Z'),
+  endDate: new Date('2021-05-24T13:15:00.000Z')
 }, {
   text: 'Approval on Converting to New HDMI Specification',
-  startDate: new Date(2017, 4, 29, 9, 30, 0),
-  endDate: new Date(2017, 4, 29, 10, 15, 0)
+  startDate: new Date('2021-05-03T06:30:00.000Z'),
+  endDate: new Date('2021-05-03T07:15:00.000Z')
 }, {
   text: 'Create New Spike for Automation Server',
-  startDate: new Date(2017, 5, 21, 10, 0, 0),
-  endDate: new Date(2017, 5, 21, 12, 30, 0)
+  startDate: new Date('2021-05-25T07:00:00.000Z'),
+  endDate: new Date('2021-05-25T09:30:00.000Z')
 }, {
   text: 'Code Review - New Automation Server',
-  startDate: new Date(2017, 5, 21, 13, 0, 0),
-  endDate: new Date(2017, 5, 21, 15, 0, 0)
+  startDate: new Date('2021-05-25T10:00:00.000Z'),
+  endDate: new Date('2021-05-25T12:00:00.000Z')
 }, {
   text: 'Confirm Availability for Sales Meeting',
-  startDate: new Date(2017, 4, 23, 10, 15, 0),
-  endDate: new Date(2017, 4, 23, 15, 15, 0)
+  startDate: new Date('2021-04-27T07:15:00.000Z'),
+  endDate: new Date('2021-04-27T12:15:00.000Z')
 }, {
   text: 'Reschedule Sales Team Meeting',
-  startDate: new Date(2017, 4, 24, 16, 15, 0),
-  endDate: new Date(2017, 4, 24, 18, 0, 0)
+  startDate: new Date('2021-04-28T13:15:00.000Z'),
+  endDate: new Date('2021-04-28T15:00:00.000Z')
 }, {
   text: 'Send 2 Remotes for Giveaways',
-  startDate: new Date(2017, 5, 22, 9, 30, 0),
-  endDate: new Date(2017, 5, 22, 11, 45, 0)
+  startDate: new Date('2021-05-26T06:30:00.000Z'),
+  endDate: new Date('2021-05-26T08:45:00.000Z')
 }, {
   text: 'Discuss Product Giveaways with Management',
-  startDate: new Date(2017, 5, 23, 12, 15, 0),
-  endDate: new Date(2017, 5, 23, 16, 45, 0)
+  startDate: new Date('2021-05-27T09:15:00.000Z'),
+  endDate: new Date('2021-05-27T13:45:00.000Z')
 }, {
   text: 'Replace Desktops on the 3rd Floor',
-  startDate: new Date(2017, 4, 25, 9, 30, 0),
-  endDate: new Date(2017, 4, 25, 10, 45, 0)
+  startDate: new Date('2021-04-29T06:30:00.000Z'),
+  endDate: new Date('2021-04-29T07:45:00.000Z')
 }, {
   text: 'Update Database with New Leads',
-  startDate: new Date(2017, 5, 26, 12, 0, 0),
-  endDate: new Date(2017, 5, 26, 14, 15, 0)
+  startDate: new Date('2021-05-30T09:00:00.000Z'),
+  endDate: new Date('2021-05-30T11:15:00.000Z')
 }, {
   text: 'Mail New Leads for Follow Up',
-  startDate: new Date(2017, 5, 27, 14, 45, 0),
-  endDate: new Date(2017, 5, 27, 15, 30, 0)
+  startDate: new Date('2021-05-31T11:45:00.000Z'),
+  endDate: new Date('2021-05-31T12:30:00.000Z')
 }, {
   text: 'Send Territory Sales Breakdown',
-  startDate: new Date(2017, 4, 25, 18, 0, 0),
-  endDate: new Date(2017, 4, 25, 20, 0, 0)
+  startDate: new Date('2021-04-29T15:00:00.000Z'),
+  endDate: new Date('2021-04-29T17:00:00.000Z')
 }, {
   text: 'Territory Sales Breakdown Report',
-  startDate: new Date(2017, 4, 26, 8, 45, 0),
-  endDate: new Date(2017, 4, 26, 9, 45, 0)
+  startDate: new Date('2021-04-30T05:45:00.000Z'),
+  endDate: new Date('2021-04-30T06:45:00.000Z')
 }, {
   text: 'Report on the State of Engineering Dept',
-  startDate: new Date(2017, 4, 26, 14, 45, 0),
-  endDate: new Date(2017, 4, 26, 15, 30, 0)
+  startDate: new Date('2021-04-30T11:45:00.000Z'),
+  endDate: new Date('2021-04-30T12:30:00.000Z')
 }, {
   text: 'Staff Productivity Report',
-  startDate: new Date(2017, 5, 27, 16, 15, 0),
-  endDate: new Date(2017, 5, 27, 19, 30, 0)
+  startDate: new Date('2021-05-31T13:15:00.000Z'),
+  endDate: new Date('2021-05-31T16:30:00.000Z')
 }];

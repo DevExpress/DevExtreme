@@ -18,16 +18,16 @@ $(function(){
         currentView: "Week",
         crossScrollingEnabled: true,
         groupByDate: groupByDate.option("value"),
-        currentDate: new Date(2018, 4, 21),
+        currentDate: new Date(2021, 4, 21),
         startDayHour: 9,
         endDayHour: 16,
         groups: ["priorityId"],
         resources: [
             { 
-                 fieldExpr: "priorityId", 
-                 allowMultiple: false, 
-                 dataSource: priorityData,
-                 label: "Priority"
+                fieldExpr: "priorityId", 
+                allowMultiple: false, 
+                dataSource: priorityData,
+                label: "Priority"
             }
         ],
         height: 700

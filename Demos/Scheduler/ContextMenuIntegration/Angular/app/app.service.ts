@@ -26,52 +26,52 @@ let appointments: Appointment[] = [
     {
         text: "Watercolor Landscape",
         roomId: [1],
-        startDate: new Date(2017, 4, 1, 9, 30),
-        endDate: new Date(2017, 4, 1, 11),
+        startDate: new Date("2021-02-29T06:30:00.000Z"),
+        endDate: new Date("2021-02-29T08:00:00.000Z"),
         recurrenceRule: "FREQ=WEEKLY;BYDAY=TU,FR;COUNT=10"
     }, {
         text: "Oil Painting for Beginners",
         roomId: [2],
-        startDate: new Date(2017, 4, 1, 9, 30),
-        endDate: new Date(2017, 4, 1, 11),
+        startDate: new Date("2021-02-29T06:30:00.000Z"),
+        endDate: new Date("2021-02-29T08:00:00.000Z"),
         recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10"
     }, {
         text: "Testing",
         roomId: [3],
-        startDate: new Date(2017, 4, 1, 12, 0),
-        endDate: new Date(2017, 4, 1, 13, 0),
+        startDate: new Date("2021-02-29T09:00:00.000Z"),
+        endDate: new Date("2021-02-29T10:00:00.000Z"),
         recurrenceRule: "FREQ=WEEKLY;BYDAY=MO;WKST=TU;INTERVAL=2;COUNT=2"
     }, {
         text: "Meeting of Instructors",
         roomId: [4],
-        startDate: new Date(2017, 4, 1, 9, 0),
-        endDate: new Date(2017, 4, 1, 9, 15),
-        recurrenceRule: "FREQ=DAILY;BYDAY=WE;UNTIL=20170601"
+        startDate: new Date("2021-02-29T06:00:00.000Z"),
+        endDate: new Date("2021-02-29T06:15:00.000Z"),
+        recurrenceRule: "FREQ=DAILY;BYDAY=WE;UNTIL=20210401"
     }, {
         text: "Recruiting students",
         roomId: [5],
-        startDate: new Date(2017, 4, 26, 10, 0),
-        endDate: new Date(2017, 4, 26, 11, 0),
+        startDate: new Date("2021-02-24T07:00:00.000Z"),
+        endDate: new Date("2021-02-24T08:00:00.000Z"),
         recurrenceRule: "FREQ=YEARLY;BYWEEKNO=23",
-        recurrenceException: "20170611T100000"
+        recurrenceException: "20210611T100000"
     }, {
         text: "Final exams",
         roomId: [3],
-        startDate: new Date(2017, 4, 26, 12, 0),
-        endDate: new Date(2017, 4, 26, 13, 35),
+        startDate: new Date("2021-02-24T09:00:00.000Z"),
+        endDate: new Date("2021-02-24T10:35:00.000Z"),
         recurrenceRule: "FREQ=YEARLY;BYWEEKNO=24;BYDAY=TH,FR"
     }, {
         text: "Monthly Planning",
         roomId: [4],
-        startDate: new Date(2017, 4, 26, 14, 30),
-        endDate: new Date(2017, 4, 26, 15, 45),
+        startDate: new Date("2021-03-24T11:30:00.000Z"),
+        endDate: new Date("2021-03-24T12:45:00.000Z"),
         recurrenceRule: "FREQ=MONTHLY;BYMONTHDAY=27;COUNT=1"
     }, {
         text: "Open Day",
         roomId: [5],
-        startDate: new Date(2017, 4, 1, 9, 30),
-        endDate: new Date(2017, 4, 1, 13),
-        recurrenceRule: "FREQ=YEARLY;BYYEARDAY=148"
+        startDate: new Date("2021-02-29T06:30:00.000Z"),
+        endDate: new Date("2021-02-29T10:00:00.000Z"),
+        recurrenceRule: "FREQ=YEARLY;BYYEARDAY=87"
     }
 ];
 

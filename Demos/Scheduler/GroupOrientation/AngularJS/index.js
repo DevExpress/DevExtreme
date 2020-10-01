@@ -18,7 +18,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         }],
         currentView: "Vertical Grouping",
         crossScrollingEnabled: true,
-        currentDate: new Date(2018, 4, 21),
+        currentDate: new Date(2021, 4, 21),
         startDayHour: 9,
         endDayHour: 16,
         groups: ["priorityId"],

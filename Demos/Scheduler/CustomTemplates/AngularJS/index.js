@@ -5,7 +5,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         dataSource: data,
         views: ["day", "week", "timelineDay"],
         currentView: "day",
-        currentDate: new Date(2015, 4, 25),
+        currentDate: new Date(2021, 4, 25),
         firstDayOfWeek: 0,
         startDayHour: 9,
         endDayHour: 23,

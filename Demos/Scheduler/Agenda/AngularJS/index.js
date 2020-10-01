@@ -6,7 +6,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         views: ["agenda"],
         currentView: "agenda",
         startDayHour: 9,
-        currentDate: new Date(2017, 4, 11),
+        currentDate: new Date(2021, 4, 11),
         height: 600
     };
 });

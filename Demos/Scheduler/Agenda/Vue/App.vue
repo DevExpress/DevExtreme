@@ -20,7 +20,7 @@ export default {
   data() {
     return {
       views: ['agenda'],
-      currentDate: new Date(2017, 4, 11),
+      currentDate: new Date(2021, 4, 11),
       dataSource: data
     };
   }

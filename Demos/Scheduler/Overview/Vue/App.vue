@@ -53,7 +53,7 @@ export default {
     return {
       groups: ['employeeID'],
       views: ['month'],
-      currentDate: new Date(2016, 7, 2, 11, 30),
+      currentDate: new Date(2021, 7, 2, 11, 30),
       employees,
       dataSource: data
     };

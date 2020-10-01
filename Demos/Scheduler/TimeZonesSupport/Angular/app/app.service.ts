@@ -34,7 +34,7 @@ export const data:Data[] = [{
     startDate: "2017-05-24T16:00:00.000Z",
     endDate: "2017-05-24T15:00:00.000Z"
 }, {
-    text: "Prepare 2017 Marketing Plan",
+    text: "Prepare 2021 Marketing Plan",
     startDate: "2017-05-22T07:00:00.000Z",
     endDate: "2017-05-22T09:30:00.000Z"
 }, {

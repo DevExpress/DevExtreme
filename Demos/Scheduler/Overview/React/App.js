@@ -6,7 +6,7 @@ import { employees, data } from './data.js';
 import DataCell from './DataCell.js';
 import ResourceCell from './ResourceCell.js';
 
-const currentDate = new Date(2016, 7, 2, 11, 30);
+const currentDate = new Date(2021, 7, 2, 11, 30);
 const groups = ['employeeID'];
 const views = ['month'];
 

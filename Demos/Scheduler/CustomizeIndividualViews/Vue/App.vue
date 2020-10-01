@@ -50,7 +50,7 @@ import DxScheduler, { DxResource, DxView } from 'devextreme-vue/scheduler';
 import DateCell from './DateCell.vue';
 import { data, priorityData, typeData } from './data.js';
 
-const currentDate = new Date(2015, 4, 25);
+const currentDate = new Date(2021, 4, 25);
 
 export default {
   components: {

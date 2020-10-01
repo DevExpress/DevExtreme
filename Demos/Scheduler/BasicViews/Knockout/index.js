@@ -4,7 +4,7 @@ window.onload = function() {
             dataSource: data,
             views: ["day", "week", "workWeek", "month"],
             currentView: "day",
-            currentDate: new Date(2017, 4, 25),
+            currentDate: new Date(2021, 4, 27),
             startDayHour: 9,
             height: 600
         }

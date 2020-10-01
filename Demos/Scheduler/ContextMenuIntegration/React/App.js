@@ -7,7 +7,7 @@ import { cellContextMenuItems, appointmentContextMenuItems, setResource } from '
 
 import { AppointmentMenuTemplate } from './AppointmentTemplate.js';
 
-const currentDate = new Date(2017, 4, 25);
+const currentDate = new Date(2021, 2, 25);
 const views = ['day', 'month'];
 
 class App extends React.Component {

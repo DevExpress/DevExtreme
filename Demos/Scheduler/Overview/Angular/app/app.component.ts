@@ -18,7 +18,7 @@ if(!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     dataSource: any;
-    currentDate: Date = new Date(2016, 7, 2, 11, 30);
+    currentDate: Date = new Date(2021, 7, 2, 11, 30);
     resourcesDataSource: Employee[];
 
     constructor(service: Service) {

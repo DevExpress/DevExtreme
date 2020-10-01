@@ -4,7 +4,7 @@ import Scheduler from 'devextreme-react/scheduler';
 
 import { data } from './data.js';
 
-const currentDate = new Date(2017, 4, 25);
+const currentDate = new Date(2021, 4, 27);
 const views = ['day', 'week', 'workWeek', 'month'];
 
 class App extends React.Component {

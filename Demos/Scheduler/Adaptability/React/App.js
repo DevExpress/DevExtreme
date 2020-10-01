@@ -12,7 +12,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       scheduler: null,
-      currentDate: new Date(2017, 4, 25),
+      currentDate: new Date(2021, 4, 25),
       cellDuration: 30
     };
     this.showAppointmentPopup = this.showAppointmentPopup.bind(this);

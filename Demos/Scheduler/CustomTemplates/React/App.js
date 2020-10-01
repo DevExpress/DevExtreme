@@ -6,7 +6,7 @@ import Appointment from './Appointment.js';
 import AppointmentTooltip from './AppointmentTooltip.js';
 import { data, moviesData, theatreData } from './data.js';
 
-const currentDate = new Date(2015, 4, 25);
+const currentDate = new Date(2021, 4, 25);
 const views = ['day', 'week', 'timelineDay'];
 const groups = ['theatreId'];
 

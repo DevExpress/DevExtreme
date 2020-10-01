@@ -18,7 +18,7 @@ if(!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     appointmentsData: Appointment[];
-    currentDate: Date = new Date(2018, 4, 21);
+    currentDate: Date = new Date(2021, 4, 21);
     prioritiesData: Priority[];
     groupByDate: boolean = true;
 
