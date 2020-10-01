@@ -9,7 +9,7 @@ if(jQuery && !themeReadyCallback.fired()) {
     holdReady(true);
 
     themeReadyCallback.add(function() {
-        readyCallbacks.ready(function() {
+        readyCallbacks.add(function() {
             holdReady(false);
         });
     });
