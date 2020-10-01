@@ -544,7 +544,8 @@ QUnit.test('Print method, error image loading - delete iFrame', function(assert)
     const exportFunc = clientExporter.export;
     const mockWindow = {
         print: sinon.spy(),
-        focus: sinon.spy()
+        focus: sinon.spy(),
+        addEventListener: sinon.spy()
     };
     const widget = this.createWidget({
         'export': {
