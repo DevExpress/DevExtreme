@@ -3,7 +3,7 @@ import { each } from '../../../core/utils/iterator';
 import { noop } from '../../../core/utils/common';
 import { getWindow, hasProperty } from '../../../core/utils/window';
 const window = getWindow();
-import labelModule from './label';
+import { Label } from './label';
 const _extend = extend;
 import { isDefined as _isDefined } from '../../../core/utils/type';
 import { normalizeEnum as _normalizeEnum } from '../../core/utils';
@@ -116,7 +116,7 @@ export default {
     },
 
     _createLabel: function() {
-        this._label = new labelModule.Label({
+        this._label = new Label({
             renderer: this.series._renderer,
             labelsGroup: this.series._labelsGroup,
             point: this

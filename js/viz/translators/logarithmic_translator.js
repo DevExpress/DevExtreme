@@ -1,7 +1,5 @@
-import vizUtils from '../core/utils';
+import { raiseToExt as raiseTo, getLogExt as getLog } from '../core/utils';
 import { isDefined } from '../../core/utils/type';
-const raiseTo = vizUtils.raiseToExt;
-const getLog = vizUtils.getLogExt;
 
 export default {
     _fromValue: function(value) {

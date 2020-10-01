@@ -7,12 +7,10 @@ const _sqrt = Math.sqrt;
 const _acos = Math.acos;
 const DEG = 180 / Math.PI;
 const _abs = Math.abs;
-import vizUtils from '../../core/utils';
-const _normalizeAngle = vizUtils.normalizeAngle;
-const _getCosAndSin = vizUtils.getCosAndSin;
+import { getVerticallyShiftedAngularCoords, normalizeAngle as _normalizeAngle, getCosAndSin as _getCosAndSin } from '../../core/utils';
 import { isDefined as _isDefined } from '../../../core/utils/type';
-const getVerticallyShiftedAngularCoords = vizUtils.getVerticallyShiftedAngularCoords;
-import { radialLabelIndent as RADIAL_LABEL_INDENT } from '../../components/consts';
+import consts from '../../components/consts';
+const RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
 export default _extend({}, symbolPoint, {
     _updateData: function(data, argumentChanged) {

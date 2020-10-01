@@ -1,7 +1,9 @@
-import { prototype as proto } from './tree_map.base';
+import TreeMapBase from './tree_map.base';
 import { expand as _expand } from '../core/helpers';
 
 import './api';
+
+const proto = TreeMapBase.prototype;
 
 proto._eventsMap.onDrill = { name: 'drill' };
 

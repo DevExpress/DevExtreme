@@ -1,4 +1,4 @@
-import { format as _format } from '../../../format_helper';
+import formatHelper from '../../../format_helper';
 import {
     degreesToRadians as _degreesToRadians,
     patchFontOptions as _patchFontOptions,
@@ -8,6 +8,7 @@ import {
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 
+const _format = formatHelper.format;
 const _math = Math;
 const _round = _math.round;
 const _floor = _math.floor;

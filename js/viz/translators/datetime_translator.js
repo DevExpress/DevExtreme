@@ -1,4 +1,4 @@
-import { addDateInterval } from '../../core/utils/date';
+import dateUtils from '../../core/utils/date';
 function parse(value) {
     return value !== null ? new Date(value) : value;
 }
@@ -8,5 +8,5 @@ export default {
 
     _toValue: parse,
 
-    _add: addDateInterval
+    _add: dateUtils.addDateInterval
 };
