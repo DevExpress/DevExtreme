@@ -368,7 +368,7 @@ class FileManagerEditingControl extends Widget {
 
     _getItemProgressDisplayInfo(itemInfo) {
         return {
-            commonText: itemInfo.fileItem.name || '\xA0',
+            commonText: itemInfo.fileItem.name,
             imageUrl: this._getItemThumbnail(itemInfo)
         };
     }
