@@ -191,14 +191,15 @@ export default class FileItemsController {
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        const actionInfo = this._createEditActionInfo('create', parentDirectoryInfo, parentDirectoryInfo);
+        const tempDirInfo = this._createDirInfoByName(name, parentDirectoryInfo, true);
+        const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
             () => this._resetDirectoryState(parentDirectoryInfo));
     }
 
     renameItem(fileItemInfo, name) {
-        const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory);
+        const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory, { newName: name });
         return this._processEditAction(actionInfo,
             () => {
                 if(!fileItemInfo.fileItem.isDirectory) {
@@ -335,12 +336,12 @@ export default class FileItemsController {
         });
     }
 
-    _createEditActionInfo(name, itemInfos, directory, customData) {
-        itemInfos = Array.isArray(itemInfos) ? itemInfos : [ itemInfos ];
+    _createEditActionInfo(name, targetItemInfos, directory, customData) {
+        targetItemInfos = Array.isArray(targetItemInfos) ? targetItemInfos : [ targetItemInfos ];
         customData = customData || { };
 
-        const items = itemInfos.map(itemInfo => itemInfo.fileItem);
-        return { name, itemInfos, items, directory, customData, singleRequest: true };
+        const items = targetItemInfos.map(itemInfo => itemInfo.fileItem);
+        return { name, itemInfos: targetItemInfos, items, directory, customData, singleRequest: true };
     }
 
     _getItemInfosForUploaderFiles(files, parentDirectoryInfo) {
@@ -493,6 +494,14 @@ export default class FileItemsController {
         }
 
         return selectedDirInfo;
+    }
+
+    _createDirInfoByName(name, parentDirectoryInfo, isDirectory) {
+        const dirPathInfo = this._getPathInfo(parentDirectoryInfo);
+        const fileItem = new FileSystemItem(dirPathInfo, name, isDirectory);
+        return isDirectory
+            ? this._createDirectoryInfo(fileItem, parentDirectoryInfo)
+            : this._createFileInfo(fileItem, parentDirectoryInfo);
     }
 
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {
