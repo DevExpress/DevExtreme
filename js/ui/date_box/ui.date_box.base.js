@@ -6,7 +6,7 @@ import { createTextElementHiddenCopy } from '../../core/utils/dom';
 import { each } from '../../core/utils/iterator';
 import { compare as compareVersions } from '../../core/utils/version';
 import { extend } from '../../core/utils/extend';
-import support from '../../core/utils/support';
+import { inputType } from '../../core/utils/support';
 import devices from '../../core/devices';
 import config from '../../core/config';
 import dateUtils from '../../core/utils/date';
@@ -460,7 +460,7 @@ const DateBox = DropDownEditor.inherit({
     },
 
     _getFormatByMode: function(mode) {
-        return support.inputType(mode) ? null : uiDateUtils.FORMATS_MAP[mode];
+        return inputType(mode) ? null : uiDateUtils.FORMATS_MAP[mode];
     },
 
     _valueChangeEventHandler: function(e) {

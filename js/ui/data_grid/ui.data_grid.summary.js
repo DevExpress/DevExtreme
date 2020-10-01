@@ -8,11 +8,11 @@ import errors from '../widget/ui.errors';
 import gridCore from './ui.data_grid.core';
 import messageLocalization from '../../localization/message';
 import dataSourceAdapter from './ui.data_grid.data_source_adapter';
-import columnsView from '../grid_core/ui.grid_core.columns_view';
+import { ColumnsView } from '../grid_core/ui.grid_core.columns_view';
 import AggregateCalculator from './aggregate_calculator';
 import dataQuery from '../../data/query';
-import { multiLevelGroup } from '../../data/store_helper';
-import { normalizeSortingInfo } from '../../data/utils';
+import storeHelper from '../../data/store_helper';
+import dataUtils from '../../data/utils';
 
 const DATAGRID_TOTAL_FOOTER_CLASS = 'dx-datagrid-total-footer';
 const DATAGRID_SUMMARY_ITEM_CLASS = 'dx-datagrid-summary-item';
@@ -61,7 +61,7 @@ const recalculateWhileEditing = function(that) {
     return that.option('summary.recalculateWhileEditing');
 };
 
-export const FooterView = columnsView.ColumnsView.inherit((function() {
+export const FooterView = ColumnsView.inherit((function() {
     return {
         _getRows: function() {
             return this._dataController.footerItems();
@@ -188,7 +188,7 @@ const SummaryDataSourceAdapterExtender = (function() {
             return sortByGroupsInfo && sortByGroupsInfo.length;
         },
         sortLastLevelGroupItems: function(items, groups, paths) {
-            const groupedItems = multiLevelGroup(dataQuery(items), groups).toArray();
+            const groupedItems = storeHelper.multiLevelGroup(dataQuery(items), groups).toArray();
             let result = [];
 
             paths.forEach(function(path) {
@@ -337,7 +337,7 @@ const SummaryDataSourceAdapterClientExtender = (function() {
         },
         _handleDataLoadedCore: function(options) {
             const that = this;
-            const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
+            const groups = dataUtils.normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
             const remoteOperations = options.remoteOperations || {};
             const summary = that.summaryGetter()(remoteOperations);
             let totalAggregates;
