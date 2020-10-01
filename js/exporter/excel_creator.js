@@ -5,7 +5,7 @@ import { extend } from '../core/utils/extend';
 import errors from '../ui/widget/ui.errors';
 import { encodeHtml } from '../core/utils/string';
 import JSZip from 'jszip';
-import fileSaver from './file_saver';
+import { MIME_TYPES } from './file_saver';
 import excelFormatConverter from './excel_format_converter';
 import ExcelFile from './excel/excel.file';
 import { Deferred } from '../core/utils/deferred';
@@ -686,7 +686,7 @@ export const ExcelCreator = Class.inherit({
         const options = {
             type: isBlob ? 'blob' : 'base64',
             compression: 'DEFLATE',
-            mimeType: fileSaver.MIME_TYPES['EXCEL']
+            mimeType: MIME_TYPES['EXCEL']
         };
         const deferred = new Deferred();
 

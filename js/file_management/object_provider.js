@@ -3,7 +3,7 @@ import { ensureDefined } from '../core/utils/common';
 import { compileGetter, compileSetter } from '../core/utils/data';
 import Guid from '../core/guid';
 import { isFunction } from '../core/utils/type';
-import { errors } from '../data/errors';
+import errorsUtils from '../data/errors';
 import { Deferred } from '../core/utils/deferred';
 import { getWindow } from '../core/utils/window';
 import { fileSaver } from '../exporter/file_saver';
@@ -24,7 +24,7 @@ class ObjectFileSystemProvider extends FileSystemProviderBase {
 
         const initialArray = options.data;
         if(initialArray && !Array.isArray(initialArray)) {
-            throw errors.Error('E4006');
+            throw errorsUtils.errors.Error('E4006');
         }
 
 

@@ -6,7 +6,7 @@ import ajax from '../../core/utils/ajax';
 import Guid from '../../core/guid';
 import { grep } from '../../core/utils/common';
 import { Deferred } from '../../core/utils/deferred';
-import { errors } from '../errors';
+import errorsUtils from '../errors';
 import Utils from '../utils';
 import { format as stringFormat } from '../../core/utils/string';
 
@@ -141,7 +141,7 @@ const ajaxOptionsForRequest = (protocolVersion, request, options = {}) => {
             case 4:
                 return value;
 
-            default: throw errors.Error('E4002');
+            default: throw errorsUtils.errors.Error('E4002');
         }
     });
 
@@ -223,7 +223,7 @@ export const sendRequest = (protocolVersion, request, options) => {
             if(isFinite(count)) {
                 d.resolve(count);
             } else {
-                d.reject(new errors.Error('E4018'));
+                d.reject(new errorsUtils.errors.Error('E4018'));
             }
 
         } else if(nextUrl && !isPaged) {
@@ -439,7 +439,7 @@ export const serializeValue = (value, protocolVersion) => {
             return serializeValueV2(value);
         case 4:
             return serializeValueV4(value);
-        default: throw errors.Error('E4002');
+        default: throw errorsUtils.errors.Error('E4002');
     }
 };
 
@@ -473,7 +473,7 @@ export const convertPrimitiveValue = (type, value) => {
     if(value === null) return null;
     const converter = keyConverters[type];
     if(!converter) {
-        throw errors.Error('E4014', type);
+        throw errorsUtils.errors.Error('E4014', type);
     }
     return converter(value);
 };

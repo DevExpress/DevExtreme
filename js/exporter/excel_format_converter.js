@@ -1,4 +1,4 @@
-import stringUtils from '../core/utils/string';
+import { format as stringFormat } from '../core/utils/string';
 import numberFormatter from '../localization/number';
 import dateLocalization from '../localization/date';
 import { isDefined, isString } from '../core/utils/type';
@@ -114,7 +114,7 @@ const excelFormatConverter = {
         }
 
         if(excelFormat) {
-            result = stringUtils.format(excelFormat, this._applyPrecision(format, precision));
+            result = stringFormat(excelFormat, this._applyPrecision(format, precision));
         }
 
         return result;

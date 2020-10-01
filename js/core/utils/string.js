@@ -1,6 +1,6 @@
 import { isFunction, type } from './type';
 
-const encodeHtml = (function() {
+export const encodeHtml = (function() {
     const encodeRegExp = [new RegExp('&', 'g'), new RegExp('"', 'g'), new RegExp('\'', 'g'), new RegExp('<', 'g'), new RegExp('>', 'g')];
 
     return function(str) {
@@ -31,7 +31,7 @@ const splitQuad = function(raw) {
     }
 };
 
-const quadToObject = function(raw) {
+export const quadToObject = function(raw) {
     const quad = splitQuad(raw);
     let left = parseInt(quad && quad[0], 10);
     let top = parseInt(quad && quad[1], 10);
@@ -54,7 +54,7 @@ const quadToObject = function(raw) {
     return { top: top, right: right, bottom: bottom, left: left };
 };
 
-const stringFormat = function() {
+export const format = function() {
     let s = arguments[0];
     const values = [].slice.call(arguments).slice(1);
     let replaceDollarCount;
@@ -78,7 +78,7 @@ const stringFormat = function() {
     return s;
 };
 
-const replaceAll = (function() {
+export const replaceAll = (function() {
     const quote = function(str) {
         return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1');
     };
@@ -88,7 +88,7 @@ const replaceAll = (function() {
     };
 })();
 
-const isEmpty = (function() {
+export const isEmpty = (function() {
     const SPACE_REGEXP = /\s/g;
 
     return function(text) {
@@ -96,10 +96,3 @@ const isEmpty = (function() {
     };
 })();
 
-export {
-    encodeHtml,
-    quadToObject,
-    stringFormat as format,
-    replaceAll,
-    isEmpty
-};
