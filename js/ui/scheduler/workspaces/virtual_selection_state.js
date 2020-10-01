@@ -11,8 +11,10 @@ export default class VirtualSelectionState {
     }
 
     setFocusedCell(rowIndex, columnIndex, isAllDay) {
-        const cell = this._viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
-        this._focusedCell = cell;
+        if(rowIndex >= 0) {
+            const cell = this._viewDataProvider.getCellData(rowIndex, columnIndex, isAllDay);
+            this._focusedCell = cell;
+        }
     }
 
     getFocusedCell(isVerticalGroupOrientation) {
@@ -32,6 +34,10 @@ export default class VirtualSelectionState {
         const {
             rowIndex: lastRowIndex, columnIndex: lastColumnIndex, allDay: isLastCellAllDay,
         } = lastCellCoordinates;
+
+        if(lastRowIndex < 0) {
+            return;
+        }
 
         let firstCell = firstCellCoordinates
             ? viewDataProvider.getCellData(
@@ -54,25 +60,19 @@ export default class VirtualSelectionState {
         const {
             startDate: lastStartDate,
         } = lastCell;
-        const firstTime = firstStartDate.getTime();
-        const lastTime = lastStartDate.getTime();
 
         const cells = viewDataProvider.getCellsByGroupIndexAndAllDay(firstGroupIndex, isLastCellAllDay);
 
-        this._selectedCells = cells.reduce((selectedCells, cellsRow) => {
-            selectedCells.push(...cellsRow.reduce((cellsFromRow, cell) => {
-                const { startDate, groupIndex } = cell;
-                const time = startDate.getTime();
-                if(firstTime <= time && time <= lastTime && groupIndex === firstGroupIndex) {
-                    cellsFromRow.push(cell);
-                }
-
-                return cellsFromRow;
-            }, []));
+        const filteredCells = cells.reduce((selectedCells, cellsRow) => {
+            const filteredRow = this._filterCellsByDate(cellsRow, firstStartDate, lastStartDate);
+            selectedCells.push(...filteredRow);
 
             return selectedCells;
-        }, [])
-            .sort((firstCell, secondCell) => firstCell.startDate.getTime() - secondCell.startDate.getTime());
+        }, []);
+
+        this._selectedCells = filteredCells.sort(
+            (firstCell, secondCell) => firstCell.startDate.getTime() - secondCell.startDate.getTime(),
+        );
     }
 
     getSelectedCells() {
@@ -149,5 +149,17 @@ export default class VirtualSelectionState {
                 return rowIndex;
             }
         }
+    }
+
+    _filterCellsByDate(cellsRow, firstDate, lastDate) {
+        const firstTime = firstDate.getTime();
+        const lastTime = lastDate.getTime();
+
+        return cellsRow.filter((cell) => {
+            const { startDate } = cell;
+            const time = startDate.getTime();
+
+            return firstTime <= time && time <= lastTime;
+        });
     }
 }
