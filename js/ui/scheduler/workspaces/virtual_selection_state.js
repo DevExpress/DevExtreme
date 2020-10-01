@@ -85,12 +85,12 @@ export default class VirtualSelectionState {
     }
 
     releaseSelectedCells() {
-        delete this._selectedCells;
-        delete this._firstSelectedCell;
+        this._selectedCells = null;
+        this._firstSelectedCell = null;
     }
 
     releaseFocusedCell() {
-        delete this._focusedCell;
+        this._focusedCell = null;
     }
 
     isValidFocusedCell(nextFocusedCellData) {
