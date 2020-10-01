@@ -106,9 +106,12 @@ function setPrint(imageSrc, options) {
         img.addEventListener('load', () => {
             window.focus();
             window.print();
-            removeFrame();
         });
         img.addEventListener('error', removeFrame);
+
+        window.addEventListener('afterprint', ()=>{ // T933486
+            setTimeout(removeFrame, 0);// timeout needed for FF
+        });
 
         img.src = imageSrc;
     };
