@@ -2975,6 +2975,42 @@ declare module DevExpress.fx {
      */
     export function stop(element: Element, jumpToEnd: boolean): void;
 }
+declare module DevExpress.pdfExporter {
+    /**
+     * [descr:PdfExportBaseProps]
+     */
+    export interface PdfExportBaseProps {
+        /**
+         * [descr:PdfExportBaseProps.autoTableOptions]
+         */
+        autoTableOptions?: any;
+        /**
+         * [descr:PdfExportBaseProps.jsPDFDocument]
+         */
+        jsPDFDocument?: any;
+        /**
+         * [descr:PdfExportBaseProps.keepColumnWidths]
+         */
+        keepColumnWidths?: boolean;
+    }
+    /**
+     * [descr:PdfExportDataGridProps]
+     */
+    export interface PdfExportDataGridProps extends PdfExportBaseProps {
+        /**
+         * [descr:PdfExportDataGridProps.component]
+         */
+        component?: DevExpress.ui.dxDataGrid;
+        /**
+         * [descr:PdfExportDataGridProps.selectedRowsOnly]
+         */
+        selectedRowsOnly?: boolean;
+    }
+    /**
+     * [descr:pdfExporter.exportDataGrid(options)]
+     */
+    export function exportDataGrid(options: PdfExportDataGridProps): Promise<void> & JQueryPromise<void>;
+}
 declare module DevExpress.timeZoneUtils {
     /**
      * [descr:Utils.getTimeZones(date)]

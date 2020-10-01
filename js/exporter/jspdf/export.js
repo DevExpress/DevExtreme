@@ -110,7 +110,7 @@ export const Export = {
                 jsPDFDocument.autoTable.__autoTableOptions = autoTableOptions;
                 ///#ENDDEBUG
 
-                resolve(jsPDFDocument);
+                resolve(jsPDFDocument); // Do we need to return the Promise with jsPDFDocument param?
             });
         });
     },
