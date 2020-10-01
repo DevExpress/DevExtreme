@@ -496,12 +496,6 @@ export default class FileItemsController {
         return selectedDirInfo;
     }
 
-    findItemInfoByFileItem(fileItem) {
-        const foundItem1 = find(this._rootDirectoryInfo.items, info => info.fileItem.key === fileItem.key);
-        const foundItem2 = find(this._currentDirectoryInfo.items, info => info.fileItem.key === fileItem.key);
-        return foundItem1 || foundItem2;
-    }
-
     _createDirInfoByName(name, parentDirectoryInfo, isDirectory) {
         const dirPathInfo = this._getPathInfo(parentDirectoryInfo);
         const fileItem = new FileSystemItem(dirPathInfo, name, isDirectory);
