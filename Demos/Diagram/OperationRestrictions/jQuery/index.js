@@ -1,4 +1,12 @@
 $(function() {
+    function showToast(text) {
+        DevExpress.ui.notify({ 
+            position: { at: "top", my: "top", of: "#diagram", offset: "0 4" }, 
+            message: text, 
+            type: "warning", 
+            delayTime: 2000
+        });
+    }
     $("#diagram").dxDiagram({
         customShapes: [{
             category: "items",
@@ -22,11 +30,13 @@ $(function() {
         }],
         nodes: {
             dataSource: new DevExpress.data.ArrayStore({
-                key: "id",
+                key: "ID",
                 data: orgItems
             }),
-            textExpr: "name",
-            parentKeyExpr: "parentId",
+            keyExpr: "ID",
+            textExpr: "Name",
+            typeExpr: "Type",
+            parentKeyExpr: "ParentID",
             autoLayout: {
                 type: "tree"
             }
@@ -35,7 +45,7 @@ $(function() {
             for(var i = 0; i < e.changes.length; i++) {
                 if(e.changes[i].type === 'remove')
                     e.allowed = true;
-                else if(e.changes[i].data.parentId !== undefined && e.changes[i].data.parentId !== null)
+                else if(e.changes[i].data.ParentID !== undefined && e.changes[i].data.ParentID !== null)
                     e.allowed = true;
             }
         },
@@ -43,66 +53,66 @@ $(function() {
             var dataItem = e.args.shape && e.args.shape.dataItem;
             if(e.operation === "addShape") {
                 if(e.args.shape.type !== "employee" && e.args.shape.type !== "team") {
-                    !e.updateUI && DevExpress.ui.notify("You can add only a 'Team' or 'Employee' shape.", "warning", 3000);
+                    !e.updateUI && showToast("You can add only a 'Team' or 'Employee' shape.");
                     e.allowed = false;
                 }
             }
             else if(e.operation === "deleteShape") {
-                if(dataItem && dataItem.type === "root") {
-                    !e.updateUI && DevExpress.ui.notify("You cannot delete the 'Development' shape.", "warning", 3000);
+                if(dataItem && dataItem.Type === "root") {
+                    !e.updateUI && showToast("You cannot delete the 'Development' shape.");
                     e.allowed = false;
                 }
-                if(dataItem && dataItem.type === "team") {
+                if(dataItem && dataItem.Type === "team") {
                     var children = orgItems.filter(function(item) { 
-                        return item.parentId === dataItem.id;
+                        return item.ParentID === dataItem.ID;
                     });
                     if(children.length > 0) {
-                        !e.updateUI && DevExpress.ui.notify("You cannot delete a 'Team' shape that has a child shape.", "warning", 3000);
+                        !e.updateUI && showToast("You cannot delete a 'Team' shape that has a child shape.");
                         e.allowed = false;
                     }
                 }
             }
             else if(e.operation === "resizeShape") {
                 if(e.args.newSize.width < 1 || e.args.newSize.height < 0.75) {
-                    !e.updateUI && DevExpress.ui.notify("The shape size is too small.", "warning", 3000);
+                    !e.updateUI && showToast("The shape size is too small.");
                     e.allowed = false;
                 }
             }
             else if(e.operation === "changeConnection") {
-                if(dataItem && dataItem.type === "root" && e.args.connectorPosition === "end") {
-                    !e.updateUI && DevExpress.ui.notify("The 'Development' shape cannot have an incoming connection.", "warning", 3000);
+                if(dataItem && dataItem.Type === "root" && e.args.connectorPosition === "end") {
+                    !e.updateUI && showToast("The 'Development' shape cannot have an incoming connection.");
                     e.allowed = false;
                 }
-                if(dataItem && dataItem.type === "team" && e.args.connectorPosition === "end") {
-                    if(dataItem && dataItem.parentId !== undefined && dataItem.parentId !== null) {
-                        !e.updateUI && DevExpress.ui.notify("A 'Team' shape can have only one incoming connection.", "warning", 3000);
+                if(dataItem && dataItem.Type === "team" && e.args.connectorPosition === "end") {
+                    if(dataItem && dataItem.ParentID !== undefined && dataItem.ParentID !== null) {
+                        !e.updateUI && showToast("A 'Team' shape can have only one incoming connection.");
                         e.allowed = false;
                     }
                 }
-                if(dataItem && dataItem.type === "employee") {
+                if(dataItem && dataItem.Type === "employee") {
                     if(e.args.connectorPosition === "start")
                         e.allowed = false;
-                    if(e.args.connectorPosition === "end" && dataItem.parentId !== undefined && dataItem.parentId !== null) {
-                        !e.updateUI && DevExpress.ui.notify("An 'Employee' shape can have only one incoming connection.", "warning", 3000);
+                    if(e.args.connectorPosition === "end" && dataItem.ParentID !== undefined && dataItem.ParentID !== null) {
+                        !e.updateUI && showToast("An 'Employee' shape can have only one incoming connection.");
                         e.allowed = false;
                     }                        
                 }
             }
             else if(e.operation === "changeConnectorPoints") {
                 if(e.args.newPoints.length > 2) {
-                    !e.updateUI && DevExpress.ui.notify("You cannot add points to a connector.", "warning", 3000);
+                    !e.updateUI && showToast("You cannot add points to a connector.");
                     e.allowed = false;
                 }
             }
             else if(e.operation === "beforeChangeShapeText") {
-                if(dataItem && dataItem.type === "root") {
-                    !e.updateUI && DevExpress.ui.notify("You cannot change the 'Development' shape's text.", "warning", 3000);
+                if(dataItem && dataItem.Type === "root") {
+                    !e.updateUI && showToast("You cannot change the 'Development' shape's text.");
                     e.allowed = false;
                 }
             }
             else if(e.operation === "changeShapeText") {
                 if(e.args.text === "") {
-                    !e.updateUI && DevExpress.ui.notify("A shape text cannot be empty.", "warning", 3000);
+                    !e.updateUI && showToast("A shape text cannot be empty.");
                     e.allowed = false;
                 }
             }

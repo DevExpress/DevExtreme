@@ -1,57 +1,57 @@
 ﻿var orgItems = [{
-  'id': '106',
-  'name': 'Development',
-  'type': 'root'
+  'ID': '106',
+  'Name': 'Development',
+  'Type': 'root'
 }, {
-  'id': '107',
-  'name': 'WinForms Team',
-  'type': 'team',
-  'parentId': '106'
+  'ID': '107',
+  'Name': 'WinForms Team',
+  'Type': 'team',
+  'ParentID': '106'
 }, {
-  'id': '109',
-  'name': 'Javascript Team',
-  'type': 'team',
-  'parentId': '106'
+  'ID': '109',
+  'Name': 'Javascript Team',
+  'Type': 'team',
+  'ParentID': '106'
 }, {
-  'id': '110',
-  'name': 'ASP.NET Team',
-  'type': 'team',
-  'parentId': '106'
+  'ID': '110',
+  'Name': 'ASP.NET Team',
+  'Type': 'team',
+  'ParentID': '106'
 }, {
-  'id': '112',
-  'name': 'Ana Trujillo',
-  'type': 'employee',
-  'parentId': '107'
+  'ID': '112',
+  'Name': 'Ana Trujillo',
+  'Type': 'employee',
+  'ParentID': '107'
 }, {
-  'id': '113',
-  'name': 'Antonio Moreno',
-  'type': 'employee',
-  'parentId': '107'
+  'ID': '113',
+  'Name': 'Antonio Moreno',
+  'Type': 'employee',
+  'ParentID': '107'
 }, {
-  'id': '115',
-  'name': 'Christina Berglund',
-  'type': 'employee',
-  'parentId': '109'
+  'ID': '115',
+  'Name': 'Christina Berglund',
+  'Type': 'employee',
+  'ParentID': '109'
 }, {
-  'id': '116',
-  'name': 'Hanna Moos',
-  'type': 'employee',
-  'parentId': '109'
+  'ID': '116',
+  'Name': 'Hanna Moos',
+  'Type': 'employee',
+  'ParentID': '109'
 }, {
-  'id': '119',
-  'name': 'Laurence Lebihan',
-  'type': 'employee',
-  'parentId': '110'
+  'ID': '119',
+  'Name': 'Laurence Lebihan',
+  'Type': 'employee',
+  'ParentID': '110'
 }, {
-  'id': '122',
-  'name': 'Patricio Simpson',
-  'type': 'employee',
-  'parentId': '110'
+  'ID': '122',
+  'Name': 'Patricio Simpson',
+  'Type': 'employee',
+  'ParentID': '110'
 }, {
-  'id': '123',
-  'name': 'Francisco Chang',
-  'type': 'employee',
-  'parentId': '110'
+  'ID': '123',
+  'Name': 'Francisco Chang',
+  'Type': 'employee',
+  'ParentID': '110'
 }];
 
 export default {
