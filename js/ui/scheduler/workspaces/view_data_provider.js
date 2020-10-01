@@ -342,4 +342,34 @@ export default class ViewDataProvider {
         const { groupedData } = this.viewData;
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
     }
+
+    findGlobalCellPosition(startDate, groupIndex, allDay) {
+        const { completeViewDataMap, _workspace: workspace } = this;
+        const startTime = startDate.getTime();
+        const showAllDayPanel = workspace._isShowAllDayPanel();
+        const isVerticalGroupOrientation = workspace._isVerticalGroupedWorkSpace();
+
+        for(let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
+            const currentRow = completeViewDataMap[rowIndex];
+
+            for(let columnIndex = 0; columnIndex < currentRow.length; columnIndex += 1) {
+                const {
+                    startDate: currentStartDate,
+                    groupIndex: currentGroupIndex,
+                    allDay: currentAllDay,
+                } = currentRow[columnIndex];
+
+                if(groupIndex === currentGroupIndex
+                    && allDay === currentAllDay
+                    && startTime === currentStartDate.getTime()) {
+                    return {
+                        columnIndex,
+                        rowIndex: showAllDayPanel && !isVerticalGroupOrientation
+                            ? rowIndex - 1
+                            : rowIndex,
+                    };
+                }
+            }
+        }
+    }
 }

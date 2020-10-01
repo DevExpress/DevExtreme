@@ -2823,16 +2823,35 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
 
-    scrollToTime(hours, minutes, date) {
+    scrollToTime(hours, minutes, date, groups, allDay = false) {
         const min = this.getStartViewDate();
         const max = this.getEndViewDate();
+        const groupIndex = groups
+            ? this._getGroupIndexByResourceId(groups)
+            : 0;
 
         if(date < min || date > max) {
             errors.log('W1008', date);
             return;
         }
+        if(groupIndex < 0) {
+            // TODO: throw an error
+            return;
+        }
 
-        const coordinates = this._getScrollCoordinates(hours, minutes, date);
+        let coordinates;
+
+        if(!this.isVirtualScrolling()) {
+            coordinates = this._getScrollCoordinates(hours, minutes, date);
+        } else {
+            const position = this.viewDataProvider.findGlobalCellPosition(
+                date, groupIndex, allDay,
+            );
+            coordinates = this.virtualScrollingDispatcher.calculateCoordinatesByIndices(
+                position.rowIndex, position.columnIndex,
+            );
+        }
+
         const scrollable = this.getScrollable();
 
         scrollable.scrollBy({ top: coordinates.top - scrollable.scrollTop(), left: 0 });

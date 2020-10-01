@@ -47,6 +47,10 @@ export default class VirtualScrollingDispatcher {
         return this.virtualScrolling.getState();
     }
 
+    calculateCoordinatesByIndices(rowIndex, columnIndex) {
+        return this.virtualScrolling.calculateCoordinatesByIndices(rowIndex, columnIndex);
+    }
+
     dispose() {
         if(this._onScrollHandler) {
             eventsEngine.off(this.document, DOCUMENT_SCROLL_EVENT_NAMESPACE, this._onScrollHandler);
@@ -315,5 +319,14 @@ class VirtualScrolling {
             state.topVirtualRowHeight = topVirtualRowHeight;
             state.bottomVirtualRowHeight = bottomVirtualRowHeight;
         }
+    }
+
+    calculateCoordinatesByIndices(rowIndex, columnIndex) {
+        const rowHeight = this.getRowHeight();
+
+        return {
+            top: rowIndex * rowHeight,
+            left: 0,
+        };
     }
 }
