@@ -1763,6 +1763,7 @@
           },
           {
             "Title": "Virtual Scrolling",
+            "Badge": "New",
             "Name": "VirtualScrolling",
             "DocUrl": "Guide/Widgets/Scheduler/VirtualScrolling/",
             "Widget": "Scheduler",
