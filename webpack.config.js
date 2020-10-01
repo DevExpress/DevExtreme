@@ -23,8 +23,6 @@ module.exports = {
         'exceljs': 'window.ExcelJS',
         'jspdf': 'window.jspdf.jsPDF',
         'devexpress-diagram': 'window.DevExpress.diagram',
-        'devexpress-gantt': 'window.DevExpress.Gantt',
-        'RRule': 'window.RRule',
-        'RRuleSet': 'window.RRuleSet'
+        'devexpress-gantt': 'window.DevExpress.Gantt'
     }
 };

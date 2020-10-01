@@ -43,6 +43,11 @@ const privateOptions = {
 
     _needMergeRange: function(rowIndex, headerRowCount) {
         return rowIndex < headerRowCount;
+    },
+
+    _renderLoadPanel: function(component) {
+        const rowsView = component.getView('rowsView');
+        rowsView._renderLoadPanel(rowsView.element(), rowsView.element().parent());
     }
 };
 

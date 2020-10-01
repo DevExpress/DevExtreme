@@ -2975,6 +2975,12 @@ declare module DevExpress.fx {
      */
     export function stop(element: Element, jumpToEnd: boolean): void;
 }
+declare module DevExpress.timeZoneUtils {
+    /**
+     * [descr:Utils.getTimeZones(date)]
+     */
+    export function getTimeZones(date?: Date): Array<any>;
+}
 declare module DevExpress.ui {
     /**
      * [descr:AsyncRule]
@@ -12458,12 +12464,6 @@ declare module DevExpress.ui.dxOverlay {
      * [descr:ui.dxOverlay.baseZIndex(zIndex)]
      */
     export function baseZIndex(zIndex: number): void;
-}
-declare module DevExpress.ui.dxScheduler {
-    /**
-     * [descr:ui.dxScheduler.getTimeZones(date)]
-     */
-    export function getTimeZones(date?: Date): Array<any>;
 }
 declare module DevExpress.utils {
     /**
