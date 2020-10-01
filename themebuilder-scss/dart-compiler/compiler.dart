@@ -14,12 +14,12 @@ class Compiler {
   CompilerResult compile(
       List<MetaItem> items, String indexFileContent, SassOptions options) {
     String css;
-    if (options.file.isNotEmpty) {
+    if (options.data.isEmpty) {
       css = sass.compile(options.file,
           charset: true,
           importers: [ThemeBuilderImporter(indexFileContent, items)],
           functions: [collector.collector]);
-    } else if (options.data.isNotEmpty) {
+    } else {
       css = sass.compileString(options.data,
           charset: true,
           importers: [ThemeBuilderImporter(indexFileContent, items)],

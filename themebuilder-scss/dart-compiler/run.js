@@ -2,6 +2,7 @@
 'use strict';
 
 const { spawn } = require('child_process');
+const { join } = require('path');
 
 const runCommand = (command, args, detached = false) => {
     console.log(`Run: ${command}\n`);
@@ -40,7 +41,7 @@ const run = async() => {
     try {
         await runCommand('pub', ['get']);
         await runCommand('dart2native', ['main.dart', '-o', 'compiler.exe']);
-        runCommand('./compiler.exe', [], true);
+        runCommand(join(__dirname, 'compiler.exe'), [], true);
         console.log('Dart compile server has been run');
     } catch(e) {
         console.log('Dart compile server has not been run.', e);
