@@ -77,7 +77,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :items="simpleProducts"
-            :value.sync="value"
+            v-model:value="value"
           />
         </div>
       </div>

@@ -33,7 +33,7 @@
       <DxSelectBox
         id="selectbox"
         :data-source="dataSource"
-        :value.sync="value"
+        v-model:value="value"
         :width="200"
         display-expr="name"
       />

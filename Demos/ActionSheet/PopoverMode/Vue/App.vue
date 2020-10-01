@@ -10,8 +10,8 @@
     </DxList>
     <DxActionSheet
       :items="actionSheetItems"
-      :visible.sync="isActionSheetVisible"
-      :target.sync="actionSheetTarget"
+      v-model:visible="isActionSheetVisible"
+      v-model:target="actionSheetTarget"
       :use-popover="true"
       title="Choose action"
       @itemClick="showClickNotification($event.itemData.text)"

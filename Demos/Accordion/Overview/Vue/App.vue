@@ -5,7 +5,7 @@
       :collapsible="collapsible"
       :multiple="multiple"
       :animation-duration="animationDuration"
-      :selected-items.sync="selectedItems"
+      v-model:selected-items="selectedItems"
     >
       <template #title="{ data }">
         <CustomTitle :item-data="data"/>
@@ -19,7 +19,7 @@
       <span class="caption">Selected Items</span>
       <DxTagBox
         :data-source="companies"
-        :value.sync="selectedItems"
+        v-model:value="selectedItems"
         :disabled="!multiple"
         display-expr="CompanyName"
       />
@@ -29,13 +29,13 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          :value.sync="multiple"
+          v-model:value="multiple"
           text="Multiple enabled"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="collapsible"
+          v-model:value="collapsible"
           text="Collapsible enabled"
         />
       </div>
@@ -44,7 +44,7 @@
         <DxSlider
           :min="0"
           :max="1000"
-          :value.sync="animationDuration"
+          v-model:value="animationDuration"
         >
           <DxTooltip
             :enabled="true"

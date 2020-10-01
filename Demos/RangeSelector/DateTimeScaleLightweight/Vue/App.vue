@@ -1,7 +1,7 @@
 <template>
   <DxRangeSelector
     id="range-selector"
-    v-model="range"
+    v-model:value="range"
     title="Select a Vacation Period"
   >
     <DxMargin :top="50"/>

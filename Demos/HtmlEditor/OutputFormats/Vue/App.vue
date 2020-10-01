@@ -1,7 +1,7 @@
 <template>
   <div class="widget-container">
     <DxHtmlEditor
-      v-model="valueContent"
+      v-model:value="valueContent"
       :value-type="editorValueType"
       :height="300"
     >
@@ -34,7 +34,7 @@
     </DxHtmlEditor>
 
     <div class="options">
-      <DxButtonGroup :selected-items.sync="selectedItems">
+      <DxButtonGroup v-model:selected-items="selectedItems">
         <DxButtonGroupItem text="Html"/>
         <DxButtonGroupItem text="Markdown"/>
       </DxButtonGroup>

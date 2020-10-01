@@ -24,7 +24,7 @@
         <div class="dx-field-label">Password</div>
         <div class="dx-field-value">
           <DxTextBox
-            :value.sync="password"
+            v-model:value="password"
             mode="password"
           >
             <DxValidator>

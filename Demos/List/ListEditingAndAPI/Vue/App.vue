@@ -7,7 +7,7 @@
         :allow-item-deleting="allowDeleting"
         :item-delete-mode="deleteType"
         :show-selection-controls="true"
-        :selected-items.sync="selectedItems"
+        v-model:selected-items="selectedItems"
         selection-mode="multiple"
       />
       <div class="selected-data">
@@ -19,7 +19,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model="allowDeleting"
+          v-model:value="allowDeleting"
           text="Allow deleting"
         />
       </div>
@@ -28,7 +28,7 @@
         <DxSelectBox
           :disabled="!allowDeleting"
           :items="['static', 'toggle', 'slideButton', 'slideItem', 'swipe', 'context']"
-          v-model="deleteType"
+          v-model:value="deleteType"
         />
       </div>
     </div>

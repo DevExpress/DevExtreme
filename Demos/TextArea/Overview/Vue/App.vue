@@ -14,7 +14,7 @@
       <DxTextArea
         :height="90"
         :max-length="maxLength"
-        :value.sync="value"
+        v-model:value="value"
       />
     </div>
     <div class="full-width-content">
@@ -25,7 +25,7 @@
           <div class="dx-field-value">
             <DxSelectBox
               :items="valueChangeEvents"
-              :value.sync="eventValue"
+              v-model:value="eventValue"
               value-expr="name"
               display-expr="title"
             />
@@ -34,7 +34,7 @@
       </div>
       <DxTextArea
         :height="90"
-        :value.sync="valueForEditableTextArea"
+        v-model:value="valueForEditableTextArea"
         :value-change-event="eventValue"
       />
       <DxTextArea

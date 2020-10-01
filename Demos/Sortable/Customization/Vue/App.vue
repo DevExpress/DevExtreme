@@ -53,14 +53,14 @@
         <span>Drop Feedback Mode:</span>
         <DxSelectBox
           :items="['push', 'indicate']"
-          v-model="dropFeedbackMode"
+          v-model:value="dropFeedbackMode"
         />
       </div>
       <div class="option">
         <span>Item Orientation:</span>
         <DxSelectBox
           :items="['vertical', 'horizontal']"
-          v-model="itemOrientation"
+          v-model:value="itemOrientation"
           @value-changed="onItemOrientationChanged"
         />
       </div>
@@ -68,19 +68,19 @@
         <span>Drag Direction:</span>
         <DxSelectBox
           :items="dragDirections"
-          v-model="dragDirection"
+          v-model:value="dragDirection"
         />
       </div>
       <div class="option">
         <span>Scroll Speed:</span>
         <DxNumberBox
-          v-model="scrollSpeed"
+          v-model:value="scrollSpeed"
         />
       </div>
       <div class="option">
         <span>Scroll Sensitivity:</span>
         <DxNumberBox
-          v-model="scrollSensitivity"
+          v-model:value="scrollSensitivity"
         />
       </div>
       <div class="option">

@@ -51,7 +51,7 @@
         "systemjs-plugin-babel": "0",
         "systemjs-plugin-json": "latest",
         "underscore": "1.5.1",
-        "vue": "2.6.3",
+        "vue": "3.0.0",
         "whatwg-fetch": "2.0.4",
         "zone.js": "0.10.2",
         "preact": "^10.4.5"

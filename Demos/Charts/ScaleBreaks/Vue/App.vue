@@ -24,7 +24,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          :value.sync="autoBreaksEnabledValue"
+          v-model:value="autoBreaksEnabledValue"
           class="checkbox"
           text="Enable Breaks"
         />
@@ -33,7 +33,7 @@
         <span>Max Count</span>
         <DxSelectBox
           :items="breaksCount"
-          :value.sync="breaksCountValue"
+          v-model:value="breaksCountValue"
           :width="60"
         />
       </div>
@@ -41,7 +41,7 @@
         <span>Style</span>
         <DxSelectBox
           :items="lineStyles"
-          :value.sync="lineStyleValue"
+          v-model:value="lineStyleValue"
           :width="120"
         />
       </div>

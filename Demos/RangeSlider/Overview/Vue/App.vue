@@ -80,14 +80,14 @@
         <DxRangeSlider
           :min="0"
           :max="100"
-          v-model="range"
+          v-model:value="range"
         />
       </div>
       <div class="dx-field">
         <div class="dx-field-label">Start value</div>
         <div class="dx-field-value">
           <DxNumberBox
-            v-model="range[0]"
+            v-model:value="range[0]"
             :min="0"
             :max="100"
             :show-spin-buttons="true"
@@ -98,7 +98,7 @@
         <div class="dx-field-label">End value</div>
         <div class="dx-field-value">
           <DxNumberBox
-            v-model="range[1]"
+            v-model:value="range[1]"
             :min="0"
             :max="100"
             :show-spin-buttons="true"

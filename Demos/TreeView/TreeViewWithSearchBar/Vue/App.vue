@@ -13,7 +13,7 @@
         <span>Search mode</span>
         <DxSelectBox
           :items="options"
-          v-model="searchMode"
+          v-model:value="searchMode"
         />
       </div>
     </div>

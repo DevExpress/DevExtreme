@@ -25,7 +25,7 @@
           <div class="dx-field-label">Product</div>
           <div class="dx-field-value">
             <DxSelectBox
-              v-model="editBoxValue"
+              v-model:value="editBoxValue"
               :accept-custom-value="true"
               :data-source="productsDataSource"
               display-expr="Name"
@@ -55,14 +55,14 @@
       <div class="option">
         <div>Search Mode</div>
         <DxSelectBox
-          v-model="searchModeOption"
+          v-model:value="searchModeOption"
           :items="['contains', 'startswith']"
         />
       </div>
       <div class="option">
         <div>Search Expression</div>
         <DxSelectBox
-          v-model="searchExprOption"
+          v-model:value="searchExprOption"
           :items="searchExprItems"
           display-expr="name"
           value-expr="value"
@@ -71,7 +71,7 @@
       <div class="option">
         <div>Search Timeout</div>
         <DxNumberBox
-          v-model="searchTimeoutOption"
+          v-model:value="searchTimeoutOption"
           :min="0"
           :max="5000"
           :show-spin-buttons="true"
@@ -81,7 +81,7 @@
       <div class="option">
         <div>Minimum Search Length</div>
         <DxNumberBox
-          v-model="minSearchLengthOption"
+          v-model:value="minSearchLengthOption"
           :min="0"
           :max="5"
           :show-spin-buttons="true"
@@ -89,7 +89,7 @@
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="showDataBeforeSearchOption"
+          v-model:value="showDataBeforeSearchOption"
           text="Show Data Before Search"
         />
       </div>

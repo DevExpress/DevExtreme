@@ -17,33 +17,33 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model="allowAdding"
+          v-model:value="allowAdding"
           text="Allow adding"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="allowDeleting"
+          v-model:value="allowDeleting"
           text="Allow deleting"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="allowUpdating"
+          v-model:value="allowUpdating"
           text="Allow updating"
         />
       </div>
       <div class="option">
         <DxCheckBox
           :disabled="!allowUpdating"
-          v-model="allowResizing"
+          v-model:value="allowResizing"
           text="Allow resizing"
         />
       </div>
       <div class="option">
         <DxCheckBox
           :disabled="!allowUpdating"
-          v-model="allowDragging"
+          v-model:value="allowDragging"
           text="Allow dragging"
         />
       </div>

@@ -29,7 +29,7 @@
       <DxSelectBox
         :width="300"
         :data-source="windRoseData"
-        :value.sync="periodValues"
+        v-model:value="periodValues"
         display-expr="period"
         value-expr="values"
       />

@@ -3,7 +3,7 @@
     <DxTabPanel
       :height="260"
       :data-source="companies"
-      :selected-index.sync="selectedIndex"
+      v-model:selected-index="selectedIndex"
       :loop="loop"
       :animation-enabled="animationEnabled"
       :swipe-enabled="swipeEnabled"
@@ -50,19 +50,19 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model="loop"
+          v-model:value="loop"
           text="Loop enabled"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="animationEnabled"
+          v-model:value="animationEnabled"
           text="Animation enabled"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="swipeEnabled"
+          v-model:value="swipeEnabled"
           text="Swipe enabled"
         />
       </div>

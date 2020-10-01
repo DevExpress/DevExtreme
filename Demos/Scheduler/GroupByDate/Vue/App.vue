@@ -31,7 +31,7 @@
       <div class="caption">Group by Date First</div>
       <div class="option">
         <DxSwitch
-          v-model="groupByDate"
+          v-model:value="groupByDate"
         />
       </div>
     </div>

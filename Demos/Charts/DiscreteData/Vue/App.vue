@@ -30,7 +30,7 @@
         <DxSelectBox
           :width="200"
           :data-source="types"
-          :value.sync="currentType"
+          v-model:value="currentType"
         />
       </div>
     </div>

@@ -36,7 +36,7 @@
       />
     </DxPolarChart>
     <DxRangeSelector
-      :value.sync="visualRange"
+      v-model:value="visualRange"
     >
       <DxSize :height="100"/>
       <DxMargin

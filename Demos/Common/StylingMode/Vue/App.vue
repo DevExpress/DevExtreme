@@ -22,7 +22,7 @@
       </div>
       <div class="right">
         <DxDateBox
-          v-model="date"
+          v-model:value="date"
           :styling-mode="stylingMode"
           width="100%"
           placeholder="Start Date"
@@ -65,7 +65,7 @@
       <div class="option">
         <DxSelectBox
           :items="[ 'outlined', 'filled', 'underlined' ]"
-          v-model="stylingMode"
+          v-model:value="stylingMode"
         />
       </div>
     </div>

@@ -39,7 +39,7 @@
         <span>Series Type</span>
         <DxSelectBox
           :data-source="types"
-          :value.sync="type"
+          v-model:value="type"
         />
       </div>
     </div>

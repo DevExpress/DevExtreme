@@ -14,7 +14,7 @@
       <div class="option">
         <DxCheckBox
           :text="'Set the count of columns regardless of screen size'"
-          :value.sync="useColCountByScreen"
+          v-model:value="useColCountByScreen"
         />
       </div>
     </div>

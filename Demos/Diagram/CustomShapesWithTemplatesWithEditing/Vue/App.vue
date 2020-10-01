@@ -65,7 +65,7 @@
     </DxDiagram>
 
     <DxPopup
-      :visible.sync="popupVisible"
+      v-model:visible="popupVisible"
       :drag-enabled="false"
       :show-title="true"
       :width="400"
@@ -76,43 +76,43 @@
         <div class="dx-field">
           <div class="dx-field-label">Name</div>
           <div class="dx-field-value">
-            <DxTextBox :value.sync="currentEmployee.Full_Name"/>
+            <DxTextBox v-model:value="currentEmployee.Full_Name"/>
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Title</div>
           <div class="dx-field-value">
-            <DxTextBox :value.sync="currentEmployee.Title"/>
+            <DxTextBox v-model:value="currentEmployee.Title"/>
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">City</div>
           <div class="dx-field-value">
-            <DxTextBox :value.sync="currentEmployee.City"/>
+            <DxTextBox v-model:value="currentEmployee.City"/>
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">State</div>
           <div class="dx-field-value">
-            <DxTextBox :value.sync="currentEmployee.State"/>
+            <DxTextBox v-model:value="currentEmployee.State"/>
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Email</div>
           <div class="dx-field-value">
-            <DxTextBox :value.sync="currentEmployee.Email"/>
+            <DxTextBox v-model:value="currentEmployee.Email"/>
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Skype</div>
           <div class="dx-field-value">
-            <DxTextBox :value.sync="currentEmployee.Skype"/>
+            <DxTextBox v-model:value="currentEmployee.Skype"/>
           </div>
         </div>
         <div class="dx-field">
           <div class="dx-field-label">Phone</div>
           <div class="dx-field-value">
-            <DxTextBox :value.sync="currentEmployee.Mobile_Phone"/>
+            <DxTextBox v-model:value="currentEmployee.Mobile_Phone"/>
           </div>
         </div>
       </div>

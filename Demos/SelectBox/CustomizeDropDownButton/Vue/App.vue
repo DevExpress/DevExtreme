@@ -43,7 +43,7 @@
         <div class="dx-field-value">
           <DxSelectBox
             :data-source="products"
-            :selected-item.sync="selectedItem"
+            v-model:selected-item="selectedItem"
             :value="1"
             :show-clear-button="true"
             display-expr="Name"

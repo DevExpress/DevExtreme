@@ -18,8 +18,8 @@
 
     <DxPopup
       :close-on-outside-click="true"
-      :visible.sync="popupVisible"
-      :title.sync="imageItemToDisplay.name"
+      v-model:visible="popupVisible"
+      v-model:title="imageItemToDisplay.name"
       max-height="600"
       class="photo-popup-content"
     >

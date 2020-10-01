@@ -4,7 +4,7 @@
       <div class="dx-field-label">DropDownBox with embedded TreeView</div>
       <div class="dx-field-value">
         <DxDropDownBox
-          :value.sync="treeBoxValue"
+          v-model:value="treeBoxValue"
           :show-clear-button="true"
           :data-source="treeDataSource"
           value-expr="ID"
@@ -35,7 +35,7 @@
       <div class="dx-field-label">DropDownBox with embedded DataGrid</div>
       <div class="dx-field-value">
         <DxDropDownBox
-          :value.sync="gridBoxValue"
+          v-model:value="gridBoxValue"
           :defer-rendering="false"
           :show-clear-button="true"
           :data-source="gridDataSource"
@@ -48,7 +48,7 @@
               :data-source="gridDataSource"
               :columns="gridColumns"
               :hover-state-enabled="true"
-              :selected-row-keys.sync="gridBoxValue"
+              v-model:selected-row-keys="gridBoxValue"
             >
               <DxSelection mode="multiple"/>
               <DxPaging

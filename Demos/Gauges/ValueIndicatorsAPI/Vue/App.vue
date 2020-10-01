@@ -33,7 +33,7 @@
           <span>Main generator</span>
           <DxNumberBox
             id="main-generator"
-            :value.sync="mainGeneratorValue"
+            v-model:value="mainGeneratorValue"
             :min="10"
             :max="40"
             :width="100"
@@ -44,7 +44,7 @@
           <span>Additional generator 1</span>
           <DxNumberBox
             id="additional-generator-one"
-            :value.sync="additionalGenerator1Value"
+            v-model:value="additionalGenerator1Value"
             :min="10"
             :max="40"
             :width="100"
@@ -55,7 +55,7 @@
           <span>Additional generator 2</span>
           <DxNumberBox
             id="additional-generator-two"
-            :value.sync="additionalGenerator2Value"
+            v-model:value="additionalGenerator2Value"
             :min="10"
             :max="40"
             :width="100"

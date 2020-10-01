@@ -26,13 +26,13 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model="allowSearch"
+          v-model:value="allowSearch"
           text="Allow Search"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="showRelevantValues"
+          v-model:value="showRelevantValues"
           text="Show Relevant Values"
         />
       </div>

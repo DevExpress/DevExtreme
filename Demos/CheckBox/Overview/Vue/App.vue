@@ -16,13 +16,13 @@
       <div class="dx-field">
         <div class="dx-field-label">Indeterminate</div>
         <div class="dx-field-value">
-          <DxCheckBox v-model="undefined"/>
+          <DxCheckBox v-model:value="undefined"/>
         </div>
       </div>
       <div class="dx-field">
         <div class="dx-field-label">Value change handling</div>
         <div class="dx-field-value">
-          <DxCheckBox v-model="checkBoxValue"/>
+          <DxCheckBox v-model:value="checkBoxValue"/>
         </div>
       </div>
       <div class="dx-field">

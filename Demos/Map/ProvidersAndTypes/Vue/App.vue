@@ -3,7 +3,7 @@
     <DxMap
       :zoom="14"
       :height="400"
-      :type.sync="mapTypeValue"
+      v-model:type="mapTypeValue"
       center="Brooklyn Bridge,New York,NY"
       width="100%"
       provider="bing"
@@ -19,7 +19,7 @@
       <div class="option">
         <span>Map Type</span>
         <DxSelectBox
-          v-model="mapTypeValue"
+          v-model:value="mapTypeValue"
           :data-source="mapTypes"
           display-expr="name"
           value-expr="key"

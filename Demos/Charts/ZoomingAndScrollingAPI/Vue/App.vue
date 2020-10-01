@@ -13,7 +13,7 @@
     </DxChart>
     <DxRangeSelector
       :data-source="zoomingData"
-      :value.sync="range"
+      v-model:value="range"
     >
       <DxSize :height="120"/>
       <DxMargin :left="10"/>

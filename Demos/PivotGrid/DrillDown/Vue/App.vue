@@ -16,7 +16,7 @@
       :width="600"
       :height="400"
       :title="popupTitle"
-      :visible.sync="popupVisible"
+      v-model:visible="popupVisible"
       @shown="onShown"
     >
       <DxDataGrid

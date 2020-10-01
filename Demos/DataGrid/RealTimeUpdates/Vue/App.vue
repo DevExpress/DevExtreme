@@ -127,7 +127,7 @@
           :min="10"
           :step="10"
           :max="5000"
-          :value.sync="updatesPerSecond"
+          v-model:value="updatesPerSecond"
         >
           <DxTooltip
             :enabled="true"

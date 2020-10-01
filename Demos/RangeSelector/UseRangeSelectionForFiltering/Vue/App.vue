@@ -3,7 +3,7 @@
     <DxRangeSelector
       id="range-selector"
       :data-source="employees"
-      :value.sync="range"
+      v-model:value="range"
       title="Filter Employee List by Birth Year"
       data-source-field="BirthYear"
     >

@@ -3,7 +3,7 @@
     :ref="dropDownBoxRefName"
     :drop-down-options="dropDownOptions"
     :data-source="dataSource"
-    :value.sync="currentValue"
+    v-model:value="currentValue"
     display-expr="FullName"
     value-expr="ID"
     content-template="contentTemplate"

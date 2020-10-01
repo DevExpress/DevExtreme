@@ -36,19 +36,19 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          :value.sync="allowDropInsideItem"
+          v-model:value="allowDropInsideItem"
           text="Allow Drop Inside Item"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="allowReordering"
+          v-model:value="allowReordering"
           text="Allow Reordering"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="showDragIcons"
+          v-model:value="showDragIcons"
           text="Show Drag Icons"
         />
       </div>

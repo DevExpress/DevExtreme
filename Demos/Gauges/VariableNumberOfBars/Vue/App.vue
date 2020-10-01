@@ -20,7 +20,7 @@
           v-for="p in products"
           :data="p"
           :key="p.name"
-          :value.sync="p.active"
+          v-model:value="p.active"
           :text="p.name"
         />
       </div>

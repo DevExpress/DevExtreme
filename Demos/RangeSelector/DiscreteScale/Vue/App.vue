@@ -3,7 +3,7 @@
     <DxRangeSelector
       id="range-selector"
       :data-source="dataSource"
-      :value.sync="range"
+      v-model:value="range"
       title="Copper Production in 2013"
     >
       <DxChart>

@@ -30,7 +30,7 @@
     </DxChart>
     <DxRangeSelector
       :data-source="dataSource"
-      :value.sync="visualRange"
+      v-model:value="visualRange"
     >
       <DxSize :height="120"/>
       <DxRsChart>

@@ -20,7 +20,7 @@
     </div>
     <DxContextMenu
       :ref="contextMenuRef"
-      :data-source.sync="menuItems"
+      v-model:data-source="menuItems"
       target="#treeview .dx-treeview-item"
       @item-click="contextMenuItemClick"
     />

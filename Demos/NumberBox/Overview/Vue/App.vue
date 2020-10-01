@@ -49,7 +49,7 @@
             :max="30"
             :min="0"
             :show-spin-buttons="true"
-            :value.sync="value"
+            v-model:value="value"
             @keyDown="keyDown($event)"
           />
         </div>

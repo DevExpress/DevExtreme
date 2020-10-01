@@ -37,7 +37,7 @@
             <div :class="colorPriority.toLowerCase()">
               <DxRadioGroup
                 :items="priorities"
-                v-model="colorPriority"
+                v-model:value="colorPriority"
               />
             </div>
           </div>

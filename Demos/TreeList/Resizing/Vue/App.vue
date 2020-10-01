@@ -38,7 +38,7 @@
         <DxSelectBox
           :items="resizingModes"
           :width="250"
-          v-model="columnResizingMode"
+          v-model:value="columnResizingMode"
         />
       </div>
     </div>

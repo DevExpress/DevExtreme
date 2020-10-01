@@ -26,7 +26,7 @@
 
     <DxLoadPanel
       :position="position"
-      :visible.sync="loadingVisible"
+      v-model:visible="loadingVisible"
       :show-indicator="showIndicator"
       :show-pane="showPane"
       :shading="shading"
@@ -40,25 +40,25 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          :value.sync="showIndicator"
+          v-model:value="showIndicator"
           text="With indicator"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="shading"
+          v-model:value="shading"
           text="With overlay"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="showPane"
+          v-model:value="showPane"
           text="With pane"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="closeOnOutsideClick"
+          v-model:value="closeOnOutsideClick"
           text="Close on outside click"
         />
       </div>

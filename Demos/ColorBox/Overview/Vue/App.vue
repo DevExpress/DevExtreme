@@ -58,7 +58,7 @@
         </div>
         <div class="hero-color-box">
           <DxColorBox
-            :value.sync="color"
+            v-model:value="color"
             apply-value-mode="instantly"
           />
         </div>

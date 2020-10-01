@@ -50,7 +50,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model="isMultiline"
+          v-model:value="isMultiline"
           text="Multiline toolbar"
         />
       </div>

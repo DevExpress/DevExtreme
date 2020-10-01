@@ -6,7 +6,7 @@
     <DxMultiView
       :height="300"
       :data-source="companies"
-      :selected-index.sync="selectedIndex"
+      v-model:selected-index="selectedIndex"
       :loop="loop"
       :animation-enabled="animationEnabled"
     >
@@ -49,13 +49,13 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model="loop"
+          v-model:value="loop"
           text="Loop enabled"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="animationEnabled"
+          v-model:value="animationEnabled"
           text="Animation enabled"
         />
       </div>

@@ -8,7 +8,7 @@
       :show-borders="true"
       :column-auto-width="true"
       :expanded-row-keys="expandedRowKeys"
-      :selected-row-keys.sync="selectedRowKeys"
+      v-model:selected-row-keys="selectedRowKeys"
       key-expr="ID"
       parent-id-expr="Head_ID"
     >
@@ -39,7 +39,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model="recursive"
+          v-model:value="recursive"
           text="Recursive Selection"
           @value-changed="onRecursiveChanged"
         />

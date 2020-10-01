@@ -27,14 +27,14 @@
         <span>Palette</span>
         <DxSelectBox
           :items="paletteCollection"
-          v-model="palette"
+          v-model:value="palette"
         />
       </div>
       <div class="option">
         <span>Palette Extension Mode</span>
         <DxSelectBox
           :items="paletteExtensionModes"
-          v-model="paletteExtensionMode"
+          v-model:value="paletteExtensionMode"
         />
       </div>
     </div>

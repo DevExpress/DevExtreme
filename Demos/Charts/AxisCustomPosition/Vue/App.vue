@@ -36,14 +36,14 @@
           <div class="option">
             <span>Custom position:</span>
             <DxNumberBox
-              :value.sync="argumentPosition"
+              v-model:value="argumentPosition"
               :show-spin-buttons="true"
             />
           </div>
           <div class="option">
             <span>Offset:</span>
             <DxNumberBox
-              :value.sync="argumentOffset"
+              v-model:value="argumentOffset"
               :show-spin-buttons="true"
             />
           </div>
@@ -53,14 +53,14 @@
           <div class="option">
             <span>Custom position:</span>
             <DxNumberBox
-              :value.sync="valuePosition"
+              v-model:value="valuePosition"
               :show-spin-buttons="true"
             />
           </div>
           <div class="option">
             <span>Offset:</span>
             <DxNumberBox
-              :value.sync="valueOffset"
+              v-model:value="valueOffset"
               :show-spin-buttons="true"
             />
           </div>

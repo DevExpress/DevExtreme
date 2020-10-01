@@ -2,7 +2,7 @@
   <DxRangeSelector
     id="range-selector"
     :data-source="dataSource"
-    v-model="range"
+    v-model:value="range"
     title="Select a Product Weight"
   >
     <DxMargin :top="50"/>

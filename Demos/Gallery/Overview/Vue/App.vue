@@ -15,7 +15,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model="loop"
+          v-model:value="loop"
           text="Loop mode"
         />
       </div>
@@ -28,13 +28,13 @@
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="showNavButtons"
+          v-model:value="showNavButtons"
           text="Navigation buttons"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="showIndicator"
+          v-model:value="showIndicator"
           text="Indicator"
         />
       </div>

@@ -25,7 +25,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          :value.sync="autoExpandAll"
+          v-model:value="autoExpandAll"
           text="Expand All Groups"
         />
       </div>

@@ -1,7 +1,7 @@
 <template>
   <DxTagBox
     :data-source="dataSource"
-    :value.sync="currentValue"
+    v-model:value="currentValue"
     :show-selection-controls="true"
     :max-displayed-tags="3"
     :show-multi-tag-only="false"

@@ -20,7 +20,7 @@
         <span>Overlapping Modes:</span>
         <DxSelectBox
           :data-source="overlappingModes"
-          :value.sync="currentMode"
+          v-model:value="currentMode"
         />
       </div>
     </div>

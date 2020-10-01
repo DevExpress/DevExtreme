@@ -7,7 +7,7 @@
         :show-selection-controls="true"
         :selection-mode="selectionMode"
         :select-all-mode="selectAllMode"
-        :selected-item-keys.sync="selectedItemKeys"
+        v-model:selected-item-keys="selectedItemKeys"
       />
       <div class="selected-data">
         <span class="caption">Selected IDs:</span>
@@ -20,7 +20,7 @@
         <span>Selection Mode</span>
         <DxSelectBox
           :items="['none', 'single', 'multiple', 'all']"
-          v-model="selectionMode"
+          v-model:value="selectionMode"
         />
       </div>
       <div class="option">
@@ -28,7 +28,7 @@
         <DxSelectBox
           :disabled="selectionMode !== 'all'"
           :items="['page', 'allPages']"
-          v-model="selectAllMode"
+          v-model:value="selectAllMode"
         />
       </div>
     </div>

@@ -75,7 +75,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          :value.sync="useAggregation"
+          v-model:value="useAggregation"
           text="Aggregation enabled"
         />
       </div>
@@ -83,7 +83,7 @@
         <span>Interval:</span>
         <DxSelectBox
           :data-source="aggregationIntervals"
-          :value.sync="currentInterval"
+          v-model:value="currentInterval"
           display-expr="displayName"
           value-expr="interval"
         />
@@ -92,7 +92,7 @@
         <span>Method:</span>
         <DxSelectBox
           :data-source="aggregationFunctions"
-          :value.sync="currentFunction"
+          v-model:value="currentFunction"
           display-expr="displayName"
           value-expr="func"
         />

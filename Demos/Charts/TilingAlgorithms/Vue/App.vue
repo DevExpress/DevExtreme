@@ -23,7 +23,7 @@
         <DxSelectBox
           :data-source="algorithms"
           :width="200"
-          v-model="selectedAlgorithm"
+          v-model:value="selectedAlgorithm"
         />
       </div>
     </div>

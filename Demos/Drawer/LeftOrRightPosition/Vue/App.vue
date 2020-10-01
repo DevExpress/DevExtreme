@@ -5,12 +5,12 @@
       :opened-state-mode="selectedOpenMode"
       :position="selectedPosition"
       :reveal-mode="selectedRevealMode"
-      :opened.sync="openState"
+      v-model:opened="openState"
       :height="400"
       :close-on-outside-click="true"
       template="listMenu"
     >
-      <template #listMenu="{ data }">
+      <template #listMenu>
         <NavigationList/>
       </template>
       <div
@@ -24,7 +24,7 @@
       <div class="option">
         <label>Opened state mode</label>
         <DxRadioGroup
-          v-model="selectedOpenMode"
+          v-model:value="selectedOpenMode"
           :items="showModes"
           layout="horizontal"
         />
@@ -32,7 +32,7 @@
       <div class="option">
         <label>Position</label>
         <DxRadioGroup
-          v-model="selectedPosition"
+          v-model:value="selectedPosition"
           :items="positionModes"
           layout="horizontal"
         />
@@ -43,7 +43,7 @@
       >
         <label>Reveal mode</label>
         <DxRadioGroup
-          v-model="selectedRevealMode"
+          v-model:value="selectedRevealMode"
           :items="showSubmenuModes"
           layout="horizontal"
         />

@@ -5,7 +5,7 @@
         <div class="dx-field-label">Password TextBox</div>
         <div class="dx-field-value">
           <DxTextBox
-            :mode.sync="passwordMode"
+            v-model:mode="passwordMode"
             value="password"
             styling-mode="filled"
             placeholder="password"
@@ -23,7 +23,7 @@
         <div class="dx-field-label">Multi-currency NumberBox</div>
         <div class="dx-field-value">
           <DxNumberBox
-            :value.sync="currencyValue"
+            v-model:value="currencyValue"
             :format="currencyFormat"
             :show-clear-button="true"
             :show-spin-buttons="true"
@@ -43,7 +43,7 @@
         <div class="dx-field-label">Advanced DateBox</div>
         <div class="dx-field-value">
           <DxDateBox
-            :value.sync="dateValue"
+            v-model:value="dateValue"
             styling-mode="outlined"
           >
             <DxDateBoxButton

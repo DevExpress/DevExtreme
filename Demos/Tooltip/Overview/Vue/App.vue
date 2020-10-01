@@ -11,7 +11,7 @@
       >
 
       <DxTooltip
-        :visible.sync="defaultVisible"
+        v-model:visible="defaultVisible"
         :close-on-outside-click="false"
         target="#product1"
       >
@@ -29,7 +29,7 @@
       >
 
       <DxTooltip
-        :visible.sync="withTemplateVisible"
+        v-model:visible="withTemplateVisible"
         :close-on-outside-click="false"
         target="#product2"
         position="right"
@@ -55,7 +55,7 @@
         :target="'#product3'"
         :position="'top'"
         :animation="animationConfig"
-        :visible.sync="withAnimationVisible"
+        v-model:visible="withAnimationVisible"
         :close-on-outside-click="false"
       >
         Projector PlusHD

@@ -36,25 +36,25 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          :value.sync="showColumnLines"
+          v-model:value="showColumnLines"
           text="Show Column Lines"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="showRowLines"
+          v-model:value="showRowLines"
           text="Show Row Lines"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="showBorders"
+          v-model:value="showBorders"
           text="Show Borders"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="rowAlternationEnabled"
+          v-model:value="rowAlternationEnabled"
           text="Alternating Row Color"
         />
       </div>

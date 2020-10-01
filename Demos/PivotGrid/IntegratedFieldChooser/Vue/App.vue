@@ -22,7 +22,7 @@
         <DxSelectBox
           :items="applyChangesModes"
           :width="180"
-          :value.sync="applyChangesMode"
+          v-model:value="applyChangesMode"
         />
       </div>
     </div>

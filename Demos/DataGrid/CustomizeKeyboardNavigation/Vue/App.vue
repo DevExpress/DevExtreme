@@ -53,7 +53,7 @@
       <div class="option-container">
         <div class="option check-box">
           <DxCheckBox
-            :value.sync="editOnKeyPress"
+            v-model:value="editOnKeyPress"
             text="Edit On Key Press"
           />
         </div>
@@ -61,7 +61,7 @@
           <span class="option-caption">Enter Key Action</span>
           <DxSelectBox
             :items="enterKeyActions"
-            :value.sync="enterKeyAction"
+            v-model:value="enterKeyAction"
             class="select"
           />
         </div>
@@ -69,7 +69,7 @@
           <span class="option-caption">Enter Key Direction</span>
           <DxSelectBox
             :items="enterKeyDirections"
-            :value.sync="enterKeyDirection"
+            v-model:value="enterKeyDirection"
             class="select"
           />
         </div>

@@ -79,7 +79,7 @@
     </div>
     <DxSlider
       id="slider"
-      v-model="speedValue"
+      v-model:value="speedValue"
       :width="155"
       :min="0"
       :max="200"

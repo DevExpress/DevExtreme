@@ -3,7 +3,7 @@
     <div class="filter-container">
       <DxFilterBuilder
         :fields="fields"
-        :value.sync="filter"
+        v-model:value="filter"
       />
       <DxButton
         text="Apply Filter"

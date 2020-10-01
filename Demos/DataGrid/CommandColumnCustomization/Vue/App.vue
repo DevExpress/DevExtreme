@@ -47,7 +47,7 @@
   </div>
 </template>
 <script>
-import Vue from 'vue';
+import { createApp } from 'vue';
 import {
   DxDataGrid,
   DxColumn,

@@ -49,7 +49,7 @@
       :title="currentHouse.Address"
       :drag-enabled="false"
       :close-on-outside-click="true"
-      :visible.sync="popupVisible"
+      v-model:visible="popupVisible"
     >
       <template #content="{ data }">
         <div class="popup-property-details">

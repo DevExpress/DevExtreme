@@ -21,7 +21,7 @@
     <DxRangeSelector
       id="range-selector"
       :data-source="dataSource"
-      :value.sync="range"
+      v-model:value="range"
     >
       <DxRsChart>
         <DxRsSeries/>

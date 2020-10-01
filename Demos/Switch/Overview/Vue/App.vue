@@ -16,14 +16,14 @@
       <div class="dx-field">
         <div class="dx-field-label">Value change handling</div>
         <div class="dx-field-value">
-          <DxSwitch v-model="value"/>
+          <DxSwitch v-model:value="value"/>
         </div>
       </div>
       <div class="dx-field">
         <div class="dx-field-label">Disabled</div>
         <div class="dx-field-value">
           <DxSwitch
-            v-model="value"
+            v-model:value="value"
             :disabled="true"
           />
         </div>

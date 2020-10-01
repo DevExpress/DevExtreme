@@ -4,7 +4,7 @@
       <div class="dx-fieldset-header">Custom Field Template</div>
       <div class="dx-field">
         <DxLookup
-          v-model="lookupValue"
+          v-model:value="lookupValue"
           :items="employees"
           :display-expr="getDisplayExpr"
           class="field-customization"

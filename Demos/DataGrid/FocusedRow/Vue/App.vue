@@ -8,7 +8,7 @@
       :show-borders="true"
       :focused-row-enabled="true"
       :auto-navigate-to-focused-row="autoNavigateToFocusedRow"
-      :focused-row-key.sync="focusedRowKey"
+      v-model:focused-row-key="focusedRowKey"
       @focused-row-changing="onFocusedRowChanging"
       @focused-row-changed="onFocusedRowChanged"
     >
@@ -39,13 +39,13 @@
           :min="1"
           :max="183"
           :step="0"
-          :value.sync="focusedRowKey"
+          v-model:value="focusedRowKey"
         />
       </div>
       <div class="option">
         <DxCheckBox
           :text="'Auto Navigate To Focused Row'"
-          :value.sync="autoNavigateToFocusedRow"
+          v-model:value="autoNavigateToFocusedRow"
         />
       </div>
     </div>

@@ -116,7 +116,7 @@
     <DxSelectBox
       id="selectbox"
       :data-source="cities"
-      :value.sync="value"
+      v-model:value="value"
       display-expr="name"
     />
   </div>

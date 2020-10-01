@@ -2,7 +2,7 @@
   <div>
     <DxActionSheet
       :data-source="dataSource"
-      :visible.sync="isActionSheetVisible"
+      v-model:visible="isActionSheetVisible"
       :show-title="showTitle"
       :show-cancel-button="showCancelButton"
       title="Choose action"
@@ -20,11 +20,11 @@
       <div class="caption">Options</div>
       <div class="option">
         <span>Show title</span>
-        <DxSwitch v-model="showTitle"/>
+        <DxSwitch v-model:value="showTitle"/>
       </div>
       <div class="option">
         <span>Show cancel button</span>
-        <DxSwitch v-model="showCancelButton"/>
+        <DxSwitch v-model:value="showCancelButton"/>
       </div>
     </div>
   </div>

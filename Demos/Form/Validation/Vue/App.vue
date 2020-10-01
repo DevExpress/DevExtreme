@@ -6,7 +6,7 @@
         @submit="handleSubmit"
       >
         <DxForm
-          :form-data.sync="customer"
+          v-model:form-data="customer"
           :read-only="false"
           :show-colon-after-label="true"
           :show-validation-summary="true"

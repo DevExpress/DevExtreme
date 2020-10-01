@@ -12,7 +12,6 @@
         widget="dxButton"
       />
       <DxItem
-        #default
         location="center"
         locate-in-menu="never"
       >

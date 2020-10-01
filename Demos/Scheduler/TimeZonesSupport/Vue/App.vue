@@ -4,7 +4,7 @@
       <span>Office Time Zone</span>
       <DxSelectBox
         :items="locationsData"
-        :value.sync="timezone"
+        v-model:value="timezone"
         :width="240"
         display-expr="text"
         value-expr="timeZoneId"

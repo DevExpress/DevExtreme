@@ -4,7 +4,7 @@
       <div>Select company:</div>
       <DxSelectBox
         :data-source="companies"
-        v-model="company"
+        v-model:value="company"
         display-expr="Name"
       />
       <DxForm
@@ -24,39 +24,39 @@
         <span>Label location:</span>
         <DxSelectBox
           :items="['left', 'top']"
-          v-model="labelLocation"
+          v-model:value="labelLocation"
         />
       </div>
       <div class="option">
         <span>Columns count:</span>
         <DxSelectBox
           :items="['auto', 1, 2, 3]"
-          v-model="colCount"
+          v-model:value="colCount"
         />
       </div>
       <div class="option">
         <span>Min column width:</span>
         <DxSelectBox
           :items="[150, 200, 300]"
-          v-model="minColWidth"
+          v-model:value="minColWidth"
         />
       </div>
       <div class="option">
         <span>Form width:</span>
         <DxNumberBox
           :max="550"
-          v-model="width"
+          v-model:value="width"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="readOnly"
+          v-model:value="readOnly"
           text="readOnly"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="showColon"
+          v-model:value="showColon"
           text="showColonAfterLabel"
         />
       </div>

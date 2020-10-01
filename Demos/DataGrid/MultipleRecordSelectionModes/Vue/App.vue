@@ -44,7 +44,7 @@
           id="select-all-mode"
           :data-source="['allPages', 'page']"
           :disabled="checkBoxesMode === 'none'"
-          v-model="allMode"
+          v-model:value="allMode"
         />
       </div>
       <div class="option checkboxes-mode">
@@ -52,7 +52,7 @@
         <DxSelectBox
           id="show-checkboxes-mode"
           :data-source="['none', 'onClick', 'onLongTap', 'always']"
-          v-model="checkBoxesMode"
+          v-model:value="checkBoxesMode"
         />
       </div>
     </div>

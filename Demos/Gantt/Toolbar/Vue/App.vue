@@ -47,7 +47,7 @@
       />
     </DxGantt>
     <DxPopup
-      :visible.sync="popupVisible"
+      v-model:visible="popupVisible"
       title="About"
       :height="auto"
       :show-title="true"

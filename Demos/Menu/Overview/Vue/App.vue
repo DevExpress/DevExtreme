@@ -26,7 +26,7 @@
         <div>Show First Submenu Mode</div>
         <DxSelectBox
           :items="showSubmenuModes"
-          :value.sync="showFirstSubmenuModes"
+          v-model:value="showFirstSubmenuModes"
           display-expr="name"
         />
       </div>
@@ -34,19 +34,19 @@
         <div>Orientation</div>
         <DxSelectBox
           :items="['horizontal', 'vertical']"
-          :value.sync="orientation"
+          v-model:value="orientation"
         />
       </div>
       <div class="option">
         <div>Submenu Direction</div>
         <DxSelectBox
           :items="['auto', 'rightOrBottom', 'leftOrTop']"
-          :value.sync="submenuDirection"
+          v-model:value="submenuDirection"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="hideSubmenuOnMouseLeave"
+          v-model:value="hideSubmenuOnMouseLeave"
           text="Hide Submenu on Mouse Leave"
         />
       </div>

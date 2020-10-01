@@ -2,7 +2,7 @@
   <div>
     <DxScheduler
       :data-source="dataSource"
-      :current-date.sync="currentDate"
+      v-model:current-date="currentDate"
       :cell-duration="cellDuration"
       :views="views"
       :height="590"

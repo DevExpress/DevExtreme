@@ -72,7 +72,7 @@
       <div class="dx-fieldset-header">Event Handling and API</div>
       <div class="dx-field">
         <DxSlider
-          v-model="sliderValue"
+          v-model:value="sliderValue"
           :min="0"
           :max="100"
         />
@@ -81,7 +81,7 @@
         <div class="dx-field-label">Slider value</div>
         <div class="dx-field-value">
           <DxNumberBox
-            v-model="sliderValue"
+            v-model:value="sliderValue"
             :min="0"
             :max="100"
             :value="10"

@@ -5,7 +5,7 @@
       :height="440"
       :controls="true"
       :markers="markersData"
-      :routes.sync="routesData"
+      v-model:routes="routesData"
       center="Brooklyn Bridge,New York,NY"
       width="100%"
       provider="bing"

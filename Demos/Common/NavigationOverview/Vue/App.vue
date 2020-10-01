@@ -38,7 +38,7 @@
       <div class="sub-title">Largest cities</div>
       <DxTabPanel
         id="tabpanel"
-        :selected-index.sync="tabPanelIndex"
+        v-model:selected-index="tabPanelIndex"
         :data-source="citiesData"
         :animation-enabled="true"
         item-title-template="title"

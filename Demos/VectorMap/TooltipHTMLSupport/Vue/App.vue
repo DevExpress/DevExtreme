@@ -33,11 +33,11 @@
       content-template="tooltipTemplate"
     />
     <DxExport :enabled="true"/>
-    <TooltipTemplate
-      slot="tooltipTemplate"
-      slot-scope="{ data }"
-      :info="data"
-    />
+    <template #tooltipTemplate="{ data }">
+      <TooltipTemplate
+        :info="data"
+      />
+    </template>
   </DxVectorMap>
 </template>
 <script>

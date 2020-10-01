@@ -47,7 +47,7 @@
         id="seasons"
         :width="150"
         :data-source="dataSource"
-        :value.sync="value"
+        v-model:value="value"
         display-expr="name"
       />
     </div>

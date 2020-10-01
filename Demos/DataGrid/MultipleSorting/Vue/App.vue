@@ -36,7 +36,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          :value.sync="positionDisableSorting"
+          v-model:value="positionDisableSorting"
           text="Disable Sorting for the Position Column"
           @value-changed="onValueChanged"
         />

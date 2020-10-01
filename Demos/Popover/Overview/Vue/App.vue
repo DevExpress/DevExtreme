@@ -100,7 +100,7 @@
 
         <DxPopover
           :width="300"
-          :visible.sync="withShadingOptionsVisible"
+          v-model:visible="withShadingOptionsVisible"
           :shading="true"
           target="#link4"
           position="top"

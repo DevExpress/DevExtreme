@@ -26,7 +26,7 @@
         <span>Label Overlapping Resolution Mode</span>
         <DxSelectBox
           :data-source="resolveModes"
-          v-model="resolveMode"
+          v-model:value="resolveMode"
         />
       </div>
     </div>

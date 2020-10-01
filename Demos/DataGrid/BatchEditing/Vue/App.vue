@@ -47,7 +47,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <DxCheckBox
-          v-model="selectTextOnEditStart"
+          v-model:value="selectTextOnEditStart"
           text="Select Text on Edit Start"
         />
       </div>
@@ -55,7 +55,7 @@
         <span>Start Edit Action</span>
         <DxSelectBox
           :items="['click', 'dblClick']"
-          v-model="startEditAction"
+          v-model:value="startEditAction"
         />
       </div>
     </div>

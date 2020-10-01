@@ -46,7 +46,7 @@
         <span>Filter Mode</span>
         <DxSelectBox
           :items="filterModes"
-          v-model="filterMode"
+          v-model:value="filterMode"
         />
       </div>
     </div>

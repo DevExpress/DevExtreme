@@ -6,7 +6,7 @@
           <div class="label">Title</div>
           <div class="value">
             <DxTextBox
-              v-model="text"
+              v-model:value="text"
               :max-length="40"
               value-change-event="keyup"
             />
@@ -16,7 +16,7 @@
           <div class="label">Color</div>
           <div class="value">
             <DxColorBox
-              v-model="color"
+              v-model:value="color"
               apply-value-mode="instantly"
             />
           </div>
@@ -27,7 +27,7 @@
           <div class="label">Width</div>
           <div class="value">
             <DxNumberBox
-              v-model="width"
+              v-model:value="width"
               :show-spin-buttons="true"
               :max="700"
               :min="70"
@@ -39,7 +39,7 @@
           <div class="label">Height</div>
           <div class="value">
             <DxNumberBox
-              v-model="height"
+              v-model:value="height"
               :show-spin-buttons="true"
               :max="700"
               :min="70"
@@ -53,7 +53,7 @@
           <div class="label">Transform</div>
           <div class="value">
             <DxSelectBox
-              v-model="transform"
+              v-model:value="transform"
               :items="transformations"
               :grouped="true"
               display-expr="name"
@@ -64,7 +64,7 @@
         <div class="field">
           <div class="label">Border</div>
           <div class="value">
-            <DxSwitch v-model="border"/>
+            <DxSwitch v-model:value="border"/>
           </div>
         </div>
       </div>

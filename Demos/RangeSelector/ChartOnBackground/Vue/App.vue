@@ -2,7 +2,7 @@
   <DxRangeSelector
     id="range-selector"
     :data-source="dataSource"
-    v-model="range"
+    v-model:value="range"
     title="Select a Range in the Costs and Revenues History"
   >
     <DxMargin :top="50"/>

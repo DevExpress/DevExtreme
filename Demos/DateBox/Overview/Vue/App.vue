@@ -84,7 +84,7 @@
         <div class="dx-field-label">Set Birthday</div>
         <div class="dx-field-value">
           <DxDateBox
-            :value.sync="value"
+            v-model:value="value"
             :min="min"
             :max="now"
             apply-value-mode="useButtons"

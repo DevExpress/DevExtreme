@@ -30,7 +30,7 @@
           <div class="value">
             <DxSwitch
               id="show-indicator"
-              :value.sync="showCurrentTimeIndicator"
+              v-model:value="showCurrentTimeIndicator"
             />
           </div>
         </div>
@@ -39,7 +39,7 @@
           <div class="value">
             <DxSwitch
               id="allow-shading"
-              :value.sync="shadeUntilCurrentTime"
+              v-model:value="shadeUntilCurrentTime"
             />
           </div>
         </div>
@@ -49,7 +49,7 @@
           <div class="label">Update position in</div>
           <div class="value">
             <DxNumberBox
-              :value.sync="updateInterval"
+              v-model:value="updateInterval"
               :format="'#0 s'"
               :min="1"
               :max="1200"

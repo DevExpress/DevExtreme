@@ -15,9 +15,9 @@
         :data-source="dataSource"
         :width="400"
         :height="400"
-        :layout.sync="layout"
-        :apply-changes-mode.sync="applyChangesMode"
-        :state.sync="state"
+        v-model:layout="layout"
+        v-model:apply-changes-mode="applyChangesMode"
+        v-model:state="state"
       >
         <DxTexts
           all-fields="All"
@@ -48,7 +48,7 @@
           <span>Choose layout:</span>
           <DxRadioGroup
             :items="layouts"
-            :value.sync="layout"
+            v-model:value="layout"
             class="option-editor"
             layout="vertical"
             value-expr="key"
@@ -60,7 +60,7 @@
           <DxSelectBox
             :items="applyChangesModes"
             :width="180"
-            :value.sync="applyChangesMode"
+            v-model:value="applyChangesMode"
             class="option-editor"
           />
         </div>

@@ -8,7 +8,7 @@
         <div class="dx-field-value">
           <DxAutocomplete
             :data-source="names"
-            :value.sync="firstName"
+            v-model:value="firstName"
             placeholder="Type first name..."
             @value-changed="updateEmployeeInfo"
           />
@@ -23,7 +23,7 @@
         <div class="dx-field-value">
           <DxAutocomplete
             :data-source="surnames"
-            :value.sync="lastName"
+            v-model:value="lastName"
             :show-clear-button="true"
             placeholder="Type last name..."
             @value-changed="updateEmployeeInfo"
@@ -53,7 +53,7 @@
         <div class="dx-field-value">
           <DxAutocomplete
             :data-source="cities"
-            :value.sync="city"
+            v-model:value="city"
             :min-search-length="2"
             :search-timeout="500"
             placeholder="Type two symbols to search..."
@@ -70,7 +70,7 @@
         <div class="dx-field-value">
           <DxAutocomplete
             :data-source="states"
-            :value.sync="state"
+            v-model:value="state"
             value-expr="State_Long"
             placeholder="Type state name..."
             item-template="stateTemplate"

@@ -60,7 +60,7 @@
         <DxSelectBox
           id="useFilterApplyButton"
           :items="applyFilterTypes"
-          :value.sync="currentFilter"
+          v-model:value="currentFilter"
           :disabled="!showFilterRow"
           value-expr="key"
           display-expr="name"
@@ -68,14 +68,14 @@
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="showFilterRow"
+          v-model:value="showFilterRow"
           text="Filter Row"
           @valueChanged="clearFilter()"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          :value.sync="showHeaderFilter"
+          v-model:value="showHeaderFilter"
           text="Header Filter"
           @valueChanged="clearFilter()"
         />

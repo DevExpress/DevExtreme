@@ -21,7 +21,7 @@
           <DxSelectBox
             id="show-scrollbar-mode"
             :items="showScrollbarModes"
-            v-model="showScrollbar"
+            v-model:value="showScrollbar"
             value-expr="value"
             display-expr="text"
           />
@@ -37,19 +37,19 @@
         <div class="option">
           <DxCheckBox
             id="use-pull-down-bottom"
-            v-model="pullDown"
+            v-model:value="pullDown"
             text="Update content on the PullDown event"
           />
         </div>
         <div class="option">
           <DxCheckBox
-            v-model="scrollByContent"
+            v-model:value="scrollByContent"
             text="Scroll by content"
           />
         </div>
         <div class="option">
           <DxCheckBox
-            v-model="scrollByThumb"
+            v-model:value="scrollByThumb"
             text="Scroll by thumb"
           />
         </div>

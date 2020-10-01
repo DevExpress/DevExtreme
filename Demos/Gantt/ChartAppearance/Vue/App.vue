@@ -6,19 +6,19 @@
         <span>Scale Type</span>
         <DxSelectBox
           :items="['auto', 'minutes', 'hours', 'days', 'weeks', 'months', 'quarters', 'years']"
-          v-model="scaleType"
+          v-model:value="scaleType"
         />
       </div>
       <div class="option">
         <span>Title Position</span>
         <DxSelectBox
           :items="['inside', 'outside', 'none']"
-          v-model="taskTitlePosition"
+          v-model:value="taskTitlePosition"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="showResources"
+          v-model:value="showResources"
           text="Show Resources"
         />
       </div>

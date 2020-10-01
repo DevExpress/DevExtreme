@@ -18,7 +18,7 @@
       <div class="option">
         <span>Direction</span>
         <DxSelectBox
-          v-model="direction"
+          v-model:value="direction"
           :items="directions"
         />
       </div>

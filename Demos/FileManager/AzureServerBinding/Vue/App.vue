@@ -5,7 +5,7 @@
   >
     <DxLoadPanel
       :position="loadPanelPosition"
-      :visible.sync="loadPanelVisible"
+      v-model:visible="loadPanelVisible"
     />
     <DxFileManager
       id="file-manager"

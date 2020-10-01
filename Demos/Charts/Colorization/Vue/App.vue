@@ -20,7 +20,7 @@
         <DxSelectBox
           :data-source="colorizationOptions"
           :width="200"
-          v-model="typeOptions"
+          v-model:value="typeOptions"
           display-expr="name"
           value-expr="options"
         />

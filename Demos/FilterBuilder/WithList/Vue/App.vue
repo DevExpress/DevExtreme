@@ -4,7 +4,7 @@
       <DxFilterBuilder
         :ref="filterBuilderRefName"
         :fields="fields"
-        :value.sync="filter"
+        v-model:value="filter"
       />
       <DxButton
         text="Apply Filter"

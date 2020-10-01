@@ -32,7 +32,7 @@
       </DxChart>
       <DxRangeSelector
         :data-source="dataSource"
-        :value.sync="range"
+        v-model:value="range"
       >
         <DxSize :height="120"/>
         <DxMargin :left="10"/>

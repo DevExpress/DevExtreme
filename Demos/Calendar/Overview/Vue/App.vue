@@ -3,7 +3,7 @@
     <div class="widget-container">
       <DxCalendar
         id="calendar-container"
-        v-model="currentValue"
+        v-model:value="currentValue"
         :min="minDateValue"
         :max="maxDateValue"
         :disabled-dates="disabledDates"
@@ -58,7 +58,7 @@
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="disabled"
+          v-model:value="disabled"
           text="Disabled"
         />
       </div>
@@ -67,14 +67,14 @@
         <DxSelectBox
           id="zoom-level"
           :data-source="zoomLevels"
-          v-model="zoomLevel"
+          v-model:value="zoomLevel"
         />
       </div>
       <div class="option">
         <span>Selected date</span>
         <DxDateBox
           id="selected-date"
-          v-model="currentValue"
+          v-model:value="currentValue"
           width="100%"
         />
       </div>

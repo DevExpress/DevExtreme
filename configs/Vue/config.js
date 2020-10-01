@@ -20,7 +20,7 @@ System.config({
     'npm:': '../../../../node_modules/'
   },
   map: {
-    'vue': 'npm:vue/dist/vue.esm.browser.js',
+    'vue': 'npm:vue/dist/vue.esm-browser.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
 
     /** signalr */
@@ -78,6 +78,7 @@ System.config({
     'devextreme/dist/js/vectormap-data': 'npm:devextreme/dist/js/vectormap-data',
     /**/
 
+    'mitt': 'npm:mitt/dist/mitt.umd.js',
     'rrule': 'npm:rrule/dist/es5/rrule.js',
     'luxon': 'npm:luxon/build/global/luxon.min.js',
     'es6-object-assign': 'npm:es6-object-assign',

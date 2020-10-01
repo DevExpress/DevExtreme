@@ -51,14 +51,14 @@
         <span>Column chooser mode</span>
         <DxSelectBox
           :items="columnChooserModes"
-          v-model="mode"
+          v-model:value="mode"
           value-expr="key"
           display-expr="name"
         />
       </div>
       <div class="option">
         <DxCheckBox
-          v-model="allowSearch"
+          v-model:value="allowSearch"
           text="Allow search"
         />
       </div>

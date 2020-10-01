@@ -1,7 +1,7 @@
 <template>
   <div class="widget-container">
     <DxHtmlEditor
-      v-model="value"
+      v-model:value="value"
     >
       <DxToolbar>
         <DxItem format-name="undo"/>
@@ -30,7 +30,7 @@
     </DxHtmlEditor>
     <DxPopup
       :show-title="true"
-      :visible.sync="popupVisible"
+      v-model:visible="popupVisible"
       title="Markup"
     >
       {{ value }}

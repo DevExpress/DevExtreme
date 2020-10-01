@@ -17,14 +17,14 @@
       <div class="caption">API</div>
       <DxTabs
         :data-source="tabs"
-        :selected-index.sync="selectedIndex"
+        v-model:selected-index="selectedIndex"
       />
       <div class="content dx-fieldset">
         <div class="dx-field">
           <div class="dx-field-label">Selected index:</div>
           <div class="dx-field-value">
             <DxSelectBox
-              v-model="selectedIndex"
+              v-model:value="selectedIndex"
               :data-source="tabs"
               display-expr="text"
               value-expr="id"
