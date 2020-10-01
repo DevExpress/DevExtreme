@@ -2390,14 +2390,14 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellData = viewDataProvider.getCellData(rowIndex, cellIndex);
         }
 
-        return {
+        return cellData ? {
             startDate: cellData.startDate,
             endDate: cellData.endDate,
             groups: cellData.groups,
             groupIndex: cellData.groupIndex,
             allDay: cellData.allDay,
             text: cellData.text,
-        };
+        } : undefined;
     }
 
     _getHorizontalMax(groupIndex) {
