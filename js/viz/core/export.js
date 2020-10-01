@@ -1,17 +1,13 @@
 import { extend } from '../../core/utils/extend';
 import { getWindow } from '../../core/utils/window';
 import { patchFontOptions } from './utils';
-import clientExporter from '../../exporter';
+import { export as _export, image as imageExporter, svg as svgExporter, pdf as pdfExporter } from '../../exporter';
 import messageLocalization from '../../localization/message';
 import { isDefined } from '../../core/utils/type';
-import themeModule from '../themes';
-import hoverEvent from '../../events/hover';
+import { getTheme } from '../themes';
+import { start as hoverEventStart, end as hoverEventEnd } from '../../events/hover';
 import pointerEvents from '../../events/pointer';
 import { logger } from '../../core/utils/console';
-
-const imageExporter = clientExporter.image;
-const svgExporter = clientExporter.svg;
-const pdfExporter = clientExporter.pdf;
 
 const pointerActions = [pointerEvents.down, pointerEvents.move].join(' ');
 
@@ -169,8 +165,8 @@ function createMenuItem(renderer, options, settings) {
         }).
         data(itemData);
 
-    rect.on(hoverEvent.start + '.export', () => rect.attr({ fill: options.button.hover.backgroundColor }))
-        .on(hoverEvent.end + '.export', () => rect.attr({ fill: null }));
+    rect.on(hoverEventStart + '.export', () => rect.attr({ fill: options.button.hover.backgroundColor }))
+        .on(hoverEventEnd + '.export', () => rect.attr({ fill: null }));
 
     rect.append(menuItem);
 
@@ -232,8 +228,8 @@ export const exportFromMarkup = function(markup, options) {
     options.exportedAction = options.onExported;
     options.fileSavingAction = options.onFileSaving;
     options.margin = isDefined(options.margin) ? options.margin : MARGIN;
-    options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : (getBackgroundColorFromMarkup(markup) || themeModule.getTheme().backgroundColor);
-    clientExporter.export(markup, options, getCreatorFunc(options.format));
+    options.backgroundColor = isDefined(options.backgroundColor) ? options.backgroundColor : (getBackgroundColorFromMarkup(markup) || getTheme().backgroundColor);
+    _export(markup, options, getCreatorFunc(options.format));
 };
 
 export const getMarkup = widgets => combineMarkups(widgets).markup;
@@ -261,7 +257,7 @@ export let combineMarkups = function(widgets, options = { }) {
     const exportItems = widgets.reduce((r, row, rowIndex) => {
         const rowInfo = row.reduce((r, item, colIndex) => {
             const size = item.getSize();
-            const backgroundColor = item.option('backgroundColor') || themeModule.getTheme(item.option('theme')).backgroundColor;
+            const backgroundColor = item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor;
             backgroundColor && r.backgroundColors.indexOf(backgroundColor) === -1 && r.backgroundColors.push(backgroundColor);
 
             r.hOffset = r.width;
@@ -637,7 +633,7 @@ export const plugin = {
 
             const pointerEventsValue = this._disablePointerEvents();
 
-            const promise = clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format))
+            const promise = _export(this._renderer.root.element, options, getCreatorFunc(options.format))
                 .fail(logger.error)
                 .always(() => {
                     this._renderer.root.attr({
@@ -668,7 +664,7 @@ export const plugin = {
             const pointerEventsValue = this._disablePointerEvents();
 
             menu && menu.hide();
-            const promise = clientExporter.export(this._renderer.root.element, options, getCreatorFunc(options.format))
+            const promise = _export(this._renderer.root.element, options, getCreatorFunc(options.format))
                 .fail(logger.error)
                 .always(() => {
                     this._renderer.root.attr({

@@ -1,5 +1,4 @@
-import themeModule from '../../themes';
-const registerTheme = themeModule.registerTheme;
+import { registerTheme } from '../../themes';
 const WHITE = '#ffffff';
 const BLACK = '#000000';
 const SOME_GREY = '#2b2b2b';

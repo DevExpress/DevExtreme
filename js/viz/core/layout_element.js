@@ -1,6 +1,6 @@
 import { noop } from '../../core/utils/common';
 const _round = Math.round;
-import objectUtils from '../../core/utils/object';
+import { clone } from '../../core/utils/object';
 const defaultOffset = {
     horizontal: 0,
     vertical: 0
@@ -39,7 +39,7 @@ function WrapperLayoutElement(renderElement, bBox) {
     this._cacheBBox = bBox;
 }
 
-const wrapperLayoutElementPrototype = WrapperLayoutElement.prototype = objectUtils.clone(LayoutElement.prototype);
+const wrapperLayoutElementPrototype = WrapperLayoutElement.prototype = clone(LayoutElement.prototype);
 
 wrapperLayoutElementPrototype.constructor = WrapperLayoutElement;
 
