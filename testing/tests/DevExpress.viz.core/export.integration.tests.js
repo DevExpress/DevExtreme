@@ -7,6 +7,7 @@ const clientExporter = require('exporter');
 const exportModule = require('viz/core/export');
 const Deferred = require('core/utils/deferred').Deferred;
 const logger = require('core/utils/console').logger;
+const { isFunction } = require('core/utils/type');
 
 $('#qunit-fixture').append('<div id="test-container" style="width: 200px; height: 150px;"></div>');
 
@@ -445,7 +446,7 @@ QUnit.test('Depends on theme', function(assert) {
 });
 
 QUnit.test('Print method - use export to prepare image, create hidden iFrame with image, delete iFrame after printing', function(assert) {
-    assert.expect(29);
+    assert.expect(32);
     const done = assert.async();
     const deferred = new Deferred();
     const exportFunc = clientExporter.export;
@@ -453,8 +454,13 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
     const exportingStub = sinon.spy();
     const fileSavingStub = sinon.spy();
     const mockWindow = {
-        print: sinon.spy(),
-        focus: sinon.spy()
+        print: sinon.spy(function() {
+            this.afterPrintEventHandler();
+        }),
+        focus: sinon.spy(),
+        addEventListener: sinon.spy(function(name, callback) {
+            this.afterPrintEventHandler = callback;
+        })
     };
     const widget = this.createWidget({
         'export': {
@@ -483,6 +489,9 @@ QUnit.test('Print method - use export to prepare image, create hidden iFrame wit
                     assert.equal(mockWindow.focus.callCount, 1); // Required for IE
                     assert.equal(mockWindow.print.callCount, 1);
                     assert.ok(mockWindow.focus.getCall(0).calledBefore(mockWindow.print.getCall(0)));
+                    assert.equal(mockWindow.addEventListener.callCount, 1);
+                    assert.strictEqual(mockWindow.addEventListener.lastCall.args[0], 'afterprint');
+                    assert.ok(isFunction(mockWindow.addEventListener.lastCall.args[1]));
                 }
             }
         },
@@ -535,7 +544,8 @@ QUnit.test('Print method, error image loading - delete iFrame', function(assert)
     const exportFunc = clientExporter.export;
     const mockWindow = {
         print: sinon.spy(),
-        focus: sinon.spy()
+        focus: sinon.spy(),
+        addEventListener: sinon.spy()
     };
     const widget = this.createWidget({
         'export': {
