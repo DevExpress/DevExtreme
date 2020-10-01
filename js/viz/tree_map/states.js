@@ -1,5 +1,5 @@
-import { prototype as proto } from './tree_map.base';
-import { prototype as nodeProto } from './node';
+import proto from './tree_map.base';
+import nodeProto from './node';
 import { noop } from '../../core/utils/common';
 
 const handlers = proto._handlers;

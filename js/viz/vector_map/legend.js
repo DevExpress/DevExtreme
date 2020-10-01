@@ -3,8 +3,7 @@ import { each } from '../../core/utils/iterator';
 import { clone } from '../../core/utils/object';
 const _extend = extend;
 const _each = each;
-import legendModule from '../components/legend';
-const _BaseLegend = legendModule.Legend;
+import { Legend as _BaseLegend } from '../components/legend';
 
 const unknownSource = { category: 'UNKNOWN', name: 'UNKNOWN' };
 
