@@ -1082,14 +1082,13 @@ const KeyboardNavigationController = core.ViewController.inherit({
                     if($cell.is('td') || $cell.hasClass(this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS))) {
                         const isCommandCell = $cell.is(COMMAND_CELL_SELECTOR);
                         if((isRenderView || !isCommandCell) && this._editorFactory.focus()) {
-                            if(isCommandCell) {
-                                const $focusedElementInsideCell = $cell.find(':focus');
-                                if(isElementDefined($focusedElementInsideCell)) {
-                                    focusAndSelectElement(this, $focusedElementInsideCell);
-                                    return;
-                                }
+                            const $focusedElementInsideCell = $cell.find(':focus');
+                            const isFocusedElementDefined = isElementDefined($focusedElementInsideCell);
+                            if(isCommandCell && isFocusedElementDefined) {
+                                focusAndSelectElement(this, $focusedElementInsideCell);
+                                return;
                             }
-                            this._focus($cell);
+                            !isFocusedElementDefined && this._focus($cell);
                         } else if(this._isCellEditMode() || this._isNeedFocus) {
                             this._focus($cell, this._isHiddenFocus);
                         } else if(this._isHiddenFocus) {

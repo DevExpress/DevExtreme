@@ -11,6 +11,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
+import Guid from '../../core/guid';
 import { InkRipple, InkRippleConfig } from './common/ink_ripple';
 import { Widget } from './common/widget';
 import Themes from '../../ui/themes';
@@ -19,6 +20,7 @@ import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { EffectReturn } from '../utils/effect_return.d';
 import noop from '../utils/noop';
+import { ValidationMessage } from './validation_message';
 
 const getCssClasses = (model: CheckBoxProps): string => {
   const {
@@ -83,6 +85,18 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       </div>
       {viewModel.props.useInkRipple
                 && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
+      {viewModel.rendered && viewModel.shouldShowValidationMessage
+                && (
+                <ValidationMessage
+                  validationErrors={viewModel.validationErrors}
+                  mode={viewModel.props.validationMessageMode}
+                  positionRequest="below"
+                  rtlEnabled={viewModel.props.rtlEnabled}
+                  target={viewModel.target}
+                  boundary={viewModel.target}
+                  container={viewModel.target}
+                />
+                )}
     </Widget>
   );
 };
@@ -137,6 +151,8 @@ export const defaultOptionRules = createDefaultOptionRules<CheckBoxProps>([{
 })
 
 export class CheckBox extends JSXComponent(CheckBoxProps) {
+  rendered = false;
+
   @Ref() iconRef!: HTMLDivElement;
 
   @Ref() inkRippleRef!: InkRipple;
@@ -144,6 +160,15 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
   @Ref() inputRef!: HTMLInputElement;
 
   @Ref() widgetRef!: Widget;
+
+  get target(): HTMLDivElement {
+    return this.widgetRef?.getRootElement();
+  }
+
+  @Effect({ run: 'once' })
+  afterInitEffect(): EffectReturn {
+    this.rendered = true;
+  }
 
   @Method()
   focus(): void {
@@ -206,6 +231,13 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
     return getCssClasses(this.props);
   }
 
+  get shouldShowValidationMessage(): boolean {
+    const { isValid, validationStatus } = this.props;
+    return !isValid
+      && validationStatus === 'invalid'
+      && !!this.validationErrors?.length;
+  }
+
   get aria(): object {
     const { readOnly, isValid } = this.props;
     const checked = !!this.props.value;
@@ -216,7 +248,18 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
       checked: indeterminate ? 'mixed' : `${checked}`,
       readonly: readOnly ? 'true' : 'false',
       invalid: !isValid ? 'true' : 'false',
+      // eslint-disable-next-line spellcheck/spell-checker
+      describedby: this.shouldShowValidationMessage ? `dx-${new Guid()}` : undefined,
     };
+  }
+
+  get validationErrors(): object[] | null | undefined {
+    const { validationErrors, validationError } = this.props;
+    let allValidationErrors = validationErrors;
+    if (!allValidationErrors && validationError) {
+      allValidationErrors = [validationError];
+    }
+    return allValidationErrors;
   }
 
   wave(event: Event, type: 'showWave' | 'hideWave', waveId: number): void {

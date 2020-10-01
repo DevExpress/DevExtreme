@@ -114,6 +114,8 @@ const HOUR_MS = toMs('hour');
 
 const SCHEDULER_DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
 
+const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
+
 class ScrollSemaphore {
     constructor() {
         this.counter = 0;
@@ -140,11 +142,6 @@ const formatWeekday = function(date) {
 };
 
 class SchedulerWorkSpace extends WidgetObserver {
-    constructor(...args) {
-        super(...args);
-        this._activeStateUnit = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
-    }
-
     get viewDataProvider() {
         if(!this._viewDataProvider) {
             this._viewDataProvider = new ViewDataProvider(this);
@@ -696,6 +693,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._dataTableSemaphore = new ScrollSemaphore();
         this._viewDataProvider = null;
         this._virtualSelectionState = null;
+        this._activeStateUnit = CELL_SELECTOR;
 
         super._init();
 

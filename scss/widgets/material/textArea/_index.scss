@@ -21,7 +21,7 @@ $textarea-top-padding:
     line-height: $textarea-content-line-height;
   }
 
-  .dx-placeholder:before {
+  .dx-placeholder::before {
     padding: ($textarea-content-padding + 3) $textarea-content-padding;
   }
 
@@ -30,7 +30,7 @@ $textarea-top-padding:
     margin-top: 0;
   }
 
-  &.dx-invalid .dx-texteditor-container:after {
+  &.dx-invalid .dx-texteditor-container::after {
     top: $textarea-top-padding;
     margin-top: 0;
   }

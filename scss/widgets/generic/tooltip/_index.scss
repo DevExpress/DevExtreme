@@ -17,7 +17,7 @@
   }
 
   &.dx-popover-wrapper .dx-popover-arrow {
-    &:after {
+    &::after {
       border: 1px solid $tooltip-border-color;
       background: $tooltip-bg;
     }

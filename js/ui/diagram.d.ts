@@ -483,6 +483,13 @@ export interface dxDiagramItem {
      */
     id?: string;
     /**
+     * @docid dxDiagramItem.key
+     * @type Object
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    key?: Object;
+    /**
      * @docid dxDiagramItem.itemType
      * @type Enums.DiagramItemType
      * @prevFileNamespace DevExpress.ui

@@ -33,8 +33,8 @@ $material-dateview-roller-padding: ($material-dateview-roller-height - $material
     display: none;
   }
 
-  .dx-scrollable-content:before,
-  .dx-scrollable-content:after {
+  .dx-scrollable-content::before,
+  .dx-scrollable-content::after {
     content: "";
     height: $material-dateview-roller-padding;
     display: block;
@@ -60,7 +60,7 @@ $material-dateview-roller-padding: ($material-dateview-roller-height - $material
 }
 
 .dx-dateviewroller-hours {
-  &:after {
+  &::after {
     content: ":";
     font-size: 2.2em;
     position: absolute;
@@ -96,7 +96,7 @@ $material-dateview-roller-padding: ($material-dateview-roller-height - $material
 
 .dx-rtl {
   &.dx-dateviewroller-hours {
-    &:after {
+    &::after {
       left: -9%;
       right: auto;
     }
@@ -108,8 +108,8 @@ $material-dateview-roller-padding: ($material-dateview-roller-height - $material
   top: $material-dateview-roller-padding;
   width: 100%;
 
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     backface-visibility: hidden;
     content: "";
     display: block;
@@ -118,13 +118,13 @@ $material-dateview-roller-padding: ($material-dateview-roller-height - $material
     height: $material-dateview-roller-padding;
   }
 
-  &:before {
+  &::before {
     top: -$material-dateview-roller-padding;
 
     @include gradient-linear($dateview-shadow-up);
   }
 
-  &:after {
+  &::after {
     top: $material-dateview-roller-item-height;
 
     @include gradient-linear($dateview-shadow-down);

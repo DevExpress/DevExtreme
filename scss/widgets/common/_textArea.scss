@@ -24,7 +24,7 @@
   .dx-placeholder {
     height: auto;
 
-    &:before {
+    &::before {
       white-space: normal;
     }
   }

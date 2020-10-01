@@ -268,7 +268,11 @@ const CustomStore = Store.inherit({
 
     _pushImpl: function(changes) {
         if(this.__rawData) {
-            applyBatch(this, this.__rawData, changes);
+            applyBatch({
+                keyInfo: this,
+                data: this.__rawData,
+                changes
+            });
         }
     },
 

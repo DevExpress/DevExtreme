@@ -971,6 +971,82 @@ module('events', () => {
         pointerMock($slider).start().move(250 + $slider.offset().left).down();
     });
 
+    test('swipe should raise valueChange event with "swipe" event type', function(assert) {
+        assert.expect(1);
+
+        const $slider = $('#slider').dxSlider({
+            max: 500,
+            min: 0,
+            value: 0,
+            onValueChanged: function(data) {
+                assert.strictEqual(data.event.event.type, 'dxswipe', 'event type is correct');
+            },
+            useInkRipple: false
+        }).css('width', 500);
+
+        const $handle = $slider.find('.' + SLIDER_WRAPPER_CLASS);
+        const pointer = pointerMock($handle);
+        pointer.start().swipeStart().swipe(10);
+    });
+
+    test('event should be passed to valueChange correctly when "swipeend" event is triggered', function(assert) {
+        assert.expect(1);
+
+        const $slider = $('#slider').dxSlider({
+            max: 500,
+            min: 0,
+            value: 0,
+            onValueChanged: function(data) {
+                assert.strictEqual(data.event.event.type, 'dxswipeend', 'event type is correct');
+            },
+            useInkRipple: false
+        }).css('width', 500);
+
+        const $handle = $slider.find('.' + SLIDER_WRAPPER_CLASS);
+        const pointer = pointerMock($handle);
+        pointer.start().swipeStart().swipeEnd(9.666692444513187);
+    });
+
+    test('click on slider scale should raise valueChange event with "pointerdown" event type', function(assert) {
+        assert.expect(1);
+
+        const $slider = $('#slider').dxSlider({
+            max: 500,
+            min: 0,
+            value: 0,
+            onValueChanged: function(data) {
+                assert.strictEqual(data.event.type, 'dxpointerdown', 'event type is correct');
+            },
+            useInkRipple: false
+        }).css('width', 500);
+
+        pointerMock($slider).start().move(250 + $slider.offset().left).down();
+    });
+
+    test('value option change after swipe should raise valueChanged event with no event (T926119)', function(assert) {
+        assert.expect(2);
+
+        const $slider = $('#slider').dxSlider({
+            max: 500,
+            min: 0,
+            value: 0,
+            useInkRipple: false,
+            onValueChanged: (data) => {
+                assert.strictEqual(data.event.event.type, 'dxswipe', 'valueChange with event type "swipe" has been raised');
+            }
+        }).css('width', 500);
+        const slider = $slider.dxSlider('instance');
+
+        const $handle = $slider.find('.' + SLIDER_WRAPPER_CLASS);
+        const pointer = pointerMock($handle);
+        pointer.start().swipeStart().swipe(10).swipeEnd(9.666692444513187);
+
+        slider.option('onValueChanged', (data) => {
+            assert.strictEqual(data.event, undefined, 'no event has been passed to valueChanged event after option change');
+        });
+        slider.option('value', 0);
+    });
+
     test('Changing the \'value\' option must invoke the \'onValueChanged\' action', function(assert) {
         const slider = $('#slider').dxSlider({
             onValueChanged: function() { assert.ok(true); },
@@ -1008,14 +1084,17 @@ module('focus policy', moduleOptions, () => {
 
 module('keyboard navigation', moduleOptions, () => {
     test('control keys test', function(assert) {
-        assert.expect(2);
+        assert.expect(4);
 
         const $slider = $('#slider').dxSlider({
             min: 10,
             max: 90,
             value: 50,
             focusStateEnabled: true,
-            useInkRipple: false
+            useInkRipple: false,
+            onValueChanged: (data) => {
+                assert.strictEqual(data.event.type, 'keydown', 'correct event has been passed to valueChanged');
+            }
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
@@ -1061,7 +1140,7 @@ module('keyboard navigation', moduleOptions, () => {
     });
 
     test('pageUp/pageDown keys test', function(assert) {
-        assert.expect(4);
+        assert.expect(8);
 
         const $slider = $('#slider').dxSlider({
             min: 10,
@@ -1069,7 +1148,10 @@ module('keyboard navigation', moduleOptions, () => {
             value: 50,
             keyStep: 1,
             focusStateEnabled: true,
-            useInkRipple: false
+            useInkRipple: false,
+            onValueChanged: (data) => {
+                assert.strictEqual(data.event.type, 'keydown', 'correct event has been passed to valueChanged');
+            }
         });
         const slider = $slider.dxSlider('instance');
         const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
@@ -1091,6 +1173,34 @@ module('keyboard navigation', moduleOptions, () => {
 
         keyboard.keyDown('pageDown');
         assert.equal(slider.option('value'), 50, 'value is correct after pageDown press');
+    });
+
+
+    test('home/end keys test', function(assert) {
+        assert.expect(4);
+
+        const $slider = $('#slider').dxSlider({
+            min: 0,
+            max: 50,
+            value: 25,
+            keyStep: 1,
+            focusStateEnabled: true,
+            useInkRipple: false,
+            onValueChanged: (data) => {
+                assert.strictEqual(data.event.type, 'keydown', 'correct event has been passed to valueChanged');
+            }
+        });
+        const slider = $slider.dxSlider('instance');
+        const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
+        const keyboard = keyboardMock($handle);
+
+        $handle.trigger('focusin');
+
+        keyboard.keyDown('end');
+        assert.equal(slider.option('value'), 50, 'value is correct after end press');
+
+        keyboard.keyDown('home');
+        assert.equal(slider.option('value'), 0, 'value is correct after home press');
     });
 
     test('control keys test for rtl', function(assert) {

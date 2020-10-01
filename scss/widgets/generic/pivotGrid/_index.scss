@@ -63,7 +63,7 @@
   .dx-expand-icon-container {
     @include dx-icon(spinright);
 
-    &:before {
+    &::before {
       visibility: hidden;
     }
   }

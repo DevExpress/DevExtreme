@@ -810,7 +810,7 @@ QUnit.module('Appointment filtering', function() {
             { y: 300, expectedIndices: [2] },
             { y: 900, expectedIndices: [5] },
             { y: 1700, expectedIndices: [4, 5] },
-            { y: 2400, expectedIndices: [5, 1] },
+            { y: 2400, expectedIndices: [1, 5] },
             { y: 2700, expectedIndices: [1] },
             { y: 3000, expectedIndices: [] },
             { y: 3300, expectedIndices: [3] },
@@ -849,90 +849,47 @@ QUnit.module('Appointment filtering', function() {
             });
         });
 
-        [
-            { y: 4300, expectedIndices: [] },
-            { y: 3300, expectedIndices: [3] },
-            { y: 3000, expectedIndices: [] },
-            { y: 2700, expectedIndices: [1] },
-            { y: 2400, expectedIndices: [5, 1] },
-            { y: 1700, expectedIndices: [4, 5] },
-            { y: 900, expectedIndices: [5] },
-            { y: 300, expectedIndices: [2] },
-            { y: 0, expectedIndices: [0, 2] }
-        ].forEach(option => {
-            QUnit.test(`Scrolling Up if groups, resources, groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
-                const { expectedIndices } = option;
-
+        [0, 300, 900, 1700, 2400, 2700, 3000, 3300, 4300 ].forEach(scrollY => {
+            QUnit.test(`Next day appointments should be filtered if grouping, groupOrientation: 'vertical', scrollY: ${scrollY}`, function(assert) {
                 this.createInstance({
                     groups: ['resourceId0'],
+                    dataSource: [{
+                        startDate: new Date(2016, 9, 6, 23),
+                        endDate: new Date(2016, 9, 6, 23, 23),
+                        resourceId0: 0,
+                        text: 'test_00'
+                    }, {
+                        startDate: new Date(2016, 9, 6, 23),
+                        endDate: new Date(2016, 9, 6, 23, 23),
+                        resourceId0: 1,
+                        text: 'test_10'
+                    }],
                     resources: [{
                         fieldExpr: 'resourceId0',
                         dataSource: [
                             { text: 'Rc0_0', id: 0, color: '#727bd2' },
-                            { text: 'Rc0_1', id: 1, color: '#32c9ed' },
+                            { text: 'Rc0_1', id: 1, color: '#32c9ed' }
                         ],
                         label: 'Resource0'
                     }],
                 });
 
-                const { instance } = this;
+                try {
+                    const { instance } = this;
 
-                instance.getWorkSpaceScrollable().scrollTo({ y: option.y });
+                    instance.getWorkSpaceScrollable().scrollTo({ y: scrollY });
 
-                checkResultByDeviceType(assert, () => {
-                    const filteredItems = instance.getFilteredItems();
-
-                    assert.equal(filteredItems.length, expectedIndices.length, 'Filtered items length is correct');
-
-                    filteredItems.forEach((_, index) => {
-                        const expected = this.data[expectedIndices[index]];
-                        assert.deepEqual(filteredItems[index], expected, `Filtered item ${index} is correct`);
-                    });
-                });
-            });
-
-            [0, 300, 900, 1700, 2400, 2700, 3000, 3300, 4300 ].forEach(scrollY => {
-                QUnit.test(`Next day appointments should be filtered if grouping, groupOrientation: 'vertical', scrollY: ${scrollY}`, function(assert) {
-                    this.createInstance({
-                        groups: ['resourceId0'],
-                        dataSource: [{
-                            startDate: new Date(2016, 9, 6, 23),
-                            endDate: new Date(2016, 9, 6, 23, 23),
-                            resourceId0: 0,
-                            text: 'test_00'
-                        }, {
-                            startDate: new Date(2016, 9, 6, 23),
-                            endDate: new Date(2016, 9, 6, 23, 23),
-                            resourceId0: 1,
-                            text: 'test_10'
-                        }],
-                        resources: [{
-                            fieldExpr: 'resourceId0',
-                            dataSource: [
-                                { text: 'Rc0_0', id: 0, color: '#727bd2' },
-                                { text: 'Rc0_1', id: 1, color: '#32c9ed' }
-                            ],
-                            label: 'Resource0'
-                        }],
+                    checkResultByDeviceType(assert, () => {
+                        assert.equal(
+                            instance.getFilteredItems().length,
+                            0,
+                            'Filtered items length is correct'
+                        );
                     });
 
-                    try {
-                        const { instance } = this;
-
-                        instance.getWorkSpaceScrollable().scrollTo({ y: scrollY });
-
-                        checkResultByDeviceType(assert, () => {
-                            assert.equal(
-                                instance.getFilteredItems().length,
-                                0,
-                                'Filtered items length is correct'
-                            );
-                        });
-
-                    } catch(e) {
-                        assert.ok(false, `Exception: ${e.message}`);
-                    }
-                });
+                } catch(e) {
+                    assert.ok(false, `Exception: ${e.message}`);
+                }
             });
         });
     });

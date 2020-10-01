@@ -28,7 +28,7 @@ describe('Small pager pages', () => {
 
   it('View', () => {
     const pageIndexRef = createRef();
-    const props = { pageCount: 100, rtlEnabled: true } as PagesSmall['props'];
+    const props = { pageCount: 100 } as PagesSmall['props'];
     const viewProps = {
       valueChange: jest.fn(),
       width: 40,
@@ -45,7 +45,7 @@ describe('Small pager pages', () => {
 
     expect(pageIndexNumberBox.instance()).toBe(pageIndexRef.current);
     expect(pageIndexNumberBox.props()).toMatchObject({
-      className: 'dx-page-index', max: 100, min: 1, value: 3, rtlEnabled: true, valueChange: viewProps.valueChange, width: 40,
+      className: 'dx-page-index', max: 100, min: 1, value: 3, valueChange: viewProps.valueChange, width: 40,
     });
     expect(span.html()).toBe('<span class="dx-info  dx-info-text">of</span>');
     expect(maxPage.props()).toMatchObject({

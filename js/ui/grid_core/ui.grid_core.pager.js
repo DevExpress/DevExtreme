@@ -182,7 +182,7 @@ export default {
                 showPageSizeSelector: false,
                 /**
                  * @name GridBaseOptions.pager.allowedPageSizes
-                 * @type Array<number,Enums.GridPagerPageSize>|Enums.Mode
+                 * @type Array<number>|Enums.Mode
                  * @default "auto"
                 */
                 allowedPageSizes: 'auto'
@@ -202,8 +202,8 @@ export default {
                  * @default "Page {0} of {1} ({2} items)"
                  */
                 /**
-                 * @name GridBaseOptions.pager.displayMode
-                 * @type Enums.GridPagerDisplayMode
+                 * name GridBaseOptions.pager.displayMode
+                 * type Enums.GridPagerDisplayMode
                 */
             }
         };

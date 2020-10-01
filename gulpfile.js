@@ -23,8 +23,12 @@ require('./build/gulp/ts');
 require('./build/gulp/localization');
 require('./build/gulp/style-compiler');
 require('./build/gulp/generator/gulpfile');
-require('./build/gulp/create_timezones_data');
-require('./build/gulp/test_timezones_data');
+require('./build/gulp/check_licenses');
+
+if(!env.TEST_CI && !env.DOCKER_CI) {
+    require('./build/gulp/create_timezones_data');
+    require('./build/gulp/test_timezones_data');
+}
 
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
@@ -65,6 +69,7 @@ function createDefaultBatch(useRenovation) {
         tasks.push('npm');
         useRenovation && tasks.push('renovation-npm');
         tasks.push('themebuilder-npm');
+        tasks.push('check-license-notices');
     }
     return gulp.series(tasks);
 }

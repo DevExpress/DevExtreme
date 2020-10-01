@@ -23,7 +23,7 @@
       }
     }
 
-    &:after {
+    &::after {
       left: $material-colorbox-preview-left + 1;
     }
   }

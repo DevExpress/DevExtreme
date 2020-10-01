@@ -356,6 +356,7 @@ const DropDownEditor = TextBox.inherit({
         this._refreshEvents();
         this._refreshValueChangeEvent();
         this._renderFocusState();
+        this._refreshEmptinessEvent();
     },
 
     _refreshEmptinessEvent: function() {
@@ -560,19 +561,15 @@ const DropDownEditor = TextBox.inherit({
     _popupShownHandler: function() {
         this._openAction();
 
-        if(this._$validationMessage) {
-            this._$validationMessage.dxOverlay('option', 'position', this._getValidationMessagePosition());
-        }
+        this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
     },
 
     _popupHiddenHandler: function() {
         this._closeAction();
-        if(this._$validationMessage) {
-            this._$validationMessage.dxOverlay('option', 'position', this._getValidationMessagePosition());
-        }
+        this._validationMessage?.option('positionRequest', this._getValidationMessagePositionRequest());
     },
 
-    _getValidationMessagePosition: function() {
+    _getValidationMessagePositionRequest: function() {
         let positionRequest = 'below';
 
         if(this._popup && this._popup.option('visible')) {
@@ -582,7 +579,7 @@ const DropDownEditor = TextBox.inherit({
             positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'below' : 'above';
         }
 
-        return this.callBase(positionRequest);
+        return positionRequest;
     },
 
     _closeOutsideDropDownHandler: function({ target }) {

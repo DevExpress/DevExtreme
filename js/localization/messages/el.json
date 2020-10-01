@@ -122,7 +122,7 @@
         "dxDataGrid-sortingClearText": "Εκκαθάριση ταξινόμισης",
         "dxDataGrid-editingSaveAllChanges": "Αποθήκευση αλλαγών",
         "dxDataGrid-editingCancelAllChanges": "Απόρριψη αλλαγών",
-        "dxDataGrid-editingAddRow": "Προσθήλη γραμμής",
+        "dxDataGrid-editingAddRow": "Προσθήκη γραμμής",
         "dxDataGrid-summaryMin": "Min: {0}",
         "dxDataGrid-summaryMinOtherColumn": "Min of {1} is {0}",
         "dxDataGrid-summaryMax": "Max: {0}",
@@ -293,6 +293,9 @@
         "dxHtmlEditor-dialogImageAltField": "Εναλλακτικό κείμενο",
         "dxHtmlEditor-dialogImageWidthField": "Πλάτος (px)",
         "dxHtmlEditor-dialogImageHeightField": "Υψος (px)",
+        "dxHtmlEditor-dialogInsertTableRowsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableColumnsField": "!TODO",
+        "dxHtmlEditor-dialogInsertTableCaption": "!TODO",
         "dxHtmlEditor-heading": "Επικεφαλίδα",
         "dxHtmlEditor-normalText": "Κανονικό κείμενο",
 

@@ -31,7 +31,7 @@
   cursor: text;
   pointer-events: none;
 
-  &:before {
+  &::before {
     display: inline-block;
     vertical-align: middle;
     max-width: 100%;
@@ -42,7 +42,7 @@
     white-space: nowrap;
   }
 
-  &:after {
+  &::after {
     content: ' ';
     display: inline-block;
     height: 100%;

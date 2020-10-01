@@ -119,7 +119,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   height: $generic-scheduler-header-panel-table-cell-height;
 
   &.dx-scheduler-header-panel-current-time-cell {
-    &:before {
+    &::before {
       top: $generic-scheduler-header-panel-table-cell-height - $generic-scheduler-current-time-cell-border-size - 1;
       height: $generic-scheduler-current-time-cell-border-size;
     }
@@ -246,19 +246,19 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     &.dx-tab-selected {
       background-color: $scheduler-tab-selected-bg;
 
-      &:before {
+      &::before {
         background-color: $scheduler-tab-selected-before-bg;
       }
     }
 
-    &.dx-state-focused:after {
+    &.dx-state-focused::after {
       border-left: baseScheduler.$scheduler-base-border;
       border-right: baseScheduler.$scheduler-base-border;
       border-top: $generic-scheduler-focused-tab-border;
       border-bottom: none;
     }
 
-    &.dx-tab-selected:after {
+    &.dx-tab-selected::after {
       height: $generic-scheduler-header-height;
     }
   }
@@ -458,7 +458,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   }
 
   &.dx-state-hover {
-    &:before {
+    &::before {
       border-radius: $generic-scheduler-appointment-collector-height;
     }
   }
@@ -530,7 +530,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
       padding-bottom: $generic-scheduler-header-panel-table-cell-height * 2 + $generic-scheduler-header-panel-top-gap;
       margin-bottom: -($generic-scheduler-header-panel-table-cell-height * 2 + $generic-scheduler-header-panel-top-gap);
 
-      &:before {
+      &::before {
         height: $generic-scheduler-header-panel-table-cell-height * 2 + $generic-scheduler-header-panel-top-gap + 1;
         margin-top: -($generic-scheduler-header-panel-table-cell-height * 2 + $generic-scheduler-header-panel-top-gap + 1);
       }
@@ -547,7 +547,7 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
   .dx-scheduler-all-day-title {
     background-color: $scheduler-alldaypanel-bg;
 
-    &:before {
+    &::before {
       background-color: $scheduler-workspace-background-color,;
     }
   }

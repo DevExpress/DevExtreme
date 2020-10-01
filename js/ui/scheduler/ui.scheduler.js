@@ -2099,7 +2099,7 @@ class Scheduler extends Widget {
         const adapter = this.createAppointmentAdapter(appointment);
         const targetedAdapter = adapter.clone();
 
-        const isRecurrenceAppointment = adapter.recurrenceRule && getRecurrenceProcessor().evalRecurrenceRule(adapter.recurrenceRule).isValid;
+        const isRecurrenceAppointment = adapter.recurrenceRule && getRecurrenceProcessor().isValidRecurrenceRule(adapter.recurrenceRule);
 
         if(this._isAgenda() && isRecurrenceAppointment) {
             const getStartDate = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
@@ -2505,7 +2505,7 @@ const getTimeZones = (date) => {
         date = new Date();
     }
 
-    const dateInUTC = timeZoneUtils.createUTCDate(date);
+    const dateInUTC = timeZoneUtils.createUTCDateWithLocalOffset(date);
     return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
 };
 /**

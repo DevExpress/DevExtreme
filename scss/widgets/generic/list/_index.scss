@@ -135,14 +135,14 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
       .dx-list-item,
       .dx-list-select-all {
         &.dx-state-hover {
-          .dx-radiobutton-icon:before,
+          .dx-radiobutton-icon::before,
           .dx-checkbox-icon {
             border-color: $checkbox-hover-border-color;
           }
         }
 
         &.dx-state-focused {
-          .dx-radiobutton-icon:before,
+          .dx-radiobutton-icon::before,
           .dx-checkbox-icon {
             border: 1px solid $checkbox-focused-borderd-color;
           }
@@ -169,11 +169,11 @@ $generic-list-search-editor-height: round($generic-base-line-height * $generic-b
       border-top: none;
     }
 
-    &:before {
+    &::before {
       border-top-color: $list-group-color;
     }
 
-    .dx-list-group-collapsed &:before {
+    .dx-list-group-collapsed &::before {
       border-bottom-color: $list-group-color;
     }
   }

@@ -19,7 +19,7 @@ gulp.task('create-timezones-data', () => {
             file.contents = Buffer.from('export default ' + stringify);
             callBack(null, file);
         }))
-        .pipe(rename('ui.scheduler.timezones_data.js'))
+        .pipe(rename('timezones_data.js'))
         .pipe(lint({
             fix: true,
             configFile: './.eslintrc'

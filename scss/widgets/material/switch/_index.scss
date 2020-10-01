@@ -30,18 +30,18 @@ $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color
 
   &.dx-state-readonly,
   &.dx-state-disabled {
-    .dx-switch-handle:before {
+    .dx-switch-handle::before {
       background-color: $switch-handle-disabled-bg;
     }
 
-    .dx-switch-container:before {
+    .dx-switch-container::before {
       background-color: color.change($base-text-color, $alpha: 0.12);
     }
   }
 
   &.dx-state-active,
   &.dx-state-focused {
-    .dx-switch-handle:before {
+    .dx-switch-handle::before {
       box-shadow: $material-switch-shadow;
       border-radius: 50%;
     }
@@ -51,7 +51,7 @@ $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color
 .dx-switch-on-value,
 .dx-switch {
   &.dx-state-readonly.dx-state-focused {
-    .dx-switch-handle:before {
+    .dx-switch-handle::before {
       box-shadow: $material-switch-shadow;
       border-radius: 50%;
     }
@@ -63,7 +63,7 @@ $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color
   overflow: visible;
   position: relative;
 
-  &:before {
+  &::before {
     position: absolute;
     content: '';
     width: 100%;
@@ -112,7 +112,7 @@ $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color
   box-shadow: $material-switch-handle-shadow;
   border-radius: $switch-handle-border-radius;
 
-  &:before {
+  &::before {
     display: block;
     content: ' ';
     width: 100%;
@@ -124,17 +124,17 @@ $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color
 }
 
 .dx-switch-on-value {
-  .dx-switch-container:before {
+  .dx-switch-container::before {
     background-color: $switch-on-bg;
   }
 
-  .dx-switch-handle:before {
+  .dx-switch-handle::before {
     background-color: $switch-handle-on-bg;
   }
 
   &.dx-state-active,
   &.dx-state-focused {
-    .dx-switch-handle:before {
+    .dx-switch-handle::before {
       box-shadow: $material-on-value-switch-shadow;
       border-radius: 50%;
     }
@@ -171,19 +171,19 @@ $material-invalid-switch-shadow: 0 0 0 $material-switch-shadow-blur-radius color
 
 .dx-invalid {
   &.dx-switch {
-    .dx-switch-container:before {
+    .dx-switch-container::before {
       background-color: $switch-invalid-container-bg;
     }
   }
 
   &.dx-switch-on-value:not(.dx-state-readonly):not(.dx-state-disabled) {
-    .dx-switch-container .dx-switch-handle:before {
+    .dx-switch-container .dx-switch-handle::before {
       background-color: $switch-invalid-handle-bg;
     }
 
     &.dx-state-active,
     &.dx-state-focused {
-      .dx-switch-container .dx-switch-handle:before {
+      .dx-switch-container .dx-switch-handle::before {
         box-shadow: $material-invalid-switch-shadow;
       }
     }

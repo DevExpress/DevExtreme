@@ -1469,26 +1469,37 @@ module('deleting of items', () => {
         });
     });
 
-    test('deleteItem should trigger delete callback only once with correct itemData', function(assert) {
+    test('onDeleteItem should trigger delete callback only once with correct itemData', function(assert) {
         const item = '0';
-        let deleteActionFlag = 0;
-        let deletedItem = null;
+        const deleteActionSpy = sinon.spy();
 
         const $element = $('#cmp');
         const instance = new TestComponent($element, {
             items: [item],
-            onItemDeleted: function(e) {
-                deleteActionFlag++;
-                deletedItem = e.itemData;
-                assert.equal(e.itemIndex, 0, 'correct index specified');
-            }
+            onItemDeleted: deleteActionSpy
         });
 
         instance.deleteItem(instance.itemElements().eq(0));
 
-        assert.ok(deleteActionFlag > 0, 'onItemDeleted triggered');
-        assert.strictEqual(deleteActionFlag, 1, 'onItemDeleted triggered 1 time');
-        assert.strictEqual(item, deletedItem, 'item equals selected item');
+        assert.strictEqual(deleteActionSpy.callCount, 1, 'itemDeleted triggered 1 time');
+        assert.strictEqual(item, deleteActionSpy.firstCall.args[0].itemData, 'item equals selected item');
+    });
+
+    test('deleteItem event should trigger delete callback only once with correct itemData', function(assert) {
+        const item = '0';
+        const deleteActionSpy = sinon.spy();
+
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: [item]
+        });
+
+        instance.on('itemDeleted', deleteActionSpy);
+
+        instance.deleteItem(instance.itemElements().eq(0));
+
+        assert.strictEqual(deleteActionSpy.callCount, 1, 'itemDeleted triggered 1 time');
+        assert.strictEqual(item, deleteActionSpy.firstCall.args[0].itemData, 'item equals selected item');
     });
 
     test('deleteItem should not process item which is not presented', function(assert) {
@@ -1544,6 +1555,32 @@ module('deleting of items', () => {
             assert.deepEqual(args.value, [items[0]], 'correct option value');
         });
         instance.deleteItem(1);
+    });
+
+    test('onItemDeleting should be fired', function(assert) {
+        const itemDeletingSpy = sinon.spy();
+        const instance = new TestComponent($('#cmp'), {
+            items: [0],
+            onItemDeleting: itemDeletingSpy
+        });
+
+        const $item = instance.itemElements().eq(0);
+        instance.deleteItem($item);
+
+        assert.strictEqual(itemDeletingSpy.callCount, 1, 'item not removed');
+    });
+
+    test('itemDeleting event should be fired', function(assert) {
+        const itemDeletingSpy = sinon.spy();
+        const instance = new TestComponent($('#cmp'), {
+            items: [0]
+        });
+
+        instance.on('itemDeleting', itemDeletingSpy);
+        const $item = instance.itemElements().eq(0);
+        instance.deleteItem($item);
+
+        assert.strictEqual(itemDeletingSpy.callCount, 1, 'item not removed');
     });
 
     test('item should not be deleted if \'cancel\' flag in onItemDeleting is true', function(assert) {
@@ -2119,6 +2156,27 @@ module('reordering of items', () => {
                 assert.equal(args.fromIndex, 0, 'correct from index');
                 assert.equal(args.toIndex, 1, 'correct to index');
             }
+        });
+
+        const item = function(index) {
+            return instance.itemElements().eq(index).get(0);
+        };
+
+        instance.reorderItem(item(0), item(1));
+    });
+
+    test('itemReordered event should be fired if items reordered', function(assert) {
+        const items = [{ a: 0 }, { a: 1 }];
+
+        const $element = $('#cmp');
+        const instance = new TestComponent($element, {
+            items: items
+        });
+
+        instance.on('itemReordered', (args) => {
+            assert.equal($(args.itemElement).get(0), item(1), 'correct item element');
+            assert.equal(args.fromIndex, 0, 'correct from index');
+            assert.equal(args.toIndex, 1, 'correct to index');
         });
 
         const item = function(index) {

@@ -261,6 +261,9 @@
         "dxHtmlEditor-dialogImageAltField": "Альтернативный текст",
         "dxHtmlEditor-dialogImageWidthField": "Ширина (px)",
         "dxHtmlEditor-dialogImageHeightField": "Высота (px)",
+        "dxHtmlEditor-dialogInsertTableRowsField": "Строки",
+        "dxHtmlEditor-dialogInsertTableColumnsField": "Колонки",
+        "dxHtmlEditor-dialogInsertTableCaption": "Вставить таблицу",
         "dxHtmlEditor-heading": "Заголовок",
         "dxHtmlEditor-normalText": "Обычный текст",
 

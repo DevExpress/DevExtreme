@@ -77,7 +77,6 @@ describe('Pager size selector', () => {
         },
       ],
       pageSizeChange: props.props?.pageSizeChange,
-      rtlEnabled: false,
       parentRef: props.htmlRef,
     });
   });

@@ -666,7 +666,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
             if(_isDefined(selectedRangeUpdateMode)) {
                 selectedRangeUpdateMode = _normalizeEnum(selectedRangeUpdateMode);
                 that.__skipAnimation = true;
-            } else if(valueIsReady) { // T696409
+            } else if(valueIsReady && !that._dataSourceIsAsync) { // T696409 T930471
                 selectedRangeUpdateMode = RESET;
             }
 
@@ -692,6 +692,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
                 that.__skipAnimation = true;
             }
         }
+        that._dataSourceIsAsync = undefined;
     },
 
     _change_DATA_SOURCE: function() {
@@ -716,6 +717,7 @@ const dxRangeSelector = baseWidgetModule.inherit({
     _change_VALUE: function() {
         const that = this;
         const option = that._rangeOption;
+        that._dataSourceIsAsync = !that._dataIsReady();
         if(option) {
             that._options.silent(VALUE, option);
             that.setValue(option);

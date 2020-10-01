@@ -65,6 +65,25 @@ describe('NumberBox', () => {
         expect(properties.disabled).toStrictEqual(true);
       });
 
+      describe('rtlEnabled', () => {
+        it('get from props', () => {
+          const component = new NumberBox({ rtlEnabled: true });
+          component.config = { rtlEnabled: false };
+          expect(component.properties.rtlEnabled).toBe(true);
+        });
+
+        it('get from context', () => {
+          const component = new NumberBox({ });
+          component.config = { rtlEnabled: true };
+          expect(component.properties.rtlEnabled).toBe(true);
+        });
+
+        it('should be undefined', () => {
+          const component = new NumberBox({ });
+          expect(component.properties.rtlEnabled).toBeUndefined();
+        });
+      });
+
       it('default onValueChange', () => {
         const component = new NumberBox(new NumberBoxProps());
 

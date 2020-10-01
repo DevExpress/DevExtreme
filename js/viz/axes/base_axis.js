@@ -624,12 +624,12 @@ Axis.prototype = {
         return offset + additionalOffset + (additionalOffset && that._options.label.indentFromAxis) + (positionsAreConsistent ? maxSize.offset : 0);
     },
 
-    _getLabelAdjustedCoord: function(tick, offset, maxWidth, _checkCanvas, templateBox) {
+    _getLabelAdjustedCoord: function(tick, offset, maxWidth) {
         offset = offset || 0;
         const that = this;
         const options = that._options;
-
-        const box = templateBox || rotateBBox(tick.labelBBox, [tick.labelCoords.x, tick.labelCoords.y], -tick.labelRotationAngle || 0);
+        const templateBox = tick.templateContainer && tick.templateContainer.getBBox();
+        const box = templateBox || rotateBBox(tick.labelBBox, [ tick.labelCoords.x, tick.labelCoords.y ], -tick.labelRotationAngle || 0);
         const textAlign = tick.labelAlignment || options.label.alignment;
         const isDiscrete = that._options.type === 'discrete';
         const isFlatLabel = tick.labelRotationAngle % 90 === 0;
@@ -2596,10 +2596,11 @@ Axis.prototype = {
                 }
                 step = notRecastStep ? step : that._getStep(boxes, angle);
                 func = function(tick) {
-                    if(!tick.label) {
+                    const contentContainer = tick.getContentContainer();
+                    if(!contentContainer) {
                         return;
                     }
-                    tick.label.rotate(angle);
+                    contentContainer.rotate(angle);
                     tick.labelRotationAngle = angle;
                     alignment && (tick.labelAlignment = alignment);
                 };

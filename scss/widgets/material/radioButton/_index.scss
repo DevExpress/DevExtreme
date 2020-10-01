@@ -17,7 +17,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
   height: $material-radiobutton-size;
   position: relative;
 
-  &:after {
+  &::after {
     content: "";
     width: $material-radiobutton-ripple-size;
     height: $material-radiobutton-ripple-size;
@@ -33,7 +33,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
     transition: $material-radiobutton-ripple-transition;
   }
 
-  &:before {
+  &::before {
     display: block;
     width: $material-radiobutton-inner-size;
     height: $material-radiobutton-inner-size;
@@ -46,7 +46,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
 }
 
 .dx-radiobutton-icon-checked {
-  &:before {
+  &::before {
     border-color: $radiogroup-checked-bg;
   }
 
@@ -67,7 +67,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
 
   &.dx-state-active,
   &.dx-state-focused {
-    .dx-radiobutton-icon:after {
+    .dx-radiobutton-icon::after {
       background-color: color.change($base-text-color, $alpha: 0.1);
       transform: scale(1);
     }
@@ -76,7 +76,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
   &.dx-radiobutton-checked {
     &.dx-state-active,
     &.dx-state-focused {
-      .dx-radiobutton-icon-checked:after {
+      .dx-radiobutton-icon-checked::after {
         background-color: color.change($radiogroup-checked-bg, $alpha: 0.1);
         transform: scale(1);
       }
@@ -94,13 +94,13 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
     background-color: $radiogroup-border-color;
   }
 
-  .dx-radiobutton-icon:before {
+  .dx-radiobutton-icon::before {
     border-color: $radiogroup-border-color;
   }
 }
 
 .dx-invalid {
-  .dx-radiobutton-icon:before {
+  .dx-radiobutton-icon::before {
     border-color: $radiobutton-invalid-faded-border-color;
   }
 
@@ -111,7 +111,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
   .dx-state-active,
   .dx-state-focused {
     &.dx-radiobutton {
-      .dx-radiobutton-icon:before {
+      .dx-radiobutton-icon::before {
         border-color: $radiobutton-invalid-focused-border-color;
       }
 
@@ -119,7 +119,7 @@ $material-radiobutton-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1)
         background-color: $radiobutton-invalid-focused-border-color;
       }
 
-      .dx-radiobutton-icon:after {
+      .dx-radiobutton-icon::after {
         background-color: color.change($radiobutton-invalid-focused-border-color, $alpha: 0.1);
         transform: scale(1);
       }

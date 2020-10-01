@@ -13,6 +13,7 @@ import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 import 'ui/popup';
 import 'ui/tab_panel';
 
@@ -418,7 +419,7 @@ QUnit.module('dimensions', {
         const $popupContent = instance.$content();
         const $popupBottom = $popupContent.parent().find('.dx-popup-bottom');
 
-        assert.equal($popupContent.outerHeight() + $popupBottom.outerHeight(true), $popupContent.outerHeight(true), 'content doesn\'t overlap bottom buttons');
+        assert.equal($popupContent.offset().top + $popupContent.outerHeight(), $popupBottom.offset().top, 'content doesn\'t overlap bottom buttons');
         devices.current(devices.real());
     });
 
@@ -609,6 +610,7 @@ QUnit.module('options changed callbacks', {
 
     QUnit.test('popup height can be changed according to the content if height = auto', function(assert) {
         const $content = $('<div>').attr('id', 'content');
+        const minHeight = 100;
         const popup = $('#popup').dxPopup({
             visible: true,
             showTitle: true,
@@ -616,7 +618,7 @@ QUnit.module('options changed callbacks', {
             height: 'auto',
             contentTemplate: () => $content.append($('<div>').height(50)),
             maxHeight: 400,
-            minHeight: 50
+            minHeight: minHeight
         }).dxPopup('instance');
 
         const $popup = $(popup.content()).parent(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
@@ -626,26 +628,28 @@ QUnit.module('options changed callbacks', {
         assert.strictEqual($popup.height(), (popupHeight + 50), 'popup height has been changed (except IE11)');
 
         $('<div>').height(450).appendTo($content);
-        assert.strictEqual($popup.height(), 400, 'popup height has been changed, it is equal to the maxHeight');
+        assert.strictEqual($popup.outerHeight(), 400, 'popup height has been changed, it is equal to the maxHeight');
 
         $content.empty();
-        assert.strictEqual($popup.height(), 50, 'popup height has been changed, it is equal to the minHeight');
+        assert.strictEqual($popup.outerHeight(), minHeight, 'popup height has been changed, it is equal to the minHeight');
 
         popup.option('autoResizeEnabled', false);
         $('<div>').height(450).appendTo($content);
-        assert.strictEqual($popup.height(), 50, 'popup height does not change if autoResizeEnabled = false');
+        assert.strictEqual($popup.outerHeight(), minHeight, 'popup height does not change if autoResizeEnabled = false');
 
         popup.option('autoResizeEnabled', true);
-        assert.strictEqual($popup.height(), 400, 'popup height has been changed after \'autoResizeEnabled\' change');
+        assert.strictEqual($popup.outerHeight(), 400, 'popup height has been changed after \'autoResizeEnabled\' change');
 
         popup.option('width', 'auto');
         $content.empty();
 
-        assert.strictEqual($popup.height(), (IS_IE11 ? 400 : 50), 'popup with auto width can change height (except IE11)');
+        assert.strictEqual($popup.outerHeight(), (IS_IE11 ? 400 : minHeight), 'popup with auto width can change height (except IE11)');
     });
 
     QUnit.test('popup height should support top and bottom toolbars if height = auto', function(assert) {
         const $content = $('<div>').attr('id', 'content');
+        const minHeight = 170;
+        const maxHeight = 400;
         const popup = $('#popup').dxPopup({
             visible: true,
             height: 'auto',
@@ -653,20 +657,21 @@ QUnit.module('options changed callbacks', {
             title: 'Information',
             toolbarItems: [{ shortcut: 'cancel' }],
             contentTemplate: () => $content,
-            maxHeight: 300,
-            minHeight: 150
+            maxHeight: maxHeight,
+            minHeight: minHeight
         }).dxPopup('instance');
 
         const $popup = popup.$content().parent();
         const $popupContent = popup.$content();
-        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight();
-        const bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).innerHeight();
+        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).outerHeight();
+        const bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).outerHeight();
         const popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
+        const popupBordersHeight = parseInt($popup.css('borderTopWidth')) + parseInt($popup.css('borderBottomWidth'));
 
-        let popupContentHeight = $popupContent.innerHeight();
+        let popupContentHeight = $popupContent.outerHeight();
 
-        assert.strictEqual($popup.innerHeight(), 150, 'popup has max height');
-        assert.strictEqual(popupContentHeight, 150 - topToolbarHeight - bottomToolbarHeight, 'popup has minimum content height');
+        assert.strictEqual($popup.outerHeight(), minHeight, 'popup has max height');
+        assert.strictEqual(popupContentHeight, minHeight - topToolbarHeight - bottomToolbarHeight - popupBordersHeight, 'popup has minimum content height');
 
         $('<div>').height(150).appendTo($content);
         popupContentHeight = $popupContent.innerHeight();
@@ -674,8 +679,8 @@ QUnit.module('options changed callbacks', {
 
         $('<div>').height(300).appendTo($content);
         popupContentHeight = $popupContent.innerHeight();
-        assert.strictEqual($popup.innerHeight(), 300, 'popup has max height');
-        assert.strictEqual(popupContentHeight, 300 - topToolbarHeight - bottomToolbarHeight, 'popup has maximum content height');
+        assert.strictEqual($popup.outerHeight(), maxHeight, 'popup has max height');
+        assert.strictEqual(popupContentHeight, maxHeight - topToolbarHeight - bottomToolbarHeight - popupBordersHeight, 'popup has maximum content height');
     });
 
     QUnit.test('popup height should support any maxHeight and minHeight option values if height = auto', function(assert) {
@@ -694,20 +699,20 @@ QUnit.module('options changed callbacks', {
         const $popup = popup.$content().parent();
         const windowHeight = $(window).innerHeight();
         const $popupContent = popup.$content();
-        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight();
+        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).outerHeight();
         const popupContentPadding = $popupContent.outerHeight() - $popupContent.height();
 
-        assert.roughEqual($popup.height(), windowHeight * 0.5, 1, 'minimum popup height in percentages');
+        assert.roughEqual($popup.outerHeight(), windowHeight * 0.5, 1, 'minimum popup height in percentages');
 
         $('<div>').height(windowHeight).appendTo($content);
-        assert.roughEqual($popup.height(), windowHeight * 0.9, 1, 'maximum popup height in percentages');
+        assert.roughEqual($popup.outerHeight(), windowHeight * 0.9, 1, 'maximum popup height in percentages');
 
         popup.option('maxHeight', 'none');
         assert.roughEqual($popup.height(), windowHeight + popupContentPadding + topToolbarHeight, 1, 'popup maxHeight: none');
 
         $content.empty();
         popup.option('minHeight', 'auto');
-        assert.strictEqual($popup.height(), $popup.find(toSelector(POPUP_TITLE_CLASS)).innerHeight() + popupContentPadding, 'popup minHeight: auto');
+        assert.strictEqual($popup.height(), $popup.find(toSelector(POPUP_TITLE_CLASS)).outerHeight() + popupContentPadding, 'popup minHeight: auto');
         devices.current(devices.real());
     });
 
@@ -780,15 +785,16 @@ QUnit.module('options changed callbacks', {
 
         const $popup = instance.$content().parent();
         const $popupContent = instance.$content();
-        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).innerHeight() || 0;
-        const bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).innerHeight() || 0;
+        const topToolbarHeight = $popup.find(toSelector(POPUP_TITLE_CLASS)).eq(0).outerHeight() || 0;
+        const bottomToolbarHeight = $popup.find(toSelector(POPUP_BOTTOM_CLASS)).eq(0).outerHeight() || 0;
+        const popupBordersHeight = parseInt($popup.css('borderTopWidth')) + parseInt($popup.css('borderBottomWidth'));
 
         try {
             sinon.stub(windowUtils, 'getWindow').returns({ innerHeight: 100, innerWidth: 200 });
 
             resizeCallbacks.fire();
 
-            assert.roughEqual($popupContent.outerHeight() + topToolbarHeight + bottomToolbarHeight, 100, 1);
+            assert.roughEqual($popupContent.outerHeight() + topToolbarHeight + bottomToolbarHeight + popupBordersHeight, 100, 1);
         } finally {
             windowUtils.getWindow.restore();
         }

@@ -37,7 +37,7 @@ $generic-mobile-field-vertical-margin: 10px;
       color: $fieldset-field-value-invalid-color;
       padding-left: $generic-fieldset-attention-icon-offset;
 
-      &:before {
+      &::before {
         @include dx-invalid-generic-badge();
       }
     }
@@ -91,7 +91,7 @@ $generic-mobile-field-vertical-margin: 10px;
       position: relative;
       padding-left: $generic-fieldset-attention-icon-offset;
 
-      &:before {
+      &::before {
         left: 0;
       }
     }

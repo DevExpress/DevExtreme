@@ -1,4 +1,4 @@
-@use "../base/mixins" as *;
+@use "./mixins" as *;
 
 // adduse
 
@@ -6,7 +6,7 @@
 .dx-toolbar {
   width: 100%;
 
-  .dx-button-content:after {
+  .dx-button-content::after {
     display: none;
   }
 

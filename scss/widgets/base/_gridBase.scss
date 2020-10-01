@@ -147,7 +147,7 @@
           display: inline-block;
         }
 
-        &.dx-header-filter:after {
+        &.dx-header-filter::after {
           content: '';
           position: absolute;
           top: 0;
@@ -437,13 +437,6 @@
         overflow: hidden;
       }
 
-      .dx-cell-modified,
-      .dx-#{$widget-name}-invalid {
-        &:not(.dx-field-item-content) {
-          padding: 0;
-        }
-      }
-
       .dx-#{$widget-name}-invalid .dx-invalid-message.dx-overlay {
         position: static;
 
@@ -454,6 +447,10 @@
       }
 
       .dx-editor-cell {
+        &:not(.dx-command-select) {
+          overflow: visible;
+        }
+
         max-width: 0;
         padding: 0;
         vertical-align: middle;
@@ -533,7 +530,9 @@
     }
   }
 
-  .dx-highlight-outline {
+  .dx-highlight-outline,
+  .dx-cell-modified,
+  .dx-#{$widget-name}-invalid {
     position: relative;
     padding: $grid-cell-padding;
 
@@ -562,22 +561,30 @@
       margin: 0;
     }
 
-    .dx-highlight-outline {
+    .dx-highlight-outline,
+    &.dx-cell-modified,
+    &.dx-#{$widget-name}-invalid {
       padding: 0;
     }
 
-    &.dx-editor-inline-block .dx-highlight-outline::before {
-      display: inline-block;
-      content: '\200b';
-      vertical-align: middle;
-      padding-top: $grid-cell-padding;
-      padding-bottom: $grid-cell-padding;
+    &.dx-editor-inline-block:not(.dx-command-select) {
+      &::before {
+        display: inline-block;
+        content: '\200b';
+        vertical-align: middle;
+        padding-top: $grid-cell-padding;
+        padding-bottom: $grid-cell-padding;
+      }
     }
   }
 
   .dx-column-lines {
-    .dx-highlight-outline::after {
-      left: 0;
+    .dx-highlight-outline,
+    .dx-cell-modified,
+    .dx-#{$widget-name}-invalid {
+      &::after {
+        left: 0;
+      }
     }
   }
 
@@ -655,7 +662,7 @@
     .dx-editor-container .dx-texteditor {
       border-width: 0;
 
-      &.dx-state-focused:after {
+      &.dx-state-focused::after {
         content: " ";
         position: absolute;
         top: -1px;
@@ -671,8 +678,11 @@
       border-top: 1px solid transparent;
     }
 
-    .dx-editor-container.dx-highlight-outline {
-      padding: 0;
+    .dx-editor-container {
+      &.dx-cell-modified,
+      &.dx-#{$widget-name}-invalid {
+        padding: 0;
+      }
     }
   }
 
@@ -690,20 +700,23 @@
         }
 
         .dx-texteditor-input,
-        .dx-placeholder:before {
+        .dx-placeholder::before {
           padding-left: $grid-texteditor-input-padding;
         }
       }
     }
 
-    .dx-highlight-outline {
+    .dx-cell-modified,
+    .dx-#{$widget-name}-invalid {
       &::after {
         pointer-events: none;
       }
     }
 
     .dx-focused {
-      .dx-highlight-outline {
+      .dx-highlight-outline,
+      &.dx-cell-modified,
+      &.dx-#{$widget-name}-invalid {
         &::after {
           border-color: transparent;
         }
@@ -732,7 +745,7 @@
     }
 
     .dx-menu-item.dx-state-focused {
-      &:after {
+      &::after {
         position: absolute;
         left: 2px;
         top: 2px;
@@ -915,7 +928,7 @@
     }
 
     .dx-data-row.dx-edit-row {
-      .dx-cell-modified .dx-highlight-outline:after {
+      .dx-cell-modified::after {
         border-color: transparent;
       }
     }
@@ -1089,7 +1102,7 @@
       .dx-editor-cell .dx-editor-with-menu {
         .dx-texteditor {
           .dx-texteditor-input,
-          .dx-placeholder:before {
+          .dx-placeholder::before {
             padding-right: $grid-texteditor-input-padding;
           }
         }

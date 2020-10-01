@@ -192,7 +192,7 @@ export const dxGauge = dxBaseGauge.inherit({
         const startValue = bounds[0];
         const endValue = bounds[1];
         const angles = that._translator.getCodomain();
-        const invert = startValue > endValue;
+        const invert = !!(startValue > endValue ^ scaleOptions.inverted);
         const min = _min(startValue, endValue);
         const max = _max(startValue, endValue);
 
@@ -201,6 +201,7 @@ export const dxGauge = dxBaseGauge.inherit({
         scaleOptions.startAngle = SHIFT_ANGLE - angles[0];
         scaleOptions.endAngle = SHIFT_ANGLE - angles[1];
         scaleOptions.skipViewportExtending = true;
+        scaleOptions.inverted = invert;
         that._scale.updateOptions(scaleOptions);
         that._scale.setBusinessRange({
             axisType: 'continuous',

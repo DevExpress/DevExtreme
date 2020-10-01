@@ -3,7 +3,7 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { Row } from '../row';
 import { ViewCellData } from '../../types.d';
-import { getKeyByDateAndGroup, isVerticalGroupOrientation } from '../../utils';
+import { isVerticalGroupOrientation } from '../../utils';
 import { GroupOrientation } from '../../../types.d';
 
 export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
@@ -15,7 +15,7 @@ export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
     <thead>
       <Row>
         {viewModel.props.viewCellsData![0].map(({
-          startDate, endDate, today, groups, groupIndex, index,
+          startDate, endDate, today, groups, groupIndex, index, key,
         }) => (
           <viewModel.props.cellTemplate
             startDate={startDate}
@@ -27,7 +27,7 @@ export const viewFunction = (viewModel: HeaderPanelLayout): JSX.Element => (
             // TODO: implement this when bug in Vue is fixed
             // But since we do not use it for now, it can be commented
             // dateCellTemplate={viewModel.props.dateCellTemplate}
-            key={getKeyByDateAndGroup(startDate, groups)}
+            key={key}
           />
         ))}
       </Row>

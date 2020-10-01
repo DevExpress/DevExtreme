@@ -42,7 +42,7 @@
     padding-left: 8px;
   }
 
-  &:before {
+  &::before {
     display: inline-block;
     height: 100%;
     content: '';

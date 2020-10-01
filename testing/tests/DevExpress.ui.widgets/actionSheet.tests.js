@@ -3,9 +3,10 @@ import fx from 'animation/fx';
 import positionUtils from 'animation/position';
 import holdEvent from 'events/hold';
 import pointerMock from '../../helpers/pointerMock.js';
+import { setupRenovation } from '../../helpers/renovationHelper.js';
 
 import 'common.css!';
-import 'ui/action_sheet';
+import ActionSheet from 'ui/action_sheet';
 
 QUnit.testStart(function() {
     const markup =
@@ -20,9 +21,10 @@ QUnit.testStart(function() {
 
 const ACTION_SHEET_WITHOUT_TITLE_CLASS = 'dx-actionsheet-without-title';
 
+setupRenovation(ActionSheet);
+
 QUnit.module('action sheet', {
     beforeEach: function() {
-        this.clock = sinon.useFakeTimers();
         fx.off = true;
 
         this.element = $($('#actionSheet').dxActionSheet());
@@ -32,7 +34,6 @@ QUnit.module('action sheet', {
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     QUnit.test('render popup', function(assert) {
@@ -178,7 +179,8 @@ QUnit.module('action sheet', {
     });
 
     QUnit.test('cancel button click hides popup', function(assert) {
-        const $cancelButton = $('.dx-actionsheet-cancel', this.element); const popup = $('.dx-popup', this.element).dxPopup('instance');
+        const $cancelButton = $('.dx-actionsheet-cancel', this.element);
+        const popup = $('.dx-popup', this.element).dxPopup('instance');
 
         this.instance.show();
         assert.equal(popup.option('visible'), true, 'shown before click');
@@ -414,11 +416,9 @@ QUnit.module('action sheet', {
 QUnit.module('popover integration', {
     beforeEach: function() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     QUnit.test('usePopover without target creates Popup', function(assert) {
