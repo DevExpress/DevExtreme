@@ -641,7 +641,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-date-time-indicator {
     background-color: $scheduler-time-indicator-color;
-    position: absolute;
+    position: relative;
     pointer-events: none;
     box-shadow: $scheduler-time-indicator-shadow;
 
@@ -681,7 +681,6 @@ $scheduler-appointment-form-label-padding: 20px;
     }
 
     .dx-scheduler-date-time-indicator {
-      margin-left: $scheduler-left-column-width;
       height: $scheduler-time-indicator-size;
 
       @include dx-icon(spinright);
@@ -729,21 +728,6 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-time-panel-row:nth-child(2n) .dx-scheduler-time-panel-cell {
         &::after {
           background-color: $scheduler-accent-border-color;
-        }
-      }
-    }
-
-    &.dx-scheduler-work-space-both-scrollbar {
-      .dx-scheduler-date-time-shader,
-      .dx-scheduler-date-time-indicator,
-      .dx-scheduler-date-time-shader-all-day {
-        margin-left: 0;
-      }
-
-      .dx-scheduler-date-time-shader-top,
-      .dx-scheduler-date-time-shader-bottom {
-        &::before {
-          margin-left: 0;
         }
       }
     }
@@ -902,6 +886,7 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-date-table-cell {
+    vertical-align: top;
     border-top: $scheduler-base-border;
     height: $scheduler-workspace-date-table-cell-height;
   }

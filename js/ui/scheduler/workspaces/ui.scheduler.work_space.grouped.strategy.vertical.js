@@ -155,17 +155,18 @@ class VerticalGroupedStrategy extends GroupedStrategy {
     }
 
     shiftIndicator($indicator, height, rtlOffset, i) {
-        const offset = this._workSpace.getIndicatorOffset(0);
-        const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
-        const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
-        let verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
+        // const offset = this._workSpace.getIndicatorOffset(0);
+        // const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
+        // const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+        // let verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
 
-        if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
-            verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
-        }
+        // if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
+        //     verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
+        // }
 
-        $indicator.css('left', horizontalOffset + tableOffset);
-        $indicator.css('top', height + verticalOffset);
+        // $indicator.css('left', horizontalOffset + tableOffset);
+        // $indicator.css('top', height + verticalOffset);
+        $indicator.css('top', height);
     }
 
     getShaderOffset(i, width) {

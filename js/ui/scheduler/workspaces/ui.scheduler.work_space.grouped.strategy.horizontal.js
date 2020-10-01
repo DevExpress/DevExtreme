@@ -151,11 +151,11 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 
     shiftIndicator($indicator, height, rtlOffset, groupIndex) {
-        const offset = this._getIndicatorOffset(groupIndex);
+        // const offset = this._getIndicatorOffset(groupIndex);
 
-        const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+        // const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
 
-        $indicator.css('left', horizontalOffset);
+        // $indicator.css('left', horizontalOffset);
         $indicator.css('top', height);
     }
 
