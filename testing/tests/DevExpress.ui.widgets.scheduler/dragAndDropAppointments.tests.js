@@ -105,7 +105,6 @@ module('Browser zoom', zoomModuleConfig, () => {
             height: 600
         });
 
-        scheduler.drawControl();
         window.document.body.style.zoom = '125%';
 
         views.forEach(view => {
@@ -1053,7 +1052,6 @@ module('appointmentDragging customization', $.extend({}, {
 
                 const instance = scheduler.instance;
 
-                scheduler.drawControl();
                 if(schedulerPos) {
                     $(instance.element()).css({
                         position: 'absolute',
