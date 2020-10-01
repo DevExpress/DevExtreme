@@ -1,7 +1,4 @@
-import baseIndicatorsModule from './base_indicators';
-const BaseIndicator = baseIndicatorsModule.BaseIndicator;
-const BaseTextCloudMarker = baseIndicatorsModule.BaseTextCloudMarker;
-const BaseRangeBar = baseIndicatorsModule.BaseRangeBar;
+import { BaseIndicator, BaseTextCloudMarker, BaseRangeBar } from './base_indicators';
 
 const _Number = Number;
 import { normalizeEnum as _normalizeEnum } from '../core/utils';

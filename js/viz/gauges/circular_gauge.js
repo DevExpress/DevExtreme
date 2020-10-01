@@ -1,14 +1,14 @@
 const _isFinite = isFinite;
 import registerComponent from '../../core/component_registrator';
-import objectUtils from '../../core/utils/object';
+import { clone } from '../../core/utils/object';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { dxBaseGauge } from './base_gauge';
 import { dxGauge } from './common';
-import vizUtils from '../core/utils';
-const _normalizeAngle = vizUtils.normalizeAngle;
-const _getCosAndSin = vizUtils.getCosAndSin;
-import circularIndicatorsModule from './circular_indicators';
+import { normalizeAngle, getCosAndSin } from '../core/utils';
+const _normalizeAngle = normalizeAngle;
+const _getCosAndSin = getCosAndSin;
+import * as circularIndicators from './circular_indicators';
 import { createIndicatorCreator } from './common';
 import CircularRangeContainer from './circular_range_container';
 
@@ -227,7 +227,7 @@ const dxCircularGauge = dxGauge.inherit({
         return { width: 300, height: 300 };
     },
 
-    _factory: objectUtils.clone(dxBaseGauge.prototype._factory)
+    _factory: clone(dxBaseGauge.prototype._factory)
 });
 
 function getWidth(rect) {
@@ -280,13 +280,13 @@ dxCircularGauge._TESTS_selectRectByAspectRatio = selectRectByAspectRatio;
 const indicators = dxCircularGauge.prototype._factory.indicators = {};
 dxCircularGauge.prototype._factory.createIndicator = createIndicatorCreator(indicators);
 
-indicators._default = circularIndicatorsModule._default;
-indicators['rectangleneedle'] = circularIndicatorsModule['rectangleneedle'];
-indicators['triangleneedle'] = circularIndicatorsModule['triangleneedle'];
-indicators['twocolorneedle'] = circularIndicatorsModule['twocolorneedle'];
-indicators['trianglemarker'] = circularIndicatorsModule['trianglemarker'];
-indicators['textcloud'] = circularIndicatorsModule['textcloud'];
-indicators['rangebar'] = circularIndicatorsModule['rangebar'];
+indicators._default = circularIndicators._default;
+indicators['rectangleneedle'] = circularIndicators['rectangleneedle'];
+indicators['triangleneedle'] = circularIndicators['triangleneedle'];
+indicators['twocolorneedle'] = circularIndicators['twocolorneedle'];
+indicators['trianglemarker'] = circularIndicators['trianglemarker'];
+indicators['textcloud'] = circularIndicators['textcloud'];
+indicators['rangebar'] = circularIndicators['rangebar'];
 
 dxCircularGauge.prototype._factory.RangeContainer = CircularRangeContainer;
 
