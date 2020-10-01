@@ -3372,7 +3372,7 @@ QUnit.test('Rotated labels', function(assert) {
         const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
 
         text.setAttribute('style', 'fill: green; font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 15px;');
-        text.textContent = opt.text;
+        text.textContent = opt.valueText;
 
         g.appendChild(text);
     }

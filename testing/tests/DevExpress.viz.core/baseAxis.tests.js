@@ -723,7 +723,7 @@ QUnit.test('arguments passing to render', function(assert) {
 
     this.templateRender.getCalls().forEach((currentCall, i) => {
         const callArg = currentCall.args[0];
-        assert.strictEqual(callArg.model.text, ticks[i].toString(), 'text');
+        assert.strictEqual(callArg.model.valueText, ticks[i].toString(), 'text');
         assert.strictEqual(callArg.model.value, ticks[i], 'value');
         assert.deepEqual(callArg.model.labelFontStyle, { 'font-prop': true }, 'labelFontStyle');
         assert.deepEqual(callArg.model.labelStyle, { align: 'center', 'class': undefined, 'opacity': undefined }, 'labelStyle');
