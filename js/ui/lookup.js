@@ -615,7 +615,9 @@ const Lookup = DropDownList.inherit({
         let listHeight = 0;
         let requireListItems = [];
 
-        if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
+        if(listItems.length === 0) {
+            listHeight += MATERIAL_LOOKUP_LIST_PADDING;
+        } else if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
             listItems.each((_, item) => {
                 listHeight += $(item).outerHeight();
             });
