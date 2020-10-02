@@ -355,13 +355,15 @@ export default class ViewDataProvider {
             for(let columnIndex = 0; columnIndex < currentRow.length; columnIndex += 1) {
                 const {
                     startDate: currentStartDate,
+                    endDate: currentEndDate,
                     groupIndex: currentGroupIndex,
                     allDay: currentAllDay,
                 } = currentRow[columnIndex];
 
                 if(groupIndex === currentGroupIndex
                     && allDay === currentAllDay
-                    && startTime === currentStartDate.getTime()) {
+                    && startTime >= currentStartDate.getTime()
+                    && startTime < currentEndDate.getTime()) {
                     return {
                         columnIndex,
                         rowIndex: showAllDayPanel && !isVerticalGroupOrientation
