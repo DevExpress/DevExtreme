@@ -1,13 +1,17 @@
 const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
+const mock = require('../../helpers/mockModule.js').mock;
+const { ChartTracker } = require('viz/chart_components/tracker');
+const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
+const trackerModule = mock('viz/chart_components/tracker', {
+    ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters))
+});
 const chartThemeManagerModule = require('viz/components/chart_theme_manager');
 const legendModule = require('viz/components/legend');
 const seriesModule = require('viz/series/base_series');
 const Series = seriesModule.Series;
 const seriesFamilyModule = require('viz/core/series_family');
 const axisModule = require('viz/axes/base_axis');
-const trackerModule = require('viz/chart_components/tracker');
-const ChartTrackerStub = vizMocks.stubClass(trackerModule.ChartTracker);
 const dxPolarChart = require('viz/polar_chart');
 const rendererModule = require('viz/core/renderers/renderer');
 const dataValidatorModule = require('viz/components/data_validator');
@@ -31,9 +35,6 @@ legendModule.Legend = sinon.spy(function(parameters) {
     return legend;
 });
 
-trackerModule.ChartTracker = sinon.spy(function(parameters) {
-    return new ChartTrackerStub(parameters);
-});
 
 function stubExport() {
     const that = this;
