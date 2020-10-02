@@ -136,6 +136,27 @@ testModule('Events', createModuleConfig({ value: '<p>Test 1</p><p>Test 2</p><p>T
         assert.strictEqual(focusOutStub.callCount, 1, 'Editor is blurred one time');
     });
 
+    test('focus events listeners attached only after the content is rendered (T934089)', function(assert) {
+        const focusInStub = sinon.stub();
+        this.createEditor({
+            onFocusIn: focusInStub,
+        });
+        const renderContentImplOrig = this.instance._renderContentImpl;
+        this.instance._renderContentImpl = () => {
+            setTimeout(() => {
+                renderContentImplOrig.call(this.instance);
+            }, 0);
+        };
+        this.instance.repaint();
+
+        this.clock.tick(TIME_TO_WAIT);
+
+        this.instance.focus();
+        this.clock.tick(TIME_TO_WAIT);
+
+        assert.strictEqual(focusInStub.callCount, 1, 'Focus event handler is attached');
+    });
+
     ['html', 'markdown'].forEach((valueType) => {
         test(`change value to "null" should raise only one ValueChanged event (valueType is "${valueType}")`, function(assert) {
             const valueChangedStub = sinon.stub();
