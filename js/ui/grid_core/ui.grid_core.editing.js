@@ -2710,7 +2710,7 @@ export default {
                 _updateEditRow: function(items) {
                     const editingController = this._editingController;
                     const editRowKey = this.option('editing.editRowKey');
-                    const editRowIndex = gridCoreUtils.gridCoreUtils.getIndexByKey(editRowKey, items);
+                    const editRowIndex = gridCoreUtils.getIndexByKey(editRowKey, items);
                     const editItem = items[editRowIndex];
 
                     if(editItem) {

@@ -351,7 +351,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             if(isDefined(column.command) || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
 
-            editIndex = editingController.gridCoreUtils.getIndexByKey(parameters.key, editingController.getChanges());
+            editIndex = editingController.getIndexByKey(parameters.key, editingController.getChanges());
 
             if(editIndex < 0) {
                 if(!showEditorAlways) {
@@ -892,7 +892,7 @@ export default {
                     let $popupContent;
                     const errorHandling = this.getController('errorHandling');
                     const items = this.getController('data').items();
-                    const rowIndex = this.gridCoreUtils.getIndexByKey(editData.key, items);
+                    const rowIndex = this.getIndexByKey(editData.key, items);
                     const validationData = this.getController('validating')._getValidationData(editData.key);
 
                     if(!validationData?.isValid && validationData?.errorText && rowIndex >= 0) {
@@ -1255,7 +1255,7 @@ export default {
 
                     getEditorInstance: function($container) {
                         const $editor = $container.find('.dx-texteditor').eq(0);
-                        return gridCoreUtils.gridCoreUtils.getWidgetInstance($editor);
+                        return gridCoreUtils.getWidgetInstance($editor);
                     }
                 };
             })(),
