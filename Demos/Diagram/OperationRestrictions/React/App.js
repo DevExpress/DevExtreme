@@ -40,10 +40,10 @@ class App extends React.Component {
   }
 
   showToast(text) {
-    notify({ 
-      position: { at: "top", my: "top", of: "#diagram", offset: "0 4" }, 
-      message: text, 
-      type: "warning", 
+    notify({
+      position: { at: 'top', my: 'top', of: '#diagram', offset: '0 4' },
+      message: text,
+      type: 'warning',
       delayTime: 2000
     });
   }
