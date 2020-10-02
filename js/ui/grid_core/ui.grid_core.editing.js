@@ -10,10 +10,10 @@ import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
 import { name as doubleClickEvent } from '../../events/double_click';
 import pointerEvents from '../../events/pointer';
-import { getIndexByKey, setEmptyText, getSelectionRange, setSelectionRange, focusAndSelectElement } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
 import { addNamespace } from '../../events/utils/index';
-import dialog from '../dialog';
+import { confirm } from '../dialog';
 import messageLocalization from '../../localization/message';
 import Button from '../button';
 import Popup from '../popup';
@@ -24,7 +24,6 @@ import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 import { deferRender } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
 import Scrollable from '../scroll_view/ui.scrollable';
-import gridCoreUtils from './ui.grid_core.utils';
 
 const EDIT_FORM_CLASS = 'edit-form';
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
@@ -298,7 +297,7 @@ const EditingController = modules.ViewController.inherit((function() {
         getUpdatedData: function(data) {
             const key = this._dataController.keyOf(data);
             const changes = this.getChanges();
-            const editIndex = getIndexByKey(key, changes);
+            const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
             if(changes[editIndex]) {
                 return createObjectWithChanges(data, changes[editIndex].data);
@@ -481,7 +480,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         }
                     );
                 } else {
-                    setEmptyText($container);
+                    gridCoreUtils.setEmptyText($container);
                 }
             };
         },
@@ -537,7 +536,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         getIndexByKey: function(key, items) {
-            return getIndexByKey(key, items);
+            return gridCoreUtils.getIndexByKey(key, items);
         },
 
         hasChanges: function(rowIndex) {
@@ -816,7 +815,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
             const changes = this.getChanges();
 
-            const editIndex = getIndexByKey(key, changes);
+            const editIndex = gridCoreUtils.getIndexByKey(key, changes);
             item.isEditing = false;
 
             if(editIndex >= 0) {
@@ -1458,7 +1457,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 if($cell) {
                     const $focusableElement = $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first();
-                    focusAndSelectElement(that, $focusableElement);
+                    gridCoreUtils.focusAndSelectElement(that, $focusableElement);
                 }
 
                 that._beforeFocusCallback = null;
@@ -1516,7 +1515,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 } else {
                     const confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle;
                     const showDialogTitle = isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
-                    dialog.confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done(function(confirmResult) {
+                    confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done(function(confirmResult) {
                         if(confirmResult) {
                             that._deleteRowCore(rowIndex);
                         }
@@ -1534,7 +1533,7 @@ const EditingController = modules.ViewController.inherit((function() {
             this.refresh();
 
             const changes = this.getChanges();
-            const editIndex = getIndexByKey(key, changes);
+            const editIndex = gridCoreUtils.getIndexByKey(key, changes);
             if(editIndex >= 0) {
                 if(changes[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
                     this._removeEditDataItem(editIndex);
@@ -1563,7 +1562,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const changes = this.getChanges();
 
             if(item) {
-                const editIndex = getIndexByKey(key, changes);
+                const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
                 if(editIndex >= 0) {
                     const editData = changes[editIndex];
@@ -1696,7 +1695,7 @@ const EditingController = modules.ViewController.inherit((function() {
             for(let i = 0; i < results.length; i++) {
                 const arg = results[i].result;
                 const cancel = arg === 'cancel';
-                const editIndex = getIndexByKey(results[i].key, changes);
+                const editIndex = gridCoreUtils.getIndexByKey(results[i].key, changes);
                 const editData = changes[editIndex];
                 const isError = arg && arg instanceof Error;
 
@@ -2250,7 +2249,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     const $focusedElement = $(domAdapter.getActiveElement());
                     const columnIndex = that._rowsView.getCellIndex($focusedElement, row.rowIndex);
                     let focusedElement = $focusedElement.get(0);
-                    const selectionRange = getSelectionRange(focusedElement);
+                    const selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
 
                     that._updateEditRowCore(row, false, isCustomSetCellValue);
 
@@ -2260,7 +2259,7 @@ const EditingController = modules.ViewController.inherit((function() {
                             setTimeout(function() {
                                 focusedElement = domAdapter.getActiveElement();
                                 if(selectionRange.selectionStart >= 0) {
-                                    setSelectionRange(focusedElement, selectionRange);
+                                    gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
                                 }
                             });
                         });
@@ -2272,7 +2271,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _addEditData: function(options, row) {
             const changes = [...this.getChanges()];
-            let editDataIndex = getIndexByKey(options.key, changes);
+            let editDataIndex = gridCoreUtils.getIndexByKey(options.key, changes);
 
             if(editDataIndex < 0) {
                 editDataIndex = changes.length;
@@ -2711,7 +2710,7 @@ export default {
                 _updateEditRow: function(items) {
                     const editingController = this._editingController;
                     const editRowKey = this.option('editing.editRowKey');
-                    const editRowIndex = gridCoreUtils.getIndexByKey(editRowKey, items);
+                    const editRowIndex = gridCoreUtils.gridCoreUtils.getIndexByKey(editRowKey, items);
                     const editItem = items[editRowIndex];
 
                     if(editItem) {

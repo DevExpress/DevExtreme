@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import Sortable from '../sortable';
-import { setEmptyText } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import browser from '../../core/utils/browser';
 
 const COMMAND_HANDLE_CLASS = 'dx-command-drag';
@@ -165,7 +165,7 @@ const RowDraggingExtender = {
                 $(container).addClass(CELL_FOCUS_DISABLED_CLASS);
                 return $('<span>').addClass(this.addWidgetPrefix(HANDLE_ICON_CLASS));
             } else {
-                setEmptyText($(container));
+                gridCoreUtils.setEmptyText($(container));
             }
         };
     },

@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
-import { getIndexByKey, getWidgetInstance } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
 import { deferUpdate, equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
@@ -351,7 +351,7 @@ const ValidatingController = modules.Controller.inherit((function() {
 
             if(isDefined(column.command) || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
 
-            editIndex = editingController.getIndexByKey(parameters.key, editingController.getChanges());
+            editIndex = editingController.gridCoreUtils.getIndexByKey(parameters.key, editingController.getChanges());
 
             if(editIndex < 0) {
                 if(!showEditorAlways) {
@@ -702,7 +702,7 @@ export default {
 
                     if(editMode === EDIT_MODE_BATCH && isInserted && key) {
                         const changes = this.getChanges();
-                        const editIndex = getIndexByKey(key, changes);
+                        const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
                         if(editIndex >= 0) {
                             const editData = changes[editIndex];
@@ -892,7 +892,7 @@ export default {
                     let $popupContent;
                     const errorHandling = this.getController('errorHandling');
                     const items = this.getController('data').items();
-                    const rowIndex = this.getIndexByKey(editData.key, items);
+                    const rowIndex = this.gridCoreUtils.getIndexByKey(editData.key, items);
                     const validationData = this.getController('validating')._getValidationData(editData.key);
 
                     if(!validationData?.isValid && validationData?.errorText && rowIndex >= 0) {
@@ -945,7 +945,7 @@ export default {
 
                 getEditDataByKey: function(key) {
                     const changes = this.getChanges();
-                    return changes[getIndexByKey(key, changes)];
+                    return changes[gridCoreUtils.getIndexByKey(key, changes)];
                 },
 
                 isCellModified: function(parameters) {
@@ -1255,7 +1255,7 @@ export default {
 
                     getEditorInstance: function($container) {
                         const $editor = $container.find('.dx-texteditor').eq(0);
-                        return getWidgetInstance($editor);
+                        return gridCoreUtils.gridCoreUtils.getWidgetInstance($editor);
                     }
                 };
             })(),

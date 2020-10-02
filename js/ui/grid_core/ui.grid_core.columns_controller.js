@@ -1,20 +1,19 @@
 import $ from '../../core/renderer';
 import Callbacks from '../../core/utils/callbacks';
-import { isWrapped } from '../../core/utils/variable_wrapper';
-import dataCoreUtils from '../../core/utils/data';
+import variableWrapper from '../../core/utils/variable_wrapper';
+import { compileGetter, compileSetter } from '../../core/utils/data';
 import { grep } from '../../core/utils/common';
 import { isDefined, isString, isNumeric, isFunction, isObject, isPlainObject, type } from '../../core/utils/type';
-import iteratorUtils from '../../core/utils/iterator';
+import { each, map } from '../../core/utils/iterator';
 import { getDefaultAlignment } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
+import { inArray, normalizeIndexes } from '../../core/utils/array';
 import config from '../../core/config';
 import { orderEach, deepExtendArraySafe } from '../../core/utils/object';
 import errors from '../widget/ui.errors';
 import modules from './ui.grid_core.modules';
-import { isDateType, getFormatByDataType, getDisplayValue, normalizeSortingInfo, equalSortParameters, equalFilterParameters } from './ui.grid_core.utils';
-import { normalizeIndexes } from '../../core/utils/array';
-import inflector from '../../core/utils/inflector';
+import gridCoreUtils from './ui.grid_core.utils';
+import { captionize } from '../../core/utils/inflector';
 import dateSerialization from '../../core/utils/date_serialization';
 import numberLocalization from '../../localization/number';
 import dateLocalization from '../../localization/date';
@@ -235,7 +234,7 @@ export default {
                 let result = [];
 
                 if(columnsOptions) {
-                    iteratorUtils.each(columnsOptions, function(index, columnOptions) {
+                    each(columnsOptions, function(index, columnOptions) {
                         const userStateColumnOptions = that._columnsUserState && checkUserStateColumn(columnOptions, that._columnsUserState[index]) && that._columnsUserState[index];
                         const column = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
 
@@ -347,7 +346,7 @@ export default {
                 let colspan = 0;
                 const columns = that.getChildrenByBandColumn(columnID, true);
 
-                iteratorUtils.each(columns, function(_, column) {
+                each(columns, function(_, column) {
                     if(column.isBand) {
                         column.colspan = column.colspan || calculateColspan(that, column.index);
                         colspan += column.colspan || 1;
@@ -411,7 +410,7 @@ export default {
 
             const updateSerializers = function(options, dataType) {
                 if(!options.deserializeValue) {
-                    if(isDateType(dataType)) {
+                    if(gridCoreUtils.isDateType(dataType)) {
                         options.deserializeValue = function(value) {
                             return dateSerialization.deserializeDate(value);
                         };
@@ -468,7 +467,7 @@ export default {
                 for(let i = 0; i < firstItems.length; i++) {
                     if(firstItems[i]) {
                         for(fieldName in firstItems[i]) {
-                            if(!isFunction(firstItems[i][fieldName]) || isWrapped(firstItems[i][fieldName])) {
+                            if(!isFunction(firstItems[i][fieldName]) || variableWrapper.isWrapped(firstItems[i][fieldName])) {
                                 processedFields[fieldName] = true;
                             }
                         }
@@ -485,17 +484,17 @@ export default {
             };
 
             const updateColumnIndexes = function(that) {
-                iteratorUtils.each(that._columns, function(index, column) {
+                each(that._columns, function(index, column) {
                     column.index = index;
                 });
 
-                iteratorUtils.each(that._columns, function(index, column) {
+                each(that._columns, function(index, column) {
                     if(isObject(column.ownerBand)) {
                         column.ownerBand = column.ownerBand.index;
                     }
                 });
 
-                iteratorUtils.each(that._commandColumns, function(index, column) {
+                each(that._commandColumns, function(index, column) {
                     column.index = -(index + 1);
                 });
             };
@@ -509,7 +508,7 @@ export default {
             };
 
             const updateColumnSortIndexes = function(that, currentColumn) {
-                iteratorUtils.each(that._columns, function(index, column) {
+                each(that._columns, function(index, column) {
                     if(isDefined(column.sortIndex) && !isSortOrderValid(column.sortOrder)) {
                         delete column.sortIndex;
                     }
@@ -782,7 +781,7 @@ export default {
             };
 
             const columnOptionCore = function(that, column, optionName, value, notFireEvent) {
-                const optionGetter = dataCoreUtils.compileGetter(optionName);
+                const optionGetter = compileGetter(optionName);
                 const columnIndex = column.index;
                 let columns;
                 let changeType;
@@ -802,7 +801,7 @@ export default {
                         changeType = 'columns';
                     }
 
-                    const optionSetter = dataCoreUtils.compileSetter(optionName);
+                    const optionSetter = compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
                     const fullOptionName = getColumnFullPath(that, column);
 
@@ -874,7 +873,7 @@ export default {
                 const result = [];
 
                 rowIndex = rowIndex || 0;
-                columns[rowIndex] && iteratorUtils.each(columns[rowIndex], function(_, column) {
+                columns[rowIndex] && each(columns[rowIndex], function(_, column) {
                     if(column.ownerBand === bandColumnID || column.type === GROUP_COMMAND_COLUMN_NAME) {
                         if(!column.isBand || !column.colspan) {
                             if((!column.command || rowIndex < 1)) {
@@ -932,7 +931,7 @@ export default {
                 });
 
                 if(rowspan > 1) {
-                    expandColumnsByType = iteratorUtils.map(expandColumnsByType, function(expandColumn) { return extend({}, expandColumn, { rowspan: rowspan }); });
+                    expandColumnsByType = map(expandColumnsByType, function(expandColumn) { return extend({}, expandColumn, { rowspan: rowspan }); });
                 }
                 expandColumnsByType.unshift.apply(expandColumnsByType, isDefined(customColumnIndex) ? [customColumnIndex, 1] : [columnIndex, 0]);
                 columns.splice.apply(columns, expandColumnsByType);
@@ -1073,7 +1072,7 @@ export default {
                     };
 
                     if(dataSource && dataSource.items().length > 0) {
-                        groupsCount = normalizeSortingInfo(dataSource.group()).length;
+                        groupsCount = gridCoreUtils.normalizeSortingInfo(dataSource.group()).length;
                         items = getFirstItemsCore(dataSource.items(), groupsCount) || [];
                     }
                     return items;
@@ -1337,7 +1336,7 @@ export default {
                 getGroupColumns: function() {
                     const result = [];
 
-                    iteratorUtils.each(this._columns, function() {
+                    each(this._columns, function() {
                         const column = this;
                         if(isDefined(column.groupIndex)) {
                             result[column.groupIndex] = column;
@@ -1445,7 +1444,7 @@ export default {
                 _isColumnFixing: function() {
                     let isColumnFixing = this.option('columnFixing.enabled');
 
-                    !isColumnFixing && iteratorUtils.each(this._columns, function(_, column) {
+                    !isColumnFixing && each(this._columns, function(_, column) {
                         if(column.fixed) {
                             isColumnFixing = true;
                             return false;
@@ -1468,7 +1467,7 @@ export default {
                         expandColumn = this.columnOption('command:expand');
                     }
 
-                    expandColumns = iteratorUtils.map(expandColumns, (column) => {
+                    expandColumns = map(expandColumns, (column) => {
                         return extend({}, column, {
                             visibleWidth: null,
                             minWidth: null,
@@ -1553,7 +1552,7 @@ export default {
                         positiveIndexedColumns[i] = [{}, {}, {}];
                     }
 
-                    iteratorUtils.each(columns, function() {
+                    each(columns, function() {
                         const column = this;
                         let visibleIndex = column.visibleIndex;
                         let indexedColumns;
@@ -1600,13 +1599,13 @@ export default {
                         }
                     });
 
-                    iteratorUtils.each(result, function(rowIndex) {
+                    each(result, function(rowIndex) {
                         orderEach(negativeIndexedColumns[rowIndex], function(_, columns) {
                             result[rowIndex].unshift.apply(result[rowIndex], columns);
                         });
 
                         const firstPositiveIndexColumn = result[rowIndex].length;
-                        iteratorUtils.each(positiveIndexedColumns[rowIndex], function(index, columnsByFixing) {
+                        each(positiveIndexedColumns[rowIndex], function(index, columnsByFixing) {
                             orderEach(columnsByFixing, function(_, columnsByVisibleIndex) {
                                 result[rowIndex].push.apply(result[rowIndex], columnsByVisibleIndex);
                             });
@@ -1637,7 +1636,7 @@ export default {
 
                     columns = columns || that._columns;
 
-                    iteratorUtils.each(columns, function(_, column) {
+                    each(columns, function(_, column) {
                         if(column.ownerBand !== bandColumnIndex) {
                             return;
                         }
@@ -1769,7 +1768,7 @@ export default {
 
                     if(allowSorting && column && column.allowSorting) {
                         if(needResetSorting && !isDefined(column.groupIndex)) {
-                            iteratorUtils.each(that._columns, function(index) {
+                            each(that._columns, function(index) {
                                 if(index !== columnIndex && this.sortOrder && !isDefined(this.groupIndex)) {
                                     delete this.sortOrder;
                                     delete this.sortIndex;
@@ -1797,12 +1796,12 @@ export default {
                     const sortColumns = [];
                     const sort = [];
 
-                    iteratorUtils.each(that._columns, function() {
+                    each(that._columns, function() {
                         if((this.dataField || this.selector || this.calculateCellValue) && isDefined(this.sortIndex) && !isDefined(this.groupIndex)) {
                             sortColumns[this.sortIndex] = this;
                         }
                     });
-                    iteratorUtils.each(sortColumns, function() {
+                    each(sortColumns, function() {
                         const sortOrder = this && this.sortOrder;
                         if(isSortOrderValid(sortOrder)) {
                             const sortItem = {
@@ -1822,7 +1821,7 @@ export default {
                 getGroupDataSourceParameters: function(useLocalSelector) {
                     const group = [];
 
-                    iteratorUtils.each(this.getGroupColumns(), function() {
+                    each(this.getGroupColumns(), function() {
                         const selector = this.calculateGroupValue || this.displayField || this.calculateDisplayValue || (useLocalSelector && this.selector) || this.dataField || this.calculateCellValue;
                         if(selector) {
                             const groupItem = {
@@ -1843,7 +1842,7 @@ export default {
                 refresh: function(updateNewLookupsOnly) {
                     const deferreds = [];
 
-                    iteratorUtils.each(this._columns, function() {
+                    each(this._columns, function() {
                         const lookup = this.lookup;
 
                         if(lookup && !this.calculateDisplayValue) {
@@ -1861,7 +1860,7 @@ export default {
                 _updateColumnOptions: function(column, columnIndex) {
                     column.selector = column.selector || function(data) { return column.calculateCellValue(data); };
 
-                    iteratorUtils.each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], function(_, calculateCallbackName) {
+                    each(['calculateSortValue', 'calculateGroupValue', 'calculateDisplayValue'], function(_, calculateCallbackName) {
                         const calculateCallback = column[calculateCallbackName];
                         if(isFunction(calculateCallback) && !calculateCallback.originalCallback) {
                             column[calculateCallbackName] = function(data) { return calculateCallback.call(column, data); };
@@ -1872,7 +1871,7 @@ export default {
 
                     if(isString(column.calculateDisplayValue)) {
                         column.displayField = column.calculateDisplayValue;
-                        column.calculateDisplayValue = dataCoreUtils.compileGetter(column.displayField);
+                        column.calculateDisplayValue = compileGetter(column.displayField);
                     }
                     if(column.calculateDisplayValue) {
                         column.displayValueMap = column.displayValueMap || {};
@@ -1888,7 +1887,7 @@ export default {
                     const dataType = lookup ? lookup.dataType : column.dataType;
                     if(dataType) {
                         column.alignment = column.alignment || getAlignmentByDataType(dataType, this.option('rtlEnabled'));
-                        column.format = column.format || getFormatByDataType(dataType);
+                        column.format = column.format || gridCoreUtils.getFormatByDataType(dataType);
                         column.customizeText = column.customizeText || getCustomizeTextByDataType(dataType);
                         column.defaultFilterOperations = column.defaultFilterOperations || !lookup && DATATYPE_OPERATIONS[dataType] || [];
                         if(!isDefined(column.filterOperations)) {
@@ -1904,7 +1903,7 @@ export default {
                     const firstItems = that._getFirstItems(dataSource);
                     let isColumnDataTypesUpdated = false;
 
-                    iteratorUtils.each(that._columns, function(index, column) {
+                    each(that._columns, function(index, column) {
                         let i;
                         let value;
                         let dataType;
@@ -1912,10 +1911,10 @@ export default {
                         let valueDataType;
                         const lookup = column.lookup;
 
-                        if(isDateType(column.dataType) && column.serializationFormat === undefined) {
+                        if(gridCoreUtils.isDateType(column.dataType) && column.serializationFormat === undefined) {
                             column.serializationFormat = dateSerializationFormat;
                         }
-                        if(lookup && isDateType(lookup.dataType) && column.serializationFormat === undefined) {
+                        if(lookup && gridCoreUtils.isDateType(lookup.dataType) && column.serializationFormat === undefined) {
                             lookup.serializationFormat = dateSerializationFormat;
                         }
 
@@ -1933,7 +1932,7 @@ export default {
                                     }
 
                                     if(lookup && !lookup.dataType) {
-                                        valueDataType = getValueDataType(getDisplayValue(column, value, firstItems[i]));
+                                        valueDataType = getValueDataType(gridCoreUtils.getDisplayValue(column, value, firstItems[i]));
                                         lookupDataType = lookupDataType || valueDataType;
                                         if(lookupDataType && valueDataType && lookupDataType !== valueDataType) {
                                             lookupDataType = 'string';
@@ -2018,15 +2017,15 @@ export default {
                         this._dataSourceApplied = true;
                     }
 
-                    if(!equalSortParameters(parameters.sorting, this.getSortDataSourceParameters())) {
+                    if(!gridCoreUtils.equalSortParameters(parameters.sorting, this.getSortDataSourceParameters())) {
                         updateColumnChanges(this, 'sorting');
                     }
-                    if(!equalSortParameters(parameters.grouping, this.getGroupDataSourceParameters())) {
+                    if(!gridCoreUtils.equalSortParameters(parameters.grouping, this.getGroupDataSourceParameters())) {
                         updateColumnChanges(this, 'grouping');
                     }
 
                     const dataController = this.getController('data');
-                    if(dataController && !equalFilterParameters(parameters.filtering, dataController.getCombinedFilter())) {
+                    if(dataController && !gridCoreUtils.equalFilterParameters(parameters.filtering, dataController.getCombinedFilter())) {
                         updateColumnChanges(this, 'filtering');
                     }
                     updateColumnChanges(this, 'columns');
@@ -2037,7 +2036,7 @@ export default {
                     let isColumnsChanged;
                     const updateSortGroupParameterIndexes = function(columns, sortParameters, indexParameterName) {
 
-                        iteratorUtils.each(columns, function(index, column) {
+                        each(columns, function(index, column) {
                             delete column[indexParameterName];
                             if(sortParameters) {
                                 for(let i = 0; i < sortParameters.length; i++) {
@@ -2066,20 +2065,20 @@ export default {
                     };
 
                     if(dataSource) {
-                        sortParameters = normalizeSortingInfo(dataSource.sort());
-                        const groupParameters = normalizeSortingInfo(dataSource.group());
+                        sortParameters = gridCoreUtils.normalizeSortingInfo(dataSource.sort());
+                        const groupParameters = gridCoreUtils.normalizeSortingInfo(dataSource.group());
                         const columnsGroupParameters = that.getGroupDataSourceParameters();
                         const columnsSortParameters = that.getSortDataSourceParameters();
                         if(!that._columns.length) {
-                            iteratorUtils.each(groupParameters, function(index, group) {
+                            each(groupParameters, function(index, group) {
                                 that._columns.push(group.selector);
                             });
-                            iteratorUtils.each(sortParameters, function(index, sort) {
+                            each(sortParameters, function(index, sort) {
                                 that._columns.push(sort.selector);
                             });
                             assignColumns(that, createColumnsFromOptions(that, that._columns));
                         }
-                        if((fromDataSource || (!columnsGroupParameters && !that._hasUserState)) && !equalSortParameters(groupParameters, columnsGroupParameters)) {
+                        if((fromDataSource || (!columnsGroupParameters && !that._hasUserState)) && !gridCoreUtils.equalSortParameters(groupParameters, columnsGroupParameters)) {
                             ///#DEBUG
                             that.__groupingUpdated = true;
                             ///#ENDDEBUG
@@ -2089,7 +2088,7 @@ export default {
                                 isColumnsChanged = true;
                             }
                         }
-                        if((fromDataSource || (!columnsSortParameters && !that._hasUserState)) && !equalSortParameters(sortParameters, columnsSortParameters)) {
+                        if((fromDataSource || (!columnsSortParameters && !that._hasUserState)) && !gridCoreUtils.equalSortParameters(sortParameters, columnsSortParameters)) {
                             ///#DEBUG
                             that.__sortingUpdated = true;
                             ///#ENDDEBUG
@@ -2159,7 +2158,7 @@ export default {
                                 columnOptionCore(that, column, option, value, notFireEvent);
                             }
                         } else if(isObject(option)) {
-                            iteratorUtils.each(option, function(optionName, value) {
+                            each(option, function(optionName, value) {
                                 columnOptionCore(that, column, optionName, value, notFireEvent);
                             });
                         }
@@ -2262,7 +2261,7 @@ export default {
 
                     for(i = 0; i < columns.length; i++) {
                         result[i] = {};
-                        iteratorUtils.each(USER_STATE_FIELD_NAMES, handleStateField);
+                        each(USER_STATE_FIELD_NAMES, handleStateField);
                     }
                     return result;
                 },
@@ -2345,9 +2344,9 @@ export default {
 
                     if(dataField) {
                         if(isString(dataField)) {
-                            const getter = dataCoreUtils.compileGetter(dataField);
+                            const getter = compileGetter(dataField);
                             calculatedColumnOptions = {
-                                caption: inflector.captionize(dataField),
+                                caption: captionize(dataField),
                                 calculateCellValue: function(data, skipDeserialization) {
                                     const value = getter(data);
                                     return this.deserializeValue && !skipDeserialization ? this.deserializeValue(value) : value;
@@ -2374,7 +2373,7 @@ export default {
                                         } else if(text === column.falseText) {
                                             result = false;
                                         }
-                                    } else if(isDateType(column.dataType)) {
+                                    } else if(gridCoreUtils.isDateType(column.dataType)) {
                                         parsedValue = dateLocalization.parse(text, column.format);
                                         if(parsedValue) {
                                             result = parsedValue;
@@ -2441,8 +2440,8 @@ export default {
 
                                 this.valueMap = {};
                                 if(this.items) {
-                                    const calculateValue = dataCoreUtils.compileGetter(this.valueExpr);
-                                    const calculateDisplayValue = dataCoreUtils.compileGetter(this.displayExpr);
+                                    const calculateValue = compileGetter(this.valueExpr);
+                                    const calculateDisplayValue = compileGetter(this.displayExpr);
                                     for(let i = 0; i < this.items.length; i++) {
                                         const item = this.items[i];
                                         const displayValue = calculateDisplayValue(item);
@@ -2456,7 +2455,7 @@ export default {
                                 let dataSource = that.dataSource;
 
                                 if(dataSource) {
-                                    if(isFunction(dataSource) && !isWrapped(dataSource)) {
+                                    if(isFunction(dataSource) && !variableWrapper.isWrapped(dataSource)) {
                                         dataSource = dataSource({});
                                     }
                                     if(isPlainObject(dataSource) || (dataSource instanceof Store) || Array.isArray(dataSource)) {
@@ -2484,7 +2483,7 @@ export default {
                         calculatedColumnOptions.resizedCallbacks.add(columnOptions.resized.bind(columnOptions));
                     }
 
-                    iteratorUtils.each(calculatedColumnOptions, function(optionName) {
+                    each(calculatedColumnOptions, function(optionName) {
                         if(isFunction(calculatedColumnOptions[optionName]) && optionName.indexOf('default') !== 0) {
                             const defaultOptionName = 'default' + optionName.charAt(0).toUpperCase() + optionName.substr(1);
                             calculatedColumnOptions[defaultOptionName] = calculatedColumnOptions[optionName];
@@ -2526,7 +2525,7 @@ export default {
                     const parentBandColumns = column && getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex);
 
                     if(parentBandColumns) { // T416483 - fix for jquery 2.1.4
-                        iteratorUtils.each(parentBandColumns, function(_, bandColumn) {
+                        each(parentBandColumns, function(_, bandColumn) {
                             if(bandColumn.index === bandColumnIndex) {
                                 result = true;
                                 return false;
@@ -2541,7 +2540,7 @@ export default {
                     const bandColumnsCache = this.getBandColumnsCache();
                     const bandColumns = columnIndex >= 0 && getParentBandColumns(columnIndex, bandColumnsCache.columnParentByIndex);
 
-                    bandColumns && iteratorUtils.each(bandColumns, function(_, bandColumn) {
+                    bandColumns && each(bandColumns, function(_, bandColumn) {
                         result = result && bandColumn.visible;
                         return result;
                     });

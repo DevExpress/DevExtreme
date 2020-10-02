@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import wheelEvent from '../../events/core/wheel';
+import { name as wheelEventName } from '../../events/core/wheel';
 import messageLocalization from '../../localization/message';
 import gridCoreUtils from '../grid_core/ui.grid_core.utils';
 import { isDefined } from '../../core/utils/type';
@@ -8,7 +8,7 @@ import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import browser from '../../core/utils/browser';
 import { getBoundingRect } from '../../core/utils/position';
-import translator from '../../animation/translator';
+import { move } from '../../animation/translator';
 
 const CONTENT_CLASS = 'content';
 const CONTENT_FIXED_CLASS = 'content-fixed';
@@ -605,7 +605,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                         scrollable.scrollTo({ y: scrollTop });
                     }, scrollDelay);
                 });
-                eventsEngine.on($content, wheelEvent.name, function(e) {
+                eventsEngine.on($content, wheelEventName, function(e) {
                     const $nearestScrollable = $(e.target).closest('.dx-scrollable');
 
                     if(scrollable && scrollable.$element().is($nearestScrollable)) {
@@ -826,7 +826,7 @@ const RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             const elasticScrollTop = this._getElasticScrollTop(e);
 
             if(Math.ceil(elasticScrollTop) !== 0) {
-                translator.move(this._fixedTableElement, { top: elasticScrollTop });
+                move(this._fixedTableElement, { top: elasticScrollTop });
             } else {
                 this._fixedTableElement.css('transform', '');
             }

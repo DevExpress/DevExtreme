@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Toolbar from '../toolbar';
-import columnsView from './ui.grid_core.columns_view';
+import { ColumnsView } from './ui.grid_core.columns_view';
 import { noop } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import { triggerResizeEvent } from '../../events/visibility_change';
@@ -9,7 +9,7 @@ import '../drop_down_menu';
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
 
-const HeaderPanel = columnsView.ColumnsView.inherit({
+const HeaderPanel = ColumnsView.inherit({
     _getToolbarItems: function() {
         return [];
     },
