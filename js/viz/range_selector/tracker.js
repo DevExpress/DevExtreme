@@ -3,7 +3,7 @@ import pointerEvents from '../../events/pointer';
 import { getWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { each } from '../../core/utils/iterator';
-import { pointer as msPointerEnabled } from '../../core/utils/support';
+import { touch } from '../../core/utils/support';
 
 const MIN_MANUAL_SELECTING_WIDTH = 10;
 const window = getWindow();
@@ -211,7 +211,7 @@ function initializeSliderEvents(controller, sliders, state, getRootOffsetLeft) {
 export function Tracker(params) {
     const state = this._state = {};
     const targets = params.controller.getTrackerTargets();
-    if(msPointerEnabled) {
+    if(touch) {
         params.renderer.root.css({ 'msTouchAction': 'pinch-zoom' });
     }
     this._docEvents = [
