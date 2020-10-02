@@ -111,7 +111,6 @@ describe('DomComponentWrapper', () => {
       });
 
       const DomComponentMock = jest.fn();
-      (DomComponentMock as any).getInstance = jest.fn();
       const createWidget = () => {
         const component = new DomComponentWrapper({
           componentProps: {},
@@ -157,7 +156,7 @@ describe('DomComponentWrapper', () => {
         const component = createWidget();
         const spy = jest.spyOn(component, 'properties', 'get');
         const instance = { option: jest.fn() };
-        (DomComponentMock as any).getInstance.mockReturnValue(instance);
+        component.instance = instance as any;
 
         component.updateWidget();
 

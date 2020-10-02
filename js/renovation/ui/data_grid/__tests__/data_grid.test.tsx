@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { mount } from 'enzyme';
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import each from 'jest-each';
@@ -14,37 +14,34 @@ const mockDataGridMethods = {
   dispose: mockDispose,
   option: mockOption,
 };
-const getInstanceMock = jest.fn().mockReturnValue(mockDataGridMethods);
 
 jest.mock('../../../../ui/data_grid/ui.data_grid', () => {
   const MockDxDataGrid = jest.fn().mockImplementation(() => mockDataGridMethods);
-  (MockDxDataGrid as any).getInstance = () => getInstanceMock();
   return MockDxDataGrid;
 });
 
 const createWidget = () => {
   const component = new DataGrid({});
-  component.widgetRef = {} as HTMLDivElement;
   return component;
 };
 
 describe('DataGrid', () => {
   describe('View', () => {
     it('default render', () => {
-      const widgetRef = React.createRef();
+      const domComponentRef: any = createRef();
       const props = {
         props: new DataGridProps(),
-        widgetRef,
+        domComponentRef,
         restAttributes: { 'rest-attributes': 'true' },
-      } as any as Partial<DataGrid>;
+      } as Partial<DataGrid>;
       const tree = mount(<DataGridView {...props as any} /> as any);
 
       expect(tree.find(DomComponentWrapper).props()).toMatchObject({
-        rootElementRef: widgetRef,
         componentProps: props.props,
         componentType: LegacyDataGrid,
         'rest-attributes': 'true',
       });
+      expect(tree.find(DomComponentWrapper).instance()).toBe(domComponentRef.current);
     });
   });
 
@@ -125,9 +122,9 @@ describe('DataGrid', () => {
         methodName,
       }) => {
         it(methodName, () => {
-          getInstanceMock.mockReturnValue(mockDataGridMethods);
           mockDataGridMethods[methodName] = jest.fn();
           const component = createWidget();
+          component.domComponentRef = { getInstance: () => mockDataGridMethods } as any;
 
           component[methodName]();
 
@@ -135,9 +132,8 @@ describe('DataGrid', () => {
         });
 
         it(`${methodName} if widget is not initialized`, () => {
-          getInstanceMock.mockReturnValue(null);
           const component = createWidget();
-
+          component.domComponentRef = { getInstance: () => null } as any;
           component[methodName]();
 
           expect.assertions(0);

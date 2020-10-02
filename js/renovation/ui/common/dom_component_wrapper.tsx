@@ -1,7 +1,7 @@
 import {
-  Effect, Component, ComponentBindings, JSXComponent, OneWay, Consumer, ForwardRef, Ref,
+  Component, ComponentBindings, ForwardRef, OneWay, JSXComponent, Ref, Method, Effect, Consumer,
 } from 'devextreme-generator/component_declaration/common';
-import DomComponent from '../../../core/dom_component';
+import type DomComponent from '../../../core/dom_component';
 import { ConfigContextValue, ConfigContext } from './config_context';
 import { EventCallback } from './event_callback.d';
 
@@ -42,18 +42,28 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   @Ref()
   widgetRef!: HTMLDivElement;
 
+  @Ref()
+  instance!: DomComponent | null;
+
+  @Method()
+  getInstance(): DomComponent | null {
+    return this.instance;
+  }
+
   @Effect()
   updateWidget(): void {
-    const widget = this.props.componentType.getInstance(this.widgetRef);
-    widget?.option(this.properties);
+    this.getInstance()?.option(this.properties);
   }
 
   @Effect({ run: 'once' })
   setupWidget(): () => void {
     // eslint-disable-next-line new-cap
-    const widget = new this.props.componentType(this.widgetRef, this.properties);
+    this.instance = new this.props.componentType(this.widgetRef, this.properties);
 
-    return (): void => widget.dispose();
+    return (): void => {
+      this.instance?.dispose();
+      this.instance = null;
+    };
   }
 
   @Effect({ run: 'once' }) setRootElementRef(): void {

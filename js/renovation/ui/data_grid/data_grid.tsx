@@ -10,9 +10,11 @@ import { DomComponentWrapper } from '../common/dom_component_wrapper';
 
 /* eslint-enable import/named */
 
-export const viewFunction = ({ widgetRef, props, restAttributes }: DataGrid): JSX.Element => (
+export const viewFunction = ({
+  domComponentRef, props, restAttributes,
+}: DataGrid): JSX.Element => (
   <DomComponentWrapper
-    rootElementRef={widgetRef}
+    ref={domComponentRef as any}
     componentType={LegacyDataGrid as any}
     componentProps={props}
   // eslint-disable-next-line react/jsx-props-no-spreading
@@ -27,10 +29,10 @@ export const viewFunction = ({ widgetRef, props, restAttributes }: DataGrid): JS
 })
 export class DataGrid extends JSXComponent(DataGridProps) {
   @Ref()
-  widgetRef!: HTMLDivElement;
+  domComponentRef!: DomComponentWrapper;
 
   get instance(): any {
-    return (LegacyDataGrid as any).getInstance(this.widgetRef);
+    return this.domComponentRef.getInstance();
   }
 
   @Method()
