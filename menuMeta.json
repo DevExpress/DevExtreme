@@ -600,7 +600,6 @@
           {
             "Title": "Column Template",
             "Name": "ColumnTemplate",
-            "DocUrl": "Guide/Widgets/DataGrid/Columns/Customize_Cells/#Customize_the_Appearance",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/DataGrid/Employee.cs",
@@ -611,7 +610,6 @@
           {
             "Title": "Row Template",
             "Name": "RowTemplate",
-            "DocUrl": "ApiReference/UI_Widgets/dxDataGrid/Configuration/#rowTemplate",
             "Widget": "DataGrid",
             "Modules": "globalize--vue&react",
             "MvcAdditionalFiles": [
@@ -649,7 +647,6 @@
           {
             "Title": "Toolbar Customization",
             "Name": "ToolbarCustomization",
-            "DocUrl": "ApiReference/UI_Widgets/dxDataGrid/Configuration/#onToolbarPreparing",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
               "/Models/Order.cs",
