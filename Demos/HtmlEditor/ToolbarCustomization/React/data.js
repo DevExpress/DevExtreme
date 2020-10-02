@@ -9,7 +9,7 @@ export const markup = `
     <ul>
         <li>Inline formats:
             <ul>
-                <li><strong>Bold</strong>, <em>italic</em>, <s>underlined</s> text formatting</li>
+                <li><strong>Bold</strong>, <em>italic</em>, <s>strikethrough</s> text formatting</li>
                 <li>Font, size, color changes (HTML only)</li>
             </ul>
         </li>
@@ -28,5 +28,6 @@ export const markup = `
         <li>Adaptive toolbar for working images, links, and color formats</li>
         <li>Insert images as a link or base64 (drag and drop images to convert them to base64)</li>
         <li>Copy-paste rich content (unsupported formats are removed)</li>
+        <li>Tables support</li>
     </ul>
 `;

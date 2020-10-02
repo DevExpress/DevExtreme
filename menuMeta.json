@@ -753,7 +753,7 @@
       },
       {
         "Name": "Export",
-        "Hidden":  true,
+        "Hidden": true,
         "Equivalents": "",
         "Demos": [
           {
@@ -805,7 +805,7 @@
         "Demos": [
           {
             "Title": "Advanced Document Customization",
-            "Hidden":  true,
+            "Hidden": true,
             "Name": "ExcelJS",
             "Widget": "DataGrid",
             "Modules": "exceljs&file-saver",
@@ -1347,7 +1347,8 @@
       {
         "Name": "Node Drag & Drop",
         "Equivalents": "",
-        "Demos": [{
+        "Demos": [
+          {
             "Title": "Node Drag & Drop",
             "Name": "LocalReordering",
             "Widget": "TreeList",
@@ -1357,7 +1358,8 @@
               "/Scripts/data/employees.js"
             ],
             "DemoType": "Web"
-          }]
+          }
+        ]
       },
       {
         "Name": "Focused Row",
@@ -1966,232 +1968,250 @@
             ]
           }
         ]
+      },
+      {
+        "Name": "Tables",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Tables",
+            "Name": "Tables",
+            "DocUrl": "",
+            "Widget": "HtmlEditor",
+            "Hidden": true,
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "Web",
+            "Badge": "New"
+          }
+        ]
       }
     ]
   },
   {
     "Name": "Diagram",
-    "Badge":  "New",
+    "Badge": "New",
     "Equivalents": "dxDiagram, dx-diagram, graph, flow, process, orgchart",
     "Groups": [
-        {
+      {
+        "Name": "Overview",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Overview",
             "Name": "Overview",
-            "Equivalents": "",
-            "Demos": [
-                {
-                    "Title": "Overview",
-                    "Name": "Overview",
-                    "DocUrl": "",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true,
-                    "Modules": "whatwg-fetch"
-                }
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          }
+        ]
+      },
+      {
+        "Name": "Data Binding",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Node and Edge Arrays",
+            "Name": "NodesAndEdgesArrays",
+            "DocUrl": "Guide/Widgets/Diagram/Data_Binding/#Node_and_Edge_Arrays",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Node List: Linear Array",
+            "Name": "NodesArrayPlainStructure",
+            "DocUrl": "Guide/Widgets/Diagram/Data_Binding/#Linear_Array",
+            "Widget": "Diagram",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employees.js"
+            ],
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Node List: Hierarchical Array",
+            "Name": "NodesArrayHierarchicalStructure",
+            "DocUrl": "Guide/Widgets/Diagram/Data_Binding/#Hierarchical_Array",
+            "Widget": "Diagram",
+            "MvcAdditionalFiles": [
+              "/Scripts/data/employees.js"
+            ],
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Advanced Data Binding",
+            "Name": "AdvancedDataBinding",
+            "DocUrl": "Guide/Widgets/Diagram/Data_Binding/#Data_Binding_Options",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Web API Service",
+            "Name": "WebAPIService",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "devextreme-aspnet-data-nojquery",
+            "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
+            "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
+            "Equivalents": "webapi",
+            "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
+            "MvcAdditionalFiles": [
+              "/Models/Diagram/Employee.cs",
+              "/Models/Diagram/InMemoryEmployeesDataContext.cs",
+              "/Controllers/ApiControllers/DiagramEmployeesController.cs"
             ]
-        },
-        {
-            "Name": "Data Binding",
-            "Equivalents": "",
-            "Demos": [
-                {
-                    "Title": "Node and Edge Arrays",
-                    "Name": "NodesAndEdgesArrays",
-                    "DocUrl": "Guide/Widgets/Diagram/Data_Binding/#Node_and_Edge_Arrays",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true
-                },
-                {
-                    "Title": "Node List: Linear Array",
-                    "Name": "NodesArrayPlainStructure",
-                    "DocUrl": "Guide/Widgets/Diagram/Data_Binding/#Linear_Array",
-                    "Widget": "Diagram",
-                    "MvcAdditionalFiles": [
-                        "/Scripts/data/employees.js"
-                    ],
-                    "DemoType": "Web",
-                    "WideDemo": true
-                },
-                {
-                    "Title": "Node List: Hierarchical Array",
-                    "Name": "NodesArrayHierarchicalStructure",
-                    "DocUrl": "Guide/Widgets/Diagram/Data_Binding/#Hierarchical_Array",
-                    "Widget": "Diagram",
-                    "MvcAdditionalFiles": [
-                        "/Scripts/data/employees.js"
-                    ],
-                    "DemoType": "Web",
-                    "WideDemo": true
-                },
-                {
-                    "Title": "Advanced Data Binding",
-                    "Name": "AdvancedDataBinding",
-                    "DocUrl": "Guide/Widgets/Diagram/Data_Binding/#Data_Binding_Options",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true
-                },
-                {
-                    "Title": "Web API Service",
-                    "Name": "WebAPIService",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true,
-                    "Modules": "devextreme-aspnet-data-nojquery",
-                    "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
-                    "NetCoreDocUrl": "https://docs.devexpress.com/AspNetCore/400575/concepts/devextreme-based-controls/data-binding",
-                    "Equivalents": "webapi",
-                    "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Custom_Data_Sources/",
-                    "MvcAdditionalFiles": [
-                      "/Models/Diagram/Employee.cs",
-                      "/Models/Diagram/InMemoryEmployeesDataContext.cs",
-                      "/Controllers/ApiControllers/DiagramEmployeesController.cs"
-                    ]
-                }
-            ]
-        },
-        {
-            "Name": "Featured Shapes",
-            "Equivalents": "",
-            "Demos": [
-                {
-                    "Title": "Containers",
-                    "Name": "Containers",
-                    "DocUrl": "",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true,
-                    "Modules": "whatwg-fetch"
-                },
-                {
-                    "Title": "OrgChart Shapes",
-                    "Name": "ImagesInShapes",
-                    "DocUrl": "",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true
-                }
-            ]
-        },
-        {
-            "Name": "Custom Shapes",
-            "Equivalents": "",
-            "Demos": [
-                {
-                    "Title": "Background Images",
-                    "Name": "CustomShapesWithIcons",
-                    "DocUrl": "Guide/Widgets/Diagram/Custom_Shapes/#Shapes_with_Custom_Background_Images​​​​​​​",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true,
-                    "Modules": "whatwg-fetch"
-                },
-                {
-                    "Title": "Shapes with Base Type",
-                    "Name": "CustomShapesWithTexts",
-                    "DocUrl": "Guide/Widgets/Diagram/Custom_Shapes/#Shapes_with_Base_Type​​​​​​​",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true,
-                    "Modules": "whatwg-fetch"
-                },
-                {
-                    "Title": "Templates",
-                    "Name": "CustomShapesWithTemplates",
-                    "DocUrl": "",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true
-                },
-                {
-                    "Title": "Templates with Editing",
-                    "Name": "CustomShapesWithTemplatesWithEditing",
-                    "DocUrl": "",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true,
-                    "Badge": "New"
-                }
-            ]
-        },
-        {
-            "Name": "Document Capabilities",
-            "Equivalents": "",
-            "Demos": [
-                {
-                    "Title": "Read Only Mode",
-                    "Name": "ReadOnly",
-                    "DocUrl": "",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true,
-                    "Modules": "whatwg-fetch"
-                },
-                {
-                    "Title": "Simple View",
-                    "Name": "SimpleView",
-                    "DocUrl": "",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true
-                }
-            ]
-        },
-        {
-          "Name": "User Interaction",
-          "Equivalents": "",
-          "Demos": [
-            {
-              "Title": "Item Selection",
-              "Name": "ItemSelection",
-              "DocUrl": "",
-              "Widget": "Diagram",
-              "DemoType": "Web",
-              "WideDemo": true,
-              "Modules": "whatwg-fetch",
-              "Badge": "New"
-            },
-            {
-              "Title": "Editing Restrictions",
-              "Name": "OperationRestrictions",
-              "DocUrl": "",
-              "Widget": "Diagram",
-              "DemoType": "Web",
-              "WideDemo": true,
-              "Badge": "New"
-            }
-          ]
-        },
-        {
-            "Name": "UI Customization",
-            "Equivalents": "",
-            "Demos": [
-                {
-                    "Title": "UI Customization",
-                    "Name": "UICustomization",
-                    "DocUrl": "Guide/Widgets/Diagram/Diagram_Tools/",
-                    "Widget": "Diagram",
-                    "DemoType": "Web",
-                    "WideDemo": true,
-                    "Modules": "whatwg-fetch",
-                    "Badge": "Updated"
-                }
-            ]
-        },
-        {
+          }
+        ]
+      },
+      {
+        "Name": "Featured Shapes",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Containers",
+            "Name": "Containers",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "OrgChart Shapes",
+            "Name": "ImagesInShapes",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          }
+        ]
+      },
+      {
+        "Name": "Custom Shapes",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Background Images",
+            "Name": "CustomShapesWithIcons",
+            "DocUrl": "Guide/Widgets/Diagram/Custom_Shapes/#Shapes_with_Custom_Background_Images​​​​​​​",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "Shapes with Base Type",
+            "Name": "CustomShapesWithTexts",
+            "DocUrl": "Guide/Widgets/Diagram/Custom_Shapes/#Shapes_with_Base_Type​​​​​​​",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "Templates",
+            "Name": "CustomShapesWithTemplates",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          },
+          {
+            "Title": "Templates with Editing",
+            "Name": "CustomShapesWithTemplatesWithEditing",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Badge": "New"
+          }
+        ]
+      },
+      {
+        "Name": "Document Capabilities",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Read Only Mode",
+            "Name": "ReadOnly",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          },
+          {
+            "Title": "Simple View",
+            "Name": "SimpleView",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true
+          }
+        ]
+      },
+      {
+        "Name": "User Interaction",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Item Selection",
+            "Name": "ItemSelection",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch",
+            "Badge": "New"
+          },
+          {
+            "Title": "Editing Restrictions",
+            "Name": "OperationRestrictions",
+            "DocUrl": "",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Badge": "New"
+          }
+        ]
+      },
+      {
+        "Name": "UI Customization",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "UI Customization",
+            "Name": "UICustomization",
+            "DocUrl": "Guide/Widgets/Diagram/Diagram_Tools/",
+            "Widget": "Diagram",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch",
+            "Badge": "Updated"
+          }
+        ]
+      },
+      {
+        "Name": "Adaptability",
+        "Equivalents": "",
+        "Demos": [
+          {
+            "Title": "Adaptability",
             "Name": "Adaptability",
-            "Equivalents": "",
-            "Demos": [
-                {
-                    "Title": "Adaptability",
-                    "Name": "Adaptability",
-                    "Widget": "Diagram",
-                    "DemoType": "Adaptivity",
-                    "WideDemo": true,
-                    "Modules": "whatwg-fetch"
-                }
-            ]
-        }
+            "Widget": "Diagram",
+            "DemoType": "Adaptivity",
+            "WideDemo": true,
+            "Modules": "whatwg-fetch"
+          }
+        ]
+      }
     ]
   },
   {
@@ -3663,7 +3683,7 @@
       },
       {
         "Name": "NavBar",
-        "Hidden":  true,
+        "Hidden": true,
         "Breadcrumb": true,
         "Equivalents": "NavigationBar, dxNavBar, dx-nav-bar",
         "Demos": [
@@ -3678,7 +3698,7 @@
       },
       {
         "Name": "Slideout",
-        "Hidden":  true,
+        "Hidden": true,
         "Breadcrumb": true,
         "Equivalents": "Navigarion Drawer, dxSlideOut, dx-slide-out",
         "Demos": [
@@ -3787,7 +3807,7 @@
         "Name": "Tree View",
         "Breadcrumb": true,
         "Equivalents": "TreeView, TreeList, dxTreeView, dx-tree-view",
-        "Groups" : [
+        "Groups": [
           {
             "Name": "Hierarchical Data Structure",
             "Demos": [
@@ -4441,7 +4461,7 @@
           {
             "Title": "Customize Fields at Runtime",
             "Name": "UpdateItemsDynamically",
-			"Equivalents": "add item, remove item, show item, hide item",
+            "Equivalents": "add item, remove item, show item, hide item",
             "DocUrl": "",
             "Widget": "Form"
           }
@@ -4658,7 +4678,8 @@
               "/Models/TreeList/InMemoryTasksDataContext.cs",
               "/Models/InMemoryDataContext.cs"
             ]
-          }, {
+          },
+          {
             "Title": "Customization",
             "Name": "Customization",
             "Widget": "Sortable"
@@ -5056,7 +5077,8 @@
               "/Models/ListTaskItem.cs",
               "/Models/SampleData/ListTasksData.cs"
             ]
-          }, {
+          },
+          {
             "Title": "Web API Service",
             "Name": "WebApi",
             "DocUrl": "Guide/Data_Binding/Specify_a_Data_Source/Web_API,_PHP,_MongoDB/",

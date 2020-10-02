@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DxHtmlEditor height="550px">
+    <DxHtmlEditor height="720px">
       <DxMediaResizing :enabled="true"/>
       <DxToolbar :multiline="isMultiline">
         <DxItem format-name="undo"/>
@@ -42,6 +42,15 @@
         <DxItem format-name="clear"/>
         <DxItem format-name="codeBlock"/>
         <DxItem format-name="blockquote"/>
+        <DxItem format-name="separator"/>
+        <DxItem format-name="insertTable"/>
+        <DxItem format-name="insertRowAbove"/>
+        <DxItem format-name="insertRowBelow"/>
+        <DxItem format-name="insertColumnLeft"/>
+        <DxItem format-name="insertColumnRight"/>
+        <DxItem format-name="deleteRow"/>
+        <DxItem format-name="deleteColumn"/>
+        <DxItem format-name="deleteTable"/>
       </DxToolbar>
 
       <div v-html="markup"/>
@@ -93,6 +102,10 @@ export default {
 .dx-htmleditor-content img {
     vertical-align: middle;
     padding-right: 10px;
+}
+
+.dx-htmleditor-content table {
+    width: 50%;
 }
 
 .options {

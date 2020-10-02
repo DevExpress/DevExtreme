@@ -3,6 +3,10 @@
     padding-right: 10px;
 }
 
+.dx-htmleditor-content table {
+    width: 50%;
+}
+
 .options {
     padding: 20px;
     background-color: rgba(191, 191, 191, 0.15);

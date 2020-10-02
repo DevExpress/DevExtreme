@@ -7,7 +7,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         bindingOptions: {
             "toolbar.multiline": "multilineToolbar"
         },
-        height: 550,
+        height: 720,
         toolbar: {
             items: [
                 "undo", "redo", "separator",
@@ -28,7 +28,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 }, "separator",
                 "color", "background", "separator",
                 "link", "image", "separator",
-                "clear", "codeBlock", "blockquote"
+                "clear", "codeBlock", "blockquote", "separator",
+                "insertTable", "insertRowAbove", "insertRowBelow", "insertColumnLeft", "insertColumnRight",
+                "deleteRow", "deleteColumn", "deleteTable"
             ]
         },
         mediaResizing: {

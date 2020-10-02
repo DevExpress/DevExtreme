@@ -1,6 +1,6 @@
 $(function() {
     var editor = $(".html-editor").dxHtmlEditor({
-        height: 550,
+        height: 720,
         toolbar: {
             items: [
                 "undo", "redo", "separator",
@@ -20,7 +20,9 @@ $(function() {
                 }, "separator",
                 "color", "background", "separator",
                 "link", "image", "separator",
-                "clear", "codeBlock", "blockquote"
+                "clear", "codeBlock", "blockquote", "separator",
+                "insertTable", "insertRowAbove", "insertRowBelow", "insertColumnLeft", "insertColumnRight",
+                "deleteRow", "deleteColumn", "deleteTable"
             ]
         },
         mediaResizing: {

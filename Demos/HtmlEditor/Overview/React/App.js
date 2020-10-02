@@ -24,7 +24,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <div className="widget-container">
-          <HtmlEditor height="550px">
+          <HtmlEditor height="720px">
             <MediaResizing enabled={true} />
             <Toolbar multiline={this.state.isMultiline}>
               <Item formatName="undo" />
@@ -66,6 +66,15 @@ class App extends React.Component {
               <Item formatName="clear" />
               <Item formatName="codeBlock" />
               <Item formatName="blockquote" />
+              <Item formatName="separator" />
+              <Item formatName="insertTable" />
+              <Item formatName="insertRowAbove" />
+              <Item formatName="insertRowBelow" />
+              <Item formatName="insertColumnLeft" />
+              <Item formatName="insertColumnRight" />
+              <Item formatName="deleteRow" />
+              <Item formatName="deleteColumn" />
+              <Item formatName="deleteTable" />
             </Toolbar>
             {HTMLReactParser(markup)}
           </HtmlEditor>
