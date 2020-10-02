@@ -33,6 +33,7 @@ const EDIT_ROW_CLASS = 'dx-edit-row';
 const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const COMMAND_EXPAND_CLASS = 'dx-command-expand';
 const COMMAND_SELECT_CLASS = 'dx-command-select';
+const COMMAND_EDIT_CLASS = 'dx-command-edit';
 const COMMAND_CELL_SELECTOR = '[class^=dx-command]';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const DATEBOX_WIDGET_NAME = 'dxDateBox';
@@ -1090,7 +1091,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                             }
                             !isFocusedElementDefined && this._focus($cell);
                         } else if(this._isCellEditMode() || this._isNeedFocus) {
-                            this._focus($cell, this._isHiddenFocus);
+                            !$cell.hasClass(COMMAND_EDIT_CLASS) && this._focus($cell, this._isHiddenFocus);
                         } else if(this._isHiddenFocus) {
                             this._focus($cell, true);
                         }
@@ -2087,7 +2088,7 @@ export default {
 
                     if(keyboardNavigationController.isKeyboardEnabled() && keyboardNavigationController._focusedCellPosition.rowIndex === rowIndex) {
                         const $focusedCell = keyboardNavigationController._getFocusedCell();
-                        if(isElementDefined($focusedCell) && !$focusedCell.hasClass('dx-command-edit')) {
+                        if(isElementDefined($focusedCell) && !$focusedCell.hasClass(COMMAND_EDIT_CLASS)) {
                             $cell = $focusedCell;
                         }
                     }
