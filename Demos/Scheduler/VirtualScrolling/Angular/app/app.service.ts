@@ -80,9 +80,9 @@ export class Service {
                     const minutesBeforeHour = 60 - minutes;
                     const minMinutes = Math.min(minutes, minutesBeforeHour);
                     const maxMinutes = Math.max(minutes, minutesBeforeHour);
-                    const apointmentTime = this.getRandomInt(minMinutes, maxMinutes) * 60 * 1000;
+                    const appointmentTime = this.getRandomInt(minMinutes, maxMinutes) * 60 * 1000;
                     const startDate = new Date(2021, 8, dayIndex, hour, minutes);
-                    const endDate = new Date(startDate.getTime() + apointmentTime);
+                    const endDate = new Date(startDate.getTime() + appointmentTime);
 
                     const item = {
                         text: this.texts[this.getRandomInt(0, this.texts.length)],

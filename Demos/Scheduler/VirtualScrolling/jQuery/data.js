@@ -60,9 +60,9 @@ function generateAppointments() {
         var minutesBeforeHour = 60 - minutes;
         var minMinutes = Math.min(minutes, minutesBeforeHour);
         var maxMinutes = Math.max(minutes, minutesBeforeHour);
-        var apointmentTime = getRandomInt(minMinutes, maxMinutes) * 60 * 1000;
+        var appointmentTime = getRandomInt(minMinutes, maxMinutes) * 60 * 1000;
         var startDate = new Date(2021, 8, dayIndex, hour, minutes);
-        var endDate = new Date(startDate.getTime() + apointmentTime);
+        var endDate = new Date(startDate.getTime() + appointmentTime);
 
         var item = {
           text: texts[getRandomInt(0, texts.length)],
