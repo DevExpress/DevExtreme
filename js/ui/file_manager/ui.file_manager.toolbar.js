@@ -160,9 +160,10 @@ class FileManagerToolbar extends Widget {
             preparedItem.originalItemData = item;
 
             if(commandName !== 'separator') {
-                preparedItem.available = this._isToolbarItemAvailable(preparedItem);
-                const itemVisible = preparedItem.available;
-                preparedItem.visible = itemVisible;
+                preparedItem._available = this._isToolbarItemAvailable(preparedItem);
+                preparedItem.visible = isDefined(preparedItem.visible)
+                    ? preparedItem.visible
+                    : preparedItem._available;
             }
 
             return preparedItem;
@@ -391,13 +392,13 @@ class FileManagerToolbar extends Widget {
                 let optionsSource = null;
 
                 if(useCompactMode) {
-                    item.saved = this._getCompactModeOptions(item, item.available); // TODO use private name
+                    item.saved = this._getCompactModeOptions(item, item._available);
                     optionsSource = item.compactMode;
                 } else {
                     optionsSource = item.saved;
                 }
 
-                const options = this._getCompactModeOptions(optionsSource, item.available);
+                const options = this._getCompactModeOptions(optionsSource, item._available);
                 extend(true, item, options);
                 hasModifications = true;
             }
@@ -411,9 +412,9 @@ class FileManagerToolbar extends Widget {
         this._updateSeparatorsVisibility(items, toolbar);
     }
 
-    _getCompactModeOptions({ showText, locateInMenu, options }, available) {
+    _getCompactModeOptions({ showText, locateInMenu, options, visible }, _available) {
         return {
-            visible: available,
+            visible: isDefined(visible) ? visible : _available,
             showText: ensureDefined(showText, 'always'),
             locateInMenu: ensureDefined(locateInMenu, 'never'),
             options: {
@@ -428,10 +429,10 @@ class FileManagerToolbar extends Widget {
 
         items.forEach(item => {
             if(item.name !== 'separator') {
-                const itemVisible = item.available;
-                item.available = this._isToolbarItemAvailable(item, fileItems);
-                if(item.available !== itemVisible) {
-                    item.visible = item.available;
+                const itemVisible = item._available;
+                item._available = this._isToolbarItemAvailable(item, fileItems);
+                item.visible = isDefined(item.visible) ? item.visible : item._available;
+                if(item._available !== itemVisible) {
                     hasModifications = true;
                 }
             }
