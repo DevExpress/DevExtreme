@@ -8,7 +8,6 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect, getDefaultAlignment } from '../../core/utils/position';
 import { isEmpty } from '../../core/utils/string';
-
 import { compileGetter } from '../../core/utils/data';
 import gridCoreUtils from './ui.grid_core.utils';
 import { ColumnsView } from './ui.grid_core.columns_view';
@@ -967,7 +966,7 @@ export default {
                     that._updateRowHeight();
                     deferRender(function() {
                         that._renderScrollable();
-                        that.gridCoreUtils.renderNoDataText();
+                        that.renderNoDataText();
                         that.updateFreeSpaceRowHeight();
                         deferUpdate(function() {
                             that._updateScrollable();
@@ -1130,7 +1129,7 @@ export default {
                             args.handled = true;
                             break;
                         case 'noDataText':
-                            that.gridCoreUtils.renderNoDataText();
+                            that.renderNoDataText();
                             args.handled = true;
                             break;
                     }
