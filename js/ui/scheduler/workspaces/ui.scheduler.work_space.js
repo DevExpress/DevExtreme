@@ -2254,8 +2254,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
             cellData, position, currentDate,
         );
-
-
     }
 
     _isOutsideScrollable(target, event) {

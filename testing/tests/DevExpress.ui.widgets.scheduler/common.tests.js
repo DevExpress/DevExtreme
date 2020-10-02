@@ -1041,164 +1041,170 @@ QUnit.module('Initialization', {
     });
 })('Methods');
 
-(function() {
+QUnit.module('Scrolling to time', () => {
+    ['standard', 'virtual'].forEach((scrollingMode) => {
+        const moduleName = scrollingMode === 'virtual'
+            ? 'Virtual Scrolling'
+            : 'Standard Scrolling';
+        QUnit.module(moduleName, {
+            beforeEach: function() {
+                this.createInstance = function(options) {
+                    this.instance = $('#scheduler').dxScheduler($.extend({
+                        showCurrentTimeIndicator: false,
+                        scrolling: { mode: scrollingMode },
+                    }, options)).dxScheduler('instance');
+                };
 
-    QUnit.module('Scrolling to time', {
-        beforeEach: function() {
-            this.createInstance = function(options) {
-                this.instance = $('#scheduler').dxScheduler($.extend({
-                    showCurrentTimeIndicator: false
-                }, options)).dxScheduler('instance');
-            };
+                this.clock = sinon.useFakeTimers();
+                sinon.spy(errors, 'log');
+                fx.off = true;
+            },
+            afterEach: function() {
+                this.clock.restore();
+                errors.log.restore();
+                fx.off = false;
+            }
+        }, () => {
+            QUnit.test('Check scrolling to time', function(assert) {
+                this.createInstance({
+                    currentView: 'week',
+                    currentDate: new Date(2015, 1, 9),
+                    height: 500
+                });
 
-            this.clock = sinon.useFakeTimers();
-            sinon.spy(errors, 'log');
-            fx.off = true;
-        },
-        afterEach: function() {
-            this.clock.restore();
-            errors.log.restore();
-            fx.off = false;
-        }
-    });
+                const scrollable = this.instance.getWorkSpaceScrollable();
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
 
-    QUnit.test('Check scrolling to time', function(assert) {
-        this.createInstance({
-            currentView: 'week',
-            currentDate: new Date(2015, 1, 9),
-            height: 500
+                this.instance.scrollToTime(9, 5);
+
+                assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, 'scrollBy was called with right distance');
+                assert.equal(scrollBy.getCall(0).args[0].left, 0, 'scrollBy was called with right distance');
+            });
+
+            QUnit.test('Check scrolling to time, if startDayHour is not 0', function(assert) {
+                this.createInstance({
+                    currentView: 'week',
+                    currentDate: new Date(2015, 1, 9),
+                    height: 500,
+                    startDayHour: 3
+                });
+
+                const scrollable = this.instance.getWorkSpaceScrollable();
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+
+                this.instance.scrollToTime(2, 0);
+
+                assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, 'scrollBy was called with right distance');
+
+                this.instance.scrollToTime(5, 0);
+
+                assert.roughEqual(scrollBy.getCall(1).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, 'scrollBy was called with right distance');
+            });
+
+            QUnit.test('Check scrolling to time, if \'hours\' argument greater than the \'endDayHour\' option', function(assert) {
+                this.createInstance({
+                    currentView: 'week',
+                    currentDate: new Date(2015, 1, 9),
+                    height: 500,
+                    endDayHour: 10
+                });
+
+                const scrollable = this.instance.getWorkSpaceScrollable();
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+
+                this.instance.scrollToTime(12, 0);
+
+                assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, 'scrollBy was called with right distance');
+            });
+
+            QUnit.test('Scrolling to date which doesn\'t locate on current view should call console warning', function(assert) {
+                this.createInstance({
+                    currentView: 'week',
+                    currentDate: new Date(2015, 1, 9),
+                    height: 500
+                });
+
+                this.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
+
+                assert.equal(errors.log.callCount, 1, 'warning has been called once');
+                assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
+            });
+
+            QUnit.test('Check scrolling to time for timeline view', function(assert) {
+                this.createInstance({
+                    views: ['timelineWeek'],
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2015, 1, 9),
+                    width: 500
+                });
+
+                const scrollable = this.instance.getWorkSpaceScrollable();
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+
+                this.instance.scrollToTime(9, 5);
+
+                assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left, 1.001, 'scrollBy was called with right distance');
+            });
+
+            QUnit.test('Check scrolling to time for timeline view, rtl mode', function(assert) {
+                this.createInstance({
+                    views: ['timelineWeek'],
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2015, 1, 9),
+                    width: 500,
+                    rtlEnabled: true
+                });
+
+                const scrollable = this.instance.getWorkSpaceScrollable();
+                const scrollLeft = scrollable.scrollLeft();
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+                const offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
+
+                this.instance.scrollToTime(9, 5);
+
+                assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset, 1.001, 'scrollBy was called with right distance');
+            });
+
+            QUnit.test('Check scrolling to time for timeline view if date was set', function(assert) {
+                this.createInstance({
+                    views: ['timelineWeek'],
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2015, 1, 9),
+                    width: 500,
+                    firstDayOfWeek: 1
+                });
+
+                const scrollable = this.instance.getWorkSpaceScrollable();
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+
+                this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
+
+                assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left, 1.001, 'scrollBy was called with right distance');
+            });
+
+            QUnit.test('Check scrolling to time for timeline view if date was set, rtl mode', function(assert) {
+                this.createInstance({
+                    views: ['timelineWeek'],
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2015, 1, 9),
+                    width: 500,
+                    firstDayOfWeek: 1,
+                    rtlEnabled: true
+                });
+
+                const scrollable = this.instance.getWorkSpaceScrollable();
+                const scrollLeft = scrollable.scrollLeft();
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+                const offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
+
+                this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
+
+                assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset, 1.001, 'scrollBy was called with right distance');
+            });
         });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(9, 5);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, 'scrollBy was called with right distance');
-        assert.equal(scrollBy.getCall(0).args[0].left, 0, 'scrollBy was called with right distance');
     });
+});
 
-    QUnit.test('Check scrolling to time, if startDayHour is not 0', function(assert) {
-        this.createInstance({
-            currentView: 'week',
-            currentDate: new Date(2015, 1, 9),
-            height: 500,
-            startDayHour: 3
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(2, 0);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, 'scrollBy was called with right distance');
-
-        this.instance.scrollToTime(5, 0);
-
-        assert.roughEqual(scrollBy.getCall(1).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Check scrolling to time, if \'hours\' argument greater than the \'endDayHour\' option', function(assert) {
-        this.createInstance({
-            currentView: 'week',
-            currentDate: new Date(2015, 1, 9),
-            height: 500,
-            endDayHour: 10
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(12, 0);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Scrolling to date which doesn\'t locate on current view should call console warning', function(assert) {
-        this.createInstance({
-            currentView: 'week',
-            currentDate: new Date(2015, 1, 9),
-            height: 500
-        });
-
-        this.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
-
-        assert.equal(errors.log.callCount, 1, 'warning has been called once');
-        assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
-    });
-
-    QUnit.test('Check scrolling to time for timeline view', function(assert) {
-        this.createInstance({
-            views: ['timelineWeek'],
-            currentView: 'timelineWeek',
-            currentDate: new Date(2015, 1, 9),
-            width: 500
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(9, 5);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Check scrolling to time for timeline view, rtl mode', function(assert) {
-        this.createInstance({
-            views: ['timelineWeek'],
-            currentView: 'timelineWeek',
-            currentDate: new Date(2015, 1, 9),
-            width: 500,
-            rtlEnabled: true
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollLeft = scrollable.scrollLeft();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-        const offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
-
-        this.instance.scrollToTime(9, 5);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Check scrolling to time for timeline view if date was set', function(assert) {
-        this.createInstance({
-            views: ['timelineWeek'],
-            currentView: 'timelineWeek',
-            currentDate: new Date(2015, 1, 9),
-            width: 500,
-            firstDayOfWeek: 1
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Check scrolling to time for timeline view if date was set, rtl mode', function(assert) {
-        this.createInstance({
-            views: ['timelineWeek'],
-            currentView: 'timelineWeek',
-            currentDate: new Date(2015, 1, 9),
-            width: 500,
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollLeft = scrollable.scrollLeft();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-        const offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
-
-        this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset, 1.001, 'scrollBy was called with right distance');
-    });
-})('Scrolling to time');
 
 (function() {
 

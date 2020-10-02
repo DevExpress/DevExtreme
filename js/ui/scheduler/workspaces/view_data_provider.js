@@ -343,7 +343,7 @@ export default class ViewDataProvider {
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
     }
 
-    findGlobalCellPosition(startDate, groupIndex, allDay) {
+    findGlobalCellPosition(startDate, groupIndex = 0, allDay = false) {
         const { completeViewDataMap, _workspace: workspace } = this;
         const startTime = startDate.getTime();
         const showAllDayPanel = workspace._isShowAllDayPanel();
