@@ -1607,9 +1607,9 @@ const PivotGrid = Widget.inherit({
                 filterAreaHeight = filterHeaderCell.height();
 
                 const $dataHeader = tableElement.find('.dx-data-header');
-                const dataHeaderHeight = !msie
-                    ? $dataHeader.height()
-                    : getSize($dataHeader.get(0), 'height', { paddings: false, borders: false, margins: false });
+                const dataHeaderHeight = msie
+                    ? getSize($dataHeader.get(0), 'height', { paddings: false, borders: false, margins: false })
+                    : $dataHeader.height();
 
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
                 dataAreaHeight = that.$element().height() - filterAreaHeight - dataHeaderHeight - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);

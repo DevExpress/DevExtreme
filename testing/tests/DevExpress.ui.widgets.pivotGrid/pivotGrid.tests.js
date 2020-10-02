@@ -38,7 +38,7 @@ import dataUtils from 'core/element_data';
 import { getSize } from 'core/utils/size';
 import eventsEngine from 'events/core/events_engine';
 
-const DATA_AREA_CELL_CLASS = '.dx-area-data-cell';
+const DATA_AREA_CELL_CLASS = 'dx-area-data-cell';
 
 function sumArray(array) {
     let sum = 0;
@@ -225,7 +225,7 @@ QUnit.module('dxPivotGrid', {
         this.clock.tick();
 
         const $noDataElement = $(pivotGrid.$element().find('.dx-pivotgrid-nodata'));
-        const dataAreaCell = $(DATA_AREA_CELL_CLASS);
+        const dataAreaCell = $(`.${DATA_AREA_CELL_CLASS}`);
         const dataAreaCellOffset = dataAreaCell.offset();
         const noDataElementOffset = $noDataElement.offset();
 
@@ -2684,7 +2684,7 @@ QUnit.module('dxPivotGrid', {
         const $pivotGridElement = $('#pivotGrid').height(200); const pivotGrid = createPivotGrid(this.testOptions);
 
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
-        assert.equal(pivotGrid.$element().find(DATA_AREA_CELL_CLASS).css('borderBottomWidth'), '0px', 'data area border bottom width');
+        assert.equal(pivotGrid.$element().find(`.${DATA_AREA_CELL_CLASS}`).css('borderBottomWidth'), '0px', 'data area border bottom width');
         assert.equal(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth'), '0px', 'row area border bottom width');
 
         const scrollable = pivotGrid._dataArea.groupElement().dxScrollable('instance');
@@ -2699,7 +2699,7 @@ QUnit.module('dxPivotGrid', {
         assert.ok(pivotGrid, 'pivotGrid container is rendered');
         assert.ok(!pivotGrid._rowsArea.hasScroll(), 'no has vertical scroll after resize');
 
-        assert.ok(parseFloat(pivotGrid.$element().find(DATA_AREA_CELL_CLASS).css('borderBottomWidth')) > 0, 'data area border bottom width');
+        assert.ok(parseFloat(pivotGrid.$element().find(`.${DATA_AREA_CELL_CLASS}`).css('borderBottomWidth')) > 0, 'data area border bottom width');
         assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth')) > 0, 'row area border bottom width');
 
         assert.equal(pivotGrid._dataArea.groupElement().dxScrollable('scrollHeight'), pivotGrid._dataArea.groupElement().dxScrollable('clientHeight'), 'client height equal scroll height');
@@ -2810,7 +2810,7 @@ QUnit.module('dxPivotGrid', {
 
             // assert
             assert.ok(!pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
-            assert.ok(parseFloat(pivotGrid.$element().find(DATA_AREA_CELL_CLASS).css('borderBottomWidth')) > 0, 'data area border bottom width');
+            assert.ok(parseFloat(pivotGrid.$element().find(`.${DATA_AREA_CELL_CLASS}`).css('borderBottomWidth')) > 0, 'data area border bottom width');
             assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth')) > 0, 'row area border bottom width');
             assert.equal(pivotGrid._dataArea.groupElement().dxScrollable('scrollHeight'), pivotGrid._dataArea.groupElement().dxScrollable('clientHeight'), 'client height equal scroll height');
         });
@@ -2826,7 +2826,7 @@ QUnit.module('dxPivotGrid', {
 
         // assert
         assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
-        assert.equal(parseFloat(pivotGrid.$element().find(DATA_AREA_CELL_CLASS).css('borderBottomWidth')), 0, 'data area border bottom width');
+        assert.equal(parseFloat(pivotGrid.$element().find(`.${DATA_AREA_CELL_CLASS}`).css('borderBottomWidth')), 0, 'data area border bottom width');
         assert.equal(parseFloat(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth')), 0, 'row area border bottom width');
     });
 
@@ -2841,7 +2841,7 @@ QUnit.module('dxPivotGrid', {
         // assert
         assert.ok(!pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
         assert.ok(pivotGrid._columnsArea.hasScroll(), 'has horizontal scroll');
-        assert.ok(parseFloat(pivotGrid.$element().find(DATA_AREA_CELL_CLASS).css('borderBottomWidth')) > 0, 'data area border bottom width');
+        assert.ok(parseFloat(pivotGrid.$element().find(`.${DATA_AREA_CELL_CLASS}`).css('borderBottomWidth')) > 0, 'data area border bottom width');
         assert.ok(parseFloat(pivotGrid.$element().find('.dx-area-row-cell').css('borderBottomWidth')) > 0, 'row area border bottom width when no scrollbar width');
     });
 
@@ -4618,7 +4618,7 @@ QUnit.module('Field Panel', {
                         clock.tick();
                         eventsEngine.trigger(pivotGrid.element(), 'dxresize');
 
-                        const $dataAreaCell = pivotGrid.$element().find(DATA_AREA_CELL_CLASS).first();
+                        const $dataAreaCell = pivotGrid.$element().find(`.${DATA_AREA_CELL_CLASS}`).first();
                         const expectedHeight = fieldPanelVisible ? 33 : 86;
                         assert.roughEqual($dataAreaCell.height(), expectedHeight, 1.1, 'data area has correct height');
                         clock.restore();
