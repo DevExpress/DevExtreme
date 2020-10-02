@@ -257,23 +257,50 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     }
 
-    _renderIndicator(height, rtlOffset, $container, groupCount) {
-        let $indicator;
-        const width = this.getIndicationWidth();
+    getIndicationWidthNew(date, $cell) {
+        const today = this._getToday();
+        const cellWidth = this.getCellWidth();
+        const cellDate = this.getCellData($cell).startDate;
+        // const date = new Date(this._firstViewDate);
 
-        if(this.option('groupOrientation') === 'vertical') {
-            $indicator = this._createIndicator($container);
-            $indicator.height(getBoundingRect($container.get(0)).height);
-            $indicator.css('left', rtlOffset ? rtlOffset - width : width);
-        } else {
-            for(let i = 0; i < groupCount; i++) {
-                const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
-                $indicator = this._createIndicator($container);
-                $indicator.height(getBoundingRect($container.get(0)).height);
+        // if(this._needRenderDateTimeIndicator()) {
+        //     date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+        // }
 
-                $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
-            }
+        const duration = today.getTime() - cellDate.getTime();
+        const cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellWidth;
+    }
+
+    _renderIndicator(date, groupCount) {
+        const groupedByDate = this.isGroupedByDate();
+        const repeatCount = groupedByDate ? 1 : groupCount;
+        for(let i = 0; i < repeatCount; i++) {
+            const $container = this.getCellByDate(this._getToday(), i);
+            const $indicator = this._createIndicator($container);
+            // $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
+            const height1 = this.getIndicationWidthNew(date, $container);
+            $indicator.css('left', height1);
+            // this._groupedStrategy.shiftIndicator($indicator, height1, i);
         }
+
+        // let $indicator;
+        // const width = this.getIndicationWidth();
+
+        // if(this.option('groupOrientation') === 'vertical') {
+        //     $indicator = this._createIndicator($container);
+        //     $indicator.height(getBoundingRect($container.get(0)).height);
+        //     $indicator.css('left', rtlOffset ? rtlOffset - width : width);
+        // } else {
+        //     for(let i = 0; i < groupCount; i++) {
+        //         const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
+        //         $indicator = this._createIndicator($container);
+        //         $indicator.height(getBoundingRect($container.get(0)).height);
+
+        //         $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
+        //     }
+        // }
     }
 
     _isVerticalShader() {
