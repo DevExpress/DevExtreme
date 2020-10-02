@@ -24,10 +24,10 @@ if(Quill) {
 
     const TOOLBAR_WRAPPER_CLASS = 'dx-htmleditor-toolbar-wrapper';
     const TOOLBAR_CLASS = 'dx-htmleditor-toolbar';
-    const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-localizationMessage.format';
+    const TOOLBAR_FORMAT_WIDGET_CLASS = 'dx-htmleditor-toolbar-format';
     const TOOLBAR_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-separator';
     const TOOLBAR_MENU_SEPARATOR_CLASS = 'dx-htmleditor-toolbar-menu-separator';
-    const ACTIVE_FORMAT_CLASS = 'dx-localizationMessage.format-active';
+    const ACTIVE_FORMAT_CLASS = 'dx-format-active';
     const BOX_ITEM_CONTENT_CLASS = 'dx-box-item-content';
 
     const ICON_CLASS = 'dx-icon';
@@ -89,7 +89,7 @@ if(Quill) {
 
         _applyFormat(formatArgs, event) {
             this._editorInstance._saveValueChangeEvent(event);
-            this.quill.localizationMessage.format(...formatArgs);
+            this.quill.format(...formatArgs);
         }
 
         _addCallbacks() {
@@ -572,7 +572,7 @@ if(Quill) {
                     onInitialized: (e) => {
                         if(item.formatName) {
                             e.component.$element().addClass(TOOLBAR_FORMAT_WIDGET_CLASS);
-                            e.component.$element().toggleClass(`dx-${item.formatName.toLowerCase()}-localizationMessage.format`, !!item.formatName);
+                            e.component.$element().toggleClass(`dx-${item.formatName.toLowerCase()}-format`, !!item.formatName);
                             this._toolbarWidgets.add(item.formatName, e.component);
                         }
                     }
