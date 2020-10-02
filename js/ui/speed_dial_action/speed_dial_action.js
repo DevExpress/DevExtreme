@@ -4,7 +4,9 @@ import Guid from '../../core/guid';
 import readyCallbacks from '../../core/utils/ready_callbacks';
 import Widget from '../widget/ui.widget';
 import { initAction, disposeAction } from './speed_dial_main_item';
-import { getSwatchContainer } from '../widget/swatch_container';
+import swatchContainer from '../widget/swatch_container';
+
+const { getSwatchContainer } = swatchContainer;
 
 // STYLE speedDialAction
 

@@ -30,15 +30,15 @@ import DataHelperMixin from '../../data_helper';
 import { triggerResizeEvent } from '../../events/visibility_change';
 import dateLocalization from '../../localization/date';
 import messageLocalization from '../../localization/message';
-import dialog from '../dialog';
-import themes from '../themes';
+import { custom as customDialog } from '../dialog';
+import { isMaterial } from '../themes';
 import errors from '../widget/ui.errors';
 import Widget from '../widget/ui.widget';
 import AppointmentPopup from './appointmentPopup';
 import { CompactAppointmentsHelper } from './compactAppointmentsHelper';
 import { DesktopTooltipStrategy } from './tooltip_strategies/desktopTooltipStrategy';
 import { MobileTooltipStrategy } from './tooltip_strategies/mobileTooltipStrategy';
-import loading from './ui.loading';
+import { hide as hideLoading, show as showLoading } from './ui.loading';
 import SchedulerAppointments from './ui.scheduler.appointments';
 import SchedulerLayoutManager from './ui.scheduler.appointments.layout_manager';
 import SchedulerAppointmentModel from './ui.scheduler.appointment_model';
@@ -718,7 +718,7 @@ class Scheduler extends Widget {
             },
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     useDropDownViewSwitcher: true,
@@ -1128,15 +1128,15 @@ class Scheduler extends Widget {
         if(this._dataSource) {
 
             this._dataSource.load().done((function() {
-                loading.hide();
+                hideLoading();
 
                 this._fireContentReadyAction(result);
             }).bind(this)).fail(function() {
-                loading.hide();
+                hideLoading();
                 result.reject();
             });
 
-            this._dataSource.isLoading() && loading.show({
+            this._dataSource.isLoading() && showLoading({
                 container: this.$element(),
                 position: {
                     of: this.$element()
@@ -2022,7 +2022,7 @@ class Scheduler extends Widget {
         const seriesText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteSeries' : 'dxScheduler-confirmRecurrenceEditSeries');
         const occurrenceText = messageLocalization.format(isDeleted ? 'dxScheduler-confirmRecurrenceDeleteOccurrence' : 'dxScheduler-confirmRecurrenceEditOccurrence');
 
-        return dialog.custom({
+        return customDialog({
             messageHtml: message,
             showCloseButton: true,
             showTitle: true,

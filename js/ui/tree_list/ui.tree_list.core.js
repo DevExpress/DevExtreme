@@ -1,7 +1,7 @@
 import { extend } from '../../core/utils/extend';
 import modules from '../grid_core/ui.grid_core.modules';
 
-extend(exports, modules, {
+export default extend({}, modules, {
     modules: [],
 
     foreachNodes: function(nodes, callBack) {
