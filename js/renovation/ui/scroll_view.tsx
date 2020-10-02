@@ -82,12 +82,8 @@ export class ScrollViewProps {
   @Slot() children?: any;
 
   @OneWay() direction: ScrollViewDirection = 'vertical';
-
-  @OneWay() height?: string | number | (() => (string | number));
-
-  @OneWay() width?: string | number | (() => (string | number));
 }
-type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled'>;
+type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
 @Component({
   view: viewFunction,
