@@ -1339,7 +1339,7 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual($list.find(`.${LIST_SELECT_ALL_LABEL_CLASS}`).text(), 'Select All');
     });
 
-    QUnit.test('menuItems can be added runtime', function(assert) {
+    QUnit.test('menuItems can be added at runtime', function(assert) {
         const menuItems = [{ text: 'action' }];
         const $list = $('#list').dxList({
             items: [{ text: 'test 1' }, { text: 'test 2' }],
@@ -1397,7 +1397,7 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual($menuItems.length, 1, 'items count is correct');
     });
 
-    QUnit.test('menuMode can be changed from context to slide runtime', function(assert) {
+    QUnit.test('menuMode can be changed from context to slide at runtime', function(assert) {
         const actionSpy = sinon.spy();
         const menuItems = [{ text: 'action', action: actionSpy }];
         const $list = $('#list').dxList({
@@ -1417,7 +1417,7 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual($actionButtons.length, 1, 'items count is correct');
     });
 
-    QUnit.test('menuMode can be changed from slide to context runtime', function(assert) {
+    QUnit.test('menuMode can be changed from slide to context at runtime', function(assert) {
         const actionSpy = sinon.spy();
         const menuItems = [{ text: 'action', action: actionSpy }];
         const $list = $('#list').dxList({
