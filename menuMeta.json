@@ -3240,7 +3240,6 @@
   {
     "Name": "Gantt",
     "Equivalents": "dxGantt, dx-gantt",
-    "Badge": "New",
     "Groups": [
       {
         "Name": "Overview",
@@ -3288,10 +3287,12 @@
       {
         "Name": "UI Customization",
         "Equivalents": "",
+        "Badge": "Updated",
         "Demos": [
           {
             "Title": "Chart Appearance",
             "Name": "ChartAppearance",
+            "Badge": "Updated",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,
@@ -3302,6 +3303,17 @@
           {
             "Title": "Toolbar",
             "Name": "Toolbar",
+            "Widget": "Gantt",
+            "DemoType": "Web",
+            "WideDemo": true,
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GanttData.cs"
+            ]
+          },
+          {
+            "Title": "Context Menu",
+            "Name": "ContextMenu",
+            "Badge": "New",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,

@@ -1,0 +1,38 @@
+<div id="demo-container">
+    <div class="options">
+        <div class="caption">Options</div>
+        <div class="option">
+            <dx-check-box
+                text="Prevent Context Menu Showing"
+                [value]="false"
+                (onValueChanged)="onPreventContextMenuShowing($event)"></dx-check-box>
+        </div>
+        <div class="option">
+            <dx-check-box
+                text="Customize Context Menu"
+                [value]="true"
+                (onValueChanged)="onCustomizeContextMenu($event)"></dx-check-box>
+        </div>
+    </div>
+<div class="widget-container">
+    <dx-gantt
+        taskListWidth="500"
+        scaleType="weeks"
+        height="700"
+        [showResources]="showResources"
+        (onCustomCommand)="onCustomCommandClick($event)">
+
+        <dxo-context-menu [items]="contextMenuItems" [enabled]="!disableContextMenu"></dxo-context-menu>
+        <dxo-tasks [dataSource]="tasks"></dxo-tasks>
+        <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
+        <dxo-resources [dataSource]="resources"></dxo-resources>
+        <dxo-resource-assignments [dataSource]="resourceAssignments"></dxo-resource-assignments>
+
+        <dxi-column dataField="title" caption="Subject" [width]="300"></dxi-column>
+        <dxi-column dataField="start" caption="Start Date" dataType="date"></dxi-column>
+        <dxi-column dataField="end" caption="End Date" dataType="date"></dxi-column>
+
+        <dxo-editing [enabled]="true"></dxo-editing>
+    </dx-gantt>
+</div>
+
