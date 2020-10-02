@@ -1,10 +1,10 @@
 import TreeMapBase from './tree_map.base';
-import { prototype as nodeProto } from './node';
+import Node from './node';
 import { expand } from '../core/helpers';
-import common from './common';
+import { buildRectAppearance } from './common';
 import { parseScalar as _parseScalar } from '../core/utils';
-const _buildRectAppearance = common.buildRectAppearance;
 const proto = TreeMapBase.prototype;
+const nodeProto = Node.prototype;
 
 const STATE_CODE = 1;
 
@@ -14,7 +14,7 @@ import './states';
 proto._eventsMap.onHoverChanged = { name: 'hoverChanged' };
 
 expand(proto._handlers, 'calculateAdditionalStates', function(states, options) {
-    states[1] = options.hoverStyle ? _buildRectAppearance(options.hoverStyle) : {};
+    states[1] = options.hoverStyle ? buildRectAppearance(options.hoverStyle) : {};
 });
 
 TreeMapBase.addChange({

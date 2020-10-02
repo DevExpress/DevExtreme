@@ -1,9 +1,9 @@
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import scatterSeries from './scatter_series';
+import * as scatterSeries from './scatter_series';
 import { chart as areaChart } from './area_series';
 const areaSeries = areaChart.area;
-import vizUtils from '../core/utils';
+import { convertPolarToXY } from '../core/utils';
 const chartSeries = scatterSeries.chart;
 const polarSeries = scatterSeries.polar;
 import { isDefined as _isDefined } from '../../core/utils/type';
@@ -217,7 +217,7 @@ polar.bar = _extend({}, polarSeries, baseBarSeriesMethods, {
         for(let i = 0; i < points.length; i++) {
             const p = points[i];
             const tmpPoint = _isDefined(p[paramName]) && _isDefined(params[paramName]) && p[paramName].valueOf() === params[paramName].valueOf() ?
-                vizUtils.convertPolarToXY(argAxis.getCenter(), startAngle, -argAxis.getTranslatedAngle(p.angle), p.radius) : undefined;
+                convertPolarToXY(argAxis.getCenter(), startAngle, -argAxis.getTranslatedAngle(p.angle), p.radius) : undefined;
 
             if(_isDefined(tmpPoint)) {
                 coords = tmpPoint;

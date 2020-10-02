@@ -1,8 +1,8 @@
 import eventsEngine from '../../events/core/events_engine';
 import Class from '../../core/class';
 import domAdapter from '../../core/dom_adapter';
-import wheelEvent from '../../events/core/wheel';
-import { add as ready } from '../../core/utils/ready_callbacks';
+import { name as wheelEventName } from '../../events/core/wheel';
+import ReadyCallbacks from '../../core/utils/ready_callbacks';
 import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
 ///#DEBUG
@@ -11,6 +11,8 @@ import { debug } from '../../core/utils/console';
 const EVENT_NS = 'gauge-tooltip';
 
 const TOOLTIP_HIDE_DELAY = 100;
+
+const ready = ReadyCallbacks.add;
 
 const Tracker = Class.inherit({
     ctor: function(parameters) {
@@ -90,7 +92,7 @@ const Tracker = Class.inherit({
                 .on(addNamespace([pointerEvents.out], EVENT_NS), data, handleTooltipMouseOut)
                 .on(addNamespace([pointerEvents.down], EVENT_NS), data, handleTooltipTouchStart)
                 .on(addNamespace([pointerEvents.up], EVENT_NS), data, handleTooltipTouchEnd)
-                .on(addNamespace([wheelEvent.name], EVENT_NS), data, handleTooltipMouseWheel);
+                .on(addNamespace([wheelEventName], EVENT_NS), data, handleTooltipMouseWheel);
         }
         return that;
     },

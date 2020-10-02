@@ -1,12 +1,12 @@
-import seriesModule from '../series/base_series';
-import seriesFamilyModule from '../core/series_family';
+import { Series } from '../series/base_series';
+import { SeriesFamily } from '../core/series_family';
 import { isNumeric, isDate, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
 import { mergeMarginOptions, processSeriesTemplate } from '../core/utils';
-import rangeModule from '../translators/range';
-import dataValidatorModule from '../components/data_validator';
+import { Range } from '../translators/range';
+import { validateData } from '../components/data_validator';
 import { ThemeManager as ChartThemeManager } from '../components/chart_theme_manager';
 
 const createThemeManager = function(chartOptions) {
@@ -28,7 +28,7 @@ const processSeriesFamilies = function(series, minBubbleSize, maxBubbleSize, bar
     });
 
     each(types, function(_, type) {
-        const family = new seriesFamilyModule.SeriesFamily({
+        const family = new SeriesFamily({
             type: type,
             minBubbleSize: minBubbleSize,
             maxBubbleSize: maxBubbleSize,
@@ -105,7 +105,7 @@ SeriesDataSource.prototype = {
             }
             if(data && data.length > 0) {
                 // TODO
-                newSeries = new seriesModule.Series({
+                newSeries = new Series({
                     renderer: options.renderer,
                     argumentAxis: options.argumentAxis,
                     valueAxis: options.valueAxis,
@@ -131,7 +131,7 @@ SeriesDataSource.prototype = {
                     type: options.axisType
                 }
             };
-            parsedData = dataValidatorModule.validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions('dataPrepareSettings'));
+            parsedData = validateData(data, groupsData, options.incidentOccurred, chartThemeManager.getOptions('dataPrepareSettings'));
             that.argCategories = groupsData.categories;
             for(i = 0; i < series.length; i++) {
                 series[i].updateData(parsedData[series[i].getArgumentField()]);
@@ -147,7 +147,7 @@ SeriesDataSource.prototype = {
         }
 
         const series = this._series;
-        const viewport = new rangeModule.Range();
+        const viewport = new Range();
         const axis = series[0].getArgumentAxis();
         const themeManager = this._themeManager;
         const negativesAsZeroes = themeManager.getOptions('negativesAsZeroes');
@@ -181,7 +181,7 @@ SeriesDataSource.prototype = {
         const that = this;
         let rangeData;
         const valueAxis = that._valueAxis;
-        const valRange = new rangeModule.Range({
+        const valRange = new Range({
             min: valueAxis.min,
             minVisible: valueAxis.min,
             max: valueAxis.max,
@@ -189,7 +189,7 @@ SeriesDataSource.prototype = {
             axisType: valueAxis.type,
             base: valueAxis.logarithmBase
         });
-        const argRange = new rangeModule.Range({});
+        const argRange = new Range({});
         let rangeYSize;
         let rangeVisibleSizeY;
         let minIndent;

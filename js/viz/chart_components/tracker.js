@@ -3,13 +3,15 @@ import eventsEngine from '../../events/core/events_engine';
 import { name as clickEventName } from '../../events/click';
 import { extend } from '../../core/utils/extend';
 import { each as _each } from '../../core/utils/iterator';
-import { events as eventsConsts, states as statesConsts } from '../components/consts';
+import consts from '../components/consts';
 import { getDistance, pointInCanvas as inCanvas, normalizeEnum as _normalizeEnum } from '../core/utils';
 import pointerEvents from '../../events/pointer';
 import { addNamespace } from '../../events/utils/index';
 import { isDefined } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
 const _floor = Math.floor;
+const eventsConsts = consts.events;
+const statesConsts = consts.states;
 
 const HOVER_STATE = statesConsts.hoverMark;
 const NORMAL_STATE = statesConsts.normalMark;

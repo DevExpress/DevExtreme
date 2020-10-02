@@ -2,22 +2,24 @@ const seriesNS = {};
 import { isFunction, isDefined as _isDefined, isEmptyObject as _isEmptyObject } from '../../core/utils/type';
 import { extend as _extend } from '../../core/utils/extend';
 import { each as _each } from '../../core/utils/iterator';
-import pointModule from './points/base_point';
+import { Point } from './points/base_point';
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
-import { states } from '../components/consts';
+
+import consts from '../components/consts';
+const states = consts.states;
 
 import rangeCalculator from './helpers/range_data_calculator';
 
-import scatterSeries from './scatter_series';
-import lineSeries from './line_series';
-import areaSeries from './area_series';
-import barSeries from './bar_series';
-import rangeSeries from './range_series';
-import bubbleSeries from './bubble_series';
-import pieSeries from './pie_series';
-import financialSeries from './financial_series';
-import stackedSeries from './stacked_series';
+import * as scatterSeries from './scatter_series';
+import * as lineSeries from './line_series';
+import * as areaSeries from './area_series';
+import * as barSeries from './bar_series';
+import * as rangeSeries from './range_series';
+import * as bubbleSeries from './bubble_series';
+import * as pieSeries from './pie_series';
+import * as financialSeries from './financial_series';
+import * as stackedSeries from './stacked_series';
 
 const DISCRETE = 'discrete';
 const SELECTED_STATE = states.selectedMark;
@@ -236,7 +238,7 @@ Series.prototype = {
         if(point) {
             point.update(data, options);
         } else {
-            point = new pointModule.Point(that, data, options);
+            point = new Point(that, data, options);
             if(that.isSelected() && includePointsMode(that.lastSelectionMode)) {
                 point.setView(SELECTION);
             }

@@ -3,10 +3,8 @@ import { inArray } from '../../core/utils/array';
 import { each as _each } from '../../core/utils/iterator';
 import rangeCalculator from './helpers/range_data_calculator';
 import { isDefined as _isDefined, isString as _isString } from '../../core/utils/type';
-import vizUtils from '../core/utils';
+import { map as _map, normalizeEnum as _normalizeEnum, convertXYToPolar } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
-const _map = vizUtils.map;
-const _normalizeEnum = vizUtils.normalizeEnum;
 const math = Math;
 const _abs = math.abs;
 const _sqrt = math.sqrt;
@@ -741,7 +739,7 @@ polar = _extend({}, baseScatterMethods, {
     },
 
     getNeighborPoint: function(x, y) {
-        const pos = vizUtils.convertXYToPolar(this.getValueAxis().getCenter(), x, y);
+        const pos = convertXYToPolar(this.getValueAxis().getCenter(), x, y);
         return chart.getNeighborPoint.call(this, pos.phi, pos.r);
     },
 

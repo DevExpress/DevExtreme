@@ -1,5 +1,5 @@
 import { isNumeric as isNumber, isDefined } from '../../core/utils/type';
-import { addInterval, dateToMilliseconds, correctDateWithUnitBeginning } from '../../core/utils/date';
+import dateUtils from '../../core/utils/date';
 const floor = Math.floor;
 import { adjust } from '../../core/utils/math';
 
@@ -14,7 +14,7 @@ export default {
             } else {
                 value = new Date(value.getTime());
             }
-            value = correctDateWithUnitBeginning(value, interval, null, this._options.firstDayOfWeek);
+            value = dateUtils.correctDateWithUnitBeginning(value, interval, null, this._options.firstDayOfWeek);
         } else {
             value = adjust(floor(adjust(value / interval)) * interval, interval);
         }
@@ -78,7 +78,7 @@ export default {
             rangeMax = that._intervalize(rangeMax, interval);
         }
 
-        if(value.valueOf() < rangeMin || value.valueOf() >= addInterval(rangeMax, interval)) {
+        if(value.valueOf() < rangeMin || value.valueOf() >= dateUtils.addInterval(rangeMax, interval)) {
             return false;
         }
 
@@ -90,7 +90,7 @@ export default {
 
         interval = interval || that._options.interval;
         const v1 = that._intervalize(bp, interval);
-        const v2 = addInterval(v1, interval);
+        const v2 = dateUtils.addInterval(v1, interval);
         let res = that._to(v1);
         const p2 = that._to(v2);
 
@@ -111,7 +111,7 @@ export default {
         if(value < rMin) {
             offset = 0;
         } else if(value > rMax) {
-            offset = addInterval(rMax, this._options.interval) - rMin;
+            offset = dateUtils.addInterval(rMax, this._options.interval) - rMin;
         }
 
         return this._conversionValue(this._calculateProjection(offset * this._canvasOptions.ratioOfCanvasRange));
@@ -127,11 +127,11 @@ export default {
         let value;
 
         if(that._businessRange.dataType === 'datetime') {
-            interval = dateToMilliseconds(origInterval);
+            interval = dateUtils.dateToMilliseconds(origInterval);
         }
 
         value = (that._calculateUnProjection((position - that._canvasOptions.startPoint) / that._canvasOptions.ratioOfCanvasRange));
-        value = that._intervalize(addInterval(value, interval / 2, direction > 0), origInterval);
+        value = that._intervalize(dateUtils.addInterval(value, interval / 2, direction > 0), origInterval);
 
         if(value < rMin) {
             value = rMin;

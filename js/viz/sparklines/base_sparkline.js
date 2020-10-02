@@ -11,7 +11,7 @@ const DEFAULT_LINE_SPACING = 2;
 const EVENT_NS = 'sparkline-tooltip';
 const POINTER_ACTION = addNamespace([pointerEvents.down, pointerEvents.move], EVENT_NS);
 
-import translator2DModule from '../translators/translator2d';
+import { Translator2D } from '../translators/translator2d';
 
 const _extend = extend;
 const _floor = Math.floor;
@@ -67,7 +67,7 @@ function generateCustomizeTooltipCallback(customizeTooltip, fontOptions, rtlEnab
 }
 
 function createAxis(isHorizontal) {
-    const translator = new translator2DModule.Translator2D({}, {}, { shiftZeroValue: !isHorizontal, isHorizontal: !!isHorizontal });
+    const translator = new Translator2D({}, {}, { shiftZeroValue: !isHorizontal, isHorizontal: !!isHorizontal });
 
     return {
         getTranslator: function() {

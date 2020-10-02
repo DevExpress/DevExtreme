@@ -1,12 +1,12 @@
 import { extend as _extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import { each as _each, reverseEach as _reverseEach } from '../../core/utils/iterator';
-import rangeModule from '../translators/range';
-import axisModule from '../axes/base_axis';
-import seriesFamilyModule from '../core/series_family';
+import { Range } from '../translators/range';
+import { Axis } from '../axes/base_axis';
+import { SeriesFamily } from '../core/series_family';
 import { BaseChart } from './base_chart';
-import crosshairModule from './crosshair';
-import { getViewPortFilter } from '../series/helpers/range_data_calculator';
+import { getMargins } from './crosshair';
+import rangeDataCalculator from '../series/helpers/range_data_calculator';
 import { isDefined as _isDefined, type } from '../../core/utils/type';
 import { noop as _noop } from '../../core/utils/common';
 import {
@@ -165,7 +165,7 @@ export const AdvancedChart = BaseChart.inherit({
     _getCrosshairMargins: function() {
         const crosshairOptions = this._getCrosshairOptions() || {};
         const crosshairEnabled = crosshairOptions.enabled;
-        const margins = crosshairModule.getMargins();
+        const margins = getMargins();
 
         return {
             x: crosshairEnabled && crosshairOptions.horizontalLine.visible ? margins.x : 0,
@@ -386,7 +386,7 @@ export const AdvancedChart = BaseChart.inherit({
             paneSeries = that._getSeriesForPane(pane.name);
 
             _each(types, function(_, type) {
-                const family = new seriesFamilyModule.SeriesFamily({
+                const family = new SeriesFamily({
                     type: type,
                     pane: pane.name,
                     minBubbleSize: familyOptions.minBubbleSize,
@@ -461,11 +461,11 @@ export const AdvancedChart = BaseChart.inherit({
     _populateBusinessRange(updatedAxis, keepRange) {
         const that = this;
         const rotated = that._isRotated();
-        const argRange = new rangeModule.Range({ rotated: !!rotated });
+        const argRange = new Range({ rotated: !!rotated });
         const series = that._getVisibleSeries();
 
         that._valueAxes.forEach(valueAxis => {
-            const groupRange = new rangeModule.Range({
+            const groupRange = new Range({
                 rotated: !!rotated,
                 pane: valueAxis.pane,
                 axis: valueAxis.name
@@ -558,7 +558,7 @@ export const AdvancedChart = BaseChart.inherit({
     },
 
     _getValFilter(series) {
-        return getViewPortFilter(series.getValueAxis().visualRange() || {});
+        return rangeDataCalculator.getViewPortFilter(series.getValueAxis().visualRange() || {});
     },
 
     _createAxis(isArgumentAxes, options, virtual) {
@@ -581,7 +581,7 @@ export const AdvancedChart = BaseChart.inherit({
                 return that._getTemplate(options.label.template);
             }
         }, that._getAxisRenderingOptions(typeSelector));
-        const axis = new axisModule.Axis(renderingSettings);
+        const axis = new Axis(renderingSettings);
         axis.updateOptions(options);
         axis.isVirtual = virtual;
 

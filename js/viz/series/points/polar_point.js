@@ -5,13 +5,13 @@ import symbolPoint from './symbol_point';
 import barPoint from './bar_point';
 import piePoint from './pie_point';
 import { isDefined } from '../../../core/utils/type';
-import vizUtils from '../../core/utils';
-const normalizeAngle = vizUtils.normalizeAngle;
+import { normalizeAngle, convertPolarToXY, getCosAndSin, convertXYToPolar } from '../../core/utils';
 
 const _math = Math;
 const _max = _math.max;
 
-import { radialLabelIndent as RADIAL_LABEL_INDENT } from '../../components/consts';
+import consts from '../../components/consts';
+const RADIAL_LABEL_INDENT = consts.radialLabelIndent;
 
 const ERROR_BARS_ANGLE_OFFSET = 90;
 const CANVAS_POSITION_END = 'canvas_position_end';
@@ -50,7 +50,7 @@ export const polarSymbolPoint = _extend({}, symbolPoint, {
         const startAngle = axis.getAngles()[0];
         const angle = this._getArgTranslator().translate(argument);
         const radius = this._getValTranslator().translate(value);
-        const coords = vizUtils.convertPolarToXY(axis.getCenter(), axis.getAngles()[0], angle, radius);
+        const coords = convertPolarToXY(axis.getCenter(), axis.getAngles()[0], angle, radius);
 
         coords.angle = angle + startAngle - 90,
         coords.radius = radius;
@@ -108,7 +108,7 @@ export const polarSymbolPoint = _extend({}, symbolPoint, {
     },
 
     getDefaultCoords: function() {
-        const cosSin = vizUtils.getCosAndSin(-this.angle);
+        const cosSin = getCosAndSin(-this.angle);
         const radius = this._getValTranslator().translate(CANVAS_POSITION_DEFAULT);
         const x = this.defaultX + radius * cosSin.cos;
         const y = this.defaultY + radius * cosSin.sin;
@@ -235,7 +235,7 @@ export const polarBarPoint = _extend({}, barPoint, {
     _checkLabelPosition: function(label, coord) {
         const that = this;
         const visibleArea = that._getVisibleArea();
-        const angleFunctions = vizUtils.getCosAndSin(that.middleAngle);
+        const angleFunctions = getCosAndSin(that.middleAngle);
         const x = that.centerX + that.defaultRadius * angleFunctions.cos;
         const y = that.centerY - that.defaultRadius * angleFunctions.sin;
 
@@ -255,7 +255,7 @@ export const polarBarPoint = _extend({}, barPoint, {
     },
 
     coordsIn: function(x, y) {
-        const val = vizUtils.convertXYToPolar(this.series.getValueAxis().getCenter(), x, y);
+        const val = convertXYToPolar(this.series.getValueAxis().getCenter(), x, y);
         const coords = this.getMarkerCoords();
         const isBetweenAngles = coords.startAngle < coords.endAngle ?
             -val.phi >= coords.startAngle && -val.phi <= coords.endAngle :

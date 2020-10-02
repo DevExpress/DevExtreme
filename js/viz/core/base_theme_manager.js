@@ -4,10 +4,10 @@ import { isString as _isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { createPalette as getPalette, getDiscretePalette, getGradientPalette, getAccentColor as accentColor } from '../palette';
 import { parseScalar as _parseScalar } from './utils';
-import themeModule from '../themes';
-const _getTheme = themeModule.getTheme;
-const _addCacheItem = themeModule.addCacheItem;
-const _removeCacheItem = themeModule.removeCacheItem;
+import { getTheme, addCacheItem, removeCacheItem } from '../themes';
+const _getTheme = getTheme;
+const _addCacheItem = addCacheItem;
+const _removeCacheItem = removeCacheItem;
 const _extend = extend;
 const _each = each;
 

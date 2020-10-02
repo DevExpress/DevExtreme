@@ -5,10 +5,9 @@ const _round = _math.round;
 const _floor = _math.floor;
 const _sqrt = _math.sqrt;
 
-import vizUtils from '../core/utils';
-const _parseScalar = vizUtils.parseScalar;
-const parseHorizontalAlignment = vizUtils.enumParser(['left', 'center', 'right']);
-const parseVerticalAlignment = vizUtils.enumParser(['top', 'bottom']);
+import { parseScalar as _parseScalar, enumParser } from '../core/utils';
+const parseHorizontalAlignment = enumParser(['left', 'center', 'right']);
+const parseVerticalAlignment = enumParser(['top', 'bottom']);
 
 const COMMAND_RESET = 'command-reset';
 const COMMAND_MOVE_UP = 'command-move-up';
