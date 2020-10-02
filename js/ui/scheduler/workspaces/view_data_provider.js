@@ -353,25 +353,31 @@ export default class ViewDataProvider {
             const currentRow = completeViewDataMap[rowIndex];
 
             for(let columnIndex = 0; columnIndex < currentRow.length; columnIndex += 1) {
+                const cellData = currentRow[columnIndex];
                 const {
                     startDate: currentStartDate,
                     endDate: currentEndDate,
                     groupIndex: currentGroupIndex,
                     allDay: currentAllDay,
-                } = currentRow[columnIndex];
+                } = cellData;
 
                 if(groupIndex === currentGroupIndex
                     && allDay === currentAllDay
                     && startTime >= currentStartDate.getTime()
                     && startTime < currentEndDate.getTime()) {
                     return {
-                        columnIndex,
-                        rowIndex: showAllDayPanel && !isVerticalGroupOrientation
-                            ? rowIndex - 1
-                            : rowIndex,
+                        position: {
+                            columnIndex,
+                            rowIndex: showAllDayPanel && !isVerticalGroupOrientation
+                                ? rowIndex - 1
+                                : rowIndex,
+                        },
+                        cellData,
                     };
                 }
             }
         }
+
+        return undefined;
     }
 }

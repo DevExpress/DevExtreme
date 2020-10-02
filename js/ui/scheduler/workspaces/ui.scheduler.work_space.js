@@ -2227,7 +2227,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.$element().find('.' + GROUP_HEADER_CLASS);
     }
 
-    _getScrollCoordinates(hours, minutes, date) {
+    _getScrollCoordinates(hours, minutes, date, groupIndex, allDay) {
         const currentDate = date || new Date(this.option('currentDate'));
         const startDayHour = this.option('startDayHour');
         const endDayHour = this.option('endDayHour');
@@ -2242,7 +2242,20 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         currentDate.setHours(hours, minutes, 0, 0);
 
-        return this.getCoordinatesByDate(currentDate);
+        if(!this.isVirtualScrolling()) {
+            return this.getCoordinatesByDate(currentDate);
+        }
+
+        const cell = this.viewDataProvider.findGlobalCellPosition(
+            currentDate, groupIndex, allDay,
+        );
+        const { position, cellData } = cell;
+
+        return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
+            cellData, position, currentDate,
+        );
+
+
     }
 
     _isOutsideScrollable(target, event) {
@@ -2839,22 +2852,14 @@ class SchedulerWorkSpace extends WidgetObserver {
             return;
         }
 
-        let coordinates;
-
-        if(!this.isVirtualScrolling()) {
-            coordinates = this._getScrollCoordinates(hours, minutes, date);
-        } else {
-            const position = this.viewDataProvider.findGlobalCellPosition(
-                date, groupIndex, allDay,
-            );
-            coordinates = this.virtualScrollingDispatcher.calculateCoordinatesByIndices(
-                position.rowIndex, position.columnIndex,
-            );
-        }
+        const coordinates = this._getScrollCoordinates(hours, minutes, date, groupIndex, allDay);
 
         const scrollable = this.getScrollable();
 
-        scrollable.scrollBy({ top: coordinates.top - scrollable.scrollTop(), left: 0 });
+        scrollable.scrollBy({
+            top: coordinates.top - scrollable.scrollTop(),
+            left: coordinates.left - scrollable.scrollLeft(),
+        });
     }
 
     getDistanceBetweenCells(startIndex, endIndex) {

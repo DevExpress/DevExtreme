@@ -47,8 +47,8 @@ export default class VirtualScrollingDispatcher {
         return this.virtualScrolling.getState();
     }
 
-    calculateCoordinatesByIndices(rowIndex, columnIndex) {
-        return this.virtualScrolling.calculateCoordinatesByIndices(rowIndex, columnIndex);
+    calculateCoordinatesByDataAndPosition(cellData, position, date) {
+        return this.virtualScrolling.calculateCoordinatesByDataAndPosition(cellData, position, date);
     }
 
     dispose() {
@@ -237,6 +237,33 @@ class VirtualScrolling {
         return true;
     }
 
+    calculateCoordinatesByDataAndPosition(cellData, position, date) {
+        const { _workspace: workSpace } = this;
+        const rowHeight = this.getRowHeight();
+        const {
+            rowIndex, columnIndex,
+        } = position;
+        const {
+            startDate, endDate,
+        } = cellData;
+
+        const timeToScroll = date.getTime();
+        const cellStartTime = startDate.getTime();
+        const cellEndTime = endDate.getTime();
+
+        const scrollInCell = (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
+
+        const firstCellInColumn = workSpace.viewDataProvider.getCellData(0, columnIndex);
+        const { left } = workSpace.getCoordinatesByDate(
+            firstCellInColumn.startDate, firstCellInColumn.groupIndex, firstCellInColumn.allDay,
+        );
+
+        return {
+            top: (rowIndex + scrollInCell) * rowHeight,
+            left,
+        };
+    }
+
     _calcTopRowsInfo(scrollPosition) {
         const { top } = scrollPosition;
         const rowHeight = this.getRowHeight();
@@ -319,14 +346,5 @@ class VirtualScrolling {
             state.topVirtualRowHeight = topVirtualRowHeight;
             state.bottomVirtualRowHeight = bottomVirtualRowHeight;
         }
-    }
-
-    calculateCoordinatesByIndices(rowIndex, columnIndex) {
-        const rowHeight = this.getRowHeight();
-
-        return {
-            top: rowIndex * rowHeight,
-            left: 0,
-        };
     }
 }
