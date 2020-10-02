@@ -14,10 +14,11 @@ const mockDataGridMethods = {
   dispose: mockDispose,
   option: mockOption,
 };
+const getInstanceMock = jest.fn().mockReturnValue(mockDataGridMethods);
 
 jest.mock('../../../../ui/data_grid/ui.data_grid', () => {
   const MockDxDataGrid = jest.fn().mockImplementation(() => mockDataGridMethods);
-  (MockDxDataGrid as any).getInstance = () => mockDataGridMethods;
+  (MockDxDataGrid as any).getInstance = () => getInstanceMock();
   return MockDxDataGrid;
 });
 
@@ -124,6 +125,7 @@ describe('DataGrid', () => {
         methodName,
       }) => {
         it(methodName, () => {
+          getInstanceMock.mockReturnValue(mockDataGridMethods);
           mockDataGridMethods[methodName] = jest.fn();
           const component = createWidget();
 
@@ -133,6 +135,7 @@ describe('DataGrid', () => {
         });
 
         it(`${methodName} if widget is not initialized`, () => {
+          getInstanceMock.mockReturnValue(null);
           const component = createWidget();
 
           component[methodName]();
