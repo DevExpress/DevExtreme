@@ -3,7 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import TextEditorButton from '../text_box/texteditor_button_collection/button';
 import SpinButton from './number_box.spin';
 import { addNamespace } from '../../events/utils/index';
-import { down as pointerDown } from '../../events/pointer';
+import pointer from '../../events/pointer';
 import { extend } from '../../core/utils/extend';
 
 const SPIN_CLASS = 'dx-numberbox-spin';
@@ -13,7 +13,7 @@ const SPIN_TOUCH_FRIENDLY_CLASS = 'dx-numberbox-spin-touch-friendly';
 export default class SpinButtons extends TextEditorButton {
     _attachEvents(instance, $spinContainer) {
         const { editor } = this;
-        const eventName = addNamespace(pointerDown, editor.NAME);
+        const eventName = addNamespace(pointer.down, editor.NAME);
         const $spinContainerChildren = $spinContainer.children();
         const pointerDownAction = editor._createAction(
             (e) => editor._spinButtonsPointerDownHandler(e)

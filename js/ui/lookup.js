@@ -13,7 +13,7 @@ import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
 import { addNamespace } from '../events/utils/index';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
-import themes from './themes';
+import { current, isMaterial } from './themes';
 import { name as clickEventName } from '../events/click';
 import Popover from './popover';
 import TextBox from './text_box';
@@ -245,7 +245,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = themes.current();
+        const themeName = current();
 
         return this.callBase().concat([
             {
@@ -298,7 +298,7 @@ const Lookup = DropDownList.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial(themeName);
+                    return isMaterial(themeName);
                 },
                 options: {
 

@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { isTouchEvent } from '../../events/utils/index';
 import { extend } from '../../core/utils/extend';
 import GroupedEditStrategy from './ui.list.edit.strategy.grouped';
-import { format as formatMessage } from '../../localization/message';
+import localizationMessage from '../../localization/message';
 import EditProvider from './ui.list.edit.provider';
 import { ListBase } from './ui.list.base';
 
@@ -104,7 +104,7 @@ const ListEdit = ListBase.inherit({
             * @default "Select All"
             * @hidden
             */
-            selectAllText: formatMessage('dxList-selectAll'),
+            selectAllText: localizationMessage.format('dxList-selectAll'),
 
             /**
             * @name dxListOptions.menuItems.text

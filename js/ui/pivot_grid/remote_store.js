@@ -10,7 +10,7 @@ import { getFiltersByPath,
     discoverObjectFields,
     setDefaultFieldValueFormatting } from './ui.pivot_grid.utils';
 import { forEachGroup } from './remote_store.utils';
-import { deserializeDate } from '../../core/utils/date_serialization';
+import dateSerialization from '../../core/utils/date_serialization';
 
 function createGroupingOptions(dimensionOptions, useSortOrder) {
     const groupingOptions = [];
@@ -204,7 +204,7 @@ function parseValue(value, field) {
     }
 
     if(field && field.dataType === 'date' && !field.groupInterval && !(value instanceof Date)) {
-        return deserializeDate(value);
+        return dateSerialization.deserializeDate(value);
     }
 
     return value;
