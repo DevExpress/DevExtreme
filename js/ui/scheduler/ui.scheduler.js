@@ -2421,8 +2421,12 @@ class Scheduler extends Widget {
         this._appointmentTooltip && this._appointmentTooltip.hide();
     }
 
-    scrollToTime(hours, minutes, date, groups, allDay) {
-        this._workSpace.scrollToTime(hours, minutes, date, groups, allDay);
+    scrollToTime(hours, minutes, date) {
+        this._workSpace.scrollToTime(hours, minutes, date);
+    }
+
+    scrollTo(date, groups, allDay) {
+        this._workSpace.scrollTo(date, groups, allDay);
     }
 
     addAppointment(appointment) {

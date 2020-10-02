@@ -2243,7 +2243,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         currentDate.setHours(hours, minutes, 0, 0);
 
         if(!this.isVirtualScrolling()) {
-            return this.getCoordinatesByDate(currentDate);
+            return this.getCoordinatesByDate(currentDate, groupIndex, allDay);
         }
 
         const cell = this.viewDataProvider.findGlobalCellPosition(
@@ -2836,30 +2836,69 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
 
-    scrollToTime(hours, minutes, date, groups, allDay = false) {
-        const min = this.getStartViewDate();
-        const max = this.getEndViewDate();
-        const groupIndex = groups
-            ? this._getGroupIndexByResourceId(groups)
-            : 0;
-
-        if(date < min || date > max) {
-            errors.log('W1008', date);
-            return;
-        }
-        if(groupIndex < 0) {
-            // TODO: throw an error
+    scrollToTime(hours, minutes, date) {
+        if(!this._isValidScrollDate(date)) {
             return;
         }
 
-        const coordinates = this._getScrollCoordinates(hours, minutes, date, groupIndex, allDay);
+        const coordinates = this._getScrollCoordinates(hours, minutes, date);
 
         const scrollable = this.getScrollable();
 
         scrollable.scrollBy({
             top: coordinates.top - scrollable.scrollTop(),
+            left: 0,
+        });
+    }
+
+    scrollTo(date, groups, allDay = false) {
+        if(!this._isValidScrollDate(date)) {
+            return;
+        }
+
+        const groupIndex = groups
+            ? this._getGroupIndexByResourceId(groups)
+            : 0;
+
+        if(groupIndex < 0) {
+            // TODO: throw an error
+            return;
+        }
+
+        const coordinates = this._getScrollCoordinates(
+            date.getHours(), date.getMinutes(), date, groupIndex, allDay,
+        );
+
+        const scrollable = this.getScrollable();
+        const offset = this.option('rtlEnabled') ? getBoundingRect(this.getScrollableContainer().get(0)).width : 0;
+
+        const left = coordinates.left - scrollable.scrollLeft() - offset;
+        const top = coordinates.top - scrollable.scrollTop();
+
+        if(this.option('templatesRenderAsynchronously')) {
+            setTimeout(() => {
+                scrollable.scrollBy({ left, top });
+            });
+        } else {
+            scrollable.scrollBy({ left, top });
+        }
+
+        scrollable.scrollBy({
+            top: coordinates.top - scrollable.scrollTop(),
             left: coordinates.left - scrollable.scrollLeft(),
         });
+    }
+
+    _isValidScrollDate(date) {
+        const min = this.getStartViewDate();
+        const max = this.getEndViewDate();
+
+        if(date < min || date > max) {
+            errors.log('W1008', date);
+            return false;
+        }
+
+        return true;
     }
 
     getDistanceBetweenCells(startIndex, endIndex) {
