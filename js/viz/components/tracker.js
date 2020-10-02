@@ -4,7 +4,7 @@ import { name as clickEventName } from '../../events/click';
 import pointer from '../../events/pointer';
 import eventsEngine from '../../events/core/events_engine';
 
-const downPointerEventName = pointer.name;
+const downPointerEventName = pointer.down;
 const movePointerEventName = pointer.move;
 
 export function Tracker(parameters) {
