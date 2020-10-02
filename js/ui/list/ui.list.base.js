@@ -17,7 +17,7 @@ import devices from '../../core/devices';
 import ListItem from './item';
 import Button from '../button';
 import { addNamespace } from '../../events/utils/index';
-import { current, isMaterial } from '../';
+import { current, isMaterial } from '../themes';
 import { hasWindow } from '../../core/utils/window';
 import ScrollView from '../scroll_view';
 import { deviceDependentOptions } from '../scroll_view/ui.scrollable.device';
