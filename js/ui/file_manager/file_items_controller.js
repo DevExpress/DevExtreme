@@ -191,7 +191,7 @@ export default class FileItemsController {
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        const tempDirInfo = this._createDirInfoByName(name, parentDirectoryInfo, true);
+        const tempDirInfo = this._createDirInfoByName(name, parentDirectoryInfo);
         const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
@@ -199,7 +199,7 @@ export default class FileItemsController {
     }
 
     renameItem(fileItemInfo, name) {
-        const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory, { newName: name });
+        const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory, { itemNewName: name });
         return this._processEditAction(actionInfo,
             () => {
                 if(!fileItemInfo.fileItem.isDirectory) {
@@ -496,12 +496,10 @@ export default class FileItemsController {
         return selectedDirInfo;
     }
 
-    _createDirInfoByName(name, parentDirectoryInfo, isDirectory) {
+    _createDirInfoByName(name, parentDirectoryInfo) {
         const dirPathInfo = this._getPathInfo(parentDirectoryInfo);
-        const fileItem = new FileSystemItem(dirPathInfo, name, isDirectory);
-        return isDirectory
-            ? this._createDirectoryInfo(fileItem, parentDirectoryInfo)
-            : this._createFileInfo(fileItem, parentDirectoryInfo);
+        const fileItem = new FileSystemItem(dirPathInfo, name, true);
+        return this._createDirectoryInfo(fileItem, parentDirectoryInfo);
     }
 
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {

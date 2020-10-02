@@ -206,7 +206,7 @@ class FileManagerEditingControl extends Widget {
                 }
                 break;
             case 'rename':
-                actionInfo.customData.context.newName = actionInfo.customData.newName;
+                actionInfo.customData.context.itemNewName = actionInfo.customData.itemNewName;
                 break;
             default:
                 break;
@@ -317,7 +317,7 @@ class FileManagerEditingControl extends Widget {
 
     _handleSingleRequestActionError(operationInfo, context, errorInfo) {
         const itemInfo = context.getItemForSingleRequestError();
-        const itemName = context.newName;
+        const itemName = context.itemNewName;
         const errorText = this._getErrorText(errorInfo, itemInfo, itemName);
 
         context.processSingleRequestError(errorText);
@@ -467,7 +467,7 @@ class FileManagerActionContext {
         this._commonProgress = 0;
 
         this._errorState = { failedCount: 0 };
-        this._newName = '';
+        this._itemNewName = '';
     }
 
     completeOperationItem(itemIndex) {
@@ -530,12 +530,12 @@ class FileManagerActionContext {
         return this._itemInfos;
     }
 
-    get newName() {
-        return this._newName;
+    get itemNewName() {
+        return this._itemNewName;
     }
 
-    set newName(value) {
-        this._newName = value;
+    set itemNewName(value) {
+        this._itemNewName = value;
     }
 
     get errorState() {

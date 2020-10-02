@@ -4,7 +4,8 @@ import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import ErrorCode from 'file_management/errors';
-import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader, NoDuplicatesFileProvider } from '../../../helpers/fileManagerHelpers.js';
+import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
+import NoDuplicatesFileProvider from '../../../helpers/fileManager/file_provider.no_duplicates.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 
 
