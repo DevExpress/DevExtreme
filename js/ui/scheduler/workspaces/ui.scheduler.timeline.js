@@ -274,9 +274,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _renderIndicator(date, groupCount) {
-        const groupedByDate = this.isGroupedByDate();
-        const repeatCount = groupedByDate ? 1 : groupCount;
-        for(let i = 0; i < repeatCount; i++) {
+        // const repeatCount = groupedByDate ? 1 : groupCount;
+        for(let i = 0; i < groupCount; i++) {
             const $container = this.getCellByDate(this._getToday(), i);
             const $indicator = this._createIndicator($container);
             // $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());

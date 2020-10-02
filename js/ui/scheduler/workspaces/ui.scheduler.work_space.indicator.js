@@ -19,6 +19,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _needRenderDateTimeIndicator() {
+        // NOTE: excess cheking
         const today = this._getToday();
         const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
@@ -71,11 +72,14 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         const repeatCount = groupedByDate ? 1 : groupCount;
         for(let i = 0; i < repeatCount; i++) {
             const $container = this.getCellByDate(this._getToday(), i);
-            const $indicator = this._createIndicator($container);
-            // $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
-            const height1 = this.getIndicationHeightNew(date, $container);
-            $indicator.css('top', height1);
-            // this._groupedStrategy.shiftIndicator($indicator, height1, i);
+            if($container.length) {
+                const $indicator = this._createIndicator($container);
+                // $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
+                const height1 = this.getIndicationHeightNew(date, $container);
+                groupedByDate && $indicator.width(this.getCellWidth() * groupCount);
+                $indicator.css('top', height1);
+                // this._groupedStrategy.shiftIndicator($indicator, height1, i);
+            }
         }
     }
     // _renderIndicator(height, groupCount) {
@@ -170,7 +174,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     getIndicationHeightNew(date, $cell) {
-        const today = this._getToday();
         const cellHeight = this.getCellHeight();
         const cellDate = this.getCellData($cell).startDate;
         // const date = new Date(this._firstViewDate);
@@ -179,7 +182,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         //     date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
         // }
 
-        const duration = today.getTime() - cellDate.getTime();
+        const duration = date.getTime() - cellDate.getTime();
         const cellCount = duration / this.getCellDuration();
 
         return cellCount * cellHeight;
