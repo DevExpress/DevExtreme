@@ -58,10 +58,11 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   @Effect({ run: 'once' })
   setupWidget(): () => void {
     // eslint-disable-next-line new-cap
-    this.instance = new this.props.componentType(this.widgetRef, this.properties);
+    const instance = new this.props.componentType(this.widgetRef, this.properties);
+    this.instance = instance;
 
     return (): void => {
-      this.instance?.dispose();
+      instance.dispose();
       this.instance = null;
     };
   }
