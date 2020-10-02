@@ -102,7 +102,7 @@ const SelectBox = DropDownList.inherit({
                 const inputText = this._input().val().trim();
                 const isCustomText = inputText && this._list && !this._list.option('focusedElement');
 
-                if(!inputText && this.option('value') && this.option('allowClearing')) {
+                if(!inputText && isDefined(this.option('value')) && this.option('allowClearing')) {
                     this.option({
                         selectedItem: null,
                         value: null
