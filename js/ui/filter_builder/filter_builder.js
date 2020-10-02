@@ -6,7 +6,6 @@ import Widget from '../widget/ui.widget';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
-import utils from './utils';
 import { when } from '../../core/utils/deferred';
 import { isDefined } from '../../core/utils/type';
 import TreeView from '../tree_view';
@@ -14,7 +13,16 @@ import Popup from '../popup';
 import { getElementMaxHeightByWindow } from '../overlay/utils';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
 import { normalizeKeyName } from '../../events/utils/index';
-import { renderValueText } from './utils';
+import {
+    renderValueText, getFilterExpression, getNormalizedFilter,
+    getNormalizedFields, getMergedOperations, convertToInnerStructure,
+    getGroupCriteria, isGroup, isCondition, removeItem, createEmptyGroup,
+    addItem, createCondition, getGroupMenuItem, setGroupValue,
+    getCustomOperation, getAvailableOperations, getOperationFromAvailable,
+    getOperationValue, updateConditionByOperation, getItems,
+    getField, getCaptionWithParents, getDefaultOperation, getGroupValue,
+    getCurrentLookupValueText, getCurrentValueText,
+} from './utils';
 
 // STYLE filterBuilder
 
@@ -298,18 +306,18 @@ const FilterBuilder = Widget.inherit({
     getFilterExpression: function() {
         const fields = this._getNormalizedFields();
         const value = extend(true, [], this._model);
-        return utils.getFilterExpression(utils.getNormalizedFilter(value), fields, this._customOperations, SOURCE);
+        return getFilterExpression(getNormalizedFilter(value), fields, this._customOperations, SOURCE);
     },
 
     _getNormalizedFields: function() {
-        return utils.getNormalizedFields(this.option('fields'));
+        return getNormalizedFields(this.option('fields'));
     },
 
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
         const value = extend(true, [], this._model);
-        const normalizedValue = utils.getNormalizedFilter(value);
-        const oldValue = utils.getNormalizedFilter(this._getModel(this.option('value')));
+        const normalizedValue = getNormalizedFilter(value);
+        const oldValue = getNormalizedFilter(this._getModel(this.option('value')));
         if(JSON.stringify(oldValue) !== JSON.stringify(normalizedValue)) {
             this.option('value', normalizedValue);
         }
@@ -330,11 +338,11 @@ const FilterBuilder = Widget.inherit({
     },
 
     _initCustomOperations: function() {
-        this._customOperations = utils.getMergedOperations(this.option('customOperations'), this.option('filterOperationDescriptions.between'), this);
+        this._customOperations = getMergedOperations(this.option('customOperations'), this.option('filterOperationDescriptions.between'), this);
     },
 
     _getModel: function(value) {
-        return utils.convertToInnerStructure(value, this._customOperations);
+        return convertToInnerStructure(value, this._customOperations);
     },
 
     _initModel: function() {
@@ -373,14 +381,14 @@ const FilterBuilder = Widget.inherit({
     _createGroupElementByCriteria: function(criteria, parent, groupLevel = 0) {
         const $group = this._createGroupElement(criteria, parent, groupLevel);
         const $groupContent = $group.find('.' + FILTER_BUILDER_GROUP_CONTENT_CLASS);
-        const groupCriteria = utils.getGroupCriteria(criteria);
+        const groupCriteria = getGroupCriteria(criteria);
 
         for(let i = 0; i < groupCriteria.length; i++) {
             const innerCriteria = groupCriteria[i];
-            if(utils.isGroup(innerCriteria)) {
+            if(isGroup(innerCriteria)) {
                 this._createGroupElementByCriteria(innerCriteria, groupCriteria, groupLevel + 1)
                     .appendTo($groupContent);
-            } else if(utils.isCondition(innerCriteria)) {
+            } else if(isCondition(innerCriteria)) {
                 this._createConditionElement(innerCriteria, groupCriteria)
                     .appendTo($groupContent);
             }
@@ -395,7 +403,7 @@ const FilterBuilder = Widget.inherit({
 
         if(parent != null) {
             this._createRemoveButton(() => {
-                utils.removeItem(parent, criteria);
+                removeItem(parent, criteria);
                 $group.remove();
                 this._updateFilter();
             }).appendTo($groupItem);
@@ -404,14 +412,14 @@ const FilterBuilder = Widget.inherit({
         this._createGroupOperationButton(criteria).appendTo($groupItem);
 
         this._createAddButton(() => {
-            const newGroup = utils.createEmptyGroup(this.option('defaultGroupOperation'));
-            utils.addItem(newGroup, criteria);
+            const newGroup = createEmptyGroup(this.option('defaultGroupOperation'));
+            addItem(newGroup, criteria);
             this._createGroupElement(newGroup, criteria, groupLevel + 1).appendTo($groupContent);
             this._updateFilter();
         }, () => {
             const field = this.option('fields')[0];
-            const newCondition = utils.createCondition(field, this._customOperations);
-            utils.addItem(newCondition, criteria);
+            const newCondition = createCondition(field, this._customOperations);
+            addItem(newCondition, criteria);
             this._createConditionElement(newCondition, criteria).appendTo($groupContent);
             this._updateFilter();
         }, groupLevel).appendTo($groupItem);
@@ -425,7 +433,7 @@ const FilterBuilder = Widget.inherit({
 
     _createGroupOperationButton: function(criteria) {
         const groupOperations = this._getGroupOperations(criteria);
-        let groupMenuItem = utils.getGroupMenuItem(criteria, groupOperations);
+        let groupMenuItem = getGroupMenuItem(criteria, groupOperations);
         const caption = groupMenuItem.text;
         const $operationButton = groupOperations && groupOperations.length < 2
             ? this._createButton(caption).addClass(DISABLED_STATE_CLASS)
@@ -437,7 +445,7 @@ const FilterBuilder = Widget.inherit({
                     keyExpr: 'value',
                     onItemClick: (e) => {
                         if(groupMenuItem !== e.itemData) {
-                            utils.setGroupValue(criteria, e.itemData.value);
+                            setGroupValue(criteria, e.itemData.value);
                             $operationButton.html(e.itemData.text);
                             groupMenuItem = e.itemData;
                             this._updateFilter();
@@ -517,7 +525,7 @@ const FilterBuilder = Widget.inherit({
     },
 
     _hasValueButton: function(condition) {
-        const customOperation = utils.getCustomOperation(this._customOperations, condition[1]);
+        const customOperation = getCustomOperation(this._customOperations, condition[1]);
         return customOperation ?
             customOperation.hasValue !== false
             : condition[2] !== null;
@@ -525,8 +533,8 @@ const FilterBuilder = Widget.inherit({
 
     _createOperationButtonWithMenu: function(condition, field) {
         const that = this;
-        const availableOperations = utils.getAvailableOperations(field, this.option('filterOperationDescriptions'), this._customOperations);
-        let currentOperation = utils.getOperationFromAvailable(utils.getOperationValue(condition), availableOperations);
+        const availableOperations = getAvailableOperations(field, this.option('filterOperationDescriptions'), this._customOperations);
+        let currentOperation = getOperationFromAvailable(getOperationValue(condition), availableOperations);
         const $operationButton = this._createButtonWithMenu({
             caption: currentOperation.text,
             menu: {
@@ -541,7 +549,7 @@ const FilterBuilder = Widget.inherit({
                 onItemClick: (e) => {
                     if(currentOperation !== e.itemData) {
                         currentOperation = e.itemData;
-                        utils.updateConditionByOperation(condition, currentOperation.value, that._customOperations);
+                        updateConditionByOperation(condition, currentOperation.value, that._customOperations);
                         const $valueButton = $operationButton.siblings().filter('.' + FILTER_BUILDER_ITEM_VALUE_CLASS);
                         if(that._hasValueButton(condition)) {
                             if($valueButton.length !== 0) {
@@ -577,10 +585,10 @@ const FilterBuilder = Widget.inherit({
     _createFieldButtonWithMenu: function(fields, condition, field) {
         const that = this;
         const allowHierarchicalFields = this.option('allowHierarchicalFields');
-        const items = utils.getItems(fields, allowHierarchicalFields);
-        let item = utils.getField(field.name || field.dataField, items);
+        const items = getItems(fields, allowHierarchicalFields);
+        let item = getField(field.name || field.dataField, items);
         const getFullCaption = function(item, items) {
-            return allowHierarchicalFields ? utils.getCaptionWithParents(item, items) : item.caption;
+            return allowHierarchicalFields ? getCaptionWithParents(item, items) : item.caption;
         };
 
         const $fieldButton = this._createButtonWithMenu({
@@ -596,7 +604,7 @@ const FilterBuilder = Widget.inherit({
                         item = e.itemData;
                         condition[0] = item.name || item.dataField;
                         condition[2] = item.dataType === 'object' ? null : '';
-                        utils.updateConditionByOperation(condition, utils.getDefaultOperation(item), that._customOperations);
+                        updateConditionByOperation(condition, getDefaultOperation(item), that._customOperations);
                         $fieldButton.siblings().filter('.' + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                         that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
@@ -620,10 +628,10 @@ const FilterBuilder = Widget.inherit({
     _createConditionItem: function(condition, parent) {
         const $item = $('<div>').addClass(FILTER_BUILDER_GROUP_ITEM_CLASS);
         const fields = this._getNormalizedFields();
-        const field = utils.getField(condition[0], fields);
+        const field = getField(condition[0], fields);
 
         this._createRemoveButton(() => {
-            utils.removeItem(parent, condition);
+            removeItem(parent, condition);
             const isSingleChild = $item.parent().children().length === 1;
             if(isSingleChild) {
                 $item.parent().remove();
@@ -642,7 +650,7 @@ const FilterBuilder = Widget.inherit({
         const groupOperationDescriptions = this.option('groupOperationDescriptions');
 
         if(!groupOperations || !groupOperations.length) {
-            groupOperations = [utils.getGroupValue(criteria).replace('!', 'not')];
+            groupOperations = [getGroupValue(criteria).replace('!', 'not')];
         }
 
         return groupOperations.map(operation => ({
@@ -700,13 +708,13 @@ const FilterBuilder = Widget.inherit({
             .appendTo($container);
         const value = item[2];
 
-        const customOperation = utils.getCustomOperation(that._customOperations, item[1]);
+        const customOperation = getCustomOperation(that._customOperations, item[1]);
         if(!customOperation && field.lookup) {
-            utils.getCurrentLookupValueText(field, value, function(result) {
+            getCurrentLookupValueText(field, value, function(result) {
                 renderValueText($text, result);
             });
         } else {
-            when(utils.getCurrentValueText(field, value, customOperation)).done(result => {
+            when(getCurrentValueText(field, value, customOperation)).done(result => {
                 renderValueText($text, result, customOperation);
             });
         }
@@ -812,7 +820,7 @@ const FilterBuilder = Widget.inherit({
 
         const options = {
             value: value === '' ? null : value,
-            filterOperation: utils.getOperationValue(item),
+            filterOperation: getOperationValue(item),
             setValue: function(data) {
                 value = data === null ? '' : data;
             },
@@ -865,7 +873,7 @@ const FilterBuilder = Widget.inherit({
 
     _createValueEditor: function($container, field, options) {
         const $editor = $('<div>').attr('tabindex', 0).appendTo($container);
-        const customOperation = utils.getCustomOperation(this._customOperations, options.filterOperation);
+        const customOperation = getCustomOperation(this._customOperations, options.filterOperation);
         const editorTemplate = customOperation && customOperation.editorTemplate ? customOperation.editorTemplate : field.editorTemplate;
 
         if(editorTemplate) {
