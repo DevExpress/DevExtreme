@@ -325,106 +325,254 @@ describe('ScrollView', () => {
           });
         };
 
-        describe('Element is smaller than container', () => {
-          it('should scroll to element from top side by vertical orientation', () => {
-            const element = createTargetElement({ location: { top: 20, left: 0 } });
-            const containerRef = createContainerRef({ top: 200, left: 0 });
-            const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
+        const getOffsetValue = (parameter, offset?): number => (offset ? offset[parameter] : 0);
 
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
-            expect(containerRef.scrollLeft).toEqual(0);
+        [undefined, {
+          left: 10,
+          right: 20,
+          top: 10,
+          bottom: 20,
+        }].forEach((offset) => {
+          describe(`Element is smaller than container. Has offset: ${!!offset}`, () => {
+            it('should scroll to element from top side by vertical orientation', () => {
+              const element = createTargetElement({ location: { top: 20, left: 0 } });
+              const containerRef = createContainerRef({ top: 200, left: 0 });
+              const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+              expect(containerRef.scrollLeft).toEqual(0);
+            });
+
+            it('should scroll to element from bottom side by vertical orientation', () => {
+              const element = createTargetElement({ location: { top: 500, left: 0 } });
+              const containerRef = createContainerRef({ top: 100, left: 0 });
+              const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollTop).toEqual(250 + getOffsetValue('bottom', offset));
+              expect(containerRef.scrollLeft).toEqual(0);
+            });
+
+            it('should scroll to element from left side by horizontal orientation', () => {
+              const element = createTargetElement({ location: { left: 20, top: 0 } });
+              const containerRef = createContainerRef({ left: 200, top: 0 });
+              const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+              expect(containerRef.scrollTop).toEqual(0);
+            });
+
+            it('should scroll to element from right side by horizontal orientation', () => {
+              const element = createTargetElement({ location: { left: 500, top: 0 } });
+              const containerRef = createContainerRef({ left: 100, top: 0 });
+              const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(250 + getOffsetValue('right', offset));
+              expect(containerRef.scrollTop).toEqual(0);
+            });
+
+            it('should scroll to element from left side and top side by both orientation', () => {
+              const element = createTargetElement({ location: { left: 20, top: 20 } });
+              const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+              expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+            });
+
+            it('should scroll to element from right side and top side by both orientation', () => {
+              const element = createTargetElement({ location: { left: 500, top: 20 } });
+              const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(267 + getOffsetValue('right', offset));
+              expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+            });
+
+            it('should scroll to element from left side and bottom side by both orientation', () => {
+              const element = createTargetElement({ location: { left: 20, top: 500 } });
+              const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+              expect(containerRef.scrollTop).toEqual(267 + getOffsetValue('bottom', offset));
+            });
+
+            it('should scroll to element from right side and bottom side by both orientation', () => {
+              const element = createTargetElement({ location: { left: 500, top: 500 } });
+              const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(267 + getOffsetValue('right', offset));
+              expect(containerRef.scrollTop).toEqual(267 + getOffsetValue('bottom', offset));
+            });
+
+            it('should do not scroll to an element when it in the visible area', () => {
+              const element = createTargetElement({ location: { top: 200, left: 200 } });
+              const containerRef = createContainerRef({ top: 100, left: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollTop).toEqual(100);
+              expect(containerRef.scrollLeft).toEqual(100);
+            });
           });
 
-          it('should scroll to element from bottom side by vertical orientation', () => {
-            const element = createTargetElement({ location: { top: 500, left: 0 } });
-            const containerRef = createContainerRef({ top: 100, left: 0 });
-            const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
+          describe(`Element larger than container. Has offset: ${!!offset}`, () => {
+            it('should scroll to element from top side by vertical orientation', () => {
+              const element = createTargetElement({
+                location: { top: 20, left: 0 },
+                width: 400,
+                height: 400,
+              });
+              const containerRef = createContainerRef({ top: 200, left: 0 });
+              const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
 
-            expect(containerRef.scrollTop).toEqual(250);
-            expect(containerRef.scrollLeft).toEqual(0);
+              expect(containerRef.scrollTop).toEqual(120 + getOffsetValue('bottom', offset));
+              expect(containerRef.scrollLeft).toEqual(0);
+            });
+
+            it('should scroll to element from bottom side by vertical orientation', () => {
+              const element = createTargetElement({
+                location: { top: 500, left: 0 },
+                width: 400,
+                height: 400,
+              });
+              const containerRef = createContainerRef({ top: 100, left: 0 });
+              const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+              expect(containerRef.scrollLeft).toEqual(0);
+            });
+
+            it('should scroll to element from left side by horizontal orientation', () => {
+              const element = createTargetElement({
+                location: { left: 20, top: 0 },
+                width: 400,
+                height: 400,
+              });
+              const containerRef = createContainerRef({ left: 200, top: 0 });
+              const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(120 + getOffsetValue('right', offset));
+              expect(containerRef.scrollTop).toEqual(0);
+            });
+
+            it('should scroll to element from right side by horizontal orientation', () => {
+              const element = createTargetElement({
+                location: { left: 500, top: 0 },
+                width: 400,
+                height: 400,
+              });
+              const containerRef = createContainerRef({ left: 100, top: 0 });
+              const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+              expect(containerRef.scrollTop).toEqual(0);
+            });
+
+            it('should scroll to element from left side and top side by both orientation', () => {
+              const element = createTargetElement({
+                location: { left: 20, top: 20 },
+                width: 400,
+                height: 400,
+              });
+              const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(137 + getOffsetValue('right', offset));
+              expect(containerRef.scrollTop).toEqual(137 + getOffsetValue('bottom', offset));
+            });
+
+            it('should scroll to element from right side and top side by both orientation', () => {
+              const element = createTargetElement({
+                location: { left: 500, top: 20 },
+                width: 400,
+                height: 400,
+              });
+              const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+              expect(containerRef.scrollTop).toEqual(137 + getOffsetValue('bottom', offset));
+            });
+
+            it('should scroll to element from left side and bottom side by both orientation', () => {
+              const element = createTargetElement({
+                location: { left: 20, top: 500 },
+                width: 400,
+                height: 400,
+              });
+              const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(137 + getOffsetValue('right', offset));
+              expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+            });
+
+            it('should scroll to element from right side and bottom side by both orientation', () => {
+              const element = createTargetElement({
+                location: { left: 500, top: 500 },
+                width: 400,
+                height: 400,
+              });
+              const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+              expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+            });
+
+            it('should do not scroll to an element when it in the visible area', () => {
+              const element = createTargetElement({
+                location: { left: 200, top: 200 },
+                width: 400,
+                height: 400,
+              });
+              const containerRef = createContainerRef({ top: 100, left: 100 }, true);
+              const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element, offset);
+
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft - getOffsetValue('left', offset));
+              expect(containerRef.scrollTop).toEqual(element.offsetTop - getOffsetValue('top', offset));
+            });
           });
+        });
 
-          it('should scroll to element from left side by horizontal orientation', () => {
-            const element = createTargetElement({ location: { left: 20, top: 0 } });
-            const containerRef = createContainerRef({ left: 200, top: 0 });
-            const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(0);
-          });
-
-          it('should scroll to element from right side by horizontal orientation', () => {
-            const element = createTargetElement({ location: { left: 500, top: 0 } });
-            const containerRef = createContainerRef({ left: 100, top: 0 });
-            const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(250);
-            expect(containerRef.scrollTop).toEqual(0);
-          });
-
-          it('should scroll to element from left side and top side by both orientation', () => {
-            const element = createTargetElement({ location: { left: 20, top: 20 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
-          });
-
-          it('should scroll to element from right side and top side by both orientation', () => {
-            const element = createTargetElement({ location: { left: 500, top: 20 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(267);
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
-          });
-
-          it('should scroll to element from left side and bottom side by both orientation', () => {
-            const element = createTargetElement({ location: { left: 20, top: 500 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(267);
-          });
-
-          it('should scroll to element from right side and bottom side by both orientation', () => {
-            const element = createTargetElement({ location: { left: 500, top: 500 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(267);
-            expect(containerRef.scrollTop).toEqual(267);
-          });
-
-          it('should do not scroll to an element when it in the visible area', () => {
-            const element = createTargetElement({ location: { top: 200, left: 200 } });
-            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollTop).toEqual(100);
-            expect(containerRef.scrollLeft).toEqual(100);
-          });
-
+        describe('Other scenarios', () => {
           it('it should scroll to element when it is located inside the positioned element', () => {
             const content = createElement({
               location: { },
@@ -457,143 +605,6 @@ describe('ScrollView', () => {
 
             expect(containerRef.scrollTop).toEqual(100);
             expect(containerRef.scrollLeft).toEqual(100);
-          });
-        });
-
-        describe('Element larger than container', () => {
-          it('should scroll to element from top side by vertical orientation', () => {
-            const element = createTargetElement({
-              location: { top: 20, left: 0 },
-              width: 400,
-              height: 400,
-            });
-            const containerRef = createContainerRef({ top: 200, left: 0 });
-            const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
-            expect(containerRef.scrollLeft).toEqual(0);
-          });
-
-          it('should scroll to element from bottom side by vertical orientation', () => {
-            const element = createTargetElement({
-              location: { top: 500, left: 0 },
-              width: 400,
-              height: 400,
-            });
-            const containerRef = createContainerRef({ top: 100, left: 0 });
-            const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
-            expect(containerRef.scrollLeft).toEqual(0);
-          });
-
-          it('should scroll to element from left side by horizontal orientation', () => {
-            const element = createTargetElement({
-              location: { left: 20, top: 0 },
-              width: 400,
-              height: 400,
-            });
-            const containerRef = createContainerRef({ left: 200, top: 0 });
-            const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(0);
-          });
-
-          it('should scroll to element from right side by horizontal orientation', () => {
-            const element = createTargetElement({
-              location: { left: 500, top: 0 },
-              width: 400,
-              height: 400,
-            });
-            const containerRef = createContainerRef({ left: 100, top: 0 });
-            const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(0);
-          });
-
-          it('should scroll to element from left side and top side by both orientation', () => {
-            const element = createTargetElement({
-              location: { left: 20, top: 20 },
-              width: 400,
-              height: 400,
-            });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
-          });
-
-          it('should scroll to element from right side and top side by both orientation', () => {
-            const element = createTargetElement({
-              location: { left: 500, top: 20 },
-              width: 400,
-              height: 400,
-            });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
-          });
-
-          it('should scroll to element from left side and bottom side by both orientation', () => {
-            const element = createTargetElement({
-              location: { left: 20, top: 500 },
-              width: 400,
-              height: 400,
-            });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
-          });
-
-          it('should scroll to element from right side and bottom side by both orientation', () => {
-            const element = createTargetElement({
-              location: { left: 500, top: 500 },
-              width: 400,
-              height: 400,
-            });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
-          });
-
-          it('should do not scroll to an element when it in the visible area', () => {
-            const element = createTargetElement({
-              location: { left: 200, top: 200 },
-              width: 400,
-              height: 400,
-            });
-            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
-            const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
-            scrollView.containerRef = containerRef;
-            scrollView.scrollToElement(element);
-
-            expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
-            expect(containerRef.scrollTop).toEqual(element.offsetTop);
           });
         });
       });
