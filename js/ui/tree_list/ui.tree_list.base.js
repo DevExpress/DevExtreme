@@ -5,7 +5,7 @@ import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import Widget from '../widget/ui.widget';
 import treeListCore from './ui.tree_list.core';
-import themes from '../themes';
+import { isMaterial } from '../themes';
 const callModuleItemsMethod = treeListCore.callModuleItemsMethod;
 
 const DATAGRID_ROW_SELECTOR = '.dx-row';
@@ -72,7 +72,7 @@ const TreeList = Widget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     showRowLines: true,

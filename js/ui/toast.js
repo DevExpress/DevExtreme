@@ -14,7 +14,7 @@ import { inArray } from '../core/utils/array';
 import pointerEvents from '../events/pointer';
 import registerComponent from '../core/component_registrator';
 import Overlay from './overlay';
-import themes from './themes';
+import { isMaterial } from './themes';
 
 const ready = readyCallbacks.add;
 
@@ -176,7 +176,7 @@ const Toast = Overlay.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     minWidth: 344,
