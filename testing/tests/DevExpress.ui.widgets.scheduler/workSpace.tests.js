@@ -201,6 +201,33 @@ QUnit.testStart(function() {
         this.instance.option('width', 900);
         assert.equal(this.instance.getWorkSpaceMinWidth(), 800, 'minWidth is ok');
     });
+
+    QUnit.test('Global cache should be cleared on dimension changed', function(assert) {
+        const spy = sinon.spy(this.instance.cache, 'clear');
+
+        assert.ok(this.instance.cache.size > 0, 'Global cache is not empty');
+
+        this.instance._dimensionChanged();
+
+        assert.ok(spy.callCount > 0, 'Cache clear was invoked');
+
+        spy.restore();
+    });
+
+    QUnit.test('Global cache should be cleared on _cleanView', function(assert) {
+        const spy = sinon.spy(this.instance.cache, 'clear');
+
+        assert.ok(this.instance.cache.size > 0, 'Global cache is not empty');
+
+        this.instance._cleanView();
+
+        assert.ok(spy.callCount > 0, 'Cache clear was invoked');
+
+        assert.notOk(this.instance.cache.size, 'Global cache is empty');
+
+        spy.restore();
+    });
+
 })('Work Space Base');
 
 (function() {
@@ -3103,13 +3130,12 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
         try {
             this.instance.setCellDataCache(cellCoordinates, 0, $cell);
-            cache = this.instance.getCellDataCache();
 
-            assert.deepEqual(cache, {
-                '{"rowIndex":1,"cellIndex":0,"groupIndex":0}': {
-                    startDate: 2015,
-                    endDate: 2016
-                }
+            cache = this.instance.cache;
+
+            assert.deepEqual(cache.get('{"rowIndex":1,"cellIndex":0,"groupIndex":0}'), {
+                startDate: 2015,
+                endDate: 2016
             }, 'Cache is OK');
 
         } finally {
@@ -3138,7 +3164,8 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
             this.instance.setCellDataCache(appointment, 0, $cell);
             this.instance.setCellDataCacheAlias(appointment, geometry);
-            const cacheData = this.instance.getCellDataCache(aliasKey);
+
+            const cacheData = this.instance.cache.get(aliasKey);
 
             assert.deepEqual(cacheData, {
                 'endDate': 2016,
@@ -3169,7 +3196,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
             endDate: 2016
         };
         const getCellDataStub = sinon.stub(this.instance, 'getCellData').returns($cell);
-        const getCellDataCacheSpy = sinon.spy(this.instance, 'getCellDataCache').withArgs(aliasKey);
+        const aliasCellCache = sinon.spy(this.instance.cache, 'get').withArgs(aliasKey);
 
         try {
 
@@ -3179,11 +3206,11 @@ QUnit.module('Workspace Mouse Interaction', () => {
             const cellData = this.instance.getCellDataByCoordinates({ top: 10, left: 10 });
 
             assert.ok(getCellDataStub.calledOnce, 'getCellData called once');
-            assert.ok(getCellDataCacheSpy.calledOnce, 'getCellDataByCoordinates called getCellDataCache once');
-            assert.deepEqual(getCellDataCacheSpy.getCall(0).returnValue, {
+            assert.ok(aliasCellCache.calledOnce, 'getCellDataByCoordinates called aliasCellCache once');
+            assert.deepEqual(aliasCellCache.getCall(0).returnValue, {
                 'endDate': 2016,
                 'startDate': 2015
-            }, 'getCellDataCache return correct cellData object');
+            }, 'aliasCellCache return correct cellData object');
             assert.deepEqual(cellData, {
                 'endDate': 2016,
                 'startDate': 2015
@@ -3270,10 +3297,10 @@ QUnit.module('Workspace Mouse Interaction', () => {
             workSpace.setCellDataCacheAlias(appointment, geometry);
 
             workSpace.option(testData.optionName, testData.optionValue);
-            assert.ok($.isEmptyObject(workSpace.getCellDataCache()), 'Cell data cache was cleared after ' + testData.optionName + ' option changing');
+            assert.ok($.isEmptyObject(workSpace.cache.size), `Cell data cache was cleared after ${testData.optionName} option changing`);
 
             const cellData = workSpace.getCellDataByCoordinates(geometry);
-            assert.deepEqual(cellData, testData.cellDataCompare, 'Cell data cache was cleared after ' + testData.optionName + ' option changing');
+            assert.deepEqual(cellData, testData.cellDataCompare, `Cell data cache was cleared after ${testData.optionName} option changing`);
         });
     });
 
@@ -3297,9 +3324,11 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
         resizeCallbacks.fire();
 
-        const cache = workSpace.getCellDataCache();
+        const cache = workSpace.cache;
 
-        assert.ok($.isEmptyObject(cache), 'Cache is cleared');
+        assert.equal(cache.size, 2, 'Cache has no cell data');
+        assert.ok(cache.get('cellWidth'), 'Has cached cell width');
+        assert.ok(cache.get('cellHeight'), 'Has cached cell height');
     });
 
 })('Work Space cellData Cache');

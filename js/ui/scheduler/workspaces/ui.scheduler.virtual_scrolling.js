@@ -5,7 +5,7 @@ import { addNamespace } from '../../../events/utils/index';
 
 const ROW_HEIGHT = 50;
 const MIN_SCROLL_OFFSET = 10;
-const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 25;
+const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
 
 export default class VirtualScrollingDispatcher {

@@ -797,6 +797,6 @@ const subscribes = {
 
     removeDroppableCellClass: function() {
         this._workSpace.removeDroppableCellClass();
-    },
+    }
 };
 export default subscribes;

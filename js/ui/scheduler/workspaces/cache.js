@@ -1,0 +1,29 @@
+class Cache {
+    constructor() {
+        this._init();
+    }
+
+    get size() { return this._cache.size; }
+
+    _init() {
+        this._cache = new Map();
+    }
+
+    clear() {
+        this._init();
+    }
+
+    get(name, callback) {
+        if(!this._cache.get(name) && callback) {
+            this.set(name, callback());
+        }
+
+        return this._cache.get(name);
+    }
+
+    set(name, value) {
+        this._cache.set(name, value);
+    }
+}
+
+export const cache = new Cache();
