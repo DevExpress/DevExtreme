@@ -151,7 +151,7 @@ class App extends React.Component {
       size: 0
     };
 
-    directory = directory || this.fileManager.instance.getCurrentDirectory();
+    directory = directory || this.fileManager.getCurrentDirectory();
     if(!directory.isDirectory) {
       return false;
     }
@@ -177,7 +177,7 @@ class App extends React.Component {
     if(viewArea === 'navPane') {
       items = [ directory ];
     } else {
-      items = this.fileManager.instance.getSelectedItems();
+      items = this.fileManager.getSelectedItems();
     }
 
     items.forEach(function(item) {
