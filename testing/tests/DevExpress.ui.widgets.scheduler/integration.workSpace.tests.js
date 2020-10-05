@@ -1708,16 +1708,11 @@ QUnit.test('WorkSpace should be refreshed after groups changed', function(assert
             allDay: false,
         };
 
-        if(scrollingMode === 'standard') {
-            assert.deepEqual(this.instance.option('selectedCellData'), [baseData], 'option has right value');
-        } else {
-            assert.deepEqual(this.instance.option('selectedCellData'), [{
-                ...baseData,
-                groupIndex: 0,
-                index: 0,
-                text: '12:00 AM',
-            }], 'option has right value');
-        }
+        assert.deepEqual(this.instance.option('selectedCellData'), [{
+            ...baseData,
+            groupIndex: 0,
+            groups: undefined,
+        }], 'option has right value');
     });
 
     QUnit.test(`SelectedCellData option should be applied correctly in ungrouped workspace when scrolling is ${scrollingMode}`, function(assert) {
@@ -1954,26 +1949,68 @@ if(devices.real().deviceType === 'desktop') {
         [{
             view: 'day',
             startCell: {
-                index: 0, cellData: { startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false },
+                index: 0,
+                cellData: {
+                    startDate: new Date(2018, 3, 8, 0, 0),
+                    endDate: new Date(2018, 3, 8, 0, 30),
+                    allDay: false,
+                    groups: undefined,
+                    groupIndex: 0,
+                },
             },
             endCell: {
-                index: 1, cellData: { startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false },
+                index: 1,
+                cellData: {
+                    startDate: new Date(2018, 3, 8, 0, 30),
+                    endDate: new Date(2018, 3, 8, 1, 0),
+                    allDay: false,
+                    groups: undefined,
+                    groupIndex: 0,
+                },
             },
         }, {
             view: 'week',
             startCell: {
-                index: 0, cellData: { startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false },
+                index: 0,
+                cellData: {
+                    startDate: new Date(2018, 3, 8, 0, 0),
+                    endDate: new Date(2018, 3, 8, 0, 30),
+                    allDay: false,
+                    groups: undefined,
+                    groupIndex: 0,
+                },
             },
             endCell: {
-                index: 7, cellData: { startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false },
+                index: 7,
+                cellData: {
+                    startDate: new Date(2018, 3, 8, 0, 30),
+                    endDate: new Date(2018, 3, 8, 1, 0),
+                    allDay: false,
+                    groups: undefined,
+                    groupIndex: 0,
+                },
             },
         }, {
             view: 'month',
             startCell: {
-                index: 0, cellData: { startDate: new Date(2018, 3, 1), endDate: new Date(2018, 3, 2) },
+                index: 0,
+                cellData: {
+                    startDate: new Date(2018, 3, 1),
+                    endDate: new Date(2018, 3, 2),
+                    groups: undefined,
+                    groupIndex: 0,
+                    allDay: undefined,
+                },
             },
             endCell: {
-                index: 1, cellData: { startDate: new Date(2018, 3, 2), endDate: new Date(2018, 3, 3) },
+                index: 1,
+                cellData: {
+                    startDate: new Date(2018, 3, 2),
+                    endDate: new Date(2018, 3, 3),
+                    groups: undefined,
+                    groupIndex: 0,
+                    allDay: undefined,
+                },
             },
         }].forEach((config) => {
             const { view, startCell, endCell } = config;
@@ -2027,18 +2064,7 @@ if(devices.real().deviceType === 'desktop') {
                     assert.deepEqual(
                         instance.option('selectedCellData'),
                         [
-                            {
-                                ...startCell.cellData,
-                                index: startCell.index,
-                                groupIndex: 0,
-                                text: '12:00 AM',
-                            },
-                            {
-                                ...endCell.cellData,
-                                index: endCell.index,
-                                groupIndex: 0,
-                                text: '',
-                            },
+                            startCell.cellData, endCell.cellData,
                         ], 'correct cells have been selected');
                 });
             }
@@ -2744,25 +2770,22 @@ if(devices.real().deviceType === 'desktop') {
             allDay: false,
             endDate: new Date(2020, 8, 20, 0, 30),
             groupIndex: 0,
-            index: 0,
             startDate: new Date(2020, 8, 20, 0, 0),
-            text: '12:00 AM',
+            groups: undefined,
         };
         const bottomCell = {
             allDay: false,
             endDate: new Date(2020, 8, 21, 0, 0),
             groupIndex: 0,
-            index: 329,
             startDate: new Date(2020, 8, 20, 23, 30),
-            text: '',
+            groups: undefined,
         };
         const lastCell = {
             allDay: false,
             endDate: new Date(2020, 8, 21, 0, 30),
             groupIndex: 0,
-            index: 1,
             startDate: new Date(2020, 8, 21, 0, 0),
-            text: '',
+            groups: undefined,
         };
 
         const selectedCellData = instance.option('selectedCellData');
@@ -2798,9 +2821,8 @@ QUnit.test('SelectedCellData option should not change when dateTable is scrolled
         allDay: false,
         endDate: new Date(2020, 8, 20, 0, 30),
         groupIndex: 0,
-        index: 0,
         startDate: new Date(2020, 8, 20, 0, 0),
-        text: '12:00 AM',
+        groups: undefined,
     }];
 
     assert.deepEqual(scheduler.option('selectedCellData'), selectedCells, 'Correct selected cells');

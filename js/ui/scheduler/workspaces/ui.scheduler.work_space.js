@@ -388,7 +388,16 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._toggleFocusClass(true, $selectedCells);
         this.setAria('label', 'Add appointment', $selectedCells);
 
-        const selectedCellData = this.getSelectedCellData();
+        const selectedCellData = this.getSelectedCellData().map(({
+            startDate, endDate, allDay, groups, groupIndex,
+        }) => ({
+            startDate,
+            endDate,
+            allDay,
+            groups,
+            groupIndex: groupIndex || 0,
+        }));
+
         this.option('selectedCellData', selectedCellData);
         this._selectionChangedAction({ selectedCellData });
     }
