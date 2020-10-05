@@ -509,13 +509,6 @@ const HtmlEditor = Editor.inherit({
         this._abortUpdateContentTask();
         this._cleanCallback.empty();
         this._contentInitializedCallback.empty();
-        this._isContentRendered = undefined;
-        this.callBase();
-    },
-
-    _detachFocusEvents: function() {
-        this._isContentRendered && this._isContentRendered.reject();
-
         this.callBase();
     },
 
