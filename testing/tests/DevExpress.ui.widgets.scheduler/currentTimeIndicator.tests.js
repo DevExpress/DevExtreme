@@ -41,13 +41,18 @@ const testIndicators = function(testCases, $element, assert) {
     const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
     assert.equal($indicators.length, testCases.length, 'Indicator count is correct');
 
-    testCases.forEach(({ cellIndex, offset, widthFactor }, index) => {
+    testCases.forEach(({ cellIndex, offset, isSimple }, index) => {
         const $cell = $element.find('.' + SCHEDULER_DATE_TABLE_CELL_CLASS).eq(cellIndex);
+        const $indicator = $indicators.eq(index);
+
         assert.equal($indicators.eq(index).parent().get(0), $cell.get(0), 'Indicator was placed in the correct cell');
         assert.equal($indicators.eq(index).css('top'), offset.top, 'Indicator has correct top offset');
         assert.equal($indicators.eq(index).css('left'), offset.left, 'Indicator has correct left offset');
-        if(widthFactor) {
-            assert.roughEqual($indicators.eq(index).outerWidth(), $cell.outerWidth() * widthFactor, 2, 'Indicator has correct width');
+
+        if(isSimple) {
+            assert.ok($indicator.hasClass('dx-scheduler-date-time-indicator-simple'), 'Indicator is simple');
+        } else {
+            assert.notOk($indicator.hasClass('dx-scheduler-date-time-indicator-simple'), 'Indicator is usual');
         }
     });
 };
@@ -928,7 +933,15 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
                     top: '0px',
                     left: '0px'
                 },
-                widthFactor: 2
+                isSimple: false
+            },
+            {
+                cellIndex: 117,
+                offset: {
+                    top: '0px',
+                    left: '0px'
+                },
+                isSimple: true
             }
         ];
 
@@ -1041,6 +1054,53 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         assert.ok($cell.hasClass('dx-scheduler-header-panel-current-time-cell'), 'Cell has specific class');
     });
 })('DateTime indicator on TimelineDay View');
+
+(function() {
+    QUnit.module('DateTime indicator on TimelineDay View, vertical grouping', {
+        beforeEach: function() {
+            this.instance = $('#scheduler-work-space').dxSchedulerTimelineDay({
+                showCurrentTimeIndicator: true,
+                currentDate: new Date(2017, 8, 5),
+                groupOrientation: 'vertical',
+                startDayHour: 10,
+                endDayHour: 18,
+                hoursInterval: 1,
+                height: 307
+            }).dxSchedulerTimelineDay('instance');
+            stubInvokeMethod(this.instance);
+        }
+    });
+
+    QUnit.test('DateTimeIndicator should be rendered correctly', function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45)
+        });
+
+        this.instance.option('groups', [{ name: 'a', items: [{ id: 1, text: 'a.1' }, { id: 2, text: 'a.2' }] }]);
+
+        const $element = this.instance.$element();
+
+        const testCases = [
+            {
+                cellIndex: 2,
+                offset: {
+                    top: '0px',
+                    left: '150px'
+                },
+                isSimple: false
+            }, {
+                cellIndex: 10,
+                offset: {
+                    top: '0px',
+                    left: '150px'
+                },
+                isSimple: true
+            }
+        ];
+
+        testIndicators(testCases, $element, assert);
+    });
+})('DateTime indicator on TimelineDay View, vertical grouping');
 
 (function() {
     QUnit.module('DateTime indicator on TimelineDay View, horizontal grouping', {

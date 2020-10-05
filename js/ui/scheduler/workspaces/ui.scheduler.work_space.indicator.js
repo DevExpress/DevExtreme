@@ -8,6 +8,7 @@ import { hasWindow } from '../../../core/utils/window';
 const toMs = dateUtils.dateToMilliseconds;
 
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
+const SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS = 'dx-scheduler-date-time-indicator-simple';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
@@ -54,24 +55,28 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         }
     }
 
+    _isIndicatorSimple(i) {
+        return this.isGroupedByDate() && i > 0;
+    }
+
     _renderIndicator(date, groupCount) {
-        const groupedByDate = this.isGroupedByDate();
-        const repeatCount = groupCount;
-        for(let i = 0; i < repeatCount; i++) {
-            const $container = this.getCellByDate(this._getToday(), i);
-            if($container.length) {
-                const $indicator = this._createIndicator($container);
-                const top = this.getIndicatorTopOffset(date, $container);
-                if(groupedByDate && i > 0) {
-                    $indicator.addClass('dx-scheduler-date-time-indicator-simple');
-                }
-                $indicator.css('top', top);
+        for(let i = 0; i < groupCount; i++) {
+            const $cell = this.getCellByDate(this._getToday(), i);
+            if($cell.length) {
+                const $indicator = this._createIndicator($cell, this._isIndicatorSimple(i));
+                this._shiftIndicator(date, $cell, $indicator);
             }
         }
     }
 
-    _createIndicator($container) {
+    _shiftIndicator(date, $cell, $indicator) {
+        const top = this.getIndicatorTopOffset(date, $cell);
+        $indicator.css('top', top);
+    }
+
+    _createIndicator($container, isSimple) {
         const $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        isSimple && $indicator.addClass(SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS);
         $container.append($indicator);
 
         return $indicator;

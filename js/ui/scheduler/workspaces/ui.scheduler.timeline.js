@@ -258,28 +258,22 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     getIndicatorLeft(date, $cell) {
-        const today = this._getToday();
         const cellWidth = this.getCellWidth();
         const cellDate = this.getCellData($cell).startDate;
 
-        const duration = today.getTime() - cellDate.getTime();
+        const duration = date.getTime() - cellDate.getTime();
         const cellCount = duration / this.getCellDuration();
 
         return cellCount * cellWidth;
     }
 
-    _renderIndicator(date, groupCount) {
-        for(let i = 0; i < groupCount; i++) {
-            const $container = this.getCellByDate(this._getToday(), i);
-            const $indicator = this._createIndicator($container);
-            const left = this.getIndicatorLeft(date, $container);
-            $indicator.css('left', left);
+    _shiftIndicator(date, $cell, $indicator) {
+        const left = this.getIndicatorLeft(date, $cell);
+        $indicator.css('left', left);
+    }
 
-            if(this.option('groupOrientation') === 'vertical' && i > 0) {
-                $indicator.addClass('dx-scheduler-date-time-indicator-simple');
-            }
-            // this._groupedStrategy.shiftIndicator($indicator, height1, i);
-        }
+    _isIndicatorSimple(i) {
+        return this._isVerticalGroupedWorkSpace() && i > 0;
     }
 
     _isVerticalShader() {
