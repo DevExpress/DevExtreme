@@ -2139,6 +2139,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     _cleanView() {
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
+        this.virtualSelectionState?.releaseSelectedAndFocusedCells();
         this._$thead.empty();
         this._$dateTable.empty();
         this._shader && this._shader.clean();
