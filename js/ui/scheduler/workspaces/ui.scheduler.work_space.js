@@ -2858,17 +2858,14 @@ class SchedulerWorkSpace extends WidgetObserver {
             ? this._getGroupIndexByResourceId(groups)
             : 0;
 
-        if(groupIndex < 0) {
-            // TODO: throw an error
-            return;
-        }
-
         const coordinates = this._getScrollCoordinates(
             date.getHours(), date.getMinutes(), date, groupIndex, allDay,
         );
 
         const scrollable = this.getScrollable();
-        const offset = this.option('rtlEnabled') ? getBoundingRect(this.getScrollableContainer().get(0)).width : 0;
+        const offset = this.option('rtlEnabled')
+            ? getBoundingRect(this.getScrollableContainer().get(0)).width
+            : 0;
 
         const left = coordinates.left - scrollable.scrollLeft() - offset;
         const top = coordinates.top - scrollable.scrollTop();
