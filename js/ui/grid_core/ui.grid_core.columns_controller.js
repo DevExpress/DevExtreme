@@ -753,7 +753,7 @@ export default {
                 }
             };
 
-            const updateSortOrderWhenGrouping = function(column, groupIndex, prevGroupIndex) {
+            const updateSortOrderWhenGrouping = function(that, column, groupIndex, prevGroupIndex) {
                 const columnWasGrouped = prevGroupIndex >= 0;
 
                 if(groupIndex >= 0) {
@@ -761,7 +761,17 @@ export default {
                         column.lastSortOrder = column.sortOrder;
                     }
                 } else {
-                    column.sortOrder = column.lastSortOrder;
+                    const sortMode = that.option('sorting.mode');
+                    let sortOrder = column.lastSortOrder;
+
+                    if(sortMode === 'single') {
+                        const sortedByAnotherColumn = that._columns.some(col => col !== column && isDefined(col.sortIndex));
+                        if(sortedByAnotherColumn) {
+                            sortOrder = undefined;
+                        }
+                    }
+
+                    column.sortOrder = sortOrder;
                 }
             };
 
@@ -794,7 +804,7 @@ export default {
                 if(prevValue !== value) {
                     if(optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
                         changeType = 'grouping';
-                        updateSortOrderWhenGrouping(column, value, prevValue);
+                        updateSortOrderWhenGrouping(that, column, value, prevValue);
                     } else if(optionName === 'sortIndex' || optionName === 'sortOrder' || optionName === 'calculateSortValue') {
                         changeType = 'sorting';
                     } else {
@@ -1769,8 +1779,10 @@ export default {
                     if(allowSorting && column && column.allowSorting) {
                         if(needResetSorting && !isDefined(column.groupIndex)) {
                             each(that._columns, function(index) {
-                                if(index !== columnIndex && this.sortOrder && !isDefined(this.groupIndex)) {
-                                    delete this.sortOrder;
+                                if(index !== columnIndex && this.sortOrder) {
+                                    if(!isDefined(this.groupIndex)) {
+                                        delete this.sortOrder;
+                                    }
                                     delete this.sortIndex;
                                 }
                             });
