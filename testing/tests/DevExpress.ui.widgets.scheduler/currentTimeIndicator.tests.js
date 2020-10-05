@@ -791,6 +791,39 @@ const testIndicators = function(testCases, $element, assert) {
         assert.ok($cell.hasClass('dx-scheduler-header-panel-current-time-cell'), 'Cell has specific class');
     });
 
+    [{
+        startDayHour: 8,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 6, 10, 45),
+        isVisible: true,
+        caseName: 'indicator time is between startDayHour and endDayHour'
+    },
+    {
+        startDayHour: 8,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 6, 15, 45),
+        isVisible: false,
+        caseName: 'indicator time is later than endDayHour'
+    },
+    {
+        startDayHour: 8,
+        endDayHour: 23,
+        indicatorTime: new Date(2017, 8, 6, 7, 45),
+        isVisible: false,
+        caseName: 'indicator time is earlier than startDayHour'
+    }].forEach(testCase => {
+        QUnit.test(`indicator visibility - ${testCase.caseName} `, function(assert) {
+            this.instance.option({
+                indicatorTime: testCase.indicatorTime,
+                startDayHour: testCase.startDayHour,
+                endDayHour: testCase.endDayHour
+            });
+
+            const $element = this.instance.$element();
+            assert.equal($element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, testCase.isVisible ? 1 : 0, 'Indicator was rendered correctly');
+        });
+    });
+
     QUnit.skip('DateTimeIndicator and shader should have correct positions, Week view with intervalCount, rtl mode', function(assert) {
         const workspace = $('#scheduler-work-space-rtl').dxSchedulerWorkSpaceWeek({
             showCurrentTimeIndicator: true,

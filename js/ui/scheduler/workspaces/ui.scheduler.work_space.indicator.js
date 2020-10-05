@@ -18,12 +18,15 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         return this.invoke('convertDateByTimezone', date) || date;
     }
 
-    _needRenderDateTimeIndicator() {
-        // NOTE: excess cheking
+    _isIndicatorVisible() {
         const today = this._getToday();
-        const endViewDate = dateUtils.trimTime(this.getEndViewDate());
+        const endViewDate = new Date(this.getEndViewDate());
 
-        return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+        const firstViewDate = new Date(this._firstViewDate);
+        firstViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+        endViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+
+        return dateUtils.dateInRange(today, firstViewDate, endViewDate);
     }
 
     needRenderDateTimeIndication() {
@@ -42,57 +45,30 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                 this._shader.render();
             }
 
-            if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+            if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
                 const groupCount = this._getGroupCount() || 1;
-                const height = this.getIndicationHeight(); // refactor
-                // const rtlOffset = this._getRtlOffset(this.getCellWidth());
                 const date = this._getToday();
-                //  const $container = this.getCellByDate(this._getToday());
-                if(height > 0) {
-                    this._renderIndicator(date, groupCount);
-                    // const groupedByDate = this.isGroupedByDate();
-                    // const repeatCount = groupedByDate ? 1 : groupCount;
-                    // for(let i = 0; i < repeatCount; i++) {
-                    //     const $container = this.getCellByDate(this._getToday(), i);
-                    //     const $indicator = this._createIndicator($container);
-                    //     // $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
-                    //     const height1 = this.getIndicationHeightNew(date, $container);
-                    //     $indicator.css('top', height1);
-                    //     // this._groupedStrategy.shiftIndicator($indicator, height1, i);
-                    // }
 
-                    // this._renderIndicator(height1, $container, groupCount);
-                }
+                this._renderIndicator(date, groupCount);
             }
         }
     }
 
     _renderIndicator(date, groupCount) {
         const groupedByDate = this.isGroupedByDate();
-        const repeatCount = groupedByDate ? 1 : groupCount;
+        const repeatCount = groupCount;
         for(let i = 0; i < repeatCount; i++) {
             const $container = this.getCellByDate(this._getToday(), i);
             if($container.length) {
                 const $indicator = this._createIndicator($container);
-                // $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
-                const height1 = this.getIndicationHeightNew(date, $container);
-                groupedByDate && $indicator.width(this.getCellWidth() * groupCount);
-                $indicator.css('top', height1);
-                // this._groupedStrategy.shiftIndicator($indicator, height1, i);
+                const top = this.getIndicatorTopOffset(date, $container);
+                if(groupedByDate && i > 0) {
+                    $indicator.addClass('dx-scheduler-date-time-indicator-simple');
+                }
+                $indicator.css('top', top);
             }
         }
     }
-    // _renderIndicator(height, groupCount) {
-    //     const groupedByDate = this.isGroupedByDate();
-    //     const repeatCount = groupedByDate ? 1 : groupCount;
-
-    //     for(let i = 0; i < repeatCount; i++) {
-    //         const $indicator = this._createIndicator($container);
-
-    //         // $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
-    //         this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
-    //     }
-    // }
 
     _createIndicator($container) {
         const $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
@@ -101,9 +77,14 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         return $indicator;
     }
 
-    // _getRtlOffset(width) {
-    //     return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
-    // }
+    getIndicatorTopOffset(date, $cell) {
+        const cellHeight = this.getCellHeight();
+        const cellDate = this.getCellData($cell).startDate;
+        const duration = date.getTime() - cellDate.getTime();
+        const cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellHeight;
+    }
 
     _setIndicationUpdateInterval() {
         if(!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
@@ -163,26 +144,11 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         const cellHeight = this.getCellHeight();
         const date = new Date(this._firstViewDate);
 
-        if(this._needRenderDateTimeIndicator()) {
+        if(this._isIndicatorVisible()) {
             date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
         }
 
         const duration = today.getTime() - date.getTime();
-        const cellCount = duration / this.getCellDuration();
-
-        return cellCount * cellHeight;
-    }
-
-    getIndicationHeightNew(date, $cell) {
-        const cellHeight = this.getCellHeight();
-        const cellDate = this.getCellData($cell).startDate;
-        // const date = new Date(this._firstViewDate);
-
-        // if(this._needRenderDateTimeIndicator()) {
-        //     date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
-        // }
-
-        const duration = date.getTime() - cellDate.getTime();
         const cellCount = duration / this.getCellDuration();
 
         return cellCount * cellHeight;
@@ -200,7 +166,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _isCurrentTime(date) {
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
             const today = this._getToday();
             let result = false;
             date = new Date(date);
@@ -223,7 +189,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _isCurrentTimeHeaderCell(headerIndex) {
         let result = false;
 
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
             const date = this._getDateByIndex(headerIndex);
             const now = this.option('indicatorTime') || new Date();
 

@@ -257,15 +257,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     }
 
-    getIndicationWidthNew(date, $cell) {
+    getIndicatorLeft(date, $cell) {
         const today = this._getToday();
         const cellWidth = this.getCellWidth();
         const cellDate = this.getCellData($cell).startDate;
-        // const date = new Date(this._firstViewDate);
-
-        // if(this._needRenderDateTimeIndicator()) {
-        //     date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
-        // }
 
         const duration = today.getTime() - cellDate.getTime();
         const cellCount = duration / this.getCellDuration();
@@ -274,32 +269,17 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _renderIndicator(date, groupCount) {
-        // const repeatCount = groupedByDate ? 1 : groupCount;
         for(let i = 0; i < groupCount; i++) {
             const $container = this.getCellByDate(this._getToday(), i);
             const $indicator = this._createIndicator($container);
-            // $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
-            const height1 = this.getIndicationWidthNew(date, $container);
-            $indicator.css('left', height1);
+            const left = this.getIndicatorLeft(date, $container);
+            $indicator.css('left', left);
+
+            if(this.option('groupOrientation') === 'vertical' && i > 0) {
+                $indicator.addClass('dx-scheduler-date-time-indicator-simple');
+            }
             // this._groupedStrategy.shiftIndicator($indicator, height1, i);
         }
-
-        // let $indicator;
-        // const width = this.getIndicationWidth();
-
-        // if(this.option('groupOrientation') === 'vertical') {
-        //     $indicator = this._createIndicator($container);
-        //     $indicator.height(getBoundingRect($container.get(0)).height);
-        //     $indicator.css('left', rtlOffset ? rtlOffset - width : width);
-        // } else {
-        //     for(let i = 0; i < groupCount; i++) {
-        //         const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
-        //         $indicator = this._createIndicator($container);
-        //         $indicator.height(getBoundingRect($container.get(0)).height);
-
-        //         $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
-        //     }
-        // }
     }
 
     _isVerticalShader() {
@@ -309,7 +289,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _isCurrentTimeHeaderCell(headerIndex) {
         let result = false;
 
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
             let date = this._getDateByIndex(headerIndex);
 
             const now = this._getToday();
