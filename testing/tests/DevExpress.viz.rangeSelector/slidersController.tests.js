@@ -260,9 +260,9 @@ QUnit.module('Positioning', environment);
 
 QUnit.test('Total area and selected area trackers', function(assert) {
     const _touchEvents = support.touchEvents;
-    const _pointer = support.pointer;
+    const _pointerEvents = support.pointerEvents;
     try {
-        support.touchEvents = support.pointer = false;
+        support.touchEvents = support.pointerEvents = false;
         this.update({
             sliderHandle: { width: 14 }
         });
@@ -278,15 +278,15 @@ QUnit.test('Total area and selected area trackers', function(assert) {
         assert.deepEqual(this.sliderTracker(1).animate.lastCall.args, [{ translateX: 1500 }, { duration: 250 }], 'slider tracker 2 animation');
     } finally {
         support.touchEvents = _touchEvents;
-        support.pointer = _pointer;
+        support.pointerEvents = _pointerEvents;
     }
 });
 
 QUnit.test('Slider tracker width when slider handler width is rather small', function(assert) {
     const _touchEvents = support.touchEvents;
-    const _pointer = support.pointer;
+    const _pointerEvents = support.pointerEvents;
     try {
-        support.touchEvents = support.pointer = false;
+        support.touchEvents = support.pointerEvents = false;
         this.update({
             sliderHandle: { width: 2 }
         });
@@ -296,15 +296,15 @@ QUnit.test('Slider tracker width when slider handler width is rather small', fun
         assert.deepEqual(this.sliderTracker(1).attr.getCall(1).args, [{ x: -4, y: 0, width: 8, height: 10, translateY: 15 }], 'slider tracker 2');
     } finally {
         support.touchEvents = _touchEvents;
-        support.pointer = _pointer;
+        support.pointerEvents = _pointerEvents;
     }
 });
 
 QUnit.test('Slider tracker width on touch devices', function(assert) {
     const _touchEvents = support.touchEvents;
-    const _pointer = support.pointer;
+    const _pointerEvents = support.pointerEvents;
     try {
-        support.touchEvents = support.pointer = true;
+        support.touchEvents = support.pointerEvents = true;
         this.update({
             sliderHandle: { width: 14 }
         });
@@ -314,7 +314,7 @@ QUnit.test('Slider tracker width on touch devices', function(assert) {
         assert.deepEqual(this.sliderTracker(1).attr.getCall(1).args, [{ x: -10, y: 0, width: 20, height: 10, translateY: 15 }], 'slider tracker 2');
     } finally {
         support.touchEvents = _touchEvents;
-        support.pointer = _pointer;
+        support.pointerEvents = _pointerEvents;
     }
 });
 

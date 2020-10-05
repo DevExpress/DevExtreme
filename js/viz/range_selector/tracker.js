@@ -3,9 +3,7 @@ import pointerEvents from '../../events/pointer';
 import { getWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { each } from '../../core/utils/iterator';
-// import { pointer as msPointerEnabled } from '../../core/utils/support';
-
-const msPointerEnabled = undefined;
+import { pointerEvents as msPointerEnabled } from '../../core/utils/support';
 
 const MIN_MANUAL_SELECTING_WIDTH = 10;
 const window = getWindow();
