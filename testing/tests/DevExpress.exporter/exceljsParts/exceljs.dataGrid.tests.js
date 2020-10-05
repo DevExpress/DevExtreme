@@ -6645,6 +6645,60 @@ QUnit.module('LoadPanel', moduleConfig, () => {
     });
 });
 
+QUnit.module('OutlineLevel', moduleConfig, () => {
+    QUnit.test('Outlinelevel property was applied before customizeCell callbacks were called', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'str1', f2: 'str1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            columns: [
+                { dataField: 'f1', groupIndex: 0 },
+                { dataField: 'f2' },
+            ],
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        exportDataGrid({
+            component: dataGrid,
+            worksheet: this.worksheet,
+            customizeCell: ({ excelCell, gridCell }) => {
+                assert.strictEqual(this.worksheet.getRow(excelCell.fullAddress.row).outlineLevel, gridCell.rowType === 'group' ? 0 : 1, 'row.outlinelevel');
+            }
+        }).then(() => {
+            helper.checkOutlineLevel([0, 1], 1);
+            done();
+        });
+    });
+
+    QUnit.test('Setting outlinelevel property using the customizeCell callback should be applied', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'str1', f2: 'str1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            columns: [
+                { dataField: 'f1', groupIndex: 0 },
+                { dataField: 'f2' },
+            ],
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+
+        exportDataGrid({
+            component: dataGrid,
+            worksheet: this.worksheet,
+            customizeCell: ({ excelCell, gridCell }) => {
+                this.worksheet.getRow(excelCell.fullAddress.row).outlineLevel = gridCell.rowType === 'group' ? 1 : 2;
+            }
+        }).then(() => {
+            helper.checkOutlineLevel([1, 2], 1);
+            done();
+        });
+    });
+});
+
 ExcelJSLocalizationFormatTests.runCurrencyTests([
     { value: 'USD', expected: '$#,##0_);\\($#,##0\\)' },
     { value: 'RUB', expected: '$#,##0_);\\($#,##0\\)' }, // NOT SUPPORTED in default
