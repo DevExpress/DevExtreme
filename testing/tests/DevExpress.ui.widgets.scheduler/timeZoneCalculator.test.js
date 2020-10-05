@@ -6,7 +6,7 @@ const { test, module } = QUnit;
 
 module('TimeZoneCalculator', {}, () => {
     const localOffset = (new Date()).getTimezoneOffset() * 60000;
-    const commonOffset = 11;
+    const commonOffset = 15;
     const appointmentOffset = 7.5;
 
     const sourceDate = new Date(2020, 6, 6, 18, 0);
