@@ -213,7 +213,7 @@ $diagram-toolbox-title-size: 12px;
     box-shadow: none;
 
     .dx-texteditor-input,
-    .dx-placeholder:before {
+    .dx-placeholder::before {
       padding: $diagram-toolbox-input-v-padding $diagram-toolbox-input-h-padding;
     }
 
@@ -330,7 +330,7 @@ $diagram-toolbox-title-size: 12px;
     }
 
     .dx-tabpanel {
-      .dx-tab-selected:before {
+      .dx-tab-selected::before {
         top: -1px;
       }
     }

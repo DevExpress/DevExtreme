@@ -63,7 +63,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
     @include texteditor-input-padding();
 
     .dx-texteditor-input-container {
-      &:after {
+      &::after {
         @include texteditor-validation-icon-offset();
       }
     }
@@ -168,7 +168,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
 .dx-placeholder {
   color: $texteditor-placeholder-color;
 
-  &:before {
+  &::before {
     padding: $generic-texteditor-input-padding;
 
     .dx-editor-underlined & {
@@ -263,7 +263,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
     }
 
     &.dx-show-invalid-badge .dx-texteditor-input-container {
-      &:after {
+      &::after {
         @include dx-invalid-generic-badge();
       }
     }
@@ -340,7 +340,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   &.dx-editor-underlined,
   &.dx-editor-outlined {
     .dx-texteditor-input-container {
-      &:after {
+      &::after {
         @include dx-valid-generic-badge();
       }
     }
@@ -361,7 +361,7 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
 
 .dx-rtl {
   .dx-placeholder,
-  .dx-placeholder:before {
+  .dx-placeholder::before {
     right: 0;
     left: auto;
 

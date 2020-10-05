@@ -1,14 +1,13 @@
-import commonModule from './common';
-const animationSettings = commonModule.utils.animationSettings;
-const formatValue = commonModule.formatValue;
+import { utils, formatValue } from './common';
+const animationSettings = utils.animationSettings;
 import SliderMarker from './slider_marker';
-import support from '../../core/utils/support';
+import { touchEvents, pointer } from '../../core/utils/support';
 
 const SPLITTER_WIDTH = 8;
 const TOUCH_SPLITTER_WIDTH = 20;
 
 function getSliderTrackerWidth(sliderHandleWidth) {
-    return support.touchEvents || support.pointer ? TOUCH_SPLITTER_WIDTH : (SPLITTER_WIDTH < sliderHandleWidth ? sliderHandleWidth : SPLITTER_WIDTH);
+    return touchEvents || pointer ? TOUCH_SPLITTER_WIDTH : (SPLITTER_WIDTH < sliderHandleWidth ? sliderHandleWidth : SPLITTER_WIDTH);
 }
 
 function Slider(params, index) {

@@ -1,6 +1,5 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
-import config from '../../../core/config';
 import ScrollView, {
   viewFunction,
   Location,
@@ -626,13 +625,6 @@ describe('ScrollView', () => {
           const { cssClasses } = new ScrollView({ direction: 'both' });
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
         });
-      });
-    });
-
-    describe('Default options', () => {
-      it('should use rtlEnabled from config', () => {
-        const props = new ScrollViewProps();
-        expect(props.rtlEnabled).toEqual(config().rtlEnabled);
       });
     });
 

@@ -48,7 +48,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
   height: $material-slider-handle-size;
   border-radius: $material-slider-radius;
 
-  &:after {
+  &::after {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -67,7 +67,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
       background-color: transparent;
       min-width: $material-slider-tooltip-width;
 
-      &:before {
+      &::before {
         content: "";
         position: absolute;
         width: $material-slider-tooltip-width;
@@ -102,7 +102,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
       }
 
       &.dx-state-disabled {
-        &:before {
+        &::before {
           margin-top: $material-slider-disabled-tooltip-top-margin;
 
           .dx-slider-tooltip-position-top & {
@@ -173,7 +173,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
     border-radius: 50%;
     border: 2px solid $base-bg;
 
-    &:after {
+    &::after {
       margin-top: -$material-slider-handle-inner-disabled-size / 2 - $material-slider-handle-inner-border-width - 2px;
       margin-left: -$material-slider-handle-inner-disabled-size / 2 - $material-slider-handle-inner-border-width - 2px;
       width: 8px;
@@ -188,7 +188,7 @@ $material-slider-disabled-tooltip-top-margin: 5px;
 }
 
 .dx-invalid {
-  .dx-slider-handle:after {
+  .dx-slider-handle::after {
     background-color: $base-invalid-color;
   }
 

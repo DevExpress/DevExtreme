@@ -3,7 +3,7 @@ import { isDefined as _isDefined, isNumeric as _isNumber } from '../../core/util
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 const _isArray = Array.isArray;
-import axisModule from '../axes/base_axis';
+import { Axis } from '../axes/base_axis';
 import { map as _map } from '../core/utils';
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
 import { compareArrays as _compareArrays } from './base_gauge';
@@ -63,7 +63,7 @@ export const dxGauge = dxBaseGauge.inherit({
         const that = this;
 
         that._scaleGroup = that._renderer.g().attr({ 'class': 'dxg-scale' }).linkOn(that._renderer.root, 'scale');
-        that._scale = new axisModule.Axis({
+        that._scale = new Axis({
             incidentOccurred: that._incidentOccurred,
             renderer: that._renderer,
             axesContainerGroup: that._scaleGroup,

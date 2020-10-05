@@ -1,11 +1,11 @@
 import TreeMapBase from './tree_map.base';
-import { prototype as nodeProto } from './node';
+import Node from './node';
 import { expand } from '../core/helpers';
-import common from './common';
+import { buildRectAppearance } from './common';
 
 const proto = TreeMapBase.prototype;
+const nodeProto = Node.prototype;
 
-const _buildRectAppearance = common.buildRectAppearance;
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
 import { inArray as _inArray } from '../../core/utils/array';
 
@@ -21,7 +21,7 @@ import './states';
 proto._eventsMap.onSelectionChanged = { name: 'selectionChanged' };
 
 expand(proto._handlers, 'calculateAdditionalStates', function(states, options) {
-    states[2] = options.selectionStyle ? _buildRectAppearance(options.selectionStyle) : {};
+    states[2] = options.selectionStyle ? buildRectAppearance(options.selectionStyle) : {};
 });
 
 nodeProto.statesMap[2] = nodeProto.statesMap[3] = STATE_CODE;

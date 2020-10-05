@@ -33,7 +33,7 @@
       color: $fieldset-field-value-invalid-color;
       padding-left: $material-fieldset-attention-icon-offset;
 
-      &:before {
+      &::before {
         @include dx-invalid-material-badge();
       }
     }
@@ -88,7 +88,7 @@
       position: relative;
       padding-left: $material-fieldset-attention-icon-offset;
 
-      &:before {
+      &::before {
         left: 0;
       }
     }

@@ -10,7 +10,7 @@
     text-align: center;
     line-height: 0;
 
-    &:before {
+    &::before {
       display: inline-block;
       height: 100%;
       content: '';

@@ -4,6 +4,8 @@ import dateLocalization from 'localization/date';
 import ResourceManager from 'ui/scheduler/ui.scheduler.resource_manager';
 
 const DATE_TABLE_CELL_CLASS = 'dx-scheduler-date-table-cell';
+const HOVER_CLASS = 'dx-state-hover';
+
 const formatDateAndWeekday = function(date) {
     return date.getDate() + ' ' + dateLocalization.getDayNames('abbreviated')[date.getDay()];
 };
@@ -24,7 +26,7 @@ QUnit.module('Agenda', {
                 rows.push(singleGroup);
             }
 
-            this.instance = $('#scheduler-agenda')
+            this.$element = $('#scheduler-agenda')
                 .dxSchedulerAgenda($.extend(options, {
                     observer: {
                         fire: $.proxy(function(functionName, args) {
@@ -36,8 +38,8 @@ QUnit.module('Agenda', {
                             }
                         }, this)
                     }
-                }))
-                .dxSchedulerAgenda('instance');
+                }));
+            this.instance = this.$element.dxSchedulerAgenda('instance');
         };
     }
 });
@@ -480,4 +482,14 @@ QUnit.test('Agenda should not have tabIndex', function(assert) {
     });
 
     assert.equal(this.instance.$element().attr('tabindex'), null, 'tabindex is not set');
+});
+
+QUnit.test('Cell hover should not work', function(assert) {
+    this.createInstance();
+
+    const cells = this.$element.find(`.${DATE_TABLE_CELL_CLASS}`);
+
+    this.$element.trigger($.Event('dxpointerenter', { target: cells.eq(2).get(0), which: 1 }));
+
+    assert.notOk(cells.eq(2).hasClass(HOVER_CLASS), 'onHover event does not work');
 });

@@ -3,7 +3,7 @@ import { isDefined, isNumeric, isExponential, isFunction, isString } from '../..
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { adjust, sign } from '../../core/utils/math';
-import { dateToMilliseconds } from '../../core/utils/date';
+import dateUtils from '../../core/utils/date';
 import domAdapter from '../../core/dom_adapter';
 import Color from '../../color';
 const { PI, LN10, abs, log, floor, ceil, pow, sqrt, atan2 } = Math;
@@ -12,6 +12,7 @@ const _max = Math.max;
 const _cos = Math.cos;
 const _sin = Math.sin;
 const _round = Math.round;
+const dateToMilliseconds = dateUtils.dateToMilliseconds;
 
 
 const MAX_PIXEL_COUNT = 1E10;

@@ -25,17 +25,17 @@
 .dx-fileuploader-input-wrapper {
   @include dx-clearfix-mixin();
 
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     width: 100%;
   }
 
-  &:before {
+  &::before {
     padding-top: 1em;
     margin-top: -1em;
   }
 
-  &:after {
+  &::after {
     padding-bottom: 1em;
     margin-bottom: -1em;
   }
@@ -138,7 +138,7 @@
   width: 100%;
   cursor: default;
 
-  &:before {
+  &::before {
     content: '';
     position: absolute;
     top: -50%;

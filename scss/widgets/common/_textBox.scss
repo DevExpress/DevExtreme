@@ -9,7 +9,7 @@
     position: relative;
     pointer-events: none;
 
-    &:before {
+    &::before {
       content: "";
       position: absolute;
       display: inline-block;

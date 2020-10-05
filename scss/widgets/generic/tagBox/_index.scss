@@ -59,8 +59,8 @@
   width: $generic-tagbox-remove-button-width;
   height: 100%;
 
-  &:before,
-  &:after {
+  &::before,
+  &::after {
     right: 4px + $generic-tagbox-remove-button-right;
     margin-top: -5px;
     width: 3px;
@@ -68,7 +68,7 @@
     background: $tagbox-tag-button-remove-bg;
   }
 
-  &:after {
+  &::after {
     right: $generic-tagbox-remove-button-right;
     margin-top: -1px;
     width: 11px;
@@ -76,8 +76,8 @@
   }
 
   &:active {
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       background: $tagbox-tag-button-remove-active-bg;
     }
   }
@@ -90,14 +90,14 @@
   }
 
   .dx-tag-remove-button {
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       background-color: $tagbox-tag-focused-button-remove-bg;
     }
 
     &:active {
-      &:before,
-      &:after {
+      &::before,
+      &::after {
         background: $tagbox-tag-button-remove-active-bg;
       }
     }
@@ -116,7 +116,7 @@
 .dx-tagbox.dx-invalid,
 .dx-tagbox.dx-valid {
   .dx-texteditor-container {
-    &:after {
+    &::after {
       @include tagbox-badge-offset();
     }
   }
@@ -145,12 +145,12 @@
   }
 
   .dx-tag-remove-button {
-    &:before {
+    &::before {
       right: auto;
       left: 4px + $generic-tagbox-remove-button-right;
     }
 
-    &:after {
+    &::after {
       right: auto;
       left: $generic-tagbox-remove-button-right;
     }

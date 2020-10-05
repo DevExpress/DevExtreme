@@ -89,7 +89,7 @@
   cursor: pointer;
   position: relative;
 
-  &:before {
+  &::before {
     position: absolute;
     display: block;
     right: 0;

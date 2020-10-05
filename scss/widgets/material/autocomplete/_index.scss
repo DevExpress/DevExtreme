@@ -20,7 +20,7 @@
 .dx-autocomplete.dx-invalid,
 .dx-autocomplete.dx-valid {
   .dx-texteditor-buttons-container {
-    &:after {
+    &::after {
       @include autocomplete-editor-container-offset();
     }
   }

@@ -9,7 +9,6 @@ import {
   OneWay,
   Ref,
   Slot,
-  Fragment,
   Consumer,
 } from 'devextreme-generator/component_declaration/common';
 import '../../../events/click';
@@ -74,15 +73,13 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
     </div>
   );
   return (
-    <Fragment>
-      {viewModel.shouldRenderConfigProvider
-        ? (
-          <ConfigProvider rtlEnabled={viewModel.rtlEnabled}>
-            {widget}
-          </ConfigProvider>
-        )
-        : widget}
-    </Fragment>
+    viewModel.shouldRenderConfigProvider
+      ? (
+        <ConfigProvider rtlEnabled={viewModel.rtlEnabled}>
+          {widget}
+        </ConfigProvider>
+      )
+      : widget
   );
 };
 

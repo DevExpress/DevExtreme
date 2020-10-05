@@ -68,6 +68,12 @@
     }
   },
   {
+    "name": "data/apply_changes",
+    "exports": {
+      "default": { "path": "data.applyChanges" }
+    }
+  },
+  {
     "name": "data/array_store",
     "exports": {
       "default": { "path": "data.ArrayStore" }
@@ -560,8 +566,7 @@
   {
     "name": "ui/scheduler",
     "exports": {
-      "default": { "path": "ui.dxScheduler", "isWidget": true },
-      "getTimeZones": { "path": "ui.dxScheduler.getTimeZones"}
+      "default": { "path": "ui.dxScheduler", "isWidget": true }
     }
   },
   {

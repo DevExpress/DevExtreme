@@ -6,7 +6,7 @@ import callOnce from '../../../core/utils/call_once';
 import eventsEngine from '../../../events/core/events_engine';
 import browser from '../../../core/utils/browser';
 import { getSvgMarkup } from '../../../core/utils/svg';
-import animation from './animation';
+import { AnimationController } from './animation';
 import { normalizeBBox, rotateBBox, normalizeEnum } from '../utils';
 import { isDefined } from '../../../core/utils/type';
 
@@ -1867,7 +1867,7 @@ Renderer.prototype = {
         const that = this;
         that._defs = that._createElement('defs').append(that.root);
 
-        that._animationController = new animation.AnimationController(that.root.element);
+        that._animationController = new AnimationController(that.root.element);
         that._animation = { enabled: true, duration: 1000, easing: 'easeOutCubic' };
     },
 

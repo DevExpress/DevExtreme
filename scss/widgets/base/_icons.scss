@@ -27,7 +27,7 @@
   text-align: center;
   line-height: $icon-size;
 
-  &:before {
+  &::before {
     position: absolute;
     display: block;
     width: $icon-size;
@@ -64,7 +64,7 @@
 @mixin dx-font-icon($glyph) {
   font: 14px/1 DXIcons; // stylelint-disable-line font-family-no-missing-generic-family-keyword
 
-  &:before {
+  &::before {
     content: $glyph;
   }
 }
@@ -317,36 +317,36 @@ $icons: (
 }
 
 .dx-rtl {
-  .dx-icon-spinnext:before {
+  .dx-icon-spinnext::before {
     content: "\f04f"; // .dx-icon-spinleft
   }
 
-  .dx-icon-spinprev:before {
+  .dx-icon-spinprev::before {
     content: "\f04e"; // .dx-icon-spinright
   }
 
-  .dx-icon-chevronnext:before {
+  .dx-icon-chevronnext::before {
     content: "\f012"; // .dx-icon-chevronleft
   }
 
-  .dx-icon-chevronprev:before,
-  .dx-icon-back:before {
+  .dx-icon-chevronprev::before,
+  .dx-icon-back::before {
     content: "\f010"; // .dx-icon-chevronright
   }
 
-  .dx-icon-undo:before {
+  .dx-icon-undo::before {
     content: "\f093"; // redo icon
   }
 
-  .dx-icon-redo:before {
+  .dx-icon-redo::before {
     content: "\f04c"; // undo icon
   }
 
-  .dx-icon-hidepanel:before {
+  .dx-icon-hidepanel::before {
     content: "\f11d"; // showpanel icon
   }
 
-  .dx-icon-showpanel:before {
+  .dx-icon-showpanel::before {
     content: "\f11c"; // hidepanel icon
   }
 }

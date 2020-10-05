@@ -1,7 +1,8 @@
 const $ = require('jquery');
+const mock = require('../../../helpers/mockModule.js').mock;
 const vizMocks = require('../../../helpers/vizMocks.js');
-const labelModule = require('viz/series/points/label');
-const LabelCtor = new vizMocks.ObjectPool(labelModule.Label);
+const { Label } = require('viz/series/points/label');
+const LabelCtor = new vizMocks.ObjectPool(Label);
 const ThemeManager = vizMocks.stubClass(require('viz/components/chart_theme_manager').ThemeManager);
 const layoutManagerModule = require('viz/chart_components/layout_manager');
 const LayoutManager = vizMocks.stubClass(layoutManagerModule.LayoutManager);
@@ -17,9 +18,9 @@ const Crosshair = crosshairModule.Crosshair;
 const chartThemeManagerModule = require('viz/components/chart_theme_manager');
 const scrollBarClassModule = require('viz/chart_components/scroll_bar');
 const ScrollBarClass = scrollBarClassModule.ScrollBar;
-const trackerModule = require('viz/chart_components/tracker');
-const ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker);
-const PieTrackerSub = vizMocks.stubClass(trackerModule.PieTracker);
+const { ChartTracker, PieTracker } = require('viz/chart_components/tracker');
+const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
+const PieTrackerSub = vizMocks.stubClass(PieTracker);
 const dataValidatorModule = require('viz/components/data_validator');
 const chartMocks = require('../../../helpers/chartMocks.js');
 const insertMockFactory = chartMocks.insertMockFactory;
@@ -27,22 +28,11 @@ const resetMockFactory = chartMocks.resetMockFactory;
 const exportModule = require('viz/core/export');
 const _test_prepareSegmentRectPoints = require('viz/utils')._test_prepareSegmentRectPoints;
 const restoreMockFactory = chartMocks.restoreMockFactory;
-require('viz/chart');
+
 const tooltipOrig = tooltipModule.Tooltip;
 
 exports.LabelCtor = LabelCtor;
 exports.rendererModule = rendererModule;
-
-const resetModules = exports.resetModules = function() {
-    trackerModule.ChartTracker.reset();
-    trackerModule.PieTracker.reset();
-
-    legendModule.Legend.reset();
-
-    rendererModule.Renderer.reset();
-    exportModule.ExportMenu.reset();
-    titleModule.Title.reset();
-};
 
 function stubExport() {
     const that = this;
@@ -86,13 +76,21 @@ legendModule.Legend = sinon.spy(function(parameters) {
     return legend;
 });
 
-trackerModule.ChartTracker = sinon.spy(function(parameters) {
-    return new ChartTrackerSub(parameters);
+const trackerModule = mock('viz/chart_components/tracker', {
+    ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters)),
+    PieTracker: sinon.spy((parameters) => new PieTrackerSub(parameters))
 });
 
-trackerModule.PieTracker = sinon.spy(function(parameters) {
-    return new PieTrackerSub(parameters);
-});
+const resetModules = exports.resetModules = function() {
+    trackerModule.ChartTracker.reset();
+    trackerModule.PieTracker.reset();
+
+    legendModule.Legend.reset();
+
+    rendererModule.Renderer.reset();
+    exportModule.ExportMenu.reset();
+    titleModule.Title.reset();
+};
 
 // stubs getters
 function getTitleStub() {
@@ -285,3 +283,5 @@ exports.environment = {
         this.validateData.restore();
     }
 };
+
+require('viz/chart');

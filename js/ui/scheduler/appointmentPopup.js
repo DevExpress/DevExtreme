@@ -11,7 +11,7 @@ import messageLocalization from '../../localization/message';
 import { isEmptyObject } from '../../core/utils/type';
 import Popup from '../popup';
 import { AppointmentForm } from './ui.scheduler.appointment_form';
-import loading from './ui.loading';
+import { hide as hideLoading, show as showLoading } from './ui.loading';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -370,13 +370,13 @@ export default class AppointmentPopup {
     }
 
     _hideLoadPanel() {
-        loading.hide();
+        hideLoading();
     }
 
     _showLoadPanel() {
         const $overlayContent = this._popup.overlayContent();
 
-        loading.show({
+        showLoading({
             container: $overlayContent,
             position: {
                 of: $overlayContent

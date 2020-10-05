@@ -50,7 +50,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
   padding-top: $material-list-searchbox-vertical-padding - 2px;
 
   &.dx-searchbox {
-    .dx-placeholder:before {
+    .dx-placeholder::before {
       font-size: $material-list-main-font-size;
     }
 
@@ -72,7 +72,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
 }
 
 .dx-list-collapsible-groups .dx-list-group-header {
-  &:before {
+  &::before {
     content: none;
   }
 }
@@ -126,21 +126,21 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
     &.dx-list-select-decorator-enabled {
       .dx-list-item {
         &.dx-state-hover {
-          .dx-radiobutton-icon:before {
+          .dx-radiobutton-icon::before {
             border-color: $checkbox-hover-border-color;
           }
         }
 
         &.dx-state-focused {
           .dx-checkbox {
-            .dx-checkbox-icon:after {
+            .dx-checkbox-icon::after {
               background-color: color.change($checkbox-border-color, $alpha: 0.1);
               transform: scale(1);
             }
 
             &.dx-checkbox-checked,
             &.dx-checkbox-indeterminate {
-              .dx-checkbox-icon:after {
+              .dx-checkbox-icon::after {
                 background-color: color.change($checkbox-bg, $alpha: 0.1);
                 transform: scale(1);
               }
@@ -223,7 +223,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
       bottom: 0;
     }
 
-    &:before {
+    &::before {
       content: none;
     }
   }
@@ -359,7 +359,7 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
     font-size: $material-list-main-font-size;
     position: relative;
 
-    &:after {
+    &::after {
       content: "";
       position: absolute;
       bottom: 1px;

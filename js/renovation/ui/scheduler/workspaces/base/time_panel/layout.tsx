@@ -5,7 +5,6 @@ import { Row } from '../row';
 import { TimePanelCell as Cell } from './cell';
 import { CellBase } from '../cell';
 import {
-  getKeyByDateAndGroup,
   getKeyByGroup,
   getIsGroupedAllDayPanel,
   isVerticalGroupOrientation,
@@ -36,13 +35,19 @@ export const viewFunction = (viewModel: TimePanelTableLayout): JSX.Element => (
           {dateTable.map((cellsRow) => {
             const { cellCountInGroupRow } = viewModel.props.viewData!;
             const {
-              groups, startDate, text, index: cellIndex, isFirstGroupCell, isLastGroupCell,
+              groups,
+              startDate,
+              text,
+              index: cellIndex,
+              isFirstGroupCell,
+              isLastGroupCell,
+              key,
             } = cellsRow[0];
 
             return (
               <Row
                 className="dx-scheduler-time-panel-row"
-                key={getKeyByDateAndGroup(startDate, groups)}
+                key={key}
               >
                 <Cell
                   startDate={startDate}

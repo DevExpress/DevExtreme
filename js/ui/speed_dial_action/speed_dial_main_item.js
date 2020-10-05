@@ -3,9 +3,11 @@ import config from '../../core/config';
 import { extend } from '../../core/utils/extend';
 import eventsEngine from '../../events/core/events_engine';
 import errors from '../widget/ui.errors';
-import { getSwatchContainer } from '../widget/swatch_container';
+import swatchContainer from '../widget/swatch_container';
 import SpeedDialItem from './speed_dial_item';
-import themes from '../themes';
+import { isMaterial } from '../themes';
+
+const { getSwatchContainer } = swatchContainer;
 
 const FAB_MAIN_CLASS = 'dx-fa-button-main';
 const FAB_MAIN_CLASS_WITH_LABEL = 'dx-fa-button-with-label';
@@ -58,7 +60,7 @@ class SpeedDialMainItem extends SpeedDialItem {
         return super._defaultOptionsRules().concat([
             {
                 device() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     indent: 72,

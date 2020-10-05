@@ -1,5 +1,5 @@
 const mixins = {};
-import { states as statesConsts } from '../../components/consts';
+import consts from '../../components/consts';
 import symbolPoint from './symbol_point';
 import barPoint from './bar_point';
 import bubblePoint from './bubble_point';
@@ -8,12 +8,13 @@ import rangeSymbolPoint from './range_symbol_point';
 import rangeBarPoint from './range_bar_point';
 import candlestickPoint from './candlestick_point';
 import stockPoint from './stock_point';
-import polarPoints from './polar_point';
+import { polarSymbolPoint, polarBarPoint } from './polar_point';
 import { normalizeEnum as _normalizeEnum } from '../../core/utils';
 import { extend } from '../../../core/utils/extend';
 const _extend = extend;
 import { isDefined as _isDefined } from '../../../core/utils/type';
 import { noop as _noop } from '../../../core/utils/common';
+const statesConsts = consts.states;
 const SYMBOL_POINT = 'symbolPoint';
 const POLAR_SYMBOL_POINT = 'polarSymbolPoint';
 const BAR_POINT = 'barPoint';
@@ -94,8 +95,8 @@ mixins.rangeSymbolPoint = rangeSymbolPoint;
 mixins.rangeBarPoint = rangeBarPoint;
 mixins.candlestickPoint = candlestickPoint;
 mixins.stockPoint = stockPoint;
-mixins.polarSymbolPoint = polarPoints.polarSymbolPoint;
-mixins.polarBarPoint = polarPoints.polarBarPoint;
+mixins.polarSymbolPoint = polarSymbolPoint;
+mixins.polarBarPoint = polarBarPoint;
 
 Point.prototype = {
     constructor: Point,

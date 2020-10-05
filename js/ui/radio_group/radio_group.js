@@ -3,7 +3,7 @@ import { extend } from '../../core/utils/extend';
 import devices from '../../core/devices';
 import { deferRender } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
-import inkRipple from '../widget/utils.ink_ripple';
+import * as inkRipple from '../widget/utils.ink_ripple';
 import registerComponent from '../../core/component_registrator';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import DataExpressionMixin from '../editor/ui.data_expression';

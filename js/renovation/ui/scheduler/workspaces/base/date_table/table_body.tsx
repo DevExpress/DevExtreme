@@ -1,11 +1,10 @@
 import {
   Component, ComponentBindings, JSXComponent, Fragment, OneWay,
 } from 'devextreme-generator/component_declaration/common';
-import { DateTableRow } from './row';
+import { Row as DateTableRow } from '../row';
 import { ViewCellData } from '../../types.d';
 import {
   getKeyByGroup,
-  getKeyByDateAndGroup,
   getIsGroupedAllDayPanel,
 } from '../../utils';
 import { LayoutProps } from '../layout_props';
@@ -27,7 +26,8 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
           )}
           {dateTable.map((cellsRow) => (
             <DateTableRow
-              key={getKeyByDateAndGroup(cellsRow[0].startDate, cellsRow[0].groups)}
+              className="dx-scheduler-date-table-row"
+              key={cellsRow[0].key}
             >
               {cellsRow.map(({
                 startDate,
@@ -37,6 +37,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
                 index,
                 isFirstGroupCell,
                 isLastGroupCell,
+                key,
               }: ViewCellData) => (
                 <viewModel.cell
                   isFirstGroupCell={isFirstGroupCell}
@@ -47,7 +48,7 @@ export const viewFunction = (viewModel: DateTableBody): JSX.Element => (
                   groupIndex={cellGroupIndex}
                   index={index}
                   dataCellTemplate={viewModel.props.dataCellTemplate}
-                  key={getKeyByDateAndGroup(startDate, groups)}
+                  key={key}
                 />
               ))}
             </DateTableRow>

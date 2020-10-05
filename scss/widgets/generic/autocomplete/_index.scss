@@ -26,7 +26,7 @@
 .dx-autocomplete.dx-invalid,
 .dx-autocomplete.dx-valid {
   .dx-texteditor-container {
-    &:after {
+    &::after {
       @include autocomplete-badge-offset();
     }
   }

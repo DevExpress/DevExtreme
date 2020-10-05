@@ -158,7 +158,7 @@ $diagram-toolbox-title-size: 18px;
 
     .dx-texteditor {
       .dx-texteditor-input,
-      .dx-placeholder:before {
+      .dx-placeholder::before {
         color: inherit;
         padding: $diagram-floating-toolbar-editor-padding;
       }
@@ -239,7 +239,7 @@ $diagram-toolbox-title-size: 18px;
     margin: $diagram-toolbox-input-margin;
 
     .dx-texteditor-input,
-    .dx-placeholder:before {
+    .dx-placeholder::before {
       padding: $diagram-toolbox-input-v-padding $diagram-toolbox-input-h-padding;
     }
 
@@ -375,7 +375,7 @@ $diagram-toolbox-title-size: 18px;
     }
 
     .dx-tabpanel {
-      .dx-tab-selected:before {
+      .dx-tab-selected::before {
         top: 0;
         bottom: initial;
       }

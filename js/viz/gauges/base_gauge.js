@@ -1,17 +1,18 @@
 const _Number = Number;
 import { getAppropriateFormat as _getAppropriateFormat } from '../core/utils';
 import { extend } from '../../core/utils/extend';
-import translator1DModule from '../translators/translator1d';
+import { Translator1D } from '../translators/translator1d';
 const _extend = extend;
 import BaseWidget from '../core/base_widget';
 import themeManagerModule from './theme_manager';
 import Tracker from './tracker';
-import { format as _format } from '../../format_helper';
+import formatHelper from '../../format_helper';
 import { plugin as exportPlugin } from '../core/export';
 import { plugin as titlePlugin } from '../core/title';
 import { plugin as tooltipPlugin } from '../core/tooltip';
 import { plugin as loadingIndicatorPlugin } from '../core/loading_indicator';
 
+const _format = formatHelper.format;
 export const dxBaseGauge = BaseWidget.inherit({
     _rootClassPrefix: 'dxg',
 
@@ -213,7 +214,7 @@ export const dxBaseGauge = BaseWidget.inherit({
 
     _factory: {
         createTranslator: function() {
-            return new translator1DModule.Translator1D();
+            return new Translator1D();
         },
 
         createTracker: function(parameters) {

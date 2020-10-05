@@ -59,7 +59,7 @@ $icon-size: 16px;
     height: 100%;
     display: inline-block;
 
-    &:before {
+    &::before {
       content: "";
       height: 100%;
       display: inline-block;

@@ -16,7 +16,7 @@ import { addNamespace, isMouseEvent } from '../../../events/utils/index';
 import pointerEvents from '../../../events/pointer';
 import errors from '../../widget/ui.errors';
 import { name as clickEventName } from '../../../events/click';
-import contextMenuEvent from '../../../events/contextmenu';
+import { name as contextMenuEventName } from '../../../events/contextmenu';
 import {
     enter as dragEventEnter,
     leave as dragEventLeave,
@@ -25,7 +25,8 @@ import {
 import Scrollable from '../../scroll_view/ui.scrollable';
 import HorizontalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.horizontal';
 import VerticalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.vertical';
-import { tableCreator } from '../ui.scheduler.table_creator';
+import tableCreatorModule from '../ui.scheduler.table_creator';
+const { tableCreator } = tableCreatorModule;
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
 import { FIXED_CONTAINER_CLASS } from '../constants';
@@ -113,6 +114,8 @@ const HOUR_MS = toMs('hour');
 
 const SCHEDULER_DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS} td`;
 
+const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
+
 class ScrollSemaphore {
     constructor() {
         this.counter = 0;
@@ -139,11 +142,6 @@ const formatWeekday = function(date) {
 };
 
 class SchedulerWorkSpace extends WidgetObserver {
-    constructor(...args) {
-        super(...args);
-        this._activeStateUnit = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
-    }
-
     get viewDataProvider() {
         if(!this._viewDataProvider) {
             this._viewDataProvider = new ViewDataProvider(this);
@@ -581,6 +579,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._sideBarSemaphore = new ScrollSemaphore();
         this._dataTableSemaphore = new ScrollSemaphore();
         this._viewDataProvider = null;
+        this._activeStateUnit = CELL_SELECTOR;
 
         super._init();
 
@@ -1357,7 +1356,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const cellSelector = '.' + DATE_TABLE_CELL_CLASS + ',.' + ALL_DAY_TABLE_CELL_CLASS;
         const $element = this.$element();
-        const eventName = addNamespace(contextMenuEvent.name, this.NAME);
+        const eventName = addNamespace(contextMenuEventName, this.NAME);
 
         eventsEngine.off($element, eventName, cellSelector);
         eventsEngine.on($element, eventName, cellSelector, this._contextMenuHandler.bind(this));

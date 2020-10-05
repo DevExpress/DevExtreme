@@ -1,6 +1,6 @@
 import BaseSparkline from './base_sparkline';
-import dataValidatorModule from '../components/data_validator';
-import seriesModule from '../series/base_series';
+import { validateData } from '../components/data_validator';
+import { Series } from '../series/base_series';
 const MIN_BAR_WIDTH = 1;
 const MAX_BAR_WIDTH = 50;
 const DEFAULT_BAR_INTERVAL = 4;
@@ -27,9 +27,7 @@ const _round = _math.round;
 const _max = _math.max;
 const _min = _math.min;
 const _isFinite = isFinite;
-import vizUtils from '../core/utils';
-const _map = vizUtils.map;
-const _normalizeEnum = vizUtils.normalizeEnum;
+import { map as _map, normalizeEnum as _normalizeEnum } from '../core/utils';
 import { isDefined as _isDefined } from '../../core/utils/type';
 const _Number = Number;
 const _String = String;
@@ -223,7 +221,7 @@ const dxSparkline = BaseSparkline.inherit({
     },
 
     _createSeries: function() {
-        this._series = new seriesModule.Series({
+        this._series = new Series({
             renderer: this._renderer,
             seriesGroup: this._seriesGroup,
             labelsGroup: this._seriesLabelGroup,
@@ -255,7 +253,7 @@ const dxSparkline = BaseSparkline.inherit({
             type: seriesOptions.type === 'bar' ? 'discrete' : undefined
         };
 
-        that._simpleDataSource = dataValidatorModule.validateData(that._simpleDataSource, groupsData, that._incidentOccurred, {
+        that._simpleDataSource = validateData(that._simpleDataSource, groupsData, that._incidentOccurred, {
             checkTypeForAllData: false,
             convertToAxisDataType: true,
             sortingMethod: true

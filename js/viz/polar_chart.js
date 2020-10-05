@@ -1,7 +1,7 @@
 import { noop } from '../core/utils/common';
 import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
-import vizUtils from './core/utils';
+import { normalizeAngle, convertPolarToXY } from './core/utils';
 import { AdvancedChart } from './chart_components/advanced_chart';
 import { isDefined } from '../core/utils/type';
 
@@ -40,7 +40,7 @@ const dxPolarChart = AdvancedChart.inherit({
         const themeManager = this._themeManager;
         const axisUserOptions = this.option('argumentAxis');
         const argumentAxisOptions = themeManager.getOptions('argumentAxis', axisUserOptions) || {};
-        const startAngle = isFinite(argumentAxisOptions.startAngle) ? vizUtils.normalizeAngle(argumentAxisOptions.startAngle) : 0;
+        const startAngle = isFinite(argumentAxisOptions.startAngle) ? normalizeAngle(argumentAxisOptions.startAngle) : 0;
 
         return {
             type: this.option('useSpiderWeb') && isArgumentAxis ? 'discrete' : axisOptions.type,
@@ -199,7 +199,7 @@ const dxPolarChart = AdvancedChart.inherit({
         }
 
         if(isDefined(argAngle) && isDefined(translatedRadius)) {
-            const coords = vizUtils.convertPolarToXY(argAxis.getCenter(), startAngle, argAngle, translatedRadius);
+            const coords = convertPolarToXY(argAxis.getCenter(), startAngle, argAngle, translatedRadius);
             extend(layoutInfo, coords, { angle: argAxis.getTranslatedAngle(argAngle), radius: translatedRadius });
         }
 

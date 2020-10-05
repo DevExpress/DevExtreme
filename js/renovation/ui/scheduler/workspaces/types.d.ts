@@ -10,6 +10,7 @@ export interface ViewCellData {
   index: number;
   isFirstGroupCell: boolean;
   isLastGroupCell: boolean;
+  key: string;
 }
 
 interface ViewData {

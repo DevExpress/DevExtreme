@@ -8,7 +8,7 @@
     "rules": {
         "indentation": [2, { "ignore": ["inside-parens"] }],
         "max-empty-lines": 2,
-        "selector-pseudo-element-colon-notation": null,
+        "selector-pseudo-element-colon-notation": "double",
         "no-descending-specificity": null,
         "no-empty-source": null,
         "at-rule-no-vendor-prefix": true,

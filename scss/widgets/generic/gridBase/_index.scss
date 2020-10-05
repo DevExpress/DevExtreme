@@ -221,7 +221,7 @@ $generic-grid-base-checkbox-icon-size: 16px;
 
     .dx-searchbox {
       .dx-texteditor-input,
-      .dx-placeholder:before {
+      .dx-placeholder::before {
         padding-left: $generic-texteditor-icon-container-size;
 
         @at-root #{selector-append(".dx-rtl", &)},
@@ -451,14 +451,14 @@ $generic-grid-base-checkbox-icon-size: 16px;
       &.dx-state-focused {
         background-color: transparent;
 
-        &:after {
+        &::after {
           border: 2px solid $datagrid-focused-border-color;
         }
 
         &.dx-menu-item-expanded {
           background-color: $datagrid-base-background-color;
 
-          &:after {
+          &::after {
             border-color: transparent;
           }
         }
@@ -516,7 +516,7 @@ $generic-grid-base-checkbox-icon-size: 16px;
           padding: $generic-grid-base-cell-padding;
         }
 
-        &.dx-state-focused:after {
+        &.dx-state-focused::after {
           border: 2px solid $datagrid-focused-border-color;
         }
       }

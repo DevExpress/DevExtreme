@@ -2975,6 +2975,43 @@ declare module DevExpress.fx {
      */
     export function stop(element: Element, jumpToEnd: boolean): void;
 }
+declare module DevExpress.pdfExporter {
+    /**
+     * [descr:PdfExportDataGridProps]
+     */
+    export interface PdfExportDataGridProps {
+        /**
+         * [descr:PdfExportDataGridProps.autoTableOptions]
+         */
+        autoTableOptions?: any;
+        /**
+         * [descr:PdfExportDataGridProps.component]
+         */
+        component?: DevExpress.ui.dxDataGrid;
+        /**
+         * [descr:PdfExportDataGridProps.jsPDFDocument]
+         */
+        jsPDFDocument?: any;
+        /**
+         * [descr:PdfExportDataGridProps.keepColumnWidths]
+         */
+        keepColumnWidths?: boolean;
+        /**
+         * [descr:PdfExportDataGridProps.selectedRowsOnly]
+         */
+        selectedRowsOnly?: boolean;
+    }
+    /**
+     * [descr:pdfExporter.exportDataGrid(options)]
+     */
+    export function exportDataGrid(options: PdfExportDataGridProps): Promise<void> & JQueryPromise<void>;
+}
+declare module DevExpress.timeZoneUtils {
+    /**
+     * [descr:Utils.getTimeZones(date)]
+     */
+    export function getTimeZones(date?: Date): Array<any>;
+}
 declare module DevExpress.ui {
     /**
      * [descr:AsyncRule]
@@ -3552,7 +3589,7 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBase.Options.pager]
          */
-        pager?: { allowedPageSizes?: Array<number | 'all'> | 'auto', displayMode?: 'adaptive' | 'compact' | 'full', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
+        pager?: { allowedPageSizes?: Array<number> | 'auto', infoText?: string, showInfo?: boolean, showNavigationButtons?: boolean, showPageSizeSelector?: boolean, visible?: boolean | 'auto' };
         /**
          * [descr:GridBase.Options.paging]
          */
@@ -12459,12 +12496,6 @@ declare module DevExpress.ui.dxOverlay {
      */
     export function baseZIndex(zIndex: number): void;
 }
-declare module DevExpress.ui.dxScheduler {
-    /**
-     * [descr:ui.dxScheduler.getTimeZones(date)]
-     */
-    export function getTimeZones(date?: Date): Array<any>;
-}
 declare module DevExpress.utils {
     /**
      * [descr:utils.cancelAnimationFrame(requestID)]
@@ -14860,7 +14891,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.commonAxisSettings.label.template]
          */
-        template?: DevExpress.core.template | ((model: any, element: SVGGElement) => string | SVGElement | JQuery);
+        template?: DevExpress.core.template | ((data: any, element: SVGGElement) => string | SVGElement | JQuery);
         /**
          * [descr:dxChart.Options.commonAxisSettings.label.textOverflow]
          */

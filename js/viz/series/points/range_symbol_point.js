@@ -1,7 +1,7 @@
 import { each } from '../../../core/utils/iterator';
 import { extend } from '../../../core/utils/extend';
 import { noop } from '../../../core/utils/common';
-import labelModule from './label';
+import { Label } from './label';
 import symbolPoint from './symbol_point';
 
 const _extend = extend;
@@ -116,8 +116,8 @@ export default _extend({}, symbolPoint, {
             labelsGroup: this.series._labelsGroup,
             point: this
         };
-        this._topLabel = new labelModule.Label(options);
-        this._bottomLabel = new labelModule.Label(options);
+        this._topLabel = new Label(options);
+        this._bottomLabel = new Label(options);
     },
 
     _getGraphicBBox: function(location) {

@@ -1,6 +1,6 @@
 import { extend } from '../../core/utils/extend';
 import errors from '../widget/ui.errors';
-import objectUtils from '../../core/utils/object';
+import { deepExtendArraySafe } from '../../core/utils/object';
 
 const PROPERTY_NAMES = {
     startDate: 'startDate',
@@ -129,7 +129,7 @@ class AppointmentAdapter {
     }
 
     clone(options = undefined) {
-        const result = new AppointmentAdapter(objectUtils.deepExtendArraySafe({}, this.rawAppointment), this.options);
+        const result = new AppointmentAdapter(deepExtendArraySafe({}, this.rawAppointment), this.options);
 
         if(options?.pathTimeZone) {
             result.startDate = result.calculateStartDate(options.pathTimeZone);

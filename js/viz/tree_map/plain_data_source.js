@@ -1,4 +1,5 @@
-import { prototype as proto } from './tree_map.base';
+import TreeMapBase from './tree_map.base';
+const proto = TreeMapBase.prototype;
 
 proto._optionChangesMap.idField = proto._optionChangesMap.parentField = 'NODES_CREATE';
 

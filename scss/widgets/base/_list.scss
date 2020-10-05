@@ -24,7 +24,7 @@ $list-searchbox-margin-bottom: 5px;
 }
 
 .dx-list-group-header {
-  &:before {
+  &::before {
     width: 0;
     height: 0;
     display: block;
@@ -38,12 +38,12 @@ $list-searchbox-margin-bottom: 5px;
   .dx-list-collapsible-groups & {
     cursor: pointer;
 
-    &:before {
+    &::before {
       content: ' ';
     }
   }
 
-  .dx-list-group-collapsed &:before {
+  .dx-list-group-collapsed &::before {
     border-width: 0 5px 5px 5px;
   }
 }
@@ -68,7 +68,7 @@ $list-searchbox-margin-bottom: 5px;
   display: table-cell;
   width: 100%;
 
-  &:before {
+  &::before {
     content: "_";
     color: transparent;
     display: inline-block;
@@ -354,7 +354,7 @@ $list-searchbox-margin-bottom: 5px;
     left: 0;
   }
 
-  .dx-list-group-header:before {
+  .dx-list-group-header::before {
     float: left;
   }
 }

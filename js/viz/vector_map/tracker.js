@@ -1,7 +1,7 @@
 import eventsEngine from '../../events/core/events_engine';
 import { getNavigator, hasProperty } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
-import eventEmitterModule from './event_emitter';
+import { makeEventEmitter } from './event_emitter';
 import { addNamespace } from '../../events/utils/index';
 import { name as wheelEventName } from '../../events/core/wheel';
 import { parseScalar } from '../core/utils';
@@ -461,7 +461,7 @@ Focus = function(fire) {
     };
 };
 
-eventEmitterModule.makeEventEmitter(Tracker);
+makeEventEmitter(Tracker);
 
 ///#DEBUG
 const originFocus = Focus;

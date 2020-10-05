@@ -22,6 +22,7 @@ import { extend } from 'core/utils/extend';
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
 const ALL_DAY_TABLE_CELL_CLASS = 'dx-scheduler-all-day-table-cell';
+const HOVER_CLASS = 'dx-state-hover';
 const WORKSPACE_DAY = { class: 'dxSchedulerWorkSpaceDay', name: 'SchedulerWorkSpaceDay' };
 const WORKSPACE_WEEK = { class: 'dxSchedulerWorkSpaceWeek', name: 'SchedulerWorkSpaceWeek' };
 const WORKSPACE_MONTH = { class: 'dxSchedulerWorkSpaceMonth', name: 'SchedulerWorkSpaceMonth' };
@@ -2967,6 +2968,29 @@ QUnit.module('Workspace Mouse Interaction', () => {
         assert.notOk(cells.eq(28).hasClass('dx-state-focused'), 'a cell in the next group is not focused');
     });
 
+    [WORKSPACE_DAY, WORKSPACE_WEEK, WORKSPACE_MONTH].forEach((workSpace) => {
+        QUnit.test(`Cell hover should work correctly in ${workSpace.name}`, function(assert) {
+            const $element = $('#scheduler-work-space')[workSpace.class]({});
+
+            const cells = $element.find(`.${CELL_CLASS}`);
+
+            $element.trigger($.Event('dxpointerenter', { target: cells.eq(2).get(0), which: 1 }));
+
+            assert.ok(cells.eq(2).hasClass(HOVER_CLASS), 'onHover event works');
+        });
+    });
+
+    [WORKSPACE_DAY, WORKSPACE_WEEK].forEach((workSpace) => {
+        QUnit.test(`Cell hover should work correctly in ${workSpace.name} in all-day panel cells`, function(assert) {
+            const $element = $('#scheduler-work-space')[workSpace.class]({});
+
+            const cells = $element.find(`.${ALL_DAY_TABLE_CELL_CLASS}`);
+
+            $element.trigger($.Event('dxpointerenter', { target: cells.eq(0).get(0), which: 1 }));
+
+            assert.ok(cells.eq(0).hasClass(HOVER_CLASS), 'onHover event works in all-day panel cells');
+        });
+    });
 });
 
 
@@ -3756,6 +3780,7 @@ QUnit.module('Renovated Render', {
                             allDay: true,
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 0,
                         }],
                         dateTable: [[{
                             startDate: new Date(2020, 6, 29, 0, 0),
@@ -3766,6 +3791,7 @@ QUnit.module('Renovated Render', {
                             text: '12:00 AM',
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 0,
                         }], [{
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
@@ -3775,6 +3801,7 @@ QUnit.module('Renovated Render', {
                             text: '',
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 1,
                         }]],
                         groupIndex: 0,
                         isGroupedAllDayPanel: false
@@ -3795,6 +3822,7 @@ QUnit.module('Renovated Render', {
                             text: '12:00 AM',
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 0,
                         },
                         position: { cellIndex: 0, rowIndex: 0 }
                     }], [{
@@ -3807,6 +3835,7 @@ QUnit.module('Renovated Render', {
                             text: '',
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 1,
                         },
                         position: { cellIndex: 0, rowIndex: 1 }
                     }]
@@ -3845,6 +3874,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 0,
                         },
                         {
                             allDay: true,
@@ -3855,6 +3885,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 1,
                         }],
                         dateTable: [[{
                             startDate: new Date(2020, 6, 29, 0, 0),
@@ -3866,6 +3897,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 0,
                         }, {
                             startDate: new Date(2020, 6, 29, 0, 0),
                             endDate: new Date(2020, 6, 29, 0, 30),
@@ -3876,6 +3908,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 1,
                         }], [{
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
@@ -3886,6 +3919,7 @@ QUnit.module('Renovated Render', {
                             index: 1,
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 2,
                         }, {
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
@@ -3896,6 +3930,7 @@ QUnit.module('Renovated Render', {
                             index: 1,
                             isFirstGroupCell: true,
                             isLastGroupCell: true,
+                            key: 3,
                         }]],
                         groupIndex: 0,
                         isGroupedAllDayPanel: false,
@@ -3916,6 +3951,7 @@ QUnit.module('Renovated Render', {
                         index: 0,
                         isFirstGroupCell: true,
                         isLastGroupCell: true,
+                        key: 0,
                     },
                     position: { cellIndex: 0, rowIndex: 0 }
                 }, {
@@ -3929,6 +3965,7 @@ QUnit.module('Renovated Render', {
                         index: 0,
                         isFirstGroupCell: true,
                         isLastGroupCell: true,
+                        key: 1,
                     },
                     position: { cellIndex: 1, rowIndex: 0 }
                 }], [{
@@ -3942,6 +3979,7 @@ QUnit.module('Renovated Render', {
                         index: 1,
                         isFirstGroupCell: true,
                         isLastGroupCell: true,
+                        key: 2,
                     },
                     position: { cellIndex: 0, rowIndex: 1 }
                 }, {
@@ -3955,6 +3993,7 @@ QUnit.module('Renovated Render', {
                         index: 1,
                         isFirstGroupCell: true,
                         isLastGroupCell: true,
+                        key: 3,
                     },
                     position: { cellIndex: 1, rowIndex: 1 }
                 }]];
@@ -3992,6 +4031,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: false,
+                            key: 0,
                         }],
                         dateTable: [[{
                             startDate: new Date(2020, 6, 29, 0, 0),
@@ -4003,6 +4043,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: false,
+                            key: 0,
                         }], [{
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
@@ -4013,6 +4054,7 @@ QUnit.module('Renovated Render', {
                             index: 1,
                             isFirstGroupCell: false,
                             isLastGroupCell: true,
+                            key: 1,
                         }]]
                     }, {
                         allDayPanel: [{
@@ -4026,6 +4068,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: false,
+                            key: 2,
                         }],
                         dateTable: [[{
                             startDate: new Date(2020, 6, 29, 0, 0),
@@ -4037,6 +4080,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: false,
+                            key: 2,
                         }], [{
                             startDate: new Date(2020, 6, 29, 0, 30),
                             endDate: new Date(2020, 6, 29, 1, 0),
@@ -4047,6 +4091,7 @@ QUnit.module('Renovated Render', {
                             index: 1,
                             isFirstGroupCell: false,
                             isLastGroupCell: true,
+                            key: 3,
                         }]]
                     }],
                 };
@@ -4062,6 +4107,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: false,
+                            key: 0,
                         },
                         position: { rowIndex: 0, cellIndex: 0 }
                     }], [{
@@ -4075,6 +4121,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: false,
+                            key: 0,
                         },
                         position: { rowIndex: 1, cellIndex: 0 }
                     }], [{
@@ -4088,6 +4135,7 @@ QUnit.module('Renovated Render', {
                             index: 1,
                             isFirstGroupCell: false,
                             isLastGroupCell: true,
+                            key: 1,
                         },
                         position: { rowIndex: 2, cellIndex: 0 }
                     }], [{
@@ -4100,6 +4148,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: false,
+                            key: 2,
                         },
                         position: { rowIndex: 3, cellIndex: 0 }
                     }], [{
@@ -4113,6 +4162,7 @@ QUnit.module('Renovated Render', {
                             index: 0,
                             isFirstGroupCell: true,
                             isLastGroupCell: false,
+                            key: 2,
                         },
                         position: { rowIndex: 4, cellIndex: 0 }
                     }], [{
@@ -4126,6 +4176,7 @@ QUnit.module('Renovated Render', {
                             index: 1,
                             isFirstGroupCell: false,
                             isLastGroupCell: true,
+                            key: 3,
                         },
                         position: { rowIndex: 5, cellIndex: 0 }
                     }]
@@ -4171,6 +4222,7 @@ QUnit.module('Renovated Render', {
                     allDay: false,
                     groupIndex: 0,
                     text: '12:00 AM',
+                    key: 0,
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4191,6 +4243,7 @@ QUnit.module('Renovated Render', {
                     allDay: false,
                     groupIndex: 0,
                     text: '12:00 AM',
+                    key: 0,
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');

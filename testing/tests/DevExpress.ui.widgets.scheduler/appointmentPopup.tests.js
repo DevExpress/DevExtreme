@@ -1707,7 +1707,7 @@ module('Timezone Editors', moduleOptions, () => {
 
         [startDateTimezoneEditor, endDateTimezoneEditor].forEach(editor => {
             assert.equal(editor.option('value'), 'Europe/Paris', 'value is ok');
-            assert.equal(editor.option('displayValue'), '(GMT +01:00) Europe/Paris', 'displayValue is ok');
+            assert.equal(editor.option('displayValue'), '(GMT +01:00) Europe - Paris', 'displayValue is ok');
         });
     });
 
@@ -1719,9 +1719,9 @@ module('Timezone Editors', moduleOptions, () => {
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
 
         startDateTimezoneEditor.option('value', 'Etc/UTC');
-        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +00:00) Etc/UTC', 'displayValue is ok');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +00:00) Etc - UTC', 'displayValue is ok');
         startDateTimezoneEditor.option('value', 'America/Los_Angeles');
-        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT -08:00) America/Los_Angeles', 'displayValue is ok');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT -08:00) America - Los Angeles', 'displayValue is ok');
     });
 
     QUnit.test('timeZone editor display value for timeZone with DST should depend on date', function(assert) {
@@ -1731,7 +1731,7 @@ module('Timezone Editors', moduleOptions, () => {
         let form = this.instance.getAppointmentDetailsForm();
         let startDateTimezoneEditor = form.getEditor('startDateTimeZone');
 
-        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +01:00) Europe/Paris', 'displayValue is ok');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +01:00) Europe - Paris', 'displayValue is ok');
         this.instance.getAppointmentPopup().hide();
 
         this.instance.showAppointmentPopup({ startDate: new Date(2020, 5, 1, 1), startDateTimeZone: 'Europe/Paris', endDate: new Date(2020, 5, 1, 2), text: 'test_text' });
@@ -1739,7 +1739,7 @@ module('Timezone Editors', moduleOptions, () => {
         form = this.instance.getAppointmentDetailsForm();
         startDateTimezoneEditor = form.getEditor('startDateTimeZone');
 
-        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +02:00) Europe/Paris', 'displayValue is ok, DST');
+        assert.equal(startDateTimezoneEditor.option('displayValue'), '(GMT +02:00) Europe - Paris', 'displayValue is ok, DST');
     });
 
     QUnit.test('dataSource of timezoneEditor should be filtered', function(assert) {

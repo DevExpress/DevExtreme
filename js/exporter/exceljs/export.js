@@ -2,6 +2,7 @@ import { isDefined, isString, isDate, isObject, isFunction } from '../../core/ut
 import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
 import { extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
@@ -108,6 +109,15 @@ export const Export = {
         });
     },
 
+    setLoadPanelOptions: function(component, options, privateOptions) {
+        if(!hasWindow()) {
+            return;
+        }
+
+        component._setOptionWithoutOptionChange('loadPanel', options);
+        privateOptions._renderLoadPanel(component);
+    },
+
     export: function(options, privateOptions) {
         const {
             customizeCell,
@@ -124,7 +134,8 @@ export const Export = {
         if('animation' in component.option('loadPanel')) {
             loadPanel.animation = null;
         }
-        component.option('loadPanel', loadPanel);
+
+        this.setLoadPanelOptions(component, loadPanel, privateOptions);
 
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -188,7 +199,7 @@ export const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                component.option('loadPanel', initialLoadPanelOptions);
+                this.setLoadPanelOptions(component, initialLoadPanelOptions, privateOptions);
             });
         });
     },

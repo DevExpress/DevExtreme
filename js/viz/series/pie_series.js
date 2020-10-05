@@ -2,22 +2,21 @@
 import { noop } from '../../core/utils/common';
 
 import { each } from '../../core/utils/iterator';
-import scatterSeries from './scatter_series';
-import vizUtils from '../core/utils';
+import { chart } from './scatter_series';
+import { normalizeAngle, map } from '../core/utils';
 import { extend } from '../../core/utils/extend';
 import { chart as barChart } from './bar_series';
 ///#DEBUG
 import { debug } from '../../core/utils/console';
 ///#ENDDEBUG
 
-const chartScatterSeries = scatterSeries.chart;
+const chartScatterSeries = chart;
 const barSeries = barChart.bar;
 
 const _extend = extend;
 const _each = each;
 const _noop = noop;
-
-const _map = vizUtils.map;
+const _map = map;
 
 const _isFinite = isFinite;
 const _max = Math.max;
@@ -164,7 +163,7 @@ export const pie = _extend({}, barSeries, {
     _applyArrangeCorrection: function(points, minShownValue, total) {
         const options = this._options;
         const isClockWise = options.segmentsDirection !== 'anticlockwise';
-        const shiftedAngle = _isFinite(options.startAngle) ? vizUtils.normalizeAngle(options.startAngle) : 0;
+        const shiftedAngle = _isFinite(options.startAngle) ? normalizeAngle(options.startAngle) : 0;
         const minSegmentSize = options.minSegmentSize;
         let percent;
         let correction = 0;
