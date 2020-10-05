@@ -31,11 +31,14 @@ $(function(){
                 dropFeedbackMode: "push",
                 onReorder: function(e) {
                     var visibleRows = e.component.getVisibleRows(),
-                        newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
+                        newOrderIndex = visibleRows[e.toIndex].data.OrderIndex,
+                        d = $.Deferred();
 
-                        tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex }).then(function() {
-                        e.component.refresh();
-                    });
+                    tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex }).then(function() {
+                        e.component.refresh().then(d.resolve, d.reject);
+                    }, d.reject);
+
+                    e.promise = d.promise();
                 }
             },
             showBorders: true,

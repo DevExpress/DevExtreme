@@ -9,7 +9,6 @@
         :allow-reordering="true"
         :on-reorder="onReorder"
         :show-drag-icons="showDragIcons"
-        drop-feedback-mode="push"
       />
       <DxSorting mode="none"/>
       <DxScrolling mode="virtual"/>

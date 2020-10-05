@@ -11,7 +11,6 @@ $(function(){
         },
         rowDragging: {
             allowReordering: true,
-            dropFeedbackMode: "push",
             onReorder: function(e) {
                 var visibleRows = e.component.getVisibleRows(),
                     toIndex = tasks.indexOf(visibleRows[e.toIndex].data),

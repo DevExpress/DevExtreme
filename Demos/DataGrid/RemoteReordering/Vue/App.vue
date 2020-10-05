@@ -79,12 +79,15 @@ export default {
   },
   methods: {
     onReorder(e) {
-      var visibleRows = e.component.getVisibleRows(),
-        newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
+      e.promise = this.processReorder(e);
+    },
 
-      tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex }).then(() => {
-        e.component.refresh();
-      });
+    async processReorder(e) {
+        const visibleRows = e.component.getVisibleRows();
+        const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
+
+        await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
+        await e.component.refresh();
     }
   },
 };

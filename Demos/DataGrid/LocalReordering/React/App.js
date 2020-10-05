@@ -11,19 +11,23 @@ class App extends React.Component {
     this.onShowDragIconsChanged = this.onShowDragIconsChanged.bind(this);
 
     this.state = {
+      tasks: tasks,
       showDragIcons: true
     };
   }
 
   onReorder(e) {
-    let visibleRows = e.component.getVisibleRows(),
-      toIndex = tasks.indexOf(visibleRows[e.toIndex].data),
-      fromIndex = tasks.indexOf(e.itemData);
+    const visibleRows = e.component.getVisibleRows();
+    const newTasks = [...this.state.tasks];
+    const toIndex = newTasks.indexOf(visibleRows[e.toIndex].data);
+    const fromIndex = newTasks.indexOf(e.itemData);
 
-    tasks.splice(fromIndex, 1);
-    tasks.splice(toIndex, 0, e.itemData);
+    newTasks.splice(fromIndex, 1);
+    newTasks.splice(toIndex, 0, e.itemData);
 
-    e.component.refresh();
+    this.setState({
+      tasks: newTasks
+    });
   }
 
   onShowDragIconsChanged(args) {
@@ -37,14 +41,13 @@ class App extends React.Component {
       <React.Fragment>
         <DataGrid
           height={440}
-          dataSource={tasks}
+          dataSource={this.state.tasks}
           showBorders={true}
         >
           <RowDragging
             allowReordering={true}
             onReorder={this.onReorder}
             showDragIcons={this.state.showDragIcons}
-            dropFeedbackMode="push"
           />
           <Scrolling mode="virtual" />
           <Sorting mode="none" />

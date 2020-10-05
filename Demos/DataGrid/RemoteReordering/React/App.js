@@ -29,13 +29,16 @@ class App extends React.Component {
   }
 
   onReorder(e) {
+    e.promise = this.processReorder(e);
+  }
+
+  async processReorder(e) {
     let visibleRows = e.component.getVisibleRows(),
       newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 
-    tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex }).then(() => {
-      e.component.refresh();
-    });
-  }
+    await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
+    await e.component.refresh();
+  } 
 
   render() {
     return (

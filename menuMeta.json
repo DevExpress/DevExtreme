@@ -239,7 +239,6 @@
             "Title": "Data Validation",
             "Name": "DataValidation",
             "Widget": "DataGrid",
-            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridEmployeesValidationController.cs",
               "/Models/DataGrid/InMemoryEmployeesValidationDataContext.cs",
@@ -410,7 +409,6 @@
         "Demos": [{
           "Title": "Local Reordering",
           "Name": "LocalReordering",
-          "Badge": "Updated",
           "Widget": "DataGrid",
           "DemoType": "Web",
           "MvcAdditionalFiles": [

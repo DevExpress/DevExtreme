@@ -42,12 +42,15 @@ export class AppComponent {
     }
 
     onReorder(e) {
+        e.promise = this.processReorder(e);
+    }
+    
+    async processReorder(e) {
         var visibleRows = e.component.getVisibleRows(),
             newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 
-        this.tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex }).then(() => {
-            e.component.refresh();
-        });
+        await this.tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
+        await e.component.refresh();
     }
 }
 
