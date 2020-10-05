@@ -1069,14 +1069,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     generateRenderOptions() {
-        const groupCountForRender = !this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
-        const groupCount = this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
+        const groupCount = this._getGroupCount();
+        const verticalGroupCount = !this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
+        const horizontalGroupCount = this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
         const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
         const rowCountInGroup = this._getRowCount();
 
         const options = {
-            horizontalGroupsCount: groupCount,
-            groupCount: groupCountForRender,
+            horizontalGroupCount,
+            verticalGroupCount,
             rowCountInGroup,
             cellCount: this._getTotalCellCount(groupCount),
             cellCountInGroupRow: this._getCellCount(),
@@ -1085,7 +1086,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             startRowIndex: 0,
             groupOrientation: this.option('groupOrientation'),
             nonVirtualRowCount: this._getRowCount(),
-            realGroupCount: this._getGroupCount(),
+            groupCount,
         };
 
         if(this.isVirtualScrolling()) {
@@ -1097,7 +1098,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 rowCount: virtualScrollingState.rowCount,
             });
         } else {
-            options.rowCount = this._getTotalRowCount(this._getGroupCount(), this._isVerticalGroupedWorkSpace());
+            options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
         }
 
         return options;
