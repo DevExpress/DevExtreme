@@ -1750,12 +1750,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = {
             startDate: startDate,
             endDate: endDate,
-            allDay: this._getTableAllDay()
+            allDay: this._getTableAllDay(),
+            groupIndex,
         };
-
-        if(this.isRenovatedRender()) {
-            data.groupIndex = groupIndex;
-        }
 
         const groups = this._getCellGroups(groupIndex);
 
@@ -2204,6 +2201,18 @@ class SchedulerWorkSpace extends WidgetObserver {
         } else {
             return this.$element().find('.' + cellClass);
         }
+    }
+
+    _getAllCells(allDay) {
+        if(this._isVerticalGroupedWorkSpace()) {
+            return this._$dateTable.find('td');
+        }
+
+        const cellClass = allDay && this.supportAllDayRow()
+            ? ALL_DAY_TABLE_CELL_CLASS
+            : DATE_TABLE_CELL_CLASS;
+
+        return this.$element().find('.' + cellClass);
     }
 
     _setHorizontalGroupHeaderCellsHeight() {
@@ -2783,35 +2792,83 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
 
-    updateScrollPosition(date) {
+    updateScrollPosition(date, groups, allDay) {
         const scheduler = this.option('observer');
         const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
-        const bounds = this.getVisibleBounds();
-        const startDateHour = newDate.getHours();
-        const startDateMinutes = newDate.getMinutes();
-
-        if(this.needUpdateScrollPosition(startDateHour, startDateMinutes, bounds, newDate)) {
-            this.scrollToTime(startDateHour, startDateMinutes, newDate);
+        console.time('start');
+        if(this.needUpdateScrollPosition(date, groups, allDay)) {
+            console.log('I am updating');
+            this.scrollTo(newDate, groups, allDay);
         }
+        console.timeEnd('start');
     }
 
-    needUpdateScrollPosition(hours, minutes, bounds) {
-        let isUpdateNeeded = false;
+    needUpdateScrollPosition(date, groups, allDay) {
+        const cells = this._getCellsInViewport(allDay);
+        const groupIndex = groups
+            ? this._getGroupIndexByResourceId(groups)
+            : 0;
+        const time = date.getTime();
 
-        if(hours < bounds.top.hours || hours > bounds.bottom.hours) {
-            isUpdateNeeded = true;
+        const result = cells.reduce((currentResult, cell) => {
+            const {
+                startDate: cellStartDate,
+                endDate: cellEndDate,
+                allDay: cellAllDay,
+                groupIndex: cellGroupIndex,
+                groups: cellGroups,
+            } = this.getCellData(cell);
+            // console.log(cellGroupIndex);
+            const cellStartTime = cellStartDate.getTime();
+            const cellEndTime = cellEndDate.getTime();
+
+            if(cellStartTime <= time
+                && time < cellEndTime
+                && allDay === cellAllDay
+                && groupIndex === cellGroupIndex) {
+                return false;
+            }
+
+            return currentResult;
+        }, true);
+
+        return result;
+    }
+
+    _getCellsInViewport(allDay) {
+        const $scrollable = this.getScrollable().$element();
+        const cellHeight = this.getCellHeight();
+        const cellWidth = this.getCellWidth();
+
+        let scrolledRowCount = this.getScrollableScrollTop() / cellHeight;
+        const scrolledColumnCount = this.getScrollableScrollLeft() / cellWidth;
+        if(this.isVirtualScrolling()) {
+            const virtualScrollingState = this.virtualScrollingDispatcher.getState();
+            scrolledRowCount -= virtualScrollingState.topVirtualRowCount;
         }
 
-        if(hours === bounds.top.hours && minutes < bounds.top.minutes) {
-            isUpdateNeeded = true;
-        }
+        const totalRowCount = scrolledRowCount + $scrollable.height() / cellHeight;
+        const totalColumnCount = scrolledColumnCount + $scrollable.width() / cellWidth;
 
-        if(hours === bounds.bottom.hours && minutes > bounds.top.minutes) {
-            isUpdateNeeded = true;
-        }
+        const cells = this._getAllCells(allDay);
+        const result = [];
+        // console.time('aaa');
+        cells.each(function() {
+            const cell = $(this);
+            const columnIndex = cell.index();
+            const rowIndex = cell.parent().index();
 
-        return isUpdateNeeded;
+            if(scrolledColumnCount <= columnIndex
+                && columnIndex < totalColumnCount
+                && scrolledRowCount <= rowIndex
+                && rowIndex < totalRowCount) {
+                result.push(cell);
+            }
+        });
+        // console.timeEnd('aaa');
+
+        return result;
     }
 
     getGroupWidth(groupIndex) {

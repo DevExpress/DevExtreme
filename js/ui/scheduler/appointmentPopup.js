@@ -356,7 +356,13 @@ export default class AppointmentPopup {
             when(this.saveChanges(true)).done(() => {
                 if(this.state.lastEditData) {
                     const startDate = this.scheduler.fire('getField', 'startDate', this.state.lastEditData);
-                    this.scheduler._workSpace.updateScrollPosition(startDate);
+                    const allDay = this.scheduler.fire('getField', 'allDay', this.state.lastEditData);
+
+                    this.scheduler._workSpace.updateScrollPosition(
+                        startDate,
+                        this.scheduler._resourcesManager.getResourcesFromItem(this.state.lastEditData, true),
+                        allDay,
+                    );
                     this.state.lastEditData = null;
                 }
 

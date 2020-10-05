@@ -98,9 +98,9 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return date;
     }
 
-    needUpdateScrollPosition(hours, minutes, bounds, date) {
-        return this._dateWithinBounds(bounds, date);
-    }
+    // needUpdateScrollPosition(hours, minutes, bounds, date) {
+    //     return this._dateWithinBounds(bounds, date);
+    // }
 
     getPositionShift() {
         return {

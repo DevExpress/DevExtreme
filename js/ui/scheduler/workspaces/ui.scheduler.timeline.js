@@ -489,25 +489,25 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return result;
     }
 
-    needUpdateScrollPosition(hours, minutes, bounds, date) {
-        let isUpdateNeeded = false;
+    // needUpdateScrollPosition(hours, minutes, bounds, date) {
+    //     let isUpdateNeeded = false;
 
-        isUpdateNeeded = this._dateWithinBounds(bounds, date);
+    //     isUpdateNeeded = this._dateWithinBounds(bounds, date);
 
-        if(hours < bounds.left.hours || hours > bounds.right.hours) {
-            isUpdateNeeded = true;
-        }
+    //     if(hours < bounds.left.hours || hours > bounds.right.hours) {
+    //         isUpdateNeeded = true;
+    //     }
 
-        if(hours === bounds.left.hours && minutes < bounds.left.minutes) {
-            isUpdateNeeded = true;
-        }
+    //     if(hours === bounds.left.hours && minutes < bounds.left.minutes) {
+    //         isUpdateNeeded = true;
+    //     }
 
-        if(hours === bounds.right.hours && minutes > bounds.right.minutes) {
-            isUpdateNeeded = true;
-        }
+    //     if(hours === bounds.right.hours && minutes > bounds.right.minutes) {
+    //         isUpdateNeeded = true;
+    //     }
 
-        return isUpdateNeeded;
-    }
+    //     return isUpdateNeeded;
+    // }
 
     getIntervalDuration(allDay) {
         return this.getCellDuration();
