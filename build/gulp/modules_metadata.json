@@ -68,6 +68,12 @@
     }
   },
   {
+    "name": "data/apply_changes",
+    "exports": {
+      "default": { "path": "data.applyChanges" }
+    }
+  },
+  {
     "name": "data/array_store",
     "exports": {
       "default": { "path": "data.ArrayStore" }
