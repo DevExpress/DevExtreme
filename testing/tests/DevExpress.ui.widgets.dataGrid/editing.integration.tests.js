@@ -3925,6 +3925,42 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal(dataGrid.cellValue(2, 1), 666, 'value is changed');
         assert.equal(dataGrid.hasEditData(), false, 'no unsaved data');
     });
+
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        QUnit.test(`${editMode} - Drop-down editor cell should not have paddings/margins`, function(assert) {
+            // arrange, act
+            const dataGrid = createDataGrid({
+                dataSource: [{ id: 1, name: 1 }],
+                columns: [{
+                    dataField: 'name',
+                    lookup: {
+                        dataSource: [{ id: 1, text: 'test' }],
+                        valueExpr: 'id',
+                        displayExpr: 'text'
+                    }
+                }],
+                editing: {
+                    mode: editMode.toLowerCase()
+                }
+            });
+            this.clock.tick();
+
+            // act
+            if(editMode === 'Row') {
+                dataGrid.editRow(0);
+            } else {
+                dataGrid.editCell(0, 0);
+            }
+            this.clock.tick();
+
+            const $editor = $(dataGrid.getCellElement(0, 0)).find('.dx-dropdowneditor');
+
+            // assert
+            assert.equal($editor.length, 1, 'cell has an editor');
+            assert.strictEqual($editor.css('margin'), '0px', 'no margins');
+            assert.strictEqual($editor.css('padding'), '0px', 'no paddings');
+        });
+    });
 });
 
 
