@@ -38,7 +38,8 @@ const environment = {
         const controller = new Controller(this);
         this.tracker = new trackerModule.Tracker({
             renderer: {
-                getRootOffset: function() { return { left: 25 }; }
+                getRootOffset: function() { return { left: 25 }; },
+                root: { css: sinon.spy() }
             },
             controller: controller
         });

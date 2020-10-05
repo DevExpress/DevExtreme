@@ -1,13 +1,13 @@
 import { utils, formatValue } from './common';
 const animationSettings = utils.animationSettings;
 import SliderMarker from './slider_marker';
-import { touchEvents, pointer } from '../../core/utils/support';
+import { touchEvents, pointerEvents } from '../../core/utils/support';
 
 const SPLITTER_WIDTH = 8;
 const TOUCH_SPLITTER_WIDTH = 20;
 
 function getSliderTrackerWidth(sliderHandleWidth) {
-    return touchEvents || pointer ? TOUCH_SPLITTER_WIDTH : (SPLITTER_WIDTH < sliderHandleWidth ? sliderHandleWidth : SPLITTER_WIDTH);
+    return touchEvents || pointerEvents ? TOUCH_SPLITTER_WIDTH : (SPLITTER_WIDTH < sliderHandleWidth ? sliderHandleWidth : SPLITTER_WIDTH);
 }
 
 function Slider(params, index) {
