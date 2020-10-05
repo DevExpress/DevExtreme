@@ -1,10 +1,9 @@
-import { wrapToArray } from '../../core/utils/array';
+import { wrapToArray, inArray } from '../../core/utils/array';
 import { grep } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import { deepExtendArraySafe } from '../../core/utils/object';
 import { each, map } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import query from '../../data/query';
 import { compileGetter, compileSetter } from '../../core/utils/data';
 import { DataSource } from '../../data/data_source/data_source';

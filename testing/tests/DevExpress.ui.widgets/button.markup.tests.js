@@ -5,7 +5,6 @@ import { createRenovationModuleConfig } from '../../helpers/renovationHelper.js'
 import dxrButton from 'renovation/ui/button.j';
 import dxButton from 'ui/button';
 
-import 'ui/button';
 import 'common.css!';
 
 QUnit.testStart(function() {

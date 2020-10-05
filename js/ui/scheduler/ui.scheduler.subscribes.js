@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import { wrapToArray } from '../../core/utils/array';
+import { wrapToArray, inArray } from '../../core/utils/array';
 import { isDefined, isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
@@ -7,7 +7,6 @@ import errors from '../widget/ui.errors';
 import { locate } from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';

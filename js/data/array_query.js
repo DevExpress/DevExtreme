@@ -1,8 +1,7 @@
 import Class from '../core/class';
 import { isFunction, isDefined } from '../core/utils/type';
 import { each, map } from '../core/utils/iterator';
-import { compileGetter } from '../core/utils/data';
-import { toComparable } from '../core/utils/data';
+import { compileGetter, toComparable } from '../core/utils/data';
 import { Deferred } from '../core/utils/deferred';
 import errorsModule from './errors';
 import dataUtils from './utils';

@@ -1,11 +1,9 @@
 import { buildRectAppearance as _buildRectAppearance, buildTextAppearance as _buildTextAppearance } from './common';
 import Node from './node';
-import { getAlgorithm as _getTilingAlgorithm } from './tiling';
-import { getColorizer as _getColorizer } from './colorizing';
+import { getAlgorithm as _getTilingAlgorithm, setDefaultAlgorithm } from './tiling';
+import { getColorizer as _getColorizer, setDefaultColorizer } from './colorizing';
 import { patchFontOptions as _patchFontOptions } from '../core/utils';
 import { noop as _noop } from '../../core/utils/common';
-import { setDefaultAlgorithm } from './tiling';
-import { setDefaultColorizer } from './colorizing';
 import baseWidget from '../core/base_widget';
 
 const _max = Math.max;

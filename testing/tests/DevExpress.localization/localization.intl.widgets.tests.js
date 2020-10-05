@@ -1,5 +1,4 @@
 import 'intl';
-import 'localization/date';
 import 'localization/number';
 import { locale } from 'localization/core';
 

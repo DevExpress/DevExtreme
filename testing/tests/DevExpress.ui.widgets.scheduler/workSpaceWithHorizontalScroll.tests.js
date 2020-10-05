@@ -5,7 +5,7 @@ import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/scheduler/ui.scheduler';
 import SchedulerResourcesManager from 'ui/scheduler/ui.scheduler.resource_manager';
-import 'ui/scheduler/ui.scheduler';
+
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-work-space"></div>');
 });

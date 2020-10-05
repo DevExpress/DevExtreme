@@ -11,7 +11,6 @@ import firstDayOfWeekData from './cldr-data/first_day_of_week_data';
 import localizationCore from './core';
 import numberLocalization from './number';
 import intlDateLocalization from './intl/date';
-import './core';
 
 const DEFAULT_DAY_OF_WEEK_INDEX = 0;
 const hasIntl = typeof Intl !== 'undefined';
