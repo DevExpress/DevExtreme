@@ -8,7 +8,7 @@ import logarithmicTranslator from './logarithmic_translator';
 import { getLogExt as getLog, getPower, raiseToExt, getCategoriesInfo } from '../core/utils';
 import { isDefined, isDate } from '../../core/utils/type';
 import { adjust } from '../../core/utils/math';
-import { addInterval } from '../../core/utils/date';
+import dateUtils from '../../core/utils/date';
 const _abs = Math.abs;
 
 const CANVAS_PROP = ['width', 'height', 'left', 'top', 'bottom', 'right'];
@@ -161,7 +161,7 @@ _Translator2d.prototype = {
                     break;
                 case 'semidiscrete':
                     script = intervalTranslator;
-                    canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
+                    canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (dateUtils.addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
                     break;
                 case 'discrete':
                     script = categoryTranslator;

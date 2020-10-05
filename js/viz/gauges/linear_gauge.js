@@ -4,12 +4,11 @@ const _min = Math.min;
 const _round = Math.round;
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
-import objectUtils from '../../core/utils/object';
+import { clone } from '../../core/utils/object';
 import { dxBaseGauge } from './base_gauge';
-import { dxGauge } from './common';
+import { dxGauge, createIndicatorCreator } from './common';
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
-import linearIndicatorsModule from './linear_indicators';
-import { createIndicatorCreator } from './common';
+import * as linearIndicators from './linear_indicators';
 import LinearRangeContainer from './linear_range_container';
 
 const dxLinearGauge = dxGauge.inherit({
@@ -205,7 +204,7 @@ const dxLinearGauge = dxGauge.inherit({
         }
     },
 
-    _factory: objectUtils.clone(dxBaseGauge.prototype._factory)
+    _factory: clone(dxBaseGauge.prototype._factory)
 });
 
 function selectRectBySizes(srcRect, sizes, margins) {
@@ -243,13 +242,13 @@ dxLinearGauge._TESTS_selectRectBySizes = selectRectBySizes;
 const indicators = dxLinearGauge.prototype._factory.indicators = {};
 dxLinearGauge.prototype._factory.createIndicator = createIndicatorCreator(indicators);
 
-indicators._default = linearIndicatorsModule._default;
-indicators['rectangle'] = linearIndicatorsModule['rectangle'];
-indicators['rhombus'] = linearIndicatorsModule['rhombus'];
-indicators['circle'] = linearIndicatorsModule['circle'];
-indicators['trianglemarker'] = linearIndicatorsModule['trianglemarker'];
-indicators['textcloud'] = linearIndicatorsModule['textcloud'];
-indicators['rangebar'] = linearIndicatorsModule['rangebar'];
+indicators._default = linearIndicators._default;
+indicators['rectangle'] = linearIndicators['rectangle'];
+indicators['rhombus'] = linearIndicators['rhombus'];
+indicators['circle'] = linearIndicators['circle'];
+indicators['trianglemarker'] = linearIndicators['trianglemarker'];
+indicators['textcloud'] = linearIndicators['textcloud'];
+indicators['rangebar'] = linearIndicators['rangebar'];
 
 dxLinearGauge.prototype._factory.RangeContainer = LinearRangeContainer;
 

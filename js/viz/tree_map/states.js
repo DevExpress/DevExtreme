@@ -1,10 +1,13 @@
-import { prototype as proto } from './tree_map.base';
-import { prototype as nodeProto } from './node';
+import TreeMapBase from './tree_map.base';
+import Node from './node';
 import { noop } from '../../core/utils/common';
 
+const proto = TreeMapBase.prototype;
+const nodeProto = Node.prototype;
 const handlers = proto._handlers;
 const _calculateState = handlers.calculateState;
 const _buildState = nodeProto._buildState;
+
 import { extend as _extend } from '../../core/utils/extend';
 
 handlers.calculateState = function(options) {

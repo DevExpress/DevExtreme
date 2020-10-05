@@ -1,5 +1,6 @@
-import { prototype as proto } from './sankey';
+import Sankey from './sankey';
 import { Tracker } from '../components/tracker';
+const proto = Sankey.prototype;
 const DATA_KEY_BASE = '__sankey_data_';
 let dataKeyModifier = 0;
 ///#DEBUG

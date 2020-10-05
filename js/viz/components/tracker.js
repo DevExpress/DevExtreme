@@ -1,9 +1,11 @@
 import { eventData as _eventData } from '../../events/utils/index';
 import domAdapter from '../../core/dom_adapter';
 import { name as clickEventName } from '../../events/click';
-import { down as downPointerEventName } from '../../events/pointer';
-import { move as movePointerEventName } from '../../events/pointer';
+import pointer from '../../events/pointer';
 import eventsEngine from '../../events/core/events_engine';
+
+const downPointerEventName = pointer.down;
+const movePointerEventName = pointer.move;
 
 export function Tracker(parameters) {
     this._initHandlers(parameters);

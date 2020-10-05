@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import Tooltip from '../tooltip';
-import translator from '../../animation/translator';
+import { resetPosition, move, locate } from '../../animation/translator';
 import positionUtils from '../../animation/position';
 import { fitIntoRange } from '../../core/utils/math';
 import { isDefined, type } from '../../core/utils/type';
@@ -125,12 +125,12 @@ const SliderHandle = Widget.inherit({
     },
 
     _resetTooltipPosition: function() {
-        translator.resetPosition(this._$tooltipContent);
-        translator.resetPosition(this._$tooltipArrow);
+        resetPosition(this._$tooltipContent);
+        resetPosition(this._$tooltipArrow);
     },
 
     _saveTooltipLocation: function() {
-        this._contentLocate = translator.locate(this._$tooltipContent);
+        this._contentLocate = locate(this._$tooltipContent);
     },
 
     _centeredTooltipPosition: function() {
@@ -180,8 +180,8 @@ const SliderHandle = Widget.inherit({
         const arrowMinLeft = this._contentLocate.left;
         const arrowMaxRight = this._contentLocate.left + this._$tooltipContent.outerWidth() - this._$tooltipArrow.outerWidth();
 
-        translator.move(this._$tooltipContent, { left: this._contentLocate.left + (isLeftSide ? 1 : -1) * calculatePosition.h.oversize });
-        translator.move(this._$tooltipArrow, { left: fitIntoRange(arrowLeft, arrowMinLeft, arrowMaxRight) });
+        move(this._$tooltipContent, { left: this._contentLocate.left + (isLeftSide ? 1 : -1) * calculatePosition.h.oversize });
+        move(this._$tooltipArrow, { left: fitIntoRange(arrowLeft, arrowMinLeft, arrowMaxRight) });
     },
 
     _getFormattedValue: function(value) {

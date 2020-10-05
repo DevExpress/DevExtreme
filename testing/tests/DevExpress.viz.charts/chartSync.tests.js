@@ -1,6 +1,12 @@
 const $ = require('jquery');
-const noop = require('core/utils/common').noop;
+const mock = require('../../helpers/mockModule.js').mock;
 const vizMocks = require('../../helpers/vizMocks.js');
+const { ChartTracker } = require('viz/chart_components/tracker');
+const ChartTrackerSub = vizMocks.stubClass(ChartTracker);
+const trackerModule = mock('viz/chart_components/tracker', {
+    ChartTracker: sinon.spy((parameters) => new ChartTrackerSub(parameters))
+});
+const noop = require('core/utils/common').noop;
 const executeAsyncMock = require('../../helpers/executeAsyncMock.js');
 const vizUtils = require('viz/core/utils');
 const titleModule = require('viz/core/title');
@@ -18,8 +24,6 @@ const CustomStore = require('data/custom_store');
 const chartThemeManagerModule = require('viz/components/chart_theme_manager');
 const scrollBarModule = require('viz/chart_components/scroll_bar');
 const ScrollBar = scrollBarModule.ScrollBar;
-const trackerModule = require('viz/chart_components/tracker');
-const ChartTrackerSub = vizMocks.stubClass(trackerModule.ChartTracker);
 const dxChart = require('viz/chart');
 const chartMocks = require('../../helpers/chartMocks.js');
 const MockSeries = chartMocks.MockSeries;
@@ -60,9 +64,6 @@ function getLegendStub() {
     return legendModule.Legend.lastCall.returnValue;
 }
 
-trackerModule.ChartTracker = sinon.spy(function(parameters) {
-    return new ChartTrackerSub(parameters);
-});
 
 function getTrackerStub() {
     return trackerModule.ChartTracker.lastCall.returnValue;

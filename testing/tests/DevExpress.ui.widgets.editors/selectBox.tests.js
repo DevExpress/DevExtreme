@@ -2779,7 +2779,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($items.length, 1, 'items was filtered');
     });
 
-    QUnit.test('data is filtered when min search length is exceeded', function(assert) {
+    QUnit.test('data is filtered when min search length is exceeded and showDataBeforeSearch: true', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
             showDataBeforeSearch: true,
@@ -3079,31 +3079,33 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
     });
 
-    QUnit.testInActiveWindow('Value should be null after input is cleared and enter key is tapped', function(assert) {
-        const items = [1, 2];
-        const $selectBox = $('#selectBox').dxSelectBox({
-            searchEnabled: true,
-            items: items,
-            value: items[0],
-            searchTimeout: 0
+    [0, 1].forEach((value) => {
+        QUnit.testInActiveWindow(`Value=${value} should be null after input is cleared and enter key is tapped (T935801)`, function(assert) {
+            const items = [0, 1, 2];
+            const $selectBox = $('#selectBox').dxSelectBox({
+                searchEnabled: true,
+                items: items,
+                value,
+                searchTimeout: 0
+            });
+            const selectBox = $selectBox.dxSelectBox('instance');
+            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const keyboard = keyboardMock($input);
+
+            $input.focus();
+
+            keyboard
+                .press('end')
+                .press('backspace');
+
+            keyboard
+                .press('enter');
+
+            assert.equal($selectBox.dxSelectBox('option', 'value'), null, 'value is null');
+            assert.equal($input.val(), '', 'input is cleared');
+            assert.equal(selectBox.option('selectedItem'), null, 'selectedItem is null');
+            assert.ok(!selectBox.option('opened'), 'popup is closed');
         });
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-        const keyboard = keyboardMock($input);
-
-        $input.focus();
-
-        keyboard
-            .press('end')
-            .press('backspace');
-
-        keyboard
-            .press('enter');
-
-        assert.equal($selectBox.dxSelectBox('option', 'value'), null, 'value is null');
-        assert.equal($input.val(), '', 'input is cleared');
-        assert.equal(selectBox.option('selectedItem'), null, 'selectedItem is null');
-        assert.ok(!selectBox.option('opened'), 'popup is closed');
     });
 
     QUnit.testInActiveWindow('Value should not be null after focusOut during loading (T600537)', function(assert) {
@@ -3486,7 +3488,7 @@ QUnit.module('search substitution', {
         }
     });
 
-    QUnit.test('the \'left\', \'right\', \'home\' and \'end\' keys press should lead to the list dataSource filtering', function(assert) {
+    QUnit.test('the \'left\', \'right\', \'home\' and \'end\' keys press should lead to the list dataSource filtering and loadCount: 0', function(assert) {
         const keys = ['left', 'right', 'home', 'end'];
         const item = 'item1';
 

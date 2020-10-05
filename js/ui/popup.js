@@ -24,7 +24,7 @@ import { triggerResizeEvent } from '../events/visibility_change';
 import messageLocalization from '../localization/message';
 import Button from './button';
 import Overlay from './overlay';
-import themes from './themes';
+import { isMaterial, current as currentTheme } from './themes';
 import './toolbar/ui.toolbar.base';
 
 const window = getWindow();
@@ -130,7 +130,7 @@ const Popup = Overlay.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = themes.current();
+        const themeName = currentTheme();
 
         return this.callBase().concat([
             {
@@ -169,7 +169,7 @@ const Popup = Overlay.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial(themeName);
+                    return isMaterial(themeName);
                 },
                 options: {
                     useDefaultToolbarButtons: true,

@@ -19,10 +19,14 @@ const privateOptions = {
 
     _needMergeRange: function() {
         return true;
+    },
+
+    _renderLoadPanel: function(component) {
+        component._renderLoadPanel(component._dataArea.groupElement(), component.$element());
     }
 };
 
-export function exportPivotGrid(options) {
+function exportPivotGrid(options) {
     return Export.export(_getFullOptions(options), privateOptions);
 }
 
@@ -39,3 +43,5 @@ function _getFullOptions(options) {
 //#DEBUG
 exportPivotGrid.__internals = { _getFullOptions };
 //#ENDDEBUG
+
+export { exportPivotGrid };

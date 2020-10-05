@@ -2,7 +2,7 @@ import { enumParser, normalizeEnum, patchFontOptions } from '../core/utils';
 import { extend } from '../../core/utils/extend';
 import { LayoutElement, WrapperLayoutElement } from '../core/layout_element';
 import { isDefined, isFunction } from '../../core/utils/type';
-import title from '../core/title';
+import { Title } from '../core/title';
 import { clone } from '../../core/utils/object';
 import { noop } from '../../core/utils/common';
 import { processHatchingAttrs, getFuncIri } from '../core/renderers/renderer';
@@ -423,7 +423,7 @@ extend(legendPrototype, {
         };
 
         if(that.isVisible() && !that._title) {
-            that._title = new title.Title({ renderer: that._renderer, cssClass: that._titleGroupClass, root: that._legendGroup });
+            that._title = new Title({ renderer: that._renderer, cssClass: that._titleGroupClass, root: that._legendGroup });
         }
 
         if(that._title) {

@@ -1,5 +1,4 @@
-import themeModule from '../../themes';
-const registerTheme = themeModule.registerTheme;
+import { registerTheme } from '../../themes';
 
 const FONT_FAMILY = '\'Roboto\', \'RobotoFallback\', \'Helvetica\', \'Arial\', sans-serif';
 

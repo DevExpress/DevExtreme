@@ -1,11 +1,11 @@
 import { noop } from '../../core/utils/common';
-import commonModule from './common';
+import { utils, consts } from './common';
 import Slider from './slider';
 import { normalizeEnum as _normalizeEnum, rangesAreEqual, adjustVisualRange } from '../core/utils';
 import { isNumeric, isDefined } from '../../core/utils/type';
 import { adjust } from '../../core/utils/math';
-const animationSettings = commonModule.utils.animationSettings;
-const emptySliderMarkerText = commonModule.consts.emptySliderMarkerText;
+const animationSettings = utils.animationSettings;
+const emptySliderMarkerText = consts.emptySliderMarkerText;
 
 function buildRectPoints(left, top, right, bottom) {
     return [left, top, right, top, right, bottom, left, bottom];

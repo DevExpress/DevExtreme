@@ -4,7 +4,6 @@ import { Row } from '../../row';
 import * as utilsModule from '../../../utils';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
 
-const getKeyByDateAndGroup = jest.spyOn(utilsModule, 'getKeyByDateAndGroup');
 const isVerticalGroupOrientation = jest.spyOn(utilsModule, 'isVerticalGroupOrientation');
 
 describe('HeaderPanelLayoutBase', () => {
@@ -17,6 +16,7 @@ describe('HeaderPanelLayoutBase', () => {
       groups: { id: 1 },
       groupIndex: 1,
       index: 0,
+      key: '0',
     }, {
       startDate: new Date(2020, 6, 10),
       endDate: new Date(2020, 6, 11),
@@ -24,13 +24,12 @@ describe('HeaderPanelLayoutBase', () => {
       groups: { id: 1 },
       groupIndex: 1,
       index: 1,
+      key: '1',
     }]];
     const render = (viewModel) => shallow(LayoutView({
       ...viewModel,
       props: { cellTemplate, ...viewModel.props, viewCellsData },
     }) as any);
-
-    beforeEach(() => getKeyByDateAndGroup.mockClear());
 
     it('should combine `className` with predefined classes', () => {
       const layout = render({ props: { className: 'custom-class' } });
@@ -75,7 +74,8 @@ describe('HeaderPanelLayoutBase', () => {
       expect(cells)
         .toHaveLength(2);
 
-      expect(cells.at(0).props())
+      const firstCell = cells.at(0);
+      expect(firstCell.props())
         .toMatchObject({
           startDate: viewCellsData[0][0].startDate,
           endDate: viewCellsData[0][0].endDate,
@@ -85,7 +85,11 @@ describe('HeaderPanelLayoutBase', () => {
           index: viewCellsData[0][0].index,
           // dateCellTemplate,
         });
-      expect(cells.at(1).props())
+      expect(firstCell.key())
+        .toBe(viewCellsData[0][0].key);
+
+      const secondCell = cells.at(1);
+      expect(secondCell.props())
         .toMatchObject({
           startDate: viewCellsData[0][1].startDate,
           endDate: viewCellsData[0][1].endDate,
@@ -95,6 +99,8 @@ describe('HeaderPanelLayoutBase', () => {
           index: viewCellsData[0][1].index,
           // dateCellTemplate,
         });
+      expect(secondCell.key())
+        .toBe(viewCellsData[0][1].key);
     });
 
     it('should not pass groups and groupInex to cells in case of Vertical Gruping', () => {
@@ -116,24 +122,6 @@ describe('HeaderPanelLayoutBase', () => {
           groups: undefined,
           groupIndex: undefined,
         });
-    });
-
-    it('should call getKeyByDateAndGroup with correct parameters', () => {
-      render({});
-
-      expect(getKeyByDateAndGroup)
-        .toHaveBeenCalledTimes(2);
-
-      expect(getKeyByDateAndGroup)
-        .toHaveBeenNthCalledWith(
-          1, viewCellsData[0][0].startDate,
-          viewCellsData[0][0].groups,
-        );
-      expect(getKeyByDateAndGroup)
-        .toHaveBeenNthCalledWith(
-          1, viewCellsData[0][0].startDate,
-          viewCellsData[0][0].groups,
-        );
     });
   });
 

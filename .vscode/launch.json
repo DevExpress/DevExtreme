@@ -11,7 +11,23 @@
       "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
       "args": [
         "--runInBand",
-        "--no-cache"
+        "--no-cache",
+      ],
+      "runtimeArgs": [
+        "--harmony"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Jest Test (current opened file)",
+      "program": "${workspaceRoot}/node_modules/jest/bin/jest.js",
+      "args": [
+        "--runInBand",
+        "--no-cache",
+        "${fileBasenameNoExtension}",
       ],
       "runtimeArgs": [
         "--harmony"

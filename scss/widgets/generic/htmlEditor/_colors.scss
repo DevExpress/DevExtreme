@@ -20,6 +20,7 @@ $htmleditor-resize-frame-border-color: $base-accent !default;
 $htmleditor-resize-handle-bg: $base-accent !default;
 $htmleditor-mention-bg: null !default;
 $htmleditor-mention-color: null !default;
+$htmleditor-table-border-color: $base-border-color !default;
 
 
 @if $color == "carmine" {

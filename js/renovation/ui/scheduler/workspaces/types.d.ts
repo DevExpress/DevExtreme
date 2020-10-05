@@ -8,6 +8,7 @@ export interface ViewCellData {
   groups?: object;
   groupIndex?: number;
   index: number;
+  key: string;
 }
 
 interface ViewData {

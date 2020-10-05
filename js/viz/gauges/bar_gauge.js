@@ -6,21 +6,19 @@ const _min = Math.min;
 const _max = Math.max;
 
 import registerComponent from '../../core/component_registrator';
-import objectUtils from '../../core/utils/object';
+import { clone } from '../../core/utils/object';
 import { noop } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
-import { normalizeEnum as _normalizeEnum } from '../core/utils';
-import baseGaugeModule from './base_gauge';
-const dxBaseGauge = baseGaugeModule.dxBaseGauge;
-const _getSampleText = baseGaugeModule.getSampleText;
-const _formatValue = baseGaugeModule.formatValue;
-const _compareArrays = baseGaugeModule.compareArrays;
+import { normalizeEnum as _normalizeEnum, convertAngleToRendererSpace, getCosAndSin, patchFontOptions } from '../core/utils';
+import { dxBaseGauge, getSampleText, formatValue, compareArrays } from './base_gauge';
+const _getSampleText = getSampleText;
+const _formatValue = formatValue;
+const _compareArrays = compareArrays;
 import dxCircularGauge from './circular_gauge';
 const _isArray = Array.isArray;
-import vizUtils from '../core/utils';
-const _convertAngleToRendererSpace = vizUtils.convertAngleToRendererSpace;
-const _getCosAndSin = vizUtils.getCosAndSin;
-const _patchFontOptions = vizUtils.patchFontOptions;
+const _convertAngleToRendererSpace = convertAngleToRendererSpace;
+const _getCosAndSin = getCosAndSin;
+const _patchFontOptions = patchFontOptions;
 const _Number = Number;
 const _isFinite = isFinite;
 const _noop = noop;
@@ -371,7 +369,7 @@ export const dxBarGauge = dxBaseGauge.inherit({
         this._updateValues(this.option(OPTION_VALUES));
     },
 
-    _factory: objectUtils.clone(dxBaseGauge.prototype._factory),
+    _factory: clone(dxBaseGauge.prototype._factory),
 
     _optionChangesOrder: ['VALUES', 'NODES'],
 

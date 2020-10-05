@@ -1,12 +1,9 @@
-import baseIndicatorsModule from './base_indicators';
-const BaseIndicator = baseIndicatorsModule.BaseIndicator;
-const BaseTextCloudMarker = baseIndicatorsModule.BaseTextCloudMarker;
-const BaseRangeBar = baseIndicatorsModule.BaseRangeBar;
-import vizUtils from '../core/utils';
+import { BaseIndicator, BaseTextCloudMarker, BaseRangeBar } from './base_indicators';
+import { getCosAndSin, convertAngleToRendererSpace, normalizeAngle } from '../core/utils';
 
 const _Number = Number;
-const _getCosAndSin = vizUtils.getCosAndSin;
-const _convertAngleToRendererSpace = vizUtils.convertAngleToRendererSpace;
+const _getCosAndSin = getCosAndSin;
+const _convertAngleToRendererSpace = convertAngleToRendererSpace;
 
 const SimpleIndicator = BaseIndicator.inherit({
     _move: function() {
@@ -271,7 +268,7 @@ const textCloud = BaseTextCloudMarker.inherit({
     _getTextCloudOptions: function() {
         const that = this;
         const cosSin = _getCosAndSin(that._actualPosition);
-        const nAngle = vizUtils.normalizeAngle(that._actualPosition);
+        const nAngle = normalizeAngle(that._actualPosition);
         return {
             x: that._options.x + cosSin.cos * that._options.radius,
             y: that._options.y - cosSin.sin * that._options.radius,

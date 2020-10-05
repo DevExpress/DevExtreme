@@ -18,6 +18,7 @@ $htmleditor-variable-bg: color.change($base-accent, $alpha: 0.15) !default;
 $htmleditor-resize-frame-border-color: $base-accent !default;
 $htmleditor-resize-handle-bg: $base-accent !default;
 $htmleditor-mention-bg: null !default;
+$htmleditor-table-border-color: $base-border-color !default;
 
 
 @if $mode == "light" {

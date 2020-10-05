@@ -82,7 +82,7 @@ function queryByOptions(query, options, isCountQuery) {
 }
 
 export default {
-    multiLevelGroup: multiLevelGroup,
-    arrangeSortingInfo: arrangeSortingInfo,
-    queryByOptions: queryByOptions
+    multiLevelGroup,
+    arrangeSortingInfo,
+    queryByOptions
 };

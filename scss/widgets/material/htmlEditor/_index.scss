@@ -51,6 +51,10 @@
       background: $htmleditor-variable-bg;
     }
   }
+
+  td {
+    border-color: $htmleditor-table-border-color;
+  }
 }
 
 .dx-htmleditor-toolbar {

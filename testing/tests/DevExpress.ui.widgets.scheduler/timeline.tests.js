@@ -19,6 +19,11 @@ QUnit.testStart(function() {
 });
 
 const CELL_CLASS = 'dx-scheduler-date-table-cell';
+const HOVER_CLASS = 'dx-state-hover';
+
+const TIMELINE_DAY = { class: 'dxSchedulerTimelineDay', name: 'SchedulerTimelineDay' };
+const TIMELINE_WEEK = { class: 'dxSchedulerTimelineWeek', name: 'SchedulerTimelineWeek' };
+const TIMELINE_MONTH = { class: 'dxSchedulerTimelineMonth', name: 'SchedulerTimelineMonth' };
 
 const stubInvokeMethod = function(instance) {
     sinon.stub(instance, 'invoke', function() {
@@ -537,7 +542,7 @@ QUnit.test('The part of long appointment should have right coordinates on curren
 
 });
 
-QUnit.test('The part of long appointment should have right coordinates on current week (T342192)', function(assert) {
+QUnit.test('The part of long appointment should have right coordinates on current week (T342192) №2', function(assert) {
     this.instance.option({
         currentDate: new Date(2015, 1, 23),
         firstDayOfWeek: 1,
@@ -554,7 +559,7 @@ QUnit.test('The part of long appointment should have right coordinates on curren
 
 });
 
-QUnit.test('The part of long appointment should have right coordinates on current week (T342192)', function(assert) {
+QUnit.test('The part of long appointment should have right coordinates on current week (T342192) №3', function(assert) {
     this.instance.option({
         currentDate: new Date(2015, 1, 23),
         firstDayOfWeek: 1,
@@ -870,6 +875,20 @@ QUnit.module('Timeline Keyboard Navigation', {
 
                 $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
             });
+        });
+    });
+});
+
+QUnit.module('Mouse Interaction', () => {
+    [TIMELINE_DAY, TIMELINE_WEEK, TIMELINE_MONTH].forEach((workSpace) => {
+        QUnit.test(`Cell hover should work correctly in ${workSpace.name}`, function(assert) {
+            const $element = $('#scheduler-timeline')[workSpace.class]({});
+
+            const cells = $element.find(`.${CELL_CLASS}`);
+
+            $element.trigger($.Event('dxpointerenter', { target: cells.eq(2).get(0), which: 1 }));
+
+            assert.ok(cells.eq(2).hasClass(HOVER_CLASS), 'onHover event works');
         });
     });
 });

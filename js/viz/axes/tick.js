@@ -151,7 +151,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     this._templateDef = new Deferred();
                     template.render({
                         model: {
-                            text,
+                            valueText: text,
                             value: this.value,
                             labelFontStyle: getLabelFontStyle(this),
                             labelStyle

@@ -1,4 +1,4 @@
-import animationFrame from '../../../animation/frame';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../../animation/frame';
 const noop = function() { };
 export const easingFunctions = {
     easeOutCubic: function(pos, start, end) { return (pos === 1) ? end : ((1 - Math.pow((1 - pos), 3)) * (end - start) + (+start)); },
@@ -157,7 +157,7 @@ AnimationController.prototype = {
             });
             return;
         }
-        that._timerId = animationFrame.requestAnimationFrame.call(null, function() {
+        that._timerId = requestAnimationFrame.call(null, function() {
             that._loop();
         }, that.element);
     },
@@ -196,7 +196,7 @@ AnimationController.prototype = {
 
         that._animations = {};
         that._animationCount = 0;
-        animationFrame.cancelAnimationFrame(that._timerId);
+        cancelAnimationFrame(that._timerId);
         clearTimeout(that._startDelay);
         clearTimeout(that._endAnimationTimer);
         that._timerId = null;

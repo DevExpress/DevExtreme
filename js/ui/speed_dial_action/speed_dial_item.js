@@ -6,7 +6,7 @@ import { name as clickEventName } from '../../events/click';
 import { getImageContainer } from '../../core/utils/icon';
 import Overlay from '../overlay';
 import { render } from '../widget/utils.ink_ripple';
-import themes from '../themes';
+import { isMaterial } from '../themes';
 
 const FAB_CLASS = 'dx-fa-button';
 const FAB_ICON_CLASS = 'dx-fa-button-icon';
@@ -30,7 +30,7 @@ class SpeedDialItem extends Overlay {
         return super._defaultOptionsRules().concat([
             {
                 device() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     useInkRipple: true
