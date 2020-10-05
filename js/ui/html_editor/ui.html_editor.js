@@ -8,7 +8,7 @@ import { EmptyTemplate } from '../../core/templates/empty_template';
 import Editor from '../editor/editor';
 import Errors from '../widget/ui.errors';
 import Callbacks from '../../core/utils/callbacks';
-import { Deferred, when } from '../../core/utils/deferred';
+import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils';
 import scrollEvents from '../scroll_view/ui.events.emitter.gesture.scroll';
@@ -200,7 +200,9 @@ const HtmlEditor = Editor.inherit({
     _attachFocusEvents: function() {
         const callBase = this.callBase.bind(this);
 
-        when(this._isContentRendered).done(callBase);
+        this._isContentRendered.done(() => {
+            callBase();
+        });
     },
 
     _prepareQuillRegistrator: function() {
