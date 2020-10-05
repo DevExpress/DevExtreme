@@ -62,6 +62,7 @@ const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 
 const KEY_DOWN = 'ArrowDown';
 const KEY_ENTER = 'Enter';
@@ -1603,13 +1604,31 @@ QUnit.module('clearButton', moduleSetup, () => {
         const selectBox = $element.dxSelectBox('instance');
 
         this.clock.tick(TIME_TO_WAIT);
-        pointerMock($element.find('.dx-clear-button-area')).click();
+        pointerMock($element.find(toSelector(CLEAR_BUTTON_AREA))).click();
         assert.equal(selectBox.option('opened'), false, 'selectbox is closed after click on clear button');
 
         selectBox.option('searchEnabled', true);
         selectBox.option('searchTimeout', 0);
-        pointerMock($element.find('.dx-clear-button-area')).click();
+        pointerMock($element.find(toSelector(CLEAR_BUTTON_AREA))).click();
         assert.equal(selectBox.option('opened'), false, 'selectbox is closed after click on clear button if searchEnabled = true');
+    });
+
+    QUnit.test('selectBox should be opened on instant re-click after click on clearButton (T935717)', function(assert) {
+        const $element = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            showClearButton: true,
+            searchEnabled: true,
+            value: 1,
+            searchTimeout: 3000
+        });
+        const selectBox = $element.dxSelectBox('instance');
+        const $clearButton = $element.find(toSelector(CLEAR_BUTTON_AREA));
+        const $dropDownButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON));
+
+        pointerMock($clearButton).click();
+        pointerMock($dropDownButton).click();
+
+        assert.strictEqual(selectBox.option('opened'), true, 'selectBox is opened after instant re-click');
     });
 
     QUnit.test('drop down list should be still opened if click \'clear\' during the search', function(assert) {
@@ -1627,7 +1646,7 @@ QUnit.module('clearButton', moduleSetup, () => {
             .focus()
             .type('50')
             .change();
-        pointerMock($element.find('.dx-clear-button-area')).click();
+        pointerMock($element.find(toSelector(CLEAR_BUTTON_AREA))).click();
 
         assert.ok(selectBox.option('opened'), 'selectbox is opened');
     });
@@ -1642,7 +1661,7 @@ QUnit.module('clearButton', moduleSetup, () => {
             searchEnabled: true
         });
 
-        const $clearButton = $selectBox.find('.dx-clear-button-area');
+        const $clearButton = $selectBox.find(toSelector(CLEAR_BUTTON_AREA));
 
         $($clearButton).trigger('dxclick');
 
@@ -1657,7 +1676,7 @@ QUnit.module('clearButton', moduleSetup, () => {
             onValueChanged: valueChangedHandler,
             showClearButton: true
         });
-        const $clearButton = $selectBox.find('.dx-clear-button-area');
+        const $clearButton = $selectBox.find(toSelector(CLEAR_BUTTON_AREA));
 
         $($clearButton).trigger('dxclick');
 
@@ -1679,7 +1698,7 @@ QUnit.module('clearButton', moduleSetup, () => {
 
         this.clock.tick();
 
-        pointerMock($selectBox.find('.dx-clear-button-area')).click();
+        pointerMock($selectBox.find(toSelector(CLEAR_BUTTON_AREA))).click();
 
         this.clock.tick();
 
@@ -1705,7 +1724,7 @@ QUnit.module('clearButton', moduleSetup, () => {
         const items = $(toSelector(LIST_ITEM_CLASS));
         items.eq(1).trigger('dxclick');
 
-        const $clearButton = $('.dx-clear-button-area');
+        const $clearButton = $(toSelector(CLEAR_BUTTON_AREA));
         $($clearButton).trigger('dxclick');
 
         assert.equal(selectBox.option('value'), null, 'value is reset after click on \'clear\' button');
