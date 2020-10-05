@@ -244,23 +244,25 @@ class VirtualScrolling {
             rowIndex, columnIndex,
         } = position;
         const {
-            startDate, endDate,
+            startDate, endDate, allDay,
         } = cellData;
 
         const timeToScroll = date.getTime();
         const cellStartTime = startDate.getTime();
         const cellEndTime = endDate.getTime();
 
-        const scrollInCell = (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
+        const scrollInCell = allDay
+            ? 0
+            : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
 
-        const firstCellInColumn = workSpace.viewDataProvider.getCellData(0, columnIndex);
-        const { left } = workSpace.getCoordinatesByDate(
-            firstCellInColumn.startDate, firstCellInColumn.groupIndex, firstCellInColumn.allDay,
-        );
+        const firstCellInTable = workSpace._dom_getDateCell({
+            rowIndex: 0, cellIndex: 0,
+        });
+        const cellWidth = workSpace.getDimensions(firstCellInTable.get(0)).width;
 
         return {
             top: (rowIndex + scrollInCell) * rowHeight,
-            left,
+            left: cellWidth * columnIndex,
         };
     }
 

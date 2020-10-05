@@ -343,9 +343,9 @@ export default class ViewDataProvider {
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
     }
 
-    findGlobalCellPosition(startDate, groupIndex = 0, allDay = false) {
+    findGlobalCellPosition(date, groupIndex = 0, allDay = false) {
         const { completeViewDataMap, _workspace: workspace } = this;
-        const startTime = startDate.getTime();
+
         const showAllDayPanel = workspace._isShowAllDayPanel();
         const isVerticalGroupOrientation = workspace._isVerticalGroupedWorkSpace();
 
@@ -363,8 +363,7 @@ export default class ViewDataProvider {
 
                 if(groupIndex === currentGroupIndex
                     && allDay === currentAllDay
-                    && startTime >= currentStartDate.getTime()
-                    && startTime < currentEndDate.getTime()) {
+                    && this._compareDatesAndAllDay(date, currentStartDate, currentEndDate, allDay)) {
                     return {
                         position: {
                             columnIndex,
@@ -379,5 +378,17 @@ export default class ViewDataProvider {
         }
 
         return undefined;
+    }
+
+    _compareDatesAndAllDay(date, cellStartDate, cellEndDate, allDay) {
+        const time = date.getTime();
+        const trimmedTime = dateUtils.trimTime(date).getTime();
+        const cellStartTime = cellStartDate.getTime();
+        const cellEndTime = cellEndDate.getTime();
+
+        return (!allDay
+            && time >= cellStartTime
+            && time < cellEndTime)
+            || (allDay && trimmedTime === cellStartTime);
     }
 }

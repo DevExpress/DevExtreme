@@ -2950,6 +2950,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     _isShowAllDayPanel() {
         return this.option('showAllDayPanel');
     }
+
+    getDimensions(element) {
+        return getBoundingRect(element);
+    }
 }
 
 export default SchedulerWorkSpace;
