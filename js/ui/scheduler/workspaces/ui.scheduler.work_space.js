@@ -2390,15 +2390,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getCellByDate(date, groupIndex) {
         const index = this.getCellIndexByDate(date);
-
         const cellCoordinates = this._getCellCoordinatesByIndex(index);
         const $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, false);
-
-        // const $cells = this._getCells();
-        // debugger;
-        // const $cell = $cells.eq(index);
-        // const cellCoordinates = this._getCellCoordinatesByIndex(index);
-        // const $cell = this._getCellByCoordinates(cellCoordinates, groupIndex);
 
         return $cell;
     }
