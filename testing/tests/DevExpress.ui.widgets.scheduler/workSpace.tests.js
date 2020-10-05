@@ -4222,7 +4222,6 @@ QUnit.module('Renovated Render', {
                     allDay: false,
                     groupIndex: 0,
                     text: '12:00 AM',
-                    key: 0,
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
@@ -4243,7 +4242,6 @@ QUnit.module('Renovated Render', {
                     allDay: false,
                     groupIndex: 0,
                     text: '12:00 AM',
-                    key: 0,
                 };
 
                 assert.deepEqual(result, expected, 'correct cell data');
