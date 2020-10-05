@@ -1,6 +1,6 @@
 const _max = Math.max;
 const _round = Math.round;
-import tiling from './tiling';
+import { buildSidesData, calculateRectangles, getStaticSideIndex } from './tiling';
 
 function compare(a, b) { return b.value - a.value; }
 
@@ -42,7 +42,7 @@ function getArea(rect) {
 }
 
 function doStep(nodes, head, context) {
-    const sidesData = tiling.buildSidesData(context.rect, context.directions, context.staticSideIndex);
+    const sidesData = buildSidesData(context.rect, context.directions, context.staticSideIndex);
     const area = getArea(context.rect);
     const rowData = area > 0 ? findAppropriateCollection(nodes, head, {
         areaToValue: area / context.sum,
@@ -50,7 +50,7 @@ function doStep(nodes, head, context) {
         staticSide: sidesData.staticSide
     }) : { sum: 1, side: sidesData.variedSide, count: nodes.length - head };
 
-    tiling.calculateRectangles(nodes, head, context.rect, sidesData, rowData);
+    calculateRectangles(nodes, head, context.rect, sidesData, rowData);
     context.sum -= rowData.sum;
     return head + rowData.count;
 }
@@ -66,7 +66,7 @@ export default function(data, accumulate, isFixedStaticSide) {
         accumulate: accumulate
     };
     if(isFixedStaticSide) {
-        context.staticSideIndex = tiling.getStaticSideIndex(context.rect);
+        context.staticSideIndex = getStaticSideIndex(context.rect);
     }
     items.sort(compare);
     for(i = 0; i < ii;) {

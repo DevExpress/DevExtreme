@@ -110,7 +110,7 @@ export const Export = {
                 jsPDFDocument.autoTable.__autoTableOptions = autoTableOptions;
                 ///#ENDDEBUG
 
-                resolve(jsPDFDocument);
+                resolve();
             });
         });
     },

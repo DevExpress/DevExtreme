@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Button from '../button';
-import translator from '../../animation/translator';
+import { resetPosition, move } from '../../animation/translator';
 import messageLocalization from '../../localization/message';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import { when } from '../../core/utils/deferred';
@@ -122,7 +122,7 @@ export class CompactAppointmentsHelper {
                         event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings);
 
                         dragBehavior.onDragStart(event.data);
-                        translator.resetPosition($(dragElement));
+                        resetPosition($(dragElement));
                     }
                 },
                 onDragEnd: (e) => {
@@ -189,7 +189,7 @@ export class CompactAppointmentsHelper {
     }
 
     _setPosition(element, position) {
-        translator.move(element, {
+        move(element, {
             top: position.top,
             left: position.left
         });

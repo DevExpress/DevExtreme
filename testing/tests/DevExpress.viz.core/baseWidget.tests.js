@@ -6,7 +6,15 @@ const version = require('core/version');
 const resizeCallbacks = require('core/utils/resize_callbacks');
 const registerComponent = require('core/component_registrator');
 const logger = require('core/utils/console').logger;
-const errors = require('viz/core/errors_warnings');
+const mock = require('../../helpers/mockModule.js').mock;
+const errorsModule = require('viz/core/errors_warnings');
+errorsModule.ERROR_MESSAGES = {
+    W0001: '', // To prevent failure on reading "incidentOccurred" option in tests
+    E100: 'Templated text 1: {0}, Templated text 2: {1}',
+    W100: 'Warning: Templated text 1: {0}, Templated text 2: {1}'
+};
+mock('viz/core/errors_warnings', errorsModule);
+// const errors = require('viz/core/errors_warnings');
 const BaseWidget = require('viz/core/base_widget');
 const DEBUG_createEventTrigger = require('viz/core/base_widget.utils').DEBUG_createEventTrigger;
 const DEBUG_createResizeHandler = require('viz/core/base_widget.utils').DEBUG_createResizeHandler;
@@ -965,19 +973,12 @@ QUnit.test('Call renderer.fixPlacement on container visibility change (show)', f
 QUnit.module('Incident occurred', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        this.ORIGINAL_MESSAGES = errors.ERROR_MESSAGES;
-        errors.ERROR_MESSAGES = {
-            W0001: '', // To prevent failure on reading "incidentOccurred" option in tests
-            E100: 'Templated text 1: {0}, Templated text 2: {1}',
-            W100: 'Warning: Templated text 1: {0}, Templated text 2: {1}'
-        };
         this.error = sinon.stub(logger, 'error');
         this.warn = sinon.stub(logger, 'warn');
     },
     afterEach: function() {
         this.error.restore();
         this.warn.restore();
-        errors.ERROR_MESSAGES = this.ORIGINAL_MESSAGES;
         environment.afterEach.apply(this, arguments);
     },
     triggerIncident: function() {

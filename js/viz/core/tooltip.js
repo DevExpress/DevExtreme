@@ -1,15 +1,16 @@
 import domAdapter from '../../core/dom_adapter';
 import { getWindow } from '../../core/utils/window';
-import inflector from '../../core/utils/inflector';
-
+import { camelize } from '../../core/utils/inflector';
 import $ from '../../core/renderer';
-import rendererModule from './renderers/renderer';
+import { Renderer } from './renderers/renderer';
 import { isFunction, isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import vizUtils from './utils';
-import { format } from '../../format_helper';
+import { patchFontOptions, normalizeEnum } from './utils';
+import formatHelper from '../../format_helper';
 
 import { Plaque } from './plaque';
+
+const format = formatHelper.format;
 
 const mathCeil = Math.ceil;
 const mathMax = Math.max;
@@ -46,7 +47,7 @@ export let Tooltip = function(params) {
         .css({ position: 'absolute', overflow: 'hidden', 'pointerEvents': 'none' }) // T265557, T447623
         .addClass(params.cssClass);
 
-    that._renderer = renderer = new rendererModule.Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
+    that._renderer = renderer = new Renderer({ pathModified: params.pathModified, container: that._wrapper[0] });
     const root = renderer.root;
     root.attr({ 'pointer-events': 'none' });
 
@@ -87,7 +88,7 @@ Tooltip.prototype = {
         const that = this;
 
         that._options = options;
-        that._textFontStyles = vizUtils.patchFontOptions(options.font);
+        that._textFontStyles = patchFontOptions(options.font);
         that._textFontStyles.color = that._textFontStyles.fill;
         that._wrapper.css({ 'zIndex': options.zIndex });
 
@@ -188,7 +189,7 @@ Tooltip.prototype = {
         // text area
         const normalizedCSS = {};
         for(const name in that._textFontStyles) {
-            normalizedCSS[inflector.camelize(name)] = that._textFontStyles[name];
+            normalizedCSS[camelize(name)] = that._textFontStyles[name];
         }
         that._textGroupHtml.css(normalizedCSS);
         that._text.css(that._textFontStyles);
@@ -314,7 +315,7 @@ Tooltip.prototype = {
     },
 
     getLocation: function() {
-        return vizUtils.normalizeEnum(this._options.location);
+        return normalizeEnum(this._options.location);
     },
 
     isEnabled: function() {

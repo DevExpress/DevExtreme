@@ -17,15 +17,15 @@ import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import formatHelper from '../../format_helper';
 import { getParser } from '../components/parse_utils';
-import tickGeneratorModule from './tick_generator';
-import Translator2DModule from '../translators/translator2d';
+import { tickGenerator } from './tick_generator';
+import { Translator2D } from '../translators/translator2d';
 import { Range } from '../translators/range';
 import { tick } from './tick';
 import { adjust } from '../../core/utils/math';
-import { dateToMilliseconds } from '../../core/utils/date';
+import dateUtils from '../../core/utils/date';
 import { noop as _noop } from '../../core/utils/common';
 import xyMethods from './xy_axes';
-import polarMethods from './polar_axes';
+import * as polarMethods from './polar_axes';
 import createConstantLine from './constant_line';
 import createStrip from './strip';
 import { Deferred, when } from '../../core/utils/deferred';
@@ -65,7 +65,7 @@ const dateIntervals = {
 };
 
 function getTickGenerator(options, incidentOccurred, skipTickGeneration, rangeIsEmpty, adjustDivisionFactor, { allowNegatives, linearThreshold }) {
-    return tickGeneratorModule.tickGenerator({
+    return tickGenerator({
         axisType: options.type,
         dataType: options.dataType,
         logBase: options.logarithmBase,
@@ -1522,7 +1522,7 @@ Axis.prototype = {
                 let start = min;
                 let end = max;
                 if(!useAllAggregatedPoints) {
-                    const maxMinDistance = Math.max(that.calculateInterval(max, min), options.dataType === 'datetime' ? dateToMilliseconds(tickInterval) : tickInterval);
+                    const maxMinDistance = Math.max(that.calculateInterval(max, min), options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval);
                     start = add(min, maxMinDistance, -1);
                     end = add(max, maxMinDistance);
                 }
@@ -1663,7 +1663,7 @@ Axis.prototype = {
         const isDateTime = this._options.dataType === 'datetime';
         const minArgs = [];
         const addToArgs = function(value) {
-            isDefined(value) && minArgs.push(isDateTime ? dateToMilliseconds(value) : value);
+            isDefined(value) && minArgs.push(isDateTime ? dateUtils.dateToMilliseconds(value) : value);
         };
 
         addToArgs(this._tickInterval);
@@ -2024,7 +2024,7 @@ Axis.prototype = {
         const options = this._options;
         const tickInterval = that._tickInterval;
         if(isDefined(tickInterval)) {
-            convertedTickInterval = that.getTranslator().getInterval(options.dataType === 'datetime' ? dateToMilliseconds(tickInterval) : tickInterval);
+            convertedTickInterval = that.getTranslator().getInterval(options.dataType === 'datetime' ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval);
         }
 
         const displayMode = that._validateDisplayMode(options.label.displayMode);
@@ -2398,7 +2398,7 @@ Axis.prototype = {
         if(options.type !== 'discrete') {
             if(isDefined(minZoom)) {
                 if(options.dataType === 'datetime' && !isNumeric(minZoom)) {
-                    minZoom = dateToMilliseconds(minZoom);
+                    minZoom = dateUtils.dateToMilliseconds(minZoom);
                 }
                 isOvercoming &= minZoom >= visualRangeLength;
             } else {
@@ -2651,7 +2651,7 @@ Axis.prototype = {
     _adjustConstantLineLabels: _noop,
 
     _createTranslator: function() {
-        return new Translator2DModule.Translator2D({}, {}, {});
+        return new Translator2D({}, {}, {});
     },
 
     _updateTranslator: function() {

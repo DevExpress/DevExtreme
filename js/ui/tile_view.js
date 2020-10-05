@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
-import inflector from '../core/utils/inflector';
+import { captionize } from '../core/utils/inflector';
 import { map, each } from '../core/utils/iterator';
 import { isDefined } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
@@ -446,7 +446,7 @@ const TileView = CollectionWidget.inherit({
         }
 
         const config = this._config;
-        const outerMainProp = 'outer' + inflector.captionize(config.mainDimension);
+        const outerMainProp = 'outer' + captionize(config.mainDimension);
         const itemMargin = this.option('itemMargin');
         const itemPosition = $itemElement.position()[config.mainPosition];
         const itemDimension = $itemElement[outerMainProp]();

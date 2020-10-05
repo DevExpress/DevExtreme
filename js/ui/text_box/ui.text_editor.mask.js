@@ -10,7 +10,7 @@ import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { noop } from '../../core/utils/common';
 import { isEmpty } from '../../core/utils/string';
-import wheelEvent from '../../events/core/wheel';
+import { name as wheelEventName } from '../../events/core/wheel';
 import { EmptyMaskRule, StubMaskRule, MaskRule } from './ui.text_editor.mask.rule';
 import TextEditorBase from './ui.text_editor.base';
 import DefaultMaskStrategy from './ui.text_editor.mask.strategy.default';
@@ -131,7 +131,7 @@ const TextEditorMask = TextEditorBase.inherit({
         }
 
         const input = this._input();
-        const eventName = addNamespace(wheelEvent.name, this.NAME);
+        const eventName = addNamespace(wheelEventName, this.NAME);
         const mouseWheelAction = this._createAction((function(e) {
             if(focused(input)) {
                 const dxEvent = e.event;

@@ -1,7 +1,7 @@
 import eventsEngine from '../../events/core/events_engine';
 import { fireEvent } from '../../events/utils/index';
 import { extend } from '../../core/utils/extend';
-import translator2DModule from '../translators/translator2d';
+import { Translator2D } from '../translators/translator2d';
 import { isDefined } from '../../core/utils/type';
 import { noop } from '../../core/utils/common';
 import { start as dragEventStart, move as dragEventMove, end as dragEventEnd } from '../../events/drag';
@@ -11,7 +11,7 @@ const _max = Math.max;
 const MIN_SCROLL_BAR_SIZE = 2;
 
 export const ScrollBar = function(renderer, group) {
-    this._translator = new translator2DModule.Translator2D({}, {}, {});
+    this._translator = new Translator2D({}, {}, {});
     this._scroll = renderer.rect().append(group);
     this._addEvents();
 };

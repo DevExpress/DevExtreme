@@ -1,13 +1,13 @@
 import { parseScalar as _parseScalar } from '../core/utils';
 import { Projection } from './projection.main';
-import controlBarModule from './control_bar';
-import gestureHandlerModule from './gesture_handler';
-import trackerModule from './tracker';
-import dataExchangerModule from './data_exchanger';
-import legendModule from './legend';
-import layoutModule from './layout';
+import { ControlBar } from './control_bar';
+import { GestureHandler } from './gesture_handler';
+import { Tracker } from './tracker';
+import { DataExchanger } from './data_exchanger';
+import { LegendsControl } from './legend';
+import { LayoutControl } from './layout';
 import { MapLayerCollection, getMaxBound } from './map_layer';
-import tooltipViewerModule from './tooltip_viewer';
+import { TooltipViewer } from './tooltip_viewer';
 import { generateDataKey } from './vector_map.utils';
 
 const DEFAULT_WIDTH = 800;
@@ -110,7 +110,7 @@ const dxVectorMap = BaseWidget.inherit({
 
     _initLegendsControl: function() {
         const that = this;
-        that._legendsControl = new legendModule.LegendsControl({
+        that._legendsControl = new LegendsControl({
             renderer: that._renderer,
             container: that._root,
             widget: that,
@@ -124,7 +124,7 @@ const dxVectorMap = BaseWidget.inherit({
 
     _initControlBar: function(dataKey) {
         const that = this;
-        that._controlBar = new controlBarModule.ControlBar({
+        that._controlBar = new ControlBar({
             renderer: that._renderer,
             container: that._root,
             layoutControl: that._layoutControl,
@@ -157,7 +157,7 @@ const dxVectorMap = BaseWidget.inherit({
             }
         };
         that._preventProjectionEvents();
-        that._dataExchanger = new dataExchangerModule.DataExchanger();
+        that._dataExchanger = new DataExchanger();
 
         // The `{ eventTrigger: that._eventTrigger }` object cannot be passed to the Projection because later backward option updating is going to be added.
         that._projection = new Projection({
@@ -172,9 +172,9 @@ const dxVectorMap = BaseWidget.inherit({
                 }
             }
         });
-        that._tracker = new trackerModule.Tracker({ root: that._root, projection: that._projection, dataKey: dataKey });
-        that._gestureHandler = new gestureHandlerModule.GestureHandler({ projection: that._projection, renderer: that._renderer, tracker: that._tracker });
-        that._layoutControl = new layoutModule.LayoutControl();
+        that._tracker = new Tracker({ root: that._root, projection: that._projection, dataKey: dataKey });
+        that._gestureHandler = new GestureHandler({ projection: that._projection, renderer: that._renderer, tracker: that._tracker });
+        that._layoutControl = new LayoutControl();
         that._layoutControl.suspend();
 
         that._initLayerCollection(dataKey);
@@ -182,7 +182,7 @@ const dxVectorMap = BaseWidget.inherit({
         that._initControlBar(dataKey);
         that._initLegendsControl();
         that._prepareExtraElements();
-        that._tooltipViewer = new tooltipViewerModule.TooltipViewer({ tracker: that._tracker, tooltip: that._tooltip, layerCollection: that._layerCollection });
+        that._tooltipViewer = new TooltipViewer({ tracker: that._tracker, tooltip: that._tooltip, layerCollection: that._layerCollection });
     },
 
     _change_RESUME_LAYOUT: function() {

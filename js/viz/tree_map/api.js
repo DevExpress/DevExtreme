@@ -1,7 +1,10 @@
-import { prototype as proto } from './tree_map.base';
-import { prototype as nodeProto } from './node';
+import TreeMapBase from './tree_map.base';
+import Node from './node';
 import { extend as _extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
+
+const proto = TreeMapBase.prototype;
+const nodeProto = Node.prototype;
 
 proto._eventsMap.onNodesInitialized = { name: 'nodesInitialized' };
 proto._eventsMap.onNodesRendering = { name: 'nodesRendering' };
