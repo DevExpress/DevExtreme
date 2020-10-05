@@ -191,18 +191,9 @@ const HtmlEditor = Editor.inherit({
     },
 
     _render: function() {
-        this._isContentRendered = new Deferred();
         this._prepareConverters();
 
         this.callBase();
-    },
-
-    _attachFocusEvents: function() {
-        const callBase = this.callBase.bind(this);
-
-        this._isContentRendered.done(() => {
-            callBase();
-        });
     },
 
     _prepareQuillRegistrator: function() {
@@ -239,7 +230,6 @@ const HtmlEditor = Editor.inherit({
         this._renderHtmlEditor();
         this._renderFormDialog();
         this._addKeyPressHandler();
-        this._isContentRendered.resolve();
 
         return renderContentPromise;
     },
