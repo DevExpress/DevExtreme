@@ -1,26 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Ref, Effect, Component, JSXComponent, Method, InternalState,
+  Ref, Component, JSXComponent, Method,
 } from 'devextreme-generator/component_declaration/common';
 import LegacyDataGrid from '../../../ui/data_grid/ui.data_grid';
 
 import { DataGridProps } from './props';
 
-/*
-import type { Options, dxDataGridColumn, dxDataGridRowObject } from '../../../ui/data_grid';
-import type dxScrollable from '../../../ui/scroll_view/ui.scrollable';
-import type { dxElement } from '../../../core/element';
-*/
+import { DomComponentWrapper } from '../common/dom_component_wrapper';
+
+/* eslint-enable import/named */
 
 export const viewFunction = ({
-  widgetRef,
-  props: { className },
-  restAttributes,
+  domComponentRef, props, restAttributes,
 }: DataGrid): JSX.Element => (
-  <div
-    ref={widgetRef as any}
-    className={className}
-    // eslint-disable-next-line react/jsx-props-no-spreading
+  <DomComponentWrapper
+    ref={domComponentRef as any}
+    componentType={LegacyDataGrid as any}
+    componentProps={props}
+  // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
 );
@@ -32,31 +29,10 @@ export const viewFunction = ({
 })
 export class DataGrid extends JSXComponent(DataGridProps) {
   @Ref()
-  widgetRef!: HTMLDivElement;
-
-  @InternalState() widget: { instance?: any } = { instance: null };
+  domComponentRef!: DomComponentWrapper;
 
   get instance(): any {
-    return this.widget.instance;
-  }
-
-  @Effect()
-  updateWidget(): void {
-    this.instance?.option(this.properties);
-  }
-
-  @Effect({ run: 'once' })
-  setupWidget(): () => void {
-    const instance = new LegacyDataGrid(this.widgetRef, this.properties);
-    this.widget.instance = instance;
-
-    return (): void => {
-      instance.dispose();
-    };
-  }
-
-  get properties(): any /* Options */ {
-    return this.props;
+    return this.domComponentRef.getInstance();
   }
 
   @Method()
