@@ -437,6 +437,7 @@ const DropDownList = DropDownEditor.inherit({
 
         this._clearFilter();
         this._clearSelectedItem();
+        this._preventFiltering = true;
     },
 
     _listItemElements: function() {
@@ -708,7 +709,6 @@ const DropDownList = DropDownEditor.inherit({
     _clearFilter: function() {
         const dataSource = this._dataSource;
         dataSource && dataSource.searchValue() && dataSource.searchValue(null);
-        this._preventFiltering = true;
     },
 
     _dataSourceFiltered: function() {
