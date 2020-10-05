@@ -1,20 +1,20 @@
 export const data = [
   {
     text: 'Website Re-Design Plan',
-    startDate: new Date('2021-05-03T06:30:00.000Z'),
-    endDate: new Date('2021-05-03T08:30:00.000Z'),
+    startDate: new Date('2021-04-26T06:30:00.000Z'),
+    endDate: new Date('2021-04-26T08:30:00.000Z'),
     recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,FR;WKST=TU;INTERVAL=2;COUNT=32',
   }, {
     text: 'Book Flights to San Fran for Sales Trip',
-    startDate: new Date('2021-05-03T06:30:00.000Z'),
-    endDate: new Date('2021-05-03T08:30:00.000Z'),
+    startDate: new Date('2021-04-26T06:30:00.000Z'),
+    endDate: new Date('2021-04-26T08:30:00.000Z'),
     recurrenceRule: 'FREQ=WEEKLY;BYDAY=MO,FR;INTERVAL=4;COUNT=32',
     allDay: true,
     priorityId: [1]
   }, {
     text: 'Install New Router in Dev Room',
-    startDate: new Date('2021-05-03T06:30:00.000Z'),
-    endDate: new Date('2021-05-03T08:30:00.000Z'),
+    startDate: new Date('2021-04-26T06:30:00.000Z'),
+    endDate: new Date('2021-04-26T08:30:00.000Z'),
     recurrenceRule: 'FREQ=WEEKLY;BYDAY=FR;INTERVAL=2;COUNT=32'
   }, {
     text: 'Approve Personal Computer Upgrade Plan',

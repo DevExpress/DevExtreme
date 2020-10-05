@@ -4,7 +4,7 @@ import Scheduler, { Resource } from 'devextreme-react/scheduler';
 
 import { data, resourcesData, priorityData } from './data.js';
 
-const currentDate = new Date(2021, 4, 2);
+const currentDate = new Date(2021, 1, 2);
 const views = ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 const groups = ['priority'];
 

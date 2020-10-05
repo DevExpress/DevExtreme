@@ -28,8 +28,8 @@ var data = [
         roomId: [5],
         startDate: new Date("2021-02-24T07:00:00.000Z"),
         endDate: new Date("2021-02-24T08:00:00.000Z"),
-        recurrenceRule: "FREQ=YEARLY;BYWEEKNO=23",
-        recurrenceException: "20210611T100000"
+        recurrenceRule: "FREQ=YEARLY;BYWEEKNO=14",
+        recurrenceException: "20210411T100000"
     }, {
         text: "Final exams",
         roomId: [3],

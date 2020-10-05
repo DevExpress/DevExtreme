@@ -18,67 +18,66 @@ var employees = [{
 var data = [{ 
         text: "Helen",
         employeeID: 2,
-        startDate: new Date("2021-08-03T06:30:00.000Z"),
-        endDate: new Date("2021-08-03T08:30:00.000Z")
+        startDate: new Date("2021-07-27T06:30:00.000Z"),
+        endDate: new Date("2021-07-27T08:30:00.000Z")
     }, {
         text: "Helen",
         employeeID: 2,
-       startDate: new Date("2021-08-12T06:30:00.000Z"),
-        endDate: new Date("2021-08-13T08:30:00.000Z")
-    }, {
-        text: "Alex",
-        employeeID: 1,
-        startDate: new Date("2021-08-04T06:30:00.000Z"),
-        endDate: new Date("2021-08-04T08:30:00.000Z")
-    }, {
-        text: "Alex",
-        employeeID: 1,
-        startDate: new Date("2021-08-13T09:00:00.000Z"),
-        endDate: new Date("2021-08-13T10:00:00.000Z")
-    }, {
-        text: "Alex",
-        employeeID: 2,
-        startDate: new Date("2021-08-18T06:30:00.000Z"),
-        endDate: new Date("2021-08-18T08:30:00.000Z")
-    }, {
-        text: "Stan",
-        employeeID: 1,
-        startDate: new Date("2021-08-09T06:30:00.000Z"),
-        endDate: new Date("2021-08-09T08:30:00.000Z")
-    }, {
-        text: "Stan",
-        employeeID: 1,
-        startDate: new Date("2021-08-30T06:30:00.000Z"),
-        endDate: new Date("2021-08-30T08:30:00.000Z")
-    }, {
-        text: "Stan",
-        employeeID: 1,
-        startDate: new Date("2021-09-01T06:30:00.000Z"),
-        endDate: new Date("2021-09-01T08:30:00.000Z")
-    },
-     {
-        text: "Rachel",
-        employeeID: 2,
-        startDate: new Date("2021-08-06T06:30:00.000Z"),
+        startDate: new Date("2021-08-05T06:30:00.000Z"),
         endDate: new Date("2021-08-06T08:30:00.000Z")
     }, {
+        text: "Alex",
+        employeeID: 1,
+        startDate: new Date("2021-07-28T06:30:00.000Z"),
+        endDate: new Date("2021-07-28T08:30:00.000Z")
+    }, {
+        text: "Alex",
+        employeeID: 1,
+        startDate: new Date("2021-08-06T09:00:00.000Z"),
+        endDate: new Date("2021-08-06T10:00:00.000Z")
+    }, {
+        text: "Alex",
+        employeeID: 2,
+        startDate: new Date("2021-08-11T06:30:00.000Z"),
+        endDate: new Date("2021-08-11T08:30:00.000Z")
+    }, {
+        text: "Stan",
+        employeeID: 1,
+        startDate: new Date("2021-08-02T06:30:00.000Z"),
+        endDate: new Date("2021-08-02T08:30:00.000Z")
+    }, {
+        text: "Stan",
+        employeeID: 1,
+        startDate: new Date("2021-08-16T06:30:00.000Z"),
+        endDate: new Date("2021-08-16T08:30:00.000Z")
+    }, {
+        text: "Stan",
+        employeeID: 1,
+        startDate: new Date("2021-08-25T06:30:00.000Z"),
+        endDate: new Date("2021-08-25T08:30:00.000Z")
+    }, {
         text: "Rachel",
         employeeID: 2,
-        startDate: new Date("2021-08-09T06:30:00.000Z"),
-        endDate: new Date("2021-08-09T08:30:00.000Z")
+        startDate: new Date("2021-07-30T06:30:00.000Z"),
+        endDate: new Date("2021-07-30T08:30:00.000Z")
+    }, {
+        text: "Rachel",
+        employeeID: 2,
+        startDate: new Date("2021-08-02T06:30:00.000Z"),
+        endDate: new Date("2021-08-02T08:30:00.000Z")
     }, {
         text: "Rachel",
         employeeID: 1,
-        startDate: new Date("2021-08-23T06:30:00.000Z"),
-        endDate: new Date("2021-08-23T08:30:00.000Z")
+        startDate: new Date("2021-08-16T06:30:00.000Z"),
+        endDate: new Date("2021-08-16T08:30:00.000Z")
     }, {
         text: "Kelly",
         employeeID: 2,
-        startDate: new Date("2021-08-17T06:30:00.000Z"),
-        endDate: new Date("2021-08-17T08:30:00.000Z")
+        startDate: new Date("2021-08-10T06:30:00.000Z"),
+        endDate: new Date("2021-08-10T08:30:00.000Z")
     }, {
         text: "Kelly",
         employeeID: 2,
-        startDate: new Date("2021-08-31T06:30:00.000Z"),
-        endDate: new Date("2021-08-31T08:30:00.000Z")
+        startDate: new Date("2021-08-24T06:30:00.000Z"),
+        endDate: new Date("2021-08-24T08:30:00.000Z")
     }];

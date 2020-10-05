@@ -40,7 +40,7 @@ export default {
     return {
       views: ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'],
       groups: ['priority'],
-      currentDate: new Date(2021, 4, 2),
+      currentDate: new Date(2021, 1, 2),
       dataSource: data,
       priorityData: priorityData,
       resourcesData: resourcesData
