@@ -9477,6 +9477,37 @@ QUnit.module('Editing with real dataController', {
                 'type': 'update'
             }], 'row change');
         });
+
+        QUnit.test('Empty changes objects should not be created if column has showEditorAlways', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            this.options.columns = [{
+                dataField: 'name',
+                showEditorAlways: true,
+                validationRules: [{
+                    type: 'custom',
+                    reevaluate: true,
+                    validationCallback: function(params) {
+                        return params.data.name.length > 0;
+                    }
+                }]
+            }];
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'cell'
+            });
+
+            this.columnsController.reset();
+            this.columnsController.init();
+
+            rowsView.render($testElement);
+
+            // assert
+            assert.deepEqual(this.option('editing.changes'), [], 'no changes');
+        });
     });
 
     QUnit.module('Save/cancel events', {
