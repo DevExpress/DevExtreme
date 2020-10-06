@@ -1178,15 +1178,55 @@ QUnit.module('options changed callbacks', {
     QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
         const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
 
-        this.instance.option({
-            visible: true,
-            toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
-        });
+        try {
+            this.instance.option({
+                visible: true,
+                toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
+            });
 
-        assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
+            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
 
-        this.instance.option('toolbarItems[0].toolbar', 'top');
-        assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered after option change');
+            this.instance.option('toolbarItems[0].toolbar', 'top');
+            assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered after option change');
+        } finally {
+            resizeEventSpy.restore();
+        }
+    });
+
+    QUnit.test('titleTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
+        this.instance.option('visible', true);
+        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+
+        try {
+            this.instance.option({
+                titleTemplate: () => ''
+            });
+
+            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
+
+            this.instance.option('titleTemplate', () => '');
+            assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered after option change');
+        } finally {
+            resizeEventSpy.restore();
+        }
+    });
+
+    QUnit.test('bottomTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
+        this.instance.option('visible', true);
+        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+
+        try {
+            this.instance.option({
+                bottomTemplate: () => ''
+            });
+
+            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
+
+            this.instance.option('bottomTemplate', () => '');
+            assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered after option change');
+        } finally {
+            resizeEventSpy.restore();
+        }
     });
 });
 

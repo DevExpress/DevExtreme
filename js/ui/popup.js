@@ -663,10 +663,12 @@ const Popup = Overlay.inherit({
             case 'titleTemplate':
                 this._renderTitle();
                 this._renderGeometry();
+                domUtils.triggerResizeEvent(this._$content);
                 break;
             case 'bottomTemplate':
                 this._renderBottom();
                 this._renderGeometry();
+                domUtils.triggerResizeEvent(this._$content);
                 break;
             case 'onTitleRendered':
                 this._createTitleRenderAction(args.value);
