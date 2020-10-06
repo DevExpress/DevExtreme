@@ -255,10 +255,7 @@ class VirtualScrolling {
             ? 0
             : (timeToScroll - cellStartTime) / (cellEndTime - cellStartTime);
 
-        const firstCellInTable = workSpace._dom_getDateCell({
-            rowIndex: 0, cellIndex: 0,
-        });
-        const cellWidth = workSpace.getDimensions(firstCellInTable.get(0)).width;
+        const cellWidth = workSpace.getCellWidth();
 
         return {
             top: (rowIndex + scrollInCell) * rowHeight,

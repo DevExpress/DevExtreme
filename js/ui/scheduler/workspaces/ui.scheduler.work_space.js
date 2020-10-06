@@ -2922,7 +2922,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $scrollable = scrollable.$element();
 
         const offset = this.option('rtlEnabled')
-            ? getBoundingRect(this.getScrollableContainer().get(0)).width
+            ? this.getCellWidth()
             : 0;
         const scrollableHeight = $scrollable.height();
         const scrollableWidth = $scrollable.width();
@@ -2932,7 +2932,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const xShift = (scrollableWidth - cellWidth) / 2;
         const yShift = (scrollableHeight - cellHeight) / 2;
 
-        const left = coordinates.left - scrollable.scrollLeft() - offset - xShift;
+        const left = coordinates.left - scrollable.scrollLeft() - xShift - offset;
         let top = coordinates.top - scrollable.scrollTop() - yShift;
         if(isScrollToAllDay) {
             top = 0;
@@ -3012,10 +3012,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _isShowAllDayPanel() {
         return this.option('showAllDayPanel');
-    }
-
-    getDimensions(element) {
-        return getBoundingRect(element);
     }
 }
 
