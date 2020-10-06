@@ -121,7 +121,7 @@ export default class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: ScrollOffset): void {
+  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
     if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
       const scrollOffset = {
         top: 0,

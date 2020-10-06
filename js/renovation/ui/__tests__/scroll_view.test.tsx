@@ -4,6 +4,7 @@ import each from 'jest-each';
 import ScrollView, {
   viewFunction,
   Location,
+  ScrollOffset,
   ScrollViewProps,
   ensureLocation,
 } from '../scroll_view';
@@ -326,7 +327,10 @@ describe('ScrollView', () => {
           });
         };
 
-        const getOffsetValue = (parameter, offset?): number => (offset ? offset[parameter] : 0);
+        const getOffsetValue = (
+          name: keyof ScrollOffset,
+          offset?,
+        ): number => (offset ? offset[name] : 0);
 
         const offsets = [undefined, {
           left: 10,
