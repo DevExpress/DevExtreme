@@ -1185,9 +1185,6 @@ QUnit.module('options changed callbacks', {
             });
 
             assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
-
-            this.instance.option('toolbarItems[0].toolbar', 'top');
-            assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered after option change');
         } finally {
             resizeEventSpy.restore();
         }
@@ -1203,9 +1200,6 @@ QUnit.module('options changed callbacks', {
             });
 
             assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
-
-            this.instance.option('titleTemplate', () => '');
-            assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered after option change');
         } finally {
             resizeEventSpy.restore();
         }
@@ -1221,9 +1215,6 @@ QUnit.module('options changed callbacks', {
             });
 
             assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
-
-            this.instance.option('bottomTemplate', () => '');
-            assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered after option change');
         } finally {
             resizeEventSpy.restore();
         }
