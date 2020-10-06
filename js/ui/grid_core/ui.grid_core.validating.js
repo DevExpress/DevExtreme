@@ -365,14 +365,6 @@ const ValidatingController = modules.Controller.inherit((function() {
                 if(showEditorAlways && editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row })) {
                     editIndex = editingController._addEditData({ key: parameters.key, oldData: parameters.data });
                 }
-
-                if(this.option('editing.editRowKey') === parameters.key) {
-                    editIndex = 0;
-                }
-
-                if(showEditorAlways && editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row })) {
-                    editIndex = editingController._addEditData({ key: parameters.key, oldData: parameters.data });
-                }
             }
 
             if(editIndex >= 0) {
