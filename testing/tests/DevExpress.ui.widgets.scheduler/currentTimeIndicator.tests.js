@@ -49,11 +49,8 @@ const testIndicators = function(testCases, $element, assert) {
         assert.equal($indicators.eq(index).css('top'), offset.top, 'Indicator has correct top offset');
         assert.equal($indicators.eq(index).css('left'), offset.left, 'Indicator has correct left offset');
 
-        if(isSimple) {
-            assert.ok($indicator.hasClass('dx-scheduler-date-time-indicator-simple'), 'Indicator is simple');
-        } else {
+        isSimple ? assert.ok($indicator.hasClass('dx-scheduler-date-time-indicator-simple'), 'Indicator is simple') :
             assert.notOk($indicator.hasClass('dx-scheduler-date-time-indicator-simple'), 'Indicator is usual');
-        }
     });
 };
 
