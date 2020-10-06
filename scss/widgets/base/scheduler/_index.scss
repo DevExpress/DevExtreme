@@ -878,6 +878,12 @@ $scheduler-appointment-form-label-padding: 20px;
         border-bottom: $scheduler-base-border;
       }
     }
+
+    .dx-scheduler-date-time-indicator-simple {
+      &::before {
+        content: "";
+      }
+    }
   }
 
 
@@ -1080,12 +1086,6 @@ $scheduler-appointment-form-label-padding: 20px;
         color: $scheduler-workspace-accent-color;
         background-color: $scheduler-first-month-cell-background-color;
         font-weight: bold;
-      }
-    }
-
-    .dx-scheduler-date-time-indicator-simple {
-      &::before {
-        content: "";
       }
     }
   }
