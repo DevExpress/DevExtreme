@@ -1008,15 +1008,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.notOk(scrollToTimeSpy.calledOnce, 'scrollToTime was not called');
+                    assert.notOk(scrollTo.calledOnce, 'scrollTo was not called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
@@ -1037,15 +1037,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9, 21), endDate: new Date(2015, 1, 9, 22), text: 'caption 2' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
@@ -1066,15 +1066,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9, 7), endDate: new Date(2015, 1, 9, 1, 8), text: 'caption' };
                 const workSpace = this.instance.$element().find('.dx-scheduler-work-space').dxSchedulerTimelineDay('instance');
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
@@ -1096,15 +1096,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 12, 7), endDate: new Date(2015, 1, 12, 1, 8), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
@@ -1127,15 +1127,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
@@ -1153,15 +1153,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9, 2), endDate: new Date(2015, 1, 9, 2, 30), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
@@ -1180,15 +1180,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9, 5, 45), endDate: new Date(2015, 1, 9, 6, 30), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
