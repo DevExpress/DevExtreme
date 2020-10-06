@@ -2916,12 +2916,21 @@ class SchedulerWorkSpace extends WidgetObserver {
         );
 
         const scrollable = this.getScrollable();
+        const $scrollable = scrollable.$element();
+
         const offset = this.option('rtlEnabled')
             ? getBoundingRect(this.getScrollableContainer().get(0)).width
             : 0;
+        const scrollableHeight = $scrollable.height();
+        const scrollableWidth = $scrollable.width();
+        const cellWidth = this.getCellWidth();
+        const cellHeight = this.getCellHeight();
 
-        const left = coordinates.left - scrollable.scrollLeft() - offset;
-        const top = coordinates.top - scrollable.scrollTop();
+        const xShift = (scrollableWidth - cellWidth) / 2;
+        const yShift = (scrollableHeight - cellHeight) / 2;
+
+        const left = coordinates.left - scrollable.scrollLeft() - offset - xShift;
+        const top = coordinates.top - scrollable.scrollTop() - yShift;
 
         if(this.option('templatesRenderAsynchronously')) {
             setTimeout(() => {
@@ -2930,11 +2939,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         } else {
             scrollable.scrollBy({ left, top });
         }
-
-        scrollable.scrollBy({
-            top: coordinates.top - scrollable.scrollTop(),
-            left: coordinates.left - scrollable.scrollLeft(),
-        });
     }
 
     _isValidScrollDate(date) {
