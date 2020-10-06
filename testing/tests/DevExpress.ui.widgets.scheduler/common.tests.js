@@ -4755,3 +4755,435 @@ QUnit.module('Getting timezones', {}, () => {
         assert.equal(timeZone.title, '(GMT -07:00) America - Los Angeles', 'returned title for timeZone with DST is OK');
     });
 });
+
+QUnit.module('ScrollTo', () => {
+    ['virtual', 'standard'].forEach((scrollingMode) => {
+        const moduleName = scrollingMode === 'virtual'
+            ? 'Virtual Scrolling'
+            : 'Standard Scrolling';
+        QUnit.module(moduleName, {
+            beforeEach: function() {
+                this.createScheduler = (options = {}) => {
+                    return createWrapper({
+                        showCurrentTimeIndicator: false,
+                        scrolling: { mode: scrollingMode },
+                        currentDate: new Date('2020-09-06'),
+                        currentView: 'week',
+                        height: 500,
+                        width: 500,
+                        crossScrollingEnabled: true,
+                        resources: [{
+                            fieldExpr: 'ownerId',
+                            dataSource: [{
+                                id: 1, text: 'A',
+                            }, {
+                                id: 2, text: 'B',
+                            }]
+                        }],
+                        ...options,
+                    });
+                };
+
+                this.clock = sinon.useFakeTimers();
+                sinon.spy(errors, 'log');
+                fx.off = true;
+            },
+            afterEach: function() {
+                this.clock.restore();
+                errors.log.restore();
+                fx.off = false;
+            }
+        }, () => {
+            QUnit.test('A warning should be thrown when scrolling to an invalid date', function(assert) {
+                const scheduler = this.createScheduler();
+
+                scheduler.instance.scrollTo(new Date('2020-09-05'));
+
+                assert.equal(errors.log.callCount, 1, 'warning has been called once');
+                assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
+
+                scheduler.instance.scrollTo(new Date('2020-09-14'));
+
+                assert.equal(errors.log.callCount, 2, 'warning has been called once');
+                assert.equal(errors.log.getCall(1).args[0], 'W1008', 'warning has correct error id');
+            });
+
+            QUnit.test('A warning should not be thrown when scrolling to a valid date', function(assert) {
+                const scheduler = this.createScheduler();
+
+                scheduler.instance.scrollTo(new Date('2020-09-07'));
+
+                assert.equal(errors.log.callCount, 0, 'warning has been called once');
+            });
+
+            [{
+                view: 'week',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 1,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date('2020-09-25'),
+                leftCellCount: 5,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 66,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date('2020-09-07'),
+                leftCellCount: 6,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work in basic case in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: view,
+                    });
+
+                    const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                    const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                    scheduler.instance.scrollTo(date);
+
+                    const scrollableHeight = $scrollable.height();
+                    const scrollableWidth = $scrollable.width();
+                    const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                    const cellHeight = $schedulerCell.outerHeight();
+                    const cellWidth = $schedulerCell.outerWidth();
+
+                    assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].top,
+                        topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
+                        'Correct top parameter',
+                    );
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].left,
+                        leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                        'Correct left parameter',
+                    );
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date('2020-09-07T09:15:00'),
+                leftCellCount: 1,
+                topCellCount: 18.5,
+            }, {
+                view: 'month',
+                date: new Date('2020-09-25T12:00:00'),
+                leftCellCount: 5,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date('2020-09-07T09:15:00'),
+                leftCellCount: 66.5,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date('2020-09-07T12:00:00'),
+                leftCellCount: 6,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work when date is between a cell's startDate and endDate in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: view,
+                    });
+
+                    const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                    const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                    scheduler.instance.scrollTo(date);
+
+                    const scrollableHeight = $scrollable.height();
+                    const scrollableWidth = $scrollable.width();
+                    const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                    const cellHeight = $schedulerCell.outerHeight();
+                    const cellWidth = $schedulerCell.outerWidth();
+
+                    assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].top,
+                        topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
+                        'Correct top parameter',
+                    );
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].left,
+                        leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                        'Correct left parameter',
+                    );
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 8,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date('2020-09-25T12:00:00'),
+                leftCellCount: 12,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 402,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date('2020-09-07T12:00:00'),
+                leftCellCount: 36,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work with horizontal grouping in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: {
+                            type: view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: false,
+                        },
+                        groups: ['ownerId'],
+                    });
+
+                    const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                    const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                    scheduler.instance.scrollTo(date, { ownerId: 2 });
+
+                    const scrollableHeight = $scrollable.height();
+                    const scrollableWidth = $scrollable.width();
+                    const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                    const cellHeight = $schedulerCell.outerHeight();
+                    const cellWidth = $schedulerCell.outerWidth();
+
+                    assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].top,
+                        topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
+                        'Correct top parameter',
+                    );
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].left,
+                        leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                        'Correct left parameter',
+                    );
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 3,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date('2020-09-25T12:00:00'),
+                leftCellCount: 11,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 133,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date('2020-09-07T12:00:00'),
+                leftCellCount: 13,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work when grouped by date in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: {
+                            type: view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true,
+                        },
+                        groups: ['ownerId'],
+                    });
+
+                    const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                    const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                    scheduler.instance.scrollTo(date, { ownerId: 2 });
+
+                    const scrollableHeight = $scrollable.height();
+                    const scrollableWidth = $scrollable.width();
+                    const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                    const cellHeight = $schedulerCell.outerHeight();
+                    const cellWidth = $schedulerCell.outerWidth();
+
+                    assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].top,
+                        topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
+                        'Correct top parameter',
+                    );
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].left,
+                        leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                        'Correct left parameter',
+                    );
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 1,
+                topCellCount: 66,
+            }, {
+                view: 'month',
+                date: new Date('2020-09-25T12:00:00'),
+                leftCellCount: 5,
+                topCellCount: 9,
+            }, {
+                view: 'timelineWeek',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 66,
+                topCellCount: 1,
+            }, {
+                view: 'timelineMonth',
+                date: new Date('2020-09-07T12:00:00'),
+                leftCellCount: 6,
+                topCellCount: 1,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work with vertical grouping in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: {
+                            type: view,
+                            groupOrientation: 'vertical',
+                        },
+                        groups: ['ownerId'],
+                        showAllDayPanel: false,
+                    });
+
+                    const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                    const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                    scheduler.instance.scrollTo(date, { ownerId: 2 });
+
+                    const scrollableHeight = $scrollable.height();
+                    const scrollableWidth = $scrollable.width();
+                    const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                    const cellHeight = $schedulerCell.outerHeight();
+                    const cellWidth = $schedulerCell.outerWidth();
+
+                    assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].top,
+                        topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
+                        'Correct top parameter',
+                    );
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].left,
+                        leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                        'Correct left parameter',
+                    );
+                });
+            });
+
+            QUnit.test('ScrollTo should work with vertical grouping in week view when all-day panel is enabled', function(assert) {
+                const leftCellCount = 1;
+                const topCellCount = 68;
+
+                const scheduler = this.createScheduler({
+                    currentView: {
+                        type: 'week',
+                        groupOrientation: 'vertical',
+                    },
+                    groups: ['ownerId'],
+                    showAllDayPanel: true,
+                });
+
+                const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                scheduler.instance.scrollTo(new Date('2020-09-07T09:00:00'), { ownerId: 2 });
+
+                const scrollableHeight = $scrollable.height();
+                const scrollableWidth = $scrollable.width();
+                const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                const cellHeight = $schedulerCell.outerHeight();
+                const cellWidth = $schedulerCell.outerWidth();
+
+                assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                assert.equal(
+                    scrollBy.getCall(0).args[0].top,
+                    topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
+                    'Correct top parameter',
+                );
+                assert.equal(
+                    scrollBy.getCall(0).args[0].left,
+                    leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                    'Correct left parameter',
+                );
+            });
+
+            [{
+                view: 'week',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 1,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date('2020-09-25'),
+                leftCellCount: 5,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 66,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date('2020-09-07'),
+                leftCellCount: 6,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo to all-day cells should work in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: view,
+                    });
+
+                    const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                    const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                    scheduler.instance.scrollTo(date, undefined, true);
+
+                    const scrollableHeight = $scrollable.height();
+                    const scrollableWidth = $scrollable.width();
+                    const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                    const cellHeight = $schedulerCell.outerHeight();
+                    const cellWidth = $schedulerCell.outerWidth();
+
+                    const top = view === 'week'
+                        ? 0
+                        : topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2;
+
+                    assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].top,
+                        top,
+                        'Correct top parameter',
+                    );
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].left,
+                        leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                        'Correct left parameter',
+                    );
+                });
+            });
+        });
+    });
+});

@@ -2797,7 +2797,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
         if(this.needUpdateScrollPosition(date, groups, allDay)) {
-            this.scrollTo(newDate, groups, allDay);
+            this.scrollTo(newDate, groups, allDay, false);
         }
     }
 
@@ -2902,17 +2902,20 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
     }
 
-    scrollTo(date, groups, allDay = false) {
-        if(!this._isValidScrollDate(date)) {
+    scrollTo(date, groups, allDay = false, throwWarning = true) {
+        if(!this._isValidScrollDate(date, throwWarning)) {
             return;
         }
 
-        const groupIndex = groups
+        const groupIndex = this._getGroupCount() && groups
             ? this._getGroupIndexByResourceId(groups)
             : 0;
+        const isScrollToAllDay = allDay
+            && this.supportAllDayRow()
+            && this._isShowAllDayPanel();
 
         const coordinates = this._getScrollCoordinates(
-            date.getHours(), date.getMinutes(), date, groupIndex, allDay,
+            date.getHours(), date.getMinutes(), date, groupIndex, isScrollToAllDay,
         );
 
         const scrollable = this.getScrollable();
@@ -2930,7 +2933,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         const yShift = (scrollableHeight - cellHeight) / 2;
 
         const left = coordinates.left - scrollable.scrollLeft() - offset - xShift;
-        const top = coordinates.top - scrollable.scrollTop() - yShift;
+        let top = coordinates.top - scrollable.scrollTop() - yShift;
+        if(isScrollToAllDay) {
+            top = 0;
+        }
 
         if(this.option('templatesRenderAsynchronously')) {
             setTimeout(() => {
@@ -2941,12 +2947,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
     }
 
-    _isValidScrollDate(date) {
+    _isValidScrollDate(date, throwWarning = true) {
         const min = this.getStartViewDate();
         const max = this.getEndViewDate();
 
         if(date < min || date > max) {
-            errors.log('W1008', date);
+            throwWarning && errors.log('W1008', date);
             return false;
         }
 
