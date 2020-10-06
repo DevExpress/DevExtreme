@@ -14,7 +14,7 @@ class Cache {
     }
 
     get(name, callback) {
-        if(!this._cache.get(name) && callback) {
+        if(!this._cache.has(name) && callback) {
             this.set(name, callback());
         }
 
