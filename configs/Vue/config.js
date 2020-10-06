@@ -85,7 +85,6 @@ System.config({
 
     'devextreme': 'npm:devextreme',
     'devextreme-vue': 'npm:devextreme-vue',
-    'mitt': 'npm:mitt/dist/mitt.umd.js',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',

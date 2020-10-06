@@ -83,11 +83,11 @@ export default {
     },
 
     async processReorder(e) {
-        const visibleRows = e.component.getVisibleRows();
-        const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
+      const visibleRows = e.component.getVisibleRows();
+      const newOrderIndex = visibleRows[e.toIndex].data.OrderIndex;
 
-        await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
-        await e.component.refresh();
+      await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
+      await e.component.refresh();
     }
   },
 };

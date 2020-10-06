@@ -47,7 +47,6 @@
   </div>
 </template>
 <script>
-import { createApp } from 'vue';
 import {
   DxDataGrid,
   DxColumn,
@@ -88,9 +87,8 @@ export default {
       return !e.row.isEditing && !this.isChief(e.row.data.Position);
     },
     cloneIconClick(e) {
-      var clonedItem = Vue.util.extend({}, e.row.data);
+      var clonedItem = Object.assign({}, e.row.data, { ID: service.getMaxID() });
 
-      clonedItem.ID = service.getMaxID();
       this.employees.splice(e.row.rowIndex, 0, clonedItem);
       e.event.preventDefault();
     },
