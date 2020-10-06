@@ -8,8 +8,8 @@ export const viewFunction = (viewModel: TimePanelCell): JSX.Element => (
   <Cell
       // eslint-disable-next-line react/jsx-props-no-spreading
     {...viewModel.restAttributes}
-    isFirstCell={viewModel.props.isFirstCell}
-    isLastCell={viewModel.props.isLastCell}
+    isFirstGroupCell={viewModel.props.isFirstGroupCell}
+    isLastGroupCell={viewModel.props.isLastGroupCell}
     contentTemplate={viewModel.props.timeCellTemplate}
     contentTemplateProps={viewModel.timeCellTemplateProps}
     className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${viewModel.props.className}`}

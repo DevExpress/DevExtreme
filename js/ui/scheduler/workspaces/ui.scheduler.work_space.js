@@ -1069,14 +1069,15 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     generateRenderOptions() {
-        const groupCountForRender = !this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
-        const groupCount = this._isVerticalGroupedWorkSpace() ? 1 : this._getGroupCount();
+        const groupCount = this._getGroupCount();
+        const verticalGroupCount = !this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
+        const horizontalGroupCount = this._isVerticalGroupedWorkSpace() ? 1 : groupCount;
         const allDayElements = this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined;
         const rowCountInGroup = this._getRowCount();
 
         const options = {
-            horizontalGroupsCount: groupCount,
-            groupCount: groupCountForRender,
+            horizontalGroupCount,
+            verticalGroupCount,
             rowCountInGroup,
             cellCount: this._getTotalCellCount(groupCount),
             cellCountInGroupRow: this._getCellCount(),
@@ -1085,6 +1086,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             startRowIndex: 0,
             groupOrientation: this.option('groupOrientation'),
             nonVirtualRowCount: this._getRowCount(),
+            groupCount,
         };
 
         if(this.isVirtualScrolling()) {
@@ -1096,7 +1098,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 rowCount: virtualScrollingState.rowCount,
             });
         } else {
-            options.rowCount = this._getTotalRowCount(this._getGroupCount(), this._isVerticalGroupedWorkSpace());
+            options.rowCount = this._getTotalRowCount(groupCount, this._isVerticalGroupedWorkSpace());
         }
 
         return options;
@@ -1526,7 +1528,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getHeaderPanelCellClass(i) {
         const cellClass = HEADER_PANEL_CELL_CLASS + ' ' + HORIZONTAL_SIZES_CLASS;
 
-        return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i + 1);
+        return this._groupedStrategy.addAdditionalGroupCellClasses(
+            cellClass, i + 1, undefined, undefined, this.isGroupedByDate(),
+        );
     }
 
     _calculateHeaderCellRepeatCount() {
@@ -1675,7 +1679,9 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getTimeCellClass(i) {
         const cellClass = TIME_PANEL_CELL_CLASS + ' ' + VERTICAL_SIZES_CLASS;
 
-        return this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i);
+        return this._isVerticalGroupedWorkSpace()
+            ? this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i)
+            : cellClass;
     }
 
     _getTimeCellDateAdjustedDST(i) {
@@ -2371,15 +2377,27 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const { viewDataProvider } = this;
         const isAllDayCell = this._hasAllDayClass($cell);
+
+        let cellData;
+
         if(isAllDayCell) {
             const allDayPanel = this._isVerticalGroupedWorkSpace()
                 ? viewDataProvider.getCellData(rowIndex, cellIndex)
                 : viewDataProvider.viewData.groupedData[0].allDayPanel;
 
-            return allDayPanel[cellIndex];
+            cellData = allDayPanel[cellIndex];
+        } else {
+            cellData = viewDataProvider.getCellData(rowIndex, cellIndex);
         }
 
-        return viewDataProvider.getCellData(rowIndex, cellIndex);
+        return cellData ? {
+            startDate: cellData.startDate,
+            endDate: cellData.endDate,
+            groups: cellData.groups,
+            groupIndex: cellData.groupIndex,
+            allDay: cellData.allDay,
+            text: cellData.text,
+        } : undefined;
     }
 
     _getHorizontalMax(groupIndex) {

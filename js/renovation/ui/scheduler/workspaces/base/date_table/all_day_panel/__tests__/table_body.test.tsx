@@ -12,6 +12,8 @@ describe('AllDayPanelTableBody', () => {
       groups: { id: 1 },
       groupIndex: 1,
       index: 3,
+      isFirstGroupCell: true,
+      isLastGroupCell: false,
       key: '0',
     }, {
       startDate: new Date(2020, 7, 29),
@@ -19,6 +21,8 @@ describe('AllDayPanelTableBody', () => {
       groups: { id: 2 },
       groupIndex: 2,
       index: 4,
+      isFirstGroupCell: false,
+      isLastGroupCell: true,
       key: '1',
     }];
 
@@ -63,8 +67,8 @@ describe('AllDayPanelTableBody', () => {
       const firstCell = cells.at(0);
       expect(firstCell.props())
         .toMatchObject({
-          isFirstCell: true,
-          isLastCell: false,
+          isFirstGroupCell: true,
+          isLastGroupCell: false,
           startDate: viewData[0].startDate,
           endDate: viewData[0].endDate,
           groups: viewData[0].groups,
@@ -77,8 +81,8 @@ describe('AllDayPanelTableBody', () => {
       const secondCell = cells.at(1);
       expect(secondCell.props())
         .toMatchObject({
-          isFirstCell: false,
-          isLastCell: true,
+          isFirstGroupCell: false,
+          isLastGroupCell: true,
           startDate: viewData[1].startDate,
           endDate: viewData[1].endDate,
           groups: viewData[1].groups,
@@ -87,6 +91,28 @@ describe('AllDayPanelTableBody', () => {
         });
       expect(secondCell.key())
         .toBe(viewData[1].key);
+    });
+
+    it('should not pass "isFirstGroupCell" and "isLastGroupCell" when grouped vertically', () => {
+      const tableBody = render({ props: { isVerticalGroupOrientation: true } });
+
+      expect(tableBody.find(Row))
+        .toHaveLength(1);
+
+      const cells = tableBody.find(Cell);
+
+      expect(cells)
+        .toHaveLength(2);
+
+      expect(cells.at(0).prop('isFirstGroupCell'))
+        .toBe(false);
+      expect(cells.at(0).prop('isLastGroupCell'))
+        .toBe(false);
+
+      expect(cells.at(1).prop('isFirstGroupCell'))
+        .toBe(false);
+      expect(cells.at(1).prop('isLastGroupCell'))
+        .toBe(false);
     });
   });
 });
