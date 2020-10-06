@@ -257,10 +257,14 @@ class VirtualScrolling {
 
         const cellWidth = workSpace.getCellWidth();
 
-        return {
-            top: (rowIndex + scrollInCell) * rowHeight,
-            left: cellWidth * columnIndex,
-        };
+        const top = (rowIndex + scrollInCell) * rowHeight;
+        let left = cellWidth * columnIndex;
+
+        if(workSpace.option('rtlEnabled')) {
+            left = workSpace.getScrollableOuterWidth() - left;
+        }
+
+        return { top, left };
     }
 
     _calcTopRowsInfo(scrollPosition) {

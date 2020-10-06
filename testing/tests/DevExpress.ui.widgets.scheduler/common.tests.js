@@ -1151,7 +1151,7 @@ QUnit.module('Scrolling to time', () => {
             });
 
             QUnit.test('Check scrolling to time for timeline view', function(assert) {
-                const scheduler = this.createInstance({
+                const scheduler = this.createScheduler({
                     views: ['timelineWeek'],
                     currentView: 'timelineWeek',
                     currentDate: new Date(2015, 1, 9),
@@ -5175,6 +5175,59 @@ QUnit.module('ScrollTo', () => {
                     assert.equal(
                         scrollBy.getCall(0).args[0].top,
                         top,
+                        'Correct top parameter',
+                    );
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].left,
+                        leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                        'Correct left parameter',
+                    );
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 5,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date('2020-09-25'),
+                leftCellCount: 1,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date('2020-09-07T09:00:00'),
+                leftCellCount: 269,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date('2020-09-07'),
+                leftCellCount: 24,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work correctly when RTL is enabled in ${view}`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        rtlEnabled: true,
+                        currentView: view,
+                    });
+
+                    const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                    const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                    scheduler.instance.scrollTo(date);
+
+                    const scrollableHeight = $scrollable.height();
+                    const scrollableWidth = $scrollable.width();
+                    const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                    const cellHeight = $schedulerCell.outerHeight();
+                    const cellWidth = $schedulerCell.outerWidth();
+
+                    assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].top,
+                        topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
                         'Correct top parameter',
                     );
                     assert.equal(
