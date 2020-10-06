@@ -40,6 +40,8 @@ DevExpress.utils.cancelAnimationFrame = animationFrame.cancelAnimationFrame;
 
 DevExpress.utils.initMobileViewport = require('../../mobile/init_mobile_viewport/init_mobile_viewport').initMobileViewport;
 
+DevExpress.utils.timeZone = require('../../time_zone_utils');
+
 // TODO: MODULARITY: Remove this
 DevExpress.utils.extendFromObject = require('../../core/utils/extend').extendFromObject;
 DevExpress.utils.triggerShownEvent = require('../../events/visibility_change').triggerShownEvent;
