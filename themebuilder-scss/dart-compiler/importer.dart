@@ -16,7 +16,7 @@ class ThemeBuilderImporter extends Importer {
   List<MetaItem> userItems;
 
   ThemeBuilderImporter(this.indexFileContent, this.userItems) {
-    var metaPath = path.absolute('../../../dart-compiler/metadata/dx-theme-builder-metadata.json');
+    var metaPath = path.absolute('../../dart-compiler/metadata/dx-theme-builder-metadata.json');
     var contents = File(metaPath).readAsStringSync();
     this.metadata = jsonDecode(contents);
   }
