@@ -300,18 +300,22 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _getInternalData: function(key) {
-            let internalData = this._internalState.filter(item => item.key === key)[0];
+            return this._internalState.filter(item => item.key === key)[0];
+        },
 
-            if(!internalData) {
-                internalData = { key };
-                this._internalState.push(internalData);
+        _addInternalData: function(params) {
+            const internalData = this._getInternalData(params.key);
+
+            if(internalData) {
+                return internalData;
             }
 
-            return internalData;
+            this._internalState.push(params);
+            return params;
         },
 
         _getOldData: function(key) {
-            return this._getInternalData(key).oldData;
+            return this._getInternalData(key)?.oldData;
         },
 
         getUpdatedData: function(data) {
@@ -1733,7 +1737,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 if(isError) {
                     if(editData) {
-                        this._getInternalData(editData.key, true).error = arg;
+                        this._addInternalData({ key: editData.key }).error = arg;
                     }
                     that._fireDataErrorOccurred(arg);
                     if(editMode !== EDIT_MODE_BATCH) {
@@ -1765,7 +1769,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 const data = itemData.data;
                 const key = itemData.key;
                 const type = itemData.type;
-                const internalData = that._getInternalData(key);
+                const internalData = that._addInternalData({ key });
                 const params = { key: key, data: data };
 
                 if(internalData.error) {
@@ -2309,8 +2313,10 @@ const EditingController = modules.ViewController.inherit((function() {
             if(editDataIndex < 0) {
                 editDataIndex = changes.length;
 
-                const internalData = this._getInternalData(options.key, true);
-                internalData.oldData = options.oldData;
+                this._addInternalData({
+                    key: options.key,
+                    oldData: options.oldData
+                });
 
                 delete options.oldData;
 
