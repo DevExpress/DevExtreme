@@ -572,6 +572,26 @@ describe('Widget', () => {
           expect(getEventHandlers(EVENT.hiding)).toBe(undefined);
         });
       });
+
+      describe('setRootElementRef', () => {
+        it('set rootElementRef to div ref', () => {
+          const widgetRef = {} as HTMLDivElement;
+          const component = new Widget({
+            rootElementRef: {},
+          } as WidgetProps);
+          component.widgetRef = widgetRef;
+          component.setRootElementRef();
+
+          expect(component.props.rootElementRef).toBe(component.widgetRef);
+        });
+
+        it('hasnt rootElementRef', () => {
+          const component = new Widget({ });
+          component.widgetRef = {} as HTMLDivElement;
+          component.setRootElementRef();
+          expect(component.props.rootElementRef).toBeUndefined();
+        });
+      });
     });
 
     describe('Methods', () => {
@@ -588,28 +608,10 @@ describe('Widget', () => {
           expect(widget.focused).toBe(true);
         });
       });
-
-      describe('getRootElement', () => {
-        it('should return widgetRef', () => {
-          const widget = new Widget({});
-          const mockRef = jest.fn();
-          widget.widgetRef = mockRef as any;
-
-          expect(widget.getRootElement()).toBe(mockRef);
-        });
-      });
     });
   });
 
   describe('Logic', () => {
-    it('getHtmlElement', () => {
-      const widgetRef = {} as HTMLDivElement;
-      const component = new Widget({});
-      component.widgetRef = widgetRef;
-
-      expect(component.getHtmlElement()).toEqual(widgetRef);
-    });
-
     describe('Getters', () => {
       describe('attributes', () => {
         it('should return ARIA labels', () => {

@@ -9,7 +9,6 @@ import {
   ResizableContainerProps,
   calculateAdaptivityProps,
 } from '../resizable_container';
-import { GetHtmlElement } from '../common/types.d';
 import resizeCallbacks from '../../../../core/utils/resize_callbacks';
 
 jest.mock('../utils/get_computed_style');
@@ -24,11 +23,9 @@ describe('resizable-container', () => {
   function getElementsRef({
     width, pageSizes, info, pages,
   }) {
-    const parentHtmlEl: GetHtmlElement = { getHtmlElement: () => getFakeHtml(width) };
-    const pageSizesHtmlEl: GetHtmlElement | undefined = pageSizes
-      ? { getHtmlElement: () => getFakeHtml(pageSizes) } : undefined;
-    const infoHtmlEl: GetHtmlElement | undefined = info
-      ? { getHtmlElement: () => getFakeHtml(info) } : undefined;
+    const parentHtmlEl = getFakeHtml(width) as HTMLDivElement;
+    const pageSizesHtmlEl = pageSizes ? getFakeHtml(pageSizes) as HTMLDivElement : undefined;
+    const infoHtmlEl = info ? getFakeHtml(info) as HTMLDivElement : undefined;
     const pagesHtmlEl = getFakeHtml(info + pages);
     return {
       parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,

@@ -1,5 +1,5 @@
 import {
-  Ref, Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, Method, React,
+  Component, ComponentBindings, JSXComponent, OneWay, Event, TwoWay, React,
 } from 'devextreme-generator/component_declaration/common';
 /* eslint-disable-next-line import/named */
 import LegacyNumberBox from '../../ui/number_box';
@@ -8,14 +8,13 @@ import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { EventCallback } from './common/event_callback.d';
 
 export const viewFunction = ({
-  rootElementRef,
-  props,
+  props: { rootElementRef, ...componentProps },
   restAttributes,
 }: NumberBox): JSX.Element => (
   <DomComponentWrapper
     rootElementRef={rootElementRef as any}
     componentType={LegacyNumberBox}
-    componentProps={props}
+    componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
@@ -53,12 +52,4 @@ export class NumberBoxProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class NumberBox extends JSXComponent(NumberBoxProps) {
-  @Ref()
-  rootElementRef!: HTMLDivElement;
-
-  @Method()
-  getHtmlElement(): HTMLDivElement {
-    return this.rootElementRef;
-  }
-}
+export class NumberBox extends JSXComponent(NumberBoxProps) {}

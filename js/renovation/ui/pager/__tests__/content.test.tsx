@@ -57,7 +57,6 @@ describe('PagerContent', () => {
         pageSize: 5,
         pageSizeChange: props.props.pageSizeChange,
         pageSizes: [5, 10],
-        // rtlEnabled: true,
       });
       const pagesContainer = childContainer.childAt(1);
       expect((pagesContainer.instance() as unknown as Element).className).toEqual('dx-pages');
@@ -85,42 +84,41 @@ describe('PagerContent', () => {
     });
 
     it('pagesContainerVisibility = false', () => {
-      const parentRef = createRef();
-      const tree = mount(<PagerContentComponent
-        {...{
-          pagesContainerVisible: true,
-          pagesContainerVisibility: 'hidden',
-          props: {
-            rootElementRef: parentRef,
-          },
-        } as Partial<PagerContent> as any}
-      /> as any).childAt(0);
+      const rootElementRef = {} as HTMLDivElement;
+      const props = {
+        pagesContainerVisible: true,
+        pagesContainerVisibility: 'hidden',
+        props: {
+          rootElementRef,
+        },
+      } as Partial<PagerContent>;
+      const tree = mount(<PagerContentComponent {...props as any} /> as any).childAt(0);
       expect((tree.find('.dx-pages').instance() as unknown as HTMLElement).style).toHaveProperty('visibility', 'hidden');
     });
 
     it('pagesContainerVisible = false', () => {
-      const parentRef = createRef();
+      const rootElementRef = {} as HTMLDivElement;
       const tree = mount(<PagerContentComponent
         {...{
           pagesContainerVisible: false,
           props: {
-            parentRef,
+            rootElementRef,
           },
-        } as any}
+        } as Partial<PagerContent> as any}
       /> as any).childAt(0);
       expect(tree.find('.dx-pages')).toHaveLength(0);
     });
 
     it('infoVisible = false', () => {
-      const parentRef = createRef();
+      const rootElementRef = {} as HTMLDivElement;
       const tree = mount(<PagerContentComponent
         {...{
           pagesContainerVisible: true,
           infoVisible: false,
           props: {
-            parentRef,
+            rootElementRef,
           },
-        } as any}
+        } as Partial<PagerContent> as any}
       /> as any).childAt(0);
       const pagesContainer = tree.childAt(0);
       expect(tree.find(InfoText)).toHaveLength(0);
@@ -128,29 +126,30 @@ describe('PagerContent', () => {
     });
 
     it('showPageSizes = false', () => {
-      const parentRef = createRef();
+      const rootElementRef = {} as HTMLDivElement;
+      const props = {
+        props: {
+          showPageSizes: false,
+          rootElementRef,
+        } as Partial<PagerContentProps>,
+      } as PagerContent;
       const tree = mount(<PagerContentComponent
-        {...{
-          props: {
-            showPageSizes: false,
-            rootElementRef: parentRef,
-          },
-        } as PagerContent as any}
+        {...props as any}
       />).childAt(0);
       expect(tree).toHaveLength(1);
       expect(tree.find(PageSizeSelector)).toHaveLength(0);
     });
 
-    it('refs', () => {
-      const widgetRef = createRef();
-      const pageSizesRef = createRef();
-      const pagesRef = createRef();
-      const infoTextRef = createRef();
+    it('forwarded refs', () => {
+      const widgetRootElementRef = {} as HTMLDivElement;
+      const pageSizesRef = {} as HTMLDivElement;
+      const pagesRef = createRef() as any; // {} as HTMLDivElement;
+      const infoTextRef = {} as HTMLDivElement;
       const props = {
         pagesContainerVisible: true,
         isLargeDisplayMode: true,
         infoVisible: true,
-        widgetRef,
+        widgetRootElementRef,
         props: {
           rtlEnabled: false,
           showPageSizes: true,
@@ -160,39 +159,38 @@ describe('PagerContent', () => {
         },
       } as PagerContent;
       const tree = mount(<PagerContentComponent {...props as any} />).childAt(0);
-      expect(tree.instance()).toBe(widgetRef.current);
+      expect(tree.props().rootElementRef).toBe(widgetRootElementRef);
       const childrenContainer = tree.find('div').first();
-      expect(childrenContainer.childAt(0).instance()).toBe(pageSizesRef.current);
+      expect(childrenContainer.childAt(0).props().rootElementRef).toBe(pageSizesRef);
       expect(childrenContainer.childAt(1).instance()).toBe(pagesRef.current);
-      expect(childrenContainer.childAt(1).childAt(0).instance()).toBe(infoTextRef.current);
+      expect(childrenContainer.childAt(1).childAt(0).props().rootElementRef).toBe(infoTextRef);
     });
   });
 
   describe('Logic', () => {
-    it('setRootElementRef, has parentRef', () => {
+    it('setRootElementRef, has rootElementRef', () => {
       const component = new PagerContent({ rootElementRef: {} } as PagerContentProps);
-      component.widgetRef = {} as HTMLElement;
+      component.widgetRootElementRef = {} as HTMLElement;
       component.setRootElementRef();
-      expect(component.props.rootElementRef).toBe(component.widgetRef);
+      expect(component.props.rootElementRef).toBe(component.widgetRootElementRef);
     });
 
-    it('setRootElementRef, hasnt parentRef', () => {
-      const component = new PagerContent({ rootElementRef: null } as PagerContentProps);
-      component.widgetRef = {} as HTMLElement;
+    it('setRootElementRef, hasnt rootElementRef', () => {
+      const component = new PagerContent({ } as PagerContentProps);
+      component.widgetRootElementRef = {} as HTMLElement;
       component.setRootElementRef();
-      expect(component.props.rootElementRef).toBe(null);
+      expect(component.props.rootElementRef).toBeUndefined();
     });
 
     it('keyboardAction provider', () => {
-      const parentElement = { el: 1 };
-      const widgetRef = { getHtmlElement: () => parentElement };
+      const rootElement = { el: 1 };
       const element = {} as HTMLElement;
       const action = jest.fn();
       const component = new PagerContent({
         pageCount: 1,
         pagesNavigatorVisible: 'auto',
       } as PagerContentProps);
-      component.widgetRef = widgetRef;
+      component.widgetRootElementRef = rootElement;
       component.keyboardAction.registerKeyboardAction(element, action);
       expect(registerKeyboardAction).toBeCalledWith(
         'pager',
@@ -206,7 +204,7 @@ describe('PagerContent', () => {
         action,
       );
       const fakeComponent = (registerKeyboardAction as jest.Mock).mock.calls[0][1];
-      expect(fakeComponent.element()).toBe(parentElement);
+      expect(fakeComponent.element()).toBe(rootElement);
       expect(fakeComponent.option()).toBe(false);
       // eslint-disable-next-line no-underscore-dangle
       expect(fakeComponent._createActionByOption()).toEqual(expect.any(Function));
