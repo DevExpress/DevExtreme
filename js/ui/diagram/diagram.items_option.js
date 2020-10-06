@@ -11,7 +11,7 @@ class ItemsOption extends Component {
 
     _dataSourceChangedHandler(newItems, e) {
         this._resetCache();
-        this._items = newItems.map(item => Object.assign({}, item));
+        this._items = newItems.map(item => extend({}, item));
         this._dataSourceItems = newItems.slice();
 
         if(e && e.changes) {
