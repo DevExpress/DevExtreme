@@ -205,7 +205,7 @@ QUnit.testStart(function() {
     QUnit.test('Global cache should be cleared on dimension changed', function(assert) {
         const spy = sinon.spy(this.instance.cache, 'clear');
 
-        assert.ok(this.instance.cache.size > 0, 'Global cache is not empty');
+        this.instance.cache.set('test', 'value');
 
         this.instance._dimensionChanged();
 
@@ -217,7 +217,7 @@ QUnit.testStart(function() {
     QUnit.test('Global cache should be cleared on _cleanView', function(assert) {
         const spy = sinon.spy(this.instance.cache, 'clear');
 
-        assert.ok(this.instance.cache.size > 0, 'Global cache is not empty');
+        this.instance.cache.set('test', 'value');
 
         this.instance._cleanView();
 

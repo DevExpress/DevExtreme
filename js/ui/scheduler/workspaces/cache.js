@@ -1,4 +1,6 @@
-class Cache {
+import { isDefined } from '../../../core/utils/type';
+
+export class Cache {
     constructor() {
         this._init();
     }
@@ -22,7 +24,7 @@ class Cache {
     }
 
     set(name, value) {
-        this._cache.set(name, value);
+        isDefined(value) && this._cache.set(name, value);
     }
 }
 
