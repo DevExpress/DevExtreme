@@ -206,6 +206,7 @@ const Export = {
 
     exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, privateOptions) {
         const styles = dataProvider.getStyles();
+        privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -246,8 +247,6 @@ const Export = {
                 }
             }
         }
-
-        privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
     }
 };
 
