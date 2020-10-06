@@ -13,8 +13,7 @@ const gulpIf = require('gulp-if');
 const babel = require('gulp-babel');
 const notify = require('gulp-notify');
 const watch = require('gulp-watch');
-const cjsConfig = require('../../../cjs.babelrc.json');
-const esmConfig = require('../../../esm.babelrc.json');
+const transpileConfig = require('../transpile-config');
 
 const {
     BASE_GENERATOR_OPTIONS,
@@ -74,28 +73,28 @@ const processErrors = (knownErrors, errors = []) => (e) => {
     }
 };
 
-function generatePreactComponents(dev = false) {
+function generatePreactComponents(dev = false, isEsm) {
     return function(done) {
         const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
 
         generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
 
         const errors = [];
+        const isNotDTS = (file) => !file.path.endsWith('.d.ts');
+        const babelConfig = isEsm ? transpileConfig.esm : transpileConfig.cjs;
+        const distPath = isEsm ? './esm' : './cjs';
 
         return gulp.src(SRC, { base: 'js' })
             .pipe(generateComponents(generator))
-            .pipe(plumber(()=>null))
+            .pipe(plumber(() => null))
             .pipe(tsProject({
                 error: processErrors(knownErrors, errors),
                 finish() {}
             }))
-            .pipe(babel(esmConfig))
-            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_PATH, './esm')))
-            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_RENOVATION_PATH, './esm')))
-            .pipe(babel(cjsConfig))
-            .pipe(gulp.dest(context.TRANSPILED_PATH))
-            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_PATH, './cjs')))
-            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_RENOVATION_PATH, './cjs')))
+            .pipe(gulpIf(isNotDTS, babel(babelConfig)))
+            .pipe(gulpIf(!isEsm, gulp.dest(context.TRANSPILED_PATH)))
+            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_PATH, distPath)))
+            .pipe(gulp.dest(path.join(context.TRANSPILED_PROD_RENOVATION_PATH, distPath)))
             .on('end', function() {
                 done(!dev && errors.length || undefined);
             });
@@ -132,12 +131,14 @@ gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
 gulp.task('generate-components', gulp.series(
     'generate-jquery-components',
     generatePreactComponents(),
+    generatePreactComponents(false, true),
     processRenovationMeta
 ));
 
 gulp.task('generate-components-dev', gulp.series(
     'generate-jquery-components',
     generatePreactComponents(true),
+    generatePreactComponents(true, true),
     processRenovationMeta
 ));
 
@@ -165,7 +166,7 @@ function addGenerationTask(
                 error: processErrors(knownErrors),
                 finish() { }
             })))
-            .pipe(gulpIf(babelGeneratedFiles, babel(cjsConfig)))
+            .pipe(gulpIf(babelGeneratedFiles, babel(transpileConfig.cjs)))
             .pipe(gulp.dest(frameworkDest));
     });
 
@@ -183,7 +184,7 @@ function addGenerationTask(
                 .pipe(
                     gulpIf(
                         file => file.extname === '.js',
-                        babel(cjsConfig)
+                        babel(transpileConfig.cjs)
                     )
                 )
                 .pipe(gulp.dest(frameworkDest));
@@ -213,7 +214,7 @@ function addGenerationTask(
                 .pipe(
                     gulpIf(
                         file => file.extname === '.js',
-                        babel(cjsConfig)
+                        babel(transpileConfig.cjs)
                     )
                 )
                 .pipe(gulp.dest(frameworkDest));

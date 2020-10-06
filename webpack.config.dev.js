@@ -2,7 +2,7 @@
 
 const baseConfig = require('./webpack.config.js');
 const path = require('path');
-const cjsConfig = require('./cjs.babelrc.json');
+const transpileConfig = require('./build/gulp/transpile-config');
 
 module.exports = Object.assign({
     watch: true,
@@ -13,7 +13,7 @@ module.exports = Object.assign({
                 loaders: [
                     {
                         loader: 'babel-loader',
-                        options: cjsConfig,
+                        options: transpileConfig.cjs,
                     },
                     {
                         loader: 'devextreme-generator/webpack-loader',
@@ -33,7 +33,7 @@ module.exports = Object.assign({
                 exclude: /node_modules/,
                 use: {
                     loader: 'babel-loader',
-                    options: cjsConfig,
+                    options: transpileConfig.cjs,
                 }
             },
             {

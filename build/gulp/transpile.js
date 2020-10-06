@@ -15,8 +15,7 @@ const context = require('./context.js');
 const rename = require('gulp-rename');
 const flatMap = require('gulp-flatmap');
 const gulpIf = require('gulp-if');
-const cjsConfig = require('../../cjs.babelrc.json');
-const esmConfig = require('../../esm.babelrc.json');
+const transpileConfig = require('./transpile-config');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const fs = require('fs');
 const normalize = require('normalize-path');
@@ -80,15 +79,19 @@ function transpile(dist, replaceWidgets) {
         () => gulp.src(SRC)
             .pipe(compressionPipes.removeDebug())
             .pipe(gulpIf(replaceWidgets, renovationPipes.replaceWidgets()))
-            .pipe(babel(esmConfig))
-            .pipe(gulp.dest(path.join(dist, './esm')))
-            .pipe(babel(cjsConfig))
+            .pipe(babel(transpileConfig.esm))
+            .pipe(gulp.dest(path.join(dist, './esm'))),
+
+        () => gulp.src(SRC)
+            .pipe(compressionPipes.removeDebug())
+            .pipe(gulpIf(replaceWidgets, renovationPipes.replaceWidgets()))
+            .pipe(babel(transpileConfig.cjs))
             .pipe(gulp.dest(path.join(dist, './cjs'))),
 
         () => gulp.src(BANDLES_SRC)
             .pipe(compressionPipes.removeDebug())
             .pipe(gulpIf(replaceWidgets, renovationPipes.replaceWidgets()))
-            .pipe(babel(cjsConfig))
+            .pipe(babel(transpileConfig.cjs))
             .pipe(gulp.dest(path.join(dist, './bundles'))),
 
         () => gulp.src(TRANSPILE_SRC)
@@ -126,7 +129,7 @@ gulp.task('transpile-prod-old', transpile(context.TRANSPILED_PROD_PATH));
 
 gulp.task('transpile', gulp.series('bundler-config', 'transpile-prod-old', 'transpile-prod-renovation', function() {
     return gulp.src(SRC)
-        .pipe(babel(cjsConfig))
+        .pipe(babel(transpileConfig.cjs))
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 }));
 
@@ -153,7 +156,7 @@ gulp.task('transpile-watch', gulp.series('version-replace', function() {
             errorHandler: notify.onError('Error: <%= error.message %>')
                 .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
         }))
-        .pipe(babel(cjsConfig))
+        .pipe(babel(transpileConfig.cjs))
         .pipe(gulp.dest(context.TRANSPILED_PATH));
 }));
 
