@@ -3957,8 +3957,10 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
             // assert
             assert.equal($editor.length, 1, 'cell has an editor');
-            assert.strictEqual($editor.css('margin'), '0px', 'no margins');
-            assert.strictEqual($editor.css('padding'), '0px', 'no paddings');
+            ['left', 'right', 'top', 'bottom'].forEach(direction => {
+                assert.strictEqual($editor.css(`margin-${direction}`), '0px', `no ${direction} margin`);
+                assert.strictEqual($editor.css(`padding-${direction}`), '0px', `no ${direction} padding`);
+            });
         });
     });
 });
