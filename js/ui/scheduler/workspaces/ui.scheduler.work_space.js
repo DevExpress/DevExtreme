@@ -2796,12 +2796,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const scheduler = this.option('observer');
         const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
-        console.time('start');
         if(this.needUpdateScrollPosition(date, groups, allDay)) {
-            console.log('I am updating');
             this.scrollTo(newDate, groups, allDay);
         }
-        console.timeEnd('start');
     }
 
     needUpdateScrollPosition(date, groups, allDay) {
@@ -2817,9 +2814,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 endDate: cellEndDate,
                 allDay: cellAllDay,
                 groupIndex: cellGroupIndex,
-                groups: cellGroups,
             } = this.getCellData(cell);
-            // console.log(cellGroupIndex);
+
             const cellStartTime = cellStartDate.getTime();
             const cellEndTime = cellEndDate.getTime();
 
@@ -2840,6 +2836,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const $scrollable = this.getScrollable().$element();
         const cellHeight = this.getCellHeight();
         const cellWidth = this.getCellWidth();
+        const totalColumnCount = this._getTotalCellCount(this._getGroupCount());
 
         let scrolledRowCount = this.getScrollableScrollTop() / cellHeight;
         const scrolledColumnCount = this.getScrollableScrollLeft() / cellWidth;
@@ -2848,25 +2845,24 @@ class SchedulerWorkSpace extends WidgetObserver {
             scrolledRowCount -= virtualScrollingState.topVirtualRowCount;
         }
 
-        const totalRowCount = scrolledRowCount + $scrollable.height() / cellHeight;
-        const totalColumnCount = scrolledColumnCount + $scrollable.width() / cellWidth;
+        const rowCount = scrolledRowCount + $scrollable.height() / cellHeight;
+        const columnCount = scrolledColumnCount + $scrollable.width() / cellWidth;
 
         const cells = this._getAllCells(allDay);
         const result = [];
-        // console.time('aaa');
-        cells.each(function() {
+
+        cells.each(function(index) {
             const cell = $(this);
-            const columnIndex = cell.index();
-            const rowIndex = cell.parent().index();
+            const columnIndex = index % totalColumnCount;
+            const rowIndex = index / totalColumnCount;
 
             if(scrolledColumnCount <= columnIndex
-                && columnIndex < totalColumnCount
+                && columnIndex < columnCount
                 && scrolledRowCount <= rowIndex
-                && rowIndex < totalRowCount) {
+                && rowIndex < rowCount) {
                 result.push(cell);
             }
         });
-        // console.timeEnd('aaa');
 
         return result;
     }
