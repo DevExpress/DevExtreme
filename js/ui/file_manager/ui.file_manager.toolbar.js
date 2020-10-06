@@ -389,13 +389,13 @@ class FileManagerToolbar extends Widget {
                 let optionsSource = null;
 
                 if(useCompactMode) {
-                    item.saved = this._getCompactModeOptions(item, this._getItemVisibleAvailable(item).visible);
+                    item.saved = this._getCompactModeOptions(item, item._available);
                     optionsSource = item.compactMode;
                 } else {
                     optionsSource = item.saved;
                 }
 
-                const options = this._getCompactModeOptions(optionsSource, this._getItemVisibleAvailable(item).visible);
+                const options = this._getCompactModeOptions(optionsSource, item._available);
                 extend(true, item, options);
                 hasModifications = true;
             }
@@ -409,9 +409,9 @@ class FileManagerToolbar extends Widget {
         this._updateSeparatorsVisibility(items, toolbar);
     }
 
-    _getCompactModeOptions({ showText, locateInMenu, options }, visible) {
+    _getCompactModeOptions({ showText, locateInMenu, options }, available) {
         return {
-            visible,
+            visible: available,
             showText: ensureDefined(showText, 'always'),
             locateInMenu: ensureDefined(locateInMenu, 'never'),
             options: {
