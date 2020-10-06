@@ -2,6 +2,7 @@ import $ from 'jquery';
 
 import 'ui/html_editor';
 import 'ui/html_editor/converters/markdown';
+import { deferUpdate } from 'core/utils/common';
 
 import keyboardMock from '../../../helpers/keyboardMock.js';
 
@@ -134,6 +135,19 @@ testModule('Events', createModuleConfig({ value: '<p>Test 1</p><p>Test 2</p><p>T
 
         assert.strictEqual(focusInStub.callCount, 1, 'Editor is focused one time');
         assert.strictEqual(focusOutStub.callCount, 1, 'Editor is blurred one time');
+    });
+
+    test('focus events listeners attached only after the content is rendered (T934089)', function(assert) {
+        const focusInStub = sinon.stub();
+        deferUpdate(() => {
+            this.createEditor({
+                onFocusIn: focusInStub,
+            });
+        });
+
+        this.instance.focus();
+
+        assert.strictEqual(focusInStub.callCount, 1, 'Focus event handler is attached');
     });
 
     ['html', 'markdown'].forEach((valueType) => {
