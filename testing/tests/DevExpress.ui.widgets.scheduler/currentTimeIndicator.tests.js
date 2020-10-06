@@ -20,7 +20,6 @@ import 'ui/scheduler/workspaces/ui.scheduler.timeline_month';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('</div><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space">');
-    // $('body').append('</div><div id="scheduler-work-space-rtl"></div><div id="scheduler-work-space">');
 });
 
 const stubInvokeMethod = function(instance, options) {
