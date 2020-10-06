@@ -9764,7 +9764,7 @@ QUnit.module('Editing with real dataController', {
             this.clock.tick(500);
 
             // assert
-            assert.equal(this.array[0].name, 'Alex', 'data is not saved');
+            assert.equal(this.array[0].name, 'new value', 'data is saved');
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
             assert.equal(onSaved.callCount, 1, 'onSaved was called');
             assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
@@ -9998,6 +9998,64 @@ QUnit.module('Editing with real dataController', {
             assert.equal(onSaved.callCount, 1, 'onSaved was called');
             assert.deepEqual(onSaved.firstCall.args[0].changes, modifiedChanges, 'onSaved args');
             assert.equal(this.array[0].name, 'another new value', 'value from onSaving');
+        });
+
+        QUnit.test('Assign changes parameter in onSaving', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.changes = [{
+                    type: 'update',
+                    data: { name: 'test' },
+                    key: 1
+                }];
+            });
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'row'
+            });
+            this.options.onSaving = onSaving;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.saveEditData();
+
+            // assert
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal($(this.getCellElement(0, 0)).text(), 'test', 'cell was modified');
+        });
+
+        QUnit.test('Push change to the changes parameter in onSaving', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.changes.push({
+                    type: 'update',
+                    data: { name: 'test' },
+                    key: 1
+                });
+            });
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'row'
+            });
+            this.options.onSaving = onSaving;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.saveEditData();
+
+            // assert
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal($(this.getCellElement(0, 0)).text(), 'test', 'cell was modified');
         });
     });
 });

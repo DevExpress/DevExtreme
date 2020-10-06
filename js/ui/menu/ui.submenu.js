@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { noop } from '../../core/utils/common';
 import { getPublicElement } from '../../core/element';
-import { setup } from '../../animation/position';
+import animationPosition from '../../animation/position';
 import { extend } from '../../core/utils/extend';
 import ContextMenu from '../context_menu';
 
@@ -155,7 +155,7 @@ class Submenu extends ContextMenu {
                 }
             }
         }
-        setup(this.$contentDelimiter, position);
+        animationPosition.setup(this.$contentDelimiter, position);
     }
 
     _getContextMenuPosition() {

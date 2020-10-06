@@ -10,7 +10,7 @@ import browser from '../../core/utils/browser';
 import { extend } from '../../core/utils/extend';
 import { getBoundingRect } from '../../core/utils/position';
 import EditorFactoryMixin from '../shared/ui.editor_factory_mixin';
-import { isElementInCurrentGrid } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 
 const EDITOR_INLINE_BLOCK = 'dx-editor-inline-block';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -132,7 +132,7 @@ const EditorFactory = modules.ViewController.inherit({
     renderFocusOverlay: function($element, hideBorder) {
         const that = this;
 
-        if(!isElementInCurrentGrid(this, $element)) {
+        if(!gridCoreUtils.isElementInCurrentGrid(this, $element)) {
             return;
         }
 

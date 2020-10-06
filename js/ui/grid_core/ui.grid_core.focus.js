@@ -1,11 +1,10 @@
 import $ from '../../core/renderer';
 import core from './ui.grid_core.modules';
 import { each } from '../../core/utils/iterator';
-import { combineFilters } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import { equalByValue } from '../../core/utils/common';
 import { isDefined, isBoolean } from '../../core/utils/type';
 import { Deferred, when } from '../../core/utils/deferred';
-import { getIndexByKey } from './ui.grid_core.utils';
 
 const ROW_FOCUSED_CLASS = 'dx-row-focused';
 const FOCUSED_ROW_SELECTOR = '.dx-row' + '.' + ROW_FOCUSED_CLASS;
@@ -232,7 +231,7 @@ const FocusController = core.ViewController.inherit((function() {
             const that = this;
             const dataController = this.getController('data');
             const rowsScrollController = dataController._rowsScrollController;
-            const rowIndex = getIndexByKey(key, dataController.items(true));
+            const rowIndex = gridCoreUtils.getIndexByKey(key, dataController.items(true));
             const scrollable = that.getView('rowsView').getScrollable();
 
             if(rowsScrollController && scrollable && rowIndex >= 0) {
@@ -620,7 +619,7 @@ export default {
                 },
                 _concatWithCombinedFilter: function(filter, groupFilter) {
                     const combinedFilter = this.getCombinedFilter();
-                    return combineFilters([filter, combinedFilter, groupFilter]);
+                    return gridCoreUtils.combineFilters([filter, combinedFilter, groupFilter]);
                 },
                 _generateBooleanFilter: function(selector, value, sortInfo) {
                     let result;

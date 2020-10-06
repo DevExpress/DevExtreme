@@ -56,31 +56,47 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         return this._workSpace._getRowCount();
     }
 
-    addAdditionalGroupCellClasses(cellClass, index) {
-        cellClass = this._addLastGroupCellClass(cellClass, index);
+    addAdditionalGroupCellClasses(cellClass, index, i, j, applyUnconditionally = false) {
+        cellClass = this._addLastGroupCellClass(cellClass, index, applyUnconditionally);
 
-        return this._addFirstGroupCellClass(cellClass, index);
+        return this._addFirstGroupCellClass(cellClass, index, applyUnconditionally);
     }
 
-    _addLastGroupCellClass(cellClass, index) {
-        const groupByDay = this._workSpace.isGroupedByDate();
+    _addLastGroupCellClass(cellClass, index, applyUnconditionally) {
+        if(applyUnconditionally) {
+            return `${cellClass} ${this.getLastGroupCellClass()}`;
+        }
 
-        if(groupByDay) {
+        const groupByDate = this._workSpace.isGroupedByDate();
+
+        if(groupByDate) {
             if(index % this._workSpace._getGroupCount() === 0) {
-                return cellClass + ' ' + this.getLastGroupCellClass();
+                return `${cellClass} ${this.getLastGroupCellClass()}`;
             }
         } else {
             if(index % this._workSpace._getCellCount() === 0) {
-                return cellClass + ' ' + this.getLastGroupCellClass();
+                return `${cellClass} ${this.getLastGroupCellClass()}`;
             }
         }
 
         return cellClass;
     }
 
-    _addFirstGroupCellClass(cellClass, index) {
-        if((index - 1) % this._workSpace._getCellCount() === 0) {
-            return cellClass + ' ' + this.getFirstGroupCellClass();
+    _addFirstGroupCellClass(cellClass, index, applyUnconditionally) {
+        if(applyUnconditionally) {
+            return `${cellClass} ${this.getFirstGroupCellClass()}`;
+        }
+
+        const groupByDate = this._workSpace.isGroupedByDate();
+
+        if(groupByDate) {
+            if((index - 1) % this._workSpace._getGroupCount() === 0) {
+                return `${cellClass} ${this.getFirstGroupCellClass()}`;
+            }
+        } else {
+            if((index - 1) % this._workSpace._getCellCount() === 0) {
+                return `${cellClass} ${this.getFirstGroupCellClass()}`;
+            }
         }
 
         return cellClass;

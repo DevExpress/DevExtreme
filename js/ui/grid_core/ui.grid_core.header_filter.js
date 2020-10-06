@@ -12,7 +12,7 @@ import { getDefaultAlignment } from '../../core/utils/position';
 import { extend } from '../../core/utils/extend';
 import { normalizeDataSourceOptions } from '../../data/data_source/utils';
 import dateLocalization from '../../localization/date';
-import { isWrapped } from '../../core/utils/variable_wrapper';
+import variableWrapper from '../../core/utils/variable_wrapper';
 import { Deferred } from '../../core/utils/deferred';
 import { restoreFocus } from '../shared/accessibility';
 
@@ -176,7 +176,7 @@ const HeaderFilterController = modules.ViewController.inherit((function() {
                     lookupDataSourceOptions = column.lookup.items;
                 } else {
                     lookupDataSourceOptions = column.lookup.dataSource;
-                    if(isFunction(lookupDataSourceOptions) && !isWrapped(lookupDataSourceOptions)) {
+                    if(isFunction(lookupDataSourceOptions) && !variableWrapper.isWrapped(lookupDataSourceOptions)) {
                         lookupDataSourceOptions = lookupDataSourceOptions({});
                     }
                 }

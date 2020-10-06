@@ -1,12 +1,12 @@
 import $ from '../../core/renderer';
-import viewPortUtils from '../../core/utils/view_port';
+import { value } from '../../core/utils/view_port';
 
 const SWATCH_CONTAINER_CLASS_PREFIX = 'dx-swatch-';
 
 const getSwatchContainer = element => {
     const $element = $(element);
     const swatchContainer = $element.closest(`[class^="${SWATCH_CONTAINER_CLASS_PREFIX}"], [class*=" ${SWATCH_CONTAINER_CLASS_PREFIX}"]`);
-    const viewport = viewPortUtils.value();
+    const viewport = value();
     if(!swatchContainer.length) return viewport;
 
     const swatchClassRegex = new RegExp(`(\\s|^)(${SWATCH_CONTAINER_CLASS_PREFIX}.*?)(\\s|$)`);

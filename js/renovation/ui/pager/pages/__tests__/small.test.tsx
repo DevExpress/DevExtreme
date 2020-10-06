@@ -6,6 +6,7 @@ import { NumberBox } from '../../../number_box';
 import messageLocalization from '../../../../../localization/message';
 
 jest.mock('../../utils/get_computed_style');
+jest.mock('../../../number_box', () => ({ NumberBox: React.forwardRef(() => null) }));
 jest.mock('../../../../../localization/message', () => ({
   getFormatter: jest.fn(),
 }));

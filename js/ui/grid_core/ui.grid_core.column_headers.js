@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import columnsView from './ui.grid_core.columns_view';
+import { ColumnsView } from './ui.grid_core.columns_view';
 import messageLocalization from '../../localization/message';
 import { isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
@@ -33,7 +33,7 @@ export default {
         };
     },
     views: {
-        columnHeadersView: columnsView.ColumnsView.inherit((function() {
+        columnHeadersView: ColumnsView.inherit((function() {
             const createCellContent = function(that, $cell, options) {
                 const $cellContent = $('<div>').addClass(that.addWidgetPrefix(CELL_CONTENT_CLASS));
 

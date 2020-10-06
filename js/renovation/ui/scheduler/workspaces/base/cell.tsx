@@ -28,9 +28,9 @@ export const viewFunction = (viewModel: CellBase): JSX.Element => {
 export class CellBaseProps {
   @OneWay() className? = '';
 
-  @OneWay() isFirstCell? = false;
+  @OneWay() isFirstGroupCell? = false;
 
-  @OneWay() isLastCell? = false;
+  @OneWay() isLastGroupCell? = false;
 
   @OneWay() startDate?: Date = new Date();
 
@@ -59,6 +59,8 @@ export class CellBaseProps {
 })
 export class CellBase extends JSXComponent(CellBaseProps) {
   get classes(): string {
-    return getGroupCellClasses(this.props.isFirstCell, this.props.isLastCell, this.props.className);
+    const { isFirstGroupCell, isLastGroupCell, className } = this.props;
+
+    return getGroupCellClasses(isFirstGroupCell, isLastGroupCell, className);
   }
 }

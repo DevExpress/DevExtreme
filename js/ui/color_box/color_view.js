@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
-import translator from '../../animation/translator';
+import { locate, move } from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 import Color from '../../color';
 import messageLocalization from '../../localization/message';
@@ -119,7 +119,7 @@ const ColorView = Editor.inherit({
         const updateHueScaleValue = function(step) {
             that._currentColor.hsv.h += step;
             that._placeHueScaleHandle();
-            const handleLocation = translator.locate(that._$hueScaleHandle);
+            const handleLocation = locate(that._$hueScaleHandle);
             that._updateColorHue(handleLocation.top + that._hueScaleHandleHeight / 2);
         };
         const getAlphaScaleStep = function(e) {
@@ -135,7 +135,7 @@ const ColorView = Editor.inherit({
         const updateAlphaScaleValue = function(step) {
             that._currentColor.a += step;
             that._placeAlphaChannelHandle();
-            const handleLocation = translator.locate(that._$alphaChannelHandle);
+            const handleLocation = locate(that._$alphaChannelHandle);
             that._calculateColorTransparencyByScaleWidth(handleLocation.left + that._alphaChannelHandleWidth / 2);
         };
 
@@ -375,7 +375,7 @@ const ColorView = Editor.inherit({
                 return -this._paletteHandleHeight / 2;
             }).bind(this),
             onDragMove: (function() {
-                const paletteHandlePosition = translator.locate(this._$paletteHandle);
+                const paletteHandlePosition = locate(this._$paletteHandle);
                 this._updateByDrag = true;
                 this._updateColorFromHsv(
                     this._currentColor.hsv.h,
@@ -392,7 +392,7 @@ const ColorView = Editor.inherit({
     },
 
     _placePaletteHandle: function() {
-        translator.move(this._$paletteHandle, {
+        move(this._$paletteHandle, {
             left: Math.round(this._paletteWidth * this._currentColor.hsv.s / 100 - this._paletteHandleWidth / 2),
             top: Math.round(this._paletteHeight - (this._paletteHeight * this._currentColor.hsv.v / 100) - this._paletteHandleHeight / 2)
         });
@@ -444,7 +444,7 @@ const ColorView = Editor.inherit({
             dragDirection: 'vertical',
             onDragMove: (function() {
                 this._updateByDrag = true;
-                this._updateColorHue(translator.locate(this._$hueScaleHandle).top + this._hueScaleHandleHeight / 2);
+                this._updateColorHue(locate(this._$hueScaleHandle).top + this._hueScaleHandleHeight / 2);
             }).bind(this)
         });
 
@@ -465,7 +465,7 @@ const ColorView = Editor.inherit({
             top = 0;
         }
 
-        translator.move(this._$hueScaleHandle, { top: Math.round(top) });
+        move(this._$hueScaleHandle, { top: Math.round(top) });
     },
 
     _updateColorHue: function(handlePosition) {
@@ -706,7 +706,7 @@ const ColorView = Editor.inherit({
             onDragMove: (function() {
                 this._updateByDrag = true;
                 const $alphaChannelHandle = this._$alphaChannelHandle;
-                const alphaChannelHandlePosition = translator.locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
+                const alphaChannelHandlePosition = locate($alphaChannelHandle).left + this._alphaChannelHandleWidth / 2;
 
                 this._calculateColorTransparencyByScaleWidth(alphaChannelHandlePosition);
             }).bind(this)
@@ -746,7 +746,7 @@ const ColorView = Editor.inherit({
             left = this._alphaChannelScaleWorkWidth;
         }
 
-        translator.move(this._$alphaChannelHandle, {
+        move(this._$alphaChannelHandle, {
             'left': this.option('rtlEnabled') ? this._alphaChannelScaleWorkWidth - left : left
         });
     },

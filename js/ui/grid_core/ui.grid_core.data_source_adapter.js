@@ -5,7 +5,7 @@ import { isDefined, isPlainObject, isFunction } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import ArrayStore from '../../data/array_store';
-import arrayUtils from '../../data/array_utils';
+import { applyBatch } from '../../data/array_utils';
 import { when, Deferred } from '../../core/utils/deferred';
 
 export default gridCore.Controller.inherit((function() {
@@ -174,7 +174,7 @@ export default gridCore.Controller.inherit((function() {
             this.resetPagesCache(true);
 
             if(this._cachedStoreData) {
-                arrayUtils.applyBatch({
+                applyBatch({
                     keyInfo: store,
                     data: this._cachedStoreData,
                     changes
@@ -222,14 +222,14 @@ export default gridCore.Controller.inherit((function() {
             const oldItemCount = getItemCount();
 
 
-            arrayUtils.applyBatch({
+            applyBatch({
                 keyInfo,
                 data: this._items,
                 changes,
                 groupCount: groupCount,
                 useInsertIndex: true
             });
-            arrayUtils.applyBatch({
+            applyBatch({
                 keyInfo,
                 data: dataSource.items(),
                 changes,

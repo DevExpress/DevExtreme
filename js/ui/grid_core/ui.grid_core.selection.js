@@ -1,11 +1,11 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import gridCore from '../data_grid/ui.data_grid.core';
-import { setEmptyText } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import { isDefined } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import support from '../../core/utils/support';
+import { touch } from '../../core/utils/support';
 import { name as clickEventName } from '../../events/click';
 import messageLocalization from '../../localization/message';
 import { addNamespace } from '../../events/utils/index';
@@ -680,7 +680,7 @@ export default {
                         this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectRow'), $container);
                         this._renderSelectCheckBox($container, options);
                     } else {
-                        setEmptyText($container);
+                        gridCoreUtils.setEmptyText($container);
                     }
                 },
 
@@ -763,7 +763,7 @@ export default {
 
 
                     if(selectionMode !== 'none') {
-                        if(that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !support.touch) {
+                        if(that.option(SHOW_CHECKBOXES_MODE) === 'onLongTap' || !touch) {
                             // TODO Not working timeout by hold when it is larger than other timeouts by hold
                             eventsEngine.on($table, addNamespace(holdEvent.name, 'dxDataGridRowsView'), '.' + DATA_ROW_CLASS, that.createAction(function(e) {
                                 processLongTap(that.component, e.event);

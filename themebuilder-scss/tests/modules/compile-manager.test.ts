@@ -79,8 +79,8 @@ describe('Compile manager - integration test on test sass', () => {
     }).then((result) => {
       expect(result.css).toBe('');
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
-        '$base-accent': 'rgba(51,122,183,1)',
+        '$base-font-family': '"Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif',
+        '$base-accent': '#337ab7',
       });
     });
   });
@@ -103,10 +103,10 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '"Helvetica Neue","Segoe UI",Helvetica,Verdana,sans-serif',
-        '$base-accent': 'rgba(255,0,0,1)',
-        '$accordion-title-color': 'rgba(255,0,0,1)',
-        '$accordion-item-title-opened-bg': 'rgba(0,0,0,0)',
+        '$base-font-family': '"Helvetica Neue", "Segoe UI", Helvetica, Verdana, sans-serif',
+        '$base-accent': 'red',
+        '$accordion-title-color': 'red',
+        '$accordion-item-title-opened-bg': 'transparent',
       });
     });
   });
@@ -129,10 +129,10 @@ describe('Compile manager - integration test on test sass', () => {
 }`);
 
       expect(result.compiledMetadata).toEqual({
-        '$base-font-family': '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji"',
-        '$base-accent': 'rgba(255,0,0,1)',
-        '$accordion-title-color': 'rgba(255,0,0,1)',
-        '$accordion-item-title-opened-bg': 'rgba(0,0,0,0)',
+        '$base-font-family': '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+        '$base-accent': 'red',
+        '$accordion-title-color': 'red',
+        '$accordion-item-title-opened-bg': 'transparent',
       });
     });
   });

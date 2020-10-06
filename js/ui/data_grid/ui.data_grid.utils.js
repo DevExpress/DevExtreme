@@ -1,8 +1,8 @@
 import gridCoreUtils from '../grid_core/ui.grid_core.utils';
-import { normalizeSortingInfo as normalizeSortingInfo } from '../../data/utils';
+import dataUtils from '../../data/utils';
 
 export function createGroupFilter(path, storeLoadOptions) {
-    const groups = normalizeSortingInfo(storeLoadOptions.group);
+    const groups = dataUtils.normalizeSortingInfo(storeLoadOptions.group);
 
     const filter = [];
 

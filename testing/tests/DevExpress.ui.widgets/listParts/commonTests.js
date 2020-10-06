@@ -2289,7 +2289,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         assert.equal(count, 1, 'data source loaded, shouldn\'t load another page');
     });
 
-    QUnit.test('appending items on scroll bottom', function(assert) {
+    QUnit.test('appending items on scroll bottom №2', function(assert) {
         const element = this.element.dxList({
             pageLoadMode: 'scrollBottom',
             scrollingEnabled: true,
@@ -2841,7 +2841,7 @@ QUnit.module('scrollView integration', {
         assert.equal(scrollToElementSpy.firstCall.args[0], null, 'list wasn\'t scrolled');
     });
 
-    QUnit.test('list should be scrolled to item from bottom by scrollToItem', function(assert) {
+    QUnit.test('list should be scrolled to item from bottom by scrollToItem №2', function(assert) {
         const $list = $('#list').dxList({
             items: ['0']
         });

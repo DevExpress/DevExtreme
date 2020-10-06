@@ -1,6 +1,4 @@
-import { getTimeZones } from './ui/scheduler/utils.timeZone';
+import timeZoneUtils from './ui/scheduler/utils.timeZone';
 
 
-export {
-    getTimeZones
-};
+export const getTimeZones = timeZoneUtils.getTimeZones;

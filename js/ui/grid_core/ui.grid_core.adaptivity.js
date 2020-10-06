@@ -8,7 +8,7 @@ import Guid from '../../core/guid';
 import modules from './ui.grid_core.modules';
 import Form from '../form';
 import gridCoreUtils from './ui.grid_core.utils';
-import themes from '../themes';
+import { isMaterial } from '../themes';
 import { getWindow } from '../../core/utils/window';
 import { equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
@@ -566,7 +566,7 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
             items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
             formID: 'dx-' + new Guid()
         };
-        const defaultFormOptions = themes.isMaterial() ? { colCount: 2 } : {};
+        const defaultFormOptions = isMaterial() ? { colCount: 2 } : {};
 
         this.executeAction('onAdaptiveDetailRowPreparing', { formOptions: userFormOptions });
 

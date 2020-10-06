@@ -44,8 +44,8 @@ describe('TimePanelCell', () => {
       const timeCellTemplate = () => null;
       const cell = render({
         props: {
-          isFirstCell: true,
-          isLastCell: true,
+          isFirstGroupCell: true,
+          isLastGroupCell: true,
           timeCellTemplate,
         },
         timeCellTemplateProps,
@@ -53,8 +53,8 @@ describe('TimePanelCell', () => {
 
       expect(cell.props())
         .toMatchObject({
-          isFirstCell: true,
-          isLastCell: true,
+          isFirstGroupCell: true,
+          isLastGroupCell: true,
           contentTemplate: timeCellTemplate,
           contentTemplateProps: timeCellTemplateProps,
         });

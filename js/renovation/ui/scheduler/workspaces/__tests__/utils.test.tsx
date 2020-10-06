@@ -114,11 +114,11 @@ describe('Workspaces utils', () => {
   });
 
   describe('getGroupCellClasses', () => {
-    [true, false].forEach((isFirstCell) => {
-      [true, false].forEach((isLastCell) => {
+    [true, false].forEach((isFirstGroupCell) => {
+      [true, false].forEach((isLastGroupCell) => {
         ['some-class', undefined].forEach((className) => {
-          it(`should return correct classes if isFirstCell: ${isFirstCell}, isLastCell: ${isLastCell}, className: ${className}`, () => {
-            const result = getGroupCellClasses(isFirstCell, isLastCell, className).trim();
+          it(`should return correct classes if isFirstGroupCell: ${isFirstGroupCell}, isLastGroupCell: ${isLastGroupCell}, className: ${className}`, () => {
+            const result = getGroupCellClasses(isFirstGroupCell, isLastGroupCell, className).trim();
             const assert = (value: string, not: boolean): void => {
               if (not) {
                 expect(result).not.toContain(value);
@@ -127,8 +127,8 @@ describe('Workspaces utils', () => {
               }
             };
 
-            assert('dx-scheduler-first-group-cell', !isFirstCell);
-            assert('dx-scheduler-last-group-cell', !isLastCell);
+            assert('dx-scheduler-first-group-cell', !isFirstGroupCell);
+            assert('dx-scheduler-last-group-cell', !isLastGroupCell);
             assert('some-class', !className);
           });
         });

@@ -8,7 +8,7 @@ import DOMComponent from '../../core/dom_component';
 import { each } from '../../core/utils/iterator';
 import { addNamespace } from '../utils/index';
 import { extend } from '../../core/utils/extend';
-import publicComponentUtils from '../../core/utils/public_component';
+import { name } from '../../core/utils/public_component';
 
 const DX_SWIPEABLE = 'dxSwipeable';
 const SWIPEABLE_CLASS = 'dx-swipeable';
@@ -105,6 +105,6 @@ const Swipeable = DOMComponent.inherit({
     },
 });
 
-publicComponentUtils.name(Swipeable, DX_SWIPEABLE);
+name(Swipeable, DX_SWIPEABLE);
 
 export default Swipeable;

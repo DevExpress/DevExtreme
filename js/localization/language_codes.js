@@ -1,4 +1,4 @@
-import { locale } from './core';
+import localizationCoreUtils from './core';
 const LANGUAGE_CODES = {
     'ar': 1,
     'bg': 2,
@@ -354,5 +354,5 @@ const LANGUAGE_CODES = {
 };
 
 export function getLanguageId() {
-    return LANGUAGE_CODES[locale()];
+    return LANGUAGE_CODES[localizationCoreUtils.locale()];
 }

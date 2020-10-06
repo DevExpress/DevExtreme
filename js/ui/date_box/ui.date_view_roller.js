@@ -9,7 +9,7 @@ import { name as clickEventName } from '../../events/click';
 import Scrollable from '../scroll_view/ui.scrollable';
 import devices from '../../core/devices';
 import fx from '../../animation/fx';
-import translator from '../../animation/translator';
+import { resetPosition } from '../../animation/translator';
 
 const DATEVIEW_ROLLER_CLASS = 'dx-dateviewroller';
 const DATEVIEW_ROLLER_ACTIVE_CLASS = 'dx-state-active';
@@ -208,7 +208,7 @@ const DateViewRoller = Scrollable.inherit({
                     type: 'slide',
                     to: { top: Math.floor(delta.y) },
                     complete: function() {
-                        translator.resetPosition(that._$content);
+                        resetPosition(that._$content);
                         that._strategy.handleMove({ delta: delta });
                     }
                 });

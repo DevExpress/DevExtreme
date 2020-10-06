@@ -1,7 +1,7 @@
 import { getKeyHash, equalByValue } from '../../core/utils/common';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
-import stateStoringCore from './ui.grid_core.state_storing_core';
+import { StateStoringController } from './ui.grid_core.state_storing_core';
 import { Deferred } from '../../core/utils/deferred';
 
 const getDataState = that => {
@@ -126,7 +126,7 @@ export default {
         };
     },
     controllers: {
-        stateStoring: stateStoringCore.StateStoringController
+        stateStoring: StateStoringController
     },
     extenders: {
         views: {

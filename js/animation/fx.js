@@ -18,7 +18,7 @@ import {
     convertTransitionTimingFuncToEasing,
     getEasing
 } from './easing';
-import animationFrame from './frame';
+import { requestAnimationFrame, cancelAnimationFrame } from './frame';
 import { transitionEndEventName, transition } from '../core/utils/support';
 import positionUtils from './position';
 import removeEvent from '../core/remove_event';
@@ -217,7 +217,7 @@ const FrameAnimationStrategy = {
             finish: function() {
                 this.currentValue = this.to;
                 this.draw();
-                animationFrame.cancelAnimationFrame(config.frameAnimation.animationFrameId);
+                cancelAnimationFrame(config.frameAnimation.animationFrameId);
                 deferred.resolve();
             },
             draw: function() {
@@ -259,7 +259,7 @@ const FrameAnimationStrategy = {
         eventsEngine.off($element, removeEventName);
         eventsEngine.on($element, removeEventName, function() {
             if(config.frameAnimation) {
-                animationFrame.cancelAnimationFrame(config.frameAnimation.animationFrameId);
+                cancelAnimationFrame(config.frameAnimation.animationFrameId);
             }
         });
 
@@ -297,7 +297,7 @@ const FrameAnimationStrategy = {
             return;
         }
 
-        animationFrame.cancelAnimationFrame(frameAnimation.animationFrameId);
+        cancelAnimationFrame(frameAnimation.animationFrameId);
         clearTimeout(frameAnimation.delayTimeout);
 
         if(jumpToEnd) {
@@ -325,7 +325,7 @@ const FrameAnimationStrategy = {
         frameAnimation.draw();
 
         const that = this;
-        frameAnimation.animationFrameId = animationFrame.requestAnimationFrame(function() {
+        frameAnimation.animationFrameId = requestAnimationFrame(function() {
             that._animationStep($element, config);
         });
     },

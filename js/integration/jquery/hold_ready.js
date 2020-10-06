@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-restricted-imports
 import jQuery from 'jquery';
 import { themeReadyCallback } from '../../ui/themes_callback';
-import { add as ready } from '../../core/utils/ready_callbacks';
+import readyCallbacks from '../../core/utils/ready_callbacks';
 
 if(jQuery && !themeReadyCallback.fired()) {
     const holdReady = jQuery.holdReady || jQuery.fn.holdReady;
@@ -9,7 +9,7 @@ if(jQuery && !themeReadyCallback.fired()) {
     holdReady(true);
 
     themeReadyCallback.add(function() {
-        ready(function() {
+        readyCallbacks.add(function() {
             holdReady(false);
         });
     });

@@ -6,10 +6,9 @@ import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import { clone } from '../../core/utils/object';
 import { dxBaseGauge } from './base_gauge';
-import { dxGauge } from './common';
+import { dxGauge, createIndicatorCreator } from './common';
 import { normalizeEnum as _normalizeEnum } from '../core/utils';
 import * as linearIndicators from './linear_indicators';
-import { createIndicatorCreator } from './common';
 import LinearRangeContainer from './linear_range_container';
 
 const dxLinearGauge = dxGauge.inherit({

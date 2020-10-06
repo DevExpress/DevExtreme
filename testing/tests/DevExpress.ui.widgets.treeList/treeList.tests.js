@@ -12,7 +12,6 @@ QUnit.testStart(function() {
 
 import 'common.css!';
 import 'generic_light.css!';
-import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';

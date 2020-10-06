@@ -20,7 +20,7 @@ import { default as FormItemsRunTimeInfo } from './ui.form.items_runtime_info';
 import TabPanel from '../tab_panel';
 import Scrollable from '../scroll_view/ui.scrollable';
 import { Deferred } from '../../core/utils/deferred';
-import themes from '../themes';
+import { isMaterial } from '../themes';
 import tryCreateItemOptionAction from './ui.form.item_options_actions';
 import './ui.form.layout_manager';
 import {
@@ -240,7 +240,7 @@ const Form = Widget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     showColonAfterLabel: false,

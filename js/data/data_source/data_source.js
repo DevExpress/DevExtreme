@@ -3,11 +3,11 @@ import { extend } from '../../core/utils/extend';
 import { executeAsync } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { isString, isNumeric, isBoolean, isDefined, isPlainObject } from '../../core/utils/type';
-import { throttleChanges } from '../utils';
+import dataUtils from '../utils';
 import { applyBatch } from '../array_utils';
 import CustomStore from '../custom_store';
 import { EventsStrategy } from '../../core/events_strategy';
-import { errors } from '../errors';
+import errorUtils from '../errors';
 import { isEmpty } from '../../core/utils/array';
 import { create } from '../../core/utils/queue';
 import { Deferred, when } from '../../core/utils/deferred';
@@ -56,7 +56,7 @@ export const DataSource = Class.inherit({
         */
 
         const onPushHandler = options.pushAggregationTimeout !== 0
-            ? throttleChanges(this._onPush, () =>
+            ? dataUtils.throttleChanges(this._onPush, () =>
                 options.pushAggregationTimeout === undefined
                     ? this._changedTime * 5
                     : options.pushAggregationTimeout
@@ -351,7 +351,7 @@ export const DataSource = Class.inherit({
         const options = this._createStoreLoadOptions();
         const handleDone = (data) => {
             if(!isDefined(data) || isEmpty(data)) {
-                d.reject(new errors.Error('E4009'));
+                d.reject(new errorUtils.errors.Error('E4009'));
             } else {
                 if(!Array.isArray(data)) {
                     data = [data];

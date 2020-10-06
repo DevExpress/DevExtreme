@@ -18,7 +18,7 @@ import devices from '../core/devices';
 import { addNamespace } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
-import themes from './themes';
+import { isMaterial } from './themes';
 
 // STYLE fileUploader
 
@@ -227,7 +227,7 @@ class FileUploader extends Editor {
                 }
             },
             {
-                device: () => themes.isMaterial(),
+                device: () => isMaterial(),
                 options: {
                     _uploadButtonType: 'default'
                 }

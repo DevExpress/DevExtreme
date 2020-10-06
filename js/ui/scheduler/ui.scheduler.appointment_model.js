@@ -5,9 +5,8 @@ import { getRecurrenceProcessor } from './recurrence';
 import dateUtils from '../../core/utils/date';
 import { equalByValue } from '../../core/utils/common';
 import { isFunction, isDefined, isString } from '../../core/utils/type';
-import { inArray } from '../../core/utils/array';
+import { inArray, wrapToArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
-import { wrapToArray } from '../../core/utils/array';
 import query from '../../data/query';
 import { Deferred } from '../../core/utils/deferred';
 

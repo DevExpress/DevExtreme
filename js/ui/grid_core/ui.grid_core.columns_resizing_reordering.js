@@ -16,7 +16,7 @@ import {
 import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
 import fx from '../../animation/fx';
-import { getSwatchContainer } from '../widget/swatch_container';
+import swatchContainer from '../widget/swatch_container';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
@@ -461,7 +461,7 @@ const DraggingHeaderView = modules.View.inherit({
             .toggleClass(DRAGGING_COMMAND_CELL_CLASS, isCommandColumn)
             .text(isCommandColumn ? '' : options.sourceColumn.caption);
 
-        that.element().appendTo(getSwatchContainer(columnElement));
+        that.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
     },
 
     moveHeader: function(args) {

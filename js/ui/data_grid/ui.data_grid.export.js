@@ -3,7 +3,7 @@ import Class from '../../core/class';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getDefaultAlignment } from '../../core/utils/position';
-import arrayUtils from '../../core/utils/array';
+import { merge } from '../../core/utils/array';
 import dataGridCore from './ui.data_grid.core';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { export as clientExport, excel } from '../../exporter';
@@ -485,7 +485,7 @@ export const ExportController = dataGridCore.ViewController.inherit({}).include(
                 }
 
                 if(summaryValues.length > 0) {
-                    arrayUtils.merge(item.values, summaryValues);
+                    merge(item.values, summaryValues);
                     summaryValues = [];
                 }
             }

@@ -1,4 +1,4 @@
-import { createElement } from '../../core/dom_adapter';
+import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 
 // Must become obsolete after the fix https://bugs.chromium.org/p/chromium/issues/detail?id=947408
@@ -8,5 +8,5 @@ function isModernAndroidDevice() {
 }
 
 export function isInputEventsL2Supported() {
-    return 'onbeforeinput' in createElement('input') || isModernAndroidDevice();
+    return 'onbeforeinput' in domAdapter.createElement('input') || isModernAndroidDevice();
 }

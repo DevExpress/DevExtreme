@@ -9,7 +9,7 @@ import Button from './button';
 import Popover from './popover';
 import DataHelperMixin from '../data_helper';
 import List from './list';
-import themes from './themes';
+import { isMaterial } from './themes';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
@@ -145,7 +145,7 @@ const DropDownMenu = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     useInkRipple: true

@@ -4,12 +4,11 @@ import { clone } from '../../core/utils/object';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { dxBaseGauge } from './base_gauge';
-import { dxGauge } from './common';
+import { dxGauge, createIndicatorCreator } from './common';
 import { normalizeAngle, getCosAndSin } from '../core/utils';
 const _normalizeAngle = normalizeAngle;
 const _getCosAndSin = getCosAndSin;
 import * as circularIndicators from './circular_indicators';
-import { createIndicatorCreator } from './common';
 import CircularRangeContainer from './circular_range_container';
 
 const _abs = Math.abs;

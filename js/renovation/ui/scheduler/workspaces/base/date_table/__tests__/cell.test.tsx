@@ -30,8 +30,8 @@ describe('DateTableCellBase', () => {
         classes: 'test-class',
         dataCellTemplateProps,
         props: {
-          isFirstCell: true,
-          isLastCell: false,
+          isFirstGroupCell: true,
+          isLastGroupCell: false,
           dataCellTemplate,
         },
       });
@@ -42,8 +42,8 @@ describe('DateTableCellBase', () => {
         .toBe(true);
       expect(cell.props())
         .toMatchObject({
-          isFirstCell: true,
-          isLastCell: false,
+          isFirstGroupCell: true,
+          isLastGroupCell: false,
           contentTemplate: dataCellTemplate,
           contentTemplateProps: dataCellTemplateProps,
         });

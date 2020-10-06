@@ -7,8 +7,8 @@ import { extend } from '../../core/utils/extend';
 import { logger } from '../../core/utils/console';
 import browser from '../../core/utils/browser';
 import Widget from '../widget/ui.widget';
-import gridCore, { callModuleItemsMethod } from './ui.data_grid.core';
-import themes from '../themes';
+import gridCore from './ui.data_grid.core';
+import { isMaterial } from '../themes';
 
 const DATAGRID_ROW_SELECTOR = '.dx-row';
 const DATAGRID_DEPRECATED_TEMPLATE_WARNING = 'Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.';
@@ -86,7 +86,7 @@ const DataGrid = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     showRowLines: true,
@@ -149,7 +149,7 @@ const DataGrid = Widget.inherit({
 
         gridCore.processModules(that, gridCore);
 
-        callModuleItemsMethod(that, 'init');
+        gridCore.callModuleItemsMethod(that, 'init');
     },
 
     _clean: noop,
@@ -157,7 +157,7 @@ const DataGrid = Widget.inherit({
     _optionChanged: function(args) {
         const that = this;
 
-        callModuleItemsMethod(that, 'optionChanged', [args]);
+        gridCore.callModuleItemsMethod(that, 'optionChanged', [args]);
         if(!args.handled) {
             that.callBase(args);
         }
@@ -205,7 +205,7 @@ const DataGrid = Widget.inherit({
         const that = this;
         that.callBase();
 
-        callModuleItemsMethod(that, 'dispose');
+        gridCore.callModuleItemsMethod(that, 'dispose');
     },
 
     isReady: function() {
@@ -216,13 +216,13 @@ const DataGrid = Widget.inherit({
         const that = this;
 
         that.callBase();
-        callModuleItemsMethod(that, 'beginUpdate');
+        gridCore.callModuleItemsMethod(that, 'beginUpdate');
     },
 
     endUpdate: function() {
         const that = this;
 
-        callModuleItemsMethod(that, 'endUpdate');
+        gridCore.callModuleItemsMethod(that, 'endUpdate');
         that.callBase();
     },
 

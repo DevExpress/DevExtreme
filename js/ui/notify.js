@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import Action from '../core/action';
-import viewPortUtils from '../core/utils/view_port';
+import { value } from '../core/utils/view_port';
 import { extend } from '../core/utils/extend';
 import { isPlainObject } from '../core/utils/type';
 import Toast from './toast';
@@ -25,7 +25,7 @@ const notify = function(message, /* optional */ type, displayTime) {
         }
     });
 
-    $notify = $('<div>').appendTo(viewPortUtils.value());
+    $notify = $('<div>').appendTo(value());
     new Toast($notify, options).show();
 };
 

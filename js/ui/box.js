@@ -4,7 +4,7 @@ import registerComponent from '../core/component_registrator';
 import { extend } from '../core/utils/extend';
 import { noop } from '../core/utils/common';
 import { hasWindow } from '../core/utils/window';
-import inflector from '../core/utils/inflector';
+import { dasherize } from '../core/utils/inflector';
 import { isDefined } from '../core/utils/type';
 import { normalizeStyleProp, styleProp, stylePropPrefix } from '../core/utils/style';
 import { each } from '../core/utils/iterator';
@@ -60,7 +60,7 @@ const setFlexProp = (element, prop, value) => {
             return;
         }
 
-        const cssName = inflector.dasherize(prop);
+        const cssName = dasherize(prop);
         const styleExpr = cssName + ': ' + value + ';';
 
         if(!element.attributes.style) {

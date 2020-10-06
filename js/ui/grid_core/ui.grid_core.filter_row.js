@@ -3,7 +3,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { normalizeKeyName } from '../../events/utils/index';
-import iteratorUtils from '../../core/utils/iterator';
+import { each, map } from '../../core/utils/iterator';
 import modules from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
 import messageLocalization from '../../localization/message';
@@ -613,7 +613,7 @@ const ColumnHeadersViewFilterRowExtender = (function() {
                 const availableFilterOperations = column.filterOperations.filter(function(value) {
                     return isDefined(OPERATION_DESCRIPTORS[value]);
                 });
-                result = iteratorUtils.map(availableFilterOperations, function(value) {
+                result = map(availableFilterOperations, function(value) {
                     const descriptionName = OPERATION_DESCRIPTORS[value];
 
                     return {
@@ -664,7 +664,7 @@ const DataControllerFilterRowExtender = {
         const filters = [this.callBase()];
         const columns = this._columnsController.getVisibleColumns(null, true);
 
-        iteratorUtils.each(columns, function() {
+        each(columns, function() {
 
             if(this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue)) {
                 const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');

@@ -2,7 +2,7 @@ import registerComponent from '../core/component_registrator';
 import eventsEngine from '../events/core/events_engine';
 import { grep } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
-import iteratorUtils from '../core/utils/iterator';
+import { each, map } from '../core/utils/iterator';
 import ValidationEngine from './validation_engine';
 import CollectionWidget from './collection/ui.collection_widget.edit';
 
@@ -167,7 +167,7 @@ const ValidationSummary = CollectionWidget.inherit({
     _getOrderedItems(validators, items) {
         let orderedItems = [];
 
-        iteratorUtils.each(validators, function(_, validator) {
+        each(validators, function(_, validator) {
             const foundItems = grep(items, function(item) {
                 if(item.validator === validator) {
                     return true;
@@ -183,7 +183,7 @@ const ValidationSummary = CollectionWidget.inherit({
     },
 
     _groupValidationHandler(params) {
-        const items = this._getOrderedItems(params.validators, iteratorUtils.map(params.brokenRules, function(rule) {
+        const items = this._getOrderedItems(params.validators, map(params.brokenRules, function(rule) {
             return {
                 text: rule.message,
                 validator: rule.validator,
@@ -193,7 +193,7 @@ const ValidationSummary = CollectionWidget.inherit({
 
         this.validators = params.validators;
 
-        iteratorUtils.each(this.validators, (_, validator) => {
+        each(this.validators, (_, validator) => {
             if(validator._validationSummary !== this) {
                 let handler = this._itemValidationHandler.bind(this);
                 const disposingHandler = function() {
@@ -233,7 +233,7 @@ const ValidationSummary = CollectionWidget.inherit({
             }
             itemIndex++;
         }
-        iteratorUtils.each(brokenRules, function(_, rule) {
+        each(brokenRules, function(_, rule) {
             const foundItem = grep(items, function(item) {
                 return item.validator === validator && item.index === rule.index;
             })[0];

@@ -1,6 +1,6 @@
 import config from '../config';
 import devices from '../devices';
-import { Error } from '../errors';
+import Errors from '../errors';
 import $ from '../renderer';
 import { ChildDefaultTemplate } from '../templates/child_default_template';
 import { EmptyTemplate } from '../templates/empty_template';
@@ -29,7 +29,7 @@ export const suitableTemplatesByName = (rawTemplates) => {
     const templatesMap = groupBy(rawTemplates, (template) => template.options.name);
 
     if(templatesMap[undefined]) {
-        throw Error('E0023');
+        throw Errors.Error('E0023');
     }
 
     const result = {};

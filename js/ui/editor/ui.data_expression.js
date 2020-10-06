@@ -1,10 +1,10 @@
 import variableWrapper from '../../core/utils/variable_wrapper';
-import dataCoreUtils from '../../core/utils/data';
+import { compileGetter, toComparable } from '../../core/utils/data';
 import { ensureDefined, noop } from '../../core/utils/common';
 import { isDefined, isObject as isObjectType, isString, isFunction } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import DataHelperMixin from '../../data_helper';
-import DataSourceModule from '../../data/data_source/data_source';
+import { DataSource } from '../../data/data_source/data_source';
 import ArrayStore from '../../data/array_store';
 import { Deferred } from '../../core/utils/deferred';
 
@@ -37,7 +37,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     _itemsToDataSource: function() {
         if(!this.option('dataSource')) {
             // TODO: try this.option("dataSource", new ...)
-            this._dataSource = new DataSourceModule.DataSource({
+            this._dataSource = new DataSource({
                 store: new ArrayStore(this.option('items')),
                 pageSize: 0
             });
@@ -45,7 +45,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _compileDisplayGetter: function() {
-        this._displayGetter = dataCoreUtils.compileGetter(this._displayGetterExpr());
+        this._displayGetter = compileGetter(this._displayGetterExpr());
     },
 
     _displayGetterExpr: function() {
@@ -53,7 +53,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _compileValueGetter: function() {
-        this._valueGetter = dataCoreUtils.compileGetter(this._valueGetterExpr());
+        this._valueGetter = compileGetter(this._valueGetterExpr());
     },
 
     _valueGetterExpr: function() {
@@ -154,7 +154,7 @@ const DataExpressionMixin = extend({}, DataHelperMixin, {
     },
 
     _compareValues: function(value1, value2) {
-        return dataCoreUtils.toComparable(value1, true) === dataCoreUtils.toComparable(value2, true);
+        return toComparable(value1, true) === toComparable(value2, true);
     },
 
     _initDynamicTemplates: noop,

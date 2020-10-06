@@ -12,6 +12,7 @@ try {
     outputJson('dist/package.json', packageConfig, { spaces: 2 });
   });
   copy('src/data/scss', 'dist/data/scss');
+  copy('dart-compiler', 'dist/dart-compiler');
   copy('README.md', 'dist/README.md');
 } catch (e) {
   console.error(e);

@@ -9,11 +9,11 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
 import errors from '../widget/ui.errors';
-import { setup as setupPosition } from '../../animation/position';
+import animationPosition from '../../animation/position';
 import { getDefaultAlignment } from '../../core/utils/position';
 import DropDownButton from './ui.drop_down_button';
 import Widget from '../widget/ui.widget';
-import { format as formatMessage } from '../../localization/message';
+import messageLocalization from '../../localization/message';
 import { addNamespace } from '../../events/utils/index';
 import TextBox from '../text_box';
 import { name as clickEventName } from '../../events/click';
@@ -125,8 +125,8 @@ const DropDownEditor = TextBox.inherit({
             dropDownOptions: { showTitle: false },
             popupPosition: this._getDefaultPopupPosition(),
             onPopupInitialized: null,
-            applyButtonText: formatMessage('OK'),
-            cancelButtonText: formatMessage('Cancel'),
+            applyButtonText: messageLocalization.format('OK'),
+            cancelButtonText: messageLocalization.format('Cancel'),
             buttonsLocation: 'default',
             useHiddenSubmitElement: false
 
@@ -573,8 +573,8 @@ const DropDownEditor = TextBox.inherit({
         let positionRequest = 'below';
 
         if(this._popup && this._popup.option('visible')) {
-            const { top: myTop } = setupPosition(this.$element());
-            const { top: popupTop } = setupPosition(this._popup.$content());
+            const { top: myTop } = animationPosition.setup(this.$element());
+            const { top: popupTop } = animationPosition.setup(this._popup.$content());
 
             positionRequest = (myTop + this.option('popupPosition').offset.v) > popupTop ? 'below' : 'above';
         }
