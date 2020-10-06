@@ -1612,7 +1612,7 @@ const PivotGrid = Widget.inherit({
                 filterAreaHeight = filterHeaderCell.height();
 
                 const $dataHeader = tableElement.find('.dx-data-header');
-                const dataHeaderHeight = msie
+                const dataHeaderHeight = coreBrowserUtils.msie
                     ? getSize($dataHeader.get(0), 'height', { paddings: false, borders: false, margins: false })
                     : $dataHeader.height();
 
