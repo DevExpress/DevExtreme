@@ -11,6 +11,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import windowUtils from 'core/utils/window';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import domUtils from 'core/utils/dom';
 
 import 'common.css!';
 import 'ui/popup';
@@ -1172,6 +1173,20 @@ QUnit.module('options changed callbacks', {
 
         this.instance.option('toolbarItems[0].toolbar', 'top');
         assert.ok(renderGeometrySpy.calledOnce, 'renderGeometry is called on item location changing');
+    });
+
+    QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
+        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+
+        this.instance.option({
+            visible: true,
+            toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
+        });
+
+        assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
+
+        this.instance.option('toolbarItems[0].toolbar', 'top');
+        assert.strictEqual(resizeEventSpy.callCount, 2, 'resize event is triggered after option change');
     });
 });
 

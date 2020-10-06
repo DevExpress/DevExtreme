@@ -683,6 +683,7 @@ const Popup = Overlay.inherit({
 
                 if(shouldRenderGeometry) {
                     this._renderGeometry();
+                    domUtils.triggerResizeEvent(this._$content);
                 }
                 break;
             }
