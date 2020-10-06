@@ -42,9 +42,7 @@ class AppointmentLayoutManager {
     }
 
     createAppointmentsMap(items) {
-        const { width, height, allDayHeight } = this.getCellDimensions();
-        this.instance._cellWidth = width;
-        this.instance._cellHeight = height;
+        const { allDayHeight } = this.getCellDimensions();
         this.instance._allDayCellHeight = allDayHeight;
         this.getGroupOrientation({
             callback: groupOrientation => this.instance._groupOrientation = groupOrientation

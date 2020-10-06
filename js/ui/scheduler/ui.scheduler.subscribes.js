@@ -281,16 +281,16 @@ const subscribes = {
     },
 
     getCellWidth: function() {
-        return this._cellWidth;
+        return this.getWorkSpace().getCellWidth();
     },
 
     getCellHeight: function() {
-        return this._cellHeight;
+        return this.getWorkSpace().getCellHeight();
     },
 
     getResizableStep: function() {
-        const cellWidth = this._cellWidth;
         const workSpace = this.getWorkSpace();
+        const cellWidth = workSpace.getCellWidth();
 
         if(workSpace.isGroupedByDate()) {
             return workSpace._getGroupCount() * cellWidth;

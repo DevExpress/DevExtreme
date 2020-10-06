@@ -68,8 +68,8 @@ class BaseRenderingStrategy {
         const length = items && items.length;
         if(!length) return;
 
-        this._defaultWidth = this.instance._cellWidth;
-        this._defaultHeight = this.instance._cellHeight;
+        this._defaultWidth = this.instance.fire('getCellWidth');
+        this._defaultHeight = this.instance.fire('getCellHeight');
         this._allDayHeight = this.instance._allDayCellHeight;
 
         const map = [];
