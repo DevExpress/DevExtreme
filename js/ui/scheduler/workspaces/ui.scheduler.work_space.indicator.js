@@ -72,6 +72,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _shiftIndicator(date, $cell, $indicator) {
         const top = this.getIndicatorTopOffset(date, $cell);
         $indicator.css('top', top);
+        $indicator.css('left', 0);
     }
 
     _createIndicator($container, isSimple) {
