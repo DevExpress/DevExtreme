@@ -3,9 +3,9 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { hasWindow } from '../../core/utils/window';
-import { format } from '../../format_helper';
-import { parse } from '../../localization/number';
-import clientExporter, { excel as excelExporter } from '../../exporter';
+import formatHelper from '../../format_helper';
+import localizationNumber from '../../localization/number';
+import { excel as excelExporter, export as exportMethod } from '../../exporter';
 import exportMixin from '../grid_core/ui.grid_core.export_mixin';
 import { when, Deferred } from '../../core/utils/deferred';
 
@@ -19,7 +19,7 @@ export const ExportMixin = extend({}, exportMixin, {
     exportToExcel: function() {
         const that = this;
 
-        clientExporter.export(that.getDataProvider(), {
+        exportMethod(that.getDataProvider(), {
             fileName: that.option('export.fileName'),
             proxyUrl: that.option('export.proxyUrl'),
             format: 'EXCEL',
@@ -132,10 +132,10 @@ function getCellDataType(field) {
     }
 
     if(field.format) {
-        if(parse(format(1, field.format)) === 1) {
+        if(localizationNumber.parse(formatHelper.format(1, field.format)) === 1) {
             return 'number';
         }
-        if(format(new Date(), field.format)) {
+        if(formatHelper.format(new Date(), field.format)) {
             return 'date';
         }
     }

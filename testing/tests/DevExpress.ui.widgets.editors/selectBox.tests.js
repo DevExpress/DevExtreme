@@ -2779,7 +2779,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($items.length, 1, 'items was filtered');
     });
 
-    QUnit.test('data is filtered when min search length is exceeded', function(assert) {
+    QUnit.test('data is filtered when min search length is exceeded and showDataBeforeSearch: true', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
             showDataBeforeSearch: true,
@@ -3488,7 +3488,7 @@ QUnit.module('search substitution', {
         }
     });
 
-    QUnit.test('the \'left\', \'right\', \'home\' and \'end\' keys press should lead to the list dataSource filtering', function(assert) {
+    QUnit.test('the \'left\', \'right\', \'home\' and \'end\' keys press should lead to the list dataSource filtering and loadCount: 0', function(assert) {
         const keys = ['left', 'right', 'home', 'end'];
         const item = 'item1';
 

@@ -11,7 +11,7 @@ import {
     checkElementHasPropertyFromStyleSheet,
     rangesAreEqual
 } from './core/utils';
-import { type } from '../core/utils/type';
+import { type, isDefined as _isDefined } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
 import { overlapping } from './chart_components/base_chart';
 import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
@@ -30,7 +30,6 @@ const DEFAULT_PANES = [{
 const DISCRETE = 'discrete';
 
 const _isArray = Array.isArray;
-import { isDefined as _isDefined } from '../core/utils/type';
 
 function getFirstAxisNameForPane(axes, paneName, defaultPane) {
     let result;

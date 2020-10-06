@@ -3,7 +3,7 @@ import CollectionWidget from './ui.collection_widget.edit';
 import { extend } from '../../core/utils/extend';
 import { isDefined } from '../../core/utils/type';
 import { update, insert, indexByKey } from '../../data/array_utils';
-import { keysEqual } from '../../data/utils';
+import dataUtils from '../../data/utils';
 import { when } from '../../core/utils/deferred';
 import { findChanges } from '../../core/utils/array_compare';
 import domAdapter from '../../core/dom_adapter';
@@ -50,7 +50,7 @@ export default CollectionWidget.inherit({
         this.itemElements().each((_, item) => {
             const $item = $(item);
             const itemData = this._getItemData($item);
-            if(keyExpr ? keysEqual(keyExpr, this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
+            if(keyExpr ? dataUtils.keysEqual(keyExpr, this.keyOf(itemData), key) : this._isItemEquals(itemData, key)) {
                 result = $item;
                 return false;
             }

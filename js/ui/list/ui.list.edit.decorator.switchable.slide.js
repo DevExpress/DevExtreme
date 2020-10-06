@@ -10,7 +10,7 @@ import EditDecoratorMenuHelperMixin from './ui.list.edit.decorator_menu_helper';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
 import SwitchableEditDecorator from './ui.list.edit.decorator.switchable';
 import fx from '../../animation/fx';
-import themes from '../themes';
+import { isMaterial } from '../themes';
 import ActionSheet from '../action_sheet';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
@@ -108,7 +108,7 @@ registerDecorator(
             const $deleteButton = $('<div>')
                 .addClass(SLIDE_MENU_BUTTON_CLASS)
                 .addClass(SLIDE_MENU_BUTTON_DELETE_CLASS)
-                .text(themes.isMaterial()
+                .text(isMaterial()
                     ? ''
                     : messageLocalization.format('dxListEditDecorator-delete'));
 

@@ -12,7 +12,7 @@ import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { hasWindow } from '../../core/utils/window';
 import fx from '../../animation/fx';
-import { setup } from '../../animation/position';
+import animationPosition from '../../animation/position';
 import devices from '../../core/devices';
 import { addNamespace } from '../../events/utils/index';
 import Overlay from '../overlay';
@@ -637,7 +637,7 @@ class ContextMenu extends MenuBase {
                 fx.stop($submenu);
             }
 
-            setup($submenu, submenuPosition);
+            animationPosition.setup($submenu, submenuPosition);
 
             if(animation) {
                 if(isPlainObject(animation.to)) {

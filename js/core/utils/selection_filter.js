@@ -1,5 +1,4 @@
-import { getKeyHash } from './common';
-import { equalByValue } from './common';
+import { getKeyHash, equalByValue } from './common';
 import { isString, isObject } from './type';
 
 export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {

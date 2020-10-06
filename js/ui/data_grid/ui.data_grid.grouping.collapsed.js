@@ -1,10 +1,10 @@
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { combineFilters, normalizeSortingInfo } from './ui.data_grid.core';
+import dataGridCore from './ui.data_grid.core';
 import { GroupingHelper as GroupingHelperCore, createOffsetFilter } from './ui.data_grid.grouping.core';
 import { createGroupFilter } from './ui.data_grid.utils';
 import errors from '../widget/ui.errors';
-import { errors as dataErrors } from '../../data/errors';
+import dataErrors from '../../data/errors';
 import { when, Deferred } from '../../core/utils/deferred';
 
 function getContinuationGroupCount(groupOffset, pageSize, groupSize, groupIndex) {
@@ -280,14 +280,14 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
         let filter = options.storeLoadOptions.filter;
 
         if(!options.storeLoadOptions.isLoadingAll) {
-            filter = combineFilters([filter, combineFilters(expandedFilters, 'or')]);
+            filter = dataGridCore.combineFilters([filter, dataGridCore.combineFilters(expandedFilters, 'or')]);
         }
 
         const loadOptions = extend({}, options.storeLoadOptions, {
             requireTotalCount: false,
             requireGroupCount: false,
             group: null,
-            sort: groups.concat(normalizeSortingInfo(options.storeLoadOptions.sort || [])),
+            sort: groups.concat(dataGridCore.normalizeSortingInfo(options.storeLoadOptions.sort || [])),
             filter: filter
         });
 
@@ -324,7 +324,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             const count = extra && (isGrouping ? extra.groupCount : extra.totalCount);
 
             if(!isFinite(count)) {
-                d.reject(dataErrors.Error(isGrouping ? 'E4022' : 'E4021'));
+                d.reject(dataErrors.errors.Error(isGrouping ? 'E4022' : 'E4021'));
                 return;
             }
             d.resolve(count);
@@ -446,7 +446,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             const groupInfo = that.findGroupInfo(path);
             const dataSource = that._dataSource;
             const remoteGroupPaging = dataSource.remoteOperations().groupPaging;
-            const groups = normalizeSortingInfo(dataSource.group());
+            const groups = dataGridCore.normalizeSortingInfo(dataSource.group());
 
             if(groupInfo) {
                 groupInfo.isExpanded = !groupInfo.isExpanded;
@@ -473,7 +473,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
         handleDataLoading: function(options) {
             const that = this;
             const storeLoadOptions = options.storeLoadOptions;
-            const groups = normalizeSortingInfo(storeLoadOptions.group || options.loadOptions.group);
+            const groups = dataGridCore.normalizeSortingInfo(storeLoadOptions.group || options.loadOptions.group);
 
             if(options.isCustomLoading || !groups.length) {
                 return;
@@ -482,7 +482,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             if(options.remoteOperations.grouping) {
                 const remotePaging = that._dataSource.remoteOperations().paging;
 
-                storeLoadOptions.group = normalizeSortingInfo(storeLoadOptions.group);
+                storeLoadOptions.group = dataGridCore.normalizeSortingInfo(storeLoadOptions.group);
                 storeLoadOptions.group.forEach(function(group, index) {
                     const isLastGroup = index === storeLoadOptions.group.length - 1;
                     group.isExpanded = !remotePaging || !isLastGroup;
@@ -504,7 +504,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
         },
         handleDataLoadedCore: function(options, callBase) {
             const that = this;
-            const loadedGroupCount = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group).length;
+            const loadedGroupCount = dataGridCore.normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group).length;
             const groupCount = options.group ? options.group.length : 0;
             let totalCount;
             const expandedInfo = {};
@@ -533,7 +533,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
                 }
 
                 if(groupCount && options.storeLoadOptions.requireGroupCount && !isFinite(options.extra.groupCount)) {
-                    options.data = (new Deferred()).reject(dataErrors.Error('E4022'));
+                    options.data = (new Deferred()).reject(dataErrors.errors.Error('E4022'));
                     return;
                 }
 
@@ -615,7 +615,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             const dataSource = that._dataSource;
             const storeLoadOptions = options.storeLoadOptions;
             const group = options.group || options.storeLoadOptions.group;
-            const oldGroups = normalizeSortingInfo(that._group);
+            const oldGroups = dataGridCore.normalizeSortingInfo(that._group);
             let isExpanded;
             let groupIndex;
 

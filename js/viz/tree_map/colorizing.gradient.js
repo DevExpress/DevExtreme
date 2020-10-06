@@ -1,4 +1,4 @@
-import { createColorCodeGetter as _createColorCodeGetter } from './colorizing';
+import { addColorizer, createColorCodeGetter as _createColorCodeGetter } from './colorizing';
 const _min = Math.min;
 const _max = Math.max;
 
@@ -47,6 +47,6 @@ function gradientColorizer(options, themeManager) {
         return palette.getColor((getValue(node) - arg[0]) / arg[1]);
     }
 }
-import { addColorizer } from './colorizing';
+
 addColorizer('gradient', gradientColorizer);
 export default gradientColorizer;

@@ -8,11 +8,9 @@ import dataQuery from 'data/query';
 import { queryByOptions } from 'data/store_helper';
 import gridCore from 'ui/data_grid/ui.data_grid.core';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
-import { loadTotalCount } from 'ui/data_grid/ui.data_grid.grouping.expanded';
+import { loadTotalCount, GroupingHelper as ExpandedGroupingHelper } from 'ui/data_grid/ui.data_grid.grouping.expanded';
 import { createOffsetFilter } from 'ui/data_grid/ui.data_grid.grouping.core';
-import { getContinuationGroupCount } from 'ui/data_grid/ui.data_grid.grouping.collapsed';
-import { GroupingHelper as ExpandedGroupingHelper } from 'ui/data_grid/ui.data_grid.grouping.expanded';
-import { GroupingHelper as CollapsedGroupingHelper } from 'ui/data_grid/ui.data_grid.grouping.collapsed';
+import { getContinuationGroupCount, GroupingHelper as CollapsedGroupingHelper } from 'ui/data_grid/ui.data_grid.grouping.collapsed';
 
 import 'ui/data_grid/ui.data_grid';
 

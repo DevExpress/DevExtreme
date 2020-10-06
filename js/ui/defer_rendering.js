@@ -1,4 +1,4 @@
-import TransitionExecutorModule from '../animation/transition_executor/transition_executor';
+import { TransitionExecutor } from '../animation/transition_executor/transition_executor';
 import registerComponent from '../core/component_registrator';
 import domAdapter from '../core/dom_adapter';
 import $ from '../core/renderer';
@@ -49,7 +49,7 @@ const DeferRendering = Widget.inherit({
     },
 
     _init: function() {
-        this.transitionExecutor = new TransitionExecutorModule.TransitionExecutor();
+        this.transitionExecutor = new TransitionExecutor();
 
         this._initElement();
         this._initRender();

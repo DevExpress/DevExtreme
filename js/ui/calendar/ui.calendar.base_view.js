@@ -4,11 +4,11 @@ import eventsEngine from '../../events/core/events_engine';
 import { data as elementData } from '../../core/element_data';
 import { getPublicElement } from '../../core/element';
 import Widget from '../widget/ui.widget';
-import { fixTimezoneGap, getShortDateFormat, getFirstDateView } from '../../core/utils/date';
+import coreDateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
-import { serializeDate } from '../../core/utils/date_serialization';
-import { format as formatMessage } from '../../localization/message';
+import dateSerialization from '../../core/utils/date_serialization';
+import messageLocalization from '../../localization/message';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 
@@ -77,7 +77,7 @@ const BaseView = Widget.inherit({
         this._$table = $('<table>');
 
         this.setAria({
-            label: formatMessage('dxCalendar-ariaWidgetName'),
+            label: messageLocalization.format('dxCalendar-ariaWidgetName'),
             role: 'grid'
         }, this._$table);
 
@@ -129,7 +129,7 @@ const BaseView = Widget.inherit({
 
         cell.className = this._getClassNameByDate(cellDate);
 
-        cell.setAttribute('data-value', serializeDate(cellDate, getShortDateFormat()));
+        cell.setAttribute('data-value', dateSerialization.serializeDate(cellDate, coreDateUtils.getShortDateFormat()));
         elementData(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
 
         this.setAria({
@@ -145,7 +145,7 @@ const BaseView = Widget.inherit({
 
         // T425127
         if(prevCellDate) {
-            fixTimezoneGap(prevCellDate, cellDate);
+            coreDateUtils.fixTimezoneGap(prevCellDate, cellDate);
         }
 
         params.prevCellDate = cellDate;
@@ -297,7 +297,7 @@ const BaseView = Widget.inherit({
         let date = this.option('date');
         const min = this.option('min');
 
-        date = getFirstDateView(this._getViewName(), date);
+        date = coreDateUtils.getFirstDateView(this._getViewName(), date);
         return new Date(min && date < min ? min : date);
     },
 

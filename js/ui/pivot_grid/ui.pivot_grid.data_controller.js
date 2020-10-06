@@ -9,13 +9,10 @@ import { deferUpdate } from '../../core/utils/common';
 import { isDefined, isString } from '../../core/utils/type';
 import { VirtualScrollController } from '../grid_core/ui.grid_core.virtual_scrolling_core';
 import { foreachColumnInfo, createColumnsInfo } from '../grid_core/ui.grid_core.virtual_columns_core';
-import stateStoring from '../grid_core/ui.grid_core.state_storing_core';
+import { StateStoringController } from '../grid_core/ui.grid_core.state_storing_core';
 import PivotGridDataSource from './data_source';
-import pivotGridUtils, {
-    foreachTree,
-    foreachTreeAsync,
-    createPath,
-    formatValue
+import {
+    findField, foreachTree, foreachTreeAsync, createPath, formatValue,
 } from './ui.pivot_grid.utils';
 
 const math = Math;
@@ -432,7 +429,7 @@ export const DataController = Class.inherit((function() {
         const sortBySummaryPaths = [];
 
         each(headerFields, function(index, headerField) {
-            const fieldIndex = pivotGridUtils.findField(dataFields, headerField.sortBySummaryField);
+            const fieldIndex = findField(dataFields, headerField.sortBySummaryField);
             if(fieldIndex >= 0) {
                 sortBySummaryPaths.push((headerField.sortBySummaryPath || []).concat([fieldIndex]));
             }
@@ -676,7 +673,7 @@ export const DataController = Class.inherit((function() {
 
             });
 
-            that._stateStoringController = new stateStoring.StateStoringController(options.component).init();
+            that._stateStoringController = new StateStoringController(options.component).init();
 
             that._columnsInfo = [];
             that._rowsInfo = [];

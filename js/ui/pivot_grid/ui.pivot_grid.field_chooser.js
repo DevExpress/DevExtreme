@@ -5,7 +5,7 @@ import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { inArray } from '../../core/utils/array';
 import { each } from '../../core/utils/iterator';
-import { format } from '../../localization/message';
+import localizationMessage from '../../localization/message';
 import registerComponent from '../../core/component_registrator';
 import { getCompareFunction, foreachDataLevel } from './ui.pivot_grid.utils';
 import TreeView from '../tree_view';
@@ -106,31 +106,31 @@ const FieldChooser = BaseFieldChooser.inherit({
                  * @type string
                  * @default 'Column Fields'
                  */
-                columnFields: format('dxPivotGrid-columnFields'),
+                columnFields: localizationMessage.format('dxPivotGrid-columnFields'),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.rowFields
                  * @type string
                  * @default 'Row Fields'
                  */
-                rowFields: format('dxPivotGrid-rowFields'),
+                rowFields: localizationMessage.format('dxPivotGrid-rowFields'),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.dataFields
                  * @type string
                  * @default 'Data Fields'
                  */
-                dataFields: format('dxPivotGrid-dataFields'),
+                dataFields: localizationMessage.format('dxPivotGrid-dataFields'),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.filterFields
                  * @type string
                  * @default 'Filter Fields'
                  */
-                filterFields: format('dxPivotGrid-filterFields'),
+                filterFields: localizationMessage.format('dxPivotGrid-filterFields'),
                 /**
                  * @name dxPivotGridFieldChooserOptions.texts.allFields
                  * @type string
                  * @default 'All Fields'
                  */
-                allFields: format('dxPivotGrid-allFields')
+                allFields: localizationMessage.format('dxPivotGrid-allFields')
             },
             /**
              * @name dxPivotGridFieldChooserOptions.headerFilter.width

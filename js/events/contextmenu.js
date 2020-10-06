@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import eventsEngine from '../events/core/events_engine';
-import support from '../core/utils/support';
+import { touch } from '../core/utils/support';
 import devices from '../core/devices';
 import Class from '../core/class';
 import registerEvent from './core/event_registrator';
@@ -22,7 +22,7 @@ const ContextMenu = Class.inherit({
 
         eventsEngine.on($element, CONTEXTMENU_NAMESPACED_EVENT_NAME, this._contextMenuHandler.bind(this));
 
-        if(support.touch || devices.isSimulator()) {
+        if(touch || devices.isSimulator()) {
             eventsEngine.on($element, HOLD_NAMESPACED_EVENT_NAME, this._holdHandler.bind(this));
         }
     },
@@ -61,5 +61,4 @@ const ContextMenu = Class.inherit({
 
 registerEvent(CONTEXTMENU_EVENT_NAME, new ContextMenu());
 
-
-export { CONTEXTMENU_EVENT_NAME as name };
+export const name = CONTEXTMENU_EVENT_NAME;

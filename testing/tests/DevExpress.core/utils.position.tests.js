@@ -1,7 +1,6 @@
 import $ from 'jquery';
 import config from 'core/config';
-import { getDefaultAlignment } from 'core/utils/position.js';
-import { getBoundingRect } from 'core/utils/position.js';
+import { getDefaultAlignment, getBoundingRect } from 'core/utils/position.js';
 
 const { module: testModule, test } = QUnit;
 

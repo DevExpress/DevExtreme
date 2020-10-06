@@ -3,7 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import { isDefined } from '../../core/utils/type';
 import { compileGetter } from '../../core/utils/data';
 import { each } from '../../core/utils/iterator';
-import { combineFilters, getFormatOptionsByColumn, formatValue } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import messageLocalization from '../../localization/message';
 import dataQuery from '../../data/query';
 
@@ -122,7 +122,7 @@ export default {
                         }
                     }
 
-                    return combineFilters(filters, 'or');
+                    return gridCoreUtils.combineFilters(filters, 'or');
                 };
 
                 return {
@@ -134,7 +134,7 @@ export default {
                         const filter = that.callBase();
                         const searchFilter = calculateSearchFilter(that, that.option('searchPanel.text'));
 
-                        return combineFilters([filter, searchFilter]);
+                        return gridCoreUtils.combineFilters([filter, searchFilter]);
                     },
 
                     searchByText: function(text) {
@@ -258,8 +258,8 @@ export default {
 
                 _getFormattedSearchText: function(column, searchText) {
                     const value = parseValue(column, searchText);
-                    const formatOptions = getFormatOptionsByColumn(column, 'search');
-                    return formatValue(value, formatOptions);
+                    const formatOptions = gridCoreUtils.getFormatOptionsByColumn(column, 'search');
+                    return gridCoreUtils.formatValue(value, formatOptions);
                 },
 
                 _getStringNormalizer: function() {

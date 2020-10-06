@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import registerComponent from '../core/component_registrator';
-import { grep } from '../core/utils/common';
+import { grep, deferRender } from '../core/utils/common';
 import { extend } from '../core/utils/extend';
 import { merge } from '../core/utils/array';
 import { each } from '../core/utils/iterator';
@@ -8,7 +8,6 @@ import ActionSheetStrategy from './toolbar/ui.toolbar.strategy.action_sheet';
 import DropDownMenuStrategy from './toolbar/ui.toolbar.strategy.drop_down_menu';
 import ToolbarBase from './toolbar/ui.toolbar.base';
 import { ChildDefaultTemplate } from '../core/templates/child_default_template';
-import { deferRender } from '../core/utils/common';
 
 // STYLE toolbar
 

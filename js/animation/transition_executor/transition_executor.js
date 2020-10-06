@@ -5,7 +5,7 @@ import { executeAsync } from '../../core/utils/common';
 import { isFunction, isPlainObject } from '../../core/utils/type';
 import { map } from '../../core/utils/iterator';
 import fx from '../fx';
-import animationPresetsModule from '../presets/presets';
+import { presets } from '../presets/presets';
 import { when, Deferred } from '../../core/utils/deferred';
 
 const directionPostfixes = {
@@ -52,7 +52,7 @@ export const TransitionExecutor = Class.inherit({
 
         if(typeof config === 'string') {
             const presetName = config;
-            config = animationPresetsModule.presets.getPreset(presetName);
+            config = presets.getPreset(presetName);
         }
 
         if(!config) {

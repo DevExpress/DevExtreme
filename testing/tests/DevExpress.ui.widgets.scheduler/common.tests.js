@@ -15,7 +15,6 @@ import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change'
 import 'generic_light.css!';
 import $ from 'jquery';
 import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
-import 'ui/scheduler/ui.scheduler';
 import dxScheduler from 'ui/scheduler/ui.scheduler';
 import { getTimeZones } from 'time_zone_utils';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';

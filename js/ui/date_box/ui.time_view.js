@@ -5,8 +5,8 @@ import SelectBox from '../select_box';
 import Box from '../box';
 import { extend } from '../../core/utils/extend';
 import registerComponent from '../../core/component_registrator';
-import { getTimeSeparator, getPeriodNames } from '../../localization/date';
-import { normalizeTime } from './ui.date_utils';
+import dateLocalization from '../../localization/date';
+import dateUtils from './ui.date_utils';
 
 const TIMEVIEW_CLASS = 'dx-timeview';
 const TIMEVIEW_CLOCK_CLASS = 'dx-timeview-clock';
@@ -132,7 +132,7 @@ const TimeView = Editor.inherit({
             ratio: 0,
             shrink: 0,
             baseSize: 'auto',
-            template: $('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(getTimeSeparator())
+            template: $('<div>').addClass(TIMEVIEW_TIME_SEPARATOR_CLASS).text(dateLocalization.getTimeSeparator())
         }, {
             ratio: 0,
             shrink: 0,
@@ -196,7 +196,7 @@ const TimeView = Editor.inherit({
         }
 
         newValue.setHours(newHours);
-        normalizeTime(newValue);
+        dateUtils.normalizeTime(newValue);
         this.option('value', newValue);
     },
 
@@ -217,7 +217,7 @@ const TimeView = Editor.inherit({
 
                 const time = new Date(this._getValue());
                 time.setMinutes(newMinutes);
-                normalizeTime(time);
+                dateUtils.normalizeTime(time);
                 this.option('value', time);
             }
         }, this._getNumberBoxConfig()));
@@ -226,7 +226,7 @@ const TimeView = Editor.inherit({
     },
 
     _createFormat12Box: function() {
-        const periodNames = getPeriodNames();
+        const periodNames = dateLocalization.getPeriodNames();
         const editor = this._format12 = this._createComponent($('<div>').addClass(TIMEVIEW_FORMAT12_CLASS), SelectBox, {
             items: [
                 { value: TIMEVIEW_FORMAT12_AM, text: periodNames[0] },

@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import core from './ui.grid_core.modules';
-import { focusAndSelectElement, getWidgetInstance } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import { isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { focused } from '../widget/selectors';
@@ -11,7 +11,6 @@ import pointerEvents from '../../events/pointer';
 import { name as clickEventName } from '../../events/click';
 import { noop } from '../../core/utils/common';
 import * as accessibility from '../shared/accessibility';
-import { isElementInCurrentGrid } from './ui.grid_core.utils';
 import browser from '../../core/utils/browser';
 import { keyboard } from '../../events/short';
 import devices from '../../core/devices';
@@ -1014,7 +1013,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
         this._testInteractiveElement = $focusedElement;
         ///#ENDDEBUG
 
-        focusAndSelectElement(this, $focusedElement);
+        gridCoreUtils.focusAndSelectElement(this, $focusedElement);
     },
 
     _focus: function($cell, disableFocus, isInteractiveElement) {
@@ -1085,7 +1084,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                             const $focusedElementInsideCell = $cell.find(':focus');
                             const isFocusedElementDefined = isElementDefined($focusedElementInsideCell);
                             if(isCommandCell && isFocusedElementDefined) {
-                                focusAndSelectElement(this, $focusedElementInsideCell);
+                                gridCoreUtils.focusAndSelectElement(this, $focusedElementInsideCell);
                                 return;
                             }
                             !isFocusedElementDefined && this._focus($cell);
@@ -1700,7 +1699,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
     },
     // #endregion Events
     _isEventInCurrentGrid: function(event) {
-        return isElementInCurrentGrid(this, $(event.target));
+        return gridCoreUtils.isElementInCurrentGrid(this, $(event.target));
     },
     _isRowEditMode: function() {
         const editMode = this._editingController.getEditMode();
@@ -2046,7 +2045,7 @@ export default {
                 _getEditorInstance: function($cell) {
                     const $editor = $cell.find('.dx-texteditor').eq(0);
 
-                    return getWidgetInstance($editor);
+                    return gridCoreUtils.getWidgetInstance($editor);
                 }
             }
         },

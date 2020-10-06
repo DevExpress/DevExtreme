@@ -1,4 +1,4 @@
-import { createColorCodeGetter as _createColorCodeGetter } from './colorizing';
+import { addColorizer, createColorCodeGetter as _createColorCodeGetter } from './colorizing';
 
 function getPaletteIndex(value, items) {
     let start = 0;
@@ -33,6 +33,5 @@ function rangeColorizer(options, themeManager) {
     };
 }
 
-import { addColorizer } from './colorizing';
 addColorizer('range', rangeColorizer);
 export default rangeColorizer;

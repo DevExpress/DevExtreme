@@ -1,14 +1,10 @@
 import { isNumeric, isDefined, type } from '../../core/utils/type';
-import { sendRequest as ajaxRequest } from '../../core/utils/ajax';
+import coreAjaxUtils from '../../core/utils/ajax';
 import { compileGetter } from '../../core/utils/data';
 import { each, map } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import {
-    getMonthNames,
-    format as formatDate,
-    getDayNames
-} from '../../localization/date';
-import { format } from '../../format_helper';
+import localizationDate from '../../localization/date';
+import formatHelper from '../../format_helper';
 import { DataSource } from '../../data/data_source/data_source';
 import ArrayStore from '../../data/array_store';
 import { when, Deferred } from '../../core/utils/deferred';
@@ -25,7 +21,7 @@ export const setFieldProperty = function(field, property, value, isInitializatio
 };
 
 export function sendRequest(options) {
-    return ajaxRequest(options);
+    return coreAjaxUtils.sendRequest(options);
 }
 
 let foreachTreeAsyncDate = new Date();
@@ -108,7 +104,7 @@ export function findField(fields, id) {
 
 export function formatValue(value, options) {
     // because isNaN function works incorrectly with strings and undefined (T889965)
-    const valueText = value === value && format(value, options.format);
+    const valueText = value === value && formatHelper.format(value, options.format);
     const formatObject = {
         value: value,
         valueText: valueText || ''
@@ -262,13 +258,13 @@ export function getFieldsDataType(fields) {
 
 const DATE_INTERVAL_FORMATS = {
     'month': function(value) {
-        return getMonthNames()[value - 1];
+        return localizationDate.getMonthNames()[value - 1];
     },
     'quarter': function(value) {
-        return formatDate(new Date(2000, value * 3 - 1), 'quarter');
+        return localizationDate.format(new Date(2000, value * 3 - 1), 'quarter');
     },
     'dayOfWeek': function(value) {
-        return getDayNames()[value];
+        return localizationDate.getDayNames()[value];
     }
 };
 
@@ -283,7 +279,7 @@ export function setDefaultFieldValueFormatting(field) {
         if(groupInterval && !field.customizeText) {
             setFieldProperty(field, 'customizeText', function(formatObject) {
                 const secondValue = formatObject.value + groupInterval;
-                const secondValueText = format(secondValue, field.format);
+                const secondValueText = formatHelper.format(secondValue, field.format);
 
                 return formatObject.valueText && secondValueText ? formatObject.valueText + ' - ' + secondValueText : '';
             });

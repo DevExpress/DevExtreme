@@ -10,7 +10,7 @@ import {
     escapeServiceOperationParams
 } from './utils';
 import proxyUrlFormatter from '../proxy_url_formatter';
-import { errors } from '../errors';
+import errorsUtils from '../errors';
 import query from '../query';
 import Store from '../abstract_store';
 import RequestDispatcher from './request_dispatcher';
@@ -32,7 +32,7 @@ const mergeFieldTypesWithKeyType = (fieldTypes, keyType) => {
     for(const keyName in keyType) {
         if(keyName in result) {
             if(result[keyName] !== keyType[keyName]) {
-                errors.log('W4001', keyName);
+                errorsUtils.errors.log('W4001', keyName);
             }
         } else {
             result[keyName] = keyType[keyName];

@@ -1,6 +1,6 @@
 import { compileGetter } from '../core/utils/data';
 import { ensureDefined } from '../core/utils/common';
-import { deserializeDate } from '../core/utils/date_serialization';
+import dateSerialization from '../core/utils/date_serialization';
 import { each } from '../core/utils/iterator';
 import { isPromise } from '../core/utils/type';
 import { Deferred, fromPromise } from '../core/utils/deferred';
@@ -76,7 +76,7 @@ class FileSystemProviderBase {
             fileItem.size = 0;
         }
 
-        fileItem.dateModified = deserializeDate(this._dateModifiedGetter(dataObj));
+        fileItem.dateModified = dateSerialization.deserializeDate(this._dateModifiedGetter(dataObj));
         if(fileItem.dateModified === undefined) {
             fileItem.dateModified = new Date();
         }

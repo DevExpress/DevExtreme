@@ -1,7 +1,7 @@
 import $ from '../core/renderer';
 import Color from '../color';
 import { isFunction, isPromise, isDefined } from '../core/utils/type';
-import svgUtils from '../core/utils/svg';
+import { getSvgElement } from '../core/utils/svg';
 import { each as _each, map as _map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
 import domAdapter from '../core/dom_adapter';
@@ -718,7 +718,7 @@ function convertSvgToCanvas(svg, canvas, rootAppended) {
 function getCanvasFromSvg(markup, width, height, backgroundColor, margin, svgToCanvas = convertSvgToCanvas) {
     const canvas = createCanvas(width, height, margin);
     const context = canvas.getContext('2d');
-    const svgElem = svgUtils.getSvgElement(markup);
+    const svgElem = getSvgElement(markup);
     let invisibleDiv;
     const markupIsDomElement = domAdapter.isElementNode(markup);
     context.translate(margin, margin);

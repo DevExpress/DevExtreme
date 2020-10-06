@@ -5,9 +5,12 @@ import gridUtils from './ui.grid_core.utils';
 import eventsEngine from '../../events/core/events_engine';
 import messageLocalization from '../../localization/message';
 import CheckBox from '../check_box';
-import utils from '../filter_builder/utils';
+import {
+    getCurrentLookupValueText, getCustomOperation, getCurrentValueText,
+    getField, getCaptionByOperation, getGroupValue, isCondition, isGroup,
+} from '../filter_builder/utils';
 import { when, Deferred } from '../../core/utils/deferred';
-import inflector from '../../core/utils/inflector';
+import { captionize } from '../../core/utils/inflector';
 import { registerKeyboardAction } from './ui.grid_core.accessibility';
 
 const FILTER_PANEL_CLASS = 'filter-panel';
@@ -171,12 +174,12 @@ const FilterPanelView = modules.View.inherit({
         const hasCustomOperation = customOperation && customOperation.customizeText;
         if(isDefined(value) || hasCustomOperation) {
             if(!hasCustomOperation && field.lookup) {
-                utils.getCurrentLookupValueText(field, value, data => {
+                getCurrentLookupValueText(field, value, data => {
                     deferred.resolve(this._getValueMaskedText(data));
                 });
             } else {
                 const displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value);
-                when(utils.getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(data => {
+                when(getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done(data => {
                     deferred.resolve(this._getValueMaskedText(data));
                 });
             }
@@ -190,18 +193,18 @@ const FilterPanelView = modules.View.inherit({
         const that = this;
         const operation = filterValue[1];
         const deferred = new Deferred();
-        const customOperation = utils.getCustomOperation(options.customOperations, operation);
+        const customOperation = getCustomOperation(options.customOperations, operation);
         let operationText;
-        const field = utils.getField(filterValue[0], options.columns);
+        const field = getField(filterValue[0], options.columns);
         const fieldText = field.caption || '';
         const value = filterValue[2];
 
         if(customOperation) {
-            operationText = customOperation.caption || inflector.captionize(customOperation.name);
+            operationText = customOperation.caption || captionize(customOperation.name);
         } else if(value === null) {
-            operationText = utils.getCaptionByOperation(operation === '=' ? 'isblank' : 'isnotblank', options.filterOperationDescriptions);
+            operationText = getCaptionByOperation(operation === '=' ? 'isblank' : 'isnotblank', options.filterOperationDescriptions);
         } else {
-            operationText = utils.getCaptionByOperation(operation, options.filterOperationDescriptions);
+            operationText = getCaptionByOperation(operation, options.filterOperationDescriptions);
         }
         this._getValueText(field, customOperation, value).done((valueText) => {
             deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
@@ -213,12 +216,12 @@ const FilterPanelView = modules.View.inherit({
         const that = this;
         const result = new Deferred();
         const textParts = [];
-        const groupValue = utils.getGroupValue(filterValue);
+        const groupValue = getGroupValue(filterValue);
 
         filterValue.forEach(item => {
-            if(utils.isCondition(item)) {
+            if(isCondition(item)) {
                 textParts.push(that.getConditionText(item, options));
-            } else if(utils.isGroup(item)) {
+            } else if(isGroup(item)) {
                 textParts.push(that.getGroupText(item, options, true));
             }
         });
@@ -247,7 +250,7 @@ const FilterPanelView = modules.View.inherit({
             filterOperationDescriptions: that.option('filterBuilder.filterOperationDescriptions'),
             groupOperationDescriptions: that.option('filterBuilder.groupOperationDescriptions')
         };
-        return utils.isCondition(filterValue) ? that.getConditionText(filterValue, options) : that.getGroupText(filterValue, options);
+        return isCondition(filterValue) ? that.getConditionText(filterValue, options) : that.getGroupText(filterValue, options);
     }
 });
 

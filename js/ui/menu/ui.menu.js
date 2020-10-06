@@ -9,7 +9,7 @@ import { extend } from '../../core/utils/extend';
 import { getElementMaxHeightByWindow } from '../overlay/utils';
 import { addNamespace } from '../../events/utils/index';
 import pointerEvents from '../../events/pointer';
-import hoverEvents from '../../events/hover';
+import { end as hoverEventEnd } from '../../events/hover';
 import MenuBase from '../context_menu/ui.menu_base';
 import Overlay from '../overlay';
 import Submenu from './ui.submenu';
@@ -620,7 +620,7 @@ class Menu extends MenuBase {
     _attachSubmenuHandlers($rootItem, submenu) {
         const $submenuOverlayContent = submenu.getOverlayContent();
         const submenus = $submenuOverlayContent.find(`.${DX_SUBMENU_CLASS}`);
-        const submenuMouseLeaveName = addNamespace(hoverEvents.end, this.NAME + '_submenu');
+        const submenuMouseLeaveName = addNamespace(hoverEventEnd, this.NAME + '_submenu');
 
         submenu.option({
             onShowing: this._submenuOnShowingHandler.bind(this, $rootItem, submenu),

@@ -1,7 +1,7 @@
 import { when, Deferred } from '../../core/utils/deferred';
-import { aggregators } from '../../data/utils';
+import dataUtils from '../../data/utils';
 import dataQuery from '../../data/query';
-import { deserializeDate } from '../../core/utils/date_serialization';
+import dateSerialization from '../../core/utils/date_serialization';
 import { DataSource } from '../../data/data_source/data_source';
 import CustomStore from '../../data/custom_store';
 import { compileGetter, toComparable } from '../../core/utils/data';
@@ -46,7 +46,7 @@ export const LocalStore = Class.inherit((function() {
         return function(data) {
             let value = dataSelector(data);
             if(value && !(value instanceof Date)) {
-                value = deserializeDate(value);
+                value = dateSerialization.deserializeDate(value);
             }
             return value;
         };
@@ -227,7 +227,7 @@ export const LocalStore = Class.inherit((function() {
             };
         }
 
-        return aggregators[field.summaryType] || aggregators.count;
+        return dataUtils.aggregators[field.summaryType] || dataUtils.aggregators.count;
     }
 
     function aggregationStep(measures, aggregationCells, data) {

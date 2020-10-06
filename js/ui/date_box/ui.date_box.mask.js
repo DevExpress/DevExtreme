@@ -1,16 +1,13 @@
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
-import { isFunction } from '../../core/utils/type';
+import { isFunction, isString, isDate } from '../../core/utils/type';
 import { clipboardText } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
-import { fitIntoRange } from '../../core/utils/math';
-import { inRange } from '../../core/utils/math';
+import { fitIntoRange, inRange, sign } from '../../core/utils/math';
 import eventsEngine from '../../events/core/events_engine';
 import { getDatePartIndexByPosition, renderDateParts } from './ui.date_box.mask.parts';
 import dateLocalization from '../../localization/date';
 import { getRegExpInfo } from '../../localization/ldml/date.parser';
 import { getFormat } from '../../localization/ldml/date.format';
-import { isString, isDate } from '../../core/utils/type';
-import { sign } from '../../core/utils/math';
 import DateBoxBase from './ui.date_box.base';
 import numberLocalization from '../../localization/number';
 import devices from '../../core/devices';

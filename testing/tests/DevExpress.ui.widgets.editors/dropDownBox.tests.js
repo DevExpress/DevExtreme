@@ -3,10 +3,9 @@ import renderer from 'core/renderer';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
 import DropDownBox from 'ui/drop_down_box';
-import { isRenderer } from 'core/utils/type';
+import typeUtils, { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import browser from 'core/utils/browser';
-import typeUtils from 'core/utils/type';
 import devices from 'core/devices';
 
 import 'common.css!';

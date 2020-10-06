@@ -1,8 +1,7 @@
 import $ from '../core/renderer';
 import { data as elementData, removeData } from '../core/element_data';
-import { wrapToArray } from '../core/utils/array';
-import { inArray } from '../core/utils/array';
-import iteratorUtils from '../core/utils/iterator';
+import { wrapToArray, inArray } from '../core/utils/array';
+import * as iteratorUtils from '../core/utils/iterator';
 import { contains } from '../core/utils/dom';
 import registerEvent from './core/event_registrator';
 import { eventData as eData, fireEvent } from './utils/index';

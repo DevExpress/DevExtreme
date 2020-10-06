@@ -4,7 +4,7 @@ import LoadIndicator from '../load_indicator';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import { isFunction } from '../../core/utils/type';
-import dataCoreUtils from '../../core/utils/data';
+import { compileSetter, compileGetter } from '../../core/utils/data';
 import positionUtils from '../../animation/position';
 import resizeCallbacks from '../../core/utils/resize_callbacks';
 import { getDiagram } from './diagram.importer';
@@ -22,7 +22,7 @@ import DiagramMainToolbar from './ui.diagram.main_toolbar';
 import DiagramHistoryToolbar from './ui.diagram.history_toolbar';
 import DiagramViewToolbar from './ui.diagram.view_toolbar';
 import DiagramPropertiesToolbar from './ui.diagram.properties_toolbar';
-import { DiagramContextMenuWrapper } from './ui.diagram.context_menu';
+import diagramContextMenuModule from './ui.diagram.context_menu';
 import DiagramContextToolbox from './ui.diagram.context_toolbox';
 import DiagramDialog from './ui.diagram.dialogs';
 import DiagramScrollView from './ui.diagram.scroll_view';
@@ -550,7 +550,7 @@ class Diagram extends Widget {
     _renderContextMenu($parent) {
         const $contextMenu = $('<div>')
             .appendTo($parent);
-        this._contextMenu = this._createComponent($contextMenu, DiagramContextMenuWrapper, {
+        this._contextMenu = this._createComponent($contextMenu, diagramContextMenuModule.DiagramContextMenuWrapper, {
             commands: this.option('contextMenu.commands'),
             onContentReady: ({ component }) => this._registerBar(component),
             onVisibilityChanging: ({ component }) => this._diagramInstance.updateBarItemsState(component.bar),
@@ -814,7 +814,7 @@ class Diagram extends Widget {
 
     _createOptionGetter(optionName) {
         const expr = this.option(optionName);
-        return expr && dataCoreUtils.compileGetter(expr);
+        return expr && compileGetter(expr);
     }
     _onRequestUpdateLayout(changes) {
         if(!this._requestLayoutUpdateAction) {
@@ -830,7 +830,7 @@ class Diagram extends Widget {
         if(isFunction(expr)) {
             return expr;
         }
-        return expr && dataCoreUtils.compileSetter(expr);
+        return expr && compileSetter(expr);
     }
     _bindDiagramData() {
         if(this._updateDiagramLockCount || !this._isBindingMode()) return;

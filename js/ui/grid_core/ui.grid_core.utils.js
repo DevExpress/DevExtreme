@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { when } from '../../core/utils/deferred';
-import { getGroupInterval } from '../shared/filtering';
+import sharedFiltering from '../shared/filtering';
 import { format } from '../../core/utils/string';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -9,7 +9,7 @@ import { getBoundingRect } from '../../core/utils/position';
 import { toComparable } from '../../core/utils/data';
 import { equalByValue } from '../../core/utils/common';
 import LoadPanel from '../load_panel';
-import { normalizeSortingInfo as normalizeSorting } from '../../data/utils';
+import dataUtils from '../../data/utils';
 import formatHelper from '../../format_helper';
 import { getWindow } from '../../core/utils/window';
 import eventsEngine from '../../events/core/events_engine';
@@ -78,7 +78,7 @@ const setEmptyText = function($container) {
 
 const normalizeSortingInfo = function(sort) {
     sort = sort || [];
-    const result = normalizeSorting(sort);
+    const result = dataUtils.normalizeSortingInfo(sort);
 
     for(let i = 0; i < sort.length; i++) {
         if(sort && sort[i] && sort[i].isExpanded !== undefined) {
@@ -314,7 +314,7 @@ export default {
     getHeaderFilterGroupParameters: function(column, remoteGrouping) {
         let result = [];
         const dataField = column.dataField || column.name;
-        const groupInterval = getGroupInterval(column);
+        const groupInterval = sharedFiltering.getGroupInterval(column);
 
         if(groupInterval) {
             each(groupInterval, function(index, interval) {

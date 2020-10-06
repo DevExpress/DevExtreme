@@ -4,7 +4,7 @@ const abstract = Class.abstract;
 import { addNamespace, isDxMouseWheelEvent, isMouseEvent, eventData, eventDelta } from '../../events/utils/index';
 import GestureEmitter from '../../events/gesture/emitter.gesture';
 import registerEmitter from '../../events/core/emitter_registrator';
-import animationFrame from '../../animation/frame';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 import devices from '../../core/devices';
 import { compare as compareVersions } from '../../core/utils/version';
 
@@ -164,19 +164,19 @@ let PointerLocker = TimeoutLocker.inherit((function() {
                 this._locked = true;
 
                 const that = this;
-                animationFrame.cancelAnimationFrame(this._scrollFrame);
-                this._scrollFrame = animationFrame.requestAnimationFrame(function() {
+                cancelAnimationFrame(this._scrollFrame);
+                this._scrollFrame = requestAnimationFrame(function() {
                     that._locked = false;
                 });
             },
 
             check: function(e, callback) {
-                animationFrame.cancelAnimationFrame(this._scrollFrame);
-                animationFrame.cancelAnimationFrame(this._checkFrame);
+                cancelAnimationFrame(this._scrollFrame);
+                cancelAnimationFrame(this._checkFrame);
 
                 const that = this;
                 const callBase = this.callBase;
-                this._checkFrame = animationFrame.requestAnimationFrame(function() {
+                this._checkFrame = requestAnimationFrame(function() {
                     callBase.call(that, e, callback);
 
                     that._locked = false;
@@ -186,8 +186,8 @@ let PointerLocker = TimeoutLocker.inherit((function() {
             dispose: function() {
                 this.callBase();
 
-                animationFrame.cancelAnimationFrame(this._scrollFrame);
-                animationFrame.cancelAnimationFrame(this._checkFrame);
+                cancelAnimationFrame(this._scrollFrame);
+                cancelAnimationFrame(this._checkFrame);
             }
 
         };

@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { getWindow, hasWindow } from '../../core/utils/window';
 import { deferUpdate, deferRender } from '../../core/utils/common';
-import virtualScrollingCore from './ui.grid_core.virtual_scrolling_core';
+import { VirtualScrollController, subscribeToExternalScrollers } from './ui.grid_core.virtual_scrolling_core';
 import gridCoreUtils from './ui.grid_core.utils';
 import { each } from '../../core/utils/iterator';
 import { Deferred } from '../../core/utils/deferred';
@@ -83,7 +83,7 @@ const VirtualScrollingDataSourceAdapterExtender = (function() {
             that._items = [];
             that._isLoaded = true;
 
-            that._virtualScrollController = new virtualScrollingCore.VirtualScrollController(that.component, {
+            that._virtualScrollController = new VirtualScrollController(that.component, {
                 pageSize: function() {
                     return that.pageSize();
                 },
@@ -689,7 +689,7 @@ const VirtualScrollingRowsViewExtender = (function() {
             that.callBase();
 
             if(that.component.$element() && !that._windowScroll && $element.closest(getWindow().document).length) {
-                that._windowScroll = virtualScrollingCore.subscribeToExternalScrollers($element, function(scrollPos) {
+                that._windowScroll = subscribeToExternalScrollers($element, function(scrollPos) {
                     if(!that._hasHeight && that._rowHeight) {
                         that._dataController.setViewportPosition(scrollPos);
                     }
@@ -812,7 +812,7 @@ export default {
                             return item.rowType === 'data' && !item.isNewRow || item.rowType === 'group' && that._dataSource.isGroupItemCountable(item.data);
                         };
 
-                        that._rowsScrollController = new virtualScrollingCore.VirtualScrollController(that.component, {
+                        that._rowsScrollController = new VirtualScrollController(that.component, {
                             pageSize: function() {
                                 return that.getRowPageSize();
                             },

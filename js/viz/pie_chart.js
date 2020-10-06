@@ -1,5 +1,5 @@
 import consts from './components/consts';
-import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords } from './core/utils';
+import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords, patchFontOptions } from './core/utils';
 import { extend as _extend } from '../core/utils/extend';
 import { isNumeric } from '../core/utils/type';
 import { each as _each } from '../core/utils/iterator';
@@ -8,7 +8,6 @@ import registerComponent from '../core/component_registrator';
 import { BaseChart, overlapping } from './chart_components/base_chart';
 import { noop as _noop } from '../core/utils/common';
 import { Translator1D } from './translators/translator1d';
-import { patchFontOptions } from './core/utils';
 
 const { states } = consts;
 const seriesSpacing = consts.pieSeriesSpacing;

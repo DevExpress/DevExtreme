@@ -1,6 +1,6 @@
 /* globals Intl */
 import { extend } from '../../core/utils/extend';
-import { locale } from '../core';
+import localizationCoreUtils from '../core';
 
 const SYMBOLS_TO_REMOVE_REGEX = /[\u200E\u200F]/g;
 
@@ -29,9 +29,9 @@ const getIntlFormatter = format => {
 
 const formattersCache = {};
 const getFormatter = format => {
-    const key = locale() + '/' + JSON.stringify(format);
+    const key = localizationCoreUtils.locale() + '/' + JSON.stringify(format);
     if(!formattersCache[key]) {
-        formattersCache[key] = (new Intl.DateTimeFormat(locale(), format)).format;
+        formattersCache[key] = (new Intl.DateTimeFormat(localizationCoreUtils.locale(), format)).format;
     }
 
     return formattersCache[key];
@@ -42,7 +42,7 @@ function formatDateTime(date, format) {
 }
 
 const formatNumber = number => {
-    return (new Intl.NumberFormat(locale())).format(number);
+    return (new Intl.NumberFormat(localizationCoreUtils.locale())).format(number);
 };
 
 const getAlternativeNumeralsMap = (() => {
@@ -65,7 +65,7 @@ const getAlternativeNumeralsMap = (() => {
 })();
 
 const normalizeNumerals = dateString => {
-    const alternativeNumeralsMap = getAlternativeNumeralsMap(locale());
+    const alternativeNumeralsMap = getAlternativeNumeralsMap(localizationCoreUtils.locale());
 
     if(!alternativeNumeralsMap) {
         return dateString;
@@ -104,7 +104,7 @@ const intlFormats = {
 
 Object.defineProperty(intlFormats, 'shortdateshorttime', {
     get: function() {
-        const defaultOptions = Intl.DateTimeFormat(locale()).resolvedOptions();
+        const defaultOptions = Intl.DateTimeFormat(localizationCoreUtils.locale()).resolvedOptions();
 
         return { year: defaultOptions.year, month: defaultOptions.month, day: defaultOptions.day, hour: 'numeric', minute: 'numeric' };
     }

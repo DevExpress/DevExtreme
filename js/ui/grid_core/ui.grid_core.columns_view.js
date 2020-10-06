@@ -11,12 +11,11 @@ import { noop } from '../../core/utils/common';
 import { setWidth } from '../../core/utils/style';
 import { getPublicElement } from '../../core/element';
 import { isRenderer, isFunction, isString, isDefined, isNumeric } from '../../core/utils/type';
-import { getBoundingRect } from '../../core/utils/position';
-import iteratorUtils from '../../core/utils/iterator';
+import { getBoundingRect, getDefaultAlignment } from '../../core/utils/position';
+import * as iteratorUtils from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { getDefaultAlignment } from '../../core/utils/position';
 import modules from './ui.grid_core.modules';
-import { checkChanges } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import columnStateMixin from './ui.grid_core.column_state_mixin';
 import { when, Deferred } from '../../core/utils/deferred';
 
@@ -726,7 +725,7 @@ export const ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _columnOptionChanged: function(e) {
         const optionNames = e.optionNames;
 
-        if(checkChanges(optionNames, ['width', 'visibleWidth'])) {
+        if(gridCoreUtils.checkChanges(optionNames, ['width', 'visibleWidth'])) {
             const visibleColumns = this._columnsController.getVisibleColumns();
             const widths = iteratorUtils.map(visibleColumns, function(column) {
                 const width = column.visibleWidth || column.width;

@@ -1,4 +1,4 @@
-import translator from '../../animation/translator';
+import { move } from '../../animation/translator';
 import fx from '../../animation/fx';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
 import EditDecorator from './ui.list.edit.decorator';
@@ -25,7 +25,7 @@ registerDecorator(
                     }
                 });
             } else {
-                translator.move($itemElement, { left: itemOffset });
+                move($itemElement, { left: itemOffset });
                 deferred.resolve();
             }
 
