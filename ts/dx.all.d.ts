@@ -3006,12 +3006,6 @@ declare module DevExpress.pdfExporter {
      */
     export function exportDataGrid(options: PdfExportDataGridProps): Promise<void> & JQueryPromise<void>;
 }
-declare module DevExpress.timeZoneUtils {
-    /**
-     * [descr:Utils.getTimeZones(date)]
-     */
-    export function getTimeZones(date?: Date): Array<any>;
-}
 declare module DevExpress.ui {
     /**
      * [descr:AsyncRule]
@@ -12501,6 +12495,10 @@ declare module DevExpress.utils {
      * [descr:utils.cancelAnimationFrame(requestID)]
      */
     export function cancelAnimationFrame(requestID: number): void;
+    /**
+     * [descr:utils.timeZone.getTimeZones(date)]
+     */
+    export function getTimeZones(date?: Date): Array<any>;
     /**
      * [descr:utils.initMobileViewport(options)]
      */
