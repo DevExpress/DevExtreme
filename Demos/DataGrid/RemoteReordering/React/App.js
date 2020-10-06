@@ -38,7 +38,7 @@ class App extends React.Component {
 
     await tasksStore.update(e.itemData.ID, { OrderIndex: newOrderIndex });
     await e.component.refresh();
-  } 
+  }
 
   render() {
     return (
