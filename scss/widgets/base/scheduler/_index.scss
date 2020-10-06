@@ -649,16 +649,9 @@ $scheduler-appointment-form-label-padding: 20px;
       font-size: $scheduler-time-indicator-font-size;
       color: $scheduler-time-indicator-color;
       position: absolute;
-      z-index: 1000;
       margin-top: -$scheduler-time-indicator-top;
       margin-left: -$scheduler-time-indicator-left;
       text-shadow: $scheduler-time-indicator-text-shadow;
-    }
-
-    &.dx-scheduler-date-time-indicator-simple {
-      &::before {
-        content: "";
-      }
     }
   }
 
@@ -690,12 +683,6 @@ $scheduler-appointment-form-label-padding: 20px;
       height: $scheduler-time-indicator-size;
 
       @include dx-icon(spinright);
-
-      &.dx-scheduler-date-time-indicator-simple {
-        &::before {
-          content: "";
-        }
-      }
     }
 
     .dx-scheduler-date-time-shader,
@@ -748,6 +735,12 @@ $scheduler-appointment-form-label-padding: 20px;
 
         &::before {
           margin-right: -$scheduler-time-indicator-left;
+        }
+
+        &.dx-scheduler-date-time-indicator-simple {
+          &::before {
+            content: "";
+          }
         }
       }
 
@@ -809,12 +802,6 @@ $scheduler-appointment-form-label-padding: 20px;
       &::before {
         margin-left: -$scheduler-time-indicator-top;
         margin-top: -$scheduler-time-indicator-left;
-      }
-
-      &.dx-scheduler-date-time-indicator-simple {
-        &::before {
-          content: "";
-        }
       }
     }
 
@@ -1093,6 +1080,12 @@ $scheduler-appointment-form-label-padding: 20px;
         color: $scheduler-workspace-accent-color;
         background-color: $scheduler-first-month-cell-background-color;
         font-weight: bold;
+      }
+    }
+
+    .dx-scheduler-date-time-indicator-simple {
+      &::before {
+        content: "";
       }
     }
   }
