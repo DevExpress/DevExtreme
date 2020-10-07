@@ -1,0 +1,17 @@
+::ng-deep #pie {
+    height: 440px;
+}
+
+::ng-deep .medal-tooltip {
+    font-size: 12px;
+}
+
+::ng-deep .medal-tooltip .country-name {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 5px 0px 10px 0px;
+}
+
+::ng-deep .medal-tooltip .caption {
+    font-weight: 600;
+}

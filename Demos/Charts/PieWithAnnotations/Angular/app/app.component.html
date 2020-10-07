@@ -1,0 +1,64 @@
+<dx-pie-chart
+    id="pie"
+    palette="Vintage"
+    [dataSource]="champions">
+    <dxo-common-annotation-settings
+        type="image"
+        color="transparent"
+        [paddingLeftRight]="0"
+        [paddingTopBottom]="0"
+        tooltipTemplate="tooltipContent"
+    >
+        <dxo-image
+            [height]="60"
+            [width]="90"
+        ></dxo-image>
+        <dxo-border color="transparent"></dxo-border>
+    </dxo-common-annotation-settings>
+    <dxi-annotation
+        *ngFor="let item of annotations"
+        [argument]="item.country"
+        [data]="item.data"
+        [location]="item.location"
+        [offsetX]="item.offsetX"
+        [offsetY]="item.offsetY"
+        [color]="item.color">
+        <dxo-image [url]="item.image"></dxo-image>
+        <dxo-border [color]="item.borderColor"></dxo-border>
+        <dxo-shadow [opacity]="item.shadowOpacity"></dxo-shadow>
+    </dxi-annotation>
+    <dxi-series
+        argumentField="country"
+        valueField="gold">
+        <dxo-label
+            [visible]="true"
+            position="inside"
+            [radialOffset]="83"
+            backgroundColor="transparent">
+            <dxo-font
+                [size]="16"
+                [weight]="600"
+            ></dxo-font>
+        </dxo-label>
+    </dxi-series>
+    <dxo-tooltip
+        [paddingLeftRight]="12"
+        [paddingTopBottom]="10"
+    ></dxo-tooltip>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxo-title text="Ice Hockey World Championship Gold Medal Winners"></dxo-title>
+    <div *dxTemplate="let annotation of 'tooltipContent'" class='medal-tooltip'>
+        <div class='country-name'>{{annotation.data.country}}
+            <br *ngIf="annotation.data.oldCountryName"/>{{annotation.data.oldCountryName}}
+        </div>
+        <div>
+            <span class='caption'>Gold</span>: {{annotation.data.gold}}
+        </div>
+        <div>
+            <span class='caption'>Silver</span>: {{annotation.data.silver}}
+        </div>
+        <div>
+            <span class='caption'>Bronze</span>: {{annotation.data.bronze}}
+        </div>
+    </div>
+</dx-pie-chart>
