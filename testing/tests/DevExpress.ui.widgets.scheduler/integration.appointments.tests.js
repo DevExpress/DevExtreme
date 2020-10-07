@@ -4008,58 +4008,49 @@ QUnit.module('Integration: Appointments', {
                     startDate: new Date('2020-09-06T00:00:00'),
                     endDate: new Date('2020-09-06T01:00:00'),
                     groupOrientation: 'horizontal',
-                    groupByDate: false,
                 }, {
                     view: 'month',
                     startDate: new Date('2020-09-06T00:00:00'),
                     endDate: new Date('2020-09-06T01:00:00'),
                     groupOrientation: 'horizontal',
-                    groupByDate: false,
                 }, {
                     view: 'timelineWeek',
                     startDate: new Date('2020-09-06T00:00:00'),
                     endDate: new Date('2020-09-06T01:00:00'),
                     groupOrientation: 'horizontal',
-                    groupByDate: false,
                 }, {
                     view: 'timelineMonth',
                     startDate: new Date('2020-09-01T00:00:00'),
                     endDate: new Date('2020-09-01T01:00:00'),
                     groupOrientation: 'horizontal',
-                    groupByDate: false,
                 }, {
                     view: 'week',
                     startDate: new Date('2020-09-06T00:00:00'),
                     endDate: new Date('2020-09-06T01:00:00'),
                     groupOrientation: 'vertical',
-                    groupByDate: false,
                 }, {
                     view: 'month',
                     startDate: new Date('2020-09-06T00:00:00'),
                     endDate: new Date('2020-09-06T01:00:00'),
                     groupOrientation: 'vertical',
-                    groupByDate: false,
                 }, {
                     view: 'timelineWeek',
                     startDate: new Date('2020-09-06T00:00:00'),
                     endDate: new Date('2020-09-06T01:00:00'),
                     groupOrientation: 'vertical',
-                    groupByDate: false,
                 }, {
                     view: 'timelineMonth',
                     startDate: new Date('2020-09-01T00:00:00'),
                     endDate: new Date('2020-09-01T01:00:00'),
                     groupOrientation: 'vertical',
-                    groupByDate: false,
-                }].forEach(({ view, startDate, endDate, groupOrientation, groupByDate }) => {
+                }].forEach(({ view, startDate, endDate, groupOrientation }) => {
                     QUnit.test(
-                        `Scroll position should not be updated if appointment is visible in ${view}, ${groupOrientation} grouping, groupByDate=${groupByDate}`,
+                        `Scroll position should not be updated if appointment is visible in ${view}, ${groupOrientation} grouping`,
                         function(assert) {
                             const scheduler = this.createScheduler({
                                 views: [{
                                     type: view,
                                     groupOrientation,
-                                    groupByDate,
                                 }],
                                 currentView: view,
                                 groups: ['ownerId'],
@@ -4089,7 +4080,6 @@ QUnit.module('Integration: Appointments', {
                             views: [{
                                 type: view,
                                 groupOrientation,
-                                groupByDate,
                             }],
                             currentView: view,
                             groups: ['ownerId'],
