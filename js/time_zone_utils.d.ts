@@ -1,5 +1,5 @@
 /**
- * @docid utils.timeZone.getTimeZones
+ * @docid utils.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
  * @return Array<Object>
