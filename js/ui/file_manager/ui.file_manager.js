@@ -226,13 +226,13 @@ class FileManager extends Widget {
     }
 
     _onItemViewSelectionChanged({ selectedItemInfos, selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys }) {
-        this._updateToolbar(selectedItemInfos);
-
         this._lockSelectionProcessing = true;
         this.option('selectedItemKeys', selectedItemKeys);
         this._lockSelectionProcessing = false;
 
         this._actions.onSelectionChanged({ selectedItems, selectedItemKeys, currentSelectedItemKeys, currentDeselectedItemKeys });
+
+        this._updateToolbar(selectedItemInfos);
     }
 
     _onItemViewFocusedItemChanged(e) {
@@ -634,11 +634,11 @@ class FileManager extends Widget {
                             toolbarOptions.fileItems = args.value.fileSelectionItems;
                         }
                     }
-                    if(args.fullName === 'toolbar.items') {
-                        toolbarOptions.generalItems = args.value;
+                    if(args.fullName === 'toolbar.items' || args.fullName.indexOf('toolbar.items') === 0) {
+                        toolbarOptions.generalItems = this.option('toolbar.items');
                     }
-                    if(args.fullName === 'toolbar.fileSelectionItems') {
-                        toolbarOptions.fileItems = args.value;
+                    if(args.fullName === 'toolbar.fileSelectionItems' || args.fullName.indexOf('toolbar.fileSelectionItems') === 0) {
+                        toolbarOptions.fileItems = this.option('toolbar.fileSelectionItems');
                     }
                     this._toolbar.option(toolbarOptions);
                 }
