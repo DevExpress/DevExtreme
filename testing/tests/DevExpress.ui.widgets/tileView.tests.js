@@ -360,6 +360,35 @@ QUnit.module('widget sizing render', () => {
 
         assert.roughEqual($element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).width(), customWidth, 1);
     });
+
+    QUnit.test('scrollable content height is recalculated if the element was resized and the widget has vertical direction (T934021)', function(assert) {
+        const $element = $('#widget').dxTileView({
+            direction: 'vertical',
+            items: prepareItems(items, configs.vertical),
+            height: 300,
+            width: 240
+        });
+        const instance = $element.dxTileView('instance');
+        const startContentHeight = $element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).height();
+
+        instance.option('width', 900);
+
+        assert.ok($element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).height() < startContentHeight);
+    });
+
+    QUnit.test('scrollable content height is recalculated if the element was resized and the widget has horizontal direction (T934021)', function(assert) {
+        const $element = $('#widget').dxTileView({
+            items: prepareItems(items, configs.horizontal),
+            height: 240,
+            width: 300
+        });
+        const instance = $element.dxTileView('instance');
+        const startContentWidth = $element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).width();
+
+        instance.option('height', 900);
+
+        assert.ok($element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).width() < startContentWidth);
+    });
 });
 
 QUnit.module('integration with dataSource', {
