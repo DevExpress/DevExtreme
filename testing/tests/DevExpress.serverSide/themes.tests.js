@@ -15,6 +15,7 @@ QUnit.module('themes', {
     afterEach: function() {
         themes.current(this._originalTheme);
         viewportUtils.value(viewport);
+        return new Promise((resolve) => themes.ready(resolve));
     }
 });
 
@@ -30,9 +31,6 @@ QUnit.test('theme changing', function(assert) {
         'dx-theme-generic-typography',
         'dx-color-scheme-light'
     ].join(' '));
-
-    const done = assert.async();
-    themes.initialized(done);
 });
 
 QUnit.test('viewport changing', function(assert) {
@@ -54,7 +52,4 @@ QUnit.test('viewport changing', function(assert) {
     ].join(' '));
 
     fixture.removeChild(newViewport);
-
-    const done = assert.async();
-    themes.initialized(done);
 });
