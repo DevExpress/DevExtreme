@@ -5129,6 +5129,44 @@ QUnit.module('ScrollTo', () => {
                 );
             });
 
+            QUnit.test('ScrollTo should work with vertical grouping when scrolling to an all-day cell', function(assert) {
+                const leftCellCount = 1;
+                const topCellCount = 49;
+
+                const scheduler = this.createScheduler({
+                    currentView: {
+                        type: 'week',
+                        groupOrientation: 'vertical',
+                    },
+                    groups: ['ownerId'],
+                    showAllDayPanel: true,
+                });
+
+                const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                scheduler.instance.scrollTo(new Date('2020-09-07T09:00:00'), { ownerId: 2 }, true);
+
+                const scrollableHeight = $scrollable.height();
+                const scrollableWidth = $scrollable.width();
+                const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                const cellHeight = $schedulerCell.outerHeight();
+                const cellWidth = $schedulerCell.outerWidth();
+
+                assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                assert.equal(
+                    scrollBy.getCall(0).args[0].top,
+                    topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
+                    'Correct top parameter',
+                );
+                assert.equal(
+                    scrollBy.getCall(0).args[0].left,
+                    leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                    'Correct left parameter',
+                );
+            });
+
             [{
                 view: 'week',
                 date: new Date('2020-09-07T09:00:00'),

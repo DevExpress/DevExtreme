@@ -2854,10 +2854,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             const columnIndex = index % totalColumnCount;
             const rowIndex = index / totalColumnCount;
 
-            if(scrolledColumnCount <= columnIndex
+            if((scrolledColumnCount - 1) <= columnIndex
                 && columnIndex < columnCount
                 && scrolledRowCount <= rowIndex
-                && rowIndex < rowCount) {
+                && rowIndex <= rowCount) {
                 result.push(cell);
             }
         });
@@ -2932,7 +2932,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         const left = coordinates.left - scrollable.scrollLeft() - xShift - offset;
         let top = coordinates.top - scrollable.scrollTop() - yShift;
-        if(isScrollToAllDay) {
+        if(isScrollToAllDay && !this._isVerticalGroupedWorkSpace()) {
             top = 0;
         }
 
