@@ -328,7 +328,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
             dataSource: [],
             currentView: 'week',
             height: 500,
-            timeZone: 'Asia/Ashkhabad'
+            timeZone: 'Asia/Ashkhabad',
+            width: 1000,
         });
 
         this.instance.getWorkSpaceScrollable().scrollBy(170);

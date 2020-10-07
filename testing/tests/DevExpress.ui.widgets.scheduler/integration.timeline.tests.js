@@ -92,7 +92,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
             store: []
         }),
         currentView: 'timelineDay',
-        height: 500
+        height: 500,
+        width: 1000,
     });
 
     const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption' };
@@ -119,7 +120,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
         views: ['timelineWeek', 'timelineWorkWeek'],
         currentView: 'timelineWeek',
         height: 500,
-        cellDuration: 120
+        cellDuration: 120,
+        width: 1000,
     });
 
     const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
@@ -192,7 +194,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
         views: ['timelineMonth'],
         currentView: 'timelineMonth',
         height: 500,
-        cellDuration: 120
+        cellDuration: 120,
+        width: 1000,
     });
 
     const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');

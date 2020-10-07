@@ -2792,7 +2792,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
 
-    updateScrollPosition(date, groups, allDay) {
+    updateScrollPosition(date, groups, allDay = false) {
         const scheduler = this.option('observer');
         const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
@@ -2808,7 +2808,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             : 0;
         const time = date.getTime();
 
-        const result = cells.reduce((currentResult, cell) => {
+        return cells.reduce((currentResult, cell) => {
             const {
                 startDate: cellStartDate,
                 endDate: cellEndDate,
@@ -2828,8 +2828,6 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             return currentResult;
         }, true);
-
-        return result;
     }
 
     _getCellsInViewport(allDay) {

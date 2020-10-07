@@ -1003,7 +1003,8 @@ QUnit.module('Integration: Appointments', {
                         store: []
                     }),
                     currentView: 'week',
-                    height: 500
+                    height: 500,
+                    width: 1000,
                 });
 
                 const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption' };
