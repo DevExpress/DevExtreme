@@ -894,4 +894,3 @@ QUnit.module('Appointment filtering', function() {
         });
     });
 });
-
