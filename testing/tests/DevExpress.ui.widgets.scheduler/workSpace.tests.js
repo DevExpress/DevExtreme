@@ -2734,7 +2734,11 @@ QUnit.module('Workspace Mouse Interaction', () => {
                         assert.ok(true, 'event is handled');
                         assert.equal(isRenderer(e.cellElement), !!config().useJQuery, 'cell is correct');
                         assert.deepEqual($(e.cellElement)[0], $cell[0], 'cell is correct');
-                        assert.deepEqual(e.cellData, { startDate: new Date(2018, 1, 26), endDate: new Date(2018, 1, 27) }, 'cell is correct');
+                        assert.deepEqual(
+                            e.cellData,
+                            { startDate: new Date(2018, 1, 26), endDate: new Date(2018, 1, 27), groupIndex: 0, },
+                            'cell is correct',
+                        );
                     }
                 }, 'dxSchedulerWorkSpaceMonth');
 
