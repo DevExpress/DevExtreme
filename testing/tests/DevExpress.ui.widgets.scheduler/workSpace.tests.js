@@ -2609,22 +2609,6 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 $($table).trigger($.Event('dxpointerup', { target: cell, which: 1 }));
             });
 
-            // <<<<<<< HEAD
-            //         const $element = $('#scheduler-work-space').dxSchedulerWorkSpaceMonth({
-            //             focusStateEnabled: true,
-            //             currentDate: new Date(2018, 2, 1),
-            //             onCellContextMenu: function(e) {
-            //                 assert.ok(true, 'event is handled');
-            //                 assert.equal(isRenderer(e.cellElement), !!config().useJQuery, 'cell is correct');
-            //                 assert.deepEqual($(e.cellElement)[0], $cell[0], 'cell is correct');
-            //                 assert.deepEqual(
-            //                     e.cellData,
-            //                     { startDate: new Date(2018, 1, 26), endDate: new Date(2018, 1, 27), groupIndex: 0 },
-            //                     'cell is correct',
-            //                 );
-            //             }
-            //         });
-            // =======
             QUnit.test('Workspace should handle pointerdown by only left mouse key', function(assert) {
                 const $element = this.createInstance({
                     focusStateEnabled: true
