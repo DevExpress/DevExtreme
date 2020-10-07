@@ -295,16 +295,18 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             firstViewDate
         } = options;
         let { startDate } = options;
+        let resultDate = new Date(appointment.startDate);
 
         if(this.scheduler.appointmentTakesAllDay(rawAppointment)) {
-            return dateUtils.normalizeDate(startDate, firstViewDate);
+            resultDate = dateUtils.normalizeDate(startDate, firstViewDate);
+        } else {
+            if(startDate < firstViewDate) {
+                startDate = firstViewDate;
+            }
+
+            resultDate = dateUtils.normalizeDate(appointment.startDate, startDate);
         }
 
-        if(startDate < firstViewDate) {
-            startDate = firstViewDate;
-        }
-
-        const resultDate = dateUtils.normalizeDate(appointment.startDate, startDate);
 
         return dateUtils.roundDateByStartDayHour(resultDate, startDayHour);
     }
