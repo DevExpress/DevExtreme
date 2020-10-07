@@ -8,6 +8,7 @@
     :end-day-hour="19"
     :remote-filtering="true"
     current-view="day"
+    date-serialization-format="yyyy-MM-ddTHH:mm:ssZ"
     text-expr="Text"
     start-date-expr="StartDate"
     end-date-expr="EndDate"
@@ -27,7 +28,7 @@ export default {
   data() {
     return {
       views: ['day', 'workWeek', 'month'],
-      currentDate: new Date(2017, 4, 23),
+      currentDate: new Date(2021, 4, 25),
       dataSource: AspNetData.createStore({
         key: 'AppointmentId',
         loadUrl: `${url }/Get`,

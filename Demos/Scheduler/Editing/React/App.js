@@ -5,7 +5,7 @@ import notify from 'devextreme/ui/notify';
 
 import { data } from './data.js';
 
-const currentDate = new Date(2021, 4, 22);
+const currentDate = new Date(2021, 4, 27);
 const views = ['day', 'week'];
 
 class App extends React.Component {

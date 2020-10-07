@@ -19,7 +19,7 @@ if(!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     appointmentsData: Appointment[];
-    currentDate: Date = new Date(2021, 4, 22);
+    currentDate: Date = new Date(2021, 4, 27);
 
     constructor(service: Service) {
         this.appointmentsData = service.getAppointments();

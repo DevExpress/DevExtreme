@@ -13,9 +13,10 @@ window.onload = function() {
                 }
             }),
             remoteFiltering: true,
+            dateSerializationFormat="yyyy-MM-ddTHH:mm:ssZ",
             views: ["day", "workWeek", "month"],
             currentView: "day",
-            currentDate: new Date(2017, 4, 23),
+            currentDate: new Date(2021, 4, 25),
             startDayHour: 9,
             endDayHour: 19,
             height: 600,

@@ -47,8 +47,8 @@ export const data = [{
 }, {
   text: 'Stan',
   employeeID: 1,
-  startDate: new Date('2021-08-16T06:30:00.000Z'),
-  endDate: new Date('2021-08-16T08:30:00.000Z')
+  startDate: new Date('2021-08-23T06:30:00.000Z'),
+  endDate: new Date('2021-08-23T08:30:00.000Z')
 }, {
   text: 'Stan',
   employeeID: 1,

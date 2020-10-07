@@ -67,4 +67,3 @@ var data = [
         endDate: new Date("2021-05-28T11:00:00.000Z")
     }
 ];
-  

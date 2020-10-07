@@ -16,7 +16,7 @@ const dataSource = AspNetData.createStore({
   }
 });
 
-const currentDate = new Date(2017, 4, 23);
+const currentDate = new Date(2021, 4, 25);
 const views = ['day', 'workWeek', 'month'];
 
 class App extends React.Component {
@@ -30,7 +30,8 @@ class App extends React.Component {
         height={600}
         startDayHour={9}
         endDayHour={19}
-        textExpr= "Text"
+        dateSerializationFormat="yyyy-MM-ddTHH:mm:ssZ"
+        textExpr="Text"
         startDateExpr="StartDate"
         endDateExpr="EndDate"
         allDayExpr="AllDay" />

@@ -7,7 +7,7 @@ $(function () {
         dataSource: data,
         views: ["day", "week"],
         currentView: "week",
-        currentDate: new Date(2021, 4, 22),
+        currentDate: new Date(2021, 4, 27),
         startDayHour: 9,
         endDayHour: 19,
         editing: {

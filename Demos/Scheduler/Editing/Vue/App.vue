@@ -68,7 +68,7 @@ export default {
   data() {
     return {
       views: ['day', 'week'],
-      currentDate: new Date(2021, 4, 22),
+      currentDate: new Date(2021, 4, 27),
       dataSource: data,
       allowAdding: true,
       allowDeleting: true,
