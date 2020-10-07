@@ -373,7 +373,7 @@ QUnit.module('widget sizing render', () => {
 
         instance.option('width', 900);
 
-        assert.ok($element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).height() < startContentHeight);
+        assert.ok($element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).height() < startContentHeight / 2);
     });
 
     QUnit.test('scrollable content height is recalculated if the element was resized and the widget has horizontal direction (T934021)', function(assert) {
@@ -387,7 +387,7 @@ QUnit.module('widget sizing render', () => {
 
         instance.option('height', 900);
 
-        assert.ok($element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).width() < startContentWidth);
+        assert.ok($element.find(`.${SCROLLVIEW_CONTENT_CLASS}`).width() < startContentWidth / 2);
     });
 });
 
