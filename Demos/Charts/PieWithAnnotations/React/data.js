@@ -85,7 +85,6 @@ export const dataSource = [{
   bronze: 1
 }];
 
-
 export function getAnnotationSources() {
   const annotations = [];
   for(let i = 0; i < annotationSources.length; i++) {
@@ -100,7 +99,7 @@ export function getAnnotationSources() {
       data,
       ...(annotation.location === 'edge' ? edgeAnnotationSettings : {})
     });
-  } 
+  }
 
   return annotations;
 }
