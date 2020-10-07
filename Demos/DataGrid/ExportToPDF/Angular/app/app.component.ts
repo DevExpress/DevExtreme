@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxButtonModule, DxDataGridComponent } from 'devextreme-angular';
 import { Service, Customer } from './app.service';
-import Exporter from 'devextreme/pdf_exporter';
+import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
@@ -29,7 +29,7 @@ export class AppComponent {
 
     exportGrid() {
         const doc = new jsPDF();
-        Exporter.exportDataGrid({
+        exportDataGridToPdf({
             jsPDFDocument: doc,
             component: this.dataGrid.instance
         }).then(() => {

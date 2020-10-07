@@ -13,7 +13,7 @@ import { customers } from './data.js';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
-import Exporter from 'devextreme/pdf_exporter';
+import { exportDataGrid as exportDataGridToPdf } from 'devextreme/pdf_exporter';
 
 const dataGridRef = React.createRef();
 
@@ -22,7 +22,7 @@ export default function App() {
     const doc = new jsPDF();
     const dataGrid = dataGridRef.current.instance;
 
-    Exporter.exportDataGrid({
+    exportDataGridToPdf({
       jsPDFDocument: doc,
       component: dataGrid
     }).then(() => {
