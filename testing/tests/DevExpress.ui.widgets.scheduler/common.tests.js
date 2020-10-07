@@ -5203,7 +5203,7 @@ QUnit.module('ScrollTo', () => {
             }, {
                 view: 'timelineMonth',
                 date: new Date('2020-09-07'),
-                leftCellCount: 24,
+                leftCellCount: 23,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
                 QUnit.test(`ScrollTo should work correctly when RTL is enabled in ${view}`, function(assert) {
