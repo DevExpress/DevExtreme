@@ -999,7 +999,8 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', fun
         allDay: false,
         groups: {
             one: 1
-        }
+        },
+        groupIndex: 0,
     });
 
     assert.deepEqual($cells.eq(1).data('dxCellData'), {
@@ -1008,7 +1009,8 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', fun
         allDay: false,
         groups: {
             one: 2
-        }
+        },
+        groupIndex: 1,
     });
 
     assert.deepEqual($cells.eq(50).data('dxCellData'), {
@@ -1017,7 +1019,8 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', fun
         allDay: false,
         groups: {
             one: 1
-        }
+        },
+        groupIndex: 0,
     });
 
     assert.deepEqual($cells.eq(51).data('dxCellData'), {
@@ -1026,7 +1029,8 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', fun
         allDay: false,
         groups: {
             one: 2
-        }
+        },
+        groupIndex: 1,
     });
 
     assert.deepEqual($cells.eq(82).data('dxCellData'), {
@@ -1035,7 +1039,8 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', fun
         allDay: false,
         groups: {
             one: 1
-        }
+        },
+        groupIndex: 0,
     });
 
     assert.deepEqual($cells.eq(83).data('dxCellData'), {
@@ -1044,7 +1049,8 @@ QUnit.test('Date table cells shoud have right cellData, groupByDate = true', fun
         allDay: false,
         groups: {
             one: 2
-        }
+        },
+        groupIndex: 1,
     });
 });
 
