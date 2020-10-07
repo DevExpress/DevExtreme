@@ -3,7 +3,7 @@ import { getWindow } from '../../core/utils/window';
 const window = getWindow();
 import DateView from './ui.date_view';
 import DateBoxStrategy from './ui.date_box.strategy';
-import support from '../../core/utils/support';
+import { inputType } from '../../core/utils/support';
 import { extend } from '../../core/utils/extend';
 import dateUtils from './ui.date_utils';
 import messageLocalization from '../../localization/message';
@@ -81,7 +81,7 @@ const DateViewStrategy = DateBoxStrategy.inherit({
     },
 
     _renderWidget: function() {
-        if(support.inputType(this.dateBox.option('mode')) && this.dateBox._isNativeType() || this.dateBox.option('readOnly')) {
+        if(inputType(this.dateBox.option('mode')) && this.dateBox._isNativeType() || this.dateBox.option('readOnly')) {
             if(this._widget) {
                 this._widget.$element().remove();
                 this._widget = null;

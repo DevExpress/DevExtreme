@@ -81,21 +81,27 @@ describe('MetadataCollector', () => {
     const collector = new MetadataCollector();
     const version = '1.1.1';
     const fileName = join('metadata', 'dx-theme-builder-metadata.ts');
+    const jsonFileName = join('metadata', 'dx-theme-builder-metadata.json');
     const expectedFileName = resolve(fileName);
+    const expectedJsonFileName = resolve(jsonFileName);
     const expectedDirName = dirname(expectedFileName);
+    const meta: ThemesMetadata = { generic: [{ Key: '$var', Value: '\'ON\'' }], material: [] };
 
-    collector.generator.metadata = { generic: [{ Key: '$var', Value: '\'ON\'' }], material: [] };
+    collector.generator.metadata = meta;
 
     let metaContent = 'export const metadata: ThemesMetadata = {\'generic\':[{\'Key\':\'$var\',\'Value\':\'"ON"\'}],\'material\':[]};\n';
     metaContent += `export const version: string = '${version}';\n`;
     metaContent += 'export const browsersList: Array<string> = [];\n';
     metaContent += 'export const dependencies: FlatStylesDependencies = {};\n';
 
-    await collector.saveMetadata(fileName, version, [], {});
+    const jsonMetaContent = JSON.stringify(meta);
 
-    expect(promises.mkdir).toHaveBeenCalledTimes(1);
+    await collector.saveMetadata(fileName, jsonFileName, version, [], {});
+
+    expect(promises.mkdir).toHaveBeenCalledTimes(2);
     expect(promises.mkdir).toHaveBeenCalledWith(expectedDirName, { recursive: true });
-    expect(promises.writeFile).toHaveBeenCalledTimes(1);
+    expect(promises.writeFile).toHaveBeenCalledTimes(2);
     expect(promises.writeFile).toHaveBeenCalledWith(expectedFileName, metaContent);
+    expect(promises.writeFile).toHaveBeenCalledWith(expectedJsonFileName, jsonMetaContent);
   });
 });

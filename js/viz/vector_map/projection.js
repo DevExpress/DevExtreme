@@ -1,5 +1,4 @@
-import projectionModule from './projection.main';
-const projection = projectionModule.projection;
+import { projection } from './projection.main';
 
 const _min = Math.min;
 const _max = Math.max;

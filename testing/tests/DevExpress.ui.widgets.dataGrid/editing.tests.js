@@ -5255,6 +5255,49 @@ QUnit.module('Editing with real dataController', {
         assert.equal(resolveDeferred.state(), 'resolved', 'deferred is resolved');
     });
 
+    QUnit.test('onRowValidating newData and oldData args should be correct', function(assert) {
+        // arrange
+        const $testElement = $('#container');
+        const onRowValidating = sinon.spy(e => {
+            // assert
+            assert.deepEqual(e.oldData, {
+                age: 15,
+                lastName: 'John',
+                name: 'Alex',
+                phone: '555555',
+                room: 1,
+                state: {
+                    name: 'state 1'
+                },
+                stateId: 0
+            }, 'oldData');
+            assert.deepEqual(e.newData, {
+                name: 'test'
+            }, 'newData');
+        });
+
+        $.extend(this.options.editing, {
+            mode: 'cell'
+        });
+
+        this.options.onRowValidating = onRowValidating;
+
+        this.validatingController.optionChanged({ name: 'onRowValidating' });
+
+        this.rowsView.render($testElement);
+        this.editingController.init();
+
+        // act
+        this.editCell(0, 0);
+        const $input = $testElement.find('input');
+        $input.val('test');
+        $input.trigger('change');
+        this.saveEditData();
+
+        // assert
+        assert.equal(onRowValidating.callCount, 1, 'onRowValidating was called');
+    });
+
     // T100624
     QUnit.test('Edit Cell when the width of the columns in percent', function(assert) {
     // arrange
@@ -9764,7 +9807,7 @@ QUnit.module('Editing with real dataController', {
             this.clock.tick(500);
 
             // assert
-            assert.equal(this.array[0].name, 'Alex', 'data is not saved');
+            assert.equal(this.array[0].name, 'new value', 'data is saved');
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
             assert.equal(onSaved.callCount, 1, 'onSaved was called');
             assert.equal(onEditCanceling.callCount, 1, 'onEditCanceling was called');
@@ -9998,6 +10041,64 @@ QUnit.module('Editing with real dataController', {
             assert.equal(onSaved.callCount, 1, 'onSaved was called');
             assert.deepEqual(onSaved.firstCall.args[0].changes, modifiedChanges, 'onSaved args');
             assert.equal(this.array[0].name, 'another new value', 'value from onSaving');
+        });
+
+        QUnit.test('Assign changes parameter in onSaving', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.changes = [{
+                    type: 'update',
+                    data: { name: 'test' },
+                    key: 1
+                }];
+            });
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'row'
+            });
+            this.options.onSaving = onSaving;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.saveEditData();
+
+            // assert
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal($(this.getCellElement(0, 0)).text(), 'test', 'cell was modified');
+        });
+
+        QUnit.test('Push change to the changes parameter in onSaving', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+            const onSaving = sinon.spy(e => {
+                e.changes.push({
+                    type: 'update',
+                    data: { name: 'test' },
+                    key: 1
+                });
+            });
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'row'
+            });
+            this.options.onSaving = onSaving;
+            this.editingController.optionChanged({ name: 'onSaving' });
+            rowsView.render($testElement);
+
+            // act
+            this.editRow(0);
+            this.saveEditData();
+
+            // assert
+            assert.equal(onSaving.callCount, 1, 'onSaving was called');
+            assert.equal($(this.getCellElement(0, 0)).text(), 'test', 'cell was modified');
         });
     });
 });
@@ -14487,13 +14588,13 @@ QUnit.module('Editing with validation', {
 
         let result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
         let result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
-        const editData = this.editingController.getEditDataByKey(rowKey);
+        const validationData = this.validatingController._getValidationData(rowKey);
 
         // assert
         assert.ok(result1.status, 'result1 should be restored from cache');
         assert.ok(result2.status, 'result2 should be restored from cache');
 
-        this.validatingController.resetRowValidationResults(editData);
+        this.validatingController.resetRowValidationResults(validationData);
         result1 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
         result2 = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 1 });
 

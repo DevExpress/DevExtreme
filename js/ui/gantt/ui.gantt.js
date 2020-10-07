@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { isString, isDefined } from '../../core/utils/type';
 import Widget from '../widget/ui.widget';
 import registerComponent from '../../core/component_registrator';
-import dataCoreUtils from '../../core/utils/data';
+import { compileGetter, compileSetter } from '../../core/utils/data';
 import { GanttView } from './ui.gantt.view';
 import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import dxTreeList from '../tree_list';
@@ -325,7 +325,7 @@ class Gantt extends Widget {
         for(const field in optionValue) {
             const exprMatches = field.match(/(\w*)Expr/);
             if(exprMatches) {
-                getters[exprMatches[1]] = dataCoreUtils.compileGetter(optionValue[exprMatches[0]]);
+                getters[exprMatches[1]] = compileGetter(optionValue[exprMatches[0]]);
             }
         }
         return getters;
@@ -336,7 +336,7 @@ class Gantt extends Widget {
         for(const field in optionValue) {
             const exprMatches = field.match(/(\w*)Expr/);
             if(exprMatches) {
-                setters[exprMatches[1]] = dataCoreUtils.compileSetter(optionValue[exprMatches[0]]);
+                setters[exprMatches[1]] = compileSetter(optionValue[exprMatches[0]]);
             }
         }
         return setters;
@@ -430,7 +430,7 @@ class Gantt extends Widget {
                 delete this.customDataToInsert;
             }
             dataOption.insert(data, (response) => {
-                const keyGetter = dataCoreUtils.compileGetter(this.option(`${optionName}.keyExpr`));
+                const keyGetter = compileGetter(this.option(`${optionName}.keyExpr`));
                 const insertedId = keyGetter(response);
                 callback(insertedId);
                 if(optionName === GANTT_TASKS) {
@@ -462,7 +462,7 @@ class Gantt extends Widget {
     _onRecordUpdated(optionName, key, fieldName, value) {
         const dataOption = this[`_${optionName}Option`];
         if(dataOption) {
-            const setter = dataCoreUtils.compileSetter(this.option(`${optionName}.${fieldName}Expr`));
+            const setter = compileSetter(this.option(`${optionName}.${fieldName}Expr`));
             const data = {};
             setter(data, value);
             dataOption.update(key, data, () => {
@@ -479,7 +479,7 @@ class Gantt extends Widget {
     }
     _appendCustomFields(data) {
         const modelData = this._tasksOption && this._tasksOption._getItems();
-        const keyGetter = dataCoreUtils.compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+        const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
         return data.reduce((previous, item) => {
             const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === keyGetter(item))[0];
             if(!modelItem) {
@@ -759,7 +759,7 @@ class Gantt extends Widget {
         return Object.keys(coreData).reduce((previous, f) => {
             const mappedField = this._getMappedFieldName(optionName, f);
             if(mappedField) {
-                const setter = dataCoreUtils.compileSetter(mappedField);
+                const setter = compileSetter(mappedField);
                 setter(previous, coreData[f]);
             }
             return previous;
@@ -773,7 +773,7 @@ class Gantt extends Widget {
                 const exprMatches = field.match(GANTT_MAPPED_FIELD_REGEX);
                 const mappedFieldName = exprMatches && mappedFields[exprMatches[0]];
                 if(mappedFieldName && mappedData[mappedFieldName] !== undefined) {
-                    const getter = dataCoreUtils.compileGetter(mappedFieldName);
+                    const getter = compileGetter(mappedFieldName);
                     const coreFieldName = exprMatches[1];
                     coreData[coreFieldName] = getter(mappedData);
                 }
@@ -836,7 +836,7 @@ class Gantt extends Widget {
     _addCustomFieldsData(key, data) {
         if(data) {
             const modelData = this._tasksOption && this._tasksOption._getItems();
-            const keyGetter = dataCoreUtils.compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
+            const keyGetter = compileGetter(this.option(`${GANTT_TASKS}.keyExpr`));
             const modelItem = modelData && modelData.filter((obj) => keyGetter(obj) === key)[0];
             const customFields = this._getTaskCustomFields();
             for(let i = 0; i < customFields.length; i++) {

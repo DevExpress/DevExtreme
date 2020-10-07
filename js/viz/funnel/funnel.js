@@ -1,4 +1,4 @@
-import tiling from './tiling';
+import { addAlgorithm, getAlgorithm } from './tiling';
 import dynamicSlope from './tiling.funnel';
 import dynamicHeight from './tiling.pyramid';
 import { noop } from '../../core/utils/common';
@@ -7,8 +7,8 @@ import componentRegistrator from '../../core/component_registrator';
 import Item from './item';
 const NODES_CREATE_CHANGE = 'NODES_CREATE';
 
-tiling.addAlgorithm('dynamicslope', dynamicSlope, true);
-tiling.addAlgorithm('dynamicheight', dynamicHeight);
+addAlgorithm('dynamicslope', dynamicSlope, true);
+addAlgorithm('dynamicheight', dynamicHeight);
 
 function invertFigure(figure) {
     return figure.map(function(coord, index) {
@@ -223,7 +223,7 @@ const dxFunnel = baseWidget.inherit({
     _buildNodes: function() {
         const that = this;
         const data = that._getData();
-        const algorithm = tiling.getAlgorithm(that._getOption('algorithm', true));
+        const algorithm = getAlgorithm(that._getOption('algorithm', true));
         const percents = algorithm.normalizeValues(data);
         const itemOptions = that._getOption('item');
         const figures = algorithm.getFigures(percents, that._getOption('neckWidth', true), that._getOption('neckHeight', true));

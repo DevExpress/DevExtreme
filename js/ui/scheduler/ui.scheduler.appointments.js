@@ -145,7 +145,6 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 this._cleanFocusState();
                 this._clearDropDownItems();
                 this._clearDropDownItemsElements();
-
                 this._repaintAppointments(args.value);
                 this._renderDropDownAppointments();
 
@@ -186,6 +185,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _isRepaintAll: function(appointments) {
+        if(this.invoke('isVirtualScrolling')) {
+            return true;
+        }
         if(this.invoke('isCurrentViewAgenda')) {
             return true;
         }
@@ -205,7 +207,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _onEachAppointment: function(appointment, index, container, isRepaintAll) {
-        if(appointment && appointment.needRemove === true) {
+        if(!isRepaintAll && appointment && appointment.needRemove === true) {
             this._clearItem(appointment);
             return;
         }

@@ -87,13 +87,14 @@ describe('DateTableCellBase', () => {
     describe('Getters', () => {
       afterEach(() => jest.resetAllMocks());
 
-      [true, false].forEach((isFirstCell) => {
-        [true, false].forEach((isLastCell) => {
+      [true, false].forEach((isFirstGroupCell) => {
+        [true, false].forEach((isLastGroupCell) => {
           ['some-class', undefined].forEach((className) => {
-            it(`should call 'getGroupCellClasses' correctly if isFirstCell: ${isFirstCell}, isLastCell: ${isLastCell}, className: ${className}`, () => {
+            it(`should call 'getGroupCellClasses' correctly if isFirstGroupCell:
+              ${isFirstGroupCell}, isLastGroupCell: ${isLastGroupCell}, className: ${className}`, () => {
               const cellBase = new CellBase({
-                isFirstCell,
-                isLastCell,
+                isFirstGroupCell,
+                isLastGroupCell,
                 className,
               });
 
@@ -104,10 +105,9 @@ describe('DateTableCellBase', () => {
                 .toHaveBeenCalledTimes(1);
 
               expect(getGroupCellClasses)
-                .toHaveBeenNthCalledWith(
-                  1,
-                  isFirstCell,
-                  isLastCell,
+                .toHaveBeenCalledWith(
+                  isFirstGroupCell,
+                  isLastGroupCell,
                   className,
                 );
             });

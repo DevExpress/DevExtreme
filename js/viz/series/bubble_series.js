@@ -1,7 +1,7 @@
 import { chart as lineChart } from './line_series';
 import { chart as scatterSeries } from './scatter_series';
 import { chart as areaChart } from './area_series';
-import barSeries from './bar_series';
+import { chart as barChart, polar as barPolar } from './bar_series';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import { noop } from '../../core/utils/common';
@@ -9,8 +9,8 @@ import { noop } from '../../core/utils/common';
 const lineSeries = lineChart.line;
 const areaSeries = areaChart.area;
 
-const chartBarSeries = barSeries.chart.bar;
-const polarBarSeries = barSeries.polar.bar;
+const chartBarSeries = barChart.bar;
+const polarBarSeries = barPolar.bar;
 
 const _extend = extend;
 const _each = each;

@@ -19,6 +19,8 @@ describe('DateTableBody', () => {
           groups: { id: 1 },
           groupIndex: 1,
           index: 4,
+          isFirstGroupCell: true,
+          isLastGroupCell: false,
           key: '1',
         }], [{
           startDate: new Date(2020, 6, 9, 1),
@@ -26,6 +28,8 @@ describe('DateTableBody', () => {
           groups: { id: 2 },
           groupIndex: 2,
           index: 5,
+          isFirstGroupCell: false,
+          isLastGroupCell: false,
           key: '2',
         }], [{
           startDate: new Date(2020, 6, 9, 2),
@@ -33,6 +37,8 @@ describe('DateTableBody', () => {
           groups: { id: 3 },
           groupIndex: 3,
           index: 6,
+          isFirstGroupCell: false,
+          isLastGroupCell: true,
           key: '3',
         }]],
         allDayPanel: [{ startDate: new Date(), key: '1' }],
@@ -79,8 +85,8 @@ describe('DateTableBody', () => {
       const assert = (
         cells: any,
         index: number,
-        isFirstCell: boolean,
-        isLastCell: boolean,
+        isFirstGroupCell: boolean,
+        isLastGroupCell: boolean,
       ): void => {
         const cell = cells.at(index);
 
@@ -91,8 +97,8 @@ describe('DateTableBody', () => {
             groups: viewData.groupedData[0].dateTable[index][0].groups,
             groupIndex: viewData.groupedData[0].dateTable[index][0].groupIndex,
             index: viewData.groupedData[0].dateTable[index][0].index,
-            isFirstCell,
-            isLastCell,
+            isFirstGroupCell,
+            isLastGroupCell,
             dataCellTemplate,
           });
         expect(cell.key())
@@ -122,6 +128,7 @@ describe('DateTableBody', () => {
         .toMatchObject({
           viewData: viewData.groupedData[0].allDayPanel,
           dataCellTemplate,
+          isVerticalGroupOrientation: true,
         });
 
       expect(getIsGroupedAllDayPanel)

@@ -7,10 +7,11 @@ import { isDefined } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { extend } from '../../core/utils/extend';
 import { each, map } from '../../core/utils/iterator';
-import { format as messageFormat } from '../../localization/message';
+import localizationMessage from '../../localization/message';
 import registerComponent from '../../core/component_registrator';
 import Widget from '../widget/ui.widget';
-import headerFilter, {
+import {
+    HeaderFilterView as HeaderFilterViewBase,
     updateHeaderFilterItemSelectionState,
     headerFilterMixin
 } from '../grid_core/ui.grid_core.header_filter_core';
@@ -23,7 +24,7 @@ import { Deferred } from '../../core/utils/deferred';
 const IE_FIELD_WIDTH_CORRECTION = 1;
 const DIV = '<div>';
 
-const HeaderFilterView = headerFilter.HeaderFilterView.inherit({
+const HeaderFilterView = HeaderFilterViewBase.inherit({
     _getSearchExpr: function(options) {
         options.useDefaultSearchExpr = true;
         return this.callBase(options);
@@ -84,9 +85,9 @@ const FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).
                 height: 325,
                 searchTimeout: 500,
                 texts: {
-                    emptyValue: messageFormat('dxDataGrid-headerFilterEmptyValue'),
-                    ok: messageFormat('dxDataGrid-headerFilterOK'),
-                    cancel: messageFormat('dxDataGrid-headerFilterCancel')
+                    emptyValue: localizationMessage.format('dxDataGrid-headerFilterEmptyValue'),
+                    ok: localizationMessage.format('dxDataGrid-headerFilterOK'),
+                    cancel: localizationMessage.format('dxDataGrid-headerFilterCancel')
                 }
             }
         });

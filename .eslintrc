@@ -93,7 +93,10 @@
                     }
                 }
             ],
-            "quotes": ["error", "single"]
+            "quotes": ["error", "single"],
+            "import/named": 2,
+            "import/default": 2,
+            "import/no-duplicates": 2
         }
     }, {
         "files": ["*.ts?(x)"],

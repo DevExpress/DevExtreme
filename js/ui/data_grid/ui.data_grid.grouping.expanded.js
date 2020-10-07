@@ -1,9 +1,10 @@
+
 import { toComparable } from '../../core/utils/data';
-import { keysEqual } from '../../data/utils';
+import dataUtils from '../../data/utils';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { arrangeSortingInfo, multiLevelGroup } from '../../data/store_helper';
-import { combineFilters, normalizeSortingInfo } from './ui.data_grid.core';
+import storeHelper from '../../data/store_helper';
+import dataGridCore from './ui.data_grid.core';
 import { GroupingHelper as GroupingHelperCore, createOffsetFilter } from './ui.data_grid.grouping.core';
 import { createGroupFilter } from './ui.data_grid.utils';
 import dataQuery from '../../data/query';
@@ -119,7 +120,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
     const pathEquals = function(path1, path2) {
         if(path1.length !== path2.length) return false;
         for(let i = 0; i < path1.length; i++) {
-            if(!keysEqual(null, path1[i], path2[i])) {
+            if(!dataUtils.keysEqual(null, path1[i], path2[i])) {
                 return false;
             }
         }
@@ -157,15 +158,15 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
     const removeGroupLoadOption = function(storeLoadOptions, loadOptions) {
 
         if(loadOptions.group) {
-            const groups = normalizeSortingInfo(loadOptions.group);
-            const sorts = normalizeSortingInfo(storeLoadOptions.sort);
-            storeLoadOptions.sort = arrangeSortingInfo(groups, sorts);
+            const groups = dataGridCore.normalizeSortingInfo(loadOptions.group);
+            const sorts = dataGridCore.normalizeSortingInfo(storeLoadOptions.sort);
+            storeLoadOptions.sort = storeHelper.arrangeSortingInfo(groups, sorts);
             delete loadOptions.group;
         }
     };
 
     const createNotGroupFilter = function(path, storeLoadOptions, group) {
-        const groups = normalizeSortingInfo(group || storeLoadOptions.group);
+        const groups = dataGridCore.normalizeSortingInfo(group || storeLoadOptions.group);
         let filter = [];
 
         for(let i = 0; i < path.length; i++) {
@@ -173,11 +174,11 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             for(let j = 0; j <= i; j++) {
                 filterElement.push([groups[j].selector, i === j ? '<>' : '=', path[j]]);
             }
-            filter.push(combineFilters(filterElement));
+            filter.push(dataGridCore.combineFilters(filterElement));
         }
-        filter = combineFilters(filter, 'or');
+        filter = dataGridCore.combineFilters(filter, 'or');
 
-        return combineFilters([filter, storeLoadOptions.filter]);
+        return dataGridCore.combineFilters([filter, storeLoadOptions.filter]);
     };
 
     const getGroupCount = function(item, groupCount) {
@@ -252,7 +253,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
             const that = this;
             let data = options.data;
             const collapsedGroups = options.collapsedGroups;
-            const groups = normalizeSortingInfo(options.group);
+            const groups = dataGridCore.normalizeSortingInfo(options.group);
             const groupCount = groups.length;
 
             function appendCollapsedPath(data, path, groups, collapsedGroup, offset) {
@@ -285,7 +286,7 @@ export const GroupingHelper = GroupingHelperCore.inherit((function() {
 
             if(groupCount) {
                 const query = dataQuery(data);
-                multiLevelGroup(query, groups).enumerate().done(function(groupedData) {
+                storeHelper.multiLevelGroup(query, groups).enumerate().done(function(groupedData) {
                     data = groupedData;
                 });
                 if(collapsedGroups) {

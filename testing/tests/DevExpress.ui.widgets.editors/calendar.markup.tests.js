@@ -1,8 +1,7 @@
 import $ from 'jquery';
 import dateSerialization from 'core/utils/date_serialization';
-import { isDefined } from 'core/utils/type';
+import { isDefined, isRenderer } from 'core/utils/type';
 import config from 'core/config';
-import { isRenderer } from 'core/utils/type';
 import windowUtils from 'core/utils/window';
 
 import 'common.css!';

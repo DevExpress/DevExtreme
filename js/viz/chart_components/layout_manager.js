@@ -1,6 +1,6 @@
 import { isNumeric as _isNumber } from '../../core/utils/type';
 import consts from '../components/consts';
-import layoutElementModule from '../core/layout_element';
+import { WrapperLayoutElement } from '../core/layout_element';
 const { floor, sqrt } = Math;
 const _min = Math.min;
 const _max = Math.max;
@@ -139,7 +139,7 @@ function correctAvailableRadius(availableRadius, canvas, series, minR, paneCente
 }
 
 function toLayoutElementCoords(canvas) {
-    return new layoutElementModule.WrapperLayoutElement(null, {
+    return new WrapperLayoutElement(null, {
         x: canvas.left,
         y: canvas.top,
         width: canvas.width - canvas.left - canvas.right,

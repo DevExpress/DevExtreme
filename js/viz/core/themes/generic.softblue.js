@@ -1,5 +1,4 @@
-import themeModule from '../../themes';
-const registerTheme = themeModule.registerTheme;
+import { registerTheme } from '../../themes';
 const ACCENT_COLOR = '#7ab8eb';
 const BACKGROUND_COLOR = '#fff';
 const TITLE_COLOR = '#333';

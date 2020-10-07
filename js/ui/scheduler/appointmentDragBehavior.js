@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Draggable from '../draggable';
-import translator from '../../animation/translator';
+import { locate, move } from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
 
@@ -24,7 +24,7 @@ export default class AppointmentDragBehavior {
     }
 
     onDragStart(e) {
-        this.initialPosition = translator.locate($(e.itemElement));
+        this.initialPosition = locate($(e.itemElement));
         this.appointments.notifyObserver('hideAppointmentTooltip');
     }
 
@@ -135,7 +135,7 @@ export default class AppointmentDragBehavior {
 
     moveBack() {
         if(this.currentAppointment && this.initialPosition.left !== undefined && this.initialPosition.top !== undefined) {
-            translator.move(this.currentAppointment, this.initialPosition);
+            move(this.currentAppointment, this.initialPosition);
         }
     }
 }

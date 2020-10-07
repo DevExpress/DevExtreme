@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import array from '../../core/utils/array';
+import { wrapToArray, inArray } from '../../core/utils/array';
 import { isDefined, isPlainObject } from '../../core/utils/type';
 import dateUtils from '../../core/utils/date';
 import { each } from '../../core/utils/iterator';
@@ -7,7 +7,6 @@ import errors from '../widget/ui.errors';
 import { locate } from '../../animation/translator';
 import { grep } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';
-import { inArray } from '../../core/utils/array';
 import { Deferred } from '../../core/utils/deferred';
 import dateLocalization from '../../localization/date';
 import timeZoneUtils from './utils.timeZone';
@@ -139,7 +138,7 @@ const subscribes = {
             const field = resourcesManager.getField(resourceForPainting);
             const groupIndex = options.groupIndex;
             const groups = this._workSpace._getCellGroups(groupIndex);
-            const resourceValues = array.wrapToArray(resourcesManager.getDataAccessors(field, 'getter')(options.itemData));
+            const resourceValues = wrapToArray(resourcesManager.getDataAccessors(field, 'getter')(options.itemData));
             let groupId = resourceValues.length ? resourceValues[0] : undefined;
 
             for(let i = 0; i < groups.length; i++) {
@@ -282,16 +281,16 @@ const subscribes = {
     },
 
     getCellWidth: function() {
-        return this._cellWidth;
+        return this.getWorkSpace().getCellWidth();
     },
 
     getCellHeight: function() {
-        return this._cellHeight;
+        return this.getWorkSpace().getCellHeight();
     },
 
     getResizableStep: function() {
-        const cellWidth = this._cellWidth;
         const workSpace = this.getWorkSpace();
+        const cellWidth = workSpace.getCellWidth();
 
         if(workSpace.isGroupedByDate()) {
             return workSpace._getGroupCount() * cellWidth;
@@ -798,6 +797,6 @@ const subscribes = {
 
     removeDroppableCellClass: function() {
         this._workSpace.removeDroppableCellClass();
-    },
+    }
 };
 export default subscribes;

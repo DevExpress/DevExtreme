@@ -185,45 +185,87 @@ describe('TimePanelLayout', () => {
         });
     });
 
-    it('should pass correct "isFirstCell" and "isLastCell" props to the cells', () => {
-      const layout = render({
-        props: {
-          viewData: {
-            groupedData: [{
-              dateTable: [
-                [{ startDate: new Date(2020, 6, 9, 1), text: '0:00 AM', key: '1' }],
-                [{ startDate: new Date(2020, 6, 9, 2), text: '1:00 AM', key: '2' }],
-                [{ startDate: new Date(2020, 6, 9, 3), text: '2:00 AM', key: '3' }],
-                [{ startDate: new Date(2020, 6, 9, 4), text: '3:00 AM', key: '4' }],
-              ],
-              groupIndex: 10,
+    describe('firstGroupCell, lastGroupCell', () => {
+      const viewData = {
+        groupedData: [{
+          dateTable: [
+            [{
+              startDate: new Date(2020, 6, 9, 1),
+              text: '0:00 AM',
+              isFirstGroupCell: true,
+              isLastGroupCell: false,
+              key: '1',
             }],
-          },
-        },
-      });
-
+            [{
+              startDate: new Date(2020, 6, 9, 2),
+              text: '1:00 AM',
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              key: '2',
+            }],
+            [{
+              startDate: new Date(2020, 6, 9, 3),
+              text: '2:00 AM',
+              isFirstGroupCell: false,
+              isLastGroupCell: false,
+              key: '3',
+            }],
+            [{
+              startDate: new Date(2020, 6, 9, 4),
+              text: '3:00 AM',
+              isFirstGroupCell: false,
+              isLastGroupCell: true,
+              key: '4',
+            }],
+          ],
+          groupIndex: 10,
+        }],
+      };
       const assert = (
         cells: any,
         index: number,
-        isFirstCell: boolean,
-        isLastCell: boolean,
+        isFirstGroupCell: boolean,
+        isLastGroupCell: boolean,
       ): void => {
         const cell = cells.at(index);
 
-        expect(cell.prop('isFirstCell'))
-          .toBe(isFirstCell);
-        expect(cell.prop('isLastCell'))
-          .toBe(isLastCell);
+        expect(cell.prop('isFirstGroupCell'))
+          .toBe(isFirstGroupCell);
+        expect(cell.prop('isLastGroupCell'))
+          .toBe(isLastGroupCell);
       };
 
-      const cells = layout.find(Cell);
-      expect(cells)
-        .toHaveLength(4);
+      it('should pass correct "isFirstGroupCell" and "isLastGroupCell" props to the cells', () => {
+        const layout = render({
+          props: { viewData },
+          isVerticalGroupOrientation: true,
+        });
 
-      assert(cells, 0, true, false);
-      assert(cells, 1, false, false);
-      assert(cells, 2, false, false);
-      assert(cells, 3, false, true);
+        const cells = layout.find(Cell);
+        expect(cells)
+          .toHaveLength(4);
+
+        assert(cells, 0, true, false);
+        assert(cells, 1, false, false);
+        assert(cells, 2, false, false);
+        assert(cells, 3, false, true);
+      });
+
+      it('should not pass "isFirstGroupCell" and "isLastGroupCell" props to the cells if grouping is not vertical', () => {
+        const layout = render({
+          props: { viewData },
+          isVerticalGroupOrientation: false,
+        });
+
+        const cells = layout.find(Cell);
+        expect(cells)
+          .toHaveLength(4);
+
+        assert(cells, 0, false, false);
+        assert(cells, 1, false, false);
+        assert(cells, 2, false, false);
+        assert(cells, 3, false, false);
+      });
     });
 
     it('should call getIsGroupedAllDayPanel with correct arguments', () => {

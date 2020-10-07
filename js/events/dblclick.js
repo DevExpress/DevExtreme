@@ -6,6 +6,6 @@
 */
 
 // NOTE: The "double_click" module created to overcome adblock issue https://isc.devexpress.com/Thread/WorkplaceDetails/T465804. This file was kept as a fasade not to create a BC.
-import dblclick from './double_click';
+import * as dblclick from './double_click';
 
 export default dblclick;

@@ -542,7 +542,7 @@ QUnit.test('The part of long appointment should have right coordinates on curren
 
 });
 
-QUnit.test('The part of long appointment should have right coordinates on current week (T342192)', function(assert) {
+QUnit.test('The part of long appointment should have right coordinates on current week (T342192) №2', function(assert) {
     this.instance.option({
         currentDate: new Date(2015, 1, 23),
         firstDayOfWeek: 1,
@@ -559,7 +559,7 @@ QUnit.test('The part of long appointment should have right coordinates on curren
 
 });
 
-QUnit.test('The part of long appointment should have right coordinates on current week (T342192)', function(assert) {
+QUnit.test('The part of long appointment should have right coordinates on current week (T342192) №3', function(assert) {
     this.instance.option({
         currentDate: new Date(2015, 1, 23),
         firstDayOfWeek: 1,

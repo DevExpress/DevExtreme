@@ -1,7 +1,7 @@
 import { animation } from './ui.drawer.animation';
 import DrawerStrategy from './ui.drawer.rendering.strategy';
 import $ from '../../core/renderer';
-import translator from '../../animation/translator';
+import { move } from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 
 class PushStrategy extends DrawerStrategy {
@@ -28,9 +28,9 @@ class PushStrategy extends DrawerStrategy {
             animation.moveTo(animationConfig);
         } else {
             if(drawer.isHorizontalDirection()) {
-                translator.move(config.$content, { left: config.contentPosition });
+                move(config.$content, { left: config.contentPosition });
             } else {
-                translator.move(config.$content, { top: config.contentPosition });
+                move(config.$content, { top: config.contentPosition });
             }
         }
     }

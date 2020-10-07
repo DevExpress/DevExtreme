@@ -486,8 +486,20 @@ if(devices.real().deviceType === 'desktop') {
                 assert.deepEqual(
                     instance.option('selectedCellData'),
                     [
-                        { startDate: startCell.startDate, endDate: startCell.endDate, allDay: startCell.allDay },
-                        { startDate: endCell.startDate, endDate: endCell.endDate, allDay: endCell.allDay },
+                        {
+                            startDate: startCell.startDate,
+                            endDate: startCell.endDate,
+                            allDay: startCell.allDay,
+                            groups: undefined,
+                            groupIndex: 0,
+                        },
+                        {
+                            startDate: endCell.startDate,
+                            endDate: endCell.endDate,
+                            allDay: endCell.allDay,
+                            groups: undefined,
+                            groupIndex: 0,
+                        },
                     ], 'correct cells have been selected');
             });
         });

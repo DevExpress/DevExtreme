@@ -20,7 +20,6 @@ import messageLocalization from '../../localization/message';
 import { ChildDefaultTemplate } from '../../core/templates/child_default_template';
 import { Deferred } from '../../core/utils/deferred';
 import DataConverterMixin from '../shared/grouped_data_converter_mixin';
-import typeUtils from '../../core/utils/type';
 
 const LIST_ITEM_SELECTOR = '.dx-list-item';
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
@@ -436,6 +435,7 @@ const DropDownList = DropDownEditor.inherit({
 
         this._clearFilter();
         this._clearSelectedItem();
+        this._preventFiltering = true;
     },
 
     _listItemElements: function() {
@@ -791,7 +791,7 @@ const DropDownList = DropDownEditor.inherit({
         if(popupWidth === undefined) {
             this._setPopupOption('width', (this._getInputWidth.bind(this)));
         }
-        if(!typeUtils.isDefined(popupMinWidth)) {
+        if(!isDefined(popupMinWidth)) {
             this._updatePopupMinWidth(popupWidth);
         }
         this._popup && this._updatePopupDimensions();

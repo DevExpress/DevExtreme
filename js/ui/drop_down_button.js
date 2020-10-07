@@ -17,7 +17,7 @@ import { extend } from '../core/utils/extend';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import { ensureDefined } from '../core/utils/common';
 import Guid from '../core/guid';
-import { format as formatMessage } from '../localization/message';
+import messageLocalization from '../localization/message';
 
 // STYLE dropDownButton
 
@@ -63,7 +63,7 @@ const DropDownButton = Widget.inherit({
 
             deferRendering: true,
 
-            noDataText: formatMessage('dxCollectionWidget-noDataText'),
+            noDataText: messageLocalization.format('dxCollectionWidget-noDataText'),
 
             useSelectMode: false,
 

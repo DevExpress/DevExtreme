@@ -6,12 +6,11 @@ import { setHeight } from '../../core/utils/style';
 import { isDefined, isNumeric, isString } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { getBoundingRect } from '../../core/utils/position';
+import { getBoundingRect, getDefaultAlignment } from '../../core/utils/position';
 import { isEmpty } from '../../core/utils/string';
-import { getDefaultAlignment } from '../../core/utils/position';
 import { compileGetter } from '../../core/utils/data';
-import { setEmptyText, getGroupRowSummaryText, getDisplayValue, formatValue, renderLoadPanel, renderNoDataText } from './ui.grid_core.utils';
-import columnsView from './ui.grid_core.columns_view';
+import gridCoreUtils from './ui.grid_core.utils';
+import { ColumnsView } from './ui.grid_core.columns_view';
 import Scrollable from '../scroll_view/ui.scrollable';
 import removeEvent from '../../core/remove_event';
 import messageLocalization from '../../localization/message';
@@ -112,14 +111,14 @@ export default {
         };
     },
     views: {
-        rowsView: columnsView.ColumnsView.inherit((function() {
+        rowsView: ColumnsView.inherit((function() {
             const defaultCellTemplate = function($container, options) {
                 const isDataTextEmpty = isEmpty(options.text) && options.rowType === 'data';
                 const text = options.text;
                 const container = $container.get(0);
 
                 if(isDataTextEmpty) {
-                    setEmptyText($container);
+                    gridCoreUtils.setEmptyText($container);
                 } else if(options.column.encodeHtml) {
                     container.textContent = text;
                 } else {
@@ -154,7 +153,7 @@ export default {
                         const container = $container.get(0);
 
                         if(options.summaryItems && options.summaryItems.length) {
-                            text += ' ' + getGroupRowSummaryText(options.summaryItems, summaryTexts);
+                            text += ' ' + gridCoreUtils.getGroupRowSummaryText(options.summaryItems, summaryTexts);
                         }
 
                         if(data) {
@@ -324,7 +323,7 @@ export default {
                     that._scrollableContainer = that._scrollable && that._scrollable._$container;
                 },
 
-                _renderLoadPanel: renderLoadPanel,
+                _renderLoadPanel: gridCoreUtils.renderLoadPanel,
 
                 _renderContent: function(contentElement, tableElement) {
                     contentElement.empty().append(tableElement);
@@ -693,7 +692,7 @@ export default {
                     const data = row.data;
                     const summaryCells = row && row.summaryCells;
                     const value = options.value;
-                    const displayValue = getDisplayValue(column, value, data, row.rowType);
+                    const displayValue = gridCoreUtils.getDisplayValue(column, value, data, row.rowType);
 
                     const parameters = this.callBase(options);
                     parameters.value = value;
@@ -704,7 +703,7 @@ export default {
                     parameters.data = data;
                     parameters.rowType = row.rowType;
                     parameters.values = row.values;
-                    parameters.text = !column.command ? formatValue(displayValue, column) : '';
+                    parameters.text = !column.command ? gridCoreUtils.formatValue(displayValue, column) : '';
                     parameters.rowIndex = row.rowIndex;
                     parameters.summaryItems = summaryCells && summaryCells[options.columnIndex];
                     parameters.resized = column.resizedCallbacks;
@@ -745,7 +744,7 @@ export default {
                     return getWindow().devicePixelRatio;
                 },
 
-                renderNoDataText: renderNoDataText,
+                renderNoDataText: gridCoreUtils.renderNoDataText,
 
                 getCellOptions: function(rowIndex, columnIdentifier) {
                     const rowOptions = this._dataController.items()[rowIndex];

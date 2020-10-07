@@ -3,7 +3,7 @@ import AdaptivePositioningStrategy from './ui.scheduler.appointmentsPositioning.
 import { extend } from '../../../core/utils/extend';
 import dateUtils from '../../../core/utils/date';
 import { isNumeric, isObject } from '../../../core/utils/type';
-import themes from '../../themes';
+import { current as currentTheme } from '../../themes';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -68,8 +68,8 @@ class BaseRenderingStrategy {
         const length = items && items.length;
         if(!length) return;
 
-        this._defaultWidth = this.instance._cellWidth;
-        this._defaultHeight = this.instance._cellHeight;
+        this._defaultWidth = this.instance.fire('getCellWidth');
+        this._defaultHeight = this.instance.fire('getCellHeight');
         this._allDayHeight = this.instance._allDayCellHeight;
 
         const map = [];
@@ -696,7 +696,7 @@ class BaseRenderingStrategy {
     }
 
     _isCompactTheme() {
-        return (themes.current() || '').split('.').pop() === 'compact';
+        return (currentTheme() || '').split('.').pop() === 'compact';
     }
 
     _getAppointmentDefaultOffset() {

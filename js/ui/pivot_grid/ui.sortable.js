@@ -14,7 +14,8 @@ import {
     leave as dragEventLeave,
     drop as dragEventDrop
 } from '../../events/drag';
-import { getSwatchContainer } from '../widget/swatch_container';
+import swatchContainer from '../widget/swatch_container';
+const { getSwatchContainer } = swatchContainer;
 
 const SORTABLE_NAMESPACE = 'dxSortable';
 const SORTABLE_CLASS = 'dx-sortable-old';

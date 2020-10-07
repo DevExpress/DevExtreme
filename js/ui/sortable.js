@@ -5,7 +5,7 @@ import Draggable from './draggable';
 import { getPublicElement } from '../core/element';
 import { getWindow } from '../core/utils/window';
 import { getBoundingRect } from '../core/utils/position';
-import translator from '../animation/translator';
+import { resetPosition } from '../animation/translator';
 import fx from '../animation/fx';
 import { Deferred } from '../core/utils/deferred';
 
@@ -219,7 +219,7 @@ const Sortable = Draggable.inherit({
             }
 
             if(isSourceDraggable) {
-                translator.resetPosition($sourceElement);
+                resetPosition($sourceElement);
             }
             if(this.option('moveItemOnDrop')) {
                 !cancelAdd && this._moveItem($sourceElement, toIndex, cancelRemove);

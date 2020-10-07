@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import modules from './ui.grid_core.modules';
-import { getIndexByKey, getWidgetInstance } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
 import { deferUpdate, equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
@@ -90,23 +90,22 @@ const ValidatingController = modules.Controller.inherit((function() {
             return validationData;
         },
 
-        _getBrokenRules: function(editData, validationResults) {
+        _getBrokenRules: function(validationData, validationResults) {
             let brokenRules;
 
             if(validationResults) {
                 brokenRules = validationResults.brokenRules || validationResults.brokenRule && [validationResults.brokenRule];
             } else {
-                const validationData = this._getValidationData(editData.key);
                 brokenRules = validationData.brokenRules || [];
             }
 
             return brokenRules;
         },
 
-        _rowValidating: function(editData, validationResults) {
+        _rowValidating: function(validationData, validationResults) {
             const deferred = new Deferred();
-            const brokenRules = this._getBrokenRules(editData, validationResults);
-            const validationData = this._getValidationData(editData.key);
+            const editData = this._editingController.getEditDataByKey(validationData?.key);
+            const brokenRules = this._getBrokenRules(validationData, validationResults);
             const isValid = validationResults ? validationResults.isValid : validationData.isValid;
             const parameters = {
                 brokenRules: brokenRules,
@@ -189,19 +188,18 @@ const ValidatingController = modules.Controller.inherit((function() {
             return deferred.promise();
         },
 
-        validateGroup: function(editData) {
+        validateGroup: function(validationData) {
             const result = new Deferred();
-            const validationData = this._getValidationData(editData.key);
             const validateGroup = validationData && ValidationEngine.getGroupConfig(validationData);
             let validationResult;
 
             if(validateGroup?.validators.length) {
-                this.resetRowValidationResults(editData);
+                this.resetRowValidationResults(validationData);
                 validationResult = ValidationEngine.validateGroup(validationData);
             }
 
             when(validationResult?.complete || validationResult).done((validationResult) => {
-                when(this._rowValidating(editData, validationResult)).done(result.resolve);
+                when(this._rowValidating(validationData, validationResult)).done(result.resolve);
             });
 
             return result.promise();
@@ -512,9 +510,7 @@ const ValidatingController = modules.Controller.inherit((function() {
             }
         },
 
-        resetRowValidationResults: function(editData) {
-            const validationData = this._getValidationData(editData.key);
-
+        resetRowValidationResults: function(validationData) {
             if(validationData) {
                 validationData.validationResults && delete validationData.validationResults;
                 delete validationData.validated;
@@ -702,7 +698,7 @@ export default {
 
                     if(editMode === EDIT_MODE_BATCH && isInserted && key) {
                         const changes = this.getChanges();
-                        const editIndex = getIndexByKey(key, changes);
+                        const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
                         if(editIndex >= 0) {
                             const editData = changes[editIndex];
@@ -945,7 +941,7 @@ export default {
 
                 getEditDataByKey: function(key) {
                     const changes = this.getChanges();
-                    return changes[getIndexByKey(key, changes)];
+                    return changes[gridCoreUtils.getIndexByKey(key, changes)];
                 },
 
                 isCellModified: function(parameters) {
@@ -1255,7 +1251,7 @@ export default {
 
                     getEditorInstance: function($container) {
                         const $editor = $container.find('.dx-texteditor').eq(0);
-                        return getWidgetInstance($editor);
+                        return gridCoreUtils.getWidgetInstance($editor);
                     }
                 };
             })(),

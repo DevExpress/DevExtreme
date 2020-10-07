@@ -69,8 +69,8 @@ import { isWindow } from '../core/utils/type';
 import { extend } from '../core/utils/extend';
 import { getBoundingRect } from '../core/utils/position';
 import browser from '../core/utils/browser';
-import translator from './translator';
-import support from '../core/utils/support';
+import { resetPosition, move } from './translator';
+import { touch } from '../core/utils/support';
 import devices from '../core/devices';
 
 const horzRe = /left|right/;
@@ -343,8 +343,8 @@ const calculatePosition = function(what, options) {
         let left = win.scrollLeft();
         let top = win.scrollTop();
         const documentElement = domAdapter.getDocumentElement();
-        const hZoomLevel = support.touch ? documentElement.clientWidth / windowWidth : 1;
-        const vZoomLevel = support.touch ? documentElement.clientHeight / windowHeight : 1;
+        const hZoomLevel = touch ? documentElement.clientWidth / windowWidth : 1;
+        const vZoomLevel = touch ? documentElement.clientHeight / windowHeight : 1;
 
         if(scrollbarWidth === undefined) {
             calculateScrollbarWidth();
@@ -426,7 +426,7 @@ const position = function(what, options) {
         return $what.offset();
     }
 
-    translator.resetPosition($what, true);
+    resetPosition($what, true);
 
 
     const offset = getOffsetWithoutScale($what);
@@ -436,7 +436,7 @@ const position = function(what, options) {
         return options.precise ? number : Math.round(number);
     };
 
-    translator.move($what, {
+    move($what, {
         left: targetPosition.h.location - preciser(offset.left),
         top: targetPosition.v.location - preciser(offset.top)
     });

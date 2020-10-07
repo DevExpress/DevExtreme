@@ -1,7 +1,9 @@
 import version from '../../core/version';
 import { format as _stringFormat } from '../../core/utils/string';
-import { ERROR_MESSAGES } from './errors_warnings';
+import warnings from './errors_warnings';
 import { each } from '../../core/utils/iterator';
+
+const ERROR_MESSAGES = warnings.ERROR_MESSAGES;
 
 export function createEventTrigger(eventsMap, callbackGetter) {
     let triggers = {};

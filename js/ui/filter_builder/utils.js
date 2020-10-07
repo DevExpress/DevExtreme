@@ -1,14 +1,14 @@
 import $ from '../../core/renderer';
 import { Deferred, when } from '../../core/utils/deferred';
-import { errors as dataErrors } from '../../data/errors';
+import errorsUtils from '../../data/errors';
 import { isDefined } from '../../core/utils/type';
 import { compileGetter } from '../../core/utils/data';
 import errors from '../widget/ui.errors';
 import filterUtils from '../shared/filtering';
 import formatHelper from '../../format_helper';
 import { extend } from '../../core/utils/extend';
-import inflector from '../../core/utils/inflector';
-import between from './between';
+import { captionize } from '../../core/utils/inflector';
+import { getConfig } from './between';
 import messageLocalization from '../../localization/message';
 import { DataSource } from '../../data/data_source/data_source';
 import filterOperationsDictionary from './ui.filter_operations_dictionary';
@@ -142,7 +142,7 @@ function getCriteriaOperation(criteria) {
         const item = criteria[i];
         if(!Array.isArray(item)) {
             if(value && value !== item) {
-                throw new dataErrors.Error('E4019');
+                throw new errorsUtils.errors.Error('E4019');
             }
             if(item !== '!') {
                 value = item;
@@ -217,7 +217,7 @@ export function getAvailableOperations(field, filterOperationDescriptions, custo
         if(customOperation) {
             return {
                 icon: customOperation.icon || EMPTY_MENU_ICON,
-                text: customOperation.caption || inflector.captionize(customOperation.name),
+                text: customOperation.caption || captionize(customOperation.name),
                 value: customOperation.name,
                 isCustom: true
             };
@@ -598,7 +598,7 @@ function generateCaptionByDataField(dataField, allowHierarchicalFields) {
         dataField = dataField.substring(dataField.lastIndexOf('.') + 1);
     } else if(hasParent(dataField)) {
         dataField.split('.').forEach(function(field, index, arr) {
-            caption += inflector.captionize(field);
+            caption += captionize(field);
             if(index !== (arr.length - 1)) {
                 caption += '.';
             }
@@ -607,7 +607,7 @@ function generateCaptionByDataField(dataField, allowHierarchicalFields) {
         return caption;
     }
 
-    return inflector.captionize(dataField);
+    return captionize(dataField);
 }
 
 export function getItems(fields, allowHierarchicalFields) {
@@ -704,9 +704,9 @@ export function getMergedOperations(customOperations, betweenCaption, context) {
         }
     });
     if(betweenIndex !== -1) {
-        result[betweenIndex] = extend(between.getConfig(betweenCaption, context), result[betweenIndex]);
+        result[betweenIndex] = extend(getConfig(betweenCaption, context), result[betweenIndex]);
     } else {
-        result.unshift(between.getConfig(betweenCaption, context));
+        result.unshift(getConfig(betweenCaption, context));
     }
     return result;
 }

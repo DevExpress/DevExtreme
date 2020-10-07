@@ -2,7 +2,7 @@ import $ from '../core/renderer';
 import { getNavigator } from '../core/utils/window';
 const navigator = getNavigator();
 import { animation } from '../core/utils/support';
-import themes from './themes';
+import { current, isMaterial, isGeneric } from './themes';
 import { extend } from '../core/utils/extend';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
@@ -64,7 +64,7 @@ const LoadIndicator = Widget.inherit({
     },
 
     _defaultOptionsRules: function() {
-        const themeName = themes.current();
+        const themeName = current();
 
         return this.callBase().concat([
             {
@@ -79,7 +79,7 @@ const LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial(themeName);
+                    return isMaterial(themeName);
                 },
                 options: {
                     _animatingSegmentCount: 2,
@@ -88,7 +88,7 @@ const LoadIndicator = Widget.inherit({
             },
             {
                 device: function() {
-                    return themes.isGeneric(themeName);
+                    return isGeneric(themeName);
                 },
                 options: {
                     _animatingSegmentCount: 7

@@ -11,7 +11,9 @@ import ArrayStore from '../../data/array_store';
 import query from '../../data/query';
 import DataSourceAdapter from '../grid_core/ui.grid_core.data_source_adapter';
 import { Deferred, when } from '../../core/utils/deferred';
-import { queryByOptions } from '../../data/store_helper';
+import storeHelper from '../../data/store_helper';
+
+const { queryByOptions } = storeHelper;
 
 const DEFAULT_KEY_EXPRESSION = 'id';
 

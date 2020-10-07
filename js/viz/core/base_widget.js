@@ -6,12 +6,12 @@ import { isNumeric, isFunction, isDefined, isObject as _isObject, type } from '.
 import { each } from '../../core/utils/iterator';
 import _windowResizeCallbacks from '../../core/utils/resize_callbacks';
 import { extend } from '../../core/utils/extend';
-import themeManagerModule from '../core/base_theme_manager';
+import { BaseThemeManager } from '../core/base_theme_manager';
 import DOMComponent from '../../core/dom_component';
-import helpers from './helpers';
+import { changes, replaceInherit } from './helpers';
 import { parseScalar as _parseScalar } from './utils';
-import { log as _log } from './errors_warnings';
-import rendererModule from './renderers/renderer';
+import warnings from './errors_warnings';
+import { Renderer } from './renderers/renderer';
 import _Layout from './layout';
 import devices from '../../core/devices';
 import eventsEngine from '../../events/core/events_engine';
@@ -21,6 +21,7 @@ import {
     createResizeHandler,
     createIncidentOccurred } from './base_widget.utils';
 const _floor = Math.floor;
+const _log = warnings.log;
 
 const OPTION_RTL_ENABLED = 'rtlEnabled';
 
@@ -138,7 +139,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
         that._optionChangedLocker = 0;
-        that._changes = helpers.changes();
+        that._changes = changes();
         that._suspendChanges();
         that._themeManager = that._createThemeManager();
         that._themeManager.setCallback(function() {
@@ -167,7 +168,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     },
 
     _createThemeManager() {
-        return new themeManagerModule.BaseThemeManager(this._getThemeManagerOptions());
+        return new BaseThemeManager(this._getThemeManagerOptions());
     },
 
     _getThemeManagerOptions() {
@@ -349,7 +350,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const that = this;
         // Canvas is calculated before the renderer is created in order to capture actual size of the container
         that._canvas = that._calculateCanvas();
-        that._renderer = new rendererModule.Renderer({ cssClass: that._rootClassPrefix + ' ' + that._rootClass, pathModified: that.option('pathModified'), container: that._$element[0] });
+        that._renderer = new Renderer({ cssClass: that._rootClassPrefix + ' ' + that._rootClass, pathModified: that.option('pathModified'), container: that._$element[0] });
         that._renderer.resize(that._canvas.width, that._canvas.height);
     },
 
@@ -697,4 +698,4 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
 
 export default baseWidget;
 
-helpers.replaceInherit(baseWidget);
+replaceInherit(baseWidget);

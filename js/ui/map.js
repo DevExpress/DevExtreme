@@ -6,14 +6,13 @@ import registerComponent from '../core/component_registrator';
 import errors from './widget/ui.errors';
 import devices from '../core/devices';
 import Widget from './widget/ui.widget';
-import inflector from '../core/utils/inflector';
+import { titleize } from '../core/utils/inflector';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
-import { inArray } from '../core/utils/array';
+import { inArray, wrapToArray } from '../core/utils/array';
 import { isNumeric } from '../core/utils/type';
 import { addNamespace } from '../events/utils/index';
 import pointerEvents from '../events/pointer';
-import { wrapToArray } from '../core/utils/array';
 
 // NOTE external urls must have protocol explicitly specified (because inside Cordova package the protocol is "file:")
 
@@ -368,7 +367,7 @@ const Map = Widget.inherit({
                 const prevValue = this._rendered[name];
                 this._saveRendered(name);
                 this._queueAsyncAction(
-                    'update' + inflector.titleize(name),
+                    'update' + titleize(name),
                     changeBag ? changeBag.removed : prevValue,
                     changeBag ? changeBag.added : this._rendered[name]
                 ).then(function(result) {
@@ -486,7 +485,7 @@ const Map = Widget.inherit({
                 const removing = optionValue.splice(index, 1)[0];
                 removingValues.splice(removingIndex, 1, removing);
             } else {
-                throw errors.log('E1021', inflector.titleize(optionName.substring(0, optionName.length - 1)), removingValue);
+                throw errors.log('E1021', titleize(optionName.substring(0, optionName.length - 1)), removingValue);
             }
         });
 

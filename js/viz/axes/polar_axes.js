@@ -5,13 +5,15 @@ import {
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import constants from './axes_constants';
-import { linear as xyAxesLinear } from './xy_axes';
+import xyAxes from './xy_axes';
 import { tick } from './tick';
-import baseAxisModule from './base_axis';
+import { calculateCanvasMargins, Axis, measureLabels } from './base_axis';
 import { noop as _noop } from '../../core/utils/common';
 const { PI, abs, atan, round } = Math;
 const _min = Math.min;
 const _max = Math.max;
+
+const xyAxesLinear = xyAxes.linear;
 
 const HALF_PI_ANGLE = 90;
 
@@ -148,7 +150,7 @@ const circularAxes = {
             bottom: this._canvas.height - (y + radius)
         });
 
-        const margins = baseAxisModule.calculateCanvasMargins(labelBoxes, canvas);
+        const margins = calculateCanvasMargins(labelBoxes, canvas);
         Object.keys(margins).forEach(k => margins[k] = (margins[k] < tickOuterLength ? tickOuterLength : margins[k]));
 
         return margins;
@@ -157,9 +159,9 @@ const circularAxes = {
     updateSize() {
         const that = this;
 
-        baseAxisModule.Axis.prototype.updateSize.apply(that, arguments);
+        Axis.prototype.updateSize.apply(that, arguments);
 
-        baseAxisModule.measureLabels(that._majorTicks);
+        measureLabels(that._majorTicks);
         that._adjustLabelsCoord(0, 0, true);
 
         this._checkBoundedLabelsOverlapping(this._majorTicks, this._majorTicks.map(t=>t.labelBBox));

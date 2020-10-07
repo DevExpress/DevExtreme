@@ -4,7 +4,7 @@ import Class from '../../core/class';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
 import errors from '../widget/ui.errors';
-import decoratorRegistry from './ui.list.edit.decorator_registry';
+import { registry } from './ui.list.edit.decorator_registry';
 
 import './ui.list.edit.decorator.static';
 import './ui.list.edit.decorator.switchable.button';
@@ -131,7 +131,7 @@ const EditProvider = Class.inherit({
     },
 
     _findDecorator: function(type, subType) {
-        const foundDecorator = decoratorRegistry.registry[type][subType];
+        const foundDecorator = registry[type][subType];
 
         if(!foundDecorator) {
             throw errors.Error('E1012', type, subType);

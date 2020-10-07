@@ -5,7 +5,8 @@ import { getBoundingRect } from '../../../core/utils/position';
 import registerComponent from '../../../core/component_registrator';
 import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
-import { tableCreator } from '../ui.scheduler.table_creator';
+import tableCreatorModule from '../ui.scheduler.table_creator';
+const { tableCreator } = tableCreatorModule;
 import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';

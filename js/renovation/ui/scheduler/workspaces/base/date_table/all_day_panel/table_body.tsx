@@ -17,11 +17,13 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
       groups,
       groupIndex: cellGroupIndex,
       index: cellIndex,
+      isFirstGroupCell,
+      isLastGroupCell,
       key,
-    }, index) => (
+    }) => (
       <Cell
-        isFirstCell={index === 0}
-        isLastCell={index === (viewModel.props.viewData!.length - 1)}
+        isFirstGroupCell={!viewModel.props.isVerticalGroupOrientation && isFirstGroupCell}
+        isLastGroupCell={!viewModel.props.isVerticalGroupOrientation && isLastGroupCell}
         startDate={startDate}
         endDate={endDate}
         groups={groups}
@@ -37,6 +39,8 @@ export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
 @ComponentBindings()
 export class AllDayPanelTableBodyProps {
   @OneWay() viewData?: ViewCellData[];
+
+  @OneWay() isVerticalGroupOrientation?: boolean = false;
 
   @OneWay() className?: string = '';
 

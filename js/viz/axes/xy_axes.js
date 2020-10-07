@@ -1,10 +1,10 @@
-import rangeModule from '../translators/range';
-import { getDateFormatByDifferences } from '../../format_helper';
+import { Range } from '../translators/range';
+import formatHelper from '../../format_helper';
 import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import { generateDateBreaks } from './datetime_breaks';
 import { noop } from '../../core/utils/common';
-import vizUtils from '../core/utils';
+import { getLog, patchFontOptions, getCosAndSin } from '../core/utils';
 import { isDefined } from '../../core/utils/type';
 import constants from './axes_constants';
 
@@ -109,7 +109,7 @@ function getMarkerFormat(curDate, prevDate, tickInterval, markerInterval) {
     const datesDifferences = prevDate && dateUtils.getDatesDifferences(prevDate, curDate);
     if(prevDate && tickInterval !== 'year') {
         prepareDatesDifferences(datesDifferences, tickInterval);
-        format = getDateFormatByDifferences(datesDifferences);
+        format = formatHelper.getDateFormatByDifferences(datesDifferences);
     }
     return format;
 }
@@ -188,7 +188,7 @@ function generateRangesOnPoints(points, edgePoints, getRange) {
 function generateAutoBreaks({ logarithmBase, type, maxAutoBreakCount }, series, { minVisible, maxVisible }) {
     const breaks = [];
     const getRange = type === 'logarithmic' ?
-        (min, max) => { return vizUtils.getLog(max / min, logarithmBase); } :
+        (min, max) => { return getLog(max / min, logarithmBase); } :
         (min, max) => { return max - min; };
 
     let visibleRange = getRange(minVisible, maxVisible);
@@ -365,7 +365,7 @@ export default {
             }
             const text = this._renderer
                 .text(titleOptions.text, coords.x, coords.y)
-                .css(vizUtils.patchFontOptions(titleOptions.font))
+                .css(patchFontOptions(titleOptions.font))
                 .attr(attrs)
                 .append(group);
 
@@ -419,7 +419,7 @@ export default {
                 y: options.y,
                 cropped: options.withoutStick,
                 label: that._renderer.text(text, options.x, options.y)
-                    .css(vizUtils.patchFontOptions(markerOptions.label.font))
+                    .css(patchFontOptions(markerOptions.label.font))
                     .append(that._axisElementsGroup),
                 line: pathElement,
                 getContentContainer() {
@@ -733,7 +733,7 @@ export default {
             }
 
             if(this._validateDisplayMode(drawingType) === 'rotate' || this._validateOverlappingMode(labelOptions.overlappingBehavior, drawingType) === 'rotate') {
-                const sinCos = vizUtils.getCosAndSin(labelOptions.rotationAngle);
+                const sinCos = getCosAndSin(labelOptions.rotationAngle);
                 height = height * sinCos.cos + bBox.width * sinCos.sin;
             }
 
@@ -942,7 +942,7 @@ export default {
                     range.min = isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
                     range.max = isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
                     if(s.showZero) {
-                        range = new rangeModule.Range(range);
+                        range = new Range(range);
                         range.correctValueZeroLevel();
                     }
                     return range;

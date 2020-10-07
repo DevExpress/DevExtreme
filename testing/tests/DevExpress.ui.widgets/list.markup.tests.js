@@ -5,7 +5,6 @@ import devices from 'core/devices';
 import List from 'ui/list';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
-import 'ui/list';
 import 'common.css!';
 import 'generic_light.css!';
 

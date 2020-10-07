@@ -4,7 +4,7 @@ import { each } from '../../core/utils/iterator';
 import { isFunction, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import errors from '../../ui/widget/ui.errors';
-import { getOperationBySearchMode } from '../../ui/widget/ui.search_box_mixin';
+import uiSearchBoxMixin from '../../ui/widget/ui.search_box_mixin';
 import { inArray } from '../../core/utils/array';
 import query from '../../data/query';
 import storeHelper from '../../data/store_helper';
@@ -466,7 +466,7 @@ const DataAdapter = Class.inherit({
 
     _filterDataStructure: function(filterValue, dataStructure) {
         const selector = this.options.searchExpr || this.options.dataAccessors.getters.display;
-        const operation = getOperationBySearchMode(this.options.searchMode);
+        const operation = uiSearchBoxMixin.getOperationBySearchMode(this.options.searchMode);
         const criteria = this._createCriteria(selector, filterValue, operation);
 
         dataStructure = dataStructure || this._initialDataStructure;

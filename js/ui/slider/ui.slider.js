@@ -12,7 +12,7 @@ import pointerEvents from '../../events/pointer';
 import { addNamespace, isMouseEvent, isTouchEvent, eventData } from '../../events/utils/index';
 import { triggerShownEvent } from '../../events/visibility_change';
 import numberLocalization from '../../localization/number';
-import themes from '../themes';
+import { isMaterial, current as currentTheme } from '../themes';
 import TrackBar from '../track_bar';
 import { render } from '../widget/utils.ink_ripple';
 import SliderHandle from './ui.slider_handle';
@@ -184,7 +184,7 @@ const Slider = TrackBar.inherit({
 
             useInkRipple: false,
 
-            validationMessageOffset: themes.isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 },
+            validationMessageOffset: isMaterial() ? { h: 18, v: 0 } : { h: 7, v: 4 },
 
             focusStateEnabled: true
 
@@ -210,8 +210,8 @@ const Slider = TrackBar.inherit({
             },
             {
                 device: function() {
-                    const themeName = themes.current();
-                    return themes.isMaterial(themeName);
+                    const themeName = currentTheme();
+                    return isMaterial(themeName);
                 },
                 options: {
                     useInkRipple: true

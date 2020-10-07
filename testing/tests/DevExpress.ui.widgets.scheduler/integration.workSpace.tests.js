@@ -3,6 +3,7 @@ import themes from 'ui/themes';
 import dateLocalization from 'localization/date';
 import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
 import devices from 'core/devices';
+import keyboardMock from '../../helpers/keyboardMock.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(
@@ -149,20 +150,25 @@ QUnit.test('Scheduler work space should have a single type class', function(asse
     assert.ok(check('dx-scheduler-work-space-month'), 'Work space has a right type class');
 });
 
-QUnit.test('Pointer down on workspace cell should focus cell', function(assert) {
-    this.createInstance({ currentDate: new Date(2015, 1, 10) });
+['standard', 'virtual'].forEach((scrollingMode) => {
+    QUnit.test(`Pointer down on workspace cell should focus cell in ${scrollingMode} mode`, function(assert) {
+        this.createInstance({
+            currentDate: new Date(2015, 1, 10),
+            scrolling: { mode: scrollingMode },
+        });
 
-    const $firstCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0);
-    const $otherCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(1);
+        const $firstCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0);
+        const $otherCell = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(1);
 
-    $firstCell.trigger('dxpointerdown');
+        $firstCell.trigger('dxpointerdown');
 
-    assert.ok($firstCell.hasClass('dx-state-focused'), 'first cell was focused after first pointerdown');
+        assert.ok($firstCell.hasClass('dx-state-focused'), 'first cell was focused after first pointerdown');
 
-    $otherCell.trigger('dxpointerdown');
+        $otherCell.trigger('dxpointerdown');
 
-    assert.ok(!$firstCell.hasClass('dx-state-focused'), 'first cell is not focused');
-    assert.ok($otherCell.hasClass('dx-state-focused'), 'other cell is focused');
+        assert.ok(!$firstCell.hasClass('dx-state-focused'), 'first cell is not focused');
+        assert.ok($otherCell.hasClass('dx-state-focused'), 'other cell is focused');
+    });
 });
 
 QUnit.test('Double click on workspace cell should call scheduler.showAppointmentPopup method in day view', function(assert) {
@@ -1680,75 +1686,91 @@ QUnit.test('WorkSpace should be refreshed after groups changed', function(assert
     }
 });
 
-QUnit.test('SelectedCellData option should have rigth data of focused cell', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        showAllDayPanel: true,
-        currentDate: new Date(2018, 3, 11),
-        height: 600
-    });
+['standard', 'virtual'].forEach((scrollingMode) => {
+    QUnit.test(`SelectedCellData option should have rigth data of focused cell when scrolling is ${scrollingMode}`, function(assert) {
+        this.createInstance({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            currentDate: new Date(2018, 3, 11),
+            height: 600,
+            scrolling: { mode: scrollingMode },
+        });
 
-    const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
+        const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
-    $($cells.eq(0)).trigger('dxpointerdown');
+        $($cells.eq(0)).trigger('dxpointerdown');
 
-    assert.deepEqual(this.instance.option('selectedCellData'), [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }], 'option has right value');
-});
-
-QUnit.test('SelectedCellData option should be applied correctly in ungrouped workspace', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        showAllDayPanel: true,
-        groups: undefined,
-        currentDate: new Date(2018, 3, 11),
-        height: 600,
-        selectedCellData: [{
-            allDay: false,
+        const baseData = {
             startDate: new Date(2018, 3, 8),
             endDate: new Date(2018, 3, 8, 0, 30),
-            groups: {
-                groupId: 1
-            }
-        }]
+            allDay: false,
+        };
+
+        assert.deepEqual(this.instance.option('selectedCellData'), [{
+            ...baseData,
+            groupIndex: 0,
+            groups: undefined,
+        }], 'option has right value');
     });
 
-    assert.ok(true, 'WorkSpace works correctly');
-});
+    QUnit.test(`SelectedCellData option should be applied correctly in ungrouped workspace when scrolling is ${scrollingMode}`, function(assert) {
+        this.createInstance({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            groups: undefined,
+            currentDate: new Date(2018, 3, 11),
+            height: 600,
+            selectedCellData: [{
+                allDay: false,
+                startDate: new Date(2018, 3, 8),
+                endDate: new Date(2018, 3, 8, 0, 30),
+                groups: {
+                    groupId: 1
+                }
+            }],
+            scrolling: { mode: scrollingMode },
+        });
 
-QUnit.test('SelectedCellData option should make cell in focused state', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        showAllDayPanel: true,
-        selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
-        currentDate: new Date(2018, 3, 11),
-        height: 600
+        assert.ok(true, 'WorkSpace works correctly');
     });
 
-    const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
+    QUnit.test(`SelectedCellData option should make cell in focused state when scrolling is ${scrollingMode}`, function(assert) {
+        this.createInstance({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
+            currentDate: new Date(2018, 3, 11),
+            height: 600,
+            scrolling: { mode: scrollingMode },
+        });
 
-    assert.ok($($cells.eq(0)).hasClass('dx-state-focused', 'correct cell is focused'));
-});
+        const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
 
-QUnit.test('Focused cells cash should be correct (T640466)', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        views: ['week'],
-        currentView: 'week',
-        showAllDayPanel: true,
-        selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
-        currentDate: new Date(2018, 3, 11),
-        height: 600
+        assert.ok($($cells.eq(0)).hasClass('dx-state-focused', 'correct cell is focused'));
     });
-    const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
-    const workSpace = this.instance.getWorkSpace();
 
-    assert.deepEqual(workSpace._focusedCells[0], $cells.eq(0).get(0), 'Cashed cells is correct');
+    QUnit.test(`Focused cells cash should be correct (T640466) when scrolling is ${scrollingMode}`, function(assert) {
+        this.createInstance({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            selectedCellData: [{ startDate: new Date(2018, 3, 8), endDate: new Date(2018, 3, 8, 0, 30), allDay: false }],
+            currentDate: new Date(2018, 3, 11),
+            height: 600,
+            scrolling: { mode: scrollingMode },
+        });
+        const $cells = this.instance.$element().find('.dx-scheduler-date-table-cell');
+        const workSpace = this.instance.getWorkSpace();
+
+        assert.deepEqual(workSpace._selectedCells[0], $cells.eq(0).get(0), 'Cashed cells is correct');
+    });
 });
 
 QUnit.test('Scheduler timeline workweek should contain two spans in header panel cell in Material theme', function(assert) {
@@ -1927,26 +1949,68 @@ if(devices.real().deviceType === 'desktop') {
         [{
             view: 'day',
             startCell: {
-                index: 0, cellData: { startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false },
+                index: 0,
+                cellData: {
+                    startDate: new Date(2018, 3, 8, 0, 0),
+                    endDate: new Date(2018, 3, 8, 0, 30),
+                    allDay: false,
+                    groups: undefined,
+                    groupIndex: 0,
+                },
             },
             endCell: {
-                index: 1, cellData: { startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false },
+                index: 1,
+                cellData: {
+                    startDate: new Date(2018, 3, 8, 0, 30),
+                    endDate: new Date(2018, 3, 8, 1, 0),
+                    allDay: false,
+                    groups: undefined,
+                    groupIndex: 0,
+                },
             },
         }, {
             view: 'week',
             startCell: {
-                index: 0, cellData: { startDate: new Date(2018, 3, 8, 0, 0), endDate: new Date(2018, 3, 8, 0, 30), allDay: false },
+                index: 0,
+                cellData: {
+                    startDate: new Date(2018, 3, 8, 0, 0),
+                    endDate: new Date(2018, 3, 8, 0, 30),
+                    allDay: false,
+                    groups: undefined,
+                    groupIndex: 0,
+                },
             },
             endCell: {
-                index: 7, cellData: { startDate: new Date(2018, 3, 8, 0, 30), endDate: new Date(2018, 3, 8, 1, 0), allDay: false },
+                index: 7,
+                cellData: {
+                    startDate: new Date(2018, 3, 8, 0, 30),
+                    endDate: new Date(2018, 3, 8, 1, 0),
+                    allDay: false,
+                    groups: undefined,
+                    groupIndex: 0,
+                },
             },
         }, {
             view: 'month',
             startCell: {
-                index: 0, cellData: { startDate: new Date(2018, 3, 1), endDate: new Date(2018, 3, 2) },
+                index: 0,
+                cellData: {
+                    startDate: new Date(2018, 3, 1),
+                    endDate: new Date(2018, 3, 2),
+                    groups: undefined,
+                    groupIndex: 0,
+                    allDay: undefined,
+                },
             },
             endCell: {
-                index: 1, cellData: { startDate: new Date(2018, 3, 2), endDate: new Date(2018, 3, 3) },
+                index: 1,
+                cellData: {
+                    startDate: new Date(2018, 3, 2),
+                    endDate: new Date(2018, 3, 3),
+                    groups: undefined,
+                    groupIndex: 0,
+                    allDay: undefined,
+                },
             },
         }].forEach((config) => {
             const { view, startCell, endCell } = config;
@@ -1975,6 +2039,35 @@ if(devices.real().deviceType === 'desktop') {
                         startCell.cellData, endCell.cellData,
                     ], 'correct cells have been selected');
             });
+
+            if(view !== 'month') {
+                QUnit.test(`Multiple selection should work in ${view} when dragging is not enabled when scrolling is virtual`, function(assert) {
+                    const instance = createWrapper({
+                        dataSource: [],
+                        views: [view],
+                        currentView: view,
+                        showAllDayPanel: true,
+                        currentDate: new Date(2018, 3, 8),
+                        height: 600,
+                        editing: { allowDragging: false },
+                        scrolling: { mode: 'virtual' },
+                    });
+
+                    const $cells = instance.workSpace.getCells();
+                    const $table = instance.workSpace.getDateTable();
+
+                    $($table).trigger(
+                        $.Event('dxpointerdown', { target: $cells.eq(startCell.index).get(0), which: 1, pointerType: 'mouse' }),
+                    );
+                    $($table).trigger($.Event('dxpointermove', { target: $cells.eq(endCell.index).get(0), which: 1 }));
+
+                    assert.deepEqual(
+                        instance.option('selectedCellData'),
+                        [
+                            startCell.cellData, endCell.cellData,
+                        ], 'correct cells have been selected');
+                });
+            }
         });
     });
 }
@@ -2652,3 +2745,188 @@ QUnit.module('Cell Templates in renovated views', () => {
         });
     });
 });
+
+if(devices.real().deviceType === 'desktop') {
+    QUnit.test('SelectedCellData option should be correct when virtual scrolling is enabled', function(assert) {
+        const instance = createWrapper({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            currentDate: new Date(2020, 8, 21),
+            height: 300,
+            scrolling: { mode: 'virtual' },
+        });
+
+        const $cells = instance.workSpace.getCells();
+        const $table = instance.workSpace.getDateTable();
+
+        $($table).trigger(
+            $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
+        );
+        $($table).trigger($.Event('dxpointermove', { target: $cells.eq(1).get(0), which: 1 }));
+
+        const firstCell = {
+            allDay: false,
+            endDate: new Date(2020, 8, 20, 0, 30),
+            groupIndex: 0,
+            startDate: new Date(2020, 8, 20, 0, 0),
+            groups: undefined,
+        };
+        const bottomCell = {
+            allDay: false,
+            endDate: new Date(2020, 8, 21, 0, 0),
+            groupIndex: 0,
+            startDate: new Date(2020, 8, 20, 23, 30),
+            groups: undefined,
+        };
+        const lastCell = {
+            allDay: false,
+            endDate: new Date(2020, 8, 21, 0, 30),
+            groupIndex: 0,
+            startDate: new Date(2020, 8, 21, 0, 0),
+            groups: undefined,
+        };
+
+        const selectedCellData = instance.option('selectedCellData');
+
+        assert.equal(selectedCellData.length, 49, 'Correct number of selected cells');
+        assert.deepEqual(selectedCellData[0], firstCell, 'First selected cell is correct');
+        assert.deepEqual(selectedCellData[47], bottomCell, 'Bottom cell is correct');
+        assert.deepEqual(selectedCellData[48], lastCell, 'Last selected cell is correct');
+    });
+}
+
+QUnit.test('SelectedCellData option should not change when dateTable is scrolled', function(assert) {
+    const done = assert.async();
+    const scheduler = createWrapper({
+        dataSource: [],
+        views: ['week'],
+        currentView: 'week',
+        showAllDayPanel: true,
+        currentDate: new Date(2020, 8, 21),
+        height: 300,
+        scrolling: { mode: 'virtual' },
+    });
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+    const $cells = scheduler.workSpace.getCells();
+    const $table = scheduler.workSpace.getDateTable();
+
+    $($table).trigger(
+        $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
+    );
+
+    const selectedCells = [{
+        allDay: false,
+        endDate: new Date(2020, 8, 20, 0, 30),
+        groupIndex: 0,
+        startDate: new Date(2020, 8, 20, 0, 0),
+        groups: undefined,
+    }];
+
+    assert.deepEqual(scheduler.option('selectedCellData'), selectedCells, 'Correct selected cells');
+
+    const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+
+    dateTableScrollable.scrollTo({ y: 400 });
+
+    setTimeout(() => {
+        assert.deepEqual(scheduler.option('selectedCellData'), selectedCells, 'Correct selected cells');
+
+        done();
+    });
+});
+
+QUnit.test('"onOptionChanged" should not be called on scroll when virtual scrolling is enabled', function(assert) {
+    const done = assert.async();
+    let onOptionChangedCalls = 0;
+    const scheduler = createWrapper({
+        dataSource: [],
+        views: ['week'],
+        currentView: 'week',
+        showAllDayPanel: true,
+        currentDate: new Date(2020, 8, 21),
+        height: 300,
+        scrolling: { mode: 'virtual' },
+        onOptionChanged: () => {
+            onOptionChangedCalls += 1;
+        },
+    });
+    scheduler.instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+    const $cells = scheduler.workSpace.getCells();
+    const $table = scheduler.workSpace.getDateTable();
+
+    const onOptionChangedSpy = sinon.spy();
+
+    scheduler.onOptionChanged = onOptionChangedSpy;
+
+    $($table).trigger(
+        $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
+    );
+
+    assert.equal(onOptionChangedCalls, 1, '"onOptionChanged" was triggered because selected cells have been changed');
+
+    const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+
+    dateTableScrollable.scrollTo({ y: 400 });
+
+    setTimeout(() => {
+        assert.equal(
+            onOptionChangedCalls, 1,
+            '"onOptionChanged" was not triggered again because selected cells have not been changed',
+        );
+        done();
+    });
+
+});
+
+if(devices.real().deviceType === 'desktop') {
+    QUnit.test('Appointment popup should be opened with correct parameters if virtual scrolling is enabled', function(assert) {
+        const done = assert.async();
+        const scheduler = createWrapper({
+            dataSource: [],
+            views: ['week'],
+            currentView: 'week',
+            showAllDayPanel: true,
+            currentDate: new Date(2020, 8, 20),
+            height: 300,
+            scrolling: { mode: 'virtual' },
+        });
+
+        const { instance } = scheduler;
+        instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+        const showAppointmentPopupSpy = sinon.spy();
+        instance.showAppointmentPopup = showAppointmentPopupSpy;
+
+        const $cells = scheduler.workSpace.getCells();
+        const $table = scheduler.workSpace.getDateTable();
+
+        $($table).trigger(
+            $.Event('dxpointerdown', { target: $cells.eq(0).get(0), which: 1, pointerType: 'mouse' }),
+        );
+        $($table).trigger($.Event('dxpointermove', { target: $cells.eq(1).get(0), which: 1 }));
+
+        const dateTableScrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+
+        dateTableScrollable.scrollTo({ y: 400 });
+
+        setTimeout(() => {
+            const keyboard = keyboardMock(instance.getWorkSpace().$element());
+            keyboard.keyDown('enter');
+
+            assert.ok(showAppointmentPopupSpy.calledOnce, '"showAppointmentPopup" was called');
+            assert.deepEqual(
+                showAppointmentPopupSpy.getCall(0).args[0],
+                {
+                    allDay: false,
+                    endDate: new Date(2020, 8, 21, 0, 30),
+                    startDate: new Date(2020, 8, 20, 0, 0),
+                },
+                '"showAppointmentPopup" was called with correct parameters',
+            );
+            done();
+        });
+    });
+}

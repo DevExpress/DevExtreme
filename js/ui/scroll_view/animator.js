@@ -1,7 +1,7 @@
 import { noop } from '../../core/utils/common';
 import Class from '../../core/class';
 const abstract = Class.abstract;
-import animationFrame from '../../animation/frame';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 
 const Animator = Class.inherit({
 
@@ -20,7 +20,7 @@ const Animator = Class.inherit({
 
     stop: function() {
         this._stopped = true;
-        animationFrame.cancelAnimationFrame(this._stepAnimationFrame);
+        cancelAnimationFrame(this._stepAnimationFrame);
     },
 
     _stepCore: function() {
@@ -36,7 +36,7 @@ const Animator = Class.inherit({
         }
 
         this._step();
-        this._stepAnimationFrame = animationFrame.requestAnimationFrame(this._proxiedStepCore);
+        this._stepAnimationFrame = requestAnimationFrame(this._proxiedStepCore);
     },
 
     _step: abstract,

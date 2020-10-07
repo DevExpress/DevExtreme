@@ -3,10 +3,10 @@ import dataUtils from './utils';
 import { applyBatch } from './array_utils';
 import { isFunction } from '../core/utils/type';
 import config from '../core/config';
-import { errors } from './errors';
+import errorUtils from './errors';
 import Store from './abstract_store';
 import arrayQuery from './array_query';
-import { queryByOptions } from './store_helper';
+import storeHelper from './store_helper';
 import { Deferred, when, fromPromise } from '../core/utils/deferred';
 
 const TOTAL_COUNT = 'totalCount';
@@ -26,12 +26,12 @@ function trivialPromise(value) {
 
 function ensureRequiredFuncOption(name, obj) {
     if(!isFunction(obj)) {
-        throw errors.Error('E4011', name);
+        throw errorUtils.errors.Error('E4011', name);
     }
 }
 
 function throwInvalidUserFuncResult(name) {
-    throw errors.Error('E4012', name);
+    throw errorUtils.errors.Error('E4012', name);
 }
 
 function createUserFuncFailureHandler(pendingDeferred) {
@@ -86,7 +86,7 @@ function invokeUserTotalCountFunc(store, options) {
     let userResult;
 
     if(!isFunction(userFunc)) {
-        throw errors.Error('E4021');
+        throw errorUtils.errors.Error('E4021');
     }
 
     userResult = userFunc.apply(store, [options]);
@@ -158,7 +158,7 @@ function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
         let totalCount;
 
         if(!countOnly) {
-            itemsQuery = queryByOptions(rawDataQuery, options);
+            itemsQuery = storeHelper.queryByOptions(rawDataQuery, options);
             if(itemsQuery === rawDataQuery) {
                 items = rawData.slice(0);
             } else {
@@ -169,7 +169,7 @@ function runRawLoadWithQuery(pendingDeferred, store, options, countOnly) {
         }
 
         if(options.requireTotalCount || countOnly) {
-            totalCountQuery = queryByOptions(rawDataQuery, options, true);
+            totalCountQuery = storeHelper.queryByOptions(rawDataQuery, options, true);
             if(totalCountQuery === rawDataQuery) {
                 totalCount = rawData.length;
             } else {
@@ -208,7 +208,7 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
             }
         }
 
-        pendingDeferred.reject(errors.Error('E4009'));
+        pendingDeferred.reject(errorUtils.errors.Error('E4009'));
     });
 }
 
@@ -244,7 +244,7 @@ const CustomStore = Store.inherit({
     },
 
     createQuery: function() {
-        throw errors.Error('E4010');
+        throw errorUtils.errors.Error('E4010');
     },
 
     clearRawDataCache: function() {

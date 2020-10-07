@@ -2,9 +2,9 @@ import $ from '../core/renderer';
 import { getWindow } from '../core/utils/window';
 const window = getWindow();
 import eventsEngine from '../events/core/events_engine';
-import stringUtils from '../core/utils/string';
+import { quadToObject } from '../core/utils/string';
 import registerComponent from '../core/component_registrator';
-import translator from '../animation/translator';
+import { locate, move } from '../animation/translator';
 import Animator from './scroll_view/animator';
 import browser from '../core/utils/browser';
 import { dasherize } from '../core/utils/inflector';
@@ -367,7 +367,7 @@ const Draggable = DOMComponent.inherit({
         const isCloned = this._dragElementIsCloned();
         const cursorOffset = this.option('cursorOffset');
         let normalizedCursorOffset = { left: 0, top: 0 };
-        const currentLocate = this._initialLocate = translator.locate($dragElement);
+        const currentLocate = this._initialLocate = locate($dragElement);
 
         if(isCloned || options.initialOffset || cursorOffset) {
             elementOffset = options.initialOffset || $element.offset();
@@ -400,7 +400,7 @@ const Draggable = DOMComponent.inherit({
             this._move(elementOffset, $dragElement);
         }
 
-        this._startPosition = translator.locate($dragElement);
+        this._startPosition = locate($dragElement);
     },
 
     _startAnimator: function() {
@@ -527,7 +527,7 @@ const Draggable = DOMComponent.inherit({
     },
 
     _move: function(position, $element) {
-        translator.move($element || this._$dragElement, position);
+        move($element || this._$dragElement, position);
     },
 
     _getDraggableElement: function(e) {
@@ -570,11 +570,11 @@ const Draggable = DOMComponent.inherit({
         const dragDirection = this.option('dragDirection');
 
         if(dragDirection === 'horizontal' || dragDirection === 'both') {
-            position.left = e.pageX - $element.offset().left + translator.locate($element).left - $element.width() / 2;
+            position.left = e.pageX - $element.offset().left + locate($element).left - $element.width() / 2;
         }
 
         if(dragDirection === 'vertical' || dragDirection === 'both') {
-            position.top = e.pageY - $element.offset().top + translator.locate($element).top - $element.height() / 2;
+            position.top = e.pageY - $element.offset().top + locate($element).top - $element.height() / 2;
         }
 
         this._move(position, $element);
@@ -676,7 +676,7 @@ const Draggable = DOMComponent.inherit({
             boundOffset = boundOffset.call(this);
         }
 
-        return stringUtils.quadToObject(boundOffset);
+        return quadToObject(boundOffset);
     },
 
     _getArea: function() {

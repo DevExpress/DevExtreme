@@ -1,5 +1,5 @@
 import $ from '../../core/renderer';
-import themes from '../themes';
+import { isMaterial, waitWebFont } from '../themes';
 import { noop } from '../../core/utils/common';
 import { isPlainObject } from '../../core/utils/type';
 import registerComponent from '../../core/component_registrator';
@@ -111,7 +111,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         return this.callBase().concat([
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     useFlatButtons: true
@@ -183,7 +183,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         this.callBase();
         this._renderItemsAsync();
 
-        if(themes.isMaterial()) {
+        if(isMaterial()) {
             Promise.all([
                 this._waitParentAnimationFinished(),
                 this._checkWebFontForLabelsLoaded()
@@ -226,7 +226,7 @@ const ToolbarBase = AsyncCollectionWidget.inherit({
         $labels.each((_, label) => {
             const text = $(label).text();
             const fontWeight = $(label).css('fontWeight');
-            promises.push(themes.waitWebFont(text, fontWeight));
+            promises.push(waitWebFont(text, fontWeight));
         });
         return Promise.all(promises);
     },

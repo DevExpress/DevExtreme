@@ -7,7 +7,7 @@ import domAdapter from '../core/dom_adapter';
 import { extend } from '../core/utils/extend';
 import { deferRender } from '../core/utils/common';
 import { getPublicElement } from '../core/element';
-import iteratorUtils from '../core/utils/iterator';
+import * as iteratorUtils from '../core/utils/iterator';
 import { isPlainObject, isDefined } from '../core/utils/type';
 import registerComponent from '../core/component_registrator';
 import { addNamespace } from '../events/utils/index';
@@ -15,7 +15,7 @@ import CollectionWidget from './collection/ui.collection_widget.live_update';
 import { when, Deferred } from '../core/utils/deferred';
 import { BindableTemplate } from '../core/templates/bindable_template';
 import { getImageContainer } from '../core/utils/icon';
-import themes from './themes';
+import { isMaterial } from './themes';
 
 // STYLE accordion
 
@@ -76,7 +76,7 @@ const Accordion = CollectionWidget.inherit({
             },
             {
                 device: function() {
-                    return themes.isMaterial();
+                    return isMaterial();
                 },
                 options: {
                     animationDuration: 200,

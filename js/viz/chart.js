@@ -11,16 +11,16 @@ import {
     checkElementHasPropertyFromStyleSheet,
     rangesAreEqual
 } from './core/utils';
-import { type } from '../core/utils/type';
+import { type, isDefined as _isDefined } from '../core/utils/type';
 import { getPrecision } from '../core/utils/math';
 import { overlapping } from './chart_components/base_chart';
 import multiAxesSynchronizer from './chart_components/multi_axes_synchronizer';
 import { AdvancedChart } from './chart_components/advanced_chart';
-import scrollBarModule from './chart_components/scroll_bar';
-import crosshairModule from './chart_components/crosshair';
-import { getViewPortFilter } from './series/helpers/range_data_calculator';
-import LayoutManagerModule from './chart_components/layout_manager';
-import rangeModule from './translators/range';
+import { ScrollBar } from './chart_components/scroll_bar';
+import { Crosshair } from './chart_components/crosshair';
+import rangeDataCalculator from './series/helpers/range_data_calculator';
+import { LayoutManager } from './chart_components/layout_manager';
+import { Range } from './translators/range';
 const DEFAULT_PANE_NAME = 'default';
 const VISUAL_RANGE = 'VISUAL_RANGE';
 const DEFAULT_PANES = [{
@@ -30,7 +30,6 @@ const DEFAULT_PANES = [{
 const DISCRETE = 'discrete';
 
 const _isArray = Array.isArray;
-import { isDefined as _isDefined } from '../core/utils/type';
 
 function getFirstAxisNameForPane(axes, paneName, defaultPane) {
     let result;
@@ -325,13 +324,13 @@ function collectMarkersInfoBySeries(allSeries, filteredSeries, argAxis) {
     const overloadedSeries = {};
     const argVisualRange = argAxis.visualRange();
     const argTranslator = argAxis.getTranslator();
-    const argViewPortFilter = getViewPortFilter(argVisualRange || {});
+    const argViewPortFilter = rangeDataCalculator.getViewPortFilter(argVisualRange || {});
     filteredSeries.forEach(s => {
         const valAxis = s.getValueAxis();
         const valVisualRange = valAxis.getCanvasRange();
         const valTranslator = valAxis.getTranslator();
         const seriesIndex = allSeries.indexOf(s);
-        const valViewPortFilter = getViewPortFilter(valVisualRange || {});
+        const valViewPortFilter = rangeDataCalculator.getViewPortFilter(valVisualRange || {});
 
         overloadedSeries[seriesIndex] = {};
         filteredSeries.forEach(sr => overloadedSeries[seriesIndex][allSeries.indexOf(sr)] = 0);
@@ -679,7 +678,7 @@ const dxChart = AdvancedChart.inherit({
 
         if(scrollBarOptions.visible) {
             scrollBarOptions.rotated = that._isRotated();
-            that._scrollBar = (that._scrollBar || new scrollBarModule.ScrollBar(that._renderer, scrollBarGroup)).update(scrollBarOptions);
+            that._scrollBar = (that._scrollBar || new ScrollBar(that._renderer, scrollBarGroup)).update(scrollBarOptions);
         } else {
             scrollBarGroup.linkRemove();
             that._scrollBar && that._scrollBar.dispose();
@@ -762,7 +761,7 @@ const dxChart = AdvancedChart.inherit({
 
     _handleSeriesDataUpdated: function() {
         const that = this;
-        const viewport = new rangeModule.Range();
+        const viewport = new Range();
 
         that.series.forEach(function(s) {
             viewport.addRange(s.getArgumentRange());
@@ -802,7 +801,7 @@ const dxChart = AdvancedChart.inherit({
         if(drawOptions.drawLegend && that._legend && legendHasInsidePosition) {
             const panes = that.panes;
             const newCanvas = _extend({}, panes[0].canvas);
-            const layoutManager = new LayoutManagerModule.LayoutManager();
+            const layoutManager = new LayoutManager();
 
             newCanvas.right = panes[panes.length - 1].canvas.right;
             newCanvas.bottom = panes[panes.length - 1].canvas.bottom;
@@ -844,7 +843,7 @@ const dxChart = AdvancedChart.inherit({
     },
 
     _getArgFilter() {
-        return getViewPortFilter(this.getArgumentAxis().visualRange() || {});
+        return rangeDataCalculator.getViewPortFilter(this.getArgumentAxis().visualRange() || {});
     },
 
     _applyPointMarkersAutoHiding() {
@@ -1154,7 +1153,7 @@ const dxChart = AdvancedChart.inherit({
             return;
         }
         if(!that._crosshair) {
-            that._crosshair = new crosshairModule.Crosshair(that._renderer, options, parameters, that._crosshairCursorGroup);
+            that._crosshair = new Crosshair(that._renderer, options, parameters, that._crosshairCursorGroup);
         } else {
             that._crosshair.update(options, parameters);
         }

@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { isNumeric } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
-import { queryByOptions } from '../../data/store_helper';
+import storeHelper from '../../data/store_helper';
 import query from '../../data/query';
 import EditStrategy from '../collection/ui.collection_widget.edit.strategy.plain';
 
@@ -150,7 +150,7 @@ const GroupedEditStrategy = EditStrategy.inherit({
         const group = dataSource && dataSource.group();
 
         if(group) {
-            return queryByOptions(query(items), { group: group }).toArray();
+            return storeHelper.queryByOptions(query(items), { group: group }).toArray();
         }
 
         return this._collectionWidget.option('items');

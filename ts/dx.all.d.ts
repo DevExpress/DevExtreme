@@ -2975,11 +2975,36 @@ declare module DevExpress.fx {
      */
     export function stop(element: Element, jumpToEnd: boolean): void;
 }
-declare module DevExpress.timeZoneUtils {
+declare module DevExpress.pdfExporter {
     /**
-     * [descr:Utils.getTimeZones(date)]
+     * [descr:PdfExportDataGridProps]
      */
-    export function getTimeZones(date?: Date): Array<any>;
+    export interface PdfExportDataGridProps {
+        /**
+         * [descr:PdfExportDataGridProps.autoTableOptions]
+         */
+        autoTableOptions?: any;
+        /**
+         * [descr:PdfExportDataGridProps.component]
+         */
+        component?: DevExpress.ui.dxDataGrid;
+        /**
+         * [descr:PdfExportDataGridProps.jsPDFDocument]
+         */
+        jsPDFDocument?: any;
+        /**
+         * [descr:PdfExportDataGridProps.keepColumnWidths]
+         */
+        keepColumnWidths?: boolean;
+        /**
+         * [descr:PdfExportDataGridProps.selectedRowsOnly]
+         */
+        selectedRowsOnly?: boolean;
+    }
+    /**
+     * [descr:pdfExporter.exportDataGrid(options)]
+     */
+    export function exportDataGrid(options: PdfExportDataGridProps): Promise<void> & JQueryPromise<void>;
 }
 declare module DevExpress.ui {
     /**
@@ -3482,11 +3507,11 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBase.Options.onEditCanceled]
          */
-        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
+        onEditCanceled?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, changes?: Array<any> }) => any);
         /**
          * [descr:GridBase.Options.onEditCanceling]
          */
-        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, cancel?: boolean }) => any);
+        onEditCanceling?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, changes?: Array<any>, cancel?: boolean }) => any);
         /**
          * [descr:GridBase.Options.onInitNewRow]
          */
@@ -3542,11 +3567,11 @@ declare module DevExpress.ui {
         /**
          * [descr:GridBase.Options.onSaved]
          */
-        onSaved?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any }) => any);
+        onSaved?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, changes?: Array<any> }) => any);
         /**
          * [descr:GridBase.Options.onSaving]
          */
-        onSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
+        onSaving?: ((e: { component?: T, element?: DevExpress.core.dxElement, model?: any, changes?: Array<any>, promise?: Promise<void> | JQueryPromise<void>, cancel?: boolean }) => any);
         /**
          * [descr:GridBase.Options.onSelectionChanged]
          */
@@ -8098,7 +8123,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxHtmlEditorToolbar.items]
          */
-        items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear'>;
+        items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
         /**
          * [descr:dxHtmlEditorToolbar.multiline]
          */
@@ -8111,7 +8136,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxHtmlEditorToolbarItem.formatName]
          */
-        formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | string;
+        formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
         /**
          * [descr:dxHtmlEditorToolbarItem.formatValues]
          */
@@ -12470,6 +12495,10 @@ declare module DevExpress.utils {
      * [descr:utils.cancelAnimationFrame(requestID)]
      */
     export function cancelAnimationFrame(requestID: number): void;
+    /**
+     * [descr:utils.getTimeZones(date)]
+     */
+    export function getTimeZones(date?: Date): Array<any>;
     /**
      * [descr:utils.initMobileViewport(options)]
      */

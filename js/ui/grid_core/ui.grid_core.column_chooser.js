@@ -1,14 +1,14 @@
 import $ from '../../core/renderer';
-import { deferUpdate } from '../../core/utils/common';
+import { deferUpdate, noop } from '../../core/utils/common';
 import modules from './ui.grid_core.modules';
-import columnsView from './ui.grid_core.columns_view';
+import { ColumnsView } from './ui.grid_core.columns_view';
 import messageLocalization from '../../localization/message';
-import themes from '../themes';
+import { isMaterial as isMaterialTheme, isGeneric, current } from '../themes';
 import Button from '../button';
 import TreeView from '../tree_view';
 import devices from '../../core/devices';
 import Popup from '../popup';
-import { noop } from '../../core/utils/common';
+
 import { isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
@@ -100,7 +100,7 @@ const ColumnChooserController = modules.ViewController.inherit({
     }
 });
 
-const ColumnChooserView = columnsView.ColumnsView.inherit({
+const ColumnChooserView = ColumnsView.inherit({
     _resizeCore: noop,
 
     _isWinDevice: function() {
@@ -143,9 +143,9 @@ const ColumnChooserView = columnsView.ColumnsView.inherit({
         const that = this;
         const $element = that.element().addClass(that.addWidgetPrefix(COLUMN_CHOOSER_CLASS));
         const columnChooserOptions = that.option('columnChooser');
-        const themeName = themes.current();
-        const isGenericTheme = themes.isGeneric(themeName);
-        const isMaterial = themes.isMaterial(themeName);
+        const themeName = current();
+        const isGenericTheme = isGeneric(themeName);
+        const isMaterial = isMaterialTheme(themeName);
         const dxPopupOptions = {
             visible: false,
             shading: false,

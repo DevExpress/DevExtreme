@@ -15,7 +15,6 @@ import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change'
 import 'generic_light.css!';
 import $ from 'jquery';
 import timeZoneDataUtils from 'ui/scheduler/timezones/utils.timezones_data';
-import 'ui/scheduler/ui.scheduler';
 import dxScheduler from 'ui/scheduler/ui.scheduler';
 import { getTimeZones } from 'time_zone_utils';
 import dxSchedulerAppointmentModel from 'ui/scheduler/ui.scheduler.appointment_model';
@@ -2022,60 +2021,72 @@ QUnit.module('Scrolling to time', () => {
         assert.equal(this.instance.$element().find('.dx-scheduler-appointment').length, 0, 'Appointments were removed');
     });
 
-    QUnit.test('selectedCellData option should be updated after view changing', function(assert) {
-        this.createInstance({
-            currentDate: new Date(2018, 4, 10),
-            views: ['week', 'month'],
-            currentView: 'week',
-            focusStateEnabled: true
+    ['virtual', 'standard'].forEach((scrollingMode) => {
+        QUnit.test(`selectedCellData option should be updated after view changing when scrolling is ${scrollingMode}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2018, 4, 10),
+                views: ['week', 'month'],
+                currentView: 'week',
+                focusStateEnabled: true,
+                scrolling: { mode: scrollingMode },
+            });
+
+            const keyboard = keyboardMock(this.instance.getWorkSpace().$element());
+            const cell = this.scheduler.workSpace.getCell(7);
+
+            pointerMock(cell).start().click();
+            keyboard.keyDown('down', { shiftKey: true });
+
+            assert.deepEqual(this.instance.option('selectedCellData'), [{
+                startDate: new Date(2018, 4, 6, 0, 30),
+                endDate: new Date(2018, 4, 6, 1),
+                allDay: false,
+                groups: undefined,
+                groupIndex: 0,
+            }, {
+                startDate: new Date(2018, 4, 6, 1),
+                endDate: new Date(2018, 4, 6, 1, 30),
+                allDay: false,
+                groups: undefined,
+                groupIndex: 0,
+            }], 'correct cell data');
+
+            this.instance.option('currentView', 'month');
+            assert.deepEqual(this.instance.option('selectedCellData'), [], 'selectedCellData was cleared');
         });
 
-        const keyboard = keyboardMock(this.instance.getWorkSpace().$element());
-        const cell = this.scheduler.workSpace.getCell(7);
+        QUnit.test(`selectedCellData option should be updated after currentDate changing when scrolling is ${scrollingMode}`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2018, 4, 10),
+                views: ['week', 'month'],
+                currentView: 'week',
+                focusStateEnabled: true,
+                scrolling: { mode: scrollingMode },
+            });
 
-        pointerMock(cell).start().click();
-        keyboard.keyDown('down', { shiftKey: true });
+            const keyboard = keyboardMock(this.instance.getWorkSpace().$element());
+            const cell = this.scheduler.workSpace.getCell(7);
 
-        assert.deepEqual(this.instance.option('selectedCellData'), [{
-            startDate: new Date(2018, 4, 6, 0, 30),
-            endDate: new Date(2018, 4, 6, 1),
-            allDay: false
-        }, {
-            startDate: new Date(2018, 4, 6, 1),
-            endDate: new Date(2018, 4, 6, 1, 30),
-            allDay: false
-        }], 'correct cell data');
+            pointerMock(cell).start().click();
+            keyboard.keyDown('down', { shiftKey: true });
 
-        this.instance.option('currentView', 'month');
-        assert.deepEqual(this.instance.option('selectedCellData'), [], 'selectedCellData was cleared');
-    });
+            assert.deepEqual(this.instance.option('selectedCellData'), [{
+                startDate: new Date(2018, 4, 6, 0, 30),
+                endDate: new Date(2018, 4, 6, 1),
+                allDay: false,
+                groups: undefined,
+                groupIndex: 0,
+            }, {
+                startDate: new Date(2018, 4, 6, 1),
+                endDate: new Date(2018, 4, 6, 1, 30),
+                allDay: false,
+                groups: undefined,
+                groupIndex: 0,
+            }], 'correct cell data');
 
-    QUnit.test('selectedCellData option should be updated after currentDate changing', function(assert) {
-        this.createInstance({
-            currentDate: new Date(2018, 4, 10),
-            views: ['week', 'month'],
-            currentView: 'week',
-            focusStateEnabled: true
+            this.instance.option('currentDate', new Date(2018, 5, 10));
+            assert.deepEqual(this.instance.option('selectedCellData'), [], 'selectedCellData was cleared');
         });
-
-        const keyboard = keyboardMock(this.instance.getWorkSpace().$element());
-        const cell = this.scheduler.workSpace.getCell(7);
-
-        pointerMock(cell).start().click();
-        keyboard.keyDown('down', { shiftKey: true });
-
-        assert.deepEqual(this.instance.option('selectedCellData'), [{
-            startDate: new Date(2018, 4, 6, 0, 30),
-            endDate: new Date(2018, 4, 6, 1),
-            allDay: false
-        }, {
-            startDate: new Date(2018, 4, 6, 1),
-            endDate: new Date(2018, 4, 6, 1, 30),
-            allDay: false
-        }], 'correct cell data');
-
-        this.instance.option('currentDate', new Date(2018, 5, 10));
-        assert.deepEqual(this.instance.option('selectedCellData'), [], 'selectedCellData was cleared');
     });
 
     QUnit.test('Multiple reloading should be avoided after some options changing (T656320)', function(assert) {

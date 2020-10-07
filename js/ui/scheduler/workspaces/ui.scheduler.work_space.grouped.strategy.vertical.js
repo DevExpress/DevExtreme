@@ -1,5 +1,6 @@
 import { getBoundingRect } from '../../../core/utils/position';
 import GroupedStrategy from './ui.scheduler.work_space.grouped.strategy';
+import { cache } from './cache';
 
 const VERTICAL_GROUPED_ATTR = 'dx-group-column-count';
 
@@ -133,25 +134,27 @@ class VerticalGroupedStrategy extends GroupedStrategy {
     }
 
     getGroupBoundsOffset(cellCount, $cells, cellWidth, coordinates) {
-        const groupIndex = coordinates.groupIndex;
-        const startOffset = $cells.eq(0).offset().left;
-        const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
-        const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();
-        const scrollTop = this.getScrollableScrollTop();
-        let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.invoke('getHeaderHeight') + DATE_HEADER_OFFSET - scrollTop;
+        return cache.get('groupBoundsOffset', () => {
+            const groupIndex = coordinates.groupIndex;
+            const startOffset = $cells.eq(0).offset().left;
+            const endOffset = $cells.eq(cellCount - 1).offset().left + cellWidth;
+            const dayHeight = (this._workSpace._calculateDayDuration() / this._workSpace.option('hoursInterval')) * this._workSpace.getCellHeight();
+            const scrollTop = this.getScrollableScrollTop();
+            let topOffset = groupIndex * dayHeight + getBoundingRect(this._workSpace._$thead.get(0)).height + this._workSpace.invoke('getHeaderHeight') + DATE_HEADER_OFFSET - scrollTop;
 
-        if(this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
-            topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);
-        }
+            if(this._workSpace.option('showAllDayPanel') && this._workSpace.supportAllDayRow()) {
+                topOffset += this._workSpace.getCellHeight() * (groupIndex + 1);
+            }
 
-        const bottomOffset = topOffset + dayHeight;
+            const bottomOffset = topOffset + dayHeight;
 
-        return {
-            left: startOffset,
-            right: endOffset,
-            top: topOffset,
-            bottom: bottomOffset
-        };
+            return this._groupBoundsOffset = {
+                left: startOffset,
+                right: endOffset,
+                top: topOffset,
+                bottom: bottomOffset
+            };
+        });
     }
 
     shiftIndicator($indicator, height, rtlOffset, i) {

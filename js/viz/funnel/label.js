@@ -1,4 +1,4 @@
-import labelModule from '../series/points/label';
+import { Label } from '../series/points/label';
 import { normalizeEnum } from '../core/utils';
 import { extend } from '../../core/utils/extend';
 import { noop } from '../../core/utils/common';
@@ -364,7 +364,7 @@ export const plugin = {
             }
 
             this._labels = that._items.map(function(item) {
-                const label = new labelModule.Label({
+                const label = new Label({
                     renderer: that._renderer,
                     labelsGroup: that._labelsGroup,
                     strategy: connectorStrategy

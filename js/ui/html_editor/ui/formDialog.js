@@ -6,7 +6,7 @@ import Form from '../../form';
 import domAdapter from '../../../core/dom_adapter';
 import { resetActiveElement } from '../../../core/utils/dom';
 import { Deferred } from '../../../core/utils/deferred';
-import { format } from '../../../localization/message';
+import localizationMessage from '../../../localization/message';
 import browser from '../../../core/utils/browser';
 
 const getActiveElement = domAdapter.getActiveElement;
@@ -77,7 +77,7 @@ class FormDialog {
                     widget: 'dxButton',
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
-                        text: format('OK'),
+                        text: localizationMessage.format('OK'),
                         onClick: ({ event }) => {
                             this.hide(this._form.option('formData'), event);
                         }
@@ -88,7 +88,7 @@ class FormDialog {
                     widget: 'dxButton',
                     options: {
                         onInitialized: this._addEscapeHandler.bind(this),
-                        text: format('Cancel'),
+                        text: localizationMessage.format('Cancel'),
                         onClick: () => {
                             this._popup.hide();
                         }

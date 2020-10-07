@@ -11,7 +11,7 @@ import WidgetCollector from './widget_collector';
 import { each } from '../../../core/utils/iterator';
 import { isString, isObject, isDefined, isEmptyObject, isBoolean } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
-import { format } from '../../../localization/message';
+import localizationMessage from '../../../localization/message';
 import { titleize } from '../../../core/utils/inflector';
 
 import eventsEngine from '../../../events/core/events_engine';
@@ -64,8 +64,8 @@ if(Quill) {
     const USER_ACTION = 'user';
     const SILENT_ACTION = 'silent';
 
-    const HEADING_TEXT = format('dxHtmlEditor-heading');
-    const NORMAL_TEXT = format('dxHtmlEditor-normalText');
+    const HEADING_TEXT = localizationMessage.format('dxHtmlEditor-heading');
+    const NORMAL_TEXT = localizationMessage.format('dxHtmlEditor-normalText');
 
     ToolbarModule = class ToolbarModule extends BaseModule {
         constructor(quill, options) {
@@ -203,7 +203,7 @@ if(Quill) {
                     text: selection && !hasEmbedContent ? this.quill.getText(selection) : '',
                     target: Object.prototype.hasOwnProperty.call(formats, 'target') ? !!formats.target : true
                 };
-                this._editorInstance.formDialogOption('title', format(DIALOG_LINK_CAPTION));
+                this._editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_LINK_CAPTION));
 
                 const promise = this._editorInstance.showFormDialog({
                     formData: formData,
@@ -239,17 +239,17 @@ if(Quill) {
 
         _getLinkFormItems(selection) {
             return [
-                { dataField: 'href', label: { text: format(DIALOG_LINK_FIELD_URL) } },
+                { dataField: 'href', label: { text: localizationMessage.format(DIALOG_LINK_FIELD_URL) } },
                 {
                     dataField: 'text',
-                    label: { text: format(DIALOG_LINK_FIELD_TEXT) },
+                    label: { text: localizationMessage.format(DIALOG_LINK_FIELD_TEXT) },
                     visible: !this._hasEmbedContent(selection)
                 },
                 {
                     dataField: 'target',
                     editorType: 'dxCheckBox',
                     editorOptions: {
-                        text: format(DIALOG_LINK_FIELD_TARGET)
+                        text: localizationMessage.format(DIALOG_LINK_FIELD_TARGET)
                     },
                     cssClass: DIALOG_LINK_FIELD_TARGET_CLASS,
                     label: { visible: false }
@@ -276,7 +276,7 @@ if(Quill) {
 
                 const formatIndex = this._embedFormatIndex;
 
-                this._editorInstance.formDialogOption('title', format(DIALOG_IMAGE_CAPTION));
+                this._editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_IMAGE_CAPTION));
 
                 const promise = this._editorInstance.showFormDialog({
                     formData: formData,
@@ -311,7 +311,7 @@ if(Quill) {
                     editorOptions: {
                         min: 1
                     },
-                    label: { text: format(DIALOG_TABLE_FIELD_COLUMNS) }
+                    label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_COLUMNS) }
                 },
                 {
                     dataField: 'rows',
@@ -319,7 +319,7 @@ if(Quill) {
                     editorOptions: {
                         min: 1
                     },
-                    label: { text: format(DIALOG_TABLE_FIELD_ROWS) }
+                    label: { text: localizationMessage.format(DIALOG_TABLE_FIELD_ROWS) }
                 }
             ];
         }
@@ -335,7 +335,7 @@ if(Quill) {
                     return;
                 }
 
-                this._editorInstance.formDialogOption('title', format(DIALOG_TABLE_CAPTION));
+                this._editorInstance.formDialogOption('title', localizationMessage.format(DIALOG_TABLE_CAPTION));
 
                 const promise = this._editorInstance.showFormDialog({
                     formData,
@@ -394,10 +394,10 @@ if(Quill) {
 
         get _imageFormItems() {
             return [
-                { dataField: 'src', label: { text: format(DIALOG_IMAGE_FIELD_URL) } },
-                { dataField: 'width', label: { text: format(DIALOG_IMAGE_FIELD_WIDTH) } },
-                { dataField: 'height', label: { text: format(DIALOG_IMAGE_FIELD_HEIGHT) } },
-                { dataField: 'alt', label: { text: format(DIALOG_IMAGE_FIELD_ALT) } }
+                { dataField: 'src', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_URL) } },
+                { dataField: 'width', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_WIDTH) } },
+                { dataField: 'height', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_HEIGHT) } },
+                { dataField: 'alt', label: { text: localizationMessage.format(DIALOG_IMAGE_FIELD_ALT) } }
             ];
         }
 
@@ -539,7 +539,7 @@ if(Quill) {
             return () => {
                 const formData = this.quill.getFormat();
                 const caption = formatName === 'color' ? DIALOG_COLOR_CAPTION : DIALOG_BACKGROUND_CAPTION;
-                this._editorInstance.formDialogOption('title', format(caption));
+                this._editorInstance.formDialogOption('title', localizationMessage.format(caption));
                 const promise = this._editorInstance.showFormDialog({
                     formData: formData,
                     items: [{

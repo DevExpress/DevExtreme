@@ -1,14 +1,16 @@
-import { pieSeriesSpacing as seriesSpacing, states } from './components/consts';
-import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords } from './core/utils';
+import consts from './components/consts';
+import { normalizeAngle, getVerticallyShiftedAngularCoords as _getVerticallyShiftedAngularCoords, patchFontOptions } from './core/utils';
 import { extend as _extend } from '../core/utils/extend';
 import { isNumeric } from '../core/utils/type';
 import { each as _each } from '../core/utils/iterator';
-import rangeModule from './translators/range';
+import { Range } from './translators/range';
 import registerComponent from '../core/component_registrator';
 import { BaseChart, overlapping } from './chart_components/base_chart';
 import { noop as _noop } from '../core/utils/common';
-import translator1DModule from './translators/translator1d';
-import { patchFontOptions } from './core/utils';
+import { Translator1D } from './translators/translator1d';
+
+const { states } = consts;
+const seriesSpacing = consts.pieSeriesSpacing;
 
 const OPTIONS_FOR_REFRESH_SERIES = ['startAngle', 'innerRadius', 'segmentsDirection', 'type'];
 const NORMAL_STATE = states.normalMark;
@@ -131,7 +133,7 @@ const dxPieChart = BaseChart.inherit({
     },
 
     _getValueAxis: function() {
-        const translator = (new translator1DModule.Translator1D())
+        const translator = (new Translator1D())
             .setCodomain(360, 0);
 
         return {
@@ -146,7 +148,7 @@ const dxPieChart = BaseChart.inherit({
 
     _populateBusinessRange: function() {
         this.series.map(function(series) {
-            const range = new rangeModule.Range();
+            const range = new Range();
             range.addRange(series.getRangeData().val);
             series.getValueAxis().setBusinessRange(range);
             return range;

@@ -1,12 +1,12 @@
 import eventsEngine from '../../events/core/events_engine';
 import pointerEvents from '../../events/pointer';
-import windowModule from '../../core/utils/window';
+import { getWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import { each } from '../../core/utils/iterator';
-import { pointer as msPointerEnabled } from '../../core/utils/support';
+import { pointerEvents as msPointerEnabled } from '../../core/utils/support';
 
 const MIN_MANUAL_SELECTING_WIDTH = 10;
-const window = windowModule.getWindow();
+const window = getWindow();
 
 function isLeftButtonPressed(event) {
     const e = event || window.event;

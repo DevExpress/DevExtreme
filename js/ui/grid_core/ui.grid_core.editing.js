@@ -10,10 +10,10 @@ import modules from './ui.grid_core.modules';
 import { name as clickEventName } from '../../events/click';
 import { name as doubleClickEvent } from '../../events/double_click';
 import pointerEvents from '../../events/pointer';
-import { getIndexByKey, setEmptyText, getSelectionRange, setSelectionRange, focusAndSelectElement } from './ui.grid_core.utils';
+import gridCoreUtils from './ui.grid_core.utils';
 import { createObjectWithChanges } from '../../data/array_utils';
 import { addNamespace } from '../../events/utils/index';
-import dialog from '../dialog';
+import { confirm } from '../dialog';
 import messageLocalization from '../../localization/message';
 import Button from '../button';
 import Popup from '../popup';
@@ -24,7 +24,6 @@ import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 import { deferRender } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
 import Scrollable from '../scroll_view/ui.scrollable';
-import gridCoreUtils from './ui.grid_core.utils';
 
 const EDIT_FORM_CLASS = 'edit-form';
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
@@ -298,7 +297,7 @@ const EditingController = modules.ViewController.inherit((function() {
         getUpdatedData: function(data) {
             const key = this._dataController.keyOf(data);
             const changes = this.getChanges();
-            const editIndex = getIndexByKey(key, changes);
+            const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
             if(changes[editIndex]) {
                 return createObjectWithChanges(data, changes[editIndex].data);
@@ -481,7 +480,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         }
                     );
                 } else {
-                    setEmptyText($container);
+                    gridCoreUtils.setEmptyText($container);
                 }
             };
         },
@@ -537,7 +536,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         getIndexByKey: function(key, items) {
-            return getIndexByKey(key, items);
+            return gridCoreUtils.getIndexByKey(key, items);
         },
 
         hasChanges: function(rowIndex) {
@@ -816,7 +815,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
             const changes = this.getChanges();
 
-            const editIndex = getIndexByKey(key, changes);
+            const editIndex = gridCoreUtils.getIndexByKey(key, changes);
             item.isEditing = false;
 
             if(editIndex >= 0) {
@@ -1458,7 +1457,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 if($cell) {
                     const $focusableElement = $cell.find(FOCUSABLE_ELEMENT_SELECTOR).first();
-                    focusAndSelectElement(that, $focusableElement);
+                    gridCoreUtils.focusAndSelectElement(that, $focusableElement);
                 }
 
                 that._beforeFocusCallback = null;
@@ -1516,7 +1515,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 } else {
                     const confirmDeleteTitle = editingTexts && editingTexts.confirmDeleteTitle;
                     const showDialogTitle = isDefined(confirmDeleteTitle) && confirmDeleteTitle.length > 0;
-                    dialog.confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done(function(confirmResult) {
+                    confirm(confirmDeleteMessage, confirmDeleteTitle, showDialogTitle).done(function(confirmResult) {
                         if(confirmResult) {
                             that._deleteRowCore(rowIndex);
                         }
@@ -1534,7 +1533,7 @@ const EditingController = modules.ViewController.inherit((function() {
             this.refresh();
 
             const changes = this.getChanges();
-            const editIndex = getIndexByKey(key, changes);
+            const editIndex = gridCoreUtils.getIndexByKey(key, changes);
             if(editIndex >= 0) {
                 if(changes[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
                     this._removeEditDataItem(editIndex);
@@ -1563,7 +1562,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const changes = this.getChanges();
 
             if(item) {
-                const editIndex = getIndexByKey(key, changes);
+                const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
                 if(editIndex >= 0) {
                     const editData = changes[editIndex];
@@ -1581,21 +1580,21 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             }
         },
-        _fireOnSaving: function(changes) {
+        _fireOnSaving: function() {
             const onSavingParams = {
                 cancel: false,
                 promise: null,
-                changes
+                changes: [...this.getChanges()]
             };
             this.executeAction('onSaving', onSavingParams);
             const d = new Deferred();
             when(fromPromise(onSavingParams.promise))
                 .done(() => {
-                    d.resolve(onSavingParams.cancel);
+                    d.resolve(onSavingParams);
                 }).fail(arg => {
                     createFailureHandler(d);
                     this._fireDataErrorOccurred(arg);
-                    d.resolve(true);
+                    d.resolve({ cancel: true });
                 });
 
             return d;
@@ -1623,10 +1622,10 @@ const EditingController = modules.ViewController.inherit((function() {
             return deferred;
         },
 
-        _processEditData: function(deferreds, results, changes) {
+        _processEditData: function(deferreds, results, dataChanges, changes) {
             const store = this._dataController.store();
 
-            each(this.getChanges(), (index, editData) => {
+            each(changes, (index, editData) => {
                 const data = editData.data;
                 const oldData = editData.oldData;
                 const type = editData.type;
@@ -1642,7 +1641,7 @@ const EditingController = modules.ViewController.inherit((function() {
                         params = { data: oldData, key: editData.key, cancel: false };
                         deferred = this._executeEditingAction('onRowRemoving', params, function() {
                             return store.remove(editData.key).done(function(key) {
-                                changes.push({ type: 'remove', key: key });
+                                dataChanges.push({ type: 'remove', key: key });
                             });
                         });
                         break;
@@ -1656,7 +1655,7 @@ const EditingController = modules.ViewController.inherit((function() {
                                 if(data && isObject(data) && data !== params.data) {
                                     editData.data = data;
                                 }
-                                changes.push({ type: 'insert', data: data, index: 0 });
+                                dataChanges.push({ type: 'insert', data: data, index: 0 });
                             });
                         });
                         break;
@@ -1667,7 +1666,7 @@ const EditingController = modules.ViewController.inherit((function() {
                                 if(data && isObject(data) && data !== params.newData) {
                                     editData.data = data;
                                 }
-                                changes.push({ type: 'update', key: key, data: data });
+                                dataChanges.push({ type: 'update', key: key, data: data });
                             });
                         });
                         break;
@@ -1696,7 +1695,7 @@ const EditingController = modules.ViewController.inherit((function() {
             for(let i = 0; i < results.length; i++) {
                 const arg = results[i].result;
                 const cancel = arg === 'cancel';
-                const editIndex = getIndexByKey(results[i].key, changes);
+                const editIndex = gridCoreUtils.getIndexByKey(results[i].key, changes);
                 const editData = changes[editIndex];
                 const isError = arg && arg instanceof Error;
 
@@ -1789,25 +1788,24 @@ const EditingController = modules.ViewController.inherit((function() {
         _saveEditDataInner: function() {
             const results = [];
             const deferreds = [];
-            const changes = [];
+            const dataChanges = [];
             const dataController = this._dataController;
             const dataSource = dataController.dataSource();
             const result = new Deferred();
-            const editData = this.getChanges().slice(0);
 
-            when(this._fireOnSaving(editData)).done(isCanceled => {
-                if(isCanceled) {
+            when(this._fireOnSaving()).done(({ cancel, changes }) => {
+                if(cancel) {
                     return result.resolve().promise();
                 }
 
-                this._processEditData(deferreds, results, changes);
+                this._processEditData(deferreds, results, dataChanges, changes);
 
                 if(deferreds.length) {
                     dataSource?.beginLoading();
 
                     when(...deferreds).done(() => {
                         if(this._processSaveEditDataResult(results)) {
-                            this._endSaving(changes, editData, result);
+                            this._endSaving(dataChanges, changes, result);
                         } else {
                             dataSource?.endLoading();
                             result.resolve();
@@ -1844,12 +1842,12 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _endSaving: function(changes, editData, deferred) {
+        _endSaving: function(dataChanges, changes, deferred) {
             const editMode = getEditMode(this);
             const dataSource = this._dataController.dataSource();
 
             if(editMode !== EDIT_MODE_CELL) {
-                this._resetModifiedClassCells(editData);
+                this._resetModifiedClassCells(changes);
                 this._resetEditIndices();
             }
 
@@ -1859,7 +1857,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             dataSource?.endLoading();
 
-            this._refreshDataAfterSave(changes, editData, deferred);
+            this._refreshDataAfterSave(dataChanges, changes, deferred);
         },
 
         _cancelSaving: function(result) {
@@ -1884,13 +1882,13 @@ const EditingController = modules.ViewController.inherit((function() {
             this._resolveAfterSave(result);
         },
 
-        _refreshDataAfterSave: function(changes, editData, deferred) {
+        _refreshDataAfterSave: function(dataChanges, changes, deferred) {
             const dataController = this._dataController;
             const refreshMode = this.option('editing.refreshMode');
             const isFullRefresh = refreshMode !== 'reshape' && refreshMode !== 'repaint';
 
             if(!isFullRefresh) {
-                dataController.push(changes);
+                dataController.push(dataChanges);
             }
 
             when(dataController.refresh({
@@ -1899,7 +1897,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 load: refreshMode === 'reshape',
                 changesOnly: this.option('repaintChangesOnly')
             })).always(() => {
-                this._fireSaveEditDataEvents(editData);
+                this._fireSaveEditDataEvents(changes);
             }).done(() => {
                 this._resolveAfterSave(deferred);
             }).fail((error) => {
@@ -2250,7 +2248,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     const $focusedElement = $(domAdapter.getActiveElement());
                     const columnIndex = that._rowsView.getCellIndex($focusedElement, row.rowIndex);
                     let focusedElement = $focusedElement.get(0);
-                    const selectionRange = getSelectionRange(focusedElement);
+                    const selectionRange = gridCoreUtils.getSelectionRange(focusedElement);
 
                     that._updateEditRowCore(row, false, isCustomSetCellValue);
 
@@ -2260,7 +2258,7 @@ const EditingController = modules.ViewController.inherit((function() {
                             setTimeout(function() {
                                 focusedElement = domAdapter.getActiveElement();
                                 if(selectionRange.selectionStart >= 0) {
-                                    setSelectionRange(focusedElement, selectionRange);
+                                    gridCoreUtils.setSelectionRange(focusedElement, selectionRange);
                                 }
                             });
                         });
@@ -2272,7 +2270,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _addEditData: function(options, row) {
             const changes = [...this.getChanges()];
-            let editDataIndex = getIndexByKey(options.key, changes);
+            let editDataIndex = gridCoreUtils.getIndexByKey(options.key, changes);
 
             if(editDataIndex < 0) {
                 editDataIndex = changes.length;
