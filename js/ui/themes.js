@@ -14,6 +14,7 @@ const window = getWindow();
 const ready = readyCallbacks.add;
 const viewPort = viewPortValue;
 const viewPortChanged = changeCallback;
+let initDeferred = new Deferred();
 
 const DX_LINK_SELECTOR = 'link[rel=dx-theme]';
 const THEME_ATTR = 'data-theme';
@@ -30,8 +31,9 @@ let defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
 
-let inited = false;
-themeInitializedCallback.add(() => inited = true);
+// let inited = false;
+// themeInitializedCallback.add(() => inited = true);
+themeInitializedCallback.add(initDeferred.resolve);
 
 function readThemeMarker() {
     if(!hasWindow()) {
@@ -74,10 +76,12 @@ export function waitForThemeLoad(themeName) {
         themeReadyCallback.fire();
         themeReadyCallback.empty();
 
-        if(!inited) {
-            themeInitializedCallback.fire();
-            themeInitializedCallback.empty();
-        }
+        // if(!inited) {
+        //     themeInitializedCallback.fire();
+        //     themeInitializedCallback.empty();
+        // }
+
+        initDeferred.resolve();
     }
 
     if(isPendingThemeLoaded() || !defaultTimeout) {
@@ -115,7 +119,7 @@ function isPendingThemeLoaded() {
 
     const anyThemePending = pendingThemeName === ANY_THEME;
 
-    if(inited && anyThemePending) {
+    if(initDeferred.state() === 'resolved' && anyThemePending) {
         return true;
     }
 
@@ -386,8 +390,6 @@ export function waitWebFont(text, fontWeight) {
     });
 }
 
-const initDeferred = new Deferred();
-
 function autoInit() {
     init({
         _autoInit: true,
@@ -398,7 +400,7 @@ function autoInit() {
         throw errors.Error('E0022');
     }
 
-    initDeferred.resolve();
+    // initDeferred.resolve();
 }
 
 if(hasWindow()) {
@@ -426,16 +428,18 @@ export function resetTheme() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
-    inited = false;
-    themeInitializedCallback.add(() => inited = true);
+    initDeferred = new Deferred();
+    // inited = false;
+    themeInitializedCallback.add(initDeferred.resolve);
 }
 
 export function initialized(callback) {
-    if(inited) {
-        callback();
-    } else {
-        themeInitializedCallback.add(callback);
-    }
+    initDeferred.done(callback);
+    // if(inited) {
+    //     callback();
+    // } else {
+    //     themeInitializedCallback.add(callback);
+    // }
 }
 
 export function setDefaultTimeout(timeout) {
