@@ -14,6 +14,7 @@ class App extends React.Component {
     this.onPreventContextMenuShowing = this.onPreventContextMenuShowing.bind(this);
     this.onCustomizeContextMenu = this.onCustomizeContextMenu.bind(this);
     this.onCustomCommandClick = this.onCustomCommandClick.bind(this);
+    this.onContextMenuPreparing = this.onContextMenuPreparing.bind(this);
   }
 
   render() {
@@ -48,9 +49,9 @@ class App extends React.Component {
             showResources={showResources}
             scaleType="weeks"
             onCustomCommand={this.onCustomCommandClick}
+            onContextMenuPreparing={this.onContextMenuPreparing}
           >
             <ContextMenu
-              enabled={!disableContextMenu}
               items={contextMenuItems} />
 
             <Tasks dataSource={tasks} />
@@ -67,6 +68,9 @@ class App extends React.Component {
         </div>
       </div>
     );
+  }
+  onContextMenuPreparing(e) {
+    e.cancel = this.state.disableContextMenu;
   }
   onCustomizeContextMenu(e) {
     this.setState({

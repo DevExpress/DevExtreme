@@ -20,9 +20,10 @@
         scaleType="weeks"
         height="700"
         [showResources]="showResources"
-        (onCustomCommand)="onCustomCommandClick($event)">
+        (onCustomCommand)="onCustomCommandClick($event)"
+        (onContextMenuPreparing)="onContextMenuPreparing($event)">
 
-        <dxo-context-menu [items]="contextMenuItems" [enabled]="!disableContextMenu"></dxo-context-menu>
+        <dxo-context-menu [items]="contextMenuItems"></dxo-context-menu>
         <dxo-tasks [dataSource]="tasks"></dxo-tasks>
         <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>
         <dxo-resources [dataSource]="resources"></dxo-resources>

@@ -24,9 +24,9 @@
         scale-type="weeks"
         :show-resources="showResources"
         :on-custom-command="onCustomCommandClick"
+        :on-context-menu-preparing="onContextMenuPreparing"
       >
         <DxContextMenu
-          :enabled="!disableContextMenu"
           :items="contextMenuItems"
         />
 
@@ -98,6 +98,9 @@ export default {
     };
   },
   methods: {
+    onContextMenuPreparing(e) {
+      e.cancel = this.disableContextMenu;
+    },
     onCustomizeContextMenu(e) {
       this.contextMenuItems = e.value ? this.getContextMenuItems() : null;
     },

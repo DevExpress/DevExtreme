@@ -33,6 +33,9 @@ export class AppComponent {
         this.disableContextMenu = false,
         this.contextMenuItems = this.getContextMenuItems()
     }
+    onContextMenuPreparing(e) {
+        e.cancel = this.disableContextMenu;
+    }
     onCustomizeContextMenu(e) {
         this.contextMenuItems = e.value ? this.getContextMenuItems() : undefined
     }

@@ -1,7 +1,8 @@
 $(function() {
     var gantt = $("#gantt").dxGantt({
         contextMenu: getContextMenu(),
-        onCustomCommand: onCustomCommandClick, 
+        onCustomCommand: onCustomCommandClick,
+        onContextMenuPreparing: onContextMenuPreparing,
         tasks: {
             dataSource: tasks
         },
@@ -35,15 +36,16 @@ $(function() {
     $("#preventContextMenuShowing").dxCheckBox({
         text: "Prevent Context Menu Showing",
         value: false,
-        onValueChanged: function (e) {
-            gantt.option("contextMenu.enabled", !e.value);
-        }
     });
 
+    function onContextMenuPreparing(e) {
+        e.cancel = $("#preventContextMenuShowing").dxCheckBox('instance').option('value');
+    }
+
     $("#customizeContextMenu").dxCheckBox({
-        text: "Customize Context Menu",
+        text: 'Customize Context Menu',
         value: true,
-        onValueChanged: function (e) {
+        onValueChanged: function(e) {
             var items = e.value ? getContextMenuItems() : undefined;
             gantt.option("contextMenu.items", items);
         }
@@ -65,12 +67,12 @@ $(function() {
 
     function getContextMenuItems() {
         return [
-            "addTask",
-            "taskdetails",
-            "deleteTask",
+            'addTask',
+            'taskdetails',
+            'deleteTask',
             { 
-                name: "ToggleDisplayOfResources", 
-                text: "Toggle Display of Resources"
+                name: 'ToggleDisplayOfResources',
+                text: 'Toggle Display of Resources'
             }
         ]
     }
