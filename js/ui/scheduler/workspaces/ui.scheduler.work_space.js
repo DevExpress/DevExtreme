@@ -2812,7 +2812,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const {
                 startDate: cellStartDate,
                 endDate: cellEndDate,
-                allDay: cellAllDay,
+                allDay: cellAllDay = false,
                 groupIndex: cellGroupIndex,
             } = this.getCellData(cell);
 
@@ -2825,7 +2825,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 && groupIndex === cellGroupIndex) {
                 return false;
             }
-
             return currentResult;
         }, true);
     }
