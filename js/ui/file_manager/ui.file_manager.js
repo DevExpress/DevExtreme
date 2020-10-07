@@ -636,10 +636,10 @@ class FileManager extends Widget {
                             toolbarOptions.fileItems = args.value.fileSelectionItems;
                         }
                     }
-                    if(args.fullName === 'toolbar.items' || args.fullName.indexOf('toolbar.items') === 0) {
+                    if(args.fullName.indexOf('toolbar.items') === 0) {
                         toolbarOptions.generalItems = this.option('toolbar.items');
                     }
-                    if(args.fullName === 'toolbar.fileSelectionItems' || args.fullName.indexOf('toolbar.fileSelectionItems') === 0) {
+                    if(args.fullName.indexOf('toolbar.fileSelectionItems') === 0) {
                         toolbarOptions.fileItems = this.option('toolbar.fileSelectionItems');
                     }
                     this._toolbar.option(toolbarOptions);
