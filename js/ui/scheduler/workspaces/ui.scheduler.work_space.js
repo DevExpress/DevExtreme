@@ -41,6 +41,8 @@ import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/bas
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import VirtualSelectionState from './virtual_selection_state';
 
+import { cache } from './cache';
+
 const abstract = WidgetObserver.abstract;
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -150,6 +152,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._viewDataProvider;
     }
 
+    get cache() { return cache; }
     get virtualSelectionState() {
         if(!this._virtualSelectionState) {
             this._virtualSelectionState = new VirtualSelectionState(this.viewDataProvider);
@@ -1013,6 +1016,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _visibilityChanged(visible) {
+        this.cache.clear();
+
         if(visible && this._isVerticalGroupedWorkSpace()) {
             this._setHorizontalGroupHeaderCellsHeight();
         }
@@ -1086,7 +1091,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this.headerPanelOffsetRecalculate();
-        this._cleanCellDataCache();
+
+        this.cache.clear();
         this._cleanAllowedPositions();
     }
 
@@ -1107,6 +1113,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     _getCellCount() { return noop(); }
 
     _initMarkup() {
+        this.cache.clear();
+
         this._initWorkSpaceUnits();
 
         this._initDateTableScrollable();
@@ -2143,7 +2151,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _cleanView() {
-        this._cleanCellDataCache();
+        this.cache.clear();
         this._cleanAllowedPositions();
         this.virtualSelectionState?.releaseSelectedAndFocusedCells();
         this._$thead.empty();
@@ -2314,11 +2322,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getWorkSpaceWidth() {
-        if(this._needCreateCrossScrolling()) {
-            return getBoundingRect(this._$dateTable.get(0)).width;
-        }
+        return this.cache.get('workspaceWidth', () => {
+            if(this._needCreateCrossScrolling()) {
+                return getBoundingRect(this._$dateTable.get(0)).width;
+            }
 
-        return getBoundingRect(this.$element().get(0)).width - this.getTimePanelWidth();
+            return getBoundingRect(this.$element().get(0)).width - this.getTimePanelWidth();
+        });
     }
 
     _getCellPositionByIndex(index, groupIndex, inAllDayRow) {
@@ -2452,16 +2462,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     setCellDataCache(cellCoordinates, groupIndex, $cell) {
-        const cache = this.getCellDataCache();
-        const data = this.getCellData($cell);
-
         const key = JSON.stringify({
             rowIndex: cellCoordinates.rowIndex,
             cellIndex: cellCoordinates.cellIndex,
             groupIndex: groupIndex
         });
 
-        cache[key] = data;
+        this.cache.set(
+            key,
+            this.getCellData($cell)
+        );
     }
 
     setCellDataCacheAlias(appointment, geometry) {
@@ -2470,27 +2480,16 @@ class SchedulerWorkSpace extends WidgetObserver {
             cellIndex: appointment.cellIndex,
             groupIndex: appointment.groupIndex
         });
+
         const aliasKey = JSON.stringify({
             top: geometry.top,
             left: geometry.left
         });
-        const cache = this.getCellDataCache();
 
-        if(cache[key]) {
-            cache[aliasKey] = cache[key];
-        }
-    }
-
-    getCellDataCache(key) {
-        if(!this._cache) {
-            this._cache = {};
-        }
-
-        return key ? this._cache[key] : this._cache;
-    }
-
-    _cleanCellDataCache() {
-        delete this._cache;
+        this.cache.set(
+            aliasKey,
+            this.cache.get(key)
+        );
     }
 
     _cleanAllowedPositions() {
@@ -2742,8 +2741,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getCellWidth() {
-        const cell = this._getCells().first().get(0);
-        return cell && getBoundingRect(cell).width;
+        return this.cache.get('cellWidth', () => {
+            const cell = this._getCells().first().get(0);
+            return cell && getBoundingRect(cell).width;
+        });
     }
 
     getCellMinWidth() {
@@ -2774,9 +2775,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getCellHeight() {
-        const cell = this._getCells().first().get(0);
-
-        return cell && getBoundingRect(cell).height;
+        return this.cache.get('cellHeight', () => {
+            const cell = this._getCells().first().get(0);
+            return cell && getBoundingRect(cell).height;
+        });
     }
 
     getAllDayHeight() {
@@ -2937,17 +2939,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     getCellDataByCoordinates(coordinates, allDay) {
         const key = JSON.stringify({ top: coordinates.top, left: coordinates.left });
-        const data = this.getCellDataCache(key);
+        return this.cache.get(key, () => {
+            const $cells = this._getCells(allDay);
+            const cellIndex = this.getCellIndexByCoordinates(coordinates, allDay);
+            const $cell = $cells.eq(cellIndex);
 
-        if(data) {
-            return data;
-        }
-
-        const $cells = this._getCells(allDay);
-        const cellIndex = this.getCellIndexByCoordinates(coordinates, allDay);
-        const $cell = $cells.eq(cellIndex);
-
-        return this.getCellData($cell);
+            return this.getCellData($cell);
+        });
     }
 
     getVisibleBounds() {
