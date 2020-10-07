@@ -314,6 +314,8 @@ export class SchedulerTestWrapper extends ElementWrapper {
             getRowCount: () => $('.dx-scheduler-date-table-row').length,
             getRows: (index = 0) => $('.dx-scheduler-date-table-row').eq(index),
             getCells: () => $('.dx-scheduler-date-table-cell'),
+            getSelectedCells: () => this.workSpace.getCells().filter('.dx-state-focused'),
+            getFocusedCell: () => this.workSpace.getCells().filter('.dx-scheduler-focused-cell'),
             getCell: (rowIndex, cellIndex) => {
                 if(cellIndex !== undefined) {
                     return $('.dx-scheduler-date-table-row').eq(rowIndex).find('.dx-scheduler-date-table-cell').eq(cellIndex);
