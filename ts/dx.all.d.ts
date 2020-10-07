@@ -12496,7 +12496,7 @@ declare module DevExpress.utils {
      */
     export function cancelAnimationFrame(requestID: number): void;
     /**
-     * [descr:utils.timeZone.getTimeZones(date)]
+     * [descr:utils.getTimeZones(date)]
      */
     export function getTimeZones(date?: Date): Array<any>;
     /**
