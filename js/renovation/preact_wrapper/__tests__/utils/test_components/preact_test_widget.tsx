@@ -67,6 +67,18 @@ export default class PreactTestWidget extends JSXComponent(PreactTestWidgetProps
   }
 
   @Method()
+  // eslint-disable-next-line class-methods-use-this
+  methodWithElementParam(arg: HTMLDivElement | number): any {
+    return { arg };
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  methodReturnElement(arg: HTMLDivElement): HTMLDivElement {
+    return arg;
+  }
+
+  @Method()
   getLastPreactReceivedProps(): PreactTestWidgetProps {
     return this.props;
   }

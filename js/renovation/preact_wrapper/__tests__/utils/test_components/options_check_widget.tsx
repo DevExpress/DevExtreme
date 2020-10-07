@@ -31,6 +31,8 @@ export class OptionsCheckWidgetProps {
   @TwoWay() twoWayWithValue = '10';
 
   @TwoWay() twoWayNullWithValue: string | null = '20';
+
+  @OneWay() propWithElement?: HTMLDivElement | number;
 }
 
 @Component({

@@ -64,6 +64,43 @@ describe('Misc cases', () => {
       $('#component').dxPreactTestWidget('setAria');
     }).toThrowError('"setAria" method is deprecated, use "aria" property instead');
   });
+
+  describe('API with Element type params/return type', () => {
+    it('pass DOM node to preact if provided parameter is jQuery wrapper', () => {
+      const element = document.createElement('div');
+      const wrapper = $(element);
+
+      act(() => $('#component').dxPreactTestWidget({}));
+
+      const checkParam = $('#component').dxPreactTestWidget('methodWithElementParam', wrapper);
+
+      expect(checkParam.arg).toEqual(element);
+    });
+
+    it('leave param as is if it is not jQuery wrapper', () => {
+      act(() => $('#component').dxPreactTestWidget({}));
+
+      const checkParam = $('#component').dxPreactTestWidget('methodWithElementParam', 15);
+
+      expect(checkParam.arg).toEqual(15);
+    });
+
+    it('wraps return value with jQuery and gets public element', () => {
+      const getPublicElement = jest.fn(($el) => $el.get(0));
+      setPublicElementWrapper(getPublicElement);
+
+      const element = document.createElement('div');
+
+      act(() => $('#component').dxPreactTestWidget({}));
+
+      const checkParam = $('#component').dxPreactTestWidget('methodReturnElement', element);
+
+      expect(checkParam).toEqual(element);
+
+      expect(getPublicElement).toBeCalledTimes(1);
+      expect(getPublicElement).toHaveBeenNthCalledWith(1, $(element));
+    });
+  });
 });
 
 describe('Widget\'s container manipulations', () => {
@@ -386,6 +423,27 @@ describe('option', () => {
       twoWayNullWithValue: undefined,
     });
   });
+
+  describe('Options with Element type', () => {
+    it('pass DOM node to preact if provided option is jQuery wrapper', () => {
+      const element = document.createElement('div');
+      const wrapper = $(element);
+
+      act(() => $('#component').dxOptionsCheckWidget({
+        propWithElement: wrapper,
+      }));
+
+      expect($('#component').dxOptionsCheckWidget('getLastPreactPassedProps').propWithElement).toEqual(element);
+    });
+
+    it('leave option as is if it is not jQuery wrapper', () => {
+      act(() => $('#component').dxOptionsCheckWidget({
+        propWithElement: 15,
+      }));
+
+      expect($('#component').dxOptionsCheckWidget('getLastPreactPassedProps').propWithElement).toEqual(15);
+    });
+  });
 });
 
 describe('templates and slots', () => {
@@ -444,6 +502,30 @@ describe('templates and slots', () => {
 
       expect(template).toBeCalledTimes(1);
       expect(template.mock.calls[0]).toEqual([{ indexedTemplate: 'data' }, 2, templateRoot]);
+    });
+
+    it('wraps DOM nodes in "data" param with jQuery and gets public element', () => {
+      const getPublicElement = jest.fn(($el) => $el.get(0));
+      setPublicElementWrapper(getPublicElement);
+
+      const template = jest.fn();
+      const param1 = document.createElement('div');
+      const param2 = { some: 'object' };
+
+      act(() => $('#component').dxTemplatedTestWidget({
+        elementTemplate: template,
+        elementTemplatePayload: { nodeParam: param1, nonNodeParam: param2 },
+      }));
+
+      expect(template).toBeCalledTimes(1);
+      expect(template.mock.calls[0][0]).toMatchObject({
+        nodeParam: param1, nonNodeParam: param2,
+      });
+
+      const templateRoot = $('#component').children('.templates-root')[0];
+      expect(getPublicElement).toBeCalledTimes(2);
+      expect(getPublicElement).toHaveBeenNthCalledWith(1, $(param1));
+      expect(getPublicElement).toHaveBeenNthCalledWith(2, $(templateRoot));
     });
   });
 
@@ -529,31 +611,35 @@ describe('events/actions', () => {
     });
   });
 
-  it('wraps DOM nodes in "*Element" args with jQuery and gets public element', () => {
+  it('wraps DOM nodes in event args with jQuery and gets public element', () => {
     const getPublicElement = jest.fn(($el) => $el.get(0));
     setPublicElementWrapper(getPublicElement);
 
     const onEventProp = jest.fn();
     const element1 = document.createElement('div');
     const element2 = document.createElement('div');
+    const element3 = { some: 'object' };
     act(() => $('#component').dxPreactTestWidget({
       onEventProp,
     }));
 
     $('#component').dxPreactTestWidget('eventPropCheck', {
       eventElement: element1,
-      nonWrappedNode: element2,
+      wrappedField: element2,
+      nonWrappedField: element3,
     });
 
     expect(onEventProp.mock.calls[0][0]).toMatchObject({
       eventElement: element1,
-      nonWrappedNode: element2,
+      wrappedField: element2,
+      nonWrappedField: element3,
       element: $('#component').get(0),
     });
 
-    expect(getPublicElement).toBeCalledTimes(2);
+    expect(getPublicElement).toBeCalledTimes(3);
     expect(getPublicElement).toHaveBeenNthCalledWith(1, $(element1));
-    expect(getPublicElement).toHaveBeenNthCalledWith(2, $('#component'));
+    expect(getPublicElement).toHaveBeenNthCalledWith(2, $(element2));
+    expect(getPublicElement).toHaveBeenNthCalledWith(3, $('#component'));
   });
 
   it('re-wraps event props if it is changed', () => {
