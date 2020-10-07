@@ -233,30 +233,19 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
     _createRecurrenceAppointments(appointment, resources) {
         const { duration } = appointment;
-        const result = [];
-        const workspace = this.scheduler._workSpace;
-        const groupIndices = workspace._getGroupCount()
-            ? this._getGroupIndices(resources)
-            : [0];
+        const option = this._createRecurrenceOptions(appointment);
+        const generatedStartDates = getRecurrenceProcessor().generateDates(option);
 
-        groupIndices.forEach(groupIndex => {
-            const option = this._createRecurrenceOptions(appointment, groupIndex);
-            const generatedStartDates = getRecurrenceProcessor().generateDates(option);
-            const dates = generatedStartDates.map(date => {
-                const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
-                utcDate.setTime(utcDate.getTime() + duration);
-                const endDate = timeZoneUtils.createDateFromUTCWithLocalOffset(utcDate);
+        return generatedStartDates.map(date => {
+            const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
+            utcDate.setTime(utcDate.getTime() + duration);
+            const endDate = timeZoneUtils.createDateFromUTCWithLocalOffset(utcDate);
 
-                return {
-                    startDate: new Date(date),
-                    endDate: endDate
-                };
-            });
-
-            result.push(...dates);
+            return {
+                startDate: new Date(date),
+                endDate: endDate
+            };
         });
-
-        return result;
     }
 
     _getGroupIndices(resources) {
@@ -337,6 +326,34 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 }
 
 export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSettingsGeneratorBaseStrategy {
+    _createRecurrenceAppointments(appointment, resources) {
+        const { duration } = appointment;
+        const result = [];
+        const workspace = this.scheduler._workSpace;
+        const groupIndices = workspace._getGroupCount()
+            ? this._getGroupIndices(resources)
+            : [0];
+
+        groupIndices.forEach(groupIndex => {
+            const option = this._createRecurrenceOptions(appointment, groupIndex);
+            const generatedStartDates = getRecurrenceProcessor().generateDates(option);
+            const dates = generatedStartDates.map(date => {
+                const utcDate = timeZoneUtils.createUTCDateWithLocalOffset(date);
+                utcDate.setTime(utcDate.getTime() + duration);
+                const endDate = timeZoneUtils.createDateFromUTCWithLocalOffset(utcDate);
+
+                return {
+                    startDate: new Date(date),
+                    endDate: endDate
+                };
+            });
+
+            result.push(...dates);
+        });
+
+        return result;
+    }
+
     _getViewStartDayHour(firstViewDate) {
         return firstViewDate.getHours();
     }
