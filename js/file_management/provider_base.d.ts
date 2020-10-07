@@ -1,5 +1,6 @@
 import '../jquery_augmentation';
 import FileSystemItem from './file_system_item';
+import UploadInfo from './upload_info';
 
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
@@ -124,25 +125,25 @@ export default class FileSystemProviderBase {
      * @docid FileSystemProviderBaseMethods.uploadFileChunk
      * @publicName uploadFileChunk()
      * @param1 fileData:File
-     * @param2 uploadInfo:object
+     * @param2 uploadInfo:UploadInfo
      * @param3 destinationDirectory:FileSystemItem
      * @return Promise<any>
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    uploadFileChunk(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+    uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
 
     /**
      * @docid FileSystemProviderBaseMethods.abortFileUpload
      * @publicName abortFileUpload()
      * @param1 fileData:File
-     * @param2 uploadInfo:object
+     * @param2 uploadInfo:UploadInfo
      * @param3 destinationDirectory:FileSystemItem
      * @return Promise<any>
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
-    abortFileUpload(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+    abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
 
     /**
      * @docid FileSystemProviderBaseMethods.downloadItems

@@ -2855,7 +2855,7 @@ declare module DevExpress.fileManagement {
         /**
          * [descr:FileSystemProviderBase.abortFileUpload()]
          */
-        abortFileUpload(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+        abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
         /**
          * [descr:FileSystemProviderBase.copyItems()]
          */
@@ -2891,7 +2891,7 @@ declare module DevExpress.fileManagement {
         /**
          * [descr:FileSystemProviderBase.uploadFileChunk()]
          */
-        uploadFileChunk(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+        uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
     }
     /**
      * [descr:ObjectFileSystemProvider.Options]
