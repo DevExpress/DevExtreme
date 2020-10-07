@@ -220,12 +220,12 @@ const TileView = CollectionWidget.inherit({
         this._renderContentSize(config, itemMargin);
     },
 
-    _renderContentSize: function(config, itemMargin) {
+    _renderContentSize: function({ mainDimension, baseItemMainDimension }, itemMargin) {
         if(windowUtils.hasWindow()) {
-            const actualContentSize = this._cells.length * this.option(config.baseItemMainDimension) + (this._cells.length + 1) * itemMargin;
-            const elementSize = this.$element()[config.mainDimension]();
+            const actualContentSize = this._cells.length * this.option(baseItemMainDimension) + (this._cells.length + 1) * itemMargin;
+            const elementSize = this.$element()[mainDimension]();
 
-            this._$container[config.mainDimension](Math.max(actualContentSize, elementSize));
+            this._$container[mainDimension](Math.max(actualContentSize, elementSize));
         }
     },
 
