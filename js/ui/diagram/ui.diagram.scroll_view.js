@@ -33,9 +33,11 @@ class DiagramScrollView extends Widget {
 
     setScroll(left, top) {
         this._scrollView.scrollTo({ left, top });
+        this._raiseOnScrollWithoutPoint();
     }
     offsetScroll(left, top) {
         this._scrollView.scrollBy({ left, top });
+        this._raiseOnScrollWithoutPoint();
     }
     getSize() {
         const { Size } = getDiagram();
@@ -58,6 +60,12 @@ class DiagramScrollView extends Widget {
         const { Point } = getDiagram();
         this.onScroll.raise('notifyScrollChanged', () => {
             return new Point(left, top);
+        });
+    }
+    _raiseOnScrollWithoutPoint() {
+        const { Point } = getDiagram();
+        this.onScroll.raise('notifyScrollChanged', () => {
+            return new Point(this._scrollView.scrollLeft(), this._scrollView.scrollTop());
         });
     }
     _createOnCreateDiagramAction() {
