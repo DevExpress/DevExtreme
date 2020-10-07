@@ -27,4 +27,12 @@ es6-object-assign (Open Source - MIT License)
 Copyright (c) 2015-2017 Rubén Norte
 https://github.com/rubennorte/es6-object-assign/blob/master/LICENSE
 
+luxon (Open Source - MIT License)
+Copyright 2019 JS Foundation and other contributors
+https://github.com/moment/luxon/blob/master/license.md
+
+preact (Open Source – MIT License) 
+Copyright (c) 2015-present Jason Miller
+https://github.com/preactjs/preact/blob/master/LICENSE
+
 The open source libraries included in this product are done so pursuant to each individual open source library license and subject to the disclaimers and limitations on liability set forth in each open source library license.
