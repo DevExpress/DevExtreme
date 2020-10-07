@@ -1,16 +1,16 @@
 <template>
-  <div class='medal-tooltip'>
-    <div class='country-name'>{{data.country}}
-      <br v-if="data.oldCountryName"/>{{data.oldCountryName}}
+  <div class="medal-tooltip">
+    <div class="country-name">{{ data.country }}
+      <br v-if="data.oldCountryName">{{ data.oldCountryName }}
     </div>
     <div>
-      <span class='caption'>Gold</span>: {{data.gold}}
+      <span class="caption">Gold</span>: {{ data.gold }}
     </div>
     <div>
-      <span class='caption'>Silver</span>: {{data.silver}}
+      <span class="caption">Silver</span>: {{ data.silver }}
     </div>
     <div>
-      <span class='caption'>Bronze</span>: {{data.bronze}}
+      <span class="caption">Bronze</span>: {{ data.bronze }}
     </div>
   </div>
 </template>

@@ -24,21 +24,24 @@
       :argument="item.country"
       :data="item.data"
       :location="item.location"
-      :offsetX="item.offsetX"
-      :offsetY="item.offsetY"
-      :color="item.color">
+      :offset-x="item.offsetX"
+      :offset-y="item.offsetY"
+      :color="item.color"
+    >
       <DxImage :url="item.image"/>
       <DxBorder :color="item.borderColor"/>
       <DxShadow :opacity="item.shadowOpacity"/>
     </DxAnnotation>
     <DxSeries
       argument-field="country"
-      value-field="gold">
+      value-field="gold"
+    >
       <DxLabel
         :visible="true"
         :radial-offset="83"
         position="inside"
-        background-color="transparent">
+        background-color="transparent"
+      >
         <DxFont
           :size="16"
           :weight="600"
