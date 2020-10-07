@@ -442,17 +442,10 @@ class FileManagerToolbar extends Widget {
         this._updateSeparatorsVisibility(items, toolbar);
     }
 
-    _getItemVisibleAvailable(item, fileItems) {
-        const originalVisible = item.originalItemData?.visible;
-        const available = this._isToolbarItemAvailable(item, fileItems);
-        const visible = isDefined(originalVisible) ? originalVisible : available;
-        return { available, visible };
-    }
-
     _setItemVisibleAvailable(item, fileItems) {
-        const itemOptions = this._getItemVisibleAvailable(item, fileItems);
-        item._available = itemOptions.available;
-        item.visible = itemOptions.visible;
+        const originalVisible = item.originalItemData?.visible;
+        item._available = this._isToolbarItemAvailable(item, fileItems);
+        item.visible = isDefined(originalVisible) ? originalVisible : item._available;
     }
 
     _fileToolbarHasEffectiveItems(fileItems) {
