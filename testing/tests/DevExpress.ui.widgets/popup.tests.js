@@ -11,7 +11,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import windowUtils from 'core/utils/window';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
-import domUtils from 'core/utils/dom';
+import visibilityChangeUtils from 'events/visibility_change';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -1182,7 +1182,7 @@ QUnit.module('options changed callbacks', {
     });
 
     QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
-        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
 
         try {
             this.instance.option({
@@ -1198,7 +1198,7 @@ QUnit.module('options changed callbacks', {
 
     QUnit.test('titleTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
         this.instance.option('visible', true);
-        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
 
         try {
             this.instance.option({
@@ -1213,7 +1213,7 @@ QUnit.module('options changed callbacks', {
 
     QUnit.test('bottomTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
         this.instance.option('visible', true);
-        const resizeEventSpy = sinon.spy(domUtils, 'triggerResizeEvent');
+        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
 
         try {
             this.instance.option({
