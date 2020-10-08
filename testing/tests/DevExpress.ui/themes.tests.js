@@ -240,15 +240,16 @@ QUnit.module('dx-theme changing', (hooks) => {
 
 QUnit.module('dx-theme links', (hooks) => {
     let $frame;
+    const frames = [];
     hooks.beforeEach(() => {
         themes.setDefaultTimeout(100);
         $frame = $('<iframe></iframe>').appendTo('body');
+        frames.push($frame);
     });
 
-    hooks.afterEach(() => {
-        $frame.remove();
-        themes.setDefaultTimeout(defaultTimeout);
-    });
+    hooks.afterEach(() => themes.setDefaultTimeout(defaultTimeout));
+
+    hooks.after(() => frames.forEach((frame) => frame.remove()));
 
     function frameDoc() {
         return $frame[0].contentWindow.document;
