@@ -19,7 +19,7 @@ import noop from '../../utils/noop';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
-  widgetRef,
+  widgetRootElementRef,
   classes,
   pagesContainerVisible,
   pagesContainerVisibility,
@@ -35,11 +35,16 @@ export const viewFunction = ({
   },
   restAttributes,
 }: PagerContent) => (
+  <Widget
+    rootElementRef={widgetRootElementRef}
+    rtlEnabled={rtlEnabled}
+    classes={classes}
   // eslint-disable-next-line react/jsx-props-no-spreading
-  <Widget ref={widgetRef as any} rtlEnabled={rtlEnabled} classes={classes} {...restAttributes}>
+    {...restAttributes}
+  >
     {showPageSizes && (
     <PageSizeSelector
-      ref={pageSizesRef}
+      rootElementRef={pageSizesRef}
       isLargeDisplayMode={isLargeDisplayMode}
       pageSize={pageSize}
       pageSizeChange={pageSizeChange}
@@ -48,13 +53,13 @@ export const viewFunction = ({
     )}
     {pagesContainerVisible && (
       <div
-        ref={pagesRef}
+        ref={pagesRef as any}
         className={PAGER_PAGES_CLASS}
         style={{ visibility: pagesContainerVisibility }}
       >
         {infoVisible && (
         <InfoText
-          ref={infoTextRef}
+          rootElementRef={infoTextRef}
           infoText={infoText}
           pageCount={pageCount}
           pageIndex={pageIndex}
@@ -84,18 +89,18 @@ export class PagerContentProps extends PagerProps {
 
   @OneWay() isLargeDisplayMode = true;
 
-  @ForwardRef() pageSizesRef: any = null;
+  @ForwardRef() rootElementRef?: HTMLDivElement;
 
-  @ForwardRef() rootElementRef: any = null;
+  @ForwardRef() pageSizesRef?: HTMLDivElement;
 
-  @ForwardRef() pagesRef: any = null;
+  @ForwardRef() pagesRef?: HTMLDivElement;
 
-  @ForwardRef() infoTextRef: any = null;
+  @ForwardRef() infoTextRef?: HTMLDivElement;
 }
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagerContent extends JSXComponent<PagerContentProps>() {
-  @Ref() widgetRef!: any;
+  @Ref() widgetRootElementRef!: any;
 
   @Provider(KeyboardActionContext)
   get keyboardAction(): KeyboardActionContextType {
@@ -104,7 +109,7 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
         (element: HTMLElement, action: EventCallback): DisposeEffectReturn => {
           const fakePagerInstance = {
             option: (): boolean => false,
-            element: (): HTMLElement | null => this.widgetRef.getHtmlElement(),
+            element: (): HTMLElement | null => this.widgetRootElementRef,
             // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
             _createActionByOption: () => noop,
           };
@@ -116,7 +121,7 @@ export class PagerContent extends JSXComponent<PagerContentProps>() {
   @Effect({ run: 'once' }) setRootElementRef(): void {
     const { rootElementRef } = this.props;
     if (rootElementRef) {
-      this.props.rootElementRef = this.widgetRef;
+      this.props.rootElementRef = this.widgetRootElementRef;
     }
   }
 

@@ -31,7 +31,7 @@ export const viewFunction = ({
 }: PagesSmall) => (
   <div className={LIGHT_PAGES_CLASS}>
     <NumberBox
-      ref={pageIndexRef as never}
+      rootElementRef={pageIndexRef}
       className={PAGER_PAGE_INDEX_CLASS}
       min={1}
       max={pageCount}
@@ -54,7 +54,7 @@ type PagesSmallPropsType = Pick<PagerProps,
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesSmall extends JSXComponent<PagesSmallPropsType>() {
-  @Ref() pageIndexRef!: NumberBox;
+  @Ref() pageIndexRef!: HTMLDivElement;
 
   get value(): number {
     return this.props.pageIndex + 1;
@@ -72,7 +72,7 @@ export class PagesSmall extends JSXComponent<PagesSmallPropsType>() {
   @InternalState() private minWidth = 10;
 
   @Effect() updateWidth(): void {
-    this.minWidth = getElementMinWidth(this.pageIndexRef.getHtmlElement()) || this.minWidth;
+    this.minWidth = getElementMinWidth(this.pageIndexRef) || this.minWidth;
   }
 
   selectLastPageIndex(): void {

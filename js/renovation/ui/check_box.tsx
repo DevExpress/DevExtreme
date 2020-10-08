@@ -55,6 +55,7 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
     <Widget // eslint-disable-line jsx-a11y/no-access-key
       // eslint-disable-next-line  @typescript-eslint/no-explicit-any
       ref={viewModel.widgetRef as any}
+      rootElementRef={viewModel.target}
       accessKey={viewModel.props.accessKey}
       activeStateEnabled={viewModel.props.activeStateEnabled}
       classes={viewModel.cssClasses}
@@ -78,13 +79,13 @@ export const viewFunction = (viewModel: CheckBox): JSX.Element => {
       {...viewModel.restAttributes} // eslint-disable-line react/jsx-props-no-spreading
     >
       {/* eslint-disable-next-line react/jsx-props-no-spreading */}
-      <input ref={viewModel.inputRef} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
+      <input ref={viewModel.inputRef as any} type="hidden" value={`${viewModel.props.value}`} {...name && { name }} />
       <div className="dx-checkbox-container">
-        <span className="dx-checkbox-icon" ref={viewModel.iconRef} />
+        <span className="dx-checkbox-icon" ref={viewModel.iconRef as any} />
         {text && (<span className="dx-checkbox-text">{text}</span>)}
       </div>
       {viewModel.props.useInkRipple
-                && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef} />}
+                && <InkRipple config={inkRippleConfig} ref={viewModel.inkRippleRef as any} />}
       {viewModel.rendered && viewModel.shouldShowValidationMessage
                 && (
                 <ValidationMessage
@@ -161,9 +162,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @Ref() widgetRef!: Widget;
 
-  get target(): HTMLDivElement {
-    return this.widgetRef?.getRootElement();
-  }
+  @Ref() target!: HTMLDivElement;
 
   @Effect({ run: 'once' })
   afterInitEffect(): EffectReturn {

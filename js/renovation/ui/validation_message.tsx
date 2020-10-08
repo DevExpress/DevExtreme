@@ -3,15 +3,16 @@ import {
 } from 'devextreme-generator/component_declaration/common';
 import { WidgetProps } from './common/widget';
 import LegacyValidationMessage from '../../ui/validation_message';
-
 import { DomComponentWrapper } from './common/dom_component_wrapper';
 
-/* eslint-enable import/named */
-
-export const viewFunction = ({ props, restAttributes }: ValidationMessage): JSX.Element => (
+export const viewFunction = ({
+  props: { rootElementRef, ...componentProps },
+  restAttributes,
+}: ValidationMessage): JSX.Element => (
   <DomComponentWrapper
+    rootElementRef={rootElementRef as any}
     componentType={LegacyValidationMessage}
-    componentProps={props}
+    componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
