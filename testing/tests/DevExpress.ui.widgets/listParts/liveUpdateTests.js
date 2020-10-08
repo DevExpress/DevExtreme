@@ -198,6 +198,7 @@ QUnit.module('live update', {
             pageLoadMode: 'scrollBottom',
             height: 40,
             displayExpr: 'text',
+            useNativeScrolling: false,
             dataSource: {
                 paginate: true,
                 pageSize: 2,
