@@ -23,6 +23,7 @@ module.exports = {
         'exceljs': 'window.ExcelJS',
         'jspdf': 'window.jspdf.jsPDF',
         'devexpress-diagram': 'window.DevExpress.diagram',
-        'devexpress-gantt': 'window.DevExpress.Gantt'
+        'devexpress-gantt': 'window.DevExpress.Gantt',
+        'luxon': 'window.luxon'
     }
 };
