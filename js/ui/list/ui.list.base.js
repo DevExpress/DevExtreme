@@ -284,7 +284,7 @@ const ListBase = CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._refreshItemElements();
-        this._updateLoadingState();
+        this._updateLoadingState(true);
     },
 
     reorderItem: function(itemElement, toItemElement) {
