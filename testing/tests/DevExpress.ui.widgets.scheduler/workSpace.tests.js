@@ -881,7 +881,8 @@ QUnit.testStart(function() {
         const cellData = {
             allDay: true,
             endDate: new Date(2015, 5, 29, 0),
-            startDate: new Date(2015, 5, 29, 0)
+            startDate: new Date(2015, 5, 29, 0),
+            groupIndex: 0,
         };
 
         assert.deepEqual(this.instance.getCellDataByCoordinates({ top: 51, left: 100 }, true), cellData, 'Cell data is OK');
