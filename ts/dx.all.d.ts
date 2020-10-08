@@ -2561,6 +2561,48 @@ declare module DevExpress.excelExporter {
         value?: any;
     }
     /**
+     * [descr:ExcelExportBaseProps]
+     */
+    export interface ExcelExportBaseProps {
+        /**
+         * [descr:ExcelExportBaseProps.keepColumnWidths]
+         */
+        keepColumnWidths?: boolean;
+        /**
+         * [descr:ExcelExportBaseProps.loadPanel]
+         */
+        loadPanel?: ExportLoadPanel;
+        /**
+         * [descr:ExcelExportBaseProps.topLeftCell]
+         */
+        topLeftCell?: CellAddress | string;
+        /**
+         * [descr:ExcelExportBaseProps.worksheet]
+         */
+        worksheet?: any;
+    }
+    /**
+     * [descr:ExcelExportDataGridProps]
+     */
+    export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
+        /**
+         * [descr:ExcelExportDataGridProps.autoFilterEnabled]
+         */
+        autoFilterEnabled?: boolean;
+        /**
+         * [descr:ExcelExportDataGridProps.component]
+         */
+        component?: DevExpress.ui.dxDataGrid;
+        /**
+         * [descr:ExcelExportDataGridProps.customizeCell]
+         */
+        customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
+        /**
+         * [descr:ExcelExportDataGridProps.selectedRowsOnly]
+         */
+        selectedRowsOnly?: boolean;
+    }
+    /**
      * [descr:ExcelPivotGridCell]
      */
     export interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGridPivotGridCell {
@@ -2576,48 +2618,6 @@ declare module DevExpress.excelExporter {
          * [descr:ExcelPivotGridCell.rowIndex]
          */
         rowIndex?: number;
-    }
-    /**
-     * [descr:ExportBaseProps]
-     */
-    export interface ExportBaseProps {
-        /**
-         * [descr:ExportBaseProps.keepColumnWidths]
-         */
-        keepColumnWidths?: boolean;
-        /**
-         * [descr:ExportBaseProps.loadPanel]
-         */
-        loadPanel?: ExportLoadPanel;
-        /**
-         * [descr:ExportBaseProps.topLeftCell]
-         */
-        topLeftCell?: CellAddress | string;
-        /**
-         * [descr:ExportBaseProps.worksheet]
-         */
-        worksheet?: any;
-    }
-    /**
-     * [descr:ExportDataGridProps]
-     */
-    export interface ExportDataGridProps extends ExportBaseProps {
-        /**
-         * [descr:ExportDataGridProps.autoFilterEnabled]
-         */
-        autoFilterEnabled?: boolean;
-        /**
-         * [descr:ExportDataGridProps.component]
-         */
-        component?: DevExpress.ui.dxDataGrid;
-        /**
-         * [descr:ExportDataGridProps.customizeCell]
-         */
-        customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
-        /**
-         * [descr:ExportDataGridProps.selectedRowsOnly]
-         */
-        selectedRowsOnly?: boolean;
     }
     /**
      * [descr:ExportLoadPanel]
@@ -2663,7 +2663,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExportPivotGridProps]
      */
-    export interface ExportPivotGridProps extends ExportBaseProps {
+    export interface ExportPivotGridProps extends ExcelExportBaseProps {
         /**
          * [descr:ExportPivotGridProps.component]
          */
@@ -2676,7 +2676,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:excelExporter.exportDataGrid(options)]
      */
-    export function exportDataGrid(options: ExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
+    export function exportDataGrid(options: ExcelExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
     /**
      * [descr:excelExporter.exportPivotGrid(options)]
      */
@@ -2685,6 +2685,7 @@ declare module DevExpress.excelExporter {
 declare module DevExpress.exporter {
     /**
      * [descr:ExcelFont]
+     * @deprecated [depNote:ExcelFont]
      */
     export interface ExcelFont {
         /**
