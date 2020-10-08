@@ -193,6 +193,40 @@ QUnit.module('live update', {
         assert.deepEqual(this.itemRenderedSpy.lastCall.args[0].itemData, pushData[1].data, 'check last updated item');
     });
 
+    QUnit.test('load new page by scrolling after updating an item', function(assert) {
+        const list = this.createList({
+            pageLoadMode: 'scrollBottom',
+            height: 40,
+            displayExpr: 'text',
+            dataSource: {
+                paginate: true,
+                pageSize: 2,
+                pushAggregationTimeout: 0,
+                key: 'id',
+                store: [
+                    { id: 1, text: 'item1' },
+                    { id: 2, text: 'item2' },
+                    { id: 3, text: 'item3' },
+                    { id: 4, text: 'item4' },
+                    { id: 5, text: 'item5' },
+
+                ]
+            }
+        });
+        const store = list.getDataSource().store();
+
+        store.push([
+            {
+                type: 'update',
+                data: { text: 'itemN' },
+                key: 1
+            }
+        ]);
+        list.scrollTo(100);
+
+        assert.equal(list.itemElements().length, 4, 'check items elements count');
+    });
+
     QUnit.test('push & repaintChangesOnly', function(assert) {
         const data = [{ a: 'Item 0', id: 0 }, { a: 'Item 1', id: 1 }];
         const list = this.createList({
