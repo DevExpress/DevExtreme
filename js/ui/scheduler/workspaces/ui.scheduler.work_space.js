@@ -2980,7 +2980,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const scheduler = this.option('observer');
         const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
 
-        if(this.needUpdateScrollPosition(date, groups, allDay)) {
+        if(this.needUpdateScrollPosition(newDate, groups, allDay)) {
             this.scrollTo(newDate, groups, allDay, false);
         }
     }
