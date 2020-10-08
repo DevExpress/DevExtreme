@@ -39,7 +39,11 @@ export default class CompileManager {
           ...bundleOptions,
         });
 
-        css = swatchResult.result.css.toString();
+        css = PostCompiler.fixSwatchCss(
+          swatchResult.result.css,
+          swatchSass.selector,
+          config.colorScheme,
+        );
         swatchSelector = swatchSass.selector;
       }
 
