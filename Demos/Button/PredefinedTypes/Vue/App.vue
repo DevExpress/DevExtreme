@@ -156,6 +156,10 @@ export default {
 };
 </script>
 <style scoped>
+#app {
+  align-self: center;
+}
+
 .demo-container {
     display: flex;
     justify-content: center;

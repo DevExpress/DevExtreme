@@ -15,7 +15,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Continent</span>
+        <span>Continent </span>
         <SelectBox
           :data-source="viewportCoordinates"
           :value="viewportCoordinates[0].coordinates"
@@ -25,14 +25,14 @@
         />
       </div>
       <div class="option">
-        <span>Zoom factor</span>
+        <span>Zoom factor </span>
         <TextBox
           :value="zoomFactor"
           :read-only="true"
         />
       </div>
       <div class="option">
-        <span>Center</span>
+        <span>Center </span>
         <TextBox
           :value="center"
           :read-only="true"

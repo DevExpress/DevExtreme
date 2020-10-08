@@ -40,7 +40,7 @@
         <DxTagBox
           :items="products"
           :value="[1, 2, 3, 4, 5, 6, 7]"
-          :show-selection-controls-="true"
+          :show-selection-controls="true"
           :max-displayed-tags="2"
           :show-multi-tag-only="false"
           display-expr="Name"

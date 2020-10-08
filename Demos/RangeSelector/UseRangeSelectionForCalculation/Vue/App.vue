@@ -24,7 +24,7 @@
       <div class="options">
         <div class="caption">Options</div>
         <div class="option">
-          <span>Handle Range Changes</span>
+          <span>Handle Range Changes </span>
           <DxSelectBox
             :data-source="behaviorModes"
             :width="210"

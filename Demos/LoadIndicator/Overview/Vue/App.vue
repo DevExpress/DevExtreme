@@ -34,7 +34,7 @@
       :height="40"
       :on-click="handleClick"
     >
-      <template>
+      <template #content>
         <span>
           <DxLoadIndicator
             :visible="loadIndicatorVisible"

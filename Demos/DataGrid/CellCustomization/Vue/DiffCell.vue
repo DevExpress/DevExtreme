@@ -1,7 +1,7 @@
 <template>
-  <div :class="cellData | className">
-    <div class="current-value">{{ cellData | formatCurrency('USD') }}</div>
-    <div class="diff">{{ cellData | abs | fixed(2) }}</div>
+  <div :class="className(cellData)">
+    <div class="current-value">{{ formatCurrency(cellData, 'USD') }}</div>
+    <div class="diff">{{ fixed(abs(cellData), 2) }}</div>
   </div>
 </template>
 <script>
@@ -24,7 +24,7 @@ export default {
     DxSize,
     DxTooltip
   },
-  filters: {
+  methods: {
     className(value) {
       return gridCellData(value).diff > 0 ? 'inc' : 'dec';
     },

@@ -61,7 +61,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Focused row key</span>
+        <span>Focused row key </span>
         <DxNumberBox
           id="taskId"
           :min="1"

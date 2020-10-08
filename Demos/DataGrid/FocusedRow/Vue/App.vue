@@ -32,7 +32,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Focused Row Key</span>
+        <span>Focused Row Key </span>
         <DxNumberBox
           id="taskId"
           :ref="taskIdEditorRefName"

@@ -49,7 +49,7 @@
       />
     </DxDataGrid>
     <div class="selected-data">
-      <span class="caption">Selected Records:</span>
+      <span class="caption">Selected Records: </span>
       <span>
         {{ selectedEmployeeNames }}
       </span>

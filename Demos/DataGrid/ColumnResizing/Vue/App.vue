@@ -13,7 +13,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Column resizing mode:</span>
+        <span>Column resizing mode: </span>
         <DxSelectBox
           :items="resizingModes"
           :value="currentMode"

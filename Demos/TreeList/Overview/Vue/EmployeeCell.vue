@@ -31,7 +31,7 @@ export default {
 .img {
     height: 50px;
     width: 50px;
-    margin-right: 10px;
+    margin-right: 14px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;

@@ -143,7 +143,7 @@ export default {
     .option {
         margin-top: 10px;
         display: inline-block;
-        margin-right: 50px;
+        margin-right: 54px;
     }
 
     label {

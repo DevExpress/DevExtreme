@@ -112,7 +112,7 @@ h1 {
   display: inline-block;
   vertical-align: middle;
   padding: 10px;
-  margin: 0;
+  margin: 0 0.1em 0 0;
 }
 
 #employee {

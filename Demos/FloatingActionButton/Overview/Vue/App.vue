@@ -60,7 +60,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Direction:</span>
+        <span>Direction: </span>
         <DxSelectBox
           :data-source="['auto', 'up', 'down']"
           value="auto"

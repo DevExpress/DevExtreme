@@ -19,7 +19,7 @@
       <DxPropertiesPanel :visibility="'disabled'"/>
     </DxDiagram>
     <div class="selected-data">
-      <span class="caption">Selected Items:</span>
+      <span class="caption">Selected Items: </span>
       <span>
         {{ selectedItemNames }}
       </span>

@@ -99,5 +99,6 @@ export default {
   width: 24%;
   display: inline-block;
   margin-top: 10px;
+  margin-right: 4px;
 }
 </style>

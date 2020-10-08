@@ -56,7 +56,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Refresh Mode:</span>
+        <span>Refresh Mode: </span>
         <DxSelectBox
           v-model:value="refreshMode"
           :items="refreshModes"

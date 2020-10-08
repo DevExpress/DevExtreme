@@ -154,7 +154,7 @@ export default {
 
 .selected-container {
     padding: 20px;
-    margin-left: 20px;
+    margin-left: 24px;
     background-color: rgba(191, 191, 191, 0.15);
     font-size: 115%;
     font-weight: bold;
@@ -184,7 +184,7 @@ export default {
     width: 24%;
     display: inline-block;
     margin-top: 10px;
-    margin-right: 5px;
+    margin-right: 9px;
     box-sizing: border-box;
 }
 

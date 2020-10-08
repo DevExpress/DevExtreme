@@ -48,7 +48,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Column chooser mode</span>
+        <span>Column chooser mode </span>
         <DxSelectBox
           :items="columnChooserModes"
           v-model:value="mode"

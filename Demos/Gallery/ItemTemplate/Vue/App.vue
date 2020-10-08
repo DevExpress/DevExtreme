@@ -9,7 +9,7 @@
     <template #item="{ data }">
       <div class="content">
         <img :src="data.Image">
-        <div class="item-price">{{ data.Price | formatCurrency }}</div>
+        <div class="item-price">{{ formatCurrency(data.Price) }}</div>
         <div class="item-address">{{ data.Address + ", " + data.City + ", " + data.State }}</div>
       </div>
     </template>
@@ -23,7 +23,7 @@ export default {
   components: {
     DxGallery
   },
-  filters: {
+  methods: {
     formatCurrency(value) {
       return new Intl.NumberFormat('en-US', {
         style: 'currency',

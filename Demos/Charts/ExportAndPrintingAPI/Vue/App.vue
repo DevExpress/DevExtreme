@@ -104,7 +104,7 @@ export default {
 }
 
 #buttonGroup > .dx-button {
-    margin: 0 20px;
+    margin: 0 22px;
 }
 
 .title {

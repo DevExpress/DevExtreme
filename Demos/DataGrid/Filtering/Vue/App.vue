@@ -56,7 +56,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Apply Filter</span>
+        <span>Apply Filter </span>
         <DxSelectBox
           id="useFilterApplyButton"
           :items="applyFilterTypes"

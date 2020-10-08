@@ -32,7 +32,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <span>Series Type</span>
+        <span>Series Type </span>
         <DxSelectBox
           :data-source="types"
           v-model:value="type"

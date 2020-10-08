@@ -21,7 +21,7 @@
               />
             </div>
             <div class="price-container">
-              <div class="price">{{ item.Price | currency }}</div>
+              <div class="price">{{ currency(item.Price) }}</div>
               <div class="caption">per<br>night</div>
             </div>
           </div>
@@ -41,7 +41,7 @@
           />
         </div>
         <div class="price-container">
-          <div class="price">{{ currentHotel.Price | currency }}</div>
+          <div class="price">{{ currency(currentHotel.Price) }}</div>
           <div class="caption">per<br>night</div>
         </div>
       </div>
@@ -84,11 +84,6 @@ export default {
   components: {
     DxTileView, DxList
   },
-  filters: {
-    currency(data) {
-      return currencyFormatter.format(data);
-    }
-  },
   data: function() {
     return {
       currentHotel: data[0],
@@ -103,6 +98,9 @@ export default {
     };
   },
   methods: {
+    currency(data) {
+      return currencyFormatter.format(data);
+    },
     listSelectionChanged(e) {
       this.currentHotel = e.addedItems[0];
     }

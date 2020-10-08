@@ -43,7 +43,7 @@
     <div class="options">
       <div class="caption">Options</div>
       <div class="option">
-        <label for="selectInput">Language</label>
+        <label for="selectInput">Language </label>
         <DxSelectBox
           :data-source="locales"
           :value="locale"

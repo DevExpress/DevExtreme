@@ -12,12 +12,12 @@
         @pull-down="updateTopContent"
         @reach-bottom="updateBottomContent"
       >
-        <div v-html="content"/>
+        <div class="text-content ">{{content}}</div>
       </DxScrollView>
       <div class="options">
         <div class="caption">Options</div>
         <div class="option">
-          <span>Show scrollbar:</span>
+          <span>Show scrollbar: </span>
           <DxSelectBox
             id="show-scrollbar-mode"
             :items="showScrollbarModes"
@@ -162,6 +162,10 @@ export default {
   position: relative;
   top: 2px;
   margin-right: 10px;
+}
+
+.text-content {
+    white-space: pre-wrap;
 }
 
 .option > .dx-selectbox {

@@ -154,6 +154,10 @@ export default {
     display: inline-block;
 }
 
+#rectangleNeedle, #twoColorNeedle, #rangebar, #textCloud {
+    margin-right: 4px;
+}
+
 #rectangleNeedle, #twoColorNeedle, #triangleNeedle {
     width: 33%;
 }

@@ -80,7 +80,7 @@
         />
       </div>
       <div class="option">
-        <span>Interval:</span>
+        <span>Interval: </span>
         <DxSelectBox
           :data-source="aggregationIntervals"
           v-model:value="currentInterval"
@@ -89,7 +89,7 @@
         />
       </div>
       <div class="option">
-        <span>Method:</span>
+        <span>Method: </span>
         <DxSelectBox
           :data-source="aggregationFunctions"
           v-model:value="currentFunction"

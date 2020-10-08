@@ -41,6 +41,7 @@
             @click="plusClick()"
           />
           <DxButton
+            id="back"
             icon="back"
             @click="backClick()"
           />
@@ -85,6 +86,7 @@
             icon="plus"
           />
           <DxButton
+            id="back"
             :disabled="true"
             icon="back"
           />
@@ -121,6 +123,9 @@ export default {
 };
 </script>
 <style scoped>
+#app {
+  margin-left: 3px;
+}
 .dx-viewport:not(.dx-theme-ios7) .dx-fieldset {
     width: 520px;
     margin: 30px auto;
@@ -136,7 +141,7 @@ export default {
 
 .dx-viewport:not(.dx-theme-ios7) .dx-field {
     display: inline-block;
-    margin-right: 20px;
+    margin-right: 24px;
 }
 
 .dx-viewport:not(.dx-theme-ios7) .dx-field-value:not(.dx-widget) > .dx-button {

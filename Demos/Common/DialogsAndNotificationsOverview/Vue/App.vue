@@ -12,7 +12,7 @@
         <div class="item-options">
           <div>
             <div class="address">{{ house.Address }}</div>
-            <div class="price large-text">{{ house.Price | currency }}</div>
+            <div class="price large-text">{{ currency(house.Price) }}</div>
             <div class="agent">
               <div :id="'house' + house.ID">
                 <img src="../../../../images/icon-agent.svg">
@@ -53,7 +53,7 @@
     >
       <template #content="{ data }">
         <div class="popup-property-details">
-          <div class="large-text">{{ currentHouse.Price | currency }}</div>
+          <div class="large-text">{{ currency(currentHouse.Price) }}</div>
           <div class="opacity">{{ currentHouse.Address }}, {{ currentHouse.City }}, {{ currentHouse.State }}</div>
           <DxButton
             :text="favoriteText"
@@ -99,11 +99,6 @@ export default {
   components: {
     DxButton, DxPopup, DxPopover
   },
-  filters: {
-    currency(val) {
-      return currencyFormatter.format(val);
-    }
-  },
   data: function() {
     return {
       houses: housesSource,
@@ -123,6 +118,9 @@ export default {
     }
   },
   methods: {
+    currency(val) {
+      return currencyFormatter.format(val);
+    },
     showHouse(house) {
       this.currentHouse = house;
       this.popupVisible = true;

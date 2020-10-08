@@ -31,11 +31,9 @@
           :colspan="2"
           screen="sm"
         />
-        <template #default>
-          <div class="header item">
-            <p>Header</p>
-          </div>
-        </template>
+        <div class="header item">
+          <p>Header</p>
+        </div>
       </DxItem>
       <DxItem>
         <DxLocation
@@ -49,11 +47,9 @@
           :colspan="2"
           screen="sm"
         />
-        <template #default>
-          <div class="content item">
-            <p>Content</p>
-          </div>
-        </template>
+        <div class="content item">
+          <p>Content</p>
+        </div>
       </DxItem>
       <DxItem>
         <DxLocation
@@ -66,11 +62,9 @@
           :col="0"
           screen="sm"
         />
-        <template #default>
-          <div class="left-side-bar item">
-            <p>Left Bar</p>
-          </div>
-        </template>
+        <div class="left-side-bar item">
+          <p>Left Bar</p>
+        </div>
       </DxItem>
       <DxItem>
         <DxLocation
@@ -83,11 +77,9 @@
           :col="1"
           screen="sm"
         />
-        <template #default>
-          <div class="right-side-bar item">
-            <p>Right Bar</p>
-          </div>
-        </template>
+        <div class="right-side-bar item">
+          <p>Right Bar</p>
+        </div>
       </DxItem>
       <DxItem>
         <DxLocation
@@ -102,11 +94,9 @@
           :colspan="2"
           screen="sm"
         />
-        <template #default>
-          <div class="footer item">
-            <p>Footer</p>
-          </div>
-        </template>
+        <div class="footer item">
+          <p>Footer</p>
+        </div>
       </DxItem>
     </DxResponsiveBox>
   </div>

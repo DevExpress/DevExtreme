@@ -112,6 +112,10 @@ export default {
   margin: 0 5px;
 }
 
+.logo img:first-child {
+  margin-right: 9px;
+}
+
 .dx-row.dx-data-row .employee {
   color: #bf4e6a;
   font-weight: bold;

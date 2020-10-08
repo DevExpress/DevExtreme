@@ -7,7 +7,7 @@
       :on-click="onButtonClick"
     />
     <div class="progress-info">
-      Time left {{ seconds | time }}
+      Time left {{ time(seconds) }}
     </div>
     <DxProgressBar
       id="progress-bar-status"
@@ -36,11 +36,6 @@ export default {
     DxButton,
     DxProgressBar
   },
-  filters: {
-    time(value) {
-      return `00:00:${ (`0${ value}`).slice(-2)}`;
-    }
-  },
   data() {
     return {
       maxValue,
@@ -56,6 +51,9 @@ export default {
     }
   },
   methods: {
+    time(value) {
+      return `00:00:${ (`0${ value}`).slice(-2)}`;
+    },
     onButtonClick() {
       if (this.inProgress) {
         this.buttonText = 'Continue progress';

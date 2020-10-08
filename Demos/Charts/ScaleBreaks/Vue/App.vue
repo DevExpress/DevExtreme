@@ -30,7 +30,7 @@
         />
       </div>
       <div class="option center">
-        <span>Max Count</span>
+        <span>Max Count </span>
         <DxSelectBox
           :items="breaksCount"
           v-model:value="breaksCountValue"
@@ -38,7 +38,7 @@
         />
       </div>
       <div class="option right">
-        <span>Style</span>
+        <span>Style </span>
         <DxSelectBox
           :items="lineStyles"
           v-model:value="lineStyleValue"
@@ -121,5 +121,8 @@ export default {
 .option > .dx-widget {
     display: inline-block;
     vertical-align: middle;
+}
+.center, .right {
+  margin-left: 4px;
 }
 </style>

@@ -2,7 +2,7 @@
   <div>
     <div>{{ item.CategoryName }}</div>
     <div>{{ item.ProductName }}</div>
-    <b class="price">{{ item.UnitPrice | currency }}</b>
+    <b class="price">{{ currency(item.UnitPrice) }}</b>
   </div>
 </template>
 <script>
@@ -15,7 +15,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 export default {
-  filters: {
+  methods: {
     currency(data) {
       return currencyFormatter.format(data);
     }

@@ -8,7 +8,7 @@
   >
     <template #item="{ data }">
       <div class="dx-tile-content">
-        <div class="price">{{ data.Price | formatCurrency }}</div>
+        <div class="price">{{ formatCurrency(data.Price) }}</div>
         <div
           :style="{ backgroundImage: 'url(' + data.ImageSrc + ')' }"
           class="image"
@@ -25,7 +25,7 @@ export default {
   components: {
     DxTileView
   },
-  filters: {
+  methods: {
     formatCurrency(value) {
       return new Intl.NumberFormat('en-US', {
         style: 'currency',

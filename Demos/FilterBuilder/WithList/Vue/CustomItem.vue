@@ -3,7 +3,7 @@
     <div class="product">
       <img :src="item.ImageSrc">
       <div>{{ item.Name }}</div>
-      <div class="price">{{ item.Price | currency }}</div>
+      <div class="price">{{ currency(item.Price) }}</div>
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 export default {
-  filters: {
+  methods: {
     currency(data) {
       return currencyFormatter.format(data);
     }

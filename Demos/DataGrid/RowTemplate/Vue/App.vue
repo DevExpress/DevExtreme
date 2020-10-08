@@ -40,8 +40,8 @@
             <td>{{ rowInfo.data.FirstName }}</td>
             <td>{{ rowInfo.data.LastName }}</td>
             <td>{{ rowInfo.data.Position }}</td>
-            <td>{{ new Date(rowInfo.data.BirthDate) | formatDate }}</td>
-            <td>{{ new Date(rowInfo.data.HireDate) | formatDate }}</td>
+            <td>{{ formatDate(new Date(rowInfo.data.BirthDate)) }}</td>
+            <td>{{ formatDate(new Date(rowInfo.data.HireDate)) }}</td>
           </tr>
           <tr class="notes-row">
             <td colspan="6"><div>{{ rowInfo.data.Notes }}</div></td>
@@ -64,7 +64,7 @@ export default {
     DxDataGrid,
     DxColumn
   },
-  filters: {
+  methods: {
     formatDate: new Intl.DateTimeFormat('en-US').format
   },
   data() {
