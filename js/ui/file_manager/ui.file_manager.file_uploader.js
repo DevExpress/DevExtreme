@@ -47,6 +47,7 @@ class FileManagerFileUploader extends Widget {
             readyToUploadMessage: '',
             accept: '*',
             chunkSize,
+            dropZone: this.option('dropZone'),
             onValueChanged: e => this._onFileUploaderValueChanged(e),
             onProgress: e => this._onFileUploaderProgress(e),
             onUploaded: e => this._onFileUploaderUploaded(e),
@@ -197,6 +198,11 @@ class FileManagerFileUploader extends Widget {
         this._dropZoneEnterCounter = 0;
     }
 
+    _updateDropZoneOwner(fileUploader) {
+        fileUploader.option('dropZone', '');
+        fileUploader.option('dropZone', this.option('dropZone'));
+    }
+
     _uploadFiles(uploaderInfo, files) {
         this._setDropZonePlaceholderVisible(false);
         const sessionId = new Guid().toString();
@@ -249,6 +255,7 @@ class FileManagerFileUploader extends Widget {
         for(let i = 0; i < this._uploaderInfos.length; i++) {
             const info = this._uploaderInfos[i];
             if(!info.session) {
+                this._updateDropZoneOwner(info.fileUploader);
                 return info;
             }
         }
