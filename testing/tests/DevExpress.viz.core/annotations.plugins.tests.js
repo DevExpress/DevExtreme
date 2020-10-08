@@ -837,7 +837,7 @@ QUnit.module('Lifecycle', {
         this.renderer = new vizMocks.Renderer();
         rendererModule.Renderer = sinon.spy(() => this.renderer);
 
-        this.createAnnotationStub = sinon.stub().returns([{ draw: sinon.spy() }]);
+        this.createAnnotationStub = sinon.stub().returns([{ draw: sinon.spy(), plaque: { clear: sinon.spy() } }]);
         __test_utils.stub_createAnnotations(this.createAnnotationStub);
     },
     afterEach() {
@@ -1002,6 +1002,7 @@ QUnit.module('Lifecycle', {
 
         const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
         assert.equal(annotation.draw.callCount, 1);
+        assert.equal(annotation.plaque.clear.callCount, 1);
         assert.deepEqual(annotation.draw.getCall(0).args, [chart, annotationsGroup]);
         assert.ok(annotation.draw.lastCall.calledAfter(annotationsGroup.clear.lastCall));
     });
@@ -1032,6 +1033,7 @@ QUnit.module('Lifecycle', {
 
         const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
         assert.equal(annotation.draw.callCount, 1);
+        assert.equal(annotation.plaque.clear.callCount, 1);
         assert.deepEqual(annotation.draw.getCall(0).args, [chart, annotationsGroup]);
         assert.ok(annotation.draw.lastCall.calledAfter(annotationsGroup.clear.lastCall));
     });
@@ -1190,6 +1192,7 @@ QUnit.module('Lifecycle', {
 
         const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
         assert.equal(annotation.draw.callCount, 1);
+        assert.equal(annotation.plaque.clear.callCount, 1);
         assert.deepEqual(annotation.draw.getCall(0).args, [polarChart, annotationsGroup]);
         assert.ok(annotation.draw.lastCall.calledAfter(annotationsGroup.clear.lastCall));
     });
@@ -1220,6 +1223,7 @@ QUnit.module('Lifecycle', {
 
         const annotation = this.createAnnotationStub.getCall(0).returnValue[0];
         assert.equal(annotation.draw.callCount, 1);
+        assert.equal(annotation.plaque.clear.callCount, 1);
         assert.deepEqual(annotation.draw.getCall(0).args, [polarChart, annotationsGroup]);
         assert.ok(annotation.draw.lastCall.calledAfter(annotationsGroup.clear.lastCall));
     });
