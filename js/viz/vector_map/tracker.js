@@ -12,7 +12,6 @@ const _abs = _math.abs;
 const _sqrt = _math.sqrt;
 const _round = _math.round;
 const _addNamespace = eventUtils.addNamespace;
-const _now = Date.now;
 
 const _NAME = 'dxVectorMap';
 const EVENT_START = 'start';
@@ -74,7 +73,7 @@ Tracker.prototype = {
         this._clickState = {
             x: coords.x, y: coords.y,
             threshold: isTouchEvent(event) ? CLICK_COORD_THRESHOLD_TOUCH : CLICK_COORD_THRESHOLD_MOUSE,
-            time: _now()
+            time: Date.now()
         };
     },
 
@@ -83,7 +82,7 @@ Tracker.prototype = {
 
         if(!state) { return; }
 
-        if(data && _now() - state.time <= CLICK_TIME_THRESHOLD) {
+        if(data && Date.now() - state.time <= CLICK_TIME_THRESHOLD) {
             const threshold = state.threshold;
             const coords = getEventCoords(event);
             if(_abs(coords.x - state.x) <= threshold && _abs(coords.y - state.y) <= threshold) {
@@ -127,7 +126,7 @@ Tracker.prototype = {
         if(!data) { return; }
         const that = this;
         const lock = that._wheelLock;
-        const time = _now();
+        const time = Date.now();
 
         if(time - lock.time <= WHEEL_COOLDOWN) { return; }
         // T136650
