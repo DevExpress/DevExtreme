@@ -2,6 +2,7 @@
   <div>
     <DxButton
       id="exportButton"
+      icon="exportpdf"
       text="Export to PDF"
       @click="exportGrid()"
     />

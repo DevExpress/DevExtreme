@@ -35,6 +35,7 @@ export default function App() {
       <div>
         <Button
           id='exportButton'
+          icon='exportpdf'
           text='Export to PDF'
           onClick={exportGrid}
         />

@@ -1,5 +1,6 @@
 $(function(){
     $('#exportButton').dxButton({
+        icon: 'exportpdf',
         text: 'Export to PDF',
         onClick: function() {
           const doc = new jsPDF();
