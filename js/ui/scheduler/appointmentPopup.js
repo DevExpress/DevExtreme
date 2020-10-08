@@ -27,6 +27,8 @@ const APPOINTMENT_POPUP_WIDTH_MOBILE = 350;
 const TOOLBAR_ITEM_AFTER_LOCATION = 'after';
 const TOOLBAR_ITEM_BEFORE_LOCATION = 'before';
 
+const DAY_IN_MS = 24 * 3600000;
+
 export default class AppointmentPopup {
     constructor(scheduler) {
         this.scheduler = scheduler;
@@ -355,7 +357,13 @@ export default class AppointmentPopup {
             when(this.saveChanges(true)).done(() => {
                 if(this.state.lastEditData) {
                     const startDate = this.scheduler.fire('getField', 'startDate', this.state.lastEditData);
-                    const allDay = this.scheduler.fire('getField', 'allDay', this.state.lastEditData);
+                    const endDate = this.scheduler.fire('getField', 'endDate', this.state.lastEditData);
+
+                    const startTime = startDate.getTime();
+                    const endTime = endDate.getTime();
+
+                    const allDay = this.scheduler.fire('getField', 'allDay', this.state.lastEditData)
+                        || (endTime - startTime) >= DAY_IN_MS;
 
                     this.scheduler._workSpace.updateScrollPosition(
                         startDate,
