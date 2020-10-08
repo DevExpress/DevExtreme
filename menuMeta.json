@@ -2796,8 +2796,7 @@
             "DemoType": "Viz",
             "MvcAdditionalFiles": [
               "/Models/SampleData/CustomPositionData.cs"
-            ],
-            "Badge": "New"
+            ]
           }
         ]
       },
@@ -2865,8 +2864,7 @@
               "/Models/DiscreteScaleTemperature.cs",
               "/Models/SampleData/DiscreteScaleTemperatures.cs"
             ],
-            "DemoType": "Viz",
-            "Badge": "New"
+            "DemoType": "Viz"
           }
         ]
       },
