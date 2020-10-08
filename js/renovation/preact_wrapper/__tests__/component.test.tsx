@@ -3,7 +3,8 @@
  */
 
 import { act } from 'preact/test-utils';
-import $ from '../../../core/renderer';
+// eslint-disable-next-line import/named
+import renderer, { dxElementWrapper } from '../../../core/renderer';
 import './utils/test_components/empty_test_widget';
 import './utils/test_components/preact_test_widget';
 import './utils/test_components/options_check_widget';
@@ -14,6 +15,13 @@ import {
   KEY,
 } from '../../test_utils/events_mock';
 import { setPublicElementWrapper } from '../../../core/element';
+
+const $ = renderer as (el: string | Element | dxElementWrapper) => dxElementWrapper & {
+  dxEmptyTestWidget: any;
+  dxPreactTestWidget: any;
+  dxOptionsCheckWidget: any;
+  dxTemplatedTestWidget: any;
+};
 
 beforeEach(() => {
   document.body.innerHTML = `
@@ -44,7 +52,7 @@ describe('Misc cases', () => {
     expect(subscribeEffect).toHaveBeenCalledTimes(1);
     expect(unsubscribeEffect).toHaveBeenCalledTimes(0);
 
-    act(() => $('#components').empty());
+    act(() => { $('#components').empty(); });
 
     expect(subscribeEffect).toHaveBeenCalledTimes(1);
     expect(unsubscribeEffect).toHaveBeenCalledTimes(1);
@@ -105,7 +113,8 @@ describe('Misc cases', () => {
 
 describe('Widget\'s container manipulations', () => {
   it('repaint redraws preact component 2 times', () => {
-    $('#component').css({ width: '123px', height: '456px' });
+    $('#component').css('width', '123px');
+    $('#component').css('height', '456px');
     $('#component').addClass('custom-css-class');
 
     const subscribeEffect = jest.fn();
@@ -143,8 +152,8 @@ describe('Widget\'s container manipulations', () => {
 
   it('preact component\'s root is widget\'s container after render in detached container', () => {
     const $container = $('#component');
-    const parent = $container.parent();
-    $container.remove();
+    const parent = $container.parent('');
+    $container.remove($container);
     act(() => $container.dxPreactTestWidget({ text: 'test' }));
 
     act(() => {
@@ -157,8 +166,8 @@ describe('Widget\'s container manipulations', () => {
 
   it('preact component\'s root is widget\'s container after render in detached container and repaint', () => {
     const $container = $('#component');
-    const parent = $container.parent();
-    $container.remove();
+    const parent = $container.parent('');
+    $container.remove($container);
     act(() => $container.dxPreactTestWidget({ text: 'test' }));
 
     act(() => {
@@ -172,8 +181,8 @@ describe('Widget\'s container manipulations', () => {
 
   it('html tree is correct after repaint detached component', () => {
     const $container = $('#component');
-    const parent = $container.parent();
-    $container.remove();
+    const parent = $container.parent('');
+    $container.remove($container);
     act(() => $container.dxPreactTestWidget({ text: 'test' }));
 
     act(() => {
@@ -304,7 +313,8 @@ describe('Widget\'s container manipulations', () => {
   });
 
   it('pass style as key_value pair to props', () => {
-    $('#component').css({ width: '123.5px', height: '456.6px' });
+    $('#component').css('width', '123.5px');
+    $('#component').css('height', '456.6px');
 
     act(() => $('#component').dxPreactTestWidget({}));
 
@@ -315,11 +325,14 @@ describe('Widget\'s container manipulations', () => {
   });
 
   it('pass updated style on repaint', () => {
-    $('#component').css({ width: '123.5px', height: '456.6px' });
+    $('#component').css('width', '123.5px');
+    $('#component').css('height', '456.6px');
 
     act(() => $('#component').dxPreactTestWidget({}));
 
-    $('#component').css({ width: '23.5px', height: '56.6px', display: 'inline' });
+    $('#component').css('width', '23.5px');
+    $('#component').css('height', '56.6px');
+    $('#component').css('display', 'inline');
 
     act(() => $('#component').dxPreactTestWidget('repaint'));
 
@@ -452,7 +465,7 @@ describe('templates and slots', () => {
 
     act(() => $('#component').dxTemplatedTestWidget({}));
 
-    expect($('#component').children().length).toBe(1);
+    expect(($('#component').children('') as any).length).toBe(1);
     expect($('#component')[0].innerHTML).toBe('<span>Default slot</span>');
   });
 
@@ -462,7 +475,7 @@ describe('templates and slots', () => {
 
     act(() => $('#component').dxTemplatedTestWidget({}));
 
-    expect($('#component').children()[0]).toBe(element[0]);
+    expect($('#component').children('')[0]).toBe(element[0]);
   });
 
   it('pass updated anonymous content on repaint', () => {
@@ -544,7 +557,7 @@ describe('templates and slots', () => {
   it('remove old template content between renders', () => {
     act(() => $('#component').dxTemplatedTestWidget({
       template(data, element) {
-        $(element).append(`<span>Template - ${data.simpleTemplate}</span>`);
+        $(element).append(`<span>Template - ${data.simpleTemplate}</span>` as any);
       },
     }));
     const templateRoot = $('#component').children('.templates-root')[0];
@@ -559,13 +572,13 @@ describe('templates and slots', () => {
   it('correctly change template at runtime', () => {
     const template = () => {
       const div = $('<div>');
-      div.append('first custom template');
+      div.append('first custom template' as any);
       return div;
     };
 
     const templateNew = () => {
       const div = $('<div>');
-      div.append('second custom template');
+      div.append('second custom template' as any);
       return div;
     };
     act(() => $('#component').dxTemplatedTestWidget({

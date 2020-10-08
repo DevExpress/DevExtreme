@@ -4,6 +4,7 @@ import {
   JSXComponent,
 } from 'devextreme-generator/component_declaration/common';
 
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const view = () => null;
 
 @ComponentBindings()

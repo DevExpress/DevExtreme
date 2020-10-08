@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component,
   ComponentBindings,
@@ -17,7 +18,7 @@ export const view = ({
     text,
   },
   restAttributes,
-}: TemplatedTestWidget): any => {
+}: TemplatedTestWidget): JSX.Element => {
   const hasTemplate = TemplateComp || IndexedTemplateComp || ElementTemplateComp;
   return (
     <div

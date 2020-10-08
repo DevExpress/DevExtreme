@@ -16,3 +16,4 @@ export type dxElement = HTMLElement & JQuery;
 export type dxSVGElement = SVGElement & JQuery;
 
 export function getPublicElement(element: JQuery|dxElementWrapper): dxElement;
+export function setPublicElementWrapper(newStrategy: (element: JQuery|dxElementWrapper) => dxElement): void;
