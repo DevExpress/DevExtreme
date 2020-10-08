@@ -31,8 +31,6 @@ let defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
 
-// let inited = false;
-// themeInitializedCallback.add(() => inited = true);
 themeInitializedCallback.add(initDeferred.resolve);
 
 function readThemeMarker() {
@@ -75,11 +73,6 @@ export function waitForThemeLoad(themeName) {
 
         themeReadyCallback.fire();
         themeReadyCallback.empty();
-
-        // if(!inited) {
-        //     themeInitializedCallback.fire();
-        //     themeInitializedCallback.empty();
-        // }
 
         initDeferred.resolve();
     }
@@ -399,8 +392,6 @@ function autoInit() {
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error('E0022');
     }
-
-    // initDeferred.resolve();
 }
 
 if(hasWindow()) {
@@ -429,17 +420,11 @@ export function resetTheme() {
     currentThemeName = null;
     pendingThemeName = null;
     initDeferred = new Deferred();
-    // inited = false;
     themeInitializedCallback.add(initDeferred.resolve);
 }
 
 export function initialized(callback) {
     initDeferred.done(callback);
-    // if(inited) {
-    //     callback();
-    // } else {
-    //     themeInitializedCallback.add(callback);
-    // }
 }
 
 export function setDefaultTimeout(timeout) {
