@@ -3,15 +3,17 @@ import { Export } from './export';
 import errors from '../../core/errors';
 
 const privateOptions = {
-    _setAutoFilter: function(dataProvider, worksheet, cellRange, autoFilterEnabled) {
+    _trySetAutoFilter: function(dataProvider, worksheet, cellRange, headerRowCount, autoFilterEnabled) {
         if(autoFilterEnabled) {
             if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
-                worksheet.autoFilter = cellRange;
+                const dataRange = { from: { row: cellRange.from.row + headerRowCount - 1, column: cellRange.from.column }, to: cellRange.to };
+
+                worksheet.autoFilter = dataRange;
             }
         }
     },
 
-    _setFont: function(excelCell, bold) {
+    _trySetFont: function(excelCell, bold) {
         if(isDefined(bold)) {
             excelCell.font = excelCell.font || {};
             excelCell.font.bold = bold;
