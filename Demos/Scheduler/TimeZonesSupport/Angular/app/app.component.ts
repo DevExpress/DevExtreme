@@ -16,7 +16,7 @@ if(!/localhost/.test(document.location.host)) {
     preserveWhitespaces: true
 })
 export class AppComponent {
-    currentDate: Date = new Date(2017, 4, 25);
+    currentDate: Date = new Date(2021, 4, 25);
     timezone: string;
     locations: Location[];
     dataSource: Data[];

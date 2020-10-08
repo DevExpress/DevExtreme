@@ -1,7 +1,7 @@
 export const dinnerTime = { from: 12, to: 13 };
 
 export const holidays = [
-  new Date(2021, 4, 25),
+  new Date(2021, 4, 27),
   new Date(2021, 6, 4)
 ];
 

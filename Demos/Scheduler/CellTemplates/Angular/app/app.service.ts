@@ -91,7 +91,7 @@ export class DataService {
 
     getHolidays() {
         return [
-            new Date(2021, 4, 25),
+            new Date(2021, 4, 27),
             new Date(2021, 6, 4)
         ];
     }

@@ -36,8 +36,7 @@ $(function(){
                         "<div>" + Globalize.formatDate(model.appointmentData.startDate, { time: "short" }) +
                             " - " + Globalize.formatDate(model.appointmentData.endDate, { time: "short" }) +
                         "</div>" + 
-                     "</div>"); 
-     
+                    "</div>");
         },
         onAppointmentFormOpening: function(data) {
             var form = data.form,
