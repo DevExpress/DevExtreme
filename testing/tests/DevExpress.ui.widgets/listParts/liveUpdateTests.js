@@ -208,8 +208,7 @@ QUnit.module('live update', {
                     { id: 2, text: 'item2' },
                     { id: 3, text: 'item3' },
                     { id: 4, text: 'item4' },
-                    { id: 5, text: 'item5' },
-
+                    { id: 5, text: 'item5' }
                 ]
             }
         });
