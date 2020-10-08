@@ -224,7 +224,7 @@ QUnit.module('live update', {
         ]);
         list.scrollTo(100);
 
-        assert.strictEqual(list.itemElements().length, 4, 'check items elements count');
+        assert.strictEqual(list.itemElements().length, 4, '2nd page is loaded');
     });
 
     QUnit.test('push & repaintChangesOnly', function(assert) {
