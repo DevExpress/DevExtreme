@@ -193,7 +193,7 @@ QUnit.module('live update', {
         assert.deepEqual(this.itemRenderedSpy.lastCall.args[0].itemData, pushData[1].data, 'check last updated item');
     });
 
-    QUnit.test('load new page by scrolling after updating an item', function(assert) {
+    QUnit.test('load new page by scrolling after updating an item (T937825)', function(assert) {
         const list = this.createList({
             pageLoadMode: 'scrollBottom',
             height: 40,
