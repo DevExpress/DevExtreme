@@ -332,7 +332,7 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
             width: 1000,
         });
 
-        this.instance.getWorkSpaceScrollable().scrollBy(170);
+        this.instance.getWorkSpaceScrollable().scrollBy(190);
 
         workSpace = this.instance.getWorkSpace();
 
