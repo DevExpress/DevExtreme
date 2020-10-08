@@ -3021,30 +3021,42 @@ class SchedulerWorkSpace extends WidgetObserver {
         const cellHeight = this.getCellHeight();
         const cellWidth = this.getCellWidth();
         const totalColumnCount = this._getTotalCellCount(this._getGroupCount());
+        const scrollableScrollTop = this.getScrollableScrollTop();
+        const scrollableScrollLeft = this.getScrollableScrollLeft();
 
-        let scrolledRowCount = this.getScrollableScrollTop() / cellHeight;
-        const scrolledColumnCount = this.getScrollableScrollLeft() / cellWidth;
+        let fullScrolledRowCount = scrollableScrollTop / cellHeight;
         if(this.isVirtualScrolling()) {
             const virtualScrollingState = this.virtualScrollingDispatcher.getState();
-            scrolledRowCount -= virtualScrollingState.topVirtualRowCount;
+            fullScrolledRowCount -= virtualScrollingState.topVirtualRowCount;
         }
 
-        const rowCount = scrolledRowCount + $scrollable.height() / cellHeight;
-        const columnCount = scrolledColumnCount + $scrollable.width() / cellWidth;
+        let scrolledRowCount = Math.floor(fullScrolledRowCount);
+        if(scrollableScrollTop % cellHeight !== 0) {
+            scrolledRowCount += 1;
+        }
+
+        const fullScrolledColumnCount = scrollableScrollLeft / cellWidth;
+        let scrolledColumnCount = Math.floor(fullScrolledColumnCount);
+        if(scrollableScrollLeft % cellWidth !== 0) {
+            scrolledColumnCount += 1;
+        }
+
+        const rowCount = Math.floor(fullScrolledRowCount + $scrollable.height() / cellHeight);
+        const columnCount = Math.floor(fullScrolledColumnCount + $scrollable.width() / cellWidth);
 
         const cells = this._getAllCells(inAllDayRow);
         const result = [];
 
         cells.each(function(index) {
-            const cell = $(this);
+            const $cell = $(this);
             const columnIndex = index % totalColumnCount;
             const rowIndex = index / totalColumnCount;
 
-            if((scrolledColumnCount - 1) <= columnIndex
+            if(scrolledColumnCount <= columnIndex
                 && columnIndex < columnCount
                 && scrolledRowCount <= rowIndex
-                && rowIndex <= rowCount) {
-                result.push(cell);
+                && rowIndex < rowCount) {
+                result.push($cell);
             }
         });
 
