@@ -207,16 +207,16 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _onEachAppointment: function(appointment, index, container, isRepaintAll) {
-        if(!isRepaintAll && appointment && appointment.needRemove === true) {
-            this._clearItem(appointment);
-            return;
-        }
-
-        if(this._isRepaintAppointment(appointment)) {
+        const repaintAppointment = () => {
             appointment.needRepaint = false;
-            !isRepaintAll && this._clearItem(appointment);
-
+            this._clearItem(appointment);
             this._renderItem(index, appointment, container);
+        };
+
+        if(appointment?.needRemove === true) {
+            this._clearItem(appointment);
+        } else if(isRepaintAll || this._isRepaintAppointment(appointment)) {
+            repaintAppointment();
         }
     },
 
