@@ -8,7 +8,8 @@ import 'generic_light.css!';
 import {
     createWrapper,
     initTestMarkup,
-    checkResultByDeviceType
+    checkResultByDeviceType,
+    isDesktopEnvironment
 } from '../../helpers/scheduler/helpers.js';
 
 const supportedViews = ['day', 'week', 'workWeek'];
@@ -432,6 +433,11 @@ module('AppointmentSettings', {
     });
 
     test('Recurrent appointment should have correct settings in vertical group orientation', function(assert) {
+        if(!isDesktopEnvironment()) {
+            assert.ok(true, 'This test is for desktop only');
+            return;
+        }
+
         const data = [{
             text: 'Test0',
             priorityId: 1,
@@ -774,6 +780,11 @@ module('Appointment filtering', function() {
         });
 
         test('Recurrent appointments should be filtered correctly in vertical group orientation', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
             const data = [{
                 text: 'Test0',
                 priorityId: 1,
