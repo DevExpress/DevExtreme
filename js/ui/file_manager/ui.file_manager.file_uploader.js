@@ -1,7 +1,6 @@
 import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { Deferred } from '../../core/utils/deferred';
-import { isDefined } from '../../core/utils/type';
 import { hasWindow } from '../../core/utils/window';
 import Guid from '../../core/guid';
 
@@ -86,8 +85,7 @@ class FileManagerFileUploader extends Widget {
 
     _cancelUpload(sessionId, fileIndex) {
         const { fileUploader } = this._findUploaderInfoBySessionId(sessionId);
-        const files = isDefined(fileIndex) ? [ fileUploader._files[fileIndex] ] : fileUploader._files;
-        fileUploader._preventFilesUploading(files);
+        fileUploader.abortUpload(fileIndex);
     }
 
     _fileUploaderUploadChunk(fileUploader, file, chunksInfo) {
@@ -221,7 +219,7 @@ class FileManagerFileUploader extends Widget {
         this._raiseUploadSessionStarted(sessionInfo);
 
         return whenSome(deferreds).always(() => setTimeout(() => {
-            uploaderInfo.fileUploader.option('value', []);
+            uploaderInfo.fileUploader.reset();
             uploaderInfo.session = null;
         }));
     }
