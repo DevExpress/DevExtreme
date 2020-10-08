@@ -21,7 +21,7 @@ export default {
   components: {
     DxTreeView
   },
-  data() {
+  setup() {
     return {
       dataSource: new DataSource({
         store: new ODataStore({
