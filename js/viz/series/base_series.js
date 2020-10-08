@@ -15,8 +15,8 @@ import * as scatterSeries from './scatter_series';
 import * as lineSeries from './line_series';
 import * as areaSeries from './area_series';
 import * as barSeries from './bar_series';
-import * as rangeSeries from './range_series';
-import * as bubbleSeries from './bubble_series';
+import { chart as rangeSeriesChart } from './range_series';
+import { chart as bubbleSeriesChart } from './bubble_series';
 import * as pieSeries from './pie_series';
 import * as financialSeries from './financial_series';
 import * as stackedSeries from './stacked_series';
@@ -62,9 +62,9 @@ seriesNS.mixins.chart.scatter = scatterSeries.chart;
 seriesNS.mixins.polar.scatter = scatterSeries.polar;
 
 _extend(seriesNS.mixins.pie, pieSeries);
-_extend(seriesNS.mixins.chart, lineSeries.chart, areaSeries.chart, barSeries.chart, rangeSeries.chart,
-    bubbleSeries.chart, financialSeries, stackedSeries.chart);
-_extend(seriesNS.mixins.polar, lineSeries.polar, areaSeries.polar, barSeries.polar, rangeSeries.polar, bubbleSeries.polar, stackedSeries.polar);
+_extend(seriesNS.mixins.chart, lineSeries.chart, areaSeries.chart, barSeries.chart, rangeSeriesChart,
+    bubbleSeriesChart, financialSeries, stackedSeries.chart);
+_extend(seriesNS.mixins.polar, lineSeries.polar, areaSeries.polar, barSeries.polar, stackedSeries.polar);
 
 function includePointsMode(mode) {
     mode = _normalizeEnum(mode);
