@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 // Should be before component import
 import { mount } from 'enzyme';
+// import { create as mount } from 'react-test-renderer';
 import each from 'jest-each';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
@@ -13,7 +14,7 @@ import config from '../../../../core/config';
 import { ConfigProvider } from '../config_provider';
 
 jest.mock('../../../../events/utils/index', () => ({
-  ...require.requireActual('../../../../events/utils/index'),
+  ...jest.requireActual('../../../../events/utils/index'),
   isFakeClickEvent: jest.fn(),
 }));
 jest.mock('../config_provider', () => ({ ConfigProvider: () => null }));
@@ -32,7 +33,6 @@ describe('Widget', () => {
         styles: { display: 'none' },
         attributes: { attributes: 'attributes' },
       } as any) as any);
-
       expect(widget.props()).toEqual({
         attributes: 'attributes',
         style: { display: 'none' },

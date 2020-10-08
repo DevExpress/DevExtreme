@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 
 jest.mock('../../../base/date_table/layout', () => ({
-  ...require.requireActual('../../../base/date_table/layout'),
+  ...jest.requireActual('../../../base/date_table/layout'),
   DateTableLayoutBase: (props) => <div {...props} />,
 }));
 
