@@ -2979,14 +2979,17 @@ class SchedulerWorkSpace extends WidgetObserver {
     updateScrollPosition(date, groups, allDay = false) {
         const scheduler = this.option('observer');
         const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        const inAllDayRow = allDay
+            && this.supportAllDayRow()
+            && this._isShowAllDayPanel();
 
-        if(this.needUpdateScrollPosition(newDate, groups, allDay)) {
-            this.scrollTo(newDate, groups, allDay, false);
+        if(this.needUpdateScrollPosition(newDate, groups, inAllDayRow)) {
+            this.scrollTo(newDate, groups, inAllDayRow, false);
         }
     }
 
-    needUpdateScrollPosition(date, groups, allDay) {
-        const cells = this._getCellsInViewport(allDay);
+    needUpdateScrollPosition(date, groups, inAllDayRow) {
+        const cells = this._getCellsInViewport(inAllDayRow);
         const groupIndex = groups
             ? this._getGroupIndexByResourceId(groups)
             : 0;
@@ -3003,9 +3006,9 @@ class SchedulerWorkSpace extends WidgetObserver {
             const cellStartTime = cellStartDate.getTime();
             const cellEndTime = cellEndDate.getTime();
 
-            if(((!allDay && cellStartTime <= time
+            if(((!inAllDayRow && cellStartTime <= time
                 && time < cellEndTime)
-                || (allDay && trimmedTime === cellStartTime))
+                || (inAllDayRow && trimmedTime === cellStartTime))
                 && groupIndex === cellGroupIndex) {
                 return false;
             }
@@ -3013,7 +3016,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         }, true);
     }
 
-    _getCellsInViewport(allDay) {
+    _getCellsInViewport(inAllDayRow) {
         const $scrollable = this.getScrollable().$element();
         const cellHeight = this.getCellHeight();
         const cellWidth = this.getCellWidth();
@@ -3029,7 +3032,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         const rowCount = scrolledRowCount + $scrollable.height() / cellHeight;
         const columnCount = scrolledColumnCount + $scrollable.width() / cellWidth;
 
-        const cells = this._getAllCells(allDay);
+        const cells = this._getAllCells(inAllDayRow);
         const result = [];
 
         cells.each(function(index) {
