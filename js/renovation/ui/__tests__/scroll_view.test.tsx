@@ -70,6 +70,51 @@ describe('ScrollView', () => {
 
   describe('Behavior', () => {
     describe('Methods', () => {
+      const createElement = ({
+        location,
+        width = 50,
+        height = 50,
+        offsetParent = {},
+        className = '',
+        isInScrollableContent = false,
+      }): HTMLElement => {
+        const checkSelector = (selector: string): boolean => className.indexOf(selector.replace('.', '')) > -1;
+        return {
+          offsetHeight: height,
+          offsetWidth: width,
+          offsetTop: location.top,
+          offsetLeft: location.left,
+          offsetParent,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          closest: (selector: string): Element | null => (
+            isInScrollableContent ? {} as Element : null
+          ),
+          matches: (selector: string): boolean => checkSelector(selector),
+        } as HTMLElement;
+      };
+
+      const createContainerRef = (
+        location: Location,
+        hasScrollBars?: boolean,
+      ): HTMLDivElement => ({
+        scrollTop: location.top,
+        scrollLeft: location.left,
+        offsetHeight: 300,
+        offsetWidth: 300,
+        clientWidth: hasScrollBars ? 283 : 300,
+      }) as HTMLDivElement;
+
+      const createTargetElement = (args): HTMLElement => {
+        const scrollableContent = createElement({
+          location: { },
+          className: SCROLLABLE_CONTENT_CLASS,
+        });
+        return createElement({
+          ...args,
+          ...{ offsetParent: scrollableContent, isInScrollableContent: true },
+        });
+      };
+
       describe('Content', () => {
         it('should get the content of the widget', () => {
           const scrollView = new ScrollView({});
@@ -282,51 +327,6 @@ describe('ScrollView', () => {
       });
 
       describe('ScrollToElement', () => {
-        const createElement = ({
-          location,
-          width = 50,
-          height = 50,
-          offsetParent = {},
-          className = '',
-          isInScrollableContent = false,
-        }): HTMLElement => {
-          const checkSelector = (selector: string): boolean => className.indexOf(selector.replace('.', '')) > -1;
-          return {
-            offsetHeight: height,
-            offsetWidth: width,
-            offsetTop: location.top,
-            offsetLeft: location.left,
-            offsetParent,
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            closest: (selector: string): Element | null => (
-              isInScrollableContent ? {} as Element : null
-            ),
-            matches: (selector: string): boolean => checkSelector(selector),
-          } as HTMLElement;
-        };
-
-        const createContainerRef = (
-          location: Location,
-          hasScrollBars?: boolean,
-        ): HTMLDivElement => ({
-          scrollTop: location.top,
-          scrollLeft: location.left,
-          offsetHeight: 300,
-          offsetWidth: 300,
-          clientWidth: hasScrollBars ? 283 : 300,
-        }) as HTMLDivElement;
-
-        const createTargetElement = (args): HTMLElement => {
-          const scrollableContent = createElement({
-            location: { },
-            className: SCROLLABLE_CONTENT_CLASS,
-          });
-          return createElement({
-            ...args,
-            ...{ offsetParent: scrollableContent, isInScrollableContent: true },
-          });
-        };
-
         const getOffsetValue = (
           name: keyof ScrollOffset,
           offset?,
@@ -613,6 +613,66 @@ describe('ScrollView', () => {
             expect(containerRef.scrollTop).toEqual(100);
             expect(containerRef.scrollLeft).toEqual(100);
           });
+        });
+      });
+
+      describe('ScrollHeight', () => {
+        it('should get height of the scroll content', () => {
+          const scrollView = new ScrollView({});
+          scrollView.contentRef = { offsetHeight: 300 } as HTMLDivElement;
+
+          expect(scrollView.scrollHeight()).toEqual(300);
+        });
+      });
+
+      describe('ScrollWidth', () => {
+        it('should get width of the scroll content', () => {
+          const scrollView = new ScrollView({});
+          scrollView.contentRef = { offsetWidth: 400 } as HTMLDivElement;
+
+          expect(scrollView.scrollWidth()).toEqual(400);
+        });
+      });
+
+      describe('ScrollOffset', () => {
+        it('should get scroll offset', () => {
+          const scrollView = new ScrollView({});
+          const location = { left: 130, top: 560 };
+          scrollView.containerRef = createContainerRef(location);
+
+          expect(scrollView.scrollOffset()).toEqual(location);
+        });
+
+        it('should get scroll top', () => {
+          const scrollView = new ScrollView({});
+          scrollView.containerRef = createContainerRef({ left: 130, top: 560 });
+
+          expect(scrollView.scrollTop()).toEqual(560);
+        });
+
+        it('should get scroll left', () => {
+          const scrollView = new ScrollView({});
+          scrollView.containerRef = createContainerRef({ left: 130, top: 560 });
+
+          expect(scrollView.scrollLeft()).toEqual(130);
+        });
+      });
+
+      describe('ClientHeight', () => {
+        it('should get client height of the scroll container', () => {
+          const scrollView = new ScrollView({});
+          scrollView.containerRef = { clientHeight: 120 } as HTMLDivElement;
+
+          expect(scrollView.clientHeight()).toEqual(120);
+        });
+      });
+
+      describe('ClientWidth', () => {
+        it('should get client width of the scroll container', () => {
+          const scrollView = new ScrollView({});
+          scrollView.containerRef = { clientWidth: 120 } as HTMLDivElement;
+
+          expect(scrollView.clientWidth()).toEqual(120);
         });
       });
     });
