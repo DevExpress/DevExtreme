@@ -4367,6 +4367,59 @@ QUnit.module('Integration: Appointments', {
                             workSpace.scrollTo.restore();
                         }
                     });
+
+                [{
+                    position: 'right',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                    scrollLeft: 0,
+                    scrollTop: 0,
+                }, {
+                    position: 'left',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    scrollLeft: 2,
+                    scrollTop: 0,
+                }, {
+                    position: 'top',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                    scrollLeft: 0,
+                    scrollTop: 2,
+                }, {
+                    position: 'bottom',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                    scrollLeft: 0,
+                    scrollTop: 0,
+                }].forEach(({ position, startDate, endDate, scrollLeft, scrollTop }) => {
+                    QUnit.test(
+                        `Scroll position should be updated if an appointment starts in a partially visible cell, ${position} end`,
+                        function(assert) {
+                            const scheduler = this.createScheduler({
+                                views: ['week'],
+                                currentView: 'week',
+                            });
+
+                            const appointment = {
+                                startDate,
+                                endDate,
+                                text: 'text',
+                            };
+                            const workSpace = scheduler.instance.getWorkSpace();
+                            const scrollTo = sinon.spy(workSpace, 'scrollTo');
+                            workSpace.getScrollable().scrollTo({ x: scrollLeft, y: scrollTop });
+
+                            try {
+                                scheduler.instance.showAppointmentPopup(appointment);
+                                scheduler.appointmentPopup.clickDoneButton();
+
+                                assert.ok(scrollTo.calledOnce, 'scrollTo was not called');
+                            } finally {
+                                workSpace.scrollTo.restore();
+                            }
+                        });
+                });
             });
         });
     });
