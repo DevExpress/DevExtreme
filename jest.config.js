@@ -8,6 +8,7 @@ module.exports = {
         'ts-jest': {
             tsConfig: './jest.tsconfig.json',
             diagnostics: false, // set to true to enable type checking
+            isolatedModules: true // performance optimization https://kulshekhar.github.io/ts-jest/user/config/isolatedModules
         }
     },
     collectCoverageFrom: [
