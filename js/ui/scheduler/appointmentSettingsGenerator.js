@@ -192,7 +192,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         const dateRange = this._getGroupDateRange(groupIndex);
 
         const startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
-            ? dateUtils.trimTime(new Date(dateRange[0]))
+            ? dateUtils.trimTime(dateRange[0])
             : dateRange[0];
         const commonTimeZone = this.scheduler.option('timeZone');
 
