@@ -4,8 +4,9 @@ import FileUploader from 'ui/file_uploader';
 import fx from 'animation/fx';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import ErrorCode from 'file_management/errors';
-import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
+import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader, getDropFileEvent } from '../../../helpers/fileManagerHelpers.js';
 import NoDuplicatesFileProvider from '../../../helpers/fileManager/file_provider.no_duplicates.js';
+import SlowFileProvider from '../../../helpers/fileManager/file_provider.slow.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 
 
@@ -803,6 +804,147 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(notificationInfo.details[0].commonText, targetFileName, 'Common text is correct');
         assert.ok(notificationInfo.details[0].hasError, 'Info has error');
         assert.strictEqual(notificationInfo.details[0].errorText, `File '${newFileName}' already exists.`, 'Error text is correct');
+    });
+
+    test('consequent upload of multiple files with drag and drop', function(assert) {
+        const operationDelay = 200;
+        const chunkSize = 50000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            upload: {
+                chunkSize
+            }
+        });
+        this.clock.tick(400);
+
+        let initialItemCount = this.wrapper.getDetailsItemsNames().length;
+        const file0 = createUploaderFiles(1)[0];
+
+        this.wrapper.getItemsViewPanel().trigger(getDropFileEvent(file0));
+        this.clock.tick((file0.size / chunkSize + 1) * operationDelay);
+
+        let itemNames = this.wrapper.getDetailsItemNamesTexts();
+        let uploadedFileIndex = itemNames.indexOf(file0.name);
+
+        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.ok(uploadedFileIndex > -1, 'file is uploaded');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'rendered one operation');
+        assert.strictEqual(infos[0].common.commonText, 'Uploaded an item to Files', 'Common operation text is correct');
+        assert.strictEqual(infos[0].details.length, 1, 'There is only one detail section in the info');
+        assert.strictEqual(infos[0].details[0].commonText, file0.name, 'Common details text is correct');
+        assert.notOk(infos[0].details[0].hasError, 'Info has no error');
+        assert.strictEqual(infos[0].details[0].$progressBar.length, 1, 'Info has progress bar');
+        assert.strictEqual(infos[0].details[0].progressBarStatusText, 'Done', 'Progress bar has correct status');
+        assert.strictEqual(infos[0].details[0].commonText, file0.name, 'Detail text is correct');
+
+        initialItemCount = this.wrapper.getDetailsItemsNames().length;
+        const file1 = createUploaderFiles(2)[1];
+
+        this.wrapper.getItemsViewPanel().trigger(getDropFileEvent(file1));
+        this.clock.tick((file1.size / chunkSize + 1) * operationDelay);
+
+        itemNames = this.wrapper.getDetailsItemNamesTexts();
+        uploadedFileIndex = itemNames.indexOf(file1.name);
+
+        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.ok(uploadedFileIndex > -1, 'file is uploaded');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '488.3 KB', 'file size is correct');
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 2, 'rendered two operation');
+        assert.strictEqual(infos[0].common.commonText, 'Uploaded an item to Files', 'Common operation text is correct');
+        assert.strictEqual(infos[0].details.length, 1, 'There is only one detail section in the info');
+        assert.strictEqual(infos[0].details[0].commonText, file1.name, 'Common details text is correct');
+        assert.notOk(infos[0].details[0].hasError, 'Info has no error');
+        assert.strictEqual(infos[0].details[0].$progressBar.length, 1, 'Info has progress bar');
+        assert.strictEqual(infos[0].details[0].progressBarStatusText, 'Done', 'Progress bar has correct status');
+        assert.strictEqual(infos[0].details[0].commonText, file1.name, 'Detail text is correct');
+    });
+
+    test('simultaneous upload of multiple files with drag and drop', function(assert) {
+        const operationDelay = 200;
+        const chunkSize = 50000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            upload: {
+                chunkSize
+            }
+        });
+        this.clock.tick(400);
+
+        const initialItemCount = this.wrapper.getDetailsItemsNames().length;
+        const file0 = createUploaderFiles(1)[0];
+        const timeToLoad0 = (file0.size / chunkSize + 1) * operationDelay;
+        const timeRemains0 = timeToLoad0 / 3;
+        const file1 = createUploaderFiles(2)[1];
+        const timeToLoad1 = (file1.size / chunkSize + 1) * operationDelay;
+        const timeRemains1 = timeToLoad1 / 3;
+
+        this.wrapper.getItemsViewPanel().trigger(getDropFileEvent(file0));
+        this.clock.tick(timeToLoad0 - timeRemains0);
+
+        let infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'rendered one operation');
+        assert.strictEqual(infos[0].common.commonText, 'Uploading an item to Files', 'Common operation text is correct');
+        assert.strictEqual(infos[0].details.length, 1, 'There is only one detail section in the info');
+        assert.strictEqual(infos[0].details[0].commonText, file0.name, 'Common details text is correct');
+        assert.notOk(infos[0].details[0].hasError, 'Info has no error');
+        assert.strictEqual(infos[0].details[0].$progressBar.length, 1, 'Info has progress bar');
+        assert.ok(infos[0].details[0].progressBarValue < 80, 'Progress bar has correct value');
+        assert.strictEqual(infos[0].details[0].commonText, file0.name, 'Detail text is correct');
+
+        this.wrapper.getItemsViewPanel().trigger(getDropFileEvent(file1));
+        this.clock.tick(timeToLoad1 - timeRemains1);
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 2, 'rendered two operation');
+        assert.strictEqual(infos[0].common.commonText, 'Uploading an item to Files', 'Common operation text is correct');
+        assert.strictEqual(infos[0].details.length, 1, 'There is only one detail section in the info');
+        assert.strictEqual(infos[0].details[0].commonText, file1.name, 'Common details text is correct');
+        assert.notOk(infos[0].details[0].hasError, 'Info has no error');
+        assert.strictEqual(infos[0].details[0].$progressBar.length, 1, 'Info has progress bar');
+        assert.ok(infos[0].details[0].progressBarValue < 80, 'Progress bar has correct value');
+        assert.strictEqual(infos[0].details[0].commonText, file1.name, 'Detail text is correct');
+
+        this.clock.tick(timeRemains0 + timeRemains1);
+
+        const itemNames = this.wrapper.getDetailsItemNamesTexts();
+        const uploadedFile0Index = itemNames.indexOf(file0.name);
+        const uploadedFile1Index = itemNames.indexOf(file1.name);
+
+        assert.strictEqual(initialItemCount + 2, itemNames.length, 'item count increased');
+        assert.ok(uploadedFile0Index > -1, 'file0 is uploaded');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFile0Index), '293 KB', 'file size is correct');
+
+        assert.ok(uploadedFile1Index > -1, 'file1 is uploaded');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFile1Index), '488.3 KB', 'file size is correct');
+
+        infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 2, 'rendered two operation');
+        assert.strictEqual(infos[0].common.commonText, 'Uploaded an item to Files', 'Common operation text is correct');
+        assert.strictEqual(infos[0].details.length, 1, 'There is only one detail section in the info 0');
+        assert.strictEqual(infos[0].details[0].commonText, file1.name, 'Common details text is correct');
+        assert.notOk(infos[0].details[0].hasError, 'Info 0 has no error');
+        assert.strictEqual(infos[0].details[0].$progressBar.length, 1, 'Info 0 has progress bar');
+        assert.strictEqual(infos[0].details[0].progressBarStatusText, 'Done', 'Progress bar has correct status');
+        assert.strictEqual(infos[0].details[0].commonText, file1.name, 'Detail text is correct');
+
+        assert.strictEqual(infos[1].common.commonText, 'Uploaded an item to Files', 'Common operation text is correct');
+        assert.strictEqual(infos[1].details.length, 1, 'There is only one detail section in the info 1');
+        assert.strictEqual(infos[1].details[0].commonText, file0.name, 'Common details text is correct');
+        assert.notOk(infos[1].details[0].hasError, 'Info 1 has no error');
+        assert.strictEqual(infos[1].details[0].$progressBar.length, 1, 'Info 1 has progress bar');
+        assert.strictEqual(infos[1].details[0].progressBarStatusText, 'Done', 'Progress bar has correct status');
+        assert.strictEqual(infos[1].details[0].commonText, file0.name, 'Detail text is correct');
     });
 
 });
