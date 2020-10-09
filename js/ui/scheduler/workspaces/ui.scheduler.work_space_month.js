@@ -78,12 +78,14 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     // TODO: temporary fix, in the future, if we replace table layout on div layout, getCellWidth method need remove. Details in T712431
     // TODO: there is a test for this bug, when changing the layout, the test will also be useless
     getCellWidth() {
-        const DAYS_IN_WEEK = 7;
+        return this.cache.get('cellWidth', () => {
+            const DAYS_IN_WEEK = 7;
 
-        let averageWidth = 0;
-        this._getCells().slice(0, DAYS_IN_WEEK).each((index, element) => averageWidth += getBoundingRect(element).width);
+            let averageWidth = 0;
+            this._getCells().slice(0, DAYS_IN_WEEK).each((index, element) => averageWidth += getBoundingRect(element).width);
 
-        return averageWidth / DAYS_IN_WEEK;
+            return averageWidth / DAYS_IN_WEEK;
+        });
     }
 
     _calculateHiddenInterval() {

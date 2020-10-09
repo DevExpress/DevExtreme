@@ -3615,6 +3615,7 @@ QUnit.test('Alignment right. Chart rotated', function(assert) {
 QUnit.module('Custom axis positioning', $.extend({}, moduleSetup, {
     beforeEach() {
         moduleSetup.beforeEach.call(this);
+        this.clock = sinon.useFakeTimers();
         this.options = {
             dataSource: [{
                 arg: 0,
@@ -3692,6 +3693,7 @@ QUnit.module('Custom axis positioning', $.extend({}, moduleSetup, {
     },
     afterEach() {
         moduleSetup.afterEach.call(this);
+        this.clock.restore();
     },
     createChart: function(options) {
         return moduleSetup.createChart.call(this, $.extend(true, {}, this.options, options));
@@ -3768,7 +3770,6 @@ QUnit.test('Zoom and pan', function(assert) {
     assert.ok(valAxis2._majorTicks[0].label.attr('translateY') < 0);
 
     const $root = $(chart._renderer.root.element);
-    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pageX: 200, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: 100, y: 0 } }));
     $root.trigger(new $.Event('dxdragend', {}));
@@ -3776,7 +3777,6 @@ QUnit.test('Zoom and pan', function(assert) {
     assert.roughEqual(valAxis2._axisPosition, 264, 6);
     assert.ok(valAxis2._majorTicks[0].label.attr('translateY') < 0);
 
-    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: -250, y: 0 } }));
     $root.trigger(new $.Event('dxdragend', {}));
@@ -3791,7 +3791,6 @@ QUnit.test('Zoom and pan', function(assert) {
 
     assert.roughEqual(valAxis1._axisPosition, 340, 8);
 
-    chart._lastRenderingTime = 0;
     $root.trigger(new $.Event('dxdragstart', { pageX: 500, pageY: 250 }));
     $root.trigger(new $.Event('dxdrag', { offset: { x: -400, y: 0 } }));
     $root.trigger(new $.Event('dxdragend', {}));

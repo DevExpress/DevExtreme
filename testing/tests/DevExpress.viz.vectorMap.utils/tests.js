@@ -83,6 +83,7 @@ QUnit.module('node - read and parse');
 
 testData.forEach(function(testDataItem) {
     QUnit.test(testDataItem.name, function(assert) {
+        assert.timeout(100000);
         const done = assert.async();
         $.getJSON(CONTROLLER_URL + 'ReadAndParse/' + testDataItem.name).done(function(response) {
             applyNodeDatesPatch(response.data);

@@ -895,3 +895,28 @@ QUnit.module('Appointment filtering', function() {
     });
 });
 
+QUnit.module('Appointments', {
+    before: function() {
+        this.createInstance = function(options) {
+            this.scheduler = createWrapper(options);
+            this.scheduler.instance
+                .getWorkSpace()
+                .virtualScrollingDispatcher
+                .getRenderTimeout = () => -1;
+        };
+    }
+}, function() {
+    QUnit.test('Appointments should be fully repainted', function(assert) {
+        this.createInstance({
+            currentDate: new Date(2015, 2, 2),
+            scrolling: {
+                mode: 'virtual'
+            },
+            height: 400
+        });
+
+        const { instance } = this.scheduler;
+
+        assert.ok(instance._appointments._isRepaintAll(), 'Full repaint flag is set');
+    });
+});

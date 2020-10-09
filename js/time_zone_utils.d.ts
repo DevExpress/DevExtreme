@@ -1,10 +1,10 @@
 /**
- * @docid Utils.getTimeZones
+ * @docid utils.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
  * @return Array<Object>
- * @namespace DevExpress.timeZoneUtils
- * @module time_zone
+ * @namespace DevExpress.utils
+ * @module time_zone_utils
  * @export getTimeZones
  * @static
  * @prevFileNamespace DevExpress

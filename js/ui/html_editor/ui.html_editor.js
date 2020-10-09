@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import { isDefined, isFunction } from '../../core/utils/type';
 import { getPublicElement } from '../../core/element';
-import { executeAsync, noop, ensureDefined } from '../../core/utils/common';
+import { executeAsync, noop, ensureDefined, deferRender } from '../../core/utils/common';
 import registerComponent from '../../core/component_registrator';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import Editor from '../editor/editor';
@@ -229,6 +229,10 @@ const HtmlEditor = Editor.inherit({
         this._addKeyPressHandler();
 
         return renderContentPromise;
+    },
+
+    _attachFocusEvents: function() {
+        deferRender(this.callBase.bind(this));
     },
 
     _addKeyPressHandler: function() {

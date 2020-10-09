@@ -570,6 +570,12 @@
     }
   },
   {
+    "name": "time_zone_utils",
+    "exports": {
+      "getTimeZones": { "path": "utils.getTimeZones" }
+    }
+  },
+  {
     "name": "ui/scroll_view",
     "exports": {
       "default": { "path": "ui.dxScrollView", "isWidget": true }

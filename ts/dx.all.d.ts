@@ -2855,7 +2855,7 @@ declare module DevExpress.fileManagement {
         /**
          * [descr:FileSystemProviderBase.abortFileUpload()]
          */
-        abortFileUpload(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+        abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
         /**
          * [descr:FileSystemProviderBase.copyItems()]
          */
@@ -2891,7 +2891,7 @@ declare module DevExpress.fileManagement {
         /**
          * [descr:FileSystemProviderBase.uploadFileChunk()]
          */
-        uploadFileChunk(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+        uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
     }
     /**
      * [descr:ObjectFileSystemProvider.Options]
@@ -3005,12 +3005,6 @@ declare module DevExpress.pdfExporter {
      * [descr:pdfExporter.exportDataGrid(options)]
      */
     export function exportDataGrid(options: PdfExportDataGridProps): Promise<void> & JQueryPromise<void>;
-}
-declare module DevExpress.timeZoneUtils {
-    /**
-     * [descr:Utils.getTimeZones(date)]
-     */
-    export function getTimeZones(date?: Date): Array<any>;
 }
 declare module DevExpress.ui {
     /**
@@ -8129,7 +8123,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxHtmlEditorToolbar.items]
          */
-        items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear'>;
+        items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
         /**
          * [descr:dxHtmlEditorToolbar.multiline]
          */
@@ -8142,7 +8136,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxHtmlEditorToolbarItem.formatName]
          */
-        formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | string;
+        formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
         /**
          * [descr:dxHtmlEditorToolbarItem.formatValues]
          */
@@ -12502,6 +12496,10 @@ declare module DevExpress.utils {
      */
     export function cancelAnimationFrame(requestID: number): void;
     /**
+     * [descr:utils.getTimeZones(date)]
+     */
+    export function getTimeZones(date?: Date): Array<any>;
+    /**
      * [descr:utils.initMobileViewport(options)]
      */
     export function initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;
@@ -14891,7 +14889,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.commonAxisSettings.label.template]
          */
-        template?: DevExpress.core.template | ((data: any, element: SVGGElement) => string | SVGElement | JQuery);
+        template?: DevExpress.core.template | ((data: { value?: Date | number | string, valueText?: string }, element: SVGGElement) => string | SVGElement | JQuery);
         /**
          * [descr:dxChart.Options.commonAxisSettings.label.textOverflow]
          */

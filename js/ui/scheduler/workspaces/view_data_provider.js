@@ -334,10 +334,34 @@ export default class ViewDataProvider {
         return dateTable[0][0].groups;
     }
 
-    getCellData(rowIndex, cellIndex) {
+    getCellData(rowIndex, cellIndex, isAllDay) {
+        if(isAllDay && !this._workspace._isVerticalGroupedWorkSpace()) {
+            return this._viewData.groupedData[0].allDayPanel[cellIndex];
+        }
+
         const { cellData } = this.viewDataMap[rowIndex][cellIndex];
 
         return cellData;
+    }
+
+    getCellsByGroupIndexAndAllDay(groupIndex, allDay) {
+        const workspace = this._workspace;
+        const rowsPerGroup = workspace._getRowCountWithAllDayRows();
+        const isVerticalGrouping = workspace._isVerticalGroupedWorkSpace();
+        const isShowAllDayPanel = workspace._isShowAllDayPanel();
+
+        const firstRowInGroup = isVerticalGrouping ? groupIndex * rowsPerGroup : 0;
+        const lastRowInGroup = isVerticalGrouping
+            ? (groupIndex + 1) * rowsPerGroup - 1
+            : rowsPerGroup;
+        const correctedFirstRow = isShowAllDayPanel && !allDay
+            ? firstRowInGroup + 1
+            : firstRowInGroup;
+        const correctedLastRow = allDay ? correctedFirstRow : lastRowInGroup;
+
+        return this.completeViewDataMap
+            .slice(correctedFirstRow, correctedLastRow + 1)
+            .map(row => row.filter(({ groupIndex: currentGroupIndex }) => groupIndex === currentGroupIndex));
     }
 
     findCellPositionInMap(groupIndex, startDate, isAllDay) {
@@ -354,7 +378,11 @@ export default class ViewDataProvider {
                 : startTime >= cellStartTime && startTime < cellEndTime;
         };
 
-        const rows = this.groupedDataMap[groupIndex];
+        const rows = isAllDay && !this._workspace._isVerticalGroupedWorkSpace()
+            ? [this.completeViewDataMap[0].map((cell, index) => ({
+                cellData: cell, position: { cellIndex: index, rowIndex: 0 }
+            }))]
+            : this.groupedDataMap[groupIndex] || [];
 
         for(let rowIndex = 0; rowIndex < rows.length; ++rowIndex) {
             const row = rows[rowIndex];
@@ -364,12 +392,14 @@ export default class ViewDataProvider {
                 const { cellData } = cell;
 
                 if(cellData.groupIndex === groupIndex) {
-                    if(isStartTimeInCell(cell.cellData)) {
+                    if(isStartTimeInCell(cellData)) {
                         return cell.position;
                     }
                 }
             }
         }
+
+        return undefined;
     }
 
     _getGroupData(groupIndex) {
