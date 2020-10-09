@@ -920,6 +920,23 @@ declare module DevExpress {
      */
     export var devices: DevicesObject;
     /**
+     * [descr:dxSchedulerTimeZone]
+     */
+    export interface dxSchedulerTimeZone  {
+        /**
+         * [descr:dxSchedulerTimeZone.id]
+         */
+        id: string;
+        /**
+         * [descr:dxSchedulerTimeZone.offset]
+         */
+        offset: number;
+        /**
+         * [descr:dxSchedulerTimeZone.title]
+         */
+        title: string;
+    }
+    /**
      * [descr:globalConfig]
      */
     export interface globalConfig {
@@ -12490,23 +12507,6 @@ declare module DevExpress.ui.dxOverlay {
      * [descr:ui.dxOverlay.baseZIndex(zIndex)]
      */
     export function baseZIndex(zIndex: number): void;
-}
-/**
- * [descr:dxSchedulerTimeZone]
- */
-export interface dxSchedulerTimeZone  {
-    /**
-     * [descr:dxSchedulerTimeZone.id]
-     */
-    id: string;
-    /**
-     * [descr:dxSchedulerTimeZone.offset]
-     */
-    offset: number;
-    /**
-     * [descr:dxSchedulerTimeZone.title]
-     */
-    title: string;
 }
 declare module DevExpress.utils {
     /**
