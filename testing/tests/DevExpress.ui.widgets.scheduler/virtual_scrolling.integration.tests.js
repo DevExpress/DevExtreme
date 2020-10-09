@@ -8,7 +8,8 @@ import 'generic_light.css!';
 import {
     createWrapper,
     initTestMarkup,
-    checkResultByDeviceType
+    checkResultByDeviceType,
+    isDesktopEnvironment
 } from '../../helpers/scheduler/helpers.js';
 
 const supportedViews = ['day', 'week', 'workWeek'];
@@ -430,6 +431,104 @@ module('AppointmentSettings', {
             });
         });
     });
+
+    test('Recurrent appointment should have correct settings in vertical group orientation', function(assert) {
+        if(!isDesktopEnvironment()) {
+            assert.ok(true, 'This test is for desktop only');
+            return;
+        }
+
+        const data = [{
+            text: 'Test0',
+            priorityId: 1,
+            startDate: new Date(2020, 9, 7, 0, 0),
+            endDate: new Date(2020, 9, 7, 0, 15),
+            recurrenceRule: 'FREQ=HOURLY'
+        }, {
+            text: 'Test1',
+            priorityId: 2,
+            startDate: new Date(2020, 9, 7, 0, 0),
+            endDate: new Date(2020, 9, 7, 1, 15),
+            recurrenceRule: 'FREQ=HOURLY'
+        }];
+
+        const instance = createWrapper({
+            dataSource: data,
+            views: [{
+                type: 'day',
+                groupOrientation: 'vertical',
+            }],
+            currentView: 'day',
+            scrolling: {
+                mode: 'virtual'
+            },
+            currentDate: new Date(2020, 9, 7),
+            groups: ['priorityId'],
+            resources: [{
+                fieldExpr: 'priorityId',
+                dataSource: [
+                    { id: 1 },
+                    { id: 2 }
+                ]
+            }],
+            height: 600
+        }).instance;
+
+        instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+        const scrollable = instance.getWorkSpace().getScrollable();
+
+        [
+            {
+                offsetY: 0,
+                expectedSettings: [
+                    {
+                        groupIndex: 0,
+                        topPositions: [50, 150, 250, 350, 450, 550, 650, 750]
+                    }
+                ]
+            },
+            {
+                offsetY: 2000,
+                expectedSettings: [
+                    {
+                        groupIndex: 0,
+                        topPositions: [1750, 1850, 1950, 2050, 2150, 2250, 2350]
+                    },
+                    {
+                        groupIndex: 1,
+                        topPositions: [2500, 2600, 2700]
+                    },
+                ]
+            },
+            {
+                offsetY: 4000,
+                expectedSettings: [
+                    {
+                        groupIndex: 1,
+                        topPositions: [3800, 3900, 4000, 4100, 4200, 4300, 4400, 4500, 4600, 4700]
+                    }
+                ]
+            },
+        ].forEach(option => {
+            scrollable.scrollTo({ y: option.offsetY });
+
+            const filteredItems = instance.getFilteredItems();
+
+            filteredItems.forEach((dataItem, index) => {
+                const settings = instance.fire('createAppointmentSettings', dataItem);
+                const {
+                    groupIndex,
+                    topPositions
+                } = option.expectedSettings[index];
+                topPositions.forEach((top, index) => {
+                    assert.equal(settings[index].groupIndex, groupIndex, `Appointment groupIndex ${groupIndex} is correct for offsetY: ${option.offsetY}`);
+                    assert.equal(settings[index].top, top, `Appointment top position ${top} is correct for offsetY: ${option.offsetY}`);
+                });
+            });
+
+        });
+    });
 });
 
 module('Appointment filtering', function() {
@@ -678,6 +777,74 @@ module('Appointment filtering', function() {
             assert.deepEqual(filteredItems[0], data[0], 'Filtered item 0 is correct');
             assert.deepEqual(filteredItems[1], data[1], 'Filtered item 1 is correct');
             assert.deepEqual(filteredItems[2], data[2], 'Filtered item 2 is correct');
+        });
+
+        test('Recurrent appointments should be filtered correctly in vertical group orientation', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
+            const data = [{
+                text: 'Test0',
+                priorityId: 1,
+                startDate: new Date(2020, 9, 7, 0, 0),
+                endDate: new Date(2020, 9, 7, 0, 15),
+                recurrenceRule: 'FREQ=HOURLY'
+            }, {
+                text: 'Test1',
+                priorityId: 2,
+                startDate: new Date(2020, 9, 7, 0, 0),
+                endDate: new Date(2020, 9, 7, 1, 15),
+                recurrenceRule: 'FREQ=HOURLY'
+            }];
+
+            const instance = createWrapper({
+                dataSource: data,
+                views: [{
+                    type: 'day',
+                    groupOrientation: 'vertical',
+                }],
+                currentView: 'day',
+                scrolling: {
+                    mode: 'virtual'
+                },
+                currentDate: new Date(2020, 9, 7),
+                groups: ['priorityId'],
+                resources: [{
+                    fieldExpr: 'priorityId',
+                    dataSource: [
+                        { id: 1 },
+                        { id: 2 }
+                    ]
+                }],
+                height: 600
+            }).instance;
+
+            instance.getWorkSpace().virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+            const scrollable = instance.getWorkSpace().getScrollable();
+
+            [
+                { offsetY: 0, expectedDataIndices: [0] },
+                { offsetY: 500, expectedDataIndices: [0] },
+                { offsetY: 1000, expectedDataIndices: [0] },
+                { offsetY: 2000, expectedDataIndices: [0, 1] },
+                { offsetY: 2500, expectedDataIndices: [0, 1] },
+                { offsetY: 4000, expectedDataIndices: [1] },
+                { offsetY: 4500, expectedDataIndices: [1] },
+            ].forEach(option => {
+                scrollable.scrollTo({ y: option.offsetY });
+
+                const filteredItems = instance.getFilteredItems();
+
+                const { expectedDataIndices } = option;
+                assert.equal(filteredItems.length, expectedDataIndices.length, 'Filtered items length is correct');
+
+                expectedDataIndices.forEach((dataIndex, index) => {
+                    assert.deepEqual(filteredItems[index], data[dataIndex], `Filtered item ${index} is correct`);
+                });
+            });
         });
     });
 

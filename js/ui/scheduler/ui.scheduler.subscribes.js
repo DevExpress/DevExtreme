@@ -515,6 +515,7 @@ const subscribes = {
                 : resourcesManager.getResourcesData();
 
             filterOptions.push({
+                isVirtualScrolling: true,
                 startDayHour,
                 endDayHour,
                 min: startDate,
