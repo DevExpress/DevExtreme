@@ -307,7 +307,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const internalData = this._getInternalData(params.key);
 
             if(internalData) {
-                return internalData;
+                return extend(internalData, params);
             }
 
             this._internalState.push(params);
@@ -1737,7 +1737,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
                 if(isError) {
                     if(editData) {
-                        this._addInternalData({ key: editData.key }).error = arg;
+                        this._addInternalData({ key: editData.key, error: arg });
                     }
                     that._fireDataErrorOccurred(arg);
                     if(editMode !== EDIT_MODE_BATCH) {
