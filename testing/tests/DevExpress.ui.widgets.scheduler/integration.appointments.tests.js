@@ -3997,6 +3997,34 @@ QUnit.module('Integration: Appointments', {
                     };
                 },
             }, () => {
+                const checkThatScrollToWasCalled = (assert, scheduler, appointment) => {
+                    const workSpace = scheduler.instance.getWorkSpace();
+                    const scrollTo = sinon.spy(workSpace, 'scrollTo');
+
+                    try {
+                        scheduler.instance.showAppointmentPopup(appointment);
+                        scheduler.appointmentPopup.clickDoneButton();
+
+                        assert.ok(scrollTo.calledOnce, 'scrollTo was called');
+                    } finally {
+                        workSpace.scrollTo.restore();
+                    }
+                };
+
+                const checkThatScrollToWasNotCalled = (assert, scheduler, appointment) => {
+                    const workSpace = scheduler.instance.getWorkSpace();
+                    const scrollTo = sinon.spy(workSpace, 'scrollTo');
+
+                    try {
+                        scheduler.instance.showAppointmentPopup(appointment);
+                        scheduler.appointmentPopup.clickDoneButton();
+
+                        assert.notOk(scrollTo.calledOnce, 'scrollTo was not called');
+                    } finally {
+                        workSpace.scrollTo.restore();
+                    }
+                };
+
                 [{
                     view: 'week',
                     startDate: new Date('2020-09-06T00:00:00'),
@@ -4056,17 +4084,8 @@ QUnit.module('Integration: Appointments', {
                                 text: 'text',
                                 ownerId: 1,
                             };
-                            const workSpace = scheduler.instance.getWorkSpace();
-                            const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
-                            try {
-                                scheduler.instance.showAppointmentPopup(appointment);
-                                scheduler.appointmentPopup.clickDoneButton();
-
-                                assert.notOk(scrollTo.calledOnce, 'scrollTo was not called');
-                            } finally {
-                                workSpace.scrollTo.restore();
-                            }
+                            checkThatScrollToWasNotCalled(assert, scheduler, appointment);
                         });
                 });
 
@@ -4127,17 +4146,8 @@ QUnit.module('Integration: Appointments', {
                             text: 'text',
                             ownerId: 2,
                         };
-                        const workSpace = scheduler.instance.getWorkSpace();
-                        const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
-                        try {
-                            scheduler.instance.showAppointmentPopup(appointment);
-                            scheduler.appointmentPopup.clickDoneButton();
-
-                            assert.ok(scrollTo.calledOnce, 'scrollTo was called');
-                        } finally {
-                            workSpace.scrollTo.restore();
-                        }
+                        checkThatScrollToWasCalled(assert, scheduler, appointment);
                     });
                 });
 
@@ -4177,17 +4187,8 @@ QUnit.module('Integration: Appointments', {
                                 text: 'text',
                                 ownerId: 1,
                             };
-                            const workSpace = scheduler.instance.getWorkSpace();
-                            const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
-                            try {
-                                scheduler.instance.showAppointmentPopup(appointment);
-                                scheduler.appointmentPopup.clickDoneButton();
-
-                                assert.notOk(scrollTo.calledOnce, 'scrollTo was not called');
-                            } finally {
-                                workSpace.scrollTo.restore();
-                            }
+                            checkThatScrollToWasNotCalled(assert, scheduler, appointment);
                         });
                 });
 
@@ -4227,17 +4228,8 @@ QUnit.module('Integration: Appointments', {
                                 text: 'text',
                                 ownerId: 2,
                             };
-                            const workSpace = scheduler.instance.getWorkSpace();
-                            const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
-                            try {
-                                scheduler.instance.showAppointmentPopup(appointment);
-                                scheduler.appointmentPopup.clickDoneButton();
-
-                                assert.ok(scrollTo.calledOnce, 'scrollTo was not called');
-                            } finally {
-                                workSpace.scrollTo.restore();
-                            }
+                            checkThatScrollToWasCalled(assert, scheduler, appointment);
                         });
                 });
 
@@ -4260,17 +4252,8 @@ QUnit.module('Integration: Appointments', {
                             ownerId: 1,
                             allDay: true,
                         };
-                        const workSpace = scheduler.instance.getWorkSpace();
-                        const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
-                        try {
-                            scheduler.instance.showAppointmentPopup(appointment);
-                            scheduler.appointmentPopup.clickDoneButton();
-
-                            assert.notOk(scrollTo.calledOnce, 'scrollTo was not called');
-                        } finally {
-                            workSpace.scrollTo.restore();
-                        }
+                        checkThatScrollToWasNotCalled(assert, scheduler, appointment);
                     });
 
                 QUnit.test(
@@ -4292,17 +4275,8 @@ QUnit.module('Integration: Appointments', {
                             ownerId: 2,
                             allDay: true,
                         };
-                        const workSpace = scheduler.instance.getWorkSpace();
-                        const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
-                        try {
-                            scheduler.instance.showAppointmentPopup(appointment);
-                            scheduler.appointmentPopup.clickDoneButton();
-
-                            assert.ok(scrollTo.calledOnce, 'scrollTo was not called');
-                        } finally {
-                            workSpace.scrollTo.restore();
-                        }
+                        checkThatScrollToWasCalled(assert, scheduler, appointment);
                     });
 
                 QUnit.test(
@@ -4323,17 +4297,8 @@ QUnit.module('Integration: Appointments', {
                             text: 'text',
                             ownerId: 1,
                         };
-                        const workSpace = scheduler.instance.getWorkSpace();
-                        const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
-                        try {
-                            scheduler.instance.showAppointmentPopup(appointment);
-                            scheduler.appointmentPopup.clickDoneButton();
-
-                            assert.notOk(scrollTo.calledOnce, 'scrollTo was not called');
-                        } finally {
-                            workSpace.scrollTo.restore();
-                        }
+                        checkThatScrollToWasNotCalled(assert, scheduler, appointment);
                     });
 
                 QUnit.test(
@@ -4354,17 +4319,8 @@ QUnit.module('Integration: Appointments', {
                             text: 'text',
                             ownerId: 2,
                         };
-                        const workSpace = scheduler.instance.getWorkSpace();
-                        const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
-                        try {
-                            scheduler.instance.showAppointmentPopup(appointment);
-                            scheduler.appointmentPopup.clickDoneButton();
-
-                            assert.ok(scrollTo.calledOnce, 'scrollTo was not called');
-                        } finally {
-                            workSpace.scrollTo.restore();
-                        }
+                        checkThatScrollToWasCalled(assert, scheduler, appointment);
                     });
 
                 [{
@@ -4406,17 +4362,9 @@ QUnit.module('Integration: Appointments', {
                                 text: 'text',
                             };
                             const workSpace = scheduler.instance.getWorkSpace();
-                            const scrollTo = sinon.spy(workSpace, 'scrollTo');
                             workSpace.getScrollable().scrollTo({ x: scrollLeft, y: scrollTop });
 
-                            try {
-                                scheduler.instance.showAppointmentPopup(appointment);
-                                scheduler.appointmentPopup.clickDoneButton();
-
-                                assert.ok(scrollTo.calledOnce, 'scrollTo was not called');
-                            } finally {
-                                workSpace.scrollTo.restore();
-                            }
+                            checkThatScrollToWasCalled(assert, scheduler, appointment);
                         });
                 });
             });
