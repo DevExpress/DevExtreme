@@ -228,6 +228,24 @@ Tooltip.prototype = {
 
     show: function(formatObject, params, eventData, customizeTooltip) {
         const that = this;
+        // trigger event
+        // The *onTooltipHidden* is triggered outside the *hide* method because of the cases when *show* is called to determine if tooltip will be visible or not (when target is changed) -
+        // *hide* can neither be called before that *show* - because if tooltip is determined to hide it requires some timeout before actually hiding
+        // nor after that *show* - because it is either too early to hide (because of timeout) or wrong (because tooltip has already been shown for new target)
+        // It is only inside the *show* where it is known weather *onTooltipHidden* is required or not
+        // This functionality can be simplified when we get rid of timeouts for tooltip
+        const riseEvents = () => {
+            that._eventData && that._eventTrigger('tooltipHidden', that._eventData);
+            that._eventData = eventData;
+            that._eventTrigger('tooltipShown', that._eventData);
+        };
+
+        if(that._options.forceEvents) { // for Blazor charts
+            eventData.x = params.x;
+            eventData.y = params.y - params.offset;
+            riseEvents();
+            return true;
+        }
         const state = {
             formatObject
         };
@@ -251,16 +269,7 @@ Tooltip.prototype = {
         }));
 
         that.moveWrapper();
-
-        // trigger event
-        // The *onTooltipHidden* is triggered outside the *hide* method because of the cases when *show* is called to determine if tooltip will be visible or not (when target is changed) -
-        // *hide* can neither be called before that *show* - because if tooltip is determined to hide it requires some timeout before actually hiding
-        // nor after that *show* - because it is either too early to hide (because of timeout) or wrong (because tooltip has already been shown for new target)
-        // It is only inside the *show* where it is known weather *onTooltipHidden* is required or not
-        // This functionality can be simplified when we get rid of timeouts for tooltip
-        that._eventData && that._eventTrigger('tooltipHidden', that._eventData);
-        that._eventData = eventData;
-        that._eventTrigger('tooltipShown', that._eventData);
+        riseEvents();
         return true;
     },
 
@@ -319,7 +328,8 @@ Tooltip.prototype = {
     },
 
     isEnabled: function() {
-        return !!this._options.enabled;
+        return !!this._options.enabled ||
+         !!this._options.forceEvents; // for Blazor charts
     },
 
     isShared: function() {
