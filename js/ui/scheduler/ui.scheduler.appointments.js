@@ -983,7 +983,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             startDate.setDate(startDate.getDate() + 1);
         }
 
-        while(appointmentIsLong && startDate.getTime() < endDate.getTime() - 1 && startDate < maxAllowedDate) {
+        while(appointmentIsLong && startDate.getTime() < endDate.getTime() && startDate < maxAllowedDate) {
             const currentStartDate = new Date(startDate);
             const currentEndDate = new Date(startDate);
 
@@ -997,6 +997,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             appointmentData.settings = appointmentSettings;
             result.push(appointmentData);
 
+            startDate = dateUtils.trimTime(startDate);
             startDate.setDate(startDate.getDate() + 1);
             startDate.setHours(startDayHour);
         }
