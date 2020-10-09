@@ -3044,10 +3044,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         const rowCount = Math.floor(fullScrolledRowCount + $scrollable.height() / cellHeight);
         const columnCount = Math.floor(fullScrolledColumnCount + $scrollable.width() / cellWidth);
 
-        const cells = this._getAllCells(inAllDayRow);
+        const $cells = this._getAllCells(inAllDayRow);
         const result = [];
 
-        cells.each(function(index) {
+        $cells.each(function(index) {
             const $cell = $(this);
             const columnIndex = index % totalColumnCount;
             const rowIndex = index / totalColumnCount;
