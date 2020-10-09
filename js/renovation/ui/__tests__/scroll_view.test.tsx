@@ -94,7 +94,7 @@ describe('ScrollView', () => {
       };
 
       const createContainerRef = (
-        location: Location,
+        location: Partial<Location>,
         hasScrollBars?: boolean,
       ): HTMLDivElement => ({
         scrollTop: location.top,
@@ -126,7 +126,7 @@ describe('ScrollView', () => {
 
       describe('ScrollBy', () => {
         it('should scroll by positive distance as number in the vertical direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 0 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 0 });
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -137,7 +137,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by positive distance as number in the horizontal direction', () => {
-          const containerRefMock = createContainerRef({ top: 0, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 0, left: 150 });
           const scrollView = new ScrollView({ direction: 'horizontal' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -148,7 +148,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by positive distance as number in the both direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 150 });
           const scrollView = new ScrollView({ direction: 'both' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -159,7 +159,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by positive distance as object in the vertical direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 0 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 0 });
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -170,7 +170,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by positive distance as object in the horizontal direction', () => {
-          const containerRefMock = createContainerRef({ top: 0, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 0, left: 150 });
           const scrollView = new ScrollView({ direction: 'horizontal' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -181,7 +181,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by positive distance as object in the both direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 150 });
           const scrollView = new ScrollView({ direction: 'both' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -192,7 +192,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by negative distance as number in the vertical direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 0 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 0 });
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -203,7 +203,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by negative distance as number in the horizontal direction', () => {
-          const containerRefMock = createContainerRef({ top: 0, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 0, left: 150 });
           const scrollView = new ScrollView({ direction: 'horizontal' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -214,7 +214,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by negative distance as number in the both direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 150 });
           const scrollView = new ScrollView({ direction: 'both' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -225,7 +225,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by negative distance as object in the vertical direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 0 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 0 });
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -236,7 +236,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by negative distance as object in the horizontal direction', () => {
-          const containerRefMock = createContainerRef({ top: 0, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 0, left: 150 });
           const scrollView = new ScrollView({ direction: 'horizontal' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -247,7 +247,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll by negative distance as object in the both direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 150 });
           const scrollView = new ScrollView({ direction: 'both' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -260,7 +260,7 @@ describe('ScrollView', () => {
 
       describe('ScrollTo', () => {
         it('should scroll to position as number in the vertical direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 0 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 0 });
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -271,7 +271,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll position as number in the horizontal direction', () => {
-          const containerRefMock = createContainerRef({ top: 0, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 0, left: 150 });
           const scrollView = new ScrollView({ direction: 'horizontal' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -282,7 +282,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll position as number in the both direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 150 });
           const scrollView = new ScrollView({ direction: 'both' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -293,7 +293,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll position as object in the vertical direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 0 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 0 });
           const scrollView = new ScrollView({ direction: 'vertical' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -304,7 +304,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll position as object in the horizontal direction', () => {
-          const containerRefMock = createContainerRef({ top: 0, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 0, left: 150 });
           const scrollView = new ScrollView({ direction: 'horizontal' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
@@ -315,7 +315,7 @@ describe('ScrollView', () => {
         });
 
         it('should scroll position as object in the both direction', () => {
-          const containerRefMock = createContainerRef({ top: 150, left: 150 } as Location);
+          const containerRefMock = createContainerRef({ top: 150, left: 150 });
           const scrollView = new ScrollView({ direction: 'both' });
           scrollView.containerRef = containerRefMock as HTMLDivElement;
 
