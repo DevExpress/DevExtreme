@@ -119,7 +119,7 @@ QUnit.module('ClientSideEvents.requestOperation', {
     test('requestOperation arguments', function(assert) {
         const $element = $('#diagram').dxDiagram({});
         const instance = $element.dxDiagram('instance');
-        const operationCount = 11;
+        const operationCount = 12;
         let count = 0;
         for(const key in DiagramModelOperation) {
             if(Object.prototype.hasOwnProperty.call(DiagramModelOperation, key)) { count++; }
