@@ -245,15 +245,16 @@ class FileManagerFileUploader extends Widget {
     }
 
     _findAndUpdateAvailableUploaderInfo() {
+        let info = null;
         for(let i = 0; i < this._uploaderInfos.length; i++) {
-            const info = this._uploaderInfos[i];
-            if(!info.session) {
-                info.fileUploader.option('dropZone', '');
-                info.fileUploader.option('dropZone', this.option('dropZone'));
-                return info;
+            const currentInfo = this._uploaderInfos[i];
+            currentInfo.fileUploader.option('dropZone', '');
+            if(!info && !currentInfo.session) {
+                info = currentInfo;
             }
         }
-        return null;
+        info.fileUploader.option('dropZone', this.option('dropZone'));
+        return info;
     }
 
     _findUploaderInfo(fileUploader) {
