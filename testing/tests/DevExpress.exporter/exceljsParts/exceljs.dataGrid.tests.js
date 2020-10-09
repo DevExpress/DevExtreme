@@ -5362,7 +5362,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 1 }, { row: 3, column: 1 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 1 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -5411,7 +5411,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
                 helper.checkValues(expectedCells);
@@ -5458,7 +5458,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 2, column: 4 }, { row: 2, column: 4 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 1, column: topLeft.column + 3 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 1, column: topLeft.column + 3 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -5520,7 +5520,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -5584,7 +5584,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 5 }, { row: 3, column: 5 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 4 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -5946,7 +5946,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn250Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -5996,7 +5996,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 3, column: 3 }, { row: 3, column: 3 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 2, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 1 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn150Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -6054,7 +6054,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -6108,7 +6108,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -6158,7 +6158,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 2 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -6216,7 +6216,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels, excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -6270,7 +6270,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -6320,7 +6320,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 1 }, { row: 4, column: 1 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 2 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn100Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -6378,7 +6378,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 3 }, { row: 4, column: 3 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 2 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels, excelColumnWidthFromColumn100Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -6432,7 +6432,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 2, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
@@ -6486,7 +6486,7 @@ const moduleConfig = {
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then((cellRange) => {
                 helper.checkRowAndColumnCount({ row: 4, column: 2 }, { row: 4, column: 2 }, topLeft);
-                helper.checkAutoFilter(autoFilterEnabled, { from: topLeft, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
+                helper.checkAutoFilter(autoFilterEnabled, { from: { row: topLeft.row + 1, column: topLeft.column }, to: { row: topLeft.row + 3, column: topLeft.column + 1 } }, { state: 'frozen', ySplit: topLeft.row + 2 });
                 helper.checkColumnWidths([excelColumnWidthFromColumn150Pixels, excelColumnWidthFromColumn200Pixels], topLeft.column);
                 helper.checkFont(expectedCells);
                 helper.checkAlignment(expectedCells);
