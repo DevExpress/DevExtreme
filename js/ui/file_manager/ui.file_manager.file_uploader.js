@@ -69,7 +69,7 @@ class FileManagerFileUploader extends Widget {
     }
 
     tryUpload() {
-        const info = this._findAvailableUploaderInfo();
+        const info = this._findAndUpdateAvailableUploaderInfo();
         if(info) {
             info.fileUploader._selectButtonClickHandler();
         }
@@ -112,7 +112,7 @@ class FileManagerFileUploader extends Widget {
         this._uploadFiles(uploaderInfo, files);
 
         setTimeout(() => {
-            if(!this._findAvailableUploaderInfo()) {
+            if(!this._findAndUpdateAvailableUploaderInfo()) {
                 this._createInternalFileUploader();
             }
         });
@@ -196,11 +196,6 @@ class FileManagerFileUploader extends Widget {
         this._dropZoneEnterCounter = 0;
     }
 
-    _updateDropZoneOwner(fileUploader) {
-        fileUploader.option('dropZone', '');
-        fileUploader.option('dropZone', this.option('dropZone'));
-    }
-
     _uploadFiles(uploaderInfo, files) {
         this._setDropZonePlaceholderVisible(false);
         const sessionId = new Guid().toString();
@@ -249,11 +244,12 @@ class FileManagerFileUploader extends Widget {
         return null;
     }
 
-    _findAvailableUploaderInfo() {
+    _findAndUpdateAvailableUploaderInfo() {
         for(let i = 0; i < this._uploaderInfos.length; i++) {
             const info = this._uploaderInfos[i];
             if(!info.session) {
-                this._updateDropZoneOwner(info.fileUploader);
+                info.fileUploader.option('dropZone', '');
+                info.fileUploader.option('dropZone', this.option('dropZone'));
                 return info;
             }
         }
@@ -310,7 +306,7 @@ class FileManagerFileUploader extends Widget {
                 this._actions[name] = this._createActionByOption(name);
                 break;
             case 'dropZone':
-                this._uploaderInfos[0].fileUploader.option('dropZone', args.value);
+                this._findAndUpdateAvailableUploaderInfo();
                 this._adjustDropZonePlaceholder();
                 this._resetDropZoneEnterCounter();
                 break;
