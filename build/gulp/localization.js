@@ -56,8 +56,12 @@ const accountingFormats = function() {
     const result = {};
 
     locales.forEach(function(locale) {
-        const numbersData = require(path.join(`../../node_modules/cldr-numbers-full/main/${locale}/numbers.json`));
-        result[locale] = numbersData.main[locale].numbers['currencyFormats-numberSystem-latn'].accounting;
+        const dataFilePath = `../../node_modules/cldr-numbers-full/main/${locale}/numbers.json`;
+
+        if(fs.existsSync(path.join(__dirname, dataFilePath))) {
+            const numbersData = require(dataFilePath);
+            result[locale] = numbersData.main[locale].numbers['currencyFormats-numberSystem-latn'].accounting;
+        }
     });
 
     return result;
