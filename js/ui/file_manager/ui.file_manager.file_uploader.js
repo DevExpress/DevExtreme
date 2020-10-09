@@ -253,7 +253,7 @@ class FileManagerFileUploader extends Widget {
                 info = currentInfo;
             }
         }
-        info.fileUploader.option('dropZone', this.option('dropZone'));
+        info?.fileUploader.option('dropZone', this.option('dropZone'));
         return info;
     }
 
