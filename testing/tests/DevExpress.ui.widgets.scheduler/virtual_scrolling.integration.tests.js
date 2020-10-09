@@ -14,7 +14,11 @@ import {
 const supportedViews = ['day', 'week', 'workWeek'];
 const unsupportedViews = ['month', 'timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'];
 
-const { testStart, test, module } = QUnit;
+const {
+    testStart,
+    test,
+    module
+} = QUnit;
 
 testStart(() => initTestMarkup());
 
@@ -121,7 +125,7 @@ module('Initialization', () => {
             });
         });
 
-        QUnit.module('Options', () => {
+        module('Options', () => {
             test(`viewportHeight should be correct if height is not set in ${viewName} view`, function(assert) {
                 const { instance } = createWrapper({
                     views: [{
@@ -236,7 +240,7 @@ module('Initialization', () => {
     });
 });
 
-QUnit.module('AppointmentSettings', {
+module('AppointmentSettings', {
     before: function() {
         this.createInstance = function(options) {
             this.scheduler = createWrapper(options);
@@ -249,7 +253,7 @@ QUnit.module('AppointmentSettings', {
 }, function() {
     supportedViews.forEach(viewName => {
         [undefined, 'FREQ=DAILY'].forEach(recurrenceRule => {
-            QUnit.test(`Appointments should contains groupIndex if recurrenceRule: ${recurrenceRule}, view: ${viewName}`, function(assert) {
+            test(`Appointments should contains groupIndex if recurrenceRule: ${recurrenceRule}, view: ${viewName}`, function(assert) {
                 this.createInstance({
                     currentDate: new Date(2015, 2, 2),
                     scrolling: {
@@ -270,7 +274,7 @@ QUnit.module('AppointmentSettings', {
             });
         });
 
-        QUnit.test(`Grouped appointment should contains correct groupIndex if ${viewName} view has vertical group orientation`, function(assert) {
+        test(`Grouped appointment should contains correct groupIndex if ${viewName} view has vertical group orientation`, function(assert) {
             this.createInstance({
                 currentDate: new Date(2015, 2, 2),
                 views: [{
@@ -300,7 +304,7 @@ QUnit.module('AppointmentSettings', {
             assert.equal(settings[0].groupIndex, 0, 'groupIndex is correct');
         });
 
-        QUnit.test(`Grouped appointment should contains correct groupIndex if ${viewName} view has horizontal group orientation`, function(assert) {
+        test(`Grouped appointment should contains correct groupIndex if ${viewName} view has horizontal group orientation`, function(assert) {
             this.createInstance({
                 currentDate: new Date(2015, 2, 2),
                 views: [{
@@ -333,7 +337,7 @@ QUnit.module('AppointmentSettings', {
             assert.equal(settings[0].groupIndex, 1, 'groupIndex is correct');
         });
 
-        QUnit.test(`Grouped allDay appointment should contains correct groupIndex if ${viewName} view has vertical group orientation`, function(assert) {
+        test(`Grouped allDay appointment should contains correct groupIndex if ${viewName} view has vertical group orientation`, function(assert) {
             this.createInstance({
                 currentDate: new Date(2015, 2, 2),
                 scrolling: {
@@ -377,7 +381,7 @@ QUnit.module('AppointmentSettings', {
                 { y: 1500, expectedDate: new Date(2015, 2, 4, 13, 30) },
                 { y: 2000, expectedDate: new Date(2015, 2, 4, 18, 30) }
             ].forEach(option => {
-                QUnit.test(`A long appointment should be correctly croped if view: ${viewName}, ${groupOrientation} group orientation, scroll position ${option.y}`, function(assert) {
+                test(`A long appointment should be correctly croped if view: ${viewName}, ${groupOrientation} group orientation, scroll position ${option.y}`, function(assert) {
                     this.createInstance({
                         currentDate: new Date(2015, 2, 4),
                         scrolling: {
@@ -428,10 +432,10 @@ QUnit.module('AppointmentSettings', {
     });
 });
 
-QUnit.module('Appointment filtering', function() {
-    QUnit.module('Init', function() {
+module('Appointment filtering', function() {
+    module('Init', function() {
         ['vertical', 'horizontal'].forEach(groupOrientation => {
-            QUnit.test(`Should be filtered correctly when groupOrientation: ${groupOrientation}`, function(assert) {
+            test(`Should be filtered correctly when groupOrientation: ${groupOrientation}`, function(assert) {
                 const data = [
                     {
                         startDate: new Date(2016, 9, 5, 0, 0),
@@ -482,7 +486,7 @@ QUnit.module('Appointment filtering', function() {
                 assert.deepEqual(filteredItems[2], data[2], 'Filtered item 2 is correct');
             });
 
-            QUnit.test(`Should be filtered correctly with resources when groupOrientation: ${groupOrientation}`, function(assert) {
+            test(`Should be filtered correctly with resources when groupOrientation: ${groupOrientation}`, function(assert) {
                 const data = [
                     {
                         startDate: new Date(2016, 9, 5, 0, 0),
@@ -547,7 +551,7 @@ QUnit.module('Appointment filtering', function() {
             });
         });
 
-        QUnit.test('Grouped appointments should be filtered correctly when groupOrientation: "vertical"', function(assert) {
+        test('Grouped appointments should be filtered correctly when groupOrientation: "vertical"', function(assert) {
             const data = [
                 {
                     startDate: new Date(2016, 9, 5, 0, 0),
@@ -611,7 +615,7 @@ QUnit.module('Appointment filtering', function() {
             assert.deepEqual(filteredItems[1], data[2], 'Filtered item 1 is correct');
         });
 
-        QUnit.test('Grouped appointments should be filtered correctly when groupOrientation: "horizontal"', function(assert) {
+        test('Grouped appointments should be filtered correctly when groupOrientation: "horizontal"', function(assert) {
             const data = [
                 {
                     startDate: new Date(2016, 9, 5, 0, 0),
@@ -677,7 +681,7 @@ QUnit.module('Appointment filtering', function() {
         });
     });
 
-    QUnit.module('On scrolling', {
+    module('On scrolling', {
         beforeEach: function() {
             this.data = [
                 {
@@ -752,7 +756,7 @@ QUnit.module('Appointment filtering', function() {
             { y: 1700, expectedIndices: [4, 5] },
             { y: 2400, expectedIndices: [4, 5] }
         ].forEach(option => {
-            QUnit.test(`Scrolling Down if groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
+            test(`Scrolling Down if groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
                 const { expectedIndices } = option;
 
                 this.createInstance();
@@ -783,7 +787,7 @@ QUnit.module('Appointment filtering', function() {
             { y: 300, expectedIndices: [1, 2] },
             { y: 0, expectedIndices: [0, 1, 2] }
         ].forEach(option => {
-            QUnit.test(`Scrolling Up if groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
+            test(`Scrolling Up if groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
                 const { expectedIndices } = option;
 
                 this.createInstance();
@@ -816,7 +820,7 @@ QUnit.module('Appointment filtering', function() {
             { y: 3300, expectedIndices: [3] },
             { y: 4300, expectedIndices: [] },
         ].forEach(option => {
-            QUnit.test(`Scrolling Down if groups, resources, groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
+            test(`Scrolling Down if groups, resources, groupOrientation: 'vertical', scrollY: ${option.y}`, function(assert) {
                 const { expectedIndices } = option;
 
                 this.createInstance({
@@ -850,7 +854,7 @@ QUnit.module('Appointment filtering', function() {
         });
 
         [0, 300, 900, 1700, 2400, 2700, 3000, 3300, 4300 ].forEach(scrollY => {
-            QUnit.test(`Next day appointments should be filtered if grouping, groupOrientation: 'vertical', scrollY: ${scrollY}`, function(assert) {
+            test(`Next day appointments should be filtered if grouping, groupOrientation: 'vertical', scrollY: ${scrollY}`, function(assert) {
                 this.createInstance({
                     groups: ['resourceId0'],
                     dataSource: [{
@@ -895,7 +899,7 @@ QUnit.module('Appointment filtering', function() {
     });
 });
 
-QUnit.module('Appointments', {
+module('Appointments', {
     before: function() {
         this.createInstance = function(options) {
             this.scheduler = createWrapper(options);
@@ -906,7 +910,7 @@ QUnit.module('Appointments', {
         };
     }
 }, function() {
-    QUnit.test('Appointments should be fully repainted', function(assert) {
+    test('Repaint all flag should be set', function(assert) {
         this.createInstance({
             currentDate: new Date(2015, 2, 2),
             scrolling: {
@@ -918,5 +922,49 @@ QUnit.module('Appointments', {
         const { instance } = this.scheduler;
 
         assert.ok(instance._appointments._isRepaintAll(), 'Full repaint flag is set');
+    });
+
+
+    ['vertical', 'horizontal'].forEach(groupOrientation => {
+        test(`Created appointments should be fully repainted in ${groupOrientation} group orientation`, function(assert) {
+            this.createInstance({
+                currentDate: new Date(2015, 2, 2),
+                dataSource: [],
+                views: [{
+                    type: 'week',
+                    groupOrientation,
+                    cellDuration: 30,
+                }],
+                currentView: 'week',
+                scrolling: {
+                    mode: 'virtual'
+                },
+                groups: ['priorityId'],
+                resources: [{
+                    fieldExpr: 'priorityId',
+                    dataSource: [
+                        { id: 0 },
+                        { id: 1 },
+                    ],
+                }],
+                height: 400
+            });
+
+            const { instance } = this.scheduler;
+
+            instance.addAppointment({
+                startDate: new Date(2015, 2, 2, 1),
+                endDate: new Date(2015, 2, 2, 1, 30),
+                priorityId: 0
+            });
+
+            instance.addAppointment({
+                startDate: new Date(2015, 2, 2, 1, 30),
+                endDate: new Date(2015, 2, 2, 2),
+                priorityId: 0
+            });
+
+            assert.equal(this.scheduler.appointments.getAppointmentCount(), 2, 'Appointments rendered correctly');
+        });
     });
 });
