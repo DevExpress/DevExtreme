@@ -1,8 +1,32 @@
+export interface dxSchedulerTimeZone {
+    /**
+     * @docid dxSchedulerTimeZone.id
+     * @type string
+     * @prevFileNamespace DevExpress
+     * @public
+     */
+    id: string;
+    /**
+     * @docid dxSchedulerTimeZone.offset 
+     * @type number
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    offset: number;
+     /**
+     * @docid dxSchedulerTimeZone.title 
+     * @type string
+     * @prevFileNamespace DevExpress
+     * @public
+     */
+    title: string;
+}
+
 /**
  * @docid utils.getTimeZones
  * @publicName getTimeZones(date)
  * @param1 date:Date|undefined
- * @return Array<Object>
+ * @return Array<dxSchedulerTimeZone>
  * @namespace DevExpress.utils
  * @module time_zone_utils
  * @export getTimeZones
@@ -10,4 +34,4 @@
  * @prevFileNamespace DevExpress
  * @public
  */
-export function getTimeZones(date?: Date): Array<{id: string, title: string, offset: number}>;
+export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
