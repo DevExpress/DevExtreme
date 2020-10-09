@@ -872,6 +872,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 this._applyTabIndexToElement(this._focusedView.element());
                 this._focusedView.focus();
             } else if(!this._isMasterDetailCell($target) && !isEditingRow) {
+            // } else if(!this._isMasterDetailCell($target)) {
                 this._clickTargetCellHandler(event, $target);
             } else {
                 this._updateFocusedCellPosition($target);
@@ -1091,7 +1092,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                             }
                             !isFocusedElementDefined && this._focus($cell);
                         } else if(this._isCellEditMode() || this._isNeedFocus) {
-                            !$cell.hasClass(COMMAND_EDIT_CLASS) && this._focus($cell, this._isHiddenFocus);
+                            this._focus($cell, this._isHiddenFocus);
                         } else if(this._isHiddenFocus) {
                             this._focus($cell, true);
                         }

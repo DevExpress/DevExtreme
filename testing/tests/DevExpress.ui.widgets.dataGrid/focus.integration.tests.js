@@ -3698,12 +3698,12 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.ok($focused.closest('.dx-command-edit').length, 'focused element is command cell child');
 
         // act
-        $('.dx-link-cancel').trigger('click');
+        $('.dx-link-cancel').trigger('dxpointerdown').trigger('click');
         this.clock.tick();
 
         // assert
         const $commandCell = $(dataGrid.getCellElement(0, 1));
-        assert.notOk($(':focus').length, 'no focus');
+        assert.ok($commandCell.is(':focus'), 'command cell is focused');
         assert.notOk($commandCell.hasClass('dx-focused'), 'no dx-focused class');
     });
 });
