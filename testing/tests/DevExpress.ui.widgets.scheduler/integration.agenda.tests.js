@@ -1523,3 +1523,39 @@ QUnit.test('Appointments should be rendered correctly if agenda view is set as o
     assert.equal($appointments.first().position().top, 0, 'appointment position is OK');
     assert.equal($appointments.last().position().top, 240, 'appointment position is OK');
 });
+
+QUnit.test('Long appointment should not affect render the next appointment', function(assert) {
+    const data = [{
+        text: 'Long',
+        startDate: new Date(2020, 9, 1, 21, 15),
+        endDate: new Date(2020, 9, 2, 9, 15)
+    }, {
+        text: 'Simple',
+        startDate: new Date(2020, 9, 4, 21, 16),
+        endDate: new Date(2020, 9, 4, 22)
+    }];
+
+    this.createInstance({
+        currentView: 'agenda',
+        currentDate: new Date(2020, 9, 1),
+        startDayHour: 9,
+        dataSource: data
+    });
+
+    const items = this.instance._appointments.option('items');
+
+    let settings = items[0].itemData.settings;
+    assert.deepEqual(settings.startDate, data[0].startDate, 'Long item part 0 settings startDate is correct');
+    assert.deepEqual(settings.endDate, new Date(2020, 9, 2, 0, 0), 'Long item part 0 settings endDate is correct');
+
+    settings = items[1].itemData.settings;
+    assert.deepEqual(settings.startDate, new Date(2020, 9, 2, 9, 0), 'Long item part 1 settings startDate is correct');
+    assert.deepEqual(settings.endDate, new Date(2020, 9, 2, 9, 15), 'Long item part 1 settings endDate is correct');
+
+    settings = items[2].itemData.settings;
+    assert.notOk(items[2].itemData.settings, 'Simple item settings are empty');
+
+    const { itemData } = items[2];
+    assert.deepEqual(itemData.startDate, data[1].startDate, 'Simple item startDate is correct');
+    assert.deepEqual(itemData.endDate, data[1].endDate, 'Simple item endDate is correct');
+});
