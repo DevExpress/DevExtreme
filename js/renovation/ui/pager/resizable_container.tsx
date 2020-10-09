@@ -1,12 +1,11 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, ComponentBindings, JSXComponent,
-  Effect, Template, InternalState, ForwardRef, OneWay,
+  Effect, Template, InternalState, OneWay, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import PagerProps from './common/pager_props';
-import { GetHtmlElement } from './common/types.d';
 import { getElementWidth } from './utils/get_element_width';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
 
@@ -82,13 +81,13 @@ export class ResizableContainerProps {
   view: viewFunction,
 })
 export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps' | 'contentTemplate'>() {
-  @ForwardRef() parentRef!: GetHtmlElement;
+  @Ref() parentRef!: HTMLDivElement;
 
-  @ForwardRef() pageSizesRef?: GetHtmlElement;
+  @Ref() pageSizesRef?: HTMLDivElement;
 
-  @ForwardRef() infoTextRef?: GetHtmlElement;
+  @Ref() infoTextRef?: HTMLDivElement;
 
-  @ForwardRef() pagesRef!: HTMLElement | undefined;
+  @Ref() pagesRef?: HTMLElement;
 
   @InternalState() infoTextVisible = true;
 
@@ -108,7 +107,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   }
 
   @Effect({ run: 'always' }) effectUpdateChildProps(): void {
-    const parentWidth = getElementWidth(this.parentRef.getHtmlElement());
+    const parentWidth = getElementWidth(this.parentRef);
     if (parentWidth > 0) {
       this.updateChildrenProps();
     }
@@ -124,9 +123,9 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
   updateChildrenProps(): void {
     const elementsWidth = getElementsWidth({
-      parent: this.parentRef.getHtmlElement(),
-      pageSizes: this.pageSizesRef?.getHtmlElement(),
-      info: this.infoTextRef?.getHtmlElement(),
+      parent: this.parentRef,
+      pageSizes: this.pageSizesRef,
+      info: this.infoTextRef,
       pages: this.pagesRef,
     });
     const current = calculateAdaptivityProps(elementsWidth);

@@ -93,11 +93,24 @@ describe('Pager size selector', () => {
       expect(component.normalizedPageSizes).toEqual([{ text: 'All', value: 0 }, { text: 'All', value: 0 }]);
     });
 
-    it('getHtmlElement', () => {
-      const htmlRef = {} as HTMLDivElement;
-      const component = new PageSizeSelector({ pageSizes: [5, 10], pageSizeChange: jest.fn() });
-      component.htmlRef = htmlRef;
-      expect(component.getHtmlElement()).toBe(htmlRef);
+    describe('setRootElementRef', () => {
+      it('set rootElementRef to div ref', () => {
+        const widgetRef = {} as HTMLDivElement;
+        const component = new PageSizeSelector({
+          rootElementRef: {} as HTMLDivElement,
+        });
+        component.htmlRef = widgetRef;
+        component.setRootElementRef();
+
+        expect(component.props.rootElementRef).toBe(component.htmlRef);
+      });
+
+      it('hasnt rootElementRef', () => {
+        const component = new PageSizeSelector({ });
+        component.htmlRef = {} as HTMLDivElement;
+        component.setRootElementRef();
+        expect(component.props.rootElementRef).toBeUndefined();
+      });
     });
   });
 });

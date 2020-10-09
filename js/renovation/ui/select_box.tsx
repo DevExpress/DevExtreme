@@ -10,10 +10,14 @@ import LegacySelectBox from '../../ui/select_box';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
 import { EventCallback } from './common/event_callback.d';
 
-export const viewFunction = ({ props, restAttributes }: SelectBox): JSX.Element => (
+export const viewFunction = ({
+  props: { rootElementRef, ...componentProps },
+  restAttributes,
+}: SelectBox): JSX.Element => (
   <DomComponentWrapper
+    rootElementRef={rootElementRef as any}
     componentType={LegacySelectBox}
-    componentProps={props}
+    componentProps={componentProps}
   // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />

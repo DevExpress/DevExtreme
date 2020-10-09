@@ -1,23 +1,26 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import React from 'react';
-import { mount } from 'enzyme';
-import DxSelectBox from '../../../ui/select_box';
+import { shallow } from 'enzyme';
+import LegacySelectBox from '../../../ui/select_box';
 import { viewFunction as SelectBoxView, SelectBoxProps, SelectBox } from '../select_box';
 import { DomComponentWrapper } from '../common/dom_component_wrapper';
 
-jest.mock('../../../ui/validation_message', () => jest.fn());
+jest.mock('../../../ui/select_box', () => jest.fn());
 
 describe('Selectbox', () => {
   it('View render', () => {
+    const rootElementRef = { } as HTMLDivElement;
+    const componentProps = new SelectBoxProps();
     const props = {
-      props: new SelectBoxProps(),
+      props: { ...componentProps, rootElementRef },
       restAttributes: { 'rest-attributes': 'true' },
     } as Partial<SelectBox>;
-    const tree = mount(<SelectBoxView {...props as any} /> as any);
+    const tree = shallow(<SelectBoxView {...props as any} /> as any);
 
     expect(tree.find(DomComponentWrapper).props()).toMatchObject({
-      componentProps: props.props,
-      componentType: DxSelectBox,
+      rootElementRef: {},
+      componentProps,
+      componentType: LegacySelectBox,
       'rest-attributes': 'true',
     });
   });

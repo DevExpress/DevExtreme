@@ -10,6 +10,7 @@ import {
   Ref,
   Slot,
   Consumer,
+  ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 import '../../../events/click';
 import '../../../events/hover';
@@ -85,6 +86,8 @@ export const viewFunction = (viewModel: Widget): JSX.Element => {
 
 @ComponentBindings()
 export class WidgetProps extends BaseWidgetProps {
+  @ForwardRef() rootElementRef?: HTMLDivElement;
+
   @OneWay() _feedbackHideTimeout?: number = 400;
 
   @OneWay() _feedbackShowTimeout?: number = 30;
@@ -134,11 +137,6 @@ export class Widget extends JSXComponent(WidgetProps) {
   @Ref()
   widgetRef!: HTMLDivElement;
 
-  @Method()
-  getHtmlElement(): HTMLDivElement {
-    return this.widgetRef;
-  }
-
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
@@ -161,9 +159,11 @@ export class Widget extends JSXComponent(WidgetProps) {
     return globalConfig().rtlEnabled;
   }
 
-  @Method()
-  getRootElement(): HTMLDivElement {
-    return this.widgetRef;
+  @Effect({ run: 'once' }) setRootElementRef(): void {
+    const { rootElementRef } = this.props;
+    if (rootElementRef) {
+      this.props.rootElementRef = this.widgetRef;
+    }
   }
 
   @Effect()

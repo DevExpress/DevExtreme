@@ -31,6 +31,7 @@ export default class PreactWrapper extends DOMComponent {
   _propsInfo!: {
     allowNull: string[],
     twoWay: any[],
+    elements: string[]
   };
   _shouldRefresh!: boolean;
   _storedClasses?: string;
@@ -143,20 +144,29 @@ export default class PreactWrapper extends DOMComponent {
   }
 
   _patchOptionValues(options) {
-    this._propsInfo.allowNull.forEach(
+    const { allowNull, twoWay, elements } = this._propsInfo;
+    const defaultProps = this._viewComponent.defaultProps;
+
+    allowNull.forEach(
       setDefaultOptionValue(options, () => null)
     );
 
-    Object.keys(this._viewComponent.defaultProps).forEach(
+    Object.keys(defaultProps).forEach(
       setDefaultOptionValue(
         options,
-        (name) => this._viewComponent.defaultProps[name]
+        (name: string) => defaultProps[name]
       )
     );
 
-    this._propsInfo.twoWay.forEach(([name, defaultValue]) =>
+    twoWay.forEach(([name, defaultValue]) =>
       setDefaultOptionValue(options, () => defaultValue)(name)
     );
+
+    elements.forEach((name: string) => {
+      if(name in options) {
+        options[name] = this._patchElementParam(options[name]);
+      }
+    });
 
     return options;
   }
@@ -208,9 +218,9 @@ export default class PreactWrapper extends DOMComponent {
         this._getActionConfigs()[event]
       );
 
-      action = function (actArgs: { [name: string]: unknown }) {
+      action = function (actArgs: { [name: string]: any }) {
         Object.keys(actArgs).forEach((name) => {
-          if (/element$/i.exec(name)) {
+          if (domAdapter.isNode(actArgs[name])) {
             actArgs[name] = getPublicElement($(actArgs[name]));
           }
         });
@@ -272,6 +282,12 @@ export default class PreactWrapper extends DOMComponent {
           const $parent = $(parentNode);
           const $children = $parent.contents();
 
+          Object.keys(data).forEach((name) => {
+            if (domAdapter.isNode(data[name])) {
+              data[name] = getPublicElement($(data[name]));
+            }
+          });
+
           const $template = $(
             template.render({
               container: getPublicElement($parent),
@@ -320,6 +336,22 @@ export default class PreactWrapper extends DOMComponent {
       // NOTE: make it possible to pass onKeyDown property
       return handler?.(originalEvent, options);
     };
+  }
+
+  _toPublicElement(element: any) {
+    return getPublicElement($(element));
+  }
+
+  _patchElementParam(value: any) {
+    let result: any;
+
+    try {
+      result = $(value);
+    } catch(error) {
+      return value;
+    }
+    result = result?.get(0);
+    return result?.nodeType ? result : value
   }
 
   // Public API
