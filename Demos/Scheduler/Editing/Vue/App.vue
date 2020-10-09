@@ -122,6 +122,7 @@ export default {
 
   .option {
     margin-top: 10px;
+    margin-right: 4px;
     display: inline-block;
     width: 19%;
   }

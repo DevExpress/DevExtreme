@@ -86,7 +86,7 @@
             icon="plus"
           />
           <DxButton
-            id="back"
+            id="back-disabled"
             :disabled="true"
             icon="back"
           />
@@ -123,8 +123,8 @@ export default {
 };
 </script>
 <style scoped>
-#app {
-  margin-left: 3px;
+#back, #back-disabled {
+ margin-left: 4px;
 }
 .dx-viewport:not(.dx-theme-ios7) .dx-fieldset {
     width: 520px;

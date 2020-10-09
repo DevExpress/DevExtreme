@@ -148,6 +148,11 @@ export default {
     margin: 15px 3%;
     text-align: left;
 }
+
+.settings .column:nth-child(2)  {
+    padding: 0 4px;
+}
+
 .settings .column .field {
     padding: 5px 0;
 }
@@ -156,7 +161,7 @@ export default {
     vertical-align: middle;
 }
 .settings .column .field .label {
-    width: 75px;
+    width: 79px;
 }
 .settings .column .field .value {
     width: 60%;

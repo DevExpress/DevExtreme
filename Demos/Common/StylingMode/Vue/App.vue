@@ -130,6 +130,10 @@ export default {
     box-sizing: border-box;
 }
 
+.editors .left {
+    margin-right: 4px;
+}
+
 .editors .left > *, .editors .right > *, .editors .center > * {
     margin-bottom: 20px;
 }

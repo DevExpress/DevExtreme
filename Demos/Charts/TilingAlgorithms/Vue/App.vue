@@ -114,7 +114,7 @@ export default {
     font-weight: 500;
 }
 .option > span {
-    margin-right: 10px;
+    margin-right: 14px;
 }
 .option > .dx-widget {
     display: inline-block;

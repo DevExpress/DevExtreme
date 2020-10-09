@@ -104,7 +104,7 @@ export default {
 }
 
 .option > span {
-    width: 140px;
+    width: 144px;
     display: inline-block;
 }
 

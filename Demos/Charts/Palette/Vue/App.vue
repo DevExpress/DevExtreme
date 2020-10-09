@@ -116,7 +116,7 @@ export default {
 }
 
 .option > span {
-   margin: 0 10px 0 0;
+   margin: 0 14px 0 0;
 }
 
 .option > .dx-widget {

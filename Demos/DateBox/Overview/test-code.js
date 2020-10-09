@@ -14,5 +14,10 @@
 
         instance.option("value", new Date("2014/08/25 16:35:10"));
     });
-    $("#age").text("It is the test!!!");
+    var age = $("#age");
+    if(age.textContent) {
+        $("#age").textContent = "It is the test!!!";
+    } else {
+        $("#age").text("It is the test!!!");
+    }
 });
