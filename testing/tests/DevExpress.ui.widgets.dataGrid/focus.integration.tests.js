@@ -2370,6 +2370,38 @@ QUnit.module('View\'s focus', {
         assert.ok($inputElement.closest('td').hasClass('dx-focused'), 'cell is marked as focused');
         assert.ok($inputElement.is(':focus'), 'input is focused');
     });
+
+    ['Row', 'Cell', 'Batch', 'Form', 'Popup'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - A stand-alone input should be focused on click after adding a new row (T935999)`, function(assert) {
+            // arrange
+            this.dataGrid.option({
+                dataSource: [{ id: 1, name: 'test', description: 'test' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    popup: {
+                        container: this.dataGrid.element()
+                    }
+                }
+            });
+            this.clock.tick();
+
+            const $inputElement = $('<input>').prependTo($('#container'));
+
+            // act
+            this.dataGrid.addRow();
+            this.clock.tick();
+            $inputElement.trigger('focus');
+            this.clock.tick();
+            $inputElement.trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.ok($inputElement.is(':focus'), 'input is focused');
+
+            $inputElement.remove();
+        });
+    });
 });
 
 QUnit.module('API methods', baseModuleConfig, () => {
