@@ -166,9 +166,8 @@ class TaskEditDialogInfo extends DialogInfoBase {
                         text: '...',
                         hint: messageLocalization.format('dxGantt-dialogEditResourceListHint'),
                         onClick: () => {
-                            const task = this._parameters;
-                            task.internalId = task.id;
-                            this._parameters.showResourcesDialogCommand.execute(() => { this._parameters.showTaskEditDialogCommand.execute(task); });
+                            const showTaskEditDialogCallback = () => { this._parameters.showTaskEditDialogCommand.execute(); };
+                            this._parameters.showResourcesDialogCommand.execute(showTaskEditDialogCallback);
                         }
                     }
                 }]
