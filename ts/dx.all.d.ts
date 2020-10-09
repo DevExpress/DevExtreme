@@ -922,7 +922,7 @@ declare module DevExpress {
     /**
      * [descr:dxSchedulerTimeZone]
      */
-    export interface dxSchedulerTimeZone  {
+    export interface dxSchedulerTimeZone {
         /**
          * [descr:dxSchedulerTimeZone.id]
          */
