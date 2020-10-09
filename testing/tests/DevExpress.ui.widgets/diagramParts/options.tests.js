@@ -305,6 +305,7 @@ QUnit.module('Options', {
         this.instance.option('editing.allowChangeShapeText', false);
         this.instance.option('editing.allowChangeConnectorText', false);
         this.instance.option('editing.allowResizeShape', false);
+        this.instance.option('editing.allowMoveShape', false);
         assert.equal(this.instance._diagramInstance.operationSettings.addShape, false);
         assert.equal(this.instance._diagramInstance.operationSettings.addShapeFromToolbox, false);
         assert.equal(this.instance._diagramInstance.operationSettings.deleteShape, false);
@@ -314,6 +315,7 @@ QUnit.module('Options', {
         assert.equal(this.instance._diagramInstance.operationSettings.changeShapeText, false);
         assert.equal(this.instance._diagramInstance.operationSettings.changeConnectorText, false);
         assert.equal(this.instance._diagramInstance.operationSettings.resizeShape, false);
+        assert.equal(this.instance._diagramInstance.operationSettings.moveShape, false);
     });
 
     test('should change dataSource options', function(assert) {

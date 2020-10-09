@@ -1492,6 +1492,46 @@ QUnit.test('Show then show on invisible target then move', function(assert) {
     assert.ok(true, 'no errors');
 });
 
+// Funcionality for blazor charts
+QUnit.test('forceEvents. rise tooltipShown event, but tooltip not shown', function(assert) {
+    this.options.forceEvents = true;
+    this.options.enabled = false;
+    this.tooltip.update(this.options);
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._state = { a: 'b' };
+
+    const result = this.tooltip.show({ valueText: 'some-text' }, { x: 100, y: 200, offset: 50 }, {});
+
+    assert.strictEqual(result, true);
+    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', { x: 100, y: 150 }], 'event is triggered');
+
+    assert.deepEqual(this.tooltip._state, {
+        a: 'b'
+    }, 'state');
+
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
+});
+
+// Funcionality for blazor charts
+QUnit.test('forceEvents. rise tooltipHidden event', function(assert) {
+    const eventObject = { 'some-event-object': 'some-event-value' };
+    this.options.forceEvents = true;
+    this.tooltip.update(this.options).show({ valueText: 'some-text' }, {}, eventObject);
+    this.eventTrigger.reset();
+
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._wrapper.detach = sinon.spy();
+    // act
+    this.tooltip.hide();
+
+    // assert
+    assert.equal(this.tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
+    assert.equal(this.tooltip._wrapper.get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
+    assert.equal(this.tooltip._wrapper.detach.callCount, 1, 'wrapper detached');
+    assert.equal(this.eventTrigger.callCount, 1);
+    assert.deepEqual(this.eventTrigger.firstCall.args, ['tooltipHidden', eventObject]);
+});
+
 function getCloudPoints() {
     const cloud = this.renderer.path.lastCall.returnValue;
     const path = cloud._stored_settings.d.replace(/a 0 0 0 0 1 0 0/g, '');

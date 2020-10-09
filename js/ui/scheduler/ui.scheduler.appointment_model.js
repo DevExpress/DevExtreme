@@ -302,7 +302,7 @@ class AppointmentModel {
                 result = false;
             }
 
-            if(result && startDayHour !== undefined) {
+            if(result && startDayHour !== undefined && (!useRecurrence || !filterOptions.isVirtualScrolling)) {
                 result = compareDateWithStartDayHour(comparableStartDate, comparableEndDate, startDayHour, appointmentTakesAllDay, appointmentTakesSeveralDays);
             }
 

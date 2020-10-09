@@ -13,7 +13,7 @@ const getKeyByGroup = jest.spyOn(utilsModule, 'getKeyByGroup');
 const isVerticalGroupOrientation = jest.spyOn(utilsModule, 'isVerticalGroupOrientation');
 
 jest.mock('../../table', () => ({
-  ...require.requireActual('../../table'),
+  ...jest.requireActual('../../table'),
   Table: ({ children }) => (
     <table>
       <tbody>

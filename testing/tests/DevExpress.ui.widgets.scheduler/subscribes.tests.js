@@ -2,6 +2,10 @@ import 'common.css!';
 import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler.subscribes';
 import 'ui/scheduler/ui.scheduler';
+import {
+    AppointmentSettingsGeneratorBaseStrategy,
+    AppointmentSettingsGeneratorVirtualStrategy
+} from 'ui/scheduler/appointmentSettingsGenerator';
 
 import $ from 'jquery';
 import fx from 'animation/fx';
@@ -79,6 +83,30 @@ QUnit.module('Subscribes', {
 
         assert.equal(targetedData.startDate.getTime(), appointmentData.startDate.getTime() + 2 * 3600000, 'Targeted startDate is OK');
         assert.equal(targetedData.endDate.getTime(), appointmentData.endDate.getTime() + 2 * 3600000, 'Targeted endDate is OK');
+    });
+
+    [
+        {
+            scrollingMode: 'standard',
+            expectedType: AppointmentSettingsGeneratorBaseStrategy
+        },
+        {
+            scrollingMode: 'virtual',
+            expectedType: AppointmentSettingsGeneratorVirtualStrategy
+        }
+    ].forEach(option => {
+        QUnit.test(`Appointment settings generator strategy should be created with correct type if scrolling.mode: ${option.scrollingMode}`, function(assert) {
+            this.createInstance({
+                currentView: 'day',
+                scrolling: {
+                    mode: option.scrollingMode
+                }
+            });
+
+            const { settingsStrategy } = this.instance._getAppointmentSettingsGenerator();
+
+            assert.ok(settingsStrategy instanceof option.expectedType, 'Appointment settings type is correct');
+        });
     });
 
     QUnit.test('\'setCellDataCacheAlias\' should call workSpace method with right arguments', function(assert) {

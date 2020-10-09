@@ -6,7 +6,7 @@ import {
 } from '../cell';
 
 jest.mock('../../../base/date_table/cell', () => ({
-  ...require.requireActual('../../../base/date_table/cell'),
+  ...jest.requireActual('../../../base/date_table/cell'),
   DateTableCellBase: (props) => <div {...props} />,
 }));
 

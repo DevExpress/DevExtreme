@@ -5755,7 +5755,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagram.Options.editing]
          */
-        editing?: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowResizeShape?: boolean };
+        editing?: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean };
         /**
          * [descr:dxDiagram.Options.export]
          */
@@ -5799,7 +5799,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagram.Options.onRequestEditOperation]
          */
-        onRequestEditOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape', args?: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs, updateUI?: boolean, allowed?: boolean }) => any);
+        onRequestEditOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape', args?: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs | dxDiagramMoveShapeArgs, updateUI?: boolean, allowed?: boolean }) => any);
         /**
          * [descr:dxDiagram.Options.onRequestLayoutUpdate]
          */
@@ -6104,6 +6104,23 @@ declare module DevExpress.ui {
          * [descr:dxDiagramItem.key]
          */
         key?: any;
+    }
+    /**
+     * [descr:dxDiagramMoveShapeArgs]
+     */
+    export interface dxDiagramMoveShapeArgs {
+        /**
+         * [descr:dxDiagramMoveShapeArgs.newPosition]
+         */
+        newPosition?: Array<any>;
+        /**
+         * [descr:dxDiagramMoveShapeArgs.oldPosition]
+         */
+        oldPosition?: Array<any>;
+        /**
+         * [descr:dxDiagramMoveShapeArgs.shape]
+         */
+        shape?: dxDiagramShape;
     }
     /**
      * [descr:dxDiagramResizeShapeArgs]

@@ -6,7 +6,7 @@ import {
 import { getGroupCellClasses } from '../../utils';
 
 jest.mock('../../utils', () => ({
-  ...require.requireActual('../../utils'),
+  ...jest.requireActual('../../utils'),
   getGroupCellClasses: jest.fn(),
 }));
 
