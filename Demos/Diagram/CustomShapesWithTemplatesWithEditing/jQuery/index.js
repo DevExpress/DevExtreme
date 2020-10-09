@@ -26,15 +26,31 @@ $(function() {
         }],
         customShapeTemplate: function(item, $container) {
             var employee = item.dataItem;
-            var $content = $("<svg class='template'>" +
-                "<text class='template-name' x='50%' y='20%'>" + (employee ? employee.Full_Name : "Employee's Name") + "</text>" +
-                "<text class='template-title' x='50%' y='45%'>" + (employee ? employee.Title : "Employee's Title") + "</text>" +
-                "<text class='template-button' id='employee-edit' x='40%' y='85%'>Edit</text>" +
-                "<text class='template-button' id='employee-delete' x='62%' y='85%'>Delete</text>" +
-                "</svg >");
-            $container.append($content);
-            $content.find("#employee-edit").click(function() { editEmployee(employee); });
-            $content.find("#employee-delete").click(function() { deleteEmployee(employee); });
+            var svgNS = "http://www.w3.org/2000/svg";
+            var $content = $(document.createElementNS(svgNS, "svg")).addClass("template");
+            $(document.createElementNS(svgNS, "text"))
+                .addClass("template-name")
+                .attr({ x: "50%", y: "20%" })
+                .text(employee ? employee.Full_Name : "Employee's Name")
+                .appendTo($content);
+            $(document.createElementNS(svgNS, "text"))
+                .addClass("template-title")
+                .attr({ x: "50%", y: "45%" })
+                .text(employee ? employee.Title : "Employee's Title")
+                .appendTo($content);
+            $(document.createElementNS(svgNS, "text"))
+                .addClass("template-button")
+                .attr({ id: "employee-edit", x: "40%", y: "85%" })
+                .text("Edit")
+                .click(function() { editEmployee(employee); })
+                .appendTo($content);
+            $(document.createElementNS(svgNS, "text"))
+                .addClass("template-button")
+                .attr({ id: "employee-delete", x: "62%", y: "85%" })
+                .text("Delete")
+                .click(function() { deleteEmployee(employee); })                
+                .appendTo($content);                       
+            $container.append($content); 
         },
         customShapeToolboxTemplate: function(item, $container) {
             var employee = item.dataItem;
