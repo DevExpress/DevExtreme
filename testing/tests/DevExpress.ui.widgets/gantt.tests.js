@@ -6,6 +6,7 @@ import 'common.css!';
 import 'generic_light.css!';
 import 'ui/gantt';
 import { extend } from 'core/utils/extend';
+import messageLocalization from 'localization/message';
 
 QUnit.testStart(() => {
     const markup = '<div id="gantt"></div>';
@@ -585,8 +586,8 @@ QUnit.module('Actions', moduleConfig, () => {
 QUnit.module('Dialogs', moduleConfig, () => {
     test('common', function(assert) {
         this.createInstance(allSourcesOptions);
+        this.instance.option('selectedRowKey', 1);
         this.clock.tick();
-
         showTaskEditDialog(this.instance);
         assert.equal($('body').find(POPUP_SELECTOR).length, 1, 'dialog is shown');
         this.instance.repaint();
@@ -601,6 +602,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
     test('task editing', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
         this.clock.tick();
         showTaskEditDialog(this.instance);
         this.clock.tick();
@@ -673,6 +675,7 @@ QUnit.module('Dialogs', moduleConfig, () => {
     test('task progress not reset check (T890805)', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
         this.clock.tick();
         showTaskEditDialog(this.instance);
         this.clock.tick();
@@ -690,6 +693,34 @@ QUnit.module('Dialogs', moduleConfig, () => {
         $okButton.trigger('dxclick');
         this.clock.tick();
         assert.equal(tasks[0].progress, 31, 'progress reset');
+    });
+    test('showing taskEditDialog after resources dialog is closed', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
+        this.clock.tick();
+
+        showTaskEditDialog(this.instance);
+        const $dialog = $('body').find(POPUP_SELECTOR);
+        assert.equal($dialog.length, 1, 'dialog is shown');
+        const expectedTaskEditTitleText = messageLocalization.format('dxGantt-dialogTaskDetailsTitle');
+        let popupTitleText = $dialog.find('.dx-popup-title').text();
+        assert.equal(expectedTaskEditTitleText, popupTitleText, 'taskEditPopup title');
+
+        const $showResourcesButton = $dialog.find('.dx-texteditor-buttons-container').find('.dx-button').eq(0);
+        $showResourcesButton.trigger('dxclick');
+        this.clock.tick();
+
+        const expectedResourceTitleText = messageLocalization.format('dxGantt-dialogResourceManagerTitle');
+        popupTitleText = $dialog.find('.dx-popup-title').text();
+        assert.equal(expectedResourceTitleText, popupTitleText, 'resourcePopup title');
+
+        const $okButton = $dialog.find('.dx-popup-bottom').find('.dx-button').eq(0);
+        $okButton.trigger('dxclick');
+        this.clock.tick();
+
+        popupTitleText = $dialog.find('.dx-popup-title').text();
+        assert.equal(expectedTaskEditTitleText, popupTitleText, 'taskEditPopup title shown again');
     });
 });
 
@@ -977,6 +1008,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
     test('task dialog showing - change editor values', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
 
         const newStart = new Date('2019-02-25');
         const newEnd = new Date('2019-02-26');
@@ -1004,6 +1036,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
     test('task dialog showing - disable fields', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
 
         this.instance.option('onTaskEditDialogShowing', (e) => {
             e.readOnlyFields.push('title');
@@ -1023,6 +1056,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
     test('task dialog showing - hide fields', function(assert) {
         this.createInstance(allSourcesOptions);
         this.instance.option('editing.enabled', true);
+        this.instance.option('selectedRowKey', 1);
         this.clock.tick();
         showTaskEditDialog(this.instance);
         this.clock.tick();
@@ -1836,6 +1870,7 @@ QUnit.module('Parent auto calculation', moduleConfig, () => {
             validation: { autoUpdateParentTasks: true }
         };
         this.createInstance(options);
+        this.instance.option('selectedRowKey', 1);
         this.clock.tick();
 
         showTaskEditDialog(this.instance);
