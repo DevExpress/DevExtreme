@@ -1259,6 +1259,8 @@ class SchedulerWorkSpace extends WidgetObserver {
 
             this.renderRComponent(this._$allDayPanel, dxrAllDayPanelLayout, 'renovatedAllDayPanel', options);
             this.renderRComponent(this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', { visible });
+
+            this._$allDayTable = this.renovatedAllDayPanel.$element();
         }
         this._toggleAllDayVisibility();
     }

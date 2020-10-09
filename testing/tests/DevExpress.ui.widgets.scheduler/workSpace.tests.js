@@ -4503,4 +4503,12 @@ QUnit.module('Renovated Render', {
             assert.equal($(this).outerWidth(), dateTableWidth / 2, 'Correct cell width');
         });
     });
+
+    QUnit.test('AllDayTable should be initialized', function(assert) {
+        this.createInstance({
+            showAllDayPanel: true,
+        }, 'dxSchedulerWorkSpaceWeek');
+
+        assert.ok(this.instance._$allDayTable, 'All-day panel has been initialized');
+    });
 });
