@@ -85,7 +85,7 @@ function createSassStream(destPath) {
 
 const addDefaultExport = lazyPipe().pipe(function() {
     return through.obj(function(chunk, enc, callback) {
-        const moduleName = chunk.relative.replace('.js', '').split('\\').join('/');
+        const moduleName = chunk.relative.replace('.js', '').replace(/^cjs(\/|\\)/, '').split('\\').join('/');
         const moduleMeta = MODULES.filter(m => m.name === moduleName)[0];
 
         if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
