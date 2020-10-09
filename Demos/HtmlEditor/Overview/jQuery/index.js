@@ -1,6 +1,6 @@
 $(function() {
     var editor = $(".html-editor").dxHtmlEditor({
-        height: 720,
+        height: 725,
         toolbar: {
             items: [
                 "undo", "redo", "separator",

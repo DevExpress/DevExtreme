@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DxHtmlEditor height="720px">
+    <DxHtmlEditor height="725px">
       <DxMediaResizing :enabled="true"/>
       <DxToolbar :multiline="isMultiline">
         <DxItem format-name="undo"/>

@@ -2,17 +2,14 @@ import React from 'react';
 import { employees } from './data.js';
 import HtmlEditor from 'devextreme-react/html-editor';
 
-class App extends React.Component {
-  constructor() {
-    super();
+const mentionsConfig = [{
+  dataSource: employees,
+  searchExpr: 'text',
+  displayExpr: 'text',
+  valueExpr: 'text'
+}];
 
-    this.mentions = [{
-      dataSource: employees,
-      searchExpr: 'text',
-      displayExpr: 'text',
-      valueExpr: 'text'
-    }];
-  }
+class App extends React.Component {
   render() {
     return (
       <div>
@@ -63,7 +60,7 @@ class App extends React.Component {
           </div>
         </div>
         <HtmlEditor
-          mentions={this.mentions}>
+          mentions={mentionsConfig}>
           <p>
             <span className="dx-mention" spellCheck="false" data-marker="@" data-mention-value="Kevin Carter"><span contentEditable="false"><span>@</span>Kevin Carter</span></span>
             {" I think John's expertise can be very valuable in our startup."}

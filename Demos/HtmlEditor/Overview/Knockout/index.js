@@ -1,7 +1,7 @@
 window.onload = function() {
     var viewModel = {
         htmlEditorOptions: {
-            height: 550,
+            height: 725,
             toolbar: {
                 items: [
                     "undo", "redo", "separator",
