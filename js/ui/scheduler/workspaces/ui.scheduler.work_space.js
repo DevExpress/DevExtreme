@@ -1223,7 +1223,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         if(this.isVirtualScrolling()) {
             const virtualScrollingState = this.virtualScrollingDispatcher.getState();
-            Object.assign(options, {
+            extend(options, {
                 topVirtualRowHeight: virtualScrollingState.topVirtualRowHeight,
                 bottomVirtualRowHeight: virtualScrollingState.bottomVirtualRowHeight,
                 startRowIndex: virtualScrollingState.startIndex,
