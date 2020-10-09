@@ -12491,6 +12491,23 @@ declare module DevExpress.ui.dxOverlay {
      */
     export function baseZIndex(zIndex: number): void;
 }
+/**
+ * [descr:dxSchedulerTimeZone]
+ */
+export interface dxSchedulerTimeZone  {
+    /**
+     * [descr:dxSchedulerTimeZone.id]
+     */
+    id: string;
+    /**
+     * [descr:dxSchedulerTimeZone.offset]
+     */
+    offset: number;
+    /**
+     * [descr:dxSchedulerTimeZone.title]
+     */
+    title: string;
+}
 declare module DevExpress.utils {
     /**
      * [descr:utils.cancelAnimationFrame(requestID)]
@@ -12499,7 +12516,7 @@ declare module DevExpress.utils {
     /**
      * [descr:utils.getTimeZones(date)]
      */
-    export function getTimeZones(date?: Date): Array<any>;
+    export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
     /**
      * [descr:utils.initMobileViewport(options)]
      */
