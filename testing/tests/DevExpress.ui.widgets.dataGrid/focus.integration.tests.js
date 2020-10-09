@@ -3677,6 +3677,11 @@ QUnit.module('API methods', baseModuleConfig, () => {
     });
 
     QUnit.testInActiveWindow('DataGrid should not focus command cell after edit canceling', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test should not be run on mobile');
+            return;
+        }
+
         // arrange, act
         const dataGrid = createDataGrid({
             editing: {
