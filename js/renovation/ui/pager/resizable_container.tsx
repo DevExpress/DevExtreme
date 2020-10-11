@@ -1,13 +1,14 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, ComponentBindings, JSXComponent,
-  Effect, Template, InternalState, OneWay, Ref,
+  Effect, Template, InternalState, OneWay, Ref, JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
 import PagerProps from './common/pager_props';
 import { getElementWidth } from './utils/get_element_width';
 import { DisposeEffectReturn } from '../../utils/effect_return.d';
+import { PagerContentProps } from './content';
 
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export const viewFunction = ({
@@ -74,7 +75,7 @@ export class ResizableContainerProps {
   @OneWay() pagerProps!: PagerProps;
 
   // renovation bug
-  @Template() contentTemplate!: any;
+  @Template() contentTemplate!: JSXTemplate<PagerContentProps>;
 }
 @Component({
   defaultOptionRules: null,
