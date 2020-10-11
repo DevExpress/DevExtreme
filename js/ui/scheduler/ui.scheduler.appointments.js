@@ -469,15 +469,21 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
+        const scheduler = this.option('observer');
         const { itemData, container, index } = renderArgs;
+
+        const appointmentData = scheduler.createAppointmentAdapter(itemData).clone({ pathTimeZone: 'toGrid' }).source();
+
+        const rawTargetedAppointmentData = scheduler.getTargetedAppointment(itemData, $(container).parent());
+        const targetedAppointmentData = scheduler.createAppointmentAdapter(rawTargetedAppointmentData).clone({ pathTimeZone: 'toGrid' }).source();
 
         return itemTemplate.render({
             model: {
-                appointmentData: itemData,
-                targetedAppointmentData: this.invoke('getTargetedAppointmentData', itemData, $(container).parent())
+                appointmentData,
+                targetedAppointmentData
             },
-            container: container,
-            index: index
+            container,
+            index
         });
     },
 
