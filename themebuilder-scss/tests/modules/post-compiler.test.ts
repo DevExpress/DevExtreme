@@ -68,7 +68,8 @@ describe('PostCompiler - swatch features (fixSwatchCss)', () => {
 .dx-swatch-c .dx-theme-generic-typography {
   color: #fff;
 }
-.dx-swatch-c .dx-theme-generic-typography textarea {
+.dx-swatch-c .dx-theme-generic-typography textarea,
+.dx-swatch-c .dx-theme-generic-typography input {
   color: #fff;
 }`;
     const expectedCss = `
@@ -81,7 +82,8 @@ describe('PostCompiler - swatch features (fixSwatchCss)', () => {
 .dx-theme-generic-typography .dx-swatch-c,.dx-theme-generic-typography.dx-swatch-c {
   color: #fff;
 }
-.dx-theme-generic-typography .dx-swatch-c textarea,.dx-theme-generic-typography.dx-swatch-c textarea {
+.dx-theme-generic-typography .dx-swatch-c textarea,.dx-theme-generic-typography.dx-swatch-c textarea,
+.dx-theme-generic-typography .dx-swatch-c input,.dx-theme-generic-typography.dx-swatch-c input {
   color: #fff;
 }`;
     const result = PostCompiler.fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
