@@ -9,7 +9,6 @@ const extend = require('../../core/utils/extend').extend;
 const dateUtils = require('./ui.date_utils');
 const dateLocalization = require('../../localization/date');
 const dateSerialization = require('../../core/utils/date_serialization');
-const typeUtils = require('../../core/utils/type');
 
 const DATE_FORMAT = 'date';
 
@@ -43,15 +42,6 @@ const ListStrategy = DateBoxStrategy.inherit({
 
     getDisplayFormat: function(displayFormat) {
         return displayFormat || 'shorttime';
-    },
-
-    _updatePopupMinWidth(popupWidth) {
-        if(window && this._getPopup()) {
-            if(popupWidth === undefined) {
-                popupWidth = this._getInputWidth();
-            }
-            this._getPopup().overlayContent().css('minWidth', popupWidth);
-        }
     },
 
     _getPopupWidth() {
@@ -277,13 +267,9 @@ const ListStrategy = DateBoxStrategy.inherit({
     _dimensionChanged: function() {
         if(this._getPopup()) {
             const popupWidth = this._getPopupWidth();
-            const popupMinWidth = this.dateBox.option('dropDownOptions.minWidth');
 
             if(popupWidth === undefined) {
                 this.dateBox.setPopupOption('width', (this._getInputWidth.bind(this)));
-            }
-            if(!typeUtils.isDefined(popupMinWidth)) {
-                this._updatePopupMinWidth(popupWidth);
             }
 
             this._updatePopupHeight();
