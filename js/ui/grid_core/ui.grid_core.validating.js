@@ -19,7 +19,6 @@ import errors from '../widget/ui.errors';
 import { Deferred, when } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import { encodeHtml } from '../../core/utils/string';
-import * as themes from '../themes';
 import browser from '../../core/utils/browser';
 
 const INVALIDATE_CLASS = 'invalid';
@@ -1106,7 +1105,8 @@ export default {
                                 boundaryOffset: '0 0',
                                 offset: {
                                     x: 0,
-                                    y: (browser.mozilla || browser.msie) && themes.isGeneric(themes.current()) ? -1 : 0
+                                    // IE and Firefox consider the top row/cell border when calculating a cell offset.
+                                    y: !isOverlayVisible && (browser.mozilla || browser.msie) ? -1 : 0
                                 },
                                 my: myPosition,
                                 at: atPosition
