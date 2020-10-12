@@ -67,6 +67,7 @@ export const Export = {
                 const styles = dataProvider.getStyles();
                 const dataRowsCount = dataProvider.getRowsCount();
                 const headerRowCount = dataProvider.getHeaderRowCount();
+                const mergedCells = [];
 
                 if(keepColumnWidths) {
                     const pdfColumnWidths = this._tryGetPdfColumnWidths(autoTableOptions.tableWidth, dataProvider.getColumnsWidths());
@@ -89,7 +90,19 @@ export const Export = {
                             styles: this._getPDFCellStyles(gridCell.rowType, columns[cellIndex].alignment, cellStyle)
                         };
 
-                        if(gridCell.rowType === 'group' && !isDefined(pdfCell.content) && row.length === 1) {
+                        if(gridCell.rowType === 'header') {
+                            const mergedRange = this._tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
+                            if(mergedRange && mergedRange.rowSpan > 0) {
+                                pdfCell.rowSpan = mergedRange.rowSpan + 1;
+                            }
+                            if(mergedRange && mergedRange.colSpan > 0) {
+                                pdfCell.colSpan = mergedRange.colSpan + 1;
+                            }
+                            const isMergedCell = mergedCells[rowIndex] && mergedCells[rowIndex][cellIndex];
+                            if(!isMergedCell || pdfCell.rowSpan > 1 || pdfCell.colSpan > 1) {
+                                row.push(pdfCell);
+                            }
+                        } else if(gridCell.rowType === 'group' && !isDefined(pdfCell.content) && row.length === 1) {
                             row[0].colSpan = row[0].colSpan ?? 1;
                             row[0].colSpan++;
                         } else {
@@ -145,6 +158,23 @@ export const Export = {
         }
 
         return pdfCellStyle;
+    },
+
+    _tryGetMergeRange: function(rowIndex, cellIndex, mergedCells, dataProvider) {
+        if(!mergedCells[rowIndex] || !mergedCells[rowIndex][cellIndex]) {
+            const cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
+            if(cellMerge.colspan || cellMerge.rowspan) {
+                for(let i = rowIndex; i <= rowIndex + cellMerge.rowspan || 0; i++) {
+                    for(let j = cellIndex; j <= cellIndex + cellMerge.colspan || 0; j++) {
+                        if(!mergedCells[i]) {
+                            mergedCells[i] = [];
+                        }
+                        mergedCells[i][j] = true;
+                    }
+                }
+                return { rowSpan: cellMerge.rowspan, colSpan: cellMerge.colspan };
+            }
+        }
     },
 
     _tryGetPdfColumnWidths(autoTableWidth, columnWidths) {

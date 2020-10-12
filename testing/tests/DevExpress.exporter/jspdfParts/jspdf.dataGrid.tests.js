@@ -3112,3 +3112,961 @@ QUnit.module('Total summary', moduleConfig, () => {
         });
     });
 });
+
+QUnit.module('Bands', moduleConfig, () => {
+    QUnit.test('Bands, col2_band x without columns', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1', width: 200
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'F1', styles: { 'halign': 'left' } },
+                { content: 'Band1', styles: { } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [f1, band[empty]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f1', width: 100 },
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'Band1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F1', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [f1, band[f2, f3]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: '1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                'f1',
+                {
+                    caption: 'Band1',
+                    columns: [
+                        'f2',
+                        'f3',
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'Band1', colSpan: 2, styles: { } }
+            ], [
+                { content: 'F2', styles: { } },
+                { content: 'F3', styles: { } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [f1, band[f2, f3, f4]]', function(assert) {
+        const done = assert.async();
+        const ds = [];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2', width: 150 },
+                        { dataField: 'f3', width: 200 },
+                        { dataField: 'f4', width: 200 },
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'F1', rowSpan: 2, styles: { } },
+                { content: 'Band1', colSpan: 3, styles: { } }
+            ], [
+                { content: 'F2', styles: { } },
+                { content: 'F3', styles: { } },
+                { content: 'F4', styles: { } }
+            ]],
+            body: []
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [f1, band[f2, f3], band[f4, f5]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: '1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2', width: 150 },
+                        { dataField: 'f3', width: 200 },
+                    ]
+                },
+                {
+                    caption: 'Band2',
+                    columns: [
+                        { dataField: 'f4', width: 100 },
+                        { dataField: 'f5', width: 200 },
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'Band1', colSpan: 2, styles: { } },
+                { content: 'Band2', colSpan: 2, styles: { } }
+            ], [
+                { content: 'F2', styles: { } },
+                { content: 'F3', styles: { } },
+                { content: 'F4', styles: { } },
+                { content: 'F5', styles: { } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [f1, band[f2, f3.visible:false, f4], band[f5.visible: false, f6, f7]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: '1' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2', width: 150 },
+                        { dataField: 'f3', width: 200, visible: false },
+                        { dataField: 'f4', width: 100 },
+                    ]
+                },
+                {
+                    caption: 'Band2',
+                    columns: [
+                        { dataField: 'f5', width: 100, visible: false },
+                        { dataField: 'f6', width: 150 },
+                        { dataField: 'f7', width: 200 },
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'Band1', colSpan: 2, styles: { } },
+                { content: 'Band2', colSpan: 2, styles: { } }
+            ], [
+                { content: 'F2', styles: { } },
+                { content: 'F4', styles: { } },
+                { content: 'F6', styles: { } },
+                { content: 'F7', styles: { } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, showColumnHeaders: false, [f1, band[f2, f3, f4]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' } ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2', width: 150 },
+                        { dataField: 'f3', width: 200 },
+                        { dataField: 'f4', width: 200 },
+                    ]
+                }
+            ],
+            dataSource: ds,
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f2, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } },
+                { content: ds[0].f4, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, showColumnHeaders: false, [f1, band[f2.visible: false, f3, f4]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' } ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2', width: 150, visible: false },
+                        { dataField: 'f3', width: 200 },
+                        { dataField: 'f4', width: 200 },
+                    ]
+                }
+            ],
+            dataSource: ds,
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } },
+                { content: ds[0].f4, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, showColumnHeaders: false, [f1, band[f2.allowExporting: false, f3, f4]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' } ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2', width: 150, allowExporting: false },
+                        { dataField: 'f3', width: 200 },
+                        { dataField: 'f4', width: 100 },
+                    ]
+                }
+            ],
+            dataSource: ds,
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } },
+                { content: ds[0].f4, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [f1, band[f2, f3].visible: false, f4]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    visible: false,
+                    columns: [
+                        { dataField: 'f2', width: 50 },
+                        { dataField: 'f3', width: 200 },
+                    ]
+                },
+                { dataField: 'f4', width: 200 },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'F1', styles: { 'halign': 'left' } },
+                { content: 'F4', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f4, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [f1, band[f2.visible: false, f3.visible: false], f4.visible: false]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    width: 250,
+                    columns: [
+                        { dataField: 'f2', width: 50, visible: false, allowExporting: true },
+                        { dataField: 'f3', width: 200, visible: false, allowExporting: true }
+                    ]
+                },
+                { dataField: 'f4', visible: false, width: 150 }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'F1', styles: { 'halign': 'left' } },
+                { content: 'Band1', styles: { } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: '', styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [f1, band[f2.visible: false(allowExporting: true), f3, f4]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2', width: 100, visible: false, allowExporting: true },
+                        { dataField: 'f3', width: 200 },
+                        { dataField: 'f4', width: 250 },
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F3', styles: { 'halign': 'left' } },
+                { content: 'F4', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } },
+                { content: ds[0].f4, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [f1, band[f2.allowExporting: false, f3, f4]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3', f4: 'f1_4' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', width: 100 },
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f2', width: 100, visible: true, allowExporting: false },
+                        { dataField: 'f3', width: 200 },
+                        { dataField: 'f4', width: 150 },
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F3', styles: { 'halign': 'left' } },
+                { content: 'F4', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } },
+                { content: ds[0].f4, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [band[band[f1, f2, f3]]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                {
+                    caption: 'Band1',
+                    columns: [
+                        {
+                            caption: 'Band1_1',
+                            columns: [
+                                { dataField: 'f1', width: 100 },
+                                { dataField: 'f2', width: 150 },
+                                { dataField: 'f3', width: 200 },
+                            ]
+                        }
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'Band1_1', colSpan: 3, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F1', styles: { 'halign': 'left' } },
+                { content: 'F2', styles: { 'halign': 'left' } },
+                { content: 'F3', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f2, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [band[band[f1.visible: false, f2, f3]]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                {
+                    caption: 'Band1',
+                    columns: [
+                        {
+                            caption: 'Band1_1',
+                            columns: [
+                                { dataField: 'f1', width: 100, visible: false },
+                                { dataField: 'f2', width: 150 },
+                                { dataField: 'f3', width: 200 },
+                            ]
+                        }
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F2', styles: { 'halign': 'left' } },
+                { content: 'F3', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f2, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [band[band[f1, f2.allowExporting: false, f3.visible: false]]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                {
+                    caption: 'Band1',
+                    columns: [
+                        {
+                            caption: 'Band1_1',
+                            columns: [
+                                { dataField: 'f1', width: 100 },
+                                { dataField: 'f2', width: 150, allowExporting: false },
+                                { dataField: 'f3', width: 200, visible: false },
+                            ]
+                        }
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'Band1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'Band1_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F1', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [band[f1, band[f2, f3]]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f1', width: 100 },
+                        {
+                            caption: 'Band1_1',
+                            columns: [
+                                { dataField: 'f2', width: 150 },
+                                { dataField: 'f3', width: 200 },
+                            ]
+                        }
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F2', styles: { 'halign': 'left' } },
+                { content: 'F3', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f2, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [band[f1.visible: false, band[f2, f3]]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                {
+                    caption: 'Band1',
+                    columns: [
+                        { dataField: 'f1', width: 100, visible: false },
+                        {
+                            caption: 'Band1_1',
+                            columns: [
+                                { dataField: 'f2', width: 150 },
+                                { dataField: 'f3', width: 200 },
+                            ]
+                        }
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F2', styles: { 'halign': 'left' } },
+                { content: 'F3', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f2, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [band[band[f1, f2], f3]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                {
+                    caption: 'Band1',
+                    columns: [
+                        {
+                            caption: 'Band1_1',
+                            columns: [
+                                { dataField: 'f1', width: 150 },
+                                { dataField: 'f2', width: 200 },
+                            ]
+                        },
+                        { dataField: 'f3', width: 100 }
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'F3', rowSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F1', styles: { 'halign': 'left' } },
+                { content: 'F2', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f2, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+
+    QUnit.test('Bands, [band[band[f1, f2], f3.visible: false]]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1', f2: 'f1_2', f3: 'f1_3' }];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                {
+                    caption: 'Band1',
+                    columns: [
+                        {
+                            caption: 'Band1_1',
+                            columns: [
+                                { dataField: 'f1', width: 150 },
+                                { dataField: 'f2', width: 200 },
+                            ]
+                        },
+                        { dataField: 'f3', width: 100, visible: false }
+                    ]
+                }
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[
+                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }
+            ], [
+                { content: 'F1', styles: { 'halign': 'left' } },
+                { content: 'F2', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f2, styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            ['head', 'body'].forEach((rowType) => {
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsStyles(expectedCells, autoTableOptions, rowType);
+                helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
+                helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
+            });
+            done();
+        });
+    });
+});
