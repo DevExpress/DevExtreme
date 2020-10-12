@@ -4783,8 +4783,8 @@ QUnit.module('ScrollTo', () => {
             const scrollableHeight = $scrollable.height();
             const scrollableWidth = $scrollable.width();
             const $schedulerCell = scheduler.workSpace.getCells().eq(0);
-            const cellHeight = $schedulerCell.outerHeight();
-            const cellWidth = $schedulerCell.outerWidth();
+            const cellHeight = $schedulerCell.get(0).getBoundingClientRect().height;
+            const cellWidth = $schedulerCell.get(0).getBoundingClientRect().width;
 
             assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
             assert.equal(
@@ -5088,8 +5088,8 @@ QUnit.module('ScrollTo', () => {
                     const scrollableHeight = $scrollable.height();
                     const scrollableWidth = $scrollable.width();
                     const $schedulerCell = scheduler.workSpace.getCells().eq(0);
-                    const cellHeight = $schedulerCell.outerHeight();
-                    const cellWidth = $schedulerCell.outerWidth();
+                    const cellHeight = $schedulerCell.get(0).getBoundingClientRect().height;
+                    const cellWidth = $schedulerCell.get(0).getBoundingClientRect().width;
 
                     const top = view === 'week'
                         ? 0
