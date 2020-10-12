@@ -503,6 +503,31 @@ QUnit.module('dimensions', {
         assert.notEqual($overlayContent.height(), 100, 'auto height option');
     });
 
+    ['minWidth', 'maxWidth', 'minHeight', 'maxHeight'].forEach((option) => {
+        QUnit.test(`overlay content should have correct ${option} attr`, function(assert) {
+            const instance = $('#popup').dxPopup({
+                [option]: 100,
+                visible: true
+            }).dxPopup('instance');
+
+            const overlayContentElement = instance.$content().parent().get(0);
+
+            assert.strictEqual(overlayContentElement.style[option], '100px', 'css attr value is correct');
+        });
+
+        QUnit.test(`overlay content ${option} attr should be restored after fullScreen option set to true`, function(assert) {
+            const instance = $('#popup').dxPopup({
+                [option]: 100,
+                visible: true
+            }).dxPopup('instance');
+
+            const overlayContentElement = instance.$content().parent().get(0);
+
+            instance.option('fullScreen', true);
+            assert.strictEqual(overlayContentElement.style[option], '', 'css attr value is restored');
+        });
+    });
+
     QUnit.test('minHeight should affect popup content height correctly', function(assert) {
         const $popup = $('#popup').dxPopup({
             visible: true,
