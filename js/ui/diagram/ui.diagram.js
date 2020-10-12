@@ -2593,7 +2593,7 @@ class Diagram extends Widget {
             fromKey: nativeConnector.fromKey,
             toKey: nativeConnector.toKey,
 
-            fromId: nativeConnector.froId,
+            fromId: nativeConnector.fromId,
             fromPointIndex: nativeConnector.fromPointIndex,
             toId: nativeConnector.toId,
             toPointIndex: nativeConnector.toPointIndex,
