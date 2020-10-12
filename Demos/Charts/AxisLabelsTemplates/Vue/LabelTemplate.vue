@@ -6,9 +6,14 @@
       width="60"
       height="40"
       :href="getFilePath(data.valueText)"
-    ></image>
-    <text class="template-text" x="30" y="59" text-anchor="middle">
-      {{data.valueText}}
+    />
+    <text
+      class="template-text"
+      x="30"
+      y="59"
+      text-anchor="middle"
+    >
+      {{ data.valueText }}
     </text>
   </svg>
 </template>
@@ -22,9 +27,9 @@ export default {
     }
   },
   methods: {
-    getFilePath: (text) => `../../../../images/flags/3x2/${text.toLowerCase().replace(" ", "")}.svg`
+    getFilePath: (text) => `../../../../images/flags/3x2/${text.toLowerCase().replace(' ', '')}.svg`
   }
-}
+};
 </script>
 <style scoped>
 .template-text {
