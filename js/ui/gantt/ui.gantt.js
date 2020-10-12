@@ -177,18 +177,19 @@ class Gantt extends Widget {
         }
     }
     _onTreeListContextMenuPreparing(e) {
-        if(e.row && e.row.rowType === 'data') {
+
+        if(e.row?.rowType === 'data') {
             this._setTreeListOption('selectedRowKeys', [e.row.data[this.option('tasks.keyExpr')]]);
-            e.items = [];
-            const info = {
-                cancel: false,
-                event: e.event,
-                type: 'task',
-                key: e.row.key,
-                position: { x: e.event.pageX, y: e.event.pageY }
-            };
-            this._showPopupMenu(info);
         }
+        e.items = [];
+        const info = {
+            cancel: false,
+            event: e.event,
+            type: 'task',
+            key: e.row?.key,
+            position: { x: e.event.pageX, y: e.event.pageY }
+        };
+        this._showPopupMenu(info);
     }
     _onTreeListRowClick(e) {
         this._raiseTaskClickAction(e.key, e.event);
@@ -1196,6 +1197,26 @@ class Gantt extends Widget {
             taskTooltipContentTemplate: null,
             rootValue: 0
         });
+    }
+
+    getTaskResources(key) {
+        if(!isDefined(key)) {
+            return null;
+        }
+        const coreData = this._ganttView._ganttViewCore.getTaskResources(key);
+        return coreData.map(r => this._convertCoreToMappedData(GANTT_RESOURCES, r));
+    }
+    getVisibleTaskKeys() {
+        return this._ganttView._ganttViewCore.getVisibleTaskKeys();
+    }
+    getVisibleDependencyKeys() {
+        return this._ganttView._ganttViewCore.getVisibleDependencyKeys();
+    }
+    getVisibleResourceKeys() {
+        return this._ganttView._ganttViewCore.getVisibleResourceKeys();
+    }
+    getVisibleResourceAssignmentKeys() {
+        return this._ganttView._ganttViewCore.getVisibleResourceAssignmentKeys();
     }
 
     getTaskData(key) {

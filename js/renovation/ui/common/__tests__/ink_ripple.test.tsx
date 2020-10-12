@@ -3,7 +3,7 @@ import { InkRipple, viewFunction } from '../ink_ripple';
 import { initConfig, showWave, hideWave } from '../../../../ui/widget/utils.ink_ripple';
 
 jest.mock('../../../../ui/widget/utils.ink_ripple', () => ({
-  ...require.requireActual('../../../../ui/widget/utils.ink_ripple'),
+  ...jest.requireActual('../../../../ui/widget/utils.ink_ripple'),
   initConfig: jest.fn(),
   showWave: jest.fn(),
   hideWave: jest.fn(),

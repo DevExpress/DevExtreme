@@ -230,6 +230,12 @@ module('View Data Provider', () => {
             assert.deepEqual(group3Info, 'group_3', 'Group 3 cells group is correct');
         });
 
+        test('getGroupIndices', function(assert) {
+            const groupIndices = this.viewDataProvider.getGroupIndices();
+
+            assert.deepEqual(groupIndices, [2, 3], 'Indices are correct');
+        });
+
         module('getCellData', function() {
             test('Cell data of the allDayPanel', function(assert) {
                 assert.deepEqual(

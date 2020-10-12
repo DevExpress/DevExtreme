@@ -154,7 +154,7 @@ export const Export = {
         return new Promise((resolve) => {
             dataProvider.ready().done(() => {
                 const columns = dataProvider.getColumns();
-                const headerRowCount = isFunction(dataProvider.getHeaderRowCount) ? dataProvider.getHeaderRowCount() : undefined;
+                const headerRowCount = isFunction(dataProvider.getHeaderRowCount) ? dataProvider.getHeaderRowCount() : 1;
                 const dataRowsCount = dataProvider.getRowsCount();
 
                 if(keepColumnWidths) {
@@ -184,13 +184,11 @@ export const Export = {
                     worksheetViewSettings.rightToLeft = true;
                 }
 
-                if(!isDefined(headerRowCount) || headerRowCount > 0) {
+                if(headerRowCount > 0) {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
                         extend(worksheetViewSettings, privateOptions._getWorksheetFrozenState(dataProvider, cellRange));
                     }
-                    if(isFunction(privateOptions._setAutoFilter)) {
-                        privateOptions._setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
-                    }
+                    privateOptions._trySetAutoFilter(dataProvider, worksheet, cellRange, headerRowCount, autoFilterEnabled);
                 }
 
                 if(Object.keys(worksheetViewSettings).length > 0) {
@@ -231,14 +229,13 @@ export const Export = {
                 }
 
                 this.setNumberFormat(excelCell, numberFormat);
-                privateOptions._setFont(excelCell, bold);
+                privateOptions._trySetFont(excelCell, bold);
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
             if(isDefined(customizeCell)) {
                 customizeCell(privateOptions._getCustomizeCellOptions(excelCell, cell));
             }
-
 
             if(privateOptions._needMergeRange(rowIndex, headerRowCount)) {
                 const mergeRange = this.tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);

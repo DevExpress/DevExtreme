@@ -12,11 +12,10 @@ module.exports = {
     },
     collectCoverageFrom: [
         './js/renovation/**/*.tsx',
-        '!./js/renovation/ui/list.tsx',
-        '!./js/renovation/ui/select_box.tsx',
         '!./js/renovation/**/*.j.tsx',
         '!./js/renovation/**/__tests__/**/*',
         '!./js/renovation/utils/render_template.tsx',
+        '!./js/renovation/ui/list.tsx',
     ],
     coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {

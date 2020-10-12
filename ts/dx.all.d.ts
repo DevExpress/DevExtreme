@@ -2561,6 +2561,48 @@ declare module DevExpress.excelExporter {
         value?: any;
     }
     /**
+     * [descr:ExcelExportBaseProps]
+     */
+    export interface ExcelExportBaseProps {
+        /**
+         * [descr:ExcelExportBaseProps.keepColumnWidths]
+         */
+        keepColumnWidths?: boolean;
+        /**
+         * [descr:ExcelExportBaseProps.loadPanel]
+         */
+        loadPanel?: ExportLoadPanel;
+        /**
+         * [descr:ExcelExportBaseProps.topLeftCell]
+         */
+        topLeftCell?: CellAddress | string;
+        /**
+         * [descr:ExcelExportBaseProps.worksheet]
+         */
+        worksheet?: any;
+    }
+    /**
+     * [descr:ExcelExportDataGridProps]
+     */
+    export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
+        /**
+         * [descr:ExcelExportDataGridProps.autoFilterEnabled]
+         */
+        autoFilterEnabled?: boolean;
+        /**
+         * [descr:ExcelExportDataGridProps.component]
+         */
+        component?: DevExpress.ui.dxDataGrid;
+        /**
+         * [descr:ExcelExportDataGridProps.customizeCell]
+         */
+        customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
+        /**
+         * [descr:ExcelExportDataGridProps.selectedRowsOnly]
+         */
+        selectedRowsOnly?: boolean;
+    }
+    /**
      * [descr:ExcelPivotGridCell]
      */
     export interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGridPivotGridCell {
@@ -2576,48 +2618,6 @@ declare module DevExpress.excelExporter {
          * [descr:ExcelPivotGridCell.rowIndex]
          */
         rowIndex?: number;
-    }
-    /**
-     * [descr:ExportBaseProps]
-     */
-    export interface ExportBaseProps {
-        /**
-         * [descr:ExportBaseProps.keepColumnWidths]
-         */
-        keepColumnWidths?: boolean;
-        /**
-         * [descr:ExportBaseProps.loadPanel]
-         */
-        loadPanel?: ExportLoadPanel;
-        /**
-         * [descr:ExportBaseProps.topLeftCell]
-         */
-        topLeftCell?: CellAddress | string;
-        /**
-         * [descr:ExportBaseProps.worksheet]
-         */
-        worksheet?: any;
-    }
-    /**
-     * [descr:ExportDataGridProps]
-     */
-    export interface ExportDataGridProps extends ExportBaseProps {
-        /**
-         * [descr:ExportDataGridProps.autoFilterEnabled]
-         */
-        autoFilterEnabled?: boolean;
-        /**
-         * [descr:ExportDataGridProps.component]
-         */
-        component?: DevExpress.ui.dxDataGrid;
-        /**
-         * [descr:ExportDataGridProps.customizeCell]
-         */
-        customizeCell?: ((options: { gridCell?: ExcelDataGridCell, excelCell?: any }) => any);
-        /**
-         * [descr:ExportDataGridProps.selectedRowsOnly]
-         */
-        selectedRowsOnly?: boolean;
     }
     /**
      * [descr:ExportLoadPanel]
@@ -2663,7 +2663,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:ExportPivotGridProps]
      */
-    export interface ExportPivotGridProps extends ExportBaseProps {
+    export interface ExportPivotGridProps extends ExcelExportBaseProps {
         /**
          * [descr:ExportPivotGridProps.component]
          */
@@ -2676,7 +2676,7 @@ declare module DevExpress.excelExporter {
     /**
      * [descr:excelExporter.exportDataGrid(options)]
      */
-    export function exportDataGrid(options: ExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
+    export function exportDataGrid(options: ExcelExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
     /**
      * [descr:excelExporter.exportPivotGrid(options)]
      */
@@ -2685,6 +2685,7 @@ declare module DevExpress.excelExporter {
 declare module DevExpress.exporter {
     /**
      * [descr:ExcelFont]
+     * @deprecated [depNote:ExcelFont]
      */
     export interface ExcelFont {
         /**
@@ -2855,7 +2856,7 @@ declare module DevExpress.fileManagement {
         /**
          * [descr:FileSystemProviderBase.abortFileUpload()]
          */
-        abortFileUpload(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+        abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
         /**
          * [descr:FileSystemProviderBase.copyItems()]
          */
@@ -2891,7 +2892,7 @@ declare module DevExpress.fileManagement {
         /**
          * [descr:FileSystemProviderBase.uploadFileChunk()]
          */
-        uploadFileChunk(fileData: File, uploadInfo: any, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
+        uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
     }
     /**
      * [descr:ObjectFileSystemProvider.Options]
@@ -5754,7 +5755,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagram.Options.editing]
          */
-        editing?: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowResizeShape?: boolean };
+        editing?: { allowAddShape?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowDeleteConnector?: boolean, allowDeleteShape?: boolean, allowMoveShape?: boolean, allowResizeShape?: boolean };
         /**
          * [descr:dxDiagram.Options.export]
          */
@@ -5798,7 +5799,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagram.Options.onRequestEditOperation]
          */
-        onRequestEditOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape', args?: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs, updateUI?: boolean, allowed?: boolean }) => any);
+        onRequestEditOperation?: ((e: { component?: dxDiagram, element?: DevExpress.core.dxElement, model?: any, operation?: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape', args?: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs | dxDiagramMoveShapeArgs, updateUI?: boolean, allowed?: boolean }) => any);
         /**
          * [descr:dxDiagram.Options.onRequestLayoutUpdate]
          */
@@ -5956,9 +5957,13 @@ declare module DevExpress.ui {
          */
         connectorPosition?: 'start' | 'end';
         /**
-         * [descr:dxDiagramChangeConnectionArgs.shape]
+         * [descr:dxDiagramChangeConnectionArgs.newShape]
          */
-        shape?: dxDiagramShape;
+        newShape?: dxDiagramShape;
+        /**
+         * [descr:dxDiagramChangeConnectionArgs.oldShape]
+         */
+        oldShape?: dxDiagramShape;
     }
     /**
      * [descr:dxDiagramChangeConnectorPointsArgs]
@@ -6103,6 +6108,23 @@ declare module DevExpress.ui {
          * [descr:dxDiagramItem.key]
          */
         key?: any;
+    }
+    /**
+     * [descr:dxDiagramMoveShapeArgs]
+     */
+    export interface dxDiagramMoveShapeArgs {
+        /**
+         * [descr:dxDiagramMoveShapeArgs.newPosition]
+         */
+        newPosition?: Array<any>;
+        /**
+         * [descr:dxDiagramMoveShapeArgs.oldPosition]
+         */
+        oldPosition?: Array<any>;
+        /**
+         * [descr:dxDiagramMoveShapeArgs.shape]
+         */
+        shape?: dxDiagramShape;
     }
     /**
      * [descr:dxDiagramResizeShapeArgs]
@@ -7836,6 +7858,26 @@ declare module DevExpress.ui {
          * [descr:dxGantt.getTaskData(key)]
          */
         getTaskData(key: any): any;
+        /**
+         * [descr:dxGantt.getTaskResources(key)]
+         */
+        getTaskResources(key: any): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleDependencyKeys()]
+         */
+        getVisibleDependencyKeys(): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleResourceAssignmentKeys()]
+         */
+        getVisibleResourceAssignmentKeys(): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleResourceKeys()]
+         */
+        getVisibleResourceKeys(): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleTaskKeys()]
+         */
+        getVisibleTaskKeys(): Array<any>;
         /**
          * [descr:dxGantt.insertDependency(data)]
          */
@@ -14889,7 +14931,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.commonAxisSettings.label.template]
          */
-        template?: DevExpress.core.template | ((data: any, element: SVGGElement) => string | SVGElement | JQuery);
+        template?: DevExpress.core.template | ((data: { value?: Date | number | string, valueText?: string }, element: SVGGElement) => string | SVGElement | JQuery);
         /**
          * [descr:dxChart.Options.commonAxisSettings.label.textOverflow]
          */

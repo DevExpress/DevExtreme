@@ -1489,7 +1489,8 @@ class Diagram extends Widget {
             changeConnectorPoints: this.option('editing.allowChangeConnectorPoints'),
             changeShapeText: this.option('editing.allowChangeShapeText'),
             changeConnectorText: this.option('editing.allowChangeConnectorText'),
-            resizeShape: this.option('editing.allowResizeShape')
+            resizeShape: this.option('editing.allowResizeShape'),
+            moveShape: this.option('editing.allowMoveShape')
         });
     }
 
@@ -2251,7 +2252,13 @@ class Diagram extends Widget {
                 * @type boolean
                 * @default true
                 */
-                allowResizeShape: true
+                allowResizeShape: true,
+                /**
+                * @name dxDiagramOptions.editing.allowMoveShape
+                * @type boolean
+                * @default true
+                */
+                allowMoveShape: true
             },
             export: {
                 /**
@@ -2465,6 +2472,8 @@ class Diagram extends Widget {
                 return 'changeConnectorText';
             case DiagramModelOperation.ResizeShape:
                 return 'resizeShape';
+            case DiagramModelOperation.MoveShape:
+                return 'moveShape';
         }
     }
     _getRequestEditOperationEventArgs(operation, args) {
@@ -2498,7 +2507,8 @@ class Diagram extends Widget {
                 break;
             case DiagramModelOperation.ChangeConnection:
                 eventArgs.args = {
-                    shape: args.shape && this._nativeItemToDiagramItem(args.shape),
+                    newShape: args.shape && this._nativeItemToDiagramItem(args.shape),
+                    oldShape: args.oldShape && this._nativeItemToDiagramItem(args.oldShape),
                     connector: args.connector && this._nativeItemToDiagramItem(args.connector),
                     connectionPointIndex: args.connectionPointIndex,
                     connectorPosition: (args.position === ConnectorPosition.Begin) ? 'start' : 'end',
@@ -2542,6 +2552,13 @@ class Diagram extends Widget {
                     oldSize: args.oldSize && { width: args.oldSize.width, height: args.oldSize.height }
                 };
                 break;
+            case DiagramModelOperation.MoveShape:
+                eventArgs.args = {
+                    shape: args.shape && this._nativeItemToDiagramItem(args.shape),
+                    newPosition: args.position && { x: args.position.x, y: args.position.y },
+                    oldPosition: args.oldPosition && { x: args.oldPosition.x, y: args.oldPosition.y }
+                };
+                break;
         }
         return eventArgs;
     }
@@ -2576,7 +2593,7 @@ class Diagram extends Widget {
             fromKey: nativeConnector.fromKey,
             toKey: nativeConnector.toKey,
 
-            fromId: nativeConnector.froId,
+            fromId: nativeConnector.fromId,
             fromPointIndex: nativeConnector.fromPointIndex,
             toId: nativeConnector.toId,
             toPointIndex: nativeConnector.toPointIndex,

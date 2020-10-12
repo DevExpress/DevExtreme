@@ -8,15 +8,18 @@ import LegacyOverlay from '../../ui/overlay';
 import { dxElement } from '../../core/element';
 import { template } from '../../core/templates/template';
 import { animationConfig } from '../../animation/fx';
+/* eslint-enable import/named */
 import { DomComponentWrapper } from './common/dom_component_wrapper';
 
-/* eslint-enable import/named */
-
-export const viewFunction = ({ props, restAttributes }: Overlay): JSX.Element => (
+export const viewFunction = ({
+  props: { rootElementRef, ...componentProps },
+  restAttributes,
+}: Overlay): JSX.Element => (
   <DomComponentWrapper
+    rootElementRef={rootElementRef as any}
     componentType={LegacyOverlay}
-    componentProps={props}
-    // eslint-disable-next-line react/jsx-props-no-spreading
+    componentProps={componentProps}
+  // eslint-disable-next-line react/jsx-props-no-spreading
     {...restAttributes}
   />
 );

@@ -11,6 +11,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import windowUtils from 'core/utils/window';
 import themes from 'ui/themes';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
+import visibilityChangeUtils from 'events/visibility_change';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -501,6 +502,31 @@ QUnit.module('dimensions', {
         $popupContent.append($contentElement);
         instance.option('height', 'auto');
         assert.notEqual($overlayContent.height(), 100, 'auto height option');
+    });
+
+    ['minWidth', 'maxWidth', 'minHeight', 'maxHeight'].forEach((option) => {
+        QUnit.test(`overlay content should have correct ${option} attr`, function(assert) {
+            const instance = $('#popup').dxPopup({
+                [option]: 100,
+                visible: true
+            }).dxPopup('instance');
+
+            const overlayContentElement = instance.$content().parent().get(0);
+
+            assert.strictEqual(overlayContentElement.style[option], '100px', 'css attr value is correct');
+        });
+
+        QUnit.test(`overlay content ${option} attr should be restored after fullScreen option set to true`, function(assert) {
+            const instance = $('#popup').dxPopup({
+                [option]: 100,
+                visible: true
+            }).dxPopup('instance');
+
+            const overlayContentElement = instance.$content().parent().get(0);
+
+            instance.option('fullScreen', true);
+            assert.strictEqual(overlayContentElement.style[option], '', 'css attr value is restored');
+        });
     });
 
     QUnit.test('minHeight should affect popup content height correctly', function(assert) {
@@ -1178,6 +1204,51 @@ QUnit.module('options changed callbacks', {
 
         this.instance.option('toolbarItems[0].toolbar', 'top');
         assert.ok(renderGeometrySpy.calledOnce, 'renderGeometry is called on item location changing');
+    });
+
+    QUnit.test('toolbarItems option change should trigger resize event for content correct geometry rendering (T934380)', function(assert) {
+        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+
+        try {
+            this.instance.option({
+                visible: true,
+                toolbarItems: [{ widget: 'dxButton', options: { text: 'test 2 top' }, toolbar: 'bottom', location: 'after' }]
+            });
+
+            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
+        } finally {
+            resizeEventSpy.restore();
+        }
+    });
+
+    QUnit.test('titleTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
+        this.instance.option('visible', true);
+        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+
+        try {
+            this.instance.option({
+                titleTemplate: () => ''
+            });
+
+            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
+        } finally {
+            resizeEventSpy.restore();
+        }
+    });
+
+    QUnit.test('bottomTemplate option change should trigger resize event for content correct geometry rendering', function(assert) {
+        this.instance.option('visible', true);
+        const resizeEventSpy = sinon.spy(visibilityChangeUtils, 'triggerResizeEvent');
+
+        try {
+            this.instance.option({
+                bottomTemplate: () => ''
+            });
+
+            assert.ok(resizeEventSpy.calledOnce, 'resize event is triggered after option change');
+        } finally {
+            resizeEventSpy.restore();
+        }
     });
 });
 

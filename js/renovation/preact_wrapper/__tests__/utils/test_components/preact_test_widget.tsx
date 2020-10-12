@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Component,
   ComponentBindings,
@@ -14,7 +15,7 @@ import {
 
 import BaseComponent from './base_test_widget';
 
-export const view = (viewModel: PreactTestWidget) => (
+export const view = (viewModel: PreactTestWidget): JSX.Element => (
   <div
     ref={viewModel.rootRef as any}
     {...viewModel.props} // eslint-disable-line react/jsx-props-no-spreading
@@ -64,6 +65,18 @@ export default class PreactTestWidget extends JSXComponent(PreactTestWidgetProps
   @Method()
   eventPropCheck(arg): void {
     this.props.onEventProp?.(arg);
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  methodWithElementParam(arg: HTMLDivElement | number): any {
+    return { arg };
+  }
+
+  @Method()
+  // eslint-disable-next-line class-methods-use-this
+  methodReturnElement(arg: HTMLDivElement): HTMLDivElement {
+    return arg;
   }
 
   @Method()

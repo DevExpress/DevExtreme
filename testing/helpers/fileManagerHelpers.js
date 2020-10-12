@@ -831,3 +831,5 @@ export const stubFileReader = object => {
 export const isDesktopDevice = () => {
     return devices.real().deviceType === 'desktop';
 };
+
+export const getDropFileEvent = file => $.Event($.Event('drop', { dataTransfer: { files: [file] } }));

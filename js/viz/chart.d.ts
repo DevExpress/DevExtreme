@@ -1556,13 +1556,15 @@ export interface dxChartCommonAxisSettingsLabel {
      * @docid dxChartOptions.commonAxisSettings.label.template
      * @type template|function
      * @default undefined
-     * @type_function_param1 data:any
+     * @type_function_param1 data:object
+     * @type_function_param1_field1 value:Date|Number|string
+     * @type_function_param1_field2 valueText:string
      * @type_function_param2 element:SVGGElement
      * @type_function_return string|SVGElement|jQuery
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    template?: template | ((data: any, element: SVGGElement) => string | SVGElement | JQuery);
+    template?: template | ((data: object, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxChartOptions.commonAxisSettings.label.alignment
      * @type Enums.HorizontalAlignment

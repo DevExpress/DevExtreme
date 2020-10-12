@@ -493,7 +493,7 @@ export default class ResourceManager {
         const currentResourcesData = [];
 
         resourceData.forEach(
-            data => currentResourcesData.push(Object.assign({}, data))
+            data => currentResourcesData.push(extend({}, data))
         );
 
         each(groups, (_, value) => {

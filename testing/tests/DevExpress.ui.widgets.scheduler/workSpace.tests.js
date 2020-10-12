@@ -436,7 +436,8 @@ QUnit.testStart(function() {
         assert.deepEqual($cell.data('dxCellData'), {
             startDate: new Date(2015, 2, 16, 0, 0),
             endDate: new Date(2015, 2, 16, 0, 30),
-            allDay: false
+            allDay: false,
+            groupIndex: 0,
         });
     });
 
@@ -521,7 +522,8 @@ QUnit.testStart(function() {
             allDay: false,
             groups: {
                 one: 1
-            }
+            },
+            groupIndex: 0,
         });
 
         assert.deepEqual($cells.eq(1).data('dxCellData'), {
@@ -530,7 +532,8 @@ QUnit.testStart(function() {
             allDay: false,
             groups: {
                 one: 2
-            }
+            },
+            groupIndex: 1,
         });
 
         assert.deepEqual($cells.eq(2).data('dxCellData'), {
@@ -539,7 +542,8 @@ QUnit.testStart(function() {
             allDay: false,
             groups: {
                 one: 1
-            }
+            },
+            groupIndex: 0,
         });
 
         assert.deepEqual($cells.eq(3).data('dxCellData'), {
@@ -548,7 +552,8 @@ QUnit.testStart(function() {
             allDay: false,
             groups: {
                 one: 2
-            }
+            },
+            groupIndex: 1,
         });
 
         assert.deepEqual($cells.eq(4).data('dxCellData'), {
@@ -557,7 +562,8 @@ QUnit.testStart(function() {
             allDay: false,
             groups: {
                 one: 1
-            }
+            },
+            groupIndex: 0,
         });
 
         assert.deepEqual($cells.eq(5).data('dxCellData'), {
@@ -566,7 +572,8 @@ QUnit.testStart(function() {
             allDay: false,
             groups: {
                 one: 2
-            }
+            },
+            groupIndex: 1,
         });
     });
 
@@ -577,25 +584,29 @@ QUnit.testStart(function() {
         assert.deepEqual($cells.eq(0).data('dxCellData'), {
             startDate: new Date(2018, 2, 1),
             endDate: new Date(2018, 2, 1, 0, 30),
-            allDay: false
+            allDay: false,
+            groupIndex: 0,
         });
 
         assert.deepEqual($cells.eq(1).data('dxCellData'), {
             startDate: new Date(2018, 2, 2),
             endDate: new Date(2018, 2, 2, 0, 30),
-            allDay: false
+            allDay: false,
+            groupIndex: 0,
         });
 
         assert.deepEqual($cells.eq(2).data('dxCellData'), {
             startDate: new Date(2018, 2, 1, 0, 30),
             endDate: new Date(2018, 2, 1, 1, 0),
-            allDay: false
+            allDay: false,
+            groupIndex: 0,
         });
 
         assert.deepEqual($cells.eq(3).data('dxCellData'), {
             startDate: new Date(2018, 2, 2, 0, 30),
             endDate: new Date(2018, 2, 2, 1, 0),
-            allDay: false
+            allDay: false,
+            groupIndex: 0,
         });
     });
 
@@ -798,7 +809,8 @@ QUnit.testStart(function() {
         assert.deepEqual($cell.data('dxCellData'), {
             startDate: new Date(2015, 2, 17, 5, 30),
             endDate: new Date(2015, 2, 17, 6, 0),
-            allDay: false
+            allDay: false,
+            groupIndex: 0,
         });
     });
 
@@ -814,7 +826,8 @@ QUnit.testStart(function() {
         assert.deepEqual($cell.data('dxCellData'), {
             startDate: new Date(2015, 2, 3, 0, 30),
             endDate: new Date(2015, 2, 3, 1, 0),
-            allDay: false
+            allDay: false,
+            groupIndex: 0,
         });
     });
 
@@ -863,7 +876,8 @@ QUnit.testStart(function() {
         const cellData = {
             allDay: false,
             endDate: new Date(2015, 5, 29, 1, 30),
-            startDate: new Date(2015, 5, 29, 1, 0)
+            startDate: new Date(2015, 5, 29, 1, 0),
+            groupIndex: 0,
         };
 
         assert.deepEqual(this.instance.getCellDataByCoordinates({ top: 100, left: 100 }, false), cellData, 'Cell data is OK');
@@ -894,7 +908,8 @@ QUnit.testStart(function() {
         const cellData = {
             allDay: true,
             endDate: new Date(2015, 5, 29, 0),
-            startDate: new Date(2015, 5, 29, 0)
+            startDate: new Date(2015, 5, 29, 0),
+            groupIndex: 0,
         };
 
         assert.deepEqual(this.instance.getCellDataByCoordinates({ top: 51, left: 100 }, true), cellData, 'Cell data is OK');
@@ -1052,6 +1067,51 @@ QUnit.testStart(function() {
         assert.roughEqual($fourthGroupLastCell.position().top + $fourthGroupLastCell.get(0).getBoundingClientRect().height, this.instance.getVerticalMax(3), 1.1, 'Max top is OK');
     });
 
+    [{
+        date: new Date(2020, 11, 2, 12, 43),
+        groupIndex: 0,
+        cellStartDate: new Date(2020, 11, 2, 12, 30),
+        cellGroup: { one: 1 },
+        groupOrientation: 'vertical'
+    },
+    {
+        date: new Date(2020, 11, 2, 16, 25),
+        groupIndex: 1,
+        cellStartDate: new Date(2020, 11, 2, 16, 0),
+        cellGroup: { one: 2 },
+        groupOrientation: 'vertical'
+    },
+    {
+        date: new Date(2020, 11, 2, 10, 0),
+        groupIndex: 0,
+        cellStartDate: new Date(2020, 11, 2, 10, 0),
+        cellGroup: { one: 1 },
+        groupOrientation: 'horizontal'
+    },
+    {
+        date: new Date(2020, 11, 2, 16, 59),
+        groupIndex: 1,
+        cellStartDate: new Date(2020, 11, 2, 16, 30),
+        cellGroup: { one: 2 },
+        groupOrientation: 'horizontal'
+    }].forEach(testCase => {
+        QUnit.test(`the getCellByDate method should return correct cell from group -  ${testCase.groupIndex}, groupOrientation -  ${testCase.groupOrientation}`, function(assert) {
+            this.instance.option({
+                currentDate: new Date(2020, 11, 2),
+                groupOrientation: testCase.groupOrientation,
+                groups: [{
+                    name: 'one',
+                    items: [{ id: 1, text: 'a' }, { id: 2, text: 'b' }]
+                }]
+            });
+
+            const $cell = this.instance.getCellByDate(testCase.date, testCase.groupIndex);
+            const cellData = $cell.data('dxCellData');
+
+            assert.deepEqual(cellData.startDate, testCase.cellStartDate, 'returned cell has correct cellData.startDate');
+            assert.deepEqual(cellData.groups, testCase.cellGroup, 'returned cell has correct cellData.groups');
+        });
+    });
 })('Work Space Week');
 
 
@@ -1272,7 +1332,8 @@ QUnit.testStart(function() {
         assert.deepEqual($cell.data('dxCellData'), {
             startDate: new Date(2015, 1, 23, 5, 0),
             endDate: new Date(2015, 1, 24, 0, 0),
-            allDay: undefined
+            allDay: undefined,
+            groupIndex: 0,
         });
     });
 
@@ -1288,7 +1349,8 @@ QUnit.testStart(function() {
         assert.deepEqual($cell.data('dxCellData'), {
             startDate: new Date(2015, 1, 23, 0, 0),
             endDate: new Date(2015, 1, 23, 10, 0),
-            allDay: undefined
+            allDay: undefined,
+            groupIndex: 0,
         });
     });
 
@@ -1305,7 +1367,8 @@ QUnit.testStart(function() {
         assert.deepEqual($cell.data('dxCellData'), {
             startDate: new Date(2015, 1, 23, 0, 0),
             endDate: new Date(2015, 1, 23, 5, 0),
-            allDay: undefined
+            allDay: undefined,
+            groupIndex: 0,
         });
     });
 
@@ -1384,7 +1447,8 @@ QUnit.testStart(function() {
             assert.deepEqual($cell.data('dxCellData'), {
                 startDate: new Date(2016, 2, 14, 5, 0),
                 endDate: new Date(2016, 2, 15, 0, 0),
-                allDay: undefined
+                allDay: undefined,
+                groupIndex: 0,
             }, 'data of the cell is right');
         } finally {
             this.instance.getStartViewDate = origGetFirstViewDate;
@@ -2669,7 +2733,11 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     onCellClick: function(e) {
                         assert.equal(isRenderer(e.cellElement), !!config().useJQuery, 'cell is clicked');
                         assert.deepEqual($(e.cellElement)[0], $cell[0], 'cell is clicked');
-                        assert.deepEqual(e.cellData, { startDate: new Date(2015, 8, 27), endDate: new Date(2015, 8, 28) }, 'cell is clicked');
+                        assert.deepEqual(
+                            e.cellData,
+                            { startDate: new Date(2015, 8, 27), endDate: new Date(2015, 8, 28), groupIndex: 0 },
+                            'correct cell data',
+                        );
                     }
                 }, 'dxSchedulerWorkSpaceMonth');
 
@@ -2723,7 +2791,11 @@ QUnit.module('Workspace Mouse Interaction', () => {
                         assert.ok(true, 'event is handled');
                         assert.equal(isRenderer(e.cellElement), !!config().useJQuery, 'cell is correct');
                         assert.deepEqual($(e.cellElement)[0], $cell[0], 'cell is correct');
-                        assert.deepEqual(e.cellData, { startDate: new Date(2018, 1, 26), endDate: new Date(2018, 1, 27) }, 'cell is correct');
+                        assert.deepEqual(
+                            e.cellData,
+                            { startDate: new Date(2018, 1, 26), endDate: new Date(2018, 1, 27), groupIndex: 0, },
+                            'cell is correct',
+                        );
                     }
                 }, 'dxSchedulerWorkSpaceMonth');
 
@@ -3284,7 +3356,8 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 cellDataCompare: {
                     allDay: false,
                     startDate: new Date(2016, 4, 8),
-                    endDate: new Date(2016, 4, 8, 0, 30)
+                    endDate: new Date(2016, 4, 8, 0, 30),
+                    groupIndex: 0,
                 }
             }, {
                 optionName: 'hoursInterval',
@@ -3292,7 +3365,8 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 cellDataCompare: {
                     allDay: false,
                     startDate: new Date(2016, 4, 8),
-                    endDate: new Date(2016, 4, 8, 0, 18)
+                    endDate: new Date(2016, 4, 8, 0, 18),
+                    groupIndex: 0,
                 }
             }, {
                 optionName: 'firstDayOfWeek',
@@ -3300,7 +3374,8 @@ QUnit.module('Workspace Mouse Interaction', () => {
                 cellDataCompare: {
                     allDay: false,
                     startDate: new Date(2016, 4, 11),
-                    endDate: new Date(2016, 4, 11, 0, 18, 0)
+                    endDate: new Date(2016, 4, 11, 0, 18, 0),
+                    groupIndex: 0,
                 }
             }, {
                 optionName: 'groups',
@@ -3309,7 +3384,8 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     allDay: false,
                     startDate: new Date(2016, 4, 11),
                     endDate: new Date(2016, 4, 11, 0, 18, 0),
-                    groups: { one: 1 }
+                    groups: { one: 1 },
+                    groupIndex: 0,
                 }
             }, {
                 optionName: 'startDayHour',
@@ -3318,7 +3394,8 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     allDay: false,
                     startDate: new Date(2016, 4, 11, 2),
                     endDate: new Date(2016, 4, 11, 2, 18, 0),
-                    groups: { one: 1 }
+                    groups: { one: 1 },
+                    groupIndex: 0,
                 }
             }, {
                 optionName: 'endDayHour',
@@ -3327,7 +3404,8 @@ QUnit.module('Workspace Mouse Interaction', () => {
                     allDay: false,
                     startDate: new Date(2016, 4, 11, 2),
                     endDate: new Date(2016, 4, 11, 2, 18),
-                    groups: { one: 1 }
+                    groups: { one: 1 },
+                    groupIndex: 0,
                 }
             }
         ];
@@ -4502,5 +4580,13 @@ QUnit.module('Renovated Render', {
         cells.each(function() {
             assert.equal($(this).outerWidth(), dateTableWidth / 2, 'Correct cell width');
         });
+    });
+
+    QUnit.test('AllDayTable should be initialized', function(assert) {
+        this.createInstance({
+            showAllDayPanel: true,
+        }, 'dxSchedulerWorkSpaceWeek');
+
+        assert.ok(this.instance._$allDayTable, 'All-day panel has been initialized');
     });
 });

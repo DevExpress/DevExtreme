@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 import {
-  ComponentBindings, JSXComponent, OneWay, Component, Method, Ref,
+  ComponentBindings, JSXComponent, OneWay, Component, Ref, ForwardRef, Effect,
 } from 'devextreme-generator/component_declaration/common';
 
-import { GetHtmlElement, FullPageSize } from '../common/types.d';
+import { FullPageSize } from '../common/types.d';
 import { PageSizeSmall } from './small';
 import { PageSizeLarge } from './large';
 import PagerProps from '../common/pager_props';
@@ -43,16 +43,20 @@ function getAllText(): string {
 @ComponentBindings()
 class PageSizeSelectorProps {
   @OneWay() isLargeDisplayMode = true;
+
+  @ForwardRef() rootElementRef?: HTMLDivElement;
 }
 type PageSizeSelectorPropsType = Pick<PagerProps, 'pageSize'| 'pageSizeChange' | 'pageSizes' > & PageSizeSelectorProps;
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PageSizeSelector
-  extends JSXComponent<PageSizeSelectorPropsType>()
-  implements GetHtmlElement {
+  extends JSXComponent<PageSizeSelectorPropsType>() {
   @Ref() htmlRef!: HTMLDivElement;
 
-  @Method() getHtmlElement(): HTMLElement {
-    return this.htmlRef;
+  @Effect({ run: 'once' }) setRootElementRef(): void {
+    const { rootElementRef } = this.props;
+    if (rootElementRef) {
+      this.props.rootElementRef = this.htmlRef;
+    }
   }
 
   get normalizedPageSizes(): FullPageSize[] {

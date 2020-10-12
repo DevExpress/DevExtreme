@@ -2156,7 +2156,7 @@ QUnit.module('Editing', {
         assert.deepEqual(updateArgs, [['test1', { 'name': 'Test1' }]]);
         assert.deepEqual(removeKeys, []);
         assert.ok(that.dataController.refreshed, 'data is refreshed');
-        assert.deepEqual(that.option('editing.changes'), [{ key: 'test3', oldData: that.dataControllerOptions.items[2].data, type: 'remove' }], 'edit data');
+        assert.deepEqual(that.option('editing.changes'), [{ key: 'test3', type: 'remove' }], 'edit data');
     });
 
     QUnit.test('Close Editing Cell when batch mode on click inside freespace row', function(assert) {
@@ -6439,7 +6439,6 @@ QUnit.module('Editing with real dataController', {
         const changes = this.option('editing.changes');
         assert.deepEqual(changes.length, 1, 'count of edit data');
         assert.deepEqual(changes[0].data, { name: 'Test2' }, 'new data');
-        assert.deepEqual(changes[0].oldData, that.array[1], 'old data');
     });
 
     // T539602
@@ -9098,17 +9097,6 @@ QUnit.module('Editing with real dataController', {
                     'name': 'test'
                 },
                 'key': 1,
-                'oldData': {
-                    'age': 15,
-                    'lastName': 'John',
-                    'name': 'Alex',
-                    'phone': '555555',
-                    'room': 1,
-                    'state': {
-                        'name': 'state 1'
-                    },
-                    'stateId': 0
-                },
                 'type': 'update'
             });
 
@@ -9124,17 +9112,6 @@ QUnit.module('Editing with real dataController', {
                     'name': 'test'
                 },
                 'key': 1,
-                'oldData': {
-                    'age': 15,
-                    'lastName': 'John',
-                    'name': 'Alex',
-                    'phone': '555555',
-                    'room': 1,
-                    'state': {
-                        'name': 'state 1'
-                    },
-                    'stateId': 0
-                },
                 'type': 'update'
             });
             assert.deepEqual(newChanges[0], {
@@ -9143,17 +9120,6 @@ QUnit.module('Editing with real dataController', {
                     'name': 'test'
                 },
                 'key': 1,
-                'oldData': {
-                    'age': 15,
-                    'lastName': 'John',
-                    'name': 'Alex',
-                    'phone': '555555',
-                    'room': 1,
-                    'state': {
-                        'name': 'state 1'
-                    },
-                    'stateId': 0
-                },
                 'type': 'update'
             });
         });
@@ -9180,17 +9146,6 @@ QUnit.module('Editing with real dataController', {
             assert.equal(newChanges.length, 1, 'new changes');
             assert.deepEqual(newChanges[0], {
                 'key': 1,
-                'oldData': {
-                    'age': 15,
-                    'lastName': 'John',
-                    'name': 'Alex',
-                    'phone': '555555',
-                    'room': 1,
-                    'state': {
-                        'name': 'state 1'
-                    },
-                    'stateId': 0
-                },
                 'type': 'remove'
             });
         });
@@ -9224,17 +9179,6 @@ QUnit.module('Editing with real dataController', {
             assert.equal(changesInOnRowRemoving.length, 1, 'changes in onRowRemoving');
             assert.deepEqual(changesInOnRowRemoving[0], {
                 'key': 1,
-                'oldData': {
-                    'age': 15,
-                    'lastName': 'John',
-                    'name': 'Alex',
-                    'phone': '555555',
-                    'room': 1,
-                    'state': {
-                        'name': 'state 1'
-                    },
-                    'stateId': 0
-                },
                 'type': 'remove'
             });
         });
@@ -9285,17 +9229,6 @@ QUnit.module('Editing with real dataController', {
                         },
                         'stateId': 1
                     },
-                    'oldData': {
-                        'age': 16,
-                        'lastName': 'Skip',
-                        'name': 'Dan',
-                        'phone': '553355',
-                        'room': 2,
-                        'state': {
-                            'name': 'state 2'
-                        },
-                        'stateId': 1
-                    },
                     'type': 'update'
                 }, 'changes');
             };
@@ -9309,17 +9242,6 @@ QUnit.module('Editing with real dataController', {
                         'name': 'some value'
                     },
                     'key': {
-                        'age': 16,
-                        'lastName': 'Skip',
-                        'name': 'Dan',
-                        'phone': '553355',
-                        'room': 2,
-                        'state': {
-                            'name': 'state 2'
-                        },
-                        'stateId': 1
-                    },
-                    'oldData': {
                         'age': 16,
                         'lastName': 'Skip',
                         'name': 'Dan',
@@ -9521,17 +9443,6 @@ QUnit.module('Editing with real dataController', {
                     'name': 'test'
                 },
                 'key': 1,
-                'oldData': {
-                    'age': 15,
-                    'lastName': 'John',
-                    'name': 'Alex',
-                    'phone': '555555',
-                    'room': 1,
-                    'state': {
-                        'name': 'state 1'
-                    },
-                    'stateId': 0
-                },
                 'type': 'update'
             }], 'row change');
         });
@@ -9563,17 +9474,6 @@ QUnit.module('Editing with real dataController', {
                     'name': 'test'
                 },
                 'key': 1,
-                'oldData': {
-                    'age': 15,
-                    'lastName': 'John',
-                    'name': 'Alex',
-                    'phone': '555555',
-                    'room': 1,
-                    'state': {
-                        'name': 'state 1'
-                    },
-                    'stateId': 0
-                },
                 'type': 'update'
             }], 'row change');
         });
@@ -11960,7 +11860,7 @@ QUnit.module('Editing with validation', {
         assert.ok(invalidTooltipInstance.option('visible'), 'invalid message tooltip is visible');
         assert.ok(revertTooltipInstance.option('visible'), 'revert tooltip is visible');
         assert.ok(invalidTooltipInstance.$content().offset().left + invalidTooltipInstance.$content().width() < revertTooltipInstance.$content().offset().left, 'revert tooltip is shown after invalid tooltip');
-        assert.roughEqual(revertTooltipInstance.$content().offset().left + revertTooltipInstance.$content().width(), selectBoxInstance.$element().offset().left, 1, 'selectbox is shown after revert tooltip');
+        assert.roughEqual(revertTooltipInstance.$content().offset().left + revertTooltipInstance.$content().width(), selectBoxInstance.$element().offset().left, 1.1, 'selectbox is shown after revert tooltip');
 
         $('#qunit-fixture').removeClass('qunit-fixture-static').css('width', '');
     });

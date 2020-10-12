@@ -402,6 +402,11 @@ export default class ViewDataProvider {
         return undefined;
     }
 
+    getGroupIndices() {
+        const { groupedData } = this.viewData;
+        return groupedData.map(({ groupIndex }) => groupIndex);
+    }
+
     _getGroupData(groupIndex) {
         const { groupedData } = this.viewData;
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];

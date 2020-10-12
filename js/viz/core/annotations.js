@@ -25,6 +25,11 @@ function coreAnnotation(options, contentTemplate) {
         draw: function(widget, group) {
             const annotationGroup = widget._renderer.g().append(group)
                 .css(patchFontOptions(options.font));
+
+            if(this.plaque) {
+                this.plaque.clear();
+            }
+
             this.plaque = new Plaque(
                 extend(true, {}, options, { cornerRadius: (options.border || {}).cornerRadius }),
                 widget, annotationGroup, contentTemplate,
@@ -433,6 +438,10 @@ const corePlugin = {
             hideTooltip() {
                 this.tooltip.annotation = null;
                 this.tooltip.hide();
+            },
+            clearItems() {
+                this.items.forEach(i => i.plaque.clear());
+                this.items = [];
             }
         };
 
@@ -467,7 +476,7 @@ const corePlugin = {
     },
     members: {
         _buildAnnotations() {
-            this._annotations.items = [];
+            this._annotations.clearItems();
 
             const items = this._getOption('annotations', true);
             if(!items?.length) {

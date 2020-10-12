@@ -36,7 +36,6 @@ $material-grid-base-command-select-column-width:
   $material-grid-base-cell-first-column-padding +
   $material-command-column-additional-right-margin;
 
-$material-grid-base-command-expand-column-width: $material-base-icon-size;
 $material-grid-base-cell-vertical-padding: round(($material-grid-base-cell-height - $material-grid-base-cell-line-height) / 2);
 $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $material-grid-base-cell-horizontal-padding;
 
@@ -283,8 +282,6 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
 
         &.dx-command-expand,
         .dx-#{$widget-name}-group-space {
-          width: $material-grid-base-command-expand-column-width;
-          min-width: $material-grid-base-command-expand-column-width;
           padding: 0 4px 0 8px;
           line-height: 0;
         }

@@ -59,7 +59,7 @@ import SchedulerWorkSpaceWorkWeek from './workspaces/ui.scheduler.work_space_wor
 import AppointmentAdapter from './appointmentAdapter';
 import { TimeZoneCalculator } from './timeZoneCalculator';
 import { AppointmentTooltipInfo } from './dataStructures';
-import AppointmentSettingsGenerator from './appointmentSettingsGenerator';
+import { AppointmentSettingsGenerator } from './appointmentSettingsGenerator';
 import utils from './utils';
 import DateAdapter from './dateAdapter';
 

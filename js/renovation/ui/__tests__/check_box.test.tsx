@@ -20,7 +20,7 @@ type Mock = jest.Mock;
 jest.mock('../validation_message', () => ({ ValidationMessage: () => null }));
 
 jest.mock('../../../core/devices', () => {
-  const actualDevices = require.requireActual('../../../core/devices').default;
+  const actualDevices = jest.requireActual('../../../core/devices').default;
   const isSimulator = actualDevices.isSimulator.bind(actualDevices);
   const real = actualDevices.real.bind(actualDevices);
 
@@ -31,7 +31,7 @@ jest.mock('../../../core/devices', () => {
 });
 
 jest.mock('../../../ui/themes', () => ({
-  ...require.requireActual('../../../ui/themes'),
+  ...jest.requireActual('../../../ui/themes'),
   current: jest.fn(() => 'generic'),
 }));
 
@@ -134,7 +134,9 @@ describe('CheckBox', () => {
       const restAttributes = { attr1: 'value1', attr2: 'value2' };
       const onWidgetKeyDown = (): null => null;
       const onWidgetClick = (): null => null;
+      const target = {};
       const checkBox = mount(viewFunction({
+        target,
         ...renderOptions,
         props: renderProps,
         restAttributes,
@@ -143,6 +145,7 @@ describe('CheckBox', () => {
         onWidgetClick,
       } as any) as any); // eslint-disable-line  @typescript-eslint/no-explicit-any
       expect(checkBox.find(Widget).props()).toMatchObject({
+        rootElementRef: target,
         ...renderOptions,
         ...renderProps,
         ...restAttributes,
@@ -500,7 +503,7 @@ describe('CheckBox', () => {
             validationStatus: 'invalid',
             validationErrors: [{ message: 'error message' }],
           });
-          expect(aria.describedby).not.toBe(undefined);
+          expect(aria.describedby).not.toBeUndefined();
         });
         /* eslint-enable spellcheck/spell-checker */
       });
@@ -548,26 +551,6 @@ describe('CheckBox', () => {
           const validationError = { message: 'error message' };
           expect(new CheckBox({ validationError }).validationErrors)
             .toEqual([validationError]);
-        });
-      });
-
-      describe('target', () => {
-        it('should return widget "rootElement" call result', () => {
-          const checkBox = new CheckBox({});
-          const targetMock = 'result';
-          checkBox.widgetRef = { getRootElement: jest.fn(() => targetMock) } as any;
-
-          const { target } = checkBox;
-          expect(target).toBe(targetMock);
-          expect(checkBox.widgetRef.getRootElement).toHaveBeenCalledTimes(1);
-          expect(checkBox.widgetRef.getRootElement).toHaveBeenCalledWith();
-        });
-
-        it('should return undefined when widgetRef is not defined', () => {
-          const checkBox = new CheckBox({});
-
-          const { target } = checkBox;
-          expect(target).toBe(undefined);
         });
       });
 

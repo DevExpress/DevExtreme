@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, Ref,
+  ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
 import { SelectBox } from '../../select_box';
@@ -27,7 +27,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class PageSizeSmallProps {
-  @Ref() parentRef!: HTMLElement;
+  @ForwardRef() parentRef!: HTMLElement;
 
   @OneWay() pageSizes!: FullPageSize[];
 }
@@ -45,7 +45,7 @@ export class PageSizeSmall
     );
   }
 
-  @Effect() updateWidth(): void {
+  @Effect({ run: 'always' }) updateWidth(): void {
     this.minWidth = getElementMinWidth(this.props.parentRef) || this.minWidth;
   }
 }

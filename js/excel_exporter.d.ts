@@ -161,35 +161,35 @@ export interface ExportLoadPanel {
 }
 
 /**
-* @docid ExportBaseProps
+* @docid ExcelExportBaseProps
 * @namespace DevExpress.excelExporter
 * @type object
 * @hidden
 */
-export interface ExportBaseProps {
+export interface ExcelExportBaseProps {
     /**
-     * @docid ExportBaseProps.worksheet
+     * @docid ExcelExportBaseProps.worksheet
      * @type Object
      * @default undefined
      * @public
      */
     worksheet?: object;
     /**
-     * @docid ExportBaseProps.topLeftCell
+     * @docid ExcelExportBaseProps.topLeftCell
      * @type CellAddress|string
      * @default { row: 1, column: 1 }
      * @public
      */
     topLeftCell?: CellAddress | string;
     /**
-     * @docid ExportBaseProps.keepColumnWidths
+     * @docid ExcelExportBaseProps.keepColumnWidths
      * @type boolean
      * @default true
      * @public
      */
     keepColumnWidths?: boolean;
     /**
-     * @docid ExportBaseProps.loadPanel
+     * @docid ExcelExportBaseProps.loadPanel
      * @type ExportLoadPanel
      * @public
      */
@@ -197,35 +197,35 @@ export interface ExportBaseProps {
 }
 
 /**
-* @docid ExportDataGridProps
+* @docid ExcelExportDataGridProps
 * @namespace DevExpress.excelExporter
 * @type object
-* @inherits ExportBaseProps
+* @inherits ExcelExportBaseProps
 */
-export interface ExportDataGridProps extends ExportBaseProps {
+export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
     /**
-     * @docid ExportDataGridProps.component
+     * @docid ExcelExportDataGridProps.component
      * @type dxDataGrid
      * @default undefined
      * @public
      */
     component?: dxDataGrid;
     /**
-     * @docid ExportDataGridProps.selectedRowsOnly
+     * @docid ExcelExportDataGridProps.selectedRowsOnly
      * @type boolean
      * @default false
      * @public
      */
     selectedRowsOnly?: boolean;
     /**
-     * @docid ExportDataGridProps.autoFilterEnabled
+     * @docid ExcelExportDataGridProps.autoFilterEnabled
      * @type boolean
      * @default false
      * @public
      */
     autoFilterEnabled?: boolean;
     /**
-     * @docid ExportDataGridProps.customizeCell
+     * @docid ExcelExportDataGridProps.customizeCell
      * @type function(options)
      * @type_function_param1 options:Object
      * @type_function_param1_field1 gridCell:ExcelDataGridCell
@@ -239,9 +239,9 @@ export interface ExportDataGridProps extends ExportBaseProps {
 * @docid ExportPivotGridProps
 * @namespace DevExpress.excelExporter
 * @type object
-* @inherits ExportBaseProps
+* @inherits ExcelExportBaseProps
 */
-export interface ExportPivotGridProps extends ExportBaseProps {
+export interface ExportPivotGridProps extends ExcelExportBaseProps {
     /**
      * @docid ExportPivotGridProps.component
      * @type dxPivotGrid
@@ -263,7 +263,7 @@ export interface ExportPivotGridProps extends ExportBaseProps {
 /**
  * @docid excelExporter.exportDataGrid
  * @publicName exportDataGrid(options)
- * @param1 options:ExportDataGridProps
+ * @param1 options:ExcelExportDataGridProps
  * @return Promise<CellRange>
  * @namespace DevExpress.excelExporter
  * @module excel_exporter
@@ -271,7 +271,7 @@ export interface ExportPivotGridProps extends ExportBaseProps {
  * @prevFileNamespace DevExpress
  * @public
  */
-export function exportDataGrid(options: ExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
+export function exportDataGrid(options: ExcelExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
 
 /**
  * @docid excelExporter.exportPivotGrid

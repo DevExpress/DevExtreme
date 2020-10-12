@@ -22,7 +22,7 @@ const stubLayersEnvironment = $.extend({}, commons.environment, {
         commons.environment.beforeEach.apply(this, arguments);
         this.layerCollection.stub('items').returns([]);
         this.tracker.on = sinon.stub().returns(noop);
-        sinon.stub(plaqueModule, 'Plaque').returns({ draw: sinon.stub(), hitTest: sinon.stub() });
+        sinon.stub(plaqueModule, 'Plaque').returns({ draw: sinon.stub(), hitTest: sinon.stub(), clear: sinon.stub() });
     },
     afterEach: function() {
         plaqueModule.Plaque.restore();
@@ -516,6 +516,7 @@ QUnit.test('Annotation should be re-render after update size', function(assert) 
 
     assert.equal(plaqueModule.Plaque.callCount, 2);
     assert.equal(plaqueModule.Plaque.returnValues[0].draw.callCount, 2);
+    assert.equal(plaqueModule.Plaque.returnValues[0].clear.callCount, 1);
 });
 
 QUnit.module('Map - API', stubLayersEnvironment);
@@ -818,6 +819,7 @@ QUnit.test('`Annotations` option', function(assert) {
 
     assert.deepEqual(plaqueModule.Plaque.lastCall.args[0], { type: 'text', text: 'updates annotation' });
     assert.equal(plaqueModule.Plaque.returnValues[0].draw.callCount, 2);
+    assert.equal(plaqueModule.Plaque.returnValues[0].clear.callCount, 1);
 });
 
 QUnit.module('Map - preventing option merging', stubLayersEnvironment);

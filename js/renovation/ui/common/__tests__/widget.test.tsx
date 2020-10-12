@@ -1,6 +1,7 @@
 import React, { createRef } from 'react';
 // Should be before component import
 import { mount } from 'enzyme';
+// import { create as mount } from 'react-test-renderer';
 import each from 'jest-each';
 import { DisposeEffectReturn } from '../../../utils/effect_return.d';
 import {
@@ -13,7 +14,7 @@ import config from '../../../../core/config';
 import { ConfigProvider } from '../config_provider';
 
 jest.mock('../../../../events/utils/index', () => ({
-  ...require.requireActual('../../../../events/utils/index'),
+  ...jest.requireActual('../../../../events/utils/index'),
   isFakeClickEvent: jest.fn(),
 }));
 jest.mock('../config_provider', () => ({ ConfigProvider: () => null }));
@@ -32,7 +33,6 @@ describe('Widget', () => {
         styles: { display: 'none' },
         attributes: { attributes: 'attributes' },
       } as any) as any);
-
       expect(widget.props()).toEqual({
         attributes: 'attributes',
         style: { display: 'none' },
@@ -572,6 +572,26 @@ describe('Widget', () => {
           expect(getEventHandlers(EVENT.hiding)).toBe(undefined);
         });
       });
+
+      describe('setRootElementRef', () => {
+        it('set rootElementRef to div ref', () => {
+          const widgetRef = {} as HTMLDivElement;
+          const component = new Widget({
+            rootElementRef: {},
+          } as WidgetProps);
+          component.widgetRef = widgetRef;
+          component.setRootElementRef();
+
+          expect(component.props.rootElementRef).toBe(component.widgetRef);
+        });
+
+        it('hasnt rootElementRef', () => {
+          const component = new Widget({ });
+          component.widgetRef = {} as HTMLDivElement;
+          component.setRootElementRef();
+          expect(component.props.rootElementRef).toBeUndefined();
+        });
+      });
     });
 
     describe('Methods', () => {
@@ -588,28 +608,10 @@ describe('Widget', () => {
           expect(widget.focused).toBe(true);
         });
       });
-
-      describe('getRootElement', () => {
-        it('should return widgetRef', () => {
-          const widget = new Widget({});
-          const mockRef = jest.fn();
-          widget.widgetRef = mockRef as any;
-
-          expect(widget.getRootElement()).toBe(mockRef);
-        });
-      });
     });
   });
 
   describe('Logic', () => {
-    it('getHtmlElement', () => {
-      const widgetRef = {} as HTMLDivElement;
-      const component = new Widget({});
-      component.widgetRef = widgetRef;
-
-      expect(component.getHtmlElement()).toEqual(widgetRef);
-    });
-
     describe('Getters', () => {
       describe('attributes', () => {
         it('should return ARIA labels', () => {
