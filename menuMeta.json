@@ -1861,9 +1861,7 @@
             "Widget": "Scheduler",
             "Modules": "globalize--vue&react",
             "MvcAdditionalFiles": [
-              "/Models/AdaptiveAppointment.cs",
-              "/Models/AdaptiveAppointmentsResource.cs",
-              "/Models/SampleData/AdaptiveAppointments.cs",
+              "/Models/SampleData/LimitAppointmentCountPerCellAppointments.cs",
               "/Models/SampleData/AdaptiveAppointmentsResources.cs"
             ],
             "DemoType": "Web"
