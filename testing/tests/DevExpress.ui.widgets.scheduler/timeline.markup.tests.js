@@ -191,7 +191,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
         assert.equal($element.find('.dx-scheduler-date-table-cell').length, 48, 'Date table has 48 cells');
     });
 
-    QUnit.test('Scheduler timeline day should have rigth first view date', function(assert) {
+    QUnit.test('Scheduler timeline day should have correct first view date', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -201,7 +201,7 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
         assert.deepEqual(this.instance.getStartViewDate(), new Date(2015, 9, 21, 4), 'First view date is OK');
     });
 
-    QUnit.test('Each cell of scheduler timeline day should contain rigth jQuery dxCellData', function(assert) {
+    QUnit.test('Each cell of scheduler timeline day should contain correct jQuery dxCellData', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -214,23 +214,26 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
         assert.deepEqual(dataUtils.data($cells.get(0), 'dxCellData'), {
             startDate: new Date(2015, 9, 21, 5),
             endDate: new Date(2015, 9, 21, 6),
-            allDay: false
-        }, 'data of first cell is rigth');
+            allDay: false,
+            groupIndex: 0,
+        }, 'data of first cell is correct');
 
         assert.deepEqual(dataUtils.data($cells.get(5), 'dxCellData'), {
             startDate: new Date(2015, 9, 21, 10),
             endDate: new Date(2015, 9, 21, 11),
-            allDay: false
-        }, 'data of 5th cell is rigth');
+            allDay: false,
+            groupIndex: 0,
+        }, 'data of 5th cell is correct');
 
         assert.deepEqual(dataUtils.data($cells.get(10), 'dxCellData'), {
             startDate: new Date(2015, 9, 21, 15),
             endDate: new Date(2015, 9, 21, 16),
-            allDay: false
-        }, 'data of 10th cell is rigth');
+            allDay: false,
+            groupIndex: 0,
+        }, 'data of 10th cell is correct');
     });
 
-    QUnit.test('Each cell of grouped scheduler timeline day should contain rigth jQuery dxCellData', function(assert) {
+    QUnit.test('Each cell of grouped scheduler timeline day should contain correct jQuery dxCellData', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -251,8 +254,9 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             groups: {
                 one: 2,
                 two: 1
-            }
-        }, 'data of first cell is rigth');
+            },
+            groupIndex: 2,
+        }, 'data of first cell is correct');
 
         assert.deepEqual(dataUtils.data($cells.get(5), 'dxCellData'), {
             startDate: new Date(2015, 9, 21, 10),
@@ -261,8 +265,9 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             groups: {
                 one: 2,
                 two: 1
-            }
-        }, 'data of 5th cell is rigth');
+            },
+            groupIndex: 2,
+        }, 'data of 5th cell is correct');
 
         assert.deepEqual(dataUtils.data($cells.get(10), 'dxCellData'), {
             startDate: new Date(2015, 9, 21, 15),
@@ -271,8 +276,9 @@ QUnit.module('TimelineDay markup', timelineDayModuleConfig, () => {
             groups: {
                 one: 2,
                 two: 1
-            }
-        }, 'data of 10th cell is rigth');
+            },
+            groupIndex: 2,
+        }, 'data of 10th cell is correct');
     });
 
     QUnit.test('Header panel should have right quantity of cells', function(assert) {
@@ -438,7 +444,7 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
         assert.equal($element.find('.dx-scheduler-date-table-cell').length, 96, 'Date table has 96 cells');
     });
 
-    QUnit.test('Each cell of scheduler timeline day should contain rigth jQuery dxCellData, groupOrientation = horizontal', function(assert) {
+    QUnit.test('Each cell of scheduler timeline day should contain correct jQuery dxCellData, groupOrientation = horizontal', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -455,8 +461,9 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
             allDay: false,
             groups: {
                 one: 1
-            }
-        }, 'data of first cell is rigth');
+            },
+            groupIndex: 0,
+        }, 'data of first cell is correct');
 
         assert.deepEqual(dataUtils.data($cells.get(5), 'dxCellData'), {
             startDate: new Date(2015, 9, 21, 7),
@@ -464,8 +471,9 @@ QUnit.module('TimelineDay with horizontal grouping markup', timelineDayModuleCon
             allDay: false,
             groups: {
                 one: 2
-            }
-        }, 'data of 5th cell is rigth');
+            },
+            groupIndex: 1,
+        }, 'data of 5th cell is correct');
     });
 
     QUnit.test('Header panel should have right quantity of cells, groupOrientation = horizontal', function(assert) {
@@ -573,7 +581,7 @@ QUnit.module('TimelineWeek markup', timelineWeekModuleConfig, () => {
         assert.equal($firstRow.find('.dx-scheduler-header-panel-week-cell').length, 7, 'First row cells count and class is ok');
     });
 
-    QUnit.test('Scheduler timeline week should have rigth first view date', function(assert) {
+    QUnit.test('Scheduler timeline week should have correct first view date', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -704,7 +712,7 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
         assert.equal($element.find('.dx-scheduler-date-table-cell').length, 336 * 2, 'Date table has 672 cells');
     });
 
-    QUnit.test('Each cell of scheduler timeline week should contain rigth jQuery dxCellData, groupOrientation = horizontal', function(assert) {
+    QUnit.test('Each cell of scheduler timeline week should contain correct jQuery dxCellData, groupOrientation = horizontal', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -721,8 +729,9 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
             allDay: false,
             groups: {
                 one: 1
-            }
-        }, 'data of first cell is rigth');
+            },
+            groupIndex: 0,
+        }, 'data of first cell is correct');
 
         assert.deepEqual(dataUtils.data($cells.get(25), 'dxCellData'), {
             startDate: new Date(2015, 9, 20, 6),
@@ -730,8 +739,9 @@ QUnit.module('TimelineWeek with horizontal grouping markup', timelineWeekModuleC
             allDay: false,
             groups: {
                 one: 2
-            }
-        }, 'data of 25th cell is rigth');
+            },
+            groupIndex: 1,
+        }, 'data of 25th cell is correct');
     });
 
     QUnit.test('Header panel should contain group rows in grouped mode, groupOrientation = horizontal', function(assert) {
@@ -781,7 +791,7 @@ QUnit.module('TimelineWorkWeek markup', timelineWorkWeekModuleConfig, () => {
         assert.equal($element.find('.dx-scheduler-date-table-cell').length, 240, 'Date table has 240 cells');
     });
 
-    QUnit.test('Scheduler timeline work week should have rigth first view date', function(assert) {
+    QUnit.test('Scheduler timeline work week should have correct first view date', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -936,7 +946,7 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
         });
     });
 
-    QUnit.test('Scheduler timeline month should have rigth first view date', function(assert) {
+    QUnit.test('Scheduler timeline month should have correct first view date', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 9, 21),
             firstDayOfWeek: 1,
@@ -952,7 +962,7 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
         assert.deepEqual(this.instance.getStartViewDate(), new Date(2015, 9, 1, 0), 'First view date is OK after startDayHour option changed');
     });
 
-    QUnit.test('Each cell of scheduler timeline month should contain rigth jQuery dxCellData', function(assert) {
+    QUnit.test('Each cell of scheduler timeline month should contain correct jQuery dxCellData', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 3, 1),
             startDayHour: 1,
@@ -966,8 +976,9 @@ QUnit.module('TimelineMonth markup', timelineMonthModuleConfig, () => {
             assert.deepEqual(dataUtils.data($(this)[0], 'dxCellData'), {
                 startDate: new Date(2015, 3, 1 + index, 1),
                 endDate: new Date(2015, 3, 1 + index, 10),
-                allDay: false
-            }, 'data of first cell is rigth');
+                allDay: false,
+                groupIndex: 0,
+            }, 'cell\'s data is correct');
         });
     });
 
@@ -1075,7 +1086,7 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
         });
     });
 
-    QUnit.test('Each cell of scheduler timeline month should contain rigth jQuery dxCellData', function(assert) {
+    QUnit.test('Each cell of scheduler timeline month should contain correct jQuery dxCellData', function(assert) {
         this.instance.option({
             currentDate: new Date(2015, 3, 1),
             startDayHour: 1,
@@ -1095,8 +1106,9 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
                 allDay: false,
                 groups: {
                     one: groupIndex
-                }
-            }, 'data of cell is rigth');
+                },
+                groupIndex: groupIndex - 1,
+            }, 'cell\'s data is correct');
         });
     });
 

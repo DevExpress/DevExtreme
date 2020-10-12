@@ -1761,11 +1761,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             startDate: startDate,
             endDate: startDate,
             allDay: true,
+            groupIndex: cellGroupIndex,
         };
-
-        if(this.isRenovatedRender()) {
-            data.groupIndex = cellGroupIndex;
-        }
 
         const groups = this._getCellGroups(cellGroupIndex);
 
@@ -1933,12 +1930,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         const data = {
             startDate: startDate,
             endDate: endDate,
-            allDay: this._getTableAllDay()
+            allDay: this._getTableAllDay(),
+            groupIndex,
         };
-
-        if(this.isRenovatedRender()) {
-            data.groupIndex = groupIndex;
-        }
 
         const groups = this._getCellGroups(groupIndex);
 
