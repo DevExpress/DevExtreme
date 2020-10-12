@@ -362,6 +362,10 @@ const ValidatingController = modules.Controller.inherit((function() {
                 const isCellOrBatchEditingAllowed = editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row });
 
                 needCreateValidator = isEditRow || isCellOrBatchEditingAllowed && showEditorAlways;
+
+                if(isCellOrBatchEditingAllowed && showEditorAlways) {
+                    editingController._addInternalData({ key: parameters.key, oldData: parameters.data });
+                }
             }
 
             if(needCreateValidator) {
@@ -636,6 +640,17 @@ export default {
                     }
 
                     return result;
+                },
+
+                _prepareEditCell: function(params) {
+                    const isNotCanceled = this.callBase.apply(this, arguments);
+                    const validatingController = this.getController('validating');
+
+                    if(isNotCanceled && params.column.showEditorAlways) {
+                        validatingController.updateValidationState({ key: params.key });
+                    }
+
+                    return isNotCanceled;
                 },
 
                 processItems: function(items, changeType) {
