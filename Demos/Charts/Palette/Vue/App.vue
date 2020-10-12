@@ -111,7 +111,7 @@ export default {
 
 .option {
     display: inline-block;
-    min-width: 320px;
+    min-width: 324px;
     margin-top: 5px;
 }
 

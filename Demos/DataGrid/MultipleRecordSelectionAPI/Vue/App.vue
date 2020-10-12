@@ -49,7 +49,7 @@
       />
     </DxDataGrid>
     <div class="selected-data">
-      <span class="caption">Selected Records: </span>
+      <span class="caption">Selected Records:</span>
       <span>
         {{ selectedEmployeeNames }}
       </span>
@@ -134,6 +134,7 @@ export default {
 
 #select-prefix {
   width: 150px;
+  margin-right: 4px;
   display: inline-block;
   vertical-align: middle;
 }
@@ -147,5 +148,6 @@ export default {
 .selected-data .caption {
   font-weight: bold;
   font-size: 115%;
+  margin-right: 4px;
 }
 </style>

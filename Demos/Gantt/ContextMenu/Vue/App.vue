@@ -145,7 +145,7 @@ export default {
 
   .option {
     margin-top: 10px;
-    margin-right: 44px;
+    margin-right: 40px;
     display: inline-block;
   }
 
