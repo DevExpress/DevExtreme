@@ -2274,7 +2274,7 @@ Axis.prototype = {
         if(ticks) {
             return this._majorTicks.map(tick => {
                 return tick.templateContainer;
-            }).filter(item => item !== undefined);
+            }).filter(item => item !== undefined && item !== null);
         } else {
             return [];
         }

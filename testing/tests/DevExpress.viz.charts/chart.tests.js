@@ -92,6 +92,7 @@ const environment = {
             };
             axis.stub('getMargins').returns({ left: 0, top: 0, right: 0, bottom: 0 });
             axis.stub('getOptions').returns({});
+            axis.stub('getTemplatesGroups').returns([]);
             return axis;
         });
     },
