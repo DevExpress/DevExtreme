@@ -90,6 +90,10 @@ const subscribes = {
         return this._getUpdatedData({ data: options.data });
     },
 
+    createAppointmentAdapter: function(rawAppointment) {
+        return this.createAppointmentAdapter(rawAppointment);
+    },
+
     updateAppointmentAfterDrag: function(options) {
         const info = utils.dataAccessors.getAppointmentInfo(options.$appointment);
 
