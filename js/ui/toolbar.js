@@ -9,6 +9,7 @@ const ActionSheetStrategy = require('./toolbar/ui.toolbar.strategy.action_sheet'
 const DropDownMenuStrategy = require('./toolbar/ui.toolbar.strategy.drop_down_menu');
 const ToolbarBase = require('./toolbar/ui.toolbar.base');
 const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
+import { deferRender } from '../core/utils/common';
 
 const STRATEGIES = {
     actionSheet: ActionSheetStrategy,
@@ -136,7 +137,9 @@ const Toolbar = ToolbarBase.inherit({
         this._hideOverflowItems();
         this._menuStrategy._updateMenuVisibility();
         this.callBase();
-        this._menuStrategy.renderMenuItems();
+        deferRender(() => {
+            this._menuStrategy.renderMenuItems();
+        });
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
@@ -218,7 +221,9 @@ const Toolbar = ToolbarBase.inherit({
 
     _renderMenu: function() {
         this._renderMenuStrategy();
-        this._menuStrategy.render();
+        deferRender(() => {
+            this._menuStrategy.render();
+        });
     },
 
     _renderMenuStrategy: function() {

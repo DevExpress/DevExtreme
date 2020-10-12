@@ -26,7 +26,7 @@ QUnit.testStart(() => {
 const openedStateModes = ['shrink', 'push', 'overlap'];
 const configs = [];
 openedStateModes.forEach(openedStateMode => {
-    ['left', 'top', 'right'].forEach(position => {
+    ['left', 'top', 'right', 'bottom'].forEach(position => {
         ['slide', 'expand'].forEach(revealMode => {
             [true, false].forEach(shading => {
                 [undefined, 25].forEach(minSize => {
@@ -187,7 +187,9 @@ configs.forEach(config => {
     }, () => {
 
         function configIs(openedStateMode, position, revealMode) {
-            return config.openedStateMode === openedStateMode && (config.position === position || !position) && (config.revealMode === revealMode || !revealMode);
+            const isPosition = Array.isArray(position) ? (position.indexOf(config.position) >= 0) : (config.position === position || !position);
+            const isRevealMode = Array.isArray(revealMode) ? (revealMode.indexOf(config.revealMode) >= 0) : (config.revealMode === revealMode || !revealMode);
+            return config.openedStateMode === openedStateMode && isPosition && isRevealMode;
         }
 
         function testOrSkip(name, skip, callback) {
@@ -212,11 +214,15 @@ configs.forEach(config => {
             return extend({ rtlEnabled: false, animationEnabled: false }, config, targetOptions);
         }
 
-        testOrSkip('opened: false', () => configIs('push', 'top') || configIs('overlap', 'right', 'expand') && config.minSize, function(assert) {
+        testOrSkip('opened: false', () => configIs('push', ['top', 'bottom']) || configIs('overlap', ['right', 'top', 'bottom', ], ['expand', 'slide']) && config.minSize || configIs('overlap', 'bottom', 'slide'), function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
                 template: drawerTesters[config.position].template,
+                __debugWhenPanelContentRendered: (e) => {
+                    drawerTesters[config.position].checkWhenPanelContentRendered(assert, e.drawer, drawerElement, document.getElementById('template'), config.minSize);
+                }
             }));
 
             this.clock.tick(100);
@@ -224,7 +230,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: false -> opened: true', () => configIs('push', 'top') || configIs('overlap', 'right'), function(assert) {
+        testOrSkip('opened: false -> opened: true', () => configIs('push', ['top', 'bottom']) || configIs('overlap', 'right') || configIs('overlap', 'bottom') && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
@@ -253,7 +259,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkHidden(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: false, visible: false -> visible: true -> opened: true', () => configIs('overlap') || configIs('push', 'top'), function(assert) {
+        testOrSkip('opened: false, visible: false -> visible: true -> opened: true', () => configIs('overlap') || configIs('push', ['top', 'bottom']), function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
@@ -270,7 +276,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true', () => configIs('push', 'top'), function(assert) {
+        testOrSkip('opened: true', () => configIs('push', ['top', 'bottom']) || configIs('overlap', 'bottom') && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -298,7 +304,7 @@ configs.forEach(config => {
         });
 
         [true, false].forEach((closeOnOutsideClick) => {
-            testOrSkip(`opened: true -> click by viewContent, closeOnOutsideClick: ${closeOnOutsideClick}`, () => configIs('push', 'top'), function(assert) {
+            testOrSkip(`opened: true -> click by viewContent, closeOnOutsideClick: ${closeOnOutsideClick}`, () => configIs('push', ['top', 'bottom']) || configIs('overlap', 'bottom'), function(assert) {
                 const drawerElement = document.getElementById(drawerTesters.drawerElementId);
                 const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                     opened: true,
@@ -318,7 +324,7 @@ configs.forEach(config => {
             });
         });
 
-        testOrSkip('opened: true -> visible: false -> visible: true', () => configIs('push', 'top'), function(assert) {
+        testOrSkip('opened: true -> visible: false -> visible: true', () => configIs('push', ['top', 'bottom']) || configIs('overlap', 'bottom') && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -334,7 +340,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip(`opened: true, shading: ${config.shading} -> shading: ${!config.shading}`, () => configIs('push', 'top'), function(assert) {
+        testOrSkip(`opened: true, shading: ${config.shading} -> shading: ${!config.shading}`, () => configIs('push', ['top', 'bottom']) || configIs('overlap', 'bottom') && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -349,7 +355,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true -> repaint', () => configIs('push', 'top'), function(assert) {
+        testOrSkip('opened: true -> repaint', () => configIs('push', ['top', 'bottom']) || configIs('overlap', 'bottom') && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,
@@ -363,7 +369,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: false -> resize -> opened: true, update position config after resize', () => configIs('push', 'top'), function(assert) {
+        testOrSkip('opened: false -> resize -> opened: true, update position config after resize', () => configIs('push', ['top', 'bottom']) || configIs('overlap', 'bottom'), function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: false,
@@ -387,7 +393,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOrSkip('opened: true (template + onRendered)', () => configIs('push', 'top') || configIs('overlap', 'right', 'expand'), function(assert) {
+        testOrSkip('opened: true (template + onRendered)', () => configIs('push', ['top', 'bottom']) || configIs('overlap', 'right', 'expand') || configIs('overlap', 'bottom'), function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 width: 200,
@@ -413,7 +419,7 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
-        testOverlap('opened: true (T813710: template + rendered + _viewPortChangeHandler)', () => configIs(undefined, 'right'), function(assert) {
+        testOverlap('opened: true (T813710: template + rendered + _viewPortChangeHandler)', () => configIs(undefined, 'right') || configIs('overlap', 'bottom'), function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
                 opened: true,

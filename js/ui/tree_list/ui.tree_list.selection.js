@@ -4,6 +4,7 @@ import { noop, equalByValue } from '../../core/utils/common';
 import selectionModule from '../grid_core/ui.grid_core.selection';
 import errors from '../widget/ui.errors';
 import { extend } from '../../core/utils/extend';
+import { isDefined } from '../../core/utils/type';
 
 const TREELIST_SELECT_ALL_CLASS = 'dx-treelist-select-all';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
@@ -168,7 +169,7 @@ treeListCore.registerModule('selection', extend(true, {}, selectionModule, {
                     const selectedRowKeys = that.option('selectedRowKeys');
                     const isRecursiveSelection = this.isRecursiveSelection();
                     const normalizedArgs = isRecursiveSelection && that._normalizeSelectionArgs({
-                        keys: value || []
+                        keys: isDefined(value) ? value : []
                     }, !isDeselect);
 
                     if(normalizedArgs && !equalByValue(normalizedArgs.selectedRowKeys, selectedRowKeys)) {

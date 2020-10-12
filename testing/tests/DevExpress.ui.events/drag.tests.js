@@ -693,6 +693,25 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should not be fired on unsubscribed
 });
 
 
+['successive', 'reverse'].forEach((orderOfSubscriptions) => {
+    QUnit.test(`dxdragenter of the nested target should be fired with ${orderOfSubscriptions} subscriptions`, function(assert) {
+        assert.expect(2);
+
+        const $element = $('#element');
+        const $dropContainer1 = orderOfSubscriptions === 'successive' ? $('#dropTarget') : $('#innerDropTarget');
+        const $dropContainer2 = orderOfSubscriptions === 'successive' ? $('#innerDropTarget') : $('#dropTarget');
+        const pointer = pointerMock($element);
+
+        $dropContainer1.on(dragEvents.enter, function(e) { assert.ok(true); });
+        $dropContainer2.on(dragEvents.enter, function(e) { assert.ok(true); });
+
+        $element.on(dragEvents.start, noop);
+
+        pointer.start().down().move(200, 200).move(50, 50).up();
+    });
+});
+
+
 QUnit.module('hacks');
 
 QUnit.test('default behaviour on dxpointermove should be prevented to reduce user selection while drag', function(assert) {

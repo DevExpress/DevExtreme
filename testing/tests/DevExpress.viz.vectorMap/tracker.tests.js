@@ -54,10 +54,12 @@ const environment = {
         $.each(this.stubbedCallbacks || [], $.proxy(function(_, name) {
             this[name] = sinon.stub();
         }, this));
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         this.tracker.dispose();
         this.root.dispose();
+        this.clock.restore();
     },
     createTracker: function() {
         const test = this;
@@ -359,7 +361,6 @@ QUnit.test('too big deltas are truncated', function(assert) {
 
 QUnit.test('consequent deltas are ignored', function(assert) {
     this.trigger('wheel', { x: 10, y: 20 }, { deltaY: -200, deltaMode: 0 });
-    this.tracker._wheelLock.time = Date.now(); // this line help to imitate next action was run immediately
     this.trigger('wheel', { x: 11, y: 22 }, { deltaY: -120, deltaMode: 0 });
 
     assert.deepEqual(this.onZoom.lastCall.args, [{ delta: 2, x: 10, y: 20 }]);

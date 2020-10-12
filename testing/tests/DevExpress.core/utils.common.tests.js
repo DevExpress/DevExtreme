@@ -8,9 +8,11 @@ import {
     deferRenderer,
     applyServerDecimalSeparator,
     grep,
-    getKeyHash
+    getKeyHash,
+    equalByValue,
+    splitPair,
+    pairToObject
 } from 'core/utils/common';
-import { equalByValue } from 'core/utils/common';
 import Guid from 'core/guid';
 import config from 'core/config';
 
@@ -484,6 +486,166 @@ module('getKeyHash', () => {
     TEST_VALUES.forEach(({ value, result }) => {
         test(`getKeyHash from the ${typeof value} value`, function(assert) {
             assert.strictEqual(getKeyHash(value), result, 'Correct hash');
+        });
+    });
+});
+
+module('splitPair', () => {
+    const TEST_DATA = [
+        {
+            value: '',
+            result: ['']
+        },
+        {
+            value: '1  2',
+            result: ['1', '2']
+        },
+        {
+            value: '0 0',
+            result: ['0', '0']
+        },
+        {
+            value: '1 2 3',
+            result: ['1', '2']
+        },
+        {
+            value: {},
+            result: [undefined, undefined]
+        },
+        {
+            value: { x: 2 },
+            result: [2, undefined]
+        },
+        {
+            value: { y: 1 },
+            result: [undefined, 1]
+        },
+        {
+            value: { x: 1, y: 2 },
+            result: [1, 2]
+        },
+        {
+            value: { x: 0, y: 0 },
+            result: [0, 0]
+        },
+        {
+            value: { x: 0, y: 0, h: 1 },
+            result: [0, 0]
+        },
+        {
+            value: { x: 2, y: 1, h: 3, v: 6 },
+            result: [2, 1]
+        },
+        {
+            value: { h: 2, v: 1 },
+            result: [2, 1]
+        },
+        {
+            value: { h: 0, v: 0 },
+            result: [0, 0]
+        },
+        {
+            value: 5,
+            result: [5]
+        },
+        {
+            value: 0,
+            result: [0]
+        },
+        {
+            value: -1,
+            result: [-1]
+        },
+        {
+            value: 2.4,
+            result: [2.4]
+        },
+        {
+            value: [],
+            result: []
+        },
+        {
+            value: [1, 2, 3],
+            result: [1, 2, 3]
+        },
+        {
+            value: function() {},
+            result: null
+        }
+    ];
+
+    TEST_DATA.forEach(({ value, result }) => {
+        test(`call "splitPair" function with ${JSON.stringify(value)} argument`, function(assert) {
+            assert.deepEqual(splitPair(value), result, 'Correct splitting');
+        });
+    });
+});
+
+module('pairToObject', () => {
+    const TEST_DATA = [
+        {
+            value: [''],
+            result: { h: 0, v: 0 }
+        },
+        {
+            value: ['1', '2'],
+            result: { h: 1, v: 2 }
+        },
+        {
+            value: ['0', '0'],
+            result: { h: 0, v: 0 }
+        },
+
+        {
+            value: [undefined, undefined],
+            result: { h: 0, v: 0 }
+        },
+        {
+            value: [2, undefined],
+            result: { h: 2, v: 2 }
+        },
+        {
+            value: [undefined, 1],
+            result: { h: 0, v: 1 }
+        },
+        {
+            value: [5],
+            result: { h: 5, v: 5 }
+        },
+        {
+            value: [0],
+            result: { h: 0, v: 0 }
+        },
+        {
+            value: [-1],
+            result: { h: -1, v: -1 }
+        },
+        {
+            value: [2.4],
+            result: { h: 2.4, v: 2.4 },
+            integerResult: { h: 2, v: 2 }
+        },
+        {
+            value: [2.4, 5.6],
+            result: { h: 2.4, v: 5.6 },
+            integerResult: { h: 2, v: 5 }
+        },
+        {
+            value: [],
+            result: { h: 0, v: 0 }
+        },
+        {
+            value: null,
+            result: { h: 0, v: 0 }
+        }
+    ];
+
+    [false, true].forEach((preventRound) => {
+        TEST_DATA.forEach(({ value, result, integerResult }) => {
+            test(`call "pairToObject" function with ${JSON.stringify(value)} value and preventRound="${preventRound}"`, function(assert) {
+                const expectedResult = !preventRound && integerResult ? integerResult : result;
+                assert.deepEqual(pairToObject(value, preventRound), expectedResult, 'Correct convertation');
+            });
         });
     });
 });

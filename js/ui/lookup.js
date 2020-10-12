@@ -10,6 +10,7 @@ const inkRipple = require('./widget/utils.ink_ripple');
 const messageLocalization = require('../localization/message');
 const devices = require('../core/devices');
 const registerComponent = require('../core/component_registrator');
+const { isDefined } = require('../core/utils/type');
 const eventUtils = require('../events/utils');
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
 const themes = require('./themes');
@@ -233,7 +234,7 @@ const Lookup = DropDownList.inherit({
             * @hidden
             */
 
-            itemCenteringEnabled: false,
+            dropDownCentered: false,
 
             _scrollToSelectedItemEnabled: false,
             useHiddenSubmitElement: true
@@ -304,7 +305,7 @@ const Lookup = DropDownList.inherit({
 
                     showCancelButton: false,
 
-                    itemCenteringEnabled: true,
+                    dropDownCentered: true,
 
                     _scrollToSelectedItemEnabled: true,
 
@@ -454,7 +455,8 @@ const Lookup = DropDownList.inherit({
             return;
         }
 
-        this._updateField(this.option('displayValue') || this.option('placeholder'));
+        const displayValue = this.option('displayValue');
+        this._updateField(isDefined(displayValue) && String(displayValue) || this.option('placeholder'));
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
     },
 
@@ -580,7 +582,7 @@ const Lookup = DropDownList.inherit({
     },
 
     _setPopupPosition: function() {
-        if(!this.option('itemCenteringEnabled')) return;
+        if(!this.option('dropDownCentered')) return;
 
         const flipped = this._popup._$wrapper.hasClass(LOOKUP_POPOVER_FLIP_VERTICAL_CLASS);
         if(flipped) return;
@@ -619,7 +621,9 @@ const Lookup = DropDownList.inherit({
         let listHeight = 0;
         let requireListItems = [];
 
-        if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
+        if(listItems.length === 0) {
+            listHeight += MATERIAL_LOOKUP_LIST_PADDING;
+        } else if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
             listItems.each((_, item) => {
                 listHeight += $(item).outerHeight();
             });
@@ -737,7 +741,7 @@ const Lookup = DropDownList.inherit({
         delete result.position;
 
         if(this.option('_scrollToSelectedItemEnabled')) {
-            result.position = this.option('itemCenteringEnabled') ? {
+            result.position = this.option('dropDownCentered') ? {
                 my: 'left top',
                 at: 'left top',
                 of: this.element()
@@ -1129,7 +1133,7 @@ const Lookup = DropDownList.inherit({
             case 'cleanSearchOnOpening':
             case '_scrollToSelectedItemEnabled':
                 break;
-            case 'itemCenteringEnabled':
+            case 'dropDownCentered':
                 if(this.option('_scrollToSelectedItemEnabled')) {
                     this.option('dropDownOptions.position', undefined);
                     this._renderPopup();

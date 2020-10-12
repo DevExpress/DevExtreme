@@ -158,8 +158,25 @@ QUnit.module('dateViewRoller', {
         pointer.start().down().move(0, -itemHeight * 0.7).wait(500).up();
         assert.equal(content.position().top, -itemHeight);
 
-        pointer.start().down().move(0, -itemHeight * 0.4).wait(500).up();
+        pointer.start().down().move(0, -itemHeight * 0.1).wait(500).up();
+
         assert.equal(content.position().top, -itemHeight);
+    });
+
+    QUnit.test('selectedIndex can be changed by vertical swipe', function(assert) {
+        const element = this.element.dxDateViewRoller({ items: ['1', '2', '3', '4', '5'], selectedIndex: 0 });
+        const instance = element.dxDateViewRoller('instance');
+        const content = element.find('.dx-scrollable-content');
+        const itemHeight = element.find('.' + DATEVIEW_ROLLER_ITEM_SELECTED_CLASS).eq(0).outerHeight(true);
+        const pointer = pointerMock(instance._$container);
+
+        pointer.start().down().move(0, -itemHeight * 4).wait(500).up();
+        assert.strictEqual(content.position().top, -itemHeight * 4);
+        assert.strictEqual(instance.option('selectedIndex'), 4);
+
+        pointer.start().down().move(0, itemHeight * 2).wait(500).up();
+        assert.strictEqual(content.position().top, -itemHeight * 2);
+        assert.strictEqual(instance.option('selectedIndex'), 2);
     });
 
     QUnit.test('items changing leads to selected item recalculation', function(assert) {

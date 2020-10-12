@@ -2,6 +2,7 @@ import { isDefined, isString, isDate, isObject, isFunction } from '../../core/ut
 import messageLocalization from '../../localization/message';
 import { ExportFormat } from './export_format';
 import { extend } from '../../core/utils/extend';
+import { hasWindow } from '../../core/utils/window';
 
 // docs.microsoft.com/en-us/office/troubleshoot/excel/determine-column-widths - "Description of how column widths are determined in Excel"
 const MAX_DIGIT_WIDTH_IN_PIXELS = 7; // Calibri font with 11pt size
@@ -108,6 +109,15 @@ const Export = {
         });
     },
 
+    setLoadPanelOptions: function(component, options, privateOptions) {
+        if(!hasWindow()) {
+            return;
+        }
+
+        component._setOptionWithoutOptionChange('loadPanel', options);
+        privateOptions._renderLoadPanel(component);
+    },
+
     export: function(options, privateOptions) {
         const {
             customizeCell,
@@ -124,7 +134,8 @@ const Export = {
         if('animation' in component.option('loadPanel')) {
             loadPanel.animation = null;
         }
-        component.option('loadPanel', loadPanel);
+
+        this.setLoadPanelOptions(component, loadPanel, privateOptions);
 
         const wrapText = !!component.option('wordWrapEnabled');
 
@@ -143,7 +154,7 @@ const Export = {
         return new Promise((resolve) => {
             dataProvider.ready().done(() => {
                 const columns = dataProvider.getColumns();
-                const headerRowCount = isFunction(dataProvider.getHeaderRowCount) ? dataProvider.getHeaderRowCount() : undefined;
+                const headerRowCount = isFunction(dataProvider.getHeaderRowCount) ? dataProvider.getHeaderRowCount() : 1;
                 const dataRowsCount = dataProvider.getRowsCount();
 
                 if(keepColumnWidths) {
@@ -173,13 +184,11 @@ const Export = {
                     worksheetViewSettings.rightToLeft = true;
                 }
 
-                if(!isDefined(headerRowCount) || headerRowCount > 0) {
+                if(headerRowCount > 0) {
                     if(Object.keys(worksheetViewSettings).indexOf('state') === -1) {
                         extend(worksheetViewSettings, privateOptions._getWorksheetFrozenState(dataProvider, cellRange));
                     }
-                    if(isFunction(privateOptions._setAutoFilter)) {
-                        privateOptions._setAutoFilter(dataProvider, worksheet, cellRange, autoFilterEnabled);
-                    }
+                    privateOptions._trySetAutoFilter(dataProvider, worksheet, cellRange, headerRowCount, autoFilterEnabled);
                 }
 
                 if(Object.keys(worksheetViewSettings).length > 0) {
@@ -188,13 +197,14 @@ const Export = {
 
                 resolve(cellRange);
             }).always(() => {
-                component.option('loadPanel', initialLoadPanelOptions);
+                this.setLoadPanelOptions(component, initialLoadPanelOptions, privateOptions);
             });
         });
     },
 
     exportRow: function(rowIndex, cellCount, row, startColumnIndex, dataProvider, customizeCell, headerRowCount, mergedCells, mergeRanges, wrapText, privateOptions) {
         const styles = dataProvider.getStyles();
+        privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
 
         for(let cellIndex = 0; cellIndex < cellCount; cellIndex++) {
             const cellData = dataProvider.getCellData(rowIndex, cellIndex, true);
@@ -219,14 +229,13 @@ const Export = {
                 }
 
                 this.setNumberFormat(excelCell, numberFormat);
-                privateOptions._setFont(excelCell, bold);
+                privateOptions._trySetFont(excelCell, bold);
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
             if(isDefined(customizeCell)) {
                 customizeCell(privateOptions._getCustomizeCellOptions(excelCell, cell));
             }
-
 
             if(privateOptions._needMergeRange(rowIndex, headerRowCount)) {
                 const mergeRange = this.tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
@@ -235,8 +244,6 @@ const Export = {
                 }
             }
         }
-
-        privateOptions._trySetOutlineLevel(dataProvider, row, rowIndex, headerRowCount);
     }
 };
 

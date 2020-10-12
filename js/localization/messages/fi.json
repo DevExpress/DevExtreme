@@ -76,7 +76,7 @@
         "dxSwitch-switchedOffText": "POIS",
 
         "dxForm-optionalMark": "valinnainen",
-        "dxForm-requiredMessage": "{0} on valinnainen",
+        "dxForm-requiredMessage": "{0} on pakollinen",
 
         "dxNumberBox-invalidValueMessage": "Arvon on oltava numero",
         "dxNumberBox-noDataText": "Ei dataa",

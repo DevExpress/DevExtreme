@@ -51,6 +51,8 @@ const ZOOM_LEVEL = {
     CENTURY: 'century'
 };
 
+const isIE11 = browser.msie && parseInt(browser.version) <= 11;
+
 const Calendar = Editor.inherit({
     _activeStateUnit: '.' + CALENDAR_CELL_CLASS,
 
@@ -330,7 +332,7 @@ const Calendar = Editor.inherit({
     },
 
     _moveToClosestAvailableDate: function(baseDate = this.option('currentDate')) {
-        let currentDate = new Date(baseDate);
+        let currentDate = dateUtils.createDate(baseDate);
         const zoomLevel = this.option('zoomLevel');
 
         const isCurrentDateAvailable = !this._isDateNotAvailable(currentDate);
@@ -341,8 +343,8 @@ const Calendar = Editor.inherit({
         let isDateForwardInStartView;
         let isDateBackwardInStartView;
 
-        const dateForward = new Date(currentDate);
-        const dateBackward = new Date(currentDate);
+        const dateForward = dateUtils.createDate(currentDate);
+        const dateBackward = dateUtils.createDate(currentDate);
 
         do {
             if(isDateForwardAvailable) {
@@ -405,7 +407,7 @@ const Calendar = Editor.inherit({
 
     _getNormalizedDate: function(date) {
         date = dateUtils.normalizeDate(date, this._getMinDate(), this._getMaxDate());
-        return typeUtils.isDefined(date) ? new Date(date) : date;
+        return typeUtils.isDefined(date) ? this._getDate(date) : date;
     },
 
     _initActions: function() {
@@ -439,7 +441,7 @@ const Calendar = Editor.inherit({
         const normalizedDate = this._getNormalizedDate(date);
 
         if(date.getTime() !== normalizedDate.getTime()) {
-            this.option('currentDate', new Date(normalizedDate));
+            this.option('currentDate', dateUtils.createDate(normalizedDate));
             return;
         }
 
@@ -532,7 +534,7 @@ const Calendar = Editor.inherit({
     },
 
     _getDateByOffset: function(offset, date) {
-        date = new Date(date || this.option('currentDate'));
+        date = this._getDate(date || this.option('currentDate'));
 
         const currentDay = date.getDate();
         const difference = dateUtils.getDifferenceInMonth(this.option('zoomLevel')) * offset;
@@ -618,7 +620,7 @@ const Calendar = Editor.inherit({
         const $view = $('<div>').appendTo(this._$viewsWrapper);
         const config = this._viewConfig(date);
 
-        return new specificView($view, config);
+        return this._createComponent($view, specificView, config);
     },
 
     _viewConfig: function(date) {
@@ -631,8 +633,6 @@ const Calendar = Editor.inherit({
             max: this._getMaxDate(),
             firstDayOfWeek: this.option('firstDayOfWeek'),
             value: this._dateOption('value'),
-            rtlEnabled: this.option('rtlEnabled'),
-            disabled: this.option('disabled'),
             tabIndex: undefined,
             focusStateEnabled: this.option('focusStateEnabled'),
             hoverStateEnabled: this.option('hoverStateEnabled'),
@@ -694,7 +694,7 @@ const Calendar = Editor.inherit({
     },
 
     _updateTimeComponent: function(date) {
-        const result = new Date(date);
+        const result = dateUtils.createDate(date);
         const currentValue = this._dateOption('value');
 
         if(currentValue) {
@@ -994,6 +994,15 @@ const Calendar = Editor.inherit({
         });
     },
 
+    _getDate(value) {
+        const result = dateUtils.createDate(value);
+        if(isIE11 && typeUtils.isDate(value)) {
+            result.setMilliseconds(0);
+        }
+
+        return result;
+    },
+
     _toTodayView: function() {
         const today = new Date();
 
@@ -1194,13 +1203,9 @@ const Calendar = Editor.inherit({
                 value = this._convertToDate(value);
                 previousValue = this._convertToDate(previousValue);
                 this._updateAriaSelected(value, previousValue);
-                this.option('currentDate', typeUtils.isDefined(value) ? new Date(value) : new Date());
+                this.option('currentDate', typeUtils.isDefined(value) ? dateUtils.createDate(value) : new Date());
                 this._updateViewsValue(value);
                 this._setSubmitValue(value);
-                this.callBase(args);
-                break;
-            case 'disabled':
-                this._view.option('disabled', value);
                 this.callBase(args);
                 break;
             case 'onCellClick':

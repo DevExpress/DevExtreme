@@ -221,7 +221,7 @@ const createTextElementHiddenCopy = function(element, text, options) {
         'paddingBottom': includePaddings ? elementStyles.paddingBottom : '',
         'paddingLeft': includePaddings ? elementStyles.paddingLeft : '',
         'visibility': 'hidden',
-        'whiteSpace': 'nowrap',
+        'whiteSpace': 'pre',
         'position': 'absolute',
         'float': 'left'
     });

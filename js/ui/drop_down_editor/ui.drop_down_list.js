@@ -437,6 +437,7 @@ const DropDownList = DropDownEditor.inherit({
 
         this._clearFilter();
         this._clearSelectedItem();
+        this._preventFiltering = true;
     },
 
     _listItemElements: function() {
@@ -501,12 +502,10 @@ const DropDownList = DropDownEditor.inherit({
     _renderOpenedState: function() {
         this.callBase();
 
-        const opened = this.option('opened') || undefined;
-
         this._list && this._updateActiveDescendant();
         this.setAria({
-            'controls': opened && this._listId,
-            'owns': opened && this._popupContentId
+            'controls': this._list && this._listId,
+            'owns': this._popup && this._popupContentId
         });
     },
 
@@ -525,8 +524,8 @@ const DropDownList = DropDownEditor.inherit({
 
     _shouldRefreshDataSource: function() {
         const dataSourceProvided = !!this._list.option('dataSource');
-        const someItemsSelected = this.option('selectedItems')?.length > 0;
-        return dataSourceProvided !== this._needPassDataSourceToList() && !someItemsSelected;
+
+        return dataSourceProvided !== this._needPassDataSourceToList();
     },
 
     _isDesktopDevice: function() {

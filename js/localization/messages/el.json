@@ -121,7 +121,7 @@
         "dxDataGrid-sortingClearText": "Εκκαθάριση ταξινόμισης",
         "dxDataGrid-editingSaveAllChanges": "Αποθήκευση αλλαγών",
         "dxDataGrid-editingCancelAllChanges": "Απόρριψη αλλαγών",
-        "dxDataGrid-editingAddRow": "Προσθήλη γραμμής",
+        "dxDataGrid-editingAddRow": "Προσθήκη γραμμής",
         "dxDataGrid-summaryMin": "Min: {0}",
         "dxDataGrid-summaryMinOtherColumn": "Min of {1} is {0}",
         "dxDataGrid-summaryMax": "Max: {0}",

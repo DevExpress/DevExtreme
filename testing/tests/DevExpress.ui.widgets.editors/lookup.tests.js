@@ -3456,7 +3456,28 @@ QUnit.module('default options', {
         }
     });
 
-    QUnit.test('Check when itemCenteringEnabled option for Material theme', function(assert) {
+    QUnit.test('Check popup height with no found data option for Material theme', function(assert) {
+        const origIsMaterial = themes.isMaterial;
+        themes.isMaterial = function() { return true; };
+
+        const $lookup = $('<div>').prependTo('body');
+
+        try {
+
+            const lookup = $lookup.dxLookup({ dataSource: [], searchEnabled: true }).dxLookup('instance');
+
+            $(lookup.field()).trigger('dxclick');
+
+            const $popup = $('.dx-popup-content');
+
+            assert.roughEqual($popup.height(), 91, 1, 'popup height if DataSource without items and `searchEnabled: true`');
+        } finally {
+            $lookup.remove();
+            themes.isMaterial = origIsMaterial;
+        }
+    });
+
+    QUnit.test('Check when dropDownCentered option for Material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
@@ -3539,13 +3560,13 @@ QUnit.module('default options', {
 
             lookup.close();
 
-            lookup.option('itemCenteringEnabled', false);
+            lookup.option('dropDownCentered', false);
 
             $(lookup.field()).trigger('dxclick');
 
             $popup = $('.dx-popup-wrapper');
 
-            assert.roughEqual($popup.find('.dx-overlay-content').position().top, $(lookup.field()).outerHeight(), 3, 'popup position if itemCenteringEnabled option is false');
+            assert.roughEqual($popup.find('.dx-overlay-content').position().top, $(lookup.field()).outerHeight(), 3, 'popup position if dropDownCentered option is false');
         } finally {
             $lookup.remove();
             themes.isMaterial = origIsMaterial;
@@ -3553,7 +3574,7 @@ QUnit.module('default options', {
     });
 
 
-    QUnit.test('Check when itemCenteringEnabled option is false and change options for Material theme', function(assert) {
+    QUnit.test('Check when dropDownCentered option is false and change options for Material theme', function(assert) {
         const origIsMaterial = themes.isMaterial;
         themes.isMaterial = function() { return true; };
 
@@ -3567,7 +3588,7 @@ QUnit.module('default options', {
             const lookup = $lookup.dxLookup({
                 dataSource: ['blue', 'orange', 'lime', 'purple', 'green'],
                 value: 'blue',
-                itemCenteringEnabled: false,
+                dropDownCentered: false,
                 dropDownOptions: {
                     position: {
                         at: 'center',
@@ -3619,7 +3640,7 @@ QUnit.module('default options', {
     });
 
 
-    QUnit.test('Check itemCenteringEnabled option for Generic theme', function(assert) {
+    QUnit.test('Check dropDownCentered option for Generic theme', function(assert) {
         const $lookup = $('<div>').prependTo('body');
 
         try {
@@ -3627,7 +3648,7 @@ QUnit.module('default options', {
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple', 'green'], value: 'blue' }).dxLookup('instance');
 
             lookup.option('usePopover', true);
-            lookup.option('itemCenteringEnabled', true);
+            lookup.option('dropDownCentered', true);
 
             $(lookup.field()).trigger('dxclick');
 

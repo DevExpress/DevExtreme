@@ -890,6 +890,14 @@ QUnit.module('deferRendering', () => {
 
         assert.equal($('.dx-dropdowneditor-overlay').length, 1, 'content is not rendered');
     });
+
+    QUnit.test('popup is rendered immediately when deferRendering is changed to false in runtime', function(assert) {
+        const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({}).dxDropDownEditor('instance');
+
+        assert.strictEqual(dropDownEditor._popup, undefined, 'popup is not rendered');
+        dropDownEditor.option('deferRendering', false);
+        assert.ok(dropDownEditor._popup, 'popup is rendered after runtime option change');
+    });
 });
 
 QUnit.module('Templates', () => {

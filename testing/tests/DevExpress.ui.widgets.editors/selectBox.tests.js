@@ -62,6 +62,7 @@ const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 
 const KEY_DOWN = 'ArrowDown';
 const KEY_ENTER = 'Enter';
@@ -1603,13 +1604,31 @@ QUnit.module('clearButton', moduleSetup, () => {
         const selectBox = $element.dxSelectBox('instance');
 
         this.clock.tick(TIME_TO_WAIT);
-        pointerMock($element.find('.dx-clear-button-area')).click();
+        pointerMock($element.find(toSelector(CLEAR_BUTTON_AREA))).click();
         assert.equal(selectBox.option('opened'), false, 'selectbox is closed after click on clear button');
 
         selectBox.option('searchEnabled', true);
         selectBox.option('searchTimeout', 0);
-        pointerMock($element.find('.dx-clear-button-area')).click();
+        pointerMock($element.find(toSelector(CLEAR_BUTTON_AREA))).click();
         assert.equal(selectBox.option('opened'), false, 'selectbox is closed after click on clear button if searchEnabled = true');
+    });
+
+    QUnit.test('selectBox should be opened on instant re-click after click on clearButton (T935717)', function(assert) {
+        const $element = $('#selectBox').dxSelectBox({
+            items: [1, 2, 3],
+            showClearButton: true,
+            searchEnabled: true,
+            value: 1,
+            searchTimeout: 3000
+        });
+        const selectBox = $element.dxSelectBox('instance');
+        const $clearButton = $element.find(toSelector(CLEAR_BUTTON_AREA));
+        const $dropDownButton = $element.find(toSelector(DX_DROP_DOWN_BUTTON));
+
+        pointerMock($clearButton).click();
+        pointerMock($dropDownButton).click();
+
+        assert.strictEqual(selectBox.option('opened'), true, 'selectBox is opened after instant re-click');
     });
 
     QUnit.test('drop down list should be still opened if click \'clear\' during the search', function(assert) {
@@ -1627,7 +1646,7 @@ QUnit.module('clearButton', moduleSetup, () => {
             .focus()
             .type('50')
             .change();
-        pointerMock($element.find('.dx-clear-button-area')).click();
+        pointerMock($element.find(toSelector(CLEAR_BUTTON_AREA))).click();
 
         assert.ok(selectBox.option('opened'), 'selectbox is opened');
     });
@@ -1642,7 +1661,7 @@ QUnit.module('clearButton', moduleSetup, () => {
             searchEnabled: true
         });
 
-        const $clearButton = $selectBox.find('.dx-clear-button-area');
+        const $clearButton = $selectBox.find(toSelector(CLEAR_BUTTON_AREA));
 
         $($clearButton).trigger('dxclick');
 
@@ -1657,7 +1676,7 @@ QUnit.module('clearButton', moduleSetup, () => {
             onValueChanged: valueChangedHandler,
             showClearButton: true
         });
-        const $clearButton = $selectBox.find('.dx-clear-button-area');
+        const $clearButton = $selectBox.find(toSelector(CLEAR_BUTTON_AREA));
 
         $($clearButton).trigger('dxclick');
 
@@ -1679,7 +1698,7 @@ QUnit.module('clearButton', moduleSetup, () => {
 
         this.clock.tick();
 
-        pointerMock($selectBox.find('.dx-clear-button-area')).click();
+        pointerMock($selectBox.find(toSelector(CLEAR_BUTTON_AREA))).click();
 
         this.clock.tick();
 
@@ -1705,7 +1724,7 @@ QUnit.module('clearButton', moduleSetup, () => {
         const items = $(toSelector(LIST_ITEM_CLASS));
         items.eq(1).trigger('dxclick');
 
-        const $clearButton = $('.dx-clear-button-area');
+        const $clearButton = $(toSelector(CLEAR_BUTTON_AREA));
         $($clearButton).trigger('dxclick');
 
         assert.equal(selectBox.option('value'), null, 'value is reset after click on \'clear\' button');
@@ -3079,31 +3098,33 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
     });
 
-    QUnit.testInActiveWindow('Value should be null after input is cleared and enter key is tapped', function(assert) {
-        const items = [1, 2];
-        const $selectBox = $('#selectBox').dxSelectBox({
-            searchEnabled: true,
-            items: items,
-            value: items[0],
-            searchTimeout: 0
+    [0, 1].forEach((value) => {
+        QUnit.testInActiveWindow(`Value=${value} should be null after input is cleared and enter key is tapped (T935801)`, function(assert) {
+            const items = [0, 1, 2];
+            const $selectBox = $('#selectBox').dxSelectBox({
+                searchEnabled: true,
+                items: items,
+                value,
+                searchTimeout: 0
+            });
+            const selectBox = $selectBox.dxSelectBox('instance');
+            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const keyboard = keyboardMock($input);
+
+            $input.focus();
+
+            keyboard
+                .press('end')
+                .press('backspace');
+
+            keyboard
+                .press('enter');
+
+            assert.equal($selectBox.dxSelectBox('option', 'value'), null, 'value is null');
+            assert.equal($input.val(), '', 'input is cleared');
+            assert.equal(selectBox.option('selectedItem'), null, 'selectedItem is null');
+            assert.ok(!selectBox.option('opened'), 'popup is closed');
         });
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-        const keyboard = keyboardMock($input);
-
-        $input.focus();
-
-        keyboard
-            .press('end')
-            .press('backspace');
-
-        keyboard
-            .press('enter');
-
-        assert.equal($selectBox.dxSelectBox('option', 'value'), null, 'value is null');
-        assert.equal($input.val(), '', 'input is cleared');
-        assert.equal(selectBox.option('selectedItem'), null, 'selectedItem is null');
-        assert.ok(!selectBox.option('opened'), 'popup is closed');
     });
 
     QUnit.testInActiveWindow('Value should not be null after focusOut during loading (T600537)', function(assert) {
@@ -5516,8 +5537,8 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
             });
 
-            QUnit.test(`opened: false -> searchEnabled: ${!searchEnabled}`, function() {
-                helper.createWidget({ opened: false });
+            QUnit.test(`opened: false, deferRendering: true -> searchEnabled: ${!searchEnabled}`, function() {
+                helper.createWidget({ opened: false, deferRendering: true });
 
                 const inputAttributes = {
                     role: 'combobox',

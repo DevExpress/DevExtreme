@@ -651,3 +651,59 @@ test('Scrolling should work if scrolling.mode and rowRenderingMode are virtual r
     },
   };
 }));
+
+test('Scrolling should not occured after deleting via push API if scrolling.mode is virtual (T930434)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.getFocusedRow().exists).ok();
+
+  const scrollTop = await dataGrid.getScrollTop();
+
+  await t
+    .expect(scrollTop).gt(0)
+    .click('button')
+    .click(dataGrid.getDataCell(9, 0).element)
+    .click('button')
+    .expect(dataGrid.getScrollTop()).eql(scrollTop);
+
+}).before(async () => {
+  await ClientFunction(() => {
+    $('<button>').text('Delete').on('click', function () {
+      const { widget } = window as any;
+      const focusedRowKey = widget.option('focusedRowKey');
+      widget.option('focusedRowKey', undefined);
+      widget.getDataSource().store().push([{ type: 'remove', key: focusedRowKey }]);
+    }).prependTo('body');
+  })();
+  await createWidget('dxDataGrid', () => {
+    const data = (function () {
+      const result = [];
+      for(let i = 0; i < 20; i += 1) {
+        result.push({ id: i + 1 });
+      }
+      return result;
+    }());
+
+    return {
+      height: 200,
+      width: 200,
+      dataSource: {
+        store: {
+          type: 'array',
+          key: 'id',
+          data: data
+        },
+        pushAggregationTimeout: 0
+      },
+      focusedRowEnabled: true,
+      focusedRowKey: 10,
+      columns: ['id'],
+      scrolling: {
+        mode: 'virtual'
+      }
+    };
+  });
+}).after(() => ClientFunction(() => {
+  $('button').remove();
+})());

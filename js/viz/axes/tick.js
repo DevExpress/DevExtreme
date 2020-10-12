@@ -125,7 +125,7 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
 
                 if(!labelIsVisible) {
                     if(this.label) {
-                        this.label.remove();
+                        this.removeLabel();
                     }
                     return;
                 }
@@ -189,7 +189,8 @@ function createTick(axis, renderer, tickOptions, gridOptions, skippedCategory, s
                     opacity: 1
                 }).animate({ opacity: 0 }, {
                     partitionDuration: 0.5
-                }).append(axis._axisElementsGroup);
+                }).append(axis._axisElementsGroup).toBackground();
+
                 this.label.append(group);
             },
 

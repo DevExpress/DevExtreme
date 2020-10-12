@@ -8,6 +8,7 @@ import config from 'core/config';
 import dataQuery from 'data/query';
 import devices from 'core/devices';
 import errors from 'core/errors';
+import dataErrors from 'data/errors';
 import fx from 'animation/fx';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import messageLocalization from 'localization/message';
@@ -861,6 +862,50 @@ QUnit.module('multi tag support', {
         assert.equal($tagBox.dxTagBox('option', 'value').length, 5, 'first page is selected');
         assert.equal($tagBox.find('.' + TAGBOX_MULTI_TAG_CLASS).text(), '5 selected', 'text is correct');
     });
+
+    QUnit.test('TagBox should correctly process the rejected load promise of the dataSource', function(assert) {
+        const dataErrorStub = sinon.stub(dataErrors.errors, 'log');
+        const $editor = $('#tagBox').dxTagBox({
+            dataSource: {
+                store: new CustomStore({
+                    load: function(loadOptions) {
+                        const deferred = $.Deferred();
+                        setTimeout(() => {
+                            if(loadOptions.filter) {
+                                deferred.reject({
+                                    type: 'error',
+                                    message: 'data load error'
+                                });
+                            } else {
+                                deferred.resolve([1, 2, 3]);
+                            }
+                        }, 100);
+                        return deferred.promise();
+                    }
+                })
+            },
+            showSelectionControls: true,
+            searchEnabled: true,
+            maxDisplayedTags: 1,
+            showMultiTagOnly: false,
+            opened: true
+        });
+        const $input = $editor.find('.dx-texteditor-input');
+        const keyboard = keyboardMock($input);
+
+        this.clock.tick(100);
+        keyboard.type('t');
+        this.clock.tick(100);
+
+        $('.dx-list-select-checkbox').each((i, elem) => {
+            $(elem).trigger('dxclick');
+            this.clock.tick(100);
+        });
+
+        const tagCount = $editor.find('.dx-tag').length;
+        assert.strictEqual(tagCount, 1, 'There is only one tag');
+        dataErrorStub.restore();
+    });
 });
 
 QUnit.module('the \'value\' option', moduleSetup, () => {
@@ -1092,6 +1137,7 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         assert.equal($tags.eq(0).text(), 'display ' + customValue);
         assert.ok(logStub.calledOnce, 'There was an one message');
         assert.deepEqual(logStub.firstCall.args, ['W0015', 'onCustomItemCreating', 'customItem'], 'Check warning parameters');
+        logStub.restore();
     });
 
     QUnit.test('creating custom item via the \'customItem\' event parameter', function(assert) {
@@ -1407,14 +1453,15 @@ QUnit.module('placeholder', () => {
             }
         });
 
-        const $input = $tagBox.find('.dx-texteditor-input');
+        let $input = $tagBox.find('.dx-texteditor-input');
         const keyboard = keyboardMock($input);
 
         keyboard
             .type('123')
             .press('enter');
+
+        $input = $tagBox.find('.dx-texteditor-input');
         $input.trigger('blur');
-        $input.trigger('focusout');
 
         const $placeholder = $tagBox.find('.dx-placeholder');
         assert.notOk($placeholder.is(':visible'), 'placeholder is not visible');
@@ -2931,6 +2978,27 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.roughEqual($tagBox.find(`.${TEXTBOX_CLASS}`).width(), initInputWidth, 0.1, 'input width is not changed after selecting item');
     });
 
+    QUnit.test('space entering should increase input element size (T923429)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            searchEnabled: true
+        });
+
+        const text = '123456789          ';
+        const $input = $tagBox.find(`.${TEXTBOX_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type(text);
+        const $inputCopy = createTextElementHiddenCopy($input, text, { includePaddings: true });
+        $inputCopy
+            .css('whiteSpace', 'pre')
+            .appendTo('#qunit-fixture');
+        const textWidth = $inputCopy.width();
+
+        const currentWidth = $tagBox.find(`.${TEXTBOX_CLASS}`).width();
+        assert.ok(currentWidth > textWidth, `input width (${currentWidth}) should be grester then input text width (${textWidth})`);
+        $inputCopy.remove();
+    });
+
     QUnit.test('size of input is 1 when searchEnabled and acceptCustomValue is false', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({
             searchEnabled: false,
@@ -3578,6 +3646,49 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
         assert.deepEqual(instance.option('value'), [111], 'value is not removed');
         assert.strictEqual(instance.option('text'), '1', 'text is correct');
+    });
+
+    QUnit.testInActiveWindow('TagBox without selection controls should search value when minSearchLength is exceeded and there are selected items (T932182)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [111, 222],
+            value: [111],
+            searchEnabled: true,
+            minSearchLength: 2,
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $tagBox.dxTagBox('instance');
+        const $input = $(instance._input());
+        const keyboard = keyboardMock($input);
+
+        $input.focusin();
+        keyboard
+            .type('22');
+        this.clock.tick(TIME_TO_WAIT);
+        const list = $tagBox.dxTagBox('instance')._list;
+        assert.deepEqual(list.getDataSource().items(), [222], 'dataSource was updated');
+    });
+
+    QUnit.testInActiveWindow('TagBox with selection controls should search value when minSearchLength is exceeded and there are selected items (T932182)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [111, 222],
+            value: [111],
+            searchEnabled: true,
+            minSearchLength: 2,
+            showSelectionControls: true
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $tagBox.dxTagBox('instance');
+        const $input = $(instance._input());
+        const keyboard = keyboardMock($input);
+
+        $input.focusin();
+        keyboard
+            .type('22');
+        this.clock.tick(TIME_TO_WAIT);
+        const list = $tagBox.dxTagBox('instance')._list;
+        assert.deepEqual(list.getDataSource().items(), [222], 'dataSource was updated');
     });
 
     QUnit.test('load tags data should not raise an error after widget has been disposed', function(assert) {

@@ -1,18 +1,19 @@
 import { isDefined, isObject } from '../../core/utils/type';
 import { Export } from './export';
 import errors from '../../core/errors';
-import DataGrid from '../../ui/data_grid';
 
 const privateOptions = {
-    _setAutoFilter: function(dataProvider, worksheet, cellRange, autoFilterEnabled) {
+    _trySetAutoFilter: function(dataProvider, worksheet, cellRange, headerRowCount, autoFilterEnabled) {
         if(autoFilterEnabled) {
             if(!isDefined(worksheet.autoFilter) && dataProvider.getRowsCount() > 0) {
-                worksheet.autoFilter = cellRange;
+                const dataRange = { from: { row: cellRange.from.row + headerRowCount - 1, column: cellRange.from.column }, to: cellRange.to };
+
+                worksheet.autoFilter = dataRange;
             }
         }
     },
 
-    _setFont: function(excelCell, bold) {
+    _trySetFont: function(excelCell, bold) {
         if(isDefined(bold)) {
             excelCell.font = excelCell.font || {};
             excelCell.font.bold = bold;
@@ -44,6 +45,11 @@ const privateOptions = {
 
     _needMergeRange: function(rowIndex, headerRowCount) {
         return rowIndex < headerRowCount;
+    },
+
+    _renderLoadPanel: function(component) {
+        const rowsView = component.getView('rowsView');
+        rowsView._renderLoadPanel(rowsView.element(), rowsView.element().parent());
     }
 };
 
@@ -55,7 +61,7 @@ function _getFullOptions(options) {
     if(!(isDefined(options) && isObject(options))) {
         throw Error('The "exportDataGrid" method requires a configuration object.');
     }
-    if(!(isDefined(options.component) && isObject(options.component) && options.component instanceof DataGrid)) {
+    if(!(isDefined(options.component) && isObject(options.component) && options.component.NAME === 'dxDataGrid')) {
         throw Error('The "component" field must contain a DataGrid instance.');
     }
     if(!isDefined(options.selectedRowsOnly)) {

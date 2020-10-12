@@ -3232,6 +3232,72 @@ QUnit.module('datebox with time component', {
         assert.equal($input.val(), dateLocalization.format(date, format), 'input value is correct');
     });
 
+    QUnit.test('DateBox with pickerType=rollers should scroll to the neighbor item independent of deltaY when device is desktop (T921228)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'device is not desktop');
+            return;
+        }
+
+        const date = new Date(2015, 0, 1);
+        $('#dateBox').dxDateBox({
+            pickerType: 'rollers',
+            value: date,
+            opened: true
+        });
+
+        const $monthRollerView = $('.dx-dateviewroller-month');
+        const monthRollerView = $monthRollerView.dxDateViewRoller('instance');
+        const deltaY = 100;
+        const pointer = pointerMock(monthRollerView._$container);
+
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
+
+        pointer.start().wheel(deltaY).wait(500);
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 0, 'selectedItem is correct');
+
+        pointer.start().wheel(-deltaY).wait(500);
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
+
+        pointer.start().wheel(-deltaY * 3).wait(500);
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
+
+        pointer.start().wheel(deltaY * 5).wait(500);
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 1, 'selectedItem is correct');
+
+        pointer.start().wheel(-deltaY * 10).wait(500);
+        assert.strictEqual(monthRollerView.option('selectedIndex'), 2, 'selectedItem is correct');
+    });
+
+
+    QUnit.test('dateview selectedIndex should not be changed after dateBox reopen (T934663)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'device is not desktop');
+            return;
+        }
+
+        assert.expect(0);
+
+        const date = new Date(2015, 3, 3);
+        const dateBox = $('#dateBox').dxDateBox({
+            pickerType: 'rollers',
+            value: date,
+            opened: true
+        }).dxDateBox('instance');
+        const selectedIndexChangedHandler = (args) => {
+            assert.ok(false, 'selectedIndex has been changed');
+        };
+
+        const monthRollerView = $('.dx-dateviewroller-month').dxDateViewRoller('instance');
+        const dayRollerView = $('.dx-dateviewroller-day').dxDateViewRoller('instance');
+        const yearRollerView = $('.dx-dateviewroller-year').dxDateViewRoller('instance');
+        monthRollerView.option('onSelectedIndexChanged', selectedIndexChangedHandler);
+        dayRollerView.option('onSelectedIndexChanged', selectedIndexChangedHandler);
+        yearRollerView.option('onSelectedIndexChanged', selectedIndexChangedHandler);
+
+        dateBox.close();
+        dateBox.open();
+    });
+
     QUnit.test('DateBox with time should be rendered correctly in IE, templatesRenderAsynchronously=true', function(assert) {
         const clock = sinon.useFakeTimers();
         try {
@@ -5178,6 +5244,26 @@ QUnit.module('DateBox number and string value support', {
             assert.deepEqual($('#dateBox').dxDateBox('option', 'value'), new Date(21016, 0, 12), 'value is correct and it is not serialized');
         } finally {
             config().forceIsoDateParsing = defaultForceIsoDateParsing;
+        }
+    });
+
+    QUnit.test('First century year value should works correctly(T905007)', function(assert) {
+        try {
+            const dateBox = $('#dateBox').dxDateBox({
+                value: '3/16/1964',
+                min: new Date(-50, 1, 1),
+                displayFormat: 'shortdate',
+                pickerType: 'calendar'
+            }).dxDateBox('instance');
+
+            const $input = $('#dateBox').find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+            $($input.val('1/1/15')).trigger('change');
+            dateBox.option('opened', true);
+
+            assert.deepEqual($('#dateBox').dxDateBox('option', 'text'), '1/1/15');
+        } catch(e) {
+            assert.ok(false, 'exception raised: ' + e.message);
         }
     });
 

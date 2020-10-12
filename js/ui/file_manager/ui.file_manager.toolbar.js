@@ -160,9 +160,7 @@ class FileManagerToolbar extends Widget {
             preparedItem.originalItemData = item;
 
             if(commandName !== 'separator') {
-                preparedItem.available = this._isToolbarItemAvailable(preparedItem);
-                const itemVisible = preparedItem.available;
-                preparedItem.visible = itemVisible;
+                this._setItemVisibleAvailable(preparedItem);
             }
 
             return preparedItem;
@@ -391,13 +389,13 @@ class FileManagerToolbar extends Widget {
                 let optionsSource = null;
 
                 if(useCompactMode) {
-                    item.saved = this._getCompactModeOptions(item, item.available); // TODO use private name
+                    item.saved = this._getCompactModeOptions(item, item._available);
                     optionsSource = item.compactMode;
                 } else {
                     optionsSource = item.saved;
                 }
 
-                const options = this._getCompactModeOptions(optionsSource, item.available);
+                const options = this._getCompactModeOptions(optionsSource, item._available);
                 extend(true, item, options);
                 hasModifications = true;
             }
@@ -428,10 +426,9 @@ class FileManagerToolbar extends Widget {
 
         items.forEach(item => {
             if(item.name !== 'separator') {
-                const itemVisible = item.available;
-                item.available = this._isToolbarItemAvailable(item, fileItems);
-                if(item.available !== itemVisible) {
-                    item.visible = item.available;
+                const itemVisible = item._available;
+                this._setItemVisibleAvailable(item, fileItems);
+                if(item._available !== itemVisible) {
                     hasModifications = true;
                 }
             }
@@ -443,6 +440,12 @@ class FileManagerToolbar extends Widget {
         }
 
         this._updateSeparatorsVisibility(items, toolbar);
+    }
+
+    _setItemVisibleAvailable(item, fileItems) {
+        const originalVisible = item.originalItemData?.visible;
+        item._available = this._isToolbarItemAvailable(item, fileItems);
+        item.visible = isDefined(originalVisible) ? originalVisible : item._available;
     }
 
     _fileToolbarHasEffectiveItems(fileItems) {

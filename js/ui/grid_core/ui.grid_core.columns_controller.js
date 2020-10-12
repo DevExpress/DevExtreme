@@ -752,7 +752,7 @@ module.exports = {
                 }
             };
 
-            const updateSortOrderWhenGrouping = function(column, groupIndex, prevGroupIndex) {
+            const updateSortOrderWhenGrouping = function(that, column, groupIndex, prevGroupIndex) {
                 const columnWasGrouped = prevGroupIndex >= 0;
 
                 if(groupIndex >= 0) {
@@ -760,7 +760,17 @@ module.exports = {
                         column.lastSortOrder = column.sortOrder;
                     }
                 } else {
-                    column.sortOrder = column.lastSortOrder;
+                    const sortMode = that.option('sorting.mode');
+                    let sortOrder = column.lastSortOrder;
+
+                    if(sortMode === 'single') {
+                        const sortedByAnotherColumn = that._columns.some(col => col !== column && isDefined(col.sortIndex));
+                        if(sortedByAnotherColumn) {
+                            sortOrder = undefined;
+                        }
+                    }
+
+                    column.sortOrder = sortOrder;
                 }
             };
 
@@ -793,7 +803,7 @@ module.exports = {
                 if(prevValue !== value) {
                     if(optionName === 'groupIndex' || optionName === 'calculateGroupValue') {
                         changeType = 'grouping';
-                        updateSortOrderWhenGrouping(column, value, prevValue);
+                        updateSortOrderWhenGrouping(that, column, value, prevValue);
                     } else if(optionName === 'sortIndex' || optionName === 'sortOrder' || optionName === 'calculateSortValue') {
                         changeType = 'sorting';
                     } else {
@@ -1417,7 +1427,15 @@ module.exports = {
                         }
                     }
 
-                    return result;
+                    return result.map(columns => {
+                        return columns.map(column => {
+                            const newColumn = { ...column };
+                            if(newColumn.headerId) {
+                                newColumn.headerId += '-fixed';
+                            }
+                            return newColumn;
+                        });
+                    });
                 },
                 _isColumnFixing: function() {
                     let isColumnFixing = this.option('columnFixing.enabled');
@@ -1747,8 +1765,10 @@ module.exports = {
                     if(allowSorting && column && column.allowSorting) {
                         if(needResetSorting && !isDefined(column.groupIndex)) {
                             iteratorUtils.each(that._columns, function(index) {
-                                if(index !== columnIndex && this.sortOrder && !isDefined(this.groupIndex)) {
-                                    delete this.sortOrder;
+                                if(index !== columnIndex && this.sortOrder) {
+                                    if(!isDefined(this.groupIndex)) {
+                                        delete this.sortOrder;
+                                    }
                                     delete this.sortIndex;
                                 }
                             });
@@ -2021,7 +2041,13 @@ module.exports = {
                                     const selector = sortParameters[i].selector;
                                     const isExpanded = sortParameters[i].isExpanded;
 
-                                    if(selector === column.dataField || selector === column.name || selector === column.selector || selector === column.calculateCellValue || selector === column.calculateGroupValue) {
+                                    if(selector === column.dataField ||
+                                        selector === column.name ||
+                                        selector === column.selector ||
+                                        selector === column.calculateCellValue ||
+                                        selector === column.calculateGroupValue ||
+                                        selector === column.calculateDisplayValue
+                                    ) {
                                         column.sortOrder = column.sortOrder || (sortParameters[i].desc ? 'desc' : 'asc');
 
                                         if(isExpanded !== undefined) {

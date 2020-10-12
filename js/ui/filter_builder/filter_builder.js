@@ -370,7 +370,8 @@ const FilterBuilder = Widget.inherit({
         that._actions = {};
 
         ACTIONS.forEach(function(action) {
-            that._actions[action.name] = that._createActionByOption(action.name, action.config);
+            const actionConfig = extend({}, action.config);
+            that._actions[action.name] = that._createActionByOption(action.name, actionConfig);
         });
     },
 

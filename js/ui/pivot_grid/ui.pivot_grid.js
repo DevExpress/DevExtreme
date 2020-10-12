@@ -1264,6 +1264,14 @@ const PivotGrid = Widget.inherit({
         const that = this;
         const element = that.$element();
 
+        if(isDefined(that._hasHeight)) {
+            const height = that.option('height') || that.$element().get(0).style.height;
+
+            if(height && (that._hasHeight ^ height !== 'auto')) {
+                that._hasHeight = null;
+            }
+        }
+
         if(isDefined(that._hasHeight) || element.is(':hidden')) {
             return;
         }
@@ -1597,8 +1605,14 @@ const PivotGrid = Widget.inherit({
             let dataAreaHeight = 0;
             if(that._hasHeight) {
                 filterAreaHeight = filterHeaderCell.height();
+
+                const $dataHeader = tableElement.find('.dx-data-header');
+                const dataHeaderHeight = msie
+                    ? getSize($dataHeader.get(0), 'height', { paddings: false, borders: false, margins: false })
+                    : $dataHeader.height();
+
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, columnHeaderCell, filterHeaderCell], 'height');
-                dataAreaHeight = that.$element().height() - filterAreaHeight - tableElement.find('.dx-data-header').height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
+                dataAreaHeight = that.$element().height() - filterAreaHeight - dataHeaderHeight - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
             }
 
             totalWidth = dataArea.tableElement().width();

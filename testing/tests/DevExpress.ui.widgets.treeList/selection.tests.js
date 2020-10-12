@@ -1446,5 +1446,37 @@ QUnit.module('Recursive selection', {
         // assert
         assert.equal(this.selectionController._selection._focusedItemIndex, -1, '_focusedItemIndex corrected');
     });
+
+    QUnit.test('Selecting row with key = 0', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+        const selectionChangedArgs = [];
+
+        this.options.rootValue = -1;
+        this.options.columns = ['id', 'text'];
+        this.options.selectedRowKeys = [1];
+        this.options.dataSource = [
+            { id: 0, parentId: -1, text: 'text a' },
+            { id: 1, parentId: 0, text: 'text ab1' },
+            { id: 2, parentId: 0, text: 'text ab2' },
+            { id: 3, parentId: -1, text: 'text b' }
+        ];
+        this.options.onSelectionChanged = (e) => {
+            selectionChangedArgs.push(e);
+        };
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        // act
+        this.selectRows(0, true);
+
+        // assert
+        const items = this.dataController.items();
+        assert.equal(selectionChangedArgs.length, 1, 'selectionChanged is called once');
+        assert.deepEqual(selectionChangedArgs[0].selectedRowKeys, [0], 'selectedItemsKeys');
+        assert.deepEqual(selectionChangedArgs[0].currentSelectedRowKeys, [0], 'currentSelectedRowKeys');
+        assert.deepEqual(this.option('selectedRowKeys'), [0], 'selected row keys');
+        assert.ok(items[0].isSelected, 'first item is selected');
+    });
 });
 

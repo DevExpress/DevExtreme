@@ -237,6 +237,36 @@ const TestPointerElement = TestElement.inherit({
         assert.strictEqual(gauge._valueIndicator.options.baseValue, 0);
     });
 
+    QUnit.test('Pass correct \'invert\' value into scale, when startValue < endValue and rtlEnabled = true', function(assert) {
+        new dxLinearGauge(this.container, {
+            rtlEnabled: true,
+            scale: {
+                startValue: -1000,
+                endValue: 1000
+            },
+            value: 50,
+        });
+
+        const scale = axisModule.Axis.getCall(0).returnValue;
+
+        assert.strictEqual(scale.setBusinessRange.lastCall.args[0].invert, true, 'invert passed to scale');
+    });
+
+    QUnit.test('Pass correct \'invert\' value into scale, when startValue > endValue and rtlEnabled = true', function(assert) {
+        new dxLinearGauge(this.container, {
+            rtlEnabled: true,
+            scale: {
+                startValue: 1000,
+                endValue: -1000
+            },
+            value: 50,
+        });
+
+        const scale = axisModule.Axis.getCall(0).returnValue;
+
+        assert.strictEqual(scale.setBusinessRange.lastCall.args[0].invert, false, 'XOR invert passed to scale');
+    });
+
     QUnit.module('HorizontalGauge - positioning of elements', environment);
 
     QUnit.test('Default', function(assert) {
@@ -432,6 +462,20 @@ const TestPointerElement = TestElement.inherit({
         const scale = axisModule.Axis.getCall(0).returnValue;
 
         assert.strictEqual(scale.updateOptions.lastCall.calledAfter(scale.setBusinessRange.lastCall), true);
+    });
+
+    QUnit.test('Pass the rtlEnabled option to the axis and translator', function(assert) {
+        const gauge = new dxLinearGauge(this.container, {
+            rtlEnabled: true,
+            scale: {
+                startValue: -1000,
+                endValue: 1000
+            },
+            value: 100,
+        });
+
+        assert.strictEqual(gauge._translator.inverted, true, 'translator rtlEnabled');
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].inverted, true, 'axis rtlEnabled');
     });
 
     QUnit.module('VerticalGauge - positioning of elements', environment);
@@ -652,5 +696,15 @@ const TestPointerElement = TestElement.inherit({
         assert.strictEqual(gauge._valueIndicator.options.x, 414, 'main pointer x');
 
         assert.strictEqual(gauge._subvalueIndicatorsSet._options.x, 414, 'sub pointers set x');
+    });
+
+    QUnit.test('Don\'t pass the rtlEnabled option to the axis and translator', function(assert) {
+        const gauge = new dxLinearGauge(this.container, {
+            rtlEnabled: true,
+            geometry: { orientation: 'vertical' }
+        });
+
+        assert.strictEqual(gauge._translator.inverted, false, 'vertical translator rtlEnabled');
+        assert.equal(axisModule.Axis.getCall(0).returnValue.updateOptions.getCall(1).args[0].inverted, false, 'axis rtlEnabled');
     });
 })();

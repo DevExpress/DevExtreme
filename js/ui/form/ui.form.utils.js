@@ -36,6 +36,23 @@ const tryGetTabPath = fullPath => {
 
 const isFullPathContainsTabs = fullPath => fullPath.indexOf('tabs') > -1;
 
+const getItemPath = (items, item, isTabs) => {
+    const index = items.indexOf(item);
+    if(index > -1) {
+        return createItemPathByIndex(index, isTabs);
+    }
+    for(let i = 0; i < items.length; i++) {
+        const targetItem = items[i];
+        const tabOrGroupItems = targetItem.tabs || targetItem.items;
+        if(tabOrGroupItems) {
+            const itemPath = getItemPath(tabOrGroupItems, item, targetItem.tabs);
+            if(itemPath) {
+                return concatPaths(createItemPathByIndex(i, isTabs), itemPath);
+            }
+        }
+    }
+};
+
 exports.getOptionNameFromFullName = getOptionNameFromFullName;
 exports.getFullOptionName = getFullOptionName;
 exports.getTextWithoutSpaces = getTextWithoutSpaces;
@@ -44,3 +61,4 @@ exports.createItemPathByIndex = createItemPathByIndex;
 exports.concatPaths = concatPaths;
 exports.tryGetTabPath = tryGetTabPath;
 exports.isFullPathContainsTabs = isFullPathContainsTabs;
+exports.getItemPath = getItemPath;

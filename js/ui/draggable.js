@@ -237,6 +237,8 @@ const Draggable = DOMComponent.inherit({
             onDragStart: null,
             onDragMove: null,
             onDragEnd: null,
+            onDragEnter: null,
+            onDragLeave: null,
             /**
              * @name dxDraggableOptions.onDrop
              * @type function(e)
@@ -848,21 +850,31 @@ const Draggable = DOMComponent.inherit({
             return false;
         }
 
-        if(!sourceDraggable._dragElementIsCloned()) {
-            return true;
-        }
-
+        const $dragElement = sourceDraggable._$dragElement;
         const $sourceDraggableElement = sourceDraggable.$element();
-        const elements = this.getElementsFromPoint({
-            x: e.pageX,
-            y: e.pageY
-        }, e.target);
-        const firstWidgetElement = elements.filter((element) => $(element).hasClass(this._addWidgetPrefix()))[0];
+        const $targetDraggableElement = this.$element();
 
-        return firstWidgetElement !== $sourceDraggableElement.get(0);
+        const mousePosition = getMousePosition(e);
+        const elements = this.getElementsFromPoint(mousePosition, e.target);
+        const firstWidgetElement = elements.filter((element) => {
+            const $element = $(element);
+
+            if($element.hasClass(this._addWidgetPrefix())) {
+                return !$element.closest($dragElement).length;
+            }
+        })[0];
+
+        const $sourceElement = this._getSourceElement();
+        const isTargetOverItself = firstWidgetElement === $sourceDraggableElement.get(0);
+        const isTargetOverNestedDraggable = $(firstWidgetElement).closest($sourceElement).length;
+
+        return !firstWidgetElement || firstWidgetElement === $targetDraggableElement.get(0) && !isTargetOverItself && !isTargetOverNestedDraggable;
+
     },
 
     _dragEnterHandler: function(e) {
+        this._fireDragEnterEvent(e);
+
         if(this._isTargetOverAnotherDraggable(e)) {
             this._setTargetDraggable();
         }
@@ -872,6 +884,8 @@ const Draggable = DOMComponent.inherit({
     },
 
     _dragLeaveHandler: function(e) {
+        this._fireDragLeaveEvent(e);
+
         this._resetTargetDraggable();
 
         if(this !== this._getSourceDraggable()) {
@@ -922,6 +936,8 @@ const Draggable = DOMComponent.inherit({
             case 'onDragMove':
             case 'onDragEnd':
             case 'onDrop':
+            case 'onDragEnter':
+            case 'onDragLeave':
                 this['_' + name + 'Action'] = this._createActionByOption(name);
                 break;
             case 'dragTemplate':
@@ -993,6 +1009,18 @@ const Draggable = DOMComponent.inherit({
         this._resetSourceDraggable();
         this._$sourceElement = null;
         this._stopAnimator();
+    },
+
+    _fireDragEnterEvent: function(sourceEvent) {
+        const args = this._getEventArgs(sourceEvent);
+
+        this._getAction('onDragEnter')(args);
+    },
+
+    _fireDragLeaveEvent: function(sourceEvent) {
+        const args = this._getEventArgs(sourceEvent);
+
+        this._getAction('onDragLeave')(args);
     }
 });
 
