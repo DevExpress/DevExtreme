@@ -2,7 +2,8 @@ import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxSelectBoxModule, DxTemplateModule } from 'devextreme-angular';
-import { Service, Location, Data } from './app.service';
+import { Service, Data } from './app.service';
+import tzUtils from 'devextreme/time_zone_utils';
 
 if(!/localhost/.test(document.location.host)) {
     enableProdMode();
@@ -18,13 +19,47 @@ if(!/localhost/.test(document.location.host)) {
 export class AppComponent {
     currentDate: Date = new Date(2021, 4, 25);
     timezone: string;
-    locations: Location[];
+    locations: string[];
     dataSource: Data[];
+    demoLocations: string[];
 
     constructor(service: Service) {
-        this.locations = service.getLocations();
+        this.demoLocations = this.getLocations(this.currentDate)
         this.dataSource = service.getData();
-        this.timezone = this.locations[0].timeZoneId;
+        this.timezone = service.getLocations()[0];
+        this.currentDate = this.currentDate;
+    }
+
+    getLocations = (date) => {
+        const timeZones = tzUtils.getTimeZones(date);
+        return timeZones.filter((timeZone) => {
+            return service.getLocations().indexOf(timeZone.id) !== -1;
+        });
+    };
+
+    onValueChanged(e: any) {
+        this.timezone = e.value;
+    }
+    
+    onAppointmentFormOpening(e: any) {
+        const form = e.form;
+    
+        const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
+        const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
+        const startDatedataSource = startDateTimezoneEditor.option('dataSource');
+        const endDateDataSource = endDateTimezoneEditor.option('dataSource');
+    
+        startDatedataSource.filter(['id', 'contains', 'Europe']);
+        endDateDataSource.filter(['id', 'contains', 'Europe']);
+
+        startDatedataSource.load();
+        endDateDataSource.load();
+    }
+
+    onOptionChanged(e) {
+        if(e.name === 'currentDate') { 
+            this.demoLocations = this.getLocations(e.value);                      
+        }
     }
 }
 

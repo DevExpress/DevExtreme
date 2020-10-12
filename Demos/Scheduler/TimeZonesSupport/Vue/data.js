@@ -47,14 +47,4 @@ export const data = [
   }
 ];
 
-export const locations = [
-  {
-    timeZoneId: 'America/Los_Angeles',
-    text: 'Los Angeles (UTC-08:00)'
-  }, {
-    timeZoneId: 'America/New_York',
-    text: 'New York (UTC-05:00)'
-  }, {
-    timeZoneId: 'Europe/Berlin',
-    text: 'Berlin (UTC+01:00)'
-  }];
+export const locations = ['Europe/London', 'Europe/Berlin', 'Europe/Helsinki'];

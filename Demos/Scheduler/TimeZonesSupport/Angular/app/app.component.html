@@ -1,10 +1,10 @@
 <div class="option">
     <span>Office Time Zone</span>
     <dx-select-box
-        [items]="locations"
+        [items]="demoLocations"
         [width]="240"
-        displayExpr="text"
-        valueExpr="timeZoneId"
+        displayExpr="title"
+        valueExpr="id"
         [(value)]="timezone"
     >
     </dx-select-box>
@@ -16,7 +16,10 @@
     currentView="workWeek"
     [currentDate]="currentDate"
     [resources]="resources"
-    [height]="600">
+    [height]="600"
+    [startDayHour]="8"
+    (onAppointmentFormOpening)="onAppointmentFormOpening($event)"
+    (onOptionChanged)="onOptionChanged($event)">
     <dxo-editing
         [allowTimeZoneEditing]="true">
     </dxo-editing>
