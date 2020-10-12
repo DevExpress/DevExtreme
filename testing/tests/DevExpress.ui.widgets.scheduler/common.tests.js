@@ -4805,7 +4805,7 @@ QUnit.module('ScrollTo', () => {
                     return createWrapper({
                         showCurrentTimeIndicator: false,
                         scrolling: { mode: scrollingMode },
-                        currentDate: new Date('2020-09-06'),
+                        currentDate: new Date(2020, 8, 6),
                         currentView: 'week',
                         height: 500,
                         width: 500,
@@ -4835,12 +4835,12 @@ QUnit.module('ScrollTo', () => {
             QUnit.test('A warning should be thrown when scrolling to an invalid date', function(assert) {
                 const scheduler = this.createScheduler();
 
-                scheduler.instance.scrollTo(new Date('2020-09-05'));
+                scheduler.instance.scrollTo(new Date(2020, 8, 5));
 
                 assert.equal(errors.log.callCount, 1, 'warning has been called once');
                 assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
 
-                scheduler.instance.scrollTo(new Date('2020-09-14'));
+                scheduler.instance.scrollTo(new Date(2020, 8, 14));
 
                 assert.equal(errors.log.callCount, 2, 'warning has been called once');
                 assert.equal(errors.log.getCall(1).args[0], 'W1008', 'warning has correct error id');
@@ -4849,7 +4849,7 @@ QUnit.module('ScrollTo', () => {
             QUnit.test('A warning should not be thrown when scrolling to a valid date', function(assert) {
                 const scheduler = this.createScheduler();
 
-                scheduler.instance.scrollTo(new Date('2020-09-07'));
+                scheduler.instance.scrollTo(new Date(2020, 8, 7));
 
                 assert.equal(errors.log.callCount, 0, 'warning has been called once');
             });
