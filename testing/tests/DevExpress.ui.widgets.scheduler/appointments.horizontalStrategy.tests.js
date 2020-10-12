@@ -80,6 +80,17 @@ const moduleOptions = {
             if(command === 'processDateDependOnTimezone') {
                 return field;
             }
+            if(command === 'createAppointmentAdapter') {
+                return {
+                    clone: () => {
+                        return {
+                            source: () => {
+                                return {};
+                            }
+                        };
+                    }
+                };
+            }
             if(command === 'getAppointmentGeometry') {
                 return {
                     width: field.width || 0,
