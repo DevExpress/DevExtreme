@@ -3980,7 +3980,7 @@ QUnit.module('Integration: Appointments', {
                     this.createScheduler = (options = {}) => {
                         return createWrapper({
                             scrolling: { mode: scrollingMode },
-                            currentDate: new Date('2020-09-06'),
+                            currentDate: new Date('2020-09-06T00:00:00'),
                             height: 500,
                             width: 500,
                             crossScrollingEnabled: true,

@@ -4856,22 +4856,22 @@ QUnit.module('ScrollTo', () => {
 
             [{
                 view: 'week',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 1,
                 topCellCount: 18,
             }, {
                 view: 'month',
-                date: new Date('2020-09-25'),
+                date: new Date(2020, 8, 25),
                 leftCellCount: 5,
                 topCellCount: 3,
             }, {
                 view: 'timelineWeek',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 66,
                 topCellCount: 0,
             }, {
                 view: 'timelineMonth',
-                date: new Date('2020-09-07'),
+                date: new Date(2020, 8, 7),
                 leftCellCount: 6,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
@@ -4886,22 +4886,22 @@ QUnit.module('ScrollTo', () => {
 
             [{
                 view: 'week',
-                date: new Date('2020-09-07T09:15:00'),
+                date: new Date(2020, 8, 7, 9, 15),
                 leftCellCount: 1,
                 topCellCount: 18.5,
             }, {
                 view: 'month',
-                date: new Date('2020-09-25T12:00:00'),
+                date: new Date(2020, 8, 25, 12),
                 leftCellCount: 5,
                 topCellCount: 3,
             }, {
                 view: 'timelineWeek',
-                date: new Date('2020-09-07T09:15:00'),
+                date: new Date(2020, 8, 7, 9, 15),
                 leftCellCount: 66.5,
                 topCellCount: 0,
             }, {
                 view: 'timelineMonth',
-                date: new Date('2020-09-07T12:00:00'),
+                date: new Date(2020, 8, 7, 12),
                 leftCellCount: 6,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
@@ -4916,22 +4916,22 @@ QUnit.module('ScrollTo', () => {
 
             [{
                 view: 'week',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 8,
                 topCellCount: 18,
             }, {
                 view: 'month',
-                date: new Date('2020-09-25T12:00:00'),
+                date: new Date(2020, 8, 25, 12),
                 leftCellCount: 12,
                 topCellCount: 3,
             }, {
                 view: 'timelineWeek',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 402,
                 topCellCount: 0,
             }, {
                 view: 'timelineMonth',
-                date: new Date('2020-09-07T12:00:00'),
+                date: new Date(2020, 8, 7, 12),
                 leftCellCount: 36,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
@@ -4951,22 +4951,22 @@ QUnit.module('ScrollTo', () => {
 
             [{
                 view: 'week',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 3,
                 topCellCount: 18,
             }, {
                 view: 'month',
-                date: new Date('2020-09-25T12:00:00'),
+                date: new Date(2020, 8, 25, 12),
                 leftCellCount: 11,
                 topCellCount: 3,
             }, {
                 view: 'timelineWeek',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 133,
                 topCellCount: 0,
             }, {
                 view: 'timelineMonth',
-                date: new Date('2020-09-07T12:00:00'),
+                date: new Date(2020, 8, 7, 12),
                 leftCellCount: 13,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
@@ -4986,22 +4986,22 @@ QUnit.module('ScrollTo', () => {
 
             [{
                 view: 'week',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 1,
                 topCellCount: 66,
             }, {
                 view: 'month',
-                date: new Date('2020-09-25T12:00:00'),
+                date: new Date(2020, 8, 25, 12),
                 leftCellCount: 5,
                 topCellCount: 9,
             }, {
                 view: 'timelineWeek',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 66,
                 topCellCount: 1,
             }, {
                 view: 'timelineMonth',
-                date: new Date('2020-09-07T12:00:00'),
+                date: new Date(2020, 8, 7, 12),
                 leftCellCount: 6,
                 topCellCount: 1,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
@@ -5022,7 +5022,7 @@ QUnit.module('ScrollTo', () => {
             QUnit.test('ScrollTo should work with vertical grouping in week view when all-day panel is enabled', function(assert) {
                 const leftCellCount = 1;
                 const topCellCount = 68;
-                const date = new Date('2020-09-07T09:00:00');
+                const date = new Date(2020, 8, 7, 9);
 
                 const scheduler = this.createScheduler({
                     currentView: {
@@ -5039,7 +5039,7 @@ QUnit.module('ScrollTo', () => {
             QUnit.test('ScrollTo should work with vertical grouping when scrolling to an all-day cell', function(assert) {
                 const leftCellCount = 1;
                 const topCellCount = 49;
-                const date = new Date('2020-09-07T09:00:00');
+                const date = new Date(2020, 8, 7, 9);
 
                 const scheduler = this.createScheduler({
                     currentView: {
@@ -5055,22 +5055,22 @@ QUnit.module('ScrollTo', () => {
 
             [{
                 view: 'week',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 1,
                 topCellCount: 18,
             }, {
                 view: 'month',
-                date: new Date('2020-09-25'),
+                date: new Date(2020, 8, 25),
                 leftCellCount: 5,
                 topCellCount: 3,
             }, {
                 view: 'timelineWeek',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 66,
                 topCellCount: 0,
             }, {
                 view: 'timelineMonth',
-                date: new Date('2020-09-07'),
+                date: new Date(2020, 8, 7),
                 leftCellCount: 6,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
@@ -5111,22 +5111,22 @@ QUnit.module('ScrollTo', () => {
 
             [{
                 view: 'week',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 5,
                 topCellCount: 18,
             }, {
                 view: 'month',
-                date: new Date('2020-09-25'),
+                date: new Date(2020, 8, 25),
                 leftCellCount: 1,
                 topCellCount: 3,
             }, {
                 view: 'timelineWeek',
-                date: new Date('2020-09-07T09:00:00'),
+                date: new Date(2020, 8, 7, 9),
                 leftCellCount: 269,
                 topCellCount: 0,
             }, {
                 view: 'timelineMonth',
-                date: new Date('2020-09-07'),
+                date: new Date(2020, 8, 7),
                 leftCellCount: 23,
                 topCellCount: 0,
             }].forEach(({ view, date, leftCellCount, topCellCount }) => {
