@@ -18,6 +18,13 @@ export default class Utils {
     return hours >= dinnerTime.from && hours < dinnerTime.to;
   }
 
+  static hasCoffeeCupIcon(date) {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    return hours === dinnerTime.from && minutes === 0;
+  }
+
   static isValidAppointment(component, appointmentData) {
     const startDate = new Date(appointmentData.startDate);
     const endDate = new Date(appointmentData.endDate);

@@ -36,11 +36,13 @@ $(function () {
 
         timeCellTemplate: function(itemData, itemIndex, itemElement) {
             var element = $(`<div>${itemData.text}</div>`);
+            var date = itemData.date;
 
-            if (isDinner(itemData.date)) {
-                element
-                    .addClass('dinner')
-                    .append('<div class="cafe" />');
+            if (isDinner(date)) {
+                element.addClass('dinner');
+            }
+            if (hasCoffeeCupIcon(date)) {
+                element.append('<div class="cafe" />');
             }
 
             return itemElement.append(element);
@@ -127,6 +129,13 @@ function isWeekend(date) {
 function isDinner(date) {
     var hours = date.getHours();
     return hours >= dinnerTime.from && hours < dinnerTime.to;
+}
+
+function hasCoffeeCupIcon(date) {
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+
+    return hours === dinnerTime.from && minutes === 0;
 }
 
 function applyDisableDatesToDateEditors(form) {

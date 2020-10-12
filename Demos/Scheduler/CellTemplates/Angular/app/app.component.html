@@ -31,7 +31,7 @@
       *dxTemplate="let timeCell of 'timeCellTemplate'"
       [ngClass]="{ 'dinner': isDinner(timeCell.date) }">
       {{timeCell.text}}
-      <div *ngIf="isDinner(timeCell.date)" class="cafe"></div>
+      <div *ngIf="hasCoffeeCupIcon(timeCell.date)" class="cafe"></div>
     </div>
 
 </dx-scheduler>

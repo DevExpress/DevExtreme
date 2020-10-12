@@ -77,6 +77,14 @@ export class AppComponent {
         return hours >= dinnerTime.from && hours < dinnerTime.to;
     }
 
+    hasCoffeeCupIcon(date: Date) {
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const dinnerTime = this.dataService.getDinnerTime();
+
+        return hours === dinnerTime.from && minutes === 0;
+    }
+
     isValidAppointment(component: any, appointmentData: any) {
         const startDate = new Date(appointmentData.startDate);
         const endDate = new Date(appointmentData.endDate);

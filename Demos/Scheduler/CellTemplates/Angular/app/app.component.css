@@ -32,7 +32,7 @@
   cursor: auto;
 }
 
-::ng-deep td.dx-scheduler-first-group-cell.dx-scheduler-time-panel-cell .dinner .cafe {
+::ng-deep td.dx-scheduler-time-panel-cell .dinner .cafe {
   height: 200%;
   width: 100%;
   left: 50%;
