@@ -55,3 +55,92 @@ describe('PostCompiler', () => {
       .toBe('.c1 { -webkit-box-shadow: none; box-shadow: none; }');
   });
 });
+
+describe('PostCompiler - swatch features (fixSwatchCss)', () => {
+  test('fixSwatchCss - common styles and typography', () => {
+    const compilerCss = `
+.dx-swatch-c div {
+  color: #fff;
+}
+.dx-swatch-c .dx-theme-accent-as-text-color {
+  color: #fff;
+}
+.dx-swatch-c .dx-theme-generic-typography {
+  color: #fff;
+}
+.dx-swatch-c .dx-theme-generic-typography textarea {
+  color: #fff;
+}`;
+    const expectedCss = `
+.dx-swatch-c div {
+  color: #fff;
+}
+.dx-swatch-c .dx-theme-accent-as-text-color {
+  color: #fff;
+}
+.dx-theme-generic-typography .dx-swatch-c,.dx-theme-generic-typography.dx-swatch-c {
+  color: #fff;
+}
+.dx-theme-generic-typography .dx-swatch-c textarea,.dx-theme-generic-typography.dx-swatch-c textarea {
+  color: #fff;
+}`;
+    const result = PostCompiler.fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(expectedCss);
+  });
+
+  test('fixSwatchCss - do not change the order of cascade\'s classes by swatch class (T692470) - checkbox case', () => {
+    const compilerCss = `
+.dx-swatch-c .dx-checkbox-checked .dx-checkbox-icon,
+.dx-swatch-c .dx-checkbox-checked.dx-checkbox-icon {
+  background-color: #fff;
+}`;
+
+    const result = PostCompiler.fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(compilerCss);
+  });
+
+  test('fixSwatchCss - do not change the order of cascade\'s classes by swatch class (T692470) - underlined editor case', () => {
+    const compilerCss = `
+.dx-swatch-c .dx-rtl.dx-editor-underlined.dx-searchbox .dx-placeholder:before,
+.dx-swatch-c .dx-rtl .dx-editor-underlined.dx-searchbox .dx-placeholder:before {
+  padding-right: 0;
+}`;
+
+    const result = PostCompiler.fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(compilerCss);
+  });
+
+  test('fixSwatchCss - do not change the order of cascade\'s classes by swatch class (T692470) - tabs case', () => {
+    const compilerCss = `
+.dx-swatch-c .dx-tab-selected + .dx-swatch-c .dx-tab-selected {
+  border: none;
+}`;
+
+    const result = PostCompiler.fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(compilerCss);
+  });
+
+  test('fixSwatchCss - do not change the order of cascade\'s classes by swatch class (T692470) - tabs case with extra selector', () => {
+    const compilerCss = `
+.dx-swatch-c .dx-tab-selected + .s .dx-swatch-c .dx-tab-selected {
+  border: none;
+}`;
+
+    const expectedCss = `
+.dx-swatch-c .dx-tab-selected + .dx-swatch-c .s .dx-tab-selected {
+  border: none;
+}`;
+
+    const result = PostCompiler.fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(expectedCss);
+  });
+
+  test('fixSwatchCss - fix theme marker in swatch css', () => {
+    const compilerCss = '.dx-swatch-c .dx-theme-marker { font-family: \'dx.generic.light\'; }';
+
+    const expectedCss = '.dx-swatch-c .dx-theme-marker { font-family: \'dx.generic.c\'; }';
+
+    const result = PostCompiler.fixSwatchCss(compilerCss, '.dx-swatch-c', 'c');
+    expect(result).toBe(expectedCss);
+  });
+});

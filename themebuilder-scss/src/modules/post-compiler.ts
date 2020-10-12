@@ -41,4 +41,21 @@ export default class PostCompiler {
       from: undefined,
     })).css;
   }
+
+  static fixSwatchCss(css: string | Buffer, swatchClass: string, colorScheme: string): string {
+    let result = css.toString();
+
+    const escapedSelector = swatchClass.replace('.', '\\.');
+
+    const swatchOrderRegex = new RegExp(`([ \\t]*)([\\w\\.#:\\*][\\w\\.#:\\*\\->()\\s]*)(${escapedSelector}\\s)([^,{+~]*)`, 'gm');
+    const changeTypographyRulesOrderRegex = /(\.dx-swatch-.*?)\s(\.dx-theme-.*?-typography)(.*?)\s{/g;
+    const themeMarkerRegex = /(\.dx-theme-marker\s*{\s*font-family:\s*['"]dx\..*?\.)(.*)(['"])/g;
+
+    result = result
+      .replace(swatchOrderRegex, '$1$3$2$4')
+      .replace(changeTypographyRulesOrderRegex, '$2 $1$3,$2$1$3 {')
+      .replace(themeMarkerRegex, `$1${colorScheme}$3`);
+
+    return result;
+  }
 }
