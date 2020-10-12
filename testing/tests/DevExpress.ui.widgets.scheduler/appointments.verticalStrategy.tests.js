@@ -91,6 +91,17 @@ const moduleOptions = {
                     empty: field.empty || false
                 };
             }
+            if(command === 'createAppointmentAdapter') {
+                return {
+                    clone: () => {
+                        return {
+                            source: () => {
+                                return {};
+                            }
+                        };
+                    }
+                };
+            }
         }, this);
     },
     afterEach: function() {
