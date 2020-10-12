@@ -425,8 +425,8 @@ const VirtualScrollingRowsViewExtender = (function() {
             editingController && editingController.hasChanges() && this._getRowElements(contentTable).each((_, item)=>{
                 const rowOptions = $(item).data('options');
                 if(rowOptions) {
-                    const editData = editingController.getEditDataByKey(rowOptions.key);
-                    editData && editingController._showErrorRow(editData);
+                    const change = editingController.getChangeByKey(rowOptions.key);
+                    change && editingController._showErrorRow(change);
                 }
             });
         },
