@@ -124,6 +124,32 @@ module('Initialization', () => {
                 );
                 assert.notOk(instance.getWorkSpace().isRenovatedRender(), 'Renovated render is not used');
             });
+
+            test(`Row height should be correct in ${scrolling.mode} scrollign mode if ${viewName} view`, function(assert) {
+                const $style = $('<style>');
+                const styleBefore = $style.text();
+
+                $style
+                    .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 20px } ')
+                    .appendTo('head');
+
+                const instance = createWrapper({
+                    views: [{
+                        type: viewName,
+                    }],
+                    currentView: viewName,
+                    scrolling: {
+                        mode: 'virtual'
+                    },
+                    height: 400
+                }).instance;
+
+                const { virtualScrollingDispatcher } = instance.getWorkSpace();
+
+                assert.equal(virtualScrollingDispatcher.rowHeight, 20, 'Row height is correct');
+
+                $style.text(styleBefore);
+            });
         });
 
         module('Options', () => {
@@ -157,10 +183,13 @@ module('Initialization', () => {
                 });
 
                 const { virtualScrollingDispatcher } = instance.getWorkSpace();
+
+                virtualScrollingDispatcher.virtualScrolling.getRenderTimeout = () => -1;
+
                 const { pageSize } = virtualScrollingDispatcher.getState();
                 const { innerHeight } = getWindow();
 
-                const rowHeight = virtualScrollingDispatcher._virtualScrolling.getRowHeight();
+                const rowHeight = virtualScrollingDispatcher._virtualScrolling.rowHeight;
                 const expectedPageSize = Math.ceil(innerHeight / rowHeight);
 
                 assert.equal(pageSize, expectedPageSize, 'Page size is correct');

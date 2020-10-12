@@ -1246,6 +1246,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.renderRDateTable();
 
         this.updateRSelection();
+
+        this.virtualScrollingDispatcher?.updateDimensions();
     }
 
     renderRAllDayPanel() {
@@ -2778,11 +2780,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         return width / (totalCellCount + cellCount - startIndex);
     }
 
-    getCellHeight() {
-        return this.cache.get('cellHeight', () => {
+    getCellHeight(useCache = true) {
+        const callbackResult = () => {
             const cell = this._getCells().first().get(0);
             return cell && getBoundingRect(cell).height;
-        });
+        };
+
+        return useCache
+            ? this.cache.get('cellHeight', callbackResult)
+            : callbackResult();
     }
 
     getAllDayHeight() {

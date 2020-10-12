@@ -12,9 +12,9 @@ export default class VirtualScrollingDispatcher {
     constructor(workspace) {
         this._workspace = workspace;
         this._virtualScrolling = null;
+        this._rowHeight = ROW_HEIGHT;
 
         this._createVirtualScrolling();
-
         this._attachScrollableEvents();
     }
 
@@ -32,6 +32,9 @@ export default class VirtualScrollingDispatcher {
     get height() {
         return this.workspace.invoke('getOption', 'height');
     }
+
+    get rowHeight() { return this._rowHeight; }
+    set rowHeight(value) { this._rowHeight = value; }
 
     get viewportHeight() {
         return this.height
@@ -56,7 +59,8 @@ export default class VirtualScrollingDispatcher {
     _createVirtualScrolling() {
         this.virtualScrolling = new VirtualScrolling(
             this.workspace,
-            this.viewportHeight
+            this.viewportHeight,
+            this.rowHeight
         );
     }
 
@@ -101,14 +105,31 @@ export default class VirtualScrollingDispatcher {
     _process(scrollPosition) {
         scrollPosition
             && this.virtualScrolling.updateState(scrollPosition)
-            && this._updateWorkspace();
+            && this._updateRender();
     }
 
-    _updateWorkspace() {
+    updateDimensions() {
+        const cellHeight = this.workspace.getCellHeight(false);
+        if(cellHeight !== this.rowHeight) {
+            this.rowHeight = cellHeight;
+            this._createVirtualScrolling();
+
+            this._renderDateTable();
+        }
+    }
+
+    _updateRender() {
+        this._renderDateTable();
+        this._renderAppointments();
+    }
+
+    _renderDateTable() {
+        this.workspace.renderRWorkspace(false);
+    }
+
+    _renderAppointments() {
         const { workspace } = this;
         const renderTimeout = this.getRenderTimeout();
-
-        workspace.renderRWorkspace(false);
 
         if(renderTimeout >= 0) {
 
@@ -125,10 +146,11 @@ export default class VirtualScrollingDispatcher {
 }
 
 class VirtualScrolling {
-    constructor(workspace, viewportHeight) {
+    constructor(workspace, viewportHeight, rowHeight) {
         this._workspace = workspace;
         this._viewportHeight = viewportHeight;
         this._renderAppointmentTimeout = null;
+        this._rowHeight = rowHeight;
 
         this._init();
     }
@@ -142,16 +164,14 @@ class VirtualScrolling {
         return this._viewportHeight;
     }
 
-    getRowHeight() {
-        return ROW_HEIGHT;
-    }
+    get rowHeight() { return this._rowHeight; }
 
     getState() {
         return this._state;
     }
 
     _getPageSize() {
-        return Math.ceil(this.getViewportHeight() / this.getRowHeight());
+        return Math.ceil(this.getViewportHeight() / this.rowHeight);
     }
 
     _getOutlineCount() {
@@ -186,10 +206,9 @@ class VirtualScrolling {
         const state = this.getState();
         const top = scrollPosition.top;
         const currentTopPosition = state.prevScrollPosition.top;
-        const rowHeight = this.getRowHeight();
-        const currentTopRowsCount = Math.floor(currentTopPosition / rowHeight);
+        const currentTopRowsCount = Math.floor(currentTopPosition / this.rowHeight);
         const isFirstInitialization = state.startIndex < 0;
-        const topRowsCount = Math.floor(top / rowHeight);
+        const topRowsCount = Math.floor(top / this.rowHeight);
         const isStartIndexChanged = Math.abs(currentTopRowsCount - topRowsCount) > this._getOutlineCount();
 
         return isFirstInitialization || isStartIndexChanged;
@@ -216,7 +235,7 @@ class VirtualScrolling {
         const rowCount = topOutlineCount + rowCountWithBottom + bottomOutlineCount;
 
         const { top } = scrollPosition;
-        const topRowsCount = Math.floor(top / this.getRowHeight());
+        const topRowsCount = Math.floor(top / this.rowHeight);
 
         const state = this.getState();
 
@@ -235,8 +254,7 @@ class VirtualScrolling {
 
     _calcTopRowsInfo(scrollPosition) {
         const { top } = scrollPosition;
-        const rowHeight = this.getRowHeight();
-        let topVirtualRowCount = Math.floor(top / rowHeight);
+        let topVirtualRowCount = Math.floor(top / this.rowHeight);
         const topOutlineCount = Math.min(topVirtualRowCount, this._getOutlineCount());
 
         topVirtualRowCount -= topOutlineCount;
@@ -286,7 +304,6 @@ class VirtualScrolling {
 
     _updateStateCore() {
         const state = this.getState();
-        const rowHeight = this.getRowHeight();
         const topVirtualRowCount = state.topVirtualRowCount;
         const bottomVirtualRowCount = state.bottomVirtualRowCount;
         const topOutlineCount = state.topOutlineCount;
@@ -297,10 +314,10 @@ class VirtualScrolling {
         const prevTopOutlineHeight = state.topOutlineHeight;
         const prevBottomOutlineHeight = state.bottomOutlineHeight;
 
-        const topVirtualRowHeight = rowHeight * topVirtualRowCount;
-        const bottomVirtualRowHeight = rowHeight * bottomVirtualRowCount;
-        const topOutlineHeight = rowHeight * topOutlineCount;
-        const bottomOutlineHeight = rowHeight * bottomOutlineCount;
+        const topVirtualRowHeight = this.rowHeight * topVirtualRowCount;
+        const bottomVirtualRowHeight = this.rowHeight * bottomVirtualRowCount;
+        const topOutlineHeight = this.rowHeight * topOutlineCount;
+        const bottomOutlineHeight = this.rowHeight * bottomOutlineCount;
 
         const prevTopVirtualHeight = prevTopVirtualRowHeight + prevTopOutlineHeight;
         const topVirtualHeight = topVirtualRowHeight + topOutlineHeight;
