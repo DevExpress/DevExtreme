@@ -1,0 +1,19 @@
+<dx-chart id="chart" title="Ice Hockey World Championship Gold Medal Winners" [dataSource]=dataSource>
+    <dxo-common-series-settings type="bar" argumentField="country">
+        <dxo-label visible="true"></dxo-label>
+    </dxo-common-series-settings>
+    <dxi-series name="Gold" valueField="gold" color="#ffd700">
+    </dxi-series>
+    <dxi-series name="Silver" valueField="silver" color="#c0c0c0">
+    </dxi-series>
+    <dxi-series name="Bronze" valueField="bronze" color="#cd7f32">
+    </dxi-series>
+    <dxo-argument-axis>
+        <dxo-label [visible]="true" template="labelTemplate"></dxo-label>
+    </dxo-argument-axis>
+    <svg overflow="visible" *dxTemplate="let data of 'labelTemplate'">
+        <image filter="url(#DevExpress_shadow_filter)" y="0" width="60" height="40"
+            attr.href={{getFilePath(data.valueText)}}></image>
+        <text class="template-text" x="30" y="59" text-anchor="middle">{{data.valueText}}</text>
+    </svg>
+</dx-chart>

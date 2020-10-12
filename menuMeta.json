@@ -3110,6 +3110,17 @@
             "Widget": "Charts",
             "DemoType": "Viz",
             "Credits": "U.S. Energy Information Administration (Oct 2019)"
+          },
+          {
+            "Title": "Axis Labels Templates",
+            "Name": "AxisLabelsTemplates",
+            "DocUrl": "",
+            "Widget": "Charts",
+            "MvcDescription": "",
+            "NetCoreDescription": "",
+            "MvcAdditionalFiles": [],
+            "DemoType": "",
+            "Badge": "New"
           }
         ]
       },

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>DevExtreme Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script src="../../../../node_modules/jquery/dist/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../node_modules/devextreme/dist/css/dx.light.css" />
+    <script src="../../../../node_modules/devextreme/dist/js/dx.all.js"></script>
+    <script src="data.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="index.js"></script>
+</head>
+<body class="dx-viewport">
+    <div class="demo-container">
+        <div id="chart"></div>
+        <svg width="0" height="0">
+            <defs>
+            <filter id="DevExpress_shadow_filter" x="-50%" y="-50%" width="200%" height="200%" transform="translate(0,0)">
+            <fegaussianblur in="SourceGraphic" result="gaussianBlurResult" stdDeviation="3"></fegaussianblur>
+            <feoffset in="gaussianBlurResult" result="offsetResult" dx="0" dy="1"></feoffset>
+            <feflood result="floodResult" flood-color="#000000" flood-opacity="0.3"></feflood>
+            <fecomposite in="floodResult" in2="offsetResult" operator="in" result="compositeResult"></fecomposite>
+            <fecomposite in="SourceGraphic" in2="compositeResult" operator="over"></fecomposite>
+            </filter>
+            </defs>
+          </svg>
+    </div>
+</body>
+</html>
