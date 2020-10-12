@@ -5,20 +5,18 @@
 </dx-button>
 
 <dx-data-grid 
-    id='gridContainer'
-    ref={this.dataGridRef}
-    [dataSource]='customers'
-    [allowColumnReordering]='true'
-    [showBorders]='true'>    
+    [dataSource]="customers"
+    [allowColumnReordering]="true"
+    [showBorders]="true">    
     
-    <dxi-column dataField='CompanyName'></dxi-column>
-    <dxi-column dataField='Phone'></dxi-column>
-    <dxi-column dataField='Fax'></dxi-column>
-    <dxi-column dataField='City'></dxi-column>
-    <dxi-column dataField='State' [groupIndex]='0'></dxi-column>
+    <dxi-column dataField="CompanyName"></dxi-column>
+    <dxi-column dataField="Phone"></dxi-column>
+    <dxi-column dataField="Fax"></dxi-column>
+    <dxi-column dataField="City"></dxi-column>
+    <dxi-column dataField="State" [groupIndex]="0"></dxi-column>
     
-    <dxo-search-panel [visible]='true'></dxo-search-panel>
-    <dxo-paging [pageSize]='10'></dxo-paging>
-    <dxo-group-panel [visible]='true'></dxo-group-panel>
-    <dxo-grouping [autoExpandAll]='true'></dxo-grouping>
+    <dxo-search-panel [visible]="true"></dxo-search-panel>
+    <dxo-paging [pageSize]="10"></dxo-paging>
+    <dxo-group-panel [visible]="true"></dxo-group-panel>
+    <dxo-grouping [autoExpandAll]="true"></dxo-grouping>
 </dx-data-grid>
