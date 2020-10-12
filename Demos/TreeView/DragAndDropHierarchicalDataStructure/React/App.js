@@ -141,22 +141,26 @@ class App extends React.Component {
   }
 
   findNode(treeView, index) {
-    const visibleItems = [];
-    this.buildVisibleNodesArray(treeView.getNodes(), visibleItems);
-    if(visibleItems.length <= index) {
-      return null;
+    const nodeElement = treeView.element().querySelectorAll('.dx-treeview-node')[index];
+    if(nodeElement) {
+      return this.findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
     }
-
-    return visibleItems[index];
+    return null;
   }
 
-  buildVisibleNodesArray(nodes, arrayContainer) {
+  findNodeById(nodes, id) {
     for(var i = 0; i < nodes.length; i++) {
-      arrayContainer.push(nodes[i]);
-      if(nodes[i].expanded !== false && nodes[i].children) {
-        this.buildVisibleNodesArray(nodes[i].children, arrayContainer);
+      if(nodes[i].itemData.id == id) {
+        return nodes[i];
+      }
+      if(nodes[i].children) {
+        const node = this.findNodeById(nodes[i].children, id);
+        if(node != null) {
+          return node;
+        }
       }
     }
+    return null;
   }
 
   moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {

@@ -92,23 +92,27 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     }
 
     function findNode(treeView, index) {
-        var visibleItems = [];
-        buildVisibleNodesArray(treeView.getNodes(), visibleItems);
-        if(visibleItems.length <= index) {
-            return null;
+        var nodeElement = treeView.element().find('.dx-treeview-node')[index];
+        if(nodeElement) {
+            return findNodeById(treeView.getNodes(), nodeElement.getAttribute('data-item-id'));
         }
-
-        return visibleItems[index];
+        return null;
     }
 
-    function buildVisibleNodesArray(nodes, arrayContainer) {
+    function findNodeById(nodes, id) {
         for(var i = 0; i < nodes.length; i++) {
-            arrayContainer.push(nodes[i]);
-            if(nodes[i].expanded !== false && nodes[i].children){
-                buildVisibleNodesArray(nodes[i].children, arrayContainer);
+            if(nodes[i].itemData.id == id) {
+                return nodes[i];
+            }
+            if(nodes[i].children) {
+                var node = findNodeById(nodes[i].children, id);
+                if(node != null) {
+                    return node;
+                }
             }
         }
-    } 
+        return null;
+    }
 
     function moveNode(fromNode, toNode, fromItems, toItems, isDropInsideItem) {
         var fromIndex = findIndex(fromItems, fromNode.itemData.id);
