@@ -2577,14 +2577,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._groupedStrategy.getHorizontalMax(groupIndex);
     }
 
-    getCellByDate(date, groupIndex) {
-        const index = this.getCellIndexByDate(date);
-        const cellCoordinates = this._getCellCoordinatesByIndex(index);
-        const $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, false);
-
-        return $cell;
-    }
-
     getCoordinatesByDate(date, groupIndex, inAllDayRow) {
         groupIndex = groupIndex || 0;
         let position;
