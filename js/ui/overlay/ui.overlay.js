@@ -1184,8 +1184,8 @@ var Overlay = Widget.inherit({
 
         const isWindow = this._isWindow($container);
 
-        wrapperWidth = isWindow ? null : $container.outerWidth(),
-        wrapperHeight = isWindow ? null : $container.outerHeight();
+        wrapperWidth = isWindow ? '' : $container.outerWidth(),
+        wrapperHeight = isWindow ? '' : $container.outerHeight();
 
         this._$wrapper.css({
             width: wrapperWidth,

@@ -2142,6 +2142,42 @@ testModule('close on target scroll', moduleConfig, () => {
 
 
 testModule('container', moduleConfig, () => {
+    test('wrapper should have width and height css attributes equal to container width and height', function(assert) {
+        const $container = $('#customTargetContainer');
+        $container.css({
+            width: 100,
+            height: 100
+        });
+
+        const overlay = $('#overlay').dxOverlay({
+            container: $container,
+            visible: true
+        }).dxOverlay('instance');
+
+        const wrapperElement = overlay.$content().parent().get(0);
+
+        assert.strictEqual(wrapperElement.style.width, '100px', 'width is correct');
+        assert.strictEqual(wrapperElement.style.height, '100px', 'height is correct');
+    });
+
+    test('wrapper width and height should be restored after container option value changed to window (T937118)', function(assert) {
+        const $container = $('#customTargetContainer');
+        $container.css({
+            width: 100,
+            height: 100
+        });
+
+        const overlay = $('#overlay').dxOverlay({
+            container: $container,
+            visible: true
+        }).dxOverlay('instance');
+
+        const wrapperElement = overlay.$content().parent().get(0);
+        overlay.option('container', null);
+        assert.strictEqual(wrapperElement.style.width, '', 'width is restored after container option value changed to window');
+        assert.strictEqual(wrapperElement.style.height, '', 'height is restored after container option value changed to window');
+    });
+
     test('content should not be moved to container', function(assert) {
         const overlay = $('#overlay').dxOverlay({
             container: '#customTargetContainer'
