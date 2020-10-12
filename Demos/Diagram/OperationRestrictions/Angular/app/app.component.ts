@@ -49,6 +49,7 @@ export class AppComponent {
         }
     } 
     requestEditOperationHandler(e) {
+        var dataItem;
         if(e.operation === "addShape") {
             if(e.args.shape.type !== "employee" && e.args.shape.type !== "team") {
                 !e.updateUI && this.showToast("You can add only a 'Team' or 'Employee' shape.");
@@ -56,7 +57,7 @@ export class AppComponent {
             }
         }
         else if(e.operation === "deleteShape") {
-            var dataItem = e.args.shape && e.args.shape.dataItem;
+            dataItem = e.args.shape && e.args.shape.dataItem;
             if(dataItem && dataItem.Type === "root") {
                 !e.updateUI && this.showToast("You cannot delete the 'Development' shape.");
                 e.allowed = false;
@@ -78,7 +79,7 @@ export class AppComponent {
             }
         }
         else if(e.operation === "changeConnection") {
-            var dataItem = e.args.newShape && e.args.newShape.dataItem;
+            dataItem = e.args.newShape && e.args.newShape.dataItem;
             if(dataItem && dataItem.Type === "root" && e.args.connectorPosition === "end") {
                 !e.updateUI && this.showToast("The 'Development' shape cannot have an incoming connection.");
                 e.allowed = false;
@@ -105,7 +106,7 @@ export class AppComponent {
             }
         }
         else if(e.operation === "beforeChangeShapeText") {
-            var dataItem = e.args.shape && e.args.shape.dataItem;
+            dataItem = e.args.shape && e.args.shape.dataItem;
             if(dataItem && dataItem.Type === "root") {
                 !e.updateUI && this.showToast("You cannot change the 'Development' shape's text.");
                 e.allowed = false;
