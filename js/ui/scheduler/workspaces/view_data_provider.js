@@ -445,8 +445,6 @@ export default class ViewDataProvider {
                 }
             }
         }
-
-        return undefined;
     }
 
     _compareDatesAndAllDay(date, cellStartDate, cellEndDate, allDay) {

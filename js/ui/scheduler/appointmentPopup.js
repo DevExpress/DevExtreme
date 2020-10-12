@@ -356,19 +356,19 @@ export default class AppointmentPopup {
         if(this._tryLockSaveChanges()) {
             when(this.saveChanges(true)).done(() => {
                 if(this.state.lastEditData) {
-                    const startDate = this.scheduler.fire('getField', 'startDate', this.state.lastEditData);
-                    const endDate = this.scheduler.fire('getField', 'endDate', this.state.lastEditData);
+                    const adapter = this.scheduler.createAppointmentAdapter(this.state.lastEditData);
+
+                    const { startDate, endDate, allDay } = adapter;
 
                     const startTime = startDate.getTime();
                     const endTime = endDate.getTime();
 
-                    const allDay = this.scheduler.fire('getField', 'allDay', this.state.lastEditData)
-                        || (endTime - startTime) >= DAY_IN_MS;
+                    const inAllDayRow = allDay || (endTime - startTime) >= DAY_IN_MS;
 
                     this.scheduler._workSpace.updateScrollPosition(
                         startDate,
                         this.scheduler._resourcesManager.getResourcesFromItem(this.state.lastEditData, true),
-                        allDay,
+                        inAllDayRow,
                     );
                     this.state.lastEditData = null;
                 }
