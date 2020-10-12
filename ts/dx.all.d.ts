@@ -5957,9 +5957,13 @@ declare module DevExpress.ui {
          */
         connectorPosition?: 'start' | 'end';
         /**
-         * [descr:dxDiagramChangeConnectionArgs.shape]
+         * [descr:dxDiagramChangeConnectionArgs.newShape]
          */
-        shape?: dxDiagramShape;
+        newShape?: dxDiagramShape;
+        /**
+         * [descr:dxDiagramChangeConnectionArgs.oldShape]
+         */
+        oldShape?: dxDiagramShape;
     }
     /**
      * [descr:dxDiagramChangeConnectorPointsArgs]

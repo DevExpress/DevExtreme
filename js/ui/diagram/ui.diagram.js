@@ -2507,7 +2507,8 @@ class Diagram extends Widget {
                 break;
             case DiagramModelOperation.ChangeConnection:
                 eventArgs.args = {
-                    shape: args.shape && this._nativeItemToDiagramItem(args.shape),
+                    newShape: args.shape && this._nativeItemToDiagramItem(args.shape),
+                    oldShape: args.oldShape && this._nativeItemToDiagramItem(args.oldShape),
                     connector: args.connector && this._nativeItemToDiagramItem(args.connector),
                     connectionPointIndex: args.connectionPointIndex,
                     connectorPosition: (args.position === ConnectorPosition.Begin) ? 'start' : 'end',
