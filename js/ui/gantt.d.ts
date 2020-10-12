@@ -521,6 +521,47 @@ export default class dxGantt extends Widget {
      * @public
      */
     unassignResourceFromTask(resourceKey, taskKey)
+    /**
+     * @docid dxGanttMethods.getTaskResources
+     * @publicName getTaskResources(key)
+     * @param1 key:object
+     * @return Array<object>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getTaskResources(key: any): Array<any>;
+    /**
+     * @docid dxGanttMethods.getVisibleTaskKeys
+     * @publicName getVisibleTaskKeys()     
+     * @return Array<object>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getVisibleTaskKeys(): Array<any>;
+    /**
+     * @docid dxGanttMethods.getVisibleDependencyKeys
+     * @publicName getVisibleDependencyKeys()     
+     * @return Array<object>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getVisibleDependencyKeys(): Array<any>;
+    /**
+     * @docid dxGanttMethods.getVisibleResourceKeys
+     * @publicName getVisibleResourceKeys()     
+     * @return Array<object>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getVisibleResourceKeys(): Array<any>;
+    /**
+     * @docid dxGanttMethods.getVisibleResourceAssignmentKeys
+     * @publicName getVisibleResourceAssignmentKeys()     
+     * @return Array<object>
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    getVisibleResourceAssignmentKeys(): Array<any>;
 }
 
 export interface dxGanttToolbar {

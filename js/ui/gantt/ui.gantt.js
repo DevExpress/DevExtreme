@@ -1199,6 +1199,26 @@ class Gantt extends Widget {
         });
     }
 
+    getTaskResources(key) {
+        if(!isDefined(key)) {
+            return null;
+        }
+        const coreData = this._ganttView._ganttViewCore.getTaskResources(key);
+        return coreData.map(r => this._convertCoreToMappedData(GANTT_RESOURCES, r));
+    }
+    getVisibleTaskKeys() {
+        return this._ganttView._ganttViewCore.getVisibleTaskKeys();
+    }
+    getVisibleDependencyKeys() {
+        return this._ganttView._ganttViewCore.getVisibleDependencyKeys();
+    }
+    getVisibleResourceKeys() {
+        return this._ganttView._ganttViewCore.getVisibleResourceKeys();
+    }
+    getVisibleResourceAssignmentKeys() {
+        return this._ganttView._ganttViewCore.getVisibleResourceAssignmentKeys();
+    }
+
     getTaskData(key) {
         if(!isDefined(key)) {
             return null;
