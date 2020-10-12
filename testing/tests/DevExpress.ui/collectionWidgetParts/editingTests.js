@@ -1472,7 +1472,6 @@ module('deleting of items', () => {
     test('onDeleteItem should trigger delete callback only once with correct itemData', function(assert) {
         const item = '0';
         const deleteActionSpy = sinon.spy();
-
         const $element = $('#cmp');
         const instance = new TestComponent($element, {
             items: [item],
@@ -1488,14 +1487,12 @@ module('deleting of items', () => {
     test('deleteItem event should trigger delete callback only once with correct itemData', function(assert) {
         const item = '0';
         const deleteActionSpy = sinon.spy();
-
         const $element = $('#cmp');
         const instance = new TestComponent($element, {
             items: [item]
         });
 
         instance.on('itemDeleted', deleteActionSpy);
-
         instance.deleteItem(instance.itemElements().eq(0));
 
         assert.strictEqual(deleteActionSpy.callCount, 1, 'itemDeleted triggered 1 time');

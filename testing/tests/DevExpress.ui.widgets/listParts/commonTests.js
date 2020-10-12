@@ -3061,30 +3061,41 @@ QUnit.module('scrollView integration', {
         assert.equal(scrollView.scrollTop(), scrollTop, 'position was not changed');
     });
 
-    [{ listOption: 'showScrollbar', scrollViewOption: 'showScrollbar' },
+    const scrollViewBoolOptions = [{ listOption: 'showScrollbar', scrollViewOption: 'showScrollbar' },
         { listOption: 'bounceEnabled', scrollViewOption: 'bounceEnabled' },
         { listOption: 'scrollByContent', scrollViewOption: 'scrollByContent' },
         { listOption: 'scrollByThumb', scrollViewOption: 'scrollByThumb' },
         { listOption: 'useNativeScrolling', scrollViewOption: 'useNative' },
         { listOption: 'scrollingEnabled', scrollViewOption: 'disabled', reverted: true }
-    ].forEach((optionInfo) => {
-        QUnit.test(`${optionInfo.listOption} option changed`, function(assert) {
+    ];
+
+    scrollViewBoolOptions.forEach((optionInfo) => {
+        QUnit.test(`${optionInfo.listOption} option changed to true`, function(assert) {
             const startConfig = {};
             startConfig[optionInfo.listOption] = false;
             const $list = $('#list').dxList(startConfig);
             const list = $list.dxList('instance');
             const scrollView = $list.dxScrollView('instance');
 
-            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), optionInfo.reverted ? true : false);
-
             list.option(optionInfo.listOption, true);
-            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), optionInfo.reverted ? false : true);
 
-            list.option(optionInfo.listOption, false);
-            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), optionInfo.reverted ? true : false);
+            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), optionInfo.reverted ? false : true);
         });
     });
 
+    scrollViewBoolOptions.forEach((optionInfo) => {
+        QUnit.test(`${optionInfo.listOption} option changed to false`, function(assert) {
+            const startConfig = {};
+            startConfig[optionInfo.listOption] = true;
+            const $list = $('#list').dxList(startConfig);
+            const list = $list.dxList('instance');
+            const scrollView = $list.dxScrollView('instance');
+
+            list.option(optionInfo.listOption, false);
+
+            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), optionInfo.reverted ? true : false);
+        });
+    });
 
     [{ listOption: 'pulledDownText', scrollViewOption: 'pulledDownText' },
         { listOption: 'pullingDownText', scrollViewOption: 'pullingDownText' },
@@ -3097,17 +3108,11 @@ QUnit.module('scrollView integration', {
             const list = $list.dxList('instance');
             const scrollView = $list.dxScrollView('instance');
 
-            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), 'custom text');
-
             list.option(optionInfo.listOption, 'changed text');
-            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), 'changed text');
 
-            list.option(optionInfo.listOption, '');
-            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), '');
+            assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), 'changed text');
         });
     });
-
-
 });
 
 QUnit.module('regressions', moduleSetup, () => {
