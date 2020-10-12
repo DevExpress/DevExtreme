@@ -643,6 +643,16 @@ QUnit.test('getCanvasRange', function(assert) {
     assert.deepEqual(canvasRange, { startValue: 'startValue', endValue: 'endValue' });
 });
 
+QUnit.test('getTemplatesGroups, labels without templates', function(assert) {
+    this.updateOptions();
+    this.axis.setBusinessRange({ min: 0, max: 4 });
+    this.generatedTicks = [1, 2, 3];
+    this.generatedMinorTicks = [1.5, 2.5];
+    this.axis.createTicks(this.canvas);
+
+    assert.deepEqual(this.axis.getTemplatesGroups(), []);
+});
+
 QUnit.module('Labels template', {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -827,6 +837,29 @@ QUnit.test('templatesDef on redrawing', function(assert) {
     this.axis.draw();
 
     assert.strictEqual(def.state(), 'rejected');
+});
+
+QUnit.test('getTemplatesGroups', function(assert) {
+    this.updateOptions({
+        label: { template: sinon.spy() }
+    });
+    this.axis.setBusinessRange({
+        addRange: sinon.stub(),
+        min: 0,
+        max: 100
+    });
+    this.axis.createTicks(this.canvas);
+
+    // act
+    this.axis.draw();
+
+    const groups = this.axis.getTemplatesGroups();
+
+    assert.equal(groups.length, 3);
+
+    groups.forEach(g => {
+        assert.equal(g.typeOfNode, 'group');
+    });
 });
 
 QUnit.module('Labels Settings', {

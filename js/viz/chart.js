@@ -1009,9 +1009,15 @@ const dxChart = AdvancedChart.inherit({
     _resolveDeferredItems() {
         const that = this;
         const allAxes = (that._argumentAxes || []).concat(that._valueAxes || []);
+        let groups = [];
+
+        allAxes.forEach(axis => {
+            groups = groups.concat(axis.getTemplatesGroups());
+        });
 
         that._addToDeferred({
             items: allAxes.map(axis => axis.getTemplatesDef()),
+            groups: groups,
             launchRequest() {
                 allAxes.forEach(function(a) {
                     a.setRenderedState(true);

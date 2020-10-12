@@ -2753,4 +2753,7 @@ QUnit.test('Request change if template is asynchronous, first drawing', function
     const widget = this.legend._widget;
 
     assert.ok(widget._addToDeferred.called);
+    assert.equal(widget._addToDeferred.getCall(0).args[0].items.length, 1);
+    assert.equal(widget._addToDeferred.getCall(0).args[0].groups.length, 1);
+    assert.equal(widget._addToDeferred.getCall(0).args[0].groups[0].typeOfNode, 'group');
 });
