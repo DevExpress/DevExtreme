@@ -3566,6 +3566,17 @@ QUnit.module('datebox w/ time list', {
         assert.strictEqual($overlayContent.outerWidth(), 350, 'overlay content width is correct');
     });
 
+    QUnit.test('popup should have correct width when dropDownOptions.container is defined (T938497)', function(assert) {
+        this.dateBox.option({
+            'dropDownOptions.container': '#containerWithWidth',
+            opened: true
+        });
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.strictEqual($overlayContent.outerWidth(), 1000, 'width is correct');
+    });
+
     QUnit.test('list should contain correct values if min/max does not specified', function(assert) {
         this.dateBox.option({
             min: null,
