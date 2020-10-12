@@ -32,13 +32,13 @@ DemoApp.controller('DemoController', function DemoController($scope) {
 
             const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
             const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-            const startDatedataSource = startDateTimezoneEditor.option('dataSource');
+            const startDateDataSource = startDateTimezoneEditor.option('dataSource');
             const endDateDataSource = endDateTimezoneEditor.option('dataSource');
 
-            startDatedataSource.filter(['id', 'contains', 'Europe']);
+            startDateDataSource.filter(['id', 'contains', 'Europe']);
             endDateDataSource.filter(['id', 'contains', 'Europe']);
 
-            startDatedataSource.load();
+            startDateDataSource.load();
             endDateDataSource.load();
         },
         editing: {

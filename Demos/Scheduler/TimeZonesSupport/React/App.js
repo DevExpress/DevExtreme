@@ -3,15 +3,15 @@ import Scheduler, { Editing } from 'devextreme-react/scheduler';
 import SelectBox from 'devextreme-react/select-box';
 
 import { data, locations } from './data.js';
-import tzUtils from 'devextreme/time_zone_utils';
+import timeZoneUtils from 'devextreme/time_zone_utils';
 
 const currentDate = new Date(2021, 4, 25);
 const views = ['workWeek'];
 
-const getLocations = (date) => {
-  const timeZones = tzUtils.getTimeZones(date);
+function getLocations(date) {
+  const timeZones = timeZoneUtils.getTimeZones(date);
   return timeZones.filter((timeZone) => {
-      return locations.indexOf(timeZone.id) !== -1;
+    return locations.indexOf(timeZone.id) !== -1;
   });
 };
 
@@ -40,18 +40,18 @@ class App extends React.Component {
 
     const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
     const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
-    const startDatedataSource = startDateTimezoneEditor.option('dataSource');
+    const startDateDataSource = startDateTimezoneEditor.option('dataSource');
     const endDateDataSource = endDateTimezoneEditor.option('dataSource');
 
-    startDatedataSource.filter(['id', 'contains', 'Europe']);
+    startDateDataSource.filter(['id', 'contains', 'Europe']);
     endDateDataSource.filter(['id', 'contains', 'Europe']);
 
-    startDatedataSource.load();
+    startDateDataSource.load();
     endDateDataSource.load();
   }
 
   onOptionChanged(e) {
-    if(e.name === 'currentDate') {                        
+    if(e.name === 'currentDate') {                    
       this.setState({
         demoLocations: getLocations(e.value)
       });
