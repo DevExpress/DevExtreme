@@ -8,7 +8,7 @@
       type="bar"
       argument-field="country"
     >
-      <Label :visible="true"/>
+      <DxLabel :visible="true"/>
     </DxCommonSeriesSettings>
     <DxSeries
       name="Gold"
