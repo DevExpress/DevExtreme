@@ -1115,7 +1115,7 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.equal($list.find('.dx-empty-message').length, 0, 'empty message was not rendered');
     });
 
-    QUnit.test('list should be able to change grouped option after dataSource option', function(assert) {
+    QUnit.test('list should be able to change grouped option to false after dataSource option', function(assert) {
         const $element = $('#list').dxList({
             dataSource: [{ key: 'parent', items: [{ text: 'child' }] }],
             grouped: true
@@ -1130,6 +1130,15 @@ QUnit.module('options changed', moduleSetup, () => {
 
         assert.notOk(instance.option('grouped'), 'grouped option was changed without exceptions');
         assert.strictEqual($element.find(`.${LIST_GROUP_CLASS}`).length, 0, 'list is not grouped');
+    });
+
+    QUnit.test('list should be able to change grouped option to true after dataSource option', function(assert) {
+        const $element = $('#list').dxList({
+            dataSource: [{ text: 'one' }],
+            grouped: false
+        });
+
+        const instance = $element.dxList('instance');
 
         instance.option({
             dataSource: [{ key: 'parent', items: [{ text: 'child' }] }],
@@ -1140,6 +1149,25 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.strictEqual($element.find(`.${LIST_GROUP_CLASS}`).length, 1, 'list is grouped');
     });
 
+    QUnit.test('list should be able to change grouped option twice after dataSource option', function(assert) {
+        const $element = $('#list').dxList({
+            dataSource: [{ text: 'one' }],
+            grouped: false
+        });
+
+        const instance = $element.dxList('instance');
+
+        instance.option({
+            dataSource: [{ key: 'parent', items: [{ text: 'child' }] }],
+            grouped: true
+        });
+        instance.option({
+            dataSource: [{ text: 'one' }],
+            grouped: false
+        });
+
+        assert.strictEqual($element.find(`.${LIST_GROUP_CLASS}`).length, 0, 'list is not grouped');
+    });
 
     QUnit.test('searchEnabled option changing', function(assert) {
         const $element = $('#list').dxList({
@@ -1911,9 +1939,7 @@ QUnit.module('events', moduleSetup, () => {
                 items: [{ a: 0 }, { a: 1 }, { a: 2 }]
             }
         ];
-
         const groupRenderedSpy = sinon.spy();
-
         const $list = $('#list').dxList({
             items
         });
@@ -2586,7 +2612,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
 
         const element = this.element;
 
-        const list = element.dxList({
+        element.dxList({
             dataSource,
             pullRefreshEnabled: true,
             pageLoadMode: 'scrollBottom',
@@ -2606,30 +2632,97 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
         element.dxScrollView('instance').scrollBottom();
         assert.ok(nextPageCalled, 'next page loaded');
         assert.strictEqual(pageLoadingActionFired, 1, 'onPageLoading fired');
-
-        list.option('onPullRefresh', null);
-        list.option('onPageLoading', null);
-
-        element.dxScrollView('instance').pullDown();
-        assert.ok(reloaded, 'dataSource reloaded');
-        assert.strictEqual(pullRefreshActionFired, 1, 'onPullRefresh is not fired');
-
-        element.dxScrollView('instance').scrollBottom();
-        assert.ok(nextPageCalled, 'next page loaded');
-        assert.strictEqual(pageLoadingActionFired, 1, 'onPageLoading is not fired');
     });
 
-    QUnit.test('scrollView callbacks with subscription by "on" method ', function(assert) {
+    QUnit.test('scrollView onPullRefresh option change to null', function(assert) {
         const pullRefreshActionSpy = sinon.spy();
-        const pageLoadingActionSpy = sinon.spy();
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5],
+            pageSize: 2
+        });
+        const element = this.element;
+        const list = element.dxList({
+            dataSource,
+            pullRefreshEnabled: true,
+            pageLoadMode: 'scrollBottom',
+            scrollingEnabled: true,
+            onPullRefresh: pullRefreshActionSpy,
+        }).dxList('instance');
 
+        list.option('onPullRefresh', null);
+        element.dxScrollView('instance').pullDown();
+
+        assert.strictEqual(pullRefreshActionSpy.callCount, 0, 'onPullRefresh is not fired');
+    });
+
+    QUnit.test('scrollView onPullRefresh handler change', function(assert) {
+        const pullRefreshActionSpy = sinon.spy();
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5],
+            pageSize: 2
+        });
+        const element = this.element;
+        const list = element.dxList({
+            dataSource,
+            pullRefreshEnabled: true,
+            pageLoadMode: 'scrollBottom',
+            scrollingEnabled: true
+        }).dxList('instance');
+
+        list.option('onPullRefresh', pullRefreshActionSpy);
+        element.dxScrollView('instance').pullDown();
+
+        assert.strictEqual(pullRefreshActionSpy.callCount, 1, 'onPullRefresh is fired');
+    });
+
+    QUnit.test('scrollView onPageLoading option change to null', function(assert) {
+        const onPageLoadingSpy = sinon.spy();
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5],
+            pageSize: 2
+        });
+        const element = this.element;
+        const list = element.dxList({
+            dataSource,
+            pullRefreshEnabled: true,
+            pageLoadMode: 'scrollBottom',
+            scrollingEnabled: true,
+            onPageLoading: onPageLoadingSpy,
+        }).dxList('instance');
+
+        list.option('onPageLoading', null);
+        element.dxScrollView('instance').scrollBottom();
+
+        assert.strictEqual(onPageLoadingSpy.callCount, 0, 'onPullRefresh is not fired');
+    });
+
+    QUnit.test('scrollView onPageLoading handler change', function(assert) {
+        const onPageLoadingSpy = sinon.spy();
+        const dataSource = new DataSource({
+            store: [1, 2, 3, 4, 5],
+            pageSize: 2
+        });
+        const element = this.element;
+        const list = element.dxList({
+            dataSource,
+            pullRefreshEnabled: true,
+            pageLoadMode: 'scrollBottom',
+            scrollingEnabled: true
+        }).dxList('instance');
+
+        list.option('onPageLoading', onPageLoadingSpy);
+        element.dxScrollView('instance').scrollBottom();
+
+        assert.strictEqual(onPageLoadingSpy.callCount, 1, 'onPullRefresh is fired');
+    });
+
+    QUnit.test('scrollView pullRefresh with subscription by "on" method', function(assert) {
+        const pullRefreshActionSpy = sinon.spy();
         const dataSource = new DataSource({
             store: [1, 2, 3],
             pageSize: 2
         });
-
         const element = this.element;
-
         const instance = element.dxList({
             dataSource,
             pullRefreshEnabled: true,
@@ -2638,10 +2731,26 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
         }).dxList('instance');
 
         instance.on('pullRefresh', pullRefreshActionSpy);
-        instance.on('pageLoading', pageLoadingActionSpy);
 
         element.dxScrollView('instance').pullDown();
         assert.strictEqual(pullRefreshActionSpy.callCount, 1, 'onPullRefresh fired');
+    });
+
+    QUnit.test('scrollView pageLoading with subscription by "on" method', function(assert) {
+        const pageLoadingActionSpy = sinon.spy();
+        const dataSource = new DataSource({
+            store: [1, 2, 3],
+            pageSize: 2
+        });
+        const element = this.element;
+        const instance = element.dxList({
+            dataSource,
+            pullRefreshEnabled: true,
+            pageLoadMode: 'scrollBottom',
+            scrollingEnabled: true
+        }).dxList('instance');
+
+        instance.on('pageLoading', pageLoadingActionSpy);
 
         element.dxScrollView('instance').scrollBottom();
         assert.strictEqual(pageLoadingActionSpy.callCount, 1, 'onPageLoading fired');
