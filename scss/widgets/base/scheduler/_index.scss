@@ -727,6 +727,21 @@ $scheduler-appointment-form-label-padding: 20px;
       }
     }
 
+    &.dx-scheduler-work-space-both-scrollbar {
+      .dx-scheduler-date-time-shader,
+      .dx-scheduler-date-time-indicator,
+      .dx-scheduler-date-time-shader-all-day {
+        margin-left: 0;
+      }
+
+      .dx-scheduler-date-time-shader-top,
+      .dx-scheduler-date-time-shader-bottom {
+        &::before {
+          margin-left: 0;
+        }
+      }
+    }
+
     &.dx-rtl {
       .dx-scheduler-date-time-indicator {
         margin-left: 0;
