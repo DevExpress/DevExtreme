@@ -137,6 +137,17 @@ const moduleOptions = {
             appendSingleAppointmentData: function(data) {
                 return data;
             },
+            createAppointmentAdapter: function() {
+                return {
+                    clone: () => {
+                        return {
+                            source: () => {
+                                return {};
+                            }
+                        };
+                    }
+                };
+            }
         };
 
         const observer = {
