@@ -53,7 +53,7 @@ export default class CompileManager {
         css = await PostCompiler.cleanCss(css);
       }
 
-      css = PostCompiler.addInfoHeader(css, version);
+      css = PostCompiler.addInfoHeader(css, version, compileData.result.stats === null);
 
       return {
         compiledMetadata: compileData.changedVariables,
