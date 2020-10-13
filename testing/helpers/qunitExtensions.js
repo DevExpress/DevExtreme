@@ -129,7 +129,7 @@
             const link = document.createElement('link');
             link.setAttribute('rel', 'dx-theme');
             link.setAttribute('data-theme', theme);
-            link.setAttribute('href', SystemJS.normalizeSync(theme.replace(/./g, '_') + '.css'));
+            link.setAttribute('href', SystemJS.normalizeSync(theme.replace(/\./g, '_') + '.css'));
             head.appendChild(link);
         });
     };

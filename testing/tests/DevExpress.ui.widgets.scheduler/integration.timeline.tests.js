@@ -92,20 +92,21 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
             store: []
         }),
         currentView: 'timelineDay',
-        height: 500
+        height: 500,
+        width: 1000,
     });
 
     const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption' };
     const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineDay('instance');
-    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
 
-        assert.notOk(scrollToTimeSpy.calledOnce, 'scrollToTime was not called');
+        assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
-        workSpace.scrollToTime.restore();
+        workSpace.scrollTo.restore();
     }
 });
 
@@ -119,7 +120,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
         views: ['timelineWeek', 'timelineWorkWeek'],
         currentView: 'timelineWeek',
         height: 500,
-        cellDuration: 120
+        cellDuration: 120,
+        width: 1000,
     });
 
     const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
@@ -127,15 +129,15 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
 
     const appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: 'caption' };
     const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance');
-    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
 
-        assert.notOk(scrollToTimeSpy.calledOnce, 'scrollToTime was not called');
+        assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
-        workSpace.scrollToTime.restore();
+        workSpace.scrollTo.restore();
     }
 });
 
@@ -157,15 +159,15 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
 
     const appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: 'caption' };
     const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineWeek('instance');
-    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
 
-        assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+        assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
     } finally {
-        workSpace.scrollToTime.restore();
+        workSpace.scrollTo.restore();
     }
 });
 
@@ -192,7 +194,8 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
         views: ['timelineMonth'],
         currentView: 'timelineMonth',
         height: 500,
-        cellDuration: 120
+        cellDuration: 120,
+        width: 1000,
     });
 
     const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
@@ -200,15 +203,15 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
 
     const appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: 'caption' };
     const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth('instance');
-    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
 
-        assert.notOk(scrollToTimeSpy.calledOnce, 'scrollToTime was not called');
+        assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
-        workSpace.scrollToTime.restore();
+        workSpace.scrollTo.restore();
     }
 });
 
@@ -230,15 +233,15 @@ QUnit.test('Scheduler should update scroll position if appointment is not visibl
 
     const appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: 'caption' };
     const workSpace = scheduler.workSpace.getWorkSpace().dxSchedulerTimelineMonth('instance');
-    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
     try {
         scheduler.instance.showAppointmentPopup(appointment);
         scheduler.appointmentPopup.clickDoneButton();
 
-        assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+        assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
     } finally {
-        workSpace.scrollToTime.restore();
+        workSpace.scrollTo.restore();
     }
 });
 

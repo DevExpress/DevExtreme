@@ -39,7 +39,11 @@ export default class CompileManager {
           ...bundleOptions,
         });
 
-        css = swatchResult.result.css.toString();
+        css = PostCompiler.fixSwatchCss(
+          swatchResult.result.css,
+          swatchSass.selector,
+          config.colorScheme,
+        );
         swatchSelector = swatchSass.selector;
       }
 
@@ -53,7 +57,7 @@ export default class CompileManager {
         css = await PostCompiler.cleanCss(css);
       }
 
-      css = PostCompiler.addInfoHeader(css, version);
+      css = PostCompiler.addInfoHeader(css, version, compileData.result.stats === null);
 
       return {
         compiledMetadata: compileData.changedVariables,

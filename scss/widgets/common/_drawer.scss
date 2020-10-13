@@ -102,15 +102,11 @@
   }
 
 
-  &.dx-drawer-right.dx-drawer-expand {
-    .dx-overlay-content {
-      right: 0;
-    }
+  &.dx-drawer-right.dx-drawer-expand > .dx-drawer-wrapper > .dx-overlay > .dx-overlay-wrapper > .dx-overlay-content {
+    right: 0;
   }
 
-  &.dx-drawer-right.dx-drawer-slide {
-    .dx-overlay-content {
-      right: 0;
-    }
+  &.dx-drawer-right.dx-drawer-slide > .dx-drawer-wrapper > .dx-overlay > .dx-overlay-wrapper > .dx-overlay-content {
+    right: 0;
   }
 }

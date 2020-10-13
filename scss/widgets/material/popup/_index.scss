@@ -87,3 +87,35 @@ $material-popup-title-bottom-margin: $material-popup-content-withtitle-top-paddi
 .dx-dialog-message {
   padding: 0;
 }
+
+.dx-rtl {
+  .dx-popup-title {
+    &.dx-toolbar {
+      @include dx-toolbar-sizing(
+        $material-toolbar-height,
+        $material-popup-toolbartop-padding-rtl,
+        $material-popup-toolbar-label-font-size,
+        $material-popup-toolbar-item-spacing );
+    }
+  }
+
+  .dx-popup-bottom {
+    &.dx-toolbar {
+      @include dx-toolbar-sizing(
+        $material-popup-bottom-toolbar-height,
+        $material-popup-toolbarbottom-padding-rtl,
+        $material-popup-toolbar-label-font-size,
+        $material-popup-toolbar-item-spacing
+      );
+
+      .dx-device-mobile & {
+        @include dx-toolbar-sizing(
+          $material-popup-bottom-toolbar-height,
+          $material-popup-toolbarbottom-padding-rtl,
+          $material-popup-toolbar-label-font-size,
+          $material-popup-toolbar-item-spacing
+        );
+      }
+    }
+  }
+}

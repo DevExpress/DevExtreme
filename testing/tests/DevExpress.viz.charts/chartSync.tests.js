@@ -1054,15 +1054,35 @@ const environment = {
             defs.push(d);
             return d;
         }
+        const argumentGroups = [{ attr: sinon.spy() }, { attr: sinon.spy() }, { attr: sinon.spy() }];
+        const valueGroups = [{ attr: sinon.spy() }, { attr: sinon.spy() }, { attr: sinon.spy() }];
 
-        $.each(chart._argumentAxes, function(_, axis) { axis.getTemplatesDef = getDeferred; });
-        $.each(chart._valueAxes, function(_, axis) { axis.getTemplatesDef = getDeferred; });
+        $.each(chart._argumentAxes, function(_, axis) {
+            axis.getTemplatesDef = getDeferred;
+            axis.getTemplatesGroups = function() { return argumentGroups; };
+        });
+        $.each(chart._valueAxes, function(_, axis) {
+            axis.getTemplatesDef = getDeferred;
+            axis.getTemplatesGroups = function() { return valueGroups; };
+        });
 
         drawn.reset();
         chart.render({ force: true });
         $.each(defs, function(_, d) { d.resolve(); });
 
         assert.strictEqual(drawn.callCount, 2);
+
+        argumentGroups.forEach(g => {
+            assert.equal(g.attr.callCount, 3);
+            assert.deepEqual(g.attr.getCall(1).args[0], { visibility: 'hidden' });
+            assert.deepEqual(g.attr.getCall(2).args[0], { visibility: 'visible' });
+        });
+
+        valueGroups.forEach(g => {
+            assert.equal(g.attr.callCount, 3);
+            assert.deepEqual(g.attr.getCall(1).args[0], { visibility: 'hidden' });
+            assert.deepEqual(g.attr.getCall(2).args[0], { visibility: 'visible' });
+        });
     });
 
     QUnit.module('DataSource updating', {

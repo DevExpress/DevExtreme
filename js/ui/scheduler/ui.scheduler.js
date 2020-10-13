@@ -2425,6 +2425,10 @@ class Scheduler extends Widget {
         this._workSpace.scrollToTime(hours, minutes, date);
     }
 
+    scrollTo(date, groups, allDay) {
+        this._workSpace.scrollTo(date, groups, allDay);
+    }
+
     addAppointment(appointment) {
         const adapter = this.createAppointmentAdapter(appointment);
         adapter.text = adapter.text || '';

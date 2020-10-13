@@ -681,7 +681,8 @@ QUnit.test('Cell data should be updated after view changing', function(assert) {
     }), {
         allDay: false,
         startDate: new Date(2016, 8, 4),
-        endDate: new Date(2016, 8, 4, 0, 30)
+        endDate: new Date(2016, 8, 4, 0, 30),
+        groupIndex: 0,
     }, 'Cell data is OK!');
 
 
