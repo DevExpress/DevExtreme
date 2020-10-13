@@ -1055,7 +1055,6 @@ QUnit.test('click on menu item should open menu', function(assert) {
     assert.strictEqual($menuItems.text(), 'menumenu', 'menu text is correct');
 });
 
-
 QUnit.test('click on menu toggle should not turn off ready to delete', function(assert) {
     const $list = $('#templated-list').dxList({
         items: ['0'],

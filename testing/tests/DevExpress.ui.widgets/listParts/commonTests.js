@@ -131,15 +131,16 @@ const ScrollViewMock = DOMComponent.inherit({
     }
 });
 
-const showListMenu = ($list, type = 'context') => {
+const showListSlideMenu = ($list) => {
     const $item = $list.find('.dx-list-item').eq(0);
-    if(type === 'context') {
-        const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
-        $item.trigger(contextMenuEvent);
-    } else {
-        const pointer = pointerMock($item);
-        pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
-    }
+    const pointer = pointerMock($item);
+    pointer.start().swipeStart().swipe(-0.5).swipeEnd(-1, -0.5);
+};
+
+const showListContextMenu = ($list) => {
+    const $item = $list.find('.dx-list-item').eq(0);
+    const contextMenuEvent = $.Event('contextmenu', { pointerType: 'mouse' });
+    $item.trigger(contextMenuEvent);
 };
 
 const moduleSetup = {
@@ -1403,7 +1404,7 @@ QUnit.module('options changed', moduleSetup, () => {
         const list = $list.dxList('instance');
 
         list.option('menuItems', [{ text: 'action' }]);
-        showListMenu($list);
+        showListContextMenu($list);
 
         const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
         assert.strictEqual($menuItems.length, 1, 'items count is correct');
@@ -1418,7 +1419,7 @@ QUnit.module('options changed', moduleSetup, () => {
         const list = $list.dxList('instance');
 
         list.option('menuItems', []);
-        showListMenu($list);
+        showListContextMenu($list);
 
         const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
         assert.strictEqual($menuItems.length, 0, 'items count is correct');
@@ -1433,7 +1434,7 @@ QUnit.module('options changed', moduleSetup, () => {
 
         list.option('menuItems', [{ text: 'action' }]);
         list.option('menuItems', [{ text: 'another action' }]);
-        showListMenu($list);
+        showListContextMenu($list);
 
         const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
         assert.strictEqual($menuItems.length, 1, 'items count is correct');
@@ -1450,7 +1451,7 @@ QUnit.module('options changed', moduleSetup, () => {
         const list = $list.dxList('instance');
 
         list.option('menuMode', 'slide');
-        showListMenu($list, 'slide');
+        showListSlideMenu($list);
         const $actionButtons = $list.find('.dx-list-slide-menu-button');
 
         assert.strictEqual($actionButtons.length, 1, 'items count is correct');
@@ -1465,7 +1466,7 @@ QUnit.module('options changed', moduleSetup, () => {
         const list = $list.dxList('instance');
 
         list.option('menuMode', 'context');
-        showListMenu($list);
+        showListContextMenu($list);
         const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
 
         assert.strictEqual($menuItems.length, 1, 'items count is correct');
@@ -1482,8 +1483,7 @@ QUnit.module('options changed', moduleSetup, () => {
         list.option('menuMode', 'slide');
         list.option('menuMode', 'context');
 
-        showListMenu($list, 'slide');
-        showListMenu($list);
+        showListContextMenu($list);
 
         const $actionButtons = $list.find('.dx-list-slide-menu-button');
         const $menuItems = $(`.${LIST_CONTEXT_MENUCONTENT_CLASS}`).find('.dx-list-item');
@@ -2688,7 +2688,7 @@ QUnit.module('scrollView interaction', moduleSetup, () => {
             pullRefreshEnabled: true,
             pageLoadMode: 'scrollBottom',
             scrollingEnabled: true,
-            onPageLoading: onPageLoadingSpy,
+            onPageLoading: onPageLoadingSpy
         }).dxList('instance');
 
         list.option('onPageLoading', null);
@@ -3061,16 +3061,15 @@ QUnit.module('scrollView integration', {
         assert.equal(scrollView.scrollTop(), scrollTop, 'position was not changed');
     });
 
-    const scrollViewBoolOptions = [{ listOption: 'showScrollbar', scrollViewOption: 'showScrollbar' },
+    [
+        { listOption: 'showScrollbar', scrollViewOption: 'showScrollbar' },
         { listOption: 'bounceEnabled', scrollViewOption: 'bounceEnabled' },
         { listOption: 'scrollByContent', scrollViewOption: 'scrollByContent' },
         { listOption: 'scrollByThumb', scrollViewOption: 'scrollByThumb' },
         { listOption: 'useNativeScrolling', scrollViewOption: 'useNative' },
         { listOption: 'scrollingEnabled', scrollViewOption: 'disabled', reverted: true }
-    ];
-
-    scrollViewBoolOptions.forEach((optionInfo) => {
-        QUnit.test(`${optionInfo.listOption} option changed to true`, function(assert) {
+    ].forEach((optionInfo) => {
+        QUnit.test(`${optionInfo.listOption} bool option changed to true`, function(assert) {
             const startConfig = {};
             startConfig[optionInfo.listOption] = false;
             const $list = $('#list').dxList(startConfig);
@@ -3081,10 +3080,8 @@ QUnit.module('scrollView integration', {
 
             assert.strictEqual(scrollView.option(optionInfo.scrollViewOption), optionInfo.reverted ? false : true);
         });
-    });
 
-    scrollViewBoolOptions.forEach((optionInfo) => {
-        QUnit.test(`${optionInfo.listOption} option changed to false`, function(assert) {
+        QUnit.test(`${optionInfo.listOption} bool option changed to false`, function(assert) {
             const startConfig = {};
             startConfig[optionInfo.listOption] = true;
             const $list = $('#list').dxList(startConfig);
@@ -3097,10 +3094,12 @@ QUnit.module('scrollView integration', {
         });
     });
 
-    [{ listOption: 'pulledDownText', scrollViewOption: 'pulledDownText' },
+    [
+        { listOption: 'pulledDownText', scrollViewOption: 'pulledDownText' },
         { listOption: 'pullingDownText', scrollViewOption: 'pullingDownText' },
         { listOption: 'refreshingText', scrollViewOption: 'refreshingText' },
-        { listOption: 'pageLoadingText', scrollViewOption: 'reachBottomText' }].forEach((optionInfo) => {
+        { listOption: 'pageLoadingText', scrollViewOption: 'reachBottomText' }
+    ].forEach((optionInfo) => {
         QUnit.test(`${optionInfo.listOption} option changed`, function(assert) {
             const startConfig = {};
             startConfig[optionInfo.listOption] = 'custom text';
