@@ -47,4 +47,4 @@ export const data = [
   }
 ];
 
-export const locations = ['Europe/London', 'Europe/Berlin', 'Europe/Helsinki']; 
+export const locations = ['Europe/London', 'Europe/Berlin', 'Europe/Helsinki'];

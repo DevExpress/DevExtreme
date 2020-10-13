@@ -13,7 +13,7 @@ function getLocations(date) {
   return timeZones.filter((timeZone) => {
     return locations.indexOf(timeZone.id) !== -1;
   });
-};
+}
 
 const demoLocations = getLocations(currentDate);
 
@@ -51,7 +51,7 @@ class App extends React.Component {
   }
 
   onOptionChanged(e) {
-    if(e.name === 'currentDate') {                    
+    if(e.name === 'currentDate') {
       this.setState({
         demoLocations: getLocations(e.value)
       });
