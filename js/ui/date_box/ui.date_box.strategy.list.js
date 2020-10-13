@@ -277,7 +277,7 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getInputWidth() {
-        return this.dateBox.$element().outerWidth();
+        return this.dateBox.getWidth();
     },
 
     _updatePopupHeight: function() {
