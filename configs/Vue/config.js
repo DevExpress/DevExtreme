@@ -79,6 +79,11 @@ System.config({
     /**/
 
     'mitt': 'npm:mitt/dist/mitt.umd.js',
+
+    /** vuex */
+    'vuex': 'npm:vuex/dist/vuex.esm-browser.js',
+    /**/
+
     'rrule': 'npm:rrule/dist/es5/rrule.js',
     'luxon': 'npm:luxon/build/global/luxon.min.js',
     'es6-object-assign': 'npm:es6-object-assign',

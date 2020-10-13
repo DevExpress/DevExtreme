@@ -1,0 +1,41 @@
+<dx-load-panel
+    [position]="loadPanelPosition"
+    [visible]="isLoading">
+</dx-load-panel>
+<dx-data-grid
+    id="gridContainer"
+    keyExpr="OrderID"
+    [dataSource]="orders$ | async"
+    [showBorders]="true"
+    [repaintChangesOnly]="true"
+    (onSaving)="onSaving($event)">
+
+    <dxo-editing
+        mode="row"
+        [allowAdding]="true"
+        [allowDeleting]="true"
+        [allowUpdating]="true"
+        [(changes)]="changes"
+        (changesChange)="onChangesChange($event)"
+        [(editRowKey)]="editRowKey"
+    ></dxo-editing>
+
+    <dxi-column dataField="OrderID" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="ShipName"></dxi-column>
+    <dxi-column dataField="ShipCountry"></dxi-column>
+    <dxi-column dataField="ShipCity"></dxi-column>
+    <dxi-column dataField="ShipAddress"></dxi-column>
+    <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+    <dxi-column dataField="Freight"></dxi-column>
+</dx-data-grid>
+<div class="options">
+    <div class="caption">Options</div>
+    <div class="option">
+        <span>Edit Row Key:</span>
+        <div id="editRowKey">{{editRowKey === null ? "null" : editRowKey.toString()}}</div>
+    </div>
+    <div class="option">
+        <span>Changes:</span>
+        <div id="changes">{{changesText}}</div>
+    </div>
+</div>

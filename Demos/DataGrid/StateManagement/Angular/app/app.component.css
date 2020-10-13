@@ -1,0 +1,30 @@
+::ng-deep #gridContainer {
+    height: 440px;
+}
+
+::ng-deep .options {
+    padding: 20px;
+    margin-top: 20px;
+    background-color: rgba(191, 191, 191, 0.15);
+}
+
+::ng-deep .caption {
+    margin-bottom: 10px;
+	font-weight: 500;
+	font-size: 18px;
+}
+
+::ng-deep .option {
+    margin-bottom: 10px;
+}
+
+::ng-deep .option > span {
+    position: relative;
+    top: 2px;
+    margin-right: 10px;
+}
+
+::ng-deep .option > div {
+    display: inline-block;
+    font-weight: bold;
+}
