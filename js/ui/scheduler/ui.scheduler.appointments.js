@@ -343,11 +343,15 @@ const SchedulerAppointments = CollectionWidget.inherit({
         this._preventSingleAppointmentClick = false;
     },
 
-    _renderAppointmentTemplate: function($container, data, model) {
+    _renderAppointmentTemplate: function($container, rawAppointment, model) {
+        //
+        const appointmentData = this.invoke('createAppointmentAdapter', model.appointmentData).clone({ pathTimeZone: 'fromGrid' }).source();
+        const targetedAppointmentData = this.invoke('createAppointmentAdapter', model.targetedAppointmentData).clone({ pathTimeZone: 'fromGrid' }).source();
+
         const formatText = this.invoke(
             'getTextAndFormatDate',
-            model.appointmentData,
-            model.appointmentData.settings || model.targetedAppointmentData,
+            appointmentData,
+            model.appointmentData.settings || targetedAppointmentData,
             // TODO: very strange variable model.appointmentData.settings at this place
             'TIME'
         );
@@ -357,9 +361,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
             .addClass(APPOINTMENT_TITLE_CLASS)
             .appendTo($container);
 
-        if(isPlainObject(data)) {
-            if(data.html) {
-                $container.html(data.html);
+        if(isPlainObject(rawAppointment)) {
+            if(rawAppointment.html) {
+                $container.html(rawAppointment.html);
             }
         }
 
@@ -369,11 +373,11 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         $contentDetails.appendTo($container);
 
-        if(data.recurrenceRule) {
+        if(rawAppointment.recurrenceRule) {
             $('<span>').addClass(RECURRING_ICON_CLASS + ' dx-icon-repeat').appendTo($container);
         }
 
-        if(data.allDay) {
+        if(rawAppointment.allDay) {
             $('<div>')
                 .text(' ' + messageLocalization.format('dxScheduler-allDay') + ': ')
                 .addClass(ALL_DAY_CONTENT_CLASS)
@@ -470,6 +474,9 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
         const { itemData, container, index } = renderArgs;
+
+        // Forced to convert back to 'toGrid', because in _createItemByTemplate method model is converted in 'fromGrid'.
+        // 'fromGrid' - default date value without time scheduler zone offset
 
         const appointmentData = this.invoke('createAppointmentAdapter', itemData).clone({ pathTimeZone: 'toGrid' }).source();
 
