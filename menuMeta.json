@@ -4726,7 +4726,6 @@
       {
         "Name": "File Manager",
         "Equivalents": "dxFileManager, dx-file-manager",
-        "Badge": "New",
         "Groups": [
           {
             "Name": "Overview",
@@ -4870,6 +4869,13 @@
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/FileUploaderAzureAccessApiController.cs"
             ]
+          },
+          {
+            "Title": "Custom Dropzone",
+            "Name": "CustomDropzone",
+            "Badge": "New",
+            "DocUrl": "",
+            "Widget": "FileUploader"
           }
         ]
       }
