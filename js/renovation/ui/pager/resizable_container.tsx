@@ -74,7 +74,6 @@ function getElementsWidth({
 export class ResizableContainerProps {
   @OneWay() pagerProps!: PagerProps;
 
-  // renovation bug
   @Template() contentTemplate!: JSXTemplate<PagerContentProps>;
 }
 @Component({

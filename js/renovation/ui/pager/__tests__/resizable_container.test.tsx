@@ -66,6 +66,7 @@ describe('resizable-container', () => {
         pagesRef: 'pagesRef',
         rootElementRef: 'parentRef',
       });
+      expect(tree.exists(contentTemplate)).toBe(true);
     });
   });
 
