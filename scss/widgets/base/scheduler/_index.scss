@@ -518,6 +518,19 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-fixed-appointments {
     z-index: 100;
     position: absolute;
+
+    .dx-draggable-dragging {
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: $scheduler-appointment-dragging-shadow, $scheduler-vertical-appointment-resizing-shadow;
+    }
+
+    .dx-resizable-resizing,
+    .dx-draggable-dragging {
+      z-index: 1000;
+      opacity: 0.7;
+    }
   }
 
   .dx-scheduler-header {
@@ -1914,6 +1927,10 @@ $scheduler-appointment-form-label-padding: 20px;
       cursor: default;
       opacity: 0.6;
       pointer-events: auto;
+    }
+
+    &.dx-scheduler-appointment-drag-source {
+      opacity: 0.7;
     }
   }
 

@@ -32,6 +32,7 @@ import AppointmentDragBehavior from '../appointmentDragBehavior';
 import { FIXED_CONTAINER_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
+import { resetPosition } from '../../../animation/translator';
 
 import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
 import ViewDataProvider from './view_data_provider';
@@ -3063,10 +3064,90 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(!this.dragBehavior && scheduler) {
             this.dragBehavior = new AppointmentDragBehavior(scheduler);
 
-            this.dragBehavior.addTo(this.getWorkArea());
-            this.dragBehavior.addTo(this.getAllDayContainer());
-            this.dragBehavior.addTo(this._$allDayPanel);
+            // const config = {
+            //     clone: true,
+            //     onDragStart: (e) => {
+            //         // const event = e.event;
+            //         // const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+
+            //         // if(itemData && !itemData.appointment.disabled) {
+            //         //     event.data = event.data || {};
+            //         //     event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings);
+
+            //         //     dragBehavior.onDragStart(event.data);
+            //         //     resetPosition($(dragElement));
+            //         // }
+            //         debugger;
+            //     },
+            //     container: this.getWorkArea(),
+            // };
+
+            // this.dragBehavior.addTo(this.getWorkArea(), config);
+            // this.dragBehavior.addTo(this.getAllDayContainer(), config);
+            // this.dragBehavior.addTo(this._$allDayPanel, config);
+            this._createDragBehavior(this.getWorkArea(), this._getDateTableAppointmentsContainer());
+            this._createDragBehavior(this.getAllDayContainer());
+            this._createDragBehavior(this._$allDayPanel);
         }
+    }
+
+    _createDragBehavior($element) {
+        let dragElement;
+        const dragBehavior = this.dragBehavior;
+
+        dragBehavior.addTo($element, {
+            container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
+            cursorOffset: () => {
+                const $dragElement = $(dragElement);
+                return {
+                    x: $dragElement.width() / 2,
+                    y: $dragElement.height() / 2
+                };
+            },
+            dragTemplate: () => {
+                return dragElement;
+            },
+            onDragStart: (e) => {
+                const event = e.event;
+                const itemElement = $(e.itemElement);
+                const itemData = itemElement.data('dxItemData');
+                const settings = itemElement.data('dxAppointmentSettings');
+
+                itemElement.addClass('dx-scheduler-appointment-drag-source');
+                itemElement.removeClass('dx-state-focused');
+
+                if(itemData && !itemData.disabled) {
+                    event.data = event.data || {};
+                    event.data.itemElement = dragElement = this._createDragAppointment(itemData, settings);
+
+                    dragBehavior.onDragStart(event.data);
+                    resetPosition($(dragElement));
+                }
+            },
+            onDragEnd: (e) => {
+                const itemData = $(e.itemElement).data('dxItemData');
+                if(itemData && !itemData.disabled) {
+                    dragBehavior.onDragEnd(e);
+                }
+            }
+        });
+    }
+
+    _createDragAppointment(itemData, settings) {
+        const appointments = this.dragBehavior.appointments;
+        const appointmentIndex = appointments.option('items').length;
+
+        settings.isCompact = false;
+        settings.virtual = false;
+
+        appointments._renderItem(appointmentIndex, {
+            itemData: itemData,
+            settings: [settings]
+        });
+
+        const elements = appointments._findItemElementByItem(itemData);
+
+        return elements[elements.length - 1];
     }
 
     _isApplyCompactAppointmentOffset() {
