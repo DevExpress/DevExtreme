@@ -3934,7 +3934,7 @@ QUnit.module('width of datebox with list', {
 }, () => {
     QUnit.module('overlay content real width', () => {
         QUnit.test('should be equal to the editor width when dropDownOptions.width in not defined', function(assert) {
-            const dateBox = this.$dateBox.dxDateBox({
+            this.$dateBox.dxDateBox({
                 opened: true,
                 pickerType: 'list',
                 type: 'time'
@@ -3942,8 +3942,18 @@ QUnit.module('width of datebox with list', {
 
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
             assert.strictEqual($overlayContent.outerWidth(), this.$dateBox.outerWidth(), 'popup width is correct');
+        });
+
+        QUnit.test('should be equal to the editor width when dropDownOptions.width in not defined after editor width runtime change', function(assert) {
+            const dateBox = this.$dateBox.dxDateBox({
+                opened: true,
+                pickerType: 'list',
+                type: 'time'
+            }).dxDateBox('instance');
 
             dateBox.option('width', 153);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
             assert.strictEqual($overlayContent.outerWidth(), this.$dateBox.outerWidth(), 'popup width is correct');
         });
 
@@ -4099,7 +4109,7 @@ QUnit.module('width of datebox with calendar', {
 }, () => {
     QUnit.module('overlay content width', () => {
         QUnit.test('should be equal to the calendar width + margins when dropDownOptions.width in not defined', function(assert) {
-            const dateBox = this.$dateBox.dxDateBox({
+            this.$dateBox.dxDateBox({
                 opened: true,
                 pickerType: 'calendar'
             }).dxDateBox('instance');
@@ -4110,8 +4120,21 @@ QUnit.module('width of datebox with calendar', {
 
             const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
             assert.strictEqual($overlayContent.width(), calendarWidth, 'popup width is correct');
+        });
+
+        QUnit.test('should be equal to the calendar width + margins when dropDownOptions.width in not defined after editor width runtime change', function(assert) {
+            const dateBox = this.$dateBox.dxDateBox({
+                opened: true,
+                pickerType: 'calendar'
+            }).dxDateBox('instance');
+
+            const $calendar = $(`.${CALENDAR_CLASS}`);
+            const paddingsWidth = parseInt($calendar.css('margin-left')) * 4;
+            const calendarWidth = $calendar.outerWidth() + paddingsWidth;
 
             dateBox.option('width', 153);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
             assert.strictEqual($overlayContent.width(), calendarWidth, 'popup width is correct');
         });
 
