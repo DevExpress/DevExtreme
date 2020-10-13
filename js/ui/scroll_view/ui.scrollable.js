@@ -160,46 +160,28 @@ const Scrollable = DOMComponent.inherit({
         this._updateRtlPosition();
     },
 
+    _isHorizontalRtl: function() {
+        return this.option('rtlEnabled') && this.option('direction') !== VERTICAL;
+    },
+
     _updateRtlPosition: function() {
         this._updateBounds();
-        if(this.option('rtlEnabled') && this.option('direction') !== VERTICAL) {
+        if(this._isHorizontalRtl()) {
             deferUpdate(() => {
                 deferRender(() => {
                     const containerElement = this._container().get(0);
-                    const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
+                    const oldWidthToNewWidthRatio = (this.oldClientWidth || containerElement.clientWidth) / containerElement.clientWidth;
+                    const offsetRight = (this.offsetRight || 0) * oldWidthToNewWidthRatio;
 
-                    if(!this.wasDimension) {
-                        this._saveFlags();
-                    }
-
-                    if(this._forDimension) {
-                        const scrollOffset = maxLeftOffset - this._lastMaxLeftOffset;
-
-                        if(containerElement.scrollLeft < maxLeftOffset && scrollOffset !== 0) {
-                            this.scrollTo({ left: Math.round(containerElement.scrollLeft) + scrollOffset });
-                        } else if(scrollOffset < 0 && this._lost > 0 && maxLeftOffset !== containerElement.scrollLeft) {
-                            if(this._lost === 0) {
-                                this.scrollTo({ left: maxLeftOffset + scrollOffset });
-                            } else {
-                                this.scrollTo({ left: maxLeftOffset - this._lost });
-                            }
-                        } else if(scrollOffset < 0 && this._lost > 0 && maxLeftOffset === containerElement.scrollLeft) {
-                            if((Math.abs(scrollOffset) - this._lost) > 0) {
-                                this.scrollTo({ left: maxLeftOffset - this._lost });
-                            } else {
-                                this.scrollTo({ left: maxLeftOffset + this._lost - scrollOffset });
-                            }
-                        } else if(scrollOffset === 0 && this.previousState > 0) {
-                            this.scrollTo({ left: maxLeftOffset - this.previousState });
-                        }
-
-                        this._lost = maxLeftOffset + this._lastScrollLeft;
-                        this._lastMaxLeftOffset = maxLeftOffset;
-
-                        this.wasDimension = false;
+                    const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth - offsetRight;
+                    this.oldClientWidth = containerElement.clientWidth;
+                    if(containerElement.clientWidth === containerElement.scrollWidth) {
+                        this.offsetRight = 0;
                     } else {
-                        this.scrollTo({ left: maxLeftOffset });
+                        this.offsetRight = offsetRight;
                     }
+
+                    this.scrollTo({ left: maxLeftOffset });
                 });
             });
         }
@@ -227,8 +209,15 @@ const Scrollable = DOMComponent.inherit({
         eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.cancel, SCROLLABLE), strategy.handleCancel.bind(strategy));
         eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.stop, SCROLLABLE), strategy.handleStop.bind(strategy));
 
+        const that = this;
         eventsEngine.off(this._$container, '.' + SCROLLABLE);
-        eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
+        eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), function() {
+            if(that._isHorizontalRtl()) {
+                that.offsetRight = this.scrollWidth - (this.scrollLeft + this.clientWidth);
+                that.oldClientWidth = this.clientWidth;
+            }
+            strategy.handleScroll.bind(strategy);
+        });
     },
 
     _validate: function(e) {
