@@ -14,8 +14,6 @@ module.exports = {
         './js/renovation/**/*.tsx',
         '!./js/renovation/**/*.j.tsx',
         '!./js/renovation/**/__tests__/**/*',
-        '!./js/renovation/utils/render_template.tsx',
-        '!./js/renovation/ui/list.tsx',
     ],
     coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {
