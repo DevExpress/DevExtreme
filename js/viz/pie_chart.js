@@ -328,7 +328,7 @@ const dxPieChart = BaseChart.inherit({
         if(!this._centerTemplateGroup) {
             this._centerTemplateGroup = this._renderer.g().attr({ class: 'dxc-hole-template' }).css(patchFontOptions(this._themeManager._font));
         }
-        this._centerTemplateGroup.append(this._renderer.root);
+        this._centerTemplateGroup.attr({ visibility: 'hidden' }).append(this._renderer.root);
 
         template = this._getTemplate(template);
 
@@ -336,8 +336,10 @@ const dxPieChart = BaseChart.inherit({
             model: this,
             container: this._centerTemplateGroup.element,
             onRendered: ()=>{
-                const bBox = this._centerTemplateGroup.getBBox();
-                this._centerTemplateGroup.move(this._center.x - (bBox.x + bBox.width / 2), this._center.y - (bBox.y + bBox.height / 2));
+                const group = this._centerTemplateGroup;
+                const bBox = group.getBBox();
+                group.move(this._center.x - (bBox.x + bBox.width / 2), this._center.y - (bBox.y + bBox.height / 2));
+                group.attr({ visibility: 'visible' });
             }
         });
     },

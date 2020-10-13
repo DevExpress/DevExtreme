@@ -451,8 +451,29 @@ const overlappingEnvironment = $.extend({}, environment, {
         renderSpy.lastCall.args[0].onRendered();
 
         const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
-
         assert.strictEqual(templateGroup.stub('move').callCount, 1);
+    });
+
+    QUnit.test('Async tempaltes rendering. called group visibilty', function(assert) {
+        chartMocks.seriesMockData.series.push(new MockSeries({ range: { val: { min: 0, max: 10 } } }));
+        const renderSpy = sinon.spy();
+        this.templateManager.getTemplate = sinon.spy(function() {
+            return { render: renderSpy };
+        });
+        const chart = this.createPieChart({
+            dataSource: this.dataSource,
+            series: [{}],
+            centerTemplate: $.noop
+        });
+
+        const templateGroup = chart._renderer.root.children[chart._renderer.root.children.length - 1];
+        assert.strictEqual(templateGroup.stub('attr').callCount, 2);
+        assert.deepEqual(templateGroup.stub('attr').getCall(1).args[0], { visibility: 'hidden' });
+
+        renderSpy.lastCall.args[0].onRendered();
+
+        assert.strictEqual(templateGroup.stub('attr').callCount, 3);
+        assert.deepEqual(templateGroup.stub('attr').getCall(2).args[0], { visibility: 'visible' });
     });
 
     QUnit.test('Hole template. First rendering', function(assert) {
