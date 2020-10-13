@@ -150,7 +150,7 @@
     "systemjs-plugin-text": "0.0.8",
     "testcafe": "^1.2.0",
     "through2": "^2.0.1",
-    "ts-jest": "^24.2.0",
+    "ts-jest": "^24.3.0",
     "typescript": "^3.7.2",
     "underscore": "^1.9.2",
     "vinyl-named": "^1.1.0",
@@ -187,7 +187,7 @@
     "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner",
-    "test-jest": "jest --coverage",
+    "test-jest": "jest --coverage --maxWorkers=8",
     "test-jest:watch": "jest --watch"
   },
   "browserslist": [
