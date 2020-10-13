@@ -15,7 +15,6 @@ require('./build/gulp/transpile');
 require('./build/gulp/js-bundles');
 require('./build/gulp/vectormap');
 require('./build/gulp/npm');
-require('./build/gulp/renovation-npm');
 require('./build/gulp/themebuilder-npm');
 require('./build/gulp/aspnet');
 require('./build/gulp/vendor');
@@ -49,11 +48,10 @@ function createMiscBatch() {
     return gulp.parallel(tasks);
 }
 
-function createMainBatch(useRenovation) {
+function createMainBatch() {
     const tasks = ['js-bundles-debug'];
     if(!env.TEST_CI) {
         tasks.push('js-bundles-prod');
-        useRenovation && tasks.push('js-bundles-prod-renovation');
     }
     tasks.push('style-compiler-batch', 'misc-batch');
     return env.DOCKER_CI
@@ -61,13 +59,12 @@ function createMainBatch(useRenovation) {
         : (callback) => multiProcess(tasks, callback, true);
 }
 
-function createDefaultBatch(useRenovation) {
+function createDefaultBatch() {
     const tasks = ['clean', 'localization', 'generate-components'];
-    useRenovation && tasks.push('create-renovation-temp');
-    tasks.push('version-replace', createMainBatch(useRenovation));
+    env.USE_RENOVATION && tasks.push('create-renovation-temp');
+    tasks.push('version-replace', createMainBatch());
     if(!env.TEST_CI) {
         tasks.push('npm');
-        useRenovation && tasks.push('renovation-npm');
         tasks.push('themebuilder-npm');
         tasks.push('check-license-notices');
     }
@@ -77,7 +74,7 @@ function createDefaultBatch(useRenovation) {
 gulp.task('misc-batch', createMiscBatch());
 gulp.task('style-compiler-batch', createStyleCompilerBatch());
 
-gulp.task('default', createDefaultBatch(env.USE_RENOVATION));
+gulp.task('default', createDefaultBatch());
 
 gulp.task('dev', gulp.series(
     'generate-jquery-components',

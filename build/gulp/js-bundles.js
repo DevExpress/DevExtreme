@@ -51,17 +51,19 @@ const bundleProdPipe = lazyPipe()
     .pipe(headerPipes.bangLicense)
     .pipe(compressionPipes.minify);
 
-gulp.task('js-bundles-prod-renovation', function() {
-    return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_RENOVATION_PATH))
+const jsBundlesProd = (src, dist) => (() =>
+    gulp.src(processBundles(BUNDLES, src))
         .pipe(bundleProdPipe())
-        .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
-});
+        .pipe(gulp.dest(dist))
+);
 
-gulp.task('js-bundles-prod', function() {
-    return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_PATH))
-        .pipe(bundleProdPipe())
-        .pipe(gulp.dest(context.RESULT_JS_PATH));
-});
+gulp.task('js-bundles-prod',
+    jsBundlesProd(context.TRANSPILED_PROD_PATH, context.RESULT_JS_PATH),
+    utils.runTaskByCondition(env.USE_RENOVATION,
+        jsBundlesProd(context.TRANSPILED_PROD_RENOVATION_PATH,
+            context.RESULT_JS_RENOVATION_PATH
+        ))
+);
 
 function prepareDebugMeta(watch, renovation) {
     let debugConfig;
@@ -109,22 +111,22 @@ function createRenovationTemp(isWatch) {
         .pipe(gulp.dest(renovationPipes.TEMP_PATH));
 }
 
-gulp.task('create-renovation-temp', utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
+gulp.task('create-renovation-temp', utils.runTaskByCondition(env.USE_RENOVATION, function() {
     return createRenovationTemp(false);
 }));
 
-gulp.task('create-renovation-temp-watch', utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
+gulp.task('create-renovation-temp-watch', utils.runTaskByCondition(env.USE_RENOVATION, function() {
     return createRenovationTemp(true);
 }));
 
 gulp.task('js-bundles-debug', gulp.series(function() {
     return createDebugBundlesStream(false, false);
-}, utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
+}, utils.runTaskByCondition(env.USE_RENOVATION, function() {
     return createDebugBundlesStream(false, true);
 })));
 
 gulp.task('js-bundles-dev', gulp.parallel(function() {
     return createDebugBundlesStream(true, false);
-}, utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
+}, utils.runTaskByCondition(env.USE_RENOVATION, function() {
     return createDebugBundlesStream(true, true);
 })));

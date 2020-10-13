@@ -1,133 +1,169 @@
 'use strict';
 
-const gulp = require('gulp');
 const eol = require('gulp-eol');
-const replace = require('gulp-replace');
-const merge = require('merge-stream');
-const through = require('through2');
+const fs = require('fs');
+const gulp = require('gulp');
+const gulpIf = require('gulp-if');
 const lazyPipe = require('lazypipe');
-const dataUri = require('./gulp-data-uri').gulpPipe;
+const merge = require('merge-stream');
+const replace = require('gulp-replace');
+const through = require('through2');
 
-const context = require('./context.js');
-const headerPipes = require('./header-pipes.js');
+const MODULES = require('./modules_metadata.json');
 const compressionPipes = require('./compression-pipes.js');
+const ctx = require('./context.js');
+const dataUri = require('./gulp-data-uri').gulpPipe;
+const env = require('./env-variables');
+const headerPipes = require('./header-pipes.js');
+const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 const renovationPipes = require('./renovation-pipes');
+const utils = require('./utils');
 const version = require('../../package.json').version;
-const packagePath = context.RESULT_NPM_PATH + '/devextreme';
-const scssPackagePath = packagePath + '/scss';
 
-const TRANSPILED_GLOBS = [
-    context.TRANSPILED_PROD_PATH + '/**/*.js',
-    '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.*',
-    '!' + context.TRANSPILED_PROD_PATH + '/bundles/*.js',
-    '!' + context.TRANSPILED_PROD_PATH + '/bundles/modules/parts/*.js',
-    '!' + context.TRANSPILED_PROD_PATH + '/viz/vector_map.utils/*.js',
-    '!' + context.TRANSPILED_PROD_PATH + '/viz/docs/*.js'
+const resultPath = ctx.RESULT_NPM_PATH;
+const renovation = env.USE_RENOVATION;
+
+const srcGlobsPattern = (path, exclude) => [
+    `${path}/**/*.js`,
+    `!${exclude}/**/*.*`,
+    `!${path}/bundles/*.js`,
+    `!${path}/bundles/modules/parts/*.js`,
+    `!${path}/viz/vector_map.utils/*.js`,
+    `!${path}/viz/docs/*.js`
 ];
 
-const JSON_GLOBS = [
-    'js/**/*.json',
-    '!js/viz/vector_map.utils/*.*'
-];
+const srcGlobs = srcGlobsPattern(
+    ctx.TRANSPILED_PROD_PATH,
+    ctx.TRANSPILED_PROD_RENOVATION_PATH
+);
 
-const DIST_GLOBS = [
+const renovationSrcGlobs = srcGlobsPattern(
+    ctx.TRANSPILED_PROD_RENOVATION_PATH,
+    ctx.TRANSPILED_PROD_PATH
+);
+
+const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
+
+const distGlobsPattern = (jsFolder, exclude) => [
     'artifacts/**/*.*',
-    '!' + context.TRANSPILED_PROD_PATH + '/**/*.*',
-    '!' + context.RESULT_JS_RENOVATION_PATH + '/**/*.*',
-    '!' + context.TRANSPILED_PROD_RENOVATION_PATH + '/**/*.*',
-    '!' + renovationPipes.TEMP_PATH + '/**/*.*',
     '!artifacts/npm/**/*.*',
-    '!artifacts/js/angular**/*.*',
-    '!artifacts/js/angular*',
-    '!artifacts/js/knockout*',
-    '!artifacts/js/cldr/*.*',
-    '!artifacts/js/cldr*',
-    '!artifacts/js/globalize/*.*',
-    '!artifacts/js/globalize*',
-    '!artifacts/js/jquery*',
-    '!artifacts/js/jszip*',
-    '!artifacts/js/dx.custom*',
-    '!artifacts/js/dx-diagram*',
-    '!artifacts/js/dx-gantt*',
-    '!artifacts/js/dx-quill*',
     '!artifacts/ts/jquery*',
     '!artifacts/ts/knockout*',
     '!artifacts/ts/globalize*',
     '!artifacts/ts/cldr*',
     '!artifacts/css/dx-diagram.*',
-    '!artifacts/css/dx-gantt.*'
+    '!artifacts/css/dx-gantt.*',
+    `!${jsFolder}/angular**/*.*`,
+    `!${jsFolder}/angular*`,
+    `!${jsFolder}/knockout*`,
+    `!${jsFolder}/cldr/*.*`,
+    `!${jsFolder}/cldr*`,
+    `!${jsFolder}/globalize/*.*`,
+    `!${jsFolder}/globalize*`,
+    `!${jsFolder}/jquery*`,
+    `!${jsFolder}/jszip*`,
+    `!${jsFolder}/dx.custom*`,
+    `!${jsFolder}/dx-diagram*`,
+    `!${jsFolder}/dx-gantt*`,
+    `!${jsFolder}/dx-quill*`,
+    `!${renovationPipes.TEMP_PATH}/**/*.*`,
+    `!${ctx.TRANSPILED_PROD_RENOVATION_PATH}/**/*.*`,
+    `!${ctx.TRANSPILED_PROD_PATH}/**/*.*`,
+    `!${exclude}/**/*.*`,
 ];
 
-const MODULES = require('./modules_metadata.json');
+const distGlobs = distGlobsPattern(ctx.RESULT_JS_PATH, ctx.RESULT_JS_RENOVATION_PATH);
+const renovationDistGlobs = distGlobsPattern(ctx.RESULT_JS_RENOVATION_PATH, ctx.RESULT_JS_PATH);
 
-function createSassStream(destPath) {
-    return gulp.parallel(() => {
-        return gulp
-            .src('scss/**/*')
-            .pipe(dataUri())
-            .pipe(gulp.dest(destPath));
-
-    }, () => {
-        return gulp
-            .src('fonts/**/*', { base: '.' })
-            .pipe(gulp.dest(destPath + '/widgets/material/typography'));
-    }, () => {
-        return gulp
-            .src('icons/**/*', { base: '.' })
-            .pipe(gulp.dest(destPath + '/widgets/base'));
-    });
-}
-
-const addDefaultExport = lazyPipe().pipe(function() {
-    return through.obj(function(chunk, enc, callback) {
+const addDefaultExport = lazyPipe().pipe(() =>
+    through.obj((chunk, enc, callback) => {
         const moduleName = chunk.relative.replace('.js', '').split('\\').join('/');
         const moduleMeta = MODULES.filter(m => m.name === moduleName)[0];
 
         if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
-            chunk.contents = Buffer.from(String(chunk.contents) + 'module.exports.default = module.exports;');
+            chunk.contents = Buffer.from(`${String(chunk.contents)}
+                module.exports.default = module.exports;`);
         }
         callback(null, chunk);
-    });
-});
+    })
+);
 
-gulp.task('npm-sources', gulp.series('ts-sources', function() {
-    return merge(
+const sources = (src, dist, distGlob) => (() => merge(
+    gulp
+        .src(src)
+        .pipe(addDefaultExport())
+        .pipe(headerPipes.starLicense())
+        .pipe(compressionPipes.beautify())
+        .pipe(gulp.dest(dist)),
 
-        gulp.src(TRANSPILED_GLOBS)
-            .pipe(addDefaultExport())
-            .pipe(headerPipes.starLicense())
-            .pipe(compressionPipes.beautify())
-            .pipe(gulp.dest(packagePath)),
+    gulp
+        .src(jsonGlobs)
+        .pipe(gulp.dest(dist)),
 
-        gulp.src(JSON_GLOBS)
-            .pipe(gulp.dest(packagePath)),
+    gulp
+        .src('build/npm-bin/*.js')
+        .pipe(eol('\n'))
+        .pipe(gulp.dest(`${dist}/bin`)),
 
-        gulp.src('build/npm-bin/*.js')
-            .pipe(eol('\n'))
-            .pipe(gulp.dest(packagePath + '/bin')),
+    gulp
+        .src('webpack.config.js')
+        .pipe(gulp.dest(`${dist}/bin`)),
 
-        gulp.src('webpack.config.js')
-            .pipe(gulp.dest(packagePath + '/bin')),
+    gulp
+        .src('package.json')
+        .pipe(replace(version, ctx.version.package))
+        .pipe(gulp.dest(dist)),
 
-        gulp.src('package.json')
-            .pipe(replace(version, context.version.package))
-            .pipe(gulp.dest(packagePath)),
+    gulp
+        .src(distGlob)
+        .pipe(gulpIf(renovation, replace(
+            new RegExp(renovatedComponents
+                .map(component => (`dxr${component.name}`))
+                .join('|'), 'g'),
+            (match) => match.replace('dxr', 'dx')
+        )))
+        .pipe(gulp.dest(`${dist}/dist`)),
 
-        gulp.src(DIST_GLOBS)
-            .pipe(gulp.dest(packagePath + '/dist')),
+    gulp
+        .src('README.md')
+        .pipe(gulp.dest(dist))
+));
 
-        gulp.src('README.md')
-            .pipe(gulp.dest(packagePath))
-    );
-}));
 
-gulp.task('npm-sass', createSassStream(scssPackagePath));
+gulp.task('npm-sources', gulp.series(
+    'ts-sources',
+    sources(srcGlobs, `${resultPath}/devextreme`, distGlobs),
+    utils.runTaskByCondition(renovation,
+        sources(renovationSrcGlobs, `${resultPath}/devextreme-renovation`, renovationDistGlobs)
+    ),
+    utils.runTaskByCondition(renovation, (done) =>
+        fs.rename(
+            `${resultPath}/devextreme-renovation/dist/js-renovation`,
+            `${resultPath}/devextreme-renovation/dist/js`,
+            (err) => {
+                if(err) throw err;
+                done();
+            }
+        ))
+));
 
-gulp.task('npm-check', gulp.series('ts-modules-check'));
+gulp.task('npm-sass', gulp
+    .parallel(
+        () => gulp
+            .src('scss/**/*')
+            .pipe(dataUri())
+            .pipe(gulp.dest(`${resultPath}/devextreme/scss`))
+            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss`))),
 
-gulp.task('npm', gulp.series('npm-sources', 'npm-check', 'npm-sass'));
+        () => gulp
+            .src('fonts/**/*', { base: '.' })
+            .pipe(gulp.dest(`${resultPath}/devextreme/scss/widgets/material/typography`))
+            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/material/typography`))),
 
-module.exports = {
-    addDefaultExport,
-    createSassStream,
-};
+        () => gulp
+            .src('icons/**/*', { base: '.' })
+            .pipe(gulp.dest(`${resultPath}/devextreme/scss/widgets/base`))
+            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/base`))),
+    ));
+
+gulp.task('npm', gulp.series('npm-sources', 'ts-modules-check', 'npm-sass'));
