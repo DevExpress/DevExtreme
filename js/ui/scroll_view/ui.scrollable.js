@@ -36,34 +36,21 @@ const Scrollable = DOMComponent.inherit({
         return extend(this.callBase(), {
             disabled: false,
             onScroll: null,
-
             direction: VERTICAL,
-
             showScrollbar: 'onScroll',
-
             useNative: true,
-
             bounceEnabled: true,
-
             scrollByContent: true,
-
             scrollByThumb: false,
-
             onUpdated: null,
-
             onStart: null,
             onEnd: null,
-
             onBounce: null,
             onStop: null,
-
             useSimulatedScrollbar: false,
             useKeyboard: true,
-
             inertiaEnabled: true,
-
             pushBackValue: 0,
-
             updateManually: false
         });
     },
@@ -138,8 +125,22 @@ const Scrollable = DOMComponent.inherit({
         $wrapper.appendTo($element);
     },
 
+    _saveFlags: function() {
+        const containerElement = this._container().get(0);
+        const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
+        this._lastMaxLeftOffset = this._lastMaxLeftOffset || maxLeftOffset;
+        this.wasDimension = true;
+        this._lastScrollLeft = this._location().left;
+        this._lost = this._lost || maxLeftOffset + this._lastScrollLeft;
+
+        this.previousState = maxLeftOffset - containerElement.scrollLeft;
+    },
+
     _dimensionChanged: function() {
+        this._saveFlags();
         this.update();
+        this._forDimension = true;
+        this._updateRtlPosition();
     },
 
     _initMarkup: function() {
@@ -163,10 +164,42 @@ const Scrollable = DOMComponent.inherit({
         this._updateBounds();
         if(this.option('rtlEnabled') && this.option('direction') !== VERTICAL) {
             deferUpdate(() => {
-                const containerElement = this._container().get(0);
-                const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
                 deferRender(() => {
-                    this.scrollTo({ left: maxLeftOffset });
+                    const containerElement = this._container().get(0);
+                    const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
+
+                    if(!this.wasDimension) {
+                        this._saveFlags();
+                    }
+
+                    if(this._forDimension) {
+                        const scrollOffset = maxLeftOffset - this._lastMaxLeftOffset;
+
+                        if(containerElement.scrollLeft < maxLeftOffset && scrollOffset !== 0) {
+                            this.scrollTo({ left: Math.round(containerElement.scrollLeft) + scrollOffset });
+                        } else if(scrollOffset < 0 && this._lost > 0 && maxLeftOffset !== containerElement.scrollLeft) {
+                            if(this._lost === 0) {
+                                this.scrollTo({ left: maxLeftOffset + scrollOffset });
+                            } else {
+                                this.scrollTo({ left: maxLeftOffset - this._lost });
+                            }
+                        } else if(scrollOffset < 0 && this._lost > 0 && maxLeftOffset === containerElement.scrollLeft) {
+                            if((Math.abs(scrollOffset) - this._lost) > 0) {
+                                this.scrollTo({ left: maxLeftOffset - this._lost });
+                            } else {
+                                this.scrollTo({ left: maxLeftOffset + this._lost - scrollOffset });
+                            }
+                        } else if(scrollOffset === 0 && this.previousState > 0) {
+                            this.scrollTo({ left: maxLeftOffset - this.previousState });
+                        }
+
+                        this._lost = maxLeftOffset + this._lastScrollLeft;
+                        this._lastMaxLeftOffset = maxLeftOffset;
+
+                        this.wasDimension = false;
+                    } else {
+                        this.scrollTo({ left: maxLeftOffset });
+                    }
                 });
             });
         }
@@ -316,7 +349,10 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _location: function() {
-        return this._strategy.location();
+        const location = this._strategy.location();
+
+
+        return location;
     },
 
     _normalizeLocation: function(location) {
@@ -440,6 +476,7 @@ const Scrollable = DOMComponent.inherit({
         }
 
         this._updateIfNeed();
+
         this._strategy.scrollBy(distance);
     },
 
