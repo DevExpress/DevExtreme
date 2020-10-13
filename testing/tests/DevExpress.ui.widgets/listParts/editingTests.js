@@ -430,8 +430,6 @@ QUnit.test('selectAllMode option changed to \'page\'', function(assert) {
     });
     const instance = $element.dxList('instance');
 
-    instance.selectAll();
-    instance.unselectAll();
     instance.option('selectAllMode', 'page');
     instance.selectAll();
 
@@ -456,8 +454,6 @@ QUnit.test('selectAllMode option changed twice', function(assert) {
     const instance = $element.dxList('instance');
 
     instance.option('selectAllMode', 'allPages');
-    instance.selectAll();
-    instance.unselectAll();
     instance.option('selectAllMode', 'page');
     instance.selectAll();
 
