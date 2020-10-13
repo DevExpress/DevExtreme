@@ -244,7 +244,7 @@ module('selecting of items', {
         const that = this;
 
         const item = function(index) {
-            return that.getItemElement(this.instance, index);
+            return that.getItemElement(that.instance, index);
         };
 
         this.instance.selectItem(item(0));
