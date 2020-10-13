@@ -3136,14 +3136,12 @@ class SchedulerWorkSpace extends WidgetObserver {
         settings.isCompact = false;
         settings.virtual = false;
 
-        appointments._renderItem(appointmentIndex, {
+        const items = appointments._renderItem(appointmentIndex, {
             itemData,
             settings: [settings]
         });
 
-        const elements = appointments._findItemElementByItem(itemData);
-
-        return elements[elements.length - 1];
+        return items[0];
     }
 
     _isApplyCompactAppointmentOffset() {

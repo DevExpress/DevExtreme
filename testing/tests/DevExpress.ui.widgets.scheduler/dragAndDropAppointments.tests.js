@@ -367,7 +367,7 @@ const moveAsMouseConfig = $.extend({}, {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(dragCase.left, dragCase.top);
 
-        const draggedAppointment = $(scheduler.appointments.find(text).get(0));
+        const draggedAppointment = $(scheduler.appointments.find(text).get(0)).parent();
 
         const positionAfterDrag = getAbsolutePosition(draggedAppointment);
 

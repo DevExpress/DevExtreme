@@ -453,13 +453,17 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _renderItem: function(index, item, container) {
         const itemData = item.itemData;
+        const $items = [];
 
         for(let i = 0; i < item.settings.length; i++) {
             const setting = item.settings[i];
             this._currentAppointmentSettings = setting;
             const $item = this.callBase(index, itemData, container);
             $item.data(APPOINTMENT_SETTINGS_NAME, setting);
+            $items.push($item);
         }
+
+        return $items;
     },
 
     _getItemContent: function($itemFrame) {

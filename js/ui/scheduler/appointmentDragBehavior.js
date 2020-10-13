@@ -43,12 +43,10 @@ export default class AppointmentDragBehavior {
     }
 
     onDragEnd(e) {
-        // debugger;
         // const appointmentData = this.currentData;
         const $appointment = this.getAppointmentElement(e);
         const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
         container.append($appointment);
-        // debugger;
 
         this.currentAppointment = $appointment;
         this.currentData = null;
