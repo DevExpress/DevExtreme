@@ -511,7 +511,7 @@ export default class dxGantt extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    assignResourceToTask(resourceKey, taskKey)
+    assignResourceToTask(resourceKey: any, taskKey: any): void;
     /**
      * @docid dxGanttMethods.unassignResourceFromTask
      * @publicName unassignResourceFromTask(resourceKey, taskKey)
@@ -520,7 +520,7 @@ export default class dxGantt extends Widget {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    unassignResourceFromTask(resourceKey, taskKey)
+    unassignResourceFromTask(resourceKey: any, taskKey: any): void;
     /**
      * @docid dxGanttMethods.getTaskResources
      * @publicName getTaskResources(key)
