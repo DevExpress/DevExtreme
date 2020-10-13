@@ -240,17 +240,10 @@ module('selecting of items', {
     });
 
     test('deleteItem should change selected items', function(assert) {
-
-        const that = this;
-
-        const item = function(index) {
-            return that.getItemElement(that.instance, index);
-        };
-
-        this.instance.selectItem(item(0));
-        this.instance.selectItem(item(1));
-        this.instance.selectItem(item(2));
-        this.instance.deleteItem(item(1));
+        this.instance.selectItem(getItemElement(this.instance, 0));
+        this.instance.selectItem(getItemElement(this.instance, 1));
+        this.instance.selectItem(getItemElement(this.instance, 2));
+        this.instance.deleteItem(getItemElement(this.instance, 1));
 
         assert.deepEqual(this.instance.option('selectedItems'), [{ a: 0 }, { a: 2 }], 'item not deleted');
     });
