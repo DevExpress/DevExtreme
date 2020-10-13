@@ -63,6 +63,10 @@ const DateBox = DropDownEditor.inherit({
         return extend(this.callBase(), this._strategy.supportedKeys());
     },
 
+    getWidth: function() {
+        return this.$element().outerWidth();
+    },
+
     _renderButtonContainers: function() {
         this.callBase.apply(this, arguments);
         this._strategy.customizeButtons();
