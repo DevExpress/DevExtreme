@@ -45,13 +45,12 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getPopupWidth: function() {
-        const popupWidth = this.dateBox.option('dropDownOptions.width');
+        let popupWidth = this.dateBox.option('dropDownOptions.width');
 
         if(popupWidth === null) {
-            return undefined;
-        }
-        if(typeof popupWidth === 'function') {
-            return popupWidth();
+            popupWidth = undefined;
+        } else if(typeof popupWidth === 'function') {
+            popupWidth = popupWidth();
         }
 
         return popupWidth;
