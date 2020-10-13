@@ -27,7 +27,7 @@ const APPOINTMENT_POPUP_WIDTH_MOBILE = 350;
 const TOOLBAR_ITEM_AFTER_LOCATION = 'after';
 const TOOLBAR_ITEM_BEFORE_LOCATION = 'before';
 
-const DAY_IN_MS = 24 * 3600000;
+const DAY_IN_MS = toMs('day');
 
 export default class AppointmentPopup {
     constructor(scheduler) {
