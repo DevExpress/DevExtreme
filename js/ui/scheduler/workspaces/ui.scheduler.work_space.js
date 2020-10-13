@@ -3064,28 +3064,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(!this.dragBehavior && scheduler) {
             this.dragBehavior = new AppointmentDragBehavior(scheduler);
 
-            const config = {
-                clone: true,
-                // onDragStart: (e) => {
-                // // const event = e.event;
-                // // const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
-
-                //     // if(itemData && !itemData.appointment.disabled) {
-                //     //     event.data = event.data || {};
-                //     //     event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings);
-
-                //     debugger;
-                //     this.dragBehavior.onDragStart(e.event.data);
-                // //     resetPosition($(dragElement));
-                // // }
-                // // debugger;
-                // },
-                container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
-            };
-
-            // this.dragBehavior.addTo(this.getWorkArea(), config);
-            // this.dragBehavior.addTo(this.getAllDayContainer(), config);
-            // this.dragBehavior.addTo(this._$allDayPanel, config);
             // this.dragBehavior.addTo(this.getWorkArea());
             // this.dragBehavior.addTo(this.getAllDayContainer());
             // this.dragBehavior.addTo(this._$allDayPanel);
@@ -3101,13 +3079,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         dragBehavior.addTo($element, {
             container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
-            // container: this.getAllDayContainer(),
             dragTemplate: () => {
                 return dragElement;
             },
             onDragStart: (e) => {
                 const event = e.event;
-                // debugger;
                 const itemElement = $(e.itemElement);
                 const itemData = itemElement.data('dxItemData');
                 const settings = itemElement.data('dxAppointmentSettings');
