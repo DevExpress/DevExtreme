@@ -1,0 +1,23 @@
+<dx-data-grid
+    id="gridContainer"
+    [dataSource]="ordersStore"
+    [showBorders]="true"
+    [remoteOperations]="true"
+    [repaintChangesOnly]="true"
+    (onSaving)="onSaving($event)">
+
+    <dxo-editing
+        mode="batch"
+        [allowAdding]="true"
+        [allowDeleting]="true"
+        [allowUpdating]="true"
+    ></dxo-editing>
+
+    <dxi-column dataField="OrderID" [allowEditing]="false"></dxi-column>
+    <dxi-column dataField="ShipName"></dxi-column>
+    <dxi-column dataField="ShipCountry"></dxi-column>
+    <dxi-column dataField="ShipCity"></dxi-column>
+    <dxi-column dataField="ShipAddress"></dxi-column>
+    <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
+    <dxi-column dataField="Freight"></dxi-column>
+</dx-data-grid>

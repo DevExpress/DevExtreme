@@ -312,6 +312,21 @@
               "/Models/SampleData/DataGridEmployees.cs",
               "/Models/SampleData/States.cs"
             ]
+          },
+          {
+            "Title": "Batch Update Request",
+            "Name": "BatchUpdateRequest",
+            "DocUrl": "",
+            "Widget": "DataGrid",
+            "DemoType": "Web",
+            "Equivalents": "",
+            "Badge": "New",
+            "Modules": "whatwg-fetch,devextreme-aspnet-data-nojquery",
+            "MvcAdditionalFiles": [
+              "/Controllers/ApiControllers/DataGridWebApiController.cs",
+              "/Models/Northwind/InMemoryNorthwindContext.cs",
+              "/Models/DataGrid/DataChange.cs"
+            ]
           }
         ]
       },
