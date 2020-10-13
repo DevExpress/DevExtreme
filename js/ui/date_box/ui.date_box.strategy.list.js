@@ -44,8 +44,22 @@ const ListStrategy = DateBoxStrategy.inherit({
         return displayFormat || 'shorttime';
     },
 
+    _getPopupWidth: function() {
+        let popupWidth = this.dateBox.option('dropDownOptions.width');
+
+        if(popupWidth === null) {
+            popupWidth = undefined;
+        } else if(typeof popupWidth === 'function') {
+            popupWidth = popupWidth();
+        }
+
+        return popupWidth;
+    },
+
     popupConfig: function(popupConfig) {
-        return popupConfig;
+        return extend(popupConfig, {
+            width: this._getInputWidth.bind(this)
+        });
     },
 
     useCurrentDateByDefault: function() {
@@ -251,8 +265,18 @@ const ListStrategy = DateBoxStrategy.inherit({
 
     _dimensionChanged: function() {
         if(this._getPopup()) {
+            const popupWidth = this._getPopupWidth();
+
+            if(popupWidth === undefined) {
+                this.dateBox.setPopupOption('width', this._getInputWidth.bind(this));
+            }
+
             this._updatePopupHeight();
         }
+    },
+
+    _getInputWidth() {
+        return this.dateBox.getWidth();
     },
 
     _updatePopupHeight: function() {
