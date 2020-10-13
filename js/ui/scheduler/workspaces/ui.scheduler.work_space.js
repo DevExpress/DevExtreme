@@ -3085,7 +3085,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             // this.dragBehavior.addTo(this.getWorkArea(), config);
             // this.dragBehavior.addTo(this.getAllDayContainer(), config);
             // this.dragBehavior.addTo(this._$allDayPanel, config);
-            this._createDragBehavior(this.getWorkArea(), this._getDateTableAppointmentsContainer());
+            this._createDragBehavior(this.getWorkArea());
             this._createDragBehavior(this.getAllDayContainer());
             this._createDragBehavior(this._$allDayPanel);
         }
