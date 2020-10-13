@@ -14,7 +14,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             }
         }),
         remoteFiltering: true,
-        dateSerializationFormat="yyyy-MM-ddTHH:mm:ssZ",
+        dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ",
         views: ["day", "workWeek", "month"],
         currentView: "day",
         currentDate: new Date(2021, 4, 25),
