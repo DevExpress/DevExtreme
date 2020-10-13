@@ -592,6 +592,7 @@ module('Common', commonModuleConfig, () => {
             }]
         });
 
+        const text = 'Watercolor Landscape';
         const $appointment = scheduler.appointments.find('Watercolor Landscape').first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
         const pointer = pointerMock($appointment).start();
@@ -599,10 +600,13 @@ module('Common', commonModuleConfig, () => {
         try {
             pointer
                 .down(positionBeforeDrag.left, positionBeforeDrag.top)
-                .move(150, 0)
-                .up();
+                .move(150, 0);
 
-            const positionAfterDrag = getAbsolutePosition($appointment);
+            const $draggedAppointment = $(scheduler.appointments.find(text).get(0)).parent();
+
+            const positionAfterDrag = getAbsolutePosition($draggedAppointment);
+
+            pointer.up();
 
             assert.deepEqual(positionAfterDrag, {
                 left: positionBeforeDrag.left + 150,
@@ -660,9 +664,7 @@ module('Common', commonModuleConfig, () => {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(cellWidth, 0);
 
-        pointer.up();
-
-        $appointment = scheduler.appointments.find('Task 1').first();
+        $appointment = scheduler.appointments.find('Task 1').first().parent();
         let positionAfterDrag = getAbsolutePosition($appointment);
 
         assert.deepEqual(positionAfterDrag, {
@@ -673,7 +675,7 @@ module('Common', commonModuleConfig, () => {
 
         this.clock.tick(30); // waiting for data update
 
-        $appointment = scheduler.appointments.find('Task 1').first();
+        $appointment = scheduler.appointments.find('Task 1').first().parent();
         positionAfterDrag = getAbsolutePosition($appointment);
 
         assert.deepEqual(positionAfterDrag, {
@@ -684,8 +686,10 @@ module('Common', commonModuleConfig, () => {
 
         this.clock.tick(30); // waiting for data loading
 
-        $appointment = scheduler.appointments.find('Task 1').first();
+        $appointment = scheduler.appointments.find('Task 1').first().parent();
         positionAfterDrag = getAbsolutePosition($appointment);
+
+        pointer.up();
 
         assert.deepEqual(positionAfterDrag, {
             left: positionBeforeDrag.left + cellWidth,
@@ -847,6 +851,7 @@ module('appointmentDragging customization', $.extend({}, {
             onAdd: sinon.spy(),
             onRemove: sinon.spy()
         };
+        const text = 'App 1';
 
         const scheduler = this.createScheduler({
             appointmentDragging
@@ -861,7 +866,9 @@ module('appointmentDragging customization', $.extend({}, {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
 
-        const positionAfterDrag = getAbsolutePosition(appointment);
+        const $draggedAppointment = $(scheduler.appointments.find(text).get(0)).parent();
+
+        const positionAfterDrag = getAbsolutePosition($draggedAppointment);
 
         pointer.up();
 
@@ -887,8 +894,9 @@ module('appointmentDragging customization', $.extend({}, {
             appointmentDragging
         });
 
+        const text = 'App 1';
         const dataSource = scheduler.instance.option('dataSource');
-        const appointment = scheduler.appointments.find('App 1');
+        const appointment = scheduler.appointments.find(text);
         const positionBeforeDrag = getAbsolutePosition(appointment);
         const pointer = pointerMock(appointment).start();
 
@@ -896,7 +904,9 @@ module('appointmentDragging customization', $.extend({}, {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
 
-        const positionAfterDrag = getAbsolutePosition(appointment);
+        const $draggedAppointment = $(scheduler.appointments.find(text).get(0));
+
+        const positionAfterDrag = getAbsolutePosition($draggedAppointment);
 
         pointer.up();
 
@@ -912,13 +922,14 @@ module('appointmentDragging customization', $.extend({}, {
                 e.cancel = true;
             }
         };
+        const text = 'App 1';
 
         const scheduler = this.createScheduler({
             appointmentDragging
         });
 
         const dataSource = scheduler.instance.option('dataSource');
-        const appointment = scheduler.appointments.find('App 1');
+        const appointment = scheduler.appointments.find(text);
         const positionBeforeDrag = getAbsolutePosition(appointment);
         const pointer = pointerMock(appointment).start();
 
@@ -926,7 +937,9 @@ module('appointmentDragging customization', $.extend({}, {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
 
-        const positionAfterDrag = getAbsolutePosition(appointment);
+        const $draggedAppointment = $(scheduler.appointments.find(text).get(0));
+
+        const positionAfterDrag = getAbsolutePosition($draggedAppointment);
 
         pointer.up();
 

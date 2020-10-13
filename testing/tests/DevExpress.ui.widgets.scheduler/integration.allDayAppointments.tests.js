@@ -267,7 +267,8 @@ QUnit.module('Integration: allDay appointments', {
 
             pointer.down().move(0, dragDistance);
 
-            const currentPosition = translator.locate($appointment);
+            const $draggedAppointment = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
+            const currentPosition = $draggedAppointment.offset();
 
             assert.roughEqual(startPosition.top, currentPosition.top - dragDistance, 2.1, 'Appointment position is correct');
             pointer.up();
@@ -297,7 +298,8 @@ QUnit.module('Integration: allDay appointments', {
 
             pointer.down().move(0, dragDistance);
 
-            const currentPosition = translator.locate($appointment);
+            const $draggedAppointment = $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0);
+            const currentPosition = $draggedAppointment.offset();
 
             assert.equal(startPosition.top, currentPosition.top - dragDistance, 'Appointment position is correct');
             pointer.up();

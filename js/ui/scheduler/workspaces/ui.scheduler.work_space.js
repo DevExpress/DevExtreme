@@ -3083,6 +3083,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 return dragElement;
             },
             onDragStart: (e) => {
+                const canceled = e.cancel;
                 const event = e.event;
                 const itemElement = $(e.itemElement);
                 const itemData = itemElement.data('dxItemData');
@@ -3093,15 +3094,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
                 if(itemData && !itemData.disabled) {
                     event.data = event.data || {};
-                    event.data.itemElement = dragElement = this._createDragAppointment(itemData, settings);
+                    if(!canceled) {
+                        event.data.itemElement = dragElement = this._createDragAppointment(itemData, settings);
+                    }
 
                     dragBehavior.onDragStart(event.data);
-                    resetPosition($(dragElement));
+                    !canceled && resetPosition($(dragElement));
                 }
             },
-            onDragEnd: (e) => {
-                dragBehavior.onDragEnd(e);
-            }
         });
     }
 

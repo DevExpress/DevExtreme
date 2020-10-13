@@ -17,7 +17,6 @@ export default class AppointmentDragBehavior {
         };
 
         this.currentAppointment = null;
-        this.currentData = null;
     }
 
     isAllDay(appointment) {
@@ -43,7 +42,6 @@ export default class AppointmentDragBehavior {
     }
 
     onDragEnd(e) {
-        // const appointmentData = this.currentData;
         const $appointment = this.getAppointmentElement(e);
         const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
         container.append($appointment);
