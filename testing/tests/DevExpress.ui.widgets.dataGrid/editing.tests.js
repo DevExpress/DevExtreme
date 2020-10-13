@@ -11578,7 +11578,7 @@ QUnit.module('Editing with validation', {
         cells = $(rowsView.element()).find('.dx-data-row').last().find('td');
 
         // assert
-        const $overlayContent = cells.eq(1).find('.dx-overlay-content');
+        const $overlayContent = rowsView.element().find('.dx-invalid-message .dx-overlay-content');
         assert.equal(getInputElements(testElement).length, 1, 'has input');
         assert.equal($overlayContent.length, 1, 'has tooltip');
         assert.ok(rowsView.element().find('.dx-freespace-row').is(':visible'), 'visible freespace row');
