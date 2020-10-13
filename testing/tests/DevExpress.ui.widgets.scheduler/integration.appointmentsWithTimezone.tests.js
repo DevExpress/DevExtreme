@@ -328,22 +328,23 @@ QUnit.test('Scheduler should not update scroll position if appointment is visibl
             dataSource: [],
             currentView: 'week',
             height: 500,
-            timeZone: 'Asia/Ashkhabad'
+            timeZone: 'Asia/Ashkhabad',
+            width: 1000,
         });
 
-        this.instance.getWorkSpaceScrollable().scrollBy(170);
+        this.instance.getWorkSpaceScrollable().scrollBy(190);
 
         workSpace = this.instance.getWorkSpace();
 
         const appointment = { startDate: new Date(Date.UTC(2015, 1, 9, 3)).toJSON(), endDate: new Date(Date.UTC(2015, 1, 9, 3, 30)).toJSON(), text: 'caption' };
-        const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+        const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
         this.instance.showAppointmentPopup(appointment);
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-        assert.notOk(scrollToTimeSpy.calledOnce, 'scrollToTime was not called');
+        assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
     } finally {
-        workSpace.scrollToTime.restore();
+        workSpace.scrollTo.restore();
     }
 });
 
@@ -360,15 +361,15 @@ QUnit.test('Scheduler should update scroll position if appointment was added to 
 
     const appointment = { startDate: new Date(2015, 1, 9, 21), endDate: new Date(2015, 1, 9, 22), text: 'caption 2' };
     const workSpace = this.instance.getWorkSpace();
-    const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+    const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
     try {
         this.instance.showAppointmentPopup(appointment);
         $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-        assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+        assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
     } finally {
-        workSpace.scrollToTime.restore();
+        workSpace.scrollTo.restore();
     }
 });
 

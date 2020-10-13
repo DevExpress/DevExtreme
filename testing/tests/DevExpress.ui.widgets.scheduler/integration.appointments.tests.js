@@ -1003,29 +1003,25 @@ QUnit.module('Integration: Appointments', {
                         store: []
                     }),
                     currentView: 'week',
-                    height: 500
+                    height: 500,
+                    width: 1000,
                 });
 
                 const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollTo = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.notOk(scrollToTimeSpy.calledOnce, 'scrollToTime was not called');
+                    assert.notOk(scrollTo.calledOnce, 'scrollTo was not called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
             QUnit.test('Scheduler should update scroll position if appointment was added to invisible bottom area', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Limitation');
-                    return;
-                }
-
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1037,24 +1033,19 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9, 21), endDate: new Date(2015, 1, 9, 22), text: 'caption 2' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
             QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline view ', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Limitation');
-                    return;
-                }
-
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1066,24 +1057,19 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9, 7), endDate: new Date(2015, 1, 9, 1, 8), text: 'caption' };
                 const workSpace = this.instance.$element().find('.dx-scheduler-work-space').dxSchedulerTimelineDay('instance');
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
             QUnit.test('Scheduler should update scroll position if appointment is not visible, timeline week view ', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Limitation');
-                    return;
-                }
-
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1096,24 +1082,19 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 12, 7), endDate: new Date(2015, 1, 12, 1, 8), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
             QUnit.test('Scheduler should update scroll position if appointment was added to invisible top area', function(assert) {
-                if(scrollingMode === 'virtual') {
-                    assert.ok('Virtual Scrolling - Limitation');
-                    return;
-                }
-
                 this.createInstance({
                     currentDate: new Date(2015, 1, 9),
                     dataSource: new DataSource({
@@ -1127,15 +1108,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
@@ -1153,15 +1134,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9, 2), endDate: new Date(2015, 1, 9, 2, 30), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
@@ -1180,15 +1161,15 @@ QUnit.module('Integration: Appointments', {
 
                 const appointment = { startDate: new Date(2015, 1, 9, 5, 45), endDate: new Date(2015, 1, 9, 6, 30), text: 'caption' };
                 const workSpace = this.instance.getWorkSpace();
-                const scrollToTimeSpy = sinon.spy(workSpace, 'scrollToTime');
+                const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
 
                 try {
                     this.instance.showAppointmentPopup(appointment);
                     $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
 
-                    assert.ok(scrollToTimeSpy.calledOnce, 'scrollToTime was called');
+                    assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
                 } finally {
-                    workSpace.scrollToTime.restore();
+                    workSpace.scrollTo.restore();
                 }
             });
 
@@ -3992,6 +3973,400 @@ QUnit.module('Integration: Appointments', {
 
                 assert.strictEqual(tailCoords.top, 0, 'Appointment top is correct');
                 assert.roughEqual(tailCoords.left, 240, 2, 'Appointment left is correct');
+            });
+
+            QUnit.module('Scroll after Editing', {
+                beforeEach: function() {
+                    this.createScheduler = (options = {}) => {
+                        return createWrapper({
+                            scrolling: { mode: scrollingMode },
+                            currentDate: new Date('2020-09-06T00:00:00'),
+                            height: 500,
+                            width: 500,
+                            crossScrollingEnabled: true,
+                            resources: [{
+                                fieldExpr: 'ownerId',
+                                dataSource: [{
+                                    id: 1, text: 'A',
+                                }, {
+                                    id: 2, text: 'B',
+                                }]
+                            }],
+                            ...options,
+                        });
+                    };
+                },
+            }, () => {
+                const checkThatScrollToWasCalled = (assert, scheduler, appointment) => {
+                    const workSpace = scheduler.instance.getWorkSpace();
+                    const scrollTo = sinon.spy(workSpace, 'scrollTo');
+
+                    try {
+                        scheduler.instance.showAppointmentPopup(appointment);
+                        scheduler.appointmentPopup.clickDoneButton();
+
+                        assert.ok(scrollTo.calledOnce, 'scrollTo was called');
+                    } finally {
+                        workSpace.scrollTo.restore();
+                    }
+                };
+
+                const checkThatScrollToWasNotCalled = (assert, scheduler, appointment) => {
+                    const workSpace = scheduler.instance.getWorkSpace();
+                    const scrollTo = sinon.spy(workSpace, 'scrollTo');
+
+                    try {
+                        scheduler.instance.showAppointmentPopup(appointment);
+                        scheduler.appointmentPopup.clickDoneButton();
+
+                        assert.notOk(scrollTo.calledOnce, 'scrollTo was not called');
+                    } finally {
+                        workSpace.scrollTo.restore();
+                    }
+                };
+
+                [{
+                    view: 'week',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'horizontal',
+                }, {
+                    view: 'month',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'horizontal',
+                }, {
+                    view: 'timelineWeek',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'horizontal',
+                }, {
+                    view: 'timelineMonth',
+                    startDate: new Date('2020-09-01T00:00:00'),
+                    endDate: new Date('2020-09-01T01:00:00'),
+                    groupOrientation: 'horizontal',
+                }, {
+                    view: 'week',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'vertical',
+                }, {
+                    view: 'month',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'vertical',
+                }, {
+                    view: 'timelineWeek',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'vertical',
+                }, {
+                    view: 'timelineMonth',
+                    startDate: new Date('2020-09-01T00:00:00'),
+                    endDate: new Date('2020-09-01T01:00:00'),
+                    groupOrientation: 'vertical',
+                }].forEach(({ view, startDate, endDate, groupOrientation }) => {
+                    QUnit.test(
+                        `Scroll position should not be updated if appointment is visible in ${view}, ${groupOrientation} grouping`,
+                        function(assert) {
+                            const scheduler = this.createScheduler({
+                                views: [{
+                                    type: view,
+                                    groupOrientation,
+                                }],
+                                currentView: view,
+                                groups: ['ownerId'],
+                            });
+
+                            const appointment = {
+                                startDate,
+                                endDate,
+                                text: 'text',
+                                ownerId: 1,
+                            };
+
+                            checkThatScrollToWasNotCalled(assert, scheduler, appointment);
+                        });
+                });
+
+                [{
+                    view: 'week',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'horizontal',
+                }, {
+                    view: 'month',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'horizontal',
+                }, {
+                    view: 'timelineWeek',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'horizontal',
+                }, {
+                    view: 'timelineMonth',
+                    startDate: new Date('2020-09-01T00:00:00'),
+                    endDate: new Date('2020-09-01T01:00:00'),
+                    groupOrientation: 'horizontal',
+                }, {
+                    view: 'week',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'vertical',
+                }, {
+                    view: 'month',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    groupOrientation: 'vertical',
+                }, {
+                    view: 'timelineWeek',
+                    startDate: new Date('2020-09-08T00:00:00'),
+                    endDate: new Date('2020-09-08T01:00:00'),
+                    groupOrientation: 'vertical',
+                }, {
+                    view: 'timelineMonth',
+                    startDate: new Date('2020-09-08T00:00:00'),
+                    endDate: new Date('2020-09-08T01:00:00'),
+                    groupOrientation: 'vertical',
+                }].forEach(({ view, startDate, endDate, groupOrientation }) => {
+                    QUnit.test(`Scroll position should be updated if appointment is not visible in ${view}, ${groupOrientation} grouping`, function(assert) {
+                        const scheduler = this.createScheduler({
+                            views: [{
+                                type: view,
+                                groupOrientation,
+                            }],
+                            currentView: view,
+                            groups: ['ownerId'],
+                        });
+
+                        const appointment = {
+                            startDate,
+                            endDate,
+                            text: 'text',
+                            ownerId: 2,
+                        };
+
+                        checkThatScrollToWasCalled(assert, scheduler, appointment);
+                    });
+                });
+
+                [{
+                    view: 'week',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                }, {
+                    view: 'month',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                }, {
+                    view: 'timelineWeek',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                }, {
+                    view: 'timelineMonth',
+                    startDate: new Date('2020-09-01T00:00:00'),
+                    endDate: new Date('2020-09-01T01:00:00'),
+                }].forEach(({ view, startDate, endDate }) => {
+                    QUnit.test(
+                        `Scroll position should not be updated if appointment is visible in ${view}, grouping by date`,
+                        function(assert) {
+                            const scheduler = this.createScheduler({
+                                views: [{
+                                    type: view,
+                                    groupOrientation: 'horizontal',
+                                    groupByDate: true,
+                                }],
+                                currentView: view,
+                                groups: ['ownerId'],
+                            });
+
+                            const appointment = {
+                                startDate,
+                                endDate,
+                                text: 'text',
+                                ownerId: 1,
+                            };
+
+                            checkThatScrollToWasNotCalled(assert, scheduler, appointment);
+                        });
+                });
+
+                [{
+                    view: 'week',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                }, {
+                    view: 'month',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                }, {
+                    view: 'timelineWeek',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                }, {
+                    view: 'timelineMonth',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                }].forEach(({ view, startDate, endDate }) => {
+                    QUnit.test(
+                        `Scroll position should be updated if appointment is not visible in ${view}, grouping by date`,
+                        function(assert) {
+                            const scheduler = this.createScheduler({
+                                views: [{
+                                    type: view,
+                                    groupOrientation: 'horizontal',
+                                    groupByDate: true,
+                                }],
+                                currentView: view,
+                                groups: ['ownerId'],
+                            });
+
+                            const appointment = {
+                                startDate,
+                                endDate,
+                                text: 'text',
+                                ownerId: 2,
+                            };
+
+                            checkThatScrollToWasCalled(assert, scheduler, appointment);
+                        });
+                });
+
+                QUnit.test(
+                    'Scroll position should not be updated if appointment is visible in all-day panel',
+                    function(assert) {
+                        const scheduler = this.createScheduler({
+                            views: [{
+                                type: 'week',
+                                groupOrientation: 'horizontal',
+                            }],
+                            currentView: 'week',
+                            groups: ['ownerId'],
+                        });
+
+                        const appointment = {
+                            startDate: new Date('2020-09-06T00:00:00'),
+                            endDate: new Date('2020-09-06T01:00:00'),
+                            text: 'text',
+                            ownerId: 1,
+                            allDay: true,
+                        };
+
+                        checkThatScrollToWasNotCalled(assert, scheduler, appointment);
+                    });
+
+                QUnit.test(
+                    'Scroll position should be updated if appointment is not visible in all-day panel',
+                    function(assert) {
+                        const scheduler = this.createScheduler({
+                            views: [{
+                                type: 'week',
+                                groupOrientation: 'horizontal',
+                            }],
+                            currentView: 'week',
+                            groups: ['ownerId'],
+                        });
+
+                        const appointment = {
+                            startDate: new Date('2020-09-06T00:00:00'),
+                            endDate: new Date('2020-09-06T01:00:00'),
+                            text: 'text',
+                            ownerId: 2,
+                            allDay: true,
+                        };
+
+                        checkThatScrollToWasCalled(assert, scheduler, appointment);
+                    });
+
+                QUnit.test(
+                    'Scroll position should not be updated if appointment is longer that one day and visible',
+                    function(assert) {
+                        const scheduler = this.createScheduler({
+                            views: [{
+                                type: 'week',
+                                groupOrientation: 'horizontal',
+                            }],
+                            currentView: 'week',
+                            groups: ['ownerId'],
+                        });
+
+                        const appointment = {
+                            startDate: new Date('2020-09-06T00:00:00'),
+                            endDate: new Date('2020-09-07T01:00:00'),
+                            text: 'text',
+                            ownerId: 1,
+                        };
+
+                        checkThatScrollToWasNotCalled(assert, scheduler, appointment);
+                    });
+
+                QUnit.test(
+                    'Scroll position should be updated if appointment is longer that one day and is not visible',
+                    function(assert) {
+                        const scheduler = this.createScheduler({
+                            views: [{
+                                type: 'week',
+                                groupOrientation: 'horizontal',
+                            }],
+                            currentView: 'week',
+                            groups: ['ownerId'],
+                        });
+
+                        const appointment = {
+                            startDate: new Date('2020-09-06T00:00:00'),
+                            endDate: new Date('2020-09-07T01:00:00'),
+                            text: 'text',
+                            ownerId: 2,
+                        };
+
+                        checkThatScrollToWasCalled(assert, scheduler, appointment);
+                    });
+
+                [{
+                    position: 'right',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                    scrollLeft: 0,
+                    scrollTop: 0,
+                }, {
+                    position: 'left',
+                    startDate: new Date('2020-09-06T00:00:00'),
+                    endDate: new Date('2020-09-06T01:00:00'),
+                    scrollLeft: 2,
+                    scrollTop: 0,
+                }, {
+                    position: 'top',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                    scrollLeft: 0,
+                    scrollTop: 2,
+                }, {
+                    position: 'bottom',
+                    startDate: new Date('2020-09-11T00:00:00'),
+                    endDate: new Date('2020-09-11T01:00:00'),
+                    scrollLeft: 0,
+                    scrollTop: 0,
+                }].forEach(({ position, startDate, endDate, scrollLeft, scrollTop }) => {
+                    QUnit.test(
+                        `Scroll position should be updated if an appointment starts in a partially visible cell, ${position} end`,
+                        function(assert) {
+                            const scheduler = this.createScheduler({
+                                views: ['week'],
+                                currentView: 'week',
+                            });
+
+                            const appointment = {
+                                startDate,
+                                endDate,
+                                text: 'text',
+                            };
+                            const workSpace = scheduler.instance.getWorkSpace();
+                            workSpace.getScrollable().scrollTo({ x: scrollLeft, y: scrollTop });
+
+                            checkThatScrollToWasCalled(assert, scheduler, appointment);
+                        });
+                });
             });
         });
     });
