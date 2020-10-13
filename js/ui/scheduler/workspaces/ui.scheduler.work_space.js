@@ -1246,6 +1246,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.renderRDateTable();
 
         this.updateRSelection();
+
+        this.virtualScrollingDispatcher?.updateDimensions();
     }
 
     renderRAllDayPanel() {
@@ -2399,7 +2401,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             return this._$dateTable.find('td');
         }
 
-        const cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
+        const cellClass = allDay && this.supportAllDayRow()
+            ? ALL_DAY_TABLE_CELL_CLASS
+            : DATE_TABLE_CELL_CLASS;
+
         return this.$element().find('.' + cellClass);
     }
 
@@ -2424,7 +2429,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.$element().find('.' + GROUP_HEADER_CLASS);
     }
 
-    _getScrollCoordinates(hours, minutes, date) {
+    _getScrollCoordinates(hours, minutes, date, groupIndex, allDay) {
         const currentDate = date || new Date(this.option('currentDate'));
         const startDayHour = this.option('startDayHour');
         const endDayHour = this.option('endDayHour');
@@ -2439,7 +2444,18 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         currentDate.setHours(hours, minutes, 0, 0);
 
-        return this.getCoordinatesByDate(currentDate);
+        if(!this.isVirtualScrolling()) {
+            return this.getCoordinatesByDate(currentDate, groupIndex, allDay);
+        }
+
+        const cell = this.viewDataProvider.findGlobalCellPosition(
+            currentDate, groupIndex, allDay,
+        );
+        const { position, cellData } = cell;
+
+        return this.virtualScrollingDispatcher.calculateCoordinatesByDataAndPosition(
+            cellData, position, currentDate,
+        );
     }
 
     _isOutsideScrollable(target, event) {
@@ -2770,11 +2786,15 @@ class SchedulerWorkSpace extends WidgetObserver {
         return width / (totalCellCount + cellCount - startIndex);
     }
 
-    getCellHeight() {
-        return this.cache.get('cellHeight', () => {
+    getCellHeight(useCache = true) {
+        const callbackResult = () => {
             const cell = this._getCells().first().get(0);
             return cell && getBoundingRect(cell).height;
-        });
+        };
+
+        return useCache
+            ? this.cache.get('cellHeight', callbackResult)
+            : callbackResult();
     }
 
     getAllDayHeight() {
@@ -2964,35 +2984,91 @@ class SchedulerWorkSpace extends WidgetObserver {
         return result;
     }
 
-    updateScrollPosition(date) {
+    updateScrollPosition(date, groups, allDay = false) {
         const scheduler = this.option('observer');
         const newDate = scheduler.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        const inAllDayRow = allDay
+            && this.supportAllDayRow()
+            && this._isShowAllDayPanel();
 
-        const bounds = this.getVisibleBounds();
-        const startDateHour = newDate.getHours();
-        const startDateMinutes = newDate.getMinutes();
-
-        if(this.needUpdateScrollPosition(startDateHour, startDateMinutes, bounds, newDate)) {
-            this.scrollToTime(startDateHour, startDateMinutes, newDate);
+        if(this.needUpdateScrollPosition(newDate, groups, inAllDayRow)) {
+            this.scrollTo(newDate, groups, inAllDayRow, false);
         }
     }
 
-    needUpdateScrollPosition(hours, minutes, bounds) {
-        let isUpdateNeeded = false;
+    needUpdateScrollPosition(date, groups, inAllDayRow) {
+        const cells = this._getCellsInViewport(inAllDayRow);
+        const groupIndex = groups
+            ? this._getGroupIndexByResourceId(groups)
+            : 0;
+        const time = date.getTime();
+        const trimmedTime = dateUtils.trimTime(date).getTime();
 
-        if(hours < bounds.top.hours || hours > bounds.bottom.hours) {
-            isUpdateNeeded = true;
+        return cells.reduce((currentResult, cell) => {
+            const {
+                startDate: cellStartDate,
+                endDate: cellEndDate,
+                groupIndex: cellGroupIndex,
+            } = this.getCellData(cell);
+
+            const cellStartTime = cellStartDate.getTime();
+            const cellEndTime = cellEndDate.getTime();
+
+            if(((!inAllDayRow && cellStartTime <= time
+                && time < cellEndTime)
+                || (inAllDayRow && trimmedTime === cellStartTime))
+                && groupIndex === cellGroupIndex) {
+                return false;
+            }
+            return currentResult;
+        }, true);
+    }
+
+    _getCellsInViewport(inAllDayRow) {
+        const $scrollable = this.getScrollable().$element();
+        const cellHeight = this.getCellHeight();
+        const cellWidth = this.getCellWidth();
+        const totalColumnCount = this._getTotalCellCount(this._getGroupCount());
+        const scrollableScrollTop = this.getScrollableScrollTop();
+        const scrollableScrollLeft = this.getScrollableScrollLeft();
+
+        let fullScrolledRowCount = scrollableScrollTop / cellHeight;
+        if(this.isVirtualScrolling()) {
+            const virtualScrollingState = this.virtualScrollingDispatcher.getState();
+            fullScrolledRowCount -= virtualScrollingState.topVirtualRowCount;
         }
 
-        if(hours === bounds.top.hours && minutes < bounds.top.minutes) {
-            isUpdateNeeded = true;
+        let scrolledRowCount = Math.floor(fullScrolledRowCount);
+        if(scrollableScrollTop % cellHeight !== 0) {
+            scrolledRowCount += 1;
         }
 
-        if(hours === bounds.bottom.hours && minutes > bounds.top.minutes) {
-            isUpdateNeeded = true;
+        const fullScrolledColumnCount = scrollableScrollLeft / cellWidth;
+        let scrolledColumnCount = Math.floor(fullScrolledColumnCount);
+        if(scrollableScrollLeft % cellWidth !== 0) {
+            scrolledColumnCount += 1;
         }
 
-        return isUpdateNeeded;
+        const rowCount = Math.floor(fullScrolledRowCount + $scrollable.height() / cellHeight);
+        const columnCount = Math.floor(fullScrolledColumnCount + $scrollable.width() / cellWidth);
+
+        const $cells = this._getAllCells(inAllDayRow);
+        const result = [];
+
+        $cells.each(function(index) {
+            const $cell = $(this);
+            const columnIndex = index % totalColumnCount;
+            const rowIndex = index / totalColumnCount;
+
+            if(scrolledColumnCount <= columnIndex
+                && columnIndex < columnCount
+                && scrolledRowCount <= rowIndex
+                && rowIndex < rowCount) {
+                result.push($cell);
+            }
+        });
+
+        return result;
     }
 
     getGroupWidth(groupIndex) {
@@ -3016,18 +3092,75 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     scrollToTime(hours, minutes, date) {
-        const min = this.getStartViewDate();
-        const max = this.getEndViewDate();
-
-        if(date < min || date > max) {
-            errors.log('W1008', date);
+        if(!this._isValidScrollDate(date)) {
             return;
         }
 
         const coordinates = this._getScrollCoordinates(hours, minutes, date);
+
         const scrollable = this.getScrollable();
 
-        scrollable.scrollBy({ top: coordinates.top - scrollable.scrollTop(), left: 0 });
+        scrollable.scrollBy({
+            top: coordinates.top - scrollable.scrollTop(),
+            left: 0,
+        });
+    }
+
+    scrollTo(date, groups, allDay = false, throwWarning = true) {
+        if(!this._isValidScrollDate(date, throwWarning)) {
+            return;
+        }
+
+        const groupIndex = this._getGroupCount() && groups
+            ? this._getGroupIndexByResourceId(groups)
+            : 0;
+        const isScrollToAllDay = allDay
+            && this.supportAllDayRow()
+            && this._isShowAllDayPanel();
+
+        const coordinates = this._getScrollCoordinates(
+            date.getHours(), date.getMinutes(), date, groupIndex, isScrollToAllDay,
+        );
+
+        const scrollable = this.getScrollable();
+        const $scrollable = scrollable.$element();
+
+        const offset = this.option('rtlEnabled')
+            ? this.getCellWidth()
+            : 0;
+        const scrollableHeight = $scrollable.height();
+        const scrollableWidth = $scrollable.width();
+        const cellWidth = this.getCellWidth();
+        const cellHeight = this.getCellHeight();
+
+        const xShift = (scrollableWidth - cellWidth) / 2;
+        const yShift = (scrollableHeight - cellHeight) / 2;
+
+        const left = coordinates.left - scrollable.scrollLeft() - xShift - offset;
+        let top = coordinates.top - scrollable.scrollTop() - yShift;
+        if(isScrollToAllDay && !this._isVerticalGroupedWorkSpace()) {
+            top = 0;
+        }
+
+        if(this.option('templatesRenderAsynchronously')) {
+            setTimeout(() => {
+                scrollable.scrollBy({ left, top });
+            });
+        } else {
+            scrollable.scrollBy({ left, top });
+        }
+    }
+
+    _isValidScrollDate(date, throwWarning = true) {
+        const min = this.getStartViewDate();
+        const max = this.getEndViewDate();
+
+        if(date < min || date > max) {
+            throwWarning && errors.log('W1008', date);
+            return false;
+        }
+
+        return true;
     }
 
     getDistanceBetweenCells(startIndex, endIndex) {

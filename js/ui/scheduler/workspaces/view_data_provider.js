@@ -411,4 +411,51 @@ export default class ViewDataProvider {
         const { groupedData } = this.viewData;
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
     }
+
+    findGlobalCellPosition(date, groupIndex = 0, allDay = false) {
+        const { completeViewDataMap, _workspace: workspace } = this;
+
+        const showAllDayPanel = workspace._isShowAllDayPanel();
+        const isVerticalGroupOrientation = workspace._isVerticalGroupedWorkSpace();
+
+        for(let rowIndex = 0; rowIndex < completeViewDataMap.length; rowIndex += 1) {
+            const currentRow = completeViewDataMap[rowIndex];
+
+            for(let columnIndex = 0; columnIndex < currentRow.length; columnIndex += 1) {
+                const cellData = currentRow[columnIndex];
+                const {
+                    startDate: currentStartDate,
+                    endDate: currentEndDate,
+                    groupIndex: currentGroupIndex,
+                    allDay: currentAllDay,
+                } = cellData;
+
+                if(groupIndex === currentGroupIndex
+                    && allDay === currentAllDay
+                    && this._compareDatesAndAllDay(date, currentStartDate, currentEndDate, allDay)) {
+                    return {
+                        position: {
+                            columnIndex,
+                            rowIndex: showAllDayPanel && !isVerticalGroupOrientation
+                                ? rowIndex - 1
+                                : rowIndex,
+                        },
+                        cellData,
+                    };
+                }
+            }
+        }
+    }
+
+    _compareDatesAndAllDay(date, cellStartDate, cellEndDate, allDay) {
+        const time = date.getTime();
+        const trimmedTime = dateUtils.trimTime(date).getTime();
+        const cellStartTime = cellStartDate.getTime();
+        const cellEndTime = cellEndDate.getTime();
+
+        return (!allDay
+            && time >= cellStartTime
+            && time < cellEndTime)
+            || (allDay && trimmedTime === cellStartTime);
+    }
 }
