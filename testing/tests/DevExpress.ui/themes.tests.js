@@ -583,12 +583,20 @@ QUnit.module('dx-theme links', (hooks) => {
             assert.ok($('.dx-theme-generic', frameDoc()).hasClass('dx-color-scheme-light'), 'right dx-color-scheme class for generic');
 
             themes.current('generic.light.compact');
-            assert.ok($('.dx-theme-generic', frameDoc()).hasClass('dx-color-scheme-light'), 'right dx-color-scheme class for generic.compact');
 
-            themes.ready(done);
-            themes.current('material.blue.light');
-            assert.ok($('.dx-theme-material', frameDoc()).hasClass('dx-color-scheme-blue-light'), 'right dx-color-scheme class for material');
+            themes.initialized(() => {
+                assert.ok($('.dx-theme-generic', frameDoc()).hasClass('dx-color-scheme-light'), 'right dx-color-scheme class for generic.compact');
+
+                themes.current('material.blue.light');
+
+                themes.initialized(() => {
+                    assert.ok($('.dx-theme-material', frameDoc()).hasClass('dx-color-scheme-blue-light'), 'right dx-color-scheme class for material');
+                    done();
+                });
+            });
         });
+
+
     });
 });
 
