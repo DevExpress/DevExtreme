@@ -217,6 +217,9 @@ QUnit.module('popup integration', {
                         padding: 5
                     })
                     .appendTo($container);
+            },
+            dropDownOptions: {
+                width: 'auto'
             }
         });
 

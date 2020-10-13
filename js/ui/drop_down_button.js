@@ -6,7 +6,6 @@ import ButtonGroup from './button_group';
 import Popup from './popup';
 import List from './list';
 import { compileGetter } from '../core/utils/data';
-import windowUtils from '../core/utils/window';
 import domUtils from '../core/utils/dom';
 import { getImageContainer } from '../core/utils/icon';
 import DataHelperMixin from '../data_helper';
@@ -315,18 +314,16 @@ const DropDownButton = Widget.inherit({
         });
     },
 
+    _getInputWidth: function() {
+        return this.$element().outerWidth();
+    },
+
     _popupOptions() {
         const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
         return extend({
             dragEnabled: false,
             focusStateEnabled: false,
             deferRendering: this.option('deferRendering'),
-            minWidth: () => {
-                if(!windowUtils.hasWindow()) {
-                    return;
-                }
-                return this.$element().outerWidth();
-            },
             closeOnOutsideClick: (e) => {
                 const $element = this.$element();
                 const $buttonClicked = $(e.target).closest(`.${DROP_DOWN_BUTTON_CLASS}`);
@@ -337,7 +334,7 @@ const DropDownButton = Widget.inherit({
                 show: { type: 'fade', duration: 0, from: 0, to: 1 },
                 hide: { type: 'fade', duration: 400, from: 1, to: 0 }
             },
-            width: 'auto',
+            width: this._getInputWidth.bind(this),
             height: 'auto',
             shading: false,
             position: {
@@ -412,6 +409,42 @@ const DropDownButton = Widget.inherit({
             expanded: false,
             owns: undefined
         });
+    },
+
+    _getPopupWidth() {
+        const popupWidth = this.option('dropDownOptions.width');
+
+        if(popupWidth === null) {
+            return undefined;
+        }
+        if(typeof popupWidth === 'function') {
+            return popupWidth();
+        }
+
+        return popupWidth;
+    },
+
+    _popupOptionChanged: function(args) {
+        const options = Widget.getOptionsFromContainer(args);
+
+        this._setPopupOption(options);
+
+        const optionsKeys = Object.keys(options);
+        if(optionsKeys.indexOf('width') !== -1 || optionsKeys.indexOf('height') !== -1) {
+            this._dimensionChanged();
+        }
+    },
+
+    _dimensionChanged: function() {
+        const popupWidth = this._getPopupWidth();
+
+        if(popupWidth === undefined) {
+            this._setPopupOption('width', this._getInputWidth.bind(this));
+        }
+    },
+
+    _setPopupOption: function(optionName, value) {
+        this._setWidgetOption('_popup', arguments);
     },
 
     _popupShowingHandler() {
@@ -578,6 +611,7 @@ const DropDownButton = Widget.inherit({
                 if(args.value.visible !== undefined) {
                     delete args.value.visible;
                 }
+                this._popupOptionChanged(args);
                 this._innerWidgetOptionChanged(this._popup, args);
                 break;
             case 'opened':
