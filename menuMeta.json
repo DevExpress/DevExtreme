@@ -3304,6 +3304,7 @@
           {
             "Title": "Data Binding and Editing",
             "Name": "DataBinding",
+            "Badge": "Updated",
             "Widget": "Gantt",
             "DemoType": "Web",
             "WideDemo": true,

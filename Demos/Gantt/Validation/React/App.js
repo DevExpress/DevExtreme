@@ -30,6 +30,7 @@ class App extends React.Component {
               onValueChanged={this.onAutoUpdateParentTasksChanged}
             />
           </div>
+          &nbsp;
           <div className="option">
             <CheckBox
               text="Enable Dependency Validation"

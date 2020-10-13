@@ -1,5 +1,6 @@
 $(function() {
     $("#gantt").dxGantt({
+        rootValue: -1,
         tasks: {
             dataSource: tasks
         },

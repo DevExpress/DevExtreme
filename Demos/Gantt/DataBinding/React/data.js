@@ -1,6 +1,6 @@
 export const tasks = [{
   'id': 1,
-  'parentId': 0,
+  'parentId': -1,
   'title': 'Software Development',
   'start': new Date('2019-02-21T05:00:00.000Z'),
   'end': new Date('2019-07-04T12:00:00.000Z'),

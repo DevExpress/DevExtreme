@@ -39,6 +39,7 @@ class App extends React.Component {
               onValueChanged={this.onScaleTypeChanged}
             />
           </div>
+          &nbsp;
           <div className="option">
             <span>Title Position</span>
             <SelectBox
@@ -47,6 +48,7 @@ class App extends React.Component {
               onValueChanged={this.onTaskTitlePositionChanged}
             />
           </div>
+          &nbsp;
           <div className="option">
             <CheckBox
               text="Show Resources"
@@ -54,6 +56,7 @@ class App extends React.Component {
               onValueChanged={this.onShowResourcesChanged}
             />
           </div>
+          &nbsp;
           <div className="option">
             <CheckBox
               text="Customize Task Tooltip"

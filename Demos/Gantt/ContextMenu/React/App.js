@@ -34,6 +34,7 @@ class App extends React.Component {
               onValueChanged={this.onPreventContextMenuShowing}
             />
           </div>
+          &nbsp;
           <div className="option">
             <CheckBox
               text="Customize Context Menu"

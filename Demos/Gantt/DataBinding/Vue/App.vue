@@ -3,6 +3,7 @@
     :task-list-width="500"
     :height="700"
     scale-type="weeks"
+    :root-value="-1"
   >
 
     <DxTasks :data-source="tasks"/>

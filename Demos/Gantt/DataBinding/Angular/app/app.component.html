@@ -1,7 +1,8 @@
 <dx-gantt
     taskListWidth="500"
     scaleType="weeks"
-    height="700">
+    height="700"
+    [rootValue]="-1">
 
     <dxo-tasks [dataSource]="tasks"></dxo-tasks>
     <dxo-dependencies [dataSource]="dependencies"></dxo-dependencies>

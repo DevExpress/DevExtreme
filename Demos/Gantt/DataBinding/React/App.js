@@ -10,7 +10,8 @@ class App extends React.Component {
       <Gantt
         taskListWidth={500}
         scaleType="weeks"
-        height={700}>
+        height={700}
+        rootValue={-1}>
 
         <Tasks dataSource={tasks} />
         <Dependencies dataSource={dependencies} />
