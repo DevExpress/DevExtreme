@@ -1928,7 +1928,6 @@
             "DocUrl": "Guide/Widgets/HtmlEditor/Overview/",
             "Widget": "HtmlEditor",
             "DemoType": "Web",
-            "Modules": "html-react-parser",
             "Badge": "Updated"
           }
         ]

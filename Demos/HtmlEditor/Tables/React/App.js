@@ -1,7 +1,5 @@
 import React from 'react';
 
-import HTMLReactParser from 'html-react-parser';
-
 import { markup } from './data.js';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 
@@ -11,7 +9,10 @@ class App extends React.Component {
   render() {
     return (
       <div className="widget-container">
-        <HtmlEditor height="350px">
+        <HtmlEditor
+          height="350px"
+          defaultValue={markup}
+        >
           <Toolbar>
             <Item
               formatName="header"
@@ -34,7 +35,6 @@ class App extends React.Component {
             <Item formatName="deleteColumn" />
             <Item formatName="deleteTable" />
           </Toolbar>
-          {HTMLReactParser(markup)}
         </HtmlEditor>
       </div>
     );

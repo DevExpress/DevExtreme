@@ -1,7 +1,5 @@
 import React from 'react';
 
-import HTMLReactParser from 'html-react-parser';
-
 import { markup } from './data.js';
 import HtmlEditor, { Toolbar, MediaResizing, Item } from 'devextreme-react/html-editor';
 import CheckBox from 'devextreme-react/check-box';
@@ -23,7 +21,10 @@ class App extends React.Component {
   render() {
     return (
       <div className="widget-container">
-        <HtmlEditor height="725px">
+        <HtmlEditor
+          height="725px"
+          defaultValue={markup}
+        >
           <MediaResizing enabled={true} />
           <Toolbar multiline={this.state.isMultiline}>
             <Item formatName="undo" />
