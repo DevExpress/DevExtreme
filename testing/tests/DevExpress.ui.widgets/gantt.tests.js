@@ -1440,6 +1440,94 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(assignmentData['TaskKey'], assignment['TaskKey'], 'TaskKey');
         assert.equal(assignmentData['ResourceKey'], assignment['ResourceKey'], 'ResourceKey');
     });
+    test('getTaskResources', function(assert) {
+        this.createInstance(allSourcesOptions);
+        const resources = [
+            { Id: 1, ResourceText: 'My text', ResourceColor: 'black' },
+            { Id: 2, ResourceText: 'My text2', ResourceColor: 'black' }
+        ];
+        const resourceMap = {
+            dataSource: resources,
+            keyExpr: 'Id',
+            textExpr: 'ResourceText',
+            colorExpr: 'ResourceColor'
+        };
+        const assignments = [
+            { Id: 1, TaskKey: 1, ResourceKey: 1 },
+            { Id: 2, TaskKey: 1, ResourceKey: 2 }
+        ];
+        const assignmentMap = {
+            dataSource: assignments,
+            keyExpr: 'Id',
+            taskIdExpr: 'TaskKey',
+            resourceIdExpr: 'ResourceKey'
+        };
+        this.instance.option('resources', resourceMap);
+        this.instance.option('resourceAssignments', assignmentMap);
+        this.clock.tick();
+
+        const taskResources = this.instance.getTaskResources(1);
+        assert.equal(taskResources.length, 2, 'length');
+        assert.equal(taskResources[0]['ResourceText'], resources[0]['ResourceText'], 'ResourceText 1');
+        assert.equal(taskResources[1]['ResourceText'], resources[1]['ResourceText'], 'ResourceText 2');
+    });
+    test('getVisibleKeys', function(assert) {
+        const my_tasks = [
+            { 'id': 1, 'parentId': 0, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 4, 'parentId': 2, 'title': 'Secure project sponsorship', 'start': new Date('2019-02-21T10:00:00.000Z'), 'end': new Date('2019-02-22T09:00:00.000Z'), 'progress': 100 },
+            { 'id': 5, 'parentId': 2, 'title': 'Define preliminary resources', 'start': new Date('2019-02-22T10:00:00.000Z'), 'end': new Date('2019-02-25T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 6, 'parentId': 2, 'title': 'Secure core resources', 'start': new Date('2019-02-25T10:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 },
+            { 'id': 7, 'parentId': 2, 'title': 'Scope complete', 'start': new Date('2019-02-26T09:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 0 }
+        ];
+        const my_dependencies = [
+            { 'id': 0, 'predecessorId': 1, 'successorId': 2, 'type': 0 },
+            { 'id': 1, 'predecessorId': 2, 'successorId': 3, 'type': 0 },
+            { 'id': 2, 'predecessorId': 3, 'successorId': 4, 'type': 0 },
+            { 'id': 3, 'predecessorId': 4, 'successorId': 5, 'type': 0 },
+            { 'id': 4, 'predecessorId': 5, 'successorId': 6, 'type': 0 },
+            { 'id': 5, 'predecessorId': 6, 'successorId': 7, 'type': 0 }
+        ];
+        const my_resources = [
+            { 'id': 1, 'text': 'Management' },
+            { 'id': 2, 'text': 'Project Manager' },
+            { 'id': 3, 'text': 'Deployment Team' }
+        ];
+        const my_resourceAssignments = [
+            { 'id': 0, 'taskId': 3, 'resourceId': 1 },
+            { 'id': 1, 'taskId': 4, 'resourceId': 1 },
+            { 'id': 2, 'taskId': 5, 'resourceId': 2 },
+            { 'id': 3, 'taskId': 6, 'resourceId': 2 },
+            { 'id': 4, 'taskId': 6, 'resourceId': 3 },
+        ];
+
+        const my_allSourcesOptions = {
+            tasks: { dataSource: my_tasks },
+            dependencies: { dataSource: my_dependencies },
+            resources: { dataSource: my_resources },
+            resourceAssignments: { dataSource: my_resourceAssignments }
+        };
+
+        this.createInstance(my_allSourcesOptions);
+        this.clock.tick();
+
+        assert.equal(this.instance.getVisibleTaskKeys().length, my_tasks.length, 'task keys');
+        assert.equal(this.instance.getVisibleDependencyKeys().length, my_dependencies.length, 'dependencies keys');
+        assert.equal(this.instance.getVisibleResourceKeys().length, my_resources.length, 'resources keys');
+        assert.equal(this.instance.getVisibleResourceAssignmentKeys().length, my_resourceAssignments.length, 'resource assignments keys');
+
+        this.instance.option('tasks', { dataSource: [] });
+        this.instance.option('dependencies', { dataSource: [] });
+        this.instance.option('resources', { dataSource: [] });
+        this.instance.option('resourceAssignments', { dataSource: [] });
+        this.clock.tick();
+
+        assert.equal(this.instance.getVisibleTaskKeys().length, 0, 'task keys');
+        assert.equal(this.instance.getVisibleDependencyKeys().length, 0, 'dependencies keys');
+        assert.equal(this.instance.getVisibleResourceKeys().length, 0, 'resources keys');
+        assert.equal(this.instance.getVisibleResourceAssignmentKeys().length, 0, 'resource assignments keys');
+    });
 });
 
 QUnit.module('Mappings convert', moduleConfig, () => {

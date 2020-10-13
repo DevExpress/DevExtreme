@@ -1,18 +1,27 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, Event,
+  Component, ComponentBindings, JSXComponent, OneWay, Event,
 } from 'devextreme-generator/component_declaration/common';
 /* eslint-disable import/named */
 import DataSource, { DataSourceOptions } from '../../data/data_source';
 import { WidgetProps } from './common/widget';
-import LegacyList, { dxListItem, Options } from '../../ui/list';
+import LegacyList, { dxListItem } from '../../ui/list';
 import { dxElement } from '../../core/element';
 import { event } from '../../events/index';
-import renderTemplate from '../utils/render_template';
+// import renderTemplate from '../utils/render_template';
+import { DomComponentWrapper } from './common/dom_component_wrapper';
 
-export const viewFunction = (viewModel: List) => (
-  <div ref={viewModel.widgetRef as any} />
+export const viewFunction = ({
+  props: { rootElementRef, ...componentProps },
+  restAttributes,
+}: List): JSX.Element => (
+  <DomComponentWrapper
+    rootElementRef={rootElementRef as any}
+    componentType={LegacyList}
+    componentProps={componentProps}
+  // eslint-disable-next-line react/jsx-props-no-spreading
+    {...restAttributes}
+  />
 );
-
 @ComponentBindings()
 export class ListProps extends WidgetProps {
   // Properties have been copied from ../ui/list.d.ts
@@ -159,30 +168,4 @@ export class ListProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class List extends JSXComponent(ListProps) {
-  @Ref()
-  widgetRef!: HTMLDivElement;
-
-  @Effect()
-  updateWidget(): void {
-    const widget = LegacyList.getInstance(this.widgetRef);
-    widget?.option(this.properties);
-  }
-
-  @Effect({ run: 'once' })
-  setupWidget(): () => void {
-    const widget = new LegacyList(this.widgetRef, this.properties);
-
-    return (): void => widget.dispose();
-  }
-
-  get properties(): Options {
-    const { itemTemplate, ...restProps } = this.props;
-
-    const template = itemTemplate ? (item, index, container): void => {
-      renderTemplate(itemTemplate, { item, index, container }, container);
-    } : undefined;
-
-    return ({ ...restProps, itemTemplate: template }) as Options;
-  }
-}
+export class List extends JSXComponent(ListProps) {}

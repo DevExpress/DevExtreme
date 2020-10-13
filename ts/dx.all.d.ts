@@ -5957,9 +5957,13 @@ declare module DevExpress.ui {
          */
         connectorPosition?: 'start' | 'end';
         /**
-         * [descr:dxDiagramChangeConnectionArgs.shape]
+         * [descr:dxDiagramChangeConnectionArgs.newShape]
          */
-        shape?: dxDiagramShape;
+        newShape?: dxDiagramShape;
+        /**
+         * [descr:dxDiagramChangeConnectionArgs.oldShape]
+         */
+        oldShape?: dxDiagramShape;
     }
     /**
      * [descr:dxDiagramChangeConnectorPointsArgs]
@@ -7854,6 +7858,26 @@ declare module DevExpress.ui {
          * [descr:dxGantt.getTaskData(key)]
          */
         getTaskData(key: any): any;
+        /**
+         * [descr:dxGantt.getTaskResources(key)]
+         */
+        getTaskResources(key: any): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleDependencyKeys()]
+         */
+        getVisibleDependencyKeys(): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleResourceAssignmentKeys()]
+         */
+        getVisibleResourceAssignmentKeys(): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleResourceKeys()]
+         */
+        getVisibleResourceKeys(): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleTaskKeys()]
+         */
+        getVisibleTaskKeys(): Array<any>;
         /**
          * [descr:dxGantt.insertDependency(data)]
          */
