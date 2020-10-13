@@ -11579,8 +11579,10 @@ QUnit.module('Editing with validation', {
 
         // assert
         const $overlayContent = rowsView.element().find('.dx-invalid-message .dx-overlay-content');
+        const $overlayWrapper = rowsView.element().find('.dx-overlay-wrapper.dx-datagrid-invalid-message');
         assert.equal(getInputElements(testElement).length, 1, 'has input');
         assert.equal($overlayContent.length, 1, 'has tooltip');
+        assert.strictEqual($overlayWrapper.css('visibility'), 'visible', 'validation message wrapper is visible');
         assert.ok(rowsView.element().find('.dx-freespace-row').is(':visible'), 'visible freespace row');
         assert.ok(rowsView.element().find('.dx-freespace-row').height() > 0, 'freespace row has height ');
 
