@@ -164,9 +164,7 @@ class VirtualScrolling {
         return this._workspace;
     }
 
-    getViewportHeight() {
-        return this._viewportHeight;
-    }
+    get viewportHeight() { return this._viewportHeight; }
 
     get rowHeight() { return this._rowHeight; }
 
@@ -175,7 +173,7 @@ class VirtualScrolling {
     }
 
     _getPageSize() {
-        return Math.ceil(this.getViewportHeight() / this.rowHeight);
+        return Math.ceil(this.viewportHeight / this.rowHeight);
     }
 
     _getOutlineCount() {
@@ -258,7 +256,6 @@ class VirtualScrolling {
 
     calculateCoordinatesByDataAndPosition(cellData, position, date) {
         const { _workspace: workSpace } = this;
-        const rowHeight = this.getRowHeight();
         const {
             rowIndex, columnIndex,
         } = position;
@@ -276,7 +273,7 @@ class VirtualScrolling {
 
         const cellWidth = workSpace.getCellWidth();
 
-        const top = (rowIndex + scrollInCell) * rowHeight;
+        const top = (rowIndex + scrollInCell) * this.rowHeight;
         let left = cellWidth * columnIndex;
 
         if(workSpace.option('rtlEnabled')) {
