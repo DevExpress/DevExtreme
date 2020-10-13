@@ -3097,11 +3097,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         dragBehavior.addTo($element, {
             container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
-            cursorOffset: () => {
-                const $dragElement = $(dragElement);
+            cursorOffset: (e) => {
+                const { x, y } = e.initialOffset;
+                const { clientX, clientY } = e.event;
+
                 return {
-                    x: $dragElement.width() / 2,
-                    y: $dragElement.height() / 2
+                    x: clientX - x,
+                    y: clientY - y,
                 };
             },
             dragTemplate: () => {
@@ -3125,10 +3127,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 }
             },
             onDragEnd: (e) => {
-                const itemData = $(e.itemElement).data('dxItemData');
-                if(itemData && !itemData.disabled) {
-                    dragBehavior.onDragEnd(e);
-                }
+                dragBehavior.onDragEnd(e);
             }
         });
     }
@@ -3141,7 +3140,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         settings.virtual = false;
 
         appointments._renderItem(appointmentIndex, {
-            itemData: itemData,
+            itemData,
             settings: [settings]
         });
 

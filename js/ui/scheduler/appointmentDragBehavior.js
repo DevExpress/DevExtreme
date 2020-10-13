@@ -17,6 +17,7 @@ export default class AppointmentDragBehavior {
         };
 
         this.currentAppointment = null;
+        this.currentData = null;
     }
 
     isAllDay(appointment) {
@@ -25,6 +26,7 @@ export default class AppointmentDragBehavior {
 
     onDragStart(e) {
         this.initialPosition = locate($(e.itemElement));
+        this.currentData = $(e.itemElement).data('dxItemData');
         this.appointments.notifyObserver('hideAppointmentTooltip');
     }
 
@@ -41,11 +43,15 @@ export default class AppointmentDragBehavior {
     }
 
     onDragEnd(e) {
+        // debugger;
+        // const appointmentData = this.currentData;
         const $appointment = this.getAppointmentElement(e);
         const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
         container.append($appointment);
+        // debugger;
 
         this.currentAppointment = $appointment;
+        this.currentData = null;
 
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
             event: e,
