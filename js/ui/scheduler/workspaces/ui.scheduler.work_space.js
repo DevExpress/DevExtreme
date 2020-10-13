@@ -3064,27 +3064,31 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(!this.dragBehavior && scheduler) {
             this.dragBehavior = new AppointmentDragBehavior(scheduler);
 
-            // const config = {
-            //     clone: true,
-            //     onDragStart: (e) => {
-            //         // const event = e.event;
-            //         // const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
+            const config = {
+                clone: true,
+                // onDragStart: (e) => {
+                // // const event = e.event;
+                // // const itemData = $(e.itemElement).data(LIST_ITEM_DATA_KEY);
 
-            //         // if(itemData && !itemData.appointment.disabled) {
-            //         //     event.data = event.data || {};
-            //         //     event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings);
+                //     // if(itemData && !itemData.appointment.disabled) {
+                //     //     event.data = event.data || {};
+                //     //     event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings);
 
-            //         //     dragBehavior.onDragStart(event.data);
-            //         //     resetPosition($(dragElement));
-            //         // }
-            //         debugger;
-            //     },
-            //     container: this.getWorkArea(),
-            // };
+                //     debugger;
+                //     this.dragBehavior.onDragStart(e.event.data);
+                // //     resetPosition($(dragElement));
+                // // }
+                // // debugger;
+                // },
+                container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
+            };
 
             // this.dragBehavior.addTo(this.getWorkArea(), config);
             // this.dragBehavior.addTo(this.getAllDayContainer(), config);
             // this.dragBehavior.addTo(this._$allDayPanel, config);
+            // this.dragBehavior.addTo(this.getWorkArea());
+            // this.dragBehavior.addTo(this.getAllDayContainer());
+            // this.dragBehavior.addTo(this._$allDayPanel);
             this._createDragBehavior(this.getWorkArea());
             this._createDragBehavior(this.getAllDayContainer());
             this._createDragBehavior(this._$allDayPanel);
@@ -3097,20 +3101,13 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         dragBehavior.addTo($element, {
             container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
-            cursorOffset: (e) => {
-                const { x, y } = e.initialOffset;
-                const { clientX, clientY } = e.event;
-
-                return {
-                    x: clientX - x,
-                    y: clientY - y,
-                };
-            },
+            // container: this.getAllDayContainer(),
             dragTemplate: () => {
                 return dragElement;
             },
             onDragStart: (e) => {
                 const event = e.event;
+                // debugger;
                 const itemElement = $(e.itemElement);
                 const itemData = itemElement.data('dxItemData');
                 const settings = itemElement.data('dxAppointmentSettings');
