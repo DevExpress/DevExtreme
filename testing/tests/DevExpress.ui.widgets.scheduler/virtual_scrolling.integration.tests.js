@@ -1063,6 +1063,50 @@ module('Appointment filtering', function() {
                 }
             });
         });
+
+        test('Long appointment should be rendered correctly on the next page', function(assert) {
+            if(!isDesktopEnvironment()) {
+                assert.ok(true, 'This test is for desktop only');
+                return;
+            }
+
+            const data = [{
+                startDate: new Date(2020, 9, 12, 9, 30),
+                endDate: new Date(2020, 9, 12, 10, 30),
+                allDay: true,
+                priorityId: 2,
+            }];
+
+            this.createInstance({
+                dataSource: data,
+                views: [{
+                    type: 'week',
+                    groupOrientation: 'vertical'
+                }],
+                currentView: 'week',
+                currentDate: new Date(2020, 9, 12),
+                startDayHour: 9,
+                endDayHour: 16,
+                groups: ['priorityId'],
+                resources: [{
+                    fieldExpr: 'priorityId',
+                    allowMultiple: false,
+                    dataSource: [{ id: 1 }, { id: 2 }]
+                }],
+                scrolling: { mode: 'virtual' },
+                showAllDayPanel: true,
+                height: 500
+            });
+
+            const scrollable = this.instance.getWorkSpace().getScrollable();
+
+            scrollable.scrollTo({ y: 600 });
+
+            const filteredItems = this.instance.getFilteredItems();
+
+            assert.equal(filteredItems.length, 1, 'Filtered items length is correct');
+            assert.deepEqual(filteredItems[0], data[0], 'Filtered item is correct');
+        });
     });
 });
 
