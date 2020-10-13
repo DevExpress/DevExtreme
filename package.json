@@ -188,7 +188,7 @@
     "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner",
-    "test-jest": "lscpu && jest --coverage",
+    "test-jest": "jest --coverage --maxWorkers=8",
     "test-jest:watch": "jest --watch"
   },
   "browserslist": [
