@@ -1608,9 +1608,6 @@
             "Name": "SimpleArray",
             "DocUrl": "Guide/Widgets/Scheduler/Overview/",
             "Widget": "Scheduler",
-            "MvcAdditionalFiles": [
-              "/Scripts/data/appointments.js"
-            ],
             "DemoType": "Web"
           },
           {
@@ -1686,7 +1683,6 @@
             "DocUrl": "Guide/Widgets/Scheduler/Views/View_Types/#Agenda_View",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
-              "/Models/AgendaTask.cs",
               "/Models/SampleData/AgendaTasks.cs"
             ],
             "DemoType": "Web"
