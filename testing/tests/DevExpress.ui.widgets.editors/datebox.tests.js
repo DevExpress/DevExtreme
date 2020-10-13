@@ -3936,6 +3936,7 @@ QUnit.module('width of datebox with list', {
         QUnit.test('should be equal to the editor width when dropDownOptions.width in not defined', function(assert) {
             const dateBox = this.$dateBox.dxDateBox({
                 opened: true,
+                pickerType: 'list',
                 type: 'time'
             }).dxDateBox('instance');
 
@@ -3949,6 +3950,7 @@ QUnit.module('width of datebox with list', {
         QUnit.test('should be equal to dropDownOptions.width if it\'s defined (T897820)', function(assert) {
             this.$dateBox.dxDateBox({
                 type: 'time',
+                pickerType: 'list',
                 dropDownOptions: {
                     width: 500
                 },
@@ -3962,6 +3964,7 @@ QUnit.module('width of datebox with list', {
         QUnit.test('should be equal to dropDownOptions.width even after editor input width change (T897820)', function(assert) {
             const dateBox = this.$dateBox.dxDateBox({
                 type: 'time',
+                pickerType: 'list',
                 dropDownOptions: {
                     width: 500
                 },
@@ -3977,6 +3980,7 @@ QUnit.module('width of datebox with list', {
         QUnit.test('should be equal to wrapper width if dropDownOptions.width is set to auto (T897820)', function(assert) {
             this.$dateBox.dxDateBox({
                 type: 'time',
+                pickerType: 'list',
                 dropDownOptions: {
                     width: 'auto'
                 },
@@ -3991,6 +3995,7 @@ QUnit.module('width of datebox with list', {
         QUnit.test('should be equal to wrapper width if dropDownOptions.width is set to 100%', function(assert) {
             this.$dateBox.dxDateBox({
                 type: 'time',
+                pickerType: 'list',
                 dropDownOptions: {
                     width: '100%'
                 },
@@ -4005,6 +4010,7 @@ QUnit.module('width of datebox with list', {
         QUnit.test('should be calculated relative to wrapper when dropDownOptions.width is percent (T897820)', function(assert) {
             this.$dateBox.dxDateBox({
                 type: 'time',
+                pickerType: 'list',
                 dropDownOptions: {
                     width: '50%'
                 },
@@ -4019,6 +4025,7 @@ QUnit.module('width of datebox with list', {
         QUnit.test('should be calculated relative to wrapper after editor width runtime change', function(assert) {
             const dateBox = this.$dateBox.dxDateBox({
                 type: 'time',
+                pickerType: 'list',
                 width: 600,
                 dropDownOptions: {
                     width: '50%'
@@ -4036,6 +4043,7 @@ QUnit.module('width of datebox with list', {
         QUnit.test('should be equal to editor input width even when dropDownOptions.container is defined (T938497)', function(assert) {
             this.$dateBox.dxDateBox({
                 type: 'time',
+                pickerType: 'list',
                 dropDownOptions: {
                     container: '#containerWithWidth'
                 },
@@ -4051,6 +4059,7 @@ QUnit.module('width of datebox with list', {
     QUnit.test('dropDownOptions.width should be passed to popup', function(assert) {
         this.$dateBox.dxDateBox({
             type: 'time',
+            pickerType: 'list',
             dropDownOptions: {
                 width: 500
             },
@@ -4064,6 +4073,7 @@ QUnit.module('width of datebox with list', {
     QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change (T897820)', function(assert) {
         const dateBox = this.$dateBox.dxDateBox({
             type: 'time',
+            pickerType: 'list',
             dropDownOptions: {
                 width: 500
             },
@@ -4091,6 +4101,7 @@ QUnit.module('width of datebox with calendar', {
         QUnit.test('should be equal to the calendar width + margins when dropDownOptions.width in not defined', function(assert) {
             const dateBox = this.$dateBox.dxDateBox({
                 opened: true,
+                pickerType: 'calendar'
             }).dxDateBox('instance');
 
             const $calendar = $(`.${CALENDAR_CLASS}`);
@@ -4106,6 +4117,7 @@ QUnit.module('width of datebox with calendar', {
 
         QUnit.test('should be equal to dropDownOptions.width if it\'s defined', function(assert) {
             this.$dateBox.dxDateBox({
+                pickerType: 'calendar',
                 dropDownOptions: {
                     width: 500
                 },
@@ -4118,6 +4130,7 @@ QUnit.module('width of datebox with calendar', {
 
         QUnit.test('should be equal to dropDownOptions.width even after editor input width change', function(assert) {
             const dateBox = this.$dateBox.dxDateBox({
+                pickerType: 'calendar',
                 dropDownOptions: {
                     width: 500
                 },
@@ -4132,6 +4145,7 @@ QUnit.module('width of datebox with calendar', {
 
         QUnit.test('should be equal to calendar width + margins if dropDownOptions.width is set to auto', function(assert) {
             this.$dateBox.dxDateBox({
+                pickerType: 'calendar',
                 dropDownOptions: {
                     width: 'auto'
                 },
@@ -4148,6 +4162,7 @@ QUnit.module('width of datebox with calendar', {
 
         QUnit.test('should be equal to wrapper width if dropDownOptions.width is set to 100%', function(assert) {
             this.$dateBox.dxDateBox({
+                pickerType: 'calendar',
                 dropDownOptions: {
                     width: '100%'
                 },
@@ -4161,6 +4176,7 @@ QUnit.module('width of datebox with calendar', {
 
         QUnit.test('should be calculated relative to wrapper when dropDownOptions.width is percent', function(assert) {
             this.$dateBox.dxDateBox({
+                pickerType: 'calendar',
                 dropDownOptions: {
                     width: '50%'
                 },
@@ -4174,6 +4190,7 @@ QUnit.module('width of datebox with calendar', {
 
         QUnit.test('should be calculated relative to wrapper after editor width runtime change', function(assert) {
             const dateBox = this.$dateBox.dxDateBox({
+                pickerType: 'calendar',
                 width: 600,
                 dropDownOptions: {
                     width: '50%'
@@ -4190,6 +4207,7 @@ QUnit.module('width of datebox with calendar', {
 
         QUnit.test('should be equal to calendar width + margins even when dropDownOptions.container is defined', function(assert) {
             this.$dateBox.dxDateBox({
+                pickerType: 'calendar',
                 dropDownOptions: {
                     container: '#containerWithWidth'
                 },
@@ -4207,6 +4225,7 @@ QUnit.module('width of datebox with calendar', {
 
     QUnit.test('dropDownOptions.width should be passed to popup', function(assert) {
         this.$dateBox.dxDateBox({
+            pickerType: 'calendar',
             dropDownOptions: {
                 width: 500
             },
@@ -4219,6 +4238,7 @@ QUnit.module('width of datebox with calendar', {
 
     QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change (T897820)', function(assert) {
         const dateBox = this.$dateBox.dxDateBox({
+            pickerType: 'calendar',
             dropDownOptions: {
                 width: 500
             },
