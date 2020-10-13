@@ -102,7 +102,7 @@ QUnit.module('rendering with css', {}, () => {
         assert.ok($overlayContent.outerWidth() > editorWidth, 'overlay content width is correct');
     });
 
-    QUnit.test('popup should have width and minWidth equal to the input width', function(assert) {
+    QUnit.test('popup should have width equal to the input width', function(assert) {
         const instance = $('#selectBox').dxSelectBox({
             width: 400,
             opened: true
@@ -110,12 +110,10 @@ QUnit.module('rendering with css', {}, () => {
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
         assert.strictEqual($overlayContent.css('width'), '400px', 'popup width is correct');
-        assert.strictEqual($overlayContent.css('minWidth'), '400px', 'popup width is correct');
 
         instance.option('width', 600);
 
         assert.strictEqual($overlayContent.css('width'), '600px', 'popup width is correct');
-        assert.strictEqual($overlayContent.css('minWidth'), '600px', 'popup width is correct');
     });
 });
 
