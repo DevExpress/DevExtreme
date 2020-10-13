@@ -3122,7 +3122,7 @@ QUnit.module('Bands', moduleConfig, () => {
             columns: [
                 { dataField: 'f1', width: 100 },
                 {
-                    caption: 'Band1', width: 200
+                    caption: 'Band1', width: 200, alignment: 'left'
                 }
             ],
             dataSource: ds,
@@ -3132,7 +3132,7 @@ QUnit.module('Bands', moduleConfig, () => {
         const expectedCells = {
             head: [[
                 { content: 'F1', styles: { 'halign': 'left' } },
-                { content: 'Band1', styles: { } }
+                { content: 'Band1', styles: { 'halign': 'left' } }
             ]],
             body: [[
                 { content: ds[0].f1, styles: { 'halign': 'left' } },
@@ -3201,9 +3201,10 @@ QUnit.module('Bands', moduleConfig, () => {
                 'f1',
                 {
                     caption: 'Band1',
+                    alignment: 'left',
                     columns: [
-                        'f2',
-                        'f3',
+                        { dataField: 'f2', alignment: 'left' },
+                        { dataField: 'f3', alignment: 'left' },
                     ]
                 }
             ],
@@ -3214,10 +3215,10 @@ QUnit.module('Bands', moduleConfig, () => {
         const expectedCells = {
             head: [[
                 { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1', colSpan: 2, styles: { } }
+                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
             ], [
-                { content: 'F2', styles: { } },
-                { content: 'F3', styles: { } }
+                { content: 'F2', styles: { 'halign': 'left' } },
+                { content: 'F3', styles: { 'halign': 'left' } }
             ]],
             body: [[
                 { content: ds[0].f1, styles: { 'halign': 'left' } },
@@ -3244,13 +3245,14 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const dataGrid = $('#dataGrid').dxDataGrid({
             columns: [
-                { dataField: 'f1', width: 100 },
+                { dataField: 'f1', width: 100, alignment: 'left' },
                 {
                     caption: 'Band1',
+                    alignment: 'left',
                     columns: [
-                        { dataField: 'f2', width: 150 },
-                        { dataField: 'f3', width: 200 },
-                        { dataField: 'f4', width: 200 },
+                        { dataField: 'f2', width: 150, alignment: 'left' },
+                        { dataField: 'f3', width: 200, alignment: 'left' },
+                        { dataField: 'f4', width: 200, alignment: 'left' },
                     ]
                 }
             ],
@@ -3260,12 +3262,12 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', rowSpan: 2, styles: { } },
-                { content: 'Band1', colSpan: 3, styles: { } }
+                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }
             ], [
-                { content: 'F2', styles: { } },
-                { content: 'F3', styles: { } },
-                { content: 'F4', styles: { } }
+                { content: 'F2', styles: { 'halign': 'left' } },
+                { content: 'F3', styles: { 'halign': 'left' } },
+                { content: 'F4', styles: { 'halign': 'left' } }
             ]],
             body: []
         };
@@ -3292,15 +3294,16 @@ QUnit.module('Bands', moduleConfig, () => {
                 {
                     caption: 'Band1',
                     columns: [
-                        { dataField: 'f2', width: 150 },
-                        { dataField: 'f3', width: 200 },
+                        { dataField: 'f2', width: 150, alignment: 'left' },
+                        { dataField: 'f3', width: 200, alignment: 'left' },
                     ]
                 },
                 {
                     caption: 'Band2',
+                    alignment: 'left',
                     columns: [
-                        { dataField: 'f4', width: 100 },
-                        { dataField: 'f5', width: 200 },
+                        { dataField: 'f4', width: 100, alignment: 'left' },
+                        { dataField: 'f5', width: 200, alignment: 'left' },
                     ]
                 }
             ],
@@ -3311,13 +3314,13 @@ QUnit.module('Bands', moduleConfig, () => {
         const expectedCells = {
             head: [[
                 { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1', colSpan: 2, styles: { } },
-                { content: 'Band2', colSpan: 2, styles: { } }
+                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'Band2', colSpan: 2, styles: { 'halign': 'left' } }
             ], [
-                { content: 'F2', styles: { } },
-                { content: 'F3', styles: { } },
-                { content: 'F4', styles: { } },
-                { content: 'F5', styles: { } }
+                { content: 'F2', styles: { 'halign': 'left' } },
+                { content: 'F3', styles: { 'halign': 'left' } },
+                { content: 'F4', styles: { 'halign': 'left' } },
+                { content: 'F5', styles: { 'halign': 'left' } }
             ]],
             body: [[
                 { content: ds[0].f1, styles: { 'halign': 'left' } },
@@ -3349,18 +3352,20 @@ QUnit.module('Bands', moduleConfig, () => {
                 { dataField: 'f1', width: 100 },
                 {
                     caption: 'Band1',
+                    alignment: 'left',
                     columns: [
-                        { dataField: 'f2', width: 150 },
-                        { dataField: 'f3', width: 200, visible: false },
-                        { dataField: 'f4', width: 100 },
+                        { dataField: 'f2', width: 150, alignment: 'left' },
+                        { dataField: 'f3', width: 200, alignment: 'left', visible: false },
+                        { dataField: 'f4', width: 100, alignment: 'left' },
                     ]
                 },
                 {
                     caption: 'Band2',
+                    alignment: 'left',
                     columns: [
-                        { dataField: 'f5', width: 100, visible: false },
-                        { dataField: 'f6', width: 150 },
-                        { dataField: 'f7', width: 200 },
+                        { dataField: 'f5', width: 100, alignment: 'left', visible: false },
+                        { dataField: 'f6', width: 150, alignment: 'left' },
+                        { dataField: 'f7', width: 200, alignment: 'left' },
                     ]
                 }
             ],
@@ -3371,13 +3376,13 @@ QUnit.module('Bands', moduleConfig, () => {
         const expectedCells = {
             head: [[
                 { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1', colSpan: 2, styles: { } },
-                { content: 'Band2', colSpan: 2, styles: { } }
+                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } },
+                { content: 'Band2', colSpan: 2, styles: { 'halign': 'left' } }
             ], [
-                { content: 'F2', styles: { } },
-                { content: 'F4', styles: { } },
-                { content: 'F6', styles: { } },
-                { content: 'F7', styles: { } }
+                { content: 'F2', styles: { 'halign': 'left' } },
+                { content: 'F4', styles: { 'halign': 'left' } },
+                { content: 'F6', styles: { 'halign': 'left' } },
+                { content: 'F7', styles: { 'halign': 'left' } }
             ]],
             body: [[
                 { content: ds[0].f1, styles: { 'halign': 'left' } },
@@ -3580,6 +3585,7 @@ QUnit.module('Bands', moduleConfig, () => {
                 { dataField: 'f1', width: 100 },
                 {
                     caption: 'Band1',
+                    alignment: 'left',
                     width: 250,
                     columns: [
                         { dataField: 'f2', width: 50, visible: false, allowExporting: true },
@@ -3595,7 +3601,7 @@ QUnit.module('Bands', moduleConfig, () => {
         const expectedCells = {
             head: [[
                 { content: 'F1', styles: { 'halign': 'left' } },
-                { content: 'Band1', styles: { } }
+                { content: 'Band1', styles: { 'halign': 'left' } }
             ]],
             body: [[
                 { content: ds[0].f1, styles: { 'halign': 'left' } },
