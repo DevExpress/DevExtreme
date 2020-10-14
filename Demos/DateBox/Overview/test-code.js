@@ -16,8 +16,8 @@
     });
     var age = $("#age");
     if(age.textContent) {
-        $("#age").textContent = "It is the test!!!";
+        age.textContent = "It is the test!!!";
     } else {
-        $("#age").text("It is the test!!!");
+        age.text("It is the test!!!");
     }
 });
