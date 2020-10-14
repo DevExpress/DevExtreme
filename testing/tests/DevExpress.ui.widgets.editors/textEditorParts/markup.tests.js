@@ -147,39 +147,33 @@ module('basic options changing', {
     });
 
     test('the "inputAttr" option', function(assert) {
-        let $div1;
-        let $div2;
+        const $element1 = $('<div>', { id: 'testDiv1' }).appendTo('#qunit-fixture');
+        const $element2 = $('<div>', { id: 'testDiv1' }).appendTo('#qunit-fixture');
 
-        try {
-            $div1 = $('<div>', { id: 'testDiv1' }).appendTo($(document.body));
-            $div2 = $('<div>', { id: 'testDiv1' }).appendTo($(document.body));
+        const instance1 = $element1.dxTextEditor({ inputAttr: { 'data-test': 'test' } }).dxTextEditor('instance');
+        const instance2 = $element2.dxTextEditor().dxTextEditor('instance');
+        const $input1 = $element1.find('input');
 
-            const instance1 = $div1.dxTextEditor({ inputAttr: { 'data-test': 'test' } }).dxTextEditor('instance');
-            const instance2 = $div2.dxTextEditor().dxTextEditor('instance');
-            const $input1 = $div1.find('input');
+        assert.ok(typeof (instance2.option('inputAttr')) === 'object' && $.isEmptyObject(instance2.option('inputAttr')), 'Option is {} by default');
+        assert.strictEqual(instance1.option('inputAttr')['data-test'], 'test', 'Option sets to the widget on init');
+        assert.strictEqual($input1.attr('data-test'), 'test', 'Option sets to the widget input on init');
 
-            assert.ok(typeof (instance2.option('inputAttr')) === 'object' && $.isEmptyObject(instance2.option('inputAttr')), 'Option is {} by default');
-            assert.strictEqual(instance1.option('inputAttr')['data-test'], 'test', 'Option sets to the widget on init');
-            assert.strictEqual($input1.attr('data-test'), 'test', 'Option sets to the widget input on init');
+        instance1.option('inputAttr', { 'data-test': 'changedValue', 'data-anyattr': 'anyvalue' });
 
-            instance1.option('inputAttr', { 'data-test': 'changedValue', 'data-anyattr': 'anyvalue' });
-
-            assert.strictEqual($input1.attr('data-test'), 'changedValue', 'Attr was changed by API');
-            assert.strictEqual($input1.attr('data-anyattr'), 'anyvalue', 'New attr was set by API');
-        } finally {
-            $div1.remove();
-            $div2.remove();
-        }
+        assert.strictEqual($input1.attr('data-test'), 'changedValue', 'Attr was changed by API');
+        assert.strictEqual($input1.attr('data-anyattr'), 'anyvalue', 'New attr was set by API');
     });
 
-    test('name option should not conflict with inputAttr.name option', function(assert) {
+    test('update "name" option with predefined inputAttr', function(assert) {
         this.instance.option('inputAttr', { name: 'some_name' });
-
-        assert.strictEqual(this.input.attr('name'), 'some_name', 'inputAttr should be applied');
-
         this.instance.option('name', 'new_name');
-        assert.strictEqual(this.input.attr('name'), 'new_name', 'inputAttr should be redefined by name');
 
+        assert.strictEqual(this.input.attr('name'), 'new_name', 'inputAttr should be redefined by name');
+    });
+
+    test('in case "name" option becomes an empty string, editor should use the inputAttr value', function(assert) {
+        this.instance.option('inputAttr', { name: 'some_name' });
+        this.instance.option('name', 'new_name');
         this.instance.option('name', '');
         assert.strictEqual(this.input.attr('name'), 'some_name', 'inputAttr should be restored');
 
@@ -193,15 +187,18 @@ module('basic options changing', {
         assert.notOk(this.input.get(0).hasAttribute('name'), 'name attribute has been removed');
     });
 
-    test('the "inputAttr" option should preserve widget specific classes', function(assert) {
-        const $element = $('<div>').appendTo('body');
+    test('the "name" attribute should be removed when the "name" option is an empty string', function(assert) {
+        this.instance.option('name', 'test_name');
+        this.instance.option('name', '');
 
-        try {
-            $element.dxTextEditor({ inputAttr: { class: 'some-class' } });
-            assert.strictEqual($element.find('.' + INPUT_CLASS).length, 1, 'widget specific class is preserved');
-        } finally {
-            $element.remove();
-        }
+        assert.notOk(this.input.get(0).hasAttribute('name'), 'name attribute has been removed');
+    });
+
+    test('the "inputAttr" option should preserve widget specific classes', function(assert) {
+        const $element = $('<div>').appendTo('#qunit-fixture');
+
+        $element.dxTextEditor({ inputAttr: { class: 'some-class' } });
+        assert.strictEqual($element.find('.' + INPUT_CLASS).length, 1, 'widget specific class is preserved');
     });
 
     test('the "inputAttr" option should affect only custom classes on change', function(assert) {
