@@ -17,7 +17,7 @@ import { isPlainObject, isDefined } from '../core/utils/type';
 import { ensureDefined } from '../core/utils/common';
 import Guid from '../core/guid';
 import { format as formatMessage } from '../localization/message';
-import windowUtils from '../core/utils/window';
+import { getElementWidth, getPopupWidth } from '../core/utils/drop_down';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
@@ -315,12 +315,6 @@ const DropDownButton = Widget.inherit({
         });
     },
 
-    _getWidth: function() {
-        if(windowUtils.hasWindow()) {
-            return this.$element().outerWidth();
-        }
-    },
-
     _popupOptions() {
         const horizontalAlignment = this.option('rtlEnabled') ? 'right' : 'left';
         return extend({
@@ -337,7 +331,7 @@ const DropDownButton = Widget.inherit({
                 show: { type: 'fade', duration: 0, from: 0, to: 1 },
                 hide: { type: 'fade', duration: 400, from: 1, to: 0 }
             },
-            width: this._getWidth.bind(this),
+            width: getElementWidth.bind(null, this.$element()),
             height: 'auto',
             shading: false,
             position: {
@@ -414,23 +408,10 @@ const DropDownButton = Widget.inherit({
         });
     },
 
-    _getPopupWidth() {
-        let popupWidth = this.option('dropDownOptions.width');
-
-        if(popupWidth === null) {
-            popupWidth = undefined;
-        }
-        if(typeof popupWidth === 'function') {
-            popupWidth = popupWidth();
-        }
-
-        return popupWidth;
-    },
-
     _popupOptionChanged: function(args) {
         const options = Widget.getOptionsFromContainer(args);
 
-        this._setPopupOption(options);
+        this._setPopupOption('width', getElementWidth.bind(null, this.$element()));
 
         const optionsKeys = Object.keys(options);
         if(optionsKeys.indexOf('width') !== -1 || optionsKeys.indexOf('height') !== -1) {
@@ -439,10 +420,10 @@ const DropDownButton = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        const popupWidth = this._getPopupWidth();
+        const popupWidth = getPopupWidth(this.option('dropDownOptions.width'));
 
         if(popupWidth === undefined) {
-            this._setPopupOption('width', this._getWidth.bind(this));
+            this._setPopupOption('width', getElementWidth.bind(null, this.$element()));
         }
     },
 
