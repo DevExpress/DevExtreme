@@ -444,14 +444,14 @@ module('Scheduler grid', moduleConfig, () => {
 module('Appointment popup', moduleConfig, () => {
     module('scheduler time zone is set', () => {
         const cases = [{
-            startDate: (new Date('2017-05-21T19:00:00.000Z')).valueOf(),
-            endDate: (new Date('2017-05-21T19:30:00.000Z')).valueOf()
+            startDate: (new Date(2017, 4, 21, 22)).valueOf(),
+            endDate: (new Date(2017, 4, 21, 22, 30)).valueOf()
         }, {
-            startDate: (new Date('2017-05-22T02:00:00.000Z')).valueOf(),
-            endDate: (new Date('2017-05-22T02:30:00.000Z')).valueOf()
+            startDate: (new Date(2017, 4, 22, 5)).valueOf(),
+            endDate: (new Date(2017, 4, 22, 5, 30)).valueOf()
         }, {
-            startDate: (new Date('2017-05-22T09:00:00.000Z')).valueOf(),
-            endDate: (new Date('2017-05-22T09:30:00.000Z')).valueOf()
+            startDate: (new Date(2017, 4, 22, 12)).valueOf(),
+            endDate: (new Date(2017, 4, 22, 12, 30)).valueOf()
         }];
 
         cases.forEach((testCase, index) => {
@@ -472,11 +472,11 @@ module('Appointment popup', moduleConfig, () => {
 
     module('scheduler time zone is not set', () => {
         const cases = [{
-            startDate: (new Date('2017-05-21T19:00:00.000Z')).valueOf(),
-            endDate: (new Date('2017-05-21T19:30:00.000Z')).valueOf()
+            startDate: (new Date(2017, 4, 21, 22)).valueOf(),
+            endDate: (new Date(2017, 4, 21, 22, 30)).valueOf()
         }, {
-            startDate: (new Date('2017-05-22T02:00:00.000Z')).valueOf(),
-            endDate: (new Date('2017-05-22T02:30:00.000Z')).valueOf()
+            startDate: (new Date(2017, 4, 22, 5)).valueOf(),
+            endDate: (new Date(2017, 4, 22, 5, 30)).valueOf()
         }, {
             startDate: (new Date('2017-05-22T16:00:00.000Z')).valueOf(),
             endDate: (new Date('2017-05-22T16:30:00.000Z')).valueOf()
