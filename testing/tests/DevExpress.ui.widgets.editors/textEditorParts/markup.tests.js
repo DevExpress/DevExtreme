@@ -175,7 +175,7 @@ module('basic options changing', {
     test('name option should not conflict with inputAttr.name option', function(assert) {
         this.instance.option('inputAttr', { name: 'some_name' });
 
-        assert.equal(this.input.attr('name'), 'some_name', 'inputAttr should be applied');
+        assert.strictEqual(this.input.attr('name'), 'some_name', 'inputAttr should be applied');
 
         this.instance.option('name', 'new_name');
         assert.strictEqual(this.input.attr('name'), 'new_name', 'inputAttr should be redefined by name');
@@ -218,6 +218,15 @@ module('basic options changing', {
         assert.strictEqual($input.length, 1, 'widget specific class is preserved');
         assert.ok($input.hasClass(secondClassName), 'second custom class is added');
         assert.notOk($input.hasClass(firstClassName), 'first custom class is removed');
+    });
+
+    test('inputAttr should corretly handle partial update', function(assert) {
+        try {
+            this.instance.option('inputAttr.title', 'new title');
+            assert.strictEqual(this.input.attr('title'), 'new title', 'inputAttr should be applied');
+        } catch(e) {
+            assert.ok(false, 'Could not update the option');
+        }
     });
 
     test('autocomplete is disabled by default', function(assert) {
@@ -281,10 +290,10 @@ module('basic options changing', {
 
     test('texteditor "stylingMode" option: runtime change', function(assert) {
         this.element = $('#texteditor');
-        assert.equal(this.element.hasClass('dx-editor-outlined'), true, 'initial value is right');
+        assert.strictEqual(this.element.hasClass('dx-editor-outlined'), true, 'initial value is right');
 
         this.instance.option('stylingMode', 'underlined');
-        assert.equal(this.element.hasClass('dx-editor-underlined'), true, 'right class after option change present');
-        assert.equal(this.element.hasClass('dx-editor-outlined'), false, 'old class after option change was removed');
+        assert.strictEqual(this.element.hasClass('dx-editor-underlined'), true, 'right class after option change present');
+        assert.strictEqual(this.element.hasClass('dx-editor-outlined'), false, 'old class after option change was removed');
     });
 });

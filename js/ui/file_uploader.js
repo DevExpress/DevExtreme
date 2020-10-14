@@ -19,6 +19,7 @@ import { addNamespace } from '../events/utils/index';
 import { name as clickEventName } from '../events/click';
 import messageLocalization from '../localization/message';
 import { isMaterial } from './themes';
+import { normalizeInputAttrArgs } from './text_box/utils.options';
 
 // STYLE fileUploader
 
@@ -1230,7 +1231,7 @@ class FileUploader extends Editor {
     }
 
     _optionChanged(args) {
-        const value = args.value;
+        const { value, fullName } = args;
 
         switch(args.name) {
             case 'height':
@@ -1359,7 +1360,7 @@ class FileUploader extends Editor {
                 this._invalidate();
                 break;
             case 'inputAttr':
-                this._applyInputAttributes(value);
+                this._applyInputAttributes(normalizeInputAttrArgs(fullName, value));
                 break;
             default:
                 super._optionChanged(args);

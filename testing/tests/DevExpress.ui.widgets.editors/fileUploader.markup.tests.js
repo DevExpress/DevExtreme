@@ -160,6 +160,18 @@ QUnit.module('fileUploader markup', () => {
         assert.strictEqual($fileInput.attr('id'), 'test_id1', 'custom attribute rendered');
     });
 
+    QUnit.test('partically update the "inputAttr" option', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons'
+        });
+
+        $fileUploader.dxFileUploader('option', 'inputAttr.id', 'test_id1');
+
+        const $fileInput = $fileUploader.find(`.${FILEUPLOADER_INPUT_CLASS}`);
+
+        assert.strictEqual($fileInput.attr('id'), 'test_id1', 'custom attribute applied');
+    });
+
 });
 
 QUnit.module('multiple option', () => {
