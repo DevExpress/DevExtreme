@@ -1590,6 +1590,11 @@ QUnit.module('Integration: Appointments', {
             });
 
             QUnit.test('Appointment should have correct position while dragging into allDay panel, vertical grouping', function(assert) {
+                if(scrollingMode === 'virtual') {
+                    assert.ok('Virtual Scrolling - ViewData Generator');
+                    return;
+                }
+
                 this.createInstance({
                     currentDate: new Date(2015, 6, 10),
                     editing: true,

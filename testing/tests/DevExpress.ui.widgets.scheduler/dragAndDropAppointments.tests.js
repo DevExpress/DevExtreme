@@ -818,7 +818,6 @@ module('Common', commonModuleConfig, () => {
             currentDate: new Date(2020, 9, 14),
             showAllDayPanel: false,
         });
-        scheduler.drawControl();
 
         const $appointment = scheduler.appointments.find('Appointment').first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
@@ -826,17 +825,20 @@ module('Common', commonModuleConfig, () => {
         const pointer = pointerMock($appointment)
             .start()
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
-            .move(0, 500)
-            .wait(1000);
+            .move(0, 500);
 
-        const scrollable = scheduler.workSpace.getScrollable();
-        scrollable.scrollBy({ top: 500, left: 0 });
+        const $draggedAppointment = $(scheduler.appointments.find('Appointment').first()).parent();
+        const positionAfterDrag = getAbsolutePosition($draggedAppointment);
 
-        pointer.move(0, 400);
+        assert.equal(scheduler.appointments.find('Appointment').length, 2, 'Phantom appointment exists');
+        assert.equal(positionAfterDrag.left - positionBeforeDrag.left, 0,
+            'appointment has correct left position');
+        assert.equal(positionAfterDrag.top - positionBeforeDrag.top, 500,
+            'appointment has correct top position');
+
         pointer.up();
 
-        const appointmentContent = scheduler.appointments.find('Appointment').find('.dx-scheduler-appointment-content-date').text();
-        assert.equal(appointmentContent, '1:30 AM - 1:35 AM', 'Correct text');
+        assert.equal(scheduler.appointments.find('Appointment').length, 1, 'Phantom appointment  no longer exists');
     });
 });
 
