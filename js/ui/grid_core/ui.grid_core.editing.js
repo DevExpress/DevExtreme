@@ -1444,14 +1444,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 return false;
             }
 
-            if(params.column.showEditorAlways) {
-                that._addEditData({
-                    data: {},
-                    key: item.key,
-                    oldData: item.data
-                });
-            }
-
             that._pageIndex = that._dataController.pageIndex();
 
             that._setEditRowKey(item.key);
