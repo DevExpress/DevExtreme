@@ -1,4 +1,4 @@
-import windowUtils from './window';
+import windowUtils from '../../core/utils/window';
 
 const getElementWidth = function($element) {
     if(windowUtils.hasWindow()) {
