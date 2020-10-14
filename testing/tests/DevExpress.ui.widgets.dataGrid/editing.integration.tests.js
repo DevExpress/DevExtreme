@@ -2105,10 +2105,10 @@ QUnit.module('Editing', baseModuleConfig, () => {
         const errorOverlay = $cell.find('.dx-invalid-message.dx-overlay').dxOverlay('instance');
         const bottomCellPosition = $cell.offset().top + $cell.outerHeight();
         const errorMessageTopPosition = $(errorOverlay.content()).offset().top;
-        const errorMessageTopOffset = browser.mozilla || browser.msie ? -1 : 0;
+        const errorMessageTopOffset = errorMessageTopPosition - bottomCellPosition;
 
         // assert
-        assert.equal(errorMessageTopPosition - bottomCellPosition, errorMessageTopOffset, 'error message offset');
+        assert.roughEqual(errorMessageTopOffset, -0.5, 0.6, 'error message offset');
     });
 });
 
