@@ -18,7 +18,6 @@ import config from '../../core/config';
 import errors from '../widget/ui.errors';
 import { Deferred } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
-import { normalizeInputAttrArgs } from './utils.options';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
@@ -729,7 +728,7 @@ const TextEditorBase = Editor.inherit({
                 this.callBase(args);
                 break;
             case 'inputAttr':
-                this._applyInputAttributes(this._input(), normalizeInputAttrArgs(fullName, value, this.option(name)));
+                this._applyInputAttributes(this._input(), this.option(name));
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
