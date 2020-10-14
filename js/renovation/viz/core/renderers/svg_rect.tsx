@@ -80,17 +80,17 @@ export class RectSvgElement extends JSXComponent(RectSvgElementProps) {
       tmpY = y !== undefined ? y : 0;
       tmpWidth = width !== undefined ? width : 0;
       tmpHeight = height !== undefined ? height : 0;
-      (strokeWidth !== undefined) && (sw = strokeWidth);
+      sw = strokeWidth !== undefined ? strokeWidth : 0;
 
       // eslint-disable-next-line no-bitwise
       const maxSW = ~~((tmpWidth < tmpHeight ? tmpWidth : tmpHeight) / 2);
-      const newSW = (sw || 0) < maxSW ? (sw || 0) : maxSW;
+      const newSW = Math.min(sw, maxSW);
 
       tmpProps.x = tmpX + newSW / 2;
       tmpProps.y = tmpY + newSW / 2;
       tmpProps.width = tmpWidth - newSW;
       tmpProps.height = tmpHeight - newSW;
-      (((sw || 0) !== newSW) || !(newSW === 0 && sw === undefined))
+      ((sw !== newSW) || !(newSW === 0 && strokeWidth === undefined))
       && (tmpProps.strokeWidth = newSW);
     }
 

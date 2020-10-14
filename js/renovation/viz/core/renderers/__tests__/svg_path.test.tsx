@@ -46,6 +46,11 @@ describe('PathSvgElement', () => {
         { x: 120, y: 60 },
       ];
 
+      it('No points (from props)', () => {
+        const path = new PathSvgElement({ type: 'line', d: 'Path 1 2 3', points: undefined });
+        expect(path.d).toBe('Path 1 2 3');
+      });
+
       it('Line by number[]', () => {
         const points = [50, 10, 50, 150];
         const path = new PathSvgElement({ type: 'line', points });

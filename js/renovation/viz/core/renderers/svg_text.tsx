@@ -101,10 +101,9 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   get textItems(): TextItem[] | undefined {
     let items;
     let parsedHtml;
+    const { text } = this.props;
 
-    if (this.props.text === null) return;
-
-    const text = this.props.text || '';
+    if (!text) return;
 
     if (!this.props.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf('&') !== -1)) {
       parsedHtml = removeExtraAttrs(text);
@@ -137,9 +136,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
       if (this.props.x !== undefined || this.props.y !== undefined) {
         this.locateTextNodes(items);
       }
-      if (this.isStroked) {
-        this.strokeTextNodes(items);
-      }
+      this.strokeTextNodes(items);
     }
   }
 
@@ -147,14 +144,12 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     const items = [...texts];
     const textElements = this.textRef.children;
 
-    if (texts && textElements.length > 0) {
-      const strokeLength = !this.isStroked ? 0 : items.length;
-      for (let i = 0; i < textElements.length; i++) {
-        if (i < strokeLength) {
-          items[i].stroke = textElements[i] as SVGTSpanElement;
-        } else {
-          items[i % items.length].tspan = textElements[i] as SVGTSpanElement;
-        }
+    const strokeLength = !this.isStroked ? 0 : items.length;
+    for (let i = 0; i < textElements.length; i++) {
+      if (i < strokeLength) {
+        items[i].stroke = textElements[i] as SVGTSpanElement;
+      } else {
+        items[i % items.length].tspan = textElements[i] as SVGTSpanElement;
       }
     }
 
@@ -182,8 +177,6 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   }
 
   locateTextNodes(items: TextItem[]): void {
-    if (!items) return;
-
     const { x, y } = this.props;
     const lineHeight = getLineHeight(this.restAttributes.style || {});
     let item = items[0];
@@ -191,7 +184,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     setTextNodeAttribute(item, 'y', y);
     for (let i = 1, ii = items.length; i < ii; ++i) {
       item = items[i];
-      if (item?.height >= 0) {
+      if (item.height >= 0) {
         setTextNodeAttribute(item, 'x', x);
         const height = getItemLineHeight(item, lineHeight);
         setTextNodeAttribute(item, 'dy', height); // T177039
@@ -200,19 +193,18 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   }
 
   strokeTextNodes(items: TextItem[]): void {
-    if (!items) return;
+    if (!this.isStroked) return;
 
-    const { stroke } = this.props;
-    const strokeWidth = this.props.strokeWidth || '';
+    const { stroke, strokeWidth } = this.props;
     const strokeOpacity = this.props.strokeOpacity || 1;
-    let tspan: SVGTSpanElement | undefined;
+    let tspan: SVGTSpanElement;
 
     for (let i = 0, ii = items.length; i < ii; ++i) {
       tspan = items[i].stroke;
-      tspan?.setAttribute(KEY_STROKE, stroke || '');
-      tspan?.setAttribute('stroke-width', strokeWidth.toString());
-      tspan?.setAttribute('stroke-opacity', strokeOpacity.toString());
-      tspan?.setAttribute('stroke-linejoin', 'round');
+      tspan.setAttribute(KEY_STROKE, stroke);
+      tspan.setAttribute('stroke-width', strokeWidth.toString());
+      tspan.setAttribute('stroke-opacity', strokeOpacity.toString());
+      tspan.setAttribute('stroke-linejoin', 'round');
     }
   }
 }

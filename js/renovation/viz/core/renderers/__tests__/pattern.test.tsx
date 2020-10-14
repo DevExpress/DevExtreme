@@ -5,36 +5,71 @@ import { RectSvgElement } from '../svg_rect';
 import { PathSvgElement } from '../svg_path';
 
 describe('SvgPattern', () => {
-  it('View', () => {
-    const vm = {
-      props: {
-        id: 'DevExpress_1-hatching-1',
-        hatching: { width: 2, opacity: 0.5 },
-        color: '#ffaa66',
-      } as SvgPatternProps,
-      step: 8,
-      d: 'Somepath 1 2 3 4',
-    };
-    const pattern = shallow(<SvgPatternComponent {...vm as any} /> as JSX.Element);
+  describe('View', () => {
+    it('View with custom hatching', () => {
+      const vm = {
+        props: {
+          id: 'DevExpress_1-hatching-1',
+          hatching: { width: 2, opacity: 0.5 },
+          color: '#ffaa66',
+        } as SvgPatternProps,
+        step: 8,
+        d: 'Somepath 1 2 3 4',
+      };
+      const pattern = shallow(<SvgPatternComponent {...vm as any} /> as JSX.Element);
 
-    expect(pattern.props()).toMatchObject({
-      id: 'DevExpress_1-hatching-1',
-      width: 8,
-      height: 8,
+      expect(pattern.props()).toMatchObject({
+        id: 'DevExpress_1-hatching-1',
+        width: 8,
+        height: 8,
+      });
+      expect(pattern.find(RectSvgElement).at(0).props()).toEqual({
+        x: 0,
+        y: 0,
+        width: 8,
+        height: 8,
+        fill: '#ffaa66',
+        opacity: 0.5,
+      });
+      expect(pattern.find(PathSvgElement).at(0).props()).toEqual({
+        type: 'line',
+        d: 'Somepath 1 2 3 4',
+        strokeWidth: 2,
+        stroke: '#ffaa66',
+      });
     });
-    expect(pattern.find(RectSvgElement).at(0).props()).toEqual({
-      x: 0,
-      y: 0,
-      width: 8,
-      height: 8,
-      fill: '#ffaa66',
-      opacity: 0.5,
-    });
-    expect(pattern.find(PathSvgElement).at(0).props()).toEqual({
-      type: 'line',
-      d: 'Somepath 1 2 3 4',
-      strokeWidth: 2,
-      stroke: '#ffaa66',
+
+    it('View with default hatching', () => {
+      const vm = {
+        props: {
+          id: 'DevExpress_1-hatching-1',
+          hatching: undefined,
+          color: '#ffaa66',
+        } as SvgPatternProps,
+        step: 8,
+        d: 'Somepath 1 2 3 4',
+      };
+      const pattern = shallow(<SvgPatternComponent {...vm as any} /> as JSX.Element);
+
+      expect(pattern.props()).toMatchObject({
+        id: 'DevExpress_1-hatching-1',
+        width: 8,
+        height: 8,
+      });
+      expect(pattern.find(RectSvgElement).at(0).props()).toEqual({
+        x: 0,
+        y: 0,
+        width: 8,
+        height: 8,
+        fill: '#ffaa66',
+      });
+      expect(pattern.find(RectSvgElement).at(0).props().opacity).toBe(undefined);
+      expect(pattern.find(PathSvgElement).at(0).props()).toEqual({
+        type: 'line',
+        d: 'Somepath 1 2 3 4',
+        strokeWidth: 1,
+        stroke: '#ffaa66',
+      });
     });
   });
 

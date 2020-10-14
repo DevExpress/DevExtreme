@@ -95,6 +95,16 @@ describe('RectSvgElement', () => {
         });
       });
 
+      it('y != undefined', () => {
+        const rect = new RectSvgElement({ y: 5 });
+        expect(rect.parsedProps).toEqual({
+          x: 0,
+          y: 5,
+          width: 0,
+          height: 0,
+        });
+      });
+
       it('width != undefined', () => {
         const rect = new RectSvgElement({ width: 20 });
         expect(rect.parsedProps).toEqual({

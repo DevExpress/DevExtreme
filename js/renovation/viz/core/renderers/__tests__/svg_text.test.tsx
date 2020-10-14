@@ -43,6 +43,21 @@ describe('TextSvgElement', () => {
       };
     };
 
+    it('Default render (empty text)', () => {
+      const restAttributes = { dx: 5 };
+      const { props, instance, children } = render(undefined, undefined, { styles: { whiteSpace: 'pre' }, textAnchor: 'middle', isStroked: false }, restAttributes);
+      expect(props).toMatchObject({
+        x: 10,
+        y: 20,
+        textAnchor: 'middle',
+        style: { whiteSpace: 'pre' },
+        ...commonProps,
+        ...restAttributes,
+      });
+      expect(instance).toBe(textRef.current);
+      expect(children).toHaveLength(0);
+    });
+
     it('Default render', () => {
       const restAttributes = { dx: 5 };
       const { props, instance, children } = render('Some text', [], { styles: { whiteSpace: 'pre' }, textAnchor: 'middle', isStroked: false }, restAttributes);
@@ -90,6 +105,16 @@ describe('TextSvgElement', () => {
 
   describe('Behavior', () => {
     describe('effectUpdateText', () => {
+      it('Single line text', () => {
+        const text = new TextSvgElement({
+          text: 'Text',
+        });
+        text.parseTspanElements = jest.fn();
+        text.effectUpdateText();
+
+        expect(text.parseTspanElements).toHaveBeenCalledTimes(0);
+      });
+
       it('Align text nodes to center', () => {
         const text = new TextSvgElement({
           text: 'Multiline\ntext',
@@ -170,20 +195,23 @@ describe('TextSvgElement', () => {
 
       it('Locate text nodes with style', () => {
         const text = new TextSvgElement({
-          text: '<div><p>Text1</p><br /><p style="font-size: 18px">TextText2</p></div>',
+          text: '<div><p>Text1</p><br /><p style="font-size: 18px">TextText2</p><p>StilText2</p></div>',
           x: 50,
           y: 100,
         });
         text.textRef = {
           setAttribute: jest.fn(),
           children: [
-            { setAttribute: jest.fn() }, { setAttribute: jest.fn() },
+            { setAttribute: jest.fn() },
+            { setAttribute: jest.fn() },
+            { setAttribute: jest.fn() },
           ],
         } as any;
         text.effectUpdateText();
 
         expect(text.textRef.children[0].setAttribute).toHaveBeenCalledTimes(2);
         expect(text.textRef.children[1].setAttribute).toHaveBeenCalledTimes(2);
+        expect(text.textRef.children[2].setAttribute).toHaveBeenCalledTimes(0);
         expect(text.textRef.children[0].setAttribute).nthCalledWith(1, 'x', 50);
         expect(text.textRef.children[0].setAttribute).lastCalledWith('y', 100);
         expect(text.textRef.children[1].setAttribute).nthCalledWith(1, 'x', 50);
@@ -274,17 +302,43 @@ describe('TextSvgElement', () => {
         expect(text.textRef.children[1].setAttribute).nthCalledWith(3, 'stroke-opacity', '0.75');
         expect(text.textRef.children[1].setAttribute).nthCalledWith(4, 'stroke-linejoin', 'round');
       });
+
+      it('Stroke text nodes - default opacity', () => {
+        const text = new TextSvgElement({
+          text: 'Multiline\ntext',
+          stroke: 'any',
+          strokeWidth: 1,
+        });
+        text.textRef = {
+          setAttribute: jest.fn(),
+          children: [
+            { setAttribute: jest.fn() },
+            { setAttribute: jest.fn() },
+          ],
+        } as any;
+        text.effectUpdateText();
+
+        expect(text.textRef.children[0].setAttribute).nthCalledWith(3, 'stroke-opacity', '1');
+        expect(text.textRef.children[1].setAttribute).nthCalledWith(3, 'stroke-opacity', '1');
+      });
     });
   });
 
   describe('Logic', () => {
+    it('styles (no style)', () => {
+      const text = new TextSvgElement({ });
+
+      expect(text.styles).toStrictEqual({ whiteSpace: 'pre' });
+    });
+
     it('styles', () => {
       const text = new TextSvgElement({ });
-      text.restAttributes = { style: { fill: 'red' } };
+      text.restAttributes = { style: { fill: 'red', fontSize: '14px' } };
 
       expect(text.styles).toStrictEqual({
         whiteSpace: 'pre',
         fill: 'red',
+        fontSize: '14px',
       });
     });
 
@@ -333,6 +387,11 @@ describe('TextSvgElement', () => {
     });
 
     describe('textItems', () => {
+      it('No text', () => {
+        const text = new TextSvgElement({ });
+        expect(text.textItems).toBe(undefined);
+      });
+
       it('Simple text', () => {
         const text = new TextSvgElement({ text: 'Single line text' });
         expect(text.textItems).toBe(undefined);
