@@ -73,9 +73,9 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
             const dataController = this._dataController;
             const result = this.callBase.apply(this, arguments);
 
-            if(change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
-                const store = dataController && dataController.store();
-                const key = store && store.key();
+            if(change && change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
+                const store = dataController?.store();
+                const key = store?.key();
 
                 if(!isDefined(key)) {
                     throw errors.Error('E1045');
