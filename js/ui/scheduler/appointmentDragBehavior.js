@@ -25,7 +25,6 @@ export default class AppointmentDragBehavior {
 
     onDragStart(e) {
         this.initialPosition = locate($(e.itemElement));
-        this.currentData = $(e.itemElement).data('dxItemData');
         this.appointments.notifyObserver('hideAppointmentTooltip');
     }
 
@@ -47,7 +46,6 @@ export default class AppointmentDragBehavior {
         container.append($appointment);
 
         this.currentAppointment = $appointment;
-        this.currentData = null;
 
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
             event: e,

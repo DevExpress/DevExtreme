@@ -3095,20 +3095,21 @@ class SchedulerWorkSpace extends WidgetObserver {
                     event.data = event.data || {};
                     if(!canceled) {
                         event.data.itemElement = dragElement = this._createDragAppointment(itemData, settings);
+                        resetPosition($(dragElement));
                     }
 
                     dragBehavior.onDragStart(event.data);
-                    !canceled && resetPosition($(dragElement));
                 }
             },
 
             onDragEnd: (e) => {
-                const $itemElement = $(e.itemElement);
-                $itemElement.removeClass('dx-scheduler-appointment-drag-source');
-                const itemData = $itemElement.data('dxItemData');
-                if(itemData && !itemData.disabled) {
-                    dragBehavior.onDragEnd(e);
-                }
+                // if(e.fromComponent === e.toComponent) {
+                //     $itemElement.removeClass('dx-scheduler-appointment-drag-source');
+                // }
+                // debugger;
+                // const droppableCell = this.getDataByDroppableCell;
+
+                dragBehavior.onDragEnd(e);
                 dragElement?.remove();
             },
         });
