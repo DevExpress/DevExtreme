@@ -22,7 +22,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="widget-container dx-theme-marker flex-box">
+      <div className="widget-container flex-box">
         <span>Profile Picture</span>
         <div id="dropzone-external" className={`flex-box ${this.state.isDropZoneActive ? 'dx-theme-accent-as-border-color dropzone-active' : 'dx-theme-border-color'}`}>
           <img id="dropzone-image" src={this.state.imageSource} hidden={!this.state.imageSource} alt="" />
