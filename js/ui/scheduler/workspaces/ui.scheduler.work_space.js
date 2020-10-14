@@ -3085,12 +3085,11 @@ class SchedulerWorkSpace extends WidgetObserver {
             onDragStart: (e) => {
                 const canceled = e.cancel;
                 const event = e.event;
-                const itemElement = $(e.itemElement);
-                const itemData = itemElement.data('dxItemData');
-                const settings = itemElement.data('dxAppointmentSettings');
+                const $itemElement = $(e.itemElement);
+                const itemData = $itemElement.data('dxItemData');
+                const settings = $itemElement.data('dxAppointmentSettings');
 
-                itemElement.addClass('dx-scheduler-appointment-drag-source');
-                itemElement.removeClass('dx-state-focused');
+                !canceled && $itemElement.addClass('dx-scheduler-appointment-drag-source');
 
                 if(itemData && !itemData.disabled) {
                     event.data = event.data || {};
@@ -3101,6 +3100,16 @@ class SchedulerWorkSpace extends WidgetObserver {
                     dragBehavior.onDragStart(event.data);
                     !canceled && resetPosition($(dragElement));
                 }
+            },
+
+            onDragEnd: (e) => {
+                const $itemElement = $(e.itemElement);
+                $itemElement.removeClass('dx-scheduler-appointment-drag-source');
+                const itemData = $itemElement.data('dxItemData');
+                if(itemData && !itemData.disabled) {
+                    dragBehavior.onDragEnd(e);
+                }
+                dragElement?.remove();
             },
         });
     }
