@@ -44,14 +44,13 @@ const ListStrategy = DateBoxStrategy.inherit({
         return displayFormat || 'shorttime';
     },
 
-    _getPopupWidth() {
-        const popupWidth = this.dateBox.option('dropDownOptions.width');
+    _getPopupWidth: function() {
+        let popupWidth = this.dateBox.option('dropDownOptions.width');
 
         if(popupWidth === null) {
-            return undefined;
-        }
-        if(typeof popupWidth === 'function') {
-            return popupWidth();
+            popupWidth = undefined;
+        } else if(typeof popupWidth === 'function') {
+            popupWidth = popupWidth();
         }
 
         return popupWidth;
@@ -277,7 +276,7 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     _getInputWidth() {
-        return this.dateBox.$element().outerWidth();
+        return this.dateBox.getWidth();
     },
 
     _updatePopupHeight: function() {
