@@ -17,8 +17,8 @@ const env = require('./env-variables');
 const headerPipes = require('./header-pipes.js');
 const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 const renovationPipes = require('./renovation-pipes');
-const utils = require('./utils');
-const version = require('../../package.json').version;
+const { ifRenovation } = require('./utils');
+const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
 const renovation = env.USE_RENOVATION;
@@ -78,7 +78,7 @@ const renovationDistGlobs = distGlobsPattern(ctx.RESULT_JS_RENOVATION_PATH, ctx.
 const addDefaultExport = lazyPipe().pipe(() =>
     through.obj((chunk, enc, callback) => {
         const moduleName = chunk.relative.replace('.js', '').split('\\').join('/');
-        const moduleMeta = MODULES.filter(m => m.name === moduleName)[0];
+        const moduleMeta = MODULES.filter(({ name }) => name === moduleName)[0];
 
         if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
             chunk.contents = Buffer.from(`${String(chunk.contents)}
@@ -118,7 +118,7 @@ const sources = (src, dist, distGlob) => (() => merge(
         .src(distGlob)
         .pipe(gulpIf(renovation, replace(
             new RegExp(renovatedComponents
-                .map(component => (`dxr${component.name}`))
+                .map(({ name }) => (`dxr${name}`))
                 .join('|'), 'g'),
             (match) => match.replace('dxr', 'dx')
         )))
@@ -133,10 +133,10 @@ const sources = (src, dist, distGlob) => (() => merge(
 gulp.task('npm-sources', gulp.series(
     'ts-sources',
     sources(srcGlobs, `${resultPath}/devextreme`, distGlobs),
-    utils.runTaskByCondition(renovation,
+    ifRenovation(
         sources(renovationSrcGlobs, `${resultPath}/devextreme-renovation`, renovationDistGlobs)
     ),
-    utils.runTaskByCondition(renovation, (done) =>
+    ifRenovation((done) =>
         fs.rename(
             `${resultPath}/devextreme-renovation/dist/js-renovation`,
             `${resultPath}/devextreme-renovation/dist/js`,
