@@ -729,14 +729,14 @@ const TextEditorBase = Editor.inherit({
                 this.callBase(args);
                 break;
             case 'inputAttr':
-                this._applyInputAttributes(this._input(), normalizeInputAttrArgs(fullName, value));
+                this._applyInputAttributes(this._input(), normalizeInputAttrArgs(fullName, value, this.option(name)));
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
                 break;
             case 'buttons':
-                if(args.fullName === args.name) {
-                    checkButtonsOptionType(args.value);
+                if(fullName === name) {
+                    checkButtonsOptionType(value);
                 }
                 this._$beforeButtonsContainer && this._$beforeButtonsContainer.remove();
                 this._$afterButtonsContainer && this._$afterButtonsContainer.remove();

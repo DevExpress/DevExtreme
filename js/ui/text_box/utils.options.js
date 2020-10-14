@@ -1,6 +1,7 @@
+import { extend } from '../../core/utils/extend';
 import { isString } from '../../core/utils/type';
 
-export function normalizeInputAttrArgs(fullName, value) {
+export function normalizeInputAttrArgs(fullName, value, previousValue = {}) {
     if(!isString(fullName)) {
         return null;
     }
@@ -9,7 +10,7 @@ export function normalizeInputAttrArgs(fullName, value) {
     let result = value;
 
     if(nameParts.length > 1) {
-        result = { [nameParts.pop()]: value };
+        result = extend({}, previousValue, { [nameParts.pop()]: value });
     }
 
     return result;

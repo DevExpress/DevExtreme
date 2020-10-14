@@ -229,6 +229,28 @@ module('basic options changing', {
         }
     });
 
+    test('partial update of the "inputAttr" option should not replace other attibutes', function(assert) {
+        try {
+            this.instance.option('inputAttr', { autocomplete: 'on', id: 'test-id-attr' });
+            this.instance.option('inputAttr.title', 'new title');
+            assert.strictEqual(this.input.attr('title'), 'new title', 'inputAttr should be applied');
+            assert.strictEqual(this.input.attr('id'), 'test-id-attr', '"id" attribute value is the same');
+            assert.strictEqual(this.input.attr('autocomplete'), 'on', '"autocomplete" attribute value is the same');
+        } catch(e) {
+            assert.ok(false, 'Could not update the option');
+        }
+    });
+
+    test('partial update of the "inputAttr" option after setting the null value', function(assert) {
+        try {
+            this.instance.option('inputAttr', null);
+            this.instance.option('inputAttr.title', 'new title');
+            assert.strictEqual(this.input.attr('title'), 'new title', 'inputAttr should be applied');
+        } catch(e) {
+            assert.ok(false, 'Could not update the option');
+        }
+    });
+
     test('autocomplete is disabled by default', function(assert) {
         const $textEditor = $('#texteditor').dxTextEditor({});
 
