@@ -3198,7 +3198,6 @@ class SchedulerWorkSpace extends WidgetObserver {
     _createDragBehavior($element) {
         let dragElement;
         const dragBehavior = this.dragBehavior;
-        let startCell;
 
         dragBehavior.addTo($element, {
             container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
@@ -3211,10 +3210,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 const $itemElement = $(e.itemElement);
                 const itemData = $itemElement.data('dxItemData');
                 const settings = $itemElement.data('dxAppointmentSettings');
-                const { cellIndex, rowIndex, allDay } = settings;
-                startCell = allDay && this.supportAllDayRow() && this._isShowAllDayPanel() && !this._isVerticalGroupedWorkSpace()
-                    ? this._dom_getAllDayPanelCell({ cellIndex, rowIndex })
-                    : this._dom_getDateCell({ cellIndex, rowIndex });
 
                 !canceled && $itemElement.addClass('dx-scheduler-appointment-drag-source');
 
@@ -3231,10 +3226,6 @@ class SchedulerWorkSpace extends WidgetObserver {
             },
 
             onDragEnd: (e) => {
-                if(startCell.hasClass(DATE_TABLE_DROPPABLE_CELL_CLASS)) {
-                    $(e.itemElement).removeClass('dx-scheduler-appointment-drag-source');
-                }
-
                 dragBehavior.onDragEnd(e);
                 dragElement?.remove();
             },
