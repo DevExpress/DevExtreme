@@ -89,7 +89,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
       properties.onValueChanged = ({ value }): void => valueChange(value);
     }
     if (itemTemplate) {
-      properties.template = (item, index, container): void => {
+      properties.itemTemplate = (item, index, container): void => {
         renderTemplate(itemTemplate, { item, index, container }, container);
       };
     }
