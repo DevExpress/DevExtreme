@@ -2988,22 +2988,6 @@ QUnit.module('scrollView integration', {
         assert.equal(scrollToElementSpy.firstCall.args[0], null, 'list wasn\'t scrolled');
     });
 
-    QUnit.test('list should be scrolled to item from bottom by scrollToItem №2', function(assert) {
-        const $list = $('#list').dxList({
-            items: ['0']
-        });
-
-        const list = $list.dxList('instance');
-
-        const $item = list.itemElements().eq(0);
-
-        const scrollToElementSpy = sinon.spy();
-        $list.dxScrollView('instance').scrollToElement = scrollToElementSpy;
-
-        list.scrollToItem(0);
-        assert.equal(scrollToElementSpy.firstCall.args[0].get(0), $item.get(0), 'list scrolled to item');
-    });
-
     QUnit.test('list should not fail on scrollToItem if item is a string of the specific format (T381823)', function(assert) {
         const items = ['12', '1.6', '#43'];
 
