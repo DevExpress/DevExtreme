@@ -18,6 +18,9 @@ const BUTTON_GROUP_WRAPPER = 'dx-buttongroup-wrapper';
 const BUTTON_TEXT = 'dx-button-text';
 const LIST_GROUP_HEADER_CLASS = 'dx-list-group-header';
 const DROP_DOWN_BUTTON_HAS_ARROW_CLASS = 'dx-dropdownbutton-has-arrow';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
 QUnit.testStart(() => {
     const markup =
@@ -76,6 +79,252 @@ QUnit.module('popup integration', {
         this.popup = getPopup(this.instance);
     }
 }, () => {
+    QUnit.module('overlay content width', () => {
+        QUnit.test('should be equal to editor width if dropDownOptions.width is not defined and content width is smaller than editor width', function(assert) {
+            const $container = $('<div>')
+                .css({ width: 150 })
+                .appendTo('#qunit-fixture');
+
+            const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 500,
+                dropDownOptions: {
+                    container: $container
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+
+            assert.strictEqual(overlayContentWidth, $dropDownButton.outerWidth(), 'width is correct on init');
+            assert.strictEqual(overlayContentWidth, 500, 'width is correct on init');
+        });
+
+        QUnit.test('should be equal to editor width if dropDownOptions.width is not defined and content width is bigger than editor width', function(assert) {
+            const $container = $('<div>')
+                .css({ width: 150 })
+                .appendTo('#qunit-fixture');
+
+            const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 100,
+                dropDownOptions: {
+                    container: $container
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+
+            assert.strictEqual(overlayContentWidth, $dropDownButton.outerWidth(), 'width is correct on init');
+            assert.strictEqual(overlayContentWidth, 100, 'width is correct on init');
+        });
+
+        QUnit.test('should be equal to editor width if dropDownOptions.width is not defined after editor width runtime change', function(assert) {
+            const $dropDownButton = $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 500
+            });
+
+            const instance = $dropDownButton.dxDropDownButton('instance');
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+            instance.option('width', 700);
+            assert.strictEqual($overlayContent.outerWidth(), $dropDownButton.outerWidth(), 'width are equal after option change');
+            assert.strictEqual($overlayContent.outerWidth(), 700, 'width is correct after option change');
+        });
+
+        QUnit.test('should be equal to content width if dropDownOptions.width is "auto" and content width is bigger than editor width', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 100,
+                dropDownContentTemplate: () => {
+                    return $('<div>').css({ width: 300 });
+                },
+                dropDownOptions: {
+                    width: 'auto'
+                }
+            });
+
+            const popupContentWidth = $(`.${POPUP_CONTENT_CLASS}`).width();
+
+            assert.strictEqual(popupContentWidth, 300, 'width is correct');
+        });
+
+        QUnit.test('should be equal to content width if dropDownOptions.width is "auto" and content width is smaller than editor width', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 300,
+                dropDownContentTemplate: () => {
+                    return $('<div>').css({ width: 100 });
+                },
+                dropDownOptions: {
+                    width: 'auto'
+                }
+            });
+
+            const popupContentWidth = $(`.${POPUP_CONTENT_CLASS}`).width();
+
+            assert.strictEqual(popupContentWidth, 100, 'width is correct');
+        });
+
+        QUnit.test('should be equal to wrapper width if dropDownOptions.width is "100%" and content width is smaller than editor width', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 300,
+                dropDownContentTemplate: () => {
+                    return $('<div>').css({ width: 100 });
+                },
+                dropDownOptions: {
+                    width: '100%'
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+            const overlayWrapperWidth = $(`.${OVERLAY_WRAPPER_CLASS}`).outerWidth();
+
+            assert.strictEqual(overlayContentWidth, 300, 'width is correct');
+            assert.strictEqual(overlayContentWidth, overlayWrapperWidth, 'width is correct');
+        });
+
+        QUnit.test('should be equal to wrapper width if dropDownOptions.width is "100%" and content width is bigger than editor width', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 100,
+                dropDownContentTemplate: () => {
+                    return $('<div>').css({ width: 300 });
+                },
+                dropDownOptions: {
+                    width: '100%'
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+            const overlayWrapperWidth = $(`.${OVERLAY_WRAPPER_CLASS}`).outerWidth();
+
+            assert.strictEqual(overlayContentWidth, 100, 'width is correct');
+            assert.strictEqual(overlayContentWidth, overlayWrapperWidth, 'width is correct');
+        });
+
+        QUnit.test('should be equal to wrapper width if dropDownOptions.width is "100%" and container is defined', function(assert) {
+            const $container = $('<div>')
+                .css({ width: 150 })
+                .appendTo('#qunit-fixture');
+
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 100,
+                dropDownOptions: {
+                    width: '100%',
+                    container: $container
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+            const overlayWrapperWidth = $(`.${OVERLAY_WRAPPER_CLASS}`).outerWidth();
+
+            assert.strictEqual(overlayContentWidth, $container.outerWidth(), 'width is correct');
+            assert.strictEqual(overlayContentWidth, overlayWrapperWidth, 'width is correct');
+        });
+
+        QUnit.test('should be equal to dropDownOptions.width if dropDownOptions.width is bigger than editor width', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 100,
+                dropDownOptions: {
+                    width: 200
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+
+            assert.strictEqual(overlayContentWidth, 200, 'width is correct');
+        });
+
+        QUnit.test('should be equal to dropDownOptions.width if dropDownOptions.width is smaller than editor width', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 200,
+                dropDownOptions: {
+                    width: 100
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+
+            assert.strictEqual(overlayContentWidth, 100, 'width is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper width when dropDownOptions.width is pecrentage and smaller than 100', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 300,
+                dropDownOptions: {
+                    width: '50%'
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+            const overlayWrapperWidth = $(`.${OVERLAY_WRAPPER_CLASS}`).outerWidth();
+
+            assert.roughEqual(overlayContentWidth, overlayWrapperWidth / 2, 0.1, 'width is correct');
+            assert.roughEqual(overlayContentWidth, 150, 0.1, 'width is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper width when dropDownOptions.width is pecrentage and bigger than 100', function(assert) {
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 300,
+                dropDownOptions: {
+                    width: '150%'
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+            const overlayWrapperWidth = $(`.${OVERLAY_WRAPPER_CLASS}`).outerWidth();
+
+            assert.roughEqual(overlayContentWidth, overlayWrapperWidth * 1.5, 0.1, 'width is correct');
+            assert.roughEqual(overlayContentWidth, 450, 0.1, 'width is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper width when container is defined', function(assert) {
+            const $container = $('<div>')
+                .css({ width: 500 })
+                .appendTo('#qunit-fixture');
+
+            $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 300,
+                dropDownOptions: {
+                    width: '150%',
+                    container: $container
+                }
+            });
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+            const overlayWrapperWidth = $(`.${OVERLAY_WRAPPER_CLASS}`).outerWidth();
+
+            assert.roughEqual(overlayContentWidth, overlayWrapperWidth * 1.5, 0.1, 'width is correct');
+            assert.roughEqual(overlayContentWidth, 750, 0.1, 'width is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper width after wrapper width runtime change', function(assert) {
+            const dropDownButton = $('#dropDownButton').dxDropDownButton({
+                opened: true,
+                width: 300,
+                dropDownOptions: {
+                    width: '150%'
+                }
+            }).dxDropDownButton('instance');
+
+            dropDownButton.option('width', 500);
+
+            const overlayContentWidth = $(`.${OVERLAY_CONTENT_CLASS}`).outerWidth();
+            const overlayWrapperWidth = $(`.${OVERLAY_WRAPPER_CLASS}`).outerWidth();
+
+            assert.roughEqual(overlayContentWidth, overlayWrapperWidth * 1.5, 0.1, 'width is correct');
+            assert.roughEqual(overlayContentWidth, 750, 0.1, 'width is correct');
+        });
+    });
+
     QUnit.test('toggle button should toggle the widget', function(assert) {
         const instance = new DropDownButton('#dropDownButton', { splitButton: true });
         const $toggleButton = getToggleButton(instance);
@@ -163,30 +412,6 @@ QUnit.module('popup integration', {
 
         const $popupContent = $(getPopup(instance).content());
         assert.ok($popupContent.hasClass(DROP_DOWN_BUTTON_CONTENT), 'popup has special class');
-    });
-
-    QUnit.test('popup width should be equal to dropDownButton width', function(assert) {
-        const $dropDownButton = $('#dropDownButton').dxDropDownButton({
-            opened: true,
-            items: ['1', '2', '3'],
-            width: 500
-        });
-
-        const instance = $dropDownButton.dxDropDownButton('instance');
-        const $popupContent = $(getPopup(instance)._$content);
-        assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), 'width are equal on init');
-        assert.equal($popupContent.outerWidth(), 500, 'width are equal on init');
-
-        instance.option('width', 700);
-        assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), 'width are equal after option change');
-        assert.equal($popupContent.outerWidth(), 700, 'width are equal after option change');
-
-        instance.option('width', '90%');
-        $('#container').get(0).style.width = '900px';
-        instance.option('opened', false);
-        instance.option('opened', true);
-        assert.equal($popupContent.outerWidth(), $dropDownButton.outerWidth(), 'width are equal after option change');
-        assert.equal($popupContent.outerWidth(), 810, 'width are equal after option change');
     });
 
     QUnit.test('popup should be positioned correctly if rtlEnabled is true', function(assert) {
