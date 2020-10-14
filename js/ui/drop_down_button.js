@@ -314,7 +314,7 @@ const DropDownButton = Widget.inherit({
         });
     },
 
-    _getInputWidth: function() {
+    _getWidth: function() {
         return this.$element().outerWidth();
     },
 
@@ -334,7 +334,7 @@ const DropDownButton = Widget.inherit({
                 show: { type: 'fade', duration: 0, from: 0, to: 1 },
                 hide: { type: 'fade', duration: 400, from: 1, to: 0 }
             },
-            width: this._getInputWidth.bind(this),
+            width: this._getWidth.bind(this),
             height: 'auto',
             shading: false,
             position: {
@@ -412,13 +412,13 @@ const DropDownButton = Widget.inherit({
     },
 
     _getPopupWidth() {
-        const popupWidth = this.option('dropDownOptions.width');
+        let popupWidth = this.option('dropDownOptions.width');
 
         if(popupWidth === null) {
-            return undefined;
+            popupWidth = undefined;
         }
         if(typeof popupWidth === 'function') {
-            return popupWidth();
+            popupWidth = popupWidth();
         }
 
         return popupWidth;
@@ -439,7 +439,7 @@ const DropDownButton = Widget.inherit({
         const popupWidth = this._getPopupWidth();
 
         if(popupWidth === undefined) {
-            this._setPopupOption('width', this._getInputWidth.bind(this));
+            this._setPopupOption('width', this._getWidth.bind(this));
         }
     },
 
