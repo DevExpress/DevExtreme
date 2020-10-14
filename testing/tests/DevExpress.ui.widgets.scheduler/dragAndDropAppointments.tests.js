@@ -801,6 +801,43 @@ module('Common', commonModuleConfig, () => {
         const data = scheduler.instance.option('dataSource')[1];
         assert.ok(data.allDay, 'second appointment - allDay is true');
     });
+
+    test('DnD should work correctly with virtual scrolling', function(assert) {
+        const data = [{
+            text: 'Appointment',
+            startDate: new Date(2020, 9, 14, 0, 0),
+            endDate: new Date(2020, 9, 14, 0, 5),
+        }];
+
+        const scheduler = createWrapper({
+            height: 600,
+            views: ['day'],
+            currentView: 'day',
+            cellDuration: 5,
+            dataSource: data,
+            currentDate: new Date(2020, 9, 14),
+            showAllDayPanel: false,
+        });
+        scheduler.drawControl();
+
+        const $appointment = scheduler.appointments.find('Appointment').first();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+
+        const pointer = pointerMock($appointment)
+            .start()
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(0, 500)
+            .wait(1000);
+
+        const scrollable = scheduler.workSpace.getScrollable();
+        scrollable.scrollBy({ top: 500, left: 0 });
+
+        pointer.move(0, 400);
+        pointer.up();
+
+        const appointmentContent = scheduler.appointments.find('Appointment').find('.dx-scheduler-appointment-content-date').text();
+        assert.equal(appointmentContent, '1:30 AM - 1:35 AM', 'Correct text');
+    });
 });
 
 module('appointmentDragging customization', $.extend({}, {
