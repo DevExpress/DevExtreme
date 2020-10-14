@@ -20,31 +20,37 @@
         v-model:changes="changes"
         v-model:edit-row-key="editRowKey"
       />
-      <DxColumn data-field="OrderID" :allow-editing="false"></DxColumn>
-      <DxColumn data-field="ShipName"></DxColumn>
-      <DxColumn data-field="ShipCountry"></DxColumn>
-      <DxColumn data-field="ShipCity"></DxColumn>
-      <DxColumn data-field="ShipAddress"></DxColumn>
-      <DxColumn data-field="OrderDate" data-type="date"></DxColumn>
-      <DxColumn data-field="Freight"></DxColumn>
+      <DxColumn
+        data-field="OrderID"
+        :allow-editing="false"
+      />
+      <DxColumn data-field="ShipName"/>
+      <DxColumn data-field="ShipCountry"/>
+      <DxColumn data-field="ShipCity"/>
+      <DxColumn data-field="ShipAddress"/>
+      <DxColumn
+        data-field="OrderDate"
+        data-type="date"
+      />
+      <DxColumn data-field="Freight"/>
     </DxDataGrid>
     <div class="options">
-        <div class="caption">Options</div>
-        <div class="option">
-          <span>Edit Row Key:</span>
-          <div id="editRowKey">{{ editRowKey === null ? "null" : editRowKey.toString() }}</div>
-        </div>
-        <div class="option">
-          <span>Changes:</span>
-          <div id="changes">{{ changesText }}</div>
-        </div>
+      <div class="caption">Options</div>
+      <div class="option">
+        <span>Edit Row Key:</span>
+        <div id="editRowKey">{{ editRowKey === null ? "null" : editRowKey.toString() }}</div>
       </div>
+      <div class="option">
+        <span>Changes:</span>
+        <div id="changes">{{ changesText }}</div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import { DxDataGrid, DxColumn, DxEditing } from 'devextreme-vue/data-grid';
 import { DxLoadPanel } from 'devextreme-vue/load-panel';
-import { mapGetters, mapActions, mapState } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   components: {
@@ -53,13 +59,13 @@ export default {
     DxEditing,
     DxLoadPanel
   },
-  created() {
-    this.loadOrders();
-  },
   data() {
     return {
       loadPanelPosition: { of: '#gridContainer' }
-    }
+    };
+  },
+  created() {
+    this.loadOrders();
   },
   computed: {
     ...mapGetters(['orders', 'isLoading']),
@@ -81,7 +87,7 @@ export default {
     },
     changesText: {
       get() {
-         return JSON.stringify(this.changes.map((change) => ({
+        return JSON.stringify(this.changes.map((change) => ({
           type: change.type,
           key: change.type !== 'insert' ? change.key : undefined,
           data: change.data

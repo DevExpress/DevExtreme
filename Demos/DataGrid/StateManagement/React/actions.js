@@ -12,7 +12,7 @@ export const SAVING_CANCEL = 'SAVING_CANCEL';
 export const SET_CHANGES = 'SET_CHANGES';
 export const SET_EDIT_ROW_KEY = 'SET_EDIT_ROW_KEY';
 
-export const loadOrders = async (dispatch) => {
+export async function loadOrders(dispatch) {
   dispatch({ type: FETCH_PENDING });
 
   try {
@@ -28,9 +28,9 @@ export const loadOrders = async (dispatch) => {
     dispatch({ type: FETCH_ERROR });
     throw err;
   }
-};
+}
 
-export const saveChange = async (dispatch, change) => {
+export async function saveChange(dispatch, change) {
   if (change && change.type) {
     let data;
 
@@ -55,9 +55,9 @@ export const saveChange = async (dispatch, change) => {
   } else {
     dispatch({ type: SAVING_CANCEL });
   }
-};
+}
 
-const sendChange = async (url, change) => {
+async function sendChange(url, change) {
   switch (change.type) {
     case 'insert':
       return sendRequest(`${url}/InsertOrder`, 'POST', {
@@ -73,18 +73,18 @@ const sendChange = async (url, change) => {
     default:
       break;
   }
-};
+}
 
-export const setChanges = (dispatch, changes) => {
+export async function setChanges(dispatch, changes) {
   dispatch({
     type: SET_CHANGES,
     payload: changes
   });
-};
+}
 
-export const setEditRowKey = (dispatch, editRowKey) => {
+export async function setEditRowKey(dispatch, editRowKey) {
   dispatch({
     type: SET_EDIT_ROW_KEY,
     payload: editRowKey
   });
-};
+}

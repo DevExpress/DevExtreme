@@ -1,19 +1,21 @@
 import applyChanges from 'devextreme/data/apply_changes';
 import {
-    FETCH_PENDING,
-    FETCH_SUCCESS,
-    FETCH_ERROR,
-    SAVING_PENDING,
-    SAVING_SUCCESS,
-    SAVING_ERROR,
-    SAVING_CANCEL,
-    SET_CHANGES,
-    SET_EDIT_ROW_KEY } from './actions.js';
+  FETCH_PENDING,
+  FETCH_SUCCESS,
+  FETCH_ERROR,
+  SAVING_PENDING,
+  SAVING_SUCCESS,
+  SAVING_ERROR,
+  SAVING_CANCEL,
+  SET_CHANGES,
+  SET_EDIT_ROW_KEY } from './actions.js';
 
 export default function reducer(state, { type, payload }) {
+  let newData;
+
   switch (type) {
     case SAVING_SUCCESS:
-      const newData = applyChanges(state.data, [payload.change], { keyExpr: 'OrderID' });
+      newData = applyChanges(state.data, [payload.change], { keyExpr: 'OrderID' });
 
       return {
         ...state,

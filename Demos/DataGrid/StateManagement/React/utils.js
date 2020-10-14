@@ -1,4 +1,4 @@
-export const sendRequest = async (url, method = 'GET', data) => {
+export async function sendRequest(url, method = 'GET', data) {
   data = data || {};
 
   const params = Object.keys(data)
@@ -28,4 +28,4 @@ export const sendRequest = async (url, method = 'GET', data) => {
 
     throw json.Message;
   }
-};
+}

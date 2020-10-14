@@ -13,13 +13,19 @@
       :allow-deleting="true"
       :allow-updating="true"
     />
-    <DxColumn data-field="OrderID" :allow-editing="false"></DxColumn>
-    <DxColumn data-field="ShipName"></DxColumn>
-    <DxColumn data-field="ShipCountry"></DxColumn>
-    <DxColumn data-field="ShipCity"></DxColumn>
-    <DxColumn data-field="ShipAddress"></DxColumn>
-    <DxColumn data-field="OrderDate" data-type="date"></DxColumn>
-    <DxColumn data-field="Freight"></DxColumn>
+    <DxColumn
+      data-field="OrderID"
+      :allow-editing="false"
+    />
+    <DxColumn data-field="ShipName"/>
+    <DxColumn data-field="ShipCountry"/>
+    <DxColumn data-field="ShipCity"/>
+    <DxColumn data-field="ShipAddress"/>
+    <DxColumn
+      data-field="OrderDate"
+      data-type="date"
+    />
+    <DxColumn data-field="Freight"/>
   </DxDataGrid>
 </template>
 <script>
@@ -37,7 +43,7 @@ const ordersStore = createStore({
   }
 });
 
-const sendBatchRequest = async (url, changes) => {
+async function sendBatchRequest(url, changes) {
   const result = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(changes),
@@ -52,13 +58,13 @@ const sendBatchRequest = async (url, changes) => {
 
     throw json.Message;
   }
-};
+}
 
-const processBatchRequest = async (url, changes, component) => {
+async function processBatchRequest(url, changes, component) {
   await sendBatchRequest(url, changes);
   await component.refresh(true);
   component.cancelEditData();
-};
+}
 
 export default {
   components: {
