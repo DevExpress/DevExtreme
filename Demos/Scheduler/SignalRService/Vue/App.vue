@@ -10,6 +10,7 @@
         :end-day-hour="19"
         :remote-filtering="true"
         current-view="day"
+        date-serialization-format="yyyy-MM-ddTHH:mm:ssZ"
         text-expr="Text"
         description-expr="Description"
         start-date-expr="StartDate"
