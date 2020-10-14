@@ -2603,6 +2603,19 @@ declare module DevExpress.excelExporter {
         selectedRowsOnly?: boolean;
     }
     /**
+     * [descr:ExcelExportPivotGridProps]
+     */
+    export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
+        /**
+         * [descr:ExcelExportPivotGridProps.component]
+         */
+        component?: DevExpress.ui.dxPivotGrid;
+        /**
+         * [descr:ExcelExportPivotGridProps.customizeCell]
+         */
+        customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
+    }
+    /**
      * [descr:ExcelPivotGridCell]
      */
     export interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGridPivotGridCell {
@@ -2661,26 +2674,13 @@ declare module DevExpress.excelExporter {
         width?: number;
     }
     /**
-     * [descr:ExportPivotGridProps]
-     */
-    export interface ExportPivotGridProps extends ExcelExportBaseProps {
-        /**
-         * [descr:ExportPivotGridProps.component]
-         */
-        component?: DevExpress.ui.dxPivotGrid;
-        /**
-         * [descr:ExportPivotGridProps.customizeCell]
-         */
-        customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
-    }
-    /**
      * [descr:excelExporter.exportDataGrid(options)]
      */
     export function exportDataGrid(options: ExcelExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
     /**
      * [descr:excelExporter.exportPivotGrid(options)]
      */
-    export function exportPivotGrid(options: ExportPivotGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
+    export function exportPivotGrid(options: ExcelExportPivotGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
 }
 declare module DevExpress.exporter {
     /**
