@@ -2203,6 +2203,26 @@ class Diagram extends Widget {
                 * @default 'arrow'
                 */
                 connectorLineEnd: 'arrow',
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.shapeMinWidth
+                * @type Number
+                * @default undefined
+                */
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.shapeMinHeight
+                * @type Number
+                * @default undefined
+                */
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.shapeMaxWidth
+                * @type Number
+                * @default undefined
+                */
+                /**
+                * @name dxDiagramOptions.defaultItemProperties.shapeMaxHeight
+                * @type Number
+                * @default undefined
+                */
             },
             editing: {
                 /**
