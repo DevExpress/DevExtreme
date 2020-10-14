@@ -125,21 +125,8 @@ const Scrollable = DOMComponent.inherit({
         $wrapper.appendTo($element);
     },
 
-    _saveFlags: function() {
-        const containerElement = this._container().get(0);
-        const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
-        this._lastMaxLeftOffset = this._lastMaxLeftOffset || maxLeftOffset;
-        this.wasDimension = true;
-        this._lastScrollLeft = this._location().left;
-        this._lost = this._lost || maxLeftOffset + this._lastScrollLeft;
-
-        this.previousState = maxLeftOffset - containerElement.scrollLeft;
-    },
-
     _dimensionChanged: function() {
-        this._saveFlags();
         this.update();
-        this._forDimension = true;
         this._updateRtlPosition();
     },
 
@@ -170,15 +157,12 @@ const Scrollable = DOMComponent.inherit({
             deferUpdate(() => {
                 deferRender(() => {
                     const containerElement = this._container().get(0);
-                    const oldWidthToNewWidthRatio = (this.oldClientWidth || containerElement.clientWidth) / containerElement.clientWidth;
-                    const offsetRight = (this.offsetRight || 0) * oldWidthToNewWidthRatio;
+                    const offsetRight = (this.offsetRight || 0);
 
-                    const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth - offsetRight;
-                    this.oldClientWidth = containerElement.clientWidth;
-                    if(containerElement.clientWidth === containerElement.scrollWidth) {
-                        this.offsetRight = 0;
-                    } else {
-                        this.offsetRight = offsetRight;
+                    let maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth - offsetRight;
+                    if(maxLeftOffset <= 0) {
+                        maxLeftOffset = 0;
+                        this.offsetRight = containerElement.scrollWidth - containerElement.clientWidth;
                     }
 
                     this.scrollTo({ left: maxLeftOffset });
@@ -214,7 +198,6 @@ const Scrollable = DOMComponent.inherit({
         eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), function() {
             if(that._isHorizontalRtl()) {
                 that.offsetRight = this.scrollWidth - (this.scrollLeft + this.clientWidth);
-                that.oldClientWidth = this.clientWidth;
             }
             strategy.handleScroll.bind(strategy);
         });
