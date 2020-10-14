@@ -1040,164 +1040,210 @@ QUnit.module('Initialization', {
     });
 })('Methods');
 
-(function() {
+QUnit.module('Scrolling to time', () => {
+    ['standard', 'virtual'].forEach((scrollingMode) => {
+        const moduleName = scrollingMode === 'virtual'
+            ? 'Virtual Scrolling'
+            : 'Standard Scrolling';
+        QUnit.module(moduleName, {
+            beforeEach: function() {
+                this.createScheduler = (options) => {
+                    return createWrapper({
+                        showCurrentTimeIndicator: false,
+                        scrolling: { mode: scrollingMode },
+                        ...options,
+                    });
+                };
 
-    QUnit.module('Scrolling to time', {
-        beforeEach: function() {
-            this.createInstance = function(options) {
-                this.instance = $('#scheduler').dxScheduler($.extend({
-                    showCurrentTimeIndicator: false
-                }, options)).dxScheduler('instance');
-            };
+                this.clock = sinon.useFakeTimers();
+                sinon.spy(errors, 'log');
+                fx.off = true;
+            },
+            afterEach: function() {
+                this.clock.restore();
+                errors.log.restore();
+                fx.off = false;
+            }
+        }, () => {
+            QUnit.test('Check scrolling to time', function(assert) {
+                const scheduler = this.createScheduler({
+                    currentView: 'week',
+                    currentDate: new Date(2015, 1, 9),
+                    height: 500
+                });
 
-            this.clock = sinon.useFakeTimers();
-            sinon.spy(errors, 'log');
-            fx.off = true;
-        },
-        afterEach: function() {
-            this.clock.restore();
-            errors.log.restore();
-            fx.off = false;
-        }
-    });
+                const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
 
-    QUnit.test('Check scrolling to time', function(assert) {
-        this.createInstance({
-            currentView: 'week',
-            currentDate: new Date(2015, 1, 9),
-            height: 500
+                scheduler.instance.scrollToTime(9, 5);
+
+                const cellHeight = scheduler.workSpace.getCells().eq(0).outerHeight();
+                const expectedTop = cellHeight * (18 + 1 / 6);
+
+                assert.roughEqual(scrollBy.getCall(0).args[0].top, expectedTop, 1.001, 'scrollBy was called with right distance');
+                assert.equal(scrollBy.getCall(0).args[0].left, 0, 'scrollBy was called with right distance');
+            });
+
+            QUnit.test('Check scrolling to time, if startDayHour is not 0', function(assert) {
+                const scheduler = this.createScheduler({
+                    currentView: 'week',
+                    currentDate: new Date(2015, 1, 9),
+                    height: 500,
+                    startDayHour: 3
+                });
+
+                const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+
+                scheduler.instance.scrollToTime(2, 0);
+
+                assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, 'scrollBy was called with right distance');
+
+                scheduler.instance.scrollToTime(5, 0);
+
+                const cellHeight = scheduler.workSpace.getCells().eq(0).outerHeight();
+                const expectedTop = cellHeight * 4;
+
+                assert.roughEqual(
+                    scrollBy.getCall(1).args[0].top,
+                    expectedTop,
+                    1.001,
+                    'scrollBy was called with right distance',
+                );
+            });
+
+            QUnit.test('Check scrolling to time, if \'hours\' argument greater than the \'endDayHour\' option', function(assert) {
+                const scheduler = this.createScheduler({
+                    currentView: 'week',
+                    currentDate: new Date(2015, 1, 9),
+                    height: 500,
+                    endDayHour: 10
+                });
+
+                const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+
+                scheduler.instance.scrollToTime(12, 0);
+
+                const cellHeight = scheduler.workSpace.getCells().eq(0).outerHeight();
+                const expectedTop = cellHeight * 18;
+
+                assert.roughEqual(
+                    scrollBy.getCall(0).args[0].top,
+                    expectedTop,
+                    1.001,
+                    'scrollBy was called with right distance',
+                );
+            });
+
+            QUnit.test('Scrolling to date which doesn\'t locate on current view should call console warning', function(assert) {
+                const scheduler = this.createScheduler({
+                    currentView: 'week',
+                    currentDate: new Date(2015, 1, 9),
+                    height: 500
+                });
+
+                scheduler.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
+
+                assert.equal(errors.log.callCount, 1, 'warning has been called once');
+                assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
+            });
+
+            QUnit.test('Check scrolling to time for timeline view', function(assert) {
+                const scheduler = this.createScheduler({
+                    views: ['timelineWeek'],
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2015, 1, 9),
+                    width: 500
+                });
+
+                const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+
+                scheduler.instance.scrollToTime(9, 5);
+
+                assert.roughEqual(
+                    scrollBy.getCall(0).args[0].left,
+                    scheduler.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left,
+                    1.001,
+                    'scrollBy was called with right distance',
+                );
+            });
+
+            QUnit.test('Check scrolling to time for timeline view, rtl mode', function(assert) {
+                const scheduler = this.createScheduler({
+                    views: ['timelineWeek'],
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2015, 1, 9),
+                    width: 500,
+                    rtlEnabled: true
+                });
+
+                const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                const scrollLeft = scrollable.scrollLeft();
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+                const offset = scheduler.instance.getWorkSpace().getScrollableContainer().outerWidth();
+
+                scheduler.instance.scrollToTime(9, 5);
+
+                assert.roughEqual(
+                    scrollBy.getCall(0).args[0].left,
+                    scheduler.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset,
+                    1.001,
+                    'scrollBy was called with right distance',
+                );
+            });
+
+            QUnit.test('Check scrolling to time for timeline view if date was set', function(assert) {
+                const scheduler = this.createScheduler({
+                    views: ['timelineWeek'],
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2015, 1, 9),
+                    width: 500,
+                    firstDayOfWeek: 1
+                });
+
+                const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+
+                scheduler.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
+
+                assert.roughEqual(
+                    scrollBy.getCall(0).args[0].left,
+                    scheduler.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left,
+                    1.001,
+                    'scrollBy was called with right distance',
+                );
+            });
+
+            QUnit.test('Check scrolling to time for timeline view if date was set, rtl mode', function(assert) {
+                const scheduler = this.createScheduler({
+                    views: ['timelineWeek'],
+                    currentView: 'timelineWeek',
+                    currentDate: new Date(2015, 1, 9),
+                    width: 500,
+                    firstDayOfWeek: 1,
+                    rtlEnabled: true
+                });
+
+                const scrollable = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                const scrollLeft = scrollable.scrollLeft();
+                const scrollBy = sinon.spy(scrollable, 'scrollBy');
+                const offset = scheduler.workSpace.getDataTableScrollableContainer().outerWidth();
+
+                scheduler.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
+
+                assert.roughEqual(
+                    scrollBy.getCall(0).args[0].left,
+                    scheduler.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset,
+                    1.001,
+                    'scrollBy was called with right distance',
+                );
+            });
         });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(9, 5);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, 'scrollBy was called with right distance');
-        assert.equal(scrollBy.getCall(0).args[0].left, 0, 'scrollBy was called with right distance');
     });
+});
 
-    QUnit.test('Check scrolling to time, if startDayHour is not 0', function(assert) {
-        this.createInstance({
-            currentView: 'week',
-            currentDate: new Date(2015, 1, 9),
-            height: 500,
-            startDayHour: 3
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(2, 0);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, 'scrollBy was called with right distance');
-
-        this.instance.scrollToTime(5, 0);
-
-        assert.roughEqual(scrollBy.getCall(1).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Check scrolling to time, if \'hours\' argument greater than the \'endDayHour\' option', function(assert) {
-        this.createInstance({
-            currentView: 'week',
-            currentDate: new Date(2015, 1, 9),
-            height: 500,
-            endDayHour: 10
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(12, 0);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Scrolling to date which doesn\'t locate on current view should call console warning', function(assert) {
-        this.createInstance({
-            currentView: 'week',
-            currentDate: new Date(2015, 1, 9),
-            height: 500
-        });
-
-        this.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
-
-        assert.equal(errors.log.callCount, 1, 'warning has been called once');
-        assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
-    });
-
-    QUnit.test('Check scrolling to time for timeline view', function(assert) {
-        this.createInstance({
-            views: ['timelineWeek'],
-            currentView: 'timelineWeek',
-            currentDate: new Date(2015, 1, 9),
-            width: 500
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(9, 5);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Check scrolling to time for timeline view, rtl mode', function(assert) {
-        this.createInstance({
-            views: ['timelineWeek'],
-            currentView: 'timelineWeek',
-            currentDate: new Date(2015, 1, 9),
-            width: 500,
-            rtlEnabled: true
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollLeft = scrollable.scrollLeft();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-        const offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
-
-        this.instance.scrollToTime(9, 5);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Check scrolling to time for timeline view if date was set', function(assert) {
-        this.createInstance({
-            views: ['timelineWeek'],
-            currentView: 'timelineWeek',
-            currentDate: new Date(2015, 1, 9),
-            width: 500,
-            firstDayOfWeek: 1
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-
-        this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left, 1.001, 'scrollBy was called with right distance');
-    });
-
-    QUnit.test('Check scrolling to time for timeline view if date was set, rtl mode', function(assert) {
-        this.createInstance({
-            views: ['timelineWeek'],
-            currentView: 'timelineWeek',
-            currentDate: new Date(2015, 1, 9),
-            width: 500,
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-
-        const scrollable = this.instance.getWorkSpaceScrollable();
-        const scrollLeft = scrollable.scrollLeft();
-        const scrollBy = sinon.spy(scrollable, 'scrollBy');
-        const offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
-
-        this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset, 1.001, 'scrollBy was called with right distance');
-    });
-})('Scrolling to time');
 
 (function() {
 
@@ -4718,5 +4764,381 @@ QUnit.module('Getting timezones', {}, () => {
 
         assert.equal(timeZone.offset, -7, 'returned offset for timeZone with DST is OK');
         assert.equal(timeZone.title, '(GMT -07:00) America - Los Angeles', 'returned title for timeZone with DST is OK');
+    });
+});
+
+QUnit.module('ScrollTo', () => {
+    ['virtual', 'standard'].forEach((scrollingMode) => {
+        const moduleName = scrollingMode === 'virtual'
+            ? 'Virtual Scrolling'
+            : 'Standard Scrolling';
+
+        const checkScrollTo = (assert, scheduler, topCellCount, leftCellCount, date, groups, allDay) => {
+            const $scrollable = scheduler.workSpace.getDateTableScrollable();
+            const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+            const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+            scheduler.instance.scrollTo(date, groups, allDay);
+
+            const scrollableHeight = $scrollable.height();
+            const scrollableWidth = $scrollable.width();
+            const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+            const cellHeight = $schedulerCell.get(0).getBoundingClientRect().height;
+            const cellWidth = $schedulerCell.get(0).getBoundingClientRect().width;
+
+            assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+            assert.equal(
+                scrollBy.getCall(0).args[0].top,
+                topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2,
+                'Correct top parameter',
+            );
+            assert.equal(
+                scrollBy.getCall(0).args[0].left,
+                leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                'Correct left parameter',
+            );
+        };
+
+        QUnit.module(moduleName, {
+            beforeEach: function() {
+                this.createScheduler = (options = {}) => {
+                    return createWrapper({
+                        showCurrentTimeIndicator: false,
+                        scrolling: { mode: scrollingMode },
+                        currentDate: new Date(2020, 8, 6),
+                        currentView: 'week',
+                        height: 500,
+                        width: 500,
+                        crossScrollingEnabled: true,
+                        resources: [{
+                            fieldExpr: 'ownerId',
+                            dataSource: [{
+                                id: 1, text: 'A',
+                            }, {
+                                id: 2, text: 'B',
+                            }]
+                        }],
+                        ...options,
+                    });
+                };
+
+                this.clock = sinon.useFakeTimers();
+                sinon.spy(errors, 'log');
+                fx.off = true;
+            },
+            afterEach: function() {
+                this.clock.restore();
+                errors.log.restore();
+                fx.off = false;
+            }
+        }, () => {
+            QUnit.test('A warning should be thrown when scrolling to an invalid date', function(assert) {
+                const scheduler = this.createScheduler();
+
+                scheduler.instance.scrollTo(new Date(2020, 8, 5));
+
+                assert.equal(errors.log.callCount, 1, 'warning has been called once');
+                assert.equal(errors.log.getCall(0).args[0], 'W1008', 'warning has correct error id');
+
+                scheduler.instance.scrollTo(new Date(2020, 8, 14));
+
+                assert.equal(errors.log.callCount, 2, 'warning has been called once');
+                assert.equal(errors.log.getCall(1).args[0], 'W1008', 'warning has correct error id');
+            });
+
+            QUnit.test('A warning should not be thrown when scrolling to a valid date', function(assert) {
+                const scheduler = this.createScheduler();
+
+                scheduler.instance.scrollTo(new Date(2020, 8, 7));
+
+                assert.equal(errors.log.callCount, 0, 'warning has been called once');
+            });
+
+            [{
+                view: 'week',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 1,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date(2020, 8, 25),
+                leftCellCount: 5,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 66,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date(2020, 8, 7),
+                leftCellCount: 6,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work in basic case in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: view,
+                    });
+
+                    checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date(2020, 8, 7, 9, 15),
+                leftCellCount: 1,
+                topCellCount: 18.5,
+            }, {
+                view: 'month',
+                date: new Date(2020, 8, 25, 12),
+                leftCellCount: 5,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date(2020, 8, 7, 9, 15),
+                leftCellCount: 66.5,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date(2020, 8, 7, 12),
+                leftCellCount: 6,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work when date is between a cell's startDate and endDate in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: view,
+                    });
+
+                    checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 8,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date(2020, 8, 25, 12),
+                leftCellCount: 12,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 402,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date(2020, 8, 7, 12),
+                leftCellCount: 36,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work with horizontal grouping in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: {
+                            type: view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: false,
+                        },
+                        groups: ['ownerId'],
+                    });
+
+                    checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 3,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date(2020, 8, 25, 12),
+                leftCellCount: 11,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 133,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date(2020, 8, 7, 12),
+                leftCellCount: 13,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work when grouped by date in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: {
+                            type: view,
+                            groupOrientation: 'horizontal',
+                            groupByDate: true,
+                        },
+                        groups: ['ownerId'],
+                    });
+
+                    checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 1,
+                topCellCount: 66,
+            }, {
+                view: 'month',
+                date: new Date(2020, 8, 25, 12),
+                leftCellCount: 5,
+                topCellCount: 9,
+            }, {
+                view: 'timelineWeek',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 66,
+                topCellCount: 1,
+            }, {
+                view: 'timelineMonth',
+                date: new Date(2020, 8, 7, 12),
+                leftCellCount: 6,
+                topCellCount: 1,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work with vertical grouping in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: {
+                            type: view,
+                            groupOrientation: 'vertical',
+                        },
+                        groups: ['ownerId'],
+                        showAllDayPanel: false,
+                    });
+
+                    checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
+                });
+            });
+
+            QUnit.test('ScrollTo should work with vertical grouping in week view when all-day panel is enabled', function(assert) {
+                const leftCellCount = 1;
+                const topCellCount = 68;
+                const date = new Date(2020, 8, 7, 9);
+
+                const scheduler = this.createScheduler({
+                    currentView: {
+                        type: 'week',
+                        groupOrientation: 'vertical',
+                    },
+                    groups: ['ownerId'],
+                    showAllDayPanel: true,
+                });
+
+                checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 });
+            });
+
+            QUnit.test('ScrollTo should work with vertical grouping when scrolling to an all-day cell', function(assert) {
+                const leftCellCount = 1;
+                const topCellCount = 49;
+                const date = new Date(2020, 8, 7, 9);
+
+                const scheduler = this.createScheduler({
+                    currentView: {
+                        type: 'week',
+                        groupOrientation: 'vertical',
+                    },
+                    groups: ['ownerId'],
+                    showAllDayPanel: true,
+                });
+
+                checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date, { ownerId: 2 }, true);
+            });
+
+            [{
+                view: 'week',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 1,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date(2020, 8, 25),
+                leftCellCount: 5,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 66,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date(2020, 8, 7),
+                leftCellCount: 6,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo to all-day cells should work in ${view} view`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        currentView: view,
+                    });
+
+                    const $scrollable = scheduler.workSpace.getDateTableScrollable();
+                    const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
+                    const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
+
+                    scheduler.instance.scrollTo(date, undefined, true);
+
+                    const scrollableHeight = $scrollable.height();
+                    const scrollableWidth = $scrollable.width();
+                    const $schedulerCell = scheduler.workSpace.getCells().eq(0);
+                    const cellHeight = $schedulerCell.get(0).getBoundingClientRect().height;
+                    const cellWidth = $schedulerCell.get(0).getBoundingClientRect().width;
+
+                    const top = view === 'week'
+                        ? 0
+                        : topCellCount * cellHeight - (scrollableHeight - cellHeight) / 2;
+
+                    assert.ok(scrollBy.calledOnce, 'ScrollBy was called');
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].top,
+                        top,
+                        'Correct top parameter',
+                    );
+                    assert.equal(
+                        scrollBy.getCall(0).args[0].left,
+                        leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
+                        'Correct left parameter',
+                    );
+                });
+            });
+
+            [{
+                view: 'week',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 5,
+                topCellCount: 18,
+            }, {
+                view: 'month',
+                date: new Date(2020, 8, 25),
+                leftCellCount: 1,
+                topCellCount: 3,
+            }, {
+                view: 'timelineWeek',
+                date: new Date(2020, 8, 7, 9),
+                leftCellCount: 269,
+                topCellCount: 0,
+            }, {
+                view: 'timelineMonth',
+                date: new Date(2020, 8, 7),
+                leftCellCount: 23,
+                topCellCount: 0,
+            }].forEach(({ view, date, leftCellCount, topCellCount }) => {
+                QUnit.test(`ScrollTo should work correctly when RTL is enabled in ${view}`, function(assert) {
+                    const scheduler = this.createScheduler({
+                        rtlEnabled: true,
+                        currentView: view,
+                    });
+
+                    checkScrollTo(assert, scheduler, topCellCount, leftCellCount, date);
+                });
+            });
+        });
     });
 });

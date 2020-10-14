@@ -208,6 +208,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         if(--that._changesLocker === 0 && that._changes.count() > 0 && !that._applyingChanges) {
             that._deferredElements = {
                 items: [],
+                groups: [],
                 launchRequestCallbacks: [],
                 doneRequestCallbacks: []
             };
@@ -240,21 +241,30 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         let syncRendering = true;
         when.apply(that, deferredElements.items).done(() => {
             if(syncRendering) {
+                that._setGroupsVisibility(deferredElements.groups, 'visible');
                 return;
             }
             callForEach(deferredElements.launchRequestCallbacks);
             that._changesApplying = true;
             that._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
+            that._setGroupsVisibility(deferredElements.groups, 'visible');
         });
         syncRendering = false;
     },
 
-    _addToDeferred({ items, launchRequest, doneRequest }) {
+    _setGroupsVisibility(groups, visibility) {
+        groups.forEach(g => g.attr({ visibility: visibility }));
+    },
+
+    _addToDeferred({ items, launchRequest, doneRequest, groups }) {
         const deferredElements = this._deferredElements;
+
+        this._setGroupsVisibility(groups, 'hidden');
 
         deferredElements.items = deferredElements.items.concat(items);
         deferredElements.launchRequestCallbacks.push(launchRequest);
         deferredElements.doneRequestCallbacks.push(doneRequest);
+        deferredElements.groups = deferredElements.groups.concat(groups);
     },
 
     _applyQueuedOptions: function() {

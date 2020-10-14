@@ -30,6 +30,7 @@ const REVERT_BUTTON_CLASS = 'dx-revert-button';
 const VALIDATOR_CLASS = 'validator';
 const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
 const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
+const CONTENT_CLASS = 'content';
 
 const INSERT_INDEX = '__DX_INSERT_INDEX__';
 const PADDING_BETWEEN_TOOLTIPS = 2;
@@ -342,32 +343,33 @@ const ValidatingController = modules.Controller.inherit((function() {
         },
 
         createValidator: function(parameters, $container) {
-            let editIndex;
             const editingController = this._editingController;
             const column = parameters.column;
             let showEditorAlways = column.showEditorAlways;
 
             if(isDefined(column.command) || !column.validationRules || !Array.isArray(column.validationRules) || !column.validationRules.length) return;
 
-            editIndex = editingController.getIndexByKey(parameters.key, editingController.getChanges());
+            const editIndex = editingController.getIndexByKey(parameters.key, editingController.getChanges());
+            let needCreateValidator = editIndex > -1;
 
-            if(editIndex < 0) {
+            if(!needCreateValidator) {
                 if(!showEditorAlways) {
                     const columnsController = this.getController('columns');
                     const visibleColumns = columnsController?.getVisibleColumns() || [];
                     showEditorAlways = visibleColumns.some(function(column) { return column.showEditorAlways; });
                 }
 
-                if(this.option('editing.editRowKey') === parameters.key) {
-                    editIndex = 0;
-                }
+                const isEditRow = this.option('editing.editRowKey') === parameters.key;
+                const isCellOrBatchEditingAllowed = editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row });
 
-                if(showEditorAlways && editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row })) {
-                    editIndex = editingController._addEditData({ key: parameters.key, oldData: parameters.data });
+                needCreateValidator = isEditRow || isCellOrBatchEditingAllowed && showEditorAlways;
+
+                if(isCellOrBatchEditingAllowed && showEditorAlways) {
+                    editingController._addInternalData({ key: parameters.key, oldData: parameters.data });
                 }
             }
 
-            if(editIndex >= 0) {
+            if(needCreateValidator) {
                 if($container && !$container.length) {
                     errors.log('E1050');
                     return;
@@ -639,6 +641,17 @@ export default {
                     }
 
                     return result;
+                },
+
+                _prepareEditCell: function(params) {
+                    const isNotCanceled = this.callBase.apply(this, arguments);
+                    const validatingController = this.getController('validating');
+
+                    if(isNotCanceled && params.column.showEditorAlways) {
+                        validatingController.updateValidationState({ key: params.key });
+                    }
+
+                    return isNotCanceled;
                 },
 
                 processItems: function(items, changeType) {
@@ -1074,6 +1087,7 @@ export default {
                         const isOverlayVisible = editorPopup && editorPopup.option('visible');
                         const myPosition = isOverlayVisible ? 'top right' : 'top ' + alignment;
                         const atPosition = isOverlayVisible ? 'top left' : 'bottom ' + alignment;
+                        const $overlayContainer = $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
                         let errorMessageText = '';
                         messages && messages.forEach(function(message) {
@@ -1089,7 +1103,7 @@ export default {
 
                         const overlayOptions = {
                             target: $cell,
-                            container: $cell,
+                            container: $overlayContainer,
                             shading: false,
                             width: 'auto',
                             height: 'auto',

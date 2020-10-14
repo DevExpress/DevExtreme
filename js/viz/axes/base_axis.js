@@ -2269,6 +2269,17 @@ Axis.prototype = {
         this._options._customVisualRange = {};
     },
 
+    getTemplatesGroups() {
+        const ticks = this._majorTicks;
+        if(ticks) {
+            return this._majorTicks.map(tick => {
+                return tick.templateContainer;
+            }).filter(item => isDefined(item));
+        } else {
+            return [];
+        }
+    },
+
     setCustomVisualRange(range) {
         this._options._customVisualRange = range;
     },

@@ -9477,6 +9477,37 @@ QUnit.module('Editing with real dataController', {
                 'type': 'update'
             }], 'row change');
         });
+
+        QUnit.test('Empty changes objects should not be created if column has showEditorAlways', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            this.options.columns = [{
+                dataField: 'name',
+                showEditorAlways: true,
+                validationRules: [{
+                    type: 'custom',
+                    reevaluate: true,
+                    validationCallback: function(params) {
+                        return params.data.name.length > 0;
+                    }
+                }]
+            }];
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'cell'
+            });
+
+            this.columnsController.reset();
+            this.columnsController.init();
+
+            rowsView.render($testElement);
+
+            // assert
+            assert.deepEqual(this.option('editing.changes'), [], 'no changes');
+        });
     });
 
     QUnit.module('Save/cancel events', {
@@ -11578,9 +11609,11 @@ QUnit.module('Editing with validation', {
         cells = $(rowsView.element()).find('.dx-data-row').last().find('td');
 
         // assert
-        const $overlayContent = cells.eq(1).find('.dx-overlay-content');
+        const $overlayContent = rowsView.element().find('.dx-invalid-message .dx-overlay-content');
+        const $overlayWrapper = rowsView.element().find('.dx-overlay-wrapper.dx-datagrid-invalid-message');
         assert.equal(getInputElements(testElement).length, 1, 'has input');
         assert.equal($overlayContent.length, 1, 'has tooltip');
+        assert.strictEqual($overlayWrapper.css('visibility'), 'visible', 'validation message wrapper is visible');
         assert.ok(rowsView.element().find('.dx-freespace-row').is(':visible'), 'visible freespace row');
         assert.ok(rowsView.element().find('.dx-freespace-row').height() > 0, 'freespace row has height ');
 

@@ -8,7 +8,7 @@ import { each } from '../core/utils/iterator';
 import readyCallbacks from '../core/utils/ready_callbacks';
 import { value as viewPortValue, changeCallback, originalViewPort } from '../core/utils/view_port';
 import { getWindow, hasWindow } from '../core/utils/window';
-import { themeReadyCallback, themeInitializedCallback } from './themes_callback';
+import { themeReadyCallback } from './themes_callback';
 import errors from './widget/ui.errors';
 const window = getWindow();
 const ready = readyCallbacks.add;
@@ -30,8 +30,6 @@ let pendingThemeName;
 let defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
-
-themeInitializedCallback.add(initDeferred.resolve);
 
 function readThemeMarker() {
     if(!hasWindow()) {
@@ -245,7 +243,7 @@ export function current(options) {
         // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
-        if((themeReadyCallback.has() || themeInitializedCallback.has() || options._forceTimeout)) {
+        if((themeReadyCallback.has() || initDeferred.state() !== 'resolved' || options._forceTimeout)) {
             waitForThemeLoad(currentThemeName);
         }
     } else {
@@ -258,7 +256,7 @@ export function current(options) {
         }
     }
 
-    attachCssClasses(originalViewPort(), currentThemeName);
+    initDeferred.done(() => attachCssClasses(originalViewPort(), currentThemeName));
 }
 
 function getCssClasses(themeName) {
@@ -420,7 +418,6 @@ export function resetTheme() {
     currentThemeName = null;
     pendingThemeName = null;
     initDeferred = new Deferred();
-    themeInitializedCallback.add(initDeferred.resolve);
 }
 
 export function initialized(callback) {

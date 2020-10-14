@@ -10,7 +10,7 @@ const CLASS = {
   invalidOverlayMessage: 'dx-invalid-message',
   cellModified: 'dx-cell-modified',
   pendingIndicator: 'dx-pending-indicator',
-  popupContent: 'dx-overlay-content',
+  overlay: 'dx-overlay',
   revertButton: 'dx-revert-button',
 };
 
@@ -38,7 +38,7 @@ export default class DataCell extends FocusableElement {
     this.isValidationPending = this.element.find(`div.${CLASS.pendingIndicator}`).exists;
     this.isInvalid = this.element.hasClass(CLASS.invalidCell);
     this.isModified = this.element.hasClass(CLASS.cellModified);
-    this.hasInvalidMessage = this.element.find(`.${CLASS.invalidOverlayMessage} .${CLASS.popupContent}`).exists;
+    this.hasInvalidMessage = this.element.find(`.${CLASS.invalidOverlayMessage}.${CLASS.overlay}`).exists;
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
   }
 

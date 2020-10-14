@@ -1781,7 +1781,7 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.ok($firstCell.hasClass('dx-focused'), 'cell is focused');
         assert.ok($firstCell.hasClass('dx-datagrid-invalid'), 'cell is invalid');
         assert.ok($firstCell.find('.dx-datagrid-revert-tooltip .dx-overlay-content').is(':visible'), 'revert button is visible');
-        assert.ok($firstCell.find('.dx-invalid-message .dx-overlay-content').is(':visible'), 'error message is visible');
+        assert.ok($(grid.element()).find('.dx-invalid-message .dx-overlay-content').is(':visible'), 'error message is visible');
     });
 
     QUnit.testInActiveWindow('Batch mode - Cell should be invalid when a user clicks outside the cell (T869854)', function(assert) {
