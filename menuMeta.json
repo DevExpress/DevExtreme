@@ -1998,7 +1998,6 @@
             "Name": "Tables",
             "DocUrl": "",
             "Widget": "HtmlEditor",
-            "Hidden": true,
             "MvcDescription": "",
             "NetCoreDescription": "",
             "MvcAdditionalFiles": [],
