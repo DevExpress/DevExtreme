@@ -1529,6 +1529,8 @@ class Scheduler extends Widget {
             checkAndDeleteAppointment: that.checkAndDeleteAppointment.bind(that),
             isAppointmentInAllDayPanel: that.isAppointmentInAllDayPanel.bind(that),
 
+            createAppointmentAdapter: (rawAppointment) => this.createAppointmentAdapter(rawAppointment),
+
             createFormattedDateText: (appointment, targetedAppointment, format) => this.fire('getTextAndFormatDate', appointment, targetedAppointment, format)
         };
     }

@@ -344,14 +344,10 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _renderAppointmentTemplate: function($container, rawAppointment, model) {
-        //
-        const appointmentData = this.invoke('createAppointmentAdapter', model.appointmentData).clone({ pathTimeZone: 'fromGrid' }).source();
-        const targetedAppointmentData = this.invoke('createAppointmentAdapter', model.targetedAppointmentData).clone({ pathTimeZone: 'fromGrid' }).source();
-
         const formatText = this.invoke(
             'getTextAndFormatDate',
-            appointmentData,
-            model.appointmentData.settings || targetedAppointmentData,
+            this.initialAppointmentModel.appointmentData,
+            model.appointmentData.settings || this.initialAppointmentModel.targetedAppointmentData,
             // TODO: very strange variable model.appointmentData.settings at this place
             'TIME'
         );
@@ -475,13 +471,15 @@ const SchedulerAppointments = CollectionWidget.inherit({
     _createItemByTemplate: function(itemTemplate, renderArgs) {
         const { itemData, container, index } = renderArgs;
 
-        // Forced to convert back to 'toGrid', because in _createItemByTemplate method model is converted in 'fromGrid'.
-        // 'fromGrid' - default date value without time scheduler zone offset
-
         const appointmentData = this.invoke('createAppointmentAdapter', itemData).clone({ pathTimeZone: 'toGrid' }).source();
 
         const rawTargetedAppointmentData = this.invoke('getTargetedAppointmentData', itemData, $(container).parent());
         const targetedAppointmentData = this.invoke('createAppointmentAdapter', rawTargetedAppointmentData).clone({ pathTimeZone: 'toGrid' }).source();
+
+        this.initialAppointmentModel = {
+            appointmentData: itemData,
+            targetedAppointmentData: rawTargetedAppointmentData
+        };
 
         return itemTemplate.render({
             model: {

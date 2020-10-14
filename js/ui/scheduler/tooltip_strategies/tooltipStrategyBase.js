@@ -121,12 +121,16 @@ export class TooltipStrategyBase {
 
     _createFunctionTemplate(template, data, targetData, index) {
         const isEmptyDropDownAppointmentTemplate = this._isEmptyDropDownAppointmentTemplate();
+
+        const appointmentData = this._options.createAppointmentAdapter(data).clone({ pathTimeZone: 'toGrid' }).source();
+        const targetedAppointmentData = this._options.createAppointmentAdapter(targetData).clone({ pathTimeZone: 'toGrid' }).source();
+
         return new FunctionTemplate(options => {
             return template.render({
                 model: isEmptyDropDownAppointmentTemplate ? {
-                    appointmentData: data,
-                    targetedAppointmentData: targetData
-                } : data,
+                    appointmentData: appointmentData,
+                    targetedAppointmentData: targetedAppointmentData
+                } : appointmentData,
                 container: options.container,
                 index: index
             });
