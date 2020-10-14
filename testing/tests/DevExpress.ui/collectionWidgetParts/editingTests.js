@@ -1087,6 +1087,23 @@ module('selecting of items with datasource', () => {
             clock.restore();
         }
     });
+
+    // T938460
+    test('The selectedIndex should be correct after resetting selectedItems when the data contains an item without a key', function(assert) {
+        const instance = new TestComponent($('#cmp'), {
+            dataSource: new ArrayStore({
+                key: 'id',
+                data: [{ text: 'Item 0' }, { id: 1, text: 'Item 1' }, { id: 2, text: 'Item 2' }]
+            }),
+            selectionMode: 'all'
+        });
+
+        assert.equal(instance.option('selectedIndex'), -1, 'selectedIndex is correct');
+
+        instance.option('selectedItems', []);
+
+        assert.equal(instance.option('selectedIndex'), -1, 'selectedIndex is correct');
+    });
 });
 
 module('selecting of items in single mode', () => {
