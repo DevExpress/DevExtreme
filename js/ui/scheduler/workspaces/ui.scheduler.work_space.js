@@ -32,7 +32,7 @@ import AppointmentDragBehavior from '../appointmentDragBehavior';
 import { FIXED_CONTAINER_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
-import { resetPosition } from '../../../animation/translator';
+import { resetPosition, locate } from '../../../animation/translator';
 
 import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
 import ViewDataProvider from './view_data_provider';
@@ -3098,6 +3098,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     if(!canceled) {
                         event.data.itemElement = dragElement = this._createDragAppointment(itemData, settings);
                         resetPosition($(dragElement));
+                        event.data.initialPosition = locate($itemElement);
                     }
 
                     dragBehavior.onDragStart(event.data);
