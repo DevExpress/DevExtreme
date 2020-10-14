@@ -13,6 +13,7 @@ const stubComponent = {
 const stubCreateComponent = sinon.stub().returns(stubComponent);
 const stubShowAppointmentPopup = sinon.stub();
 const stubAddDefaultTemplates = sinon.stub();
+const stubCreateAppointmentAdapter = sinon.stub().returns({ clone: () => { return { source: () => { } }; } });
 const stubGetAppointmentTemplate = sinon.stub().returns('template');
 const stubCheckAndDeleteAppointment = sinon.stub();
 const stubCreateFormattedDateText = sinon.stub().returns('text');
@@ -31,6 +32,7 @@ const environment = {
         createFormattedDateText: stubCreateFormattedDateText,
         checkAndDeleteAppointment: stubCheckAndDeleteAppointment,
         isAppointmentInAllDayPanel: stubIsAppointmentInAllDayPanel,
+        createAppointmentAdapter: stubCreateAppointmentAdapter
     },
     extraOptions: {
         rtlEnabled: true,
@@ -47,6 +49,7 @@ const environment = {
         stubGetAppointmentTemplate.reset();
         stubCreateFormattedDateText.reset();
         stubCheckAndDeleteAppointment.reset();
+        stubCreateAppointmentAdapter.reset();
     }
 };
 
