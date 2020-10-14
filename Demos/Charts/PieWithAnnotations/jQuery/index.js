@@ -14,7 +14,7 @@ $(function () {
             },
             paddingLeftRight: 0,
             paddingTopBottom: 0,
-            tooltipTemplate: tooltipTemplateHandler
+            tooltipTemplate: tooltipTemplate
         },
         annotations: getAnnotationSources(),
         series: [{
@@ -53,7 +53,7 @@ $(function () {
         return annotations;
     }
 
-    function tooltipTemplateHandler(annotation, container) {
+    function tooltipTemplate(annotation, container) {
         var data = annotation.data;
         var country = data.country + (data.oldCountryName ? "<br />" + data.oldCountryName : "");
         $("<div class='medal-tooltip'><div class='country-name'>" + country

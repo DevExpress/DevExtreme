@@ -7,7 +7,7 @@
         color="transparent"
         [paddingLeftRight]="0"
         [paddingTopBottom]="0"
-        tooltipTemplate="tooltipContent"
+        tooltipTemplate="tooltipTemplate"
     >
         <dxo-image
             [height]="60"
@@ -47,7 +47,7 @@
     ></dxo-tooltip>
     <dxo-legend [visible]="false"></dxo-legend>
     <dxo-title text="Ice Hockey World Championship Gold Medal Winners"></dxo-title>
-    <div *dxTemplate="let annotation of 'tooltipContent'" class='medal-tooltip'>
+    <div *dxTemplate="let annotation of 'tooltipTemplate'" class='medal-tooltip'>
         <div class='country-name'>{{annotation.data.country}}
             <br *ngIf="annotation.data.oldCountryName"/>{{annotation.data.oldCountryName}}
         </div>
