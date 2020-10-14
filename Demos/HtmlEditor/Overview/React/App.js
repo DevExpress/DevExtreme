@@ -76,7 +76,6 @@ class App extends React.Component {
             <Item formatName="deleteColumn" />
             <Item formatName="deleteTable" />
           </Toolbar>
-          {HTMLReactParser(markup)}
         </HtmlEditor>
         <div className="options">
           <div className="caption">Options</div>
