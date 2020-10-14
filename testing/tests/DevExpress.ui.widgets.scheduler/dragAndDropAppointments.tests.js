@@ -667,6 +667,8 @@ module('Common', commonModuleConfig, () => {
         $appointment = scheduler.appointments.find('Task 1').first().parent();
         let positionAfterDrag = getAbsolutePosition($appointment);
 
+        pointer.up();
+
         assert.deepEqual(positionAfterDrag, {
             left: positionBeforeDrag.left + cellWidth,
             top: positionBeforeDrag.top
@@ -675,21 +677,14 @@ module('Common', commonModuleConfig, () => {
 
         this.clock.tick(30); // waiting for data update
 
-        $appointment = scheduler.appointments.find('Task 1').first().parent();
-        positionAfterDrag = getAbsolutePosition($appointment);
+        const $appointments = scheduler.appointments.find('Task 1');
 
-        assert.deepEqual(positionAfterDrag, {
-            left: positionBeforeDrag.left + cellWidth,
-            top: positionBeforeDrag.top
-        }, 'appointment position is correct');
-        assert.ok($appointment.hasClass('dx-draggable-dragging'), 'appointment is dragging');
+        assert.equal($appointments.length, 1, 'Dragged appointment disappeared');
 
         this.clock.tick(30); // waiting for data loading
 
-        $appointment = scheduler.appointments.find('Task 1').first().parent();
+        $appointment = scheduler.appointments.find('Task 1').first();
         positionAfterDrag = getAbsolutePosition($appointment);
-
-        pointer.up();
 
         assert.deepEqual(positionAfterDrag, {
             left: positionBeforeDrag.left + cellWidth,
