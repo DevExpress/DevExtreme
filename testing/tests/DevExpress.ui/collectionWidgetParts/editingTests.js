@@ -23,6 +23,8 @@ class TestComponent extends CollectionWidget {
     _itemContainer() { return this.$element(); }
 }
 
+const getItemElement = (instance, itemIndex) => instance.itemElements().eq(itemIndex);
+
 module('selecting of items', {
     beforeEach: function() {
         this.items = [{ a: 0 }, { a: 1 }, { a: 2 }, { a: 3 }, { a: 4 }, { a: 5 }, { a: 6 }, { a: 7 }, { a: 8 }];
@@ -34,7 +36,7 @@ module('selecting of items', {
     }
 }, () => {
     test('selectItem by node should add class to element', function(assert) {
-        const $item = this.instance.itemElements().eq(0);
+        const $item = getItemElement(this.instance, 0);
 
         this.instance.selectItem($item);
 
@@ -42,7 +44,7 @@ module('selecting of items', {
     });
 
     test('selectItem by index should add class to element', function(assert) {
-        const $item = this.instance.itemElements().eq(0);
+        const $item = getItemElement(this.instance, 0);
 
         this.instance.selectItem(0);
 
@@ -50,7 +52,7 @@ module('selecting of items', {
     });
 
     test('selectItem by itemData should add class to element', function(assert) {
-        const $item = this.instance.itemElements().eq(0);
+        const $item = getItemElement(this.instance, 0);
 
         this.instance.selectItem(this.items[0]);
 
@@ -64,7 +66,7 @@ module('selecting of items', {
         try {
             this.instance.selectItem(items[2]);
 
-            const $item = this.instance.itemElements().eq(2);
+            const $item = getItemElement(this.instance, 2);
             assert.ok($item.hasClass(ITEM_SELECTED_CLASS), 'class added');
         } catch(error) {
             assert.ok(false, 'no error was thrown');
@@ -78,7 +80,7 @@ module('selecting of items', {
             selectedIndex: 0
         });
 
-        const $item = this.instance.itemElements().eq(0);
+        const $item = getItemElement(this.instance, 0);
         assert.ok($item.hasClass(ITEM_SELECTED_CLASS), 'item was selected');
     });
 
@@ -116,7 +118,7 @@ module('selecting of items', {
     });
 
     test('unselectItem by node should remove class from element', function(assert) {
-        const $item = this.instance.itemElements().eq(0);
+        const $item = getItemElement(this.instance, 0);
 
         this.instance.selectItem($item);
         this.instance.unselectItem($item);
@@ -125,7 +127,7 @@ module('selecting of items', {
     });
 
     test('unselectItem by index should remove class from element', function(assert) {
-        const $item = this.instance.itemElements().eq(0);
+        const $item = getItemElement(this.instance, 0);
 
         this.instance.selectItem(0);
         this.instance.unselectItem(0);
@@ -134,7 +136,7 @@ module('selecting of items', {
     });
 
     test('unselectItem by itemData should remove class from element', function(assert) {
-        const $item = this.instance.itemElements().eq(0);
+        const $item = getItemElement(this.instance, 0);
 
         this.instance.selectItem(0);
         this.instance.unselectItem(this.items[0]);
@@ -238,17 +240,10 @@ module('selecting of items', {
     });
 
     test('deleteItem should change selected items', function(assert) {
-
-        const that = this;
-
-        const item = function(index) {
-            return that.instance.itemElements().eq(index);
-        };
-
-        this.instance.selectItem(item(0));
-        this.instance.selectItem(item(1));
-        this.instance.selectItem(item(2));
-        this.instance.deleteItem(item(1));
+        this.instance.selectItem(getItemElement(this.instance, 0));
+        this.instance.selectItem(getItemElement(this.instance, 1));
+        this.instance.selectItem(getItemElement(this.instance, 2));
+        this.instance.deleteItem(getItemElement(this.instance, 1));
 
         assert.deepEqual(this.instance.option('selectedItems'), [{ a: 0 }, { a: 2 }], 'item not deleted');
     });
@@ -394,7 +389,7 @@ module('selecting of items', {
         assert.deepEqual(this.instance.option('selectedItem'), this.items[2], 'selectedItem is correct');
         assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex is correct');
         assert.deepEqual(this.instance.option('selectedItemKeys'), [this.items[2]], 'selectedItemKeys is correct');
-        assert.ok(this.instance.itemElements().eq(2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
+        assert.ok(getItemElement(this.instance, 2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
     });
 
     test('select unexisting item by selectedItem option should restore previous selection', function(assert) {
@@ -410,7 +405,7 @@ module('selecting of items', {
         assert.deepEqual(this.instance.option('selectedItem'), this.items[2], 'selectedItem is correct');
         assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex is correct');
         assert.deepEqual(this.instance.option('selectedItemKeys'), [this.items[2]], 'selectedItemKeys is correct');
-        assert.ok(this.instance.itemElements().eq(2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
+        assert.ok(getItemElement(this.instance, 2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
     });
 
     test('select unexisting item by selectedIndex option should restore previous selection', function(assert) {
@@ -426,7 +421,7 @@ module('selecting of items', {
         assert.deepEqual(this.instance.option('selectedItem'), this.items[2], 'selectedItem is correct');
         assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex is correct');
         assert.deepEqual(this.instance.option('selectedItemKeys'), [this.items[2]], 'selectedItemKeys is correct');
-        assert.ok(this.instance.itemElements().eq(2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
+        assert.ok(getItemElement(this.instance, 2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
     });
 
     test('select unexisting item by selectedItemKeys option should restore previous selection', function(assert) {
@@ -442,7 +437,7 @@ module('selecting of items', {
         assert.deepEqual(this.instance.option('selectedItem'), this.items[2], 'selectedItem is correct');
         assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex is correct');
         assert.deepEqual(this.instance.option('selectedItemKeys'), [this.items[2]], 'selectedItemKeys is correct');
-        assert.ok(this.instance.itemElements().eq(2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
+        assert.ok(getItemElement(this.instance, 2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
     });
 
     test('select unexisting item by selectItem method should restore previous selection', function(assert) {
@@ -458,7 +453,7 @@ module('selecting of items', {
         assert.deepEqual(this.instance.option('selectedItem'), this.items[2], 'selectedItem is correct');
         assert.equal(this.instance.option('selectedIndex'), 2, 'selectedIndex is correct');
         assert.deepEqual(this.instance.option('selectedItemKeys'), [this.items[2]], 'selectedItemKeys is correct');
-        assert.ok(this.instance.itemElements().eq(2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
+        assert.ok(getItemElement(this.instance, 2).hasClass('dx-item-selected'), 'selected item class is on the correct item');
     });
 
     test('select should work when items are not equal by the link and store key is specified', function(assert) {
@@ -496,7 +491,7 @@ module('selecting of items', {
             assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex is correct');
             assert.deepEqual(instance.option('selectedItemKeys'), [2], 'selectedItemKeys is correct');
             assert.equal(instance.option('selectedItems')[0].text, 'Item 2', 'selectedItems is correct');
-            assert.ok(instance.itemElements().eq(1).hasClass('dx-item-selected'), 'selected item class is on the correct item');
+            assert.ok(getItemElement(instance, 1).hasClass('dx-item-selected'), 'selected item class is on the correct item');
         } finally {
             clock.restore();
         }
@@ -533,7 +528,7 @@ module('selecting of items', {
             assert.equal(instance.option('selectedIndex'), 1, 'selectedIndex is correct');
             assert.deepEqual(instance.option('selectedItemKeys'), [2], 'selectedItemKeys is correct');
             assert.equal(instance.option('selectedItems')[0].text, 'Item 2', 'selectedItems is correct');
-            assert.ok(instance.itemElements().eq(1).hasClass('dx-item-selected'), 'selected item class is on the correct item');
+            assert.ok(getItemElement(instance, 1).hasClass('dx-item-selected'), 'selected item class is on the correct item');
         } finally {
             clock.restore();
         }
@@ -1105,7 +1100,7 @@ module('selecting of items in single mode', () => {
         });
 
         const item = function(index) {
-            return instance.itemElements().eq(index);
+            return getItemElement(instance, index);
         };
 
         instance.selectItem(item(0));
@@ -1434,7 +1429,7 @@ module('deleting of items', () => {
             items: items
         });
 
-        instance.deleteItem(instance.itemElements().eq(2));
+        instance.deleteItem(getItemElement(instance, 2));
 
         assert.equal(instance.itemElements().length, 8, 'item deleted');
         assert.equal(instance.option('items').length, 8, 'item deleted from items');
@@ -1464,31 +1459,37 @@ module('deleting of items', () => {
             items: items
         });
 
-        instance.deleteItem(instance.itemElements().eq(2)).done(function() {
+        instance.deleteItem(getItemElement(instance, 2)).done(function() {
             assert.ok(true, 'resolved');
         });
     });
 
-    test('deleteItem should trigger delete callback only once with correct itemData', function(assert) {
+    test('onDeleteItem should trigger delete callback only once with correct itemData', function(assert) {
         const item = '0';
-        let deleteActionFlag = 0;
-        let deletedItem = null;
-
-        const $element = $('#cmp');
-        const instance = new TestComponent($element, {
+        const deleteActionSpy = sinon.spy();
+        const instance = new TestComponent('#cmp', {
             items: [item],
-            onItemDeleted: function(e) {
-                deleteActionFlag++;
-                deletedItem = e.itemData;
-                assert.equal(e.itemIndex, 0, 'correct index specified');
-            }
+            onItemDeleted: deleteActionSpy
         });
 
-        instance.deleteItem(instance.itemElements().eq(0));
+        instance.deleteItem(getItemElement(instance, 0));
 
-        assert.ok(deleteActionFlag > 0, 'onItemDeleted triggered');
-        assert.strictEqual(deleteActionFlag, 1, 'onItemDeleted triggered 1 time');
-        assert.strictEqual(item, deletedItem, 'item equals selected item');
+        assert.strictEqual(deleteActionSpy.callCount, 1, 'itemDeleted triggered 1 time');
+        assert.strictEqual(deleteActionSpy.firstCall.args[0].itemData, item, 'item equals selected item');
+    });
+
+    test('deleteItem event should trigger delete callback only once with correct itemData', function(assert) {
+        const item = '0';
+        const deleteActionSpy = sinon.spy();
+        const instance = new TestComponent('#cmp', {
+            items: [item]
+        });
+
+        instance.on('itemDeleted', deleteActionSpy);
+        instance.deleteItem(getItemElement(instance, 0));
+
+        assert.strictEqual(deleteActionSpy.callCount, 1, 'itemDeleted triggered 1 time');
+        assert.strictEqual(deleteActionSpy.firstCall.args[0].itemData, item, 'item equals selected item');
     });
 
     test('deleteItem should not process item which is not presented', function(assert) {
@@ -1518,7 +1519,7 @@ module('deleting of items', () => {
         });
 
         const item = function(index) {
-            return instance.itemElements().eq(index);
+            return getItemElement(instance, index);
         };
 
         item(0).data('rendered', true);
@@ -1546,6 +1547,32 @@ module('deleting of items', () => {
         instance.deleteItem(1);
     });
 
+    test('onItemDeleting should be fired', function(assert) {
+        const itemDeletingSpy = sinon.spy();
+        const instance = new TestComponent($('#cmp'), {
+            items: [0],
+            onItemDeleting: itemDeletingSpy
+        });
+
+        const $item = getItemElement(instance, 0);
+        instance.deleteItem($item);
+
+        assert.ok(itemDeletingSpy.calledOnce, 'onItemDeleting is fired');
+    });
+
+    test('itemDeleting event should be fired', function(assert) {
+        const itemDeletingSpy = sinon.spy();
+        const instance = new TestComponent($('#cmp'), {
+            items: [0]
+        });
+
+        instance.on('itemDeleting', itemDeletingSpy);
+        const $item = getItemElement(instance, 0);
+        instance.deleteItem($item);
+
+        assert.ok(itemDeletingSpy.calledOnce, 'onItemDeleting is fired');
+    });
+
     test('item should not be deleted if \'cancel\' flag in onItemDeleting is true', function(assert) {
         const instance = new TestComponent($('#cmp'), {
             items: [0],
@@ -1554,10 +1581,10 @@ module('deleting of items', () => {
             }
         });
 
-        let $item = instance.itemElements().eq(0);
+        let $item = getItemElement(instance, 0);
         instance.deleteItem($item);
 
-        $item = instance.itemElements().eq(0);
+        $item = getItemElement(instance, 0);
         assert.equal($item.length, 1, 'item not removed');
     });
 
@@ -1569,10 +1596,10 @@ module('deleting of items', () => {
             }
         });
 
-        let $item = instance.itemElements().eq(0);
+        let $item = getItemElement(instance, 0);
         instance.deleteItem($item);
 
-        $item = instance.itemElements().eq(0);
+        $item = getItemElement(instance, 0);
         assert.equal($item.length, 1, 'item not removed');
     });
 
@@ -1584,10 +1611,10 @@ module('deleting of items', () => {
             }
         });
 
-        let $item = instance.itemElements().eq(0);
+        let $item = getItemElement(instance, 0);
         instance.deleteItem($item);
 
-        $item = instance.itemElements().eq(0);
+        $item = getItemElement(instance, 0);
         assert.equal($item.length, 0, 'item removed');
     });
 
@@ -1604,11 +1631,11 @@ module('deleting of items', () => {
             }
         });
 
-        let $item = instance.itemElements().eq(0);
+        let $item = getItemElement(instance, 0);
         instance.deleteItem($item);
 
         promise.then(function() {
-            $item = instance.itemElements().eq(0);
+            $item = getItemElement(instance, 0);
             assert.equal($item.length, 0, 'item removed');
         });
 
@@ -1797,7 +1824,7 @@ module('deleting from dataSource', {
             }
         });
 
-        instance.deleteItem(instance.itemElements().eq(1)).done(function() {
+        instance.deleteItem(getItemElement(instance, 1)).done(function() {
             assert.equal(instance.itemElements().length, 2, 'item deleted');
             assert.equal(instance.option('items').length, 2, 'item deleted from items');
         });
@@ -1825,7 +1852,7 @@ module('deleting from dataSource', {
             return $.Deferred().reject().promise();
         };
 
-        instance.deleteItem(instance.itemElements().eq(1)).fail(function() {
+        instance.deleteItem(getItemElement(instance, 1)).fail(function() {
             assert.equal(instance.itemElements().length, 3, 'item not deleted');
             assert.equal(instance.option('items').length, 3, 'item not deleted from items');
         });
@@ -1861,7 +1888,7 @@ module('deleting from dataSource', {
             return d.promise();
         };
 
-        const $item = instance.itemElements().eq(1);
+        const $item = getItemElement(instance, 1);
 
         instance.deleteItem($item).fail(function() {
             assert.equal($item.hasClass(ITEM_RESPONSE_WAIT_CLASS), false, 'item not wait for response');
@@ -1927,7 +1954,7 @@ module('deleting from dataSource', {
             }
         });
 
-        const $item = instance.itemElements().eq(0);
+        const $item = getItemElement(instance, 0);
         instance.deleteItem($item);
         assert.strictEqual($(args.itemElement).get(0), $item.get(0), 'item equals selected item');
         assert.strictEqual(args.itemData, 0, 'item equals selected item');
@@ -1982,7 +2009,7 @@ module('reordering of items', () => {
         });
 
         const item = function(index) {
-            return instance.itemElements().eq(index).get(0);
+            return getItemElement(instance, index).get(0);
         };
 
         const item0 = item(0);
@@ -2002,7 +2029,7 @@ module('reordering of items', () => {
         });
 
         const item = function(index) {
-            return instance.itemElements().eq(index).get(0);
+            return getItemElement(instance, index).get(0);
         };
 
         const item0 = item(0);
@@ -2022,7 +2049,7 @@ module('reordering of items', () => {
         });
 
         const item = function(index) {
-            return instance.itemElements().eq(index).get(0);
+            return getItemElement(instance, index).get(0);
         };
 
         const item0 = item(0);
@@ -2068,7 +2095,7 @@ module('reordering of items', () => {
         });
 
         const item = function(index) {
-            return instance.itemElements().eq(index);
+            return getItemElement(instance, index);
         };
 
         item(0).data('rendered', true);
@@ -2109,11 +2136,8 @@ module('reordering of items', () => {
     });
 
     test('onItemReordered should be fired if items reordered', function(assert) {
-        const items = [{ a: 0 }, { a: 1 }];
-
-        const $element = $('#cmp');
-        const instance = new TestComponent($element, {
-            items: items,
+        const instance = new TestComponent('#cmp', {
+            items: [{ a: 0 }, { a: 1 }],
             onItemReordered: function(args) {
                 assert.equal($(args.itemElement).get(0), item(1), 'correct item element');
                 assert.equal(args.fromIndex, 0, 'correct from index');
@@ -2122,7 +2146,25 @@ module('reordering of items', () => {
         });
 
         const item = function(index) {
-            return instance.itemElements().eq(index).get(0);
+            return getItemElement(instance, index).get(0);
+        };
+
+        instance.reorderItem(item(0), item(1));
+    });
+
+    test('itemReordered event should be fired if items reordered', function(assert) {
+        const instance = new TestComponent('#cmp', {
+            items: [{ a: 0 }, { a: 1 }]
+        });
+
+        instance.on('itemReordered', (args) => {
+            assert.equal($(args.itemElement).get(0), item(1), 'correct item element');
+            assert.equal(args.fromIndex, 0, 'correct from index');
+            assert.equal(args.toIndex, 1, 'correct to index');
+        });
+
+        const item = function(index) {
+            return getItemElement(instance, index).get(0);
         };
 
         instance.reorderItem(item(0), item(1));
@@ -2139,7 +2181,7 @@ module('reordering of items', () => {
         });
 
         const item = function(index) {
-            return instance.itemElements().eq(index).get(0);
+            return getItemElement(instance, index).get(0);
         };
 
         instance.reorderItem(0, 1);
