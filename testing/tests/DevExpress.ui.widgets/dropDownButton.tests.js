@@ -1589,7 +1589,6 @@ QUnit.module('keyboard navigation', {
         this.$actionButton = getActionButton(this.dropDownButton);
         this.$toggleButton = getToggleButton(this.dropDownButton);
         this.keyboard = keyboardMock(getButtonGroup(this.dropDownButton).element());
-        this.keyboard.press('right'); // TODO: Remove after T730639 fix
     }
 }, () => {
     QUnit.test('focusStateEnabled option should be transfered to list and buttonGroup', function(assert) {

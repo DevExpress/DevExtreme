@@ -308,7 +308,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
 
             case 'selectedItems':
                 selectedItems = this.option('selectedItems') || [];
-                selectedIndex = this._editStrategy.getIndexByItemData(selectedItems[0]);
+                selectedIndex = selectedItems.length ? this._editStrategy.getIndexByItemData(selectedItems[0]) : NOT_EXISTING_INDEX;
 
                 if(this.option('selectionRequired') && !indexExists(selectedIndex)) {
                     return this._syncSelectionOptions('selectedIndex');
