@@ -14,6 +14,7 @@ const window = getWindow();
 const ready = readyCallbacks.add;
 const viewPort = viewPortValue;
 const viewPortChanged = changeCallback;
+let initDeferred = new Deferred();
 
 const DX_LINK_SELECTOR = 'link[rel=dx-theme]';
 const THEME_ATTR = 'data-theme';
@@ -30,8 +31,7 @@ let defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
 
-let inited = false;
-themeInitializedCallback.add(() => inited = true);
+themeInitializedCallback.add(initDeferred.resolve);
 
 function readThemeMarker() {
     if(!hasWindow()) {
@@ -74,10 +74,7 @@ function waitForThemeLoad(themeName) {
         themeReadyCallback.fire();
         themeReadyCallback.empty();
 
-        if(!inited) {
-            themeInitializedCallback.fire();
-            themeInitializedCallback.empty();
-        }
+        initDeferred.resolve();
     }
 
     if(isPendingThemeLoaded() || !defaultTimeout) {
@@ -115,7 +112,7 @@ function isPendingThemeLoaded() {
 
     const anyThemePending = pendingThemeName === ANY_THEME;
 
-    if(inited && anyThemePending) {
+    if(initDeferred.state() === 'resolved' && anyThemePending) {
         return true;
     }
 
@@ -398,8 +395,6 @@ function waitWebFont(text, fontWeight) {
     });
 }
 
-const initDeferred = new Deferred();
-
 function autoInit() {
     init({
         _autoInit: true,
@@ -409,8 +404,6 @@ function autoInit() {
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error('E0022');
     }
-
-    initDeferred.resolve();
 }
 
 if(hasWindow()) {
@@ -448,18 +441,14 @@ exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
-    inited = false;
-    themeInitializedCallback.add(() => inited = true);
-},
+    initDeferred = new Deferred();
+    themeInitializedCallback.add(initDeferred.resolve);
+};
 
 exports.setDefaultTimeout = function(timeout) {
     defaultTimeout = timeout;
 };
 
 exports.initialized = function(callback) {
-    if(inited) {
-        callback();
-    } else {
-        themeInitializedCallback.add(callback);
-    }
+    initDeferred.done(callback);
 };
