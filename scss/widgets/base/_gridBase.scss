@@ -312,6 +312,15 @@
 
   .dx-#{$widget-name}-content {
     position: relative;
+
+    .dx-overlay-wrapper.dx-invalid-message.dx-#{$widget-name}-invalid-message {
+      visibility: visible;
+
+      .dx-overlay-content {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
   }
 
   .dx-#{$widget-name}-text-content {
@@ -439,11 +448,6 @@
 
       .dx-#{$widget-name}-invalid .dx-invalid-message.dx-overlay {
         position: static;
-
-        .dx-overlay-content {
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
       }
 
       .dx-editor-cell {

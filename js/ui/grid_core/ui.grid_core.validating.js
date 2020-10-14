@@ -30,6 +30,7 @@ const REVERT_BUTTON_CLASS = 'dx-revert-button';
 const VALIDATOR_CLASS = 'validator';
 const PENDING_INDICATOR_CLASS = 'dx-pending-indicator';
 const VALIDATION_PENDING_CLASS = 'dx-validation-pending';
+const CONTENT_CLASS = 'content';
 
 const INSERT_INDEX = '__DX_INSERT_INDEX__';
 const PADDING_BETWEEN_TOOLTIPS = 2;
@@ -1086,6 +1087,7 @@ export default {
                         const isOverlayVisible = editorPopup && editorPopup.option('visible');
                         const myPosition = isOverlayVisible ? 'top right' : 'top ' + alignment;
                         const atPosition = isOverlayVisible ? 'top left' : 'bottom ' + alignment;
+                        const $overlayContainer = $cell.closest(`.${this.addWidgetPrefix(CONTENT_CLASS)}`);
 
                         let errorMessageText = '';
                         messages && messages.forEach(function(message) {
@@ -1101,7 +1103,7 @@ export default {
 
                         const overlayOptions = {
                             target: $cell,
-                            container: $cell,
+                            container: $overlayContainer,
                             shading: false,
                             width: 'auto',
                             height: 'auto',
