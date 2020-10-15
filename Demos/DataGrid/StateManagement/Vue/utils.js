@@ -28,4 +28,4 @@ export async function sendRequest(url, method = 'GET', data) {
 
     throw json.Message;
   }
-};
+}
