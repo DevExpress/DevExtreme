@@ -3,6 +3,7 @@ import {
   JSXComponent,
   Fragment,
   Consumer,
+  Ref,
 } from 'devextreme-generator/component_declaration/common';
 import { Page, PageProps } from './page';
 import PagerProps from '../common/pager_props';
@@ -97,39 +98,34 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
   @Consumer(ConfigContext)
   config?: ConfigContextValue;
 
-  get pages(): PageType[] {
-    const { pageIndex } = this.props;
-    const createPage = (index: PageIndex): PageType => {
-      const pagerProps = (index === 'low' || index === 'high') ? null
-        : {
-          index,
-          onClick: (): void => this.onPageClick(index),
-          selected: pageIndex === index,
-        };
+  @Ref()
+  slidingWindowStateRef!: SlidingWindowState;
+
+  private get slidingWindowState(): SlidingWindowState {
+    const slidingWindowState = this.slidingWindowStateRef;
+    if (!slidingWindowState) {
       return {
-        key: index.toString(),
-        pageProps: pagerProps,
+        indexesForReuse: [],
+        slidingWindowIndexes: [],
       };
-    };
-    const rtlPageIndexes = this.config?.rtlEnabled
-      ? [...this.pageIndexes].reverse() : this.pageIndexes;
-    return rtlPageIndexes.map((index): PageType => createPage(index));
+    }
+    return slidingWindowState;
   }
 
-  canReuseSlidingWindow(currentPageCount: number, pageIndex: number): boolean {
+  private canReuseSlidingWindow(currentPageCount: number, pageIndex: number): boolean {
     const { indexesForReuse } = this.slidingWindowState;
     const currentPageNotExistInIndexes = indexesForReuse.indexOf(currentPageCount) === -1;
     const pageIndexExistInIndexes = indexesForReuse.indexOf(pageIndex) !== -1;
     return currentPageNotExistInIndexes && pageIndexExistInIndexes;
   }
 
-  generatePageIndexes(): PageIndexes {
+  private generatePageIndexes(): PageIndexes {
     const { pageIndex, pageCount } = this.props;
     let startIndex = 0;
-    const slidingWindow = this.slidingWindowState.slidingWindowIndexes;
-    if (pageIndex === slidingWindow[0]) {
+    const { slidingWindowIndexes } = this.slidingWindowState;
+    if (pageIndex === slidingWindowIndexes[0]) {
       startIndex = pageIndex - 1;
-    } else if (pageIndex === slidingWindow[slidingWindow.length - 1]) {
+    } else if (pageIndex === slidingWindowIndexes[slidingWindowIndexes.length - 1]) {
       startIndex = pageIndex + 2 - PAGES_LIMITER;
     } else if (pageIndex < PAGES_LIMITER) {
       startIndex = 1;
@@ -142,20 +138,19 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
     const delimiter = getDelimiterType(startIndex, slidingWindowSize, pageCount);
     const {
       pageIndexes,
-      ...state
+      ...slidingWindowState
     } = createPageIndexes(startIndex, slidingWindowSize, pageCount, delimiter);
-    this.patchState(state);
+    this.slidingWindowStateRef = slidingWindowState;
     return pageIndexes;
   }
 
-  patchState({ slidingWindowIndexes, indexesForReuse }: SlidingWindowState): void {
-    this.slidingWindowState.slidingWindowIndexes = slidingWindowIndexes;
-    this.slidingWindowState.indexesForReuse = indexesForReuse;
-  }
-
-  isSlidingWindowMode(): boolean {
+  private isSlidingWindowMode(): boolean {
     const { pageCount, maxPagesCount } = this.props;
     return (pageCount <= PAGES_LIMITER) || (pageCount <= maxPagesCount);
+  }
+
+  private onPageClick(pageIndex: number): void {
+    this.props.pageIndexChange?.(pageIndex);
   }
 
   get pageIndexes(): PageIndexes {
@@ -175,12 +170,22 @@ export class PagesLarge extends JSXComponent<PagesLargePropsType>() {
     return this.generatePageIndexes();
   }
 
-  private slidingWindowState: SlidingWindowState = {
-    indexesForReuse: [],
-    slidingWindowIndexes: [],
-  };
-
-  onPageClick(pageIndex: number): void {
-    this.props.pageIndexChange?.(pageIndex);
+  get pages(): PageType[] {
+    const { pageIndex } = this.props;
+    const createPage = (index: PageIndex): PageType => {
+      const pagerProps = (index === 'low' || index === 'high') ? null
+        : {
+          index,
+          onClick: (): void => this.onPageClick(index),
+          selected: pageIndex === index,
+        };
+      return {
+        key: index.toString(),
+        pageProps: pagerProps,
+      };
+    };
+    const rtlPageIndexes = this.config?.rtlEnabled
+      ? [...this.pageIndexes].reverse() : this.pageIndexes;
+    return rtlPageIndexes.map((index): PageType => createPage(index));
   }
 }
