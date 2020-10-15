@@ -1791,7 +1791,7 @@ QUnit.test('Template container bbox on adjusting labels. Horizontal = false, rig
     assert.deepEqual(renderer.g.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 99, translateY: 29 });
 });
 
-QUnit.test('No clear labels group on draw drawn axis', function(assert) {
+QUnit.test('No clear labels group on draw drawn axis with template', function(assert) {
     this.createAxis();
     this.updateOptions({
         isHorizontal: true,

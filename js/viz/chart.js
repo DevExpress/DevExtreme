@@ -953,7 +953,7 @@ const dxChart = AdvancedChart.inherit({
 
         drawAxesAndSetCanvases(false);
         drawAxesAndSetCanvases(true);
-        if(that._estimateTickIntervals(verticalAxes, panesCanvases)) {
+        if(!that._changesApplying && that._estimateTickIntervals(verticalAxes, panesCanvases)) {
             drawAxesAndSetCanvases(false);
         }
 
