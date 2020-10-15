@@ -2,18 +2,19 @@
     "extends": "stylelint-config-standard",
     "ignoreFiles": "!**/*.{css,less}",
     "rules": {
+        "at-rule-no-vendor-prefix": true,
+        "declaration-no-important": true,
         "indentation": [4, { ignore: ["inside-parens"] }],
+        "keyframes-name-pattern": "dx-[a-z0-9-]+",
         "max-empty-lines": 2,
-        "selector-pseudo-element-colon-notation": null,
+        "media-feature-name-no-vendor-prefix": true,
         "no-descending-specificity": null,
         "no-empty-source": null,
-        "at-rule-no-vendor-prefix": true,
-        "media-feature-name-no-vendor-prefix": true,
         "property-no-vendor-prefix": true,
-        "selector-no-vendor-prefix": true,
-        "value-no-vendor-prefix": true,
-        "declaration-no-important": true,
+        "selector-class-pattern": "dx-[a-z0-9-]+",
         "selector-max-id": 0,
-        "selector-class-pattern": "dx-[a-z0-9-]+"
+        "selector-no-vendor-prefix": true,
+        "selector-pseudo-element-colon-notation": null,
+        "value-no-vendor-prefix": true,
     }
 }

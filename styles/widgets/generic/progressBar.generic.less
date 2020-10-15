@@ -27,7 +27,7 @@
     background-size: @GENERIC_BACKGROUND_WIDTH 5px;
     border: @GENERIC_PROGRESS_BAR_BORDER;
     border-radius: @GENERIC_PROGRESSBAR_BORDER_RADIUS;
-    animation: loader 2s linear infinite;
+    animation: dx-loader 2s linear infinite;
     .gradient-linear(@GENERIC_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
 
     background-repeat: repeat;
@@ -48,7 +48,7 @@
     .dx-progressbar,
     &.dx-progressbar {
         .dx-progressbar-animating-container {
-            animation: loader-rtl 2s linear infinite;
+            animation: dx-loader-rtl 2s linear infinite;
             .gradient-linear(@GENERIC_PROGRESSBAR_INTERDETERMINATE_STATE_GRADIENT);
 
             background-repeat: repeat;
@@ -56,7 +56,7 @@
     }
 }
 
-@keyframes loader {
+@keyframes dx-loader {
     0% {
         background-position-x: 0;
     }
@@ -66,7 +66,7 @@
     }
 }
 
-@keyframes loader-rtl {
+@keyframes dx-loader-rtl {
     0% {
         background-position-x: 0;
     }
