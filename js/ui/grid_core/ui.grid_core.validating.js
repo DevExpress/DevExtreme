@@ -19,6 +19,7 @@ import errors from '../widget/ui.errors';
 import { Deferred, when } from '../../core/utils/deferred';
 import LoadIndicator from '../load_indicator';
 import { encodeHtml } from '../../core/utils/string';
+import browser from '../../core/utils/browser';
 
 const INVALIDATE_CLASS = 'invalid';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
@@ -1116,6 +1117,11 @@ export default {
                                 collision: 'flip',
                                 boundary: this._rowsView.element(),
                                 boundaryOffset: '0 0',
+                                offset: {
+                                    x: 0,
+                                    // IE and Firefox consider the top row/cell border when calculating a cell offset.
+                                    y: !isOverlayVisible && (browser.mozilla || browser.msie) ? -1 : 0
+                                },
                                 my: myPosition,
                                 at: atPosition
                             },

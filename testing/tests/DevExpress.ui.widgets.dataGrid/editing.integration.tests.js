@@ -2074,6 +2074,42 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.ok(false, `the following error is thrown: ${error.message}`);
         }
     });
+
+    QUnit.testInActiveWindow('Error message should be positioned correctly at the bottom of a data cell', function(assert) {
+        // arrange
+        const gridConfig = {
+            dataSource: [{ id: 1, field1: 'test' }],
+            keyExpr: 'id',
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            columns: [
+                {
+                    dataField: 'field1',
+                    validationRules: [{
+                        type: 'required'
+                    }]
+                }
+            ]
+        };
+
+        const grid = createDataGrid(gridConfig);
+        this.clock.tick();
+        grid.editRow(0);
+        this.clock.tick();
+        grid.cellValue(0, 0, '');
+        this.clock.tick();
+
+        const $cell = $(grid.getCellElement(0, 0));
+        const errorOverlay = $cell.find('.dx-invalid-message.dx-overlay').dxOverlay('instance');
+        const bottomCellPosition = $cell.offset().top + $cell.outerHeight();
+        const errorMessageTopPosition = $(errorOverlay.content()).offset().top;
+        const errorMessageTopOffset = errorMessageTopPosition - bottomCellPosition;
+
+        // assert
+        assert.roughEqual(errorMessageTopOffset, -0.5, 0.6, 'error message offset');
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
