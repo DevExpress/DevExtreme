@@ -524,10 +524,6 @@ $scheduler-appointment-form-label-padding: 20px;
       top: 0;
       left: 0;
       box-shadow: $scheduler-appointment-dragging-shadow, $scheduler-vertical-appointment-resizing-shadow;
-    }
-
-    .dx-resizable-resizing,
-    .dx-draggable-dragging {
       z-index: 1000;
     }
   }

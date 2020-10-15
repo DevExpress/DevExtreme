@@ -719,13 +719,18 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
     &.dx-state-active,
     &.dx-resizable-resizing,
-    &.dx-draggable-dragging,
     &.dx-state-hover,
     &.dx-state-hover.dx-resizable {
       box-shadow: none;
     }
 
     border-radius: 2px;
+  }
+}
+
+.dx-scheduler-fixed-appointments {
+  .dx-draggable-dragging {
+    box-shadow: none;
   }
 }
 
