@@ -138,7 +138,7 @@ let DataSourceAdapterTreeList = DataSourceAdapter.inherit((function() {
             const key = this._keyGetter(item);
             let parentId = this._parentIdGetter(item);
 
-            parentId = parentId !== undefined ? parentId : rootValue;
+            parentId = isDefined(parentId) ? parentId : rootValue;
             const parentNode = nodeByKey[parentId] = nodeByKey[parentId] || { key: parentId, children: [] };
 
             const node = nodeByKey[key] = nodeByKey[key] || { key: key, children: [] };
