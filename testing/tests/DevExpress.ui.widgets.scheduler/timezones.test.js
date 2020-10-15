@@ -113,7 +113,7 @@ module('Common', moduleConfig, () => {
                 const pointer = pointerMock(dragAppointment).start();
 
                 // Cell on 2 A.M.
-                const dataCellOffset = $(CLASSES.dataTableCell).eq(4).offset();
+                const dataCellOffset = $(CLASSES.dateTableCell).eq(4).offset();
 
                 pointer
                     .down(0, 0)
