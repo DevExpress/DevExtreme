@@ -58,7 +58,7 @@ const createScheduler = (options = {}) => {
 };
 
 module('Common', moduleConfig, () => {
-    if(isDesktopEnvironment) {
+    if(isDesktopEnvironment()) {
         [undefined, timeZones.LosAngeles]
             .forEach(timeZone => {
                 test(`After drag element to scheduler, dates from elements should be valid, if timeZone=${timeZone}(T924224)`, function(assert) {
