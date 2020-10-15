@@ -94,10 +94,9 @@ export default class AppointmentDragBehavior {
 
             if(!e.cancel) {
                 options.onDragEnd(e);
-            }
-
-            if(e.fromComponent !== e.toComponent) {
-                appointmentDragging.onRemove && appointmentDragging.onRemove(e);
+                if(e.fromComponent !== e.toComponent) {
+                    appointmentDragging.onRemove && appointmentDragging.onRemove(e);
+                }
             }
         };
     }
