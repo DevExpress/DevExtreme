@@ -329,8 +329,8 @@
             ]
           },
           {
-            "Title": "State Management (CTP)",
-            "Name": "StateManagement",
+            "Title": "Edit State Management (CTP)",
+            "Name": "EditStateManagement",
             "DocUrl": "",
             "Widget": "DataGrid",
             "DemoType": "Web",

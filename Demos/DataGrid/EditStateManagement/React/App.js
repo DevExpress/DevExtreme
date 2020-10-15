@@ -35,12 +35,12 @@ function App() {
     e.promise = saveChange(dispatch, e.changes[0]);
   }, []);
 
-  const onOptionChanged = React.useCallback((e) => {
-    if (e.fullName === 'editing.editRowKey') {
-      setEditRowKey(dispatch, e.value);
-    } else if (e.fullName === 'editing.changes') {
-      setChanges(dispatch, e.value);
-    }
+  const onChangesChange = React.useCallback((changes) => {
+    setChanges(dispatch, changes);
+  }, []);
+
+  const onEditRowKeyChange = React.useCallback((editRowKey) => {
+    setEditRowKey(dispatch, editRowKey);
   }, []);
 
   return (
@@ -55,15 +55,16 @@ function App() {
         dataSource={state.data}
         showBorders={true}
         repaintChangesOnly={true}
-        onSaving={onSaving}
-        onOptionChanged={onOptionChanged}>
+        onSaving={onSaving}>
         <Editing
           mode="row"
           allowAdding={true}
           allowDeleting={true}
           allowUpdating={true}
           changes={state.changes}
+          onChangesChange={onChangesChange}
           editRowKey={state.editRowKey}
+          onEditRowKeyChange={onEditRowKeyChange}
         />
         <Column dataField="OrderID" allowEditing={false}></Column>
         <Column dataField="ShipName"></Column>
