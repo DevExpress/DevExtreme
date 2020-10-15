@@ -3,14 +3,14 @@
     <span>Profile Picture</span>
     <div
       id="dropzone-external"
-      :class="dropzoneClassObject"
+      class="flex-box"
+      :class="[isDropZoneActive ? 'dx-theme-accent-as-border-color dropzone-active' : 'dx-theme-border-color']"
     >
       <img
-        ref="dropzoneImage"
         id="dropzone-image"
-        :hidden="true"
+        :src="imageSource"
+        :hidden="!imageSource"
         alt=""
-        @load="toggleImageVisible(true)"
       >
       <div
         id="dropzone-text"
@@ -20,14 +20,13 @@
         <span>…or click to browse for a file instead.</span>
       </div>
       <DxProgressBar
-        ref="uploadProgress"
         id="upload-progress"
         :min="0"
         :max="100"
         width="30%"
         :show-status="false"
-        :visible="false"
-        :value="0"
+        :visible="progressVisible"
+        :value="progressValue"
       />
     </div>
     <DxFileUploader
@@ -59,17 +58,10 @@ export default {
   data() {
     return {
       isDropZoneActive: false,
-      dropzoneClassObject: {
-        'dx-theme-accent-as-border-color': this.isDropZoneActive,
-        'dropzone-active': this.isDropZoneActive,
-        'dx-theme-border-color': !this.isDropZoneActive,
-        'flex-box': true
-      }
+      imageSource: '#',
+      progressVisible: false,
+      progressValue: 0
     };
-  },
-  mounted() {
-    this.dropzoneImage = this.$refs.dropzoneImage;
-    this.uploadProgress = this.$refs.uploadProgress.instance;
   },
   methods: {
     onDropZoneEnter(e) {
@@ -88,25 +80,19 @@ export default {
       const fileReader = new FileReader();
       fileReader.onload = () => {
         this.isDropZoneActive = false;
-        this.dropzoneImage.src = fileReader.result;
+        this.imageSource = fileReader.result;
       };
       fileReader.readAsDataURL(file);
       dropZoneText.style.display = 'none';
-      this.uploadProgress.option({
-        visible: false,
-        value: 0
-      });
+      this.progressVisible = false;
+      this.progressValue = 0;
     },
     onProgress(e) {
-      this.uploadProgress.option('value', e.bytesLoaded / e.bytesTotal * 100);
+      this.progressValue = e.bytesLoaded / e.bytesTotal * 100;
     },
     onUploadStarted() {
-      this.dropzoneImage.src = '';
-      this.toggleImageVisible(false);
-      this.uploadProgress.option('visible', true);
-    },
-    toggleImageVisible(visible) {
-      this.dropzoneImage.hidden = !visible;
+      this.imageSource = '';
+      this.progressVisible = true;
     }
   }
 };
