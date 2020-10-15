@@ -25,6 +25,11 @@ export default {
   components: {
     DxTileView
   },
+  data() {
+    return {
+      dataSource: homes
+    };
+  },
   methods: {
     formatCurrency(value) {
       return new Intl.NumberFormat('en-US', {
@@ -34,11 +39,6 @@ export default {
         maximumFractionDigits: 0
       }).format(value);
     }
-  },
-  data() {
-    return {
-      dataSource: homes
-    };
   }
 };
 </script>

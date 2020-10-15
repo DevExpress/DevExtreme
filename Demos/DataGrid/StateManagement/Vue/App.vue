@@ -64,9 +64,6 @@ export default {
       loadPanelPosition: { of: '#gridContainer' }
     };
   },
-  created() {
-    this.loadOrders();
-  },
   computed: {
     ...mapGetters(['orders', 'isLoading']),
     editRowKey: {
@@ -94,6 +91,9 @@ export default {
         })), null, ' ');
       }
     }
+  },
+  created() {
+    this.loadOrders();
   },
   methods: {
     ...mapActions(['setEditRowKey', 'setChanges', 'loadOrders', 'insert', 'update', 'remove', 'saveChange']),

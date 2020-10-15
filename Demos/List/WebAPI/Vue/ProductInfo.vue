@@ -15,16 +15,16 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 });
 
 export default {
-  methods: {
-    currency(data) {
-      return currencyFormatter.format(data);
-    }
-  },
   props: {
     item: {
       type: Object,
       default: () => {}
     }
   },
+  methods: {
+    currency(data) {
+      return currencyFormatter.format(data);
+    }
+  }
 };
 </script>

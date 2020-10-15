@@ -64,14 +64,14 @@ export default {
     DxDataGrid,
     DxColumn
   },
-  methods: {
-    formatDate: new Intl.DateTimeFormat('en-US').format
-  },
   data() {
     return {
       employees: service.getEmployees()
     };
   },
+  methods: {
+    formatDate: new Intl.DateTimeFormat('en-US').format
+  }
 };
 </script>
 <style scoped>

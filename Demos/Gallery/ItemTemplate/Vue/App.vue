@@ -23,6 +23,11 @@ export default {
   components: {
     DxGallery
   },
+  data() {
+    return {
+      dataSource: gallery
+    };
+  },
   methods: {
     formatCurrency(value) {
       return new Intl.NumberFormat('en-US', {
@@ -32,12 +37,7 @@ export default {
         maximumFractionDigits: 0
       }).format(value);
     }
-  },
-  data() {
-    return {
-      dataSource: gallery
-    };
-  },
+  }
 };
 </script>
 

@@ -24,6 +24,12 @@ export default {
     DxSize,
     DxTooltip
   },
+  props: {
+    cellData: {
+      type: Object,
+      default: () => {}
+    }
+  },
   methods: {
     className(value) {
       return gridCellData(value).diff > 0 ? 'inc' : 'dec';
@@ -36,12 +42,6 @@ export default {
     },
     fixed(value, precision) {
       return value.toFixed(precision);
-    }
-  },
-  props: {
-    cellData: {
-      type: Object,
-      default: () => {}
     }
   }
 };
