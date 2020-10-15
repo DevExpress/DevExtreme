@@ -934,7 +934,7 @@ class FileUploader extends Editor {
             e.preventDefault();
         }
 
-        this._toggleDropZoneActive(true, isCustomTarget, e);
+        this._tryToggleDropZoneActive(true, isCustomTarget, e);
         this._updateEventTargets(e);
     }
 
@@ -951,7 +951,7 @@ class FileUploader extends Editor {
         }
 
         this._updateEventTargets(e);
-        this._toggleDropZoneActive(false, isCustomTarget, e);
+        this._tryToggleDropZoneActive(false, isCustomTarget, e);
     }
 
     _updateEventTargets(e) {
@@ -965,7 +965,7 @@ class FileUploader extends Editor {
         }
     }
 
-    _toggleDropZoneActive(active, isCustom, event) {
+    _tryToggleDropZoneActive(active, isCustom, event) {
         const classAction = active ? 'addClass' : 'removeClass';
         const mouseAction = active ? '_dropZoneEnterAction' : '_dropZoneLeaveAction';
 
