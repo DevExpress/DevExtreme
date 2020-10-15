@@ -204,7 +204,7 @@ class Diagram extends Widget {
             this._diagramInstance.captureFocus();
         }
     }
-    _captureFocusTimeout() {
+    _captureFocusOnTimeout() {
         this._captureFocusTimeout = setTimeout(() => {
             this._captureFocus();
             delete this._captureFocusTimeout;
@@ -217,7 +217,7 @@ class Diagram extends Widget {
         }
     }
     notifyBarCommandExecuted() {
-        this._captureFocusTimeout();
+        this._captureFocusOnTimeout();
     }
     _registerToolbar(component) {
         this._registerBar(component);
@@ -548,7 +548,7 @@ class Diagram extends Widget {
         });
     }
     _onPanelPointerUp() {
-        this._captureFocusTimeout();
+        this._captureFocusOnTimeout();
     }
     _renderContextMenu($parent) {
         const $contextMenu = $('<div>')
