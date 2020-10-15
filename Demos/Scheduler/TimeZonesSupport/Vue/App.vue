@@ -62,7 +62,7 @@ export default {
   },
   methods: {
     onAppointmentFormOpening: function(args) {
-      const form = e.form;
+      const form = args.form;
 
       const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
       const endDateTimezoneEditor = form.getEditor('endDateTimeZone');
@@ -76,7 +76,7 @@ export default {
       endDateDataSource.load();
     },
     onOptionChanged: function(args) {
-      if(args.name === 'currentDate') {      
+      if(args.name === 'currentDate') {
         this.locationsData = getLocations(args.value);
       }
     }
