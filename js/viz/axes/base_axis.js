@@ -746,7 +746,7 @@ Axis.prototype = {
         that._axisGridGroup.remove();
 
         that._axisTitleGroup.clear();
-        !that.isRendered() && that._axisElementsGroup.clear(); // for react async templates
+        (!that._options.label.template || !that.isRendered()) && that._axisElementsGroup.clear(); // for react async templates
 
         that._axisLineGroup && that._axisLineGroup.clear();
         that._axisStripGroup && that._axisStripGroup.clear();
