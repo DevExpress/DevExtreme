@@ -23,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
     orders$: Observable<Order[]>;
     changes: Change<Order>[] = [];
     editRowKey?: number = null;
-    changesText = '';
+    changesText = '[]';
     isLoading = false;
     loadPanelPosition = { of: '#gridContainer' };
 
