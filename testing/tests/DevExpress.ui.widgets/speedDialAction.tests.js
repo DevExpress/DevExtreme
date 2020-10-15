@@ -622,7 +622,6 @@ QUnit.test('check onClick handler after toggling visibility (T933671)', function
         onClick: secondClickStub
     }).dxSpeedDialAction('instance');
 
-
     this.firstSDA.option('visible', false);
     this.secondSDA.option('visible', true);
     this.firstSDA.option('visible', true);
@@ -646,7 +645,6 @@ QUnit.test('check onClick handler after toggling visibility (T933671)', function
     clickArgs = secondClickStub.getCall(0).args;
 
     assert.equal($(clickArgs[0].element).attr('id'), 'fab-two', 'right second SDA click on FAB element after toggling SDA visibility');
-
 });
 
 QUnit.module('add shading option', {
