@@ -934,16 +934,8 @@ class FileUploader extends Editor {
             e.preventDefault();
         }
 
+        this._toggleDropZoneActive(true, isCustomTarget, e);
         this._updateEventTargets(e);
-
-        this._dropZoneEnterAction({
-            event: e,
-            dropZoneElement: e.currentTarget
-        });
-
-        if(!isCustomTarget) {
-            this.$element().addClass(FILEUPLOADER_DRAGOVER_CLASS);
-        }
     }
 
     _dragOverHandler(e) {
@@ -959,15 +951,7 @@ class FileUploader extends Editor {
         }
 
         this._updateEventTargets(e);
-
-        this._dropZoneLeaveAction({
-            event: e,
-            dropZoneElement: e.currentTarget
-        });
-
-        if(!this._dragEventsTargets.length && !isCustomTarget) {
-            this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
-        }
+        this._toggleDropZoneActive(false, isCustomTarget, e);
     }
 
     _updateEventTargets(e) {
@@ -978,6 +962,21 @@ class FileUploader extends Editor {
             !isTargetExists && this._dragEventsTargets.push(e.target);
         } else {
             isTargetExists && this._dragEventsTargets.splice(targetIndex, 1);
+        }
+    }
+
+    _toggleDropZoneActive(active, isCustom, event) {
+        const classAction = active ? 'addClass' : 'removeClass';
+        const mouseAction = active ? '_dropZoneEnterAction' : '_dropZoneLeaveAction';
+
+        if(!this._dragEventsTargets.length) {
+            this[mouseAction]({
+                event,
+                dropZoneElement: event.currentTarget
+            });
+            if(!isCustom) {
+                this.$element()[classAction](FILEUPLOADER_DRAGOVER_CLASS);
+            }
         }
     }
 
