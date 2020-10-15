@@ -1007,6 +1007,22 @@ class FileUploader extends Editor {
         }
     }
 
+    _isMouseOverElement(e, element) {
+        if(!element) {
+            return false;
+        }
+
+        const x = $(element).offset().top;
+        const y = $(element).offset().left;
+        const w = element.offsetWidth;
+        const h = element.offsetHeight;
+
+        const eventX = e.offsetX;
+        const eventY = e.offsetY;
+
+        return (eventX >= x && eventX < (x + w) && eventY >= y && eventY < (y + h));
+    }
+
     _handleAllFilesUploaded() {
         const areAllFilesLoaded = this._files.every(file => !file.isValid() || file._isError || file._isLoaded || file.isAborted);
         if(areAllFilesLoaded) {
