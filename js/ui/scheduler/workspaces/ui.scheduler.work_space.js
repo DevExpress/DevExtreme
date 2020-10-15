@@ -29,7 +29,7 @@ import tableCreatorModule from '../ui.scheduler.table_creator';
 const { tableCreator } = tableCreatorModule;
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
-import { FIXED_CONTAINER_CLASS } from '../constants';
+import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_SETTINGS_KEY, FIXED_CONTAINER_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
@@ -3208,14 +3208,15 @@ class SchedulerWorkSpace extends WidgetObserver {
                 const canceled = e.cancel;
                 const event = e.event;
                 const $itemElement = $(e.itemElement);
-                const itemData = $itemElement.data('dxItemData');
-                const settings = $itemElement.data('dxAppointmentSettings');
+                const appointments = this.invoke('getAppointmentsInstance');
 
-                !canceled && $itemElement.addClass('dx-scheduler-appointment-drag-source');
+                const itemData = appointments._getItemData(e.itemElement);
+                const settings = $itemElement.data(APPOINTMENT_SETTINGS_KEY);
 
                 if(itemData && !itemData.disabled) {
                     event.data = event.data || {};
                     if(!canceled) {
+                        $itemElement.addClass(APPOINTMENT_DRAG_SOURCE_CLASS);
                         event.data.itemElement = dragElement = this._createDragAppointment(itemData, settings);
                         resetPosition($(dragElement));
                         event.data.initialPosition = locate($itemElement);
@@ -3233,7 +3234,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _createDragAppointment(itemData, settings) {
-        const appointments = this.dragBehavior.appointments;
+        const appointments = this.invoke('getAppointmentsInstance');
         const appointmentIndex = appointments.option('items').length;
 
         settings.isCompact = false;

@@ -798,6 +798,10 @@ const subscribes = {
 
     removeDroppableCellClass: function() {
         this._workSpace.removeDroppableCellClass();
+    },
+
+    getAppointmentsInstance: function() {
+        return this.getAppointmentsInstance();
     }
 };
 export default subscribes;
