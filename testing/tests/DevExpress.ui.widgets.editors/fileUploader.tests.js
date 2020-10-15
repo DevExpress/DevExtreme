@@ -3400,7 +3400,7 @@ QUnit.module('Drag and drop', moduleConfig, () => {
 
         dropZoneChild.trigger('dragenter');
         assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter not called');
-        assert.strictEqual(onDropZoneEnterSpy.args[1], undefined, 'dropZone not called');
+        assert.strictEqual(onDropZoneEnterSpy.args[1], undefined, 'dropZoneEnter not called');
 
         dropZoneChild.trigger('dragleave');
         assert.ok(onDropZoneLeaveSpy.notCalled, 'dropZoneLeave not called');
@@ -3413,7 +3413,7 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         customDropZone.remove();
     });
 
-    QUnit.test('dropZoneEnter and dropZoneLeave events should fire on correspondent interactions in the deafult drop zone', function(assert) {
+    QUnit.test('dropZoneEnter and dropZoneLeave events should fire once on correspondent interactions in the deafult drop zone', function(assert) {
         const onDropZoneEnterSpy = sinon.spy();
         const onDropZoneLeaveSpy = sinon.spy();
         const $fileUploader = $('#fileuploader').dxFileUploader({
@@ -3423,16 +3423,16 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         });
         const $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS);
 
-        const files = [fakeFile];
-        const enterEvent = $.Event($.Event('dragenter', { dataTransfer: { files: files } }));
-        const leaveEvent = $.Event($.Event('dragleave', { dataTransfer: { files: files } }));
-
-        $inputWrapper.trigger(enterEvent);
-        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called');
+        $inputWrapper.trigger('dragenter');
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called once');
         assert.strictEqual(onDropZoneEnterSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
 
-        $inputWrapper.trigger(leaveEvent);
-        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called');
+        $inputWrapper.trigger('dragenter');
+        assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter not called');
+        assert.strictEqual(onDropZoneEnterSpy.args[1], undefined, 'dropZoneEnter not called');
+
+        $inputWrapper.trigger('dragleave');
+        assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called once');
         assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
 
     });
