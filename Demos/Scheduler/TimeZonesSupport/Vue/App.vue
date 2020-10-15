@@ -36,10 +36,10 @@ import timeZoneUtils from 'devextreme/time_zone_utils';
 import { data, locations } from './data.js';
 
 const getLocations = function(date) {
-    const timeZones = timeZoneUtils.getTimeZones(date);
-    return timeZones.filter((timeZone) => {
-        return locations.indexOf(timeZone.id) !== -1;
-    });
+  const timeZones = timeZoneUtils.getTimeZones(date);
+  return timeZones.filter((timeZone) => {
+      return locations.indexOf(timeZone.id) !== -1;
+  });
 };
 
 const currentDate = new Date(2021, 4, 25);
