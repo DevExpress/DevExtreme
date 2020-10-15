@@ -33,7 +33,6 @@ class App extends React.Component {
         editing={{ allowAdding: false }}
         appointmentComponent={Appointment}
         appointmentTooltipComponent={AppointmentTooltip}
-        onContentReady={this.onContentReady}
         onAppointmentFormOpening={this.onAppointmentFormOpening}
       >
         <Resource
