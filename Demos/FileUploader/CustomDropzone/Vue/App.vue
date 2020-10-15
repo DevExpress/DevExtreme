@@ -34,7 +34,7 @@
       dialog-trigger="#dropzone-external"
       drop-zone="#dropzone-external"
       :multiple="false"
-      :allowed-file-extensions="['.jpg', '.jpeg', '.gif', '.png']"
+      :allowed-file-extensions="allowedFileExtensions"
       upload-mode="instantly"
       upload-url="https://js.devexpress.com/Content/Services/upload.aspx"
       :visible="false"
@@ -60,7 +60,8 @@ export default {
       isDropZoneActive: false,
       imageSource: '#',
       progressVisible: false,
-      progressValue: 0
+      progressValue: 0,
+      allowedFileExtensions: ['.jpg', '.jpeg', '.gif', '.png']
     };
   },
   methods: {

@@ -12,6 +12,7 @@ class App extends React.Component {
       progressVisible: false,
       progressValue: 0
     };
+    this.allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
 
     this.onDropZoneEnter = this.onDropZoneEnter.bind(this);
     this.onDropZoneLeave = this.onDropZoneLeave.bind(this);
@@ -45,7 +46,7 @@ class App extends React.Component {
           dialogTrigger="#dropzone-external"
           dropZone="#dropzone-external"
           multiple={false}
-          allowedFileExtensions={['.jpg', '.jpeg', '.gif', '.png']}
+          allowedFileExtensions={this.allowedFileExtensions}
           uploadMode="instantly"
           uploadUrl="https://js.devexpress.com/Content/Services/upload.aspx"
           visible={false}
