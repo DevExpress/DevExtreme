@@ -746,7 +746,9 @@ class Diagram extends Widget {
     }
     _clean() {
         if(this._diagramInstance) {
-            this._diagramInstance.cleanMarkup();
+            this._diagramInstance.cleanMarkup((element) => {
+                $(element).empty();
+            });
         }
         super._clean();
     }
