@@ -673,7 +673,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _optionChanged: function(args) {
-        const { name } = args;
+        const { name, fullName, value } = args;
 
         if(inArray(name.replace('on', ''), EVENTS_LIST) > -1) {
             this._refreshEvents();
@@ -720,14 +720,14 @@ const TextEditorBase = Editor.inherit({
                 this.callBase(args);
                 break;
             case 'inputAttr':
-                this._applyInputAttributes(this._input(), args.value);
+                this._applyInputAttributes(this._input(), this.option(name));
                 break;
             case 'stylingMode':
                 this._renderStylingMode();
                 break;
             case 'buttons':
-                if(args.fullName === args.name) {
-                    checkButtonsOptionType(args.value);
+                if(fullName === name) {
+                    checkButtonsOptionType(value);
                 }
                 this._$beforeButtonsContainer && this._$beforeButtonsContainer.remove();
                 this._$afterButtonsContainer && this._$afterButtonsContainer.remove();
