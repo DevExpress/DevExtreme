@@ -938,7 +938,7 @@ class FileUploader extends Editor {
 
         this._dropZoneEnterAction({
             event: e,
-            dropZoneElement: e.target
+            dropZoneElement: e.currentTarget
         });
 
         if(!isCustomTarget) {
@@ -962,7 +962,7 @@ class FileUploader extends Editor {
 
         this._dropZoneLeaveAction({
             event: e,
-            dropZoneElement: e.target
+            dropZoneElement: e.currentTarget
         });
 
         if(!this._dragEventsTargets.length && !isCustomTarget) {
