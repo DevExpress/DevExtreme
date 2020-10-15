@@ -1,4 +1,4 @@
-Our **DataGrid** widget manages the edit state automatically. However, if your use case requires full control over editing, you can use the API members below to manage the state manually.
+Our **DataGrid** widget manages the edit state automatically. However, if your use case requires full control over editing, you can use the API members below to manage the state manually. In this demo, we manage the state with a help of the <a href="https://reactjs.org/docs/hooks-reference.html#usereducer" target="_blank">useReducer</a> React hook.
 
 **Widget Options**
 
@@ -11,7 +11,7 @@ The name or data field of the column being edited.
 - **editing**.[changes](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#changes)       
 Pending row changes.
 
-You can get and set these options at runtime to access and change the edit state. In this demo, the [onOptionChanged](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#onOptionChanged) function gets the **editRowKey** and **changes** option values and displays them under the **DataGrid**.
+Bind these options to state props and set the props to change the edit state at runtime. In this demo, we bind the **editRowKey** and **changes** options and use the corresponding **on_OptionName_Change** event handlers to set the bound props.
 
 **Utility Method**
 
@@ -32,12 +32,9 @@ Use these functions to perform custom actions. In this demo, the **onSaving** fu
 Set the `e.cancel` field to **true**.
 
 1. **Send a request to the server**      
-Pending changes are stored in the `e.changes` array. It has only one element in all [edit modes](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#mode), except batch. Check if this element is not empty and send it to the server.
+Pending changes are stored in the `e.changes` array. It has only one element in all [edit modes](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/editing/#mode), except batch. Check if this element is not empty and send it to the server (see the `saveChange` action in `actions.js`).
 
-1. **Apply the same changes to a local array**       
-If the server successfully saves the changes, call the **applyChanges** method to save the same changes in a local array.
-
-1. **Update the widget's data source and reset the edit state**         
-Assign the local array to the [dataSource](/Documentation/ApiReference/UI_Widgets/dxDataGrid/Configuration/#dataSource), **null** to the **editRowKey**, and an empty array to the **changes** option.
+1. **Apply the same changes to the widget's data source and reset the edit state**       
+If the server successfully saves the changes, call the **applyChanges** method to save the same changes in the widget's data source. Assign **null** to the **editRowKey** and an empty array to the **changes** option. This resets the edit state (see the `SAVING_SUCCESS` handler in `reducer.js`).
 
 [note] This functionality is available as a <a href="https://www.devexpress.com/aboutus/pre-release.xml" target="_blank">community technology preview (CTP)</a>. Should you have any questions or suggestions prior to its official release, please email your comments to <a href="mailto:support@devexpress.com">support@devexpress.com</a>.
