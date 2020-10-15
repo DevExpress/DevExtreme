@@ -20,7 +20,6 @@ class FileManagerFileUploader extends Widget {
         this.$element().addClass(FILE_MANAGER_FILE_UPLOADER_CLASS);
 
         this._uploaderInfos = [];
-        this._dropZoneEnterCounter = 1;
 
         this._createInternalFileUploader();
         this._createDropZonePlaceholder();
@@ -178,22 +177,13 @@ class FileManagerFileUploader extends Widget {
     }
 
     _setDropZonePlaceholderVisible(visible) {
-        this._dropZoneEnterCounter += visible ? 1 : -1;
-        if(this._dropZoneEnterCounter < 0) {
-            this._resetDropZoneEnterCounter();
-        }
-        if(visible && this._dropZoneEnterCounter === 1) {
+        if(visible) {
             this._adjustDropZonePlaceholder();
             this._$dropZonePlaceholder.css('display', '');
-            return;
-        }
-        if(!visible && this._dropZoneEnterCounter === 0) {
+
+        } else {
             this._$dropZonePlaceholder.css('display', 'none');
         }
-    }
-
-    _resetDropZoneEnterCounter() {
-        this._dropZoneEnterCounter = 0;
     }
 
     _uploadFiles(uploaderInfo, files) {
@@ -309,7 +299,6 @@ class FileManagerFileUploader extends Widget {
             case 'dropZone':
                 this._findAndUpdateAvailableUploaderInfo();
                 this._adjustDropZonePlaceholder();
-                this._resetDropZoneEnterCounter();
                 break;
             case 'dropZonePlaceholderContainer':
                 this._$dropZonePlaceholder.detach();
