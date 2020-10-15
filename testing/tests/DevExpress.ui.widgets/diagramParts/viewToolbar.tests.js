@@ -51,6 +51,7 @@ QUnit.module('View Toolbar', {
         const $fullScreenButton = findViewToolbarItem(this.$element, 'full screen');
         assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         $fullScreenButton.trigger('dxclick');
+        this.clock.tick(200);
         assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test('should toggle check state on show grid button click', function(assert) {

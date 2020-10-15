@@ -199,13 +199,25 @@ class Diagram extends Widget {
         }
         return this._isMobileScreenSize;
     }
-    _diagramCaptureFocus() {
+    _captureFocus() {
         if(this._diagramInstance) {
             this._diagramInstance.captureFocus();
         }
     }
+    _captureFocusOnTimeout() {
+        this._captureFocusTimeout = setTimeout(() => {
+            this._captureFocus();
+            delete this._captureFocusTimeout;
+        }, 100);
+    }
+    _killCaptureFocusTimeout() {
+        if(this._captureFocusTimeout) {
+            clearTimeout(this._captureFocusTimeout);
+            delete this._captureFocusTimeout;
+        }
+    }
     notifyBarCommandExecuted() {
-        this._diagramCaptureFocus();
+        this._captureFocusOnTimeout();
     }
     _registerToolbar(component) {
         this._registerBar(component);
@@ -361,7 +373,7 @@ class Diagram extends Widget {
             },
             onVisibilityChanged: (e) => {
                 if(!e.visible && !this._textInputStarted) {
-                    this._diagramCaptureFocus();
+                    this._captureFocus();
                 }
 
                 if(!isServerSide) {
@@ -513,7 +525,7 @@ class Diagram extends Widget {
             },
             onVisibilityChanged: (e) => {
                 if(!e.visible && !this._textInputStarted) {
-                    this._diagramCaptureFocus();
+                    this._captureFocus();
                 }
             },
             onSelectedGroupChanged: ({ component }) => this._updatePropertiesPanelGroupBars(component),
@@ -536,16 +548,7 @@ class Diagram extends Widget {
         });
     }
     _onPanelPointerUp() {
-        this._captureFocusTimeout = setTimeout(() => {
-            this._diagramCaptureFocus();
-            delete this._captureFocusTimeout;
-        }, 100);
-    }
-    _killCaptureFocusTimeout() {
-        if(this._captureFocusTimeout) {
-            clearTimeout(this._captureFocusTimeout);
-            delete this._captureFocusTimeout;
-        }
+        this._captureFocusOnTimeout();
     }
     _renderContextMenu($parent) {
         const $contextMenu = $('<div>')
@@ -593,7 +596,7 @@ class Diagram extends Widget {
                     },
                     (shapeType) => {
                         e.callback(shapeType);
-                        this._diagramCaptureFocus();
+                        this._captureFocus();
                         e.hide();
                     }
                 );
@@ -622,7 +625,7 @@ class Diagram extends Widget {
     _showDialog(dialogParameters) {
         if(this._dialogInstance) {
             this._dialogInstance.option('onGetContent', dialogParameters.onGetContent);
-            this._dialogInstance.option('onHidden', function() { this._diagramCaptureFocus(); }.bind(this));
+            this._dialogInstance.option('onHidden', function() { this._captureFocus(); }.bind(this));
             this._dialogInstance.option('command', this._diagramInstance.getCommand(dialogParameters.command));
             this._dialogInstance.option('title', dialogParameters.title);
             this._dialogInstance._show();
@@ -743,7 +746,9 @@ class Diagram extends Widget {
     }
     _clean() {
         if(this._diagramInstance) {
-            this._diagramInstance.cleanMarkup();
+            this._diagramInstance.cleanMarkup((element) => {
+                $(element).empty();
+            });
         }
         super._clean();
     }
@@ -1496,7 +1501,7 @@ class Diagram extends Widget {
 
 
     focus() {
-        this._diagramCaptureFocus();
+        this._captureFocus();
     }
     export() {
         return this._getDiagramData();
