@@ -1230,9 +1230,9 @@ class FileUploader extends Editor {
     }
 
     _optionChanged(args) {
-        const value = args.value;
+        const { name, value, previousValue } = args;
 
-        switch(args.name) {
+        switch(name) {
             case 'height':
             case 'width':
                 this._updateFileNameMaxWidth();
@@ -1277,11 +1277,11 @@ class FileUploader extends Editor {
                 this._uploadButton && this._uploadButton.option('type', value);
                 break;
             case 'dialogTrigger':
-                this._detachSelectFileDialogHandler(args.previousValue);
+                this._detachSelectFileDialogHandler(previousValue);
                 this._attachSelectFileDialogHandler(value);
                 break;
             case 'dropZone':
-                this._detachDragEventHandlers(args.previousValue);
+                this._detachDragEventHandlers(previousValue);
                 this._attachDragEventHandlers(value);
                 break;
             case 'maxFileSize':
@@ -1359,7 +1359,7 @@ class FileUploader extends Editor {
                 this._invalidate();
                 break;
             case 'inputAttr':
-                this._applyInputAttributes(value);
+                this._applyInputAttributes(this.option(name));
                 break;
             default:
                 super._optionChanged(args);
