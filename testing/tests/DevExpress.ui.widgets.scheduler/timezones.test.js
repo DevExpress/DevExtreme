@@ -3,7 +3,8 @@ import fx from 'animation/fx';
 import {
     CLASSES,
     createWrapper,
-    initTestMarkup
+    initTestMarkup,
+    isDesktopEnvironment
 } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 
@@ -57,70 +58,72 @@ const createScheduler = (options = {}) => {
 };
 
 module('Common', moduleConfig, () => {
-    [undefined, timeZones.LosAngeles]
-        .forEach(timeZone => {
-            test(`After drag element to scheduler, dates from elements should be valid, if timeZone=${timeZone}(T924224)`, function(assert) {
-                const draggingGroupName = 'appointmentsGroup';
+    if(isDesktopEnvironment) {
+        [undefined, timeZones.LosAngeles]
+            .forEach(timeZone => {
+                test(`After drag element to scheduler, dates from elements should be valid, if timeZone=${timeZone}(T924224)`, function(assert) {
+                    const draggingGroupName = 'appointmentsGroup';
 
-                const expectedStartDate = new Date(2017, 4, 22, 2, 0);
-                const expectedEndDate = new Date(2017, 4, 22, 2, 30);
+                    const expectedStartDate = new Date(2017, 4, 22, 2, 0);
+                    const expectedEndDate = new Date(2017, 4, 22, 2, 30);
 
-                const dragAppointment = $('<div>')
-                    .text(data.text)
-                    .css({ display: 'block', width: '100px', height: '50px', background: 'red' })
-                    .prependTo('#qunit-fixture')
-                    .dxDraggable({
-                        group: draggingGroupName,
-                        data: { text: 'New Brochures' },
-                        clone: true,
-                        onDragEnd: e => {
-                            if(e.toData) {
-                                e.cancel = true;
+                    const dragAppointment = $('<div>')
+                        .text(data.text)
+                        .css({ display: 'block', width: '100px', height: '50px', background: 'red' })
+                        .prependTo('#qunit-fixture')
+                        .dxDraggable({
+                            group: draggingGroupName,
+                            data: { text: 'New Brochures' },
+                            clone: true,
+                            onDragEnd: e => {
+                                if(e.toData) {
+                                    e.cancel = true;
+                                }
+                            },
+                            onDragStart: e => {
+                                e.itemData = e.fromData;
                             }
+                        });
+
+                    const scheduler = createScheduler({
+                        dataSource: [],
+                        views: ['day'],
+                        currentView: 'day',
+                        timeZone: timeZone,
+                        editing: {
+                            allowTimeZoneEditing: true,
+                            allowAdding: true,
+                            allowUpdating: true,
                         },
-                        onDragStart: e => {
-                            e.itemData = e.fromData;
+                        height: 600,
+                        appointmentDragging: {
+                            group: draggingGroupName,
+                            onAdd: e => {
+                                e.component.showAppointmentPopup(e.itemData, true);
+
+                                const startDate = scheduler.appointmentForm.getEditor('startDate').option('value');
+                                const endDate = scheduler.appointmentForm.getEditor('endDate').option('value');
+
+                                assert.equal(startDate.valueOf(), expectedStartDate.valueOf(), 'start date should be equal with date from grid - 5/22/2017 2:00 AM');
+                                assert.equal(endDate.valueOf(), expectedEndDate.valueOf(), 'start date should be equal with date from grid - 5/22/2017 2:30 AM');
+
+                                scheduler.appointmentPopup.dialog.hide();
+                            }
                         }
                     });
 
-                const scheduler = createScheduler({
-                    dataSource: [],
-                    views: ['day'],
-                    currentView: 'day',
-                    timeZone: timeZone,
-                    editing: {
-                        allowTimeZoneEditing: true,
-                        allowAdding: true,
-                        allowUpdating: true,
-                    },
-                    height: 600,
-                    appointmentDragging: {
-                        group: draggingGroupName,
-                        onAdd: e => {
-                            e.component.showAppointmentPopup(e.itemData, true);
+                    const pointer = pointerMock(dragAppointment).start();
 
-                            const startDate = scheduler.appointmentForm.getEditor('startDate').option('value');
-                            const endDate = scheduler.appointmentForm.getEditor('endDate').option('value');
+                    // Cell on 2 A.M.
+                    const dataCellOffset = $(CLASSES.dateTableCell).eq(4).offset();
 
-                            assert.equal(startDate.valueOf(), expectedStartDate.valueOf(), 'start date should be equal with date from grid - 5/22/2017 2:00 AM');
-                            assert.equal(endDate.valueOf(), expectedEndDate.valueOf(), 'start date should be equal with date from grid - 5/22/2017 2:30 AM');
-
-                            scheduler.appointmentPopup.dialog.hide();
-                        }
-                    }
+                    pointer
+                        .down(0, 0)
+                        .move(dataCellOffset.left, dataCellOffset.top);
+                    pointer.up();
                 });
-
-                const pointer = pointerMock(dragAppointment).start();
-
-                // Cell on 2 A.M.
-                const dataCellOffset = $(CLASSES.dateTableCell).eq(4).offset();
-
-                pointer
-                    .down(0, 0)
-                    .move(dataCellOffset.left, dataCellOffset.top);
-                pointer.up();
             });
-        });
+    }
 });
 
 module('Not native date DST', moduleConfig, () => {
