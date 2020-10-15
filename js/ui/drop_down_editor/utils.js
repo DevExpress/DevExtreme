@@ -1,7 +1,7 @@
-import windowUtils from '../../core/utils/window';
+import { hasWindow } from '../../core/utils/window';
 
 const getElementWidth = function($element) {
-    if(windowUtils.hasWindow()) {
+    if(hasWindow()) {
         return $element.outerWidth();
     }
 };
