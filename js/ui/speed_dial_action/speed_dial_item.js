@@ -105,7 +105,7 @@ class SpeedDialItem extends Overlay {
     }
 
     _getVisibleActions(actions) {
-        const currentActions = actions || this.option('actions');
+        const currentActions = actions || this.option('actions')  || [];
 
         return currentActions ? currentActions.filter((action) => action.option('visible')) : [];
     }
