@@ -15,18 +15,13 @@ describe('RectSvgElement', () => {
       stroke: '#ffaa66',
       opacity: 0.8,
     } as RectSvgElementProps;
-    const restAttributes = { filter: 'filter1' };
     const viewModel = {
       rectRef: rectRef as unknown as SVGGraphicsElement,
       parsedProps,
-      restAttributes,
     };
     const rect = shallow(<RectSvgComponent {...viewModel as any} /> as JSX.Element);
 
-    expect(rect.props()).toMatchObject({
-      ...parsedProps,
-      ...restAttributes,
-    });
+    expect(rect.props()).toMatchObject({ ...parsedProps });
     expect(rect.instance()).toBe(rectRef.current);
   });
 

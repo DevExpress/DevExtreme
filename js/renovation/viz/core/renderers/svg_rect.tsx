@@ -15,7 +15,7 @@ export const viewFunction = ({
   rectRef, parsedProps: {
     x, y, width, height, strokeWidth,
     rx, ry, fill, stroke, strokeOpacity, opacity,
-  }, restAttributes,
+  },
 }: RectSvgElement): JSX.Element => (
   <rect
     ref={rectRef as any}
@@ -30,20 +30,18 @@ export const viewFunction = ({
     strokeWidth={strokeWidth}
     strokeOpacity={strokeOpacity}
     opacity={opacity}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
   />
 );
 
 @ComponentBindings()
 export class RectSvgElementProps extends SvgGraphicsProps {
-  @OneWay() x?: number = 0;
+  @OneWay() x = 0;
 
-  @OneWay() y?: number = 0;
+  @OneWay() y = 0;
 
-  @OneWay() width?: number = 0;
+  @OneWay() width = 0;
 
-  @OneWay() height?: number = 0;
+  @OneWay() height = 0;
 
   @OneWay() rx?: number;
 
@@ -99,7 +97,8 @@ export class RectSvgElement extends JSXComponent(RectSvgElementProps) {
     return tmpProps;
   }
 
-  @Effect() effectUpdateShape(): void {
+  @Effect()
+  effectUpdateShape(): void {
     const props = this.parsedProps;
     applyGraphicProps(this.rectRef, props, props.x, props.y);
   }

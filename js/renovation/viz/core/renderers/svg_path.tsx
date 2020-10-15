@@ -16,7 +16,7 @@ import { combinePathParam, buildPathSegments } from './utils';
 export const viewFunction = ({
   d, props: {
     fill, stroke, strokeWidth, strokeOpacity, strokeLineCap, opacity,
-  }, restAttributes,
+  },
 }: PathSvgElement): JSX.Element => (
   <path
     d={d}
@@ -26,8 +26,6 @@ export const viewFunction = ({
     strokeOpacity={strokeOpacity}
     strokeLinecap={strokeLineCap}
     opacity={opacity}
-    // eslint-disable-next-line react/jsx-props-no-spreading
-    {...restAttributes}
   />
 );
 
@@ -37,7 +35,7 @@ export class PathSvgElementProps extends SvgGraphicsProps {
 
   @OneWay() type: PathType = 'line';
 
-  @OneWay() d?: string = '';
+  @OneWay() d = '';
 
   @OneWay() strokeLineCap?: LineCap;
 }

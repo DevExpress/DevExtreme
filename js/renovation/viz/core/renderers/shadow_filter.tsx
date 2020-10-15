@@ -51,21 +51,21 @@ export const viewFunction = ({
 export class ShadowFilterProps {
   @OneWay() id?: string;
 
-  @OneWay() x?: number|string = 0;
+  @OneWay() x: number|string = 0;
 
-  @OneWay() y?: number|string = 0;
+  @OneWay() y: number|string = 0;
 
-  @OneWay() width?: number|string = 0;
+  @OneWay() width: number|string = 0;
 
-  @OneWay() height?: number|string = 0;
+  @OneWay() height: number|string = 0;
 
-  @OneWay() offsetX?: number|string = 0;
+  @OneWay() offsetX: number|string = 0;
 
-  @OneWay() offsetY?: number|string = 0;
+  @OneWay() offsetY: number|string = 0;
 
-  @OneWay() blur?: number = 0;
+  @OneWay() blur = 0;
 
-  @OneWay() color?: string = '';
+  @OneWay() color = '';
 
   @OneWay() opacity?: number;
 }

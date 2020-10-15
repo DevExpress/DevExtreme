@@ -44,9 +44,9 @@ export const viewFunction = ({
 export class SvgPatternProps {
   @OneWay() id?: string;
 
-  @OneWay() color?: string = '';
+  @OneWay() color = '';
 
-  @OneWay() hatching?: Hatching = {};
+  @OneWay() hatching?: Hatching;
 }
 
 @Component({

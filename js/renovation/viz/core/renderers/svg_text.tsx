@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-plusplus */
 import {
@@ -32,7 +33,6 @@ export const viewFunction = ({
   props: {
     text, x, y, fill, stroke, strokeWidth, strokeOpacity, opacity,
   },
-  restAttributes,
 }: TextSvgElement): JSX.Element => {
   const texts = textItems || [];
 
@@ -48,17 +48,13 @@ export const viewFunction = ({
       strokeWidth={strokeWidth}
       strokeOpacity={strokeOpacity}
       opacity={opacity}
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...restAttributes}
     >
-      {texts.length && isStroked && texts.map((item, index) => {
-        const { style, className, value } = item;
-        return (<tspan key={index} style={style} className={className}>{value}</tspan>);
-      })}
-      {texts.length && texts.map((item, index) => {
-        const { style, className, value } = item;
-        return (<tspan key={index} style={style} className={className}>{value}</tspan>);
-      })}
+      {texts.length && isStroked && texts.map(({ style, className, value }, index) => (
+        <tspan key={index} style={style} className={className}>{value}</tspan>
+      ))}
+      {texts.length && texts.map(({ style, className, value }, index) => (
+        <tspan key={index} style={style} className={className}>{value}</tspan>
+      ))}
       {!(texts.length) && text}
     </text>
   );
@@ -66,19 +62,21 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TextSvgElementProps extends SvgGraphicsProps {
-  @OneWay() text?: string = '';
+  @OneWay() text = '';
 
-  @OneWay() x?: number = 0;
+  @OneWay() x = 0;
 
-  @OneWay() y?: number = 0;
+  @OneWay() y = 0;
 
-  @OneWay() align?: LabelAlignment = 'center';
+  @OneWay() align: LabelAlignment = 'center';
 
   @OneWay() textsAlignment?: LabelAlignment;
 
-  @OneWay() encodeHtml?: boolean = true;
+  @OneWay() styles?: { [key: string]: any };
 
-  @OneWay() rtl?: boolean = false;
+  @OneWay() encodeHtml = true;
+
+  @OneWay() rtl = false;
 }
 
 @Component({
@@ -90,7 +88,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   @Ref() textRef!: SVGGraphicsElement;
 
   get styles(): { [key: string]: any } {
-    const style = this.restAttributes.style || {};
+    const style = this.props.styles || {};
 
     return {
       whiteSpace: 'pre',
@@ -126,7 +124,8 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
     return convertAlignmentToAnchor(this.props.align, this.props.rtl);
   }
 
-  @Effect() effectUpdateText(): void {
+  @Effect()
+  effectUpdateText(): void {
     const texts = this.textItems;
     if (texts) {
       const items = this.parseTspanElements(texts);
@@ -177,8 +176,8 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
   }
 
   locateTextNodes(items: TextItem[]): void {
-    const { x, y } = this.props;
-    const lineHeight = getLineHeight(this.restAttributes.style || {});
+    const { x, y, styles } = this.props;
+    const lineHeight = getLineHeight(styles || {});
     let item = items[0];
     setTextNodeAttribute(item, 'x', x);
     setTextNodeAttribute(item, 'y', y);

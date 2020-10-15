@@ -1,6 +1,6 @@
 import React, { createRef } from 'react';
 import { shallow } from 'enzyme';
-import { TextSvgElement, TextSvgElementProps, viewFunction as TextSvgComponent } from '../svg_text';
+import { TextSvgElement, viewFunction as TextSvgComponent } from '../svg_text';
 
 describe('TextSvgElement', () => {
   describe('View', () => {
@@ -13,7 +13,7 @@ describe('TextSvgElement', () => {
       opacity: 0.8,
     };
 
-    const getProps = (text): TextSvgElementProps => ({
+    const getProps = (text) => ({
       text,
       x: 10,
       y: 20,
@@ -22,7 +22,7 @@ describe('TextSvgElement', () => {
 
     const render = (text, textItems, {
       styles, textAnchor, isStroked,
-    }, restAttributes) => {
+    }) => {
       const props = getProps(text);
       const viewModel = {
         textRef: textRef as unknown as SVGGraphicsElement,
@@ -31,7 +31,6 @@ describe('TextSvgElement', () => {
         textAnchor,
         isStroked,
         props,
-        restAttributes,
       };
 
       const svgText = shallow(<TextSvgComponent {...viewModel as any} /> as JSX.Element);
@@ -44,30 +43,26 @@ describe('TextSvgElement', () => {
     };
 
     it('Default render (empty text)', () => {
-      const restAttributes = { dx: 5 };
-      const { props, instance, children } = render(undefined, undefined, { styles: { whiteSpace: 'pre' }, textAnchor: 'middle', isStroked: false }, restAttributes);
+      const { props, instance, children } = render(undefined, undefined, { styles: { whiteSpace: 'pre' }, textAnchor: 'middle', isStroked: false });
       expect(props).toMatchObject({
         x: 10,
         y: 20,
         textAnchor: 'middle',
         style: { whiteSpace: 'pre' },
         ...commonProps,
-        ...restAttributes,
       });
       expect(instance).toBe(textRef.current);
       expect(children).toHaveLength(0);
     });
 
     it('Default render', () => {
-      const restAttributes = { dx: 5 };
-      const { props, instance, children } = render('Some text', [], { styles: { whiteSpace: 'pre' }, textAnchor: 'middle', isStroked: false }, restAttributes);
+      const { props, instance, children } = render('Some text', [], { styles: { whiteSpace: 'pre' }, textAnchor: 'middle', isStroked: false });
       expect(props).toMatchObject({
         x: 10,
         y: 20,
         textAnchor: 'middle',
         style: { whiteSpace: 'pre' },
         ...commonProps,
-        ...restAttributes,
       });
       expect(instance).toBe(textRef.current);
       expect(children).toHaveLength(1);
@@ -78,7 +73,7 @@ describe('TextSvgElement', () => {
       const { children } = render('Some\ntext', [
         { style: { fontSize: '12px' }, className: 'first-line', value: 'Some' },
         { style: { fontSize: '14px' }, className: 'second-line', value: 'text' },
-      ], { styles: {}, textAnchor: 'middle', isStroked: false }, {});
+      ], { styles: {}, textAnchor: 'middle', isStroked: false });
       expect(children).toHaveLength(2);
       expect(children.at(0).text()).toBe('Some');
       expect(children.at(0).hasClass('first-line')).toBe(true);
@@ -92,7 +87,7 @@ describe('TextSvgElement', () => {
       const { children } = render('Some\ntext', [
         { style: { fontSize: '12px' }, className: 'first-line', value: 'Some' },
         { style: { fontSize: '14px' }, className: 'second-line', value: 'text' },
-      ], { styles: {}, textAnchor: 'middle', isStroked: true }, {});
+      ], { styles: {}, textAnchor: 'middle', isStroked: true });
       expect(children).toHaveLength(4);
       expect(children.at(0).text()).toBe(children.at(2).text());
       expect(children.at(0).hasClass('first-line')).toBe(children.at(2).hasClass('first-line'));
@@ -332,8 +327,7 @@ describe('TextSvgElement', () => {
     });
 
     it('styles', () => {
-      const text = new TextSvgElement({ });
-      text.restAttributes = { style: { fill: 'red', fontSize: '14px' } };
+      const text = new TextSvgElement({ styles: { fill: 'red', fontSize: '14px' } });
 
       expect(text.styles).toStrictEqual({
         whiteSpace: 'pre',

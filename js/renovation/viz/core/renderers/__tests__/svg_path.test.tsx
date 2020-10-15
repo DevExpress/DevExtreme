@@ -17,11 +17,9 @@ describe('PathSvgElement', () => {
       strokeLineCap: 'square',
       ...commonProps,
     } as PathSvgElementProps;
-    const restAttributes = { filter: 'filter1' };
     const viewModel = {
       d: 'M 1 2 L 3 4',
       props,
-      restAttributes,
     };
     const rect = shallow(<PathSvgComponent {...viewModel as any} /> as JSX.Element);
 
@@ -30,7 +28,6 @@ describe('PathSvgElement', () => {
       // eslint-disable-next-line spellcheck/spell-checker
       strokeLinecap: 'square',
       ...commonProps,
-      ...restAttributes,
     });
   });
 
