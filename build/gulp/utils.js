@@ -14,5 +14,6 @@ const runTaskByCondition = (condition, task) => {
 
 module.exports = {
     runTaskByCondition,
+    ifEsmPackage: (task) => runTaskByCondition(env.BUILD_ESM_PACKAGE, task),
     ifRenovation: (task) => runTaskByCondition(env.USE_RENOVATION, task)
 };

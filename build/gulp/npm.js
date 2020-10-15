@@ -17,11 +17,12 @@ const env = require('./env-variables');
 const headerPipes = require('./header-pipes.js');
 const renovatedComponents = require('../../js/bundles/modules/parts/renovation');
 const renovationPipes = require('./renovation-pipes');
-const { ifRenovation } = require('./utils');
+const { ifRenovation, ifEsmPackage } = require('./utils');
 const { version } = require('../../package.json');
 
 const resultPath = ctx.RESULT_NPM_PATH;
 const renovation = env.USE_RENOVATION;
+const esmPackage = env.BUILD_ESM_PACKAGE;
 
 const srcGlobsPattern = (path, exclude) => [
     `${path}/**/*.js`,
@@ -41,6 +42,11 @@ const renovationSrcGlobs = srcGlobsPattern(
     ctx.TRANSPILED_PROD_RENOVATION_PATH,
     ctx.TRANSPILED_PROD_PATH
 );
+
+const esmPackageJsonGlobs = [
+    `${ctx.TRANSPILED_PROD_PATH}/**/*.json`,
+    `!${ctx.TRANSPILED_PROD_PATH}/viz/vector_map.utils/**/*`
+];
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
@@ -77,12 +83,13 @@ const renovationDistGlobs = distGlobsPattern(ctx.RESULT_JS_RENOVATION_PATH, ctx.
 
 const addDefaultExport = lazyPipe().pipe(() =>
     through.obj((chunk, enc, callback) => {
-        const moduleName = chunk.relative.replace('.js', '').split('\\').join('/');
+        const moduleName = chunk.relative.replace('.js', '').replace(/^cjs(\/|\\)/, '').split('\\').join('/');
         const moduleMeta = MODULES.filter(({ name }) => name === moduleName)[0];
 
         if(moduleMeta && moduleMeta.exports && moduleMeta.exports.default) {
-            chunk.contents = Buffer.from(`${String(chunk.contents)}
-                module.exports.default = module.exports;`);
+            chunk.contents = Buffer.from(
+                `${String(chunk.contents)}module.exports.default = module.exports;`
+            );
         }
         callback(null, chunk);
     })
@@ -95,6 +102,10 @@ const sources = (src, dist, distGlob) => (() => merge(
         .pipe(headerPipes.starLicense())
         .pipe(compressionPipes.beautify())
         .pipe(gulp.dest(dist)),
+
+    gulp
+        .src(esmPackageJsonGlobs)
+        .pipe(gulpIf(esmPackage, gulp.dest(dist))),
 
     gulp
         .src(jsonGlobs)
@@ -133,6 +144,9 @@ const sources = (src, dist, distGlob) => (() => merge(
 gulp.task('npm-sources', gulp.series(
     'ts-sources',
     sources(srcGlobs, `${resultPath}/devextreme`, distGlobs),
+    ifEsmPackage(
+        sources(srcGlobs, `${resultPath}/devextreme-esm`, renovationDistGlobs)
+    ),
     ifRenovation(
         sources(renovationSrcGlobs, `${resultPath}/devextreme-renovation`, renovationDistGlobs)
     ),
@@ -153,17 +167,20 @@ gulp.task('npm-sass', gulp
             .src('scss/**/*')
             .pipe(dataUri())
             .pipe(gulp.dest(`${resultPath}/devextreme/scss`))
-            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss`))),
+            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss`)))
+            .pipe(gulpIf(esmPackage, gulp.dest(`${resultPath}/devextreme-esm/scss`))),
 
         () => gulp
             .src('fonts/**/*', { base: '.' })
             .pipe(gulp.dest(`${resultPath}/devextreme/scss/widgets/material/typography`))
-            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/material/typography`))),
+            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/material/typography`)))
+            .pipe(gulpIf(esmPackage, gulp.dest(`${resultPath}/devextreme-esm/scss/widgets/material/typography`))),
 
         () => gulp
             .src('icons/**/*', { base: '.' })
             .pipe(gulp.dest(`${resultPath}/devextreme/scss/widgets/base`))
-            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/base`))),
+            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/base`)))
+            .pipe(gulpIf(esmPackage, gulp.dest(`${resultPath}/devextreme-esm/scss/widgets/base`))),
     ));
 
 gulp.task('npm', gulp.series('npm-sources', 'ts-modules-check', 'npm-sass'));

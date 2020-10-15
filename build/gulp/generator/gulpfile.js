@@ -13,6 +13,8 @@ const gulpIf = require('gulp-if');
 const babel = require('gulp-babel');
 const notify = require('gulp-notify');
 const watch = require('gulp-watch');
+const transpileConfig = require('../transpile-config');
+const env = require('../env-variables');
 const {
     BASE_GENERATOR_OPTIONS,
     BASE_GENERATOR_OPTIONS_WITH_JQUERY
@@ -21,6 +23,9 @@ const {
 const generator = new PreactGenerator();
 
 const jQueryComponentsGlob = 'js/renovation/**/*.j.tsx';
+
+const renovation = env.USE_RENOVATION;
+const esmPackage = env.BUILD_ESM_PACKAGE;
 
 const SRC = [
     'js/renovation/**/*.{tsx,ts}',
@@ -63,6 +68,7 @@ function generateJQueryComponents(isWatch) {
 }
 
 const context = require('../context.js');
+const { ifEsmPackage } = require('../utils');
 
 const processErrors = (knownErrors, errors = []) => (e) => {
     if(!knownErrors.some(i => e.message.includes(i))) {
@@ -71,25 +77,28 @@ const processErrors = (knownErrors, errors = []) => (e) => {
     }
 };
 
-function generatePreactComponents(dev = false) {
+function generatePreactComponents(distPath = './', babelConfig = transpileConfig.cjs, dev = false) {
     return function(done) {
         const tsProject = ts.createProject('build/gulp/generator/ts-configs/preact.tsconfig.json');
 
         generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
 
         const errors = [];
+        const isNotDTS = (file) => !file.path.endsWith('.d.ts');
+        const isDefault = distPath === './';
 
         return gulp.src(SRC, { base: 'js' })
             .pipe(generateComponents(generator))
-            .pipe(plumber(()=>null))
+            .pipe(plumber(() => null))
             .pipe(tsProject({
                 error: processErrors(knownErrors, errors),
                 finish() {}
             }))
-            .pipe(babel())
-            .pipe(gulp.dest(context.TRANSPILED_PATH))
-            .pipe(gulp.dest(context.TRANSPILED_PROD_PATH))
-            .pipe(gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH))
+            .pipe(gulpIf(isNotDTS, babel(babelConfig)))
+            .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PATH)))
+            .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PROD_PATH)))
+            .pipe(gulpIf(renovation, gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH)))
+            .pipe(gulpIf(esmPackage, gulp.dest(path.join(context.TRANSPILED_PROD_ESM_PATH, distPath))))
             .on('end', function() {
                 done(!dev && errors.length || undefined);
             });
@@ -126,12 +135,16 @@ gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
 gulp.task('generate-components', gulp.series(
     'generate-jquery-components',
     generatePreactComponents(),
+    ifEsmPackage(generatePreactComponents('./esm', transpileConfig.esm)),
+    ifEsmPackage(generatePreactComponents('./cjs', transpileConfig.cjs)),
     processRenovationMeta
 ));
 
 gulp.task('generate-components-dev', gulp.series(
     'generate-jquery-components',
-    generatePreactComponents(true),
+    generatePreactComponents('./', transpileConfig.cjs, true),
+    ifEsmPackage(generatePreactComponents('./esm', transpileConfig.esm, true)),
+    ifEsmPackage(generatePreactComponents('./cjs', transpileConfig.cjs, true)),
     processRenovationMeta
 ));
 
@@ -159,7 +172,7 @@ function addGenerationTask(
                 error: processErrors(knownErrors),
                 finish() { }
             })))
-            .pipe(gulpIf(babelGeneratedFiles, babel()))
+            .pipe(gulpIf(babelGeneratedFiles, babel(transpileConfig.cjs)))
             .pipe(gulp.dest(frameworkDest));
     });
 
@@ -177,7 +190,7 @@ function addGenerationTask(
                 .pipe(
                     gulpIf(
                         file => file.extname === '.js',
-                        babel()
+                        babel(transpileConfig.cjs)
                     )
                 )
                 .pipe(gulp.dest(frameworkDest));
@@ -207,7 +220,7 @@ function addGenerationTask(
                 .pipe(
                     gulpIf(
                         file => file.extname === '.js',
-                        babel()
+                        babel(transpileConfig.cjs)
                     )
                 )
                 .pipe(gulp.dest(frameworkDest));

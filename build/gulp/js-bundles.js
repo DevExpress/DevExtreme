@@ -13,9 +13,10 @@ const webpackStream = require('webpack-stream');
 
 const compressionPipes = require('./compression-pipes.js');
 const ctx = require('./context.js');
+const env = require('./env-variables');
 const headerPipes = require('./header-pipes.js');
 const renovationPipes = require('./renovation-pipes');
-const { ifRenovation } = require('./utils');
+const { ifRenovation, ifEsmPackage } = require('./utils');
 const webpackConfig = require('../../webpack.config.js');
 const webpackConfigDev = require('../../webpack.config.dev.js');
 
@@ -28,7 +29,9 @@ const BUNDLES = [
     '/bundles/dx.viz.js'
 ];
 
-const DEBUG_BUNDLES = BUNDLES.concat(['/bundles/dx.custom.js']);
+const BUNDLES_ESM_PACKAGE = BUNDLES.map(file => '/cjs' + file);
+const DEBUG_BUNDLES = BUNDLES.concat([ '/bundles/dx.custom.js' ]);
+const DEBUG_BUNDLES_ESM_PACKAGE = DEBUG_BUNDLES.map(file => `/cjs${file}`);
 
 const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPrefix + bundle);
 const muteWebPack = () => undefined;
@@ -40,16 +43,19 @@ const bundleProdPipe = lazyPipe()
     .pipe(headerPipes.bangLicense)
     .pipe(compressionPipes.minify);
 
-const jsBundlesProd = (src, dist) => (() =>
-    gulp.src(processBundles(BUNDLES, src))
+const jsBundlesProd = (src, dist, bundles) => (() =>
+    gulp.src(processBundles(bundles, src))
         .pipe(bundleProdPipe())
         .pipe(gulp.dest(dist))
 );
 
 gulp.task('js-bundles-prod',
-    jsBundlesProd(ctx.TRANSPILED_PROD_PATH, ctx.RESULT_JS_PATH),
+    jsBundlesProd(ctx.TRANSPILED_PROD_PATH, ctx.RESULT_JS_PATH, BUNDLES),
     ifRenovation(jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
-        ctx.RESULT_JS_RENOVATION_PATH
+        ctx.RESULT_JS_RENOVATION_PATH, BUNDLES
+    )),
+    ifEsmPackage(jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
+        ctx.RESULT_JS_RENOVATION_PATH, BUNDLES_ESM_PACKAGE
     ))
 );
 
@@ -58,8 +64,9 @@ function prepareDebugMeta(watch, renovation) {
     let bundles = watch ?
         (renovation ? renovationPipes.TEMP_PATH : 'js') :
         (renovation ? ctx.TRANSPILED_PROD_RENOVATION_PATH : ctx.TRANSPILED_PROD_PATH);
+    const debugBundles = env.BUILD_ESM_PACKAGE ? DEBUG_BUNDLES_ESM_PACKAGE : DEBUG_BUNDLES;
 
-    bundles = processBundles(DEBUG_BUNDLES, bundles);
+    bundles = processBundles(debugBundles, env.BUILD_ESM_PACKAGE ? ctx.TRANSPILED_PROD_ESM_PATH : bundles);
 
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;

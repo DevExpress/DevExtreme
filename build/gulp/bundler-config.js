@@ -36,7 +36,8 @@ gulp.task('bundler-config', function() {
         .pipe(rename('dx.custom.config.js'))
         .pipe(replace(/require *\( *["']..\//g, 'require(\'devextreme/'))
         .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme/bundles'))
-        .pipe(gulpIf(env.USE_RENOVATION, gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles')));
+        .pipe(gulpIf(env.USE_RENOVATION, gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles')))
+        .pipe(gulpIf(env.BUILD_ESM_PACKAGE, gulp.dest(context.RESULT_NPM_PATH + '/devextreme-esm/bundles')));
 });
 
 gulp.task('bundler-config-dev', function() {
