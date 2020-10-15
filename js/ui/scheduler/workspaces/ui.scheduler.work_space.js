@@ -3208,7 +3208,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                 const canceled = e.cancel;
                 const event = e.event;
                 const $itemElement = $(e.itemElement);
-                const appointments = this.invoke('getAppointmentsInstance');
+                const appointments = e.component._appointments;
 
                 const itemData = appointments._getItemData(e.itemElement);
                 const settings = $itemElement.data(APPOINTMENT_SETTINGS_KEY);
@@ -3217,7 +3217,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                     event.data = event.data || {};
                     if(!canceled) {
                         $itemElement.addClass(APPOINTMENT_DRAG_SOURCE_CLASS);
-                        event.data.itemElement = dragElement = this._createDragAppointment(itemData, settings);
+                        dragElement = this._createDragAppointment(itemData, settings, appointments);
+                        event.data.itemElement = dragElement;
                         resetPosition($(dragElement));
                         event.data.initialPosition = locate($itemElement);
                     }
@@ -3233,8 +3234,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
     }
 
-    _createDragAppointment(itemData, settings) {
-        const appointments = this.invoke('getAppointmentsInstance');
+    _createDragAppointment(itemData, settings, appointments) {
         const appointmentIndex = appointments.option('items').length;
 
         settings.isCompact = false;
