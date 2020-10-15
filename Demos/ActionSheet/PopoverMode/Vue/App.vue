@@ -1,6 +1,7 @@
 <template>
-  <div>
+  <div class="app-container">
     <DxList
+      id="list"
       :items="contacts"
       @item-click="showActionSheet"
     >
