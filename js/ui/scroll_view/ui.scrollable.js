@@ -158,10 +158,10 @@ const Scrollable = DOMComponent.inherit({
                 deferRender(() => {
                     const containerElement = this._container().get(0);
 
-                    let leftOffset = containerElement.scrollWidth - containerElement.clientWidth - (this._contentScrollRight || 0);
+                    let leftOffset = containerElement.scrollWidth - containerElement.clientWidth - (this._contentOffsetRight || 0);
                     if(leftOffset <= 0) {
                         leftOffset = 0;
-                        this._contentScrollRight = containerElement.scrollWidth - containerElement.clientWidth;
+                        this._contentOffsetRight = containerElement.scrollWidth - containerElement.clientWidth;
                     }
 
                     this.scrollTo({ left: leftOffset });
@@ -192,14 +192,15 @@ const Scrollable = DOMComponent.inherit({
         eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.cancel, SCROLLABLE), strategy.handleCancel.bind(strategy));
         eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.stop, SCROLLABLE), strategy.handleStop.bind(strategy));
 
-        const that = this;
         eventsEngine.off(this._$container, '.' + SCROLLABLE);
-        eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), function() {
-            if(that._isHorizontalRtl()) {
-                that._contentScrollRight = this.scrollWidth - (this.scrollLeft + this.clientWidth);
-            }
-            strategy.handleScroll.bind(strategy);
-        });
+        eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
+    },
+
+    _saveOffsetRightForRtlMode: function() {
+        if(this._isHorizontalRtl()) {
+            const container = this._container().get(0);
+            this._contentOffsetRight = container.scrollWidth - (container.scrollLeft + container.clientWidth);
+        }
     },
 
     _validate: function(e) {

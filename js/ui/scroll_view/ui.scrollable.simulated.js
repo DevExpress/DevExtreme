@@ -735,6 +735,7 @@ export const SimulatedStrategy = Class.inherit({
 
     handleScroll: function() {
         this._scrollAction();
+        this._component._saveOffsetRightForRtlMode();
     },
 
     _attachKeyboardHandler: function() {

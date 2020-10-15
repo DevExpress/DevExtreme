@@ -155,6 +155,7 @@ const NativeStrategy = Class.inherit({
         this._scrollAction(this._createActionArgs());
         this._lastLocation = this.location();
         this._pushBackFromBoundary();
+        this._component._saveOffsetRightForRtlMode();
     },
 
     _pushBackFromBoundary: function() {
