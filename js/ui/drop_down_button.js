@@ -6,7 +6,6 @@ import ButtonGroup from './button_group';
 import Popup from './popup';
 import List from './list';
 import { compileGetter } from '../core/utils/data';
-import windowUtils from '../core/utils/window';
 import domUtils from '../core/utils/dom';
 import { getImageContainer } from '../core/utils/icon';
 import DataHelperMixin from '../data_helper';
@@ -18,6 +17,7 @@ import { isPlainObject, isDefined } from '../core/utils/type';
 import { ensureDefined } from '../core/utils/common';
 import Guid from '../core/guid';
 import { format as formatMessage } from '../localization/message';
+import { getElementWidth, getPopupWidth } from './drop_down_editor/utils';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
@@ -321,12 +321,6 @@ const DropDownButton = Widget.inherit({
             dragEnabled: false,
             focusStateEnabled: false,
             deferRendering: this.option('deferRendering'),
-            minWidth: () => {
-                if(!windowUtils.hasWindow()) {
-                    return;
-                }
-                return this.$element().outerWidth();
-            },
             closeOnOutsideClick: (e) => {
                 const $element = this.$element();
                 const $buttonClicked = $(e.target).closest(`.${DROP_DOWN_BUTTON_CLASS}`);
@@ -337,7 +331,7 @@ const DropDownButton = Widget.inherit({
                 show: { type: 'fade', duration: 0, from: 0, to: 1 },
                 hide: { type: 'fade', duration: 400, from: 1, to: 0 }
             },
-            width: 'auto',
+            width: () => getElementWidth(this.$element()),
             height: 'auto',
             shading: false,
             position: {
@@ -412,6 +406,29 @@ const DropDownButton = Widget.inherit({
             expanded: false,
             owns: undefined
         });
+    },
+
+    _popupOptionChanged: function(args) {
+        const options = Widget.getOptionsFromContainer(args);
+
+        this._setPopupOption('width', () => getElementWidth(this.$element()));
+
+        const optionsKeys = Object.keys(options);
+        if(optionsKeys.indexOf('width') !== -1 || optionsKeys.indexOf('height') !== -1) {
+            this._dimensionChanged();
+        }
+    },
+
+    _dimensionChanged: function() {
+        const popupWidth = getPopupWidth(this.option('dropDownOptions.width'));
+
+        if(popupWidth === undefined) {
+            this._setPopupOption('width', () => getElementWidth(this.$element()));
+        }
+    },
+
+    _setPopupOption: function(optionName, value) {
+        this._setWidgetOption('_popup', arguments);
     },
 
     _popupShowingHandler() {
@@ -578,6 +595,7 @@ const DropDownButton = Widget.inherit({
                 if(args.value.visible !== undefined) {
                     delete args.value.visible;
                 }
+                this._popupOptionChanged(args);
                 this._innerWidgetOptionChanged(this._popup, args);
                 break;
             case 'opened':

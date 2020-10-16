@@ -228,19 +228,6 @@ QUnit.test('deleteItem should remove item by index', function(assert) {
     assert.deepEqual(list.option('items'), groupedListData.itemsAfterDelete, 'item deleted');
 });
 
-QUnit.test('deleteItem should remove item by index', function(assert) {
-    const $list = $('#templated-list').dxList({
-        items: groupedListData.data,
-        grouped: true,
-        editEnabled: true
-    });
-    const list = $list.dxList('instance');
-
-    list.deleteItem({ group: 1, item: 2 });
-
-    assert.deepEqual(list.option('items'), groupedListData.itemsAfterDelete, 'item deleted');
-});
-
 QUnit.module('keyboard navigation', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -400,6 +387,77 @@ QUnit.test('selectAll/unselectAll for \'allPages\' selectAllMode', function(asse
 
     assert.deepEqual(instance.option('selectedItems'), [], 'selected items is empty');
     assert.equal(loading.callCount, 2, 'no load during unselect all');
+});
+
+QUnit.test('selectAllMode option changed to \'allPages\'', function(assert) {
+    const items = [1, 2, 3, 4, 5];
+    const ds = new DataSource({
+        store: {
+            type: 'array',
+            data: items
+        },
+        pageSize: 2,
+        paginate: true
+    });
+    const $element = $('#list').dxList({
+        dataSource: ds,
+        selectionMode: 'multiple',
+        selectAllMode: 'page'
+    });
+    const instance = $element.dxList('instance');
+
+    instance.selectAll();
+    instance.option('selectAllMode', 'allPages');
+    instance.selectAll();
+
+    assert.deepEqual(instance.option('selectedItems'), items, 'selected items is correct');
+});
+
+QUnit.test('selectAllMode option changed to \'page\'', function(assert) {
+    const items = [1, 2, 3, 4, 5];
+    const ds = new DataSource({
+        store: {
+            type: 'array',
+            data: items
+        },
+        pageSize: 2,
+        paginate: true
+    });
+    const $element = $('#list').dxList({
+        dataSource: ds,
+        selectionMode: 'multiple',
+        selectAllMode: 'allPages'
+    });
+    const instance = $element.dxList('instance');
+
+    instance.option('selectAllMode', 'page');
+    instance.selectAll();
+
+    assert.deepEqual(instance.option('selectedItems'), items.slice(0, 2), 'selected items is correct');
+});
+
+QUnit.test('selectAllMode option changed twice', function(assert) {
+    const items = [1, 2, 3, 4, 5];
+    const ds = new DataSource({
+        store: {
+            type: 'array',
+            data: items
+        },
+        pageSize: 2,
+        paginate: true
+    });
+    const $element = $('#list').dxList({
+        dataSource: ds,
+        selectionMode: 'multiple',
+        selectAllMode: 'page'
+    });
+    const instance = $element.dxList('instance');
+
+    instance.option('selectAllMode', 'allPages');
+    instance.option('selectAllMode', 'page');
+    instance.selectAll();
+
+    assert.deepEqual(instance.option('selectedItems'), items.slice(0, 2), 'selected items is correct');
 });
 
 QUnit.module('selection');
