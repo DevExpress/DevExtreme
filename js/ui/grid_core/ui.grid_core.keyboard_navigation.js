@@ -1279,14 +1279,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(!this._focusedCellPosition) {
             this._focusedCellPosition = {};
         }
-        this.option('focusedRowIndex', rowIndex);
         this._focusedCellPosition.rowIndex = rowIndex;
     },
     setFocusedColumnIndex: function(columnIndex) {
         if(!this._focusedCellPosition) {
             this._focusedCellPosition = {};
         }
-        this.option('focusedColumnIndex', columnIndex);
         this._focusedCellPosition.columnIndex = columnIndex;
     },
     getRowIndex: function() {
