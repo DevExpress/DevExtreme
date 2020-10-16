@@ -323,8 +323,8 @@ const TopDrawerTester = {
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + 150, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width, height: topTemplateSize }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top + topTemplateSize, width: env.drawerRect.width, height: env.drawerRect.height - env.minSize }, 'view');
         }
         function checkShrink(assert, env) {
             checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: topTemplateSize }, 'template');
@@ -366,8 +366,8 @@ const TopDrawerTester = {
 
     checkHidden: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width, height: topTemplateSize }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.minSize, width: env.drawerRect.width, height: env.drawerRect.height - env.minSize }, 'view');
 
             assert.ok(
                 window.getComputedStyle(env.templateElement.parentElement).position === 'absolute' &&
@@ -497,8 +497,9 @@ const BottomDrawerTester = {
 
     checkHidden: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.width, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width, height: env.drawerRect.height }, 'view');
+            // checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - env.minSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - bottomTemplateSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width, height: env.drawerRect.height - env.minSize }, 'view');
 
             assert.ok(
                 window.getComputedStyle(env.templateElement.parentElement).position === 'absolute' &&

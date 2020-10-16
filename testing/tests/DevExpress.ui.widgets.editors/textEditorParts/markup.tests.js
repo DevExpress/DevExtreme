@@ -131,3 +131,188 @@ module('the \'name\' option', () => {
     });
 });
 
+module('basic options changing', {
+    beforeEach: function() {
+        this.element = $('#texteditor').dxTextEditor({});
+        this.input = this.element.find('.' + INPUT_CLASS);
+        this.instance = this.element.dxTextEditor('instance');
+    }
+}, function() {
+    test('value', function(assert) {
+        this.instance.option('value', '123');
+        assert.strictEqual(this.input.val(), '123');
+
+        this.instance.option('value', '321');
+        assert.strictEqual(this.input.val(), '321');
+    });
+
+    test('the "inputAttr" option', function(assert) {
+        const $element1 = $('<div>', { id: 'testDiv1' }).appendTo('#qunit-fixture');
+        const $element2 = $('<div>', { id: 'testDiv1' }).appendTo('#qunit-fixture');
+
+        const instance1 = $element1.dxTextEditor({ inputAttr: { 'data-test': 'test' } }).dxTextEditor('instance');
+        const instance2 = $element2.dxTextEditor().dxTextEditor('instance');
+        const $input1 = $element1.find('input');
+
+        assert.ok(typeof (instance2.option('inputAttr')) === 'object' && $.isEmptyObject(instance2.option('inputAttr')), 'Option is {} by default');
+        assert.strictEqual(instance1.option('inputAttr')['data-test'], 'test', 'Option sets to the widget on init');
+        assert.strictEqual($input1.attr('data-test'), 'test', 'Option sets to the widget input on init');
+
+        instance1.option('inputAttr', { 'data-test': 'changedValue', 'data-anyattr': 'anyvalue' });
+
+        assert.strictEqual($input1.attr('data-test'), 'changedValue', 'Attr was changed by API');
+        assert.strictEqual($input1.attr('data-anyattr'), 'anyvalue', 'New attr was set by API');
+    });
+
+    test('update "name" option with predefined inputAttr', function(assert) {
+        this.instance.option('inputAttr', { name: 'some_name' });
+        this.instance.option('name', 'new_name');
+
+        assert.strictEqual(this.input.attr('name'), 'new_name', 'inputAttr should be redefined by name');
+    });
+
+    test('in case "name" option becomes an empty string, editor should use the inputAttr value', function(assert) {
+        this.instance.option('inputAttr', { name: 'some_name' });
+        this.instance.option('name', 'new_name');
+        this.instance.option('name', '');
+        assert.strictEqual(this.input.attr('name'), 'some_name', 'inputAttr should be restored');
+
+        this.instance.option('inputAttr', { name: null });
+        assert.notOk(this.input.get(0).hasAttribute('name'), 'name attribute has been removed');
+
+        this.instance.option('name', 'test_name');
+        assert.strictEqual(this.input.attr('name'), 'test_name', 'name should be applied');
+
+        this.instance.option('name', '');
+        assert.notOk(this.input.get(0).hasAttribute('name'), 'name attribute has been removed');
+    });
+
+    test('the "name" attribute should be removed when the "name" option is an empty string', function(assert) {
+        this.instance.option('name', 'test_name');
+        this.instance.option('name', '');
+
+        assert.notOk(this.input.get(0).hasAttribute('name'), 'name attribute has been removed');
+    });
+
+    test('the "inputAttr" option should preserve widget specific classes', function(assert) {
+        const $element = $('<div>').appendTo('#qunit-fixture');
+
+        $element.dxTextEditor({ inputAttr: { class: 'some-class' } });
+        assert.strictEqual($element.find('.' + INPUT_CLASS).length, 1, 'widget specific class is preserved');
+    });
+
+    test('the "inputAttr" option should affect only custom classes on change', function(assert) {
+        const firstClassName = 'first';
+        const secondClassName = 'second';
+
+        this.instance.option('inputAttr', { class: firstClassName });
+
+        const $input = this.element.find('.' + INPUT_CLASS);
+        assert.strictEqual($input.length, 1, 'widget specific class is preserved');
+        assert.ok($input.hasClass(firstClassName), 'first custom class is added');
+
+        this.instance.option('inputAttr', { class: secondClassName });
+        assert.strictEqual($input.length, 1, 'widget specific class is preserved');
+        assert.ok($input.hasClass(secondClassName), 'second custom class is added');
+        assert.notOk($input.hasClass(firstClassName), 'first custom class is removed');
+    });
+
+    test('inputAttr should corretly handle partial update', function(assert) {
+        try {
+            this.instance.option('inputAttr.title', 'new title');
+            assert.strictEqual(this.input.attr('title'), 'new title', 'inputAttr should be applied');
+        } catch(e) {
+            assert.ok(false, 'Could not update the option');
+        }
+    });
+
+    test('partial update of the "inputAttr" option should not replace other attibutes', function(assert) {
+        try {
+            this.instance.option('inputAttr', { autocomplete: 'on', id: 'test-id-attr' });
+            this.instance.option('inputAttr.title', 'new title');
+            assert.strictEqual(this.input.attr('title'), 'new title', 'inputAttr should be applied');
+            assert.strictEqual(this.input.attr('id'), 'test-id-attr', '"id" attribute value is the same');
+            assert.strictEqual(this.input.attr('autocomplete'), 'on', '"autocomplete" attribute value is the same');
+        } catch(e) {
+            assert.ok(false, 'Could not update the option');
+        }
+    });
+
+    test('partial update of the "inputAttr" option after setting the null value', function(assert) {
+        try {
+            this.instance.option('inputAttr', null);
+            this.instance.option('inputAttr.title', 'new title');
+            assert.strictEqual(this.input.attr('title'), 'new title', 'inputAttr should be applied');
+        } catch(e) {
+            assert.ok(false, 'Could not update the option');
+        }
+    });
+
+    test('autocomplete is disabled by default', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({});
+
+        assert.strictEqual($textEditor.find('input').attr('autocomplete'), 'off', 'autocomplete prop is disabled by default');
+
+        $textEditor.dxTextEditor('option', 'inputAttr', { 'autocomplete': 'on' });
+
+        assert.strictEqual($textEditor.find('input').attr('autocomplete'), 'on', 'autocomplete attr overwritten');
+    });
+
+    test('disabled', function(assert) {
+        this.instance.option('disabled', true);
+        assert.ok(this.input.prop('disabled'));
+
+        this.instance.option('disabled', false);
+        assert.ok(!this.input.prop('disabled'));
+    });
+
+    test('focusStateEnabled', function(assert) {
+        this.instance.option('focusStateEnabled', false);
+        assert.strictEqual(this.input.prop('tabIndex'), -1);
+
+        this.instance.option('focusStateEnabled', true);
+        assert.ok(!this.input.prop('tabIndex'));
+    });
+
+    test('spellcheck', function(assert) {
+        this.instance.option('spellcheck', true);
+        assert.ok(this.input.prop('spellcheck'));
+
+        this.instance.option('spellcheck', false);
+        assert.ok(!this.input.prop('spellcheck'));
+    });
+
+    test('placeholder', function(assert) {
+        this.instance.option('placeholder', 'John Doe');
+        assert.strictEqual(this.element.find('.' + PLACEHOLDER_CLASS).attr('data-dx_placeholder'), 'John Doe');
+
+        this.instance.option('placeholder', 'John Jr. Doe');
+        assert.strictEqual(this.element.find('.' + PLACEHOLDER_CLASS).attr('data-dx_placeholder'), 'John Jr. Doe');
+    });
+
+    test('readOnly', function(assert) {
+        this.instance.option('readOnly', true);
+        assert.ok(this.input.prop('readOnly'));
+
+        this.instance.option('readOnly', false);
+        assert.strictEqual(this.input.prop('readOnly'), false);
+    });
+
+    test('texteditor is clear when option \'value\' changed to null', function(assert) {
+        const instance = $('#texteditor').dxTextEditor({
+            value: 'test'
+        }).dxTextEditor('instance');
+
+        instance.option('value', null);
+        assert.strictEqual($('.dx-texteditor-empty').length, 1, 'texteditor is empty');
+    });
+
+    test('texteditor "stylingMode" option: runtime change', function(assert) {
+        this.element = $('#texteditor');
+        assert.strictEqual(this.element.hasClass('dx-editor-outlined'), true, 'initial value is right');
+
+        this.instance.option('stylingMode', 'underlined');
+        assert.strictEqual(this.element.hasClass('dx-editor-underlined'), true, 'right class after option change present');
+        assert.strictEqual(this.element.hasClass('dx-editor-outlined'), false, 'old class after option change was removed');
+    });
+});

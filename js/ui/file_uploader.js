@@ -1072,9 +1072,9 @@ class FileUploader extends Editor {
     }
 
     _optionChanged(args) {
-        const value = args.value;
+        const { name, value } = args;
 
-        switch(args.name) {
+        switch(name) {
             case 'height':
             case 'width':
                 this._updateFileNameMaxWidth();
@@ -1179,7 +1179,7 @@ class FileUploader extends Editor {
                 this._invalidate();
                 break;
             case 'inputAttr':
-                this._applyInputAttributes(value);
+                this._applyInputAttributes(this.option(name));
                 break;
             default:
                 super._optionChanged(args);

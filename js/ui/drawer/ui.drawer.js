@@ -200,6 +200,10 @@ const Drawer = Widget.inherit({
 
     _renderPanelContentWrapper() {
         this._$panelContentWrapper = $('<div>').addClass(DRAWER_PANEL_CONTENT_CLASS);
+        const position = this.calcTargetPosition();
+        if(this.option('openedStateMode') === 'push' && ['top', 'bottom'].indexOf(position) > -1) {
+            this._$panelContentWrapper.addClass(DRAWER_PANEL_CONTENT_CLASS + '-push-top-or-bottom');
+        }
         if(this.option('openedStateMode') !== 'overlap' && !this.option('opened') && !this.option('minSize')) {
             this._$panelContentWrapper.attr('manualposition', true);
             this._$panelContentWrapper.css({ position: 'absolute', top: '-10000px', left: '-10000px', right: 'auto', bottom: 'auto' });

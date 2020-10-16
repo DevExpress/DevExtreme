@@ -8,12 +8,13 @@ import { each } from '../core/utils/iterator';
 import readyCallbacks from '../core/utils/ready_callbacks';
 import { value as viewPortValue, changeCallback, originalViewPort } from '../core/utils/view_port';
 import { getWindow, hasWindow } from '../core/utils/window';
-import { themeReadyCallback, themeInitializedCallback } from './themes_callback';
+import { themeReadyCallback } from './themes_callback';
 import errors from './widget/ui.errors';
 const window = getWindow();
 const ready = readyCallbacks.add;
 const viewPort = viewPortValue;
 const viewPortChanged = changeCallback;
+let initDeferred = new Deferred();
 
 const DX_LINK_SELECTOR = 'link[rel=dx-theme]';
 const THEME_ATTR = 'data-theme';
@@ -29,9 +30,6 @@ let pendingThemeName;
 let defaultTimeout = 15000;
 
 const THEME_MARKER_PREFIX = 'dx.';
-
-let inited = false;
-themeInitializedCallback.add(() => inited = true);
 
 function readThemeMarker() {
     if(!hasWindow()) {
@@ -74,10 +72,7 @@ function waitForThemeLoad(themeName) {
         themeReadyCallback.fire();
         themeReadyCallback.empty();
 
-        if(!inited) {
-            themeInitializedCallback.fire();
-            themeInitializedCallback.empty();
-        }
+        initDeferred.resolve();
     }
 
     if(isPendingThemeLoaded() || !defaultTimeout) {
@@ -115,7 +110,7 @@ function isPendingThemeLoaded() {
 
     const anyThemePending = pendingThemeName === ANY_THEME;
 
-    if(inited && anyThemePending) {
+    if(initDeferred.state() === 'resolved' && anyThemePending) {
         return true;
     }
 
@@ -248,7 +243,7 @@ function current(options) {
         // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr('href', knownThemes[currentThemeName].url);
-        if((themeReadyCallback.has() || themeInitializedCallback.has() || options._forceTimeout)) {
+        if((themeReadyCallback.has() || initDeferred.state() !== 'resolved' || options._forceTimeout)) {
             waitForThemeLoad(currentThemeName);
         }
     } else {
@@ -263,7 +258,7 @@ function current(options) {
 
     checkThemeDeprecation();
 
-    attachCssClasses(originalViewPort(), currentThemeName);
+    initDeferred.done(() => attachCssClasses(originalViewPort(), currentThemeName));
 }
 
 function getCssClasses(themeName) {
@@ -398,8 +393,6 @@ function waitWebFont(text, fontWeight) {
     });
 }
 
-const initDeferred = new Deferred();
-
 function autoInit() {
     init({
         _autoInit: true,
@@ -409,8 +402,6 @@ function autoInit() {
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error('E0022');
     }
-
-    initDeferred.resolve();
 }
 
 if(hasWindow()) {
@@ -448,18 +439,13 @@ exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr('href', 'about:blank');
     currentThemeName = null;
     pendingThemeName = null;
-    inited = false;
-    themeInitializedCallback.add(() => inited = true);
-},
+    initDeferred = new Deferred();
+};
 
 exports.setDefaultTimeout = function(timeout) {
     defaultTimeout = timeout;
 };
 
 exports.initialized = function(callback) {
-    if(inited) {
-        callback();
-    } else {
-        themeInitializedCallback.add(callback);
-    }
+    initDeferred.done(callback);
 };
