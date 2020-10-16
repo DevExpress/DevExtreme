@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": [
+      "node_modules/testcafe/ts-defs/index.d.ts",
+      "jquery"
+    ]
+  }
+}
