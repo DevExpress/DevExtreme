@@ -1017,18 +1017,20 @@ const dxChart = AdvancedChart.inherit({
         return cleanPanesCanvases;
     },
 
-    _resolveDeferredItems() {
+    _getExtraTemplatesItems() {
         const that = this;
         const allAxes = (that._argumentAxes || []).concat(that._valueAxes || []);
-        let groups = [];
 
-        allAxes.forEach(axis => {
-            groups = groups.concat(axis.getTemplatesGroups());
-        });
+        const elements = allAxes.reduce((prev, axis) => {
+            return {
+                groups: prev.groups.concat(axis.getTemplatesGroups()),
+                items: prev.items.concat(axis.getTemplatesDef())
+            };
+        }, { groups: [], items: [] });
 
-        that._addToDeferred({
-            items: allAxes.map(axis => axis.getTemplatesDef()),
-            groups: groups,
+        return {
+            items: elements.items,
+            groups: elements.groups,
             launchRequest() {
                 allAxes.forEach(function(a) {
                     a.setRenderedState(true);
@@ -1039,7 +1041,7 @@ const dxChart = AdvancedChart.inherit({
                     a.setRenderedState(false);
                 });
             }
-        });
+        };
     },
 
     _estimateTickIntervals(axes, canvases) {
