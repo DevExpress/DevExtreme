@@ -16,7 +16,7 @@ const ctx = require('./context.js');
 const env = require('./env-variables');
 const headerPipes = require('./header-pipes.js');
 const renovationPipes = require('./renovation-pipes');
-const { ifRenovation, ifEsmPackage } = require('./utils');
+const { ifRenovationPackage, ifEsmPackage } = require('./utils');
 const webpackConfig = require('../../webpack.config.js');
 const webpackConfigDev = require('../../webpack.config.dev.js');
 
@@ -51,7 +51,7 @@ const jsBundlesProd = (src, dist, bundles) => (() =>
 
 gulp.task('js-bundles-prod',
     jsBundlesProd(ctx.TRANSPILED_PROD_PATH, ctx.RESULT_JS_PATH, BUNDLES),
-    ifRenovation(jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
+    ifRenovationPackage(jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
         ctx.RESULT_JS_RENOVATION_PATH, BUNDLES
     )),
     ifEsmPackage(jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
@@ -106,20 +106,20 @@ function createRenovationTemp(isWatch) {
         .pipe(gulp.dest(renovationPipes.TEMP_PATH));
 }
 
-gulp.task('create-renovation-temp', ifRenovation(() =>
+gulp.task('create-renovation-temp', ifRenovationPackage(() =>
     createRenovationTemp(false)
 ));
 
-gulp.task('create-renovation-temp-watch', ifRenovation(() =>
+gulp.task('create-renovation-temp-watch', ifRenovationPackage(() =>
     createRenovationTemp(true)
 ));
 
 gulp.task('js-bundles-debug', gulp.series(
     () => createDebugBundlesStream(false, false),
-    ifRenovation(() => createDebugBundlesStream(false, true))
+    ifRenovationPackage(() => createDebugBundlesStream(false, true))
 ));
 
 gulp.task('js-bundles-dev', gulp.parallel(
     () => createDebugBundlesStream(true, false),
-    ifRenovation(() => createDebugBundlesStream(true, true))
+    ifRenovationPackage(() => createDebugBundlesStream(true, true))
 ));

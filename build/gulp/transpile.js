@@ -18,7 +18,7 @@ const ctx = require('./context.js');
 const env = require('./env-variables');
 const globTs = require('./ts').GLOB_TS;
 const renovationPipes = require('./renovation-pipes');
-const { ifRenovation, ifEsmPackage } = require('./utils');
+const { ifRenovationPackage, ifEsmPackage } = require('./utils');
 const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
 
@@ -125,7 +125,7 @@ gulp.task('transpile', gulp.series(
     'bundler-config',
     transpile(src, ctx.TRANSPILED_PROD_PATH),
     transpile(src, ctx.TRANSPILED_PATH, transpileConfig.cjs, false),
-    ifRenovation(transpile(src, ctx.TRANSPILED_PROD_RENOVATION_PATH)),
+    ifRenovationPackage(transpile(src, ctx.TRANSPILED_PROD_RENOVATION_PATH)),
     ifEsmPackage(transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH)),
 ));
 
@@ -138,7 +138,7 @@ const replaceTask = (sourcePath) => (() => gulp
 gulp.task('version-replace', gulp.series('transpile', gulp.parallel([
     replaceTask(ctx.TRANSPILED_PATH),
     replaceTask(ctx.TRANSPILED_PROD_PATH),
-    ifRenovation(() => replaceTask(ctx.TRANSPILED_PROD_RENOVATION_PATH))(),
+    ifRenovationPackage(() => replaceTask(ctx.TRANSPILED_PROD_RENOVATION_PATH))(),
     ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './esm')))(),
     ifEsmPackage(() => replaceTask(path.join(ctx.TRANSPILED_PROD_ESM_PATH, './cjs')))(),
 ])));
