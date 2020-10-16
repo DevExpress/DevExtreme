@@ -1669,7 +1669,7 @@ QUnit.module('Lookup Value', function() {
         const value = 1;
 
         utils.getCurrentLookupValueText(field, value, function(r) {
-            assert.equal(r, 'DataGrid');
+            assert.strictEqual(r, 'DataGrid');
         });
     });
 
