@@ -700,7 +700,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const itemNames = this.wrapper.getDetailsItemNamesTexts();
         const uploadedFileIndex = itemNames.indexOf(file.name);
 
-        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased');
         assert.ok(uploadedFileIndex > -1, 'file is uploaded');
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
     });
@@ -712,8 +712,34 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
 
         itemViewPanel.trigger('dragenter');
-        assert.roughEqual(itemViewPanel.offset().top, dropZonePlaceholder.offset().top, 0.02, 'drop zone has correct offset');
-        assert.roughEqual(itemViewPanel.offset().left, dropZonePlaceholder.offset().left, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        itemViewPanel.trigger('dragleave');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+    });
+
+    test('upload drop zone does not hide on drag interaction', function(assert) {
+        const itemViewPanel = this.wrapper.getItemsViewPanel();
+        const detailsItemRow = $(this.wrapper.getRowsInDetailsView()[0]);
+        const dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        itemViewPanel.trigger('dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        detailsItemRow.trigger('dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        detailsItemRow.trigger('dragleave');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
         itemViewPanel.trigger('dragleave');
