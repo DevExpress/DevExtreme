@@ -162,17 +162,17 @@ export const Export = {
 
     _tryGetMergeRange: function(rowIndex, cellIndex, mergedCells, dataProvider) {
         if(!mergedCells[rowIndex] || !mergedCells[rowIndex][cellIndex]) {
-            const cellMerge = dataProvider.getCellMerging(rowIndex, cellIndex);
-            if(cellMerge.colspan || cellMerge.rowspan) {
-                for(let i = rowIndex; i <= rowIndex + cellMerge.rowspan || 0; i++) {
-                    for(let j = cellIndex; j <= cellIndex + cellMerge.colspan || 0; j++) {
+            const { colspan, rowspan } = dataProvider.getCellMerging(rowIndex, cellIndex);
+            if(colspan || rowspan) {
+                for(let i = rowIndex; i <= rowIndex + rowspan || 0; i++) {
+                    for(let j = cellIndex; j <= cellIndex + colspan || 0; j++) {
                         if(!mergedCells[i]) {
                             mergedCells[i] = [];
                         }
                         mergedCells[i][j] = true;
                     }
                 }
-                return { rowSpan: cellMerge.rowspan, colSpan: cellMerge.colspan };
+                return { rowSpan: rowspan, colSpan: colspan };
             }
         }
     },
