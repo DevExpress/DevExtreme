@@ -1,3 +1,4 @@
+import { ViewEncapsulation } from '@angular/compiler/src/core';
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
@@ -13,7 +14,8 @@ if (!/localhost/.test(document.location.host)) {
     templateUrl: 'app/app.component.html',
     styleUrls: ['app/app.component.css'],
     providers: [Service],
-    preserveWhitespaces: true
+    preserveWhitespaces: true,
+    encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {
     tasks: Task[];
@@ -37,15 +39,19 @@ export class AppComponent {
     }
 
     getTaskTooltipContentTemplate(model) {
+        const parentELemnt = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
+        parentELemnt.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
         const timeEstimate = Math.abs(model.start - model.end) / 36e5;
         const timeLeft = Math.floor((100 - model.progress) / 100 * timeEstimate);
 
-        return `<div class="template-header"> ${model.title} </div>`
-        + `<p class="template-item"> <span> Estimate: </span> ${timeEstimate} <span> hours </span> </p>`
-        + `<p class="template-item"> <span> Left: </span> ${timeLeft} <span> hours </span> </p>`;
+        return `<div class="custom-tooltip-title"> ${model.title} </div>`
+        + `<div class="custom-tooltip-row"> <span> Estimate: </span> ${timeEstimate} <span> hours </span> </div>`
+        + `<div class="custom-tooltip-row"> <span> Left: </span> ${timeLeft} <span> hours </span> </div>`;
     }
 
     onShowCustomTaskTooltip(e) {
+        const parentELemnt = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
+        parentELemnt.className = 'dx-gantt-task-edit-tooltip';
         e.value ? this.taskTooltipContentTemplate = this.getTaskTooltipContentTemplate 
                 : this.taskTooltipContentTemplate = undefined;
     }

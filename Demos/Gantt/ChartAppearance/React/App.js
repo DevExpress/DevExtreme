@@ -106,17 +106,21 @@ class App extends React.Component {
     });
   }
   onShowCustomTaskTooltip(e) {
+    const parentELemnt = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
+    parentELemnt.className = 'dx-gantt-task-edit-tooltip';
     this.setState({
       taskTooltipContentTemplate: e.value ? this.getTaskTooltipContentTemplate : undefined
     });
   }
   getTaskTooltipContentTemplate(model) {
+    const parentELemnt = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
+    parentELemnt.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
     const timeEstimate = Math.abs(model.start - model.end) / 36e5;
     const timeLeft = Math.floor((100 - model.progress) / 100 * timeEstimate);
 
-    return `<div class="template-header"> ${model.title} </div>`
-    + `<p class="template-item"> <span> Estimate: </span> ${timeEstimate} <span> hours </span> </p>`
-    + `<p class="template-item"> <span> Left: </span> ${timeLeft} <span> hours </span> </p>`;
+    return `<div class="custom-tooltip-title"> ${model.title} </div>`
+    + `<div class="custom-tooltip-row"> <span> Estimate: </span> ${timeEstimate} <span> hours </span> </div>`
+    + `<div class="custom-tooltip-row"> <span> Left: </span> ${timeLeft} <span> hours </span> </div>`;
   }
 }
 
