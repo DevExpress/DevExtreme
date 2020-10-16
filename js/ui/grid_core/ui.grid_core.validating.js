@@ -898,6 +898,7 @@ export default {
 
                 _beforeCancelEditData: function() {
                     const validatingController = this.getController('validating');
+
                     validatingController._validationState = [];
 
                     this.callBase();
@@ -1289,10 +1290,13 @@ export default {
                         rowKey: oldRow.key,
                         columnIndex
                     });
+                    const validationData = validatingController._getValidationData(oldRow.key);
                     const newValidationStatus = validationResultIsValid(validationResult) ? validationResult.status : validationResult;
                     const rowIsModified = JSON.stringify(newRow.modifiedValues) !== JSON.stringify(oldRow.modifiedValues);
                     if(oldValidationStatus !== newValidationStatus && rowIsModified) {
                         return true;
+                    } else if(validationData.isValid) {
+                        $(cell?.cellElement).toggleClass(this.addWidgetPrefix(INVALIDATE_CLASS), false);
                     }
 
                     return this.callBase.apply(this, arguments);
