@@ -52,8 +52,8 @@ const nativeDOMAdapterStrategy = {
         return typeof element === 'object' && 'nodeType' in element;
     },
 
-    isElementNode(element) {
-        return element && element.nodeType === ELEMENT_NODE;
+    isElementNode(node) {
+        return node && node.nodeType === ELEMENT_NODE;
     },
 
     isTextNode(element) {

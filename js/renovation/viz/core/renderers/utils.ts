@@ -275,7 +275,7 @@ function orderHtmlTree(list: TextItem[], line: number, node: Node, parentStyle: 
     ++line;
   } else if (domAdapter.isElementNode(node)) {
     style = extend(style = {}, parentStyle);
-    switch ((node as Element).tagName) {
+    switch (node.tagName) {
       case 'B':
       case 'STRONG':
         style.fontWeight = 'bold';
