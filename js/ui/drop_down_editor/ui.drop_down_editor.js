@@ -21,6 +21,7 @@ import devices from '../../core/devices';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import Popup from '../popup';
 import { hasWindow } from '../../core/utils/window';
+import { getElementWidth, getPopupWidth } from './utils';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -392,10 +393,6 @@ const DropDownEditor = TextBox.inherit({
         }
     },
 
-    _getInputWidth: function() {
-        return this.$element().outerWidth();
-    },
-
     _attachFocusOutHandler: function() {
         if(isIOs) {
             this._detachFocusOutEvents();
@@ -523,7 +520,7 @@ const DropDownEditor = TextBox.inherit({
                 of: this.$element()
             }),
             showTitle: this.option('dropDownOptions.showTitle'),
-            width: this._getInputWidth.bind(this),
+            width: () => getElementWidth(this.$element()),
             height: 'auto',
             shading: false,
             closeOnTargetScroll: true,
@@ -542,20 +539,6 @@ const DropDownEditor = TextBox.inherit({
         };
     },
 
-
-    _getPopupWidth() {
-        const popupWidth = this.option('dropDownOptions.width');
-
-        if(popupWidth === null) {
-            return undefined;
-        }
-        if(typeof popupWidth === 'function') {
-            return popupWidth();
-        }
-
-        return popupWidth;
-    },
-
     _popupInitializedHandler: function() {
         if(!this.option('onPopupInitialized')) {
             return;
@@ -567,10 +550,10 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _dimensionChanged: function() {
-        const popupWidth = this._getPopupWidth();
+        const popupWidth = getPopupWidth(this.option('dropDownOptions.width'));
 
         if(popupWidth === undefined) {
-            this._setPopupOption('width', this._getInputWidth.bind(this));
+            this._setPopupOption('width', () => getElementWidth(this.$element()));
         }
     },
 
