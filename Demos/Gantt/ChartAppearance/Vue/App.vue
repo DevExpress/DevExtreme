@@ -110,8 +110,8 @@ export default {
   },
   methods: {
     getTaskTooltipContentTemplate(model) {
-      const parentELemnt = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
-      parentELemnt.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
+      const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
+      parentElement.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
       const timeEstimate = Math.abs(model.start - model.end) / 36e5;
       const timeLeft = Math.floor((100 - model.progress) / 100 * timeEstimate);
 
@@ -120,8 +120,8 @@ export default {
       + `<div class="custom-tooltip-row"> <span> Left: </span> ${timeLeft} <span> hours </span> </div>`;
     },
     onShowCustomTaskTooltip(e) {
-      const parentELemnt = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
-      parentELemnt.className = 'dx-gantt-task-edit-tooltip';
+      const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
+      parentElement.className = 'dx-gantt-task-edit-tooltip';
       e.value ? this.taskTooltipContentTemplate = this.getTaskTooltipContentTemplate : this.taskTooltipContentTemplate = '';
     }
   }

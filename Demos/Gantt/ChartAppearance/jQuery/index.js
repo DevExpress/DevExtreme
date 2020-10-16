@@ -73,16 +73,16 @@ $(function() {
         text: "Customize Task Tooltip",
         value: true,
         onValueChanged: function (e) {
-            const parentELemnt = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
-            parentELemnt.className = 'dx-gantt-task-edit-tooltip';
+            const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
+            parentElement.className = 'dx-gantt-task-edit-tooltip';
             e.value ? gantt.option("taskTooltipContentTemplate", getTaskTooltipContentTemplate) 
                     : gantt.option("taskTooltipContentTemplate", undefined);
         }
     });
 
     function getTaskTooltipContentTemplate(task) {
-        const parentELemnt = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
-        parentELemnt.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
+        const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
+        parentElement.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
         const timeEstimate = Math.abs(task.start - task.end) / 36e5;
         const timeLeft = Math.floor((100 - task.progress) / 100 * timeEstimate);
         return "<div class='custom-tooltip-title'>" + task.title + "</div>"                
