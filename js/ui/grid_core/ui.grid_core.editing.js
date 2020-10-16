@@ -761,7 +761,7 @@ const EditingController = modules.ViewController.inherit((function() {
             return this._editForm;
         },
 
-        _needInsertItem: function(editData, changeType) {
+        _needInsertItem: function(change, changeType) {
             const that = this;
             const dataSource = that._dataController.dataSource();
             const scrollingMode = that.option('scrolling.mode');
@@ -772,20 +772,20 @@ const EditingController = modules.ViewController.inherit((function() {
             if(scrollingMode !== 'standard') {
                 switch(changeType) {
                     case 'append':
-                        return editData.key.pageIndex === endPageIndex;
+                        return change.key.pageIndex === endPageIndex;
                     case 'prepend':
-                        return editData.key.pageIndex === beginPageIndex;
+                        return change.key.pageIndex === beginPageIndex;
                     case 'refresh':
-                        editData.key.rowIndex = 0;
-                        editData.key.dataRowIndex = 0;
-                        editData.key.pageIndex = 0;
+                        change.key.rowIndex = 0;
+                        change.key.dataRowIndex = 0;
+                        change.key.pageIndex = 0;
                         break;
                     default:
-                        return editData.key.pageIndex >= beginPageIndex && editData.key.pageIndex <= endPageIndex;
+                        return change.key.pageIndex >= beginPageIndex && change.key.pageIndex <= endPageIndex;
                 }
             }
 
-            return editData.key.pageIndex === pageIndex;
+            return change.key.pageIndex === pageIndex;
         },
 
         _generateNewItem: function(key) {
@@ -800,16 +800,15 @@ const EditingController = modules.ViewController.inherit((function() {
             return item;
         },
 
-        processItems: function(items, change) {
-            const changeType = change.changeType;
+        processItems: function(items, { changeType, removeCount }) {
             const dataController = this._dataController;
             let dataRowIndex = -1;
 
             this.update(changeType);
 
             const changes = this.getChanges();
-            changes.forEach(editData => {
-                const key = editData.key;
+            changes.forEach(change => {
+                const key = change.key;
 
                 if(key) {
                     const rowIndexOffset = dataController.getRowIndexOffset();
@@ -817,13 +816,13 @@ const EditingController = modules.ViewController.inherit((function() {
 
                     if(changeType === 'append') {
                         dataRowIndex -= dataController.items(true).length;
-                        if(change.removeCount) {
-                            dataRowIndex += change.removeCount;
+                        if(removeCount) {
+                            dataRowIndex += removeCount;
                         }
                     }
 
                     const item = this._generateNewItem(key);
-                    if(dataRowIndex >= 0 && editData.type === DATA_EDIT_DATA_INSERT_TYPE && this._needInsertItem(editData, changeType, items, item)) {
+                    if(dataRowIndex >= 0 && change.type === DATA_EDIT_DATA_INSERT_TYPE && this._needInsertItem(change, changeType, items, item)) {
                         items.splice(key.dataRowIndex ? dataRowIndex : 0, 0, item);
                     }
                 }
@@ -833,8 +832,6 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         processDataItem: function(item, options, generateDataValues) {
-            const that = this;
-            let data;
             const columns = options.visibleColumns;
             const key = item.data[INSERT_INDEX] ? item.data.key : item.key;
             const changes = this.getChanges();
@@ -843,11 +840,10 @@ const EditingController = modules.ViewController.inherit((function() {
             item.isEditing = false;
 
             if(editIndex >= 0) {
-                const editMode = getEditMode(that);
-                const editData = changes[editIndex];
-                data = editData.data;
+                const editMode = getEditMode(this);
+                const { data, type } = changes[editIndex];
 
-                switch(editData.type) {
+                switch(type) {
                     case DATA_EDIT_DATA_INSERT_TYPE:
                         if(editMode === EDIT_MODE_POPUP) {
                             item.visible = false;
@@ -1011,7 +1007,7 @@ const EditingController = modules.ViewController.inherit((function() {
             const insertKey = that._getInsertKey(parentKey);
             const editMode = getEditMode(that);
 
-            that._addEditData({ key: insertKey, data: data, type: DATA_EDIT_DATA_INSERT_TYPE });
+            that._addChange({ key: insertKey, data: data, type: DATA_EDIT_DATA_INSERT_TYPE });
 
             that._dataController.updateItems({
                 changeType: 'update',
@@ -1320,7 +1316,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _removeEditDataItem: function(index) {
+        _removeChange: function(index) {
             if(index >= 0) {
                 const changes = [...this.getChanges()];
 
@@ -1564,12 +1560,12 @@ const EditingController = modules.ViewController.inherit((function() {
             const editIndex = gridCoreUtils.getIndexByKey(key, changes);
             if(editIndex >= 0) {
                 if(changes[editIndex].type === DATA_EDIT_DATA_INSERT_TYPE) {
-                    this._removeEditDataItem(editIndex);
+                    this._removeChange(editIndex);
                 } else {
-                    this._addEditData({ key: key, type: DATA_EDIT_DATA_REMOVE_TYPE });
+                    this._addChange({ key: key, type: DATA_EDIT_DATA_REMOVE_TYPE });
                 }
             } else {
-                this._addEditData({ key: key, oldData: item.data, type: DATA_EDIT_DATA_REMOVE_TYPE });
+                this._addChange({ key: key, oldData: item.data, type: DATA_EDIT_DATA_REMOVE_TYPE });
             }
 
             if(isBatchMode) {
@@ -1593,12 +1589,12 @@ const EditingController = modules.ViewController.inherit((function() {
                 const editIndex = gridCoreUtils.getIndexByKey(key, changes);
 
                 if(editIndex >= 0) {
-                    const editData = changes[editIndex];
+                    const { data } = changes[editIndex];
 
-                    if(isEmptyObject(editData.data)) {
-                        that._removeEditDataItem(editIndex);
+                    if(isEmptyObject(data)) {
+                        that._removeChange(editIndex);
                     } else {
-                        that._addEditData({ key: key, type: DATA_EDIT_DATA_UPDATE_TYPE });
+                        that._addChange({ key: key, type: DATA_EDIT_DATA_UPDATE_TYPE });
                     }
 
                     dataController.updateItems({
@@ -1650,25 +1646,25 @@ const EditingController = modules.ViewController.inherit((function() {
             return deferred;
         },
 
-        _processEditData: function(deferreds, results, dataChanges, changes) {
+        _processChanges: function(deferreds, results, dataChanges, changes) {
             const store = this._dataController.store();
 
-            each(changes, (index, editData) => {
-                const data = editData.data;
-                const oldData = this._getOldData(editData.key);
-                const type = editData.type;
+            each(changes, (index, change) => {
+                const oldData = this._getOldData(change.key);
+                const { data, type } = change;
+                const changeCopy = { ...change };
                 let deferred;
                 let params;
 
-                if(this._beforeSaveEditData(editData, index)) {
+                if(this._beforeSaveEditData(change, index)) {
                     return;
                 }
 
                 switch(type) {
                     case DATA_EDIT_DATA_REMOVE_TYPE:
-                        params = { data: oldData, key: editData.key, cancel: false };
+                        params = { data: oldData, key: change.key, cancel: false };
                         deferred = this._executeEditingAction('onRowRemoving', params, function() {
-                            return store.remove(editData.key).done(function(key) {
+                            return store.remove(change.key).done(function(key) {
                                 dataChanges.push({ type: 'remove', key: key });
                             });
                         });
@@ -1678,21 +1674,21 @@ const EditingController = modules.ViewController.inherit((function() {
                         deferred = this._executeEditingAction('onRowInserting', params, function() {
                             return store.insert(params.data).done(function(data, key) {
                                 if(isDefined(key)) {
-                                    editData.key = key;
+                                    changeCopy.key = key;
                                 }
                                 if(data && isObject(data) && data !== params.data) {
-                                    editData.data = data;
+                                    changeCopy.data = data;
                                 }
                                 dataChanges.push({ type: 'insert', data: data, index: 0 });
                             });
                         });
                         break;
                     case DATA_EDIT_DATA_UPDATE_TYPE:
-                        params = { newData: data, oldData: oldData, key: editData.key, cancel: false };
+                        params = { newData: data, oldData: oldData, key: change.key, cancel: false };
                         deferred = this._executeEditingAction('onRowUpdating', params, function() {
-                            return store.update(editData.key, params.newData).done(function(data, key) {
+                            return store.update(change.key, params.newData).done(function(data, key) {
                                 if(data && isObject(data) && data !== params.newData) {
-                                    editData.data = data;
+                                    changeCopy.data = data;
                                 }
                                 dataChanges.push({ type: 'update', key: key, data: data });
                             });
@@ -1700,11 +1696,13 @@ const EditingController = modules.ViewController.inherit((function() {
                         break;
                 }
 
+                changes[index] = changeCopy;
+
                 if(deferred) {
                     const doneDeferred = new Deferred();
                     deferred
                         .always(function(data) {
-                            results.push({ key: editData.key, result: data });
+                            results.push({ key: change.key, result: data });
                         })
                         .always(doneDeferred.resolve);
 
@@ -1724,23 +1722,23 @@ const EditingController = modules.ViewController.inherit((function() {
                 const arg = results[i].result;
                 const cancel = arg === 'cancel';
                 const editIndex = gridCoreUtils.getIndexByKey(results[i].key, changes);
-                const editData = changes[editIndex];
+                const change = changes[editIndex];
                 const isError = arg && arg instanceof Error;
 
                 if(isError) {
-                    if(editData) {
-                        this._addInternalData({ key: editData.key, error: arg });
+                    if(change) {
+                        this._addInternalData({ key: change.key, error: arg });
                     }
                     that._fireDataErrorOccurred(arg);
                     if(editMode !== EDIT_MODE_BATCH) {
-                        if(editData && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
+                        if(change?.type === DATA_EDIT_DATA_REMOVE_TYPE) {
                             if(editIndex >= 0) {
                                 changes.splice(editIndex, 1);
                             }
                         }
                         break;
                     }
-                } else if(!cancel || !editData || editMode !== EDIT_MODE_BATCH && editData.type === DATA_EDIT_DATA_REMOVE_TYPE) {
+                } else if(!cancel || !change || editMode !== EDIT_MODE_BATCH && change.type === DATA_EDIT_DATA_REMOVE_TYPE) {
                     if(editIndex >= 0) {
                         changes.splice(editIndex, 1);
                     }
@@ -1754,13 +1752,10 @@ const EditingController = modules.ViewController.inherit((function() {
 
             return hasSavedData;
         },
-        _fireSaveEditDataEvents: function(editData) {
+        _fireSaveEditDataEvents: function(changes) {
             const that = this;
 
-            each(editData, function(_, itemData) {
-                const data = itemData.data;
-                const key = itemData.key;
-                const type = itemData.type;
+            each(changes, function(_, { data, key, type }) {
                 const internalData = that._addInternalData({ key });
                 const params = { key: key, data: data };
 
@@ -1781,7 +1776,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             });
 
-            this.executeAction('onSaved', { changes: editData });
+            this.executeAction('onSaved', { changes });
         },
 
         saveEditData: function() {
@@ -1827,7 +1822,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     return result.resolve().promise();
                 }
 
-                this._processEditData(deferreds, results, dataChanges, changes);
+                this._processChanges(deferreds, results, dataChanges, changes);
 
                 if(deferreds.length) {
                     dataSource?.beginLoading();
@@ -1855,12 +1850,12 @@ const EditingController = modules.ViewController.inherit((function() {
             return result.promise();
         },
 
-        _resetModifiedClassCells: function(editData) {
+        _resetModifiedClassCells: function(changes) {
             const editMode = getEditMode(this);
 
             if(editMode === EDIT_MODE_BATCH) {
                 const columnsCount = this._columnsController.getVisibleColumns().length;
-                editData.forEach(({ key }) => {
+                changes.forEach(({ key }) => {
                     const rowIndex = this._dataController.getRowIndexByKey(key);
                     if(rowIndex !== -1) {
                         for(let columnIndex = 0; columnIndex < columnsCount; columnIndex++) {
@@ -2124,7 +2119,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _prepareEditDataParams: function(options, value, text) {
+        _prepareChange: function(options, value, text) {
             const that = this;
             const newData = {};
             const oldData = options.row?.data;
@@ -2170,8 +2165,8 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             if(options.column.setCellValue) {
-                this._prepareEditDataParams(options, value, text).done(params => {
-                    when(this._applyEditDataParams(options, params, forceUpdateRow)).always(() => {
+                this._prepareChange(options, value, text).done(params => {
+                    when(this._applyChange(options, params, forceUpdateRow)).always(() => {
                         deferred.resolve();
                     });
                 });
@@ -2202,7 +2197,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             return isCustomSetCellValue || isCustomCalculateCellValue;
         },
-        _applyEditDataParams: function(options, params, forceUpdateRow) {
+        _applyChange: function(options, params, forceUpdateRow) {
             const that = this;
             const editMode = getEditMode(that);
             const isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
@@ -2215,7 +2210,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 that._updateEditRow(options.row, true, isCustomSetCellValue);
                 return;
             }
-            that._addEditData(params, options.row);
+            that._addChange(params, options.row);
             that._updateEditButtons();
 
             if(showEditorAlways && !forceUpdateRow) {
@@ -2298,12 +2293,12 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
-        _addEditData: function(options, row) {
+        _addChange: function(options, row) {
             const changes = [...this.getChanges()];
-            let editDataIndex = gridCoreUtils.getIndexByKey(options.key, changes);
+            let index = gridCoreUtils.getIndexByKey(options.key, changes);
 
-            if(editDataIndex < 0) {
-                editDataIndex = changes.length;
+            if(index < 0) {
+                index = changes.length;
 
                 this._addInternalData({
                     key: options.key,
@@ -2315,7 +2310,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 changes.push(options);
             }
 
-            const change = { ...changes[editDataIndex] };
+            const change = { ...changes[index] };
 
             if(change) {
                 if(options.data) {
@@ -2330,11 +2325,11 @@ const EditingController = modules.ViewController.inherit((function() {
                 }
             }
 
-            changes[editDataIndex] = change;
+            changes[index] = change;
 
             this._silentOption('editing.changes', changes);
 
-            return editDataIndex;
+            return index;
         },
 
         _getFormEditItemTemplate: function(cellOptions, column) {
@@ -2644,8 +2639,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _afterInsertRow: function() { },
 
-        _beforeSaveEditData: function(editData) {
-            if(editData && !isDefined(editData.key) && isDefined(editData.type)) {
+        _beforeSaveEditData: function(change) {
+            if(change && !isDefined(change.key) && isDefined(change.type)) {
                 return true;
             }
         },
