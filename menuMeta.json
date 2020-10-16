@@ -156,6 +156,7 @@
             "Title": "Row Editing and Editing Events",
             "Name": "RowEditingAndEditingEvents",
             "Widget": "DataGrid",
+            "Badge": "Updated",
             "MvcAdditionalFiles": [
               "/Controllers/ApiControllers/DataGridStatesLookupController.cs",
               "/Controllers/ApiControllers/DataGridEmployeesController.cs",

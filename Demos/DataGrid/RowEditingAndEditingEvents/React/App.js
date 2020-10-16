@@ -17,6 +17,10 @@ class App extends React.Component {
     this.onRowUpdated = this.logEvent.bind(this, 'RowUpdated');
     this.onRowRemoving = this.logEvent.bind(this, 'RowRemoving');
     this.onRowRemoved = this.logEvent.bind(this, 'RowRemoved');
+    this.onSaving = this.logEvent.bind(this, 'Saving');
+    this.onSaved = this.logEvent.bind(this, 'Saved');
+    this.onEditCanceling = this.logEvent.bind(this, 'EditCanceling');
+    this.onEditCanceled = this.logEvent.bind(this, 'EditCanceled');
 
     this.clearEvents = this.clearEvents.bind(this);
   }
@@ -47,7 +51,11 @@ class App extends React.Component {
           onRowUpdating={this.onRowUpdating}
           onRowUpdated={this.onRowUpdated}
           onRowRemoving={this.onRowRemoving}
-          onRowRemoved={this.onRowRemoved}>
+          onRowRemoved={this.onRowRemoved}
+          onSaving={this.onSaving}
+          onSaved={this.onSaved}
+          onEditCanceling={this.onEditCanceling}
+          onEditCanceled={this.onEditCanceled}>
 
           <Paging enabled={true} />
           <Editing

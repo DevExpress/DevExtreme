@@ -11,7 +11,11 @@
     (onRowUpdating)="logEvent('RowUpdating')"
     (onRowUpdated)="logEvent('RowUpdated')"
     (onRowRemoving)="logEvent('RowRemoving')"
-    (onRowRemoved)="logEvent('RowRemoved')">
+    (onRowRemoved)="logEvent('RowRemoved')"
+    (onSaving)="logEvent('Saving')"
+    (onSaved)="logEvent('Saved')"
+    (onEditCanceling)="logEvent('EditCanceling')"
+    (onEditCanceled)="logEvent('EditCanceled')">
     
     <dxo-paging [enabled]="true"></dxo-paging>
     <dxo-editing 

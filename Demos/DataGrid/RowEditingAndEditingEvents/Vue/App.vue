@@ -14,6 +14,10 @@
       @row-updated="logEvent('RowUpdated')"
       @row-removing="logEvent('RowRemoving')"
       @row-removed="logEvent('RowRemoved')"
+      @saving="logEvent('Saving')"
+      @saved="logEvent('Saved')"
+      @edit-canceling="logEvent('EditCanceling')"
+      @edit-canceled="logEvent('EditCanceled')"
     >
 
       <DxPaging :enabled="true"/>

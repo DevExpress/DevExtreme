@@ -65,6 +65,18 @@ $(function(){
         },
         onRowRemoved: function(e) {
             logEvent("RowRemoved");
+        },
+        onSaving: function(e) {
+            logEvent("Saving");
+        },
+        onSaved: function(e) {
+            logEvent("Saved");
+        },
+        onEditCanceling: function(e) {
+            logEvent("EditCanceling");
+        },
+        onEditCanceled: function(e) {
+            logEvent("EditCanceled");
         }
     });
     
