@@ -1,0 +1,5 @@
+Axis labels display values for [major axis ticks](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/commonAxisSettings/tick/).
+
+To configure labels for individual axes, specify label settings in the **valueAxis**.[label](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/valueAxis/label/) and **argumentAxis**.[label](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/argumentAxis/label/) objects. To configure labels for all axes, use the **commonAxisSettings**.[label](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/commonAxisSettings/label/) object. Individual settings take precedence over common settings.
+
+This demo shows how to display custom content in axis labels. To do this, declare the SVG markup in the [template](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Configuration/commonAxisSettings/label/#template) option. You can access a label's original and formatted values from template code. 
