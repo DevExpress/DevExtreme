@@ -605,6 +605,48 @@ QUnit.module('add visible option', {
     });
 });
 
+
+QUnit.test('check onClick handler after toggling visibility (T933671)', function(assert) {
+    const firstClickStub = sinon.stub();
+    const secondClickStub = sinon.stub();
+
+    this.firstSDA = $('#fab-one').dxSpeedDialAction({
+        icon: 'edit',
+        label: 'Edit row',
+        onClick: firstClickStub
+    }).dxSpeedDialAction('instance');
+
+    this.secondSDA = $('#fab-two').dxSpeedDialAction({
+        icon: 'trash',
+        visible: false,
+        onClick: secondClickStub
+    }).dxSpeedDialAction('instance');
+
+    this.firstSDA.option('visible', false);
+    this.secondSDA.option('visible', true);
+    this.firstSDA.option('visible', true);
+    this.secondSDA.option('visible', false);
+
+    let $fabMainContent = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content');
+
+    $fabMainContent.trigger('dxclick');
+
+    let clickArgs = firstClickStub.getCall(0).args;
+
+    assert.equal($(clickArgs[0].element).attr('id'), 'fab-one', 'right first SDA click on FAB element after toggling SDA visibility');
+
+    this.firstSDA.option('visible', false);
+    this.secondSDA.option('visible', true);
+
+    $fabMainContent = $(FAB_MAIN_SELECTOR).find('.dx-overlay-content');
+
+    $fabMainContent.trigger('dxclick');
+
+    clickArgs = secondClickStub.getCall(0).args;
+
+    assert.equal($(clickArgs[0].element).attr('id'), 'fab-two', 'right second SDA click on FAB element after toggling SDA visibility');
+});
+
 QUnit.module('add shading option', {
     beforeEach: function() {
         fx.off = true;
