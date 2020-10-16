@@ -38,15 +38,20 @@ const srcGlobs = srcGlobsPattern(
     ctx.TRANSPILED_PROD_RENOVATION_PATH
 );
 
+const esmPackageJsonGlobs = [
+    `${ctx.TRANSPILED_PROD_ESM_PATH}/**/*.json`,
+    `!${ctx.TRANSPILED_PROD_ESM_PATH}/viz/vector_map.utils/**/*`
+];
+
+const esmSrcGlobs = srcGlobsPattern(
+    ctx.TRANSPILED_PROD_ESM_PATH,
+    ctx.TRANSPILED_PROD_RENOVATION_PATH
+).concat(esmPackageJsonGlobs);
+
 const renovationSrcGlobs = srcGlobsPattern(
     ctx.TRANSPILED_PROD_RENOVATION_PATH,
     ctx.TRANSPILED_PROD_PATH
 );
-
-const esmPackageJsonGlobs = [
-    `${ctx.TRANSPILED_PROD_PATH}/**/*.json`,
-    `!${ctx.TRANSPILED_PROD_PATH}/viz/vector_map.utils/**/*`
-];
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 
@@ -145,7 +150,7 @@ gulp.task('npm-sources', gulp.series(
     'ts-sources',
     sources(srcGlobs, `${resultPath}/devextreme`, distGlobs),
     ifEsmPackage(
-        sources(srcGlobs, `${resultPath}/devextreme-esm`, renovationDistGlobs)
+        sources(esmSrcGlobs, `${resultPath}/devextreme-esm`, renovationDistGlobs)
     ),
     ifRenovation(
         sources(renovationSrcGlobs, `${resultPath}/devextreme-renovation`, renovationDistGlobs)

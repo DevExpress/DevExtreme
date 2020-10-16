@@ -79,10 +79,10 @@ const createModuleConfig = (name, dir, filePath) => {
     return JSON.stringify(result, null, 2);
 };
 
-const transpile = (src, dist, config = transpileConfig.cjs) => (() =>
+const transpile = (src, dist, config = transpileConfig.cjs, removeDebug = true) => (() =>
     gulp
         .src(src)
-        .pipe(compressionPipes.removeDebug())
+        .pipe(gulpIf(removeDebug, compressionPipes.removeDebug()))
         .pipe(gulpIf(env.USE_RENOVATION, renovationPipes.replaceWidgets()))
         .pipe(babel(config))
         .pipe(gulp.dest(dist))
@@ -124,7 +124,7 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
 gulp.task('transpile', gulp.series(
     'bundler-config',
     transpile(src, ctx.TRANSPILED_PROD_PATH),
-    transpile(src, ctx.TRANSPILED_PATH),
+    transpile(src, ctx.TRANSPILED_PATH, transpileConfig.cjs, false),
     ifRenovation(transpile(src, ctx.TRANSPILED_PROD_RENOVATION_PATH)),
     ifEsmPackage(transpileEsm(ctx.TRANSPILED_PROD_ESM_PATH)),
 ));
