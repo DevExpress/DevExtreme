@@ -720,11 +720,11 @@ Axis.prototype = {
         const renderer = that._renderer;
         const classSelector = that._axisCssPrefix;
 
-        that._axisGroup = renderer.g().attr({ 'class': classSelector + 'axis' });
+        that._axisGroup = renderer.g().attr({ 'class': classSelector + 'axis' }).enableLinks();
         that._axisStripGroup = renderer.g().attr({ 'class': classSelector + 'strips' });
         that._axisGridGroup = renderer.g().attr({ 'class': classSelector + 'grid' });
-        that._axisElementsGroup = renderer.g().attr({ 'class': classSelector + 'elements' }).append(that._axisGroup);
-        that._axisLineGroup = renderer.g().attr({ 'class': classSelector + 'line' }).append(that._axisGroup);
+        that._axisElementsGroup = renderer.g().attr({ 'class': classSelector + 'elements' }).linkOn(that._axisGroup, 'axisElements').linkAppend();
+        that._axisLineGroup = renderer.g().attr({ 'class': classSelector + 'line' }).linkOn(that._axisGroup, 'axisLine').linkAppend();
         that._axisTitleGroup = renderer.g().attr({ 'class': classSelector + 'title' }).append(that._axisGroup);
 
         that._axisConstantLineGroups = {
@@ -2172,6 +2172,14 @@ Axis.prototype = {
         options.visualRange = options._customVisualRange = that._validateVisualRange(options._customVisualRange);
 
         that._setVisualRange(options._customVisualRange);
+    },
+
+    beforeCleanGroups() {
+        this._options.label.template && this._axisElementsGroup && this._axisElementsGroup.linkRemove();
+    },
+
+    afterCleanGroups() {
+        this._options.label.template && this._axisElementsGroup && this._axisElementsGroup.linkAppend();
     },
 
     validate() {
