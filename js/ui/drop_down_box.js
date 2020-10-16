@@ -268,7 +268,6 @@ const DropDownBox = DropDownEditor.inherit({
         const { focusStateEnabled } = this.option();
 
         return extend(this.callBase(), {
-            height: 'auto',
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled,

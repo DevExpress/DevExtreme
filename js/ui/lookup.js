@@ -312,7 +312,6 @@ const Lookup = DropDownList.inherit({
                     dropDownOptions: {
                         closeOnOutsideClick: true,
 
-                        width: (function() { return this._getPopupWidth(); }).bind(this),
                         height: (function() { return this._getPopupHeight(); }).bind(this),
                         showTitle: false,
 
@@ -653,10 +652,6 @@ const Lookup = DropDownList.inherit({
         } else {
             return 'auto';
         }
-    },
-
-    _getPopupWidth: function() {
-        return $(this.element()).outerWidth();
     },
 
     _renderPopup: function() {

@@ -3237,8 +3237,6 @@ QUnit.module('default options', {
 
             const lookup = $lookup.dxLookup({ dataSource: ['blue', 'orange', 'lime', 'purple'] }).dxLookup('instance');
 
-            assert.equal(lookup.option('dropDownOptions.width')(), $lookup.outerWidth(), 'popup width match with lookup field width');
-
             $(lookup.field()).trigger('dxclick');
 
             assert.equal(lookup.option('dropDownOptions.height')(), $('.dx-list-item').height() * 4 + 16, 'if 4 items popup height 4 items and 2 paddings (8px)');

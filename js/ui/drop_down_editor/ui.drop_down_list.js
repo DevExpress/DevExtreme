@@ -833,12 +833,6 @@ const DropDownList = DropDownEditor.inherit({
                 this._isDesktopDevice() && this._setListOption(args.name, args.value);
                 this.callBase(args);
                 break;
-            case 'dropDownOptions':
-                if(args.fullName === 'dropDownOptions.width') {
-                    this._dimensionChanged();
-                }
-                this.callBase(args);
-                break;
             case 'items':
                 if(!this.option('dataSource')) {
                     this._processDataSourceChanging();
