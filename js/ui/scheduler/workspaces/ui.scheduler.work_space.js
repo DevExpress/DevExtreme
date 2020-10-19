@@ -1645,35 +1645,32 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _renderDateHeader() {
-        const $container = this._getDateHeaderContainer();
+        const container = this._getDateHeaderContainer();
         const $headerRow = $('<tr>').addClass(HEADER_ROW_CLASS);
         const count = this._getCellCount();
         const cellTemplate = this._getDateHeaderTemplate();
-        const repeatCount = this._calculateHeaderCellRepeatCount();
+        const repeatCount = this._getCalculateHeaderCellRepeatCount();
         const templateCallbacks = [];
         const groupByDate = this.isGroupedByDate();
-        const colspan = groupByDate ? this._getGroupCount() : 1;
-
-        let i;
-        let j;
 
         if(!groupByDate) {
-            for(j = 0; j < repeatCount; j++) {
-                for(i = 0; i < count; i++) {
-
-                    this._renderDateHeaderTemplate($headerRow, i, j * repeatCount + i, cellTemplate, templateCallbacks);
+            for(let rowIndex = 0; rowIndex < repeatCount; rowIndex++) {
+                for(let cellIndex = 0; cellIndex < count; cellIndex++) {
+                    const templateIndex = rowIndex * repeatCount + cellIndex;
+                    this._renderDateHeaderTemplate($headerRow, cellIndex, templateIndex, cellTemplate, templateCallbacks);
                 }
             }
 
-            $container.append($headerRow);
+            container.append($headerRow);
         } else {
-            for(i = 0; i < count; i++) {
-                const $cell = this._renderDateHeaderTemplate($headerRow, i, i * repeatCount, cellTemplate, templateCallbacks);
+            const colSpan = groupByDate ? this._getGroupCount() : 1;
 
-                $cell.attr('colSpan', colspan);
+            for(let i = 0; i < count; i++) {
+                const cellElement = this._renderDateHeaderTemplate($headerRow, i, i * repeatCount, cellTemplate, templateCallbacks);
+                cellElement.attr('colSpan', colSpan);
             }
 
-            $container.prepend($headerRow);
+            container.prepend($headerRow);
 
         }
 
@@ -1682,26 +1679,26 @@ class SchedulerWorkSpace extends WidgetObserver {
         return $headerRow;
     }
 
-    _renderDateHeaderTemplate($container, i, calculatedIndex, cellTemplate, templateCallbacks) {
-        const text = this._getHeaderText(i);
+    _renderDateHeaderTemplate(container, panelCellIndex, templateIndex, cellTemplate, templateCallbacks) {
+        const text = this._getHeaderText(panelCellIndex);
         const $cell = $('<th>')
-            .addClass(this._getHeaderPanelCellClass(i))
+            .addClass(this._getHeaderPanelCellClass(panelCellIndex))
             .attr('title', text);
 
-        if(cellTemplate && cellTemplate.render) {
+        if(cellTemplate?.render) {
             templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
                 model: {
                     text: text,
-                    date: this._getDateByIndex(i)
+                    date: this._getDateByIndex(panelCellIndex)
                 },
-                index: calculatedIndex,
+                index: templateIndex,
                 container: getPublicElement($cell)
             }));
         } else {
             $cell.text(text);
         }
 
-        $container.append($cell);
+        container.append($cell);
         return $cell;
     }
 
@@ -1713,7 +1710,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         );
     }
 
-    _calculateHeaderCellRepeatCount() {
+    _getCalculateHeaderCellRepeatCount() {
         return this._groupedStrategy.calculateHeaderCellRepeatCount();
     }
 
