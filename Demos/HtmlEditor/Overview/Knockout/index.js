@@ -23,8 +23,9 @@ window.onload = function() {
                     "color", "background", "separator",
                     "link", "image", "separator",
                     "clear", "codeBlock", "blockquote", "separator",
-                    "insertTable", "insertRowAbove", "insertRowBelow", "insertColumnLeft", "insertColumnRight",
-                    "deleteRow", "deleteColumn", "deleteTable"
+                    "insertTable", "deleteTable",
+                    "insertRowAbove", "insertRowBelow", "deleteRow",
+                    "insertColumnLeft", "insertColumnRight", "deleteColumn"
                 ]
             },
             mediaResizing: {

@@ -7,12 +7,13 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             items: [
                 {
                     formatName: "header",
-                    formatValues: [false, 1, 2, 3] 
+                    formatValues: [false, 1, 2, 3]
                 },
                 "separator", "bold", "color", "separator",
                 "alignLeft", "alignCenter", "alignRight", "separator",
-                "insertTable", "insertRowAbove", "insertRowBelow", "insertColumnLeft", "insertColumnRight",
-                "deleteRow", "deleteColumn", "deleteTable"
+                "insertTable", "deleteTable",
+                "insertRowAbove", "insertRowBelow", "deleteRow",
+                "insertColumnLeft", "insertColumnRight", "deleteColumn"
             ]
         }
     };

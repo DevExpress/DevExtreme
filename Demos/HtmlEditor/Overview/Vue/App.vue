@@ -44,13 +44,13 @@
         <DxItem format-name="blockquote"/>
         <DxItem format-name="separator"/>
         <DxItem format-name="insertTable"/>
+        <DxItem format-name="deleteTable"/>
         <DxItem format-name="insertRowAbove"/>
         <DxItem format-name="insertRowBelow"/>
+        <DxItem format-name="deleteRow"/>
         <DxItem format-name="insertColumnLeft"/>
         <DxItem format-name="insertColumnRight"/>
-        <DxItem format-name="deleteRow"/>
         <DxItem format-name="deleteColumn"/>
-        <DxItem format-name="deleteTable"/>
       </DxToolbar>
 
       <div v-html="markup"/>

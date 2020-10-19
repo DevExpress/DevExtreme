@@ -68,13 +68,13 @@ class App extends React.Component {
             <Item formatName="blockquote" />
             <Item formatName="separator" />
             <Item formatName="insertTable" />
+            <Item formatName="deleteTable" />
             <Item formatName="insertRowAbove" />
             <Item formatName="insertRowBelow" />
+            <Item formatName="deleteRow" />
             <Item formatName="insertColumnLeft" />
             <Item formatName="insertColumnRight" />
-            <Item formatName="deleteRow" />
             <Item formatName="deleteColumn" />
-            <Item formatName="deleteTable" />
           </Toolbar>
         </HtmlEditor>
         <div className="options">
