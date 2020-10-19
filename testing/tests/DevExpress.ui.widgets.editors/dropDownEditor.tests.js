@@ -31,6 +31,9 @@ const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-templat
 const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
 const ESC_KEY_CODE = 'Escape';
+const POPUP_CLASS = 'dx-popup';
+const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 
 const isIOs = devices.current().platform === 'ios';
 
@@ -1254,6 +1257,145 @@ QUnit.module('options', () => {
 });
 
 QUnit.module('popup integration', () => {
+    QUnit.module('overlay content width', () => {
+        QUnit.test('should be equal to the editor width when dropDownOptions.width in not defined', function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true,
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'overlay content width is correct');
+        });
+
+        QUnit.test('should be equal to the editor width when dropDownOptions.width in not defined after editor width runtime change', function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                opened: true
+            });
+            const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+            instance.option('width', 153);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'overlay content width is correct');
+        });
+
+        QUnit.test('should be equal to dropDownOptions.width if it\'s defined', function(assert) {
+            const overlayContentWidth = 500;
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    width: overlayContentWidth
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerWidth(), overlayContentWidth, 'overlay content width is correct');
+        });
+
+        QUnit.test('should be equal to dropDownOptions.width even after editor input width change', function(assert) {
+            const overlayContentWidth = 500;
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    width: overlayContentWidth
+                },
+                opened: true
+            });
+            const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+            instance.option('width', 300);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerWidth(), overlayContentWidth, 'overlay content width is correct');
+        });
+
+        QUnit.test('should be equal to wrapper width if dropDownOptions.width is set to 100%', function(assert) {
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    width: '100%'
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+            assert.strictEqual($overlayContent.outerWidth(), $overlayWrapper.outerWidth(), 'overlay content width is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper when dropDownOptions.width is percent', function(assert) {
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    width: '50%'
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+            assert.roughEqual($overlayContent.outerWidth(), $overlayWrapper.outerWidth() / 2, 0.1, 'overlay content width is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper after editor width runtime change', function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                width: 600,
+                dropDownOptions: {
+                    width: '50%'
+                },
+                opened: true
+            });
+            const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+            instance.option('width', 700);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+            assert.roughEqual($overlayContent.outerWidth(), $overlayWrapper.outerWidth() / 2, 0.1, 'overlay content width is correct');
+        });
+
+        QUnit.test('should be equal to editor input width even when dropDownOptions.container is defined', function(assert) {
+            const $container = $('<div>')
+                .css({ width: 150 })
+                .appendTo('#qunit-fixture');
+
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    container: $container
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+            assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'width is correct');
+        });
+    });
+
+    QUnit.test('dropDownOptions.width should be passed to popup', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            dropDownOptions: {
+                width: 500
+            },
+            opened: true
+        });
+
+        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
+    });
+
+    QUnit.test('popup should have width equal to dropDownOptions.width even after editor input width change', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            dropDownOptions: {
+                width: 500
+            },
+            opened: true
+        });
+        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+
+        dropDownEditor.option('width', 300);
+
+        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
+    });
+
     QUnit.test('onPopupInitialized', function(assert) {
         assert.expect(1);
 
