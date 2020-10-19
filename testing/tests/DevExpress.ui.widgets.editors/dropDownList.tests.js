@@ -30,9 +30,6 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
-const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
-const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
-const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
 const getPopup = (instance) => {
     return instance._popup;
@@ -1141,33 +1138,6 @@ QUnit.module('popup', moduleConfig, () => {
 
         $dropDownList.dxDropDownList('option', 'opened', false);
         assert.equal($dropDownList.hasClass(SKIP_GESTURE_EVENT_CLASS), false, 'skip gesture event class was removed after popup was closed');
-    });
-
-    QUnit.test('popup content width should be equal to content width when dropDownOptions.width is set to auto (T897820)', function(assert) {
-        $('#dropDownList').dxDropDownList({
-            dropDownOptions: {
-                width: 'auto'
-            },
-            opened: true
-        });
-
-        const emptyPopupWidth = $(`.${EMPTY_MESSAGE_CLASS}`).outerWidth();
-        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
-        assert.strictEqual($popupContent.width(), emptyPopupWidth, 'overlay content width is correct');
-    });
-
-    QUnit.test('overlay content width can be equal to wrapper width when dropDownOptions.width is set to auto and there is list in content', function(assert) {
-        $('#dropDownList').dxDropDownList({
-            items: [1],
-            dropDownOptions: {
-                width: 'auto'
-            },
-            opened: true
-        });
-
-        const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
-        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.outerWidth(), $overlayWrapper.outerWidth(), 'overlay content width is correct');
     });
 
     QUnit.test('After load new page scrollTop should not be changed', function(assert) {
