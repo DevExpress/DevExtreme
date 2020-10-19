@@ -95,9 +95,21 @@ const Scrollable = DOMComponent.inherit({
         this._locked = false;
         this._rtlConfig = {
             contentOffsetRight: 0,
-            windowPixelRatio: getWindow().devicePixelRatio,
-            widowWidth: getWindow().innerWidth
+            windowPixelRatio: this._getWindowDevicePixelRatio(),
+            widowWidth: this._tryGetWindowWidth()
         };
+    },
+
+    _getWindowDevicePixelRatio: function() {
+        return hasWindow()
+            ? getWindow().devicePixelRatio
+            : 1;
+    },
+
+    _getWindowWidth: function() {
+        return hasWindow()
+            ? getWindow().innerWidth
+            : 0;
     },
 
     _visibilityChanged: function(visible) {
@@ -204,8 +216,8 @@ const Scrollable = DOMComponent.inherit({
     _updateRtlConfig: function() {
         const config = this._rtlConfig;
         if(this._isHorizontalRtl()) {
-            const windowPixelRatio = getWindow().devicePixelRatio;
-            const windowWidth = getWindow().innerWidth;
+            const windowPixelRatio = this._getWindowDevicePixelRatio();
+            const windowWidth = this._getWindowWidth();
             if(config.windowPixelRatio === windowPixelRatio && config.widowWidth === windowWidth) {
                 const container = this._container().get(0);
                 config.contentOffsetRight = Math.ceil((container.scrollWidth - (container.scrollLeft + container.clientWidth)) * 100) / 100;
