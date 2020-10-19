@@ -3803,7 +3803,6 @@
             "Name": "SortableClosableTabs",
             "Widget": "TabPanel",
             "Equivalents": "Tab Drag and Drop",
-            "Badge": "New",
             "MvcAdditionalFiles": [
               "/Views/TabPanel/_SortableTabPanel.cshtml",
               "/Controllers/ApiControllers/DataGridMasterDetailViewController.cs",
