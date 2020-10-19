@@ -227,13 +227,17 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         this._resolveDeferred(this._getTemplatesItems(items));
     },
 
-    _getTemplatesItems(items) {
-        const elements = items.reduce((prev, i) => {
+    _collectTemplatesFromItems(items) {
+        return items.reduce((prev, i) => {
             return {
                 items: prev.items.concat(i.getTemplatesDef()),
                 groups: prev.groups.concat(i.getTemplatesGroups())
             };
         }, { items: [], groups: [] });
+    },
+
+    _getTemplatesItems(items) {
+        const elements = this._collectTemplatesFromItems(items);
         const extraItems = this._getExtraTemplatesItems();
         return {
             items: extraItems.items.concat(elements.items),

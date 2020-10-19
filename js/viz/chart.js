@@ -1021,12 +1021,7 @@ const dxChart = AdvancedChart.inherit({
         const that = this;
         const allAxes = (that._argumentAxes || []).concat(that._valueAxes || []);
 
-        const elements = allAxes.reduce((prev, axis) => {
-            return {
-                groups: prev.groups.concat(axis.getTemplatesGroups()),
-                items: prev.items.concat(axis.getTemplatesDef())
-            };
-        }, { groups: [], items: [] });
+        const elements = that._collectTemplatesFromItems(allAxes);
 
         return {
             items: elements.items,
