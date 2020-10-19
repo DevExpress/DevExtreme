@@ -77,16 +77,12 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getDateByIndex(index) {
-        // TODO
-        let newFirstViewDate = new Date(this._firstViewDate);
-        if(timeZoneUtils.isTimezoneChangeInDate(newFirstViewDate)) {
-            newFirstViewDate = new Date(newFirstViewDate.setDate(newFirstViewDate.getDate() + 1));
-        }
+        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
 
-        const resultDate = new Date(newFirstViewDate);
+        const result = new Date(newFirstViewDate);
         const dayIndex = Math.floor(index / this._getCellCountInDay());
-        resultDate.setTime(newFirstViewDate.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
-        return resultDate;
+        result.setTime(newFirstViewDate.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
+        return result;
     }
 
     _getFormat() {

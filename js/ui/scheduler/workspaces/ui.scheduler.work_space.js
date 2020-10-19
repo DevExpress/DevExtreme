@@ -1804,7 +1804,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _renderTimePanel() {
         const repeatCount = this._groupedStrategy.calculateTimeCellRepeatCount();
-        const startViewDate = this._getDateWithSkippedDST();
+        const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this.getStartViewDate());
 
         const _getTimeText = (i) => {
             // T410490: incorrectly displaying time slots on Linux
@@ -1829,14 +1829,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
     }
 
-    _getDateWithSkippedDST() {
-        let result = new Date(this.getStartViewDate());
-        if(timeZoneUtils.isTimezoneChangeInDate(result)) {
-            result = new Date(result.setDate(result.getDate() + 1));
-        }
-        return result;
-    }
-
     _getTimePanelRowCount() {
         return this._getCellCountInDay();
     }
@@ -1856,15 +1848,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._isVerticalGroupedWorkSpace()
             ? this._groupedStrategy.addAdditionalGroupCellClasses(cellClass, i, i)
             : cellClass;
-    }
-
-    _getTimeCellDateAdjustedDST(i) {
-        let startViewDate = new Date(this.getStartViewDate());
-        if(timeZoneUtils.isTimezoneChangeInDate(startViewDate)) {
-            startViewDate = new Date(startViewDate.setDate(startViewDate.getDate() + 1));
-        }
-
-        return this._getTimeCellDateCore(startViewDate, i);
     }
 
     _getTimeCellDate(i) {
