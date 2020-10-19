@@ -528,8 +528,8 @@ extend(legendPrototype, {
 
         markersGroup.css(patchFontOptions(options.font));
 
-        const deferredItems = [];
-        const templatesGroups = [];
+        that._deferredItems = [];
+        that._templatesGroups = [];
 
         that._items = (items || []).map((dataItem, i) => {
             const stateOfDataItem = dataItem.states;
@@ -548,8 +548,8 @@ extend(legendPrototype, {
 
             const markerGroup = renderer.g().attr({ class: 'dxl-marker' }).append(itemGroup);
 
-            deferredItems[i] = new Deferred();
-            templatesGroups.push(markerGroup);
+            that._deferredItems[i] = new Deferred();
+            that._templatesGroups.push(markerGroup);
 
             const item = {
                 label: that._createLabel(dataItem, itemGroup),
@@ -567,7 +567,7 @@ extend(legendPrototype, {
                     template.render({
                         model: dataItem,
                         container: markerGroup.element,
-                        onRendered: deferredItems[i].resolve
+                        onRendered: that._deferredItems[i].resolve
                     });
                 }
             };
@@ -582,13 +582,14 @@ extend(legendPrototype, {
 
             return item;
         });
+    },
 
-        that._widget._addToDeferred({
-            items: deferredItems,
-            groups: templatesGroups,
-            launchRequest() {},
-            doneRequest() {}
-        });
+    getTemplatesGroups: function() {
+        return this._templatesGroups || [];
+    },
+
+    getTemplatesDef: function() {
+        return this._deferredItems || [];
     },
 
     _getItemData: function() {

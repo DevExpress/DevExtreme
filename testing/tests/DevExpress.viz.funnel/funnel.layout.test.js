@@ -23,6 +23,8 @@ function stubLegend() {
     that.legend.stub('coordsIn').returns(true);
     that.legend.stub('getItemByCoord').withArgs(2, 3).returns({ id: 4 });
     that.legend.stub('measure').returns([100, 100]);
+    that.legend.stub('getTemplatesGroups').returns([]);
+    that.legend.stub('getTemplatesDef').returns([]);
     legendModule._setLegend(
         function() {
             return that.legend;

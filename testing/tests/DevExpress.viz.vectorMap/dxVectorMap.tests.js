@@ -280,9 +280,9 @@ QUnit.test('GestureHandler', function(assert) {
 QUnit.test('LayoutControl', function(assert) {
     const spy = sinon.spy(layoutModule, 'LayoutControl');
 
-    this.createMap({ layers: {} });
+    const map = this.createMap({ layers: {} });
 
-    assert.deepEqual(spy.lastCall.args, [], 'created');
+    assert.deepEqual(spy.lastCall.args, [map], 'created');
     assert.ok(this.layoutControl.suspend.getCall(0).calledBefore(this.controlBar.setOptions.lastCall), 'suspend');
 
     assert.ok(this.layoutControl.resume.getCall(0).calledBefore(this.layerCollection.setOptions.lastCall), 'resume');

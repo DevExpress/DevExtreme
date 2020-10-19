@@ -146,6 +146,8 @@ QUnit.module('Legend', {
             () => {
                 const stub = new stubLegend();
                 stub.stub('measure').returns([120, 120]);
+                stub.stub('getTemplatesGroups').returns([]);
+                stub.stub('getTemplatesDef').returns([]);
                 stub.stub('layoutOptions').returns({
                     horizontalAlignment: 'right',
                     verticalAlignment: 'top',

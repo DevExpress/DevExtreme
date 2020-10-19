@@ -42,6 +42,8 @@ const trackerEnvironment = $.extend({}, environment, {
 
         legendModule._setLegend(sinon.spy(
             function() {
+                that.legend.stub('getTemplatesGroups').returns([]);
+                that.legend.stub('getTemplatesDef').returns([]);
                 return that.legend;
             }
         ));
