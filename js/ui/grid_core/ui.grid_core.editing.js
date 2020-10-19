@@ -2035,7 +2035,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._hideEditPopup();
             }
 
-            this._afterCancelEditData();
             this._internalState = [];
         },
 
@@ -2649,8 +2648,6 @@ const EditingController = modules.ViewController.inherit((function() {
         _afterSaveEditData: function() { },
 
         _beforeCancelEditData: function() { },
-
-        _afterCancelEditData: function() { },
 
         _allowEditAction: function(actionName, options) {
             let allowEditAction = this.option('editing.' + actionName);
