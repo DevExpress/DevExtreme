@@ -19,6 +19,7 @@ const Popover = require('./popover');
 const TextBox = require('./text_box');
 const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
 const translator = require('../animation/translator');
+const { getElementWidth } = require('./drop_down_editor/utils');
 
 const LOOKUP_CLASS = 'dx-lookup';
 const LOOKUP_SEARCH_CLASS = 'dx-lookup-search';
@@ -312,6 +313,7 @@ const Lookup = DropDownList.inherit({
                     dropDownOptions: {
                         closeOnOutsideClick: true,
 
+                        width: () => getElementWidth(this.$element()),
                         height: (function() { return this._getPopupHeight(); }).bind(this),
                         showTitle: false,
 
