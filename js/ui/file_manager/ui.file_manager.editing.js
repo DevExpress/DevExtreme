@@ -354,7 +354,7 @@ class FileManagerEditingControl extends Widget {
 
     _getErrorText(errorInfo, itemInfo, itemName) {
         itemName = itemName || itemInfo?.fileItem.name;
-        const errorText = FileManagerMessages.get(errorInfo.errorId, itemName);
+        const errorText = errorInfo.errorText || FileManagerMessages.get(errorInfo.errorId, itemName);
 
         const errorArgs = {
             fileSystemItem: itemInfo?.fileItem,
