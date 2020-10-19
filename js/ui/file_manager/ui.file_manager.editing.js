@@ -224,16 +224,16 @@ class FileManagerEditingControl extends Widget {
         this._notificationControl.addOperationDetails(operationInfo, details, context.actionMetadata.allowCancel);
     }
 
-    _onEditActionError(actionInfo, error) {
+    _onEditActionError(actionInfo, errorInfo) {
         const { context, operationInfo } = actionInfo.customData;
         context.singleRequest = actionInfo.singleRequest;
-        this._handleActionError(operationInfo, context, error);
+        this._handleActionError(operationInfo, context, errorInfo);
         this._completeAction(operationInfo, context);
     }
 
-    _onEditActionItemError(actionInfo, info) {
+    _onEditActionItemError(actionInfo, errorInfo) {
         const { context, operationInfo } = actionInfo.customData;
-        this._handleActionError(operationInfo, context, info);
+        this._handleActionError(operationInfo, context, errorInfo);
     }
 
     _onCompleteEditActionItem(actionInfo, info) {
