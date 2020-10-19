@@ -6,7 +6,7 @@ import { deferUpdate, deferRender, ensureDefined } from '../../core/utils/common
 import { isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
-import { hasWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
@@ -93,6 +93,11 @@ const Scrollable = DOMComponent.inherit({
         this.callBase();
         this._initScrollableMarkup();
         this._locked = false;
+        this._rtlConfig = {
+            contentOffsetRight: 0,
+            windowPixelRatio: getWindow().devicePixelRatio,
+            widowWidth: getWindow().innerWidth
+        };
     },
 
     _visibilityChanged: function(visible) {
@@ -158,10 +163,10 @@ const Scrollable = DOMComponent.inherit({
                 deferRender(() => {
                     const containerElement = this._container().get(0);
 
-                    let leftOffset = containerElement.scrollWidth - containerElement.clientWidth - (this._contentOffsetRight || 0);
+                    let leftOffset = containerElement.scrollWidth - containerElement.clientWidth - (this._rtlConfig.contentOffsetRight || 0);
                     if(leftOffset <= 0) {
                         leftOffset = 0;
-                        this._contentOffsetRight = containerElement.scrollWidth - containerElement.clientWidth;
+                        this._rtlConfig.contentOffsetRight = containerElement.scrollWidth - containerElement.clientWidth;
                     }
 
                     this.scrollTo({ left: leftOffset });
@@ -196,10 +201,17 @@ const Scrollable = DOMComponent.inherit({
         eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
     },
 
-    _saveOffsetRightForRtlMode: function() {
+    _updateRtlConfig: function() {
+        const config = this._rtlConfig;
         if(this._isHorizontalRtl()) {
-            const container = this._container().get(0);
-            this._contentOffsetRight = container.scrollWidth - (container.scrollLeft + container.clientWidth);
+            const windowPixelRatio = getWindow().devicePixelRatio;
+            const windowWidth = getWindow().innerWidth;
+            if(config.windowPixelRatio === windowPixelRatio && config.widowWidth === windowWidth) {
+                const container = this._container().get(0);
+                config.contentOffsetRight = Math.ceil((container.scrollWidth - (container.scrollLeft + container.clientWidth)) * 100) / 100;
+            }
+            config.widowWidth = windowWidth;
+            config.windowPixelRatio = windowPixelRatio;
         }
     },
 
