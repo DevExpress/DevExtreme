@@ -96,7 +96,7 @@ const Scrollable = DOMComponent.inherit({
         this._rtlConfig = {
             contentOffsetRight: 0,
             windowPixelRatio: this._getWindowDevicePixelRatio(),
-            widowWidth: this._tryGetWindowWidth()
+            widowWidth: this._getWindowWidth()
         };
     },
 
