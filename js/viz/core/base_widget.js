@@ -139,6 +139,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
         that._optionChangedLocker = 0;
+        that._asyncFirstDrawing = true;
         that._changes = changes();
         that._suspendChanges();
         that._themeManager = that._createThemeManager();
@@ -246,7 +247,14 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             }
             callForEach(deferredElements.launchRequestCallbacks);
             that._changesApplying = true;
-            that._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
+            const changes = ['LAYOUT', 'FULL_RENDER'];
+            if(that._asyncFirstDrawing) {
+                changes.push('FORCE_FIRST_DRAWING');
+                that._asyncFirstDrawing = false;
+            } else {
+                changes.push('FORCE_DRAWING');
+            }
+            that._requestChange(changes);
             that._setGroupsVisibility(deferredElements.groups, 'visible');
         });
         syncRendering = false;

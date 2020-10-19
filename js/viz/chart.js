@@ -541,13 +541,24 @@ const dxChart = AdvancedChart.inherit({
         }
     },
 
+    _getAllAxes() {
+        return this._argumentAxes.concat(this._valueAxes);
+    },
+
     _resetAxesAnimation(isFirstDrawing) {
-        this._argumentAxes.concat(this._valueAxes).forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
+        this._getAllAxes().forEach(a => { a.resetApplyingAnimation(isFirstDrawing); });
+    },
+
+    // for async templates. Should be fixed
+    _cleanGroups() {
+        this._getAllAxes().forEach(a => a.beforeCleanGroups());
+        this.callBase();
+        this._getAllAxes().forEach(a => a.afterCleanGroups());
     },
 
     _axesBoundaryPositioning() {
         const that = this;
-        const allAxes = that._argumentAxes.concat(that._valueAxes);
+        const allAxes = that._getAllAxes();
         let boundaryStateChanged = false;
 
         allAxes.forEach(a => {
@@ -953,7 +964,7 @@ const dxChart = AdvancedChart.inherit({
 
         drawAxesAndSetCanvases(false);
         drawAxesAndSetCanvases(true);
-        if(that._estimateTickIntervals(verticalAxes, panesCanvases)) {
+        if(!that._changesApplying && that._estimateTickIntervals(verticalAxes, panesCanvases)) {
             drawAxesAndSetCanvases(false);
         }
 
@@ -1316,7 +1327,7 @@ const dxChart = AdvancedChart.inherit({
 
     _applyClipRectsForAxes() {
         const that = this;
-        const axes = that._argumentAxes.concat(that._valueAxes);
+        const axes = that._getAllAxes();
         const customPositionAxes = axes.filter(a => a.hasCustomPosition());
         const chartCanvasClipRectID = that._getCanvasClipRectID();
 
