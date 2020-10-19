@@ -51,7 +51,6 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const POPUP_CLASS = 'dx-selectbox-popup';
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
@@ -85,37 +84,6 @@ const moduleSetup = {
         this.clock.restore();
     }
 };
-
-QUnit.module('rendering with css', {}, () => {
-    QUnit.test('Right width of popup', function(assert) {
-        const editorWidth = 100;
-        const $element = $('#selectBox').dxSelectBox({ editorWidth: 100 });
-        const instance = $element.dxSelectBox('instance');
-        instance.open();
-        const $popup = $(instance._popup.$element());
-
-        assert.ok($popup.hasClass(POPUP_CLASS));
-
-        assert.strictEqual(typeof instance._popup.option('width'), 'function');
-
-        const $overlayContent = $('.dx-overlay-content');
-        assert.ok($overlayContent.outerWidth() > editorWidth, 'overlay content width is correct');
-    });
-
-    QUnit.test('popup should have width equal to the input width', function(assert) {
-        const instance = $('#selectBox').dxSelectBox({
-            width: 400,
-            opened: true
-        }).dxSelectBox('instance');
-
-        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-        assert.strictEqual($overlayContent.css('width'), '400px', 'popup width is correct');
-
-        instance.option('width', 600);
-
-        assert.strictEqual($overlayContent.css('width'), '600px', 'popup width is correct');
-    });
-});
 
 QUnit.module('hidden input', moduleSetup, () => {
 
