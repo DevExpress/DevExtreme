@@ -333,10 +333,7 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _location: function() {
-        const location = this._strategy.location();
-
-
-        return location;
+        return this._strategy.location();
     },
 
     _normalizeLocation: function(location) {
