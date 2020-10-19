@@ -221,56 +221,6 @@ QUnit.module('common', moduleConfig, () => {
         assert.equal($('#dropDownBoxAnonymous').find('.dx-button').text(), 'Button text', 'Button text is correct');
     });
 
-    QUnit.test('popup and editor width should be equal', function(assert) {
-        const instance = new DropDownBox(this.$element, {
-            items: this.simpleItems,
-            opened: true,
-            width: 500,
-            contentTemplate() {
-                return 'Test content';
-            },
-            valueExpr: 'id',
-            displayExpr: 'name',
-            value: [1, 3]
-        });
-
-        assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), 'width are equal on init');
-        assert.equal($(instance.content()).outerWidth(), 500, 'width are equal on init');
-
-        instance.option('width', 700);
-        assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), 'width are equal after option change');
-        assert.equal($(instance.content()).outerWidth(), 700, 'width are equal after option change');
-    });
-
-    QUnit.test('popup and editor width should be equal when container resizes after runtime width change', function(assert) {
-        const instance = new DropDownBox(this.$element, {
-            width: '100%',
-            opened: true
-        });
-
-        instance.option('width', '90%');
-        $('#container').get(0).style.width = '900px';
-        instance.close();
-        instance.open();
-
-        assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), 'width are equal after option change');
-        assert.equal($(instance.content()).outerWidth(), 810, 'width are equal after option change');
-    });
-
-    QUnit.test('popup and editor width should be eual when the editor rendered in the hidden content', function(assert) {
-        this.$element.hide();
-        const instance = new DropDownBox(this.$element, {
-            deferRendering: false,
-            contentTemplate() {
-                return 'Test content';
-            }
-        });
-
-        this.$element.show();
-        instance.open();
-        assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), 'width are equal');
-    });
-
     QUnit.test('dropDownBox should work with the slow dataSource', function(assert) {
         const items = [{ key: 1, text: 'Item 1' }, { key: 2, text: 'Item 2' }];
 
@@ -395,42 +345,6 @@ QUnit.module('common', moduleConfig, () => {
 });
 
 QUnit.module('popup options', moduleConfig, () => {
-    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
-        const instance = $('#dropDownBox').dxDropDownBox({
-            width: 600,
-            dropDownOptions: {
-                width: '50%'
-            },
-            opened: true
-        }).dxDropDownBox('instance');
-
-        const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 300, 'overlay content width is correct');
-
-        instance.option('width', 400);
-
-        assert.strictEqual($overlayContent.outerWidth(), 200, 'overlay content width is correct after editor width runtime change');
-    });
-
-    QUnit.test('customize width and height', function(assert) {
-        const instance = new DropDownBox(this.$element, {
-            width: 200,
-            dropDownOptions: {
-                width: 100,
-                height: 100
-            },
-            opened: true
-        });
-
-        const $popupContent = $(instance.content());
-
-        assert.equal($popupContent.outerWidth(), 100, 'popup width has been customized');
-        assert.equal($popupContent.outerHeight(), 100, 'popup height has been customized');
-
-        instance.option('dropDownOptions.width', undefined);
-        assert.equal($popupContent.outerWidth(), 200, 'popup width customization has been cancelled');
-    });
-
     QUnit.test('popup should be positioned correctly if rtlEnabled is true', function(assert) {
         const instance = new DropDownBox(this.$element, {
             opened: true,
