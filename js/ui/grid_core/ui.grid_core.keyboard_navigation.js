@@ -974,8 +974,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                         if((isRenderView || !isCommandCell) && that.getController('editorFactory').focus()) {
                             const $focusedElementInsideCell = $cell.find(':focus');
                             !isElementDefined($focusedElementInsideCell) && that._focus($cell);
-                        } else if(this._isNeedFocus || this._isHiddenFocus) {
-                            this._focus($cell, this._isHiddenFocus);
+                        } else if(that._isNeedFocus || that._isHiddenFocus) {
+                            that._focus($cell, that._isHiddenFocus);
                         }
                         if(isEditing) {
                             that._focusInteractiveElement.bind(that)($cell);
