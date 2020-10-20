@@ -6,17 +6,20 @@ import {
   OneWay,
   Method,
   Ref,
+  Event,
+  Effect,
 } from 'devextreme-generator/component_declaration/common';
+import { subscribeToScrollEvent } from '../utils/subscribe_to_event';
 import { isNumeric } from '../../core/utils/type';
 import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
+import { DisposeEffectReturn } from '../utils/effect_return.d';
 
 const DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = 'horizontal';
-const DIRECTION_BOTH = 'both';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
-export interface Location {
+export interface Location { // TODO: rename Location, conflict with predefined Location type
   top: number;
   left: number;
 }
@@ -26,6 +29,13 @@ export interface ScrollOffset {
   left: number;
   bottom: number;
   right: number;
+}
+
+export interface BoundaryProps {
+  reachedBottom: boolean;
+  reachedLeft: boolean;
+  reachedRight: boolean;
+  reachedTop: boolean;
 }
 
 export type ScrollViewDirection = 'both' | 'horizontal' | 'vertical';
@@ -79,16 +89,27 @@ export const viewFunction = ({
 /* istanbul ignore next: class has only props default */
 @ComponentBindings()
 export class ScrollViewProps {
-  @Slot() children?: any;
+  @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
   @OneWay() direction: ScrollViewDirection = 'vertical';
+
+  @Event() onScroll: (e: {
+    event: Event;
+    scrollOffset: Partial<ScrollOffset>;
+    // TODO: use boundaryProps instead of fourth props
+    reachedLeft?: boolean;
+    reachedRight?: boolean;
+    reachedTop?: boolean;
+    reachedBottom?: boolean;
+  }) => void = () => {};
 }
 type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
 @Component({
+  jQuery: { register: true },
   view: viewFunction,
 })
-export default class ScrollView extends JSXComponent<ScrollViewPropsType>() {
+export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() containerRef!: HTMLDivElement;
@@ -99,20 +120,21 @@ export default class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  scrollBy(distance: number | Partial<Location>): void {
-    const { direction } = this.props;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  scrollBy(distance: any): void {
     const location = ensureLocation(distance);
 
-    if (direction === DIRECTION_VERTICAL || direction === DIRECTION_BOTH) {
+    if (this.isDirection(DIRECTION_VERTICAL)) {
       this.containerRef.scrollTop = Math.round(this.scrollOffset().top + location.top);
     }
-    if (direction === DIRECTION_HORIZONTAL || direction === DIRECTION_BOTH) {
+    if (this.isDirection(DIRECTION_HORIZONTAL)) {
       this.containerRef.scrollLeft = Math.round(this.scrollOffset().left + location.left);
     }
   }
 
   @Method()
-  scrollTo(targetLocation: number | Partial<Location>): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  scrollTo(targetLocation: any): void {
     const location = ensureLocation(targetLocation);
     this.scrollBy({
       left: location.left - this.scrollOffset().left,
@@ -121,14 +143,15 @@ export default class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  scrollToElement(element: HTMLElement, offset?: any): void {
     if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
       const scrollOffset = {
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        ...offset,
+        ...(offset as Partial<ScrollOffset>),
       };
       this.scrollTo({
         top: this.getScrollTopLocation(element, scrollOffset),
@@ -148,7 +171,8 @@ export default class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  scrollOffset(): Location {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  scrollOffset(): any {
     return {
       left: this.containerRef.scrollLeft,
       top: this.containerRef.scrollTop,
@@ -173,6 +197,49 @@ export default class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Method()
   clientWidth(): number {
     return this.containerRef.clientWidth;
+  }
+
+  @Effect() scrollEffect(): DisposeEffectReturn {
+    return subscribeToScrollEvent(this.containerRef,
+      (event: Event) => this.props.onScroll({
+        event,
+        scrollOffset: this.scrollOffset(),
+        ...this.getBoundaryProps(),
+      }));
+  }
+
+  private getBoundaryProps(): Partial<BoundaryProps> {
+    const { left, top } = this.scrollOffset();
+    const {
+      scrollWidth, clientWidth, scrollHeight, clientHeight,
+    } = this.containerRef;
+
+    const boundaryProps: Partial<BoundaryProps> = {};
+
+    if (this.isDirection(DIRECTION_HORIZONTAL)) {
+      boundaryProps.reachedLeft = left <= 0;
+      boundaryProps.reachedRight = left >= scrollWidth - clientWidth;
+    }
+
+    if (this.isDirection(DIRECTION_VERTICAL)) {
+      boundaryProps.reachedTop = top <= 0;
+      // Problem with rounding for 4k resolution. Do we need round it?
+      boundaryProps.reachedBottom = top >= scrollHeight - clientHeight;
+    }
+
+    return boundaryProps;
+  }
+
+  private isDirection(direction: ScrollViewDirection): boolean {
+    const { direction: currentDirection } = this.props;
+
+    if (direction === DIRECTION_VERTICAL) {
+      return currentDirection !== DIRECTION_HORIZONTAL;
+    }
+    if (direction === DIRECTION_HORIZONTAL) {
+      return currentDirection !== DIRECTION_VERTICAL;
+    }
+    return currentDirection === direction;
   }
 
   get cssClasses(): string {
