@@ -44,10 +44,9 @@ const isVirtualRowRendering = function(that) {
 };
 
 const correctCount = function(items, count, fromEnd, isItemCountableFunc) {
-    const countCorrection = (fromEnd ? 0 : 1);
-    for(let i = 0; i < count + countCorrection; i++) {
+    for(let i = 0; i < count + 1; i++) {
         const item = items[fromEnd ? items.length - 1 - i : i];
-        if(item && !isItemCountableFunc(item, i === count)) {
+        if(item && !isItemCountableFunc(item, i === count, fromEnd)) {
             count++;
         }
     }
@@ -808,7 +807,7 @@ export default {
 
                         that._visibleItems = [];
 
-                        const isItemCountable = function(item) {
+                        const isItemCountable = function(item, isNextAfterLast, fromEnd) {
                             return item.rowType === 'data' && !item.isNewRow || item.rowType === 'group' && that._dataSource.isGroupItemCountable(item.data);
                         };
 
@@ -859,7 +858,17 @@ export default {
                                 return that._rowsScrollController._dataSource.items().filter(isItemCountable).length;
                             },
                             correctCount: function(items, count, fromEnd) {
-                                return correctCount(items, count, fromEnd, isItemCountable);
+                                return correctCount(items, count, fromEnd, (item, isNextAfterLast, fromEnd) => {
+                                    if(item.isNewRow) {
+                                        return isNextAfterLast && !fromEnd;
+                                    }
+
+                                    if(isNextAfterLast && fromEnd) {
+                                        return !item.isNewRow;
+                                    }
+
+                                    return isItemCountable(item);
+                                });
                             },
                             items: function(countableOnly) {
                                 const dataSource = that.dataSource();
@@ -1001,12 +1010,12 @@ export default {
 
                         return delta < 0 ? 0 : delta;
                     },
-                    getRowIndexOffset: function() {
+                    getRowIndexOffset: function(byLoadedRows) {
                         let offset = 0;
                         const dataSource = this.dataSource();
                         const rowsScrollController = this._rowsScrollController;
 
-                        if(rowsScrollController) {
+                        if(rowsScrollController && !byLoadedRows) {
                             offset = rowsScrollController.beginPageIndex() * rowsScrollController._dataSource.pageSize();
                         } else if(this.option('scrolling.mode') === 'virtual' && dataSource) {
                             offset = dataSource.beginPageIndex() * dataSource.pageSize();
