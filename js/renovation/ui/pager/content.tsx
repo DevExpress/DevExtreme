@@ -1,7 +1,7 @@
 // A lot of refs needed any
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, ForwardRef, Provider, Ref, Effect,
+  Component, ComponentBindings, JSXComponent, OneWay, ForwardRef, Provider, Effect,
 } from 'devextreme-generator/component_declaration/common';
 
 import { InfoText } from './info';
@@ -100,7 +100,7 @@ export class PagerContentProps extends PagerProps {
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagerContent extends JSXComponent<PagerContentProps>() {
-  @Ref() widgetRootElementRef!: any;
+  @ForwardRef() widgetRootElementRef!: any;
 
   @Provider(KeyboardActionContext)
   get keyboardAction(): KeyboardActionContextType {

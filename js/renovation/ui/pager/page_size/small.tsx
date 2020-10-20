@@ -1,5 +1,5 @@
 import {
-  ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, ForwardRef,
+  ComponentBindings, JSXComponent, OneWay, InternalState, Effect, Component, Ref,
 } from 'devextreme-generator/component_declaration/common';
 
 import { SelectBox } from '../../select_box';
@@ -27,7 +27,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class PageSizeSmallProps {
-  @ForwardRef() parentRef!: HTMLElement;
+  @Ref() parentRef!: HTMLElement;
 
   @OneWay() pageSizes!: FullPageSize[];
 }

@@ -31,6 +31,7 @@ System.config({
 
         'rxjs': 'npm:rxjs@6.3.3',
         'rxjs/operators': 'npm:rxjs@6.3.3/operators',
+        'preact': 'npm:preact/dist/preact.js',
 
         'jszip': 'npm:jszip@3.1.3/dist/jszip.min.js',
         'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.js',
@@ -45,10 +46,6 @@ System.config({
             defaultExtension: 'js',
         },
         'devextreme/events': {
-            defaultExtension: 'js',
-            main: 'index.js'
-        },
-        'devextreme/events/utils/index': {
             defaultExtension: 'js',
             main: 'index.js'
         },
