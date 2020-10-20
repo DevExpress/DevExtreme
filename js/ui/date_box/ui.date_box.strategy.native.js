@@ -11,7 +11,7 @@ const NativeStrategy = DateBoxStrategy.inherit({
     NAME: 'Native',
 
     popupConfig: function(popupConfig) {
-        return extend(popupConfig, { width: 'auto' });
+        return extend({}, popupConfig, { width: 'auto' });
     },
 
     getParsedText: function(text, format) {
