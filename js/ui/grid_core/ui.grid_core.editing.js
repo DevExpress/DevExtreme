@@ -294,7 +294,6 @@ const EditingController = modules.ViewController.inherit((function() {
             const changes = this.getChanges();
             const needReset = changes?.length;
             if(needReset) {
-                this._internalState = [];
                 this._silentOption('editing.changes', []);
             }
         },
@@ -1922,7 +1921,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 changesOnly: this.option('repaintChangesOnly')
             })).always(() => {
                 this._fireSaveEditDataEvents(changes);
-                this._internalState = [];
             }).done(() => {
                 this._resolveAfterSave(deferred);
             }).fail((error) => {
@@ -2036,6 +2034,8 @@ const EditingController = modules.ViewController.inherit((function() {
             if(editMode === EDIT_MODE_POPUP) {
                 this._hideEditPopup();
             }
+
+            this._internalState = [];
         },
 
         _hideEditPopup: function() {

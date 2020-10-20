@@ -8515,59 +8515,60 @@ QUnit.module('Editing with real dataController', {
         });
     });
 
-    QUnit.testInActiveWindow('Batch - Validation frame should be rendered when a neighboring cell is modified with showEditorAlways and repaintChangesOnly enabled (T906094)', function(assert) {
-        // arrange
-        const rowsView = this.rowsView;
-        const $testElement = $('#container');
+    ['cell', 'batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Validation frame should be rendered when a neighboring cell is modified with showEditorAlways and repaintChangesOnly enabled (T906094, T914600)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
 
-        this.options.repaintChangesOnly = true;
-        $.extend(this.options.editing, {
-            mode: 'batch',
-            allowUpdating: true
+            this.options.repaintChangesOnly = true;
+            $.extend(this.options.editing, {
+                mode: editMode,
+                allowUpdating: true
+            });
+
+            this.options.columns = [{
+                dataField: 'name'
+            }, {
+                dataField: 'age',
+                showEditorAlways: true,
+                validationRules: [{
+                    type: 'custom',
+                    reevaluate: true,
+                    validationCallback: function(params) {
+                        return params.data.name.length > 0;
+                    }
+                }]
+            }];
+
+            rowsView.render($testElement);
+            this.columnsController.init();
+            this.editCell(0, 0);
+
+            const $firstCell = $(this.getCellElement(0, 0));
+            $firstCell.focus();
+
+            const $targetInput = $firstCell.find('input').first();
+
+            // act
+            $targetInput.val('').trigger('change');
+            this.closeEditCell();
+            this.clock.tick();
+
+            let $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.ok($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as invalid');
+
+            // act
+            this.cancelEditData();
+            this.clock.tick();
+
+            $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as valid');
         });
-
-        this.options.columns = [{
-            dataField: 'name'
-        }, {
-            dataField: 'age',
-            showEditorAlways: true,
-            validationRules: [{
-                type: 'custom',
-                reevaluate: true,
-                validationCallback: function(params) {
-                    return params.data.name.length > 0;
-                }
-            }]
-        }];
-
-
-        rowsView.render($testElement);
-        this.columnsController.init();
-        this.editCell(0, 0);
-
-        const $firstCell = $(this.getCellElement(0, 0));
-        $firstCell.focus();
-
-        const $targetInput = $firstCell.find('input').first();
-
-        // act
-        $targetInput.val('').trigger('change');
-        this.closeEditCell();
-        this.clock.tick();
-
-        let $secondCell = $(this.getCellElement(0, 1));
-
-        // assert
-        assert.ok($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as invalid');
-
-        // act
-        this.cancelEditData();
-        this.clock.tick();
-
-        $secondCell = $(this.getCellElement(0, 1));
-
-        // assert
-        assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as valid');
     });
 
     ['Row', 'Batch', 'Cell'].forEach((editMode) => {
