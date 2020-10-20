@@ -4,8 +4,9 @@ import dateLocalization from 'localization/date';
 import fx from 'animation/fx';
 
 import 'ui/scheduler/ui.scheduler';
-
 import 'generic_light.css!';
+
+const { testStart, module, test } = QUnit;
 
 const pacificTimezoneOffset = 480; // TODO: Value in ms. Offset (UTC-08:00) Pacific Time (US & Canada)
 const summerDSTDate = new Date(2020, 2, 8); // TODO Daylight saving time will happen on this day in 2 A.M.(UTC -7 Pacific time)
@@ -14,7 +15,7 @@ const winterDSTDate = new Date(2020, 10, 1); // TODO Daylight saving time will h
 // This tests run only in (UTC-08:00) Pacific Time (US & Canada)
 // For run test locally, change timezone on desktop on (UTC-08:00) Pacific Time (US & Canada)
 if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
-    QUnit.testStart(() => initTestMarkup());
+    testStart(() => initTestMarkup());
     const moduleConfig = {
         beforeEach() {
             fx.off = true;
@@ -25,7 +26,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         }
     };
 
-    QUnit.module('Day light saving time in native JS Date', moduleConfig, () => {
+    module('Day light saving time in native JS Date', moduleConfig, () => {
         const testCase1AmTo2AmSummerTime = {
             name: 'Summer time:source appointment from 1:00 AM to 2:00 AM',
             result: [
@@ -124,7 +125,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             testCase1AmTo3AmWinterTime,
             testCase2AmTo3AmWinterTime
         ].forEach(testCase => {
-            QUnit.test(testCase.name, function(assert) {
+            test(testCase.name, function(assert) {
                 const scheduler = createWrapper({
                     dataSource: [{
                         startDate: testCase.startDate,
@@ -161,10 +162,10 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         });
     });
 
-    QUnit.module('Time panel should have correct value in case DST(T852308)', moduleConfig, () => {
+    module('Time panel should have correct date value in case DST', moduleConfig, () => {
         const views = ['week', 'day'];
 
-        QUnit.module('timeCellTemplate', () => {
+        module('timeCellTemplate', () => {
             const expectedDateResults = (() => {
                 const result = [];
                 let startHours = 0;
@@ -180,7 +181,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             })();
 
             views.forEach(view => {
-                QUnit.test(`Time value in time panel should be correct in ${view}`, function(assert) {
+                test(`Time value in time panel should be correct in ${view}`, function(assert) {
                     let index = 0;
                     createWrapper({
                         dataSource: [],
@@ -198,7 +199,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             });
         });
 
-        QUnit.module('Time panel render', () => {
+        module('Time panel render(T852308)', () => {
             const expectedTimeResults = (() => {
                 const result = [];
                 let startDate = new Date(2020, 2, 9); // TODO Date when there is no daylight saving
@@ -229,7 +230,10 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                 });
             });
         });
-        QUnit.test('onAppointmentFormOpening should have correct dates on new appointment when custom timezone', function(assert) {
+    });
+
+    module('Common', moduleConfig, () => {
+        test('onAppointmentFormOpening should have correct dates on new appointment when custom timezone(T862350)', function(assert) {
             const assertDate = new Date(2015, 0, 25, 2, 0);
             const scheduler = createWrapper({
                 height: 600,
@@ -240,16 +244,18 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                 startDayHour: 10,
                 endDayHour: 16,
                 currentDate: assertDate,
-                onAppointmentAdding: function(e) {
+                onAppointmentAdding: e => {
                     assert.deepEqual(e.appointmentData.startDate, assertDate, 'onAppointmentAdding has correct date');
                 },
-                onAppointmentFormOpening: function(e) {
+                onAppointmentFormOpening: e => {
                     assert.deepEqual(e.appointmentData.startDate, assertDate, 'onAppointmentFormOpening has correct date');
                 }
             });
 
             pointerMock(scheduler.workSpace.getCell(0, 0)).start().click().click();
             scheduler.appointmentPopup.clickDoneButton();
+
+            assert.expect(2);
         });
     });
 }

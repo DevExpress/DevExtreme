@@ -76,12 +76,27 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
     }
 
+    _getDateForHeaderText(index) {
+        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
+        return this._getDateByIndexCore(newFirstViewDate, index);
+    }
+
+    _getDateByIndexCore(date, index) {
+        const result = new Date(date);
+        const dayIndex = Math.floor(index / this._getCellCountInDay());
+        result.setTime(date.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
+
+        return result;
+    }
+
     _getDateByIndex(index) {
         const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
+        const result = this._getDateByIndexCore(newFirstViewDate, index);
 
-        const result = new Date(newFirstViewDate);
-        const dayIndex = Math.floor(index / this._getCellCountInDay());
-        result.setTime(newFirstViewDate.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
+        if(timeZoneUtils.isTimezoneChangeInDate(this._firstViewDate)) {
+            result.setDate(result.getDate() - 1);
+        }
+
         return result;
     }
 
@@ -290,7 +305,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
             let date = this._getDateByIndex(headerIndex);
 
             const now = this._getToday();
-            date = new Date(date); // TODO
+            date = new Date(date);
 
             if(dateUtils.sameDate(now, date)) {
                 const startCellDate = new Date(date);

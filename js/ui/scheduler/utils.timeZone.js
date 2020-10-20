@@ -182,6 +182,7 @@ const utils = {
     createDateFromUTCWithLocalOffset,
     createUTCDate,
 
+    isTimezoneChangeInDate,
     getDateWithoutTimezoneChange,
     hasDSTInLocalTimeZone,
     isEqualLocalTimeZone,

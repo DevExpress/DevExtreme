@@ -1665,8 +1665,9 @@ class SchedulerWorkSpace extends WidgetObserver {
         } else {
             const colSpan = groupByDate ? this._getGroupCount() : 1;
 
-            for(let i = 0; i < count; i++) {
-                const cellElement = this._renderDateHeaderTemplate($headerRow, i, i * repeatCount, cellTemplate, templateCallbacks);
+            for(let cellIndex = 0; cellIndex < count; cellIndex++) {
+                const templateIndex = cellIndex * repeatCount;
+                const cellElement = this._renderDateHeaderTemplate($headerRow, cellIndex, templateIndex, cellTemplate, templateCallbacks);
                 cellElement.attr('colSpan', colSpan);
             }
 
@@ -2100,7 +2101,11 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _getHeaderText(headerIndex) {
-        return dateLocalization.format(this._getDateByIndex(headerIndex), this._getFormat());
+        return dateLocalization.format(this._getDateForHeaderText(headerIndex), this._getFormat());
+    }
+
+    _getDateForHeaderText(index) {
+        return this._getDateByIndex(index);
     }
 
     _getDateByIndex() { return abstract(); }
