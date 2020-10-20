@@ -43,6 +43,7 @@ const renovationSrcGlobs = srcGlobsPattern(
 );
 
 const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
+const iconsGlobs = 'images/icons/*/*.svg';
 
 const distGlobsPattern = (jsFolder, exclude) => [
     'artifacts/**/*.*',
@@ -99,6 +100,10 @@ const sources = (src, dist, distGlob) => (() => merge(
     gulp
         .src(jsonGlobs)
         .pipe(gulp.dest(dist)),
+
+    gulp
+        .src(iconsGlobs)
+        .pipe(gulp.dest(`${dist}/icons`)),
 
     gulp
         .src('build/npm-bin/*.js')
