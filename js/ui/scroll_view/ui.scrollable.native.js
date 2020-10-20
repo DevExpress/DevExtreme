@@ -150,6 +150,7 @@ const NativeStrategy = Class.inherit({
             e.stopImmediatePropagation();
             return;
         }
+
         this._eventForUserAction = e;
         this._moveScrollbars();
         this._scrollAction(this._createActionArgs());

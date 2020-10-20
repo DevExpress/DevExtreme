@@ -172,15 +172,13 @@ const Scrollable = DOMComponent.inherit({
         this._updateBounds();
         if(this._isHorizontalRtl()) {
             deferUpdate(() => {
+                const containerElement = this._container().get(0);
+                let leftOffset = containerElement.scrollWidth - containerElement.clientWidth - (this._rtlConfig.contentOffsetRight || 0);
+                if(leftOffset <= 0) {
+                    leftOffset = 0;
+                    this._rtlConfig.contentOffsetRight = containerElement.scrollWidth - containerElement.clientWidth;
+                }
                 deferRender(() => {
-                    const containerElement = this._container().get(0);
-
-                    let leftOffset = containerElement.scrollWidth - containerElement.clientWidth - (this._rtlConfig.contentOffsetRight || 0);
-                    if(leftOffset <= 0) {
-                        leftOffset = 0;
-                        this._rtlConfig.contentOffsetRight = containerElement.scrollWidth - containerElement.clientWidth;
-                    }
-
                     this.scrollTo({ left: leftOffset });
                 });
             });
@@ -469,7 +467,6 @@ const Scrollable = DOMComponent.inherit({
         }
 
         this._updateIfNeed();
-
         this._strategy.scrollBy(distance);
         this._updateRtlConfig();
     },
