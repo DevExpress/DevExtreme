@@ -517,7 +517,7 @@ QUnit.module('default', {
 
         const useDeferUpdate = instance.option('integrationOptions.useDeferUpdateForTemplates');
 
-        assert.strictEqual(useDeferUpdate, false);
+        assert.strictEqual(useDeferUpdate, true);
     });
 
     QUnit.test('option \'rtl\'', function(assert) {

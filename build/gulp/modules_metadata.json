@@ -43,13 +43,6 @@
     }
   },
   {
-    "name": "core/dom_adapter",
-    "isInternal": true,
-    "exports": {
-      "default": { "path": "DOMAdapter" }
-    }
-  },
-  {
     "name": "core/dom_component",
     "exports": {
       "default": { "path": "DOMComponent" },
@@ -69,30 +62,9 @@
     }
   },
   {
-    "name": "core/http_request",
-    "isInternal": true,
-    "exports": {
-      "default": { "path": "HTTPRequest" }
-    }
-  },
-  {
     "name": "core/set_template_engine",
     "exports": {
       "default": { "path": "setTemplateEngine" }
-    }
-  },
-  {
-    "name": "core/utils/ajax",
-    "isInternal": true,
-    "exports": {
-      "default": { "path": "ajax" }
-    }
-  },
-  {
-    "name": "core/utils/ready_callbacks",
-    "isInternal": true,
-    "exports": {
-      "default": { "path": "readyCallbacks" }
     }
   },
   {
@@ -172,13 +144,6 @@
     "name": "data/utils",
     "exports": {
       "base64_encode": { "path": "data.base64_encode" }
-    }
-  },
-  {
-    "name": "events/core/events_engine",
-    "isInternal": true,
-    "exports": {
-      "default": { "path": "eventsEngine" }
     }
   },
   {

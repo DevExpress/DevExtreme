@@ -63,10 +63,6 @@ const DateBox = DropDownEditor.inherit({
         return extend(this.callBase(), this._strategy.supportedKeys());
     },
 
-    getWidth: function() {
-        return this.$element().outerWidth();
-    },
-
     _renderButtonContainers: function() {
         this.callBase.apply(this, arguments);
         this._strategy.customizeButtons();
@@ -256,7 +252,15 @@ const DateBox = DropDownEditor.inherit({
     _renderDimensions: function() {
         this.callBase();
         this.$element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option('width'));
-        this._strategy?._dimensionChanged();
+        this._dimensionChanged();
+    },
+
+    _dimensionChanged: function() {
+        this.callBase(arguments);
+
+        if(this._popup) {
+            this._strategy._updatePopupHeight?.();
+        }
     },
 
     _refreshFormatClass: function() {

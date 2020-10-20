@@ -447,12 +447,7 @@ const DropDownList = DropDownEditor.inherit({
             templatesRenderAsynchronously: false,
             autoResizeEnabled: false,
             maxHeight: this._getMaxHeight.bind(this),
-            width: this._getInputWidth.bind(this)
         });
-    },
-
-    _getInputWidth() {
-        return this.$element().outerWidth();
     },
 
     _renderPopupContent: function() {
@@ -758,42 +753,13 @@ const DropDownList = DropDownEditor.inherit({
         delete this._searchTimer;
     },
 
-    _updatePopupMinWidth(popupWidth) {
-        if(window && this._popup) {
-            if(popupWidth === undefined) {
-                popupWidth = this.$element().outerWidth();
-            }
-            this._popup.overlayContent().css('minWidth', popupWidth);
-        }
-    },
-
     _popupShowingHandler: function() {
         this._dimensionChanged();
     },
 
-    _getPopupWidth() {
-        const popupWidth = this.option('dropDownOptions.width');
-
-        if(popupWidth === null) {
-            return undefined;
-        }
-        if(typeof popupWidth === 'function') {
-            return popupWidth();
-        }
-
-        return popupWidth;
-    },
-
     _dimensionChanged: function() {
-        const popupWidth = this._getPopupWidth();
-        const popupMinWidth = this.option('dropDownOptions.minWidth');
+        this.callBase(arguments);
 
-        if(popupWidth === undefined) {
-            this._setPopupOption('width', (this._getInputWidth.bind(this)));
-        }
-        if(!isDefined(popupMinWidth)) {
-            this._updatePopupMinWidth(popupWidth);
-        }
         this._popup && this._updatePopupDimensions();
     },
 
@@ -863,12 +829,6 @@ const DropDownList = DropDownEditor.inherit({
             case 'hoverStateEnabled':
             case 'focusStateEnabled':
                 this._isDesktopDevice() && this._setListOption(args.name, args.value);
-                this.callBase(args);
-                break;
-            case 'dropDownOptions':
-                if(args.fullName === 'dropDownOptions.width') {
-                    this._dimensionChanged();
-                }
                 this.callBase(args);
                 break;
             case 'items':

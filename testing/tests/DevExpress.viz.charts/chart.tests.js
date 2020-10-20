@@ -68,7 +68,14 @@ const environment = {
     },
     _stubLegend: function() {
         this.Legend = sinon.stub(legendModule, 'Legend', function() {
-            return new Legend();
+            const legend = new Legend();
+            legend.getTemplatesGroups = sinon.spy(function() {
+                return [];
+            });
+            legend.getTemplatesDef = sinon.spy(function() {
+                return [];
+            });
+            return legend;
         });
     },
     _stubTitle: function() {
