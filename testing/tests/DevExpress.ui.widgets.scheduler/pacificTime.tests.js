@@ -1,6 +1,5 @@
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
-import dateLocalization from 'localization/date';
 import fx from 'animation/fx';
 
 import 'ui/scheduler/ui.scheduler';
@@ -162,8 +161,26 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         });
     });
 
-    module('Time panel should have correct date value in case DST', moduleConfig, () => {
-        const views = ['week', 'day'];
+    module('Time panel should have correct dates value in case DST', moduleConfig, () => {
+        const expectedAllTimes = ['12:00 AM', '12:30 AM', '1:00 AM', '1:30 AM', '2:00 AM', '2:30 AM', '3:00 AM', '3:30 AM',
+            '4:00 AM', '4:30 AM', '5:00 AM', '5:30 AM', '6:00 AM', '6:30 AM', '7:00 AM', '7:30 AM', '8:00 AM',
+            '8:30 AM', '9:00 AM', '9:30 AM', '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM', '12:00 PM', '12:30 PM',
+            '1:00 PM', '1:30 PM', '2:00 PM', '2:30 PM', '3:00 PM', '3:30 PM', '4:00 PM', '4:30 PM', '5:00 PM',
+            '5:30 PM', '6:00 PM', '6:30 PM', '7:00 PM', '7:30 PM', '8:00 PM', '8:30 PM', '9:00 PM', '9:30 PM',
+            '10:00 PM', '10:30 PM', '11:00 PM', '11:30 PM'
+        ];
+
+        const expectedShortTimes = ['12:00 AM', '', '1:00 AM', '', '2:00 AM', '', '3:00 AM', '', '4:00 AM', '', '5:00 AM', '', '6:00 AM', '',
+            '7:00 AM', '', '8:00 AM', '', '9:00 AM', '', '10:00 AM', '', '11:00 AM', '', '12:00 PM', '', '1:00 PM', '', '2:00 PM', '', '3:00 PM', '',
+            '4:00 PM', '', '5:00 PM', '', '6:00 PM', '', '7:00 PM', '', '8:00 PM', '', '9:00 PM', '', '10:00 PM', '', '11:00 PM', ''
+        ];
+
+        const testCases = [
+            { view: 'week', times: expectedShortTimes },
+            { view: 'day', times: expectedShortTimes },
+            { view: 'timelineDay', times: expectedAllTimes },
+            { view: 'timelineWeek', times: expectedAllTimes }
+        ];
 
         module('timeCellTemplate', () => {
             const expectedDateResults = (() => {
@@ -180,42 +197,39 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                 return result;
             })();
 
-            views.forEach(view => {
-                test(`Time value in time panel should be correct in ${view}`, function(assert) {
+            testCases.forEach(testCase => {
+                test(`arguments should be valid in '${testCase.view}' view`, function(assert) {
                     let index = 0;
+
                     createWrapper({
                         dataSource: [],
-                        timeCellTemplate: (arg) => {
-                            assert.equal(arg.date.valueOf(), expectedDateResults[index].valueOf(), '');
-                            index++;
+                        timeCellTemplate: arg => {
+                            if(index < expectedAllTimes.length) {
+                                assert.equal(arg.date.valueOf(), expectedDateResults[index].valueOf(), 'arg.date should be valid');
+                                assert.equal(arg.text, testCase.times[index], 'arg.text should be valid');
+
+                                index++;
+                            }
                         },
-                        views: views,
-                        currentView: view,
+                        views: testCases.map(testCases => testCases.view),
+                        currentView: testCase.view,
                         startDayHour: 0,
                         currentDate: summerDSTDate,
                         height: 600
                     });
+
+                    assert.expect(expectedAllTimes.length * 2);
                 });
             });
         });
 
-        module('Time panel render(T852308)', () => {
-            const expectedTimeResults = (() => {
-                const result = [];
-                let startDate = new Date(2020, 2, 9); // TODO Date when there is no daylight saving
-                while(startDate.getDate() < 10) {
-                    result.push(dateLocalization.format(startDate, 'shorttime'));
-                    startDate = new Date(startDate.setHours(startDate.getHours() + 1));
-                }
-                return result;
-            })();
-
-            views.forEach(view => {
-                QUnit.test(`Time value in time panel should be correct in ${view}`, function(assert) {
+        module('Time panel render(T852308, T860281)', () => {
+            testCases.forEach(testCase => {
+                test(`Time value in time panel should be correct in ${testCase.view}`, function(assert) {
                     const scheduler = createWrapper({
                         dataSource: [],
-                        views: views,
-                        currentView: view,
+                        views: testCases.map(testCases => testCases.view),
+                        currentView: testCase.view,
                         startDayHour: 0,
                         currentDate: summerDSTDate,
                         height: 600
@@ -223,10 +237,12 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
                     const currentTimeResults = scheduler.timePanel.getTimeValues();
 
-                    assert.equal(currentTimeResults.length, expectedTimeResults.length, 'Count of current values and expected should equal');
-                    for(let i = 0; i < currentTimeResults.length; i++) {
-                        assert.equal(currentTimeResults[i], expectedTimeResults[i], 'Current value should be equal expected');
+                    assert.ok(currentTimeResults.length >= testCase.times.length, 'Count of current values should not less expected values');
+                    for(let i = 0; i < testCase.times.length; i++) {
+                        assert.equal(currentTimeResults[i], testCase.times[i], 'Current time value should be equal expected');
                     }
+
+                    assert.expect(testCase.times.length + 1);
                 });
             });
         });
