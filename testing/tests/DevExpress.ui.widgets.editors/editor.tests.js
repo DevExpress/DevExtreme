@@ -27,6 +27,10 @@ const Fixture = Class.inherit({
     }
 });
 
+const getValidationMessageWrapper = (editor) => {
+    return editor._validationMessage._wrapper();
+};
+
 QUnit.module('Editor', {
     beforeEach: function() {
         this.fixture = new Fixture();
@@ -325,35 +329,35 @@ QUnit.module('Validation - UI', {
             }
         });
 
+        const validationMessageWrapper = getValidationMessageWrapper(editor);
+
         assert.ok(editor._$validationMessage, 'Tooltip should be created');
         assert.ok(editor._$validationMessage.hasClass(INVALID_MESSAGE_CLASS), 'Tooltip should be marked with auto');
-        assert.ok(editor._$validationMessage.find(`.${INVALID_MESSAGE_CLASS}.dx-overlay-wrapper`), 'overlay wrapper should also have dx-invalid-message class');
-        assert.ok(editor._$validationMessage.hasClass('dx-invalid-message-auto'), 'Tooltip should be marked with auto');
-        assert.ok(!editor._$validationMessage.hasClass('dx-invalid-message-always'), 'Tooltip should not be marked with always');
+        assert.ok(validationMessageWrapper.find(`.${INVALID_MESSAGE_CLASS}.dx-overlay-wrapper`), 'overlay wrapper should also have dx-invalid-message class');
+        assert.ok(validationMessageWrapper.hasClass('dx-invalid-message-auto'), 'Tooltip should be marked with auto');
+        assert.notOk(editor._$validationMessage.hasClass('dx-invalid-message-always'), 'Tooltip should not be marked with always');
         assert.equal(editor._validationMessage.$content().text(), message, 'Correct message should be set');
     });
 
     QUnit.test('Widget message (tooltip) should be created and always shown', function(assert) {
-        // assign
         const message = 'That is very bad editor';
 
         const editor = this.fixture.createEditor({
             validationMessageMode: 'always'
         });
 
-        // act
         editor.option({
             isValid: false,
             validationError: {
                 message
             }
         });
+        const validationMessageWrapper = getValidationMessageWrapper(editor);
 
-        // assert
         assert.ok(editor._$validationMessage, 'Tooltip should be created');
         assert.ok(editor._$validationMessage.hasClass(INVALID_MESSAGE_CLASS), 'Tooltip should be marked with auto');
-        assert.ok(editor._$validationMessage.hasClass('dx-invalid-message-always'), 'Tooltip should be marked with always');
-        assert.ok(!editor._$validationMessage.hasClass('dx-invalid-message-auto'), 'Tooltip should not be marked with auto');
+        assert.ok(validationMessageWrapper.hasClass('dx-invalid-message-always'), 'Tooltip should be marked with always');
+        assert.notOk(validationMessageWrapper.hasClass('dx-invalid-message-auto'), 'Tooltip should not be marked with auto');
     });
 
     QUnit.test('validationMessage mode option should be updated after editor validationMessageMode option change', function(assert) {
@@ -369,14 +373,16 @@ QUnit.module('Validation - UI', {
                 message
             }
         });
+        const validationMessageWrapper = getValidationMessageWrapper(editor);
+
         assert.strictEqual(editor._validationMessage.option('mode'), 'always', 'validationMessage has correct "mode" option');
-        assert.ok(editor._$validationMessage.hasClass('dx-invalid-message-always'), 'validation message has correct mode class');
-        assert.notOk(editor._$validationMessage.hasClass('dx-invalid-message-auto'), 'validation message has correct mode class');
+        assert.ok(validationMessageWrapper.hasClass('dx-invalid-message-always'), 'validation message has correct mode class');
+        assert.notOk(validationMessageWrapper.hasClass('dx-invalid-message-auto'), 'validation message has correct mode class');
 
         editor.option('validationMessageMode', 'auto');
         assert.strictEqual(editor._validationMessage.option('mode'), 'auto', 'validationMessage has correct "mode" option');
-        assert.notOk(editor._$validationMessage.hasClass('dx-invalid-message-always'), 'validation message has correct mode class');
-        assert.ok(editor._$validationMessage.hasClass('dx-invalid-message-auto'), 'validation message has correct mode class');
+        assert.notOk(validationMessageWrapper.hasClass('dx-invalid-message-always'), 'validation message has correct mode class');
+        assert.ok(validationMessageWrapper.hasClass('dx-invalid-message-auto'), 'validation message has correct mode class');
     });
 
     QUnit.test('validationMessage position.offset should be updated after editor validationMessageOffset option change', function(assert) {
