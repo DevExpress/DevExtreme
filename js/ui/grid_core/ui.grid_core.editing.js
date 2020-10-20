@@ -812,7 +812,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             insertKey.dataRowIndex = dataController.getRowIndexOffset() + rows.filter(function(row, index) {
-                return index < insertKey.rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group'/* || row.isNewRow*/);
+                return index < insertKey.rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group');
             }).length;
 
             if(editMode !== EDIT_MODE_BATCH) {
