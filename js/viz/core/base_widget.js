@@ -139,6 +139,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         that.callBase.apply(that, arguments);
         that._changesLocker = 0;
         that._optionChangedLocker = 0;
+        that._asyncFirstDrawing = true;
         that._changes = changes();
         that._suspendChanges();
         that._themeManager = that._createThemeManager();
@@ -206,12 +207,6 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
         const that = this;
 
         if(--that._changesLocker === 0 && that._changes.count() > 0 && !that._applyingChanges) {
-            that._deferredElements = {
-                items: [],
-                groups: [],
-                launchRequestCallbacks: [],
-                doneRequestCallbacks: []
-            };
             that._renderer.lock();
             that._applyingChanges = true;
             that._applyChanges();
@@ -221,50 +216,80 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             if(that._optionsQueue) {
                 that._applyQueuedOptions();
             }
+            that.resolveItemsDeferred(that._legend ? [that._legend] : []);
             that._optionChangedLocker++;
             that._notify();
             that._optionChangedLocker--;
-            that._resolveDeferred();
         }
     },
 
-    _resolveDeferred() {
+    resolveItemsDeferred(items) {
+        this._resolveDeferred(this._getTemplatesItems(items));
+    },
+
+    _collectTemplatesFromItems(items) {
+        return items.reduce((prev, i) => {
+            return {
+                items: prev.items.concat(i.getTemplatesDef()),
+                groups: prev.groups.concat(i.getTemplatesGroups())
+            };
+        }, { items: [], groups: [] });
+    },
+
+    _getTemplatesItems(items) {
+        const elements = this._collectTemplatesFromItems(items);
+        const extraItems = this._getExtraTemplatesItems();
+        return {
+            items: extraItems.items.concat(elements.items),
+            groups: extraItems.groups.concat(elements.groups),
+            launchRequest: [extraItems.launchRequest],
+            doneRequest: [extraItems.doneRequest]
+        };
+    },
+
+    _getExtraTemplatesItems() {
+        return {
+            items: [],
+            groups: [],
+            launchRequest: () => {},
+            doneRequest: () => {}
+        };
+    },
+
+    _resolveDeferred({ items, launchRequest, doneRequest, groups }) {
         const that = this;
-        const deferredElements = that._deferredElements;
+
+        that._setGroupsVisibility(groups, 'hidden');
 
         if(that._changesApplying) {
             that._changesApplying = false;
-            callForEach(deferredElements.doneRequestCallbacks);
+            callForEach(doneRequest);
             return;
         }
 
         let syncRendering = true;
-        when.apply(that, deferredElements.items).done(() => {
+        when.apply(that, items).done(() => {
             if(syncRendering) {
-                that._setGroupsVisibility(deferredElements.groups, 'visible');
+                that._setGroupsVisibility(groups, 'visible');
                 return;
             }
-            callForEach(deferredElements.launchRequestCallbacks);
+            callForEach(launchRequest);
             that._changesApplying = true;
-            that._requestChange(['LAYOUT', 'FULL_RENDER', 'FORCE_FIRST_DRAWING']);
-            that._setGroupsVisibility(deferredElements.groups, 'visible');
+            const changes = ['LAYOUT', 'FULL_RENDER'];
+            if(that._asyncFirstDrawing) {
+                changes.push('FORCE_FIRST_DRAWING');
+                that._asyncFirstDrawing = false;
+            } else {
+                changes.push('FORCE_DRAWING');
+            }
+            that._requestChange(changes);
+            that._setGroupsVisibility(groups, 'visible');
         });
         syncRendering = false;
     },
 
     _setGroupsVisibility(groups, visibility) {
         groups.forEach(g => g.attr({ visibility: visibility }));
-    },
-
-    _addToDeferred({ items, launchRequest, doneRequest, groups }) {
-        const deferredElements = this._deferredElements;
-
-        this._setGroupsVisibility(groups, 'hidden');
-
-        deferredElements.items = deferredElements.items.concat(items);
-        deferredElements.launchRequestCallbacks.push(launchRequest);
-        deferredElements.doneRequestCallbacks.push(doneRequest);
-        deferredElements.groups = deferredElements.groups.concat(groups);
     },
 
     _applyQueuedOptions: function() {

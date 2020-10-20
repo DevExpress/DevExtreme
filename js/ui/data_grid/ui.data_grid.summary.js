@@ -1001,7 +1001,7 @@ gridCore.registerModule('summary', {
                             });
                         }
                     },
-                    _addEditData: function(params) {
+                    _addChange: function(params) {
                         const result = this.callBase.apply(this, arguments);
 
                         if(params.type) {
@@ -1010,7 +1010,7 @@ gridCore.registerModule('summary', {
 
                         return result;
                     },
-                    _removeEditDataItem: function() {
+                    _removeChange: function() {
                         const result = this.callBase.apply(this, arguments);
 
                         this._refreshSummary();

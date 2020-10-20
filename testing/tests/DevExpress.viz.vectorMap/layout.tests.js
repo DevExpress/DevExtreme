@@ -3,16 +3,21 @@ const layoutModule = require('viz/vector_map/layout');
 
 QUnit.module('LayoutControl', {
     beforeEach: function() {
-        this.layoutControl = new layoutModule.LayoutControl();
+        this.widget = {
+            resolveItemsDeferred: sinon.spy()
+        };
+        this.layoutControl = new layoutModule.LayoutControl(this.widget);
     },
     afterEach: function() {
         this.layoutControl.dispose();
     },
-    createItem: function() {
+    createItem: function(extraFunctions) {
         return {
             resize: sinon.spy(),
             getLayoutOptions: sinon.stub(),
-            locate: sinon.spy()
+            locate: sinon.spy(),
+            getTemplatesGroups: extraFunctions && extraFunctions.getTemplatesGroups,
+            getTemplatesDef: extraFunctions && extraFunctions.getTemplatesDef
         };
     }
 });
@@ -128,6 +133,23 @@ QUnit.test('calling updateLayout from item', function(assert) {
     assert.deepEqual(item3.locate.lastCall.args, [350, 30], 'locate - 2');
 });
 
+QUnit.test('should call resolveItemsDeferred with the item with `getTemplatesGroups` and `getTemplatesDef`', function(assert) {
+    const getTemplatesGroups = sinon.spy();
+    const getTemplatesDef = sinon.spy();
+    const item1 = this.createItem();
+    const item2 = this.createItem();
+    const item3 = this.createItem({ getTemplatesGroups: getTemplatesGroups, getTemplatesDef: getTemplatesDef });
+    this.layoutControl.addItem(item1);
+    this.layoutControl.addItem(item2);
+    this.layoutControl.addItem(item3);
+
+    this.layoutControl.setSize({ left: 10, right: 20, top: 30, bottom: 40, width: 800, height: 600 });
+
+    item3.updateLayout();
+
+    assert.deepEqual(this.widget.resolveItemsDeferred.getCall(0).args[0], [item3]);
+});
+
 QUnit.test('setSize / suspended', function(assert) {
     const item1 = this.createItem();
     const item2 = this.createItem();
@@ -170,7 +192,10 @@ QUnit.test('updateLayout / suspended', function(assert) {
 
 QUnit.module('Layout', {
     doTest: function(assert, itemDefs, size, expected, message) {
-        const layoutControl = new layoutModule.LayoutControl();
+        const widget = {
+            resolveItemsDeferred: sinon.spy()
+        };
+        const layoutControl = new layoutModule.LayoutControl(widget);
         const items = $.map(itemDefs, function(def) {
             const parts = def.split('-');
             const item = {

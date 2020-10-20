@@ -174,7 +174,7 @@ const dxVectorMap = BaseWidget.inherit({
         });
         that._tracker = new Tracker({ root: that._root, projection: that._projection, dataKey: dataKey });
         that._gestureHandler = new GestureHandler({ projection: that._projection, renderer: that._renderer, tracker: that._tracker });
-        that._layoutControl = new LayoutControl();
+        that._layoutControl = new LayoutControl(that);
         that._layoutControl.suspend();
 
         that._initLayerCollection(dataKey);

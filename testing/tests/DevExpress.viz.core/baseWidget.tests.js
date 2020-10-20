@@ -286,6 +286,29 @@ QUnit.test('Another handler is called if option is changed inside the handler', 
     assert.strictEqual(spy.callCount, 2, 'call count');
 });
 
+// T920836
+QUnit.test('Count the actual number of changes', function(assert) {
+    const widget = this.createWidget();
+    const counts = [];
+    const spy = sinon.stub(widget, '_applyChanges', function() {
+        counts.push(widget._changes.count());
+    });
+
+    widget.beginUpdate();
+    widget.option('encodeHtml', false);
+    widget.option({ redrawOnResize: true });
+    widget.endUpdate();
+
+    widget.beginUpdate();
+    widget.option({ size: { width: 150, height: 250 } });
+    widget.option({ size: { width: 150, height: 250 } });
+    widget.option('theme', 100);
+    widget.endUpdate();
+
+    assert.strictEqual(spy.callCount, 2, 'call count');
+    assert.deepEqual(counts, [2, 2], 'changes count');
+});
+
 QUnit.module('Option changing', environment);
 
 QUnit.test('theme', function(assert) {

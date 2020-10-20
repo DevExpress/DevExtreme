@@ -93,12 +93,7 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
 
   @InternalState() isLargeDisplayMode = true;
 
-  @InternalState() elementsWidth: ChildElementsWidth & { isEmpty: boolean } = {
-    isEmpty: true,
-    pageSizes: 0,
-    pages: 0,
-    info: 0,
-  };
+  @Ref() elementsWidth!: ChildElementsWidth;
 
   @Effect() subscribeToResize(): DisposeEffectReturn {
     const callback = (): void => this.updateChildrenProps();
@@ -113,35 +108,33 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
     }
   }
 
-  updateElementsWidth(currentElementsWidth): void {
-    this.elementsWidth.isEmpty = false;
-    this.elementsWidth.pageSizes = currentElementsWidth.pageSizes;
-    this.elementsWidth.info = currentElementsWidth.info;
-    this.elementsWidth.pages = currentElementsWidth.pages;
+  updateElementsWidth({ info, pageSizes, pages }: ChildElementsWidth): void {
+    this.elementsWidth = { info, pageSizes, pages };
   }
 
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
   updateChildrenProps(): void {
-    const elementsWidth = getElementsWidth({
+    const currentElementsWidth = getElementsWidth({
       parent: this.parentRef,
       pageSizes: this.pageSizesRef,
       info: this.infoTextRef,
       pages: this.pagesRef,
     });
-    const current = calculateAdaptivityProps(elementsWidth);
+    const current = calculateAdaptivityProps(currentElementsWidth);
     const isNotFittedWithCurrentWidths = (!current.infoTextVisible && this.infoTextVisible)
     || (!current.isLargeDisplayMode && this.isLargeDisplayMode);
-    if (this.elementsWidth.isEmpty || isNotFittedWithCurrentWidths) {
-      this.updateElementsWidth(elementsWidth);
+    const isEmpty = this.elementsWidth === undefined;
+    if (isEmpty || isNotFittedWithCurrentWidths) {
+      this.updateElementsWidth(currentElementsWidth);
       this.infoTextVisible = current.infoTextVisible;
       this.isLargeDisplayMode = current.isLargeDisplayMode;
     } else {
       const cached = calculateAdaptivityProps({
-        parent: elementsWidth.parent,
+        parent: currentElementsWidth.parent,
         ...this.elementsWidth,
       });
       if (cached.infoTextVisible && cached.isLargeDisplayMode) {
-        this.updateElementsWidth(elementsWidth);
+        this.updateElementsWidth(currentElementsWidth);
       }
       this.infoTextVisible = cached.infoTextVisible;
       this.isLargeDisplayMode = cached.isLargeDisplayMode;

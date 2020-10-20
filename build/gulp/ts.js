@@ -6,10 +6,12 @@ const footer = require('gulp-footer');
 const concat = require('gulp-concat');
 const path = require('path');
 const replace = require('gulp-replace');
+const gulpIf = require('gulp-if');
 const ts = require('gulp-typescript');
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const MODULES = require('./modules_metadata.json');
+const env = require('./env-variables');
 
 const PACKAGE_DIR = context.RESULT_NPM_PATH + '/devextreme';
 const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
@@ -41,14 +43,14 @@ gulp.task('ts-bundle', gulp.series(
             .pipe(replace(/\/\*\s*#StartJQueryAugmentation\s*\*\/[\s\S]*\/\*\s*#EndJQueryAugmentation\s*\*\//g, ''))
             .pipe(footer('\nexport default DevExpress;'))
             .pipe(gulp.dest(PACKAGE_BUNDLES_DIR))
-            .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles'));
+            .pipe(gulpIf(env.USE_RENOVATION, gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles')));
     },
 
     function writeAngularHack() {
         return file('dx.all.js', '// This file is required to compile devextreme-angular', { src: true })
             .pipe(headerPipes.starLicense())
             .pipe(gulp.dest(PACKAGE_BUNDLES_DIR))
-            .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles'));
+            .pipe(gulpIf(env.USE_RENOVATION, gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles')));
     }
 ));
 
@@ -101,7 +103,7 @@ gulp.task('ts-modules', function generateModules() {
 
         .pipe(headerPipes.starLicense())
         .pipe(gulp.dest(PACKAGE_DIR))
-        .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation'));
+        .pipe(gulpIf(env.USE_RENOVATION, gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation')));
 });
 
 gulp.task('ts-sources', gulp.series('ts-modules', 'ts-bundle'));

@@ -70,8 +70,7 @@ const environment = {
                         })
                     };
                     return this.template;
-                },
-                _addToDeferred: sinon.spy()
+                }
             },
             itemGroupClass: this.itemGroupClass,
             backgroundClass: this.backgroundClass,
@@ -2743,17 +2742,19 @@ QUnit.test('Pass customized item opacity for different states', function(assert)
     assert.equal(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.9);
 });
 
-QUnit.test('Request change if template is asynchronous, first drawing', function(assert) {
-    this.options.customizeItems = items => {
-        items.forEach(i => i.marker.size = 60);
-    };
+QUnit.test('getTemplatesGroups', function(assert) {
+    const legend = this.createSimpleLegend();
+    legend.draw(200, 200);
 
-    this.createAndDrawLegend();
+    const groups = legend.getTemplatesGroups();
+    assert.equal(groups.length, 1);
+    assert.equal(groups[0].typeOfNode, 'group');
+});
 
-    const widget = this.legend._widget;
+QUnit.test('getTemplatesDef', function(assert) {
+    const legend = this.createSimpleLegend();
+    legend.draw(200, 200);
 
-    assert.ok(widget._addToDeferred.called);
-    assert.equal(widget._addToDeferred.getCall(0).args[0].items.length, 1);
-    assert.equal(widget._addToDeferred.getCall(0).args[0].groups.length, 1);
-    assert.equal(widget._addToDeferred.getCall(0).args[0].groups[0].typeOfNode, 'group');
+    const defs = legend.getTemplatesDef();
+    assert.equal(defs.length, 1);
 });

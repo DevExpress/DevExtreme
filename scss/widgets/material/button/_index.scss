@@ -200,13 +200,3 @@
     @include dx-button-outlined-color-styling($button-success-bg, $button-success-bg, $button-success-outlined-hover-bg, $button-success-outlined-focused-bg, $button-success-outlined-active-bg);
   }
 }
-
-@keyframes focus {
-  from {
-    transform: scale(1);
-  }
-
-  to {
-    transform: scale(1.06);
-  }
-}

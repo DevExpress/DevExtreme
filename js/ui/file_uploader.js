@@ -934,16 +934,8 @@ class FileUploader extends Editor {
             e.preventDefault();
         }
 
+        this._tryToggleDropZoneActive(true, isCustomTarget, e);
         this._updateEventTargets(e);
-
-        this._dropZoneEnterAction({
-            event: e,
-            dropZoneElement: e.target
-        });
-
-        if(!isCustomTarget) {
-            this.$element().addClass(FILEUPLOADER_DRAGOVER_CLASS);
-        }
     }
 
     _dragOverHandler(e) {
@@ -959,15 +951,7 @@ class FileUploader extends Editor {
         }
 
         this._updateEventTargets(e);
-
-        this._dropZoneLeaveAction({
-            event: e,
-            dropZoneElement: e.target
-        });
-
-        if(!this._dragEventsTargets.length && !isCustomTarget) {
-            this.$element().removeClass(FILEUPLOADER_DRAGOVER_CLASS);
-        }
+        this._tryToggleDropZoneActive(false, isCustomTarget, e);
     }
 
     _updateEventTargets(e) {
@@ -978,6 +962,21 @@ class FileUploader extends Editor {
             !isTargetExists && this._dragEventsTargets.push(e.target);
         } else {
             isTargetExists && this._dragEventsTargets.splice(targetIndex, 1);
+        }
+    }
+
+    _tryToggleDropZoneActive(active, isCustom, event) {
+        const classAction = active ? 'addClass' : 'removeClass';
+        const mouseAction = active ? '_dropZoneEnterAction' : '_dropZoneLeaveAction';
+
+        if(!this._dragEventsTargets.length) {
+            this[mouseAction]({
+                event,
+                dropZoneElement: event.currentTarget
+            });
+            if(!isCustom) {
+                this.$element()[classAction](FILEUPLOADER_DRAGOVER_CLASS);
+            }
         }
     }
 
@@ -1230,9 +1229,9 @@ class FileUploader extends Editor {
     }
 
     _optionChanged(args) {
-        const value = args.value;
+        const { name, value, previousValue } = args;
 
-        switch(args.name) {
+        switch(name) {
             case 'height':
             case 'width':
                 this._updateFileNameMaxWidth();
@@ -1277,11 +1276,11 @@ class FileUploader extends Editor {
                 this._uploadButton && this._uploadButton.option('type', value);
                 break;
             case 'dialogTrigger':
-                this._detachSelectFileDialogHandler(args.previousValue);
+                this._detachSelectFileDialogHandler(previousValue);
                 this._attachSelectFileDialogHandler(value);
                 break;
             case 'dropZone':
-                this._detachDragEventHandlers(args.previousValue);
+                this._detachDragEventHandlers(previousValue);
                 this._attachDragEventHandlers(value);
                 break;
             case 'maxFileSize':
@@ -1359,7 +1358,7 @@ class FileUploader extends Editor {
                 this._invalidate();
                 break;
             case 'inputAttr':
-                this._applyInputAttributes(value);
+                this._applyInputAttributes(this.option(name));
                 break;
             default:
                 super._optionChanged(args);
