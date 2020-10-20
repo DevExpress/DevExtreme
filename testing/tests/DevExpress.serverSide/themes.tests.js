@@ -13,26 +13,28 @@ QUnit.module('themes', {
         this._originalTheme = themes.current();
     },
     afterEach: function() {
-        themes.current(this._originalTheme);
         viewportUtils.value(viewport);
+        themes.current(this._originalTheme);
     }
 });
 
 QUnit.test('theme changing', function(assert) {
+    const done = assert.async();
     themes.current('generic.light');
 
     assert.equal(themes.current(), 'generic.light');
-    assert.equal(viewport.classList.toString(), [
-        'dx-viewport',
-        'dx-device-desktop',
-        'dx-device-generic',
-        'dx-theme-generic',
-        'dx-theme-generic-typography',
-        'dx-color-scheme-light'
-    ].join(' '));
 
-    const done = assert.async();
-    themes.initialized(done);
+    themes.initialized(() => {
+        assert.equal(viewport.classList.toString(), [
+            'dx-viewport',
+            'dx-device-desktop',
+            'dx-device-generic',
+            'dx-theme-generic',
+            'dx-theme-generic-typography',
+            'dx-color-scheme-light'
+        ].join(' '));
+        done();
+    });
 });
 
 QUnit.test('viewport changing', function(assert) {
@@ -54,7 +56,4 @@ QUnit.test('viewport changing', function(assert) {
     ].join(' '));
 
     fixture.removeChild(newViewport);
-
-    const done = assert.async();
-    themes.initialized(done);
 });

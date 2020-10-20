@@ -68,7 +68,14 @@ const environment = {
     },
     _stubLegend: function() {
         this.Legend = sinon.stub(legendModule, 'Legend', function() {
-            return new Legend();
+            const legend = new Legend();
+            legend.getTemplatesGroups = sinon.spy(function() {
+                return [];
+            });
+            legend.getTemplatesDef = sinon.spy(function() {
+                return [];
+            });
+            return legend;
         });
     },
     _stubTitle: function() {
@@ -92,6 +99,7 @@ const environment = {
             };
             axis.stub('getMargins').returns({ left: 0, top: 0, right: 0, bottom: 0 });
             axis.stub('getOptions').returns({});
+            axis.stub('getTemplatesGroups').returns([]);
             return axis;
         });
     },

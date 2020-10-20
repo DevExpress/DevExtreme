@@ -685,12 +685,6 @@ $generic-grid-base-checkbox-icon-size: 16px;
         }
       }
 
-      .dx-invalid-message {
-        .dx-overlay-content {
-          padding: 9px 17px 9px;
-        }
-      }
-
       .dx-cell-modified {
         &.dx-cell-modified,
         &.dx-#{$widget-name}-invalid {
@@ -698,6 +692,12 @@ $generic-grid-base-checkbox-icon-size: 16px;
             border-color: $datagrid-cell-modified-border-color;
           }
         }
+      }
+    }
+
+    .dx-overlay-wrapper.dx-invalid-message {
+      .dx-overlay-content {
+        padding: 9px 17px 9px;
       }
     }
 

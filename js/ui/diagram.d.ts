@@ -660,12 +660,19 @@ export interface dxDiagramDeleteConnectorArgs {
  */
 export interface dxDiagramChangeConnectionArgs {
   /**
-   * @docid dxDiagramChangeConnectionArgs.shape
+   * @docid dxDiagramChangeConnectionArgs.newShape
    * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
    */
-  shape?: dxDiagramShape;
+  newShape?: dxDiagramShape;
+  /**
+   * @docid dxDiagramChangeConnectionArgs.oldShape
+   * @type dxDiagramShape
+   * @prevFileNamespace DevExpress.ui
+   * @public
+   */
+  oldShape?: dxDiagramShape;
   /**
    * @docid dxDiagramChangeConnectionArgs.connector
    * @type dxDiagramConnector

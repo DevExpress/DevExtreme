@@ -73,6 +73,12 @@ legendModule.Legend = sinon.spy(function(parameters) {
     legend.getActionCallback = sinon.spy(function(arg) {
         return arg;
     });
+    legend.getTemplatesGroups = sinon.spy(function() {
+        return [];
+    });
+    legend.getTemplatesDef = sinon.spy(function() {
+        return [];
+    });
     return legend;
 });
 

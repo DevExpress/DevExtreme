@@ -700,7 +700,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const itemNames = this.wrapper.getDetailsItemNamesTexts();
         const uploadedFileIndex = itemNames.indexOf(file.name);
 
-        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased');
         assert.ok(uploadedFileIndex > -1, 'file is uploaded');
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
     });
@@ -712,8 +712,106 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
 
         itemViewPanel.trigger('dragenter');
-        assert.roughEqual(itemViewPanel.offset().top, dropZonePlaceholder.offset().top, 0.02, 'drop zone has correct offset');
-        assert.roughEqual(itemViewPanel.offset().left, dropZonePlaceholder.offset().left, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        itemViewPanel.trigger('dragleave');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+    });
+
+    test('upload drop zone does not hide on drag interaction', function(assert) {
+        const itemViewPanel = this.wrapper.getItemsViewPanel();
+        const detailsItemRow = $(this.wrapper.getRowsInDetailsView()[0]);
+        const dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        itemViewPanel.trigger('dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        detailsItemRow.trigger('dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        detailsItemRow.trigger('dragleave');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        itemViewPanel.trigger('dragleave');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+    });
+
+    test('upload with drag and drop should not ignore correspondent permission', function(assert) {
+        const fileManager = this.$element.dxFileManager('instance');
+        fileManager.option('permissions.upload', false);
+        this.clock.tick(400);
+        stubFileReader(fileManager._controller._fileProvider);
+
+        const initialItemCount = this.wrapper.getDetailsItemsNames().length;
+
+        const file = createUploaderFiles(1)[0];
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [file] } }));
+
+        this.wrapper.getItemsViewPanel().trigger(event);
+        this.clock.tick(400);
+
+        let itemNames = this.wrapper.getDetailsItemNamesTexts();
+        let uploadedFileIndex = itemNames.indexOf(file.name);
+        let infos = this.progressPanelWrapper.getInfos();
+
+        assert.equal(infos.length, 0, 'there are no operation notifiactions');
+        assert.strictEqual(itemNames.length, initialItemCount, 'item count not increased');
+        assert.strictEqual(uploadedFileIndex, -1, 'file is not uploaded');
+
+        fileManager.option('permissions.upload', true);
+        this.clock.tick(400);
+        stubFileReader(fileManager._controller._fileProvider);
+
+        this.wrapper.getItemsViewPanel().trigger(event);
+        this.clock.tick(400);
+
+        itemNames = this.wrapper.getDetailsItemNamesTexts();
+        uploadedFileIndex = itemNames.indexOf(file.name);
+        infos = this.progressPanelWrapper.getInfos();
+
+        assert.equal(infos.length, 1, 'there is one operation notifiaction');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased after allowing to upload');
+        assert.ok(uploadedFileIndex > -1, 'file is uploaded after allowing to upload');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
+    });
+
+    test('upload drop zone does not respond on drag interaction when upload is not permitted', function(assert) {
+        const fileManager = this.$element.dxFileManager('instance');
+        fileManager.option('permissions.upload', false);
+        this.clock.tick(400);
+
+        let itemViewPanel = this.wrapper.getItemsViewPanel();
+        let dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        itemViewPanel.trigger('dragenter');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+
+        itemViewPanel.trigger('dragleave');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+
+        fileManager.option('permissions.upload', true);
+        this.clock.tick(400);
+
+        itemViewPanel = this.wrapper.getItemsViewPanel();
+        dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        itemViewPanel.trigger('dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
         itemViewPanel.trigger('dragleave');

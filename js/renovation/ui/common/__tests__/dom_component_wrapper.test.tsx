@@ -2,6 +2,9 @@
 import React, { createRef } from 'react';
 import { mount, shallow } from 'enzyme';
 import { DomComponentWrapper, DomComponentWrapperProps, viewFunction as DomComponentWrapperView } from '../dom_component_wrapper';
+import { renderTemplate } from '../../../utils/render_template';
+
+jest.mock('../../../utils/render_template', () => ({ renderTemplate: jest.fn() }));
 
 describe('DomComponentWrapper', () => {
   describe('View', () => {
@@ -41,6 +44,24 @@ describe('DomComponentWrapper', () => {
 
   describe('Logic', () => {
     describe('properties', () => {
+      it('itemTemplate', () => {
+        const component = new DomComponentWrapper({
+          componentProps: {
+            itemTemplate: 'some template',
+            tabIndex: 2,
+            disabled: true,
+          },
+        } as Partial<DomComponentWrapperProps> as any);
+
+        const { properties } = component;
+        expect(renderTemplate).not.toBeCalled();
+        (properties as any).itemTemplate();
+        expect(renderTemplate).toBeCalledTimes(1);
+        expect('itemTemplate' in properties).toStrictEqual(true);
+        expect(properties.tabIndex).toStrictEqual(2);
+        expect(properties.disabled).toStrictEqual(true);
+      });
+
       it('picks props except valueChange', () => {
         const component = new DomComponentWrapper({
           componentProps: {

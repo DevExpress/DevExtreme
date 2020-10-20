@@ -66,6 +66,7 @@ describe('resizable-container', () => {
         pagesRef: 'pagesRef',
         rootElementRef: 'parentRef',
       });
+      expect(tree.exists(contentTemplate)).toBe(true);
     });
   });
 
@@ -103,7 +104,6 @@ describe('resizable-container', () => {
         });
         component.effectUpdateChildProps();
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 50,
           pageSizes: 100,
           pages: 150,
@@ -118,7 +118,6 @@ describe('resizable-container', () => {
         });
         component.effectUpdateChildProps();
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 0,
           pageSizes: 0,
           pages: 100,
@@ -147,7 +146,6 @@ describe('resizable-container', () => {
         expect(component.infoTextVisible).toBe(false);
         expect(component.isLargeDisplayMode).toBe(false);
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 100,
           pageSizes: 100,
           pages: 300,
@@ -192,7 +190,6 @@ describe('resizable-container', () => {
         expect(component.infoTextVisible).toBe(true);
         expect(component.isLargeDisplayMode).toBe(true);
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 100,
           pageSizes: 100,
           pages: 300,
@@ -207,7 +204,6 @@ describe('resizable-container', () => {
         expect(component.infoTextVisible).toBe(true);
         expect(component.isLargeDisplayMode).toBe(true);
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 100,
           pageSizes: 100,
           pages: 300,
@@ -220,7 +216,6 @@ describe('resizable-container', () => {
         expect(component.infoTextVisible).toBe(false);
         expect(component.isLargeDisplayMode).toBe(true);
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 160,
           pageSizes: 100,
           pages: 360,
@@ -235,7 +230,6 @@ describe('resizable-container', () => {
         expect(component.infoTextVisible).toBe(false);
         expect(component.isLargeDisplayMode).toBe(true);
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 20,
           pageSizes: 100,
           pages: 120,
@@ -248,7 +242,6 @@ describe('resizable-container', () => {
         expect(component.infoTextVisible).toBe(false);
         expect(component.isLargeDisplayMode).toBe(false);
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 0,
           pageSizes: 120,
           pages: 100,
@@ -263,7 +256,6 @@ describe('resizable-container', () => {
         expect(component.infoTextVisible).toBe(true);
         expect(component.isLargeDisplayMode).toBe(true);
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 100,
           pageSizes: 100,
           pages: 200,
@@ -276,7 +268,6 @@ describe('resizable-container', () => {
         expect(component.infoTextVisible).toBe(true);
         expect(component.isLargeDisplayMode).toBe(true);
         expect(component.elementsWidth).toEqual({
-          isEmpty: false,
           info: 90,
           pageSizes: 110,
           pages: 200,
@@ -289,15 +280,9 @@ describe('resizable-container', () => {
           width: 0, pageSizes: 0, info: 0, pages: 0,
         });
         component.effectUpdateChildProps();
-        expect(component.elementsWidth).toEqual({
-          isEmpty: true,
-          info: 0,
-          pageSizes: 0,
-          pages: 0,
-        });
+        expect(component.elementsWidth).toBeUndefined();
         expect(component.isLargeDisplayMode).toBe(true);
         expect(component.infoTextVisible).toBe(true);
-        const { elementsWidth } = component;
         // visible true
         const {
           parentHtmlEl, pageSizesHtmlEl, infoHtmlEl, pagesHtmlEl,
@@ -311,8 +296,7 @@ describe('resizable-container', () => {
         component.effectUpdateChildProps();
         expect(component.isLargeDisplayMode).toBe(true);
         expect(component.infoTextVisible).toBe(true);
-        expect(elementsWidth).toEqual({
-          isEmpty: false,
+        expect(component.elementsWidth).toEqual({
           info: 50,
           pageSizes: 100,
           pages: 150,

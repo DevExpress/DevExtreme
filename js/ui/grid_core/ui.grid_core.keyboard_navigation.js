@@ -28,10 +28,10 @@ const FREESPACE_ROW_CLASS = 'dx-freespace-row';
 const VIRTUAL_ROW_CLASS = 'dx-virtual-row';
 const MASTER_DETAIL_CELL_CLASS = 'dx-master-detail-cell';
 const EDITOR_CELL_CLASS = 'dx-editor-cell';
-const EDIT_ROW_CLASS = 'dx-edit-row';
 const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const COMMAND_EXPAND_CLASS = 'dx-command-expand';
 const COMMAND_SELECT_CLASS = 'dx-command-select';
+const COMMAND_EDIT_CLASS = 'dx-command-edit';
 const COMMAND_CELL_SELECTOR = '[class^=dx-command]';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 const DATEBOX_WIDGET_NAME = 'dxDateBox';
@@ -854,7 +854,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         const rowsView = this.getView('rowsView');
         const focusedViewElement = rowsView && rowsView.element();
         const $parent = $target.parent();
-        const isEditingRow = $parent.hasClass(EDIT_ROW_CLASS);
         const isInteractiveElement = $(event.target).is(INTERACTIVE_ELEMENTS_SELECTOR);
         const isRevertButton = !!$(event.target).closest(`.${REVERT_BUTTON_CLASS}`).length;
         const isExpandCommandCell = $target.hasClass(COMMAND_EXPAND_CLASS);
@@ -869,7 +868,7 @@ const KeyboardNavigationController = core.ViewController.inherit({
                 this._updateFocusedCellPosition($target);
                 this._applyTabIndexToElement(this._focusedView.element());
                 this._focusedView.focus();
-            } else if(!this._isMasterDetailCell($target) && !isEditingRow) {
+            } else if(!this._isMasterDetailCell($target)) {
                 this._clickTargetCellHandler(event, $target);
             } else {
                 this._updateFocusedCellPosition($target);
@@ -2086,7 +2085,7 @@ export default {
 
                     if(keyboardNavigationController.isKeyboardEnabled() && keyboardNavigationController._focusedCellPosition.rowIndex === rowIndex) {
                         const $focusedCell = keyboardNavigationController._getFocusedCell();
-                        if(isElementDefined($focusedCell) && !$focusedCell.hasClass('dx-command-edit')) {
+                        if(isElementDefined($focusedCell) && !$focusedCell.hasClass(COMMAND_EDIT_CLASS)) {
                             $cell = $focusedCell;
                         }
                     }

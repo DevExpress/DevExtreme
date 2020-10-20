@@ -93,7 +93,7 @@ export class PagerContentProps extends PagerProps {
 
   @ForwardRef() pageSizesRef?: HTMLDivElement;
 
-  @ForwardRef() pagesRef?: HTMLDivElement;
+  @ForwardRef() pagesRef?: HTMLElement;
 
   @ForwardRef() infoTextRef?: HTMLDivElement;
 }

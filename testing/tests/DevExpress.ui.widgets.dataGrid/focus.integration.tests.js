@@ -3707,6 +3707,42 @@ QUnit.module('API methods', baseModuleConfig, () => {
 
         assert.notOk($(':focus').length, 'focus is lost');
     });
+
+    QUnit.testInActiveWindow('DataGrid should not focus command cell after edit canceling', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'test should not be run on mobile');
+            return;
+        }
+
+        // arrange, act
+        const dataGrid = createDataGrid({
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            dataSource: [{ field: 1 }],
+            loadingTimeout: undefined
+        });
+
+        // act
+        dataGrid.editRow(0);
+        this.clock.tick();
+        dataGrid.focus(dataGrid.getCellElement(0, 1));
+
+        // assert
+        const $focused = $(':focus');
+        assert.ok($focused.length, 'focused element');
+        assert.ok($focused.closest('.dx-command-edit').length, 'focused element is command cell child');
+
+        // act
+        $('.dx-link-cancel').trigger('dxpointerdown').trigger('click');
+        this.clock.tick();
+
+        // assert
+        const $commandCell = $(dataGrid.getCellElement(0, 1));
+        assert.ok($commandCell.is(':focus'), 'command cell is focused');
+        assert.notOk($commandCell.hasClass('dx-focused'), 'no dx-focused class');
+    });
 });
 
 QUnit.module('Column Resizing', baseModuleConfig, () => {

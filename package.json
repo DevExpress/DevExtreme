@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "20.2.2",
+  "version": "20.2.3",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [
     "html5",
@@ -28,8 +28,8 @@
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "devexpress-diagram": "1.1.41",
-    "devexpress-gantt": "1.1.21",
+    "devexpress-diagram": "2.0.0",
+    "devexpress-gantt": "2.0.0",
     "jszip": "^2.0.0 || ^3.0.0",
     "devextreme-quill": "^0.9.5",
     "rrule": "2.6.6",
@@ -65,7 +65,7 @@
     "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-generator": "1.0.126",
+    "devextreme-generator": "1.0.130",
     "devextreme-internal-tools": "stable",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
@@ -150,7 +150,7 @@
     "systemjs-plugin-text": "0.0.8",
     "testcafe": "^1.2.0",
     "through2": "^2.0.1",
-    "ts-jest": "^24.2.0",
+    "ts-jest": "^24.3.0",
     "typescript": "^3.7.2",
     "underscore": "^1.9.2",
     "vinyl-named": "^1.1.0",
@@ -187,7 +187,7 @@
     "internal-tool": "dx-tools",
     "validate-declarations": "dx-tools validate-declarations --js-scripts ./js",
     "test-testcafe": "node ./testing/testcafe/runner",
-    "test-jest": "jest --coverage",
+    "test-jest": "jest --coverage --maxWorkers=8",
     "test-jest:watch": "jest --watch"
   },
   "browserslist": [

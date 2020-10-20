@@ -1055,7 +1055,6 @@ QUnit.test('click on menu item should open menu', function(assert) {
     assert.strictEqual($menuItems.text(), 'menumenu', 'menu text is correct');
 });
 
-
 QUnit.test('click on menu toggle should not turn off ready to delete', function(assert) {
     const $list = $('#templated-list').dxList({
         items: ['0'],
@@ -2219,6 +2218,7 @@ QUnit.test('selectAll triggers callback when selects all items', function(assert
 
     const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
     $checkbox.trigger('dxclick');
+
     assert.strictEqual(selectAllSpy.callCount, 1);
     assert.strictEqual(selectAllSpy.firstCall.args[0].value, true, 'all items selected');
 });
@@ -2234,10 +2234,11 @@ QUnit.test('selectAll triggers changed callback when selects all items', functio
         onSelectAllValueChanged: noop
     });
     const list = $list.dxList('instance');
-    list.option('onSelectAllValueChanged', selectAllSpy);
 
+    list.option('onSelectAllValueChanged', selectAllSpy);
     const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
     $checkbox.trigger('dxclick');
+
     assert.strictEqual(selectAllSpy.callCount, 1);
 });
 
@@ -2251,10 +2252,11 @@ QUnit.test('selectAll triggers selectAllValueChanged event when selects all item
         selectionMode: 'all'
     });
     const list = $list.dxList('instance');
-    list.on('selectAllValueChanged', selectAllSpy);
 
+    list.on('selectAllValueChanged', selectAllSpy);
     const $checkbox = $list.find('.dx-list-select-all .dx-checkbox');
     $checkbox.trigger('dxclick');
+
     assert.strictEqual(selectAllSpy.callCount, 1);
 });
 

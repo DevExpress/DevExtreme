@@ -57,6 +57,12 @@ legendModule.Legend = sinon.spy(function(parameters) {
     legend.getActionCallback = sinon.spy(function(arg) {
         return arg;
     });
+    legend.getTemplatesGroups = sinon.spy(function() {
+        return [];
+    });
+    legend.getTemplatesDef = sinon.spy(function() {
+        return [];
+    });
     return legend;
 });
 
@@ -988,6 +994,10 @@ const environment = {
 
         assert.ok(chart._argumentAxes[0].wasDrawn, 'Horizontal axis was drawn');
         assert.ok(chart._valueAxes[0].wasDrawn, 'Vertical axis was drawn');
+        assert.ok(chart._argumentAxes[0].beforeCleanGroups.called, 'beforeCleanGroups called');
+        assert.ok(chart._argumentAxes[0].afterCleanGroups.called, 'afterCleanGroups called');
+        assert.ok(chart._valueAxes[0].beforeCleanGroups.called, 'beforeCleanGroups called');
+        assert.ok(chart._valueAxes[0].afterCleanGroups.called, 'afterCleanGroups called');
         assert.ok(chart.series[0].wasDrawn, 'Series was drawn');
         assert.ok(!chart._seriesGroup.stub('linkRemove').called, 'Series group should be detached');
         assert.ok(!chart._seriesGroup.stub('clear').called, 'Series group should be cleared');
@@ -1054,15 +1064,35 @@ const environment = {
             defs.push(d);
             return d;
         }
+        const argumentGroups = [{ attr: sinon.spy() }, { attr: sinon.spy() }, { attr: sinon.spy() }];
+        const valueGroups = [{ attr: sinon.spy() }, { attr: sinon.spy() }, { attr: sinon.spy() }];
 
-        $.each(chart._argumentAxes, function(_, axis) { axis.getTemplatesDef = getDeferred; });
-        $.each(chart._valueAxes, function(_, axis) { axis.getTemplatesDef = getDeferred; });
+        $.each(chart._argumentAxes, function(_, axis) {
+            axis.getTemplatesDef = getDeferred;
+            axis.getTemplatesGroups = function() { return argumentGroups; };
+        });
+        $.each(chart._valueAxes, function(_, axis) {
+            axis.getTemplatesDef = getDeferred;
+            axis.getTemplatesGroups = function() { return valueGroups; };
+        });
 
         drawn.reset();
         chart.render({ force: true });
         $.each(defs, function(_, d) { d.resolve(); });
 
         assert.strictEqual(drawn.callCount, 2);
+
+        argumentGroups.forEach(g => {
+            assert.equal(g.attr.callCount, 3);
+            assert.deepEqual(g.attr.getCall(1).args[0], { visibility: 'hidden' });
+            assert.deepEqual(g.attr.getCall(2).args[0], { visibility: 'visible' });
+        });
+
+        valueGroups.forEach(g => {
+            assert.equal(g.attr.callCount, 3);
+            assert.deepEqual(g.attr.getCall(1).args[0], { visibility: 'hidden' });
+            assert.deepEqual(g.attr.getCall(2).args[0], { visibility: 'visible' });
+        });
     });
 
     QUnit.module('DataSource updating', {

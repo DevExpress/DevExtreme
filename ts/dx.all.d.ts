@@ -3,8 +3,6 @@ interface JQuery {
 }
 interface JQueryPromise<T> {
 }
-interface JQueryCallback {
-}
 interface JQueryEventObject {
     cancel?: boolean;
 }
@@ -919,6 +917,23 @@ declare module DevExpress {
      * [descr:devices]
      */
     export var devices: DevicesObject;
+    /**
+     * [descr:dxSchedulerTimeZone]
+     */
+    export interface dxSchedulerTimeZone {
+        /**
+         * [descr:dxSchedulerTimeZone.id]
+         */
+        id: string;
+        /**
+         * [descr:dxSchedulerTimeZone.offset]
+         */
+        offset: number;
+        /**
+         * [descr:dxSchedulerTimeZone.title]
+         */
+        title: string;
+    }
     /**
      * [descr:globalConfig]
      */
@@ -2603,6 +2618,19 @@ declare module DevExpress.excelExporter {
         selectedRowsOnly?: boolean;
     }
     /**
+     * [descr:ExcelExportPivotGridProps]
+     */
+    export interface ExcelExportPivotGridProps extends ExcelExportBaseProps {
+        /**
+         * [descr:ExcelExportPivotGridProps.component]
+         */
+        component?: DevExpress.ui.dxPivotGrid;
+        /**
+         * [descr:ExcelExportPivotGridProps.customizeCell]
+         */
+        customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
+    }
+    /**
      * [descr:ExcelPivotGridCell]
      */
     export interface ExcelPivotGridCell extends DevExpress.ui.dxPivotGridPivotGridCell {
@@ -2661,26 +2689,13 @@ declare module DevExpress.excelExporter {
         width?: number;
     }
     /**
-     * [descr:ExportPivotGridProps]
-     */
-    export interface ExportPivotGridProps extends ExcelExportBaseProps {
-        /**
-         * [descr:ExportPivotGridProps.component]
-         */
-        component?: DevExpress.ui.dxPivotGrid;
-        /**
-         * [descr:ExportPivotGridProps.customizeCell]
-         */
-        customizeCell?: ((options: { pivotCell?: ExcelPivotGridCell, excelCell?: any }) => any);
-    }
-    /**
      * [descr:excelExporter.exportDataGrid(options)]
      */
     export function exportDataGrid(options: ExcelExportDataGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
     /**
      * [descr:excelExporter.exportPivotGrid(options)]
      */
-    export function exportPivotGrid(options: ExportPivotGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
+    export function exportPivotGrid(options: ExcelExportPivotGridProps): Promise<CellRange> & JQueryPromise<CellRange>;
 }
 declare module DevExpress.exporter {
     /**
@@ -5747,7 +5762,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagram.Options.defaultItemProperties]
          */
-        defaultItemProperties?: { connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineType?: 'straight' | 'orthogonal', style?: any, textStyle?: any };
+        defaultItemProperties?: { connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineType?: 'straight' | 'orthogonal', shapeMaxHeight?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMinWidth?: number, style?: any, textStyle?: any };
         /**
          * [descr:dxDiagram.Options.edges]
          */
@@ -5957,9 +5972,13 @@ declare module DevExpress.ui {
          */
         connectorPosition?: 'start' | 'end';
         /**
-         * [descr:dxDiagramChangeConnectionArgs.shape]
+         * [descr:dxDiagramChangeConnectionArgs.newShape]
          */
-        shape?: dxDiagramShape;
+        newShape?: dxDiagramShape;
+        /**
+         * [descr:dxDiagramChangeConnectionArgs.oldShape]
+         */
+        oldShape?: dxDiagramShape;
     }
     /**
      * [descr:dxDiagramChangeConnectorPointsArgs]
@@ -7854,6 +7873,26 @@ declare module DevExpress.ui {
          * [descr:dxGantt.getTaskData(key)]
          */
         getTaskData(key: any): any;
+        /**
+         * [descr:dxGantt.getTaskResources(key)]
+         */
+        getTaskResources(key: any): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleDependencyKeys()]
+         */
+        getVisibleDependencyKeys(): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleResourceAssignmentKeys()]
+         */
+        getVisibleResourceAssignmentKeys(): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleResourceKeys()]
+         */
+        getVisibleResourceKeys(): Array<any>;
+        /**
+         * [descr:dxGantt.getVisibleTaskKeys()]
+         */
+        getVisibleTaskKeys(): Array<any>;
         /**
          * [descr:dxGantt.insertDependency(data)]
          */
@@ -12516,7 +12555,7 @@ declare module DevExpress.utils {
     /**
      * [descr:utils.getTimeZones(date)]
      */
-    export function getTimeZones(date?: Date): Array<any>;
+    export function getTimeZones(date?: Date): Array<dxSchedulerTimeZone>;
     /**
      * [descr:utils.initMobileViewport(options)]
      */

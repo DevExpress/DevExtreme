@@ -29,8 +29,8 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
             return item;
         },
 
-        _needInsertItem: function(editData, changeType, items, item) {
-            const parentKey = editData.key.parentKey;
+        _needInsertItem: function(change, changeType, items, item) {
+            const parentKey = change.key.parentKey;
             if(parentKey !== undefined && parentKey !== this.option('rootValue')) {
                 const rowIndex = gridCoreUtils.getIndexByKey(parentKey, items);
                 if(rowIndex >= 0 && this._dataController.isRowExpanded(parentKey)) {
@@ -69,13 +69,13 @@ const EditingController = editingModule.controllers.editing.inherit((function() 
             return buttons;
         },
 
-        _beforeSaveEditData: function(editData) {
+        _beforeSaveEditData: function(change) {
             const dataController = this._dataController;
             const result = this.callBase.apply(this, arguments);
 
-            if(editData && editData.type !== DATA_EDIT_DATA_INSERT_TYPE) {
-                const store = dataController && dataController.store();
-                const key = store && store.key();
+            if(change && change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
+                const store = dataController?.store();
+                const key = store?.key();
 
                 if(!isDefined(key)) {
                     throw errors.Error('E1045');

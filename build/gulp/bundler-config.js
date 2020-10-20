@@ -6,9 +6,11 @@ const concat = require('gulp-concat');
 const rename = require('gulp-rename');
 const header = require('gulp-header');
 const eol = require('gulp-eol');
+const gulpIf = require('gulp-if');
 
 const context = require('./context.js');
 const headerPipes = require('./header-pipes.js');
+const env = require('./env-variables');
 
 const BUNDLE_CONFIG_SOURCES = [
     'js/bundles/modules/parts/core.js',
@@ -34,7 +36,7 @@ gulp.task('bundler-config', function() {
         .pipe(rename('dx.custom.config.js'))
         .pipe(replace(/require *\( *["']..\//g, 'require(\'devextreme/'))
         .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme/bundles'))
-        .pipe(gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles'));
+        .pipe(gulpIf(env.USE_RENOVATION, gulp.dest(context.RESULT_NPM_PATH + '/devextreme-renovation/bundles')));
 });
 
 gulp.task('bundler-config-dev', function() {

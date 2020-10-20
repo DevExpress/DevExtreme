@@ -631,7 +631,11 @@ const Popup = Overlay.inherit({
         if(this.option('fullScreen')) {
             this._$content.css({
                 width: '100%',
-                height: '100%'
+                height: '100%',
+                minWidth: '',
+                maxWidth: '',
+                minHeight: '',
+                maxHeight: ''
             });
         } else {
             this.callBase(...arguments);

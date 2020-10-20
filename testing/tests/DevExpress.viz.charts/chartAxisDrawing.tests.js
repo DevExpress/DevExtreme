@@ -9,6 +9,7 @@ import legendModule from 'viz/components/legend';
 import titleModule from 'viz/core/title';
 import rendererModule from 'viz/core/renderers/renderer';
 import multiAxesSynchronizer from 'viz/chart_components/multi_axes_synchronizer';
+import { Deferred } from 'core/utils/deferred';
 const TitleOrig = titleModule.Title;
 
 rendererModule.Renderer = sinon.stub();
@@ -57,6 +58,12 @@ const environment = {
         this.legend = new vizMocks.Legend();
 
         this.legendStub = sinon.stub(legendModule, 'Legend', () =>{
+            this.legend.getTemplatesGroups = sinon.spy(function() {
+                return [];
+            });
+            this.legend.getTemplatesDef = sinon.spy(function() {
+                return [];
+            });
             return this.legend;
         });
 
@@ -2075,6 +2082,102 @@ QUnit.test('Redraw vertical axes, if tickInterval is changed', function(assert) 
     }, 'createTicks valAxis canvas');
     assert.equal(this.axisStub.getCall(1).returnValue.draw.callCount, 2);
     assert.equal(this.axisStub.getCall(1).returnValue.draw.lastCall.args[0], false, 'draw valAxis');
+});
+
+QUnit.test('No redrawing after changing tickInterval when templates used', function(assert) {
+    const defs = [];
+    function getDeferred() {
+        const d = new Deferred();
+        defs.push(d);
+        return d;
+    }
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+
+    argAxis.getTemplatesDef = getDeferred;
+    valAxis.getTemplatesDef = getDeferred;
+
+    valAxis.estimateTickInterval.returns(true);
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    defs.forEach(d=> d.resolve());
+
+    assert.strictEqual(valAxis.draw.callCount, 3);
+});
+
+QUnit.test('Animation to axes on first redrawing', function(assert) {
+    const defs = [];
+    function getDeferred() {
+        const d = new Deferred();
+        defs.push(d);
+        return d;
+    }
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+
+    argAxis.getTemplatesDef = getDeferred;
+    valAxis.getTemplatesDef = getDeferred;
+    argAxis.resetApplyingAnimation = sinon.spy();
+    valAxis.resetApplyingAnimation = sinon.spy();
+
+    valAxis.estimateTickInterval.returns(true);
+
+    this.setupAxes([argAxis, valAxis]);
+
+    new dxChart(this.container, {
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    defs.forEach(d=> d.resolve());
+
+    assert.strictEqual(argAxis.resetApplyingAnimation.callCount, 1);
+    assert.deepEqual(argAxis.resetApplyingAnimation.lastCall.args, [true]);
+    assert.strictEqual(valAxis.resetApplyingAnimation.callCount, 1);
+    assert.deepEqual(valAxis.resetApplyingAnimation.lastCall.args, [true]);
+});
+
+
+QUnit.test('Animation to axes on second redrawing', function(assert) {
+    const defs = [];
+    function getDeferred() {
+        const d = new Deferred();
+        defs.push(d);
+        return d;
+    }
+    const argAxis = createAxisStubs();
+    const valAxis = createAxisStubs();
+
+    argAxis.getTemplatesDef = getDeferred;
+    valAxis.getTemplatesDef = getDeferred;
+    argAxis.resetApplyingAnimation = sinon.spy();
+    valAxis.resetApplyingAnimation = sinon.spy();
+
+    valAxis.estimateTickInterval.returns(true);
+
+    this.setupAxes([argAxis, valAxis]);
+
+    const chart = new dxChart(this.container, {
+        dataSource: [{ arg: 1, val: 10 }],
+        legend: { visible: false }
+    });
+
+    defs.forEach(d=> d.resolve());
+
+    chart.option('dataSource', [{ arg: 1, val: 1 }]);
+
+    defs.forEach(d=> d.resolve());
+
+    assert.strictEqual(argAxis.resetApplyingAnimation.callCount, 2);
+    assert.deepEqual(argAxis.resetApplyingAnimation.lastCall.args, [undefined]);
+    assert.strictEqual(valAxis.resetApplyingAnimation.callCount, 2);
+    assert.deepEqual(valAxis.resetApplyingAnimation.lastCall.args, [undefined]);
 });
 
 QUnit.module('Axes synchronization', environment);

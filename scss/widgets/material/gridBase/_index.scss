@@ -873,13 +873,13 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
           }
         }
       }
+    }
 
-      .dx-invalid-message {
-        .dx-overlay-content {
-          padding: 9px 17px 9px;
-          background-color: $validation-message-background-color;
-          color: $validation-message-color;
-        }
+    .dx-overlay-wrapper.dx-invalid-message {
+      .dx-overlay-content {
+        padding: 9px 17px 9px;
+        background-color: $validation-message-background-color;
+        color: $validation-message-color;
       }
     }
 

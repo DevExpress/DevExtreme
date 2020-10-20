@@ -492,7 +492,7 @@ const subscribes = {
         const workspace = this.getWorkSpace();
         const resourcesManager = this._resourcesManager;
 
-        let allDay = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
+        const isAllDaySupported = this.option('showAllDayPanel') || !this._workSpace.supportAllDayRow();
 
         const { viewDataProvider } = workspace;
         const { groupedData } = viewDataProvider.viewData;
@@ -507,7 +507,7 @@ const subscribes = {
             const startDayHour = startDate.getHours();
             const endDayHour = (startDayHour + (endDate - startDate) / HOUR_MS) % HOURS_IN_DAY;
 
-            allDay = (allDay !== false) && allDayPanel?.length > 0;
+            const allDay = (isAllDaySupported !== false) && allDayPanel?.length > 0;
 
             const groups = viewDataProvider.getCellsGroup(groupIndex);
             const groupResources = isVerticalGrouping

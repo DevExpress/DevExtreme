@@ -1107,7 +1107,10 @@ export const MockAxis = function(renderOptions) {
         resetApplyingAnimation: sinon.spy(),
         getTemplatesDef: sinon.spy(),
         setRenderedState: sinon.spy(),
-        isRendered: sinon.spy()
+        isRendered: sinon.spy(),
+        getTemplatesGroups: sinon.stub().returns([]),
+        beforeCleanGroups: sinon.spy(),
+        afterCleanGroups: sinon.spy()
     };
 };
 

@@ -4,6 +4,7 @@ import {
 import type DomComponent from '../../../core/dom_component';
 import { ConfigContextValue, ConfigContext } from './config_context';
 import { EventCallback } from './event_callback.d';
+import { renderTemplate } from '../../utils/render_template';
 
 export const viewFunction = ({
   widgetRef,
@@ -30,6 +31,7 @@ export class DomComponentWrapperProps {
 
   @OneWay() componentProps!: {
     className?: string;
+    itemTemplate?: string;
     valueChange?: EventCallback<any>;
   };
 }
@@ -58,11 +60,11 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   @Effect({ run: 'once' })
   setupWidget(): () => void {
     // eslint-disable-next-line new-cap
-    const instance = new this.props.componentType(this.widgetRef, this.properties) as any;
-    this.instance = instance;
+    const componentInstance = new this.props.componentType(this.widgetRef, this.properties) as any;
+    this.instance = componentInstance;
 
     return (): void => {
-      instance.dispose();
+      componentInstance.dispose();
       this.instance = null;
     };
   }
@@ -78,13 +80,18 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   config!: ConfigContextValue;
 
   get properties(): Record<string, unknown> {
-    const { valueChange, ...restProps } = this.props.componentProps;
+    const { itemTemplate, valueChange, ...restProps } = this.props.componentProps;
     const properties = ({
       rtlEnabled: this.config?.rtlEnabled,
       ...restProps,
     }) as Record<string, unknown>;
     if (valueChange) {
       properties.onValueChanged = ({ value }): void => valueChange(value);
+    }
+    if (itemTemplate) {
+      properties.itemTemplate = (item, index, container): void => {
+        renderTemplate(itemTemplate, { item, index, container }, container);
+      };
     }
     return properties;
   }

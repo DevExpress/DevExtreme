@@ -6141,7 +6141,7 @@ QUnit.module('Editing with real dataController', {
         this.options.editing.changes = changes;
 
         // act
-        this.editingController._addEditData({
+        this.editingController._addChange({
             data: { A: [13] },
             key: 1,
             type: 'number'
@@ -9477,6 +9477,37 @@ QUnit.module('Editing with real dataController', {
                 'type': 'update'
             }], 'row change');
         });
+
+        QUnit.test('Empty changes objects should not be created if column has showEditorAlways', function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
+
+            this.options.columns = [{
+                dataField: 'name',
+                showEditorAlways: true,
+                validationRules: [{
+                    type: 'custom',
+                    reevaluate: true,
+                    validationCallback: function(params) {
+                        return params.data.name.length > 0;
+                    }
+                }]
+            }];
+
+            $.extend(this.options.editing, {
+                allowUpdating: true,
+                mode: 'cell'
+            });
+
+            this.columnsController.reset();
+            this.columnsController.init();
+
+            rowsView.render($testElement);
+
+            // assert
+            assert.deepEqual(this.option('editing.changes'), [], 'no changes');
+        });
     });
 
     QUnit.module('Save/cancel events', {
@@ -9490,8 +9521,32 @@ QUnit.module('Editing with real dataController', {
             // arrange
             const rowsView = this.rowsView;
             const $testElement = $('#container');
-            const onSaving = sinon.spy();
-            const onSaved = sinon.spy();
+            const onSaving = sinon.spy(e => {
+                assert.deepEqual(e.changes, [{
+                    'data': {
+                        'name': 'new value'
+                    },
+                    'key': 1,
+                    'type': 'update'
+                }], 'onSaving args');
+            });
+            const onSaved = sinon.spy(e => {
+                assert.deepEqual(e.changes, [{
+                    'data': {
+                        'age': 15,
+                        'lastName': 'John',
+                        'name': 'new value',
+                        'phone': '555555',
+                        'room': 1,
+                        'state': {
+                            'name': 'state 1'
+                        },
+                        'stateId': 0
+                    },
+                    'key': 1,
+                    'type': 'update'
+                }], 'onSaved args');
+            });
 
             $.extend(this.options.editing, {
                 allowUpdating: true,
@@ -9506,16 +9561,11 @@ QUnit.module('Editing with real dataController', {
             // act
             this.editRow(0);
             this.cellValue(0, 0, 'new value');
-
-            const changes = this.option('editing.changes');
-
             this.saveEditData();
 
             // assert
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
-            assert.deepEqual(onSaving.firstCall.args[0].changes, changes, 'onSaving args');
             assert.equal(onSaved.callCount, 1, 'onSaved was called');
-            assert.deepEqual(onSaved.firstCall.args[0].changes, changes, 'onSaved args');
             assert.equal($(this.getCellElement(0, 0)).text(), 'new value', 'cell was modified');
         });
 
@@ -11578,9 +11628,11 @@ QUnit.module('Editing with validation', {
         cells = $(rowsView.element()).find('.dx-data-row').last().find('td');
 
         // assert
-        const $overlayContent = cells.eq(1).find('.dx-overlay-content');
+        const $overlayContent = rowsView.element().find('.dx-invalid-message .dx-overlay-content');
+        const $overlayWrapper = rowsView.element().find('.dx-overlay-wrapper.dx-datagrid-invalid-message');
         assert.equal(getInputElements(testElement).length, 1, 'has input');
         assert.equal($overlayContent.length, 1, 'has tooltip');
+        assert.strictEqual($overlayWrapper.css('visibility'), 'visible', 'validation message wrapper is visible');
         assert.ok(rowsView.element().find('.dx-freespace-row').is(':visible'), 'visible freespace row');
         assert.ok(rowsView.element().find('.dx-freespace-row').height() > 0, 'freespace row has height ');
 
@@ -14405,8 +14457,8 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(result.status, 'result should be restored from cache');
 
-        const editData = this.editingController.getEditDataByKey(rowKey);
-        this.validatingController.cancelCellValidationResult({ editData, columnIndex: 0 });
+        const change = this.editingController.getChangeByKey(rowKey);
+        this.validatingController.cancelCellValidationResult({ change, columnIndex: 0 });
         result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
         // assert
@@ -14448,8 +14500,8 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(result.status, 'result should be restored from cache');
 
-        const editData = this.editingController.getEditDataByKey(rowKey);
-        this.validatingController.removeCellValidationResult({ editData, columnIndex: 0 });
+        const change = this.editingController.getChangeByKey(rowKey);
+        this.validatingController.removeCellValidationResult({ change, columnIndex: 0 });
         result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
         // assert
