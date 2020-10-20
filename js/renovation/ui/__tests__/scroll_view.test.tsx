@@ -1,9 +1,14 @@
 import React from 'react';
 import { mount, shallow } from 'enzyme';
 import each from 'jest-each';
-import ScrollView, {
+import {
+  clear as clearEventHandlers, emit,
+} from '../../test_utils/events_mock';
+
+import {
+  ScrollView,
   viewFunction,
-  Location,
+  ScrollViewLocation,
   ScrollOffset,
   ScrollViewProps,
   ensureLocation,
@@ -69,52 +74,181 @@ describe('ScrollView', () => {
   });
 
   describe('Behavior', () => {
+    const createElement = ({
+      location,
+      width = 50,
+      height = 50,
+      offsetParent = {},
+      className = '',
+      isInScrollableContent = false,
+    }): HTMLElement => {
+      const checkSelector = (selector: string): boolean => className.indexOf(selector.replace('.', '')) > -1;
+      return {
+        offsetHeight: height,
+        offsetWidth: width,
+        offsetTop: location.top,
+        offsetLeft: location.left,
+        offsetParent,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        closest: (selector: string): Element | null => (
+          isInScrollableContent ? {} as Element : null
+        ),
+        matches: (selector: string): boolean => checkSelector(selector),
+      } as HTMLElement;
+    };
+
+    const createContainerRef = (
+      location: Partial<ScrollViewLocation>,
+      hasScrollBars?: boolean,
+    ): HTMLDivElement => ({
+      scrollTop: location.top,
+      scrollLeft: location.left,
+      offsetHeight: 300,
+      offsetWidth: 300,
+      scrollWidth: hasScrollBars ? 483 : 500,
+      scrollHeight: hasScrollBars ? 483 : 500,
+      clientWidth: hasScrollBars ? 283 : 300,
+      clientHeight: hasScrollBars ? 283 : 300,
+    }) as HTMLDivElement;
+
+    const createTargetElement = (args): HTMLElement => {
+      const scrollableContent = createElement({
+        location: { },
+        className: SCROLLABLE_CONTENT_CLASS,
+      });
+      return createElement({
+        ...args,
+        ...{ offsetParent: scrollableContent, isInScrollableContent: true },
+      });
+    };
+
+    describe('Effects', () => {
+      beforeEach(clearEventHandlers);
+
+      it('scrollEffect', () => {
+        const scrollOffset = { top: 150, left: 150 };
+        const containerRef = createContainerRef(scrollOffset);
+        const onScroll = jest.fn();
+        const scrollView = new ScrollView({ onScroll });
+        scrollView.containerRef = containerRef as HTMLDivElement;
+
+        scrollView.scrollEffect();
+        emit('scroll');
+
+        expect(onScroll).toHaveBeenCalledTimes(1);
+        expect(onScroll.mock.calls[0][0]).toMatchObject({
+          scrollOffset,
+          reachedTop: false,
+          reachedBottom: false,
+          reachedLeft: false,
+          reachedRight: false,
+        });
+      });
+
+      each(['vertical', 'horizontal', 'both']).describe('ScrollEffect params. Direction: %o', (direction) => {
+        const checkScrollParams = (actualParams,
+          expectedParams) => {
+          const checkedParams = expectedParams;
+
+          if (direction === 'vertical') {
+            delete checkedParams.reachedLeft;
+            delete checkedParams.reachedRight;
+          } else if (direction === 'horizontal') {
+            delete checkedParams.reachedTop;
+            delete checkedParams.reachedBottom;
+          }
+
+          expect(actualParams).toMatchObject(checkedParams);
+        };
+
+        it('ScrollPosition: { top: 0, left: 0 }', () => {
+          const scrollOffset = { top: 0, left: 0 };
+          const containerRef = createContainerRef(scrollOffset);
+
+          const onScroll = jest.fn();
+          const scrollView = new ScrollView({ onScroll, direction });
+          scrollView.containerRef = containerRef as HTMLDivElement;
+          scrollView.scrollEffect();
+          emit('scroll');
+
+          expect(onScroll).toHaveBeenCalledTimes(1);
+          checkScrollParams(onScroll.mock.calls[0][0], {
+            scrollOffset,
+            reachedTop: true,
+            reachedBottom: false,
+            reachedLeft: true,
+            reachedRight: false,
+          });
+        });
+
+        it('ScrollPosition: { top: maxOffset, left: maxOffset }', () => {
+          const scrollOffset = { top: 200, left: 200 };
+          const containerRef = createContainerRef(scrollOffset, true);
+
+          const onScroll = jest.fn();
+          const scrollView = new ScrollView({ onScroll, direction });
+          scrollView.containerRef = containerRef as HTMLDivElement;
+          scrollView.scrollEffect();
+          emit('scroll');
+
+          expect(onScroll).toHaveBeenCalledTimes(1);
+          checkScrollParams(onScroll.mock.calls[0][0], {
+            scrollOffset,
+            reachedTop: false,
+            reachedBottom: true,
+            reachedLeft: false,
+            reachedRight: true,
+          });
+        });
+
+        it('ScrollPosition: { top: maxOffset - 1, left: maxOffset - 1 }', () => {
+          const scrollOffset = { top: 199, left: 199 };
+          const containerRef = createContainerRef(scrollOffset);
+
+          const onScroll = jest.fn();
+          const scrollView = new ScrollView({ onScroll, direction });
+          scrollView.containerRef = containerRef as HTMLDivElement;
+          scrollView.scrollEffect();
+          emit('scroll');
+
+          expect(onScroll).toHaveBeenCalledTimes(1);
+          checkScrollParams(onScroll.mock.calls[0][0], {
+            scrollOffset,
+            reachedTop: false,
+            reachedBottom: false,
+            reachedLeft: false,
+            reachedRight: false,
+          });
+        });
+
+        it('ScrollPosition: { top: 1, left: 1 }', () => {
+          const scrollOffset = { top: 1, left: 1 };
+          const containerRef = createContainerRef(scrollOffset, true);
+
+          const onScroll = jest.fn();
+          const scrollView = new ScrollView({ onScroll, direction });
+          scrollView.containerRef = containerRef as HTMLDivElement;
+          scrollView.scrollEffect();
+          emit('scroll');
+
+          expect(onScroll).toHaveBeenCalledTimes(1);
+          checkScrollParams(onScroll.mock.calls[0][0], {
+            scrollOffset,
+            reachedTop: false,
+            reachedBottom: false,
+            reachedLeft: false,
+            reachedRight: false,
+          });
+        });
+      });
+
+      it('should not raise any error if onScroll is not defined', () => {
+        const scrollView = new ScrollView({ onScroll: undefined });
+        expect(scrollView.scrollEffect.bind(scrollView)).not.toThrow();
+      });
+    });
+
     describe('Methods', () => {
-      const createElement = ({
-        location,
-        width = 50,
-        height = 50,
-        offsetParent = {},
-        className = '',
-        isInScrollableContent = false,
-      }): HTMLElement => {
-        const checkSelector = (selector: string): boolean => className.indexOf(selector.replace('.', '')) > -1;
-        return {
-          offsetHeight: height,
-          offsetWidth: width,
-          offsetTop: location.top,
-          offsetLeft: location.left,
-          offsetParent,
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
-          closest: (selector: string): Element | null => (
-            isInScrollableContent ? {} as Element : null
-          ),
-          matches: (selector: string): boolean => checkSelector(selector),
-        } as HTMLElement;
-      };
-
-      const createContainerRef = (
-        location: Partial<Location>,
-        hasScrollBars?: boolean,
-      ): HTMLDivElement => ({
-        scrollTop: location.top,
-        scrollLeft: location.left,
-        offsetHeight: 300,
-        offsetWidth: 300,
-        clientWidth: hasScrollBars ? 283 : 300,
-      }) as HTMLDivElement;
-
-      const createTargetElement = (args): HTMLElement => {
-        const scrollableContent = createElement({
-          location: { },
-          className: SCROLLABLE_CONTENT_CLASS,
-        });
-        return createElement({
-          ...args,
-          ...{ offsetParent: scrollableContent, isInScrollableContent: true },
-        });
-      };
-
       describe('Content', () => {
         it('should get the content of the widget', () => {
           const scrollView = new ScrollView({});

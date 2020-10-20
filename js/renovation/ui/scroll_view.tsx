@@ -19,7 +19,7 @@ const DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = 'horizontal';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
-export interface Location { // TODO: rename Location, conflict with predefined Location type
+export interface ScrollViewLocation {
   top: number;
   left: number;
 }
@@ -31,7 +31,7 @@ export interface ScrollOffset {
   right: number;
 }
 
-export interface BoundaryProps {
+export interface ScrollViewBoundaryProps {
   reachedBottom: boolean;
   reachedLeft: boolean;
   reachedRight: boolean;
@@ -40,7 +40,9 @@ export interface BoundaryProps {
 
 export type ScrollViewDirection = 'both' | 'horizontal' | 'vertical';
 
-export const ensureLocation = (location: number | Partial<Location>): Location => {
+export const ensureLocation = (
+  location: number | Partial<ScrollViewLocation>,
+): ScrollViewLocation => {
   if (isNumeric(location)) {
     return {
       left: location,
@@ -50,7 +52,7 @@ export const ensureLocation = (location: number | Partial<Location>): Location =
   return { top: 0, left: 0, ...location };
 };
 
-export const getRelativeLocation = (element: HTMLElement): Location => {
+export const getRelativeLocation = (element: HTMLElement): ScrollViewLocation => {
   const result = { top: 0, left: 0 };
   let targetElement = element;
   while (!targetElement.matches(`.${SCROLLABLE_CONTENT_CLASS}`)) {
@@ -96,7 +98,6 @@ export class ScrollViewProps {
   @Event() onScroll: (e: {
     event: Event;
     scrollOffset: Partial<ScrollOffset>;
-    // TODO: use boundaryProps instead of fourth props
     reachedLeft?: boolean;
     reachedRight?: boolean;
     reachedTop?: boolean;
@@ -208,13 +209,13 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       }));
   }
 
-  private getBoundaryProps(): Partial<BoundaryProps> {
+  private getBoundaryProps(): Partial<ScrollViewBoundaryProps> {
     const { left, top } = this.scrollOffset();
     const {
       scrollWidth, clientWidth, scrollHeight, clientHeight,
     } = this.containerRef;
 
-    const boundaryProps: Partial<BoundaryProps> = {};
+    const boundaryProps: Partial<ScrollViewBoundaryProps> = {};
 
     if (this.isDirection(DIRECTION_HORIZONTAL)) {
       boundaryProps.reachedLeft = left <= 0;
