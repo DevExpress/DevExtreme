@@ -471,6 +471,7 @@ const Scrollable = DOMComponent.inherit({
         this._updateIfNeed();
 
         this._strategy.scrollBy(distance);
+        this._updateRtlConfig();
     },
 
     scrollTo: function(targetLocation) {
@@ -495,6 +496,7 @@ const Scrollable = DOMComponent.inherit({
         }
 
         this._strategy.scrollBy(distance);
+        this._updateRtlConfig();
     },
 
     scrollToElement: function(element, offset) {

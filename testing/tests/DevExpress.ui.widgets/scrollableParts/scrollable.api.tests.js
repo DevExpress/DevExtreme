@@ -772,97 +772,116 @@ class ScrollableTestHelper {
     });
 
     QUnit.module(`ScrollPosition after resize, native: ${useNative}`, moduleConfig, () => {
-        QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, scrollTo(left: 0) -> width(50) -> width(75) -> resize()`, function(assert) {
+        QUnit.test(`Direction: horizontal, rtl: true, content:100, initialScrollPosition(Max), useNative: ${useNative}, container.width(50) -> container.width(75) -> container.width(100)`, function(assert) {
             const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative: useNative, rtlEnabled: true });
-
-            assert.strictEqual(helper.scrollable.scrollLeft(), helper.scrollable.$content().width() - helper.$scrollable.width(), 'scrolled to max right position');
+            assert.strictEqual(helper.scrollable.scrollLeft(), 50, 'scrolled to max right position');
             helper.checkScrollOffset({ left: -50, top: 0, maxScrollOffset: 50 });
-
-            helper.scrollable.scrollTo({ left: 0 });
-            helper.scrollable.update();
-            helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 50 });
-            assert.strictEqual(helper.scrollable.scrollLeft(), 0, 'scrolled to max right position');
-            helper.$scrollable.css('width', 75);
-            resizeCallbacks.fire();
-
-            helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 25 });
-            assert.strictEqual(helper.scrollable.scrollLeft(), 0, 'scrolled to max right position');
-        });
-
-        QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, scrollTo(left: 0) -> width(75) -> width(50) -> resize()`, function(assert) {
-            const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative: useNative, rtlEnabled: true });
-
-            assert.strictEqual(helper.scrollable.scrollLeft(), helper.scrollable.$content().width() - helper.$scrollable.width(), 'scrolled to max right position');
-            helper.checkScrollOffset({ left: -50, top: 0, maxScrollOffset: 50 });
-
-            helper.scrollable.scrollTo({ left: 0 });
-            helper.scrollable.update();
-            helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 50 });
-            assert.strictEqual(helper.scrollable.scrollLeft(), 0, 'scrolled to max right position');
 
             helper.$scrollable.css('width', 75);
             resizeCallbacks.fire();
+            assert.strictEqual(helper.scrollable.scrollLeft(), 25, 'scrolled to max right position after resize to 75px');
+            helper.checkScrollOffset({ left: -25, top: 0, maxScrollOffset: 25 });
 
-            helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 25 });
-            assert.strictEqual(helper.scrollable.scrollLeft(), 0, 'scrolled to max right position');
-            helper.$scrollable.css('width', 50);
+            helper.$scrollable.css('width', 100);
             resizeCallbacks.fire();
-
-            helper.checkScrollOffset({ left: -25, top: 0, maxScrollOffset: 50 });
-            assert.strictEqual(helper.scrollable.scrollLeft(), 25, 'scrolled to max right position');
+            assert.strictEqual(helper.scrollable.scrollLeft(), 0, 'scrolled to max right position after resize to 100px');
+            helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 0 });
         });
 
-        QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, initialScrolPosition(Max) -> width(25) -> resize()`, function(assert) {
+        QUnit.test(`Direction: horizontal, rtl: true, content.width:100, initialScrollPosition(Max), useNative: ${useNative}, container.width(75) -> width(50) -> resize(100)`, function(assert) {
             const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative: useNative, rtlEnabled: true });
-
-            assert.strictEqual(helper.scrollable.scrollLeft(), helper.scrollable.$content().width() - helper.$scrollable.width(), 'scrolled to max right position');
-            helper.checkScrollOffset({ left: -50, top: 0, maxScrollOffset: 50 });
-
-            helper.$scrollable.css('width', 25);
+            helper.$scrollable.css('width', 75);
             resizeCallbacks.fire();
-
-            assert.strictEqual(helper.scrollable.scrollLeft(), helper.scrollable.$content().width() - helper.$scrollable.width(), 'scrolled to max right position');
-            helper.checkScrollOffset({ left: -75, top: 0, maxScrollOffset: 75 });
-        });
-
-        QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, initialScrolPosition(Max) -> width(25) -> width(50) -> resize()`, function(assert) {
-            const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative: useNative, rtlEnabled: true });
-
-            assert.strictEqual(helper.scrollable.scrollLeft(), helper.scrollable.$content().width() - helper.$scrollable.width(), 'scrolled to max right position');
-            helper.checkScrollOffset({ left: -50, top: 0, maxScrollOffset: 50 });
-
-            helper.$scrollable.css('width', 25);
-            resizeCallbacks.fire();
-
-            assert.strictEqual(helper.scrollable.scrollLeft(), helper.scrollable.$content().width() - helper.$scrollable.width(), 'scrolled to max right position');
-            helper.checkScrollOffset({ left: -75, top: 0, maxScrollOffset: 75 });
+            assert.strictEqual(helper.scrollable.scrollLeft(), 25, 'scrolled to max right position after resize to 75px');
+            helper.checkScrollOffset({ left: -25, top: 0, maxScrollOffset: 25 });
 
             helper.$scrollable.css('width', 50);
             resizeCallbacks.fire();
-
-            assert.strictEqual(helper.scrollable.scrollLeft(), helper.scrollable.$content().width() - helper.$scrollable.width(), 'scrolled to max right position');
+            assert.strictEqual(helper.scrollable.scrollLeft(), 50, 'scrolled to max right position after resize to 50px');
             helper.checkScrollOffset({ left: -50, top: 0, maxScrollOffset: 50 });
+
+            helper.$scrollable.css('width', 100);
+            resizeCallbacks.fire();
+            assert.strictEqual(helper.scrollable.scrollLeft(), 0, 'scrolled to max right position after resize to 100px');
+            helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 0 });
         });
 
-        QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, initialScrolPosition(Max) -> scrollTo(Max - 1) -> width(75) -> resize()`, function(assert) {
+        QUnit.test(`Direction: horizontal, rtl: true, content.width:100, initialScrollPosition(Max), useNative: ${useNative}, container.width(50) -> width(100) -> resize(75)`, function(assert) {
             const helper = new ScrollableTestHelper({ direction: 'horizontal', useNative: useNative, rtlEnabled: true });
-            const maxOffset = helper.getMaxScrollOffset();
-
-            assert.strictEqual(helper.scrollable.scrollLeft(), helper.scrollable.$content().width() - helper.$scrollable.width(), 'scrolled to max right position');
+            helper.$scrollable.css('width', 50);
+            resizeCallbacks.fire();
+            assert.strictEqual(helper.scrollable.scrollLeft(), 50, 'scrolled to max right position after resize to 50px');
             helper.checkScrollOffset({ left: -50, top: 0, maxScrollOffset: 50 });
 
-
-            helper.scrollable.scrollTo({ left: maxOffset.horizontal - 1 });
-            helper.scrollable.update();
-            assert.strictEqual(helper.scrollable.scrollLeft(), 49, 'scrolled to max right position');
-            helper.checkScrollOffset({ left: -49, top: 0, maxScrollOffset: 50 });
-
+            helper.$scrollable.css('width', 100);
             resizeCallbacks.fire();
+            assert.strictEqual(helper.scrollable.scrollLeft(), 0, 'scrolled to max right position after resize to 100px');
+            helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 0 });
+
             helper.$scrollable.css('width', 75);
             resizeCallbacks.fire();
+            assert.strictEqual(helper.scrollable.scrollLeft(), 25, 'scrolled to max right position after resize to 75px');
+            helper.checkScrollOffset({ left: -25, top: 0, maxScrollOffset: 25 });
+        });
 
-            helper.checkScrollOffset({ left: -24, top: 0, maxScrollOffset: 25 });
-            assert.strictEqual(helper.scrollable.scrollLeft(), 24, 'scrolled to max right position');
+        [1, 10, 20].forEach(scrollOffset => {
+            QUnit.test(`Direction: horizontal, rtl: true, content.width:100, initialScrollPosition(Right), useNative: ${useNative}, container.width(50), scrollTo(Max - ${scrollOffset}) -> width(75) -> width(50) -> width(100) -> width(50)`, function(assert) {
+                const helper = new ScrollableTestHelper({
+                    direction: 'horizontal',
+                    useNative: useNative,
+                    rtlEnabled: true
+                });
+                const maxOffset = helper.getMaxScrollOffset();
+                helper.scrollable.scrollTo({ left: maxOffset.horizontal - scrollOffset });
+                helper.scrollable.update();
+
+                helper.$scrollable.css('width', 75);
+                resizeCallbacks.fire();
+                assert.strictEqual(helper.scrollable.scrollLeft(), 25 - scrollOffset, 'scrolled to max right position after resize to 75px');
+                helper.checkScrollOffset({ left: -(25 - scrollOffset), top: 0, maxScrollOffset: 25 });
+
+                helper.$scrollable.css('width', 50);
+                resizeCallbacks.fire();
+                assert.strictEqual(helper.scrollable.scrollLeft(), 50 - scrollOffset, 'scrolled to max right position after resize to 50px');
+                helper.checkScrollOffset({ left: -(50 - scrollOffset), top: 0, maxScrollOffset: 50 });
+
+                helper.$scrollable.css('width', 100);
+                resizeCallbacks.fire();
+                assert.strictEqual(helper.scrollable.scrollLeft(), 0, 'scrolled to max right position after resize to 100px');
+                helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 0 });
+
+                helper.$scrollable.css('width', 50);
+                resizeCallbacks.fire();
+                assert.strictEqual(helper.scrollable.scrollLeft(), 50, 'scrolled to max right position after resize to 50px');
+                helper.checkScrollOffset({ left: -50, top: 0, maxScrollOffset: 50 });
+            });
+        });
+
+        [30, 40, 50].forEach(scrollOffset => {
+            QUnit.test(`Direction: horizontal, rtl: true, content.width:100, initialScrollPosition(Left), useNative: ${useNative}, container.width(50), scrollTo(Max - ${scrollOffset}) -> width(75) -> width(50) -> width(100) -> width(50)`, function(assert) {
+                const helper = new ScrollableTestHelper({
+                    direction: 'horizontal',
+                    useNative: useNative,
+                    rtlEnabled: true
+                });
+                helper.scrollable.scrollTo({ left: scrollOffset });
+                helper.scrollable.update();
+
+                helper.$scrollable.css('width', 75);
+                resizeCallbacks.fire();
+                assert.strictEqual(helper.scrollable.scrollLeft(), scrollOffset - 25, 'scrolled to max right position after resize to 75px');
+                helper.checkScrollOffset({ left: -(scrollOffset - 25), top: 0, maxScrollOffset: 25 });
+
+                helper.$scrollable.css('width', 50);
+                resizeCallbacks.fire();
+                assert.strictEqual(helper.scrollable.scrollLeft(), scrollOffset, 'scrolled to max right position after resize to 50px');
+                helper.checkScrollOffset({ left: -(scrollOffset), top: 0, maxScrollOffset: 50 });
+
+                helper.$scrollable.css('width', 100);
+                resizeCallbacks.fire();
+                assert.strictEqual(helper.scrollable.scrollLeft(), 0, 'scrolled to max right position after resize to 100px');
+                helper.checkScrollOffset({ left: 0, top: 0, maxScrollOffset: 0 });
+            });
         });
 
         QUnit.test(`Direction: horizontal, rtl: true, useNative: ${useNative}, rtlEnabled: true, scroll save the max right position when width of window was changed`, function(assert) {
