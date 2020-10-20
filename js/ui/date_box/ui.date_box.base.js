@@ -265,7 +265,9 @@ const DateBox = DropDownEditor.inherit({
     _dimensionChanged: function() {
         this.callBase(arguments);
 
-        this._popup && this._strategy._updatePopupHeight?.();
+        if(this._popup) {
+            this._strategy._updatePopupHeight?.();
+        }
     },
 
     _refreshFormatClass: function() {
