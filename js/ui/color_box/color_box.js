@@ -121,7 +121,6 @@ const ColorBox = DropDownEditor.inherit({
 
     _popupConfig: function() {
         return extend(this.callBase(), {
-            height: 'auto',
             width: ''
         });
     },
