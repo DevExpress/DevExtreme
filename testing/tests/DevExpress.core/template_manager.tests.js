@@ -37,7 +37,7 @@ QUnit.test('#defaultOptions', function(assert) {
     assert.ok(defaultOptions.integrationOptions.watchMethod, 'watchMethod is defined');
     assert.ok(defaultOptions.integrationOptions.templates, 'templates are defined');
     assert.ok(defaultOptions.integrationOptions.templates['dx-polymorph-widget'], 'default polymorph widget template is defined');
-    assert.strictEqual(defaultOptions.integrationOptions.useDeferUpdateForTemplates, false, 'do not use deferUpdate for template rendering');
+    assert.strictEqual(defaultOptions.integrationOptions.useDeferUpdateForTemplates, true, 'do not use deferUpdate for template rendering');
 });
 
 QUnit.module('TemplateManager methods');
