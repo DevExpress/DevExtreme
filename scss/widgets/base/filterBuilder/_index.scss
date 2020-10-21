@@ -21,7 +21,8 @@ $filterbuilder-remove-icon-hover-color: null !default;
 $filterbuilder-remove-icon-focus-color: null !default;
 $filterbuilder-menu-icon-color: null !default;
 
-@use "./icons" as *;
+@use "../icons" as *;
+@use "./common";
 
 .dx-filterbuilder {
   background-color: $filterbuilder-bg;
