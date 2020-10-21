@@ -11,6 +11,7 @@ QUnit.testStart(function() {
 
 
 import 'common.css!';
+import 'generic_light.css!';
 
 import 'ui/data_grid/ui.data_grid';
 
