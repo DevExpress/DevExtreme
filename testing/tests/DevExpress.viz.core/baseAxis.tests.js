@@ -527,6 +527,57 @@ QUnit.test('Disposing', function(assert) {
     assert.ok(renderer.g.getCall(3).returnValue.dispose.called, 'elements group was cleared');
 });
 
+QUnit.test('beforeCleanGroups with templates for labels', function(assert) {
+    const renderer = this.renderer;
+
+    this.updateOptions({
+        label: {
+            template: ()=>{}
+        }
+    });
+
+    this.axis.beforeCleanGroups();
+
+    assert.strictEqual(renderer.g.getCall(3).returnValue.linkRemove.callCount, 1);
+});
+
+QUnit.test('afterCleanGroups with templates for labels', function(assert) {
+    const renderer = this.renderer;
+
+    this.updateOptions({
+        label: {
+            template: ()=>{}
+        }
+    });
+
+    renderer.g.getCall(3).returnValue.linkAppend.reset();
+    this.axis.afterCleanGroups();
+
+    assert.strictEqual(renderer.g.getCall(3).returnValue.linkAppend.callCount, 1);
+});
+
+
+QUnit.test('beforeCleanGroups without templates for labels', function(assert) {
+    const renderer = this.renderer;
+
+    this.updateOptions();
+
+    this.axis.beforeCleanGroups();
+
+    assert.strictEqual(renderer.g.getCall(3).returnValue.stub('linkRemove').callCount, 0);
+});
+
+QUnit.test('afterCleanGroups without templates for labels', function(assert) {
+    const renderer = this.renderer;
+
+    this.updateOptions();
+
+    renderer.g.getCall(3).returnValue.linkAppend.reset();
+    this.axis.afterCleanGroups();
+
+    assert.strictEqual(renderer.g.getCall(3).returnValue.linkAppend.callCount, 0);
+});
+
 QUnit.test('calculateInterval - returns absolute difference of two numbers', function(assert) {
     this.updateOptions();
 

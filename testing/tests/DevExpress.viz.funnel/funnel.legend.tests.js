@@ -20,6 +20,8 @@ QUnit.module('Legend', $.extend({}, environment, {
                 stub.stub('coordsIn').returns(true);
                 stub.stub('getItemByCoord').withArgs(2, 3).returns({ id: 4 });
                 stub.stub('measure').returns([100, 100]);
+                stub.stub('getTemplatesGroups').returns([]);
+                stub.stub('getTemplatesDef').returns([]);
                 stub.stub('layoutOptions').returns({
                     horizontalAlignment: 'right',
                     verticalAlignment: 'top',

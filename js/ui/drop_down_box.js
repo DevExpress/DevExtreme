@@ -185,10 +185,6 @@ const DropDownBox = DropDownEditor.inherit({
         return deferred.promise();
     },
 
-    _updatePopupWidth: function() {
-        this._setPopupOption('width', this.$element().outerWidth());
-    },
-
     _popupElementTabHandler: function(e) {
         if(normalizeKeyName(e) !== 'tab') return;
 
@@ -279,10 +275,6 @@ const DropDownBox = DropDownEditor.inherit({
         const { focusStateEnabled } = this.option();
 
         return extend(this.callBase(), {
-            width: function() {
-                return this.$element().outerWidth();
-            }.bind(this),
-            height: 'auto',
             tabIndex: -1,
             dragEnabled: false,
             focusStateEnabled,
@@ -311,10 +303,6 @@ const DropDownBox = DropDownEditor.inherit({
     _optionChanged: function(args) {
         this._dataExpressionOptionChanged(args);
         switch(args.name) {
-            case 'width':
-                this.callBase(args);
-                this._popup && this._popup.repaint();
-                break;
             case 'dataSource':
                 this._renderInputValue();
                 break;

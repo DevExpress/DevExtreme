@@ -1087,10 +1087,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                                 return;
                             }
                             !isFocusedElementDefined && this._focus($cell);
-                        } else if(this._isCellEditMode() || this._isNeedFocus) {
+                        } else if(this._isNeedFocus || this._isHiddenFocus) {
                             this._focus($cell, this._isHiddenFocus);
-                        } else if(this._isHiddenFocus) {
-                            this._focus($cell, true);
                         }
                         if(isEditing) {
                             this._focusInteractiveElement.bind(this)($cell);
@@ -1279,14 +1277,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(!this._focusedCellPosition) {
             this._focusedCellPosition = {};
         }
-        this.option('focusedRowIndex', rowIndex);
         this._focusedCellPosition.rowIndex = rowIndex;
     },
     setFocusedColumnIndex: function(columnIndex) {
         if(!this._focusedCellPosition) {
             this._focusedCellPosition = {};
         }
-        this.option('focusedColumnIndex', columnIndex);
         this._focusedCellPosition.columnIndex = columnIndex;
     },
     getRowIndex: function() {

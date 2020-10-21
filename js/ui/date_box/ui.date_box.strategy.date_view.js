@@ -29,6 +29,7 @@ const DateViewStrategy = DateBoxStrategy.inherit({
         return {
             toolbarItems: this.dateBox._popupToolbarItemsConfig(),
             onInitialized: config.onInitialized,
+            width: 'auto',
 
             defaultOptionsRules: [
                 {

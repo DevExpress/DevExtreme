@@ -641,7 +641,7 @@ const Form = Widget.inherit({
         };
         const tabPanel = this._createComponent($tabPanel, TabPanel, tabPanelOptions);
 
-        $($container).addClass(FIELD_ITEM_CONTENT_HAS_TABS_CLASS);
+        $($container).parent().addClass(FIELD_ITEM_CONTENT_HAS_TABS_CLASS);
 
         tabPanel.on('optionChanged', e => {
             if(e.fullName === 'dataSource') {
@@ -658,7 +658,7 @@ const Form = Widget.inherit({
             .addClass(FORM_GROUP_CLASS)
             .appendTo($container);
 
-        $($container).addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
+        $($container).parent().addClass(FIELD_ITEM_CONTENT_HAS_GROUP_CLASS);
 
         let colCount;
         let layoutManager;

@@ -149,13 +149,14 @@ const Editor = Widget.inherit({
         // it can change the editor's value
         if(this._canValueBeChangedByClick() && isValidationMessageShownOnFocus) {
             // NOTE: Prevent the validation message from showing
-            this._$validationMessage?.removeClass(INVALID_MESSAGE_AUTO);
+            const $validationMessageWrapper = this._validationMessage?._wrapper();
+            $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
             clearTimeout(this.showValidationMessageTimeout);
 
             // NOTE: Show the validation message after a click changes the value
             this.showValidationMessageTimeout = setTimeout(
-                () => this._$validationMessage?.addClass(INVALID_MESSAGE_AUTO), 150
+                () => $validationMessageWrapper?.addClass(INVALID_MESSAGE_AUTO), 150
             );
         }
 
