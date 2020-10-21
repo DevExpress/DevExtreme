@@ -96,12 +96,15 @@ describe('ScrollView', () => {
       const createContainerRef = (
         location: Partial<Location>,
         hasScrollBars?: boolean,
+        hasVerticalScrollBar?: boolean,
+        hasHorizontalScrollBar?: boolean,
       ): HTMLDivElement => ({
         scrollTop: location.top,
         scrollLeft: location.left,
         offsetHeight: 300,
         offsetWidth: 300,
-        clientWidth: hasScrollBars ? 283 : 300,
+        clientWidth: hasScrollBars || hasHorizontalScrollBar ? 283 : 300,
+        clientHeight: hasScrollBars || hasVerticalScrollBar ? 283 : 300,
       }) as HTMLDivElement;
 
       const createTargetElement = (args): HTMLElement => {
@@ -362,6 +365,17 @@ describe('ScrollView', () => {
             expect(containerRef.scrollLeft).toEqual(0);
           });
 
+          it('should scroll to element from bottom side by vertical orientation, hasVerticalScrollBar: true', () => {
+            const element = createTargetElement({ location: { top: 500, left: 0 } });
+            const containerRef = createContainerRef({ top: 100, left: 0 }, false, true);
+            const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
+            scrollView.containerRef = containerRef;
+            scrollView.scrollToElement(element, offset);
+
+            expect(containerRef.scrollTop).toEqual(267 + getOffsetValue('bottom', offset));
+            expect(containerRef.scrollLeft).toEqual(0);
+          });
+
           it('should scroll to element from left side by horizontal orientation', () => {
             const element = createTargetElement({ location: { left: 20, top: 0 } });
             const containerRef = createContainerRef({ left: 200, top: 0 });
@@ -381,6 +395,17 @@ describe('ScrollView', () => {
             scrollView.scrollToElement(element, offset);
 
             expect(containerRef.scrollLeft).toEqual(250 + getOffsetValue('right', offset));
+            expect(containerRef.scrollTop).toEqual(0);
+          });
+
+          it('should scroll to element from right side by horizontal orientation, hasHorizontalScrollBar: true', () => {
+            const element = createTargetElement({ location: { left: 500, top: 0 } });
+            const containerRef = createContainerRef({ left: 100, top: 0 }, false, false, true);
+            const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
+            scrollView.containerRef = containerRef;
+            scrollView.scrollToElement(element, offset);
+
+            expect(containerRef.scrollLeft).toEqual(267 + getOffsetValue('right', offset));
             expect(containerRef.scrollTop).toEqual(0);
           });
 
