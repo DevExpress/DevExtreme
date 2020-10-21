@@ -3983,7 +3983,7 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         this.dataController.setViewportPosition(500);
 
         // assert
-        assert.strictEqual(this.dataController.items()[0].key, 50, 'first item is new');
+        assert.strictEqual(this.dataController.items()[0].key, 50, 'first item key');
 
         // act
         this.dataController.setViewportPosition(0);

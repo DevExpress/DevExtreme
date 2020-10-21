@@ -807,7 +807,7 @@ export default {
 
                         that._visibleItems = [];
 
-                        const isItemCountable = function(item, isNextAfterLast, fromEnd) {
+                        const isItemCountable = function(item) {
                             return item.rowType === 'data' && !item.isNewRow || item.rowType === 'group' && that._dataSource.isGroupItemCountable(item.data);
                         };
 
