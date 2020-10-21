@@ -25,6 +25,8 @@ const COLOR_BOX_OVERLAY_CLASS = COLOR_BOX_CLASS + '-overlay';
 
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const COLORVIEW_CLASS = 'dx-colorview';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
 
 const move = function($element, position) {
     const parentOffset = $element.parent().offset();
@@ -163,6 +165,28 @@ QUnit.module('Color Box', {
     QUnit.test('Popup should have height=\'auto\'', function(assert) {
         const popupHeight = showColorBox.call(this).dxColorBox('instance')._popup.option('height');
         assert.equal(popupHeight, 'auto');
+    });
+
+    QUnit.test('Popup content width should be equal to colorBox width when editor width is bigger then colorBox width', function(assert) {
+        this.element.dxColorBox({
+            width: 1000,
+            opened: true
+        });
+        const $colorView = $(`.${COLORVIEW_CLASS}`);
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+
+        assert.strictEqual($popupContent.width(), $colorView.outerWidth(), 'popup content width is correct');
+    });
+
+    QUnit.test('Popup content width should be equal to colorBox width when editor width is smaller then colorBox width', function(assert) {
+        this.element.dxColorBox({
+            width: 100,
+            opened: true
+        });
+        const $colorView = $(`.${COLORVIEW_CLASS}`);
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+
+        assert.strictEqual($popupContent.width(), $colorView.outerWidth(), 'popup content width is correct');
     });
 
     QUnit.test('Click on apply button', function(assert) {

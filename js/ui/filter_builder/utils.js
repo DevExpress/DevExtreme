@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 import { Deferred, when } from '../../core/utils/deferred';
 import errorsUtils from '../../data/errors';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isFunction } from '../../core/utils/type';
 import { compileGetter } from '../../core/utils/data';
 import errors from '../widget/ui.errors';
 import filterUtils from '../shared/filtering';
@@ -507,7 +507,8 @@ export function getCurrentLookupValueText(field, value, handler) {
     if(lookup.items) {
         handler(lookup.calculateCellValue(value) || '');
     } else {
-        const dataSource = new DataSource(lookup.dataSource);
+        const lookupDataSource = isFunction(lookup.dataSource) ? lookup.dataSource({}) : lookup.dataSource;
+        const dataSource = new DataSource(lookupDataSource);
         dataSource.loadSingle(lookup.valueExpr, value).done(function(result) {
             result ? handler(lookup.displayExpr ? compileGetter(lookup.displayExpr)(result) : result) : handler('');
         }).fail(function() {

@@ -61,8 +61,8 @@ export class Pager extends JSXComponent<PagerProps>() {
       ...this.props,
       className: this.className,
       pageIndex: this.pageIndex,
-      pageIndexChange: this.pageIndexChange,
-      pageSizeChange: this.pageSizeChange,
+      pageIndexChange: (pageIndex: number): void => this.pageIndexChange(pageIndex),
+      pageSizeChange: (pageSize: number): void => this.pageSizeChange(pageSize),
     };
   }
 }

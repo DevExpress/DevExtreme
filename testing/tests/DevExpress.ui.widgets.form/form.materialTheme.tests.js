@@ -282,15 +282,15 @@ QUnit.module('Left label location scenarios', () => {
 
     testChromeOnly('1 column -> [item1, item2, item3]', function(assert) {
         const wrapper = new FormLayoutTestWrapper(1, { labelLocation: 'left' }, ['item1', 'item2', 'item3']);
-        wrapper.checkFormSize(1000, 195);
+        wrapper.checkFormSize(1000, 175);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 951, 31);
 
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 87, 0, 49, 15);
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 77, 49, 951, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 77, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 67, 49, 951, 31);
 
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 164, 0, 49, 15);
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 154, 49, 951, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 144, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 134, 49, 951, 31);
     });
 
     testChromeOnly('1 column -> [item1, { group [item2, item3] ]', function(assert) {
@@ -298,15 +298,15 @@ QUnit.module('Left label location scenarios', () => {
             'item1',
             { itemType: 'group', items: ['item2', 'item3'] }
         ]);
-        wrapper.checkFormSize(1000, 169);
+        wrapper.checkFormSize(1000, 159);
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 43, 15);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 43, 956, 31);
 
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 61, 0, 49, 15);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 51, 49, 951, 31);
 
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 138, 0, 49, 15);
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 128, 49, 951, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 128, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 118, 49, 951, 31);
     });
 
     testChromeOnly('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {

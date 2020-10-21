@@ -1,6 +1,8 @@
 import ValidationMessage from 'ui/validation_message';
 import $ from 'jquery';
 
+const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+
 const moduleSetup = {
     beforeEach: function() {
         this._$validationMessage = $('<div>').attr('id', 'validationMessage').appendTo('#qunit-fixture');
@@ -17,14 +19,15 @@ QUnit.module('markup', moduleSetup, () => {
         assert.ok(this._validationMessage._wrapper().hasClass('dx-invalid-message'), 'overlay wrapper has correct class');
     });
 
-    QUnit.test('mode option change should toggle element class', function(assert) {
-        assert.ok(this._$validationMessage.hasClass('dx-invalid-message-auto'), 'class is correct on init');
+    QUnit.test('mode option change should toggle overlay wrapper class', function(assert) {
+        const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+        assert.ok($overlayWrapper.hasClass('dx-invalid-message-auto'), 'class is correct on init');
 
         this._validationMessage.option('mode', 'always');
-        assert.ok(this._$validationMessage.hasClass('dx-invalid-message-always'), 'class is correct after runtime option change');
+        assert.ok($overlayWrapper.hasClass('dx-invalid-message-always'), 'class is correct after runtime option change');
 
         this._validationMessage.option('mode', 'auto');
-        assert.ok(this._$validationMessage.hasClass('dx-invalid-message-auto'), 'class is correct after runtime option change');
+        assert.ok($overlayWrapper.hasClass('dx-invalid-message-auto'), 'class is correct after runtime option change');
     });
 
     QUnit.test('overlay content should have "dx-invalid-message-content" class', function(assert) {

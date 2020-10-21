@@ -2,8 +2,7 @@ import {
   Component,
   JSXComponent,
   Effect,
-  Ref,
-  InternalState,
+  InternalState, ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 
 import { Page } from './page';
@@ -54,7 +53,7 @@ type PagesSmallPropsType = Pick<PagerProps,
 
 @Component({ defaultOptionRules: null, view: viewFunction })
 export class PagesSmall extends JSXComponent<PagesSmallPropsType>() {
-  @Ref() pageIndexRef!: HTMLDivElement;
+  @ForwardRef() pageIndexRef!: HTMLDivElement;
 
   get value(): number {
     return this.props.pageIndex + 1;

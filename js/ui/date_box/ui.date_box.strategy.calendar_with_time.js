@@ -139,6 +139,7 @@ const CalendarWithTimeStrategy = CalendarStrategy.inherit({
     popupConfig: function(popupConfig) {
         const calendarPopupConfig = this.callBase(popupConfig);
         const result = extend(calendarPopupConfig, {
+            width: 'auto',
             onShowing: (function() {
                 if(this._box.option('_layoutStrategy') === 'fallback') {
                     const clockMinWidth = this._getPopup().$content().find('.dx-timeview-clock').css('minWidth');
