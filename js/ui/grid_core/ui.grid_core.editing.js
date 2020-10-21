@@ -24,6 +24,7 @@ import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 import { deferRender } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
 import Scrollable from '../scroll_view/ui.scrollable';
+import { options } from 'preact';
 
 const EDIT_FORM_CLASS = 'edit-form';
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
@@ -2351,6 +2352,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 id: form.getItemID(item.name || item.dataField),
                 columnIndex: column.index,
                 setValue: !isReadOnly && column.allowEditing && function(value) {
+                    options.values = that._dataController._items?.[options.rowIndex].values;
                     that.updateFieldValue(cellOptions, value);
                 }
             });
@@ -2788,10 +2790,6 @@ export default {
 
                     if(oldItem.isNewRow !== newItem.isNewRow || oldItem.removed !== newItem.removed || (isRowEditMode && oldItem.isEditing !== newItem.isEditing)) {
                         return;
-                    }
-
-                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex) && isLiveUpdate) {
-                        return [];
                     }
 
                     return this.callBase.apply(this, arguments);
