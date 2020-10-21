@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import renderer from 'core/renderer';
 import positionUtils from 'animation/position';
 import translator from 'animation/translator';
 import browser from 'core/utils/browser';
@@ -952,6 +953,36 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
+        }
+    });
+
+    QUnit.test('position should return window.height() if window.outerHeight == window.innerHeight (T939748)', function(assert) {
+        const isPhone = devices.real().deviceType === 'phone';
+        if(isPhone || browser.safari) {
+            assert.expect(0);
+            return;
+        }
+
+        const $what = $('#what').height(300);
+        const initialInnerHeight = window.innerHeight;
+        const initialOuterHeight = window.outerHeight;
+        const jqueryHeightStub = sinon.stub($.prototype, 'height').returns(1000);
+        const rendererHeightStub = sinon.stub(renderer.fn, 'height').returns(1000);
+
+        try {
+            window.innerHeight = 500;
+            window.outerHeight = 500;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.v.location, 350, 50, 'vertical location is correct');
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            window.outerHeight = initialOuterHeight;
+            jqueryHeightStub.restore();
+            rendererHeightStub.restore();
         }
     });
 
