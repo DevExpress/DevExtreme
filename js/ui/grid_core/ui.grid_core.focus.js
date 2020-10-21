@@ -423,9 +423,13 @@ module.exports = {
                 },
 
                 setFocusedRowIndex: function(rowIndex) {
+                    const dataController = this.getController('data');
+
                     this.callBase(rowIndex);
 
-                    const visibleRow = this.getController('data').getVisibleRows()[rowIndex];
+                    const visibleRowIndex = rowIndex - dataController.getRowIndexOffset();
+                    const visibleRow = dataController.getVisibleRows()[visibleRowIndex];
+
                     if(!visibleRow || !visibleRow.isNewRow) {
                         this.option('focusedRowIndex', rowIndex);
                     }
