@@ -24,7 +24,6 @@ import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 import { deferRender } from '../../core/utils/common';
 import * as iconUtils from '../../core/utils/icon';
 import Scrollable from '../scroll_view/ui.scrollable';
-import { options } from 'preact';
 
 const EDIT_FORM_CLASS = 'edit-form';
 const EDIT_FORM_ITEM_CLASS = 'edit-form-item';
@@ -2352,7 +2351,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 id: form.getItemID(item.name || item.dataField),
                 columnIndex: column.index,
                 setValue: !isReadOnly && column.allowEditing && function(value) {
-                    options.values = that._dataController._items?.[options.rowIndex].values;
                     that.updateFieldValue(cellOptions, value);
                 }
             });
@@ -2510,6 +2508,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                     if(!editingStartOptions || !editingStartOptions.cancel) {
                         options.setValue = function(value, text) {
+                            options.values = that._dataController._items?.[options.rowIndex].values;
                             that.updateFieldValue(options, value, text);
                         };
                     }
