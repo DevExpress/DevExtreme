@@ -1,6 +1,7 @@
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
+import browser from 'core/utils/browser';
 
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
@@ -13,7 +14,7 @@ const winterDSTDate = new Date(2020, 10, 1); // TODO Daylight saving time will h
 
 // This tests run only in (UTC-08:00) Pacific Time (US & Canada)
 // For run test locally, change timezone on desktop on (UTC-08:00) Pacific Time (US & Canada)
-if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
+if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
     testStart(() => initTestMarkup());
     const moduleConfig = {
         beforeEach() {
@@ -177,7 +178,9 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
         const testCases = [
             { view: 'week', times: expectedShortTimes },
-            { view: 'day', times: expectedShortTimes }
+            { view: 'day', times: expectedShortTimes },
+            { view: 'timelineDay', times: expectedAllTimes },
+            { view: 'timelineWeek', times: expectedAllTimes }
         ];
 
         module('timeCellTemplate', () => {
