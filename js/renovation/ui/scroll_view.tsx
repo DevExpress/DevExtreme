@@ -94,7 +94,7 @@ export const viewFunction = ({
 export class ScrollViewProps {
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
-  @OneWay() direction: ScrollViewDirection = 'vertical';
+  @OneWay() direction: ScrollViewDirection = DIRECTION_VERTICAL;
 
   @Event() onScroll: (e: {
     event: Event;
@@ -246,7 +246,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   get cssClasses(): string {
     const {
-      direction = DIRECTION_VERTICAL,
+      direction,
       disabled,
     } = this.props; // TODO: check default from props
 

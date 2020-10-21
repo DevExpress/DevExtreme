@@ -819,7 +819,6 @@ describe('ScrollView', () => {
           const { cssClasses } = new ScrollView({});
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollview'));
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
-          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-vertical'));
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-native-generic'));
           expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-disabled'));
@@ -850,13 +849,11 @@ describe('ScrollView', () => {
         it('should have "dx-scrollable-disabled" class if disabled option is true', () => {
           const { cssClasses } = new ScrollView({ disabled: true });
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-disabled'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-state-disabled'));
         });
 
         it('should not have "dx-scrollable-disabled" class if disabled option is false', () => {
           const { cssClasses } = new ScrollView({ disabled: false });
           expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-disabled'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-state-disabled'));
         });
       });
     });
