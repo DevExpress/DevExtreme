@@ -246,6 +246,10 @@ describe('ScrollView', () => {
 
       it('should not raise any error if onScroll is not defined', () => {
         const scrollView = new ScrollView({ onScroll: undefined });
+
+        scrollView.scrollEffect();
+        emit('scroll');
+
         expect(scrollView.scrollEffect.bind(scrollView)).not.toThrow();
       });
     });
