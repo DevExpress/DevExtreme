@@ -464,17 +464,17 @@ module('AppointmentSettings', {
             {
                 y: 0,
                 appointmentRects: [
-                    { x: -9685, y: -9693, height: 450 },
-                    { x: -9571, y: -9843, height: 50 }
+                    { left: -9685, top: -9693, height: 450 },
+                    { left: -9571, top: -9843, height: 50 }
                 ]
             },
             {
                 y: 2300,
                 appointmentRects: [
-                    { x: -9685, y: -10093, height: 350 },
-                    { x: -9571, y: -12143, height: 50 },
-                    { x: -9685, y: -9543, height: 300 },
-                    { x: -9571, y: -9693, height: 50 }
+                    { left: -9685, top: -10093, height: 350 },
+                    { left: -9571, top: -12143, height: 50 },
+                    { left: -9685, top: -9543, height: 300 },
+                    { left: -9571, top: -9693, height: 50 }
                 ]
             }
         ].forEach(option => {
@@ -529,8 +529,8 @@ module('AppointmentSettings', {
                             .getBoundingClientRect();
 
                         assert.deepEqual({
-                            x: appointmentRect.x,
-                            y: appointmentRect.y,
+                            left: appointmentRect.left,
+                            top: appointmentRect.top,
                             height: appointmentRect.height
                         },
                         expectedRect,
