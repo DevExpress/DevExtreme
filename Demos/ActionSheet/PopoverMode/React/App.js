@@ -18,6 +18,7 @@ class App extends React.Component {
 
     this.onActionSheetItemClick = this.onActionSheetItemClick.bind(this);
     this.onListItemClick = this.onListItemClick.bind(this);
+    this.onVisibleChange = this.onVisibleChange.bind(this);
   }
 
   render() {
@@ -36,6 +37,7 @@ class App extends React.Component {
           target={this.state.actionSheetTarget}
           items={actionSheetItems}
           onItemClick={this.onActionSheetItemClick}
+          onVisibleChange={this.onVisibleChange}
         />
       </div>
     );
@@ -53,6 +55,14 @@ class App extends React.Component {
       isActionSheetVisible: false
     });
     notify(`The "${e.itemData.text}" button is clicked.`);
+  }
+
+  onVisibleChange(isVisible) {
+    if(isVisible !== this.state.isActionSheetVisible) {
+      this.setState({
+        isActionSheetVisible: isVisible
+      });
+    }
   }
 }
 
