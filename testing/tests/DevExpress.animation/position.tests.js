@@ -958,7 +958,7 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
     QUnit.test('position should return window.height() if window.outerHeight == window.innerHeight (T939748)', function(assert) {
         const isPhone = devices.real().deviceType === 'phone';
         if(isPhone || browser.safari) {
-            assert.expect(0);
+            assert.ok(true, 'actual only for desktop browsers except Safari');
             return;
         }
 
