@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -1480,3 +1480,52 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     columns: ['a', 'b'],
   }));
 });
+
+['Batch', 'Cell'].forEach((editMode) => {
+    [true, false].forEach((focusedRowEnabled) => {
+      test(`A stand-alone input should be focused on click after modifying a cell if focusedRowEnabled = ${focusedRowEnabled} and editing mode is ${editMode} (T940309)`, async (t) => {
+        const dataGrid = new DataGrid('#container');
+        const cell = dataGrid.getDataCell(0, 0);
+        const cellEditor = cell.getEditor().element;
+        const inputSelector = Selector('#myinput');
+
+        // act
+        await t
+          .click(cell.element);
+
+        // assert
+        await t
+          .expect(cellEditor.exists)
+          .ok('cell editor exists');
+
+        // act
+        await t
+          .typeText(cellEditor, 'new text')
+          .click(inputSelector);
+
+        const inputElement = await inputSelector();
+
+        // assert
+        await t
+          .expect(cellEditor.exists).notOk('cell editor is not rendered')
+          .expect(inputElement.focused).ok('input is focused');
+      }).before(async () => {
+        await ClientFunction(() => {
+          $('<input id="myinput">').prependTo('body');
+        })();
+        await createWidget('dxDataGrid', {
+          dataSource: [{ id: 1, name: 'test' }],
+          keyExpr: 'id',
+          columns: ['name'],
+          focusedRowKey: 1,
+          focusedRowEnabled,
+          editing: {
+            mode: editMode.toLowerCase(),
+            allowUpdating: true,
+          },
+        });
+      }).after(() => ClientFunction(() => {
+        $('#myinput').remove();
+      })());
+    });
+  });
