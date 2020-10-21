@@ -985,6 +985,35 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         }
     });
 
+    QUnit.test('position should return window.width() if window.outerWidth == window.innerWidth (T939748)', function(assert) {
+        const isPhone = devices.real().deviceType === 'phone';
+        if(isPhone || browser.safari) {
+            assert.ok(true, 'actual only for desktop browsers except Safari');
+            return;
+        }
+
+        const $what = $('#what').width(300);
+        const initialInnerWidth = window.innerWidth;
+        const initialOuterWidth = window.outerWidth;
+
+        const widthStub = sinon.stub(renderer.fn, 'width').returns(1000);
+
+        try {
+            window.innerWidth = 500;
+            window.outerWidth = 500;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.h.location, 350, 50, 'horizontal location is correct');
+        } finally {
+            window.innerWidth = initialInnerWidth;
+            window.outerWidth = initialOuterWidth;
+            widthStub.restore();
+        }
+    });
+
     QUnit.test('position should be correct relative to the viewport on mobile devices', function(assert) {
         if(devices.real().deviceType !== 'phone') {
             assert.ok(true, 'only for mobile devices');
