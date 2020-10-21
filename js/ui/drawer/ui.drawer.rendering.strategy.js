@@ -31,13 +31,14 @@ class DrawerStrategy {
         const config = this._getPositionRenderingConfig(isDrawerOpened);
 
         if(this._useDefaultAnimation()) {
+            // TODO: _defaultPositionRendering is not declared in OverlapStrategy, ShrinkStrategy
             this._defaultPositionRendering(config, isDrawerOpened, animate);
         } else {
             const revealMode = this.getDrawerInstance().option('revealMode');
             if(revealMode === 'slide') {
-                this._slidePositionRendering(config, isDrawerOpened, animate);
+                this._slidePositionRendering(config, isDrawerOpened, animate); // TODO: _slidePositionRendering is not declared in PushStrategy
             } else if(revealMode === 'expand') {
-                this._expandPositionRendering(config, isDrawerOpened, animate);
+                this._expandPositionRendering(config, isDrawerOpened, animate); // TODO: _expandPositionRendering is not declared in PushStrategy
             }
         }
     }
