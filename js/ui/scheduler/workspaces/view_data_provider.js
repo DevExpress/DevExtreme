@@ -261,6 +261,7 @@ export default class ViewDataProvider {
         this._viewDataGenerator = null;
         this._viewData = [];
         this._completeViewDataMap = [];
+        this._completeGroupedViewDataMap = [];
         this._viewDataMap = [];
         this._groupedDataMap = [];
         this._workspace = workspace;
@@ -275,6 +276,9 @@ export default class ViewDataProvider {
 
     get completeViewDataMap() { return this._completeViewDataMap; }
     set completeViewDataMap(value) { this._completeViewDataMap = value; }
+
+    get completeGroupedViewDataMap() { return this._completeGroupedViewDataMap; }
+    set completeGroupedViewDataMap(value) { this._completeGroupedViewDataMap = value; }
 
     get viewData() { return this._viewData; }
     set viewData(value) { this._viewData = value; }
@@ -405,6 +409,33 @@ export default class ViewDataProvider {
     getGroupIndices() {
         const { groupedData } = this.viewData;
         return groupedData.map(({ groupIndex }) => groupIndex);
+    }
+
+    _getLastGroupRow(groupIndex) {
+        const group = this.groupedDataMap[groupIndex];
+        const lastIndex = group.length - 1;
+
+        return group[lastIndex];
+    }
+
+    getLasGroupCellPosition(groupIndex) {
+        const groupRow = this._getLastGroupRow(groupIndex);
+
+        return groupRow[0].position;
+    }
+
+    getLasGroupCellIndex(groupIndex) {
+        const group = this.groupedDataMap[groupIndex];
+        return group.length - 1;
+    }
+
+    getRowCountInGroup(groupIndex) {
+        const groupRow = this._getLastGroupRow(groupIndex);
+        const cellAmount = groupRow.length;
+        const lastCellData = groupRow[cellAmount - 1].cellData;
+        const lastCellIndex = lastCellData.index;
+
+        return (lastCellIndex + 1) / groupRow.length;
     }
 
     _getGroupData(groupIndex) {

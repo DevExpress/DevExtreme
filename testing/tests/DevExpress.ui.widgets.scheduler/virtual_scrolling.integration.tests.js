@@ -459,6 +459,87 @@ module('AppointmentSettings', {
                 });
             });
         });
+
+        [
+            {
+                y: 0,
+                appointmentRects: [
+                    { x: -9685, y: -9693, height: 450 },
+                    { x: -9571, y: -9843, height: 50 }
+                ]
+            },
+            {
+                y: 2300,
+                appointmentRects: [
+                    { x: -9685, y: -10093, height: 350 },
+                    { x: -9571, y: -12143, height: 50 },
+                    { x: -9685, y: -9543, height: 300 },
+                    { x: -9571, y: -9693, height: 50 }
+                ]
+            }
+        ].forEach(option => {
+            test(`Long appointment should be rendered correctly if scrollY: ${option.y}`, function(assert) {
+                const data = [{
+                    startDate: new Date(2020, 9, 12, 1, 30),
+                    endDate: new Date(2020, 9, 13, 0, 30),
+                    priorityId: 1
+                }, {
+                    startDate: new Date(2020, 9, 12, 1, 30),
+                    endDate: new Date(2020, 9, 13, 0, 30),
+                    priorityId: 2,
+                }];
+                this.createInstance({
+                    dataSource: data,
+                    views: [{
+                        type: 'week',
+                        groupOrientation: 'vertical'
+                    }],
+                    currentView: 'week',
+                    currentDate: new Date(2020, 9, 12),
+                    groups: ['priorityId'],
+                    resources: [{
+                        fieldExpr: 'priorityId',
+                        allowMultiple: false,
+                        dataSource: [{ id: 1 }, { id: 2 }]
+                    }],
+                    scrolling: { mode: 'virtual' },
+                    showAllDayPanel: true,
+                    height: 500,
+                });
+
+                const { instance } = this.scheduler;
+                const workspace = instance.getWorkSpace();
+                const scrollable = workspace.getScrollable();
+
+                workspace.virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+                scrollable.scrollTo({ y: option.y });
+
+                checkResultByDeviceType(assert, () => {
+                    assert.equal(
+                        this.scheduler.appointments.getAppointmentCount(),
+                        option.appointmentRects.length,
+                        'Appointment count is correct'
+                    );
+
+                    option.appointmentRects.forEach((expectedRect, index) => {
+                        const appointmentRect = this.scheduler.appointments
+                            .getAppointment(index)
+                            .get(0)
+                            .getBoundingClientRect();
+
+                        assert.deepEqual({
+                            x: appointmentRect.x,
+                            y: appointmentRect.y,
+                            height: appointmentRect.height
+                        },
+                        expectedRect,
+                        `appointment part #${index} rect is correct`
+                        );
+                    });
+                });
+            });
+        });
     });
 
     test('Recurrent appointment should have correct settings in vertical group orientation', function(assert) {
