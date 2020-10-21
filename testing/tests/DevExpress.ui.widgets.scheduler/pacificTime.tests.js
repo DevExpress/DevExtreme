@@ -177,9 +177,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
 
         const testCases = [
             { view: 'week', times: expectedShortTimes },
-            { view: 'day', times: expectedShortTimes },
-            { view: 'timelineDay', times: expectedAllTimes },
-            { view: 'timelineWeek', times: expectedAllTimes }
+            { view: 'day', times: expectedShortTimes }
         ];
 
         module('timeCellTemplate', () => {
