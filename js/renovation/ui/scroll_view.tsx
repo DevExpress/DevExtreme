@@ -18,6 +18,7 @@ import { DisposeEffectReturn } from '../utils/effect_return.d';
 
 const DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = 'horizontal';
+const DIRECTION_BOTH = 'both';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 export interface ScrollViewLocation {
@@ -218,14 +219,13 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
     const boundaryProps: Partial<ScrollViewBoundaryProps> = {};
 
-    if (this.isDirection(DIRECTION_HORIZONTAL)) {
+    if (this.isDirection(DIRECTION_HORIZONTAL) || this.isDirection(DIRECTION_BOTH)) {
       boundaryProps.reachedLeft = left <= 0;
-      boundaryProps.reachedRight = left >= scrollWidth - clientWidth;
+      boundaryProps.reachedRight = Math.round(left) >= scrollWidth - clientWidth;
     }
 
-    if (this.isDirection(DIRECTION_VERTICAL)) {
+    if (this.isDirection(DIRECTION_VERTICAL) || this.isDirection(DIRECTION_BOTH)) {
       boundaryProps.reachedTop = top <= 0;
-      // Problem with rounding for 4k resolution. Do we need round it?
       boundaryProps.reachedBottom = top >= scrollHeight - clientHeight;
     }
 

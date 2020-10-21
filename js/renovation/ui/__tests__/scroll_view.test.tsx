@@ -146,8 +146,10 @@ describe('ScrollView', () => {
       });
 
       each(['vertical', 'horizontal', 'both']).describe('ScrollEffect params. Direction: %o', (direction) => {
-        const checkScrollParams = (actualParams,
-          expectedParams) => {
+        const checkScrollParams = (
+          actualParams,
+          expectedParams,
+        ) => {
           const checkedParams = expectedParams;
 
           if (direction === 'vertical') {
