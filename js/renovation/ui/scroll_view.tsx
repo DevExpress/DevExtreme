@@ -13,6 +13,7 @@ import { subscribeToScrollEvent } from '../utils/subscribe_to_event';
 import { isNumeric } from '../../core/utils/type';
 import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
+import { combineClasses } from '../utils/combine_classes';
 import { DisposeEffectReturn } from '../utils/effect_return.d';
 
 const DIRECTION_VERTICAL = 'vertical';
@@ -244,8 +245,20 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   get cssClasses(): string {
-    const { direction } = this.props;
-    return `dx-scrollview dx-scrollable dx-scrollable-${direction} dx-scrollable-native dx-scrollable-native-generic`;
+    const {
+      direction = DIRECTION_VERTICAL,
+      disabled,
+    } = this.props; // TODO: check default from props
+
+    const classesMap = {
+      'dx-scrollview': true,
+      'dx-scrollable': true,
+      [`dx-scrollable-${direction}`]: true,
+      'dx-scrollable-native': true,
+      'dx-scrollable-native-generic': true,
+      'dx-scrollable-disabled': !!disabled,
+    };
+    return combineClasses(classesMap);
   }
 
   private getScrollBarWidth(): number {
