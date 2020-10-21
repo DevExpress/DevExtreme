@@ -828,7 +828,7 @@ const EditingController = modules.ViewController.inherit((function() {
             changes.forEach(change => {
                 const key = change.key;
 
-                if(key && change.type === DATA_EDIT_DATA_INSERT_TYPE) {
+                if(isDefined(key) && change.type === DATA_EDIT_DATA_INSERT_TYPE) {
                     const loadedRowIndex = this._getLoadedRowIndexByInsertKey(items, e, key);
 
                     const item = this._generateNewItem(key);
