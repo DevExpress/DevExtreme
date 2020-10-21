@@ -3888,7 +3888,6 @@
                 "Name": "ItemSelectionAndCustomization",
                 "DocUrl": "Guide/Widgets/TreeView/Select_Nodes/",
                 "Widget": "TreeView",
-                "Badge": "Updated",
                 "MvcAdditionalFiles": [
                   "/Models/TreeView/Employee.cs",
                   "/Models/SampleData/TreeViewHierarchicalData.cs"
@@ -3947,7 +3946,6 @@
               {
                 "Title": "ContextMenu Integration",
                 "Name": "ContextMenuIntegration",
-                "Badge": "New",
                 "Widget": "TreeView",
                 "MvcAdditionalFiles": [
                   "/Models/Product.cs",
@@ -3959,7 +3957,6 @@
           },
           {
             "Name": "Drag & Drop and Reordering",
-            "Badge": "New",
             "Demos": [
               {
                 "Title": "Drag & Drop for Plain Data Structure",
