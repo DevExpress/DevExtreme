@@ -721,11 +721,11 @@ const EditingController = modules.ViewController.inherit((function() {
             for(let i = 0; i < editData.length; i++) {
                 const key = editData[i].key;
 
-                if(key) {
+                if(key && editData[i].type === DATA_EDIT_DATA_INSERT_TYPE) {
                     const loadedRowIndex = this._getLoadedRowIndexByInsertKey(items, change, key);
 
                     const item = this._generateNewItem(key);
-                    if(loadedRowIndex >= 0 && editData[i].type === DATA_EDIT_DATA_INSERT_TYPE && this._needInsertItem(editData[i], changeType, items, item)) {
+                    if(loadedRowIndex >= 0 && this._needInsertItem(editData[i], changeType, items, item)) {
                         items.splice(key.dataRowIndex ? loadedRowIndex : 0, 0, item);
                     }
                 }
