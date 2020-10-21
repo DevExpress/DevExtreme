@@ -15,6 +15,7 @@ import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
 import { DisposeEffectReturn } from '../utils/effect_return.d';
+import { EventCallback } from './common/event_callback.d';
 
 const DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = 'horizontal';
@@ -38,6 +39,11 @@ export interface ScrollViewBoundaryProps {
   reachedLeft: boolean;
   reachedRight: boolean;
   reachedTop: boolean;
+}
+
+interface ScrollEventArgs extends Partial<ScrollViewBoundaryProps> {
+  event: Event;
+  scrollOffset: Partial<ScrollOffset>;
 }
 
 export type ScrollViewDirection = 'both' | 'horizontal' | 'vertical';
@@ -97,14 +103,7 @@ export class ScrollViewProps {
 
   @OneWay() direction: ScrollViewDirection = DIRECTION_VERTICAL;
 
-  @Event() onScroll: (e: {
-    event: Event;
-    scrollOffset: Partial<ScrollOffset>;
-    reachedLeft?: boolean;
-    reachedRight?: boolean;
-    reachedTop?: boolean;
-    reachedBottom?: boolean;
-  }) => void = () => {};
+  @Event() onScroll?: EventCallback<ScrollEventArgs>;
 }
 type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
@@ -112,7 +111,7 @@ type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' 
   jQuery: { register: true },
   view: viewFunction,
 })
-export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
+export class ScrollView extends JSXComponent<ScrollViewPropsType, 'onScroll'>() {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() containerRef!: HTMLDivElement;
@@ -123,7 +122,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   scrollBy(distance: any): void { // number | Partial<Location> - https://github.com/DevExpress/devextreme-renovation/issues/519
     const location = ensureLocation(distance);
 
@@ -136,7 +134,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   scrollTo(targetLocation: any): void { // number | Partial<Location> - https://github.com/DevExpress/devextreme-renovation/issues/519
     const location = ensureLocation(targetLocation);
     this.scrollBy({
@@ -146,7 +143,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   scrollToElement(element: HTMLElement, offset?: any): void { // offset?: Partial<ScrollOffset> - https://github.com/DevExpress/devextreme-renovation/issues/519
     if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
       const scrollOffset = {
@@ -174,7 +170,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   @Method()
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   scrollOffset(): any { // Location - https://github.com/DevExpress/devextreme-renovation/issues/519
     return {
       left: this.containerRef.scrollLeft,
@@ -204,7 +199,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Effect() scrollEffect(): DisposeEffectReturn {
     return subscribeToScrollEvent(this.containerRef,
-      (event: Event) => this.props.onScroll({
+      (event: Event) => this.props.onScroll?.({
         event,
         scrollOffset: this.scrollOffset(),
         ...this.getBoundaryProps(),
