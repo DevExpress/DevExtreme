@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import renderer from 'core/renderer';
 import positionUtils from 'animation/position';
 import translator from 'animation/translator';
 import browser from 'core/utils/browser';
@@ -965,7 +966,12 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         const $what = $('#what').height(300);
         const initialInnerHeight = window.innerHeight;
         const initialOuterHeight = window.outerHeight;
-        const heightStub = sinon.stub($.fn, 'height').returns(1000);
+        let heightStub;
+        if(QUnit.urlParams['nojquery']) {
+            heightStub = sinon.stub(renderer.fn, 'height').returns(1000);
+        } else {
+            heightStub = sinon.stub($.prototype, 'height').returns(1000);
+        }
 
         try {
             window.innerHeight = 500;
