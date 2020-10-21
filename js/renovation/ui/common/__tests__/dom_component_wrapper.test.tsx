@@ -99,7 +99,7 @@ describe('DomComponentWrapper', () => {
           const component = new DomComponentWrapper({
             componentProps: {},
           } as DomComponentWrapperProps);
-          expect(component.properties.rtlEnabled).toBeUndefined();
+          expect(component.properties.rtlEnabled).toBe(false);
         });
       });
 
