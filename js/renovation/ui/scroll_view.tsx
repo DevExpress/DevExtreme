@@ -245,10 +245,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   get cssClasses(): string {
-    const {
-      direction,
-      disabled,
-    } = this.props; // TODO: check default from props
+    const { direction } = this.props;
 
     const classesMap = {
       'dx-scrollview': true,
@@ -256,7 +253,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       [`dx-scrollable-${direction}`]: true,
       'dx-scrollable-native': true,
       'dx-scrollable-native-generic': true,
-      'dx-scrollable-disabled': !!disabled,
     };
     return combineClasses(classesMap);
   }

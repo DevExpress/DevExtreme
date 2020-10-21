@@ -821,8 +821,6 @@ describe('ScrollView', () => {
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable'));
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-native'));
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-native-generic'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-disabled'));
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-state-disabled'));
         });
 
         it('should add vertical direction class', () => {
@@ -844,16 +842,6 @@ describe('ScrollView', () => {
           expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-both'));
           expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-vertical'));
           expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-horizontal'));
-        });
-
-        it('should have "dx-scrollable-disabled" class if disabled option is true', () => {
-          const { cssClasses } = new ScrollView({ disabled: true });
-          expect(cssClasses).toEqual(expect.stringMatching('dx-scrollable-disabled'));
-        });
-
-        it('should not have "dx-scrollable-disabled" class if disabled option is false', () => {
-          const { cssClasses } = new ScrollView({ disabled: false });
-          expect(cssClasses).toEqual(expect.not.stringMatching('dx-scrollable-disabled'));
         });
       });
     });
