@@ -31,6 +31,20 @@ QUnit.module('options', moduleSetup, () => {
             $target.remove();
         }
     });
+
+    QUnit.test('position should be recalculated after target option runtime change', function(assert) {
+        const $element = $('<div>');
+
+        try {
+            $element.appendTo('#qunit-fixture');
+
+            this._validationMessage.option('target', $element);
+
+            assert.strictEqual(this._validationMessage.option('position').of, $element, 'position is recalculated');
+        } finally {
+            $element.remove();
+        }
+    });
 });
 
 QUnit.module('message inner html', moduleSetup, () => {
