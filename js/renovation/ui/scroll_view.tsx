@@ -123,7 +123,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  scrollBy(distance: any): void {
+  scrollBy(distance: any): void { // number | Partial<Location> - https://github.com/DevExpress/devextreme-renovation/issues/519
     const location = ensureLocation(distance);
 
     if (this.isDirection(DIRECTION_VERTICAL)) {
@@ -136,7 +136,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  scrollTo(targetLocation: any): void {
+  scrollTo(targetLocation: any): void { // number | Partial<Location> - https://github.com/DevExpress/devextreme-renovation/issues/519
     const location = ensureLocation(targetLocation);
     this.scrollBy({
       left: location.left - this.scrollOffset().left,
@@ -146,7 +146,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  scrollToElement(element: HTMLElement, offset?: any): void {
+  scrollToElement(element: HTMLElement, offset?: any): void { // offset?: Partial<ScrollOffset> - https://github.com/DevExpress/devextreme-renovation/issues/519
     if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
       const scrollOffset = {
         top: 0,
@@ -174,7 +174,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  scrollOffset(): any {
+  scrollOffset(): any { // Location - https://github.com/DevExpress/devextreme-renovation/issues/519
     return {
       left: this.containerRef.scrollLeft,
       top: this.containerRef.scrollTop,
