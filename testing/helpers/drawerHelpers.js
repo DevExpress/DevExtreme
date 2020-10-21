@@ -57,12 +57,12 @@ const LeftDrawerTester = {
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + 150, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + leftTemplateSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
         }
         function checkShrink(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + 150, top: env.drawerRect.top, width: 50, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + leftTemplateSize, top: env.drawerRect.top, width: env.drawerRect.width - leftTemplateSize, height: env.drawerRect.height }, 'view');
             checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, 0, 'template should be visible by position');
         }
         function checkOverlap(assert, env) {
@@ -99,8 +99,8 @@ const LeftDrawerTester = {
 
     checkHidden: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
 
             assert.ok(
                 window.getComputedStyle(env.templateElement.parentElement).position === 'absolute' &&
@@ -109,34 +109,34 @@ const LeftDrawerTester = {
         }
         function checkShrink(assert, env) {
             if(env.revealMode === 'expand') {
-                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: 100 }, 'template');
+                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template');
                 checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.minSize, height: env.drawerRect.height }, 'template.parentElement');
             } else {
-                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left - 150 + env.minSize, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
-                checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, -150 + env.minSize, 'template should not be visible by position');
+                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left - leftTemplateSize + env.minSize, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template');
+                checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, -leftTemplateSize + env.minSize, 'template should not be visible by position');
             }
             assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).overflow, 'hidden', 'template should not be visible by parent.overflow');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: 200 - env.minSize, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
         }
         function checkOverlap(assert, env) {
             if(env.revealMode === 'expand') {
                 if(env.minSize) {
-                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: 100 }, 'template');
-                    checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.minSize, height: 100 }, 'template.parentElement');
+                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template');
+                    checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.minSize, height: env.drawerRect.height }, 'template.parentElement');
                 } else if(env.templateElement === null) {
                     assert.strictEqual(env.templateElement, null); // Scenarios (overlap, left, expand): opened: false, visible: false -> visible: true
                 } else {
-                    checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.minSize, height: 100 }, 'template.parentElement');
+                    checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.minSize, height: env.drawerRect.height }, 'template.parentElement');
                 }
             } else {
                 if(env.templateElement) {
-                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left - 150 + env.minSize, top: env.drawerRect.top, width: 150, height: 100 }, 'template');
+                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left - leftTemplateSize + env.minSize, top: env.drawerRect.top, width: leftTemplateSize, height: env.drawerRect.height }, 'template');
                     assert.strictEqual(window.getComputedStyle(env.drawerElement.firstElementChild).overflowX, 'hidden', 'template is shown out of bounds and not visible because of overflowX is hidden');
                 } else {
                     assert.notOk(env.templateElement, 'template should not be visible because it was not created');
                 }
             }
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: 200 - env.minSize, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left + env.minSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
         }
 
         checkBoundingClientRect(assert, drawerElement, { width: 200, height: 100 }, 'drawerElement');
@@ -185,12 +185,12 @@ const RightDrawerTester = {
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left + 50, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left - rightTemplateSize, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - rightTemplateSize, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left - rightTemplateSize + env.minSize, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
         }
         function checkShrink(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left + 50, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 50, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - rightTemplateSize, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width - rightTemplateSize, height: env.drawerRect.height }, 'view');
             checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, 0, 'template should be visible by position');
         }
         function checkOverlap(assert, env) {
@@ -230,31 +230,32 @@ const RightDrawerTester = {
         function checkPush(assert, env) {
             if(env.revealMode === 'expand') {
                 if(env.minSize) {
-                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - rightTemplateSize, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template');
+                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - rightTemplateSize, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
                 }
                 assert.ok( // Scenarios (push, right, expand): opened: false
                     window.getComputedStyle(env.templateElement.parentElement).position === 'absolute' &&
                     window.getComputedStyle(env.viewElement.parentElement).transform.indexOf('matrix') >= 0,
                     'template element should be hidden, view element should be visible');
             } else {
-                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - rightTemplateSize, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template');
+                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - rightTemplateSize, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
                 assert.ok(
                     window.getComputedStyle(env.templateElement.parentElement).position === 'absolute' &&
                     window.getComputedStyle(env.viewElement.parentElement).transform.indexOf('matrix') >= 0,
                     'template element should be hidden, view element should be visible');
             }
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left - env.minSize, top: env.drawerRect.top, width: 200, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
         }
         function checkShrink(assert, env) {
             if(env.revealMode === 'expand') {
                 checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - env.minSize, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
                 checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.right - env.minSize, top: env.drawerRect.top, width: env.minSize, height: env.drawerRect.height }, 'template.parentElement');
             } else {
-                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left + 200 - env.minSize, top: env.drawerRect.top, width: rightTemplateSize, height: 100 }, 'template');
+                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.right - env.minSize, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template');
+                checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.right - env.minSize, top: env.drawerRect.top, width: rightTemplateSize, height: env.drawerRect.height }, 'template.parentElement');
                 checkMargin(assert, env.templateElement.parentElement, 0, -rightTemplateSize + env.minSize, 0, 0, 'template should not be visible by position');
             }
             assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).overflow, 'hidden', 'template should not be visible by parent.overflow');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200 - env.minSize, height: 100 }, 'view');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width - env.minSize, height: env.drawerRect.height }, 'view');
         }
         function checkOverlap(assert, env) {
             if(env.revealMode === 'expand') {
@@ -327,8 +328,8 @@ const TopDrawerTester = {
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top + topTemplateSize, width: env.drawerRect.width, height: env.drawerRect.height - env.minSize }, 'view');
         }
         function checkShrink(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: 200, height: topTemplateSize }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top + topTemplateSize, width: 200, height: env.drawerRect.height - topTemplateSize }, 'view');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width, height: topTemplateSize }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top + topTemplateSize, width: env.drawerRect.width, height: env.drawerRect.height - topTemplateSize }, 'view');
             checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, 0, 'template should be visible by position');
         }
         function checkOverlap(assert, env) {
@@ -379,11 +380,11 @@ const TopDrawerTester = {
                 checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width, height: topTemplateSize }, 'template');
                 checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width, height: env.minSize }, 'template.parentElement');
             } else {
-                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top - topTemplateSize + env.minSize, width: 200, height: topTemplateSize }, 'template');
+                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top - topTemplateSize + env.minSize, width: env.drawerRect.width, height: topTemplateSize }, 'template');
                 checkMargin(assert, env.templateElement.parentElement, -topTemplateSize + env.minSize, 0, 0, 0, 'template should not be visible by position');
             }
             assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).overflow, 'hidden', 'template should not be visible by parent.overflow');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.minSize, width: 200, height: 100 - env.minSize }, 'view');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.minSize, width: env.drawerRect.width, height: env.drawerRect.height - env.minSize }, 'view');
         }
         function checkOverlap(assert, env) {
             if(env.revealMode === 'expand') {
@@ -454,11 +455,11 @@ const BottomDrawerTester = {
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - bottomTemplateSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
-            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top - bottomTemplateSize, width: env.drawerRect.width, height: env.drawerRect.height }, 'view');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - bottomTemplateSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
+            checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top - bottomTemplateSize + env.minSize, width: env.drawerRect.width, height: env.drawerRect.height - env.minSize }, 'view');
         }
         function checkShrink(assert, env) {
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - bottomTemplateSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - bottomTemplateSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width, height: env.drawerRect.height - bottomTemplateSize }, 'view');
             checkMargin(assert, env.templateElement.parentElement, 0, 0, 0, 0, 'template should be visible by position');
         }
@@ -497,8 +498,7 @@ const BottomDrawerTester = {
 
     checkHidden: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
-            // checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - env.minSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
-            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - bottomTemplateSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
+            checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - bottomTemplateSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
             checkBoundingClientRect(assert, env.viewElement, { left: env.drawerRect.left, top: env.drawerRect.top, width: env.drawerRect.width, height: env.drawerRect.height - env.minSize }, 'view');
 
             assert.ok(
@@ -508,10 +508,11 @@ const BottomDrawerTester = {
         }
         function checkShrink(assert, env) {
             if(env.revealMode === 'expand') {
-                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - env.minSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
-                checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - env.minSize, width: env.drawerRect.width, height: env.minSize }, 'template.parentElement');
+                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - env.minSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
+                checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - env.minSize, width: env.drawerRect.width, height: env.minSize }, 'template.parentElement');
             } else {
-                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - env.minSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
+                checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - env.minSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
+                checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - env.minSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template.parentElement');
                 checkMargin(assert, env.templateElement.parentElement, 0, 0, -bottomTemplateSize + env.minSize, 0, 'template should not be visible by position');
             }
             assert.strictEqual(window.getComputedStyle(env.templateElement.parentElement).overflow, 'hidden', 'template should not be visible by parent.overflow');
@@ -520,8 +521,8 @@ const BottomDrawerTester = {
         function checkOverlap(assert, env) {
             if(env.revealMode === 'expand') {
                 if(env.minSize) {
-                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - env.minSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
-                    checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - env.minSize, width: env.drawerRect.width, height: env.minSize }, 'template.parentElement should cut template to minSize');
+                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - env.minSize, width: env.drawerRect.width, height: bottomTemplateSize }, 'template');
+                    checkBoundingClientRect(assert, env.templateElement.parentElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - env.minSize, width: env.drawerRect.width, height: env.minSize }, 'template.parentElement should cut template to minSize');
                 } else {
                     if(env.templateElement === null) {
                         assert.ok(true); // Scenarios (overlap, top, expand): opened: false, visible: false -> visible: true
@@ -531,7 +532,7 @@ const BottomDrawerTester = {
                 }
             } else {
                 if(env.templateElement) {
-                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.top + env.drawerRect.height - env.minSize, width: env.drawerRect.width, height: env.minSize }, 'template');
+                    checkBoundingClientRect(assert, env.templateElement, { left: env.drawerRect.left, top: env.drawerRect.bottom - env.minSize, width: env.drawerRect.width, height: env.minSize }, 'template');
                     assert.strictEqual(window.getComputedStyle(env.drawerElement.firstElementChild).overflowY, 'hidden', 'template is shown out of bounds and not visible because of overflowY is hidden');
                 } else {
                     assert.notOk(env.templateElement, 'template should not be visible because it was not created');
