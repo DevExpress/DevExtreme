@@ -16,7 +16,8 @@ $(function() {
                 calculateFilterExpression: function() {
                     return [[getOrderDay, "=", 0], "or", [getOrderDay, "=", 6]];
                 }
-            }]
+            }],
+            allowHierarchicalFields: true
         },
         filterBuilderPopup: {
             position: { of: window, at: "top", my: "top", offset: { y: 10 } },

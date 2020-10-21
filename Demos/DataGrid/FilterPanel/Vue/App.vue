@@ -85,7 +85,8 @@ export default {
           icon: 'check',
           hasValue: false,
           calculateFilterExpression: () => [[getOrderDay, '=', 0], 'or', [getOrderDay, '=', 6]]
-        }]
+        }],
+        allowHierarchicalFields: true
       },
       filterValue: [['Employee', '=', 'Clark Morgan'], 'and', ['OrderDate', 'weekends']],
       saleAmountHeaderFilters: [{
