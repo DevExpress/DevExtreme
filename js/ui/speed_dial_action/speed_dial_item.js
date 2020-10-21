@@ -105,13 +105,17 @@ class SpeedDialItem extends Overlay {
     }
 
     _getVisibleActions(actions) {
-        const currentActions = actions || this.option('actions');
+        const currentActions = actions || this.option('actions') || [];
 
         return currentActions.filter((action) => action.option('visible'));
     }
 
     _getActionComponent() {
-        return this.option('actionComponent') || this._getVisibleActions()[0] || this.option('actions')[0];
+        if(this._getVisibleActions().length === 1) {
+            return this._getVisibleActions()[0];
+        } else {
+            return this.option('actionComponent') || this.option('actions')[0];
+        }
     }
 
     _initContentReadyAction() {
