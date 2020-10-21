@@ -15,35 +15,47 @@ describe('Pager', () => {
       const props = new PagerProps();
       const tree = mount<PagerComponent>(<PagerComponent {...props} />);
       const pager = tree.childAt(0);
-      expect(pager.props()).toEqual({
+      const {
+        pagerProps: {
+          pageIndexChange,
+          pageSizeChange,
+          ...restPagerProps
+        },
+        ...restProps
+      } = pager.props();
+
+      expect(restProps).toEqual({
         'rest-attributes': 'restAttributes',
         contentTemplate: PagerContent,
-        pagerProps: {
-          gridCompatibility: true,
-          className: 'dx-datagrid-pager',
-          pagesNavigatorVisible: 'auto',
-          visible: true,
-          pageIndexChange: tree.instance().pageIndexChange,
-          pageSizeChange: tree.instance().pageSizeChange,
-          hasKnownLastPage: true,
-          lightModeEnabled: undefined,
-          displayMode: 'adaptive',
-          maxPagesCount: 10,
-          pageCount: 10,
-          pageIndex: 0,
-          pageSize: 5,
-          pageSizes: [5, 10],
-          showInfo: false,
-          showPageSizes: true,
-          showNavigationButtons: false,
-          totalCount: 0,
-        },
       });
+
+      expect(restPagerProps).toEqual({
+        gridCompatibility: true,
+        className: 'dx-datagrid-pager',
+        pagesNavigatorVisible: 'auto',
+        visible: true,
+        hasKnownLastPage: true,
+        lightModeEnabled: undefined,
+        displayMode: 'adaptive',
+        maxPagesCount: 10,
+        pageCount: 10,
+        pageIndex: 0,
+        pageSize: 5,
+        pageSizes: [5, 10],
+        showInfo: false,
+        showPageSizes: true,
+        showNavigationButtons: false,
+        totalCount: 0,
+      });
+
+      expect(typeof pageIndexChange).toBe('function');
+      expect(typeof pageSizeChange).toBe('function');
+
       expect(tree.find(PagerContent)).not.toBeNull();
       expect(tree.find(PageSizeLarge).props().pageSizeChange)
-        .toEqual(tree.instance().pageSizeChange);
+        .toEqual(pageSizeChange);
       expect(tree.find(PageIndexSelector).props().pageIndexChange)
-        .toEqual(tree.instance().pageIndexChange);
+        .toEqual(pageIndexChange);
     });
   });
 
@@ -69,12 +81,17 @@ describe('Pager', () => {
 
     it('pagerProps', () => {
       const component = new PagerComponent({ pageIndex: 0, gridCompatibility: false });
-      expect(component.pagerProps).toMatchObject({
+
+      const { pageIndexChange, pageSizeChange, ...restProps } = component.pagerProps;
+      expect(restProps).toMatchObject({
         className: undefined,
         pageIndex: 0,
-        pageIndexChange: component.pageIndexChange,
-        pageSizeChange: component.pageSizeChange,
       });
+
+      pageIndexChange?.(1);
+      expect(component.props.pageIndex).toBe(1);
+      pageSizeChange?.(10);
+      expect(component.props.pageSize).toBe(10);
     });
 
     describe('gridCompatibility', () => {
