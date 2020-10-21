@@ -1,5 +1,5 @@
 import { addNamespace, normalizeKeyName } from '../../events/utils';
-import { isFunction } from '../../core/utils/type';
+import { isFunction, isString, isDate, isDefined } from '../../core/utils/type';
 import { clipboardText } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { fitIntoRange } from '../../core/utils/math';
@@ -9,7 +9,6 @@ import { getDatePartIndexByPosition, renderDateParts } from './ui.date_box.mask.
 import dateLocalization from '../../localization/date';
 import { getRegExpInfo } from '../../localization/ldml/date.parser';
 import { getFormat } from '../../localization/ldml/date.format';
-import { isString, isDate } from '../../core/utils/type';
 import { sign } from '../../core/utils/math';
 import DateBoxBase from './ui.date_box.base';
 import numberLocalization from '../../localization/number';
@@ -541,7 +540,12 @@ const DateBoxMask = DateBoxBase.inherit({
     _maskClickHandler() {
         if(this.option('text')) {
             this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
-            this._caret(this._getActivePartProp('caret'));
+
+            if(isDefined(this._activePartIndex)) {
+                this._caret(this._getActivePartProp('caret'));
+            } else {
+                this._selectLastPart();
+            }
         }
     },
 
