@@ -2147,13 +2147,27 @@ const EditingController = modules.ViewController.inherit((function() {
                 if(isDefined(text) && options.column.displayValueMap) {
                     options.column.displayValueMap[value] = text;
                 }
-                if(options.values) {
-                    options.values[options.columnIndex] = value;
-                }
+
+                that._updateRowValues(options);
+
                 that.addDeferred(deferred);
             }
 
             return deferred;
+        },
+
+        _updateRowValues: function(options) {
+            if(options.values) {
+                const dataController = this._dataController;
+                const rowIndex = dataController.getRowIndexByKey(options.key);
+                const row = dataController.getVisibleRows()[rowIndex];
+
+                if(row) {
+                    options.values = row.values;
+                }
+
+                options.values[options.columnIndex] = options.value;
+            }
         },
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
@@ -2508,7 +2522,6 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                     if(!editingStartOptions || !editingStartOptions.cancel) {
                         options.setValue = function(value, text) {
-                            options.values = that._dataController._items?.[options.rowIndex].values;
                             that.updateFieldValue(options, value, text);
                         };
                     }
