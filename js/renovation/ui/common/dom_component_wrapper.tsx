@@ -77,7 +77,7 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   }
 
   @Consumer(ConfigContext)
-  config!: ConfigContextValue;
+  config?: ConfigContextValue;
 
   get properties(): Record<string, unknown> {
     const { itemTemplate, valueChange, ...restProps } = this.props.componentProps;
