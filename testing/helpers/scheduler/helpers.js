@@ -133,10 +133,10 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 return $('.dx-scheduler-time-panel');
             },
             getTimeValues: () => {
-                const cellClassName = this.instance.option('currentView').indexOf('timeline') > -1 ? '.dx-scheduler-header-panel-cell' : '.dx-scheduler-time-panel-cell > div';
-                return $(cellClassName).filter((i, el) => {
-                    return $(el).text() !== '';
-                }).map((i, el) => { return $(el).text(); });
+                const cellClassName = this.instance.option('currentView').indexOf('timeline') > -1 ?
+                    '.dx-scheduler-header-panel-cell' : '.dx-scheduler-time-panel-cell > div';
+
+                return $(cellClassName).not('.dx-scheduler-header-panel-week-cell').map((i, el) => $(el).text());
             }
         },
 
