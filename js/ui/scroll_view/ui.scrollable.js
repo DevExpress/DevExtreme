@@ -93,13 +93,6 @@ const Scrollable = DOMComponent.inherit({
         this.callBase();
         this._initScrollableMarkup();
         this._locked = false;
-        if(this._isHorizontalRtl()) {
-            this._rtlConfig = {
-                scrollRight: 0,
-                clientWidth: this._container().get(0).clientWidth,
-                windowPixelRatio: this._getWindowDevicePixelRatio()
-            };
-        }
     },
 
     _getWindowDevicePixelRatio: function() {
@@ -157,6 +150,12 @@ const Scrollable = DOMComponent.inherit({
         this.update();
 
         this.callBase();
+
+        this._rtlConfig = {
+            scrollRight: 0,
+            clientWidth: this._container().get(0).clientWidth,
+            windowPixelRatio: this._getWindowDevicePixelRatio()
+        };
         this._updateRtlPosition();
     },
 
