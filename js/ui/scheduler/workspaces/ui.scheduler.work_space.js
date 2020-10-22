@@ -2837,7 +2837,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getMaxAllowedVerticalPosition(groupIndex) {
-        if(this.isVirtualScrolling() && this._isVerticalGroupedWorkSpace()) {
+        if(this.isVirtualScrolling()) {
             return this.getMaxAllowedVerticalPositionVirtual(groupIndex);
         }
 
