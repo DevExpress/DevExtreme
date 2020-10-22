@@ -1,1 +1,3 @@
-When values for a&nbsp;series are not specified or&nbsp;are set to&nbsp;zero, bars that represent these values will not be&nbsp;visible within the chart. You can populate these empty region by&nbsp;extending neighboring bars via the **equalBarWidth** property set to _false_.
+This demo illustrates a common issue in multi-series charts. Individual [series](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Series_Types/BarSeries/) can skip values for certain arguments or include zero values. In such cases, arguments can display a different number of bars and cause uneven gaps between data. 
+
+The [ignoreEmptyPoints](/Documentation/ApiReference/Data_Visualization_Widgets/dxChart/Series_Types/BarSeries/#ignoreEmptyPoints) option allows you to change this behavior. If you set it to **true**, bars increase their width to fill the gaps. In this demo, you can see how the option affects the following arguments: `Iran`, `Canada`, `Saudi Arabia`, and `Mexico`.
