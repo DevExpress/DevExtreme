@@ -1536,10 +1536,9 @@ class Scheduler extends Widget {
     checkAndDeleteAppointment(appointment, targetedAppointment) {
         const targetedAdapter = this.createAppointmentAdapter(targetedAppointment);
 
-        const that = this;
-        this._checkRecurringAppointment(appointment, targetedAppointment, targetedAdapter.startDate, (function() {
-            that.deleteAppointment(appointment);
-        }), true);
+        this._checkRecurringAppointment(appointment, targetedAppointment, targetedAdapter.startDate, () => {
+            this.deleteAppointment(appointment);
+        }, true);
     }
 
     _getExtraAppointmentTooltipOptions() {
@@ -1975,6 +1974,7 @@ class Scheduler extends Widget {
         targetedAppointment.recurrenceException = '';
 
         if(!isDeleted && !isPopupEditing) {
+            // TODO
             this.addAppointment(rawTargetedAppointment);
         }
 
@@ -1989,7 +1989,8 @@ class Scheduler extends Widget {
             this._editAppointmentData = rawAppointment;
 
         } else {
-            this._updateAppointment(rawAppointment, updatedAppointment.source(), function() {
+            // TODO
+            this._updateAppointment(rawAppointment, updatedAppointment.source(), () => {
                 this._appointments.moveAppointmentBack(dragEvent);
             }, dragEvent);
         }
@@ -2144,7 +2145,7 @@ class Scheduler extends Widget {
         };
 
         const performFailAction = function(err) {
-            if(isFunction(onUpdatePrevented)) {
+            if(onUpdatePrevented) {
                 onUpdatePrevented.call(this);
             }
 
