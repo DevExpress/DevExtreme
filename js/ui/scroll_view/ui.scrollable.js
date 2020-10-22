@@ -214,8 +214,8 @@ const Scrollable = DOMComponent.inherit({
 
     _updateRtlConfig: function() {
         const config = this._rtlConfig;
-        const { clientWidth, scrollWidth, scrollLeft } = this._container().get(0);
         if(this._isHorizontalRtl() && !config.skipUpdating) {
+            const { clientWidth, scrollWidth, scrollLeft } = this._container().get(0);
             const windowPixelRatio = this._getWindowDevicePixelRatio();
             if(config.windowPixelRatio === windowPixelRatio && config.clientWidth === clientWidth) {
                 config.scrollRight = (scrollWidth - (scrollLeft + clientWidth));
