@@ -1530,8 +1530,8 @@ QUnit.module('popup integration', () => {
         const overlayContentRect = $overlayContent.get(0).getBoundingClientRect();
         const editorRect = $dropDownEditor.get(0).getBoundingClientRect();
 
-        assert.roughEqual(overlayContentRect.top, editorRect.bottom, 1, 'top position is correct');
-        assert.roughEqual(overlayContentRect.left, editorRect.left, 1, 'left position is correct');
+        assert.roughEqual(overlayContentRect.top, editorRect.bottom, 1.01, 'top position is correct');
+        assert.roughEqual(overlayContentRect.left, editorRect.left, 1.01, 'left position is correct');
     });
 
     QUnit.test('dropDownOptions.width should be passed to popup', function(assert) {
