@@ -94,9 +94,9 @@ const Scrollable = DOMComponent.inherit({
         this._initScrollableMarkup();
         this._locked = false;
         this._rtlConfig = {
-            contentOffsetRight: 0,
-            windowPixelRatio: this._getWindowDevicePixelRatio(),
-            widowWidth: this._getWindowWidth()
+            scrollRight: 0,
+            clientWidth: this._container().get(0).clientWidth,
+            windowPixelRatio: this._getWindowDevicePixelRatio()
         };
     },
 
@@ -173,17 +173,17 @@ const Scrollable = DOMComponent.inherit({
         if(this._isHorizontalRtl()) {
             deferUpdate(() => {
                 const containerElement = this._container().get(0);
-                let leftOffset = containerElement.scrollWidth - containerElement.clientWidth - (this._rtlConfig.contentOffsetRight || 0);
+                let scrollLeft = containerElement.scrollWidth - containerElement.clientWidth - this._rtlConfig.scrollRight;
 
-                if(leftOffset <= 0) {
-                    leftOffset = 0;
-                    this._rtlConfig.contentOffsetRight = containerElement.scrollWidth - containerElement.clientWidth;
+                if(scrollLeft <= 0) {
+                    scrollLeft = 0;
+                    this._rtlConfig.scrollRight = containerElement.scrollWidth - containerElement.clientWidth;
                 }
 
                 deferRender(() => {
-                    if(this.scrollLeft() !== leftOffset) {
+                    if(this.scrollLeft() !== scrollLeft) {
                         this._rtlConfig.skipUpdating = true;
-                        this.scrollTo({ left: leftOffset });
+                        this.scrollTo({ left: scrollLeft });
                         this._rtlConfig.skipUpdating = false;
                     }
                 });
@@ -219,14 +219,13 @@ const Scrollable = DOMComponent.inherit({
 
     _updateRtlConfig: function() {
         const config = this._rtlConfig;
+        const { clientWidth, scrollWidth, scrollLeft } = this._container().get(0);
         if(this._isHorizontalRtl() && !config.skipUpdating) {
             const windowPixelRatio = this._getWindowDevicePixelRatio();
-            const windowWidth = this._getWindowWidth();
-            if(config.windowPixelRatio === windowPixelRatio && config.widowWidth === windowWidth) {
-                const container = this._container().get(0);
-                config.contentOffsetRight = Math.ceil((container.scrollWidth - (container.scrollLeft + container.clientWidth)) * 100) / 100;
+            if(config.windowPixelRatio === windowPixelRatio && config.clientWidth === clientWidth) {
+                config.scrollRight = (scrollWidth - (scrollLeft + clientWidth));
             }
-            config.widowWidth = windowWidth;
+            config.clientWidth = clientWidth;
             config.windowPixelRatio = windowPixelRatio;
         }
     },
