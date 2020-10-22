@@ -106,12 +106,6 @@ const Scrollable = DOMComponent.inherit({
             : 1;
     },
 
-    _getWindowWidth: function() {
-        return hasWindow()
-            ? getWindow().innerWidth
-            : 0;
-    },
-
     _visibilityChanged: function(visible) {
         if(visible) {
             this.update();
