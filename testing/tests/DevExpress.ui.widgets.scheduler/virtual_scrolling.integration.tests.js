@@ -669,14 +669,9 @@ module('AppointmentSettings', {
                             .get(0)
                             .getBoundingClientRect();
 
-                        assert.deepEqual({
-                            left: appointmentRect.left,
-                            top: appointmentRect.top,
-                            height: appointmentRect.height
-                        },
-                        expectedRect,
-                        `appointment part #${index} rect is correct`
-                        );
+                        assert.roughEqual(expectedRect.left, appointmentRect.left, 2.01, `appointment part #${index} left is correct`);
+                        assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
+                        assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
                     });
                 });
             });
