@@ -1890,7 +1890,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
   });
 });
 
-test('Empty row should lose focus on Tab (T940309)', async (t) => {
+test('Empty row should lose focus on Tab (T941246)', async (t) => {
   const dataGrid = new DataGrid('#container');
   const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
   const inputElement1 = Selector('#myinput1');
