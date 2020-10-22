@@ -5,6 +5,7 @@ import ScrollView, {
   viewFunction,
   Location,
   ScrollOffset,
+  ScrollViewDirection,
   ScrollViewProps,
   ensureLocation,
 } from '../scroll_view';
@@ -95,16 +96,14 @@ describe('ScrollView', () => {
 
       const createContainerRef = (
         location: Partial<Location>,
-        hasScrollBars?: boolean,
-        hasVerticalScrollBar?: boolean,
-        hasHorizontalScrollBar?: boolean,
+        direction?: ScrollViewDirection,
       ): HTMLDivElement => ({
         scrollTop: location.top,
         scrollLeft: location.left,
         offsetHeight: 300,
         offsetWidth: 300,
-        clientWidth: hasScrollBars || hasHorizontalScrollBar ? 283 : 300,
-        clientHeight: hasScrollBars || hasVerticalScrollBar ? 283 : 300,
+        clientWidth: direction === 'horizontal' || direction === 'both' ? 283 : 300,
+        clientHeight: direction === 'vertical' || direction === 'both' ? 283 : 300,
       }) as HTMLDivElement;
 
       const createTargetElement = (args): HTMLElement => {
@@ -367,7 +366,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from bottom side by vertical orientation, hasVerticalScrollBar: true', () => {
             const element = createTargetElement({ location: { top: 500, left: 0 } });
-            const containerRef = createContainerRef({ top: 100, left: 0 }, false, true);
+            const containerRef = createContainerRef({ top: 100, left: 0 }, 'vertical');
             const scrollView = new ScrollView({ direction: 'vertical' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -400,7 +399,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from right side by horizontal orientation, hasHorizontalScrollBar: true', () => {
             const element = createTargetElement({ location: { left: 500, top: 0 } });
-            const containerRef = createContainerRef({ left: 100, top: 0 }, false, false, true);
+            const containerRef = createContainerRef({ left: 100, top: 0 }, 'horizontal');
             const scrollView = new ScrollView({ direction: 'horizontal' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -411,7 +410,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from left side and top side by both orientation', () => {
             const element = createTargetElement({ location: { left: 20, top: 20 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -422,7 +421,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from right side and top side by both orientation', () => {
             const element = createTargetElement({ location: { left: 500, top: 20 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -433,7 +432,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from left side and bottom side by both orientation', () => {
             const element = createTargetElement({ location: { left: 20, top: 500 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -444,7 +443,7 @@ describe('ScrollView', () => {
 
           it('should scroll to element from right side and bottom side by both orientation', () => {
             const element = createTargetElement({ location: { left: 500, top: 500 } });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -455,7 +454,7 @@ describe('ScrollView', () => {
 
           it('should do not scroll to an element when it in the visible area', () => {
             const element = createTargetElement({ location: { top: 200, left: 200 } });
-            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
+            const containerRef = createContainerRef({ top: 100, left: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -533,7 +532,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -548,7 +547,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -563,7 +562,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -578,7 +577,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ left: 100, top: 100 }, true);
+            const containerRef = createContainerRef({ left: 100, top: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -593,7 +592,7 @@ describe('ScrollView', () => {
               width: 400,
               height: 400,
             });
-            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
+            const containerRef = createContainerRef({ top: 100, left: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element, offset);
@@ -619,7 +618,7 @@ describe('ScrollView', () => {
               offsetParent: parent,
               isInScrollableContent: true,
             });
-            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
+            const containerRef = createContainerRef({ top: 100, left: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
@@ -630,7 +629,7 @@ describe('ScrollView', () => {
 
           it('it should not scroll to element when it is not located inside the scrollable content', () => {
             const element = createElement({ location: { top: 200, left: 200 } });
-            const containerRef = createContainerRef({ top: 100, left: 100 }, true);
+            const containerRef = createContainerRef({ top: 100, left: 100 }, 'both');
             const scrollView = new ScrollView({ direction: 'both' } as ScrollViewProps);
             scrollView.containerRef = containerRef;
             scrollView.scrollToElement(element);
