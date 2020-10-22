@@ -80,6 +80,12 @@ const getModuleConfig = function(keyboardNavigationEnabled) {
     };
 };
 
+const scrollTo = function(that, location) {
+    const scrollable = that.getScrollable();
+    scrollable.scrollTo(location);
+    $(scrollable._container()).trigger('scroll');
+};
+
 QUnit.module('Focused row', getModuleConfig(true), () => {
     QUnit.testInActiveWindow('TabIndex should set for the [focusedRowIndex; focusedColumnIndex] cell', function(assert) {
         // arrange
@@ -4068,6 +4074,85 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         assert.equal(focusedRowChangedCounter, 1, 'focusedRowChangedCounter');
     });
 
+    // T939311
+    QUnit.testInActiveWindow('Virtual Scrolling - DataGrid should not focus inserted row', function(assert) {
+        // arrange
+        const onFocusedRowChangedSpy = sinon.spy();
+
+        this.options = {
+            keyExpr: 'name',
+            focusedRowEnabled: true,
+            focusedRowKey: 'item2',
+            editing: {
+                mode: 'batch',
+                allowAdding: true
+            },
+            scrolling: {
+                mode: 'virtual'
+            },
+            paging: {
+                pageSize: 2,
+                pageIndex: 2
+            },
+            onFocusedRowChanged: onFocusedRowChangedSpy
+        };
+
+        this.data = [
+            { name: 'item1', phone: '111111', room: 1 },
+            { name: 'item2', phone: '222222', room: 2 },
+            { name: 'item3', phone: '333333', room: 3 },
+            { name: 'item4', phone: '444444', room: 4 },
+            { name: 'item5', phone: '555555', room: 5 },
+            { name: 'item6', phone: '666666', room: 6 },
+            { name: 'item7', phone: '777777', room: 7 },
+            { name: 'item8', phone: '888888', room: 8 },
+            { name: 'item9', phone: '999999', room: 9 },
+            { name: 'item10', phone: '101010', room: 10 },
+            { name: 'item11', phone: '121212', room: 11 },
+            { name: 'item12', phone: '131313', room: 12 }
+        ];
+
+        this.setupModule();
+        this.gridView.render($('#container'));
+        this.clock.tick();
+
+        const rowsView = this.gridView.getView('rowsView');
+        rowsView.height(70);
+        rowsView.resize();
+        const keyboardController = this.getController('keyboardNavigation');
+        keyboardController._focusedView = rowsView;
+
+        // assert
+        assert.equal(this.option('focusedRowKey'), 'item2', 'focusedRowKey');
+        assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
+
+        // act
+        scrollTo(this, { y: 1000 });
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.pageIndex(), 5, 'pageIndex');
+
+        // act
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        const newRowIndex = rowsView.getTopVisibleItemIndex(true);
+        const newRow = this.getVisibleRows()[newRowIndex];
+        assert.ok(newRow.isNewRow, 'new row');
+
+        // act
+        onFocusedRowChangedSpy.reset();
+        $(this.getRowElement(newRowIndex)).find('.dx-texteditor-input').trigger(pointerEvents.down).click();
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual(onFocusedRowChangedSpy.callCount, 0, 'onFocusedRowChanged event is not called for a new row');
+        assert.ok($(this.getRowElement(newRowIndex)).find('.dx-texteditor-input').is(':focus'), 'input is focused');
+        assert.equal(this.option('focusedRowKey'), 'item2', 'focusedRowKey');
+        assert.equal(this.option('focusedRowIndex'), 1, 'focusedRowIndex');
+    });
 });
 
 [true, false].forEach(keyboardNavigationEnabled => {

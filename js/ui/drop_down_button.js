@@ -411,7 +411,7 @@ const DropDownButton = Widget.inherit({
     _popupOptionChanged: function(args) {
         const options = Widget.getOptionsFromContainer(args);
 
-        this._setPopupOption('width', () => getElementWidth(this.$element()));
+        this._setPopupOption(options);
 
         const optionsKeys = Object.keys(options);
         if(optionsKeys.indexOf('width') !== -1 || optionsKeys.indexOf('height') !== -1) {

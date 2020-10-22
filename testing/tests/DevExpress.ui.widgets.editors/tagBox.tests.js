@@ -3872,23 +3872,6 @@ QUnit.module('popup position and size', moduleSetup, () => {
 
         assert.ok(testPassed, 'There is no errors during test');
     });
-
-    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
-        const instance = $('#tagBox').dxTagBox({
-            width: 600,
-            dropDownOptions: {
-                width: '150%'
-            },
-            opened: true
-        }).dxTagBox('instance');
-
-        const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
-
-        instance.option('width', 400);
-
-        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
-    });
 });
 
 QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {

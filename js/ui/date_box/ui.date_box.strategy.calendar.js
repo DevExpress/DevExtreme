@@ -129,7 +129,8 @@ const CalendarStrategy = DateBoxStrategy.inherit({
             toolbarItems: toolbarItems,
             position: {
                 collision: 'flipfit flip'
-            }
+            },
+            width: 'auto'
         });
     },
 
