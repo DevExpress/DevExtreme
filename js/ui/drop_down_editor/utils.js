@@ -6,15 +6,15 @@ const getElementWidth = function($element) {
     }
 };
 
-const getPopupWidth = function(width) {
-    if(width === null) {
-        width = undefined;
+const getSizeValue = function(size) {
+    if(size === null) {
+        size = undefined;
     }
-    if(typeof width === 'function') {
-        width = width();
+    if(typeof size === 'function') {
+        size = size();
     }
 
-    return width;
+    return size;
 };
 
-export { getElementWidth, getPopupWidth };
+export { getElementWidth, getSizeValue };

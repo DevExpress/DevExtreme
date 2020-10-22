@@ -17,7 +17,7 @@ import { isPlainObject, isDefined } from '../core/utils/type';
 import { ensureDefined } from '../core/utils/common';
 import Guid from '../core/guid';
 import { format as formatMessage } from '../localization/message';
-import { getElementWidth, getPopupWidth } from './drop_down_editor/utils';
+import { getElementWidth, getSizeValue } from './drop_down_editor/utils';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
@@ -420,7 +420,7 @@ const DropDownButton = Widget.inherit({
     },
 
     _dimensionChanged: function() {
-        const popupWidth = getPopupWidth(this.option('dropDownOptions.width'));
+        const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
 
         if(popupWidth === undefined) {
             this._setPopupOption('width', () => getElementWidth(this.$element()));
