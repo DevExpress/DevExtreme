@@ -760,6 +760,7 @@ const DropDownEditor = TextBox.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case 'width':
+            case 'height':
                 this.callBase(args);
                 this._popup?.repaint();
                 break;

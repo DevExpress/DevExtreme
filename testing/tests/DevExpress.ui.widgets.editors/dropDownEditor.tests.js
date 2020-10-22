@@ -1369,6 +1369,22 @@ QUnit.module('popup integration', () => {
         });
     });
 
+    QUnit.test('popup should be repositioned after height option runtime change', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            opened: true
+        });
+        const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+        instance.option('height', 300);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        const overlayContentRect = $overlayContent.get(0).getBoundingClientRect();
+        const editorRect = $dropDownEditor.get(0).getBoundingClientRect();
+
+        assert.strictEqual(overlayContentRect.top, editorRect.bottom, 'top position is correct');
+        assert.strictEqual(overlayContentRect.left, editorRect.left, 'left position is correct');
+    });
+
     QUnit.test('dropDownOptions.width should be passed to popup', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             dropDownOptions: {

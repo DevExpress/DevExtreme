@@ -495,6 +495,24 @@ QUnit.module('popup integration', {
         assert.strictEqual(repaintMock.callCount, 3, 'popup has been repainted 3 times');
     });
 
+    QUnit.test('popup should be repositioned after height option runtime change', function(assert) {
+        const instance = new DropDownButton('#dropDownButton', {
+            opened: true,
+            dropDownOptions: {
+                'position.collision': 'none'
+            },
+        });
+
+        instance.option('height', 300);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        const overlayContentRect = $overlayContent.get(0).getBoundingClientRect();
+        const dropDownButtonRect = $('#dropDownButton').get(0).getBoundingClientRect();
+
+        assert.strictEqual(overlayContentRect.top, dropDownButtonRect.bottom, 'top position is correct');
+        assert.strictEqual(overlayContentRect.left, dropDownButtonRect.left, 'left position is correct');
+    });
+
     QUnit.test('dropDownOptions can be restored after repaint', function(assert) {
         const instance = new DropDownButton('#dropDownButton', {
             deferRendering: false,

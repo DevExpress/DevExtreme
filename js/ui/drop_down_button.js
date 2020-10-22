@@ -632,7 +632,7 @@ const DropDownButton = Widget.inherit({
             case 'width':
             case 'height':
                 this.callBase(args);
-                this._popup && this._popup.repaint();
+                this._popup?.repaint();
                 break;
             case 'stylingMode':
                 this._buttonGroup.option(name, value);
