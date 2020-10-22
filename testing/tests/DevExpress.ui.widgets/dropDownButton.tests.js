@@ -673,8 +673,8 @@ QUnit.module('popup integration', {
         const overlayContentRect = $overlayContent.get(0).getBoundingClientRect();
         const dropDownButtonRect = $('#dropDownButton').get(0).getBoundingClientRect();
 
-        assert.strictEqual(overlayContentRect.top, dropDownButtonRect.bottom, 'top position is correct');
-        assert.strictEqual(overlayContentRect.left, dropDownButtonRect.left, 'left position is correct');
+        assert.roughEqual(overlayContentRect.top, dropDownButtonRect.bottom, 1, 'top position is correct');
+        assert.roughEqual(overlayContentRect.left, dropDownButtonRect.left, 1, 'left position is correct');
     });
 
     QUnit.test('dropDownOptions can be restored after repaint', function(assert) {
