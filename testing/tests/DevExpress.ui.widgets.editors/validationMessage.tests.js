@@ -4,7 +4,7 @@ import $ from 'jquery';
 const moduleSetup = {
     beforeEach: function() {
         this._$container = $('<div>').appendTo('#qunit-fixture');
-        this._$validationMessage = $('<div>').attr('id', 'validationMessage').appendTo(this._$container);
+        this._$validationMessage = $('<div>').attr('id', 'validationMessageRootElement').appendTo(this._$container);
         this._validationMessage = new ValidationMessage(this._$validationMessage);
     },
     afterEach: function() {

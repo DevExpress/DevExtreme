@@ -1,11 +1,13 @@
 import ValidationMessage from 'ui/validation_message';
 import $ from 'jquery';
 
+import 'common.css!';
+
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 
 const moduleSetup = {
     beforeEach: function() {
-        this._$validationMessage = $('<div>').attr('id', 'validationMessage').appendTo('#qunit-fixture');
+        this._$validationMessage = $('<div>').attr('id', 'validationMessageRootElement').appendTo('#qunit-fixture');
         this._validationMessage = new ValidationMessage(this._$validationMessage);
     },
     afterEach: function() {
@@ -28,6 +30,15 @@ QUnit.module('markup', moduleSetup, () => {
 
         this._validationMessage.option('mode', 'auto');
         assert.ok($overlayWrapper.hasClass('dx-invalid-message-auto'), 'class is correct after runtime option change');
+    });
+
+    QUnit.test('validationMessage should be visible when mode is "always"', function(assert) {
+        this._validationMessage.option({
+            mode: 'always'
+        });
+
+        const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+        assert.strictEqual($overlayWrapper.css('visibility'), 'visible', 'validation message is shown');
     });
 
     QUnit.test('overlay content should have "dx-invalid-message-content" class', function(assert) {
