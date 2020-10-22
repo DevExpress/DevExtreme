@@ -2735,10 +2735,6 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: array,
             keyExpr: 'id',
-            editing: {
-                mode: 'row',
-                allowUpdating: true
-            },
             scrolling: {
                 mode: 'virtual',
                 rowRenderingMode: 'virtual',
@@ -2750,9 +2746,8 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         const store = dataGrid.getDataSource().store();
 
         // act
-        for(let i = 12; i > 10; i--) {
-            store.push([{ type: 'remove', key: i }]);
-        }
+        store.push([{ type: 'remove', key: 12 }]);
+        store.push([{ type: 'remove', key: 11 }]);
         this.clock.tick();
 
         // assert
