@@ -1974,7 +1974,9 @@ class Scheduler extends Widget {
         targetedAppointment.recurrenceException = '';
 
         if(!isDeleted && !isPopupEditing) {
-            // TODO
+            const keyPropertyName = this._appointmentModel.keyName;
+            delete rawTargetedAppointment[keyPropertyName];
+
             this.addAppointment(rawTargetedAppointment);
         }
 
@@ -1989,7 +1991,6 @@ class Scheduler extends Widget {
             this._editAppointmentData = rawAppointment;
 
         } else {
-            // TODO
             this._updateAppointment(rawAppointment, updatedAppointment.source(), () => {
                 this._appointments.moveAppointmentBack(dragEvent);
             }, dragEvent);
