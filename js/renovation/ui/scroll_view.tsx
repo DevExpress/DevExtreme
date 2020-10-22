@@ -197,7 +197,7 @@ export default class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     const elementOffset = element[`offset${dimension}`];
 
     const scrollOffsetBegin = scrollOffset[prop];
-    const scrollOffsetEnd = scrollOffset[DIRECTION_VERTICAL ? 'bottom' : 'right'];
+    const scrollOffsetEnd = scrollOffset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'];
 
     const offset = this.scrollOffset()[prop];
 
