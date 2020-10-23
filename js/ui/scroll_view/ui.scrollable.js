@@ -143,7 +143,9 @@ const Scrollable = DOMComponent.inherit({
         this.update();
 
         this.callBase();
-        this._updateRtlPosition();
+        if(!this.option('useNative')) {
+            this._updateRtlPosition();
+        }
     },
 
     _updateRtlPosition: function() {
@@ -310,6 +312,7 @@ const Scrollable = DOMComponent.inherit({
         if(isPlainObject(location)) {
             const left = ensureDefined(location.left, location.x);
             const top = ensureDefined(location.top, location.y);
+
             return {
                 left: isDefined(left) ? -left : undefined,
                 top: isDefined(top) ? -top : undefined
@@ -391,7 +394,9 @@ const Scrollable = DOMComponent.inherit({
     },
 
     scrollLeft: function() {
-        return this.scrollOffset().left;
+        const containerElement = this._$container.get(0);
+        const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
+        return this.option('useNative') && this.option('rtlEnabled') ? (maxLeftOffset + this.scrollOffset().left) : this.scrollOffset().left;
     },
 
     clientHeight: function() {

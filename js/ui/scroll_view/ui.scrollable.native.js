@@ -127,20 +127,31 @@ const NativeStrategy = Class.inherit({
     },
 
     _createActionArgs: function() {
-        const location = this.location();
+        const { left, top } = this.location();
+        const { rtlEnabled, pushBackValue } = this.option();
         const containerElement = this._$container.get(0);
 
         return {
             event: this._eventForUserAction,
             scrollOffset: {
-                top: -location.top,
-                left: -location.left
+                top: -top,
+                left: -left
             },
-            reachedLeft: this._isDirection(HORIZONTAL) ? location.left >= 0 : undefined,
-            reachedRight: this._isDirection(HORIZONTAL) ? Math.abs(location.left) >= containerElement.scrollWidth - containerElement.clientWidth : undefined,
-            reachedTop: this._isDirection(VERTICAL) ? location.top >= 0 : undefined,
-            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(location.top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * this.option('pushBackValue') : undefined
+            reachedLeft: rtlEnabled ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: rtlEnabled ? this._isReachedLeft(-left) : this._isReachedRight(left),
+            reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
+            reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * pushBackValue : undefined
         };
+    },
+
+    _isReachedLeft: function(left) {
+        return this._isDirection(HORIZONTAL) ? left >= 0 : undefined;
+    },
+
+    _isReachedRight: function(left) {
+        const containerElement = this._$container.get(0);
+
+        return this._isDirection(HORIZONTAL) ? Math.abs(left) >= containerElement.scrollWidth - containerElement.clientWidth : undefined;
     },
 
     handleScroll: function(e) {
@@ -277,9 +288,20 @@ const NativeStrategy = Class.inherit({
     },
 
     scrollBy: function(distance) {
-        const location = this.location();
-        this._$container.scrollTop(Math.round(-location.top - distance.top + this.option('pushBackValue')));
-        this._$container.scrollLeft(Math.round(-location.left - distance.left));
+        const { top, left } = this.location();
+        const { rtlEnabled, pushBackValue } = this.option();
+
+        this._$container.scrollTop(Math.round(-top - distance.top + pushBackValue));
+
+        if(rtlEnabled) {
+            const containerElement = this._$container.get(0);
+            const maxHorizontalOffset = containerElement.scrollWidth - containerElement.clientWidth;
+
+            this._$container.scrollLeft(-maxHorizontalOffset + Math.round(-left - distance.left));
+            return;
+        } else {
+            this._$container.scrollLeft(Math.round(-left - distance.left));
+        }
     },
 
     validate: function(e) {
