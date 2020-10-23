@@ -12,3 +12,4 @@ export function subscribeToEvent(eventName: string) {
   };
 }
 export const subscribeToClickEvent = subscribeToEvent(clickEvent.name);
+export const subscribeToScrollEvent = subscribeToEvent('scroll');

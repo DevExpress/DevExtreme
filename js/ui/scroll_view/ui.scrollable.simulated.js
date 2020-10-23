@@ -1106,7 +1106,6 @@ export const SimulatedStrategy = Class.inherit({
 export {
     ACCELERATION,
     MIN_VELOCITY_LIMIT,
-    FRAME_DURATION,
-    SCROLL_LINE_HEIGHT
+    FRAME_DURATION
 };
 ///#ENDDEBUG
