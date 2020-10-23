@@ -3,7 +3,7 @@
     justify-content: flex-end;
     padding-bottom: 10px;
 }
-::ng-deep .dx-tabs-wrapper .dx-item.dx-tab {
+::ng-deep .dx-tabs .dx-tabs-wrapper .dx-item.dx-tab {
     width: auto;
     padding-left: 20px;
 }
@@ -43,7 +43,7 @@
     text-align: justify;
     white-space: normal;
 }
-::ng-deep .dx-theme-generic .dx-tabs-wrapper  .dx-item.dx-tab {
+::ng-deep .dx-theme-generic .dx-tabs-wrapper .dx-item.dx-tab {
     padding-left: 14px;
     padding-right: 9px;
     line-height: 1.618;

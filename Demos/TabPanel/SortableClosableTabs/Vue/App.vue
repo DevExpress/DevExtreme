@@ -112,7 +112,7 @@ export default {
   justify-content: flex-end;
   padding-bottom: 10px;
 }
-.dx-tabs-wrapper .dx-item.dx-tab {
+.dx-tabs .dx-tabs-wrapper .dx-item.dx-tab {
   width: auto;
   padding-left: 20px;
 }
