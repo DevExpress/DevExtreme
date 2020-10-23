@@ -153,8 +153,8 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType, 'onScroll'>() 
         ...(offset as Partial<ScrollOffset>),
       };
       this.scrollTo({
-        top: this.getScrollTopLocation(element, scrollOffset),
-        left: this.getScrollLeftLocation(element, scrollOffset),
+        top: this.getScrollLocation(element, scrollOffset, DIRECTION_VERTICAL),
+        left: this.getScrollLocation(element, scrollOffset, DIRECTION_HORIZONTAL),
       });
     }
   }
@@ -252,57 +252,41 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType, 'onScroll'>() 
     return combineClasses(classesMap);
   }
 
-  private getScrollBarWidth(): number {
-    return this.containerRef.offsetWidth - this.containerRef.clientWidth;
+  private getScrollBarSize(dimension: string): number {
+    return this.containerRef[`offset${dimension}`] - this.containerRef[`client${dimension}`];
   }
 
-  private getScrollTopLocation(element: HTMLElement, scrollOffset: ScrollOffset): number {
-    const offsetTop = getRelativeLocation(element).top;
-    const containerHeight = this.containerRef.offsetHeight;
-    const scrollBarWidth = this.getScrollBarWidth();
-    const { offsetHeight } = element;
-    const { top: scrollOffsetTop, bottom: scrollOffsetBottom } = scrollOffset;
-    const { top } = this.scrollOffset();
+  private getScrollLocation(
+    element: HTMLElement, scrollOffset: ScrollOffset, direction: ScrollViewDirection,
+  ): number {
+    const dimension = direction === DIRECTION_VERTICAL ? 'Height' : 'Width';
+    const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
 
-    if (offsetTop < top + scrollOffsetTop) {
-      if (offsetHeight < containerHeight - scrollOffsetTop - scrollOffsetBottom) {
-        return offsetTop - scrollOffsetTop;
+    const relativeLocation = getRelativeLocation(element)[prop];
+    const scrollBarSize = this.getScrollBarSize(dimension);
+
+    const containerSize = this.containerRef[`offset${dimension}`];
+    const elementOffset = element[`offset${dimension}`];
+
+    const scrollOffsetBegin = scrollOffset[prop];
+    const scrollOffsetEnd = scrollOffset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'];
+
+    const offset = this.scrollOffset()[prop];
+
+    if (relativeLocation < offset + scrollOffsetBegin) {
+      if (elementOffset < containerSize - scrollOffsetBegin - scrollOffsetEnd) {
+        return relativeLocation - scrollOffsetBegin;
       }
-      return offsetTop + offsetHeight - containerHeight + scrollOffsetBottom + scrollBarWidth;
+      return relativeLocation + elementOffset - containerSize + scrollOffsetEnd + scrollBarSize;
     }
 
-    if (offsetTop + offsetHeight >= top + containerHeight - scrollOffsetBottom) {
-      if (offsetHeight < containerHeight - scrollOffsetTop - scrollOffsetBottom) {
-        return offsetTop + offsetHeight + scrollBarWidth - containerHeight + scrollOffsetBottom;
+    if (relativeLocation + elementOffset >= offset + containerSize - scrollOffsetEnd) {
+      if (elementOffset < containerSize - scrollOffsetBegin - scrollOffsetEnd) {
+        return relativeLocation + elementOffset + scrollBarSize - containerSize + scrollOffsetEnd;
       }
-      return offsetTop - scrollOffsetTop;
+      return relativeLocation - scrollOffsetBegin;
     }
 
-    return top;
-  }
-
-  private getScrollLeftLocation(element: HTMLElement, scrollOffset: ScrollOffset): number {
-    const offsetLeft = getRelativeLocation(element).left;
-    const scrollBarWidth = this.getScrollBarWidth();
-    const containerWidth = this.containerRef.offsetWidth;
-    const { offsetWidth } = element;
-    const { left: scrollOffsetLeft, right: scrollOffsetRight } = scrollOffset;
-    const { left } = this.scrollOffset();
-
-    if (offsetLeft < left + scrollOffsetLeft) {
-      if (offsetWidth < containerWidth - scrollOffsetLeft - scrollOffsetRight) {
-        return offsetLeft - scrollOffsetLeft;
-      }
-      return offsetLeft + offsetWidth - containerWidth + scrollOffsetRight + scrollBarWidth;
-    }
-
-    if (offsetLeft + offsetWidth >= left + containerWidth - scrollOffsetRight) {
-      if (offsetWidth < containerWidth - scrollOffsetLeft - scrollOffsetRight) {
-        return offsetLeft + offsetWidth + scrollBarWidth - containerWidth + scrollOffsetRight;
-      }
-      return offsetLeft - scrollOffsetLeft;
-    }
-
-    return left;
+    return offset;
   }
 }
