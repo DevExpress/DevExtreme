@@ -1169,7 +1169,6 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     const cloud = this.renderer.path.lastCall.returnValue;
     assert.equal(cloud._stored_settings.fill, '#ffffff');
     assert.equal(cloud._stored_settings.stroke, '#252525');
-    assert.equal(cloud._stored_settings['pointer-events'], 'none');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000 }]);
