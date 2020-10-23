@@ -1108,7 +1108,7 @@ QUnit.test('Show. W/o params. Html', function(assert) {
     assert.equal(cloud._stored_settings.stroke, '#252525');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointer-events': 'none', }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointerEvents': 'none', }]);
 
     assert.ok(this.tooltip._textHtml.html.calledOnce, 'textHtml html');
     assert.deepEqual(this.tooltip._textHtml.html.firstCall.args, ['some-html'], 'textHtml html');
@@ -1173,7 +1173,7 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     assert.equal(cloud._stored_settings['pointer-events'], 'none');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
-    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointer-events': 'none', }]);
+    assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointerEvents': 'none', }]);
 
     assert.ok(this.tooltip._textHtml.html.calledOnce, 'textHtml html');
     assert.deepEqual(this.tooltip._textHtml.html(), 'custom html', 'textHtml html');
@@ -1250,7 +1250,7 @@ QUnit.test('Html text, tooltip is interactive', function(assert) {
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{
         color: 'rgba(147,147,147,0.7)',
         width: 3000,
-        'pointer-events': 'auto'
+        'pointerEvents': 'auto'
     }], 'text is clickable');
 
     const cloudSettings = this.renderer.path.lastCall.returnValue._stored_settings;

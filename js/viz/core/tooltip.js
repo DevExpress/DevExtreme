@@ -114,7 +114,7 @@ Tooltip.prototype = {
                 const template = that._template;
                 const useTemplate = template && !state.formatObject.skipTemplate;
                 if(state.html || useTemplate) {
-                    textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH, 'pointer-events': pointerEvents });
+                    textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH, 'pointerEvents': pointerEvents });
                     if(useTemplate) {
                         template.render({ model: state.formatObject, container: textHtml, onRendered: () => {
                             state.html = textHtml.html();
