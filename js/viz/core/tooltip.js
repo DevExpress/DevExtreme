@@ -108,33 +108,42 @@ Tooltip.prototype = {
             this._renderer.root.css({ '-ms-user-select': 'auto', '-moz-user-select': 'auto', '-webkit-user-select': 'auto' });
         }
 
-        const drawTooltip = (tooltip, group) => {
-            const state = tooltip._state;
-            const template = tooltip._template;
-            const useTemplate = template && !state.formatObject.skipTemplate;
-            if(state.html || useTemplate) {
-                if(!state.isRendered) {
+        const drawTooltip = ({ group, onRender, eventData, isMoving }) => {
+            const state = that._state;
+            if(!isMoving) {
+                const template = that._template;
+                const useTemplate = template && !state.formatObject.skipTemplate;
+                if(state.html || useTemplate) {
+                    textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH, 'pointer-events': pointerEvents });
                     if(useTemplate) {
-                        template.render({ model: state.formatObject, container: textHtml });
-                        state.html = textHtml.html();
-                        if(!state.html) {
-                            this.plaque.clear();
-                            return;
-                        }
+                        template.render({ model: state.formatObject, container: textHtml, onRendered: () => {
+                            state.html = textHtml.html();
+                            if(!state.html) {
+                                this.plaque.clear();
+                                return;
+                            }
+
+                            onRender();
+                            that._riseEvents(eventData);
+                            that._moveWrapper();
+                            that.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
+                        } });
+                        return;
                     } else {
                         that._text.attr({ text: '' });
                         textHtml.html(state.html);
                     }
-                    textGroupHtml.css({ color: state.textColor, width: DEFAULT_HTML_GROUP_WIDTH, 'pointerEvents': pointerEvents });
-                    state.isRendered = true;
+                } else {
+                    that._text
+                        .css({ fill: state.textColor })
+                        .attr({ text: state.text, class: options.cssClass, 'pointer-events': pointerEvents })
+                        .append(group.attr({ align: options.textAlignment }));
                 }
-            } else {
-                that._text
-                    .css({ fill: state.textColor })
-                    .attr({ text: state.text, class: options.cssClass, 'pointer-events': pointerEvents })
-                    .append(group.attr({ align: options.textAlignment }));
+                that._riseEvents(eventData);
+                that.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
             }
-            tooltip.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
+            onRender();
+            that._moveWrapper();
         };
 
         this.plaque = new Plaque({
@@ -174,14 +183,29 @@ Tooltip.prototype = {
         return that;
     },
 
+    _riseEvents: function(eventData) {
+        // trigger event
+        // The *onTooltipHidden* is triggered outside the *hide* method because of the cases when *show* is called to determine if tooltip will be visible or not (when target is changed) -
+        // *hide* can neither be called before that *show* - because if tooltip is determined to hide it requires some timeout before actually hiding
+        // nor after that *show* - because it is either too early to hide (because of timeout) or wrong (because tooltip has already been shown for new target)
+        // It is only inside the *show* where it is known weather *onTooltipHidden* is required or not
+        // This functionality can be simplified when we get rid of timeouts for tooltip
+        const that = this;
+        that._eventData && that._eventTrigger('tooltipHidden', that._eventData);
+        that._eventData = eventData;
+        that._eventTrigger('tooltipShown', that._eventData);
+    },
+
     setRendererOptions: function(options) {
         this._renderer.setOptions(options);
         this._textGroupHtml.css({ direction: options.rtl ? 'rtl' : 'ltr' });
         return this;
     },
 
-    render: function() {
+    update: function(options) {
         const that = this;
+
+        that.setOptions(options);
 
         // The following is because after update (on widget refresh) tooltip must be hidden
         hideElement(that._wrapper);
@@ -196,10 +220,6 @@ Tooltip.prototype = {
 
         that._eventData = null;
         return that;
-    },
-
-    update: function(options) {
-        return this.setOptions(options).render();
     },
 
     _prepare: function(formatObject, state, customizeTooltip = this._customizeTooltip) {
@@ -228,26 +248,16 @@ Tooltip.prototype = {
 
     show: function(formatObject, params, eventData, customizeTooltip) {
         const that = this;
-        // trigger event
-        // The *onTooltipHidden* is triggered outside the *hide* method because of the cases when *show* is called to determine if tooltip will be visible or not (when target is changed) -
-        // *hide* can neither be called before that *show* - because if tooltip is determined to hide it requires some timeout before actually hiding
-        // nor after that *show* - because it is either too early to hide (because of timeout) or wrong (because tooltip has already been shown for new target)
-        // It is only inside the *show* where it is known weather *onTooltipHidden* is required or not
-        // This functionality can be simplified when we get rid of timeouts for tooltip
-        const riseEvents = () => {
-            that._eventData && that._eventTrigger('tooltipHidden', that._eventData);
-            that._eventData = eventData;
-            that._eventTrigger('tooltipShown', that._eventData);
-        };
 
         if(that._options.forceEvents) { // for Blazor charts
             eventData.x = params.x;
             eventData.y = params.y - params.offset;
-            riseEvents();
+            that._riseEvents(eventData);
             return true;
         }
         const state = {
-            formatObject
+            formatObject,
+            eventData
         };
 
         if(!that._prepare(formatObject, state, customizeTooltip)) {
@@ -260,17 +270,14 @@ Tooltip.prototype = {
 
         that._clear();
 
-        this.plaque.clear().draw(extend({}, that._options, {
+        const parameters = extend({}, that._options, {
             canvas: that._getCanvas()
         }, state, {
             x: params.x,
             y: params.y,
             offset: params.offset
-        }));
-
-        that.moveWrapper();
-        riseEvents();
-        return true;
+        });
+        return this.plaque.clear().draw(parameters);
     },
 
     hide: function() {
@@ -289,11 +296,10 @@ Tooltip.prototype = {
     },
 
     move: function(x, y, offset) {
-        this.plaque.draw({ x, y, offset, canvas: this._getCanvas() });
-        this.moveWrapper();
+        this.plaque.draw({ x, y, offset, canvas: this._getCanvas(), isMoving: true });
     },
 
-    moveWrapper: function() {
+    _moveWrapper: function() {
         const that = this;
 
         const plaqueBBox = this.plaque.getBBox();
