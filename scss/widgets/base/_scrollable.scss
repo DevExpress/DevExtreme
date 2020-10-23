@@ -180,6 +180,11 @@
   .dx-scrollable-content,
   .dx-scrollable-container {
     direction: ltr;
+
+    @at-root #{selector-append(".dx-scrollable-native", &)} {
+      direction: rtl;
+      float: none;
+    }
   }
 
   .dx-scrollable-content > * {
