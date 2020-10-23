@@ -27,7 +27,7 @@ export default {
             return this.callBase.apply(this, arguments);
         }
 
-        return getFormatter(this._normalizeFormatConfig(format, formatConfig))(value);
+        return getFormatter(this._normalizeFormatConfig(format, formatConfig, value))(value);
     },
     _normalizeFormatConfig: function(format, formatConfig, value) {
         let config;
