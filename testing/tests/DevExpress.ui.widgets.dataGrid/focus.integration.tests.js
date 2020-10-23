@@ -685,6 +685,32 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($(rowsView.getRow(0)).find('td').eq(0).text(), '2', 'Focused row cell text');
     });
 
+    QUnit.test('Should not navigate to the focused row after scrolling if scrolling mode is infinite and preloadEnabled is true (T941254)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => ({ id })),
+            focusedRowEnabled: true,
+            focusedRowKey: 1,
+            paging: {
+                pageSize: 2
+            },
+            scrolling: {
+                mode: 'infinite',
+                preloadEnabled: true
+            }
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getTopVisibleRowData().id, 5, 'focusedRowIndex');
+    });
+
     // T804927
     QUnit.test('focusedRowKey should not overwrite dataSource field', function(assert) {
         // arrange
