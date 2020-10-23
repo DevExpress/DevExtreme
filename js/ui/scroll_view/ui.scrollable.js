@@ -36,34 +36,21 @@ const Scrollable = DOMComponent.inherit({
         return extend(this.callBase(), {
             disabled: false,
             onScroll: null,
-
             direction: VERTICAL,
-
             showScrollbar: 'onScroll',
-
             useNative: true,
-
             bounceEnabled: true,
-
             scrollByContent: true,
-
             scrollByThumb: false,
-
             onUpdated: null,
-
             onStart: null,
             onEnd: null,
-
             onBounce: null,
             onStop: null,
-
             useSimulatedScrollbar: false,
             useKeyboard: true,
-
             inertiaEnabled: true,
-
             pushBackValue: 0,
-
             updateManually: false
         });
     },

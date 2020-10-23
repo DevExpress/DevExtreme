@@ -798,10 +798,28 @@ const EditingController = modules.ViewController.inherit((function() {
 
             return item;
         },
-
-        processItems: function(items, { changeType, removeCount }) {
+        _getLoadedRowIndexByInsertKey: function(items, change, key) {
             const dataController = this._dataController;
-            let dataRowIndex = -1;
+            const loadedRowIndexOffset = dataController.getRowIndexOffset(true);
+            let loadedRowIndex = key.dataRowIndex - loadedRowIndexOffset;
+
+            if(change.changeType === 'append') {
+                loadedRowIndex -= dataController.items(true).length;
+                if(change.removeCount) {
+                    loadedRowIndex += change.removeCount;
+                }
+            }
+
+            for(let i = 0; i < loadedRowIndex; i++) {
+                if(items[i] && items[i][INSERT_INDEX]) {
+                    loadedRowIndex++;
+                }
+            }
+
+            return loadedRowIndex;
+        },
+        processItems: function(items, e) {
+            const changeType = e.changeType;
 
             this.update(changeType);
 
@@ -809,20 +827,12 @@ const EditingController = modules.ViewController.inherit((function() {
             changes.forEach(change => {
                 const key = change.key;
 
-                if(key) {
-                    const rowIndexOffset = dataController.getRowIndexOffset();
-                    dataRowIndex = key.dataRowIndex - rowIndexOffset + dataController.getRowIndexDelta();
-
-                    if(changeType === 'append') {
-                        dataRowIndex -= dataController.items(true).length;
-                        if(removeCount) {
-                            dataRowIndex += removeCount;
-                        }
-                    }
+                if(isDefined(key) && change.type === DATA_EDIT_DATA_INSERT_TYPE) {
+                    const loadedRowIndex = this._getLoadedRowIndexByInsertKey(items, e, key);
 
                     const item = this._generateNewItem(key);
-                    if(dataRowIndex >= 0 && change.type === DATA_EDIT_DATA_INSERT_TYPE && this._needInsertItem(change, changeType, items, item)) {
-                        items.splice(key.dataRowIndex ? dataRowIndex : 0, 0, item);
+                    if(loadedRowIndex >= 0 && this._needInsertItem(change, changeType, items, item)) {
+                        items.splice(key.dataRowIndex ? loadedRowIndex : 0, 0, item);
                     }
                 }
             });
@@ -901,7 +911,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             insertKey.dataRowIndex = dataController.getRowIndexOffset() + rows.filter(function(row, index) {
-                return index < insertKey.rowIndex && (row.rowType === 'data' || row.rowType === 'group' || row.isNewRow);
+                return index < insertKey.rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group');
             }).length;
 
             if(editMode !== EDIT_MODE_BATCH) {

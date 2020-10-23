@@ -4,7 +4,7 @@ import $ from 'jquery';
 const moduleSetup = {
     beforeEach: function() {
         this._$container = $('<div>').appendTo('#qunit-fixture');
-        this._$validationMessage = $('<div>').attr('id', 'validationMessage').appendTo(this._$container);
+        this._$validationMessage = $('<div>').attr('id', 'validationMessageRootElement').appendTo(this._$container);
         this._validationMessage = new ValidationMessage(this._$validationMessage);
     },
     afterEach: function() {
@@ -29,6 +29,20 @@ QUnit.module('options', moduleSetup, () => {
             assert.strictEqual(this._validationMessage.option('maxWidth'), 120, 'maxWidth was updated');
         } finally {
             $target.remove();
+        }
+    });
+
+    QUnit.test('position should be recalculated after target option runtime change', function(assert) {
+        const $element = $('<div>');
+
+        try {
+            $element.appendTo('#qunit-fixture');
+
+            this._validationMessage.option('target', $element);
+
+            assert.strictEqual(this._validationMessage.option('position').of, $element, 'position is recalculated');
+        } finally {
+            $element.remove();
         }
     });
 });

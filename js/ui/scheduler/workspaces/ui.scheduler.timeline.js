@@ -9,6 +9,8 @@ import tableCreatorModule from '../ui.scheduler.table_creator';
 const { tableCreator } = tableCreatorModule;
 import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
 
+import timeZoneUtils from '../utils.timeZone';
+
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 const GROUP_TABLE_CLASS = 'dx-scheduler-group-table';
 
@@ -74,11 +76,28 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         }
     }
 
-    _getDateByIndex(index) {
-        const resultDate = new Date(this._firstViewDate);
+    _getDateForHeaderText(index) {
+        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
+        return this._getDateByIndexCore(newFirstViewDate, index);
+    }
+
+    _getDateByIndexCore(date, index) {
+        const result = new Date(date);
         const dayIndex = Math.floor(index / this._getCellCountInDay());
-        resultDate.setTime(this._firstViewDate.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
-        return resultDate;
+        result.setTime(date.getTime() + this._calculateCellIndex(0, index) * this._getInterval() + dayIndex * this._getHiddenInterval());
+
+        return result;
+    }
+
+    _getDateByIndex(index) {
+        const newFirstViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this._firstViewDate);
+        const result = this._getDateByIndexCore(newFirstViewDate, index);
+
+        if(timeZoneUtils.isTimezoneChangeInDate(this._firstViewDate)) {
+            result.setDate(result.getDate() - 1);
+        }
+
+        return result;
     }
 
     _getFormat() {
@@ -163,7 +182,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _renderDateHeader() {
         const $headerRow = super._renderDateHeader();
-
         if(this._needRenderWeekHeader()) {
             const firstViewDate = new Date(this._firstViewDate);
             const $cells = [];

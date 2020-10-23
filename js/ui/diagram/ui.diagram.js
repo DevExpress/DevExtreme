@@ -1525,6 +1525,10 @@ class Diagram extends Widget {
         this._setDiagramData(data, updateExistingItemsOnly);
         this._raiseDataChangeAction();
     }
+    updateToolbox() {
+        this._diagramInstance && this._diagramInstance.refreshToolbox();
+        this._toolbox && this._toolbox.updateMaxHeight();
+    }
 
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {

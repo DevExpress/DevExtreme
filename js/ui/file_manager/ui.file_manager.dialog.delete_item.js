@@ -3,7 +3,7 @@ import { extend } from '../../core/utils/extend';
 
 import messageLocalization from '../../localization/message';
 
-import ScrollView from '../scroll_view/ui.scroll_view.js';
+import ScrollView from '../scroll_view';
 import FileManagerDialogBase from './ui.file_manager.dialog.js';
 
 const FILE_MANAGER_DIALOG_DELETE_ITEM = 'dx-filemanager-dialog-delete-item';

@@ -313,8 +313,8 @@ export default class FileItemsController {
 
         try {
             actionResult = action();
-        } catch(error) {
-            this._raiseEditActionError(actionInfo, error);
+        } catch(errorInfo) {
+            this._raiseEditActionError(actionInfo, errorInfo);
             return new Deferred().reject().promise();
         }
 
@@ -329,7 +329,7 @@ export default class FileItemsController {
         return whenSome(
             actionResult,
             info => this._raiseCompleteEditActionItem(actionInfo, info),
-            info => this._raiseEditActionItemError(actionInfo, info)
+            errorInfo => this._raiseEditActionItemError(actionInfo, errorInfo)
         ).then(() => {
             completeAction();
             this._raiseCompleteEditAction(actionInfo);
@@ -599,15 +599,15 @@ export default class FileItemsController {
         }
     }
 
-    _raiseEditActionError(actionInfo, error) {
+    _raiseEditActionError(actionInfo, errorInfo) {
         if(this._options.onEditActionError) {
-            this._options.onEditActionError(actionInfo, error);
+            this._options.onEditActionError(actionInfo, errorInfo);
         }
     }
 
-    _raiseEditActionItemError(actionInfo, info) {
+    _raiseEditActionItemError(actionInfo, errorInfo) {
         if(this._options.onEditActionItemError) {
-            this._options.onEditActionItemError(actionInfo, info);
+            this._options.onEditActionItemError(actionInfo, errorInfo);
         }
     }
 

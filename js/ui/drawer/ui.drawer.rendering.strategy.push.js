@@ -13,6 +13,16 @@ class PushStrategy extends DrawerStrategy {
         const drawer = this.getDrawerInstance();
 
         $(drawer.content()).css(drawer.isHorizontalDirection() ? 'width' : 'height', config.maxSize);
+        if(drawer.getMinSize()) {
+            let paddingCssPropertyName = 'padding';
+            switch(drawer.calcTargetPosition()) {
+                case 'left': paddingCssPropertyName += 'Right'; break;
+                case 'right': paddingCssPropertyName += 'Left'; break;
+                case 'top': paddingCssPropertyName += 'Bottom'; break;
+                case 'bottom': paddingCssPropertyName += 'Top'; break;
+            }
+            $(drawer.viewContent()).css(paddingCssPropertyName, drawer.getMinSize());
+        }
 
         if(animate) {
             const animationConfig = {

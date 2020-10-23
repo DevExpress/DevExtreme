@@ -160,13 +160,18 @@ QUnit.module('ClientSideEvents.requestOperation', {
             }
         });
         const instance = $element.dxDiagram('instance');
-        let callCount = 0;
+        let callCount = 17; // Shapes in general category
         assert.equal(instance._diagramInstance.model.items.length, 3);
         assert.equal(onRequestEditOperation.getCalls().length, callCount);
 
         instance._diagramInstance.selection.set(['0']);
         instance._diagramInstance.commandManager.getCommand(DiagramCommand.Delete).execute();
-        assert.equal(onRequestEditOperation.getCalls().length, ++callCount);
+        callCount += 2;
+        assert.equal(onRequestEditOperation.getCalls().length, callCount);
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['operation'], 'changeConnection');
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['args'].connector.id, '2');
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['args'].shape, undefined);
+        assert.equal(onRequestEditOperation.getCall(callCount - 2).args[0]['allowed'], false);
         assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'deleteShape');
         assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].shape.id, '0');
         assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['allowed'], false);
@@ -174,18 +179,10 @@ QUnit.module('ClientSideEvents.requestOperation', {
 
         instance._diagramInstance.selection.set(['2']);
         instance._diagramInstance.commandManager.getCommand(DiagramCommand.Delete).execute();
-        assert.equal(onRequestEditOperation.getCalls().length, ++callCount);
+        callCount += 1;
+        assert.equal(onRequestEditOperation.getCalls().length, callCount);
         assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'deleteConnector');
         assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].connector.id, '2');
-        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['allowed'], false);
-        assert.equal(instance._diagramInstance.model.items.length, 3);
-
-        instance._diagramInstance.selection.set(['0']);
-        instance._diagramInstance.commandManager.getCommand(DiagramCommand.Copy).execute();
-        instance._diagramInstance.commandManager.getCommand(DiagramCommand.Paste).execute();
-        assert.equal(onRequestEditOperation.getCalls().length, ++callCount);
-        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['operation'], 'addShape');
-        assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['args'].shape.id, '3');
         assert.equal(onRequestEditOperation.getCall(callCount - 1).args[0]['allowed'], false);
         assert.equal(instance._diagramInstance.model.items.length, 3);
     });
