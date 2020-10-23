@@ -5,17 +5,18 @@ import { join } from 'path';
 const BASE_PATH = join(__dirname, '..', '..', '..');
 
 describe('Equlas svg to font', () => {
-  const getCountElementInFont = (pathToFont: string) => {
+  const getCountElementInFont = (pathToFont: string): number => {
     const transFont = transfer(pathToFont);
     const glyphKeys = Object.keys(transFont.allGlyph());
 
     // First three svg empty
-    const notEmptyKeys = glyphKeys.slice(3);
+    const countEmptySvg = 3;
+    const notEmptyKeys = glyphKeys.slice(countEmptySvg);
 
     return notEmptyKeys.length;
   };
 
-  const getCountElementInSvg = (pathToSvg: string) => {
+  const getCountElementInSvg = (pathToSvg: string): number => {
     const files = readdirSync(pathToSvg);
     return files.length;
   };

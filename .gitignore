@@ -6,6 +6,7 @@
 /js/localization/cldr-data
 /js/renovation/**/*.j.tsx
 /js/renovation/code_coverage
+/testing/FontIcons/coverage
 bin
 node_modules
 obj

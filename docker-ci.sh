@@ -198,6 +198,11 @@ function run_test_scss {
     npm i && npm run build && npm run test
 }
 
+function run_font_icons_test {
+    npm i font-carrier
+    npm run test-jest -- --config ./testing/FontIcons/jest.config.js
+}
+
 function start_runner_watchdog {
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
     local last_suite_time=unknown
