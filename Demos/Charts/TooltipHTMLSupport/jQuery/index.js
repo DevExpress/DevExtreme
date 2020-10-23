@@ -13,18 +13,27 @@ $(function() {
         tooltip: {
             enabled: true,
             contentTemplate: function(info, container) {
-                $("<div class='state-tooltip'><img src='../../../../images/flags/" +
-                    info.point.data.name.replace(/\s/, "") + ".svg' /><h4>" +
-                    info.argument + "</h4><div><span class='caption'>Capital</span>: " +
-                    info.point.data.capital +
-                    "</div><div><span class='caption'>Population</span>: " +
-                    Globalize.formatNumber(info.value, { maximumFractionDigits: 0 }) +
-                    " people</div>" + "<div><span class='caption'>Area</span>: " +
-                    Globalize.formatNumber(info.point.data.area, { maximumFractionDigits: 0 }) +
-                    " km<sup>2</sup> (" +
-                    Globalize.formatNumber(0.3861 * info.point.data.area, { maximumFractionDigits: 0 }) +
-                    " mi<sup>2</sup>)" + "</div>" + "</div>").appendTo(container);
+                var contentItems =["<div class='state-tooltip'><img src='../../../../images/flags/" +
+                    info.point.data.name.replace(/\s/, "") + ".svg' />",
+                    "<h4 class='state'></h4>",
+                    "<div class='capital'><span class='caption'>Capital</span>: </div>",
+                    "<div class='population'><span class='caption'>Population</span>: </div>",
+                    "<div><span class='caption'>Area</span>: ",
+                    "<span class='area-km'></span> km<sup>2</sup> (",
+                    "<span class='area-mi'></span> mi<sup>2</sup>)",
+                    "</div></div>"];
+
+                    var content = $(contentItems.join(""));
+    
+                    content.find(".state").text(info.argument);
+                    content.find(".capital").append(document.createTextNode(info.point.data.capital));
+                    content.find(".population").append(document.createTextNode(formatNumber(info.value) + " people"));
+                    content.find(".area-km").text(formatNumber(info.point.data.area));
+                    content.find(".area-mi").text(formatNumber(0.3861 * info.point.data.area));
+    
+                    content.appendTo(container);
             }
         }
     });
 });
+var formatNumber = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format;

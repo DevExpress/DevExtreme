@@ -30,18 +30,27 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             enabled: true,
             shared: true,
             customizeTooltip: function (info) {
+                var tmpContainer = document.createElement("div");
+
+                tmpContainer.innerHTML = ["<div><div class='tooltip-header'></div>",
+                "<div class='tooltip-body'><div class='series-name'>",
+                "<span class='top-series-name'></span>",
+                ": </div><div class='value-text'>",
+                "<span class='top-series-value'></span>",
+                "</div><div class='series-name'>",
+                "<span class='bottom-series-name'></span>",
+                ": </div><div class='value-text'>",
+                "<span class='bottom-series-value'></span>",
+                "% </div></div></div>"].join("");
+
+                tmpContainer.querySelector(".tooltip-header").textContent = info.argumentText;
+                tmpContainer.querySelector(".top-series-name").textContent = info.points[0].seriesName;
+                tmpContainer.querySelector(".top-series-value").textContent = info.points[0].valueText;
+                tmpContainer.querySelector(".bottom-series-name").textContent = info.points[1].seriesName;
+                tmpContainer.querySelector(".bottom-series-value").textContent = info.points[1].valueText;
+
                 return {
-                    html: "<div><div class='tooltip-header'>" +
-                    info.argumentText + "</div>" +
-                    "<div class='tooltip-body'><div class='series-name'>" +
-                    info.points[0].seriesName +
-                    ": </div><div class='value-text'>" +
-                    info.points[0].valueText +
-                    "</div><div class='series-name'>" +
-                    info.points[1].seriesName +
-                    ": </div><div class='value-text'>" +
-                    info.points[1].valueText +
-                    "% </div></div></div>"
+                    html: tmpContainer.innerHTML
                 };
             }
         },

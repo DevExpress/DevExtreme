@@ -28,18 +28,27 @@ $(function () {
             enabled: true,
             shared: true,
             customizeTooltip: function (info) {
+                var content = ["<div><div class='tooltip-header'></div>",
+                "<div class='tooltip-body'><div class='series-name'>",
+                "<span class='top-series-name'></span>",
+                ": </div><div class='value-text'>",
+                "<span class='top-series-value'></span>",
+                "</div><div class='series-name'>",
+                "<span class='bottom-series-name'></span>",
+                ": </div><div class='value-text'>",
+                "<span class='bottom-series-value'></span>",
+                "% </div></div></div>"].join("");
+
+                var htmlContent = $(content);
+
+                htmlContent.find(".tooltip-header").text(info.argumentText);
+                htmlContent.find(".top-series-name").text(info.points[0].seriesName);
+                htmlContent.find(".top-series-value").text(info.points[0].valueText);
+                htmlContent.find(".bottom-series-name").text(info.points[1].seriesName);
+                htmlContent.find(".bottom-series-value").text(info.points[1].valueText);
+
                 return {
-                    html: "<div><div class='tooltip-header'>" +
-                    info.argumentText + "</div>" +
-                    "<div class='tooltip-body'><div class='series-name'>" +
-                    info.points[0].seriesName +
-                    ": </div><div class='value-text'>" +
-                    info.points[0].valueText +
-                    "</div><div class='series-name'>" +
-                    info.points[1].seriesName +
-                    ": </div><div class='value-text'>" +
-                    info.points[1].valueText +
-                    "% </div></div></div>"
+                    html: $("<div>").append(htmlContent).html()
                 };
             }
         },

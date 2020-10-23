@@ -1,14 +1,14 @@
 <template>
   <div class="state-tooltip">
-    <img :src="getImagePath(info.point)"><h4>{{ info.argument }}</h4>
-    <div>
+    <img :src="getImagePath(info.point)"><h4 class="state">{{ info.argument }}</h4>
+    <div class="capital">
       <span class="caption">Capital</span>: {{ info.point.data.capital }}
     </div>
     <div>
-      <span class="caption">Population</span>: {{ formatNumber(info.value) }} people
+      <span class="caption">Population</span>: <span class="population">{{ formatNumber(info.value) }}</span> people
     </div>
     <div>
-      <span class="caption">Area</span>: {{ formatNumber(info.point.data.area) }} km<sup>2</sup> ({{ formatNumber(0.3861 * info.point.data.area) }} mi<sup>2</sup>)
+      <span class="caption">Area</span>: <span class="area-km">{{ formatNumber(info.point.data.area) }}</span> km<sup>2</sup> (<span class="area-mi">{{ formatNumber(0.3861 * info.point.data.area) }}</span> mi<sup>2</sup>)
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
       return `../../../../images/flags/${point.data.name.replace(/\s/, '')}.svg`;
     },
     formatNumber:  new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 0
+      maximumFractionDigits: 0
     }).format
   },
 };

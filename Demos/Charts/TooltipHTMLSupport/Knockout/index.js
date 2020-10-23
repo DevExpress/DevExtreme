@@ -13,20 +13,25 @@ window.onload = function() {
             },
             tooltip: {
                 enabled: true,
-                customizeTooltip: function (args) {
-                    return {
-                        html: "<div class='state-tooltip'><img src='../../../../images/flags/" + 
-                        args.point.data.name.replace(/\s/, "") + ".svg' /><h4>" +
-                        args.argument + "</h4><div><span class='caption'>Capital</span>: " +
-                        args.point.data.capital +
-                        "</div><div><span class='caption'>Population</span>: " +
-                        Globalize.formatNumber(args.value, { maximumFractionDigits: 0 }) +
-                        " people</div>" + "<div><span class='caption'>Area</span>: " +
-                        Globalize.formatNumber(args.point.data.area, { maximumFractionDigits: 0 }) +
-                        " km<sup>2</sup> (" +
-                        Globalize.formatNumber(0.3861 * args.point.data.area, { maximumFractionDigits: 0 }) +
-                        " mi<sup>2</sup>)" + "</div>" + "</div>"
-                    };
+                contentTemplate: function(info, $container) {
+                    var container = $container[0];
+                    
+                        container.innerHTML = ["<div class='state-tooltip'><img src='../../../../images/flags/" +
+                            info.point.data.name.replace(/\s/, "") + ".svg' />",
+                            "<h4 class='state'></h4>",
+                            "<div class='capital'><span class='caption'>Capital</span>: </div>",
+                            "<div class='population'><span class='caption'>Population</span>: </div>",
+                            "<div><span class='caption'>Area</span>: ",
+                            "<span class='area-km'></span> km<sup>2</sup> (",
+                            "<span class='area-mi'></span> mi<sup>2</sup>)",
+                            "</div></div>"
+                        ].join("");
+                        
+                        container.querySelector(".state").textContent = info.argument;
+                        container.querySelector(".capital").append(document.createTextNode(info.point.data.capital));
+                        container.querySelector(".population").append(document.createTextNode(formatNumber(info.value) + " people"));
+                        container.querySelector(".area-km").textContent = formatNumber(info.point.data.area);
+                        container.querySelector(".area-mi").textContent = formatNumber(0.3861 * info.point.data.area);
                 }
             }
         }
@@ -34,3 +39,4 @@ window.onload = function() {
     
     ko.applyBindings(viewModel, document.getElementById("chart-demo"));
 };
+var formatNumber = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format;

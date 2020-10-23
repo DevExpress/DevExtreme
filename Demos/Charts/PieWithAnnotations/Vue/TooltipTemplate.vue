@@ -3,13 +3,13 @@
     <div class="country-name">{{ data.country }}
       <br v-if="data.oldCountryName">{{ data.oldCountryName }}
     </div>
-    <div>
+    <div class="gold">
       <span class="caption">Gold</span>: {{ data.gold }}
     </div>
-    <div>
+    <div class="silver">
       <span class="caption">Silver</span>: {{ data.silver }}
     </div>
-    <div>
+    <div class="bronze">
       <span class="caption">Bronze</span>: {{ data.bronze }}
     </div>
   </div>

@@ -55,11 +55,23 @@ $(function () {
 
     function tooltipTemplate(annotation, container) {
         var data = annotation.data;
-        var country = data.country + (data.oldCountryName ? "<br />" + data.oldCountryName : "");
-        $("<div class='medal-tooltip'><div class='country-name'>" + country
-            + "</div><div><span class='caption'>Gold</span>: " + data.gold
-            + "</div><div><span class='caption'>Silver</span>: " + data.silver
-            + "</div><div><span class='caption'>Bronze</span>: " + data.bronze
-            + "</div></div>").appendTo(container);
+        var contentItems = ["<div class='medal-tooltip'>",
+        "<div class='country-name'></div>",
+        "<div class='gold'><span class='caption'>Gold</span>: </div>",
+        "<div class='silver'><span class='caption'>Silver</span>: </div>",
+        "<div class='bronze'><span class='caption'>Bronze</span>: </div>",
+        "</div>"];
+
+        var content = $(contentItems.join(""));
+
+        content.find(".country-name").text(data.country);
+        if(data.oldCountryName) {
+            content.find(".country-name").append("<br/>").append(document.createTextNode(data.oldCountryName));
+        }
+        content.find(".gold").append(document.createTextNode(data.gold));
+        content.find(".silver").append(document.createTextNode(data.silver));
+        content.find(".bronze").append(document.createTextNode(data.bronze));
+            
+        content.appendTo(container);
     }
 });

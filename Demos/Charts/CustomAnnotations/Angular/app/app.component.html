@@ -28,13 +28,13 @@
         <text x="70" y="25" class="state">{{annotation.argument}}</text>
         <text x="0" y="60">
             <tspan class="caption">Capital:</tspan>
-            <tspan dx="5">{{annotation.data.capital}}</tspan>
+            <tspan class="capital" dx="5">{{annotation.data.capital}}</tspan>
             
             <tspan dy="14" x="0" class="caption">Population:</tspan>
-            <tspan dx="5">{{annotation.data.population | number:"3.0-0"}}</tspan>
+            <tspan class="population" dx="5">{{annotation.data.population | number:"3.0-0"}}</tspan>
             
             <tspan dy="14" x="0" class="caption">Area:</tspan>
-            <tspan dx="5">{{annotation.data.area | number: "3.0-0"}}</tspan>
+            <tspan class="area" dx="5">{{annotation.data.area | number: "3.0-0"}}</tspan>
             <tspan dx="5">km</tspan>
             <tspan class="sup" dy="-2">2</tspan>
         </text>

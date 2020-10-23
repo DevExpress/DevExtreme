@@ -27,13 +27,13 @@ export class AppComponent {
             html: "<div><div class='tooltip-header'>" +
                 info.argumentText + "</div>" +
                 "<div class='tooltip-body'><div class='series-name'>" +
-                info.points[0].seriesName +
+                "<span class='top-series-name'>" + info.points[0].seriesName + "</span>" +
                 ": </div><div class='value-text'>" +
-                info.points[0].valueText +
+                "<span class='top-series-value'>" + info.points[0].valueText + "</span>" +
                 "</div><div class='series-name'>" +
-                info.points[1].seriesName +
+                "<span class='bottom-series-name'>" + info.points[1].seriesName + "</span>" +
                 ": </div><div class='value-text'>" +
-                info.points[1].valueText +
+                "<span class='bottom-series-value'>" + info.points[1].valueText + "</span>" +
                 "% </div></div></div>"
         };
     }

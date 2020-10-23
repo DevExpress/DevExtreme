@@ -33,8 +33,11 @@ $(function() {
             },
             customizeTooltip: function(e) {
                 return {
-                    html: "<div class='tooltip'>" + e.description + "</div>"
-                }
+                    html: $("<div class='tooltip'>").
+                        appendTo($("<div>")).
+                        text(e.description).
+                        parent().html()
+                };
             }
         },
         annotations: [

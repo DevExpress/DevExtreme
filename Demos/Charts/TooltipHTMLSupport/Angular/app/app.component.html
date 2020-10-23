@@ -13,15 +13,15 @@
     </dxo-tooltip>
     <dxo-export [enabled]="true"></dxo-export>
     <div *dxTemplate="let info of 'content'" class='state-tooltip'>
-        <img src='{{getImagePath(info.point)}}' /><h4>{{info.argument}}</h4>
-        <div>
+        <img src='{{getImagePath(info.point)}}' /><h4 class='state'>{{info.argument}}</h4>
+        <div class='capital'>
             <span class='caption'>Capital</span>: {{info.point.data.capital}}
         </div>
-        <div>
+        <div class='population'>
             <span class='caption'>Population</span>: {{info.value | number:"3.0-0"}} people
         </div>
         <div>
-            <span class='caption'>Area</span>: {{info.point.data.area | number:"3.0-0"}} km<sup>2</sup> ({{0.3861 * info.point.data.area | number:"3.0-0"}} mi<sup>2</sup>)
+            <span class='caption'>Area</span>: <span class='area-km'>{{info.point.data.area | number:"3.0-0"}}</span> km<sup>2</sup> (<span class='area-mi'>{{0.3861 * info.point.data.area | number:"3.0-0"}}</span> mi<sup>2</sup>)
         </div>
     </div>
 </dx-pie-chart>

@@ -8,13 +8,13 @@ export default function TooltipTemplate(annotation) {
       <div className='country-name'>{data.country}
         {data.oldCountryName && <br />}{data.oldCountryName}
       </div>
-      <div>
+      <div className='gold'>
         <span className='caption'>Gold</span>: {data.gold}
       </div>
-      <div>
+      <div className='silver'>
         <span className='caption'>Silver</span>: {data.silver}
       </div>
-      <div>
+      <div className='bronze'>
         <span className='caption'>Bronze</span>: {data.bronze}
       </div>
     </div>
