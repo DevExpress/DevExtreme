@@ -1675,7 +1675,7 @@ QUnit.module('Keyboard keys', {
         // act
         this.gridView.render($('#container'));
         this.editingController.editCell(0, 1);
-
+        this.keyboardNavigationController._focusedCellPosition = { columnIndex: -1, rowIndex: -1 };
         this.keyboardNavigationController._tabKeyHandler({
             originalEvent: {
                 target: $('#container').find('.txt').first(),
