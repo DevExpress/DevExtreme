@@ -323,26 +323,30 @@ export default class ViewDataProvider {
         return dateTable[lastRowIndex][lastCellIndex].endDate;
     }
 
-    findGroupCellStartDate(groupIndex, startDate, endDate) {
+    findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
         const { dateTable } = this.getGroupData(groupIndex);
 
         for(let i = 0; i < dateTable[0].length; ++i) {
             let cell = dateTable[0][i];
-            if(dateUtils.sameDate(cell.startDate, startDate)) {
-                let lastCell = dateTable[dateTable.length - 1][i];
+            const lastRowIndex = dateTable.length - 1;
 
-                if(lastCell.endDate < startDate) {
+            if(dateUtils.sameDate(cell.startDate, startDate)) {
+                let lastCell = dateTable[lastRowIndex][i];
+
+                if(lastCell.endDate <= startDate) {
                     if(endDate.getDate() > startDate.getDate()) {
                         cell = dateTable[0][i + 1];
-                        lastCell = dateTable[dateTable.length - 1][i + 1];
+                        lastCell = dateTable[lastRowIndex][i + 1];
                     }
                 }
 
-                return lastCell?.endDate > startDate
-                    ? cell.startDate
-                    : undefined;
+                if(lastCell?.endDate > startDate) {
+                    return cell.startDate;
+                }
             }
         }
+
+        return isAllDay && this.getGroupStartDate(groupIndex);
     }
 
     getCellsGroup(groupIndex) {

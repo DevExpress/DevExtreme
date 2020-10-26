@@ -45,8 +45,13 @@ export class AppointmentSettingsGeneratorBaseStrategy {
 
         gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
 
-        const allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
-        return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
+        return this._createAppointmentInfos(gridAppointmentList, itemResources, this._isAllDayAppointment(rawAppointment));
+    }
+
+    _isAllDayAppointment(rawAppointment) {
+        const scheduler = this.scheduler;
+
+        return scheduler.appointmentTakesAllDay(rawAppointment) && scheduler._workSpace.supportAllDayRow();
     }
 
     _createAppointments(appointment, resources) {
@@ -256,7 +261,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     _cropAppointmentsByStartDayHour(appointments, rawAppointment) {
         return appointments.map(appointment => {
             const startDate = new Date(appointment.startDate);
-            const firstViewDate = this._getAppointmentFirstViewDate(appointment);
+            const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
             const startDayHour = this._getViewStartDayHour(firstViewDate);
 
             appointment.startDate = this._getAppointmentResultDate({
@@ -358,7 +363,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         return firstViewDate.getHours();
     }
 
-    _getAppointmentFirstViewDate(appointment) {
+    _getAppointmentFirstViewDate(appointment, rawAppointment) {
         const { viewDataProvider } = this.scheduler.getWorkSpace();
         const { groupIndex } = appointment.source;
         const {
@@ -366,7 +371,9 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
             endDate
         } = appointment;
 
-        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate);
+        const allDay = this._isAllDayAppointment(rawAppointment);
+
+        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, allDay);
     }
 
     _getGroupDateRange(groupIndex) {
