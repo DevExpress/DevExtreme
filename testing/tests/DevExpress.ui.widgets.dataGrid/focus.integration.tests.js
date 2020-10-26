@@ -699,7 +699,8 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             },
             scrolling: {
                 mode: 'infinite',
-                preloadEnabled: true
+                preloadEnabled: true,
+                useNative: false
             }
         }).dxDataGrid('instance');
         this.clock.tick();
