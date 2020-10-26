@@ -2722,6 +2722,37 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.equal(visibleRows[0].key, 6, 'first visible row key');
         assert.equal($(dataGrid.getRowElement(1, 0)).find('.dx-texteditor').length, 1, 'row has editor');
     });
+
+    // T939449
+    QUnit.test('The virtual row should not be rendered after removing data rows via push API', function(assert) {
+        // arrange
+        const array = [];
+
+        for(let i = 1; i <= 12; i++) {
+            array.push({ id: i });
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: array,
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                useNative: false
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick();
+        const store = dataGrid.getDataSource().store();
+
+        // act
+        store.push([{ type: 'remove', key: 12 }]);
+        store.push([{ type: 'remove', key: 11 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual($('#dataGrid').find('.dx-datagrid-rowsview').find('.dx-virtual-row').length, 0, 'no virtual rows');
+    });
 });
 
 
