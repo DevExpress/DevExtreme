@@ -970,6 +970,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const newStart = new Date('2019-02-25');
         const newEnd = new Date('2019-02-26');
         const newTitle = 'New';
+        let keyIsDefined = false;
         this.instance.option('onTaskUpdating', (e) => {
             if(e.newValues['title']) {
                 e.newValues['title'] = newTitle;
@@ -980,11 +981,15 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             if(e.newValues['end']) {
                 e.newValues['end'] = newEnd;
             }
+            keyIsDefined = taskToUpdate.id === e.key;
         });
 
         getGanttViewCore(this.instance).commandManager.changeTaskTitleCommand.execute(taskToUpdate.id.toString(), '1');
+        assert.ok(keyIsDefined, 'key defined');
         getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(taskToUpdate.id.toString(), '2');
+        assert.ok(keyIsDefined, 'key defined');
         getGanttViewCore(this.instance).commandManager.changeTaskEndCommand.execute(taskToUpdate.id.toString(), '3');
+        assert.ok(keyIsDefined, 'key defined');
 
         this.clock.tick();
         assert.equal(taskToUpdate.title, newTitle, 'task title is updated');
@@ -1014,12 +1019,14 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const newEnd = new Date('2019-02-26');
         const newTitle = 'New';
         const newProgress = 73;
+        let keyIsDefined = false;
 
         this.instance.option('onTaskEditDialogShowing', (e) => {
             e.values['title'] = newTitle;
             e.values['start'] = newStart;
             e.values['end'] = newEnd;
             e.values['progress'] = newProgress;
+            keyIsDefined = !!e.key;
         });
 
         this.clock.tick();
@@ -1032,6 +1039,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal((new Date($inputs.eq(1).val())).getTime(), newStart.getTime(), 'start task text is shown');
         assert.equal((new Date($inputs.eq(2).val())).getTime(), newEnd.getTime(), 'end task text is shown');
         assert.equal($inputs.eq(3).val(), newProgress + '%', 'progress text is shown');
+        assert.ok(keyIsDefined, 'key defined');
     });
     test('task dialog showing - disable fields', function(assert) {
         this.createInstance(allSourcesOptions);
