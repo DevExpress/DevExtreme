@@ -390,14 +390,18 @@ const Scrollable = DOMComponent.inherit({
 
         return {
             top: -top,
-            left: this._isRtlNativeStrategy() && parseInt(browser.version) > 85 ? this._getMaxLeftOffset() - left : -left
+            left: this._isRtlNativeStrategy() && (this._isModernWebkit() || browser.msie) ? this._getMaxLeftOffset() - Math.abs(left) : -left
         };
     },
 
     _isRtlNativeStrategy: function() {
         const { useNative, rtlEnabled } = this.option();
 
-        return useNative && rtlEnabled && browser.webkit;
+        return useNative && rtlEnabled;
+    },
+
+    _isModernWebkit: function() {
+        return browser.webkit && parseInt(browser.version) > 85;
     },
 
     scrollTop: function() {

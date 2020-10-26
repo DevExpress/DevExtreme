@@ -42,6 +42,7 @@ const NativeStrategy = Class.inherit({
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._isRtlNativeStrategy = scrollable._isRtlNativeStrategy.bind(scrollable);
         this._getMaxLeftOffset = scrollable._getMaxLeftOffset.bind(scrollable);
+        this._isModernWebkit = scrollable._isModernWebkit.bind(scrollable);
     },
 
     render: function() {
@@ -140,8 +141,8 @@ const NativeStrategy = Class.inherit({
                 top: -top,
                 left: -left
             },
-            reachedLeft: this._isRtlNativeStrategy() && parseInt(browser.version) > 85 ? this._isReachedRight(-left) : this._isReachedLeft(left),
-            reachedRight: this._isRtlNativeStrategy() && parseInt(browser.version) > 85 ? this._isReachedLeft(-left) : this._isReachedRight(left),
+            reachedLeft: this._isRtlNativeStrategy() && (this._isModernWebkit() || browser.msie) ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: this._isRtlNativeStrategy() && (this._isModernWebkit() || browser.msie) ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
             reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
             reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * pushBackValue : undefined
         };
@@ -297,8 +298,14 @@ const NativeStrategy = Class.inherit({
         this._$container.scrollTop(Math.round(-top - distance.top + pushBackValue));
 
         let offsetLeft = Math.round(-left - distance.left);
-        if(this._isRtlNativeStrategy() && parseInt(browser.version) > 85) {
-            offsetLeft -= this._getMaxLeftOffset();
+
+        if(this._isRtlNativeStrategy()) {
+            if(this._isModernWebkit()) {
+                offsetLeft -= this._getMaxLeftOffset();
+            }
+            if(browser.msie) {
+                offsetLeft = Math.abs(offsetLeft - this._getMaxLeftOffset());
+            }
         }
 
         this._$container.scrollLeft(offsetLeft);
