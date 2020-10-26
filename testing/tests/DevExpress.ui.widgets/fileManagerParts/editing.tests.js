@@ -1045,4 +1045,42 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(infos[1].details[0].commonText, file0.name, 'Detail text is correct');
     });
 
+    test('refresh during upload does not prevent large files from being shown before next refresh (T928871)', function(assert) {
+        const operationDelay = 1000;
+        const chunkSize = 50000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            currentPath: 'Folder 1',
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            upload: {
+                chunkSize
+            }
+        });
+        this.clock.tick(400);
+
+        const initialItemCount = this.wrapper.getDetailsItemsNames().length;
+        const file0 = createUploaderFiles(31)[30];
+
+        this.wrapper.getItemsViewPanel().trigger(getDropFileEvent(file0));
+        this.clock.tick(operationDelay / 2);
+        fileManager.refresh();
+
+        let itemNames = this.wrapper.getDetailsItemNamesTexts();
+        let uploadedFileIndex = itemNames.indexOf(file0.name);
+
+        assert.strictEqual(initialItemCount, itemNames.length, 'item count not increased');
+        assert.strictEqual(uploadedFileIndex, -1, 'file is not uploaded');
+
+        this.clock.tick((file0.size / chunkSize + 1) * operationDelay);
+
+        itemNames = this.wrapper.getDetailsItemNamesTexts();
+        uploadedFileIndex = itemNames.indexOf(file0.name);
+
+        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.ok(uploadedFileIndex > -1, 'file is uploaded');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '6 MB', 'file size is correct');
+    });
+
 });
