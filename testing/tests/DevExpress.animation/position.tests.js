@@ -1,4 +1,5 @@
 import $ from 'jquery';
+import renderer from 'core/renderer';
 import positionUtils from 'animation/position';
 import translator from 'animation/translator';
 import browser from 'core/utils/browser';
@@ -952,6 +953,64 @@ const testCollision = (name, fixtureName, params, expectedHorzDist, expectedVert
         } finally {
             window.innerHeight = initialInnerHeight;
             window.outerHeight = initialOuterHeight;
+        }
+    });
+
+    QUnit.test('position should return window.height() if window.outerHeight == window.innerHeight (T939748)', function(assert) {
+        const isPhone = devices.real().deviceType === 'phone';
+        if(isPhone || browser.safari) {
+            assert.ok(true, 'actual only for desktop browsers except Safari');
+            return;
+        }
+
+        const $what = $('#what').height(300);
+        const initialInnerHeight = window.innerHeight;
+        const initialOuterHeight = window.outerHeight;
+
+        const heightStub = sinon.stub(renderer.fn, 'height').returns(1000);
+
+        try {
+            window.innerHeight = 500;
+            window.outerHeight = 500;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.v.location, 350, 50, 'vertical location is correct');
+        } finally {
+            window.innerHeight = initialInnerHeight;
+            window.outerHeight = initialOuterHeight;
+            heightStub.restore();
+        }
+    });
+
+    QUnit.test('position should return window.width() if window.outerWidth == window.innerWidth (T939748)', function(assert) {
+        const isPhone = devices.real().deviceType === 'phone';
+        if(isPhone || browser.safari) {
+            assert.ok(true, 'actual only for desktop browsers except Safari');
+            return;
+        }
+
+        const $what = $('#what').width(300);
+        const initialInnerWidth = window.innerWidth;
+        const initialOuterWidth = window.outerWidth;
+
+        const widthStub = sinon.stub(renderer.fn, 'width').returns(1000);
+
+        try {
+            window.innerWidth = 500;
+            window.outerWidth = 500;
+
+            const resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.h.location, 350, 50, 'horizontal location is correct');
+        } finally {
+            window.innerWidth = initialInnerWidth;
+            window.outerWidth = initialOuterWidth;
+            widthStub.restore();
         }
     });
 
