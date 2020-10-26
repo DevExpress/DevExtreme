@@ -351,9 +351,9 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed) {
-        const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
         this._alignRootSimpleItems($container, colCount, excludeTabbed);
 
+        const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
         if(alignItemLabelsInAllGroups) {
             this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
         } else {
