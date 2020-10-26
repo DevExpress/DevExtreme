@@ -316,7 +316,6 @@ const Scrollable = DOMComponent.inherit({
         if(isPlainObject(location)) {
             const left = ensureDefined(location.left, location.x);
             const top = ensureDefined(location.top, location.y);
-
             return {
                 left: isDefined(left) ? -left : undefined,
                 top: isDefined(top) ? -top : undefined
@@ -390,7 +389,7 @@ const Scrollable = DOMComponent.inherit({
 
         return {
             top: -top,
-            left: this._isRtlNativeStrategy() && (this._isModernWebkit() || browser.msie) ? this._getMaxLeftOffset() - Math.abs(left) : -left
+            left: this._isRtlNativeStrategy() && (this._isRtlConsistentBrowser() || browser.msie) ? this._getMaxLeftOffset() - Math.abs(left) : -left
         };
     },
 
@@ -400,8 +399,8 @@ const Scrollable = DOMComponent.inherit({
         return useNative && rtlEnabled;
     },
 
-    _isModernWebkit: function() {
-        return browser.webkit && parseInt(browser.version) > 85;
+    _isRtlConsistentBrowser: function() {
+        return (browser.webkit && parseInt(browser.version) > 85) || browser.safari;
     },
 
     scrollTop: function() {
