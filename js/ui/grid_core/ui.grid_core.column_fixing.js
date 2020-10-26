@@ -21,6 +21,8 @@ const FIXED_COLUMNS_CLASS = 'dx-fixed-columns';
 const POINTER_EVENTS_NONE_CLASS = 'dx-pointer-events-none';
 const COMMAND_TRANSPARENT = 'transparent';
 const GROUP_ROW_CLASS = 'dx-group-row';
+const FILTER_ROW_CLASS = 'filter-row';
+const HEADERS_ROW_CLASS = 'dx-header-row';
 
 const getTransparentColumnIndex = function(fixedColumns) {
     let transparentColumnIndex = -1;
@@ -553,6 +555,168 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         }
 
         return normalizeColumnWidths(fixedColumns, result, fixedWidths);
+    },
+
+    _renderCell: function(cell, options) {
+        const $cell = this.callBase.apply(this, arguments);
+
+        if(options.row.rowType === 'header') {
+            this.addTabKeyHandler($cell, HEADERS_ROW_CLASS);
+        }
+    },
+
+    _renderFilterCell: function(cell) {
+        this.callBase.apply(this, arguments);
+
+        this.addTabKeyHandler($(cell), this.addWidgetPrefix(FILTER_ROW_CLASS), true);
+    },
+
+    addTabKeyHandler: function($cell, rowClass, isFilterRow) {
+        const that = this;
+        eventsEngine.on($cell, 'keydown', (e) => {
+            if(e.key === 'Tab' && this._fixedTableElement) {
+                const isNextCellFocused = this._focusNextCell(e, rowClass, isFilterRow);
+
+                if(!isNextCellFocused) {
+                    if(isFilterRow) {
+                        if(e.shiftKey) {
+                            this._focusLastHeader();
+                        } else {
+                            that.component.getCellElement(0, 0).focus();
+                        }
+
+                        e.preventDefault();
+                    } else {
+                        if(!e.shiftKey) {
+                            this._focusFirstFilterCell();
+                            e.preventDefault();
+                        }
+                    }
+                }
+            }
+        });
+    },
+
+    _focusLastHeader: function() {
+        const lastHeader = this._tableElement.find(`.${HEADERS_ROW_CLASS} > td`).last();
+        const lastFixedHeader = this._fixedTableElement.find(`.${HEADERS_ROW_CLASS} > td`).last();
+
+        if(lastFixedHeader.hasClass('dx-pointer-events-none')) {
+            lastHeader.focus();
+        } else {
+            lastFixedHeader.focus();
+        }
+    },
+
+    _focusFirstFilterCell: function() {
+        const filterRowCellSelector = `.${this.addWidgetPrefix(FILTER_ROW_CLASS)} > td.dx-editor-cell`;
+        const firstFilter = this._tableElement.find(filterRowCellSelector).first();
+        const firstFixedFilter = this._fixedTableElement.find(filterRowCellSelector).first();
+
+        if(firstFilter.hasClass('dx-hidden-cell')) {
+            this._focusFilterCell(firstFixedFilter, true);
+        } else {
+            this._focusFilterCell(firstFilter, true);
+        }
+    },
+
+    _getCellIndex: function($cell, isFixed) {
+        const index = $cell.index();
+        const { transparentColIndex, transparentColspan } = this._getTransparentInfo();
+
+        if(!isFixed || index < transparentColIndex) {
+            return index;
+        }
+
+        return index + transparentColspan - 1;
+    },
+
+    _focusNextCell: function(e, rowClass, isFilterRow) {
+        const rowSelector = `.${rowClass}`;
+
+        const isFixedTableCell = $element => {
+            return $element.closest('.dx-datagrid-table').is(this._fixedTableElement);
+        };
+
+        const $target = $(e.currentTarget);
+        const $row = $target.closest('tr');
+        const isTargetInFixedTable = isFixedTableCell($target);
+        const colIndex = this._getCellIndex($target, isTargetInFixedTable);
+
+        const direction = e.shiftKey ? -1 : 1;
+
+        let nextColIndex = colIndex + direction;
+        let $nextCell = $row.find('td').eq(nextColIndex);
+        let $targetRow;
+
+        const isFilterMenuFocused = $target.find('.dx-filter-menu').is(':focus');
+        const isFilterInputFocused = $target.find('input').is(':focus');
+
+        if(isFilterRow && (isFilterInputFocused && e.shiftKey || isFilterMenuFocused && !e.shiftKey)) {
+            return true;
+        }
+
+        if(isTargetInFixedTable) {
+            if($nextCell.hasClass('dx-pointer-events-none') || !$nextCell.length || $nextCell.is($target)) {
+                $targetRow = this._tableElement.find(rowSelector);
+            }
+        } else if($nextCell.hasClass('dx-hidden-cell')) {
+            $targetRow = this._fixedTableElement.find(rowSelector);
+
+            nextColIndex = this._getCorrectedColIndex(nextColIndex);
+        }
+
+        if($targetRow) {
+            $nextCell = $targetRow.find('td').eq(nextColIndex);
+
+            if(nextColIndex < 0) {
+                return false;
+            }
+
+            if($nextCell.length) {
+                if(isFilterRow) {
+                    this._focusFilterCell($nextCell, !e.shiftKey);
+                } else {
+                    $nextCell.focus();
+                }
+
+                e.preventDefault();
+
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return !$target.is(':last-child');
+    },
+
+    _getCorrectedColIndex: function(colIndex) {
+        const { transparentColIndex, transparentColspan } = this._getTransparentInfo();
+
+        if(colIndex > transparentColIndex) {
+            colIndex = colIndex - transparentColspan + 1;
+        }
+
+        return colIndex;
+    },
+
+    _getTransparentInfo: function() {
+        const $transparentColumn = this.getTransparentColumnElement();
+        const transparentColIndex = $transparentColumn?.index() || 0;
+        const transparentColspan = Number($transparentColumn?.attr('colspan') || 0);
+
+        return { transparentColIndex, transparentColspan };
+    },
+
+    _focusFilterCell: function($cell, isForward) {
+        const $filterMenu = $cell.find('.dx-filter-menu');
+
+        if(isForward && $filterMenu.length) {
+            $filterMenu.focus();
+        } else {
+            $cell.find('input').focus();
+        }
     }
 });
 
