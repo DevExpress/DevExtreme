@@ -240,8 +240,11 @@ const TagBox = SelectBox.inherit({
         const rtlEnabled = this.option('rtlEnabled');
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
 
-        const isScrollReverted = rtlEnabled && (!browser.webkit || browser.chrome && +browser.version >= 85);
-        const scrollSign = (!rtlEnabled || browser.webkit && !browser.chrome || browser.chrome && +browser.version < 85 || browser.msie) ? 1 : -1;
+        // NOTE: for affecting this Chrome BC: https://www.chromestatus.com/feature/5759578031521792
+        const isNewChrome = browser.chrome && +browser.version >= 85;
+        const isOldChrome = browser.chrome && +browser.version < 85;
+        const isScrollReverted = rtlEnabled && (!browser.webkit || isNewChrome);
+        const scrollSign = (!rtlEnabled || browser.webkit && !browser.chrome || isOldChrome || browser.msie) ? 1 : -1;
 
         return (isScrollLeft ^ !isScrollReverted)
             ? 0
