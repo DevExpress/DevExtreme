@@ -257,7 +257,10 @@ export default class FileItemsController {
         const actionInfo = this._createEditActionInfo('upload', itemInfos, uploadDirectoryInfo, { sessionInfo });
         return this._processEditAction(actionInfo,
             () => sessionInfo.deferreds,
-            () => this._resetDirectoryState(uploadDirectoryInfo));
+            () => {
+                this._resetDirectoryState(uploadDirectoryInfo);
+                this.setCurrentDirectory(uploadDirectoryInfo);
+            });
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
