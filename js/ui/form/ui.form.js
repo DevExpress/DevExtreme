@@ -38,6 +38,8 @@ import {
 import '../validation_summary';
 import '../validation_group';
 
+// STYLE form
+
 import {
     FORM_CLASS,
     FIELD_ITEM_CLASS,

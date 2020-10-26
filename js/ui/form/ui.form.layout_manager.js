@@ -437,7 +437,7 @@ const LayoutManager = Widget.inherit({
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_COL_CLASS);
                 }
                 const form = that.option('form');
-                if(form && item.itemType === SIMPLE_ITEM_TYPE) {
+                if(item.itemType === SIMPLE_ITEM_TYPE && form && form._itemsRunTimeInfo) {
                     const formItems = form._itemsRunTimeInfo.getItems();
                     if(formItems && formItems[item.guid] && formItems[item.guid].path.indexOf('.') === -1) {
                         $itemElement.addClass(ROOT_SIMPLE_ITEM_CLASS);
