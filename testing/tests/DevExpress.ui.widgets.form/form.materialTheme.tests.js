@@ -299,14 +299,27 @@ QUnit.module('Left label location scenarios', () => {
             { itemType: 'group', items: ['item2', 'item3'] }
         ]);
         wrapper.checkFormSize(1000, 159);
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 43, 15);
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 43, 956, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 951, 31);
 
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 61, 0, 49, 15);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 51, 49, 951, 31);
 
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item3"]'), 128, 0, 49, 15);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item3"]'), 118, 49, 951, 31);
+    });
+
+    testChromeOnly('1 column -> [item1, i2, { group [longText] }]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(1, { labelLocation: 'left' }, ['item1', 'i2', { itemType: 'group', items: ['longText'] } ]);
+        wrapper.checkFormSize(1000, 159);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 951, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i2"]'), 77, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i2"]'), 67, 49, 951, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 128, 0, 70, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 118, 70, 930, 31);
     });
 
     testChromeOnly('1 column -> [item1, { group [{ tabbed [{ item2 }] }] }]', function(assert) {
@@ -322,10 +335,72 @@ QUnit.module('Left label location scenarios', () => {
             }
         ]);
         wrapper.checkFormSize(1000, 252);
-        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 43, 15);
-        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 43, 956, 31);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 951, 31);
 
         wrapper.checkElementPosition(wrapper.$form.find('[for$="item2"]'), 181, 20, 49, 15);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="item2"]'), 171, 69, 911, 31);
+    });
+
+    testChromeOnly('2 columns -> [item1, i2 }]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(2, { labelLocation: 'left' },
+            ['item1', 'i2']);
+        wrapper.checkFormSize(1000, 41);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 431, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i2"]'), 10, 520, 22, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i2"]'), 0, 542, 458, 31);
+    });
+
+    testChromeOnly('2 columns -> [item1, { group [{ longText }] }]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(2, { labelLocation: 'left' },
+            ['item1', { itemType: 'group', items: ['longText'] }]);
+        wrapper.checkFormSize(1000, 41);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 431, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 10, 520, 71, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 0, 591, 409, 31);
+    });
+
+    testChromeOnly('2 columns -> [item1, i2, { group. colCont:2 colSpan:2, [{ longText1, longText2 }] }]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(2, { labelLocation: 'left' },
+            ['item1', 'i2', { itemType: 'group', colSpan: 2, colCount: 2, items: ['longText1', 'longText2'] }]);
+        wrapper.checkFormSize(1000, 92);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 431, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i2"]'), 10, 520, 22, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i2"]'), 0, 542, 458, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText1"]'), 60, 0, 82, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText2"]'), 51, 602, 398, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText1"]'), 60, 0, 82, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText2"]'), 51, 602, 398, 31);
+    });
+
+    testChromeOnly('2 columns -> [item1, i2, i3, item4, { group. colCont:2 colSpan:2, [{ longText1, longText2 }] }]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(2, { labelLocation: 'left' },
+            ['item1', 'i2', 'i3', 'item4', { itemType: 'group', colSpan: 2, colCount: 2, items: ['longText1', 'longText2'] }]);
+        wrapper.checkFormSize(1000, 159);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 431, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i2"]'), 10, 520, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i2"]'), 0, 569, 431, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i3"]'), 77, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i3"]'), 67, 49, 431, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item4"]'), 77, 520, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item4"]'), 67, 569, 431, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText1"]'), 128, 0, 82, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText2"]'), 118, 602, 398, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText1"]'), 128, 0, 82, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText2"]'), 118, 602, 398, 31);
     });
 });
