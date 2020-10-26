@@ -28,12 +28,15 @@ jobs:
     - name: Build
       env:
         DEVEXTREME_TEST_CI: "true"
-      run: npm build
+      run: npm run build
 
     - name: Run TestCafe tests
       env:
         ARGS: ${{ matrix.ARGS }}
-      run: npx testcafe --chrome:headless $ARGS
+      run: |
+      all_args="--browsers=chrome:headless ${ARGS}"
+      echo "$all_args"
+      npm run test-testcafe -- $all_args
     - name: Copy screenshots artifacts
       uses: actions/upload-artifact@v2
       with:
