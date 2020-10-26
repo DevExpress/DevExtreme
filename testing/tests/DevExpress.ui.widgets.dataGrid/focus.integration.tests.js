@@ -710,7 +710,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(dataGrid.getTopVisibleRowData().id, 5, 'focusedRowIndex');
+        assert.equal(dataGrid.getTopVisibleRowData().id, 5, 'top visible row id');
     });
 
     // T804927
