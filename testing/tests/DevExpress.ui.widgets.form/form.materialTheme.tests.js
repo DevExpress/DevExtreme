@@ -403,4 +403,52 @@ QUnit.module('Left label location scenarios', () => {
         wrapper.checkElementPosition(wrapper.$form.find('[for$="longText1"]'), 128, 0, 82, 15);
         wrapper.checkElementPosition(wrapper.$form.find('[id$="longText2"]'), 118, 602, 398, 31);
     });
+
+    testChromeOnly('3 columns -> [item1, i2.colSpan2]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(3, { labelLocation: 'left' },
+            ['item1', { dataField: 'i2', colSpan: 2 }]);
+        wrapper.checkFormSize(1000, 41);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 264, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i2"]'), 10, 354, 22, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i2"]'), 0, 376, 624, 31);
+    });
+
+    testChromeOnly('3 columns -> [item1, i2.colSpan2, i3, i4, item5]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(3, { labelLocation: 'left' },
+            ['item1', { dataField: 'i2', colSpan: 2 }, 'i3', 'i4', 'i5']);
+        wrapper.checkFormSize(1000, 108);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 264, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i2"]'), 10, 354, 22, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i2"]'), 0, 376, 624, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i3"]'), 77, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i3"]'), 67, 49, 264, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i4"]'), 77, 354, 22, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i4"]'), 67, 376, 270, 31);
+    });
+
+    testChromeOnly('3 columns -> [item1, i2.colSpan2, i3, i4, item5, { group. colSpan:3 items: [longText] }]', function(assert) {
+        const wrapper = new FormLayoutTestWrapper(3, { labelLocation: 'left' },
+            ['item1', { dataField: 'i2', colSpan: 2 }, 'i3', 'i4', 'i5', { itemType: 'group', colSpan: 3, colCount: 1, items: ['longText'] }]);
+        wrapper.checkFormSize(1000, 159);
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="item1"]'), 10, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="item1"]'), 0, 49, 264, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i2"]'), 10, 354, 22, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i2"]'), 0, 376, 624, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i3"]'), 77, 0, 49, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i3"]'), 67, 49, 264, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="i4"]'), 77, 354, 22, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="i4"]'), 67, 376, 270, 31);
+
+        wrapper.checkElementPosition(wrapper.$form.find('[for$="longText"]'), 128, 0, 71, 15);
+        wrapper.checkElementPosition(wrapper.$form.find('[id$="longText"]'), 118, 71, 929, 31);
+    });
 });
