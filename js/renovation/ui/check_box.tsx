@@ -8,6 +8,7 @@ import {
   Ref,
   Effect,
   Event,
+  ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
@@ -162,7 +163,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @Ref() widgetRef!: Widget;
 
-  @Ref() target!: HTMLDivElement;
+  @ForwardRef() target!: HTMLDivElement;
 
   @Effect({ run: 'once' })
   afterInitEffect(): EffectReturn {
