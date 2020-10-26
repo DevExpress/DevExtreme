@@ -310,30 +310,43 @@ export default class ViewDataProvider {
     }
 
     getGroupStartDate(groupIndex) {
-        const { dateTable } = this._getGroupData(groupIndex);
+        const { dateTable } = this.getGroupData(groupIndex);
 
         return dateTable[0][0].startDate;
     }
 
     getGroupEndDate(groupIndex) {
-        const { dateTable } = this._getGroupData(groupIndex);
+        const { dateTable } = this.getGroupData(groupIndex);
         const lastRowIndex = dateTable.length - 1;
         const lastCellIndex = dateTable[lastRowIndex].length - 1;
 
         return dateTable[lastRowIndex][lastCellIndex].endDate;
     }
 
-    getGroupCellStartDate(groupIndex, date) {
-        const { dateTable } = this._getGroupData(groupIndex);
-        const cell = dateTable[0].filter(
-            cell => dateUtils.sameDate(cell.startDate, date)
-        )[0];
+    findGroupCellStartDate(groupIndex, startDate, endDate) {
+        const { dateTable } = this.getGroupData(groupIndex);
 
-        return cell && cell.startDate;
+        for(let i = 0; i < dateTable[0].length; ++i) {
+            let cell = dateTable[0][i];
+            if(dateUtils.sameDate(cell.startDate, startDate)) {
+                let lastCell = dateTable[dateTable.length - 1][i];
+
+                if(lastCell.endDate < startDate) {
+                    if(endDate.getDate() > startDate.getDate()) {
+                        cell = dateTable[0][i + 1];
+                        lastCell = dateTable[dateTable.length - 1][i + 1];
+                    }
+                }
+
+                return lastCell?.endDate > startDate
+                    ? cell.startDate
+                    : undefined;
+            }
+        }
     }
 
     getCellsGroup(groupIndex) {
-        const { dateTable } = this._getGroupData(groupIndex);
+        const { dateTable } = this.getGroupData(groupIndex);
 
         return dateTable[0][0].groups;
     }
@@ -438,7 +451,7 @@ export default class ViewDataProvider {
         return (lastCellIndex + 1) / groupRow.length;
     }
 
-    _getGroupData(groupIndex) {
+    getGroupData(groupIndex) {
         const { groupedData } = this.viewData;
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
     }

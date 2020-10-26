@@ -41,7 +41,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         }
 
         let gridAppointmentList = this._createGridAppointmentList(appointmentList);
-        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
+        this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
 
         gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
 
@@ -256,7 +256,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     _cropAppointmentsByStartDayHour(appointments, rawAppointment) {
         return appointments.map(appointment => {
             const startDate = new Date(appointment.startDate);
-            const firstViewDate = this._getAppointmentFirstViewDate(appointment, startDate);
+            const firstViewDate = this._getAppointmentFirstViewDate(appointment);
             const startDayHour = this._getViewStartDayHour(firstViewDate);
 
             appointment.startDate = this._getAppointmentResultDate({
@@ -358,17 +358,15 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         return firstViewDate.getHours();
     }
 
-    _getAppointmentFirstViewDate(appointment, startDate) {
-        const workspace = this.scheduler.getWorkSpace();
+    _getAppointmentFirstViewDate(appointment) {
+        const { viewDataProvider } = this.scheduler.getWorkSpace();
         const { groupIndex } = appointment.source;
-        const { viewDataProvider } = workspace;
+        const {
+            startDate,
+            endDate
+        } = appointment;
 
-        let firstViewDate = viewDataProvider.getGroupCellStartDate(groupIndex, startDate);
-        if(!firstViewDate) {
-            firstViewDate = viewDataProvider.getGroupStartDate(groupIndex);
-        }
-
-        return firstViewDate;
+        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate);
     }
 
     _getGroupDateRange(groupIndex) {
