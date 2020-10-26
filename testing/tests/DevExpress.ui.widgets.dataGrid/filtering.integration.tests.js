@@ -1333,7 +1333,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
 
         assert.ok(dataGrid);
-        assert.equal(loadCallCount, 1, 'two load count on start');
+        assert.equal(loadCallCount, 2, 'two load count on start');
         assert.equal(contentReadyCallCount, 1, 'one contentReady on start');
     });
 });
