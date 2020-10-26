@@ -48,6 +48,10 @@ class OverlapStrategy extends DrawerStrategy {
         if(this.getDrawerInstance().calcTargetPosition() === 'right') {
             $overlayContent.css('left', 'auto');
         }
+        if(this.getDrawerInstance().calcTargetPosition() === 'bottom') {
+            $overlayContent.css('top', 'auto');
+            $overlayContent.css('bottom', '0px');
+        }
     }
 
     _getOverlayPosition() {
