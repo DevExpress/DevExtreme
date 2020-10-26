@@ -67,8 +67,9 @@ jobs:
           IE = "C:\Program Files\Internet Explorer\iexplore.exe";
           MSEdge = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe";
         }
-        Write-Host "Starting $browser with $url"
-        Start-Process -File $browserPaths[$browser] -ArgumentList "$url"
+        $browserPath = $browserPaths[$browser].ToString()
+        Write-Host "Starting $browserPath with $url"
+        Start-Process -File "$browserPath" -ArgumentList "$url"
         Write-Host "$browser started"
         Wait-Process -InputObject $runner
         Write-Host "Runner finished"
