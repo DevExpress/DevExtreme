@@ -21,6 +21,7 @@ QUnit.testStart(function() {
 QUnit.module('Tooltip behavior on target scroll', {
     beforeEach: function() {
         this.tooltipHiddenSpy = sinon.spy();
+        $('#qunit-fixture').css({ left: '-150px', top: '0px' });
     },
     createChart: function() {
         $('.tooltipInteraction .chart').dxChart({
