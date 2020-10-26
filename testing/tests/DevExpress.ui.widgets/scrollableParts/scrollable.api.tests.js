@@ -5,6 +5,7 @@ import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
 import { isRenderer } from 'core/utils/type';
+import browser from 'core/utils/browser';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -708,7 +709,7 @@ class ScrollableTestHelper {
         const scrollOffset = getScrollOffset(this.$scrollable);
 
         QUnit.assert.strictEqual(this.getMaxScrollOffset().horizontal, options.maxScrollOffset, 'horizontal maxScrollOffset');
-        QUnit.assert.strictEqual(-scrollOffset.left, (this._rtlEnabled && this._useNative) ? -(this.getMaxScrollOffset().horizontal - options.left) : options.left, 'scrollOffset.left');
+        QUnit.assert.strictEqual(-scrollOffset.left, (this._rtlEnabled && this._useNative && parseInt(browser.version) > 85) ? -(this.getMaxScrollOffset().horizontal - options.left) : options.left, 'scrollOffset.left');
         QUnit.assert.strictEqual(-scrollOffset.top, options.top, 'scrollOffset.top');
         QUnit.assert.strictEqual(this.scrollable.scrollLeft(), options.left, 'scrollable.scrollLeft()');
         QUnit.assert.strictEqual(this.scrollable.scrollTop(), options.top, 'scrollable.scrollTop()');

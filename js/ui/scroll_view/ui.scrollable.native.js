@@ -6,6 +6,7 @@ import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
+import browser from '../../core/utils/browser';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -39,6 +40,8 @@ const NativeStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
+        this._isRtlNativeStrategy = scrollable._isRtlNativeStrategy.bind(scrollable);
+        this._getMaxLeftOffset = scrollable._getMaxLeftOffset.bind(scrollable);
     },
 
     render: function() {
@@ -128,7 +131,7 @@ const NativeStrategy = Class.inherit({
 
     _createActionArgs: function() {
         const { left, top } = this.location();
-        const { rtlEnabled, pushBackValue } = this.option();
+        const { pushBackValue } = this.option();
         const containerElement = this._$container.get(0);
 
         return {
@@ -137,8 +140,8 @@ const NativeStrategy = Class.inherit({
                 top: -top,
                 left: -left
             },
-            reachedLeft: rtlEnabled ? this._isReachedRight(-left) : this._isReachedLeft(left),
-            reachedRight: rtlEnabled ? this._isReachedLeft(-left) : this._isReachedRight(left),
+            reachedLeft: this._isRtlNativeStrategy() && parseInt(browser.version) > 85 ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: this._isRtlNativeStrategy() && parseInt(browser.version) > 85 ? this._isReachedLeft(-left) : this._isReachedRight(left),
             reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
             reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * pushBackValue : undefined
         };
@@ -289,19 +292,16 @@ const NativeStrategy = Class.inherit({
 
     scrollBy: function(distance) {
         const { top, left } = this.location();
-        const { rtlEnabled, pushBackValue } = this.option();
+        const { pushBackValue } = this.option();
 
         this._$container.scrollTop(Math.round(-top - distance.top + pushBackValue));
 
-        if(rtlEnabled) {
-            const containerElement = this._$container.get(0);
-            const maxHorizontalOffset = containerElement.scrollWidth - containerElement.clientWidth;
-
-            this._$container.scrollLeft(-maxHorizontalOffset + Math.round(-left - distance.left));
-            return;
-        } else {
-            this._$container.scrollLeft(Math.round(-left - distance.left));
+        let offsetLeft = Math.round(-left - distance.left);
+        if(this._isRtlNativeStrategy() && parseInt(browser.version) > 85) {
+            offsetLeft -= this._getMaxLeftOffset();
         }
+
+        this._$container.scrollLeft(offsetLeft);
     },
 
     validate: function(e) {

@@ -152,13 +152,17 @@ const Scrollable = DOMComponent.inherit({
         this._updateBounds();
         if(this.option('rtlEnabled') && this.option('direction') !== VERTICAL) {
             deferUpdate(() => {
-                const containerElement = this._container().get(0);
-                const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
+                const maxLeftOffset = this._getMaxLeftOffset();
                 deferRender(() => {
                     this.scrollTo({ left: maxLeftOffset });
                 });
             });
         }
+    },
+
+    _getMaxLeftOffset: function() {
+        const containerElement = this._container().get(0);
+        return containerElement.scrollWidth - containerElement.clientWidth;
     },
 
     _updateBounds: function() {
@@ -382,11 +386,18 @@ const Scrollable = DOMComponent.inherit({
     },
 
     scrollOffset: function() {
-        const location = this._location();
+        const { top, left } = this._location();
+
         return {
-            top: -location.top,
-            left: -location.left
+            top: -top,
+            left: this._isRtlNativeStrategy() && parseInt(browser.version) > 85 ? this._getMaxLeftOffset() - left : -left
         };
+    },
+
+    _isRtlNativeStrategy: function() {
+        const { useNative, rtlEnabled } = this.option();
+
+        return useNative && rtlEnabled && browser.webkit;
     },
 
     scrollTop: function() {
@@ -394,9 +405,7 @@ const Scrollable = DOMComponent.inherit({
     },
 
     scrollLeft: function() {
-        const containerElement = this._$container.get(0);
-        const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
-        return this.option('useNative') && this.option('rtlEnabled') ? (maxLeftOffset + this.scrollOffset().left) : this.scrollOffset().left;
+        return this.scrollOffset().left;
     },
 
     clientHeight: function() {
@@ -511,7 +520,7 @@ const Scrollable = DOMComponent.inherit({
         const endOffset = (isVertical ? offset.bottom : offset.right) || 0;
         const pushBackOffset = isVertical ? this._strategy.verticalOffset() : 0;
         const elementPositionRelativeToContent = this._elementPositionRelativeToContent($element, isVertical ? 'top' : 'left');
-        const elementPosition = elementPositionRelativeToContent - pushBackOffset;
+        const elementPosition = ((this._isRtlNativeStrategy() && !isVertical) ? this._getMaxLeftOffset() + elementPositionRelativeToContent : elementPositionRelativeToContent) - pushBackOffset;
         const elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
         const scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
         const clientSize = (isVertical ? this.clientHeight() : this.clientWidth());
