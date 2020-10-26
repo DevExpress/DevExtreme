@@ -1,0 +1,5 @@
+{
+    "screenshots": {
+        "path": "./testing/testcafe/screenshots/"
+    }
+}
