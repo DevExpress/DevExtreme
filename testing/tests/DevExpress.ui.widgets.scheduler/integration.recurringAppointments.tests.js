@@ -44,7 +44,7 @@ module('Integration: Recurring Appointments', {
     }
 });
 
-if(isDesktopEnvironment) {
+if(isDesktopEnvironment()) {
     test('Key property should be removed in excluded appointment from recurrence(T929772)', function(assert) {
         const data = [{
             id: 1,
