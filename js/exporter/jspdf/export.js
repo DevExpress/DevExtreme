@@ -56,6 +56,7 @@ export const Export = {
             jsPDFDocument,
             autoTableOptions,
             component,
+            customizeCell,
             keepColumnWidths,
             selectedRowsOnly
         } = options;
@@ -89,6 +90,10 @@ export const Export = {
                             content: this._getFormattedValue(value, cellStyle.format),
                             styles: this._getPDFCellStyles(gridCell.rowType, columns[cellIndex].alignment, cellStyle)
                         };
+
+                        if(isDefined(customizeCell)) {
+                            customizeCell({ gridCell, pdfCell });
+                        }
 
                         if(gridCell.rowType === 'header') {
                             const mergedRange = this._tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);

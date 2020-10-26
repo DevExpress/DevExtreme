@@ -30,7 +30,7 @@ const moduleConfig = {
 };
 
 const getOptions = (context, dataGrid, options) => {
-    const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {} } = options || {};
+    const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {}, customizeCell = () => {} } = options || {};
 
     const result = {
         component: dataGrid,
@@ -39,6 +39,7 @@ const getOptions = (context, dataGrid, options) => {
     result.keepColumnWidths = keepColumnWidths;
     result.selectedRowsOnly = selectedRowsOnly;
     result.autoTableOptions = autoTableOptions;
+    result.customizeCell = customizeCell;
     return result;
 };
 
@@ -4072,6 +4073,442 @@ QUnit.module('Bands', moduleConfig, () => {
                 helper.checkCellsContent(expectedCells, autoTableOptions, rowType);
                 helper.checkMergeCells(expectedCells, autoTableOptions, rowType);
             });
+            done();
+        });
+    });
+});
+
+QUnit.module('customizeCell', moduleConfig, () => {
+    QUnit.test('Header cells, modifying predefined font settings', function(assert) {
+        const done = assert.async();
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            keyExpr: 'f1',
+            columns: [
+                { caption: 'f1', dataType: 'string' },
+                { caption: 'f2', dataType: 'string' }
+            ],
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+        const options = {
+            customizeCell: (options) => {
+                const { gridCell, pdfCell } = options;
+                if(gridCell.rowType === 'header') {
+                    pdfCell.styles.fontStyle = 'bold';
+                }
+            }
+        };
+
+        const expectedCells = {
+            head: [[
+                { content: 'f1', styles: { fontStyle: 'bold', 'halign': 'left' } },
+                { content: 'f2', styles: { fontStyle: 'bold', 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'head');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'head');
+            done();
+        });
+    });
+
+    QUnit.test('Header cells, modifying predefined content', function(assert) {
+        const done = assert.async();
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            keyExpr: 'f1',
+            columns: [
+                { caption: 'f1', dataType: 'string' },
+                { caption: 'f2', dataType: 'string' }
+            ],
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+        const options = {
+            customizeCell: (options) => {
+                const { gridCell, pdfCell } = options;
+                if(gridCell.rowType === 'header') {
+                    pdfCell.content += '_2';
+                }
+            }
+        };
+
+        const expectedCells = {
+            head: [[
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f2_2', styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'head');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'head');
+            done();
+        });
+    });
+
+    QUnit.test('Data cells, modifying predefined font settings, grouping', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f1_2' },
+            { f1: 'f1_2', f2: 'f1_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+        const options = {
+            customizeCell: (options) => {
+                const { gridCell, pdfCell } = options;
+                if(gridCell.rowType === 'group') {
+                    pdfCell.styles.fontStyle = 'normal';
+                }
+            }
+        };
+
+        const expectedCells = {
+            body: [
+                [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'normal' } }],
+                [{ content: 'f1_2', styles: { 'halign': 'left' } }],
+                [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'normal' } }],
+                [{ content: 'f1_2', styles: { 'halign': 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Data cells, modifying predefined font settings, groupSummary', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0, allowExporting: false },
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                ]
+            },
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+        const options = {
+            customizeCell: (options) => {
+                const { gridCell, pdfCell } = options;
+                if(gridCell.rowType === 'groupFooter') {
+                    pdfCell.styles.fontStyle = 'normal';
+                }
+            }
+        };
+
+        const expectedCells = {
+            body: [[
+                { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
+            ], [
+                { content: 'f1_1', styles: { 'halign': 'left' } },
+                { content: 'f2_1', styles: { 'halign': 'left' } },
+                { content: 'f3_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f2_2', styles: { 'halign': 'left' } },
+                { content: 'f3_2', styles: { 'halign': 'left' } }
+            ], [
+                { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
+                { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
+                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Data cells, modifying predefined font settings, totalSummary', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1' },
+            { f1: 'f1_2', f2: 'f2_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            summary: {
+                totalItems: [
+                    { name: 'TotalSummary 1', column: 'f1', summaryType: 'max' },
+                    { name: 'TotalSummary 2', column: 'f1', summaryType: 'min' },
+                    { name: 'TotalSummary 3', column: 'f2', summaryType: 'max' },
+                    { name: 'TotalSummary 4', column: 'f2', summaryType: 'min' }
+                ]
+            },
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+        const options = {
+            customizeCell: (options) => {
+                const { gridCell, pdfCell } = options;
+                if(gridCell.rowType === 'totalFooter') {
+                    pdfCell.styles.fontStyle = 'normal';
+                }
+            }
+        };
+
+        const expectedCells = {
+            body: [[
+                { content: 'f1_1', styles: { 'halign': 'left' } },
+                { content: 'f2_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f2_2', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
+                { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
+            ], [
+                { content: 'Min: f1_1', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
+                { content: 'Min: f2_1', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Data cells, modifying predefined content', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1', f2: 'f2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', dataType: 'string' },
+                { dataField: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+        const options = {
+            customizeCell: (options) => {
+                const { gridCell, pdfCell } = options;
+                if(gridCell.rowType === 'data') {
+                    pdfCell.content += '_2';
+                }
+            }
+        };
+
+        const expectedCells = {
+            body: [[
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f2_2', styles: { 'halign': 'left' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Data cells, modifying predefined content, grouping', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f1_2' },
+            { f1: 'f1_2', f2: 'f1_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+        const options = {
+            customizeCell: (options) => {
+                const { gridCell, pdfCell } = options;
+                if(gridCell.rowType === 'group') {
+                    pdfCell.content += ': custom';
+                }
+            }
+        };
+
+        const expectedCells = {
+            body: [
+                [{ content: 'f1: f1_1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f1_2', styles: { 'halign': 'left' } }],
+                [{ content: 'f1: f1_2: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
+                [{ content: 'f1_2', styles: { 'halign': 'left' } }]
+            ]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Data cells, modifying predefined content, groupSummary', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
+            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
+        ];
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+                { dataField: 'f3', caption: 'f3', dataType: 'string' },
+                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0, allowExporting: false },
+            ],
+            summary: {
+                groupItems: [
+                    { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
+                ]
+            },
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
+        }).dxDataGrid('instance');
+        const options = {
+            customizeCell: (options) => {
+                const { gridCell, pdfCell } = options;
+                if(gridCell.rowType === 'groupFooter' && pdfCell.content) {
+                    pdfCell.content += ': custom';
+                }
+            }
+        };
+
+        const expectedCells = {
+            body: [[
+                { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
+            ], [
+                { content: 'f1_1', styles: { 'halign': 'left' } },
+                { content: 'f2_1', styles: { 'halign': 'left' } },
+                { content: 'f3_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f2_2', styles: { 'halign': 'left' } },
+                { content: 'f3_2', styles: { 'halign': 'left' } }
+            ], [
+                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: 'Max: f3_2: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Data cells, modifying predefined content, totalSummary', function(assert) {
+        const done = assert.async();
+        const ds = [
+            { f1: 'f1_1', f2: 'f2_1' },
+            { f1: 'f1_2', f2: 'f2_2' }
+        ];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [
+                { dataField: 'f1', caption: 'f1', dataType: 'string' },
+                { dataField: 'f2', caption: 'f2', dataType: 'string' },
+            ],
+            dataSource: ds,
+            summary: {
+                totalItems: [
+                    { name: 'TotalSummary 1', column: 'f1', summaryType: 'max' },
+                    { name: 'TotalSummary 2', column: 'f1', summaryType: 'min' },
+                    { name: 'TotalSummary 3', column: 'f2', summaryType: 'max' },
+                    { name: 'TotalSummary 4', column: 'f2', summaryType: 'min' }
+                ]
+            },
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+        const options = {
+            customizeCell: (options) => {
+                const { gridCell, pdfCell } = options;
+                if(gridCell.rowType === 'totalFooter') {
+                    pdfCell.content += ': custom';
+                }
+            }
+        };
+
+        const expectedCells = {
+            body: [[
+                { content: 'f1_1', styles: { 'halign': 'left' } },
+                { content: 'f2_1', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'f1_2', styles: { 'halign': 'left' } },
+                { content: 'f2_2', styles: { 'halign': 'left' } }
+            ], [
+                { content: 'Max: f1_2: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: 'Max: f2_2: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ], [
+                { content: 'Min: f1_1: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
+                { content: 'Min: f2_1: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
             done();
         });
     });
