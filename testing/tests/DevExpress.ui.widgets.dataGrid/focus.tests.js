@@ -530,7 +530,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         const keyboardController = this.getController('keyboardNavigation');
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 0, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'Focused column index');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'Focused column index');
     });
 
     QUnit.testInActiveWindow('Tab key before rows view should focus the first row', function(assert) {
@@ -1493,17 +1493,17 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         // assert, act
         this.triggerKeyDown('tab', false, false, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         // assert, act
         this.triggerKeyDown('tab', false, false, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 2, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 2, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 3, 'focusedCellChanging count');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
     });
@@ -1553,17 +1553,17 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 2, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 2, 'FocusedColumnIndex');
         // assert, act
         this.triggerKeyDown('tab', false, true, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         // assert, act
         this.triggerKeyDown('tab', false, true, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 3, 'focusedCellChanging count');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
     });
@@ -1602,7 +1602,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
 
         // act
         this.editCell(1, 0);
@@ -1611,7 +1611,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // assert
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
 
         // act
@@ -1620,7 +1620,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         // assert
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 3, 'focusedCellChanging count');
     });
 
@@ -1673,17 +1673,17 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         // assert, act
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         // assert, act
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 2, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 2, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 3, 'focusedCellChanging count');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
     });
@@ -1738,13 +1738,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         // act, assert
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 1, 'focusedCellChanging count');
         assert.ok(this.editingController.isEditing(), 'Is editing');
         // act, assert
@@ -1752,7 +1752,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
@@ -1807,13 +1807,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         // act, assert
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
@@ -1868,13 +1868,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         // act, assert
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 1, 'focusedCellChanging count');
         assert.ok(this.editingController.isEditing(), 'Is editing');
         // act, assert
@@ -1882,7 +1882,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 2, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
@@ -1937,13 +1937,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         // act, assert
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 2, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
@@ -1993,13 +1993,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         // act, assert
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 2, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
@@ -2049,13 +2049,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         // act, assert
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 1, 'focusedCellChanging count');
         assert.ok(this.editingController.isEditing(), 'Is editing');
         // act, assert
@@ -2063,7 +2063,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 2, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
@@ -2110,13 +2110,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 2, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 2, 'FocusedColumnIndex');
         // act, assert
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 2, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 2, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 1, 'focusedCellChanging count');
         assert.ok(this.editingController.isEditing(), 'Is editing');
         // act, assert
@@ -2124,7 +2124,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 2, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
@@ -2171,13 +2171,13 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 2, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 2, 'FocusedColumnIndex');
         // act, assert
         this.triggerKeyDown('enter', false, false, rowsView.getRow(1).find('td:focus'));
         this.clock.tick();
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 2, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedCellChangingCounter, 2, 'focusedCellChanging count');
         assert.notOk(this.editingController.isEditing(), 'Is editing');
     });
@@ -2587,24 +2587,24 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         // assert, act
         this.triggerKeyDown('tab', false, false, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedRowChangingCounter, 1, 'focusedRowChanging count');
         // assert, act
         this.triggerKeyDown('tab', false, false, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 2, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 2, 'FocusedColumnIndex');
         assert.equal(focusedRowChangingCounter, 1, 'focusedRowChanging count');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
         // assert, act
         this.triggerKeyDown('tab', false, false, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 2, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedRowChangingCounter, 2, 'focusedRowChanging count');
     });
 
@@ -2651,24 +2651,24 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
 
         // assert
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'FocusedRowIndex');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 2, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 2, 'FocusedColumnIndex');
         // assert, act
         this.triggerKeyDown('tab', false, true, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 1, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 1, 'FocusedColumnIndex');
         assert.equal(focusedRowChangingCounter, 1, 'focusedRowChanging count');
         // assert, act
         this.triggerKeyDown('tab', false, true, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 1, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 0, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 0, 'FocusedColumnIndex');
         assert.equal(focusedRowChangingCounter, 1, 'focusedRowChanging count');
         // assert, act
         this.triggerKeyDown('tab', false, true, rowsView.getRow(1).find('td:focus'));
         assert.ok(keyboardController.isCellFocusType(), 'Cell focus type');
         assert.equal(keyboardController.getVisibleRowIndex(), 0, 'Focused row index');
-        assert.equal(keyboardController.getFocusedColumnIndex(), 2, 'FocusedColumnIndex');
+        assert.equal(keyboardController.getColumnIndex(), 2, 'FocusedColumnIndex');
         assert.equal(focusedRowChangingCounter, 2, 'focusedRowChanging count');
     });
 
