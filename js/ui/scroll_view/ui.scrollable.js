@@ -159,13 +159,13 @@ const Scrollable = DOMComponent.inherit({
         this._updateRtlPosition();
     },
 
-    _isHorizontalRtl: function() {
+    _isHorizontalAndRtlEnabled: function() {
         return this.option('rtlEnabled') && this.option('direction') !== VERTICAL;
     },
 
     _updateRtlPosition: function() {
         this._updateBounds();
-        if(this._isHorizontalRtl()) {
+        if(this._isHorizontalAndRtlEnabled()) {
             deferUpdate(() => {
                 const containerElement = this._container().get(0);
                 let scrollLeft = containerElement.scrollWidth - containerElement.clientWidth - this._rtlConfig.scrollRight;
@@ -213,15 +213,14 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _updateRtlConfig: function() {
-        const config = this._rtlConfig;
-        if(this._isHorizontalRtl() && !config.skipUpdating) {
+        if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
             const { clientWidth, scrollWidth, scrollLeft } = this._container().get(0);
             const windowPixelRatio = this._getWindowDevicePixelRatio();
-            if(config.windowPixelRatio === windowPixelRatio && config.clientWidth === clientWidth) {
-                config.scrollRight = (scrollWidth - (scrollLeft + clientWidth));
+            if(this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
+                this._rtlConfig.scrollRight = (scrollWidth - (scrollLeft + clientWidth));
             }
-            config.clientWidth = clientWidth;
-            config.windowPixelRatio = windowPixelRatio;
+            this._rtlConfig.clientWidth = clientWidth;
+            this._rtlConfig.windowPixelRatio = windowPixelRatio;
         }
     },
 
