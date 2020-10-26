@@ -79,6 +79,7 @@ test('Key property should be removed in excluded appointment from recurrence(T92
     pointer
         .down(offset.left, offset.top)
         .move(0, 100);
+
     pointer.up();
 
     scheduler.appointmentPopup.dialog.clickEditAppointment();
@@ -86,7 +87,7 @@ test('Key property should be removed in excluded appointment from recurrence(T92
     const appointments = scheduler.instance.getDataSource().items();
     const excludedAppointment = appointments[1];
 
-    assert.equal(excludedAppointment.startDate.valueOf(), 1495668600000, 'appointment should be shifted down');
+    assert.equal(excludedAppointment.startDate.valueOf(), 1495704600000, 'appointment should be shifted down');
     assert.equal(excludedAppointment.id.length, 36, 'id property should be equal GUID');
 
     assert.expect(4);
