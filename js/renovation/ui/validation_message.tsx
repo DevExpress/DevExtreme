@@ -21,7 +21,7 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class ValidationMessageProps extends WidgetProps {
-  @OneWay() mode?: string = 'auto';
+  @OneWay() mode?: 'auto'|'always' = 'auto';
 
   @OneWay() validationErrors?: object[] | null;
 
