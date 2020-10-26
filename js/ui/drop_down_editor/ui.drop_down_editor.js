@@ -21,7 +21,7 @@ import devices from '../../core/devices';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import Popup from '../popup';
 import { hasWindow } from '../../core/utils/window';
-import { getElementWidth, getPopupWidth } from './utils';
+import { getElementWidth, getSizeValue } from './utils';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -550,7 +550,7 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _dimensionChanged: function() {
-        const popupWidth = getPopupWidth(this.option('dropDownOptions.width'));
+        const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
 
         if(popupWidth === undefined) {
             this._setPopupOption('width', () => getElementWidth(this.$element()));
@@ -760,6 +760,7 @@ const DropDownEditor = TextBox.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case 'width':
+            case 'height':
                 this.callBase(args);
                 this._popup?.repaint();
                 break;
