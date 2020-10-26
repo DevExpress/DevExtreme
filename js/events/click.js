@@ -152,6 +152,8 @@ const useNativeClick =
             this.callBase();
 
             eventsEngine.off(this.getElement(), 'click', clickHandler);
+
+            lastFiredEvent = null;
         }
     });
 })();
