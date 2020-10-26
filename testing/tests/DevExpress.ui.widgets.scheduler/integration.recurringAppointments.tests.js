@@ -86,7 +86,7 @@ test('Key property should be removed in excluded appointment from recurrence(T92
     const appointments = scheduler.instance.getDataSource().items();
     const excludedAppointment = appointments[1];
 
-    assert.equal(excludedAppointment.startDate.toISOString(), '2017-05-24T23:30:00.000Z', 'appointment should be shifted down');
+    assert.equal(excludedAppointment.startDate.valueOf(), 1495668600000, 'appointment should be shifted down');
     assert.equal(excludedAppointment.id.length, 36, 'id property should be equal GUID');
 
     assert.expect(4);
