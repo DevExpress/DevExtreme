@@ -24,4 +24,14 @@ export const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 export const FIELD_EMPTY_ITEM_CLASS = 'dx-field-empty-item';
 export const FIELD_BUTTON_ITEM_CLASS = 'dx-field-button-item';
 export const SINGLE_COLUMN_ITEM_CONTENT = 'dx-single-column-item-content';
+export const ROOT_SIMPLE_ITEM_CLASS = 'dx-root-simple-item';
+export const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
+export const FIELD_ITEM_CONTENT_HAS_GROUP_CLASS = 'dx-field-item-has-group';
+export const FIELD_ITEM_CONTENT_HAS_TABS_CLASS = 'dx-field-item-has-tabs';
+export const FORM_GROUP_WITH_CAPTION_CLASS = 'dx-form-group-with-caption';
+export const HIDDEN_LABEL_CLASS = 'dx-layout-manager-hidden-label';
+export const FIELD_ITEM_TAB_CLASS = 'dx-field-item-tab';
+export const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
+export const GROUP_COL_COUNT_ATTR = 'group-col-count';
+export const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
 
