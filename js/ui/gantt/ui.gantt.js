@@ -573,6 +573,7 @@ class Gantt extends Widget {
         if(action) {
             const args = {
                 cancel: false,
+                key: coreArgs.key,
                 newValues: this._convertCoreToMappedData(optionName, coreArgs.newValues),
                 values: this._convertCoreToMappedData(optionName, coreArgs.values)
             };
@@ -586,6 +587,7 @@ class Gantt extends Widget {
         if(action) {
             const args = {
                 cancel: false,
+                key: coreArgs.key,
                 values: this._convertCoreToMappedData(GANTT_TASKS, coreArgs.values),
                 readOnlyFields: this._convertCoreToMappedFields(GANTT_TASKS, coreArgs.readOnlyFields),
                 hiddenFields: this._convertCoreToMappedFields(GANTT_TASKS, coreArgs.hiddenFields)
