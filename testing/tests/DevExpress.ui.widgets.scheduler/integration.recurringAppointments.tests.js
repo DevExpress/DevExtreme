@@ -86,9 +86,13 @@ if(isDesktopEnvironment) {
         scheduler.appointmentPopup.dialog.clickEditAppointment();
 
         const appointments = scheduler.instance.getDataSource().items();
+        const recurrenceAppointment = appointments[0];
         const excludedAppointment = appointments[1];
 
-        assert.equal(excludedAppointment.startDate.valueOf(), 1495704600000, 'appointment should be shifted down');
+        const expectedDate = new Date(excludedAppointment.startDate);
+        expectedDate.setHours(recurrenceAppointment.startDate.getHours() + 1);
+
+        assert.equal(excludedAppointment.startDate.valueOf(), expectedDate.valueOf(), 'appointment should be shifted down');
         assert.equal(excludedAppointment.id.length, 36, 'id property should be equal GUID');
 
         assert.expect(4);
