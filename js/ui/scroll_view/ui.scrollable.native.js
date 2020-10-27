@@ -7,6 +7,7 @@ import devices from '../../core/devices';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
 import browser from '../../core/utils/browser';
+import { getNavigator } from '../../core/utils/window';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -137,8 +138,8 @@ const NativeStrategy = Class.inherit({
         return {
             event: this._eventForUserAction,
             scrollOffset: this.getScrollOffset(),
-            reachedLeft: this._isRtlNativeStrategy() && (!this._isRtlInconsistentBrowser()) ? this._isReachedRight(-left) : this._isReachedLeft(left),
-            reachedRight: this._isRtlNativeStrategy() && (!this._isRtlInconsistentBrowser()) ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
+            reachedLeft: this._isRtlNativeStrategy() && !this._isRtlInconsistentBrowser() ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: this._isRtlNativeStrategy() && !this._isRtlInconsistentBrowser() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
             reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
             reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * pushBackValue : undefined
         };
@@ -154,7 +155,7 @@ const NativeStrategy = Class.inherit({
     },
 
     _isRtlInconsistentBrowser: function() {
-        return (browser.webkit && parseInt(browser.version) < 86 && !browser.safari);
+        return ((browser.webkit && parseInt(browser.version) < 86) && (browser.safari && getNavigator().vendor && getNavigator().vendor.indexOf('Google') > -1));
     },
 
     _isReachedLeft: function(left) {
