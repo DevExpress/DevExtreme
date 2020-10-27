@@ -104,7 +104,7 @@ export default class FileItemsController {
             return;
         }
 
-        if(this._currentDirectoryInfo && this._currentDirectoryInfo === directoryInfo) {
+        if(equalByValue(this.getCurrentDirectory().fileItem.pathKeys, directoryInfo.fileItem.pathKeys, 0, true)) {
             return;
         }
 
