@@ -703,7 +703,6 @@ export const BaseChart = BaseWidget.inherit({
         that._renderSeries(drawOptions, isRotated, isLegendInside);
 
         that._renderer.unlock();
-        that._resolveDeferredItems();
     },
 
     _updateLegendPosition: noop,
@@ -1434,8 +1433,6 @@ export const BaseChart = BaseWidget.inherit({
     _stopCurrentHandling: function() {
         this._tracker.stopCurrentHandling();
     },
-
-    _resolveDeferredItems() {}
 });
 
 REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS.forEach(function(name) {

@@ -1108,7 +1108,9 @@ export const MockAxis = function(renderOptions) {
         getTemplatesDef: sinon.spy(),
         setRenderedState: sinon.spy(),
         isRendered: sinon.spy(),
-        getTemplatesGroups: sinon.stub().returns([])
+        getTemplatesGroups: sinon.stub().returns([]),
+        beforeCleanGroups: sinon.spy(),
+        afterCleanGroups: sinon.spy()
     };
 };
 

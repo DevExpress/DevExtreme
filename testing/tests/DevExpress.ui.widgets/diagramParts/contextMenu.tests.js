@@ -69,6 +69,7 @@ QUnit.module('Context Menu', {
         assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         contextMenu.show();
         findContextMenuItem(this.$element, 'select all').trigger('dxclick');
+        this.clock.tick(200);
         assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test('should execute custom commands on click', function(assert) {

@@ -154,12 +154,14 @@ QUnit.module('Main Toolbar', {
         });
         assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         item.trigger('dxclick');
+        this.clock.tick(200);
         assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test('diagram should be focused after set font bold', function(assert) {
         const boldButton = findMainToolbarItem(this.$element, 'bold');
         assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         boldButton.trigger('dxclick');
+        this.clock.tick(200);
         assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
     test('Auto Layout button should be disabled in Read Only mode', function(assert) {
