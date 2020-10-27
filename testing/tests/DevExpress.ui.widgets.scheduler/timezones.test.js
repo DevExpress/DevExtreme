@@ -7,6 +7,8 @@ import {
     isDesktopEnvironment
 } from '../../helpers/scheduler/helpers.js';
 import pointerMock from '../../helpers/pointerMock.js';
+import dateUtils from 'core/utils/date';
+import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 
 import 'generic_light.css!';
 
@@ -124,6 +126,33 @@ module('Common', moduleConfig, () => {
                 });
             });
     }
+});
+
+module('API', moduleConfig, () => {
+    test('New added appointment should be rendered correctly in specified timeZone', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [],
+            currentDate: new Date(2018, 4, 25),
+            views: ['week'],
+            currentView: 'week',
+            timeZone: 'Etc/UTC'
+        });
+
+        const appointment = {
+            text: 'a',
+            startDate: new Date(2018, 4, 23, 8, 0),
+            endDate: new Date(2018, 4, 23, 8, 30)
+        };
+        const timezoneOffset = new Date(2018, 4, 23).getTimezoneOffset() * dateUtils.dateToMilliseconds('minute');
+
+        scheduler.instance.showAppointmentPopup(appointment, true);
+        $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+
+        const $appointment = scheduler.instance.$element().find(CLASSES.appointment);
+        const startDate = $appointment.dxSchedulerAppointment('instance').option('startDate');
+
+        assert.equal(startDate.getTime(), appointment.startDate.getTime() + timezoneOffset, 'appointment starts in 8AM');
+    });
 });
 
 module('Not native date DST', moduleConfig, () => {
@@ -576,5 +605,96 @@ module('Appointment popup', moduleConfig, () => {
                 assert.equal(endDate.valueOf(), testCase.endDate, `EndDate of '${text}' should be valid`);
             });
         });
+    });
+});
+
+const oldModuleConfig = {
+    beforeEach() {
+        fx.off = true;
+        this.tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+    },
+
+    afterEach() {
+        fx.off = false;
+        this.tzOffsetStub.restore();
+    }
+};
+
+module('Oll tests', oldModuleConfig, () => {
+    test('Appointment should have right width in workspace with timezone', function(assert) {
+        // this.clock.restore(); // TODO
+
+        const scheduler = createWrapper({
+            dataSource: [],
+            currentDate: new Date(2017, 4, 1),
+            currentView: 'month',
+            firstDayOfWeek: 1,
+            startDayHour: 3,
+            endDayHour: 24,
+            timeZone: 'Asia/Ashkhabad',
+            height: 600
+        });
+
+        scheduler.instance.addAppointment({
+            text: 'Task 1',
+            startDate: new Date(2017, 4, 4),
+            endDate: new Date(2017, 4, 5)
+        });
+
+        const rootElement = scheduler.instance.$element();
+        const $appointment = $(rootElement).find(CLASSES.appointment).eq(0);
+        const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(9);
+
+        assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 2, 2.001, 'Task has a right width');
+    });
+
+    test('DropDown appointment should be rendered correctly when timezone is set', function(assert) {
+        const data = [
+            {
+                schedule: 'Appointment 1',
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: 'Appointment 2',
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: 'Appointment 3',
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: 'Appointment 4',
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: 'Appointment 5',
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            },
+            {
+                schedule: 'Appointment 6',
+                startDate: new Date(2018, 8, 17, 1),
+                endDate: new Date(2018, 8, 17, 2)
+            }
+        ];
+
+        const scheduler = createWrapper({
+            dataSource: data,
+            views: ['month'],
+            currentView: 'month',
+            currentDate: new Date(2018, 8, 17),
+            timeZone: 'Etc/UTC',
+            showCurrentTimeIndicator: false,
+            maxAppointmentsPerCell: 1,
+            height: 600,
+            textExpr: 'schedule'
+        });
+
+        scheduler.appointments.compact.click();
+        assert.equal(scheduler.tooltip.getDateText(), 'September 16 10:00 PM - 11:00 PM', 'Dates are correct');
     });
 });

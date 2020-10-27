@@ -8,7 +8,6 @@ import dragEvents from 'events/drag';
 import { DataSource } from 'data/data_source/data_source';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dataUtils from 'core/element_data';
-import dateUtils from 'core/utils/date';
 import { SchedulerTestWrapper, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
@@ -1272,82 +1271,6 @@ QUnit.test('Task dragging when custom timeZone is set', function(assert) {
     this.clock.tick();
     assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
     assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
-});
-
-QUnit.test('DropDown appointment should be rendered correctly when timezone is set', function(assert) {
-    const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
-    try {
-        const data = [
-            {
-                schedule: 'Appointment 1',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
-            },
-            {
-                schedule: 'Appointment 2',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
-            },
-            {
-                schedule: 'Appointment 3',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
-            },
-            {
-                schedule: 'Appointment 4',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
-            },
-            {
-                schedule: 'Appointment 5',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
-            },
-            {
-                schedule: 'Appointment 6',
-                startDate: new Date(2018, 8, 17, 1),
-                endDate: new Date(2018, 8, 17, 2)
-            }
-        ];
-
-        const scheduler = createInstance({
-            dataSource: data,
-            views: ['month'],
-            currentView: 'month',
-            currentDate: new Date(2018, 8, 17),
-            timeZone: 'Etc/UTC',
-            showCurrentTimeIndicator: false,
-            maxAppointmentsPerCell: 1,
-            height: 600,
-            textExpr: 'schedule'
-        });
-
-        scheduler.appointments.compact.click();
-        assert.equal(scheduler.tooltip.getDateText(), 'September 16 10:00 PM - 11:00 PM', 'Dates are correct');
-    } finally {
-        tzOffsetStub.restore();
-    }
-});
-
-QUnit.test('New added appointment should be rendered correctly in specified timeZone', function(assert) {
-    this.createInstance({
-        dataSource: [],
-        currentDate: new Date(2018, 4, 25),
-        views: ['week'],
-        currentView: 'week',
-        timeZone: 'Etc/UTC'
-    });
-
-    const task = { text: 'a', startDate: new Date(2018, 4, 23, 8, 0), endDate: new Date(2018, 4, 23, 8, 30) };
-    const timezoneOffset = new Date(2018, 4, 23).getTimezoneOffset() * dateUtils.dateToMilliseconds('minute');
-
-    this.instance.showAppointmentPopup(task, true);
-    $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
-
-    const $appointment = this.instance.$element().find('.' + APPOINTMENT_CLASS);
-    const startDate = $appointment.dxSchedulerAppointment('instance').option('startDate');
-
-    assert.equal(startDate.getTime(), task.startDate.getTime() + timezoneOffset, 'appointment starts in 8AM');
 });
 
 if(isDesktopEnvironment()) {

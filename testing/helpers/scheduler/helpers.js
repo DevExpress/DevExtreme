@@ -22,6 +22,8 @@ export const CLASSES = {
 
     dateTableCell: '.dx-scheduler-date-table-cell',
 
+    appointment: '.dx-scheduler-appointment',
+
     resizableHandle: {
         left: '.dx-resizable-handle-left',
         right: '.dx-resizable-handle-right'
