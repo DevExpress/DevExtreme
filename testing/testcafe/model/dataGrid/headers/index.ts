@@ -17,7 +17,7 @@ export default class Headers extends FocusableElement {
   }
 
   getHeaderRow(index: number): HeaderRow {
-    return new HeaderRow(this.element.find(`.${CLASS.headerRow}:nth-child(${index + 1})`), this.widgetName);
+    return new HeaderRow(this.element.find(`.${CLASS.headerRow}`).nth(index), this.widgetName);
   }
 
   getFilterRow(): FilterRow {

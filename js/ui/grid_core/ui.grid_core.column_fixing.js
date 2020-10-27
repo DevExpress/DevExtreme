@@ -582,7 +582,9 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                         if(e.shiftKey) {
                             this._focusLastHeader();
                         } else {
-                            that.component.getCellElement(0, 0).focus();
+                            const $firstCell = that.component.getCellElement(0, 0);
+                            $firstCell.attr('tabindex', 0);
+                            $firstCell.focus();
                         }
 
                         e.preventDefault();
@@ -598,13 +600,13 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     },
 
     _focusLastHeader: function() {
-        const lastHeader = this._tableElement.find(`.${HEADERS_ROW_CLASS} > td`).last();
-        const lastFixedHeader = this._fixedTableElement.find(`.${HEADERS_ROW_CLASS} > td`).last();
+        const $lastHeader = this._tableElement.find(`.${HEADERS_ROW_CLASS} > td:not(.dx-command-edit)`).last();
+        const $lastFixedHeader = this._fixedTableElement.find(`.${HEADERS_ROW_CLASS} > td:not(.dx-command-edit)`).last();
 
-        if(lastFixedHeader.hasClass('dx-pointer-events-none')) {
-            lastHeader.focus();
+        if($lastFixedHeader.hasClass('dx-pointer-events-none')) {
+            this._focusHeader($lastHeader, false);
         } else {
-            lastFixedHeader.focus();
+            this._focusHeader($lastFixedHeader, false);
         }
     },
 
@@ -649,11 +651,22 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         let $nextCell = $row.find('td').eq(nextColIndex);
         let $targetRow;
 
-        const isFilterMenuFocused = $target.find('.dx-filter-menu').is(':focus');
-        const isFilterInputFocused = $target.find('input').is(':focus');
+        if(isFilterRow) {
+            const $filterMenu = $target.find('.dx-filter-menu');
+            const isFilterMenuFocused = $filterMenu.is(':focus');
+            const isFilterInputFocused = $target.find('input').is(':focus');
 
-        if(isFilterRow && (isFilterInputFocused && e.shiftKey || isFilterMenuFocused && !e.shiftKey)) {
-            return true;
+            if($filterMenu.length && (isFilterInputFocused && e.shiftKey || isFilterMenuFocused && !e.shiftKey)) {
+                return true;
+            }
+        } else {
+            const $headerFilter = $target.find('.dx-header-filter');
+            const isHeaderFilterFocused = $headerFilter.is(':focus');
+            const isHeaderFocused = $target.is(':focus');
+
+            if($headerFilter.length && (isHeaderFilterFocused && e.shiftKey || isHeaderFocused && !e.shiftKey)) {
+                return true;
+            }
         }
 
         if(isTargetInFixedTable) {
@@ -661,6 +674,10 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 $targetRow = this._tableElement.find(rowSelector);
             }
         } else if($nextCell.hasClass('dx-hidden-cell')) {
+            if($nextCell.hasClass('dx-command-edit')) {
+                return false;
+            }
+
             $targetRow = this._fixedTableElement.find(rowSelector);
 
             nextColIndex = this._getCorrectedColIndex(nextColIndex);
@@ -677,7 +694,7 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
                 if(isFilterRow) {
                     this._focusFilterCell($nextCell, !e.shiftKey);
                 } else {
-                    $nextCell.focus();
+                    this._focusHeader($nextCell, !e.shiftKey);
                 }
 
                 e.preventDefault();
@@ -686,6 +703,10 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             } else {
                 return false;
             }
+        }
+
+        if($nextCell.is('.dx-command-expand, .dx-command-edit, .dx-command-select, .dx-command-drag')) {
+            return false;
         }
 
         return !$target.is(':last-child');
@@ -704,7 +725,7 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
     _getTransparentInfo: function() {
         const $transparentColumn = this.getTransparentColumnElement();
         const transparentColIndex = $transparentColumn?.index() || 0;
-        const transparentColspan = Number($transparentColumn?.attr('colspan') || 0);
+        const transparentColspan = Number($transparentColumn?.prop('colspan') || 0);
 
         return { transparentColIndex, transparentColspan };
     },
@@ -716,6 +737,16 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             $filterMenu.focus();
         } else {
             $cell.find('input').focus();
+        }
+    },
+
+    _focusHeader: function($cell, isForward) {
+        const $headerFilter = $cell.find('.dx-header-filter');
+
+        if(!isForward && $headerFilter.length) {
+            $headerFilter.focus();
+        } else {
+            $cell.focus();
         }
     }
 });

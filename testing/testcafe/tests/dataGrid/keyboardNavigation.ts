@@ -1891,3 +1891,509 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     })());
   });
 });
+
+test('Navigation through headersView using Tab, Shift+Tab (fixed columns on the left, with selection and editing)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headers = dataGrid.getHeaders();
+  const fixedHeaderRow = headers.getHeaderRow(0);
+  const headerRow = headers.getHeaderRow(1);
+  const filterRow = headers.getFilterRow();
+
+  // header row
+  await t
+    .pressKey('tab')
+    .expect(headers.hasFocusedState).ok()
+    .expect(fixedHeaderRow.getCommandCell(0).element.focused)
+    .notOk()
+    .expect(fixedHeaderRow.getCommandCell(0).getSelectCheckBox().focused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(fixedHeaderRow.getHeaderCell(1).element.focused)
+    .ok()
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(fixedHeaderRow.getHeaderCell(1).getFilterIcon().focused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(2).element.focused)
+    .ok()
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(2).getFilterIcon().focused)
+    .ok();
+
+  // filter row
+  await t
+    .pressKey('tab')
+    .expect(headers.hasFocusedState).ok()
+    .expect(filterRow.getFilterCell(1).getSearchIcon().element.focused)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getSearchIcon().hasFocusedState)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getEditor().element.focused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(2).getSearchIcon().element.focused)
+    .ok()
+    .expect(filterRow.getFilterCell(2).getSearchIcon().hasFocusedState)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(2).getEditor().element.focused)
+    .ok();
+
+  // rowsView: first row
+  await t
+    .pressKey('tab')
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).element.focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).getSelectCheckBox().focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).element.focused)
+    .notOk()
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(1).element.focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(1).isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(2).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).getDataCell(2).isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(3).getButton(0).focused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(3).getButton(1).focused)
+    .ok();
+
+  // focus BODY
+  await t
+    .pressKey('tab')
+    .expect(Selector('BODY').focused).ok();
+
+  // reverse
+  // rowsView: first row
+  await t
+    .pressKey('shift+tab')
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(3).getButton(1).focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(3).getButton(0).focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(2).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).getDataCell(2).isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(1).element.focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(1).isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).getSelectCheckBox().focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).element.focused)
+    .notOk()
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).element.focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getCommandCell(0).isFocused)
+    .ok();
+
+  // filter row
+  await t
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(2).getEditor().element.focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(2).getSearchIcon().element.focused)
+    .ok()
+    .expect(filterRow.getFilterCell(2).getSearchIcon().hasFocusedState)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getEditor().element.focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getSearchIcon().element.focused)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getSearchIcon().hasFocusedState)
+    .ok();
+
+  // header row
+  await t
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(2).getFilterIcon().focused)
+    .ok()
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(2).element.focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(fixedHeaderRow.getHeaderCell(1).getFilterIcon().focused)
+    .ok()
+    .pressKey('shift+tab')
+    .expect(fixedHeaderRow.getHeaderCell(1).element.focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(fixedHeaderRow.getCommandCell(0).element.focused)
+    .notOk()
+    .expect(fixedHeaderRow.getCommandCell(0).getSelectCheckBox().focused)
+    .ok();
+
+  // focus BODY
+  await t
+    .pressKey('shift+tab')
+    .expect(Selector('BODY').focused).ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 300,
+    dataSource: [
+      { name: 'Alex', c0: 'c0_0' },
+    ],
+    keyExpr: 'name',
+    editing: {
+      allowUpdating: true,
+      allowDeleting: true,
+      selectTextOnEditStart: true,
+      useIcons: true,
+    },
+    headerFilter: { visible: true },
+    filterRow: { visible: true },
+    selection: {
+      mode: 'multiple',
+      showCheckBoxesMode: 'always',
+    },
+    columns: [{
+      dataField: 'name',
+      fixed: true,
+    }, 'c0'],
+  });
+});
+
+test('Navigation through headersView using Tab, Shift+Tab (fixed columns on the left)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headers = dataGrid.getHeaders();
+  const fixedHeaderRow = headers.getHeaderRow(0);
+  const headerRow = headers.getHeaderRow(1);
+  const filterRow = headers.getFilterRow();
+
+  // header row
+  await t
+    .pressKey('tab')
+    .expect(fixedHeaderRow.getHeaderCell(0).element.focused)
+    .ok()
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(fixedHeaderRow.getHeaderCell(0).getFilterIcon().focused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok()
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(1).getFilterIcon().focused)
+    .ok();
+
+  // filter row
+  await t
+    .pressKey('tab')
+    .expect(headers.hasFocusedState).ok()
+    .expect(filterRow.getFilterCell(0).getSearchIcon().element.focused)
+    .ok()
+    .expect(filterRow.getFilterCell(0).getSearchIcon().hasFocusedState)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(0).getEditor().element.focused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getSearchIcon().element.focused)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getSearchIcon().hasFocusedState)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getEditor().element.focused)
+    .ok();
+
+  // rowsView: first row
+  await t
+    .pressKey('tab')
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(0).element.focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(0).isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .ok();
+
+  // focus BODY
+  await t
+    .pressKey('tab')
+    .expect(Selector('BODY').focused).ok();
+
+  // reverse
+  // rowsView: first row
+  await t
+    .pressKey('shift+tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(0).element.focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(0).isFocused)
+    .ok();
+
+  // filter row
+  await t
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getEditor().element.focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getSearchIcon().element.focused)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getSearchIcon().hasFocusedState)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(0).getEditor().element.focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(0).getSearchIcon().element.focused)
+    .ok()
+    .expect(filterRow.getFilterCell(0).getSearchIcon().hasFocusedState)
+    .ok();
+
+  // header row
+  await t
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(1).getFilterIcon().focused)
+    .ok()
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(fixedHeaderRow.getHeaderCell(0).getFilterIcon().focused)
+    .ok()
+    .pressKey('shift+tab')
+    .expect(fixedHeaderRow.getHeaderCell(0).element.focused)
+    .ok();
+
+  // focus BODY
+  await t
+    .pressKey('shift+tab')
+    .expect(Selector('BODY').focused).ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 300,
+    dataSource: [
+      { name: 'Alex', c0: 'c0_0' },
+    ],
+    keyExpr: 'name',
+    headerFilter: { visible: true },
+    filterRow: { visible: true },
+    columns: [{
+      dataField: 'name',
+      fixed: true,
+    }, 'c0'],
+  });
+});
+
+test('Navigation through headersView using Tab, Shift+Tab (fixed columns on the left, no header filter)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headers = dataGrid.getHeaders();
+  const fixedHeaderRow = headers.getHeaderRow(0);
+  const headerRow = headers.getHeaderRow(1);
+  const filterRow = headers.getFilterRow();
+
+  // header row
+  await t
+    .pressKey('tab')
+    .expect(fixedHeaderRow.getHeaderCell(0).element.focused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok();
+
+  // filter row
+  await t
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(0).getEditor().element.focused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getEditor().element.focused)
+    .ok();
+
+  // rowsView: first row
+  await t
+    .pressKey('tab')
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(0).element.focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(0).isFocused)
+    .ok()
+
+    .pressKey('tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .ok();
+
+  // focus BODY
+  await t
+    .pressKey('tab')
+    .expect(Selector('BODY').focused).ok();
+
+  // reverse
+  // rowsView: first row
+  await t
+    .pressKey('shift+tab')
+    .expect(dataGrid.getDataRow(0).getDataCell(1).element.focused)
+    .ok()
+    .expect(dataGrid.getDataRow(0).getDataCell(1).isFocused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(0).element.focused)
+    .ok()
+    .expect(dataGrid.getFixedDataRow(0).getDataCell(0).isFocused)
+    .ok();
+
+  // filter row
+  await t
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(1).getEditor().element.focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(filterRow.getFilterCell(0).getEditor().element.focused)
+    .ok();
+
+  // header row
+  await t
+    .pressKey('shift+tab')
+    .expect(headers.hasFocusedState)
+    .ok()
+    .expect(headerRow.getHeaderCell(1).element.focused)
+    .ok()
+
+    .pressKey('shift+tab')
+    .expect(fixedHeaderRow.getHeaderCell(0).element.focused)
+    .ok();
+
+  // focus BODY
+  await t
+    .pressKey('shift+tab')
+    .expect(Selector('BODY').focused).ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    width: 300,
+    dataSource: [{ }],
+    filterRow: { visible: true },
+    columns: [{
+      dataField: 'name',
+      fixed: true,
+    }, 'c0'],
+  });
+});
