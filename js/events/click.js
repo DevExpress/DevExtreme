@@ -95,7 +95,9 @@ const useNativeClick =
 
     let prevented = null;
     let lastFiredEvent = null;
-
+    const onLastEventTargetRemove = () => {
+        lastFiredEvent = null;
+    };
     const clickHandler = function(e) {
         const originalEvent = e.originalEvent;
         const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED;
@@ -106,7 +108,20 @@ const useNativeClick =
                 originalEvent.DXCLICK_FIRED = true;
             }
 
+            lastFiredEvent && eventsEngine.off([
+                lastFiredEvent.target,
+                lastFiredEvent.delegateTarget,
+                lastFiredEvent.relativeTarget
+            ], 'dxremove', onLastEventTargetRemove);
+
             lastFiredEvent = originalEvent;
+
+            lastFiredEvent && eventsEngine.on([
+                lastFiredEvent.target,
+                lastFiredEvent.delegateTarget,
+                lastFiredEvent.relativeTarget
+            ], 'dxremove', onLastEventTargetRemove);
+
             fireEvent({
                 type: CLICK_EVENT_NAME,
                 originalEvent: e
@@ -152,10 +167,6 @@ const useNativeClick =
             this.callBase();
 
             eventsEngine.off(this.getElement(), 'click', clickHandler);
-
-            if(lastFiredEvent && lastFiredEvent.path.indexOf(this.getElement().get(0)) > -1) {
-                lastFiredEvent = null;
-            }
         }
     });
 })();
