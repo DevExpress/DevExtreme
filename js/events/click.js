@@ -11,6 +11,7 @@ import registerEmitter from './core/emitter_registrator';
 import { compare as compareVersions } from '../core/utils/version';
 
 const CLICK_EVENT_NAME = 'dxclick';
+const REMOVE_EVENT_NAME = 'dxremove';
 const TOUCH_BOUNDARY = 10;
 const abs = Math.abs;
 
@@ -111,10 +112,10 @@ const useNativeClick =
 
         return {
             subscribe: (event, callback) => {
-                eventsEngine.on(nodesByEvent(event), 'dxremove', callback);
+                eventsEngine.on(nodesByEvent(event), REMOVE_EVENT_NAME, callback);
             },
             unsubscribe: (event, callback) => {
-                eventsEngine.off(nodesByEvent(event), 'dxremove', callback);
+                eventsEngine.off(nodesByEvent(event), REMOVE_EVENT_NAME, callback);
             }
         };
     })();
