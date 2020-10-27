@@ -73,8 +73,8 @@ class FileManagerEditingControl extends Widget {
     _getFileUploaderController() {
         return {
             chunkSize: this._controller.getFileUploadChunkSize(),
-            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, this.uploadDirectoryInfo?.fileItem),
-            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, this.uploadDirectoryInfo?.fileItem)
+            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, this.uploadDirectoryInfoCallback()?.fileItem),
+            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, this.uploadDirectoryInfoCallback()?.fileItem)
         };
     }
 
@@ -192,7 +192,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _onUploadSessionStarted({ sessionInfo }) {
-        this._controller.processUploadSession(sessionInfo, this.uploadDirectoryInfo);
+        this._controller.processUploadSession(sessionInfo, this.uploadDirectoryInfoCallback);
     }
 
     _onEditActionStarting(actionInfo) {
@@ -455,8 +455,8 @@ class FileManagerEditingControl extends Widget {
         return this._controller.getCurrentDirectory();
     }
 
-    get uploadDirectoryInfo() {
-        return this._uploadDirectoryInfo || this._getCurrentDirectory();
+    get uploadDirectoryInfoCallback() {
+        return () => { return this._uploadDirectoryInfo || this._getCurrentDirectory(); };
     }
 
 }

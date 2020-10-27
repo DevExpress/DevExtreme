@@ -252,12 +252,13 @@ export default class FileItemsController {
             });
     }
 
-    processUploadSession(sessionInfo, uploadDirectoryInfo) {
+    processUploadSession(sessionInfo, uploadDirectoryInfoCallback) {
+        const uploadDirectoryInfo = uploadDirectoryInfoCallback();
         const itemInfos = this._getItemInfosForUploaderFiles(sessionInfo.files, uploadDirectoryInfo);
         const actionInfo = this._createEditActionInfo('upload', itemInfos, uploadDirectoryInfo, { sessionInfo });
         return this._processEditAction(actionInfo,
             () => sessionInfo.deferreds,
-            () => this._resetDirectoryState(uploadDirectoryInfo));
+            () => this._resetDirectoryState(uploadDirectoryInfoCallback()));
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
