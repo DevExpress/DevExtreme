@@ -53,6 +53,8 @@ const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 
 const TIME_TO_WAIT = 500;
+const browserVersion = parseInt(browser.version, 10);
+const isBrowserNewChrome = browser.chrome && browserVersion >= 85;
 
 const moduleSetup = {
     beforeEach: function() {
@@ -5061,6 +5063,7 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
         const scrollBehavior = getScrollBehavior();
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
@@ -5213,6 +5216,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         });
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
         const scrollBehavior = getScrollBehavior();
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
@@ -5224,6 +5228,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         this.instance.option('value', this.items);
         expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
+
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 
@@ -5315,6 +5320,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('left');
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
         const scrollBehavior = getScrollBehavior();
         const scrollSign = scrollBehavior.positive ? 1 : -1;
         const expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());

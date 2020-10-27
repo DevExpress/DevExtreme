@@ -121,6 +121,8 @@ QUnit.module('Intl localization', {
                     { value: 2, format: { type: 'decimal', precision: 3 }, expected: localizeDigits('002') },
                     { value: 12, format: { type: 'decimal', precision: 3 }, expected: localizeDigits('012') },
                     { value: 123, format: { type: 'decimal', precision: 3 }, expected: localizeDigits('123') },
+                    // NOTE: T938117 - Decimal number type is rounded off when there are at least 10 decimal places.
+                    { value: 1.9999999999999, format: { type: 'decimal' }, expected: getLocalizedFixedNumber(1, 9999999999999) },
 
                     { value: 12.345, format: 'fixedPoint', expected: localizeDigits('12') },
                     { value: 12.345, format: { type: 'fixedPoint' }, expected: localizeDigits('12') },

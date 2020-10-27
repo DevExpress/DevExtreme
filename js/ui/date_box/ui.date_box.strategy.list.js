@@ -9,6 +9,7 @@ const extend = require('../../core/utils/extend').extend;
 const dateUtils = require('./ui.date_utils');
 const dateLocalization = require('../../localization/date');
 const dateSerialization = require('../../core/utils/date_serialization');
+const getSizeValue = require('../drop_down_editor/utils').getSizeValue;
 
 const DATE_FORMAT = 'date';
 
@@ -250,11 +251,14 @@ const ListStrategy = DateBoxStrategy.inherit({
     },
 
     _updatePopupHeight: function() {
-        this.dateBox._setPopupOption('height', 'auto');
+        const dropDownOptionsHeight = getSizeValue(this.dateBox.option('dropDownOptions.height'));
+        if(dropDownOptionsHeight === undefined || dropDownOptionsHeight === 'auto') {
+            this.dateBox._setPopupOption('height', 'auto');
+            const popupHeight = this._widget.$element().outerHeight();
+            const maxHeight = $(window).height() * 0.45;
+            this.dateBox._setPopupOption('height', Math.min(popupHeight, maxHeight));
+        }
 
-        const popupHeight = this._widget.$element().outerHeight();
-        const maxHeight = $(window).height() * 0.45;
-        this.dateBox._setPopupOption('height', Math.min(popupHeight, maxHeight));
         this.dateBox._timeList && this.dateBox._timeList.updateDimensions();
     },
 

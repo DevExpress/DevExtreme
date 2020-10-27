@@ -32,6 +32,7 @@ const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
 const ESC_KEY_CODE = 'Escape';
 const POPUP_CLASS = 'dx-popup';
+const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 
@@ -1279,6 +1280,25 @@ QUnit.module('popup integration', () => {
             assert.strictEqual($overlayContent.outerWidth(), $dropDownEditor.outerWidth(), 'overlay content width is correct');
         });
 
+        QUnit.test('should be equal to content width if dropDownOptions.width is set to auto', function(assert) {
+            const contentWidth = 500;
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    width: 'auto'
+                }
+            }).dxDropDownEditor('instance');
+
+            dropDownEditor._renderPopupContent = function() {
+                return $('<div>')
+                    .css({ width: contentWidth })
+                    .appendTo(dropDownEditor._popup.$content());
+            };
+            dropDownEditor.open();
+
+            const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+            assert.strictEqual($popupContent.width(), contentWidth, 'overlay content width is correct');
+        });
+
         QUnit.test('should be equal to dropDownOptions.width if it\'s defined', function(assert) {
             const overlayContentWidth = 500;
             $('#dropDownEditorLazy').dxDropDownEditor({
@@ -1369,6 +1389,151 @@ QUnit.module('popup integration', () => {
         });
     });
 
+    QUnit.module('overlay content height', () => {
+        QUnit.test('should be equal to content height if dropDownOptions.height is not specified', function(assert) {
+            const contentHeight = 500;
+            const dropDownEditor = $('#dropDownEditorLazy')
+                .dxDropDownEditor()
+                .dxDropDownEditor('instance');
+
+            dropDownEditor._renderPopupContent = function() {
+                return $('<div>')
+                    .css({ height: contentHeight })
+                    .appendTo(dropDownEditor._popup.$content());
+            };
+            dropDownEditor.open();
+
+            const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+            assert.strictEqual($popupContent.height(), contentHeight, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to content height if dropDownOptions.height is not specified even after editor height change', function(assert) {
+            const contentHeight = 500;
+            const dropDownEditor = $('#dropDownEditorLazy')
+                .dxDropDownEditor()
+                .dxDropDownEditor('instance');
+
+            dropDownEditor._renderPopupContent = function() {
+                return $('<div>')
+                    .css({ height: contentHeight })
+                    .appendTo(dropDownEditor._popup.$content());
+            };
+            dropDownEditor.open();
+
+            dropDownEditor.option('height', 300);
+
+            const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+            assert.strictEqual($popupContent.height(), contentHeight, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to content height if dropDownOptions.height is set to auto', function(assert) {
+            const contentHeight = 500;
+            const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    height: 'auto'
+                }
+            }).dxDropDownEditor('instance');
+
+            dropDownEditor._renderPopupContent = function() {
+                return $('<div>')
+                    .css({ height: contentHeight })
+                    .appendTo(dropDownEditor._popup.$content());
+            };
+            dropDownEditor.open();
+
+            const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+            assert.strictEqual($popupContent.height(), contentHeight, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to dropDownOptions.height if it is specified', function(assert) {
+            const overlayContentHeight = 500;
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    height: overlayContentHeight
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerHeight(), overlayContentHeight, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to dropDownOptions.height even after editor height change', function(assert) {
+            const overlayContentHeight = 500;
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    height: overlayContentHeight
+                },
+                opened: true
+            });
+            const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+            instance.option('height', 300);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerHeight(), overlayContentHeight, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to wrapper height if dropDownOptions.height is set to 100%', function(assert) {
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    height: '100%'
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+            assert.strictEqual($overlayContent.outerHeight(), $overlayWrapper.outerHeight(), 'overlay content height is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper when dropDownOptions.height is percent', function(assert) {
+            $('#dropDownEditorLazy').dxDropDownEditor({
+                dropDownOptions: {
+                    height: '50%'
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+            assert.roughEqual($overlayContent.outerHeight(), $overlayWrapper.outerHeight() / 2, 0.1, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper after editor height runtime change', function(assert) {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                height: 600,
+                dropDownOptions: {
+                    height: '50%'
+                },
+                opened: true
+            });
+            const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+            instance.option('height', 700);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+            assert.roughEqual($overlayContent.outerHeight(), $overlayWrapper.outerHeight() / 2, 0.1, 'overlay content height is correct');
+        });
+    });
+
+    QUnit.test('popup should be repositioned after height option runtime change', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            opened: true
+        });
+        const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+        instance.option('height', 300);
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+        const overlayContentRect = $overlayContent.get(0).getBoundingClientRect();
+        const editorRect = $dropDownEditor.get(0).getBoundingClientRect();
+
+        assert.roughEqual(overlayContentRect.top, editorRect.bottom, 1.01, 'top position is correct');
+        assert.roughEqual(overlayContentRect.left, editorRect.left, 1.01, 'left position is correct');
+    });
+
     QUnit.test('dropDownOptions.width should be passed to popup', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
             dropDownOptions: {
@@ -1394,6 +1559,33 @@ QUnit.module('popup integration', () => {
 
         const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
         assert.strictEqual(popup.option('width'), 500, 'popup width option value is correct');
+    });
+
+    QUnit.test('dropDownOptions.height should be passed to popup', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            dropDownOptions: {
+                height: 500
+            },
+            opened: true
+        });
+
+        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('height'), 500, 'popup height option value is correct');
+    });
+
+    QUnit.test('popup should have height equal to dropDownOptions.height even after editor height change', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            dropDownOptions: {
+                height: 500
+            },
+            opened: true
+        });
+        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+
+        dropDownEditor.option('height', 300);
+
+        const popup = $dropDownEditor.find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('height'), 500, 'popup height option value is correct');
     });
 
     QUnit.test('onPopupInitialized', function(assert) {

@@ -1974,6 +1974,8 @@ const Scheduler = Widget.inherit({
         this.fire('setField', 'recurrenceException', singleAppointment, '');
 
         if(!isDeleted && !isPopupEditing) {
+            const keyPropertyName = this._appointmentModel.keyName;
+            delete singleAppointment[keyPropertyName];
 
             processAppointmentDates.call(this, singleAppointment, this._getTimezoneOffsetByOption());
 
