@@ -19,6 +19,7 @@ import { addNamespace, normalizeKeyName } from '../events/utils';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
+import { getScrollBehavior } from '../core/utils/position';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -240,13 +241,10 @@ const TagBox = SelectBox.inherit({
         const rtlEnabled = this.option('rtlEnabled');
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
 
-        // NOTE: for affecting this Chrome BC: https://www.chromestatus.com/feature/5759578031521792
-        const browserVersion = parseInt(browser.version, 10);
-        const isNewChrome = browser.chrome && browserVersion >= 85;
-        const isScrollReverted = rtlEnabled && (!browser.webkit || isNewChrome);
-        const scrollSign = (!rtlEnabled || browser.webkit && !isNewChrome || browser.msie) ? 1 : -1;
+        const scrollBehavior = getScrollBehavior();
+        const scrollSign = !rtlEnabled || scrollBehavior.positive ? 1 : -1;
 
-        return (isScrollLeft ^ !isScrollReverted)
+        return (isScrollLeft ^ !rtlEnabled)
             ? 0
             : scrollSign * (this._$tagsContainer.get(0).scrollWidth - this._$tagsContainer.outerWidth());
     },

@@ -3,7 +3,6 @@ import { DataSource } from 'data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import { createTextElementHiddenCopy } from 'core/utils/dom';
 import ajaxMock from '../../helpers/ajaxMock.js';
-import browser from 'core/utils/browser';
 import config from 'core/config';
 import dataQuery from 'data/query';
 import devices from 'core/devices';
@@ -17,6 +16,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
+import { getScrollBehavior } from 'core/utils/position';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -53,8 +53,6 @@ const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 
 const TIME_TO_WAIT = 500;
-const browserVersion = parseInt(browser.version, 10);
-const isBrowserNewChrome = browser.chrome && browserVersion >= 85;
 
 const moduleSetup = {
     beforeEach: function() {
@@ -5049,11 +5047,7 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
-
-        const expectedScrollPosition = (browser.msie || browser.mozilla || isBrowserNewChrome)
-            ? 0
-            : ($container.get(0).scrollWidth - $container.outerWidth()) * sign;
+        const expectedScrollPosition = 0;
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
 
@@ -5067,11 +5061,10 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
+        const scrollBehavior = getScrollBehavior();
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
 
-        const expectedScrollPosition = (browser.msie || browser.mozilla || isBrowserNewChrome)
-            ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
-            : 0;
+        const expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
 
         this.instance.focus();
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
@@ -5220,17 +5213,17 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         });
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const isScrollReverted = (browser.msie || browser.mozilla || isBrowserNewChrome);
-        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
+        const scrollBehavior = getScrollBehavior();
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
 
-        let expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        let expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
 
         this.instance.option('value', this.items);
-        expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 
@@ -5322,9 +5315,9 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('left');
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const isScrollReverted = browser.msie || browser.mozilla || isBrowserNewChrome;
-        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
-        const expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        const scrollBehavior = getScrollBehavior();
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
+        const expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
 
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
