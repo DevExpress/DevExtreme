@@ -5047,7 +5047,11 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const expectedScrollPosition = 0;
+        const scrollBehavior = getScrollBehavior();
+        const isScrollInverted = scrollBehavior.decreasing;
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
+
+        const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
 
@@ -5063,9 +5067,10 @@ QUnit.module('single line mode', {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         const scrollBehavior = getScrollBehavior();
+        const isScrollInverted = scrollBehavior.decreasing;
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
-        const expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
+        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
         this.instance.focus();
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
@@ -5216,16 +5221,17 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         const scrollBehavior = getScrollBehavior();
+        const isScrollInverted = scrollBehavior.decreasing;
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
 
-        let expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
+        let expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
 
         this.instance.option('value', this.items);
-        expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
+        expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
@@ -5321,7 +5327,8 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const scrollBehavior = getScrollBehavior();
         const scrollSign = scrollBehavior.positive ? 1 : -1;
-        const expectedScrollPosition = scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
+        const isScrollInverted = scrollBehavior.decreasing;
+        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
