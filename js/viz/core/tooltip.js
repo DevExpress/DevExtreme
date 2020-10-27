@@ -117,7 +117,7 @@ Tooltip.prototype = {
                     if(useTemplate) {
                         template.render({ model: state.formatObject, container: textHtml, onRendered: () => {
                             state.html = textHtml.html();
-                            if(!state.html) {
+                            if(textHtml.width() === 0 && textHtml.height() === 0) {
                                 this.plaque.clear();
                                 return;
                             }
