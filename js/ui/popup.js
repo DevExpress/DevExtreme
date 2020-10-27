@@ -625,7 +625,11 @@ const Popup = Overlay.inherit({
         if(this.option('fullScreen')) {
             this._$content.css({
                 width: '100%',
-                height: '100%'
+                height: '100%',
+                minWidth: '',
+                maxWidth: '',
+                minHeight: '',
+                maxHeight: ''
             });
         } else {
             this.callBase.apply(this, arguments);
@@ -663,10 +667,12 @@ const Popup = Overlay.inherit({
             case 'titleTemplate':
                 this._renderTitle();
                 this._renderGeometry();
+                domUtils.triggerResizeEvent(this._$content);
                 break;
             case 'bottomTemplate':
                 this._renderBottom();
                 this._renderGeometry();
+                domUtils.triggerResizeEvent(this._$content);
                 break;
             case 'onTitleRendered':
                 this._createTitleRenderAction(args.value);
@@ -683,6 +689,7 @@ const Popup = Overlay.inherit({
 
                 if(shouldRenderGeometry) {
                     this._renderGeometry();
+                    domUtils.triggerResizeEvent(this._$content);
                 }
                 break;
             }

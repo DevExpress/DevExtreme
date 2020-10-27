@@ -1453,14 +1453,15 @@ QUnit.module('placeholder', () => {
             }
         });
 
-        const $input = $tagBox.find('.dx-texteditor-input');
+        let $input = $tagBox.find('.dx-texteditor-input');
         const keyboard = keyboardMock($input);
 
         keyboard
             .type('123')
             .press('enter');
+
+        $input = $tagBox.find('.dx-texteditor-input');
         $input.trigger('blur');
-        $input.trigger('focusout');
 
         const $placeholder = $tagBox.find('.dx-placeholder');
         assert.notOk($placeholder.is(':visible'), 'placeholder is not visible');
@@ -3647,6 +3648,49 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         assert.strictEqual(instance.option('text'), '1', 'text is correct');
     });
 
+    QUnit.testInActiveWindow('TagBox without selection controls should search value when minSearchLength is exceeded and there are selected items (T932182)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [111, 222],
+            value: [111],
+            searchEnabled: true,
+            minSearchLength: 2,
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $tagBox.dxTagBox('instance');
+        const $input = $(instance._input());
+        const keyboard = keyboardMock($input);
+
+        $input.focusin();
+        keyboard
+            .type('22');
+        this.clock.tick(TIME_TO_WAIT);
+        const list = $tagBox.dxTagBox('instance')._list;
+        assert.deepEqual(list.getDataSource().items(), [222], 'dataSource was updated');
+    });
+
+    QUnit.testInActiveWindow('TagBox with selection controls should search value when minSearchLength is exceeded and there are selected items (T932182)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: [111, 222],
+            value: [111],
+            searchEnabled: true,
+            minSearchLength: 2,
+            showSelectionControls: true
+        });
+        this.clock.tick(TIME_TO_WAIT);
+
+        const instance = $tagBox.dxTagBox('instance');
+        const $input = $(instance._input());
+        const keyboard = keyboardMock($input);
+
+        $input.focusin();
+        keyboard
+            .type('22');
+        this.clock.tick(TIME_TO_WAIT);
+        const list = $tagBox.dxTagBox('instance')._list;
+        assert.deepEqual(list.getDataSource().items(), [222], 'dataSource was updated');
+    });
+
     QUnit.test('load tags data should not raise an error after widget has been disposed', function(assert) {
         assert.expect(1);
 
@@ -3827,23 +3871,6 @@ QUnit.module('popup position and size', moduleSetup, () => {
         }
 
         assert.ok(testPassed, 'There is no errors during test');
-    });
-
-    QUnit.test('popup should have correct width after editor width runtime change', function(assert) {
-        const instance = $('#tagBox').dxTagBox({
-            width: 600,
-            dropDownOptions: {
-                width: '150%'
-            },
-            opened: true
-        }).dxTagBox('instance');
-
-        const $overlayContent = $('.dx-overlay-content');
-        assert.strictEqual($overlayContent.outerWidth(), 900, 'overlay content width is correct');
-
-        instance.option('width', 400);
-
-        assert.strictEqual($overlayContent.outerWidth(), 600, 'overlay content width is correct after editor width runtime change');
     });
 });
 

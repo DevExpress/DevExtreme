@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector, ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
@@ -1480,3 +1480,136 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     columns: ['a', 'b'],
   }));
 });
+
+['Batch', 'Cell'].forEach((editMode) => {
+    [true, false].forEach((focusedRowEnabled) => {
+      test(`A stand-alone input should be focused on click after modifying a cell if focusedRowEnabled = ${focusedRowEnabled} and editing mode is ${editMode} (T940309)`, async (t) => {
+        const dataGrid = new DataGrid('#container');
+        const cell = dataGrid.getDataCell(0, 0);
+        const cellEditor = cell.getEditor().element;
+        const inputElement = Selector('#myinput');
+
+        // act
+        await t
+          .click(cell.element);
+
+        // assert
+        await t
+          .expect(cellEditor.exists)
+          .ok('cell editor exists');
+
+        // act
+        await t
+          .typeText(cellEditor, 'new text')
+          .click(inputElement);
+
+        // assert
+        await t
+          .expect(cellEditor.exists).notOk('cell editor is not rendered')
+          .expect(inputElement.focused).ok('input is focused');
+      }).before(async () => {
+        await ClientFunction(() => {
+          $('<input id="myinput">').prependTo('body');
+        })();
+        await createWidget('dxDataGrid', {
+          dataSource: [{ id: 1, name: 'test' }],
+          keyExpr: 'id',
+          columns: ['name'],
+          focusedRowKey: 1,
+          focusedRowEnabled,
+          editing: {
+            mode: editMode.toLowerCase(),
+            allowUpdating: true,
+          },
+        });
+      }).after(() => ClientFunction(() => {
+        $('#myinput').remove();
+      })());
+    });
+  });
+
+  test('Empty row should lose focus on Tab (T941246)', async (t) => {
+    const dataGrid = new DataGrid('#container');
+    const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+    const inputElement1 = Selector('#myinput1');
+    const inputElement2 = Selector('#myinput2');
+
+    // Tab
+    // act
+    await t
+      .click(inputElement1);
+
+    // assert
+    await t
+      .expect(inputElement1.focused)
+      .ok('first editor is focused');
+
+    // act
+    await t
+      .pressKey('tab');
+
+    // assert
+    await t
+      .expect(headerCell.element.focused)
+      .ok('header cell is focused');
+
+    // act
+    await t
+      .pressKey('tab');
+
+    // assert
+    await t
+      .expect(dataGrid.getRowsView().focused)
+      .ok('rows view is focused');
+
+    // act
+    await t
+      .pressKey('tab');
+
+    // assert
+    await t
+      .expect(inputElement2.focused)
+      .ok('second editor is focused');
+    // end Tab
+
+    // Shift+Tab
+    // act
+    await t
+      .pressKey('shift+tab');
+
+    // assert
+    await t
+      .expect(dataGrid.getRowsView().focused)
+      .ok('rows view is focused');
+
+    // act
+    await t
+      .pressKey('shift+tab');
+
+    // assert
+    await t
+      .expect(headerCell.element.focused)
+      .ok('header cell is focused');
+
+    // act
+    await t
+      .pressKey('shift+tab');
+
+    // assert
+    await t
+      .expect(inputElement1.focused)
+      .ok('first editor is focused');
+    // end Shift+Tab
+  }).before(async () => {
+    await ClientFunction(() => {
+      $('<input id="myinput1">').prependTo('body');
+      $('<input id="myinput2">').appendTo('body');
+    })();
+    await createWidget('dxDataGrid', {
+      dataSource: [],
+      columns: ['id'],
+    });
+  }).after(() => ClientFunction(() => {
+    $('#myinput1').remove();
+    $('#myinput2').remove();
+  })());

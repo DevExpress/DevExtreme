@@ -5,6 +5,7 @@ import fx from 'animation/fx';
 import CustomFileSystemProvider from 'file_management/custom_provider';
 import ErrorCode from 'file_management/errors';
 import { Consts, FileManagerWrapper, FileManagerProgressPanelWrapper, createTestFileSystem, createUploaderFiles, stubFileReader } from '../../../helpers/fileManagerHelpers.js';
+import NoDuplicatesFileProvider from '../../../helpers/fileManager/file_provider.no_duplicates.js';
 import { CLICK_EVENT } from '../../../helpers/grid/keyboardNavigationHelper.js';
 
 
@@ -653,4 +654,119 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(errorSpy.args[0][0].fileSystemItem.name, 'File 1.txt', 'fileSystemItem correct');
     });
 
+    test('failed upload notification in notification panel should have an invisible close button in details', function(assert) {
+        const fileManager = this.$element.dxFileManager('instance');
+        fileManager.option('upload.maxFileSize', 100);
+        this.clock.tick(400);
+        stubFileReader(fileManager._controller._fileProvider);
+
+        this.wrapper.getToolbarButton('Upload').filter(':visible').trigger('dxclick');
+
+        const file = createUploaderFiles(1)[0];
+        this.wrapper.setUploadInputFile([ file ]);
+        this.clock.tick(400);
+
+
+        const infos = this.progressPanelWrapper.getInfos();
+        assert.equal(infos.length, 1, 'rendered one operation');
+
+        const common = infos[0].common;
+        assert.ok(common.closeButtonVisible, 'close button visible');
+
+        const details = infos[0].details;
+        assert.equal(details.length, 1, 'one detail item rendered');
+
+        const detail = details[0];
+        assert.ok(detail.hasError, 'error rendered');
+        assert.equal(detail.errorText, 'File size exceeds the maximum allowed size.', 'error text rendered');
+        assert.equal(detail.commonText, 'Upload file 0.txt', 'detail item common text rendered');
+        assert.notOk(detail.$progressBar.length, 'progress bar not rendered');
+        assert.notOk(detail.closeButtonVisible, 'detail item has an invisible close button');
+    });
+
+    test('create directory duplicate leads to an error with correct text (T926881)', function(assert) {
+        const folderName = 'Folder 1';
+        this.wrapper.getInstance().option({
+            fileSystemProvider: new NoDuplicatesFileProvider({
+                currentDirectory: () => this.wrapper.getInstance().getCurrentDirectory()
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        const initialItemsLength = this.wrapper.getRowsInDetailsView().length;
+        this.wrapper.getToolbarButton('New directory').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val(folderName).trigger('change');
+        this.wrapper.getDialogButton('Create').trigger('dxclick');
+        this.clock.tick(800);
+
+        const items = this.wrapper.getRowsInDetailsView();
+        const notificationInfo = this.progressPanelWrapper.getInfos()[0];
+        assert.strictEqual(items.length, initialItemsLength, 'No items added');
+        assert.strictEqual(this.wrapper.findDetailsItem(folderName).length, 1, 'No items added');
+        assert.strictEqual(notificationInfo.details[0].commonText, folderName, 'Common text is correct');
+        assert.ok(notificationInfo.details[0].hasError, 'Info has error');
+        assert.strictEqual(notificationInfo.details[0].errorText, `Directory '${folderName}' already exists.`, 'Error text is correct');
+    });
+
+    test('rename directory to already existing leads to an error with correct text (T926881)', function(assert) {
+        const newFolderName = 'Folder 1';
+        const targetFolderName = 'Folder 2';
+        this.wrapper.getInstance().option({
+            fileSystemProvider: new NoDuplicatesFileProvider({
+                currentDirectory: () => this.wrapper.getInstance().getCurrentDirectory()
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.findDetailsItem(targetFolderName).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val(newFolderName).trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(800);
+
+        const notificationInfo = this.progressPanelWrapper.getInfos()[0];
+        assert.strictEqual(this.wrapper.findDetailsItem(newFolderName).length, 1, 'There\'s only one folder with this name');
+        assert.strictEqual(this.wrapper.findDetailsItem(newFolderName).length, 1, 'No items added');
+        assert.strictEqual(notificationInfo.details[0].commonText, targetFolderName, 'Common text is correct');
+        assert.ok(notificationInfo.details[0].hasError, 'Info has error');
+        assert.strictEqual(notificationInfo.details[0].errorText, `Directory '${newFolderName}' already exists.`, 'Error text is correct');
+    });
+
+    test('rename file to already existing leads to an error with correct text (T926881)', function(assert) {
+        const newFileName = 'File 1.txt';
+        const targetFileName = 'File 2.jpg';
+        this.wrapper.getInstance().option({
+            fileSystemProvider: new NoDuplicatesFileProvider({
+                currentDirectory: () => this.wrapper.getInstance().getCurrentDirectory()
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.findDetailsItem(targetFileName).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val(newFileName).trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(800);
+
+        const notificationInfo = this.progressPanelWrapper.getInfos()[0];
+        assert.strictEqual(this.wrapper.findDetailsItem(newFileName).length, 1, 'There\'s only one file with this name');
+        assert.strictEqual(this.wrapper.findDetailsItem(newFileName).length, 1, 'No items added');
+        assert.strictEqual(notificationInfo.details[0].commonText, targetFileName, 'Common text is correct');
+        assert.ok(notificationInfo.details[0].hasError, 'Info has error');
+        assert.strictEqual(notificationInfo.details[0].errorText, `File '${newFileName}' already exists.`, 'Error text is correct');
+    });
 });

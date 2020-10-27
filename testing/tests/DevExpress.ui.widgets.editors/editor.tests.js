@@ -490,6 +490,21 @@ QUnit.module('Validation - UI', {
         assert.equal($content.css('whiteSpace'), 'normal', 'text is not wrapped');
     });
 
+    QUnit.test('Validation message overlay content position should be absolute (T931335)', function(assert) {
+        const $element = this.fixture.createOnlyElement();
+
+        new Editor($element, {
+            validationMessageMode: 'always',
+            validationError: {
+                message: 'Error message'
+            },
+            isValid: false
+        });
+
+        const $content = $element.find(`.${INVALID_MESSAGE_CLASS} > .dx-overlay-content`);
+        assert.strictEqual($content.css('position'), 'absolute', 'overlay content position is absolute');
+    });
+
     QUnit.test('Validation message should have correct width for small content', function(assert) {
         const $element = this.fixture.createOnlyElement();
 

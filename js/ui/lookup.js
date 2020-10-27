@@ -10,6 +10,7 @@ const inkRipple = require('./widget/utils.ink_ripple');
 const messageLocalization = require('../localization/message');
 const devices = require('../core/devices');
 const registerComponent = require('../core/component_registrator');
+const { isDefined } = require('../core/utils/type');
 const eventUtils = require('../events/utils');
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
 const themes = require('./themes');
@@ -18,6 +19,7 @@ const Popover = require('./popover');
 const TextBox = require('./text_box');
 const ChildDefaultTemplate = require('../core/templates/child_default_template').ChildDefaultTemplate;
 const translator = require('../animation/translator');
+const { getElementWidth } = require('./drop_down_editor/utils');
 
 const LOOKUP_CLASS = 'dx-lookup';
 const LOOKUP_SEARCH_CLASS = 'dx-lookup-search';
@@ -311,7 +313,7 @@ const Lookup = DropDownList.inherit({
                     dropDownOptions: {
                         closeOnOutsideClick: true,
 
-                        width: (function() { return this._getPopupWidth(); }).bind(this),
+                        width: () => getElementWidth(this.$element()),
                         height: (function() { return this._getPopupHeight(); }).bind(this),
                         showTitle: false,
 
@@ -454,7 +456,8 @@ const Lookup = DropDownList.inherit({
             return;
         }
 
-        this._updateField(this.option('displayValue') || this.option('placeholder'));
+        const displayValue = this.option('displayValue');
+        this._updateField(isDefined(displayValue) && String(displayValue) || this.option('placeholder'));
         this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option('selectedItem'));
     },
 
@@ -619,7 +622,9 @@ const Lookup = DropDownList.inherit({
         let listHeight = 0;
         let requireListItems = [];
 
-        if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
+        if(listItems.length === 0) {
+            listHeight += MATERIAL_LOOKUP_LIST_PADDING;
+        } else if(listItems.length < MATERIAL_LOOKUP_LIST_ITEMS_COUNT) {
             listItems.each((_, item) => {
                 listHeight += $(item).outerHeight();
             });
@@ -649,10 +654,6 @@ const Lookup = DropDownList.inherit({
         } else {
             return 'auto';
         }
-    },
-
-    _getPopupWidth: function() {
-        return $(this.element()).outerWidth();
     },
 
     _renderPopup: function() {

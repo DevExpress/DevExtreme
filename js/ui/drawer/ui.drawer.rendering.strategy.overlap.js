@@ -48,6 +48,10 @@ class OverlapStrategy extends DrawerStrategy {
         if(this.getDrawerInstance().calcTargetPosition() === 'right') {
             $overlayContent.css('left', 'auto');
         }
+        if(this.getDrawerInstance().calcTargetPosition() === 'bottom') {
+            $overlayContent.css('top', 'auto');
+            $overlayContent.css('bottom', '0px');
+        }
     }
 
     _getOverlayPosition() {
@@ -97,6 +101,10 @@ class OverlapStrategy extends DrawerStrategy {
             overlay.option('width', overlay.option('container').width());
             overlay.option('height', calcFromRealPanelSize ? drawer.getRealPanelHeight() : this._getPanelSize(drawer.option('opened')));
         }
+    }
+
+    onViewContentWrapperCreated($viewContentWrapper, panelPosition) {
+        this._setupContent($viewContentWrapper, panelPosition);
     }
 
     _setupContent($content, position) {

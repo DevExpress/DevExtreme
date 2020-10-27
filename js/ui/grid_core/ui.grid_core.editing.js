@@ -136,6 +136,17 @@ const isRowEditMode = function(that) {
     return ROW_BASED_MODES.indexOf(editMode) !== -1;
 };
 
+const isEditingCell = function(isEditRow, cellOptions) {
+    return cellOptions.isEditing || isEditRow && cellOptions.column.allowEditing;
+};
+
+const isEditingOrShowEditorAlwaysDataCell = function(isEditRow, cellOptions) {
+    const isCommandCell = !!cellOptions.column.command;
+    const isEditing = isEditingCell(isEditRow, cellOptions);
+    const isEditorCell = !isCommandCell && (isEditing || cellOptions.column.showEditorAlways);
+    return cellOptions.rowType === 'data' && isEditorCell;
+};
+
 const EditingController = modules.ViewController.inherit((function() {
     const getDefaultEditorTemplate = function(that) {
         return function(container, options) {
@@ -681,11 +692,28 @@ const EditingController = modules.ViewController.inherit((function() {
 
             return item;
         },
+        _getLoadedRowIndexByInsertKey: function(items, change, key) {
+            const dataController = this._dataController;
+            const loadedRowIndexOffset = dataController.getRowIndexOffset(true);
+            let loadedRowIndex = key.dataRowIndex - loadedRowIndexOffset;
 
+            if(change.changeType === 'append') {
+                loadedRowIndex -= dataController.items(true).length;
+                if(change.removeCount) {
+                    loadedRowIndex += change.removeCount;
+                }
+            }
+
+            for(let i = 0; i < loadedRowIndex; i++) {
+                if(items[i] && items[i][INSERT_INDEX]) {
+                    loadedRowIndex++;
+                }
+            }
+
+            return loadedRowIndex;
+        },
         processItems: function(items, change) {
             const changeType = change.changeType;
-            const dataController = this._dataController;
-            let dataRowIndex = -1;
 
             this.update(changeType);
 
@@ -693,20 +721,12 @@ const EditingController = modules.ViewController.inherit((function() {
             for(let i = 0; i < editData.length; i++) {
                 const key = editData[i].key;
 
-                if(key) {
-                    const rowIndexOffset = dataController.getRowIndexOffset();
-                    dataRowIndex = key.dataRowIndex - rowIndexOffset + dataController.getRowIndexDelta();
-
-                    if(changeType === 'append') {
-                        dataRowIndex -= dataController.items(true).length;
-                        if(change.removeCount) {
-                            dataRowIndex += change.removeCount;
-                        }
-                    }
+                if(key && editData[i].type === DATA_EDIT_DATA_INSERT_TYPE) {
+                    const loadedRowIndex = this._getLoadedRowIndexByInsertKey(items, change, key);
 
                     const item = this._generateNewItem(key);
-                    if(dataRowIndex >= 0 && editData[i].type === DATA_EDIT_DATA_INSERT_TYPE && this._needInsertItem(editData[i], changeType, items, item)) {
-                        items.splice(key.dataRowIndex ? dataRowIndex : 0, 0, item);
+                    if(loadedRowIndex >= 0 && this._needInsertItem(editData[i], changeType, items, item)) {
+                        items.splice(key.dataRowIndex ? loadedRowIndex : 0, 0, item);
                     }
                 }
             }
@@ -792,7 +812,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             insertKey.dataRowIndex = dataController.getRowIndexOffset() + rows.filter(function(row, index) {
-                return index < insertKey.rowIndex && (row.rowType === 'data' || row.rowType === 'group' || row.isNewRow);
+                return index < insertKey.rowIndex && (row.rowType === 'data' && !row.isNewRow || row.rowType === 'group');
             }).length;
 
             if(editMode !== EDIT_MODE_BATCH) {
@@ -2693,13 +2713,13 @@ module.exports = {
                     const editingController = this._editingController;
                     const isCommandCell = !!parameters.column.command;
                     const isEditableCell = parameters.setValue;
-                    const isEditing = parameters.isEditing || editingController.isEditRow(parameters.rowIndex) && parameters.column.allowEditing;
+                    const isEditRow = editingController.isEditRow(parameters.rowIndex);
+                    const isEditing = isEditingCell(isEditRow, parameters);
 
-                    if(parameters.rowType === 'data' && !parameters.column.command && (isEditing || parameters.column.showEditorAlways)) {
+                    if(isEditingOrShowEditorAlwaysDataCell(isEditRow, parameters)) {
                         const alignment = parameters.column.alignment;
 
                         $cell
-                            .addClass(EDITOR_CELL_CLASS)
                             .toggleClass(this.addWidgetPrefix(READONLY_CLASS), !isEditableCell)
                             .toggleClass(CELL_FOCUS_DISABLED_CLASS, !isEditableCell);
 
@@ -2745,6 +2765,14 @@ module.exports = {
                     cellOptions.isEditing = this._editingController.isEditCell(cellOptions.rowIndex, cellOptions.columnIndex);
 
                     return cellOptions;
+                },
+                _createCell: function(options) {
+                    const $cell = this.callBase(options);
+                    const isEditRow = this._editingController.isEditRow(options.rowIndex);
+
+                    isEditingOrShowEditorAlwaysDataCell(isEditRow, options) && $cell.addClass(EDITOR_CELL_CLASS);
+
+                    return $cell;
                 },
                 _renderCellContent: function($cell, options) {
                     if(options.rowType === 'data' && getEditMode(this) === EDIT_MODE_POPUP && options.row.visible === false) {

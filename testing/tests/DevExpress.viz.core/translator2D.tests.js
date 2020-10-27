@@ -28,7 +28,13 @@ function prepareScaleBreaks(array, breakSize) {
 function createTranslatorWithScaleBreaks(options) {
     const breakSize = options.breakSize || 20;
     const breaks = prepareScaleBreaks(options.breaks || [{ from: 150, to: 200 }, { from: 350, to: 370 }, { from: 590, to: 650 }], breakSize);
-    return this.createTranslator({ min: options.min || 100, max: options.max || 700, breaks: breaks, invert: options.invert }, null, { breaksSize: breakSize });
+    return this.createTranslator({
+        min: options.min || 100,
+        max: options.max || 700,
+        breaks: breaks,
+        invert: options.invert,
+        userBreaks: options.userBreaks || breaks
+    }, null, { breaksSize: breakSize });
 }
 
 const canvasTemplate = {
@@ -1017,6 +1023,13 @@ QUnit.test('from. Scale breaks. Values in the breaks and should be untranslated 
     });
 
     assert.deepEqual(translator.from(950, 1), new Date(2012, 8, 1, 11));
+});
+
+QUnit.test('from. decimal (T932222)', function(assert) {
+    const translator = this.createTranslator({ min: new Date(2020, 8, 1, 0, 0, 0, 10), max: new Date(2020, 8, 1, 0, 0, 0, 18) });
+
+    assert.deepEqual(translator.from(350), new Date(2020, 8, 1, 0, 0, 0, 9));
+    assert.deepEqual(translator.from(1700), new Date(2020, 8, 1, 0, 0, 0, 20));
 });
 
 QUnit.test('GetInterval', function(assert) {
@@ -2731,6 +2744,21 @@ QUnit.test('getMinScale', function(assert) {
     assert.strictEqual(new translator2DModule.Translator2D(logarithmicRange, canvas, optionsHorizontal).getMinScale(true), 1.1, 'logarithmic zoom in');
 });
 
+QUnit.test('getDateTimeMinScale (T932222)', function(assert) {
+    const canvas = $.extend({}, canvasTemplate);
+
+    const range = {
+        min: new Date(2020, 9, 1, 0, 0, 0, 10),
+        max: new Date(2020, 9, 1, 0, 0, 0, 18),
+        axisType: 'continuous',
+        dataType: 'datetime',
+        interval: 1
+    };
+
+    assert.strictEqual(new translator2DModule.Translator2D(range, canvas, optionsHorizontal).getDateTimeMinScale(false), 0.8, 'dateTime zoom out');
+    assert.strictEqual(new translator2DModule.Translator2D(range, canvas, optionsHorizontal).getDateTimeMinScale(true), 4 / 3, 'dateTime zoom in');
+});
+
 QUnit.test('Zoom. Min in the break after zoom', function(assert) {
     const translator = createTranslatorWithScaleBreaks.call(this, {});
 
@@ -2746,6 +2774,39 @@ QUnit.test('Zoom. Max in the break after zoom', function(assert) {
     const zoomInfo = translator.zoom(650, 2.3);
     assert.equal(zoomInfo.max, 350);
 });
+
+// T927605 start
+QUnit.test('Scroll. Max in the user break, that was out of the range', function(assert) {
+    const breaks = [{ from: 350, to: 370 }];
+    const translator = createTranslatorWithScaleBreaks.call(this, { breaks: breaks, userBreaks: breaks.concat([{ from: 700, to: 800 }]) });
+
+    const scrollInfo = translator.zoom(25, 1);
+    assert.equal(scrollInfo.max, 800);
+});
+
+QUnit.test('Scroll. Min in the user break, that was out of the range', function(assert) {
+    const breaks = [{ from: 350, to: 370 }];
+    const translator = createTranslatorWithScaleBreaks.call(this, {
+        breaks: breaks,
+        userBreaks: breaks.concat([{ from: 0, to: 100 }])
+    });
+
+    const scrollInfo = translator.zoom(-25, 1);
+    assert.equal(scrollInfo.min, 0);
+});
+
+QUnit.test('Zoom out. Max and min in the user break, that was out of the range', function(assert) {
+    const breaks = [{ from: 350, to: 370 }];
+    const translator = createTranslatorWithScaleBreaks.call(this, {
+        breaks: breaks,
+        userBreaks: breaks.concat([{ from: 0, to: 120 }, { from: 700, to: 800 }])
+    });
+
+    const scrollInfo = translator.zoom(-25, 0.9);
+    assert.equal(scrollInfo.min, 0);
+    assert.equal(scrollInfo.max, 800);
+});
+// T927605 end
 
 QUnit.module('Zooming and scrolling. Discrete translator', {
     beforeEach: function() {

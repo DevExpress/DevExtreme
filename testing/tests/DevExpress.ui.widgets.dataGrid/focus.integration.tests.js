@@ -686,6 +686,33 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.equal($(rowsView.getRow(0)).find('td').eq(0).text(), '2', 'Focused row cell text');
     });
 
+    QUnit.test('Should not navigate to the focused row after scrolling if scrolling mode is infinite and preloadEnabled is true (T941254)', function(assert) {
+        // arrange
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            height: 100,
+            keyExpr: 'id',
+            dataSource: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(id => ({ id })),
+            focusedRowEnabled: true,
+            focusedRowKey: 1,
+            paging: {
+                pageSize: 2
+            },
+            scrolling: {
+                mode: 'infinite',
+                preloadEnabled: true,
+                useNative: false
+            }
+        }).dxDataGrid('instance');
+        this.clock.tick();
+
+        // act
+        dataGrid.getScrollable().scrollTo({ top: 10000 });
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getTopVisibleRowData().id, 5, 'top visible row id');
+    });
+
     // T804927
     QUnit.test('focusedRowKey should not overwrite dataSource field', function(assert) {
         // arrange
@@ -2332,6 +2359,74 @@ QUnit.module('View\'s focus', {
                     assert.equal(cellValue, 'a', 'cell value is correct');
                 });
             });
+        });
+    });
+
+    QUnit.testInActiveWindow('An input that resides in a group row template should be focused on click (T931756)', function(assert) {
+        // arrange
+        this.dataGrid.option({
+            dataSource: [{ id: 1, name: 'test', description: 'test' }],
+            keyExpr: 'id',
+            editing: {
+                mode: 'batch',
+                allowUpdating: true,
+                startEditAction: 'dblClick'
+            },
+            grouping: {
+                expandMode: 'buttonClick'
+            },
+            columns: [{
+                dataField: 'name',
+                groupIndex: 0,
+                groupCellTemplate: function(container) {
+                    $('<input>').appendTo(container);
+                }
+            }, 'description']
+        });
+        this.clock.tick();
+
+        const $inputElement = $(this.dataGrid.element()).find('input');
+
+        // act
+        $inputElement.focus();
+        this.clock.tick();
+        $inputElement.trigger('dxpointerdown').trigger('dxclick');
+        this.clock.tick();
+
+        // assert
+        assert.ok($inputElement.closest('td').hasClass('dx-focused'), 'cell is marked as focused');
+        assert.ok($inputElement.is(':focus'), 'input is focused');
+    });
+
+    ['Row', 'Cell', 'Batch', 'Form', 'Popup'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - A stand-alone input should be focused on click after adding a new row (T935999)`, function(assert) {
+            // arrange
+            this.dataGrid.option({
+                dataSource: [{ id: 1, name: 'test', description: 'test' }],
+                keyExpr: 'id',
+                editing: {
+                    mode: editMode.toLowerCase(),
+                    popup: {
+                        container: this.dataGrid.element()
+                    }
+                }
+            });
+            this.clock.tick();
+
+            const $inputElement = $('<input>').prependTo($('#container'));
+
+            // act
+            this.dataGrid.addRow();
+            this.clock.tick();
+            $inputElement.trigger('focus');
+            this.clock.tick();
+            $inputElement.trigger('dxpointerdown').trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.ok($inputElement.is(':focus'), 'input is focused');
+
+            $inputElement.remove();
         });
     });
 });

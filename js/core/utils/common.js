@@ -3,7 +3,7 @@ import Guid from '../guid';
 import { when, Deferred } from '../utils/deferred';
 import { toComparable } from './data';
 import { each } from './iterator';
-import { isDefined, isFunction, isString, isObject } from './type';
+import { isDefined, isFunction, isString, isObject, type } from './type';
 
 const ensureDefined = function(value, defaultValue) {
     return isDefined(value) ? value : defaultValue;
@@ -165,15 +165,17 @@ const match = function(value, targetValue) {
 };
 
 const splitPair = function(raw) {
-    switch(typeof raw) {
+    switch(type(raw)) {
         case 'string':
             return raw.split(/\s+/, 2);
         case 'object':
-            return [raw.x || raw.h, raw.y || raw.v];
+            return [raw.x ?? raw.h, raw.y ?? raw.v];
         case 'number':
             return [raw];
-        default:
+        case 'array':
             return raw;
+        default:
+            return null;
     }
 };
 

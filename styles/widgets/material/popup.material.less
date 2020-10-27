@@ -10,7 +10,9 @@
 
     @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING: 8px;
     @MATERIAL_POPUP_TOOLBARTOP_PADDING: 0 8px 0 24px;
+    @MATERIAL_POPUP_TOOLBARTOP_PADDING_RTL: 0 24px 0 8px;
     @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING: 0 8px 0 24px;
+    @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING_RTL: 0 24px 0 8px;
     @MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT: 52px;
 }
 
@@ -22,7 +24,9 @@
 
     @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING: 8px;
     @MATERIAL_POPUP_TOOLBARTOP_PADDING: 0 8px 0 16px;
+    @MATERIAL_POPUP_TOOLBARTOP_PADDING_RTL: 0 16px 0 8px;
     @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING: 0 8px 0 16px;
+    @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING_RTL: 0 16px 0 8px;
     @MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT: 44px;
 }
 
@@ -100,4 +104,37 @@
 
 .dx-dialog-message {
     padding: 0;
+}
+
+.dx-rtl {
+    .dx-popup-title {
+        &.dx-toolbar {
+            .dx-toolbar-sizing(
+                @MATERIAL_TOOLBAR_HEIGHT,
+                @MATERIAL_POPUP_TOOLBARTOP_PADDING_RTL,
+                @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE,
+                @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING
+            );
+        }
+    }
+
+    .dx-popup-bottom {
+        &.dx-toolbar {
+            .dx-toolbar-sizing(
+                @MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT,
+                @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING_RTL,
+                @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE,
+                @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING
+            );
+
+            .dx-device-mobile & {
+                .dx-toolbar-sizing(
+                    @MATERIAL_POPUP_BOTTOM_TOOLBAR_HEIGHT,
+                    @MATERIAL_POPUP_TOOLBARBOTTOM_PADDING_RTL,
+                    @MATERIAL_POPUP_TOOLBAR_LABEL_FONT_SIZE,
+                    @MATERIAL_POPUP_TOOLBAR_ITEM_SPACING
+                );
+            }
+        }
+    }
 }

@@ -984,4 +984,62 @@ QUnit.module('Toolbar', moduleConfig, () => {
         assert.strictEqual($selectionElements.eq(5).attr('title'), 'Clear selection', 'clear selection button has tooltip');
     });
 
+    test('file toolbar items visibility can be updated on selectionCahnged event (T926161)', function(assert) {
+        createFileManager();
+        this.clock.tick(400);
+
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            itemView: {
+                showFolders: true
+            },
+            toolbar: {
+                fileSelectionItems: [
+                    {
+                        name: 'copy',
+                        visible: true
+                    },
+                    {
+                        name: 'rename',
+                        visible: true
+                    }
+                ]
+            },
+            onSelectionChanged: function(e) {
+                const isFoldersPresent = e.selectedItems.some(item => item.name.indexOf('Folder') !== -1);
+                e.component.option('toolbar.fileSelectionItems[1].visible', !isFoldersPresent);
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.findDetailsItem('File 1.txt').trigger('dxclick');
+        this.clock.tick(400);
+
+        let $toolbar = this.wrapper.getToolbar();
+        let $elements = this.wrapper.getToolbarElements();
+        assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
+        assert.equal($elements.length, 2, 'has two buttons');
+        assert.strictEqual($elements.eq(0).text().indexOf('Move'), -1, 'move displayed');
+        assert.strictEqual($elements.eq(1).text().indexOf('Copy'), -1, 'copy displayed');
+
+        this.wrapper.findDetailsItem('Folder 1').trigger('dxclick');
+        this.clock.tick(400);
+
+        $toolbar = this.wrapper.getToolbar();
+        $elements = this.wrapper.getToolbarElements();
+        assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
+        assert.equal($elements.length, 1, 'has one button');
+        assert.strictEqual($elements.eq(0).text().indexOf('Move'), -1, 'move displayed');
+
+        this.wrapper.findDetailsItem('File 2.jpg').trigger('dxclick');
+        this.clock.tick(400);
+
+        $toolbar = this.wrapper.getToolbar();
+        $elements = this.wrapper.getToolbarElements();
+        assert.ok($toolbar.hasClass(Consts.FILE_TOOLBAR_CLASS), 'file toolbar displayed');
+        assert.equal($elements.length, 2, 'has two buttons');
+        assert.strictEqual($elements.eq(0).text().indexOf('Move'), -1, 'move displayed');
+        assert.strictEqual($elements.eq(1).text().indexOf('Copy'), -1, 'copy displayed');
+    });
+
 });

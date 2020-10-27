@@ -463,7 +463,7 @@ function fastHidingPointMarkersByArea(canvas, markersInfo, series) {
         const points = seriesPoints[i].points;
         const pointSize = points.length ? points[0].size : 0;
         const pointsArea = pointSize * pointSize * points.length;
-        if(pointsArea >= area / seriesPoints.length) {
+        if(currentSeries.autoHidePointMarkersEnabled() && pointsArea >= area / seriesPoints.length) {
             const index = seriesPoints[i].index;
             currentSeries.autoHidePointMarkers = true;
             seriesPoints.splice(i, 1);

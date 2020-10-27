@@ -191,14 +191,15 @@ export default class FileItemsController {
     }
 
     createDirectory(parentDirectoryInfo, name) {
-        const actionInfo = this._createEditActionInfo('create', parentDirectoryInfo, parentDirectoryInfo);
+        const tempDirInfo = this._createDirInfoByName(name, parentDirectoryInfo);
+        const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
             () => this._resetDirectoryState(parentDirectoryInfo));
     }
 
     renameItem(fileItemInfo, name) {
-        const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory);
+        const actionInfo = this._createEditActionInfo('rename', fileItemInfo, fileItemInfo.parentDirectory, { itemNewName: name });
         return this._processEditAction(actionInfo,
             () => {
                 if(!fileItemInfo.fileItem.isDirectory) {
@@ -312,8 +313,8 @@ export default class FileItemsController {
 
         try {
             actionResult = action();
-        } catch(error) {
-            this._raiseEditActionError(actionInfo, error);
+        } catch(errorInfo) {
+            this._raiseEditActionError(actionInfo, errorInfo);
             return new Deferred().reject().promise();
         }
 
@@ -328,19 +329,19 @@ export default class FileItemsController {
         return whenSome(
             actionResult,
             info => this._raiseCompleteEditActionItem(actionInfo, info),
-            info => this._raiseEditActionItemError(actionInfo, info)
+            errorInfo => this._raiseEditActionItemError(actionInfo, errorInfo)
         ).then(() => {
             completeAction();
             this._raiseCompleteEditAction(actionInfo);
         });
     }
 
-    _createEditActionInfo(name, itemInfos, directory, customData) {
-        itemInfos = Array.isArray(itemInfos) ? itemInfos : [ itemInfos ];
+    _createEditActionInfo(name, targetItemInfos, directory, customData) {
+        targetItemInfos = Array.isArray(targetItemInfos) ? targetItemInfos : [ targetItemInfos ];
         customData = customData || { };
 
-        const items = itemInfos.map(itemInfo => itemInfo.fileItem);
-        return { name, itemInfos, items, directory, customData, singleRequest: true };
+        const items = targetItemInfos.map(itemInfo => itemInfo.fileItem);
+        return { name, itemInfos: targetItemInfos, items, directory, customData, singleRequest: true };
     }
 
     _getItemInfosForUploaderFiles(files, parentDirectoryInfo) {
@@ -495,6 +496,12 @@ export default class FileItemsController {
         return selectedDirInfo;
     }
 
+    _createDirInfoByName(name, parentDirectoryInfo) {
+        const dirPathInfo = this._getPathInfo(parentDirectoryInfo);
+        const fileItem = new FileSystemItem(dirPathInfo, name, true);
+        return this._createDirectoryInfo(fileItem, parentDirectoryInfo);
+    }
+
     _createDirectoryInfo(fileItem, parentDirectoryInfo) {
         return extend(this._createFileInfo(fileItem, parentDirectoryInfo), {
             icon: 'folder',
@@ -592,15 +599,15 @@ export default class FileItemsController {
         }
     }
 
-    _raiseEditActionError(actionInfo, error) {
+    _raiseEditActionError(actionInfo, errorInfo) {
         if(this._options.onEditActionError) {
-            this._options.onEditActionError(actionInfo, error);
+            this._options.onEditActionError(actionInfo, errorInfo);
         }
     }
 
-    _raiseEditActionItemError(actionInfo, info) {
+    _raiseEditActionItemError(actionInfo, errorInfo) {
         if(this._options.onEditActionItemError) {
-            this._options.onEditActionItemError(actionInfo, info);
+            this._options.onEditActionItemError(actionInfo, errorInfo);
         }
     }
 

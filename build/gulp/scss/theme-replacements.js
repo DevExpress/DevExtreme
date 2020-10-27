@@ -39,7 +39,9 @@ module.exports = {
         { regex: /.dx-button-onlyicon-sizing\(\),/, replacement: '@include dx-button-onlyicon-sizing();' },
         { regex: /.dx-button-withtext-sizing\(\),/, replacement: '@include dx-button-withtext-sizing();' },
         { regex: /.dx-button-text-and-icon-sizing\(\),/, replacement: '@include dx-button-text-and-icon-sizing();' },
-        { regex: /\$MATERIAL_BUTTON_MIN_WIDTH,/, replacement: '$MATERIAL_BUTTON_MIN_WIDTH;' }
+        { regex: /\$MATERIAL_BUTTON_MIN_WIDTH,/, replacement: '$MATERIAL_BUTTON_MIN_WIDTH;' },
+        { regex: /@mixin dx-button-special-hover\(\$button-special-hover\),/, replacement: '@include dx-button-special-hover($button-special-hover);' },
+        { regex: /(CUSTOM_BUTTON_MARGIN|BUTTON_TOP_PADDING|BUTTON_BOTTOM_PADDING),/g, replacement: '$1;' },
     ],
     'buttonGroup': [
         { import: '../button', type: 'index' },

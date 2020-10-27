@@ -20,6 +20,8 @@ import clickEvent from '../../events/click';
 import devices from '../../core/devices';
 import { FunctionTemplate } from '../../core/templates/function_template';
 import Popup from '../popup';
+import { hasWindow } from '../../core/utils/window';
+import { getElementWidth, getSizeValue } from './utils';
 
 const DROP_DOWN_EDITOR_CLASS = 'dx-dropdowneditor';
 const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
@@ -355,6 +357,7 @@ const DropDownEditor = TextBox.inherit({
         this._refreshEvents();
         this._refreshValueChangeEvent();
         this._renderFocusState();
+        this._refreshEmptinessEvent();
     },
 
     _refreshEmptinessEvent: function() {
@@ -517,7 +520,7 @@ const DropDownEditor = TextBox.inherit({
                 of: this.$element()
             }),
             showTitle: this.option('dropDownOptions.showTitle'),
-            width: 'auto',
+            width: () => getElementWidth(this.$element()),
             height: 'auto',
             shading: false,
             closeOnTargetScroll: true,
@@ -544,6 +547,14 @@ const DropDownEditor = TextBox.inherit({
         return (e) => {
             this._popupInitializedAction({ popup: e.component });
         };
+    },
+
+    _dimensionChanged: function() {
+        const popupWidth = getSizeValue(this.option('dropDownOptions.width'));
+
+        if(popupWidth === undefined) {
+            this._setPopupOption('width', () => getElementWidth(this.$element()));
+        }
     },
 
     _popupPositionedHandler: function(e) {
@@ -702,15 +713,14 @@ const DropDownEditor = TextBox.inherit({
         this.option('focusStateEnabled') && this.focus();
     },
 
-    _updatePopupWidth: noop,
-
     _popupOptionChanged: function(args) {
         const options = Widget.getOptionsFromContainer(args);
 
         this._setPopupOption(options);
 
-        if(Object.keys(options).indexOf('width') !== -1 && options['width'] === undefined) {
-            this._updatePopupWidth();
+        const optionsKeys = Object.keys(options);
+        if(optionsKeys.indexOf('width') !== -1 || optionsKeys.indexOf('height') !== -1) {
+            this._dimensionChanged();
         }
     },
 
@@ -749,6 +759,11 @@ const DropDownEditor = TextBox.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
+            case 'width':
+            case 'height':
+                this.callBase(args);
+                this._popup?.repaint();
+                break;
             case 'opened':
                 this._renderOpenedState();
                 break;
@@ -779,7 +794,11 @@ const DropDownEditor = TextBox.inherit({
                 this._options.cache('dropDownOptions', this.option('dropDownOptions'));
                 break;
             case 'popupPosition':
+                break;
             case 'deferRendering':
+                if(hasWindow()) {
+                    this._createPopup();
+                }
                 break;
             case 'applyValueMode':
             case 'applyButtonText':

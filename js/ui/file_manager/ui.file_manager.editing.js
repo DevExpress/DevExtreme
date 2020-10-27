@@ -197,10 +197,19 @@ class FileManagerEditingControl extends Widget {
         const operationInfo = this._notificationControl.addOperation(context.processingMessage, actionMetadata.allowCancel, !actionMetadata.allowItemProgress);
         extend(actionInfo.customData, { context, operationInfo });
 
-        if(actionInfo.name === 'upload') {
-            const sessionId = actionInfo.customData.sessionInfo.sessionId;
-            operationInfo.uploadSessionId = sessionId;
-            this._uploadOperationInfoMap[sessionId] = operationInfo;
+        switch(actionInfo.name) {
+            case 'upload':
+                {
+                    const sessionId = actionInfo.customData.sessionInfo.sessionId;
+                    operationInfo.uploadSessionId = sessionId;
+                    this._uploadOperationInfoMap[sessionId] = operationInfo;
+                }
+                break;
+            case 'rename':
+                actionInfo.customData.context.itemNewName = actionInfo.customData.itemNewName;
+                break;
+            default:
+                break;
         }
     }
 
@@ -211,16 +220,16 @@ class FileManagerEditingControl extends Widget {
         this._notificationControl.addOperationDetails(operationInfo, details, context.actionMetadata.allowCancel);
     }
 
-    _onEditActionError(actionInfo, error) {
+    _onEditActionError(actionInfo, errorInfo) {
         const { context, operationInfo } = actionInfo.customData;
         context.singleRequest = actionInfo.singleRequest;
-        this._handleActionError(operationInfo, context, error);
+        this._handleActionError(operationInfo, context, errorInfo);
         this._completeAction(operationInfo, context);
     }
 
-    _onEditActionItemError(actionInfo, info) {
+    _onEditActionItemError(actionInfo, errorInfo) {
         const { context, operationInfo } = actionInfo.customData;
-        this._handleActionError(operationInfo, context, info);
+        this._handleActionError(operationInfo, context, errorInfo);
     }
 
     _onCompleteEditActionItem(actionInfo, info) {
@@ -308,7 +317,8 @@ class FileManagerEditingControl extends Widget {
 
     _handleSingleRequestActionError(operationInfo, context, errorInfo) {
         const itemInfo = context.getItemForSingleRequestError();
-        const errorText = this._getErrorText(errorInfo, itemInfo);
+        const itemName = context.itemNewName;
+        const errorText = this._getErrorText(errorInfo, itemInfo, itemName);
 
         context.processSingleRequestError(errorText);
         const operationErrorInfo = this._getOperationErrorInfo(context);
@@ -338,12 +348,12 @@ class FileManagerEditingControl extends Widget {
         };
     }
 
-    _getErrorText(errorInfo, itemInfo) {
-        const itemName = itemInfo ? itemInfo.fileItem.name : null;
-        const errorText = FileManagerMessages.get(errorInfo.errorId, itemName);
+    _getErrorText(errorInfo, itemInfo, itemName) {
+        itemName = itemName || itemInfo?.fileItem.name;
+        const errorText = errorInfo.errorText || FileManagerMessages.get(errorInfo.errorId, itemName);
 
         const errorArgs = {
-            fileSystemItem: itemInfo ? itemInfo.fileItem : null,
+            fileSystemItem: itemInfo?.fileItem,
             errorCode: errorInfo.errorId,
             errorText
         };
@@ -457,6 +467,7 @@ class FileManagerActionContext {
         this._commonProgress = 0;
 
         this._errorState = { failedCount: 0 };
+        this._itemNewName = '';
     }
 
     completeOperationItem(itemIndex) {
@@ -517,6 +528,14 @@ class FileManagerActionContext {
 
     get itemInfos() {
         return this._itemInfos;
+    }
+
+    get itemNewName() {
+        return this._itemNewName;
+    }
+
+    set itemNewName(value) {
+        this._itemNewName = value;
     }
 
     get errorState() {

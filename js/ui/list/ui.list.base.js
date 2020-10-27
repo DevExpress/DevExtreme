@@ -284,7 +284,7 @@ const ListBase = CollectionWidget.inherit({
         this.callBase.apply(this, arguments);
 
         this._refreshItemElements();
-        this._updateLoadingState();
+        this._updateLoadingState(true);
     },
 
     reorderItem: function(itemElement, toItemElement) {
@@ -766,6 +766,7 @@ const ListBase = CollectionWidget.inherit({
             this._$nextButton.remove();
             this._$nextButton = null;
         }
+        delete this._inkRipple;
         this.callBase.apply(this, arguments);
     },
 
@@ -853,6 +854,7 @@ const ListBase = CollectionWidget.inherit({
             case 'bounceEnabled':
             case 'scrollByContent':
             case 'scrollByThumb':
+            case 'useNativeScrolling':
             case 'scrollingEnabled':
             case 'pullRefreshEnabled':
                 this._initScrollView();
@@ -867,7 +869,6 @@ const ListBase = CollectionWidget.inherit({
             case 'onPullRefresh':
             case 'onPageLoading':
                 this._createScrollViewActions();
-                this._invalidate();
                 break;
             case 'grouped':
             case 'collapsibleGroups':
