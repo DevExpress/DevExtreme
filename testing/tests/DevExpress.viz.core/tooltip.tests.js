@@ -545,7 +545,7 @@ QUnit.module('Manipulation', {
         if(getComputedStyle) {
             this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(elem) {
                 if(elem === tooltip._textHtml.get(0)) {
-                    return { width: '83.13px', height: '23.45px' };
+                    return { width: '83.13px', height: '23.45px', getPropertyValue: () => {} };
                 }
                 return getComputedStyle.apply(window, arguments);
             });
@@ -1211,6 +1211,9 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     sinon.spy(this.tooltip._textHtml, 'html');
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
+    if(this.getComputedStyle) {
+        this.getComputedStyle.restore();
+    }
     if(!this.getComputedStyle) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
     }
@@ -1220,6 +1223,43 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
 
     assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
+    assert.ok(!this.eventTrigger.called, 'event is not triggered');
+});
+
+QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div', function(assert) {
+    const eventData = { tag: 'event-data' };
+    this.tooltip._getCanvas = function() { return CANVAS; };
+
+    this.options.contentTemplate = (_, container, onRendered) => {
+        $(container).html('<div></div>');
+        onRendered();
+    };
+
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._textGroupHtml.css = sinon.spy();
+    this.tooltip._textGroupHtml.width = sinon.spy();
+    this.tooltip._textGroupHtml.height = sinon.spy();
+    sinon.spy(this.tooltip._textHtml, 'html');
+
+    const textHtmlElement = this.tooltip._textHtml.get(0);
+    if(this.getComputedStyle) {
+        this.getComputedStyle.restore();
+    }
+    if(!this.getComputedStyle) {
+        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
+    }
+
+    const formatObject = { valueText: 'some-text' };
+    // act
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+
+    assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
+    assert.ok(!this.eventTrigger.called, 'event is not triggered');
 });
 
 QUnit.test('Simple text, tooltip is interactive', function(assert) {
