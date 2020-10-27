@@ -4,7 +4,7 @@ import { join } from 'path';
 
 const BASE_PATH = join(__dirname, '..', '..', '..');
 
-describe('Equlas svg to font', () => {
+describe('Equals svg to font', () => {
   const getCountElementInFont = (pathToFont: string): number => {
     const transFont = transfer(pathToFont);
     const glyphKeys = Object.keys(transFont.allGlyph());
