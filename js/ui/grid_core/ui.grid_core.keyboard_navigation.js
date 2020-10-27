@@ -1306,9 +1306,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
         }
         return columnIndex - this._columnsController.getColumnIndexOffset();
     },
-    getFocusedColumnIndex: function() {
-        return this._focusedCellPosition ? this._focusedCellPosition.columnIndex : null;
-    },
     _applyColumnIndexBoundaries: function(columnIndex) {
         const visibleColumnsCount = this._getVisibleColumnCount();
 

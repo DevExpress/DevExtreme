@@ -130,6 +130,11 @@ class AppointmentModel {
         this._baseAppointmentDuration = baseAppointmentDuration;
     }
 
+    get keyName() {
+        const store = this._dataSource.store();
+        return store.key();
+    }
+
     _createFilter(min, max, remoteFiltering, dateSerializationFormat) {
         this._filterMaker.make('date', [min, max]);
 
@@ -600,7 +605,7 @@ class AppointmentModel {
         return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 
-    add(data, tz) {
+    add(data) {
         return this._dataSource.store().insert(data).done((() => {
             this._dataSource.load();
         }).bind(this));

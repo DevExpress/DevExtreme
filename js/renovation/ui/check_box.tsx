@@ -8,6 +8,7 @@ import {
   Ref,
   Effect,
   Event,
+  ForwardRef,
 } from 'devextreme-generator/component_declaration/common';
 import { createDefaultOptionRules } from '../../core/options/utils';
 import devices from '../../core/devices';
@@ -114,7 +115,7 @@ export class CheckBoxProps extends BaseWidgetProps {
 
   @OneWay() text?: string = '';
 
-  @OneWay() validationMessageMode?: string = 'auto';
+  @OneWay() validationMessageMode?: 'auto'|'always' = 'auto';
 
   @OneWay() validationStatus?: string = 'valid';
 
@@ -162,7 +163,7 @@ export class CheckBox extends JSXComponent(CheckBoxProps) {
 
   @Ref() widgetRef!: Widget;
 
-  @Ref() target!: HTMLDivElement;
+  @ForwardRef() target!: HTMLDivElement;
 
   @Effect({ run: 'once' })
   afterInitEffect(): EffectReturn {

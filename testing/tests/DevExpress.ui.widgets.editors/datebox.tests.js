@@ -1109,6 +1109,15 @@ QUnit.module('dateView integration', {
         assert.equal(this.popup().$content().find('.dx-dateview').length, 1);
     });
 
+    QUnit.test('dateView popup width should be equal to 100% on mobile ios', function(assert) {
+        if(devices.real().deviceType !== 'phone' || devices.real().platform !== 'ios') {
+            assert.ok(true, 'is actual only for mobile ios');
+            return;
+        }
+
+        assert.strictEqual(this.popup().option('width'), '100%', 'popup width is equal to 100%');
+    });
+
     QUnit.test('readOnly input prop should be always true to prevent keyboard open if simulated dateView is using', function(assert) {
         this.instance.option('readOnly', false);
         assert.ok(this.$element.find('.' + TEXTEDITOR_INPUT_CLASS).prop('readOnly'), 'readonly prop specified correctly');

@@ -12,7 +12,8 @@ import { animationConfig } from '../../animation/fx';
 import { DomComponentWrapper } from './common/dom_component_wrapper';
 
 export const viewFunction = ({
-  props: { rootElementRef, ...componentProps },
+  props: { rootElementRef },
+  componentProps,
   restAttributes,
 }: Overlay): JSX.Element => (
   <DomComponentWrapper
@@ -62,4 +63,13 @@ export class OverlayProps extends WidgetProps {
   defaultOptionRules: null,
   view: viewFunction,
 })
-export class Overlay extends JSXComponent(OverlayProps) { }
+export class Overlay extends JSXComponent(OverlayProps) {
+  get componentProps(): WidgetProps {
+    const {
+      rootElementRef,
+      ...restProps
+    } = this.props;
+
+    return restProps;
+  }
+}
