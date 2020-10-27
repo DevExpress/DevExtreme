@@ -1045,7 +1045,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(infos[1].details[0].commonText, file0.name, 'Detail text is correct');
     });
 
-    test('refresh during upload does not prevent large files from being shown before next refresh (T928871)', function(assert) {
+    test('refresh during upload does not prevent files from being shown before next refresh (T928871)', function(assert) {
         const operationDelay = 1000;
         const chunkSize = 50000;
         const fileManager = this.wrapper.getInstance();
@@ -1061,7 +1061,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.clock.tick(400);
 
         const initialItemCount = this.wrapper.getDetailsItemsNames().length;
-        const file0 = createUploaderFiles(31)[30];
+        const file0 = createUploaderFiles(1)[0];
 
         this.wrapper.getItemsViewPanel().trigger(getDropFileEvent(file0));
         this.clock.tick(operationDelay / 2);
@@ -1070,7 +1070,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         let itemNames = this.wrapper.getDetailsItemNamesTexts();
         let uploadedFileIndex = itemNames.indexOf(file0.name);
 
-        assert.strictEqual(initialItemCount, itemNames.length, 'item count not increased');
+        assert.strictEqual(itemNames.length, initialItemCount, 'item count not increased');
         assert.strictEqual(uploadedFileIndex, -1, 'file is not uploaded');
 
         this.clock.tick((file0.size / chunkSize + 1) * operationDelay);
@@ -1078,9 +1078,50 @@ QUnit.module('Editing operations', moduleConfig, () => {
         itemNames = this.wrapper.getDetailsItemNamesTexts();
         uploadedFileIndex = itemNames.indexOf(file0.name);
 
-        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased');
         assert.ok(uploadedFileIndex > -1, 'file is uploaded');
-        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '6 MB', 'file size is correct');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
+    });
+
+    test('refresh during copying does not prevent files from being shown before next refresh (T928871)', function(assert) {
+        const operationDelay = 1000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            currentPath: 'Folder 1',
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            })
+        });
+        this.clock.tick(400);
+
+        // Select file 'File 1-1.txt'
+        this.wrapper.getColumnCellsInDetailsView(2).eq(0).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        // Invoke copy dialog
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+        // Select destination directory
+        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+        this.clock.tick(400);
+
+        this.clock.tick(operationDelay / 2);
+        fileManager.refresh();
+
+        let itemNames = this.wrapper.getDetailsItemNamesTexts();
+        let copiedFileIndex = itemNames.indexOf('File 1-1.txt');
+
+        assert.strictEqual(itemNames.length, 0, 'item count not increased');
+        assert.strictEqual(copiedFileIndex, -1, 'file is not copied');
+
+        this.clock.tick(operationDelay);
+
+        itemNames = this.wrapper.getDetailsItemNamesTexts();
+        copiedFileIndex = itemNames.indexOf('File 1-1.txt');
+
+        assert.strictEqual(itemNames.length, 1, 'item count increased');
+        assert.ok(copiedFileIndex > -1, 'file is copied');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', copiedFileIndex), '0 B', 'file size is correct');
     });
 
 });
