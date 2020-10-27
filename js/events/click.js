@@ -95,9 +95,30 @@ const useNativeClick =
 
     let prevented = null;
     let lastFiredEvent = null;
-    const onLastEventTargetRemove = () => {
+
+    function onNodeRemove() {
         lastFiredEvent = null;
-    };
+    }
+
+    const eventNodesDisposing = (() => {
+        function nodesByEvent(event) {
+            return event && [
+                event.target,
+                event.delegateTarget,
+                event.relativeTarget
+            ].filter(node => !!node);
+        }
+
+        return {
+            subscribe: (event, callback) => {
+                eventsEngine.on(nodesByEvent(event), 'dxremove', callback);
+            },
+            unsubscribe: (event, callback) => {
+                eventsEngine.off(nodesByEvent(event), 'dxremove', callback);
+            }
+        };
+    })();
+
     const clickHandler = function(e) {
         const originalEvent = e.originalEvent;
         const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED;
@@ -108,19 +129,11 @@ const useNativeClick =
                 originalEvent.DXCLICK_FIRED = true;
             }
 
-            lastFiredEvent && eventsEngine.off([
-                lastFiredEvent.target,
-                lastFiredEvent.delegateTarget,
-                lastFiredEvent.relativeTarget
-            ], 'dxremove', onLastEventTargetRemove);
+            eventNodesDisposing.unsubscribe(lastFiredEvent, onNodeRemove);
 
             lastFiredEvent = originalEvent;
 
-            lastFiredEvent && eventsEngine.on([
-                lastFiredEvent.target,
-                lastFiredEvent.delegateTarget,
-                lastFiredEvent.relativeTarget
-            ], 'dxremove', onLastEventTargetRemove);
+            eventNodesDisposing.subscribe(lastFiredEvent, onNodeRemove);
 
             fireEvent({
                 type: CLICK_EVENT_NAME,
