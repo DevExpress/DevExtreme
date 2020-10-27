@@ -200,7 +200,7 @@ function run_test_scss {
 
 function run_font_icons_test {
     npm i font-carrier
-    npm run test-jest -- --config ./testing/FontIcons/jest.config.js
+    npm run test-jest -- --config ./testing/FontIcons/jest.config.js --coverage false
 }
 
 function start_runner_watchdog {
