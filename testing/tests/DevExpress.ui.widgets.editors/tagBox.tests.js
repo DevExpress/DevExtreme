@@ -53,8 +53,6 @@ const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 
 const TIME_TO_WAIT = 500;
-const browserVersion = parseInt(browser.version, 10);
-const isBrowserNewChrome = browser.chrome && browserVersion >= 85;
 
 const moduleSetup = {
     beforeEach: function() {
