@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable no-bitwise */
 /* eslint-disable no-plusplus */
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
@@ -29,7 +28,6 @@ function submitResult({
     const fileName = path.basename(sourcePath, '.png');
     const targetPath = path.join(screenshotValidator.artifactsPath, `${fileName}${postfix}.png`);
     if (fs.existsSync(sourcePath)) {
-      console.log('copy artifacts', targetPath);
       fs.copyFileSync(sourcePath, targetPath);
     }
   }
@@ -103,27 +101,6 @@ async function getMaskedScreenshotBuffer({
 async function createDiff({
   etalonFileName, screenshotBuffer, diffFileName, comparisonOptions,
 }) {
-  /* function hexToRGB(hexColor) {
-    return {
-      r: parseInt(hexColor.substring(1, 3), 16),
-      g: parseInt(hexColor.substring(3, 5), 16),
-      b: parseInt(hexColor.substring(5, 7), 16),
-    };
-  }
-  function makeTransparentExceptColor(image, color) {
-    const rgb = hexToRGB(color);
-    for (let y = 0; y < image.height; y++) {
-      for (let x = 0; x < image.width; x++) {
-        const idx = (image.width * y + x) << 2;
-        if (image.data[idx + 0] !== rgb.r
-          || image.data[idx + 1] !== rgb.g
-          || image.data[idx + 2] !== rgb.b) {
-          image.data[idx + 3] = 0;
-        }
-      }
-    }
-  } */
-
   const highlightColor = '#ff00ff';
   return new Promise((resolve, reject) => {
     const diffOptions = {
@@ -136,25 +113,12 @@ async function createDiff({
       if (error) {
         reject(error);
       } else {
-        // const image = PNG.sync.read(buffer);
-        // makeTransparentExceptColor(image, highlightColor);
-        // const targetBuffer = PNG.sync.write(image);
         fs.writeFileSync(diffFileName, buffer);
       }
       resolve();
     });
   });
 }
-
-/* function getEtalonPath(fileName) {
-  const targetName = fileName.indexOf('_mask.png') > -1 ? fileName : fileName.replace('.png', '_etalon.png');
-  const sourcePath = path.join(screenshotValidator.etalonsPath, fileName);
-  const targetPath = path.join(screenshotValidator.tempPath, targetName);
-  if (!fs.existsSync(targetPath) && fs.existsSync(sourcePath)) {
-    fs.copyFileSync(sourcePath, targetPath);
-  }
-  return targetPath;
-} */
 
 export async function validate(screenshotName: string, comparisonOptions = {
   strict: false,
@@ -166,7 +130,7 @@ export async function validate(screenshotName: string, comparisonOptions = {
   ignoreCaret: true,
 }) {
   const screenshotFileName = path.join(screenshotValidator.screenshotsPath, screenshotName);
-  const etalonFileName = path.join(screenshotValidator.etalonsPath, screenshotName);// getEtalonPath(screenshotName);
+  const etalonFileName = path.join(screenshotValidator.etalonsPath, screenshotName);
   const maskFileName = path.join(screenshotValidator.etalonsPath, screenshotName.replace('.png', '_mask.png'));
   try {
     ensureArtifactsPath();
