@@ -405,7 +405,7 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _isRtlInconsistentBrowser: function() {
-        return (browser.webkit && parseInt(browser.version) < 86);
+        return (browser.webkit && parseInt(browser.version) < 86 && !browser.safari);
     },
 
     scrollTop: function() {
