@@ -566,6 +566,7 @@ const SelectBox = DropDownList.inherit({
         }
 
         this.callBase(e);
+        this._saveValueChangeEvent(undefined);
     },
 
     _isOverlayNestedTarget: function(target) {

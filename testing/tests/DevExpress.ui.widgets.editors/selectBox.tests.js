@@ -4932,6 +4932,31 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         assert.strictEqual(firstCallArgs[0].event.type, 'keydown', 'event has correct type');
         assert.strictEqual(firstCallArgs[0].event.key, 'Delete', 'event key is correct');
     });
+
+    QUnit.test('saved valueChanged event should be restored after focusout', function(assert) {
+        const valueChangedHandler = sinon.stub();
+        const $element = $('#selectBox').dxSelectBox({
+            dataSource: [11, 22],
+            value: 11,
+            searchEnabled: true
+        });
+        const instance = $element.dxSelectBox('instance');
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .caret(0)
+            .press('del')
+            .blur();
+
+        instance.option({
+            onValueChanged: valueChangedHandler,
+            value: 22
+        });
+
+        const data = valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event, undefined, 'event is undefined');
+    });
 });
 
 QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
