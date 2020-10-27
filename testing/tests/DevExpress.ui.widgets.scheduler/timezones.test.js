@@ -496,18 +496,26 @@ module('Not native date DST', moduleConfig, () => {
 });
 
 module('Scheduler grid', moduleConfig, () => {
-    module(`timezone = "${timeZones.NewYork}"`, () => {
-        test('startDate and endDate of appointments should valid', function(assert) {
-            const scheduler = createScheduler({ timeZone: timeZones.NewYork }); // -4 offset
+    [
+        {
+            timeZone: timeZones.NewYork,
+            times: ['1:00 AM - 1:30 AM', '8:00 AM - 8:30 AM', '12:00 PM - 12:30 PM']
+        }, {
+            timeZone: timeZones.LosAngeles,
+            times: ['10:00 PM - 10:30 PM', '5:00 AM - 5:30 AM', '9:00 AM - 9:30 AM']
+        }
+    ].forEach(testCase => {
+        test(`startDate and endDate of appointments should valid in ${testCase.timeZone}`, function(assert) {
+            const scheduler = createScheduler({ timeZone: testCase.timeZone });
 
-            ['1:00 AM - 1:30 AM', '8:00 AM - 8:30 AM', '12:00 PM - 12:30 PM'].forEach((expected, index) => {
-                const dateText = scheduler.appointments.getDateText(index);
-                assert.equal(dateText, expected, 'Appointment date text should be valid');
+            testCase.times.forEach((expected, index) => {
+                const gridDateText = scheduler.appointments.getDateText(index);
+                assert.equal(gridDateText, expected, 'Appointment date text should be valid');
 
                 scheduler.appointments.click(index);
 
                 const tooltipDateText = scheduler.tooltip.getDateText();
-                assert.equal(dateText, tooltipDateText, 'Tooltip date text should be valid');
+                assert.equal(gridDateText, tooltipDateText, 'Tooltip date text should be valid');
             });
         });
     });
