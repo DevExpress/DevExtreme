@@ -10,8 +10,6 @@ import pointerMock from '../../helpers/pointerMock.js';
 import dateUtils from 'core/utils/date';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 
-import 'generic_light.css!';
-
 const { testStart, test, module } = QUnit;
 
 const timeZones = {
@@ -63,7 +61,8 @@ module('Common', moduleConfig, () => {
     if(isDesktopEnvironment()) {
         [undefined, timeZones.LosAngeles]
             .forEach(timeZone => {
-                test(`After drag element to scheduler, dates from elements should be valid, if timeZone=${timeZone}(T924224)`, function(assert) {
+                test(`After drag element to scheduler, dates from elements should be valid,
+                    if timeZone=${timeZone}(T924224)`, function(assert) {
                     const draggingGroupName = 'appointmentsGroup';
 
                     const expectedStartDate = new Date(2017, 4, 22, 2, 0);
@@ -610,11 +609,15 @@ module('Appointment popup', moduleConfig, () => {
 
 const oldModuleConfig = {
     beforeEach() {
+        this.clock = sinon.useFakeTimers();
+
         fx.off = true;
         this.tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
     },
 
     afterEach() {
+        this.clock.restore(); // TODO
+
         fx.off = false;
         this.tzOffsetStub.restore();
     }
@@ -622,8 +625,6 @@ const oldModuleConfig = {
 
 module('Oll tests', oldModuleConfig, () => {
     test('Appointment should have right width in workspace with timezone', function(assert) {
-        // this.clock.restore(); // TODO
-
         const scheduler = createWrapper({
             dataSource: [],
             currentDate: new Date(2017, 4, 1),

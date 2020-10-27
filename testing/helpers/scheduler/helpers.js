@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import { locate } from 'animation/translator';
 import devices from 'core/devices';
+
+import 'common.css!';
+import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
