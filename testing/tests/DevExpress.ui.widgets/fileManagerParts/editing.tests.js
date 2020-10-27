@@ -1083,45 +1083,4 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
     });
 
-    test('refresh during copying does not prevent files from being shown before next refresh (T928871)', function(assert) {
-        const operationDelay = 1000;
-        const fileManager = this.wrapper.getInstance();
-        fileManager.option({
-            currentPath: 'Folder 1',
-            fileSystemProvider: new SlowFileProvider({
-                operationDelay
-            })
-        });
-        this.clock.tick(400);
-
-        // Select file 'File 1-1.txt'
-        this.wrapper.getColumnCellsInDetailsView(2).eq(0).trigger(CLICK_EVENT).click();
-        this.clock.tick(400);
-        // Invoke copy dialog
-        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
-        this.clock.tick(400);
-        // Select destination directory
-        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
-        this.wrapper.getDialogButton('Copy').trigger('dxclick');
-        this.clock.tick(400);
-
-        this.clock.tick(operationDelay / 2);
-        fileManager.refresh();
-
-        let itemNames = this.wrapper.getDetailsItemNamesTexts();
-        let copiedFileIndex = itemNames.indexOf('File 1-1.txt');
-
-        assert.strictEqual(itemNames.length, 0, 'item count not increased');
-        assert.strictEqual(copiedFileIndex, -1, 'file is not copied');
-
-        this.clock.tick(operationDelay);
-
-        itemNames = this.wrapper.getDetailsItemNamesTexts();
-        copiedFileIndex = itemNames.indexOf('File 1-1.txt');
-
-        assert.strictEqual(itemNames.length, 1, 'item count increased');
-        assert.ok(copiedFileIndex > -1, 'file is copied');
-        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', copiedFileIndex), '0 B', 'file size is correct');
-    });
-
 });
