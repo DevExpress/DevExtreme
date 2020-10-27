@@ -259,7 +259,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _cropAppointmentsByStartDayHour(appointments, rawAppointment) {
-        return appointments.map(appointment => {
+        appointments.forEach(appointment => {
             const startDate = new Date(appointment.startDate);
             const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
             const startDayHour = this._getViewStartDayHour(firstViewDate);
@@ -271,8 +271,6 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 startDayHour,
                 firstViewDate
             });
-
-            return appointment;
         });
     }
     _getAppointmentFirstViewDate() {
