@@ -37,12 +37,13 @@ jobs:
         all_args="--browsers=chrome:headless ${ARGS}"
         echo "$all_args"
         npm run test-testcafe -- $all_args
+    - name: Copy screenshots artifacts
       uses: actions/upload-artifact@v2
       with:
         name: screenshots
         path: .\testing\testcafe\artifacts
         if-no-files-found: ignore
-    test:
+  test:
     strategy:
       matrix:
         CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
