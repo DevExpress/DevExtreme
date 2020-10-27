@@ -38,6 +38,7 @@ jobs:
         echo "$all_args"
         npm run test-testcafe -- $all_args
     - name: Copy screenshots artifacts
+      if: ${{ failed() }}
       uses: actions/upload-artifact@v2
       with:
         name: screenshots
