@@ -12,13 +12,11 @@
             <dx-tree-view #treeviewDriveC
                 id="treeviewDriveC"
                 dataStructure="tree"
+                displayExpr="name"
                 [expandNodesRecursive]="false"
                 [items]="itemsDriveC"
                 [width]="250"
                 [height]="380">
-                <div *dxTemplate="let item of 'item'">
-                    <div><i class="dx-icon dx-icon-{{ item.isDirectory ? 'activefolder' : 'file' }}"></i><span>{{ item.name }}</span></div>
-                </div>
             </dx-tree-view>
         </dx-sortable>
     </div>
@@ -35,13 +33,11 @@
             <dx-tree-view #treeviewDriveD
                 id="treeviewDriveD"
                 dataStructure="tree"
+                displayExpr="name"
                 [expandNodesRecursive]="false"
                 [items]="itemsDriveD"
                 [width]="250"
                 [height]="380">
-                <div *dxTemplate="let item of 'item'">
-                    <div><i class="dx-icon dx-icon-{{ item.isDirectory ? 'activefolder' : 'file' }}"></i><span>{{ item.name }}</span></div>
-                </div>
             </dx-tree-view>
         </dx-sortable> 
     </div>

@@ -16,10 +16,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             expandNodesRecursive: false,
             width: 250,
             height: 380,
-            itemTemplate: function(item) {
-                var icon = item.isDirectory ? 'activefolder' : 'file';
-                return "<div><i class=\"dx-icon dx-icon-" + icon +"\"></i><span>"  + item.name + "</span></div>";
-            },
+            displayExpr: 'name',
             onInitialized: function(e) {
                 $scope[treeViewName] = e.component;
             },

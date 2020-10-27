@@ -40,7 +40,7 @@ class App extends React.Component {
               items={this.state.itemsDriveC}
               width={250}
               height={380}
-              itemRender={renderTreeViewItem}
+              displayExpr="name"
             />
           </Sortable>
         </div>
@@ -62,7 +62,7 @@ class App extends React.Component {
               items={this.state.itemsDriveD}
               width={250}
               height={380}
-              itemRender={renderTreeViewItem}
+              displayExpr="name"
             />
           </Sortable>
         </div>
@@ -222,10 +222,6 @@ class App extends React.Component {
 
     return null;
   }
-}
-
-function renderTreeViewItem(item) {
-  return <div><i className={item.isDirectory ? 'dx-icon dx-icon-activefolder' : 'dx-icon dx-icon-file'}></i><span>{ item.name }</span></div>;
 }
 
 export default App;

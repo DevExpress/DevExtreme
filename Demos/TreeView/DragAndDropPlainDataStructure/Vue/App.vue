@@ -19,10 +19,8 @@
           :items="itemsDriveC"
           :width="250"
           :height="380"
+          display-expr="name"
         >
-          <template #item="item">
-            <div><i :class="item.data.isDirectory ? 'dx-icon dx-icon-activefolder' : 'dx-icon dx-icon-file'"/><span>{{ item.data.name }}</span></div>
-          </template>
         </DxTreeView>
       </DxSortable>
     </div>
@@ -45,10 +43,8 @@
           :items="itemsDriveD"
           :width="250"
           :height="380"
+          display-expr="name"
         >
-          <template #item="item">
-            <div><i :class="item.data.isDirectory ? 'dx-icon dx-icon-activefolder' : 'dx-icon dx-icon-file'"/><span>{{ item.data.name }}</span></div>
-          </template>
         </DxTreeView>
       </DxSortable>
     </div>
