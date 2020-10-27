@@ -31,18 +31,18 @@ jobs:
       run: npm run build
 
     - name: Run TestCafe tests
-      uses: actions/upload-artifact@v2
-      with:
-        name: screenshots
-        path: .\testing\testcafe\artifacts
-        if-no-files-found: ignore
       env:
         ARGS: ${{ matrix.ARGS }}
       run: |
         all_args="--browsers=chrome:headless ${ARGS}"
         echo "$all_args"
         npm run test-testcafe -- $all_args
-  test:
+      uses: actions/upload-artifact@v2
+      with:
+        name: screenshots
+        path: .\testing\testcafe\artifacts
+        if-no-files-found: ignore
+    test:
     strategy:
       matrix:
         CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
