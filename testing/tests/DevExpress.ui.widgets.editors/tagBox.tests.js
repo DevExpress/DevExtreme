@@ -53,8 +53,8 @@ const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 
 const TIME_TO_WAIT = 500;
-const isBrowserOldChrome = browser.chrome && +browser.version < 85;
-const isBrowserNewChrome = browser.chrome && +browser.version >= 85;
+const browserVersion = parseInt(browser.version, 10);
+const isBrowserNewChrome = browser.chrome && browserVersion >= 85;
 
 const moduleSetup = {
     beforeEach: function() {
@@ -5049,7 +5049,7 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit && !browser.chrome || isBrowserOldChrome || browser.msie ? 1 : -1;
+        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla || isBrowserNewChrome)
             ? 0
@@ -5067,7 +5067,7 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit && !browser.chrome || isBrowserOldChrome || browser.msie ? 1 : -1;
+        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
 
         const expectedScrollPosition = (browser.msie || browser.mozilla || isBrowserNewChrome)
             ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
@@ -5221,7 +5221,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
         const isScrollReverted = (browser.msie || browser.mozilla || isBrowserNewChrome);
-        const sign = browser.webkit && !browser.chrome || isBrowserOldChrome || browser.msie ? 1 : -1;
+        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
@@ -5323,7 +5323,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
         const isScrollReverted = browser.msie || browser.mozilla || isBrowserNewChrome;
-        const sign = browser.webkit && !browser.chrome || isBrowserOldChrome || browser.msie ? 1 : -1;
+        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
         const expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
