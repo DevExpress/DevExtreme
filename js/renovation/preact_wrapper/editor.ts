@@ -29,14 +29,14 @@ export default class Editor extends Component {
       // it can change the editor's value
       if (isValidationMessageShownOnFocus) {
         // NOTE: Prevent the validation message from showing
-        const $validationMessage = $('.dx-invalid-message');
-        $validationMessage?.removeClass(INVALID_MESSAGE_AUTO);
+        const $validationMessageWrapper = $('.dx-invalid-message.dx-overlay-wrapper');
+        $validationMessageWrapper?.removeClass(INVALID_MESSAGE_AUTO);
 
         clearTimeout(this.showValidationMessageTimeout);
 
         // NOTE: Show the validation message after a click changes the value
         this.showValidationMessageTimeout = setTimeout(() => {
-          $validationMessage?.addClass(INVALID_MESSAGE_AUTO);
+          $validationMessageWrapper?.addClass(INVALID_MESSAGE_AUTO);
         }, 150);
       }
     };
