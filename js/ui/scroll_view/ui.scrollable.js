@@ -389,7 +389,8 @@ const Scrollable = DOMComponent.inherit({
 
         return {
             top: -top,
-            left: this._isRtlNativeStrategy() && (this._isRtlConsistentBrowser() || browser.msie) ? this._getMaxLeftOffset() - Math.abs(left) : -left
+            left: this._isRtlNativeStrategy() && !this._isRtlInconsistentBrowser() ? this._getMaxLeftOffset() - Math.abs(left) : -left
+            // left: this._isRtlNativeStrategy() && (this._isRtlConsistentBrowser() || browser.msie) ? this._getMaxLeftOffset() - Math.abs(left) : -left
         };
     },
 
@@ -401,6 +402,10 @@ const Scrollable = DOMComponent.inherit({
 
     _isRtlConsistentBrowser: function() {
         return (browser.webkit && parseInt(browser.version) > 85) || browser.safari;
+    },
+
+    _isRtlInconsistentBrowser: function() {
+        return (browser.webkit && parseInt(browser.version) < 86);
     },
 
     scrollTop: function() {
