@@ -253,4 +253,13 @@ export class GanttView extends Widget {
     onGanttViewContextMenu(event, key, type) {
         return true;
     }
+    getFormattedDateText(date) {
+        let result = '';
+        if(date) {
+            const datePart = dateLocalization.format(date, 'shortDate');
+            const timePart = dateLocalization.format(date, 'hh:mm');
+            result = datePart + ' ' + timePart;
+        }
+        return result;
+    }
 }

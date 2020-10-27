@@ -120,7 +120,7 @@ $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset
   min-height: $material-treeview-min-item-height;
   line-height: $material-treeview-min-item-height / 2 - 2;
 
-  .dx-icon {
+  .dx-treeview-item-content > .dx-icon {
     @include dx-icon-sizing($material-base-icon-size);
   }
 

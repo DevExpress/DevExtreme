@@ -69,14 +69,16 @@ const testViewDataMap = {
             startDate: new Date(2020, 7, 24),
             endDate: new Date(2020, 7, 24),
             groups: 'group_2',
-            groupIndex: 2
+            groupIndex: 2,
+            index: 0
         },
         {
             allDay: true,
             startDate: new Date(2020, 7, 25),
             endDate: new Date(2020, 7, 25),
             groups: 'group_2',
-            groupIndex: 2
+            groupIndex: 2,
+            index: 1
         }
     ],
     [
@@ -85,14 +87,16 @@ const testViewDataMap = {
             startDate: new Date(2020, 7, 24, 0, 0),
             endDate: new Date(2020, 7, 24, 0, 30),
             groups: 'group_2',
-            groupIndex: 2
+            groupIndex: 2,
+            index: 0
         },
         {
             allDay: false,
             startDate: new Date(2020, 7, 25, 0, 0),
             endDate: new Date(2020, 7, 25, 0, 30),
             groups: 'group_2',
-            groupIndex: 2
+            groupIndex: 2,
+            index: 1
         }
     ],
     [
@@ -101,14 +105,16 @@ const testViewDataMap = {
             startDate: new Date(2020, 7, 24),
             endDate: new Date(2020, 7, 24),
             groups: 'group_3',
-            groupIndex: 3
+            groupIndex: 3,
+            index: 0
         },
         {
             allDay: true,
             startDate: new Date(2020, 7, 25),
             endDate: new Date(2020, 7, 25),
             groups: 'group_3',
-            groupIndex: 3
+            groupIndex: 3,
+            index: 1
         }
     ],
     [
@@ -117,14 +123,16 @@ const testViewDataMap = {
             startDate: new Date(2020, 7, 24, 1, 0),
             endDate: new Date(2020, 7, 24, 1, 30),
             groups: 'group_3',
-            groupIndex: 3
+            groupIndex: 3,
+            index: 0
         },
         {
             allDay: false,
             startDate: new Date(2020, 7, 25, 1, 0),
             endDate: new Date(2020, 7, 25, 1, 30),
             groups: 'group_3',
-            groupIndex: 3
+            groupIndex: 3,
+            index: 1
         }
     ]]
 };
@@ -194,29 +202,41 @@ module('View Data Provider', () => {
             assert.deepEqual(group3EndDate, new Date(2020, 7, 25, 1, 30), 'Group 3 end date is correct');
         });
 
-        test('getGroupCellStartDate', function(assert) {
+        test('findGroupCellStartDate', function(assert) {
             assert.deepEqual(
-                this.viewDataProvider.getGroupCellStartDate(2, new Date(2020, 7, 24, 11, 11)),
+                this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 24, 0, 10), new Date(2020, 7, 24, 1, 10)),
                 new Date(2020, 7, 24),
                 'Group 2 cell 0 start date is correct'
             );
 
             assert.deepEqual(
-                this.viewDataProvider.getGroupCellStartDate(2, new Date(2020, 7, 25, 11, 11)),
+                this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 20)),
                 new Date(2020, 7, 25),
                 'Group 2 cell 1 start date is correct'
             );
 
             assert.deepEqual(
-                this.viewDataProvider.getGroupCellStartDate(2, new Date(2020, 7, 24, 11, 11)),
-                new Date(2020, 7, 24),
+                this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 24, 0, 11), new Date(2020, 7, 24, 1, 22)),
+                new Date(2020, 7, 24, 1),
                 'Group 3 cell 0 start date is correct'
             );
 
             assert.deepEqual(
-                this.viewDataProvider.getGroupCellStartDate(2, new Date(2020, 7, 25, 11, 11)),
-                new Date(2020, 7, 25),
+                this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 25, 1, 30)),
+                new Date(2020, 7, 25, 1),
                 'Group 3 cell 1 start date is correct'
+            );
+
+            assert.deepEqual(
+                this.viewDataProvider.findGroupCellStartDate(2, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                new Date(2020, 7, 25),
+                'Group 2 cell 1 allDay start date is correct'
+            );
+
+            assert.deepEqual(
+                this.viewDataProvider.findGroupCellStartDate(3, new Date(2020, 7, 25, 0, 11), new Date(2020, 7, 26, 1, 30), true),
+                new Date(2020, 7, 25, 1),
+                'Group 2 cell 1 allDay start date is correct '
             );
         });
 
@@ -234,6 +254,48 @@ module('View Data Provider', () => {
             const groupIndices = this.viewDataProvider.getGroupIndices();
 
             assert.deepEqual(groupIndices, [2, 3], 'Indices are correct');
+        });
+
+        test('getLasGroupCellPosition', function(assert) {
+            assert.deepEqual(
+                this.viewDataProvider.getLasGroupCellPosition(2),
+                { rowIndex: 1, cellIndex: 0 },
+                'Last position for the group 2 is correct'
+            );
+
+            assert.deepEqual(
+                this.viewDataProvider.getLasGroupCellPosition(3),
+                { rowIndex: 3, cellIndex: 0 },
+                'Last position for the group 3 is correct'
+            );
+        });
+
+        test('getLasGroupCellIndex', function(assert) {
+            assert.deepEqual(
+                this.viewDataProvider.getLasGroupCellPosition(2),
+                { rowIndex: 1, cellIndex: 0 },
+                'Last position for the group 2 is correct'
+            );
+
+            assert.deepEqual(
+                this.viewDataProvider.getLasGroupCellPosition(3),
+                { rowIndex: 3, cellIndex: 0 },
+                'Last position for the group 3 is correct'
+            );
+        });
+
+        test('getRowCountInGroup', function(assert) {
+            assert.deepEqual(
+                this.viewDataProvider.getRowCountInGroup(2),
+                1,
+                'Row count in group 2 is correct'
+            );
+
+            assert.deepEqual(
+                this.viewDataProvider.getRowCountInGroup(3),
+                1,
+                'Row count in group 3 is correct'
+            );
         });
 
         module('getCellData', function() {

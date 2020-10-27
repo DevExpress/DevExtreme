@@ -130,6 +130,11 @@ class AppointmentModel {
         this._baseAppointmentDuration = baseAppointmentDuration;
     }
 
+    get keyName() {
+        const store = this._dataSource.store();
+        return store.key();
+    }
+
     _createFilter(min, max, remoteFiltering, dateSerializationFormat) {
         this._filterMaker.make('date', [min, max]);
 
@@ -384,7 +389,7 @@ class AppointmentModel {
         } else {
             this._filterMaker.make('date', [trimmedDates.min, trimmedDates.max]);
 
-            if(this._dataSource.filter() && this._dataSource.filter().length > 1) {
+            if(this._dataSource.filter()?.length > 1) {
                 // TODO: serialize user filter value only necessary for case T838165(details in note)
                 const userFilter = this._serializeRemoteFilter([this._dataSource.filter()[1]], dateSerializationFormat);
                 this._filterMaker.make('user', userFilter);
@@ -600,7 +605,7 @@ class AppointmentModel {
         return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 
-    add(data, tz) {
+    add(data) {
         return this._dataSource.store().insert(data).done((() => {
             this._dataSource.load();
         }).bind(this));

@@ -131,7 +131,7 @@ export class TextSvgElement extends JSXComponent(TextSvgElementProps) {
       const items = this.parseTspanElements(texts);
 
       this.alignTextNodes(items);
-      applyGraphicProps(this.textRef, this.props, this.props.x, this.props.y);
+      applyGraphicProps(this.textRef, this.props as SvgGraphicsProps, this.props.x, this.props.y);
       if (this.props.x !== undefined || this.props.y !== undefined) {
         this.locateTextNodes(items);
       }
