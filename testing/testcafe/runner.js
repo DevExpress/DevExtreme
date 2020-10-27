@@ -1,4 +1,5 @@
 const createTestCafe = require('testcafe');
+const fs = require('fs');
 const process = require('process');
 const parseArgs = require('minimist');
 require('nconf').argv();
@@ -13,7 +14,8 @@ createTestCafe('localhost', 1437, 1438)
         let componentFolder = args.componentFolder.trim();
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
-
+        // eslint-disable-next-line spellcheck/spell-checker
+        fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
         const runner = testCafe.createRunner()
             .browsers(args.browsers.split(' '))
             .src([`./testing/testcafe/tests/${componentFolder}/*.ts`]);

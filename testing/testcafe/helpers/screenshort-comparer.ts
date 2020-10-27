@@ -29,6 +29,7 @@ function submitResult({
     const fileName = path.basename(sourcePath, '.png');
     const targetPath = path.join(screenshotValidator.artifactsPath, `${fileName}${postfix}.png`);
     if (fs.existsSync(sourcePath)) {
+      console.log('copy artifacts', targetPath);
       fs.copyFileSync(sourcePath, targetPath);
     }
   }
@@ -170,7 +171,7 @@ export async function validate(screenshotName: string, comparisonOptions = {
   try {
     ensureArtifactsPath();
     if (!fs.existsSync(etalonFileName)) {
-      throw new Error(`Etalon file isnt found ${screenshotFileName}`);
+      throw new Error(`Etalon file for screenshot '${screenshotName}' isnt found: ${etalonFileName}`);
     }
     const screenshotBuffer = await getMaskedScreenshotBuffer({
       screenshotFileName, etalonFileName, maskFileName,
