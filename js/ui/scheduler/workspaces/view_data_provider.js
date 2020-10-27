@@ -323,7 +323,7 @@ export default class ViewDataProvider {
         return dateTable[lastRowIndex][lastCellIndex].endDate;
     }
 
-    findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
+    findGroupCellStartDate(groupIndex, startDate, endDate) {
         const { dateTable } = this.getGroupData(groupIndex);
 
         for(let i = 0; i < dateTable[0].length; ++i) {
@@ -345,8 +345,6 @@ export default class ViewDataProvider {
                 }
             }
         }
-
-        return isAllDay && this.getGroupStartDate(groupIndex);
     }
 
     getCellsGroup(groupIndex) {

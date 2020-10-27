@@ -194,11 +194,12 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createExtremeRecurrenceDates(rawAppointment, groupIndex) {
-        const dateRange = this._getGroupDateRange(groupIndex);
+        const dateRange = this._getGroupDateRange(rawAppointment, groupIndex);
 
         const startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
             ? dateUtils.trimTime(dateRange[0])
             : dateRange[0];
+
         const commonTimeZone = this.scheduler.option('timeZone');
 
         const minRecurrenceDate = commonTimeZone ?
@@ -214,7 +215,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             maxRecurrenceDate
         ];
     }
-    _getGroupDateRange(groupIndex) {
+    _getGroupDateRange(rawAppointment, groupIndex) {
         return this.scheduler._workSpace.getDateRange();
     }
 
@@ -333,7 +334,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         const { duration } = appointment;
         const result = [];
         const workspace = this.scheduler._workSpace;
-        const groupIndices = workspace._getGroupCount()
+        const groupIndices = workspace._isVerticalGroupedWorkSpace() && workspace._getGroupCount()
             ? this._getGroupIndices(resources)
             : [0];
 
@@ -369,12 +370,16 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
             endDate
         } = appointment;
 
-        const allDay = this._isAllDayAppointment(rawAppointment);
-
-        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, allDay);
+        return this._isAllDayAppointment(rawAppointment)
+            ? startDate
+            : viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate);
     }
 
-    _getGroupDateRange(groupIndex) {
+    _getGroupDateRange(rawAppointment, groupIndex) {
+        if(this.scheduler.appointmentTakesAllDay(rawAppointment)) {
+            return super._getGroupDateRange(rawAppointment, groupIndex);
+        }
+
         const { viewDataProvider } = this.scheduler.getWorkSpace();
         const startDate = viewDataProvider.getGroupStartDate(groupIndex);
         const groupEndDate = viewDataProvider.getGroupEndDate(groupIndex);
