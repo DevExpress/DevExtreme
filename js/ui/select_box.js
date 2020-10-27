@@ -28,6 +28,8 @@ const SelectBox = DropDownList.inherit({
         const that = this;
         const parent = this.callBase();
         const clearSelectBox = function(e) {
+            this._saveValueChangeEvent(e);
+
             const isEditable = this._isEditable();
 
             if(!isEditable) {
