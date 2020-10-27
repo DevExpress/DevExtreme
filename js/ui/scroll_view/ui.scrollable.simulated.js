@@ -872,20 +872,23 @@ export const SimulatedStrategy = Class.inherit({
     _createActionArgs: function() {
         const scrollerX = this._scrollers[HORIZONTAL];
         const scrollerY = this._scrollers[VERTICAL];
-        const location = this.location();
-
-        this._scrollOffset = {
-            top: scrollerY && -location.top,
-            left: scrollerX && -location.left
-        };
 
         return {
             event: this._eventForUserAction,
-            scrollOffset: this._scrollOffset,
+            scrollOffset: this.getScrollOffset(),
             reachedLeft: scrollerX && scrollerX._reachedMax(),
             reachedRight: scrollerX && scrollerX._reachedMin(),
             reachedTop: scrollerY && scrollerY._reachedMax(),
             reachedBottom: scrollerY && scrollerY._reachedMin()
+        };
+    },
+
+    getScrollOffset: function() {
+        const { top, left } = this.location();
+
+        return {
+            top: -top,
+            left: -left
         };
     },
 

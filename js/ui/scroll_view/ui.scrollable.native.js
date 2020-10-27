@@ -42,8 +42,6 @@ const NativeStrategy = Class.inherit({
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
         this._isRtlNativeStrategy = scrollable._isRtlNativeStrategy.bind(scrollable);
         this._getMaxLeftOffset = scrollable._getMaxLeftOffset.bind(scrollable);
-        this._isRtlConsistentBrowser = scrollable._isRtlConsistentBrowser.bind(scrollable);
-        this._isRtlInconsistentBrowser = scrollable._isRtlInconsistentBrowser.bind(scrollable);
     },
 
     render: function() {
@@ -138,15 +136,25 @@ const NativeStrategy = Class.inherit({
 
         return {
             event: this._eventForUserAction,
-            scrollOffset: {
-                top: -top,
-                left: -left
-            },
+            scrollOffset: this.getScrollOffset(),
             reachedLeft: this._isRtlNativeStrategy() && (!this._isRtlInconsistentBrowser()) ? this._isReachedRight(-left) : this._isReachedLeft(left),
             reachedRight: this._isRtlNativeStrategy() && (!this._isRtlInconsistentBrowser()) ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
             reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
             reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * pushBackValue : undefined
         };
+    },
+
+    getScrollOffset: function() {
+        const { top, left } = this.location();
+
+        return {
+            top: -top,
+            left: this.option('rtlEnabled') && !this._isRtlInconsistentBrowser() ? this._getMaxLeftOffset() - Math.abs(left) : -left
+        };
+    },
+
+    _isRtlInconsistentBrowser: function() {
+        return (browser.webkit && parseInt(browser.version) < 86 && !browser.safari);
     },
 
     _isReachedLeft: function(left) {
@@ -297,18 +305,20 @@ const NativeStrategy = Class.inherit({
         const { pushBackValue } = this.option();
 
         this._$container.scrollTop(Math.round(-top - distance.top + pushBackValue));
+        this._$container.scrollLeft(this._normalizeLeftOffset(Math.round(-left - distance.left)));
+    },
 
-        let offsetLeft = Math.round(-left - distance.left);
+    _normalizeLeftOffset: function(offset) {
 
         if(this._isRtlNativeStrategy() && !this._isRtlInconsistentBrowser()) {
             if(browser.msie) {
-                offsetLeft = Math.abs(offsetLeft - this._getMaxLeftOffset());
+                offset = Math.abs(offset - this._getMaxLeftOffset());
             } else {
-                offsetLeft -= this._getMaxLeftOffset();
+                offset -= this._getMaxLeftOffset();
             }
         }
 
-        this._$container.scrollLeft(offsetLeft);
+        return offset;
     },
 
     validate: function(e) {

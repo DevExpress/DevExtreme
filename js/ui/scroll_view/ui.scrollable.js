@@ -385,27 +385,13 @@ const Scrollable = DOMComponent.inherit({
     },
 
     scrollOffset: function() {
-        const { top, left } = this._location();
-
-        return {
-            top: -top,
-            left: this._isRtlNativeStrategy() && !this._isRtlInconsistentBrowser() ? this._getMaxLeftOffset() - Math.abs(left) : -left
-            // left: this._isRtlNativeStrategy() && (this._isRtlConsistentBrowser() || browser.msie) ? this._getMaxLeftOffset() - Math.abs(left) : -left
-        };
+        return this._strategy.getScrollOffset();
     },
 
     _isRtlNativeStrategy: function() {
         const { useNative, rtlEnabled } = this.option();
 
         return useNative && rtlEnabled;
-    },
-
-    _isRtlConsistentBrowser: function() {
-        return (browser.webkit && parseInt(browser.version) > 85) || browser.safari;
-    },
-
-    _isRtlInconsistentBrowser: function() {
-        return (browser.webkit && parseInt(browser.version) < 86 && !browser.safari);
     },
 
     scrollTop: function() {
