@@ -142,7 +142,9 @@ const FeedbackEmitter = Emitter.inherit({
         this._active.stop();
         this._inactive.stop();
 
-        activeFeedback = null;
+        if(activeFeedback === this) {
+            activeFeedback = null;
+        }
 
         this.callBase();
     },

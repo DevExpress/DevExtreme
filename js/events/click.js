@@ -153,7 +153,9 @@ const useNativeClick =
 
             eventsEngine.off(this.getElement(), 'click', clickHandler);
 
-            lastFiredEvent = null;
+            if(lastFiredEvent.path.indexOf(this.getElement().get(0)) > -1) {
+                lastFiredEvent = null;
+            }
         }
     });
 })();
