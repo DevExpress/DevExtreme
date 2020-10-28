@@ -35,19 +35,23 @@ proto._showTooltip = function(index, coords) {
     const that = this;
     const tooltip = that._tooltip;
     const node = that._nodes[index];
-    const state = that._tooltipIndex === index || tooltip.show({
+    if(that._tooltipIndex === index) {
+        that._moveTooltip(node, coords);
+        return;
+    }
+    const callback = (result) => {
+        if(result) {
+            that._moveTooltip(node, coords);
+        } else {
+            tooltip.hide();
+        }
+        that._tooltipIndex = result ? index : -1;
+    };
+    callback(tooltip.show({
         value: node.value,
         valueText: tooltip.formatValue(node.value),
         node: node.proxy
-    }, { x: 0, y: 0, offset: 0 }, { node: node.proxy });
-
-    if(state) {
-        that._moveTooltip(node, coords);
-    } else {
-        tooltip.hide();
-    }
-    that._tooltipIndex = state ? index : -1;
-
+    }, { x: 0, y: 0, offset: 0 }, { node: node.proxy }, undefined, callback));
 };
 
 proto._moveTooltip = function(node, coords) {

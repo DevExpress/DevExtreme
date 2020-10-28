@@ -603,7 +603,8 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
         textColor: 'rgba(147,147,147,0.7)',
         eventData: 'eventData',
         formatObject: formatObject,
-        text: 'some-text'
+        text: 'some-text',
+        templateCallback: undefined
     }, 'state');
 
     const cloudSettings = this.renderer.path.lastCall.returnValue._stored_settings;
@@ -657,7 +658,8 @@ QUnit.test('Show preparations. W/o customize, w/ text from \'description\' filed
         eventData: 'eventData',
         textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
-        formatObject: formatObject
+        formatObject: formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -762,7 +764,8 @@ QUnit.test('Show preparations. W/ customize w/o text, w/ text', function(assert)
         textColor: 'cColor3',
         text: 'some-text',
         eventData: 'eventData',
-        formatObject: formatObject
+        formatObject: formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is not added to dom');
@@ -806,7 +809,8 @@ QUnit.test('Show preparations. W/ customize w/ text, empty text', function(asser
         textColor: 'cColor3',
         eventData: 'eventData',
         text: 'some-customized-text',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -836,7 +840,8 @@ QUnit.test('Show preparations. W/ customize w/ text, w/ text', function(assert) 
         textColor: 'cColor3',
         eventData: 'eventData',
         text: 'some-customized-text',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -941,7 +946,8 @@ QUnit.test('Show preparations. W/ customize w/ html', function(assert) {
         textColor: 'cColor3',
         eventData: 'eventData',
         html: 'some-customized-html',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -972,7 +978,8 @@ QUnit.test('Show preparations. W/ customize w/ html/text', function(assert) {
         text: 'some-customized-text',
         eventData: 'eventData',
         html: 'some-customized-html',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -1000,7 +1007,8 @@ QUnit.test('Show preparations. Certain container', function(assert) {
         textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
         eventData: 'eventData',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -1047,7 +1055,8 @@ QUnit.test('Show. W/o params', function(assert) {
         textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
         eventData,
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     const cloud = this.renderer.path.lastCall.returnValue;
@@ -1100,7 +1109,8 @@ QUnit.test('Show. W/o params. Html', function(assert) {
         textColor: 'rgba(147,147,147,0.7)',
         eventData,
         html: 'some-html',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     const cloud = this.renderer.path.lastCall.returnValue;
@@ -1151,10 +1161,11 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     }
 
     const formatObject = { valueText: 'some-text' };
+    const callback = sinon.stub();
     // act
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
 
-    assert.strictEqual(result, true);
+    assert.strictEqual(result, undefined);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
 
     assert.deepEqual(this.tooltip._state, {
@@ -1164,7 +1175,8 @@ QUnit.test('Show. W/o params. Template', function(assert) {
         eventData,
         html: 'custom html',
         text: 'some-text',
-        formatObject
+        formatObject,
+        templateCallback: callback
     }, 'state');
 
     const cloud = this.renderer.path.lastCall.returnValue;
@@ -1191,6 +1203,8 @@ QUnit.test('Show. W/o params. Template', function(assert) {
 
     assert.equal(this.options.contentTemplate.callCount, 1);
     assert.equal(this.options.contentTemplate.lastCall.args[0], formatObject);
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.getCall(0).args[0], true);
 });
 
 QUnit.test('Do not show tooltip if html is not set in contentTemplate', function(assert) {
@@ -1219,11 +1233,15 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     }
 
     const formatObject = { valueText: 'some-text' };
+    const callback = sinon.stub();
     // act
-    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
 
     assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
     assert.ok(!this.eventTrigger.called, 'event is not triggered');
+
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.getCall(0).args[0], false);
 });
 
 QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div', function(assert) {
@@ -1255,11 +1273,14 @@ QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div',
     }
 
     const formatObject = { valueText: 'some-text' };
+    const callback = sinon.stub();
     // act
-    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
 
     assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
     assert.ok(!this.eventTrigger.called, 'event is not triggered');
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.getCall(0).args[0], false);
 });
 
 QUnit.test('Simple text, tooltip is interactive', function(assert) {
@@ -1329,14 +1350,17 @@ QUnit.test('Call template if empty text', function(assert) {
     }
 
     const formatObject = { valueText: '' };
+    const callback = sinon.stub();
     // act
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
 
-    assert.strictEqual(result, true);
+    assert.strictEqual(result, undefined);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
 
     assert.equal(this.options.contentTemplate.callCount, 1);
     assert.equal(this.options.contentTemplate.lastCall.args[0], formatObject);
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.getCall(0).args[0], true);
 });
 
 QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObject', function(assert) {
@@ -1368,7 +1392,8 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
         textColor: 'rgba(147,147,147,0.7)',
         eventData,
         text: 'some-text',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     const cloud = this.renderer.path.lastCall.returnValue;
@@ -1461,7 +1486,8 @@ QUnit.test('Show. W/ params', function(assert) {
         textColor: 'rgba(147,147,147,0.7)',
         eventData: 'eventData',
         text: 'some-text',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 });
 

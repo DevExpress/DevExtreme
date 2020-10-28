@@ -108,7 +108,7 @@ Tooltip.prototype = {
             this._renderer.root.css({ '-ms-user-select': 'auto', '-moz-user-select': 'auto', '-webkit-user-select': 'auto' });
         }
 
-        const drawTooltip = ({ group, onRender, eventData, isMoving }) => {
+        const drawTooltip = ({ group, onRender, eventData, isMoving, templateCallback = () => {} }) => {
             const state = that._state;
             if(!isMoving) {
                 const template = that._template;
@@ -120,6 +120,7 @@ Tooltip.prototype = {
                             state.html = textHtml.html();
                             if(textHtml.width() === 0 && textHtml.height() === 0) {
                                 this.plaque.clear();
+                                templateCallback(false);
                                 return;
                             }
 
@@ -127,6 +128,7 @@ Tooltip.prototype = {
                             that._riseEvents(eventData);
                             that._moveWrapper();
                             that.plaque.customizeCloud({ fill: state.color, stroke: state.borderColor, 'pointer-events': pointerEvents });
+                            templateCallback(true);
                         } });
                         return;
                     } else {
@@ -144,6 +146,7 @@ Tooltip.prototype = {
             }
             onRender();
             that._moveWrapper();
+            return true;
         };
 
         this.plaque = new Plaque({
@@ -246,7 +249,7 @@ Tooltip.prototype = {
         return !!state.text || !!state.html || !!this._template;
     },
 
-    show: function(formatObject, params, eventData, customizeTooltip) {
+    show: function(formatObject, params, eventData, customizeTooltip, templateCallback) {
         const that = this;
 
         if(that._options.forceEvents) { // for Blazor charts
@@ -257,7 +260,8 @@ Tooltip.prototype = {
         }
         const state = {
             formatObject,
-            eventData
+            eventData,
+            templateCallback
         };
 
         if(!that._prepare(formatObject, state, customizeTooltip)) {
