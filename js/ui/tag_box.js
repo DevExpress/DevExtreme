@@ -241,7 +241,7 @@ const TagBox = SelectBox.inherit({
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
 
         const scrollBehavior = getScrollBehavior();
-        const isScrollInverted = rtlEnabled && scrollBehavior.decreasing && !scrollBehavior.positive;
+        const isScrollInverted = rtlEnabled && (scrollBehavior.decreasing ^ scrollBehavior.positive);
         const scrollSign = !rtlEnabled || scrollBehavior.positive ? 1 : -1;
 
         return (isScrollLeft ^ !isScrollInverted)
@@ -260,7 +260,9 @@ const TagBox = SelectBox.inherit({
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
-            scrollLeft += scrollOffset;
+            const scrollBehavior = getScrollBehavior();
+            const scrollCorrection = rtlEnabled && !scrollBehavior.decreasing && scrollBehavior.positive ? -1 : 1;
+            scrollLeft += scrollOffset * scrollCorrection;
         }
 
         return scrollLeft;
