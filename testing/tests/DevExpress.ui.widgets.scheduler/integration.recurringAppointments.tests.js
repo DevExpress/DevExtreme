@@ -1367,10 +1367,9 @@ QUnit.testStart(function() {
                     views: ['week'],
                     currentView: 'week',
                     currentDate: new Date(2018, 4, 23),
-                    timeZone: 'Etc/UTC'
+                    timeZone: 'Etc/UTC',
+                    height: 2000
                 });
-
-                this.instance.getWorkSpace().getScrollable().scrollTo({ y: 3000 });
 
                 $(this.instance.$element()).find('.dx-scheduler-appointment').eq(0).trigger('dxclick').trigger('dxclick');
 
