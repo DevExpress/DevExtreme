@@ -7,7 +7,7 @@ import devices from '../../core/devices';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
 import browser from '../../core/utils/browser';
-import { getNavigator } from '../../core/utils/window';
+// import { getNavigator } from '../../core/utils/window';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -155,7 +155,7 @@ const NativeStrategy = Class.inherit({
     },
 
     _isRtlInconsistentBrowser: function() {
-        return ((browser.webkit && parseInt(browser.version) < 86) && (browser.safari && getNavigator().vendor && getNavigator().vendor.indexOf('Google') > -1));
+        return ((browser.webkit && parseInt(browser.version) < 86) && !browser.safari); // (browser.safari && getNavigator().vendor && getNavigator().vendor.indexOf('Google') > -1)
     },
 
     _isReachedLeft: function(left) {
