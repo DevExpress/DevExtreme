@@ -112,6 +112,7 @@ const Form = Widget.inherit({
             minColWidth: 200,
             alignItemLabels: true,
             alignItemLabelsInAllGroups: true,
+            alignRootItemLabels: true,
             showColonAfterLabel: true,
             showRequiredMark: true,
             showOptionalMark: false,
@@ -353,7 +354,9 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed) {
-        this._alignRootSimpleItems($container, colCount, excludeTabbed);
+        if(this.options('alignRootItemLabels') === true) {
+            this._alignRootSimpleItems($container, colCount, excludeTabbed);
+        }
 
         const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
         if(alignItemLabelsInAllGroups) {
@@ -367,10 +370,10 @@ const Form = Widget.inherit({
         }
     },
 
-    _alignRootSimpleItems: function($container, colCount, labelsOptions) {
+    _alignRootSimpleItems: function($container, colCount, excludeTabbed) {
         const $rootSimpleItems = $container.find(`.${ROOT_SIMPLE_ITEM_CLASS}`);
         for(let colIndex = 0; colIndex < colCount; colIndex++) {
-            this._applyLabelsWidthByCol($rootSimpleItems, colIndex, labelsOptions);
+            this._applyLabelsWidthByCol($rootSimpleItems, colIndex, excludeTabbed);
         }
     },
 
