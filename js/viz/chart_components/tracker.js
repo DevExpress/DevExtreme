@@ -215,10 +215,10 @@ const baseTrackerPrototype = {
             const rootOffset = that._renderer.getRootOffset();
             coords.x += rootOffset.left;
             coords.y += rootOffset.top;
-            if(!that._tooltip.show(tooltipFormatObject, coords, eventData)) {
-                return;
-            }
-            that.pointAtShownTooltip = point;
+            const callback = (result) => {
+                result && (that.pointAtShownTooltip = point);
+            };
+            callback(that._tooltip.show(tooltipFormatObject, coords, eventData, undefined, callback));
         }
     },
 
