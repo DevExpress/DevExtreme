@@ -11008,10 +11008,6 @@ declare module DevExpress.ui {
          */
         dataSource?: string | Array<string | dxTabPanelItem | any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /**
-         * [descr:dxTabPanel.Options.focusStateEnabled]
-         */
-        focusStateEnabled?: boolean;
-        /**
          * [descr:dxTabPanel.Options.hoverStateEnabled]
          */
         hoverStateEnabled?: boolean;
