@@ -53,14 +53,14 @@ function App() {
         id="gridContainer"
         keyExpr="OrderID"
         dataSource={state.data}
-        showBorders={true}
-        repaintChangesOnly={true}
+        showBorders
+        repaintChangesOnly
         onSaving={onSaving}>
         <Editing
           mode="row"
-          allowAdding={true}
-          allowDeleting={true}
-          allowUpdating={true}
+          allowAdding
+          allowDeleting
+          allowUpdating
           changes={state.changes}
           onChangesChange={onChangesChange}
           editRowKey={state.editRowKey}

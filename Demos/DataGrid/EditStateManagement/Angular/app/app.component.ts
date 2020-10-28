@@ -23,7 +23,6 @@ export class AppComponent implements OnInit, OnDestroy {
     orders$: Observable<Order[]>;
     changes: Change<Order>[] = [];
     editRowKey?: number = null;
-    changesText = '[]';
     isLoading = false;
     loadPanelPosition = { of: '#gridContainer' };
 
@@ -38,8 +37,8 @@ export class AppComponent implements OnInit, OnDestroy {
         });
     }
 
-    onChangesChange(changes: Change<Order>[]) {
-        this.changesText = JSON.stringify(changes.map((change) => ({
+    get changesText(): string {
+        return JSON.stringify(this.changes.map((change) => ({
             type: change.type,
             key: change.type !== 'insert' ? change.key : undefined,
             data: change.data

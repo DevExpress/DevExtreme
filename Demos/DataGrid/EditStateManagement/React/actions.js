@@ -75,14 +75,14 @@ async function sendChange(url, change) {
   }
 }
 
-export async function setChanges(dispatch, changes) {
+export function setChanges(dispatch, changes) {
   dispatch({
     type: SET_CHANGES,
     payload: changes
   });
 }
 
-export async function setEditRowKey(dispatch, editRowKey) {
+export function setEditRowKey(dispatch, editRowKey) {
   dispatch({
     type: SET_EDIT_ROW_KEY,
     payload: editRowKey
