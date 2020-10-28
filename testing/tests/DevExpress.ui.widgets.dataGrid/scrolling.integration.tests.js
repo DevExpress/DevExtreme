@@ -949,51 +949,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
                 assert.equal(dataGrid.pageIndex(), 1, 'Page index');
             });
         });
-
-        QUnit.test(`Test columnsController.getColumnIndexOffset where scrollingMode: ${scrollingMode} and columnRenderingMode: virtual`, function(assert) {
-            // arrange
-            const data = [];
-            const columns = [];
-
-            for(let i = 0; i < 2; ++i) {
-                const item = {};
-                for(let j = 0; j < 100; ++j) {
-                    const fieldName = `field${j}`;
-                    item[fieldName] = `${i}-${j}`;
-                    if(columns.length !== 100) {
-                        columns.push(fieldName);
-                    }
-                }
-                data.push(item);
-            }
-
-            const dataGrid = $('#dataGrid').dxDataGrid({
-                width: 270,
-                columns: columns,
-                dataSource: data,
-                columnWidth: 90,
-                scrolling: {
-                    mode: scrollingMode,
-                    columnRenderingMode: 'virtual',
-                    useNative: true
-                },
-                loadingTimeout: undefined
-            }).dxDataGrid('instance');
-
-            const columnController = dataGrid.getController('columns');
-
-            // assert
-            assert.equal(columnController.getColumnIndexOffset(), 0, 'Column index offset is 0');
-
-            // act
-            const scrollable = dataGrid.getScrollable();
-            scrollable.scrollTo({ x: 900 });
-            $(scrollable._container()).trigger('scroll');
-            this.clock.tick();
-
-            // assert
-            assert.equal(columnController.getColumnIndexOffset(), 9, 'Column index offset');
-        });
     });
 
     QUnit.test('The navigateToRow method should not affect horizontal scrolling', function(assert) {
@@ -2119,11 +2074,9 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         this.clock.tick(200);
 
         // assert
-        assert.deepEqual(pageIndexesForLoad, [0]);
-        assert.strictEqual(dataGrid.getVisibleRows().length, 20);
+        assert.deepEqual(pageIndexesForLoad, [0, 1]);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 40);
 
-        dataGrid.getScrollable().scrollTo({ y: 1 });
-        this.clock.tick(200);
         dataGrid.getScrollable().scrollTo({ y: 700 });
         this.clock.tick(10);
         dataGrid.getScrollable().scrollTo({ y: 1400 });
@@ -2173,9 +2126,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         that.clock.tick(1000);
         const scrollable = dataGrid.getScrollable();
 
-        scrollable.scrollTo({ y: 1 });
-        that.clock.tick(100);
-
         // assert
         assert.deepEqual(loadedPages, [0, 1], 'loaded pages');
 
@@ -2193,7 +2143,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
     // T815141
     QUnit.test('Pages should not be loaded while scrolling fast if remoteOperations is true and server is slow', function(assert) {
-        fastScrollTest(assert, this, 500, 1200, [0, 1, 3, 8, 9]);
+        fastScrollTest(assert, this, 500, 1200, [0, 1, 2, 8, 9]);
     });
 
     // T815141
@@ -2948,7 +2898,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataSource.reload();
 
         // assert
-        assert.deepEqual(dataGrid.getVisibleRows().map(item => item.data.id), [0, 1], 'visible row keys');
+        assert.deepEqual(dataGrid.getVisibleRows().map(item => item.data.id), [0, 1, 2, 3], 'visible row keys');
     });
 
     QUnit.test('loading count after refresh when scrolling mode virtual', function(assert) {
@@ -2979,7 +2929,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         this.clock.tick(301);
 
-        assert.equal(loadingCount, 1, 'virtual scrolling load 1 page');
+        assert.equal(loadingCount, 2, 'virtual scrolling load 2 pages');
         assert.equal(contentReadyCount, 1, 'contentReady is called once');
 
         loadingCount = 0;
@@ -2990,7 +2940,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         this.clock.tick();
 
         // assert
-        assert.equal(loadingCount, 1, 'virtual scrolling load 1 page');
+        assert.equal(loadingCount, 2, 'virtual scrolling load 2 pages');
         assert.equal(contentReadyCount, 1, 'contentReady is called once');
     });
 
@@ -3618,7 +3568,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         dataSource.store().push([{ type: 'update', key: 2, data: { name: 'updated' } }]);
 
         // assert
-        assert.strictEqual(dataGrid.getVisibleRows().length, 2, 'visible rows');
+        assert.strictEqual(dataGrid.getVisibleRows().length, 4, 'visible rows');
         assert.ok($(dataGrid.getCellElement(1, 0)).is($firstCell), 'first cell is not recreated');
         assert.notOk($(dataGrid.getCellElement(1, 1)).is($secondCell), 'second cell is recreated');
         assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), 'updated', 'second cell value is updated');
@@ -3707,13 +3657,13 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         });
 
         // assert
-        assert.strictEqual(loadingCount, 1, 'loadingCount after init');
+        assert.strictEqual(loadingCount, 2, 'loadingCount after init');
 
         // act
         arrayStore.push([{ type: 'update', key: 2, data: { name: 'updated' } }]);
 
         // assert
-        assert.strictEqual(loadingCount, 1, 'loadingCount is not changed after push');
+        assert.strictEqual(loadingCount, 2, 'loadingCount is not changed after push');
         assert.strictEqual($(dataGrid.getCellElement(1, 1)).text(), 'updated', 'second cell value is updated');
     });
 
@@ -3946,8 +3896,8 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         deviceType !== 'desktop' && $(scrollable._container()).trigger('scroll');
 
         // assert
-        assert.strictEqual(instance.pageIndex(), 20, 'current page index is changed'); // T881314
-        assert.strictEqual(instance.getTopVisibleRowData().name, 'name40', 'top visible row is changed');
+        assert.strictEqual(instance.pageIndex(), 18, 'current page index is changed'); // T881314
+        assert.strictEqual(instance.getTopVisibleRowData().name, 'name38', 'top visible row is changed');
         assert.notStrictEqual(rowsView._rowHeight, rowHeight, 'row height has changed');
         assert.ok(rowsView._rowHeight < 50, 'rowHeight < 50');
         assert.strictEqual(instance.getVisibleRows().length, 8, 'row count');
