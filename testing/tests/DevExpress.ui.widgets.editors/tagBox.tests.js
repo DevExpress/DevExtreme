@@ -16,7 +16,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
-import { getScrollBehavior } from 'core/utils/position';
+import { getScrollRtlBehavior } from 'core/utils/scrollRtlBehavior';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -5047,7 +5047,7 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const scrollBehavior = getScrollBehavior();
+        const scrollBehavior = getScrollRtlBehavior();
         const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
@@ -5066,7 +5066,7 @@ QUnit.module('single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const scrollBehavior = getScrollBehavior();
+        const scrollBehavior = getScrollRtlBehavior();
         const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
@@ -5220,7 +5220,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const scrollBehavior = getScrollBehavior();
+        const scrollBehavior = getScrollRtlBehavior();
         const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
@@ -5325,7 +5325,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
-        const scrollBehavior = getScrollBehavior();
+        const scrollBehavior = getScrollRtlBehavior();
         const scrollSign = scrollBehavior.positive ? 1 : -1;
         const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
         const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;

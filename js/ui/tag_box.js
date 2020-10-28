@@ -18,7 +18,7 @@ import { addNamespace, normalizeKeyName } from '../events/utils';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
-import { getScrollBehavior } from '../core/utils/position';
+import { getScrollRtlBehavior } from '../core/utils/scrollRtlBehavior';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -240,7 +240,7 @@ const TagBox = SelectBox.inherit({
         const rtlEnabled = this.option('rtlEnabled');
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
 
-        const scrollBehavior = getScrollBehavior();
+        const scrollBehavior = getScrollRtlBehavior();
         const isScrollInverted = rtlEnabled && (scrollBehavior.decreasing ^ scrollBehavior.positive);
         const scrollSign = !rtlEnabled || scrollBehavior.positive ? 1 : -1;
 
@@ -260,7 +260,7 @@ const TagBox = SelectBox.inherit({
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
-            const scrollBehavior = getScrollBehavior();
+            const scrollBehavior = getScrollRtlBehavior();
             const scrollCorrection = rtlEnabled && !scrollBehavior.decreasing && scrollBehavior.positive ? -1 : 1;
             scrollLeft += scrollOffset * scrollCorrection;
         }
