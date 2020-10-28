@@ -9,6 +9,9 @@ import {
 import pointerMock from '../../helpers/pointerMock.js';
 import dateUtils from 'core/utils/date';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
+import dateLocalization from 'localization/date';
+import translator from 'animation/translator';
+import { DataSource } from 'data/data_source/data_source';
 
 const { testStart, test, module } = QUnit;
 
@@ -18,6 +21,11 @@ const timeZones = {
 };
 
 testStart(() => initTestMarkup());
+
+const getDeltaTz = (schedulerTz, date) => { // TODO
+    const defaultTz = date.getTimezoneOffset() * 60000;
+    return schedulerTz * 3600000 + defaultTz;
+};
 
 const moduleConfig = {
     beforeEach() {
@@ -547,6 +555,116 @@ module('Scheduler grid', moduleConfig, () => {
             });
         });
     });
+
+    [5, 'Asia/Calcutta'].forEach(timeZone => {
+        test(`Appts should be filtered correctly with custom timeZone='${timeZone}'`, function(assert) {
+            const scheduler = createWrapper({
+                timeZone,
+                dataSource: [{
+                    startDate: new Date(Date.UTC(2016, 4, 4, 15)),
+                    endDate: new Date(Date.UTC(2016, 4, 7, 15, 30)),
+                    text: 'new Date sample'
+                }, {
+                    startDate: new Date(Date.UTC(2016, 4, 7, 23)),
+                    endDate: new Date(Date.UTC(2016, 4, 7, 21, 59)),
+                    text: 'The last one'
+                }],
+                currentDate: new Date(Date.UTC(2016, 4, 7)),
+                currentView: 'day',
+                firstDayOfWeek: 1
+            });
+
+            assert.equal(scheduler.root.getElement().find(CLASSES.appointment).length, 1, 'Only one appt is rendered');
+        });
+    });
+
+    test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                startDate: '2015-05-27T23:00:00+01:00',
+                endDate: '2015-05-28T00:00:00+01:00',
+                text: 'a'
+            }, {
+                startDate: '2015-05-26T18:30:00+01:00',
+                endDate: '2015-05-26T20:30:00+01:00',
+                text: 'b'
+            }],
+            startDayHour: 7,
+            currentDate: new Date(2015, 4, 25),
+            timeZone: -8,
+            height: 500,
+            currentView: 'week',
+            firstDayOfWeek: 1
+        });
+
+        const $element = scheduler.root.getElement();
+        let $appt = $element.find(CLASSES.appointment);
+        const cellHeight = $element.find(CLASSES.dateTableCell).eq(0).get(0).getBoundingClientRect().height;
+        const apptPosition = translator.locate($appt.eq(0));
+        const clientTzOffset = new Date('2015-05-27T23:00:00+01:00').getTimezoneOffset() / 60;
+
+        const cellsCount = (new Date(
+            new Date('2015-05-27T23:00:00+01:00').setHours(
+                new Date('2015-05-27T23:00:00+01:00').getHours() + clientTzOffset - 8)).getHours() - 7) * 2;
+
+        assert.equal($appt.length, 2, 'Appts are OK');
+        assert.roughEqual(apptPosition.top, cellHeight * cellsCount, 2.001, 'Appt top offset is OK');
+
+        scheduler.option({
+            currentView: 'day',
+            currentDate: new Date(2015, 4, 26)
+        });
+
+        $appt = $element.find(CLASSES.appointment);
+        assert.equal($appt.length, 1, 'Appts are OK on the Day view');
+    });
+
+    test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0(T396719)', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'Stand-up meeting',
+                startDate: new Date(2015, 4, 25, 17),
+                endDate: new Date(2015, 4, 25, 17, 30),
+                startDateTimeZone: 'America/Lima', // -5
+                endDateTimeZone: 'America/Lima'
+            }],
+            startDayHour: 10,
+            currentDate: new Date(2015, 4, 25),
+            timeZone: 'America/Dawson_Creek', // -7
+            height: 500,
+            currentView: 'week',
+            firstDayOfWeek: 1
+        });
+
+        const apptCount = scheduler.root.getElement().find(CLASSES.appointment).length;
+
+        assert.equal(apptCount, 0, 'There are not appts');
+    });
+
+    test('Recurring appointment icon should be visible on the month view', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [
+                {
+                    text: 'Appt',
+                    startDate: new Date(2015, 1, 9, 1),
+                    endDate: new Date(2015, 1, 9, 10),
+                    recurrenceRule: 'FREQ=DAILY'
+                }
+            ],
+            currentDate: new Date(2015, 1, 9),
+            timeZone: 'America/Los_Angeles',
+            views: ['month'],
+            currentView: 'month',
+            height: 800
+        });
+
+        // this.clock.tick(); TODO
+
+        const $appointment = $(scheduler.root.getElement()).find(CLASSES.appointment).eq(0);
+        const $recurringIcon = $appointment.find('.dx-scheduler-appointment-recurrence-icon');
+
+        assert.ok($recurringIcon.parent().hasClass('dx-scheduler-appointment-content'), 'Recurring icon is visible');
+    });
 });
 
 module('Appointment popup', moduleConfig, () => {
@@ -605,6 +723,40 @@ module('Appointment popup', moduleConfig, () => {
             });
         });
     });
+
+    [5, 'Asia/Ashkhabad'].forEach(timeZone => {
+        test(`Appointment startDate and endDate should be correct in the details view, if custom timeZone='${timeZone}' is setting`,
+            function(assert) {
+                const startDate = new Date(2015, 3, 11, 11);
+                const endDate = new Date(2015, 3, 11, 11, 30);
+
+                const appointment = {
+                    text: 'Task 1',
+                    Start: startDate,
+                    End: endDate
+                };
+
+                const scheduler = createWrapper({
+                    timeZone,
+                    dataSource: new DataSource({
+                        store: [appointment]
+                    }),
+                    currentDate: new Date(2015, 3, 23),
+                    startDateExpr: 'Start',
+                    endDateExpr: 'End'
+                });
+
+
+                scheduler.instance.showAppointmentPopup(appointment);
+
+                const detailsForm = scheduler.instance.getAppointmentDetailsForm();
+                const formData = detailsForm.option('formData');
+                const deltaTz = getDeltaTz(5, startDate);
+
+                assert.deepEqual(formData.Start, new Date(startDate.getTime() + deltaTz), 'start date is correct');
+                assert.deepEqual(formData.End, new Date(endDate.getTime() + deltaTz), 'end date is correct');
+            });
+    });
 });
 
 const oldModuleConfig = {
@@ -647,6 +799,279 @@ module('Oll tests', oldModuleConfig, () => {
         const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(9);
 
         assert.roughEqual($appointment.outerWidth(), $cell.outerWidth() * 2, 2.001, 'Task has a right width');
+    });
+
+    test('Appointments should have correct size with custom time zone & hourly bounds', function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2015, 4, 25),
+            startDayHour: 8,
+            endDayHour: 18,
+            views: ['day'],
+            currentView: 'day',
+            firstDayOfWeek: 1,
+            dataSource: [{
+                text: 'Approve New Online Marketing Strategy',
+                startDate: new Date(2015, 4, 25, 8),
+                endDate: new Date(2015, 4, 25, 12),
+                startDateTimeZone: 'Africa/Brazzaville',
+                endDateTimeZone: 'Africa/Brazzaville'
+            }, {
+                text: 'Stand-up meeting',
+                startDate: new Date(2015, 4, 25, 18),
+                endDate: new Date(2015, 4, 25, 20),
+                startDateTimeZone: 'Africa/Brazzaville',
+                endDateTimeZone: 'Africa/Brazzaville'
+            }],
+            timeZone: 'Africa/Brazzaville' // +1
+        });
+
+        const rootElement = scheduler.root.getElement();
+
+        const $appointments = rootElement.find(CLASSES.appointment);
+        const $first = $appointments.eq(0);
+        const $second = $appointments.eq(1);
+        const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).outerHeight();
+
+        assert.roughEqual($first.outerHeight(), cellHeight * 4, 2.001, 'Appointment height is correct');
+        assert.roughEqual($second.outerHeight(), cellHeight * 4, 2.001, 'Appointment height is correct');
+
+        assert.equal($first.find('.dx-scheduler-appointment-content-date').eq(0).text(), '6:00 AM - 10:00 AM', 'First appointment is correct');
+        assert.equal($second.find('.dx-scheduler-appointment-content-date').eq(0).text(), '4:00 PM - 6:00 PM', 'Second appointment is correct');
+    });
+
+    test('Appointment should be rendered correctly if timeZones is changed', function(assert) {
+        const appointments = [{
+            startDate: new Date(2015, 1, 4, 5).toString(),
+            endDate: new Date(2015, 1, 4, 6).toString(),
+            text: 'abc'
+        }];
+
+        const scheduler = createWrapper({
+            currentDate: new Date(2015, 1, 4),
+            views: ['day'],
+            currentView: 'day',
+            firstDayOfWeek: 1,
+            dataSource: appointments,
+            startDayHour: 5,
+            timeZone: 3
+        });
+
+        scheduler.instance.option('timeZone', 4);
+
+        const rootElement = scheduler.instance.$element();
+        const $appointment = $(rootElement).find(CLASSES.appointment).eq(0);
+        const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).outerHeight();
+
+        assert.roughEqual($appointment.position().top, cellHeight * 2, 2.001, 'Appointment top is correct');
+    });
+
+    test('Appointment should be rendered correctly when appointment timeZone was set', function(assert) {
+        const appointments = [{
+            startDate: new Date(2015, 1, 4, 5).toString(),
+            startDateTimeZone: 'Asia/Calcutta', // +05:30
+            endDateTimeZone: 'Asia/Calcutta',
+            endDate: new Date(2015, 1, 4, 6).toString(),
+            text: 'abc'
+        }];
+
+        const scheduler = createWrapper({
+            currentDate: new Date(2015, 1, 4),
+            views: ['day'],
+            currentView: 'day',
+            firstDayOfWeek: 1,
+            dataSource: appointments
+        });
+        const cellHeight = scheduler.workSpace.getCellHeight();
+        const resultDate = `${dateLocalization.format(new Date(2015, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2015, 1, 4, 6), 'shorttime')}`;
+
+        assert.equal(scheduler.appointments.getDateText(), resultDate, 'Appointment content has correct dates');
+        assert.deepEqual(scheduler.appointments.getAppointmentPosition(), {
+            top: 10 * cellHeight,
+            left: 100
+        }, 'Appointment is rendered in right cell');
+    });
+
+    test('AllDay appointment with custom timezone should be resized correctly', function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2015, 5, 12),
+            views: ['week'],
+            currentView: 'week',
+            editing: true,
+            timeZone: 'America/Araguaina', // -3
+            dataSource: [{
+                text: 'a',
+                startDate: new Date(2015, 5, 8, 10),
+                endDate: new Date(2015, 5, 10, 1),
+                allDay: true
+            }]
+        });
+
+        const rootElement = scheduler.root.getElement();
+
+        const cellWidth = rootElement.find(CLASSES.dateTableCell).eq(0).get(0).getBoundingClientRect().width;
+        let $appointment = rootElement.find(CLASSES.appointment);
+
+        const pointer = pointerMock(rootElement.find('.dx-resizable-handle-right').eq(0)).start();
+
+        pointer.dragStart().drag(cellWidth, 0);
+        pointer.dragEnd();
+
+        $appointment = rootElement.find(CLASSES.appointment).eq(0);
+
+        assert.roughEqual($appointment.outerWidth(), cellWidth * 3, 2.001, 'Appointment width is OK');
+    });
+
+    test('Arguments in event args should be correct when timezone is set(T579457)', function(assert) {
+        const appointment = {
+            startDate: new Date('2017-11-22T14:30:00.000Z'),
+            endDate: new Date('2017-11-22T15:00:00.000Z'),
+            allDay: false,
+            recurrenceRule: 'FREQ=DAILY;COUNT=3',
+            text: ''
+        };
+
+        const scheduler = createWrapper({
+            currentDate: new Date(2017, 10, 22),
+            views: ['week'],
+            currentView: 'week',
+            firstDayOfWeek: 1,
+            onAppointmentClick: function(args) {
+                assert.equal(args.appointmentData.startDate.getTime(), args.targetedAppointmentData.startDate.getTime(), 'Arguments are OK');
+                assert.equal(args.appointmentData.endDate.getTime(), args.targetedAppointmentData.endDate.getTime(), 'Arguments are OK');
+            },
+            timeZone: 'Etc/UTC',
+            dataSource: [appointment]
+        });
+
+        const $appointment = $(scheduler.root.getElement()).find(CLASSES.appointment).eq(0);
+        $appointment.trigger('dxclick');
+    });
+
+    test('Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly(T390801)', function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2015, 5, 12),
+            views: ['week'],
+            currentView: 'week',
+            editing: true,
+            recurrenceEditMode: 'occurrence',
+            timeZone: 'America/Araguaina', // -3
+            dataSource: [{
+                text: 'a',
+                startDate: new Date(2015, 5, 12, 10).toString(),
+                endDate: new Date(2015, 5, 12, 12).toString(),
+                recurrenceRule: 'FREQ=DAILY',
+                startDateTimeZone: 'America/Lima', // -5
+                endDateTimeZone: 'America/Lima'
+            }]
+        });
+
+        const rootElement = scheduler.root.getElement();
+
+        const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).get(0).getBoundingClientRect().height;
+        let $appointments = rootElement.find(CLASSES.appointment);
+        const initialAppointmentTop = $appointments.eq(0).position().top;
+
+        const pointer = pointerMock(rootElement.find('.dx-resizable-handle-bottom').eq(0)).start();
+
+        pointer.dragStart().drag(0, cellHeight);
+        pointer.dragEnd();
+
+        $appointments = rootElement.find(CLASSES.appointment);
+
+        assert.equal($appointments.length, 2, 'Appointment count is OK');
+        assert.equal($appointments.eq(1).position().top, initialAppointmentTop, 'Appointment top is OK');
+        assert.roughEqual($appointments.eq(1).outerHeight(), cellHeight * 5, 2.001, 'Appointment height is OK');
+    });
+
+    [{
+        appointment: {
+            text: 'Stand-up meeting',
+            startDate: new Date(2016, 5, 7, 9),
+            endDate: new Date(2016, 5, 7, 10),
+            startDateTimeZone: 'Europe/Moscow', // +3
+            endDateTimeZone: 'Europe/Moscow',
+            recurrenceRule: 'FREQ=DAILY'
+        },
+        currentDate: new Date(2016, 5, 7),
+        text: 'Recurrence appointment with custom tz that isn\'t equal to scheduler tz should be opened correctly'
+    }, {
+        appointment: {
+            text: 'Stand-up meeting',
+            startDate: '2015-05-25T15:30:00.000Z',
+            endDate: '2015-05-25T15:45:00.000Z',
+            startDateTimeZone: 'America/Phoenix', // -7
+            endDateTimeZone: 'America/Phoenix',
+            recurrenceRule: 'FREQ=DAILY'
+        },
+        currentDate: new Date(2015, 4, 25),
+        text: 'Recurrence appointment with the same custom timezones should be opened correctly'
+    }].forEach(({ appointment, text, currentDate }) => {
+        test(`${text}(T390801)`, function(assert) {
+            const scheduler = createWrapper({
+                currentDate,
+                views: ['week'],
+                currentView: 'week',
+                firstDayOfWeek: 1,
+                recurrenceEditMode: 'occurrence',
+                timeZone: 'America/Phoenix', // -7
+                dataSource: [appointment]
+            });
+
+            const $appointment = $(scheduler.root.getElement()).find(CLASSES.appointment).eq(1);
+
+            $appointment.trigger('dxdblclick');
+            const initialPosition = $appointment.position();
+
+            $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+            const updatedPosition = $(scheduler.root.getElement()).find(CLASSES.appointment).not('.dx-scheduler-appointment-recurrence').position();
+
+            assert.equal(updatedPosition.top, initialPosition.top, 'Top is updated correctly');
+            assert.equal(updatedPosition.left, initialPosition.left, 'Left is updated correctly');
+        });
+    });
+
+    [{
+        timeZone: 'America/Phoenix',
+        appointmentTimeZone: 'America/Lima',
+        text: 'Appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly'
+    }, {
+        timeZone: 'America/Lima',
+        appointmentTimeZone: 'America/Lima',
+        text: 'Appointment with custom tz that is equal to scheduler tz should be resized correctly'
+    }].forEach(testCase => {
+        test(`${testCase.text}(T392414)`, function(assert) {
+            const scheduler = createWrapper({
+                currentDate: new Date(2015, 4, 25),
+                views: ['week'],
+                currentView: 'week',
+                editing: true,
+                recurrenceEditMode: 'occurrence',
+                timeZone: testCase.timeZone,
+                dataSource: [{
+                    text: 'a',
+                    startDate: '2015-05-25T17:00:00.000Z',
+                    endDate: '2015-05-25T17:15:00.000Z',
+                    startDateTimeZone: testCase.appointmentTimeZone,
+                    endDateTimeZone: testCase.appointmentTimeZone
+                }]
+            });
+
+            const rootElement = scheduler.instance.$element();
+
+            const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).outerHeight();
+            let $appointment = rootElement.find(CLASSES.appointment).first();
+            const initialAppointmentTop = $appointment.position().top;
+
+            const pointer = pointerMock(rootElement.find('.dx-resizable-handle-bottom').eq(0)).start();
+            pointer.dragStart().drag(0, cellHeight);
+            pointer.dragEnd();
+
+            $appointment = rootElement.find(CLASSES.appointment).first();
+
+            assert.equal($appointment.position().top, initialAppointmentTop, 'Appointment top is OK');
+            assert.roughEqual($appointment.outerHeight(), cellHeight * 2, 2.001, 'Appointment height is OK');
+
+        });
     });
 
     test('DropDown appointment should be rendered correctly when timezone is set', function(assert) {

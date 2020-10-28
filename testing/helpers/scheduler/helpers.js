@@ -13,6 +13,8 @@ const SCHEDULER_ID = 'scheduler';
 const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 
 export const CLASSES = {
+    root: '.dx-scheduler',
+
     header: '.dx-scheduler-header-panel',
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
@@ -405,6 +407,10 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
     get header() {
         return new HeaderWrapper();
+    }
+
+    get root() {
+        return new ElementWrapper(CLASSES.root);
     }
 
     option(name, value) {
