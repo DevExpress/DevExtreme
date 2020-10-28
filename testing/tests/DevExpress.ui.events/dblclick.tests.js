@@ -89,3 +89,17 @@ QUnit.test('dxdblclick should not be fired if click triggered on another element
     pointerMock($('#element')).click();
     pointerMock($('#otherElement')).click();
 });
+
+QUnit.test('dxdblclick should not be fired for the mixed (real and triggered) clicks (T941819)', function(assert) {
+    assert.expect(0);
+
+    $('#element').on(dblclickEvent.name, () => assert.ok(false));
+
+    pointerMock($('#element'))
+        // NOTE: triggered click
+        .start({ clock: 2222 })
+        .click()
+        // NOTE: real click (the timeStamp is smaller than the previous one)
+        .start({ clock: 1111 })
+        .click();
+});
