@@ -5048,7 +5048,7 @@ QUnit.module('single line mode', {
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
         const scrollBehavior = getScrollBehavior();
-        const isScrollInverted = scrollBehavior.decreasing && !scrollBehavior.positive;
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
         const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
@@ -5067,7 +5067,7 @@ QUnit.module('single line mode', {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         const scrollBehavior = getScrollBehavior();
-        const isScrollInverted = scrollBehavior.decreasing && !scrollBehavior.positive;
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
         const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
@@ -5221,7 +5221,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
 
         const scrollBehavior = getScrollBehavior();
-        const isScrollInverted = scrollBehavior.decreasing && !scrollBehavior.positive;
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
         const scrollSign = scrollBehavior.positive ? 1 : -1;
 
         this.instance.focus();
@@ -5327,7 +5327,7 @@ QUnit.module('keyboard navigation through tags in single line mode', {
 
         const scrollBehavior = getScrollBehavior();
         const scrollSign = scrollBehavior.positive ? 1 : -1;
-        const isScrollInverted = scrollBehavior.decreasing && !scrollBehavior.positive;
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
         const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
         assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
