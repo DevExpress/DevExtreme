@@ -5058,7 +5058,7 @@ QUnit.module('single line mode', {
         this.instance.focus();
         this.instance.blur();
 
-        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1, 'scroll position is correct on focus out');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'scroll position is correct on focus out');
     });
 
     QUnit.test('tags container should be scrolled to the end on focusin in the RTL mode (T390041)', function(assert) {
@@ -5177,14 +5177,14 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('right');
 
         let $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1.01, 'focused tag is visible');
 
         this.keyboard
             .press('right')
             .press('right');
 
         $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1.01, 'focused tag is visible');
     });
 
     QUnit.test('tags container should be scrolled to the end after the last tag loses focus during navigation to the right', function(assert) {
@@ -5295,13 +5295,13 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('left')
             .press('left');
 
-        assert.roughEqual(this.getFocusedTag().position().left, 0, 1, 'focused tag is not hidden at left');
+        assert.roughEqual(this.getFocusedTag().position().left, 0, 1.01, 'focused tag is not hidden at left');
 
         this.keyboard
             .press('left')
             .press('left');
 
-        assert.roughEqual(this.getFocusedTag().position().left, 0, 1, 'focused tag is not hidden at left');
+        assert.roughEqual(this.getFocusedTag().position().left, 0, 1.01, 'focused tag is not hidden at left');
     });
 
     QUnit.test('tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode', function(assert) {

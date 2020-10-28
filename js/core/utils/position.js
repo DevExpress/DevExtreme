@@ -1,8 +1,7 @@
 import domAdapter from '../dom_adapter';
 import config from '../config';
+import callOnce from './call_once';
 import typeUtils from '../utils/type';
-
-let cachedScrollBehavior;
 
 const getDefaultAlignment = function(isRtlEnabled) {
     const rtlEnabled = isRtlEnabled ?? config().rtlEnabled;
@@ -37,11 +36,7 @@ const getBoundingRect = (element) => {
     return rect;
 };
 
-function getScrollBehavior() {
-    if(cachedScrollBehavior) {
-        return cachedScrollBehavior;
-    }
-
+const getScrollBehavior = callOnce(function() {
     const document = domAdapter.getDocument();
 
     /* Append a RTL scrollable 1px square containing a 2px-wide child and check
@@ -51,19 +46,19 @@ function getScrollBehavior() {
        height: 1px;'><div style='width: 2px; height: 1px;'></div></div>`);
 
     const scroller = document.body.lastElementChild;
-    const initially_positive = scroller.scrollLeft > 0;
+    const initiallyPositive = scroller.scrollLeft > 0;
     scroller.scrollLeft = -1;
-    const has_negative = scroller.scrollLeft < 0;
+    const hasNegative = scroller.scrollLeft < 0;
 
     const result = {
-        'decreasing': has_negative || initially_positive,
-        'positive': !has_negative
+        'decreasing': hasNegative || initiallyPositive,
+        'positive': !hasNegative
     };
 
     document.body.removeChild(scroller);
 
-    return cachedScrollBehavior = result;
-}
+    return result;
+});
 
 exports.getDefaultAlignment = getDefaultAlignment;
 exports.getBoundingRect = getBoundingRect;
