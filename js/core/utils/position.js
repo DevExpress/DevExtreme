@@ -2,6 +2,8 @@ import domAdapter from '../dom_adapter';
 import config from '../config';
 import typeUtils from '../utils/type';
 
+let cachedScrollBehavior;
+
 const getDefaultAlignment = function(isRtlEnabled) {
     const rtlEnabled = isRtlEnabled ?? config().rtlEnabled;
 
@@ -36,6 +38,10 @@ const getBoundingRect = (element) => {
 };
 
 function getScrollBehavior() {
+    if(cachedScrollBehavior) {
+        return cachedScrollBehavior;
+    }
+
     const document = domAdapter.getDocument();
 
     /* Append a RTL scrollable 1px square containing a 2px-wide child and check
@@ -56,7 +62,7 @@ function getScrollBehavior() {
 
     document.body.removeChild(scroller);
 
-    return result;
+    return cachedScrollBehavior = result;
 }
 
 exports.getDefaultAlignment = getDefaultAlignment;
