@@ -123,7 +123,7 @@ $generic-treeview-toggle-item-visibility-offset: -4px;
   padding: $generic-treeview-item-padding;
   min-height: $generic-treeview-min-item-height;
 
-  .dx-icon {
+  .dx-treeview-item-content > .dx-icon {
     @include dx-icon-sizing($generic-base-icon-size);
   }
 

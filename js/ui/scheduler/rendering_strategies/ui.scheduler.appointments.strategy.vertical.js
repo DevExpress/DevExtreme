@@ -123,15 +123,34 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
         return sourceAppointmentHeight;
     }
 
+    _getTailHeight(appointmentGeometry, appointmentSettings) {
+        const workspace = this.instance.getWorkSpace();
+
+        if(!workspace.isVirtualScrolling()) {
+            return appointmentGeometry.sourceAppointmentHeight - appointmentGeometry.reducedHeight;
+        }
+
+        const groupTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
+        const allDayPanelOffset = this.instance.fire('getOffsetByAllDayPanel', appointmentSettings.groupIndex);
+        const cellHeight = workspace.getCellHeight();
+        const groupHeight = cellHeight * workspace._getRowCount();
+        const appointmentGroupTopOffset = appointmentSettings.top - groupTop - allDayPanelOffset;
+        const { sourceAppointmentHeight } = appointmentGeometry;
+
+        const tailHeight = appointmentGroupTopOffset + sourceAppointmentHeight - groupHeight;
+
+        return tailHeight;
+    }
+
     _getAppointmentParts(appointmentGeometry, appointmentSettings) {
-        let tailHeight = appointmentGeometry.sourceAppointmentHeight - appointmentGeometry.reducedHeight;
+        let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
         const width = appointmentGeometry.width;
         const result = [];
-        let currentPartTop = this.instance.fire('getGroupTop', appointmentSettings.groupIndex);
+        let currentPartTop = Math.max(0, this.instance.fire('getGroupTop', appointmentSettings.groupIndex));
         const offset = this.instance.fire('isGroupedByDate') ? this.getDefaultCellWidth() * this.instance.fire('getGroupCount') : this.getDefaultCellWidth();
         const left = appointmentSettings.left + offset;
 
-        if(tailHeight) {
+        if(tailHeight > 0) {
             const minHeight = this.getAppointmentMinSize();
 
             if(tailHeight < minHeight) {

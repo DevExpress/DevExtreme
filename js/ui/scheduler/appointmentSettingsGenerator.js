@@ -41,12 +41,17 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         }
 
         let gridAppointmentList = this._createGridAppointmentList(appointmentList);
-        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
+        this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
 
         gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
 
-        const allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
-        return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
+        return this._createAppointmentInfos(gridAppointmentList, itemResources, this._isAllDayAppointment(rawAppointment));
+    }
+
+    _isAllDayAppointment(rawAppointment) {
+        const scheduler = this.scheduler;
+
+        return scheduler.appointmentTakesAllDay(rawAppointment) && scheduler._workSpace.supportAllDayRow();
     }
 
     _createAppointments(appointment, resources) {
@@ -254,9 +259,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _cropAppointmentsByStartDayHour(appointments, rawAppointment) {
-        return appointments.map(appointment => {
+        appointments.forEach(appointment => {
             const startDate = new Date(appointment.startDate);
-            const firstViewDate = this._getAppointmentFirstViewDate(appointment, startDate);
+            const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
             const startDayHour = this._getViewStartDayHour(firstViewDate);
 
             appointment.startDate = this._getAppointmentResultDate({
@@ -266,8 +271,6 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 startDayHour,
                 firstViewDate
             });
-
-            return appointment;
         });
     }
     _getAppointmentFirstViewDate() {
@@ -358,17 +361,17 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         return firstViewDate.getHours();
     }
 
-    _getAppointmentFirstViewDate(appointment, startDate) {
-        const workspace = this.scheduler.getWorkSpace();
+    _getAppointmentFirstViewDate(appointment, rawAppointment) {
+        const { viewDataProvider } = this.scheduler.getWorkSpace();
         const { groupIndex } = appointment.source;
-        const { viewDataProvider } = workspace;
+        const {
+            startDate,
+            endDate
+        } = appointment;
 
-        let firstViewDate = viewDataProvider.getGroupCellStartDate(groupIndex, startDate);
-        if(!firstViewDate) {
-            firstViewDate = viewDataProvider.getGroupStartDate(groupIndex);
-        }
+        const allDay = this._isAllDayAppointment(rawAppointment);
 
-        return firstViewDate;
+        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, allDay);
     }
 
     _getGroupDateRange(groupIndex) {

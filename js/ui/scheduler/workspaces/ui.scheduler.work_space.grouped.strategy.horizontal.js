@@ -107,7 +107,7 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
     }
 
     getVerticalMax(groupIndex) {
-        return this._workSpace.getMaxAllowedVerticalPosition()[0];
+        return this._workSpace.getMaxAllowedVerticalPosition(0);
     }
 
     calculateTimeCellRepeatCount() {

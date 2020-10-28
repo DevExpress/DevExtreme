@@ -29,7 +29,7 @@
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "devexpress-diagram": "2.0.1",
-    "devexpress-gantt": "2.0.0",
+    "devexpress-gantt": "2.0.1",
     "jszip": "^2.0.0 || ^3.0.0",
     "devextreme-quill": "^0.9.5",
     "rrule": "2.6.6",
@@ -65,7 +65,7 @@
     "cssom": "^0.4.4",
     "del": "^2.2.2",
     "devextreme-cldr-data": "^1.0.2",
-    "devextreme-generator": "1.0.130",
+    "devextreme-generator": "1.0.131",
     "devextreme-internal-tools": "stable",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",

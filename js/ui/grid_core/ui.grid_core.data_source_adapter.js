@@ -213,6 +213,8 @@ export default gridCore.Controller.inherit((function() {
             const keyInfo = this._getKeyInfo();
             const dataSource = this._dataSource;
             const groupCount = gridCore.normalizeSortingInfo(this.group()).length;
+            const totalCount = this.totalCount();
+            const isVirtualMode = this.option('scrolling.mode') === 'virtual';
 
             changes = changes.filter(function(change) {
                 return !dataSource.paginate() || change.type !== 'insert' || change.index !== undefined;
@@ -237,7 +239,7 @@ export default gridCore.Controller.inherit((function() {
                 useInsertIndex: true
             });
 
-            if(this._currentTotalCount > 0) {
+            if(this._currentTotalCount > 0 || isVirtualMode && totalCount === oldItemCount) {
                 this._skipCorrection += getItemCount() - oldItemCount;
             }
 
@@ -547,7 +549,7 @@ export default gridCore.Controller.inherit((function() {
             return this._isLastPage;
         },
         totalCount: function() {
-            return parseInt(this._currentTotalCount + this._skipCorrection || this._dataSource.totalCount());
+            return parseInt((this._currentTotalCount || this._dataSource.totalCount()) + this._skipCorrection);
         },
         itemsCount: function() {
             return this._dataSource.items().length;

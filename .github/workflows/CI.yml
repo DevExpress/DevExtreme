@@ -1,4 +1,4 @@
-name: QUnit IE
+name: QUnit tests
 
 on: [push, pull_request]
 
@@ -6,6 +6,7 @@ jobs:
   test:
     strategy:
       matrix:
+        BROWSER: [ IE, MSEdge ]
         CONSTEL: [ export, misc, ui, ui.widgets, ui.editors, ui.grid, ui.scheduler, viz, renovation ]
         JQUERY: [ jquery=3, nojquery=true ]
 
@@ -38,6 +39,7 @@ jobs:
       env:
         CONSTEL: ${{ matrix.CONSTEL }}
         JQUERY: ${{ matrix.JQUERY }}
+        BROWSER: ${{ matrix.BROWSER }}
       run: |
         $runner = Start-Process -FilePath dotnet -ArgumentList './testing/runner/bin/runner.dll --single-run' -PassThru -NoNewWindow
         Write-Host "Runner starting"
@@ -60,8 +62,15 @@ jobs:
         }
         Write-Host "Runner started"
         $url = "$runner_host/run?notimers=true&$env:JQUERY&constellation=$env:CONSTEL"
-        & "C:\Program Files\Internet Explorer\iexplore.exe" "$url"
-        Write-Host "IE started"
+        $browser = $env:BROWSER
+        $browserPaths = @{
+          IE = "C:\Program Files\Internet Explorer\iexplore.exe";
+          MSEdge = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe";
+        }
+        $browserPath = $browserPaths[$browser].ToString()
+        Write-Host "Starting $browserPath with $url"
+        Start-Process -File "$browserPath" -ArgumentList "$url"
+        Write-Host "$browser started"
         Wait-Process -InputObject $runner
         Write-Host "Runner finished"
         exit $runner.ExitCode

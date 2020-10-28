@@ -707,6 +707,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._viewDataProvider = null;
         this._virtualSelectionState = null;
         this._activeStateUnit = CELL_SELECTOR;
+        this._maxAllowedVerticalPosition = [];
+        this._maxAllowedPosition = [];
 
         super._init();
 
@@ -1239,6 +1241,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     renovatedRenderSupported() { return false; }
 
     renderRWorkspace(isGenerateNewViewData = true) {
+        this._cleanAllowedPositions();
+
         this.viewDataProvider.update(isGenerateNewViewData);
 
         this.renderRAllDayPanel();
@@ -2490,8 +2494,8 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _cleanAllowedPositions() {
-        delete this._maxAllowedVerticalPosition;
-        delete this._maxAllowedPosition;
+        this._maxAllowedVerticalPosition = [];
+        this._maxAllowedPosition = [];
     }
 
     supportAllDayRow() {
@@ -2793,7 +2797,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     getMaxAllowedPosition() {
-        if(!this._maxAllowedPosition) {
+        if(this._maxAllowedPosition.length === 0) {
             const isRtl = this.option('rtlEnabled');
 
             this._maxAllowedPosition = [];
@@ -2817,23 +2821,54 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this._maxAllowedPosition;
     }
 
-    getMaxAllowedVerticalPosition() {
-        if(!this._maxAllowedVerticalPosition) {
-            const that = this;
-            this._maxAllowedVerticalPosition = [];
+    getMaxAllowedVerticalPosition(groupIndex) {
+        if(this.isVirtualScrolling()) {
+            return this.getMaxAllowedVerticalPositionVirtual(groupIndex);
+        }
 
-            const rows = this._getRowCount();
+        return this.getMaxAllowedVerticalPositionStandard(groupIndex);
+    }
+
+    getMaxAllowedVerticalPositionStandard(groupIndex) {
+        if(this._maxAllowedVerticalPosition.length === 0) {
+            const rowCount = this._getRowCount();
             this._$dateTable
-                .find(`tr:not(.${VIRTUAL_ROW_CLASS}):nth-child(${rows}n)`)
-                .each(function(_, row) {
+                .find(`tr:not(.${VIRTUAL_ROW_CLASS}):nth-child(${rowCount}n)`)
+                .each((_, row) => {
 
                     const maxPosition = $(row).position().top + getBoundingRect(row).height;
 
-                    that._maxAllowedVerticalPosition.push(Math.round(maxPosition));
+                    this._maxAllowedVerticalPosition.push(Math.round(maxPosition));
                 });
         }
 
-        return this._maxAllowedVerticalPosition;
+        return this._maxAllowedVerticalPosition[groupIndex];
+    }
+
+    // TODO - virtual scrolling strategy
+    getMaxAllowedVerticalPositionVirtual(groupIndex) {
+        const getMaxPosition = rowIndex => {
+            const row = this._$dateTable
+                .find(`tr:not(.${VIRTUAL_ROW_CLASS})`)
+                .get(rowIndex);
+
+            let maxPosition = $(row).position().top + getBoundingRect(row).height;
+
+            // TODO remove while refactoring dual calculcations.
+            // Should decrease allDayPanel amount due to the dual calculation corrections.
+            if(this.isGroupedAllDayPanel()) {
+                maxPosition -= (groupIndex + 1) * this.getAllDayHeight();
+            }
+
+            this._maxAllowedVerticalPosition[groupIndex] = Math.round(maxPosition);
+        };
+
+        if(!this._maxAllowedVerticalPosition[groupIndex]) {
+            const { rowIndex } = this.viewDataProvider.getLasGroupCellPosition(groupIndex);
+            getMaxPosition(rowIndex);
+        }
+
+        return this._maxAllowedVerticalPosition[groupIndex];
     }
 
     getFixedContainer() {

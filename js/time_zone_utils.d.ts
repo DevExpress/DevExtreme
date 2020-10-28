@@ -26,7 +26,7 @@ export interface dxSchedulerTimeZone {
  * @param1 date:Date|undefined
  * @return Array<dxSchedulerTimeZone>
  * @namespace DevExpress.utils
- * @module utils
+ * @module time_zone_utils
  * @export getTimeZones
  * @static
  * @prevFileNamespace DevExpress

@@ -80,7 +80,12 @@ export class DomComponentWrapper extends JSXComponent<DomComponentWrapperProps, 
   config?: ConfigContextValue;
 
   get properties(): Record<string, unknown> {
-    const { itemTemplate, valueChange, ...restProps } = this.props.componentProps;
+    const {
+      itemTemplate,
+      valueChange,
+      ...restProps
+    } = this.props.componentProps;
+
     const properties = ({
       rtlEnabled: this.config?.rtlEnabled || false, // widget expects boolean
       ...restProps,

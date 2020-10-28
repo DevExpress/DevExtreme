@@ -8,20 +8,35 @@ import { DomComponentWrapper } from '../common/dom_component_wrapper';
 jest.mock('../../../ui/validation_message', () => jest.fn());
 
 describe('ValidationMessage', () => {
-  it('View render', () => {
-    const rootElementRef = { } as HTMLDivElement;
-    const componentProps = new ValidationMessageProps();
-    const props = {
-      props: { ...componentProps, rootElementRef },
-      restAttributes: { 'rest-attributes': 'true' },
-    } as Partial<ValidationMessage>;
-    const tree = shallow(<ValidationMessageView {...props as any} />);
+  describe('View', () => {
+    it('View render', () => {
+      const rootElementRef = { } as HTMLDivElement;
+      const componentProps = new ValidationMessageProps();
+      const props = {
+        props: { rootElementRef },
+        componentProps,
+        restAttributes: { 'rest-attributes': 'true' },
+      } as Partial<ValidationMessage>;
+      const tree = shallow(<ValidationMessageView {...props as any} />);
 
-    expect(tree.find(DomComponentWrapper).props()).toMatchObject({
-      rootElementRef: {},
-      componentProps,
-      componentType: LegacyValidationMessage,
-      'rest-attributes': 'true',
+      expect(tree.find(DomComponentWrapper).props()).toMatchObject({
+        rootElementRef: {},
+        componentProps,
+        componentType: LegacyValidationMessage,
+        'rest-attributes': 'true',
+      });
+    });
+  });
+
+  describe('Logic', () => {
+    it('componentProps', () => {
+      const props = new ValidationMessageProps();
+      const validationMessage = new ValidationMessage({
+        ...props,
+        rootElementRef: {} as unknown as HTMLDivElement,
+      });
+
+      expect(validationMessage.componentProps).toMatchObject(props);
     });
   });
 });
