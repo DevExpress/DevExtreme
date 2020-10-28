@@ -53,6 +53,8 @@ const KEY_SPACE = ' ';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 
 const TIME_TO_WAIT = 500;
+const browserVersion = parseInt(browser.version, 10);
+const isBrowserNewChrome = browser.chrome && browserVersion >= 85;
 
 const moduleSetup = {
     beforeEach: function() {
@@ -5047,9 +5049,9 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit || browser.msie ? 1 : -1;
+        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
 
-        const expectedScrollPosition = (browser.msie || browser.mozilla)
+        const expectedScrollPosition = (browser.msie || browser.mozilla || isBrowserNewChrome)
             ? 0
             : ($container.get(0).scrollWidth - $container.outerWidth()) * sign;
 
@@ -5058,21 +5060,21 @@ QUnit.module('single line mode', {
         this.instance.focus();
         this.instance.blur();
 
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on focus out');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1, 'scroll position is correct on focus out');
     });
 
     QUnit.test('tags container should be scrolled to the end on focusin in the RTL mode (T390041)', function(assert) {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit || browser.msie ? 1 : -1;
+        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
 
-        const expectedScrollPosition = (browser.msie || browser.mozilla)
+        const expectedScrollPosition = (browser.msie || browser.mozilla || isBrowserNewChrome)
             ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
             : 0;
 
         this.instance.focus();
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
     });
 
     QUnit.test('tags container should be scrolled on mobile devices', function(assert) {
@@ -5218,18 +5220,18 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         });
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const isScrollReverted = (browser.msie || browser.mozilla);
-        const sign = browser.webkit || browser.msie ? 1 : -1;
+        const isScrollReverted = (browser.msie || browser.mozilla || isBrowserNewChrome);
+        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
 
         let expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the start');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
 
         this.instance.option('value', this.items);
         expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the start');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the right in the RTL mode', function(assert) {
@@ -5320,11 +5322,11 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('left');
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const isScrollReverted = browser.msie || browser.mozilla;
-        const sign = browser.webkit || browser.msie ? 1 : -1;
+        const isScrollReverted = browser.msie || browser.mozilla || isBrowserNewChrome;
+        const sign = browser.webkit && !isBrowserNewChrome || browser.msie ? 1 : -1;
         const expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the start');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 });
 
