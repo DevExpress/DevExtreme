@@ -3,12 +3,12 @@ import SchedulerWorkSpace from './ui.scheduler.work_space';
 import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
-import { getBoundingRect } from '../../../core/utils/position';
-import windowUtils from '../../../core/utils/window';
 
+import windowUtils from '../../../core/utils/window';
 const toMs = dateUtils.dateToMilliseconds;
 
 const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
+const SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS = 'dx-scheduler-date-time-indicator-simple';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
@@ -19,11 +19,15 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         return this.invoke('convertDateByTimezone', date) || date;
     },
 
-    _needRenderDateTimeIndicator: function() {
+    _isIndicatorVisible: function() {
         const today = this._getToday();
-        const endViewDate = dateUtils.trimTime(this.getEndViewDate());
+        const endViewDate = new Date(this.getEndViewDate());
+        const firstViewDate = new Date(this.getStartViewDate());
 
-        return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+        firstViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+        endViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+
+        return dateUtils.dateInRange(today, firstViewDate, endViewDate);
     },
 
     needRenderDateTimeIndication: function() {
@@ -42,40 +46,50 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
                 this._shader.render();
             }
 
-            if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+            if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
                 const groupCount = this._getGroupCount() || 1;
-                const $container = this._dateTableScrollable.$content();
-                const height = this.getIndicationHeight();
-                const rtlOffset = this._getRtlOffset(this.getCellWidth());
+                const date = this._getToday();
 
-                if(height > 0) {
-                    this._renderIndicator(height, rtlOffset, $container, groupCount);
-                }
+                this._renderIndicator(date, groupCount);
             }
         }
     },
 
-    _renderIndicator(height, rtlOffset, $container, groupCount) {
-        const groupedByDate = this.isGroupedByDate();
-        const repeatCount = groupedByDate ? 1 : groupCount;
+    _isIndicatorSimple: function(i) {
+        return this.isGroupedByDate() && i > 0;
+    },
 
-        for(let i = 0; i < repeatCount; i++) {
-            const $indicator = this._createIndicator($container);
-
-            $indicator.width(groupedByDate ? this.getCellWidth() * groupCount : this.getCellWidth());
-            this._groupedStrategy.shiftIndicator($indicator, height, rtlOffset, i);
+    _renderIndicator: function(date, groupCount) {
+        for(let i = 0; i < groupCount; i++) {
+            const $cell = this.getCellByDate(this._getToday(), i);
+            if($cell.length) {
+                const $indicator = this._createIndicator($cell, this._isIndicatorSimple(i));
+                this._shiftIndicator(date, $cell, $indicator);
+            }
         }
     },
 
-    _createIndicator: function($container) {
+    _shiftIndicator: function(date, $cell, $indicator) {
+        const top = this.getIndicatorTopOffset(date, $cell);
+        $indicator.css('top', top);
+        $indicator.css('left', 0);
+    },
+
+    _createIndicator: function($container, isSimple) {
         const $indicator = $('<div>').addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        isSimple && $indicator.addClass(SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS);
         $container.append($indicator);
 
         return $indicator;
     },
 
-    _getRtlOffset: function(width) {
-        return this.option('rtlEnabled') ? getBoundingRect(this._dateTableScrollable.$content().get(0)).width - this.getTimePanelWidth() - width : 0;
+    getIndicatorTopOffset: function(date, $cell) {
+        const cellHeight = this.getCellHeight();
+        const cellDate = this.getCellData($cell).startDate;
+        const duration = date.getTime() - cellDate.getTime();
+        const cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellHeight;
     },
 
     _setIndicationUpdateInterval: function() {
@@ -136,7 +150,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         const cellHeight = this.getCellHeight();
         const date = new Date(this._firstViewDate);
 
-        if(this._needRenderDateTimeIndicator()) {
+        if(this._isIndicatorVisible()) {
             date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
         }
 
@@ -158,7 +172,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _isCurrentTime: function(date) {
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
             const today = this._getToday();
             let result = false;
             date = new Date(date);
@@ -181,7 +195,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         let result = false;
 
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
             const date = this._getDateByIndex(headerIndex);
             const now = this.option('indicatorTime') || new Date();
 
