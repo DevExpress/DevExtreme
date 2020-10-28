@@ -323,8 +323,16 @@ export default class ViewDataProvider {
         return dateTable[lastRowIndex][lastCellIndex].endDate;
     }
 
-    findGroupCellStartDate(groupIndex, startDate, endDate) {
+    findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
         const { dateTable } = this.getGroupData(groupIndex);
+
+        if(isAllDay) {
+            const groupStartDate = this.getGroupStartDate(groupIndex);
+
+            return groupStartDate > startDate
+                ? groupStartDate
+                : startDate;
+        }
 
         for(let i = 0; i < dateTable[0].length; ++i) {
             let cell = dateTable[0][i];

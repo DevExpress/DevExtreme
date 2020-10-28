@@ -370,9 +370,9 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
             endDate
         } = appointment;
 
-        return this._isAllDayAppointment(rawAppointment)
-            ? startDate
-            : viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate);
+        const isAllDay = this._isAllDayAppointment(rawAppointment);
+
+        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay);
     }
 
     _getGroupDateRange(rawAppointment, groupIndex) {
