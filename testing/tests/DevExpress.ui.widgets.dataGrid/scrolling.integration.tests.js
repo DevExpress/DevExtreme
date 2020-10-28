@@ -830,51 +830,6 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         assert.equal(visibleRows[expandedRowVisibleIndex + 1].key, 29, 'Check next row key');
     });
 
-    // T916093
-    ['standard', 'virtual', 'infinite'].forEach(scrollingMode => {
-        QUnit.test(`LoadPanel should be shown during export (scrolling.mode = ${scrollingMode})`, function(assert) {
-            $('#dataGrid').dxDataGrid({
-                height: 400,
-                dataSource: {
-                    load: function(loadOptions) {
-                        const d = $.Deferred();
-
-                        const data = [];
-                        const start = loadOptions.skip || 0;
-                        const end = loadOptions.skip + loadOptions.take || 1000;
-                        for(let i = start; i < end; i++) {
-                            data.push({
-                                id: i + 1
-                            });
-                        }
-
-                        setTimeout(function() {
-                            d.resolve({ data: data, totalCount: 1000 });
-                        }, 2000);
-
-                        return d;
-                    }
-                },
-                remoteOperations: true,
-                scrolling: {
-                    mode: scrollingMode
-                },
-                export: {
-                    enabled: true
-                }
-            });
-
-            this.clock.tick(4500);
-
-            $('.dx-datagrid-export-button').trigger('dxclick');
-
-            this.clock.tick(1000);
-            const $loadPanel = $('.dx-loadpanel');
-
-            assert.notOk($loadPanel.hasClass('dx-state-invisible'), 'load panel is visible');
-        });
-    });
-
     // T745930
     QUnit.test('Native scrollbars should not be visible if columns are not hidden by hidingPriority', function(assert) {
         // arrange, act
