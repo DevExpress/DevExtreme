@@ -111,7 +111,7 @@ type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' 
   jQuery: { register: true },
   view: viewFunction,
 })
-export class ScrollView extends JSXComponent<ScrollViewPropsType, 'onScroll'>() {
+export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() containerRef!: HTMLDivElement;
