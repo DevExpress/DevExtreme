@@ -55,8 +55,10 @@ $(function(){
         dropZone.classList.toggle("dropzone-active", isActive);
     }
 
-    function toggleImageVisible (visible) {
+    function toggleImageVisible(visible) {
         const dropZoneImage = document.getElementById("dropzone-image");
         dropZoneImage.hidden = !visible;
     }
+
+    document.getElementById("dropzone-image").onload = () => toggleImageVisible(true);
 });
