@@ -898,6 +898,163 @@ module('AppointmentSettings', {
                 });
             });
         });
+
+
+        [
+            {
+                y: 0,
+                appointmentRects: [
+                    { left: -9685, top: -9693, height: 450 }
+                ]
+            },
+            {
+                y: 1000,
+                appointmentRects: [
+                    { left: -9685, top: -10093, height: 850 }
+                ]
+            },
+            {
+                y: 2500,
+                appointmentRects: [
+                    { left: -9685, top: -9743, height: 500 }
+                ]
+            },
+            {
+                y: 4500,
+                appointmentRects: [
+                    { left: -9685, top: -10093, height: 450 }
+                ]
+            }
+        ].forEach(option => {
+            test(`Appointment with multiple resources should be rendered correctly if vertical grouping and scrollY: ${option.y}`, function(assert) {
+                const data = [{
+                    startDate: new Date(2020, 9, 12, 1, 30),
+                    endDate: new Date(2020, 9, 12, 22, 30),
+                    priorityId: [1, 2],
+                }];
+                this.createInstance({
+                    dataSource: data,
+                    views: [{
+                        type: 'week',
+                        groupOrientation: 'vertical'
+                    }],
+                    currentView: 'week',
+                    currentDate: new Date(2020, 9, 12),
+                    groups: ['priorityId'],
+                    resources: [{
+                        fieldExpr: 'priorityId',
+                        allowMultiple: true,
+                        dataSource: [{ id: 1 }, { id: 2 }]
+                    }],
+                    scrolling: { mode: 'virtual' },
+                    height: 500,
+                });
+
+                const { instance } = this.scheduler;
+                const workspace = instance.getWorkSpace();
+                const scrollable = workspace.getScrollable();
+
+                workspace.virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+                scrollable.scrollTo({ y: option.y });
+
+                checkResultByDeviceType(assert, () => {
+                    assert.equal(
+                        this.scheduler.appointments.getAppointmentCount(),
+                        option.appointmentRects.length,
+                        'Appointment count is correct'
+                    );
+
+                    option.appointmentRects.forEach((expectedRect, index) => {
+                        const appointmentRect = this.scheduler.appointments
+                            .getAppointment(index)
+                            .get(0)
+                            .getBoundingClientRect();
+
+                        assert.deepEqual({
+                            left: appointmentRect.left,
+                            top: appointmentRect.top,
+                            height: appointmentRect.height
+                        },
+                        expectedRect,
+                        `appointment part #${index} rect is correct`
+                        );
+                    });
+                });
+            });
+        });
+
+        [
+            {
+                y: 0,
+                appointmentRects: [
+                    { left: -9835, top: -9689, height: 500 },
+                    { left: -9387, top: -9689, height: 500 }
+                ]
+            },
+            {
+                y: 1000,
+                appointmentRects: [
+                    { left: -9835, top: -10039, height: 850 },
+                    { left: -9387, top: -10039, height: 850 }
+                ]
+            },
+            {
+                y: 2100,
+                appointmentRects: [
+                    { left: -9835, top: -10051, height: 400 },
+                    { left: -9387, top: -10051, height: 400 }
+                ]
+            }
+        ].forEach(option => {
+            test(`Appointment with multiple resources should be rendered correctly if horizontal grouping and scrollY: ${option.y}`, function(assert) {
+                const data = [{
+                    startDate: new Date(2020, 9, 12, 1, 30),
+                    endDate: new Date(2020, 9, 12, 22, 30),
+                    priorityId: [1, 2],
+                }];
+                this.createInstance({
+                    dataSource: data,
+                    currentView: 'week',
+                    currentDate: new Date(2020, 9, 12),
+                    groups: ['priorityId'],
+                    resources: [{
+                        fieldExpr: 'priorityId',
+                        allowMultiple: true,
+                        dataSource: [{ id: 1 }, { id: 2 }]
+                    }],
+                    scrolling: { mode: 'virtual' },
+                    height: 500,
+                });
+
+                const { instance } = this.scheduler;
+                const workspace = instance.getWorkSpace();
+                const scrollable = workspace.getScrollable();
+
+                workspace.virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+                scrollable.scrollTo({ y: option.y });
+
+                checkResultByDeviceType(assert, () => {
+                    assert.equal(
+                        this.scheduler.appointments.getAppointmentCount(),
+                        option.appointmentRects.length,
+                        'Appointment count is correct'
+                    );
+
+                    option.appointmentRects.forEach((expectedRect, index) => {
+                        const appointmentRect = this.scheduler.appointments
+                            .getAppointment(index)
+                            .get(0)
+                            .getBoundingClientRect();
+
+                        assert.roughEqual(expectedRect.left, appointmentRect.left, 2.01, `appointment part #${index} left is correct`);
+                        assert.roughEqual(expectedRect.top, appointmentRect.top, 2.01, `appointment part #${index} top is correct`);
+                        assert.roughEqual(expectedRect.height, appointmentRect.height, 2.01, `appointment part #${index} height is correct`);
+                    });
+                });
+            });
+        });
     });
 
     test('Recurrent appointment should have correct settings in vertical group orientation', function(assert) {
