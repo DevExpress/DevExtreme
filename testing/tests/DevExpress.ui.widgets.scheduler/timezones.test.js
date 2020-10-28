@@ -11,7 +11,10 @@ import dateUtils from 'core/utils/date';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dateLocalization from 'localization/date';
 import translator from 'animation/translator';
+import tooltip from 'ui/tooltip/ui.tooltip';
 import { DataSource } from 'data/data_source/data_source';
+import dataUtils from 'core/element_data';
+import dragEvents from 'events/drag';
 
 const { testStart, test, module } = QUnit;
 
@@ -159,6 +162,39 @@ module('API', moduleConfig, () => {
         const startDate = $appointment.dxSchedulerAppointment('instance').option('startDate');
 
         assert.equal(startDate.getTime(), appointment.startDate.getTime() + timezoneOffset, 'appointment starts in 8AM');
+    });
+
+    test('Appointment date correction should be rollback after closing popup, if custom timeZone was set', function(assert) {
+        const updatedItem = {
+            text: 'Task 1',
+            startDate: new Date(2015, 1, 7, 1),
+            endDate: new Date(2015, 1, 7, 2)
+        };
+        const data = new DataSource({
+            store: [updatedItem]
+        });
+
+        const scheduler = createWrapper({
+            currentView: 'week',
+            currentDate: new Date(2015, 1, 7),
+            dataSource: data,
+            timeZone: 5
+        });
+
+        const updateAppointment = sinon.spy(scheduler.instance, 'updateAppointment');
+        try {
+            scheduler.instance.showAppointmentPopup(updatedItem);
+
+            $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+
+            tooltip.hide();
+
+            assert.ok(updateAppointment.calledOnce, 'Update method is called');
+            assert.deepEqual(updateAppointment.getCall(0).args[0], updatedItem, 'Target item is correct');
+            assert.deepEqual(updateAppointment.getCall(0).args[1], updatedItem, 'New data is correct');
+        } finally {
+            updateAppointment.restore();
+        }
     });
 });
 
@@ -578,6 +614,172 @@ module('Scheduler grid', moduleConfig, () => {
         });
     });
 
+    test('Appointment should have a correct template with custom timezone(T387040)', function(assert) {
+        const clientTzOffset = new Date(2016, 4, 7).getTimezoneOffset() * 60000;
+
+        const scheduler = createWrapper({
+            currentDate: new Date(2016, 4, 7),
+            views: ['week'],
+            currentView: 'week',
+            dataSource: []
+        });
+
+        scheduler.instance.option('dataSource', [{
+            startDate: new Date(Date.UTC(2016, 4, 7, 1)),
+            startDateTimeZone: 'Asia/Yekaterinburg',
+            endDateTimeZone: 'Asia/Yekaterinburg',
+            endDate: new Date(Date.UTC(2016, 4, 7, 1, 30)),
+            text: 'new Date sample'
+        }]);
+
+        const $appt = scheduler.root.getElement().find(CLASSES.appointment);
+        const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
+        const expectedStartDate = new Date(new Date(2016, 4, 7, 1).getTime() - clientTzOffset);
+        const expectedEndDate = new Date(new Date(2016, 4, 7, 1, 30).getTime() - clientTzOffset);
+
+        const assertText = `${dateLocalization.format(expectedStartDate, 'shorttime')} - ${dateLocalization.format(expectedEndDate, 'shorttime')}`;
+        assert.equal($contentDates.first().text(), assertText, 'Date is correct');
+    });
+
+    QUnit.test('Appointment with custom tz should be resized correctly if the scheduler tz is empty(T392414)', function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2015, 11, 25),
+            views: ['day'],
+            currentView: 'day',
+            editing: true,
+            dataSource: [{
+                text: 'a',
+                startDate: '2015-12-25T10:00:00.000Z',
+                endDate: '2015-12-25T10:15:00.000Z',
+                startDateTimeZone: 'America/Lima', // -5
+                endDateTimeZone: 'America/Lima'
+            }]
+        });
+
+        const rootElement = scheduler.getElement();
+
+        const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).outerHeight();
+        let $appointment = rootElement.find(CLASSES.appointment).first();
+        const initialAppointmentTop = $appointment.position().top;
+
+        const pointer = pointerMock(rootElement.find('.dx-resizable-handle-bottom').eq(0)).start();
+        pointer.dragStart().drag(0, cellHeight);
+        pointer.dragEnd();
+
+        $appointment = rootElement.find(CLASSES.appointment).first();
+
+        assert.equal($appointment.position().top, initialAppointmentTop, 'Appointment top is OK');
+        assert.roughEqual($appointment.outerHeight(), cellHeight * 2, 2.001, 'Appointment height is OK');
+    });
+
+    test('Appointment with custom tz that isn\'t equal to scheduler tz should be dragged correctly(T392414)', function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2015, 4, 25),
+            startDayHour: 6,
+            views: ['day'],
+            currentView: 'day',
+            editing: true,
+            recurrenceEditMode: 'occurrence',
+            timeZone: 'America/Phoenix', // -7
+            dataSource: [{
+                text: 'a',
+                startDate: '2015-05-25T17:00:00.000Z',
+                endDate: '2015-05-25T17:15:00.000Z',
+                startDateTimeZone: 'America/Lima', // -5
+                endDateTimeZone: 'America/Lima'
+            }]
+        });
+
+        const rootElement = scheduler.getElement();
+
+        let $appointment = $(rootElement).find(CLASSES.appointment).first();
+        const $cell = $(rootElement).find(CLASSES.dateTableCell).eq(6);
+        const initialAppointmentHeight = $appointment.outerHeight();
+
+        const pointer = pointerMock($appointment).start().down().move(10, 10);
+        $cell.trigger(dragEvents.enter);
+        pointer.up();
+
+        $appointment = rootElement.find(CLASSES.appointment).first();
+
+
+        assert.roughEqual($appointment.position().top, $cell.outerHeight() * 6, 2.001, 'Appointment top is OK');
+        assert.equal($appointment.outerHeight(), initialAppointmentHeight, 'Appointment height is OK');
+
+        const dateText = $appointment.find('.dx-scheduler-appointment-content-date').eq(0).text();
+        const cellData = dataUtils.data($cell.get(0), 'dxCellData');
+        const startDate = cellData.startDate;
+        const endDate = new Date(cellData.startDate.getTime() + 15 * 60 * 1000);
+        const resultDate = `${dateLocalization.format(startDate, 'shorttime')} - ${dateLocalization.format(endDate, 'shorttime')}`;
+
+        assert.equal(dateText, resultDate, 'Appointment date is OK');
+    });
+
+    test('Scheduler should not update scroll position if appointment is visible, when timeZone is set ', function(assert) {
+        // this.clock.restore(); // TODO
+
+        const scheduler = createWrapper({
+            startDayHour: 3,
+            endDayHour: 10,
+            currentDate: new Date(Date.UTC(2015, 1, 9)).toJSON(),
+            dataSource: [],
+            currentView: 'week',
+            height: 500,
+            timeZone: 'Asia/Ashkhabad',
+            width: 1000,
+        });
+
+        const workSpace = scheduler.instance.getWorkSpace();
+
+        try {
+            scheduler.instance.getWorkSpaceScrollable().scrollBy(190);
+
+            const appointment = {
+                startDate: new Date(Date.UTC(2015, 1, 9, 3)).toJSON(),
+                endDate: new Date(Date.UTC(2015, 1, 9, 3, 30)).toJSON(),
+                text: 'caption'
+            };
+
+            const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
+
+            scheduler.instance.showAppointmentPopup(appointment);
+            $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+
+            assert.notOk(scrollToSpy.calledOnce, 'scrollTo was not called');
+        } finally {
+            workSpace.scrollTo.restore();
+        }
+    });
+
+    test('Scheduler should update scroll position if appointment was added to invisible bottom area, timezone is set', function(assert) {
+        const scheduler = createWrapper({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: new DataSource({
+                store: []
+            }),
+            currentView: 'week',
+            height: 300,
+            timezone: 'Asia/Ashkhabad'
+        });
+
+        const appointment = {
+            startDate: new Date(2015, 1, 9, 21),
+            endDate: new Date(2015, 1, 9, 22),
+            text: 'caption 2'
+        };
+        const workSpace = scheduler.instance.getWorkSpace();
+        const scrollToSpy = sinon.spy(workSpace, 'scrollTo');
+
+        try {
+            scheduler.instance.showAppointmentPopup(appointment);
+            $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
+
+            assert.ok(scrollToSpy.calledOnce, 'scrollTo was called');
+        } finally {
+            workSpace.scrollTo.restore();
+        }
+    });
+
     test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0', function(assert) {
         const scheduler = createWrapper({
             dataSource: [{
@@ -617,28 +819,6 @@ module('Scheduler grid', moduleConfig, () => {
 
         $appt = $element.find(CLASSES.appointment);
         assert.equal($appt.length, 1, 'Appts are OK on the Day view');
-    });
-
-    test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0(T396719)', function(assert) {
-        const scheduler = createWrapper({
-            dataSource: [{
-                text: 'Stand-up meeting',
-                startDate: new Date(2015, 4, 25, 17),
-                endDate: new Date(2015, 4, 25, 17, 30),
-                startDateTimeZone: 'America/Lima', // -5
-                endDateTimeZone: 'America/Lima'
-            }],
-            startDayHour: 10,
-            currentDate: new Date(2015, 4, 25),
-            timeZone: 'America/Dawson_Creek', // -7
-            height: 500,
-            currentView: 'week',
-            firstDayOfWeek: 1
-        });
-
-        const apptCount = scheduler.root.getElement().find(CLASSES.appointment).length;
-
-        assert.equal(apptCount, 0, 'There are not appts');
     });
 
     test('Recurring appointment icon should be visible on the month view', function(assert) {
@@ -757,6 +937,27 @@ module('Appointment popup', moduleConfig, () => {
                 assert.deepEqual(formData.End, new Date(endDate.getTime() + deltaTz), 'end date is correct');
             });
     });
+
+    test('Appointment startDate and endDate should be correct in the details view for new appointment, if custom timeZone was set',
+        function(assert) {
+            const scheduler = createWrapper({
+                dataSource: new DataSource({
+                    store: []
+                }),
+                currentDate: new Date(2015, 3, 23),
+                startDateExpr: 'Start',
+                endDateExpr: 'End',
+                timeZone: 'Asia/Calcutta'
+            });
+
+            pointerMock(scheduler.root.getElement().find(CLASSES.dateTableCell).eq(22)).start().click().click();
+
+            const detailsForm = scheduler.instance.getAppointmentDetailsForm();
+            const formData = detailsForm.option('formData');
+
+            assert.deepEqual(formData.Start, new Date(2015, 3, 23, 11), 'start date is correct');
+            assert.deepEqual(formData.End, new Date(2015, 3, 23, 11, 30), 'end date is correct');
+        });
 });
 
 const oldModuleConfig = {
@@ -1123,4 +1324,27 @@ module('Oll tests', oldModuleConfig, () => {
         scheduler.appointments.compact.click();
         assert.equal(scheduler.tooltip.getDateText(), 'September 16 10:00 PM - 11:00 PM', 'Dates are correct');
     });
+
+    test('Appts should be filtered correctly if there is a custom tz and start day hour is not 0(T396719)', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'Stand-up meeting',
+                startDate: new Date(2015, 4, 25, 17),
+                endDate: new Date(2015, 4, 25, 17, 30),
+                startDateTimeZone: 'America/Lima', // -5
+                endDateTimeZone: 'America/Lima'
+            }],
+            startDayHour: 10,
+            currentDate: new Date(2015, 4, 25),
+            timeZone: 'America/Dawson_Creek', // -7
+            height: 500,
+            currentView: 'week',
+            firstDayOfWeek: 1
+        });
+
+        const apptCount = scheduler.getElement().find(CLASSES.appointment).length;
+
+        assert.equal(apptCount, 0, 'There are not appts');
+    });
+
 });

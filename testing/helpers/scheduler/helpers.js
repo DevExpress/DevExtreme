@@ -409,7 +409,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
         return new HeaderWrapper();
     }
 
-    get root() {
+    get root() { // TODO remove
         return new ElementWrapper(CLASSES.root);
     }
 
