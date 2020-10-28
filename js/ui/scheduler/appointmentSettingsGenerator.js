@@ -389,7 +389,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     _updateGroupIndices(appointments, itemResources) {
         const workspace = this.scheduler.getWorkSpace();
         const groupIndices = workspace._isVerticalGroupedWorkSpace()
-            ? workspace._getGroupIndexes(itemResources)
+            ? this._getGroupIndices(itemResources)
             : [0];
 
         groupIndices.forEach(groupIndex => {
