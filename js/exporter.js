@@ -5,7 +5,7 @@ import { ///#DEBUG
     ExcelCreator,
     getData as getExcelData
 } from './exporter/excel_creator';
-import { imageCreator, testFormats, getData as getImageData } from './exporter/image_creator';
+import { imageCreator, testFormats, getData as getImageData, asyncEach } from './exporter/image_creator';
 import { svgCreator, getData as getSvgData } from './exporter/svg_creator';
 import { isFunction as _isFunction } from './core/utils/type';
 import { Deferred } from './core/utils/deferred';
@@ -62,6 +62,9 @@ export const excel = {
 };
 
 export const image = {
+    ///#DEBUG
+    asyncEach,
+    ///#ENDDEBUG
     creator: imageCreator,
     getData: getImageData,
     testFormats: testFormats
