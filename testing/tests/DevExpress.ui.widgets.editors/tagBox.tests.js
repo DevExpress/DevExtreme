@@ -5260,14 +5260,14 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('right');
 
         let $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.outerWidth(true), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
 
         this.keyboard
             .press('right')
             .press('right');
 
         $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.outerWidth(true), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the left in the RTL mode', function(assert) {

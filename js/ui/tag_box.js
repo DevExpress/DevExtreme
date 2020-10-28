@@ -4,7 +4,6 @@ import dataUtils from '../core/element_data';
 import typeUtils from '../core/utils/type';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
-import browser from '../core/utils/browser';
 import { noop, ensureDefined, equalByValue } from '../core/utils/common';
 import { SelectionFilterCreator as FilterCreator } from '../core/utils/selection_filter';
 import { Deferred, when } from '../core/utils/deferred';
@@ -261,7 +260,7 @@ const TagBox = SelectBox.inherit({
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
-            const scrollCorrection = rtlEnabled && browser.msie ? -1 : 1;
+            const scrollCorrection = rtlEnabled && getScrollBehavior().positive ? -1 : 1;
             scrollLeft += scrollOffset * scrollCorrection;
         }
 
