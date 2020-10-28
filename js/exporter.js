@@ -50,6 +50,9 @@ exports.excel = {
 exports.excel.__internals = excelCreator.__internals;
 ///#ENDDEBUG
 exports.image = {
+    ///#DEBUG
+    asyncEach: imageCreator.asyncEach,
+    ///#ENDDEBUG
     creator: imageCreator.imageCreator,
     getData: imageCreator.getData,
     testFormats: imageCreator.testFormats
