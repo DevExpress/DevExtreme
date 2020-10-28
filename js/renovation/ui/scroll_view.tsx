@@ -111,7 +111,7 @@ type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' 
   jQuery: { register: true },
   view: viewFunction,
 })
-export class ScrollView extends JSXComponent<ScrollViewPropsType, 'onScroll'>() {
+export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() containerRef!: HTMLDivElement;
@@ -122,7 +122,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType, 'onScroll'>() 
   }
 
   @Method()
-  scrollBy(distance: any): void { // number | Partial<Location> - https://github.com/DevExpress/devextreme-renovation/issues/519
+  scrollBy(distance: number | Partial<ScrollViewLocation>): void {
     const location = ensureLocation(distance);
 
     if (this.isDirection(DIRECTION_VERTICAL)) {
@@ -134,7 +134,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType, 'onScroll'>() 
   }
 
   @Method()
-  scrollTo(targetLocation: any): void { // number | Partial<Location> - https://github.com/DevExpress/devextreme-renovation/issues/519
+  scrollTo(targetLocation: number | Partial<ScrollViewLocation>): void {
     const location = ensureLocation(targetLocation);
     this.scrollBy({
       left: location.left - this.scrollOffset().left,
@@ -143,7 +143,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType, 'onScroll'>() 
   }
 
   @Method()
-  scrollToElement(element: HTMLElement, offset?: any): void { // offset?: Partial<ScrollOffset> - https://github.com/DevExpress/devextreme-renovation/issues/519
+  scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
     if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
       const scrollOffset = {
         top: 0,
@@ -170,7 +170,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType, 'onScroll'>() 
   }
 
   @Method()
-  scrollOffset(): any { // Location - https://github.com/DevExpress/devextreme-renovation/issues/519
+  scrollOffset(): ScrollViewLocation {
     return {
       left: this.containerRef.scrollLeft,
       top: this.containerRef.scrollTop,
