@@ -651,22 +651,8 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         let $nextCell = $row.find('td').eq(nextColIndex);
         let $targetRow;
 
-        if(isFilterRow) {
-            const $filterMenu = $target.find('.dx-filter-menu');
-            const isFilterMenuFocused = $filterMenu.is(':focus');
-            const isFilterInputFocused = $target.find('input').is(':focus');
-
-            if($filterMenu.length && (isFilterInputFocused && e.shiftKey || isFilterMenuFocused && !e.shiftKey)) {
-                return true;
-            }
-        } else {
-            const $headerFilter = $target.find('.dx-header-filter');
-            const isHeaderFilterFocused = $headerFilter.is(':focus');
-            const isHeaderFocused = $target.is(':focus');
-
-            if($headerFilter.length && (isHeaderFilterFocused && e.shiftKey || isHeaderFocused && !e.shiftKey)) {
-                return true;
-            }
+        if(this._needLeaveFocusInCell($target, isFilterRow, e.shiftKey)) {
+            return true;
         }
 
         if(isTargetInFixedTable) {
@@ -691,25 +677,52 @@ const ColumnHeadersViewFixedColumnsExtender = extend({}, baseFixedColumns, {
             }
 
             if($nextCell.length) {
-                if(isFilterRow) {
-                    this._focusFilterCell($nextCell, !e.shiftKey);
-                } else {
-                    this._focusHeader($nextCell, !e.shiftKey);
-                }
-
-                e.preventDefault();
-
+                this._focusNextCellCore(e, $nextCell, isFilterRow);
                 return true;
             } else {
                 return false;
             }
         }
 
-        if($nextCell.is('.dx-command-expand, .dx-command-edit, .dx-command-select, .dx-command-drag')) {
+        if(this._isCommandColumnCell($nextCell)) {
             return false;
         }
 
         return !$target.is(':last-child');
+    },
+
+    _focusNextCellCore(e, $nextCell, isFilterRow) {
+        if(isFilterRow) {
+            this._focusFilterCell($nextCell, !e.shiftKey);
+        } else {
+            this._focusHeader($nextCell, !e.shiftKey);
+        }
+
+        e.preventDefault();
+    },
+
+    _needLeaveFocusInCell($target, isFilterRow, shiftKey) {
+        if(isFilterRow) {
+            const $filterMenu = $target.find('.dx-filter-menu');
+            const isFilterMenuFocused = $filterMenu.is(':focus');
+            const isFilterInputFocused = $target.find('input').is(':focus');
+
+            if($filterMenu.length && (isFilterInputFocused && shiftKey || isFilterMenuFocused && !shiftKey)) {
+                return true;
+            }
+        } else {
+            const $headerFilter = $target.find('.dx-header-filter');
+            const isHeaderFilterFocused = $headerFilter.is(':focus');
+            const isHeaderFocused = $target.is(':focus');
+
+            if($headerFilter.length && (isHeaderFilterFocused && shiftKey || isHeaderFocused && !shiftKey)) {
+                return true;
+            }
+        }
+    },
+
+    _isCommandColumnCell($cell) {
+        return $cell.is('.dx-command-expand, .dx-command-edit, .dx-command-select, .dx-command-drag');
     },
 
     _getCorrectedColIndex: function(colIndex) {
