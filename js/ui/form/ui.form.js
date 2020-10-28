@@ -868,6 +868,7 @@ const Form = Widget.inherit({
                     this._invalidate();
                 }
                 break;
+            case 'alignRootItemLabels':
             case 'readOnly':
                 break;
             case 'width':
