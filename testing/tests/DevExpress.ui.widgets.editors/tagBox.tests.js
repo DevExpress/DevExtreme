@@ -5290,18 +5290,20 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             this.keyboard.press('right');
         }
 
+        const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
+
         this.keyboard
             .press('left')
             .press('left')
             .press('left');
 
-        assert.roughEqual(this.getFocusedTag().position().left, 0, 1, 'focused tag is not hidden at left');
+        assert.roughEqual(this.getFocusedTag().position().left, $container.scrollLeft(), 1, 'focused tag is not hidden at left');
 
         this.keyboard
             .press('left')
             .press('left');
 
-        assert.roughEqual(this.getFocusedTag().position().left, 0, 1, 'focused tag is not hidden at left');
+        assert.roughEqual(this.getFocusedTag().position().left, $container.scrollLeft(), 1, 'focused tag is not hidden at left');
     });
 
     QUnit.test('tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode', function(assert) {
