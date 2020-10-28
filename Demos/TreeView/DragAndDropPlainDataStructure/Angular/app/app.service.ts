@@ -61,7 +61,7 @@ const itemsDriveC: FileSystemItem[] = [{
     id: '8',
     name: 'Images',
     isDirectory: true,
-    icon: 'file',
+    icon: 'activefolder',
     expanded: true
   }, {
     id: '9',

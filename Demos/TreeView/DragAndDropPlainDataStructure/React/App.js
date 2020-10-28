@@ -23,7 +23,7 @@ class App extends React.Component {
     return (
       <div className="form">
         <div className="drive-panel">
-          <div className="drive-header dx-treeview-item"><i className="dx-icon dx-icon-activefolder"></i><span>Drive C:</span></div>
+          <div className="drive-header dx-treeview-item"><div className="dx-treeview-item-content"><i className="dx-icon dx-icon-activefolder"></i><span>Drive C:</span></div></div>
           <Sortable
             filter=".dx-treeview-item"
             group="shared"
@@ -45,7 +45,7 @@ class App extends React.Component {
           </Sortable>
         </div>
         <div className="drive-panel">
-          <div className="drive-header dx-treeview-item"><i className="dx-icon dx-icon-activefolder"></i><span>Drive D:</span></div>
+          <div className="drive-header dx-treeview-item"><div className="dx-treeview-item-content"><i className="dx-icon dx-icon-activefolder"></i><span>Drive D:</span></div></div>
           <Sortable
             filter=".dx-treeview-item"
             group="shared"

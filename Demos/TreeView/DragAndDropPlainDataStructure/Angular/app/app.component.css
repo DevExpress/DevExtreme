@@ -18,10 +18,6 @@
     cursor: default;
 }
 
-::ng-deep .drive-header .dx-icon {
-    margin-top: -4px;
-}
-
 ::ng-deep .drive-panel {
     padding: 20px 30px;
     font-size: 115%;
