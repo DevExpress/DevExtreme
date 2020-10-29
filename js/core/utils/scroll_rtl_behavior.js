@@ -25,4 +25,4 @@ const getScrollRtlBehavior = callOnce(function() {
     return result;
 });
 
-exports.getScrollRtlBehavior = getScrollRtlBehavior;
+export default getScrollRtlBehavior;
