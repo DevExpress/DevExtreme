@@ -3,7 +3,6 @@ import { DataSource } from 'data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import { createTextElementHiddenCopy } from 'core/utils/dom';
 import ajaxMock from '../../helpers/ajaxMock.js';
-import browser from 'core/utils/browser';
 import config from 'core/config';
 import dataQuery from 'data/query';
 import devices from 'core/devices';
@@ -17,6 +16,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
+import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -4898,32 +4898,33 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit || browser.msie ? 1 : -1;
+        const scrollBehavior = getScrollRtlBehavior();
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
 
-        const expectedScrollPosition = (browser.msie || browser.mozilla)
-            ? 0
-            : ($container.get(0).scrollWidth - $container.outerWidth()) * sign;
+        const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
 
         this.instance.focus();
         this.instance.blur();
 
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on focus out');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'scroll position is correct on focus out');
     });
 
     QUnit.test('tags container should be scrolled to the end on focusin in the RTL mode (T390041)', function(assert) {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit || browser.msie ? 1 : -1;
 
-        const expectedScrollPosition = (browser.msie || browser.mozilla)
-            ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
-            : 0;
+        const scrollBehavior = getScrollRtlBehavior();
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
+
+        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
         this.instance.focus();
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
     });
 
     QUnit.test('tags container should be scrolled on mobile devices', function(assert) {
@@ -5027,14 +5028,14 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('right');
 
         let $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1.01, 'focused tag is visible');
 
         this.keyboard
             .press('right')
             .press('right');
 
         $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1.01, 'focused tag is visible');
     });
 
     QUnit.test('tags container should be scrolled to the end after the last tag loses focus during navigation to the right', function(assert) {
@@ -5069,18 +5070,21 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         });
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const isScrollReverted = (browser.msie || browser.mozilla);
-        const sign = browser.webkit || browser.msie ? 1 : -1;
+
+        const scrollBehavior = getScrollRtlBehavior();
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
 
-        let expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the start');
+        let expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
 
         this.instance.option('value', this.items);
-        expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the start');
+        expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the right in the RTL mode', function(assert) {
@@ -5142,13 +5146,13 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('left')
             .press('left');
 
-        assert.roughEqual(this.getFocusedTag().position().left, 0, 1, 'focused tag is not hidden at left');
+        assert.roughEqual(this.getFocusedTag().position().left, 0, 1.01, 'focused tag is not hidden at left');
 
         this.keyboard
             .press('left')
             .press('left');
 
-        assert.roughEqual(this.getFocusedTag().position().left, 0, 1, 'focused tag is not hidden at left');
+        assert.roughEqual(this.getFocusedTag().position().left, 0, 1.01, 'focused tag is not hidden at left');
     });
 
     QUnit.test('tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode', function(assert) {
@@ -5171,11 +5175,13 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('left');
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const isScrollReverted = browser.msie || browser.mozilla;
-        const sign = browser.webkit || browser.msie ? 1 : -1;
-        const expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the start');
+        const scrollBehavior = getScrollRtlBehavior();
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
+        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 });
 
