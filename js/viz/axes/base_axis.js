@@ -1251,9 +1251,10 @@ Axis.prototype = {
         return length;
     },
 
-    getVisualRangeCenter(range) {
-        const businessRange = this._translator.getBusinessRange();
-        const currentBusinessRange = range || businessRange;
+    getVisualRangeCenter(range, useMerge) {
+        const translator = this.getTranslator();
+        const businessRange = translator.getBusinessRange();
+        const currentBusinessRange = range ? (useMerge ? extend(true, {}, businessRange, range) : range) : businessRange;
         const { type, logarithmBase } = this._options;
         let center;
 
@@ -1269,7 +1270,7 @@ Axis.prototype = {
             const index = Math.ceil(categoriesInfo.categories.length / 2) - 1;
             center = businessRange.categories.indexOf(categoriesInfo.categories[index]);
         } else {
-            center = (currentBusinessRange.maxVisible.valueOf() + currentBusinessRange.minVisible.valueOf()) / 2;
+            center = translator._toValue((currentBusinessRange.maxVisible.valueOf() + currentBusinessRange.minVisible.valueOf()) / 2);
         }
         return center;
     },
@@ -1546,6 +1547,14 @@ Axis.prototype = {
             interval: tickInterval,
             ticks: ticks
         };
+    },
+
+    getTickInterval() {
+        return this._tickInterval;
+    },
+
+    getAggregationInterval() {
+        return this._aggregationInterval;
     },
 
     createTicks: function(canvas) {
@@ -2376,7 +2385,7 @@ Axis.prototype = {
                 categories: previousRange.categories
             };
             const typeIsNotChanged = that.getOptions().type === that._storedZoomEndParams.type;
-            const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange)) : NaN;
+            const shift = typeIsNotChanged ? adjust(that.getVisualRangeCenter() - that.getVisualRangeCenter(previousBusinessRange, false)) : NaN;
             const zoomFactor = typeIsNotChanged ? +(Math.round(that.getVisualRangeLength(previousBusinessRange) / that.getVisualRangeLength() + 'e+2') + 'e-2') : NaN;
             const zoomEndEvent = that.getZoomEndEventArg(previousRange, domEvent, action, zoomFactor, shift);
 

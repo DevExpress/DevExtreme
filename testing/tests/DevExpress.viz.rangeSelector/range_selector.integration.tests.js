@@ -494,7 +494,7 @@ QUnit.test('Range selector with aggregation', function(assert) {
         }
     }).dxRangeSelector('instance');
 
-    assert.deepEqual(rangeSelector.getValue(), [0, 2]);
+    assert.deepEqual(rangeSelector.getValue(), [0, 4]);
 });
 
 QUnit.test('Range selector with aggregation when dataSource is set after widget creation', function(assert) {
@@ -523,7 +523,7 @@ QUnit.test('Range selector with aggregation when dataSource is set after widget 
         ]
     });
 
-    assert.deepEqual(rangeSelector.getValue(), [50, 90]);
+    assert.deepEqual(rangeSelector.getValue(), [50, 100]);
 });
 
 QUnit.test('Range selector with stacked series', function(assert) {

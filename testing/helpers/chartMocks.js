@@ -665,7 +665,7 @@ export const MockSeries = function MockSeries(options) {
         updateDataType: sinon.spy(),
         getViewport: sinon.stub().returns({}),
         getMarginOptions: sinon.stub().returns(options.marginOptions || {}),
-        useAggregation: sinon.stub().returns(false),
+        useAggregation: sinon.stub().returns(!!(options.aggregation && options.aggregation.enabled)),
         usePointsToDefineAutoHiding: sinon.stub().returns(false),
         resetApplyingAnimation: sinon.stub()
     };

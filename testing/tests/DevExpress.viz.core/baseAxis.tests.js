@@ -32,6 +32,13 @@ const environment = {
 
         this.translator = new StubTranslator();
         this.translator.stub('getBusinessRange').returns(new Range());
+        this.translator._toValue = (value) => {
+            if(this.axis._options.argumentType === 'datetime') {
+                return new Date(value);
+            } else {
+                return value;
+            }
+        };
 
         this.canvas = {
             top: 200,
@@ -608,6 +615,130 @@ QUnit.test('Logarithmic axis. calculateInterval - returns difference of logarith
     assert.equal(this.axis.calculateInterval(32, 0.25), 7);
 });
 
+QUnit.test('Get visual range center. Continuous. Numeric', function(assert) {
+    this.updateOptions({
+        type: 'continuous',
+        argumentType: 'numeric'
+    });
+
+    const businessRange = new Range({
+        min: 1,
+        max: 11,
+        minVisible: 1,
+        maxVisible: 11
+    });
+
+    this.axis.setBusinessRange(businessRange);
+    this.translator.getBusinessRange.returns(businessRange);
+
+    assert.equal(this.axis.getVisualRangeCenter(), 6);
+});
+
+QUnit.test('Get visual range center. Continuous. Numeric. Merge ranges', function(assert) {
+    this.updateOptions({
+        type: 'continuous',
+        argumentType: 'numeric'
+    });
+
+    const businessRange = new Range({
+        min: 1,
+        max: 11,
+        minVisible: 1,
+        maxVisible: 11
+    });
+
+    const range = new Range({
+        minVisible: 3,
+        maxVisible: 7
+    });
+
+    this.axis.setBusinessRange(businessRange);
+    this.translator.getBusinessRange.returns(businessRange);
+
+    assert.deepEqual(this.axis.getVisualRangeCenter(range, true), 5);
+});
+
+QUnit.test('Get visual range center. Continuous. DateTime', function(assert) {
+    this.updateOptions({
+        type: 'continuous',
+        argumentType: 'datetime'
+    });
+
+    const businessRange = new Range({
+        min: new Date(2017, 0, 1),
+        max: new Date(2017, 0, 11),
+        minVisible: new Date(2017, 0, 1),
+        maxVisible: new Date(2017, 0, 11)
+    });
+
+    this.axis.setBusinessRange(businessRange);
+    this.translator.getBusinessRange.returns(businessRange);
+
+    assert.deepEqual(this.axis.getVisualRangeCenter(), new Date(2017, 0, 6));
+});
+
+QUnit.test('Get visual range center. Continuous. DateTime. Merge ranges', function(assert) {
+    this.updateOptions({
+        type: 'continuous',
+        argumentType: 'datetime'
+    });
+
+    const businessRange = new Range({
+        min: new Date(2017, 0, 1),
+        max: new Date(2017, 0, 11),
+        minVisible: new Date(2017, 0, 1),
+        maxVisible: new Date(2017, 0, 11)
+    });
+
+    const range = new Range({
+        minVisible: new Date(2017, 0, 7)
+    });
+
+    this.axis.setBusinessRange(businessRange);
+    this.translator.getBusinessRange.returns(businessRange);
+
+    assert.deepEqual(this.axis.getVisualRangeCenter(range, true), new Date(2017, 0, 9));
+});
+
+QUnit.test('Get visual range center. Discrete', function(assert) {
+    this.updateOptions({
+        type: 'discrete'
+    });
+
+    const businessRange = new Range({
+        categories: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+        minVisible: 'A',
+        maxVisible: 'G'
+    });
+
+    this.axis.setBusinessRange(businessRange);
+    this.translator.getBusinessRange.returns(businessRange);
+
+    assert.equal(this.axis.getVisualRangeCenter(), 3);
+});
+
+QUnit.test('Get visual range center. Discrete. Merge ranges', function(assert) {
+    this.updateOptions({
+        type: 'discrete'
+    });
+
+    const businessRange = new Range({
+        categories: ['A', 'B', 'C', 'D', 'E', 'F', 'G'],
+        minVisible: 'A',
+        maxVisible: 'G'
+    });
+
+    const range = new Range({
+        minVisible: 'A',
+        maxVisible: 'E'
+    });
+
+    this.axis.setBusinessRange(businessRange);
+    this.translator.getBusinessRange.returns(businessRange);
+
+    assert.deepEqual(this.axis.getVisualRangeCenter(range, true), 2);
+});
+
 QUnit.test('Get visual range center. Logaritmic', function(assert) {
     this.updateOptions({
         type: 'logarithmic',
@@ -626,6 +757,31 @@ QUnit.test('Get visual range center. Logaritmic', function(assert) {
     this.translator.getBusinessRange.returns(range);
 
     assert.equal(this.axis.getVisualRangeCenter(range), 100);
+});
+
+QUnit.test('Get visual range center. Logaritmic. Merge ranges', function(assert) {
+    this.updateOptions({
+        type: 'logarithmic',
+        allowNegatives: false,
+        logarithmBase: 10
+    });
+
+    const businessRange = new Range({
+        min: 1,
+        max: 10000,
+        minVisible: 1,
+        maxVisible: 10000
+    });
+
+    const range = new Range({
+        minVisible: 10,
+        maxVisible: 1000
+    });
+
+    this.axis.setBusinessRange(businessRange);
+    this.translator.getBusinessRange.returns(businessRange);
+
+    assert.equal(this.axis.getVisualRangeCenter(range, true), 100);
 });
 
 QUnit.test('Get visual range center. Logarithmic with negative values', function(assert) {
