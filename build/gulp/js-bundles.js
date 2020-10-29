@@ -92,7 +92,9 @@ function createDebugBundlesStream(watch, renovation) {
 
 function createRenovationTemp(isWatch) {
     const src = ['js/**/*.*'];
-    const pipe = isWatch ? gulpWatch(src) : gulp.src(src);
+    const pipe = isWatch ? gulpWatch(src).on('ready', () => console.log(
+        'create-renovation-temp task is watching for changes...'
+    )) : gulp.src(src);
 
     return pipe
         .pipe(renovationPipes.replaceWidgets())
