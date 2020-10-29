@@ -884,11 +884,10 @@ export const SimulatedStrategy = Class.inherit({
 
     getScrollOffset: function() {
         const { top, left } = this.location();
-        const { horizontal: scrollerX, vertical: scrollerY } = this._scrollers;
 
         return {
-            top: scrollerY && -top,
-            left: scrollerX && -left
+            top: -top,
+            left: -left
         };
     },
 
