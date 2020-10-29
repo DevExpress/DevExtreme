@@ -4847,6 +4847,74 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 
         assert.ok(handler.calledOnce, 'Children keyboard processor can process the \'esc\' key pressing');
     });
+
+    QUnit.test('selectBox should raise valueChanged with keydown event as parameter when value is removed using backspace (T940489)', function(assert) {
+        const valueChangedHandler = sinon.stub();
+        const $element = $('#selectBox').dxSelectBox({
+            dataSource: [0, 1, 2],
+            value: 1,
+            onValueChanged: valueChangedHandler,
+            searchEnabled: true
+        });
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .caret(1)
+            .press('backspace')
+            .blur();
+
+        assert.ok(valueChangedHandler.calledOnce, 'value has been changed');
+        const firstCallArgs = valueChangedHandler.getCall(0).args;
+        assert.ok(firstCallArgs[0].event, 'event is passed as parameter');
+        assert.strictEqual(firstCallArgs[0].event.type, 'keydown', 'event has correct type');
+        assert.strictEqual(firstCallArgs[0].event.key, 'Backspace', 'event key is correct');
+    });
+
+    QUnit.test('selectBox should raise valueChanged with keydown event as parameter when value is removed using delete (T940489)', function(assert) {
+        const valueChangedHandler = sinon.stub();
+        const $element = $('#selectBox').dxSelectBox({
+            dataSource: [0, 1, 2],
+            value: 1,
+            onValueChanged: valueChangedHandler,
+            searchEnabled: true
+        });
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .caret(0)
+            .press('del')
+            .blur();
+
+        assert.ok(valueChangedHandler.calledOnce, 'value has been changed');
+        const firstCallArgs = valueChangedHandler.getCall(0).args;
+        assert.ok(firstCallArgs[0].event, 'event is passed as parameter');
+        assert.strictEqual(firstCallArgs[0].event.type, 'keydown', 'event has correct type');
+        assert.strictEqual(firstCallArgs[0].event.key, 'Delete', 'event key is correct');
+    });
+
+    QUnit.test('valueChanged should be raised with event=undefined as parameter when runtime change after input text editing', function(assert) {
+        const valueChangedHandler = sinon.stub();
+        const $element = $('#selectBox').dxSelectBox({
+            dataSource: [11, 22],
+            value: 11,
+            onValueChanged: valueChangedHandler,
+            searchEnabled: true
+        });
+        const instance = $element.dxSelectBox('instance');
+        const $input = $element.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const keyboard = keyboardMock($input);
+
+        keyboard
+            .caret(0)
+            .press('del');
+
+        instance.option('value', 22);
+
+        const data = valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event, undefined, 'event is undefined');
+    });
 });
 
 QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
