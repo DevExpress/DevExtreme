@@ -785,7 +785,11 @@ class Gantt extends Widget {
         return coreData;
     }
     _getMappedFieldName(optionName, coreField) {
-        return this.option(`${optionName}.${coreField}Expr`);
+        let coreFieldName = coreField;
+        if(coreField === 'id') {
+            coreFieldName = 'key';
+        }
+        return this.option(`${optionName}.${coreFieldName}Expr`);
     }
     _convertCoreToMappedFields(optionName, fields) {
         return fields.reduce((previous, f) => {
@@ -917,14 +921,15 @@ class Gantt extends Widget {
     }
 
     _getTaskTooltipContentTemplateFunc(taskTooltipContentTemplateOption) {
+        const isTooltipShowing = true;
         const template = taskTooltipContentTemplateOption && this._getTemplate(taskTooltipContentTemplateOption);
         const createTemplateFunction = template && ((container, item) => {
             template.render({
                 model: this.getTaskDataByCoreData(item),
                 container: getPublicElement($(container))
             });
+            return isTooltipShowing;
         });
-
         return createTemplateFunction;
     }
 

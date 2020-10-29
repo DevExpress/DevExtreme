@@ -1,3 +1,4 @@
+import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import { getGanttViewCore } from './gantt_importer';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
@@ -261,5 +262,8 @@ export class GanttView extends Widget {
             result = datePart + ' ' + timePart;
         }
         return result;
+    }
+    destroyTemplate(container) {
+        $(container).empty();
     }
 }
