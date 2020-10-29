@@ -38,7 +38,7 @@ const SelectBox = DropDownList.inherit({
             } else if(this._valueSubstituted()) {
                 this._preventFiltering = true;
             }
-
+            this._savedTextRemoveEvent = e;
             this._preventSubstitution = true;
         };
 
@@ -572,8 +572,12 @@ const SelectBox = DropDownList.inherit({
 
     _clearTextValue: function() {
         if(this.option('selectedItem')) {
+            if(this._savedTextRemoveEvent) {
+                this._saveValueChangeEvent(this._savedTextRemoveEvent);
+            }
             this.option('value', null);
         }
+        delete this._savedTextRemoveEvent;
     },
 
     _shouldOpenPopup: function() {
