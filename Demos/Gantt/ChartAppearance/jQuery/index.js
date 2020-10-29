@@ -80,7 +80,8 @@ $(function() {
         }
     });
 
-    function getTaskTooltipContentTemplate(task) {
+    function getTaskTooltipContentTemplate(task, container) {
+        container[0].innerHTML = "";
         const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
         parentElement.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
         const timeEstimate = Math.abs(task.start - task.end) / 36e5;

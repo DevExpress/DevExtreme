@@ -109,7 +109,8 @@ export default {
     };
   },
   methods: {
-    getTaskTooltipContentTemplate(model) {
+    getTaskTooltipContentTemplate(model, container) {
+      container.innerHTML = '';
       const parentElement = document.getElementsByClassName('dx-gantt-task-edit-tooltip')[0];
       parentElement.className = 'dx-gantt-task-edit-tooltip custom-task-edit-tooltip';
       const timeEstimate = Math.abs(model.start - model.end) / 36e5;
