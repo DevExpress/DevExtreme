@@ -902,7 +902,7 @@ module('Scheduler grid', moduleConfig, () => {
                 firstDayOfWeek: 1
             });
 
-            assert.equal(scheduler.root.getElement().find(CLASSES.appointment).length, 1, 'Only one appt is rendered');
+            assert.equal(scheduler.getElement().find(CLASSES.appointment).length, 1, 'Only one appt is rendered');
         });
     });
 
@@ -924,7 +924,7 @@ module('Scheduler grid', moduleConfig, () => {
             text: 'new Date sample'
         }]);
 
-        const $appt = scheduler.root.getElement().find(CLASSES.appointment);
+        const $appt = scheduler.getElement().find(CLASSES.appointment);
         const $contentDates = $appt.find('.dx-scheduler-appointment-content-date');
         const expectedStartDate = new Date(new Date(2016, 4, 7, 1).getTime() - clientTzOffset);
         const expectedEndDate = new Date(new Date(2016, 4, 7, 1, 30).getTime() - clientTzOffset);
@@ -1091,7 +1091,7 @@ module('Scheduler grid', moduleConfig, () => {
             firstDayOfWeek: 1
         });
 
-        const $element = scheduler.root.getElement();
+        const $element = scheduler.getElement();
         let $appt = $element.find(CLASSES.appointment);
         const cellHeight = $element.find(CLASSES.dateTableCell).eq(0).get(0).getBoundingClientRect().height;
         const apptPosition = translator.locate($appt.eq(0));
@@ -1132,7 +1132,7 @@ module('Scheduler grid', moduleConfig, () => {
 
         // this.clock.tick(); TODO
 
-        const $appointment = $(scheduler.root.getElement()).find(CLASSES.appointment).eq(0);
+        const $appointment = $(scheduler.getElement()).find(CLASSES.appointment).eq(0);
         const $recurringIcon = $appointment.find('.dx-scheduler-appointment-recurrence-icon');
 
         assert.ok($recurringIcon.parent().hasClass('dx-scheduler-appointment-content'), 'Recurring icon is visible');
@@ -1349,7 +1349,7 @@ module('Appointment popup', moduleConfig, () => {
                 timeZone: 'Asia/Calcutta'
             });
 
-            pointerMock(scheduler.root.getElement().find(CLASSES.dateTableCell).eq(22)).start().click().click();
+            pointerMock(scheduler.getElement().find(CLASSES.dateTableCell).eq(22)).start().click().click();
 
             const detailsForm = scheduler.instance.getAppointmentDetailsForm();
             const formData = detailsForm.option('formData');
@@ -1457,7 +1457,7 @@ module('Oll tests', oldModuleConfig, () => {
             timeZone: 'Africa/Brazzaville' // +1
         });
 
-        const rootElement = scheduler.root.getElement();
+        const rootElement = scheduler.getElement();
 
         const $appointments = rootElement.find(CLASSES.appointment);
         const $first = $appointments.eq(0);
@@ -1538,7 +1538,7 @@ module('Oll tests', oldModuleConfig, () => {
             }]
         });
 
-        const rootElement = scheduler.root.getElement();
+        const rootElement = scheduler.getElement();
 
         const cellWidth = rootElement.find(CLASSES.dateTableCell).eq(0).get(0).getBoundingClientRect().width;
         let $appointment = rootElement.find(CLASSES.appointment);
@@ -1575,7 +1575,7 @@ module('Oll tests', oldModuleConfig, () => {
             dataSource: [appointment]
         });
 
-        const $appointment = $(scheduler.root.getElement()).find(CLASSES.appointment).eq(0);
+        const $appointment = $(scheduler.getElement()).find(CLASSES.appointment).eq(0);
         $appointment.trigger('dxclick');
     });
 
@@ -1597,7 +1597,7 @@ module('Oll tests', oldModuleConfig, () => {
             }]
         });
 
-        const rootElement = scheduler.root.getElement();
+        const rootElement = scheduler.getElement();
 
         const cellHeight = rootElement.find(CLASSES.dateTableCell).eq(0).get(0).getBoundingClientRect().height;
         let $appointments = rootElement.find(CLASSES.appointment);
@@ -1649,13 +1649,13 @@ module('Oll tests', oldModuleConfig, () => {
                 dataSource: [appointment]
             });
 
-            const $appointment = $(scheduler.root.getElement()).find(CLASSES.appointment).eq(1);
+            const $appointment = $(scheduler.getElement()).find(CLASSES.appointment).eq(1);
 
             $appointment.trigger('dxdblclick');
             const initialPosition = $appointment.position();
 
             $('.dx-scheduler-appointment-popup .dx-popup-done').trigger('dxclick');
-            const updatedPosition = $(scheduler.root.getElement()).find(CLASSES.appointment).not('.dx-scheduler-appointment-recurrence').position();
+            const updatedPosition = $(scheduler.getElement()).find(CLASSES.appointment).not('.dx-scheduler-appointment-recurrence').position();
 
             assert.equal(updatedPosition.top, initialPosition.top, 'Top is updated correctly');
             assert.equal(updatedPosition.left, initialPosition.left, 'Left is updated correctly');

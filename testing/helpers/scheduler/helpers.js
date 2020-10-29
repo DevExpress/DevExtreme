@@ -410,10 +410,6 @@ export class SchedulerTestWrapper extends ElementWrapper {
         return new HeaderWrapper();
     }
 
-    get root() { // TODO remove
-        return new ElementWrapper(CLASSES.root);
-    }
-
     option(name, value) {
         if(value === undefined) {
             return this.instance.option(name);
