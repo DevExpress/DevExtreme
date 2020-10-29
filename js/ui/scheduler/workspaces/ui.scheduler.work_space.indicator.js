@@ -20,11 +20,16 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _needRenderDateTimeIndication: function() {
-        const today = this._getToday();
-        const endViewDate = dateUtils.trimTime(this.getEndViewDate());
-        const firstViewDate = new Date(this.getStartViewDate());
+        let result = false;
 
-        return this.option('showCurrentTimeIndicator') && dateUtils.dateInRange(today, firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+        if(this.option('showCurrentTimeIndicator')) {
+            const today = this._getToday();
+            const endViewDate = dateUtils.trimTime(this.getEndViewDate());
+            const firstViewDate = new Date(this.getStartViewDate());
+
+            result = dateUtils.dateInRange(today, firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+        }
+        return result;
     },
 
     _isIndicatorVisible: function() {
