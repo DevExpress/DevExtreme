@@ -26,6 +26,7 @@ export const CLASSES = {
     schedulerSmall: '.dx-scheduler-small',
 
     dateTableCell: '.dx-scheduler-date-table-cell',
+    allDayTableCell: '.dx-scheduler-all-day-table-cell',
 
     appointment: '.dx-scheduler-appointment',
 
