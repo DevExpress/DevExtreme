@@ -101,7 +101,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _setIndicationUpdateInterval: function() {
-        if(!this._needRenderDateTimeIndication() || this.option('indicatorUpdateInterval') === 0) {
+        if(!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
             return;
         }
 
