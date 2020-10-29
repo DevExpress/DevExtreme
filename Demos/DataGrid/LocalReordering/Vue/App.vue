@@ -76,12 +76,15 @@ export default {
   },
   methods: {
     onReorder(e) {
-      var visibleRows = e.component.getVisibleRows(),
-        toIndex = this.tasks.indexOf(visibleRows[e.toIndex].data),
-        fromIndex = this.tasks.indexOf(e.itemData);
+      const visibleRows = e.component.getVisibleRows();
+      const toIndex = this.tasks.indexOf(visibleRows[e.toIndex].data);
+      const fromIndex = this.tasks.indexOf(e.itemData);
+      const newTasks = [...this.tasks];
 
-      this.tasks.splice(fromIndex, 1);
-      this.tasks.splice(toIndex, 0, e.itemData);
+      newTasks.splice(fromIndex, 1);
+      newTasks.splice(toIndex, 0, e.itemData);
+
+      this.tasks = newTasks;
     }
   },
 };
