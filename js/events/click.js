@@ -5,13 +5,13 @@ import domAdapter from '../core/dom_adapter';
 import { resetActiveElement, contains, closestCommonParent } from '../core/utils/dom';
 import { requestAnimationFrame, cancelAnimationFrame } from '../animation/frame';
 import { addNamespace, fireEvent, eventDelta, eventData } from './utils/index';
+import { subscribeNodesDisposing, unsubscribeNodesDisposing } from './utils/event_nodes_disposing';
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
 import { compare as compareVersions } from '../core/utils/version';
 
 const CLICK_EVENT_NAME = 'dxclick';
-const REMOVE_EVENT_NAME = 'dxremove';
 const TOUCH_BOUNDARY = 10;
 const abs = Math.abs;
 
@@ -101,25 +101,6 @@ const useNativeClick =
         lastFiredEvent = null;
     }
 
-    const eventNodesDisposing = (() => {
-        function nodesByEvent(event) {
-            return event && [
-                event.target,
-                event.delegateTarget,
-                event.relativeTarget
-            ].filter(node => !!node);
-        }
-
-        return {
-            subscribe: (event, callback) => {
-                eventsEngine.on(nodesByEvent(event), REMOVE_EVENT_NAME, callback);
-            },
-            unsubscribe: (event, callback) => {
-                eventsEngine.off(nodesByEvent(event), REMOVE_EVENT_NAME, callback);
-            }
-        };
-    })();
-
     const clickHandler = function(e) {
         const originalEvent = e.originalEvent;
         const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED;
@@ -130,11 +111,11 @@ const useNativeClick =
                 originalEvent.DXCLICK_FIRED = true;
             }
 
-            eventNodesDisposing.unsubscribe(lastFiredEvent, onNodeRemove);
+            unsubscribeNodesDisposing(lastFiredEvent, onNodeRemove);
 
             lastFiredEvent = originalEvent;
 
-            eventNodesDisposing.subscribe(lastFiredEvent, onNodeRemove);
+            subscribeNodesDisposing(lastFiredEvent, onNodeRemove);
 
             fireEvent({
                 type: CLICK_EVENT_NAME,
