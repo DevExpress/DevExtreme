@@ -30,6 +30,7 @@ export default {
 </script>
 <style scoped>
     .demo-container,
+    #app,
     #diagram {
         height: 100%;
     }
