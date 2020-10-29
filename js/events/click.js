@@ -1,14 +1,15 @@
-const $ = require('../core/renderer');
-const eventsEngine = require('../events/core/events_engine');
-const devices = require('../core/devices');
-const domAdapter = require('../core/dom_adapter');
-const domUtils = require('../core/utils/dom');
-const animationFrame = require('../animation/frame');
-const eventUtils = require('./utils');
-const pointerEvents = require('./pointer');
-const Emitter = require('./core/emitter');
-const registerEmitter = require('./core/emitter_registrator');
-const compareVersions = require('../core/utils/version').compare;
+import $ from '../core/renderer';
+import eventsEngine from '../events/core/events_engine';
+import devices from '../core/devices';
+import domAdapter from '../core/dom_adapter';
+import { resetActiveElement, contains, closestCommonParent } from '../core/utils/dom';
+import { requestAnimationFrame, cancelAnimationFrame } from '../animation/frame';
+import { addNamespace, fireEvent, eventDelta, eventData } from './utils/index';
+import { subscribeNodesDisposing, unsubscribeNodesDisposing } from './utils/event_nodes_disposing';
+import pointerEvents from './pointer';
+import Emitter from './core/emitter';
+import registerEmitter from './core/emitter_registrator';
+import { compare as compareVersions } from '../core/utils/version';
 
 const CLICK_EVENT_NAME = 'dxclick';
 const TOUCH_BOUNDARY = 10;
@@ -18,7 +19,7 @@ const isInput = function(element) {
     return $(element).is('input, textarea, select, button ,:focus, :focus *');
 };
 
-const misc = { requestAnimationFrame: animationFrame.requestAnimationFrame, cancelAnimationFrame: animationFrame.cancelAnimationFrame };
+const misc = { requestAnimationFrame, cancelAnimationFrame };
 
 let ClickEmitter = Emitter.inherit({
 
@@ -37,7 +38,7 @@ let ClickEmitter = Emitter.inherit({
     start: function(e) {
         this._blurPrevented = e.isDefaultPrevented();
         this._startTarget = e.target;
-        this._startEventData = eventUtils.eventData(e);
+        this._startEventData = eventData(e);
     },
 
     end: function(e) {
@@ -47,7 +48,7 @@ let ClickEmitter = Emitter.inherit({
         }
 
         if(!isInput(e.target) && !this._blurPrevented) {
-            domUtils.resetActiveElement();
+            resetActiveElement();
         }
 
         this._accept(e);
@@ -58,9 +59,9 @@ let ClickEmitter = Emitter.inherit({
 
     _eventOutOfElement: function(e, element) {
         const target = e.target;
-        const targetChanged = !domUtils.contains(element, target) && element !== target;
+        const targetChanged = !contains(element, target) && element !== target;
 
-        const gestureDelta = eventUtils.eventDelta(eventUtils.eventData(e), this._startEventData);
+        const gestureDelta = eventDelta(eventData(e), this._startEventData);
         const boundsExceeded = abs(gestureDelta.x) > TOUCH_BOUNDARY || abs(gestureDelta.y) > TOUCH_BOUNDARY;
 
         return targetChanged || boundsExceeded;
@@ -68,7 +69,7 @@ let ClickEmitter = Emitter.inherit({
 
     _fireClickEvent: function(e) {
         this._fireEvent(CLICK_EVENT_NAME, e, {
-            target: domUtils.closestCommonParent(this._startTarget, e.target)
+            target: closestCommonParent(this._startTarget, e.target)
         });
     },
 
@@ -96,6 +97,10 @@ let ClickEmitter = Emitter.inherit({
     let prevented = null;
     let lastFiredEvent = null;
 
+    function onNodeRemove() {
+        lastFiredEvent = null;
+    }
+
     const clickHandler = function(e) {
         const originalEvent = e.originalEvent;
         const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED;
@@ -106,8 +111,13 @@ let ClickEmitter = Emitter.inherit({
                 originalEvent.DXCLICK_FIRED = true;
             }
 
+            unsubscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+
             lastFiredEvent = originalEvent;
-            eventUtils.fireEvent({
+
+            subscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+
+            fireEvent({
                 type: CLICK_EVENT_NAME,
                 originalEvent: e
             });
@@ -177,7 +187,7 @@ let ClickEmitter = Emitter.inherit({
         const clickHandler = function(e) {
             const $target = $(e.target);
             if(!blurPrevented && startTarget && !$target.is(startTarget) && !$(startTarget).is('label') && isInput($target)) {
-                domUtils.resetActiveElement();
+                resetActiveElement();
             }
 
             startTarget = null;
@@ -186,8 +196,8 @@ let ClickEmitter = Emitter.inherit({
 
         const NATIVE_CLICK_FIXER_NAMESPACE = 'NATIVE_CLICK_FIXER';
         const document = domAdapter.getDocument();
-        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
-        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        eventsEngine.subscribeGlobal(document, addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+        eventsEngine.subscribeGlobal(document, addNamespace('click', NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 
