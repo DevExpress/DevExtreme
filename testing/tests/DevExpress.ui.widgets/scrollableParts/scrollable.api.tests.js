@@ -360,7 +360,7 @@ QUnit.test('event arguments', function(assert) {
         inertiaEnabled: false,
         onScroll: function(e) {
             assert.notEqual(e.event, undefined, 'Event passed');
-            assert.deepEqual(e.scrollOffset, { top: 10, left: undefined }, 'scrollOffset passed');
+            assert.deepEqual(e.scrollOffset, { top: 10, left: 0 }, 'scrollOffset passed');
             assert.equal(e.reachedLeft, undefined, 'reachedLeft passed');
             assert.equal(e.reachedRight, undefined, 'reachedRight passed');
             assert.equal(e.reachedTop, false, 'reachedTop passed');
