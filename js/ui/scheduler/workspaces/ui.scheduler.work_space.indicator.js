@@ -19,6 +19,14 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         return this.invoke('convertDateByTimezone', date) || date;
     },
 
+    _needRenderDateTimeIndication: function() {
+        const today = this._getToday();
+        const endViewDate = dateUtils.trimTime(this.getEndViewDate());
+        const firstViewDate = new Date(this.getStartViewDate());
+
+        return this.option('showCurrentTimeIndicator') && dateUtils.dateInRange(today, firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+    },
+
     _isIndicatorVisible: function() {
         const today = this._getToday();
         const endViewDate = new Date(this.getEndViewDate());
@@ -46,7 +54,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
                 this._shader.render();
             }
 
-            if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
+            if(this._needRenderDateTimeIndication() && this._isIndicatorVisible()) {
                 const groupCount = this._getGroupCount() || 1;
                 const date = this._getToday();
 
@@ -93,7 +101,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _setIndicationUpdateInterval: function() {
-        if(!this.option('showCurrentTimeIndicator') || this.option('indicatorUpdateInterval') === 0) {
+        if(!this._needRenderDateTimeIndication() || this.option('indicatorUpdateInterval') === 0) {
             return;
         }
 
@@ -150,7 +158,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         const cellHeight = this.getCellHeight();
         const date = new Date(this._firstViewDate);
 
-        if(this._isIndicatorVisible()) {
+        if(this._needRenderDateTimeIndication() && this._isIndicatorVisible()) {
             date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
         }
 
@@ -172,7 +180,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _isCurrentTime: function(date) {
-        if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
+        if(this._needRenderDateTimeIndication()) {
             const today = this._getToday();
             let result = false;
             date = new Date(date);
@@ -195,7 +203,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         let result = false;
 
-        if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
+        if(this._needRenderDateTimeIndication()) {
             const date = this._getDateByIndex(headerIndex);
             const now = this.option('indicatorTime') || new Date();
 
