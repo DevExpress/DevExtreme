@@ -40,24 +40,26 @@ import '../validation_group';
 
 // STYLE form
 
-const FORM_CLASS = 'dx-form';
-const FIELD_ITEM_CLASS = 'dx-field-item';
-const FIELD_ITEM_LABEL_TEXT_CLASS = 'dx-field-item-label-text';
-const FORM_GROUP_CLASS = 'dx-form-group';
-const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
-const FIELD_ITEM_CONTENT_HAS_GROUP_CLASS = 'dx-field-item-has-group';
-const FIELD_ITEM_CONTENT_HAS_TABS_CLASS = 'dx-field-item-has-tabs';
-const FORM_GROUP_WITH_CAPTION_CLASS = 'dx-form-group-with-caption';
-const FORM_GROUP_CAPTION_CLASS = 'dx-form-group-caption';
-const HIDDEN_LABEL_CLASS = 'dx-layout-manager-hidden-label';
-const FIELD_ITEM_LABEL_CLASS = 'dx-field-item-label';
-const FIELD_ITEM_LABEL_CONTENT_CLASS = 'dx-field-item-label-content';
-const FIELD_ITEM_TAB_CLASS = 'dx-field-item-tab';
-const FORM_FIELD_ITEM_COL_CLASS = 'dx-col-';
-const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
-const GROUP_COL_COUNT_ATTR = 'group-col-count';
-const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
-const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
+import {
+    FORM_CLASS,
+    FIELD_ITEM_CLASS,
+    FIELD_ITEM_LABEL_TEXT_CLASS,
+    FORM_GROUP_CLASS,
+    FORM_GROUP_CONTENT_CLASS,
+    FIELD_ITEM_CONTENT_HAS_GROUP_CLASS,
+    FIELD_ITEM_CONTENT_HAS_TABS_CLASS,
+    FORM_GROUP_WITH_CAPTION_CLASS,
+    FORM_GROUP_CAPTION_CLASS,
+    HIDDEN_LABEL_CLASS,
+    FIELD_ITEM_LABEL_CLASS,
+    FIELD_ITEM_LABEL_CONTENT_CLASS,
+    FIELD_ITEM_TAB_CLASS,
+    FORM_FIELD_ITEM_COL_CLASS,
+    GROUP_COL_COUNT_CLASS,
+    GROUP_COL_COUNT_ATTR,
+    FIELD_ITEM_CONTENT_CLASS,
+    FORM_VALIDATION_SUMMARY,
+    ROOT_SIMPLE_ITEM_CLASS } from './constants';
 
 const WIDGET_CLASS = 'dx-widget';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
@@ -110,6 +112,7 @@ const Form = Widget.inherit({
             minColWidth: 200,
             alignItemLabels: true,
             alignItemLabelsInAllGroups: true,
+            alignRootItemLabels: true,
             showColonAfterLabel: true,
             showRequiredMark: true,
             showOptionalMark: false,
@@ -351,8 +354,11 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed) {
-        const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
+        if(this.option('alignRootItemLabels') === true) {
+            this._alignRootSimpleItems($container, colCount, excludeTabbed);
+        }
 
+        const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
         if(alignItemLabelsInAllGroups) {
             this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
         } else {
@@ -361,6 +367,13 @@ const Form = Widget.inherit({
             for(i = 0; i < $groups.length; i++) {
                 this._applyLabelsWidth($groups.eq(i), excludeTabbed);
             }
+        }
+    },
+
+    _alignRootSimpleItems: function($container, colCount, excludeTabbed) {
+        const $rootSimpleItems = $container.find(`.${ROOT_SIMPLE_ITEM_CLASS}`);
+        for(let colIndex = 0; colIndex < colCount; colIndex++) {
+            this._applyLabelsWidthByCol($rootSimpleItems, colIndex, excludeTabbed);
         }
     },
 
@@ -855,6 +868,7 @@ const Form = Widget.inherit({
                     this._invalidate();
                 }
                 break;
+            case 'alignRootItemLabels':
             case 'readOnly':
                 break;
             case 'width':
