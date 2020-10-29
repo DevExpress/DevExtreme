@@ -4,18 +4,20 @@
       title="Orders"
       template="orders-tab"
     />
-    <OrdersTab
-      slot="orders-tab"
-      :supplier-id="masterDetailData.key"
-    />
+    <template #orders-tab>
+      <OrdersTab
+        :supplier-id="masterDetailData.key"
+      />
+    </template>
     <DxItem
       title="Address"
       template="address-tab"
     />
-    <AddressTab
-      slot="address-tab"
-      :data="masterDetailData.data"
-    />
+    <template #address-tab>
+      <AddressTab
+        :data="masterDetailData.data"
+      />
+    </template>
   </DxTabPanel>
 </template>
 

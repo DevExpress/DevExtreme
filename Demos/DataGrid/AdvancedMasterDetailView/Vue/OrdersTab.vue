@@ -6,11 +6,12 @@
     <DxItem template="select-box">
       <DxLabel text="Product"/>
     </DxItem>
-    <ProductSelectBox
-      slot="select-box"
-      :supplier-id="supplierId"
-      @product-changed="chosenProductId = $event"
-    />
+    <template #select-box>
+      <ProductSelectBox
+        :supplier-id="supplierId"
+        @product-changed="chosenProductId = $event"
+      />
+    </template>
 
     <DxItem template="order-history">
       <DxLabel text="Order History"/>
