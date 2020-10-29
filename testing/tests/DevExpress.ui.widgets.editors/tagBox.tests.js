@@ -16,7 +16,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
-import { getScrollRtlBehavior } from 'core/utils/scrollRtlBehavior';
+import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 
 import 'common.css!';
 import 'generic_light.css!';
