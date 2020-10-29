@@ -39,17 +39,29 @@ export default {
   data() {
     return {
       products: products,
+      values: [],
       format: {
         type: 'fixedPoint',
         precision: 0
       }
     };
   },
-  computed: {
-    values: function() {
-      return products.filter(p=>p.active).map(p=>p.count);
+  watch: {
+    products: {
+      handler: function() {
+        this.values = this.getActiveItems();
+      },
+      deep: true
     }
   },
+  created() {
+    this.values = this.getActiveItems();
+  },
+  methods: {
+    getActiveItems() {
+      return this.products.filter(p=>p.active).map(p=>p.count);
+    }
+  }
 };
 </script>
 <style scoped>
