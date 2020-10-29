@@ -571,10 +571,10 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearTextValue: function() {
-        if(this._savedTextRemoveEvent) {
-            this._saveValueChangeEvent(this._savedTextRemoveEvent);
-        }
         if(this.option('selectedItem')) {
+            if(this._savedTextRemoveEvent) {
+                this._saveValueChangeEvent(this._savedTextRemoveEvent);
+            }
             this.option('value', null);
         }
         delete this._savedTextRemoveEvent;
