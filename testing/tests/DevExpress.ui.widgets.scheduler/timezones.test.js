@@ -154,7 +154,7 @@ module('Common', moduleConfig, () => {
                 stubClientTimeZone: false
             }];
 
-            const testCase = (config, assert) => {
+            const runTest = (config, assert) => {
                 const scheduler = createWrapper({
                     currentDate: new Date(2020, 1, 4),
                     views: ['day'],
@@ -181,12 +181,12 @@ module('Common', moduleConfig, () => {
                     if(config.stubClientTimeZone) {
                         const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
                         try {
-                            testCase(config, assert);
+                            runTest(config, assert);
                         } finally {
                             tzOffsetStub.restore();
                         }
                     } else {
-                        test(config, assert);
+                        runTest(config, assert);
                     }
                 });
             });
@@ -1391,23 +1391,19 @@ module('Appointment popup', moduleConfig, () => {
     });
 });
 
-const oldModuleConfig = {
+module('Oll tests', {
     beforeEach() {
         this.clock = sinon.useFakeTimers();
-
-        fx.off = true;
         this.tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
+        fx.off = true;
     },
 
     afterEach() {
-        this.clock.restore(); // TODO
-
-        fx.off = false;
+        this.clock.restore();
         this.tzOffsetStub.restore();
+        fx.off = false;
     }
-};
-
-module('Oll tests', oldModuleConfig, () => {
+}, () => {
     test('Appointment should have right width in workspace with timezone', function(assert) {
         const scheduler = createWrapper({
             dataSource: [],
