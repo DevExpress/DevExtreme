@@ -28,8 +28,6 @@ const SelectBox = DropDownList.inherit({
         const that = this;
         const parent = this.callBase();
         const clearSelectBox = function(e) {
-            this._saveValueChangeEvent(e);
-
             const isEditable = this._isEditable();
 
             if(!isEditable) {
@@ -40,7 +38,7 @@ const SelectBox = DropDownList.inherit({
             } else if(this._valueSubstituted()) {
                 this._preventFiltering = true;
             }
-
+            this._savedTextRemoveEvent = e;
             this._preventSubstitution = true;
         };
 
@@ -566,7 +564,6 @@ const SelectBox = DropDownList.inherit({
         }
 
         this.callBase(e);
-        this._saveValueChangeEvent(undefined);
     },
 
     _isOverlayNestedTarget: function(target) {
@@ -574,9 +571,13 @@ const SelectBox = DropDownList.inherit({
     },
 
     _clearTextValue: function() {
+        if(this._savedTextRemoveEvent) {
+            this._saveValueChangeEvent(this._savedTextRemoveEvent);
+        }
         if(this.option('selectedItem')) {
             this.option('value', null);
         }
+        delete this._savedTextRemoveEvent;
     },
 
     _shouldOpenPopup: function() {

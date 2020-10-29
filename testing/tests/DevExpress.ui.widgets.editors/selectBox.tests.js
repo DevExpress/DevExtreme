@@ -4933,11 +4933,12 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         assert.strictEqual(firstCallArgs[0].event.key, 'Delete', 'event key is correct');
     });
 
-    QUnit.test('saved valueChanged event should be restored after focusout', function(assert) {
+    QUnit.test('valueChanged should be raised with event=undefined as parameter when runtime change after input text editing', function(assert) {
         const valueChangedHandler = sinon.stub();
         const $element = $('#selectBox').dxSelectBox({
             dataSource: [11, 22],
             value: 11,
+            onValueChanged: valueChangedHandler,
             searchEnabled: true
         });
         const instance = $element.dxSelectBox('instance');
@@ -4946,13 +4947,9 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
 
         keyboard
             .caret(0)
-            .press('del')
-            .blur();
+            .press('del');
 
-        instance.option({
-            onValueChanged: valueChangedHandler,
-            value: 22
-        });
+        instance.option('value', 22);
 
         const data = valueChangedHandler.getCall(0).args[0];
         assert.strictEqual(data.event, undefined, 'event is undefined');
