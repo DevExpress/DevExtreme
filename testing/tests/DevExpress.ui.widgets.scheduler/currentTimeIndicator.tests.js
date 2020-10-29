@@ -432,7 +432,7 @@ const testIndicators = function(testCases, $element, assert) {
         assert.equal($bottomShader.length, 1, 'Bottom shaders count is OK');
     });
 
-    QUnit.test('TimePanel currentTime cell should have specific class, Day view', function(assert) {
+    QUnit.test('TimePanel currentTime cell should have specific class depend on indication time, Day view', function(assert) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45)
         });
@@ -441,6 +441,10 @@ const testIndicators = function(testCases, $element, assert) {
         const $cell = $element.find('.dx-scheduler-time-panel-cell').eq(9);
 
         assert.ok($cell.hasClass('dx-scheduler-time-panel-current-time-cell'), 'Cell has specific class');
+
+        this.instance.option('indicatorTime', new Date(2019, 8, 5, 12, 45));
+
+        assert.equal($element.find('.dx-scheduler-time-panel-current-time-cell').length, 0, 'There are no current time cells');
     });
 
     QUnit.test('TimePanel currentTime cell should have specific class, Day view with intervalCount', function(assert) {
