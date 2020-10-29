@@ -5,6 +5,7 @@ import domAdapter from '../core/dom_adapter';
 import { resetActiveElement, contains, closestCommonParent } from '../core/utils/dom';
 import { requestAnimationFrame, cancelAnimationFrame } from '../animation/frame';
 import { addNamespace, fireEvent, eventDelta, eventData } from './utils/index';
+import { subscribeNodesDisposing, unsubscribeNodesDisposing } from './utils/event_nodes_disposing';
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
@@ -96,6 +97,10 @@ const useNativeClick =
     let prevented = null;
     let lastFiredEvent = null;
 
+    function onNodeRemove() {
+        lastFiredEvent = null;
+    }
+
     const clickHandler = function(e) {
         const originalEvent = e.originalEvent;
         const eventAlreadyFired = lastFiredEvent === originalEvent || originalEvent && originalEvent.DXCLICK_FIRED;
@@ -106,7 +111,12 @@ const useNativeClick =
                 originalEvent.DXCLICK_FIRED = true;
             }
 
+            unsubscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+
             lastFiredEvent = originalEvent;
+
+            subscribeNodesDisposing(lastFiredEvent, onNodeRemove);
+
             fireEvent({
                 type: CLICK_EVENT_NAME,
                 originalEvent: e
