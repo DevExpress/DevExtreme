@@ -1254,7 +1254,7 @@ Axis.prototype = {
     getVisualRangeCenter(range, useMerge) {
         const translator = this.getTranslator();
         const businessRange = translator.getBusinessRange();
-        const currentBusinessRange = range ? (useMerge ? extend(true, {}, businessRange, range) : range) : businessRange;
+        const currentBusinessRange = useMerge ? extend(true, {}, businessRange, range || {}) : range || businessRange;
         const { type, logarithmBase } = this._options;
         let center;
 
@@ -1270,7 +1270,7 @@ Axis.prototype = {
             const index = Math.ceil(categoriesInfo.categories.length / 2) - 1;
             center = businessRange.categories.indexOf(categoriesInfo.categories[index]);
         } else {
-            center = translator._toValue((currentBusinessRange.maxVisible.valueOf() + currentBusinessRange.minVisible.valueOf()) / 2);
+            center = translator.toValue((currentBusinessRange.maxVisible.valueOf() + currentBusinessRange.minVisible.valueOf()) / 2);
         }
         return center;
     },

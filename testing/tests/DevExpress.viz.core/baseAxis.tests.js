@@ -32,7 +32,7 @@ const environment = {
 
         this.translator = new StubTranslator();
         this.translator.stub('getBusinessRange').returns(new Range());
-        this.translator._toValue = (value) => {
+        this.translator.toValue = (value) => {
             if(this.axis._options.argumentType === 'datetime') {
                 return new Date(value);
             } else {
