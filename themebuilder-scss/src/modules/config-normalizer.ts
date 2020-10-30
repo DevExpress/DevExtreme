@@ -1,8 +1,8 @@
-/* eslint no-console: 0 */
 /* eslint no-param-reassign: ["error", { "props": false }] */
 
 import commands from './commands';
 import themes from './themes';
+import Logger from './logger';
 
 const DEFAULT_OUT_COLOR_SCHEME = 'custom-scheme';
 
@@ -38,7 +38,7 @@ const getOutParameters = (
   const isColorSchemeValid = outColorScheme && /^[\w\-.]+$/.test(outColorScheme);
 
   if (!isColorSchemeValid) {
-    console.log(
+    Logger.log(
       `'--output-color-scheme' is not valid. '${DEFAULT_OUT_COLOR_SCHEME}' will be used.`,
     );
   }
@@ -91,12 +91,12 @@ const getThemeAndColorScheme = (config: ConfigSettings): ConfigSettings => {
       && t.colorScheme === passedColorScheme);
 
     if (!foundTheme) {
-      console.log(`The base theme with name ${config.baseTheme} does not exist.`);
+      Logger.log(`The base theme with name ${config.baseTheme} does not exist.`);
     }
   } else if (config.themeId) {
     foundTheme = themes.find((t) => t.themeId === parseInt(config.themeId.toString(), 10));
     if (!foundTheme) {
-      console.log(`The theme with ID ${config.themeId} does not exist.`);
+      Logger.log(`The theme with ID ${config.themeId} does not exist.`);
     }
   }
 
