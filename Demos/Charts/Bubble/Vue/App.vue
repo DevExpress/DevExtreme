@@ -48,6 +48,11 @@
     >
       <DxBorder :visible="true"/>
     </DxLegend>
+    <DxTooltip
+      :customize-tooltip="customizeTooltip"
+      :enabled="true"
+      location="edge"
+    />
     <DxExport :enabled="true"/>
   </DxChart>
 </template>

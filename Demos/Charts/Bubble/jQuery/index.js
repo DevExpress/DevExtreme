@@ -10,7 +10,7 @@ $(function(){
             location: "edge",
             customizeTooltip: function (arg) {
                 return {
-                    text: arg.point.tag + '<br/>Total Population: ' + arg.argumentText + 'M <br/>Population with Age over 60: ' + arg.valueText + 'M (' + arg.size + '%)'
+                    text: arg.point.tag + '<br/>Total Population: ' + arg.argumentText + 'M<br/>Population with Age over 60: ' + arg.valueText + 'M (' + arg.size + '%)'
                 };
             }
         },
