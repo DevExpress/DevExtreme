@@ -18,6 +18,10 @@
       </DxLabel>
     </DxSeries>
     <DxLegend :visible="false"/>
+    <DxSize
+      :width="400"
+      :height="200"
+    />
   </DxPieChart>
 </template>
 <script>
@@ -26,7 +30,8 @@ import DxPieChart, {
   DxSeries,
   DxLabel,
   DxLegend,
-  DxConnector
+  DxConnector,
+  DxSize
 } from 'devextreme-vue/pie-chart';
 
 export default {
@@ -35,7 +40,8 @@ export default {
     DxSeries,
     DxLabel,
     DxLegend,
-    DxConnector
+    DxConnector,
+    DxSize
   },
   props: {
     data: {
