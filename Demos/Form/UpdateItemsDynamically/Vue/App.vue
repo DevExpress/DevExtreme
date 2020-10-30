@@ -32,12 +32,12 @@
           name="phones-container"
         >
           <DxGroupItem
-            v-for="(phone, index) in phoneOptions"
-            :key="'Phone' + (index + 1)"
             item-type="group"
             name="phones"
           >
             <DxSimpleItem
+              v-for="(phone, index) in phoneOptions"
+              :key="'Phone' + (index + 1)"
               :data-field="'Phones[' + index + ']'"
               :editor-options="phone"
             >

@@ -92,7 +92,7 @@ export default {
           break;
         }
       }
-      this.logItems = [...this.logItems, logEntry];
+      this.logItems = this.logItems.concat(logEntry);
     }
   }
 };

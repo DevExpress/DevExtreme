@@ -92,7 +92,7 @@ export default {
     closeButtonHandler(itemData) {
       const index = this.employees.indexOf(itemData);
 
-      this.employees.splice(index, 1);
+      this.employees = this.employees.filter(e => e != itemData);
       if(index >= this.employees.length && index > 0) this.selectedIndex = index - 1;
     },
 
