@@ -20,7 +20,21 @@ const { testStart, test, module } = QUnit;
 
 const timeZones = {
     LosAngeles: 'America/Los_Angeles',
-    NewYork: 'America/New_York'
+    NewYork: 'America/New_York',
+
+    // Deprecated time zone(don't use in new tests)
+    Ashkhabad: 'Asia/Ashkhabad',
+    Brazzaville: 'Africa/Brazzaville',
+    Calcutta: 'Asia/Calcutta',
+    // eslint-disable-next-line spellcheck/spell-checker
+    Araguaina: 'America/Araguaina',
+    Lima: 'America/Lima',
+    Phoenix: 'America/Phoenix',
+    Yekaterinburg: 'Asia/Yekaterinburg',
+    Moscow: 'Europe/Moscow',
+    UTC: 'Etc/UTC',
+    Greenwich: 'Greenwich',
+    Dawson_Creek: 'America/Dawson_Creek'
 };
 
 testStart(() => initTestMarkup());
@@ -75,8 +89,8 @@ module('Common', moduleConfig, () => {
                 caseName: 'startDateTimeZone = endDateTimezone',
                 appointment: {
                     startDate: new Date(2020, 1, 4, 5).toString(),
-                    startDateTimeZone: 'Asia/Yekaterinburg',
-                    endDateTimeZone: 'Asia/Yekaterinburg',
+                    startDateTimeZone: timeZones.Yekaterinburg,
+                    endDateTimeZone: timeZones.Yekaterinburg,
                     endDate: new Date(2020, 1, 4, 6).toString(),
                 },
                 expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
@@ -95,8 +109,8 @@ module('Common', moduleConfig, () => {
                 caseName: 'startDateTimeZone != endDateTimezone',
                 appointment: {
                     startDate: new Date(2020, 1, 4, 5).toString(),
-                    startDateTimeZone: 'Europe/Moscow',
-                    endDateTimeZone: 'Asia/Yekaterinburg',
+                    startDateTimeZone: timeZones.Moscow,
+                    endDateTimeZone: timeZones.Yekaterinburg,
                     endDate: new Date(2020, 1, 4, 6).toString()
                 },
                 expectedContent: `${dateLocalization.format(new Date(2020, 1, 4, 5), 'shorttime')} - ${dateLocalization.format(new Date(2020, 1, 4, 6), 'shorttime')}`,
@@ -119,7 +133,7 @@ module('Common', moduleConfig, () => {
                     startDateTimeZone: 'Africa/Algiers',
                     endDateTimeZone: 'Africa/Algiers'
                 },
-                schedulerTimeZone: 'Asia/Yekaterinburg',
+                schedulerTimeZone: timeZones.Yekaterinburg,
                 expectedContent: '7:00 PM - 8:00 PM',
                 expectedPosition: {
                     top: 1900,
@@ -140,7 +154,7 @@ module('Common', moduleConfig, () => {
                     startDateTimeZone: 'Africa/Algiers',
                     endDateTimeZone: 'Africa/Cairo'
                 },
-                schedulerTimeZone: 'Asia/Yekaterinburg',
+                schedulerTimeZone: timeZones.Yekaterinburg,
                 expectedContent: '7:00 PM - 8:00 PM',
                 expectedPosition: {
                     top: 1900,
@@ -265,7 +279,7 @@ module('API', moduleConfig, () => {
         const scheduler = createWrapper({
             currentDate: new Date(2016, 4, 7),
             dateSerializationFormat: 'yyyy-MM-ddTHH:mm:ssZ',
-            timeZone: 'Etc/UTC',
+            timeZone: timeZones.UTC,
             views: ['day'],
             currentView: 'day',
             dataSource: [],
@@ -293,7 +307,7 @@ module('API', moduleConfig, () => {
             currentDate: new Date(2018, 4, 25),
             views: ['week'],
             currentView: 'week',
-            timeZone: 'Etc/UTC'
+            timeZone: timeZones.UTC
         });
 
         const appointment = {
@@ -741,9 +755,6 @@ module('Scheduler grid', moduleConfig, () => {
     });
 
     test('Recurrence appointment with \'Etc/UTC\' tz should be updated correctly via drag(T394991)', function(assert) {
-        // let tzOffsetStub;
-
-        // this.clock.restore();
         const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date('2015-12-25T17:00:00.000Z').getTimezoneOffset() * 60000);
         try {
             const scheduler = createWrapper({
@@ -752,7 +763,7 @@ module('Scheduler grid', moduleConfig, () => {
                 views: ['week'],
                 currentView: 'week',
                 editing: true,
-                timeZone: 'Etc/UTC', // 0
+                timeZone: timeZones.UTC,
                 recurrenceEditMode: 'occurrence',
                 firstDayOfWeek: 1,
                 dataSource: [{
@@ -790,7 +801,6 @@ module('Scheduler grid', moduleConfig, () => {
     });
 
     test('Task dragging when custom timeZone is set', function(assert) {
-        // this.clock.restore();
         const timezone = -5;
         const timezoneDifference = getDeltaTz(timezone, new Date(2015, 1, 9));
         const startDate = new Date(new Date(2015, 1, 9).getTime() - timezoneDifference);
@@ -813,8 +823,6 @@ module('Scheduler grid', moduleConfig, () => {
             timeZone: timezone
         });
 
-        // this.clock.tick();
-
         const hour = 3600000;
         const updatedItem = {
             text: 'Task 1',
@@ -831,13 +839,11 @@ module('Scheduler grid', moduleConfig, () => {
 
         const dataSourceItem = scheduler.option('dataSource').items()[0];
 
-        // this.clock.tick();
         assert.deepEqual(dataSourceItem.startDate, updatedItem.startDate, 'New data is correct');
         assert.deepEqual(dataSourceItem.endDate, updatedItem.endDate, 'New data is correct');
     });
 
     test('Appointment with \'Etc/UTC\' tz should be rendered correctly(T394991)', function(assert) {
-        // this.clock.restore(); // TODO
         const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date('2016-06-25T17:00:00.000Z').getTimezoneOffset() * 60000);
         try {
             const scheduler = createWrapper({
@@ -846,7 +852,7 @@ module('Scheduler grid', moduleConfig, () => {
                 views: ['day'],
                 currentView: 'day',
                 editing: true,
-                timeZone: 'Greenwich', // 0
+                timeZone: timeZones.Greenwich,
                 dataSource: [{
                     text: 'a',
                     startDate: '2016-06-25T17:00:00.000Z',
@@ -918,8 +924,8 @@ module('Scheduler grid', moduleConfig, () => {
 
         scheduler.instance.option('dataSource', [{
             startDate: new Date(Date.UTC(2016, 4, 7, 1)),
-            startDateTimeZone: 'Asia/Yekaterinburg',
-            endDateTimeZone: 'Asia/Yekaterinburg',
+            startDateTimeZone: timeZones.Yekaterinburg,
+            endDateTimeZone: timeZones.Yekaterinburg,
             endDate: new Date(Date.UTC(2016, 4, 7, 1, 30)),
             text: 'new Date sample'
         }]);
@@ -943,8 +949,8 @@ module('Scheduler grid', moduleConfig, () => {
                 text: 'a',
                 startDate: '2015-12-25T10:00:00.000Z',
                 endDate: '2015-12-25T10:15:00.000Z',
-                startDateTimeZone: 'America/Lima', // -5
-                endDateTimeZone: 'America/Lima'
+                startDateTimeZone: timeZones.Lima, // -5
+                endDateTimeZone: timeZones.Lima
             }]
         });
 
@@ -972,13 +978,13 @@ module('Scheduler grid', moduleConfig, () => {
             currentView: 'day',
             editing: true,
             recurrenceEditMode: 'occurrence',
-            timeZone: 'America/Phoenix', // -7
+            timeZone: timeZones.Phoenix, // -7
             dataSource: [{
                 text: 'a',
                 startDate: '2015-05-25T17:00:00.000Z',
                 endDate: '2015-05-25T17:15:00.000Z',
-                startDateTimeZone: 'America/Lima', // -5
-                endDateTimeZone: 'America/Lima'
+                startDateTimeZone: timeZones.Lima, // -5
+                endDateTimeZone: timeZones.Lima
             }]
         });
 
@@ -1008,8 +1014,6 @@ module('Scheduler grid', moduleConfig, () => {
     });
 
     test('Scheduler should not update scroll position if appointment is visible, when timeZone is set ', function(assert) {
-        // this.clock.restore(); // TODO
-
         const scheduler = createWrapper({
             startDayHour: 3,
             endDayHour: 10,
@@ -1124,13 +1128,11 @@ module('Scheduler grid', moduleConfig, () => {
                 }
             ],
             currentDate: new Date(2015, 1, 9),
-            timeZone: 'America/Los_Angeles',
+            timeZone: timeZones.LosAngeles,
             views: ['month'],
             currentView: 'month',
             height: 800
         });
-
-        // this.clock.tick(); TODO
 
         const $appointment = $(scheduler.getElement()).find(CLASSES.appointment).eq(0);
         const $recurringIcon = $appointment.find('.dx-scheduler-appointment-recurrence-icon');
@@ -1139,7 +1141,6 @@ module('Scheduler grid', moduleConfig, () => {
     });
 
     test('Appointment should have a correct template with custom timezone', function(assert) {
-        // this.clock.restore(); TODO
         const tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(new Date(2016, 4, 7, 5).getTimezoneOffset() * 60000);
 
         try {
@@ -1170,7 +1171,6 @@ module('Scheduler grid', moduleConfig, () => {
         }
     });
 
-    //
     [{
         startDate: new Date(2015, 1, 4, 5),
         endDate: new Date(2015, 1, 4, 7),
@@ -1391,7 +1391,7 @@ module('Appointment popup', moduleConfig, () => {
     });
 });
 
-module('Oll tests', {
+module('Fixed client time zone offset', {
     beforeEach() {
         this.clock = sinon.useFakeTimers();
         this.tzOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-10800000);
@@ -1525,7 +1525,8 @@ module('Oll tests', {
             views: ['week'],
             currentView: 'week',
             editing: true,
-            timeZone: 'America/Araguaina', // -3
+            // eslint-disable-next-line spellcheck/spell-checker
+            timeZone: timeZones.Araguaina, // -3
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2015, 5, 8, 10),
@@ -1567,7 +1568,7 @@ module('Oll tests', {
                 assert.equal(args.appointmentData.startDate.getTime(), args.targetedAppointmentData.startDate.getTime(), 'Arguments are OK');
                 assert.equal(args.appointmentData.endDate.getTime(), args.targetedAppointmentData.endDate.getTime(), 'Arguments are OK');
             },
-            timeZone: 'Etc/UTC',
+            timeZone: timeZones.UTC,
             dataSource: [appointment]
         });
 
@@ -1582,14 +1583,15 @@ module('Oll tests', {
             currentView: 'week',
             editing: true,
             recurrenceEditMode: 'occurrence',
-            timeZone: 'America/Araguaina', // -3
+            // eslint-disable-next-line spellcheck/spell-checker
+            timeZone: timeZones.Araguaina, // -3
             dataSource: [{
                 text: 'a',
                 startDate: new Date(2015, 5, 12, 10).toString(),
                 endDate: new Date(2015, 5, 12, 12).toString(),
                 recurrenceRule: 'FREQ=DAILY',
-                startDateTimeZone: 'America/Lima', // -5
-                endDateTimeZone: 'America/Lima'
+                startDateTimeZone: timeZones.Lima, // -5
+                endDateTimeZone: timeZones.Lima
             }]
         });
 
@@ -1616,8 +1618,8 @@ module('Oll tests', {
             text: 'Stand-up meeting',
             startDate: new Date(2016, 5, 7, 9),
             endDate: new Date(2016, 5, 7, 10),
-            startDateTimeZone: 'Europe/Moscow', // +3
-            endDateTimeZone: 'Europe/Moscow',
+            startDateTimeZone: timeZones.Moscow, // +3
+            endDateTimeZone: timeZones.Moscow,
             recurrenceRule: 'FREQ=DAILY'
         },
         currentDate: new Date(2016, 5, 7),
@@ -1627,8 +1629,8 @@ module('Oll tests', {
             text: 'Stand-up meeting',
             startDate: '2015-05-25T15:30:00.000Z',
             endDate: '2015-05-25T15:45:00.000Z',
-            startDateTimeZone: 'America/Phoenix', // -7
-            endDateTimeZone: 'America/Phoenix',
+            startDateTimeZone: timeZones.Phoenix, // -7
+            endDateTimeZone: timeZones.Phoenix,
             recurrenceRule: 'FREQ=DAILY'
         },
         currentDate: new Date(2015, 4, 25),
@@ -1641,7 +1643,7 @@ module('Oll tests', {
                 currentView: 'week',
                 firstDayOfWeek: 1,
                 recurrenceEditMode: 'occurrence',
-                timeZone: 'America/Phoenix', // -7
+                timeZone: timeZones.Phoenix, // -7
                 dataSource: [appointment]
             });
 
@@ -1659,12 +1661,12 @@ module('Oll tests', {
     });
 
     [{
-        timeZone: 'America/Phoenix',
-        appointmentTimeZone: 'America/Lima',
+        timeZone: timeZones.Phoenix,
+        appointmentTimeZone: timeZones.Lima,
         text: 'Appointment with custom tz that isn\'t equal to scheduler tz should be resized correctly'
     }, {
-        timeZone: 'America/Lima',
-        appointmentTimeZone: 'America/Lima',
+        timeZone: timeZones.Lima,
+        appointmentTimeZone: timeZones.Lima,
         text: 'Appointment with custom tz that is equal to scheduler tz should be resized correctly'
     }].forEach(testCase => {
         test(`${testCase.text}(T392414)`, function(assert) {
@@ -1741,7 +1743,7 @@ module('Oll tests', {
             views: ['month'],
             currentView: 'month',
             currentDate: new Date(2018, 8, 17),
-            timeZone: 'Etc/UTC',
+            timeZone: timeZones.UTC,
             showCurrentTimeIndicator: false,
             maxAppointmentsPerCell: 1,
             height: 600,
@@ -1758,12 +1760,12 @@ module('Oll tests', {
                 text: 'Stand-up meeting',
                 startDate: new Date(2015, 4, 25, 17),
                 endDate: new Date(2015, 4, 25, 17, 30),
-                startDateTimeZone: 'America/Lima', // -5
-                endDateTimeZone: 'America/Lima'
+                startDateTimeZone: timeZones.Lima, // -5
+                endDateTimeZone: timeZones.Lima
             }],
             startDayHour: 10,
             currentDate: new Date(2015, 4, 25),
-            timeZone: 'America/Dawson_Creek', // -7
+            timeZone: timeZones.Dawson_Creek, // -7
             height: 500,
             currentView: 'week',
             firstDayOfWeek: 1
