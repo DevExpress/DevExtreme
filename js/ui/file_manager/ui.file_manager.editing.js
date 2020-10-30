@@ -71,7 +71,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _getFileUploaderController() {
-        const uploadDirectory = this._uploadDirectoryInfo?.fileItem || this._getCurrentDirectory().fileItem;
+        const uploadDirectory = this.uploadDirectoryInfo.fileItem;
         return {
             chunkSize: this._controller.getFileUploadChunkSize(),
             uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
@@ -193,7 +193,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _onUploadSessionStarted({ sessionInfo }) {
-        const uploadDirectoryPathKeyParts = this._controller._getDirectoryPathKeyParts(this._uploadDirectoryInfo || this._getCurrentDirectory());
+        const uploadDirectoryPathKeyParts = this._controller.getDirectoryPathKeyParts(this.uploadDirectoryInfo);
         this._controller.processUploadSession(sessionInfo, uploadDirectoryPathKeyParts);
     }
 
@@ -289,7 +289,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _tryUpload(destinationFolder) {
-        this._uploadDirectoryInfo = destinationFolder?.[0] || this._getCurrentDirectory();
+        this._uploadDirectoryInfo = destinationFolder?.[0];
         this._fileUploader.tryUpload();
     }
 
@@ -455,6 +455,10 @@ class FileManagerEditingControl extends Widget {
 
     _getCurrentDirectory() {
         return this._controller.getCurrentDirectory();
+    }
+
+    get uploadDirectoryInfo() {
+        return this._uploadDirectoryInfo || this._getCurrentDirectory();
     }
 }
 

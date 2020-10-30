@@ -253,12 +253,12 @@ export default class FileItemsController {
     }
 
     processUploadSession(sessionInfo, uploadDirectoryPathKeyParts) {
-        const uploadDirectoryInfo = this._findSelectedDirectoryByPathKeyParts(uploadDirectoryPathKeyParts);
+        const uploadDirectoryInfo = this._findDirectoryByPathKeyParts(uploadDirectoryPathKeyParts);
         const itemInfos = this._getItemInfosForUploaderFiles(sessionInfo.files, uploadDirectoryInfo);
         const actionInfo = this._createEditActionInfo('upload', itemInfos, uploadDirectoryInfo, { sessionInfo });
         return this._processEditAction(actionInfo,
             () => sessionInfo.deferreds,
-            () => this._resetDirectoryState(this._findSelectedDirectoryByPathKeyParts(uploadDirectoryPathKeyParts)));
+            () => this._resetDirectoryState(this._findDirectoryByPathKeyParts(uploadDirectoryPathKeyParts)));
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
@@ -373,13 +373,13 @@ export default class FileItemsController {
         const cachedRootInfo = {
             items: this._rootDirectoryInfo.items
         };
-        const selectedKeyParts = this._getDirectoryPathKeyParts(this.getCurrentDirectory());
+        const selectedKeyParts = this.getDirectoryPathKeyParts(this.getCurrentDirectory());
 
         this._resetDirectoryState(this._rootDirectoryInfo);
 
         return this._loadItemsRecursive(this._rootDirectoryInfo, cachedRootInfo)
             .then(() => {
-                const dirInfo = this._findSelectedDirectoryByPathKeyParts(selectedKeyParts);
+                const dirInfo = this._findDirectoryByPathKeyParts(selectedKeyParts);
                 this.setCurrentDirectory(dirInfo);
 
                 delete this._lockRefresh;
@@ -469,7 +469,7 @@ export default class FileItemsController {
             });
     }
 
-    _getDirectoryPathKeyParts(directoryInfo) {
+    getDirectoryPathKeyParts(directoryInfo) {
         const pathParts = [];
         while(directoryInfo && directoryInfo.parentDirectory) {
             pathParts.unshift(directoryInfo.fileItem.key);
@@ -478,7 +478,7 @@ export default class FileItemsController {
         return pathParts;
     }
 
-    _findSelectedDirectoryByPathKeyParts(keyParts) {
+    _findDirectoryByPathKeyParts(keyParts) {
         let selectedDirInfo = this._rootDirectoryInfo;
         if(keyParts.length === 0) {
             return selectedDirInfo;
