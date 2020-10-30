@@ -486,7 +486,7 @@ const DateBox = DropDownEditor.inherit({
         const newValue = uiDateUtils.mergeDates(value, parsedDate, type);
         const date = parsedDate && type === 'time' ? newValue : parsedDate;
 
-        if(this._applyInternalValidation(date)) {
+        if(this._applyInternalValidation(date).isValid) {
             const displayedText = this._getDisplayedText(newValue);
 
             if(value && newValue && value.getTime() === newValue.getTime() && displayedText !== text) {
@@ -530,7 +530,11 @@ const DateBox = DropDownEditor.inherit({
             }
         });
 
-        return isValid;
+        return {
+            isValid,
+            isDate,
+            isDateInRange
+        };
     },
 
     _applyCustomValidation: function(value) {
@@ -606,8 +610,12 @@ const DateBox = DropDownEditor.inherit({
 
     _applyButtonHandler: function(e) {
         const value = this._strategy.getValue();
-        if(this._applyInternalValidation(value)) {
+        const validationResult = this._applyInternalValidation(value);
+        if(validationResult.isValid) {
             this.dateValue(value, e.event);
+        } else if(validationResult.isDate) {
+            const displayedText = this._getDisplayedText(value);
+            this._input().val(displayedText);
         }
         this.callBase();
     },
