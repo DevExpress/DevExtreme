@@ -188,7 +188,6 @@ const ResponsiveBox = CollectionWidget.inherit({
         this._prepareGrid();
         this._spreadItems();
         this._layoutItems();
-        this._linkNodeToItem();
     },
 
     _itemOptionChanged: function(item) {
@@ -198,7 +197,6 @@ const ResponsiveBox = CollectionWidget.inherit({
         }
 
         this._refreshItem($item, item);
-        this._clearItemNodeTemplates();
         this._update();
     },
 
@@ -406,16 +404,6 @@ const ResponsiveBox = CollectionWidget.inherit({
         });
     },
 
-    _linkNodeToItem: function() {
-        each(this._itemElements(), function(_, itemNode) {
-            const $item = $(itemNode);
-            const item = $item.data(BOX_ITEM_DATA_KEY);
-            if(!item.box) {
-                item.node = $item.children();
-            }
-        });
-    },
-
     _layoutItems: function() {
         const rowsCount = this._grid.length;
         const colsCount = rowsCount && this._grid[0].length;
@@ -605,14 +593,7 @@ const ResponsiveBox = CollectionWidget.inherit({
 
     _dispose: function() {
         clearTimeout(this._updateTimer);
-        this._clearItemNodeTemplates();
         this.callBase.apply(this, arguments);
-    },
-
-    _clearItemNodeTemplates: function() {
-        each(this.option('items'), function() {
-            delete this.node;
-        });
     },
 
     _toggleVisibility: function(visible) {
@@ -631,7 +612,6 @@ const ResponsiveBox = CollectionWidget.inherit({
             case 'screenByWidth':
             case '_layoutStrategy':
             case 'singleColumnScreen':
-                this._clearItemNodeTemplates();
                 this._invalidate();
                 break;
             case 'width':
@@ -643,7 +623,6 @@ const ResponsiveBox = CollectionWidget.inherit({
                 this._initLayoutChangedAction();
                 break;
             case 'itemTemplate':
-                this._clearItemNodeTemplates();
                 this.callBase(args);
                 break;
             case 'currentScreenFactor':

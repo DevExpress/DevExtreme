@@ -4,6 +4,7 @@ import registerComponent from 'core/component_registrator';
 import Widget from 'ui/widget/ui.widget';
 import ResponsiveBox from 'ui/responsive_box';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
+import dxButton from 'ui/button';
 
 import 'common.css!';
 import 'ui/box';
@@ -385,14 +386,11 @@ QUnit.module('template rendering', moduleConfig, () => {
             ]
         });
 
-        let $widget = $responsiveBox.find('.dx-item .dx-widget');
-        const initialWidget = $widget.dxWidget('instance');
-
         this.updateScreenSize(700);
         this.updateScreenSize(1000);
 
-        $widget = $responsiveBox.find('.dx-item .dx-widget');
-        assert.equal($widget.dxWidget('instance'), initialWidget, 'widget was rendered correctly');
+        const $widget = $responsiveBox.find('.dx-item .dx-widget');
+        assert.notEqual($widget.dxWidget('instance'), undefined, 'widget was rendered correctly');
     });
 
     QUnit.test('items have no unsafe modifications after dispose', function(assert) {
@@ -424,8 +422,6 @@ QUnit.module('template rendering', moduleConfig, () => {
             cols: [{}],
             items: items
         });
-
-        assert.ok(items[0].node, 'node exists on rendering (unsafe)');
 
         $responsiveBox.dxResponsiveBox('instance').dispose();
 
@@ -592,6 +588,27 @@ QUnit.module('option', moduleConfig, () => {
 
         assert.equal($('#responsiveBox').find('.dx-item').eq(0).get(0).style.display, 'flex', 'Layout is correct');
         assert.equal($('#responsiveBox').find('.dx-item').eq(0).get(0).style.flex, '1 1 auto', 'Layout is correct');
+    });
+
+    QUnit.test('nested component in template should work after update', function(assert) {
+        let expected = false;
+        const responsiveBox = $('#responsiveBox').dxResponsiveBox({
+            items: [ { ratio: 1 } ],
+            itemTemplate: function(data, index, element) {
+                const $button = $('<div />');
+                new dxButton($button, {
+                    onClick: function() {
+                        expected = true;
+                    }
+                });
+                element.append($button);
+            },
+        }).dxResponsiveBox('instance');
+
+        responsiveBox._update();
+        responsiveBox.$element().find('.dx-button').trigger('click');
+
+        assert.equal(expected, true, 'onClick event is processed');
     });
 });
 
