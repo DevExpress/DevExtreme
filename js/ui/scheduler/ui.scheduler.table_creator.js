@@ -77,12 +77,18 @@ class SchedulerTableCreator {
                 }
 
                 if(options.cellTemplate && options.cellTemplate.render) {
+                    let $templateContainer = $(td);
+                    if(options.addTemplateWrapper) {
+                        $templateContainer = $('<div>').appendTo($(td));
+                        $templateContainer.addClass('dx-scheduler-date-cell-template-wrapper');
+                    }
+
                     const templateOptions = {
                         model: {
                             text: options.getCellText ? options.getCellText(i, j) : '',
                             date: options.getCellDate ? options.getCellDate(i) : undefined
                         },
-                        container: getPublicElement($(td)),
+                        container: getPublicElement($templateContainer),
                         index: i * options.cellCount + j
                     };
 
