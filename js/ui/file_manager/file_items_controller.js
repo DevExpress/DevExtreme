@@ -252,13 +252,13 @@ export default class FileItemsController {
             });
     }
 
-    processUploadSession(sessionInfo, uploadDirectoryInfoCallback) {
-        const uploadDirectoryInfo = uploadDirectoryInfoCallback();
+    processUploadSession(sessionInfo, uploadDirectoryPathKeyParts) {
+        const uploadDirectoryInfo = this._findSelectedDirectoryByPathKeyParts(uploadDirectoryPathKeyParts);
         const itemInfos = this._getItemInfosForUploaderFiles(sessionInfo.files, uploadDirectoryInfo);
         const actionInfo = this._createEditActionInfo('upload', itemInfos, uploadDirectoryInfo, { sessionInfo });
         return this._processEditAction(actionInfo,
             () => sessionInfo.deferreds,
-            () => this._resetDirectoryState(uploadDirectoryInfoCallback()));
+            () => this._resetDirectoryState(this._findSelectedDirectoryByPathKeyParts(uploadDirectoryPathKeyParts)));
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {

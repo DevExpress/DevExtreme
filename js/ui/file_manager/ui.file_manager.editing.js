@@ -71,10 +71,11 @@ class FileManagerEditingControl extends Widget {
     }
 
     _getFileUploaderController() {
+        const uploadDirectory = this._uploadDirectoryInfo?.fileItem || this._getCurrentDirectory().fileItem;
         return {
             chunkSize: this._controller.getFileUploadChunkSize(),
-            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, this.uploadDirectoryInfoCallback()?.fileItem),
-            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, this.uploadDirectoryInfoCallback()?.fileItem)
+            uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
+            abortFileUpload: (fileData, chunksInfo) => this._controller.abortFileUpload(fileData, chunksInfo, uploadDirectory)
         };
     }
 
@@ -192,7 +193,8 @@ class FileManagerEditingControl extends Widget {
     }
 
     _onUploadSessionStarted({ sessionInfo }) {
-        this._controller.processUploadSession(sessionInfo, this.uploadDirectoryInfoCallback);
+        const uploadDirectoryPathKeyParts = this._controller._getDirectoryPathKeyParts(this._uploadDirectoryInfo || this._getCurrentDirectory());
+        this._controller.processUploadSession(sessionInfo, uploadDirectoryPathKeyParts);
     }
 
     _onEditActionStarting(actionInfo) {
@@ -287,7 +289,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _tryUpload(destinationFolder) {
-        this._uploadDirectoryInfo = destinationFolder?.[0];
+        this._uploadDirectoryInfo = destinationFolder?.[0] || this._getCurrentDirectory();
         this._fileUploader.tryUpload();
     }
 
@@ -454,11 +456,6 @@ class FileManagerEditingControl extends Widget {
     _getCurrentDirectory() {
         return this._controller.getCurrentDirectory();
     }
-
-    get uploadDirectoryInfoCallback() {
-        return () => { return this._uploadDirectoryInfo || this._getCurrentDirectory(); };
-    }
-
 }
 
 class FileManagerActionContext {
