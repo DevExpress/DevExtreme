@@ -411,11 +411,16 @@ const getOffsetWithoutScale = function($startElement, $currentElement = $startEl
     }
 
     const style = currentElement.getAttribute('style') || '';
-    const scale = style.match(scaleRe)?.[0] || '';
+    const scale = style.match(scaleRe)?.[0];
+    let offset;
 
-    currentElement.setAttribute('style', style.replace(scale, ''));
-    const offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-    currentElement.setAttribute('style', style);
+    if(scale) {
+        currentElement.setAttribute('style', style.replace(scale, ''));
+        offset = getOffsetWithoutScale($startElement, $currentElement.parent());
+        currentElement.setAttribute('style', style);
+    } else {
+        offset = getOffsetWithoutScale($startElement, $currentElement.parent());
+    }
 
     return offset;
 };
