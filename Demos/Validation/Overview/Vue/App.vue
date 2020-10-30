@@ -235,7 +235,7 @@ export default {
       return this.password;
     },
     checkComparison() {
-       return true;
+      return true;
     },
     asyncValidation(params) {
       return sendRequest(params.value);
