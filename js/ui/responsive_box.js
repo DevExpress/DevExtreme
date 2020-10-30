@@ -598,32 +598,15 @@ const ResponsiveBox = CollectionWidget.inherit({
     _update: function() {
         const $existingRoot = this._$root;
         this._renderItems();
-        $existingRoot && $existingRoot.detach();
-        this._saveAssistantRoot($existingRoot);
+        $existingRoot && $existingRoot.remove();
         this._layoutChangedAction();
         this._updateRootBox();
-    },
-
-    _saveAssistantRoot: function($root) {
-        this._assistantRoots = this._assistantRoots || [];
-        this._assistantRoots.push($root);
     },
 
     _dispose: function() {
         clearTimeout(this._updateTimer);
         this._clearItemNodeTemplates();
-        this._cleanUnusedRoots();
         this.callBase.apply(this, arguments);
-    },
-
-    _cleanUnusedRoots: function() {
-        if(!this._assistantRoots) {
-            return;
-        }
-
-        each(this._assistantRoots, function(_, item) {
-            $(item).remove();
-        });
     },
 
     _clearItemNodeTemplates: function() {
