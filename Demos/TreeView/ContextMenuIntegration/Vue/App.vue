@@ -92,7 +92,7 @@ export default {
           break;
         }
       }
-      this.logItems.push(logEntry);
+      this.logItems = [...this.logItems, logEntry];
     }
   }
 };
