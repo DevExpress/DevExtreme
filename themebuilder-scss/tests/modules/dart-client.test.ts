@@ -5,7 +5,7 @@ const createServer = (echo = true): net.Server => net.createServer((socket) => {
   if (echo) {
     socket.pipe(socket);
   } else {
-    socket.on('data', () => {
+    socket.once('data', () => {
       socket.write('test');
     });
   }
@@ -66,6 +66,6 @@ describe('DartClient tests', () => {
     const reply = await client.send(testData);
     await client.dispose();
     await stopServer();
-    expect(reply).toEqual({ error: true });
+    expect(reply).toEqual({ error: 'Unable to parse dart server response: test' });
   });
 });

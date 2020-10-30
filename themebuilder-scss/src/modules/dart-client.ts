@@ -1,4 +1,5 @@
 import net from 'net';
+import Logger from './logger';
 
 export default class DartClient {
   serverPort = 22000;
@@ -64,15 +65,17 @@ export default class DartClient {
       });
 
       this.client.on('end', () => {
+        Logger.log('DartClient received', data);
         let parsedData;
         try {
           parsedData = JSON.parse(data);
         } catch (e) {
-          parsedData = { error: true };
+          parsedData = { error: `Unable to parse dart server response: ${data}` };
         }
         resolve(parsedData);
       });
 
+      Logger.log('DartClient send', message);
       this.client.write(JSON.stringify(message));
       this.client.end();
     });

@@ -62,7 +62,7 @@ export default class Compiler {
       file: options.file,
       data: options.data,
     }).then((reply) => {
-      if (reply.error) reject();
+      if (reply.error) reject(reply.error);
       else {
         resolve({
           result: {
