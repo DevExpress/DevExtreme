@@ -1,5 +1,5 @@
 {
     "screenshots": {
-        "path": "./testing/testcafe/screenshots/"
+        "path": "./"
     }
 }

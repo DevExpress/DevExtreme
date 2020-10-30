@@ -14,7 +14,7 @@ const screenshotComparerDefault = {
   highlightColor: { r: 0xff, g: 0, b: 0xff },
   attempt: 3,
   attemptTimeout: 500,
-  comparisonOptions: {
+  looksSameComparisonOptions: {
     strict: false,
     tolerance: 30,
     // eslint-disable-next-line spellcheck/spell-checker
@@ -24,6 +24,7 @@ const screenshotComparerDefault = {
     ignoreCaret: true,
   },
 };
+type ComparerOptions = typeof screenshotComparerDefault;
 
 function ensureArtifactsPath() {
   if (!fs.existsSync(artifactsPath)) {
@@ -114,7 +115,8 @@ async function getMaskedScreenshotBuffer({
 
 async function getDiff({
   etalonFileName, screenshotBuffer, options,
-}: { etalonFileName; screenshotBuffer; options: typeof screenshotComparerDefault}) {
+}: { etalonFileName; screenshotBuffer; options: ComparerOptions}):
+  Promise<Buffer> {
   function colorToString(color: typeof options.highlightColor) {
     return `#${Object.values(color).map((n) => n.toString(16).padStart(2, '0')).join('')}`;
   }
@@ -124,7 +126,7 @@ async function getDiff({
       reference: etalonFileName,
       current: screenshotBuffer,
       highlightColor,
-      ...options.comparisonOptions,
+      ...options.looksSameComparisonOptions,
     };
     LooksSame.createDiff(diffOptions, (error, buffer) => {
       if (error) {
@@ -136,7 +138,7 @@ async function getDiff({
   });
 }
 
-function getMask(diffBuffer, options: typeof screenshotComparerDefault) {
+function getMask(diffBuffer, options: ComparerOptions) {
   function makeTransparentExceptColor(image, { r, g, b }) {
     for (let y = 0; y < image.height; y++) {
       for (let x = 0; x < image.width; x++) {
@@ -162,7 +164,7 @@ async function tryGetValidScreenshot({
   screenshotFileName: string;
   etalonFileName: string;
   maskFileName: string;
-  options: typeof screenshotComparerDefault; }) {
+  options: ComparerOptions; }) {
   let equal = false;
   let attemptCount = options.attempt;
   let screenshotBuffer;
@@ -177,7 +179,7 @@ async function tryGetValidScreenshot({
     equal = await looksSame({
       etalonFileName,
       screenshotBuffer,
-      comparisonOptions: options.comparisonOptions,
+      comparisonOptions: options.looksSameComparisonOptions,
     });
     if (attemptCount > 1) {
       await t.wait(options.attemptTimeout);
@@ -189,7 +191,7 @@ export async function compareScreenshot(
   t: TestController,
   screenshotName: string,
   element: Selector | string | null = null,
-  comparisonOptions?: Partial<typeof screenshotComparerDefault>,
+  comparisonOptions?: Partial<ComparerOptions>,
 ) {
   const screenshotFileName = path.join(screenshotsPath, screenshotName);
   const etalonsPath = path.join(path.dirname((t as any).testRun.test.testFile.filename), 'etalons');
@@ -227,7 +229,7 @@ export function createScreenshotsComparer(t: TestController) {
   return {
     takeScreenshot: async (screenshotName: string,
       element: Selector | string | null = null,
-      comparisonOptions?: Partial<typeof screenshotComparerDefault>,
+      comparisonOptions?: Partial<ComparerOptions>,
     ) => {
       try {
         const isValid = await compareScreenshot(t, screenshotName, element, comparisonOptions);
