@@ -76,6 +76,7 @@ const devices = require('../core/devices');
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;
 const collisionRe = /fit|flip|none/;
+const scaleRe = /scale(.+)/;
 const IS_SAFARI = browser.safari;
 
 const normalizeAlign = function(raw) {
@@ -409,12 +410,12 @@ const getOffsetWithoutScale = function($startElement, $currentElement = $startEl
         return $startElement.offset();
     }
 
-    const transform = $currentElement.get(0).style.transform;
-    const scale = (transform.match(/scale(.+)/) || [])[0];
+    const style = currentElement.getAttribute('style') || '';
+    const scale = style.match(scaleRe)?.[0] || '';
 
-    currentElement.style.transform = transform.replace(scale, '');
+    currentElement.setAttribute('style', style.replace(scale, ''));
     const offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-    currentElement.style.transform = transform;
+    currentElement.setAttribute('style', style);
 
     return offset;
 };
