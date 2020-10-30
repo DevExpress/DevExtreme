@@ -7,7 +7,7 @@
         key-expr="id"
       >
         <DxItemDragging
-          :data="plannedTasks"
+          data="plannedTasks"
           :allow-reordering="true"
           :on-drag-start="onDragStart"
           :on-add="onAdd"
@@ -21,7 +21,7 @@
         key-expr="id"
       >
         <DxItemDragging
-          :data="doingTasks"
+          data="doingTasks"
           :allow-reordering="true"
           :on-drag-start="onDragStart"
           :on-add="onAdd"
@@ -51,13 +51,17 @@ export default {
   },
   methods: {
     onDragStart(e) {
-      e.itemData = e.fromData[e.fromIndex];
+      e.itemData = this[e.fromData][e.fromIndex];
     },
     onAdd(e) {
-      e.toData.splice(e.toIndex, 0, e.itemData);
+      const data = [...this[e.toData]];
+      data.splice(e.toIndex, 0, e.itemData);
+      this[e.toData] = data;
     },
     onRemove(e) {
-      e.fromData.splice(e.fromIndex, 1);
+      const data = [...this[e.fromData]];
+      data.splice(e.fromIndex, 1);
+      this[e.fromData] = data;
     }
   }
 };
