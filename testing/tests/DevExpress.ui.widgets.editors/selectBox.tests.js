@@ -833,18 +833,10 @@ QUnit.module('functionality', moduleSetup, () => {
             opened: true,
             searchTimeout: 0
         });
-        const instance = $selectBox.dxSelectBox('instance');
         const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
         const keyboard = keyboardMock($input);
 
-        keyboard.type('2');
-        this.clock.tick(TIME_TO_WAIT);
-        $('.dx-item').trigger('dxclick');
-        $($input).trigger('dxclick');
-        this.clock.tick(TIME_TO_WAIT);
-        assert.equal($.trim($('.dx-item').first().text()), '0', 'filter was cleared after item selected');
-
-        keyboard.press('backspace').type('3');
+        keyboard.type('3');
         this.clock.tick(TIME_TO_WAIT);
         keyboard.press('esc');
         this.clock.tick(TIME_TO_WAIT);
@@ -852,10 +844,7 @@ QUnit.module('functionality', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
         assert.equal($.trim($('.dx-item').first().text()), '3', 'filter was not cleared when no focusout and no item selection happened');
 
-        instance.close();
-        $input.focusout();
-        this.clock.tick(TIME_TO_WAIT);
-        $($input).trigger('dxclick');
+        keyboard.press('backspace');
         this.clock.tick(TIME_TO_WAIT);
         assert.equal($.trim($('.dx-item').first().text()), '0', 'filter was cleared when focusout even if item was not selected');
     });
@@ -3237,7 +3226,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal(selectBox.getDataSource().searchValue(), null, 'filter was cleared');
     });
 
-    QUnit.test('Opening selectBox after search should not load data if the \'showDataBeforeSearch\' option is false', function(assert) {
+    QUnit.test('Opening selectBox after search should filter dataSource if minSearchLength is exceeded(T943466)', function(assert) {
         const dataSource = new DataSource({
             load: () => {
                 return ['aaa', 'aab', 'bbb'];
@@ -3265,13 +3254,11 @@ QUnit.module('search', moduleSetup, () => {
         const loadSpy = sinon.spy(dataSource, 'load');
         $($input).trigger('dxclick');
 
-        const $emptyMessage = $('.dx-empty-message');
         const $items = $(toSelector(LIST_ITEM_CLASS));
 
-        assert.equal(loadSpy.callCount, 0, 'the was no load');
+        assert.ok(loadSpy.calledOnce, 'items are loaded');
         assert.ok(instance.option('opened'), 'selectBox is opened');
-        assert.equal($items.length, 0, 'items is not rendered');
-        assert.equal($emptyMessage.length, 1, 'empty message is rendered');
+        assert.strictEqual($items.length, 3, 'items are rendered');
     });
 
     QUnit.test('Input value should not be changed after dropdown click when \'startswith\' search mode is enabled', function(assert) {
@@ -5144,35 +5131,6 @@ QUnit.module('keyboard navigation \'TAB\' button', moduleSetup, () => {
 });
 
 QUnit.module('acceptCustomValue mode', moduleSetup, () => {
-    QUnit.test('All items should be displayed when widget focused out before search completion', function(assert) {
-        const items = ['aaa', 'bbb'];
-        const $selectBox = $('#selectBox').dxSelectBox({
-            searchEnabled: true,
-            acceptCustomValue: true,
-            dataSource: items,
-            opened: true,
-            searchTimeout: 500
-        });
-        const $input = $selectBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-
-        $input.focus();
-
-        keyboard.press('down')
-            .press('enter')
-            .press('end')
-            .type('Xsdx');
-
-        $input.blur();
-        pointerMock($input).start().click();
-
-        this.clock.tick(500);
-
-        const $listItems = $(`.${POPUP_CONTENT_CLASS} .${LIST_ITEM_CLASS}`);
-        assert.equal($listItems.length, items.length, 'all items are displayed');
-        assert.equal($listItems.text(), items.join(''), 'items are displayed correctly');
-    });
-
     QUnit.test('input value can be edited when acceptCustomValue=true', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             acceptCustomValue: true
