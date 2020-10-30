@@ -39,11 +39,6 @@ const timeZones = {
 
 testStart(() => initTestMarkup());
 
-const getDeltaTz = (schedulerTz, date) => { // TODO
-    const defaultTz = date.getTimezoneOffset() * 60000;
-    return schedulerTz * 3600000 + defaultTz;
-};
-
 const moduleConfig = {
     beforeEach() {
         fx.off = true;
@@ -730,6 +725,11 @@ module('Not native date DST', moduleConfig, () => {
 });
 
 module('Scheduler grid', moduleConfig, () => {
+    const getDeltaTz = (schedulerTz, date) => {
+        const defaultTz = date.getTimezoneOffset() * 60000;
+        return schedulerTz * 3600000 + defaultTz;
+    };
+
     [
         {
             timeZone: timeZones.NewYork,
@@ -1247,6 +1247,11 @@ module('Scheduler grid', moduleConfig, () => {
 });
 
 module('Appointment popup', moduleConfig, () => {
+    const getDeltaTz = (schedulerTz, date) => {
+        const defaultTz = date.getTimezoneOffset() * 60000;
+        return schedulerTz * 3600000 + defaultTz;
+    };
+
     module('scheduler time zone is set', () => {
         const cases = [{
             startDate: (new Date(2017, 4, 21, 22)).valueOf(),
