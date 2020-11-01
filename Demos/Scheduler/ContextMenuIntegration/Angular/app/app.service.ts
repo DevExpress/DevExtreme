@@ -26,26 +26,26 @@ let appointments: Appointment[] = [
     {
         text: "Watercolor Landscape",
         roomId: [1],
-        startDate: new Date("2021-02-29T06:30:00.000Z"),
-        endDate: new Date("2021-02-29T08:00:00.000Z"),
+        startDate: new Date("2021-03-01T06:30:00.000Z"),
+        endDate: new Date("2021-03-01T08:00:00.000Z"),
         recurrenceRule: "FREQ=WEEKLY;BYDAY=TU,FR;COUNT=10"
     }, {
         text: "Oil Painting for Beginners",
         roomId: [2],
-        startDate: new Date("2021-02-29T06:30:00.000Z"),
-        endDate: new Date("2021-02-29T08:00:00.000Z"),
+        startDate: new Date("2021-03-01T06:30:00.000Z"),
+        endDate: new Date("2021-03-01T08:00:00.000Z"),
         recurrenceRule: "FREQ=WEEKLY;BYDAY=MO,TH;COUNT=10"
     }, {
         text: "Testing",
         roomId: [3],
-        startDate: new Date("2021-02-29T09:00:00.000Z"),
-        endDate: new Date("2021-02-29T10:00:00.000Z"),
+        startDate: new Date("2021-03-01T09:00:00.000Z"),
+        endDate: new Date("2021-03-01T10:00:00.000Z"),
         recurrenceRule: "FREQ=WEEKLY;BYDAY=MO;WKST=TU;INTERVAL=2;COUNT=2"
     }, {
         text: "Meeting of Instructors",
         roomId: [4],
-        startDate: new Date("2021-02-29T06:00:00.000Z"),
-        endDate: new Date("2021-02-29T06:15:00.000Z"),
+        startDate: new Date("2021-03-01T06:00:00.000Z"),
+        endDate: new Date("2021-03-01T06:15:00.000Z"),
         recurrenceRule: "FREQ=DAILY;BYDAY=WE;UNTIL=20210401"
     }, {
         text: "Recruiting students",
@@ -69,8 +69,8 @@ let appointments: Appointment[] = [
     }, {
         text: "Open Day",
         roomId: [5],
-        startDate: new Date("2021-02-29T06:30:00.000Z"),
-        endDate: new Date("2021-02-29T10:00:00.000Z"),
+        startDate: new Date("2021-03-01T06:30:00.000Z"),
+        endDate: new Date("2021-03-01T10:00:00.000Z"),
         recurrenceRule: "FREQ=YEARLY;BYYEARDAY=87"
     }
 ];
