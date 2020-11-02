@@ -595,12 +595,12 @@ const ResponsiveBox = CollectionWidget.inherit({
         return result;
     },
 
-    _update: function(forceRemove) {
+    _update: function(forceRemoveRoot) {
         const $existingRoot = this._$root;
         this._renderItems();
 
         if($existingRoot) {
-            if(forceRemove) {
+            if(forceRemoveRoot) {
                 $existingRoot.remove();
             } else {
                 $existingRoot.detach();
