@@ -604,8 +604,8 @@ const ResponsiveBox = CollectionWidget.inherit({
                 $existingRoot.remove();
             } else {
                 $existingRoot.detach();
+                this._saveAssistantRoot($existingRoot);
             }
-            this._saveAssistantRoot($existingRoot);
         }
 
         this._layoutChangedAction();

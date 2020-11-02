@@ -4,7 +4,7 @@ import registerComponent from 'core/component_registrator';
 import Widget from 'ui/widget/ui.widget';
 import ResponsiveBox from 'ui/responsive_box';
 import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
-
+import dxButton from 'ui/button';
 import 'common.css!';
 import 'ui/box';
 
@@ -593,5 +593,60 @@ QUnit.module('option', moduleConfig, () => {
         assert.equal($('#responsiveBox').find('.dx-item').eq(0).get(0).style.display, 'flex', 'Layout is correct');
         assert.equal($('#responsiveBox').find('.dx-item').eq(0).get(0).style.flex, '1 1 auto', 'Layout is correct');
     });
+
+    [
+        box => {
+            box.option('items[0].visible', false);
+            box.option('items[0].visible', true);
+        }, box => {
+            box.option('items[0].disabled', true);
+            box.option('items[0].disabled', false);
+        }
+    ].forEach(optionRefreshAction => {
+        QUnit.test(`nested component is disposed after ${optionRefreshAction.toString()} changed`, function(assert) {
+            registerComponent('dxWidget', Widget.inherit({}));
+
+            const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
+                rows: [{}],
+                cols: [{}],
+                items: [{
+                    location: { row: 0, col: 0, screen: 'md' }, template: function() {
+                        return $('<div>').dxWidget();
+                    }
+                }]
+            });
+
+            const getWidget = () => $responsiveBox.find('.dx-item .dx-widget').dxWidget('instance');
+            const initialWidget = getWidget();
+
+            const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
+            optionRefreshAction(responsiveBox);
+
+            assert.notEqual(initialWidget, getWidget(), 'widget is new instance');
+            assert.equal(responsiveBox._assistantRoots, undefined, 'there is no roots cache');
+        });
+
+        QUnit.test(`nested component in template should work after ${optionRefreshAction.toString()} changed (T940715)`, function(assert) {
+            let expected = false;
+            const responsiveBox = $('#responsiveBox').dxResponsiveBox({
+                items: [ { ratio: 1 } ],
+                itemTemplate: function(data, index, element) {
+                    const $button = $('<div />');
+                    new dxButton($button, {
+                        onClick: function() {
+                            expected = true;
+                        }
+                    });
+                    element.append($button);
+                },
+            }).dxResponsiveBox('instance');
+
+            optionRefreshAction(responsiveBox);
+            responsiveBox.$element().find('.dx-button').trigger('dxclick');
+
+            assert.equal(expected, true, 'onClick event is processed');
+        });
+    });
+
 });
 
