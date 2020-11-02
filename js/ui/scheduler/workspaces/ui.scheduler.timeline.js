@@ -281,7 +281,7 @@ const SchedulerTimeline = SchedulerWorkSpace.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         let result = false;
 
-        if(this._needRenderDateTimeIndication()) {
+        if(this.option('showCurrentTimeIndicator') && this._isIndicatorVisible()) {
             let date = this._getDateByIndex(headerIndex);
 
             const now = this._getToday();
