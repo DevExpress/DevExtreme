@@ -842,11 +842,11 @@ QUnit.module('functionality', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
         $($input).trigger('dxclick');
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($.trim($('.dx-item').first().text()), '3', 'filter was not cleared when no focusout and no item selection happened');
+        assert.equal($.trim($('.dx-item').first().text()), '3', 'filter is not cleared after item select');
 
         keyboard.press('backspace');
         this.clock.tick(TIME_TO_WAIT);
-        assert.equal($.trim($('.dx-item').first().text()), '0', 'filter was cleared when focusout even if item was not selected');
+        assert.equal($.trim($('.dx-item').first().text()), '0', 'first page is loaded after filter clear');
     });
 
     QUnit.testInActiveWindow('SelectBox drop down should not blink on open after setting value with the help of search', function(assert) {

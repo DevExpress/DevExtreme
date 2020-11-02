@@ -445,7 +445,7 @@ const SelectBox = DropDownList.inherit({
     },
 
     _getActualSearchValue: function() {
-        return this._dataSource.searchValue() || this.option('text');
+        return this._dataSource.searchValue() || this._searchValue();
     },
 
     _toggleOpenState: function(isVisible) {
