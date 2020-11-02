@@ -7,6 +7,8 @@ import responsiveBoxScreenMock from '../../helpers/responsiveBoxScreenMock.js';
 import dxButton from 'ui/button';
 import 'common.css!';
 import 'ui/box';
+import eventsEngine from 'events/core/events_engine';
+import domAdapter from 'core/dom_adapter';
 
 QUnit.testStart(function() {
     const markup =
@@ -631,7 +633,7 @@ QUnit.module('option', moduleConfig, () => {
             const responsiveBox = $('#responsiveBox').dxResponsiveBox({
                 items: [ { ratio: 1 } ],
                 itemTemplate: function(data, index, element) {
-                    const $button = $('<div />');
+                    const $button = domAdapter.getDocument().createElement('div');
                     new dxButton($button, {
                         onClick: function() {
                             expected = true;
@@ -642,7 +644,7 @@ QUnit.module('option', moduleConfig, () => {
             }).dxResponsiveBox('instance');
 
             optionRefreshAction(responsiveBox);
-            $(responsiveBox.$element().find('.dx-button')).trigger('dxclick');
+            eventsEngine.trigger(responsiveBox.$element().find('.dx-button'), 'dxclick');
 
             assert.equal(expected, true, 'onClick event is processed');
         });
