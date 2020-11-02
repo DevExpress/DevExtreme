@@ -642,7 +642,7 @@ QUnit.module('option', moduleConfig, () => {
             }).dxResponsiveBox('instance');
 
             optionRefreshAction(responsiveBox);
-            responsiveBox.$element().find('.dx-button').trigger('dxclick');
+            $(responsiveBox.$element().find('.dx-button')).trigger('dxclick');
 
             assert.equal(expected, true, 'onClick event is processed');
         });
