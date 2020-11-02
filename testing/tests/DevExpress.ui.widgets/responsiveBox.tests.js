@@ -605,30 +605,35 @@ QUnit.module('option', moduleConfig, () => {
             box.option('items[0].disabled', false);
         }
     ].forEach(optionRefreshAction => {
-        QUnit.test(`nested component is disposed after ${optionRefreshAction.toString()} changed`, function(assert) {
+        QUnit.test(`nested component is recreated after item option ${optionRefreshAction.toString()} changed  (T940715)`, function(assert) {
             registerComponent('dxWidget', Widget.inherit({}));
 
+            let isDisposed = false;
             const $responsiveBox = $('#responsiveBox').dxResponsiveBox({
-                rows: [{}],
-                cols: [{}],
-                items: [{
-                    location: { row: 0, col: 0, screen: 'md' }, template: function() {
-                        return $('<div>').dxWidget();
-                    }
-                }]
+                items: [ { ratio: 1 } ],
+                itemTemplate: function(data, index, element) {
+                    const $button = domAdapter.getDocument().createElement('div');
+                    new dxButton($button, {
+                        onDisposing: function() {
+                            isDisposed = true;
+                        }
+                    });
+                    element.append($button);
+                },
             });
 
-            const getWidget = () => $responsiveBox.find('.dx-item .dx-widget').dxWidget('instance');
-            const initialWidget = getWidget();
+            const getButton = () => $responsiveBox.find('.dx-button').dxButton('instance');
+            const initialWidget = getButton();
 
             const responsiveBox = $responsiveBox.dxResponsiveBox('instance');
             optionRefreshAction(responsiveBox);
 
-            assert.notEqual(initialWidget, getWidget(), 'widget is new instance');
+            assert.equal(isDisposed, true, 'disposed is called for old instance');
+            assert.notEqual(initialWidget, getButton(), 'widget is new instance');
             assert.equal(responsiveBox._assistantRoots, undefined, 'there is no roots cache');
         });
 
-        QUnit.test(`nested component in template should work after ${optionRefreshAction.toString()} changed (T940715)`, function(assert) {
+        QUnit.test(`nested component in template should work after item option  ${optionRefreshAction.toString()} changed (T940715)`, function(assert) {
             let expected = false;
             const responsiveBox = $('#responsiveBox').dxResponsiveBox({
                 items: [ { ratio: 1 } ],

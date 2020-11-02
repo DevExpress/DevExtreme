@@ -191,7 +191,7 @@ const ResponsiveBox = CollectionWidget.inherit({
         this._linkNodeToItem();
     },
 
-    _itemOptionChanged: function(item, property, value) {
+    _itemOptionChanged: function(item) {
         const $item = this._findItemElementByItem(item);
         if(!$item.length) {
             return;
