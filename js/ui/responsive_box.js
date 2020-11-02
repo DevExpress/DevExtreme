@@ -19,6 +19,8 @@ const BOX_ITEM_CLASS = 'dx-box-item';
 const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 
 const HD_SCREEN_WIDTH = 1920;
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
+const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const ResponsiveBox = CollectionWidget.inherit({
 
@@ -191,9 +193,30 @@ const ResponsiveBox = CollectionWidget.inherit({
         this._linkNodeToItem();
     },
 
-    _itemOptionChanged: function(item) {
+    _itemOptionChanged: function(item, property, value) {
         const $item = this._findItemElementByItem(item);
         if(!$item.length) {
+            return;
+        }
+
+        if((property === 'visible' || property === 'disabled') && item.node) {
+            const container = item.node.parent().get(0);
+            switch(property) {
+                case 'visible':
+                    if(value === false) {
+                        container.classList.add(INVISIBLE_STATE_CLASS);
+                    } else {
+                        container.classList.remove(INVISIBLE_STATE_CLASS);
+                    }
+                    break;
+                case 'disabled':
+                    if(value === true) {
+                        container.classList.add(DISABLED_STATE_CLASS);
+                    } else {
+                        container.classList.remove(DISABLED_STATE_CLASS);
+                    }
+                    break;
+            }
             return;
         }
 
