@@ -68,4 +68,19 @@ describe('DartClient tests', () => {
     await stopServer();
     expect(reply).toEqual({ error: 'Unable to parse dart server response: test' });
   });
+
+  test('"send" method (server stopped while send)', async () => {
+    expect.assertions(2);
+    await startServer(false);
+    const client = new DartClient();
+    await client.check();
+    expect(client.isServerAvailable).toBe(true);
+    await stopServer();
+
+    const result = await client.send({});
+
+    await client.dispose();
+
+    expect(result.error).toContain('Error: ');
+  });
 });
