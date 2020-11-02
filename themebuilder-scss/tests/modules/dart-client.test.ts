@@ -43,7 +43,12 @@ describe('DartClient tests', () => {
 
   test('"send" method', async () => {
     const longData = [...Array(1000000).keys()].join('');
-    const testData = { a: ['a', 'b'], b: 2, c: longData };
+    const testData = {
+      index: '',
+      file: '',
+      data: longData,
+      items: [{ key: '', value: '' }],
+    };
     await startServer();
     const client = new DartClient();
     await client.check();
@@ -57,7 +62,12 @@ describe('DartClient tests', () => {
 
   test('"send" method - wrong reply', async () => {
     const longData = [...Array(100000).keys()].join('');
-    const testData = { a: ['a', 'b'], b: 2, c: longData };
+    const testData = {
+      index: '',
+      file: '',
+      data: longData,
+      items: [{ key: '', value: '' }],
+    };
     await startServer(false);
     const client = new DartClient();
     await client.check();
@@ -70,6 +80,12 @@ describe('DartClient tests', () => {
   });
 
   test('"send" method (server stopped while send)', async () => {
+    const testData = {
+      index: '',
+      file: '',
+      data: '',
+      items: [{ key: '', value: '' }],
+    };
     expect.assertions(2);
     await startServer(false);
     const client = new DartClient();
@@ -77,7 +93,7 @@ describe('DartClient tests', () => {
     expect(client.isServerAvailable).toBe(true);
     await stopServer();
 
-    const result = await client.send({});
+    const result = await client.send(testData);
 
     await client.dispose();
 

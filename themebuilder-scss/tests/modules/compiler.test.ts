@@ -206,7 +206,7 @@ describe('compile with server support', () => {
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile([], { file }).catch(async (e) => {
       await stopServer();
-      expect(e).toEqual(errorMessage);
+      expect(e.message).toEqual(errorMessage);
     });
   });
 });
