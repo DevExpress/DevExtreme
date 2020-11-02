@@ -61,7 +61,7 @@
           spellcheck="false"
           data-marker="@"
           data-mention-value="Kevin Carter"
-        ><span contenteditable="false"><span>@</span>Kevin Carter</span></span> I think John's expertise can be very valuable in our startup.
+        ><span><span>@</span>Kevin Carter</span></span> I think John's expertise can be very valuable in our startup.
       </p>
     </DxHtmlEditor>
   </div>

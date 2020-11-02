@@ -62,7 +62,7 @@ class App extends React.Component {
         <HtmlEditor
           mentions={mentionsConfig}>
           <p>
-            <span className="dx-mention" spellCheck="false" data-marker="@" data-mention-value="Kevin Carter"><span contentEditable="false"><span>@</span>Kevin Carter</span></span>
+            <span className="dx-mention" spellCheck="false" data-marker="@" data-mention-value="Kevin Carter"><span><span>@</span>Kevin Carter</span></span>
             {" I think John's expertise can be very valuable in our startup."}
           </p>
         </HtmlEditor>
