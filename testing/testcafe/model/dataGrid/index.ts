@@ -24,6 +24,7 @@ const CLASS = {
   popupContent: 'dx-overlay-content',
   toolbar: 'dx-toolbar',
   fixedGridView: 'content-fixed',
+  rowsView: 'rowsview',
 };
 
 export default class DataGrid extends Widget {
@@ -53,6 +54,10 @@ export default class DataGrid extends Widget {
 
   getHeaders(): Headers {
     return new Headers(this.element.find(`.${this.addWidgetPrefix(CLASS.headers)}`), this.name);
+  }
+
+  getRowsView(): Selector {
+    return this.element.find(`.${this.addWidgetPrefix(CLASS.rowsView)}`);
   }
 
   getDataRow(index: number): DataRow {

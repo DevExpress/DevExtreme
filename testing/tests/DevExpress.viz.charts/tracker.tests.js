@@ -287,8 +287,13 @@ QUnit.test('dxpointermove without series over when shared tooltip', function(ass
     assert.deepEqual(this.options.chart.getStackedPoints.getCall(0).args, [this.point]);
     assert.deepEqual(this.point.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, 'points_by_stack_name']);
 
-    assert.equal(this.options.tooltip.stub('show').callCount, 1, 'tooltip showing was calling once');
-    assert.deepEqual(this.options.tooltip.stub('show').lastCall.args, [this.point.getTooltipFormatObject.getCall(0).returnValue, { x: 200 + 3, y: 100 + 5 }, { target: this.point }]);
+    const showTooltip = this.options.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
+    assert.equal(showTooltip.lastCall.args[0], this.point.getTooltipFormatObject.getCall(0).returnValue);
+    assert.deepEqual(showTooltip.lastCall.args[1], { x: 200 + 3, y: 100 + 5 });
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: this.point });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
 
     assert.ok(this.options.crosshair.show.calledOnce, 'crosshair[0] moved');
     strictEqualForAllFields(assert, this.options.crosshair.show.lastCall.args[0], { point: this.point, x: 97, y: 45 });
@@ -319,8 +324,14 @@ QUnit.test('dxpointermove without series over when shared tooltip. another serie
     assert.deepEqual(this.options.chart.getStackedPoints.getCall(0).args, [point2]);
     assert.deepEqual(point2.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, 'points_by_stack_name']);
     assert.strictEqual(point2.hover.callCount, 1);
-    assert.equal(this.options.tooltip.stub('show').callCount, 1, 'tooltip show');
-    assert.deepEqual(this.options.tooltip.stub('show').lastCall.args, [point2.getTooltipFormatObject.getCall(0).returnValue, { x: 200 + 3, y: 100 + 5 }, { target: point2 }]);
+
+    const showTooltip = this.options.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
+    assert.equal(showTooltip.lastCall.args[0], point2.getTooltipFormatObject.getCall(0).returnValue);
+    assert.deepEqual(showTooltip.lastCall.args[1], { x: 200 + 3, y: 100 + 5 });
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: point2 });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
 
     assert.ok(this.options.crosshair.show.calledOnce, 'crosshair[0] moved');
     strictEqualForAllFields(assert, this.options.crosshair.show.lastCall.args[0], { point: point2, x: 97, y: 45 });
@@ -353,8 +364,15 @@ QUnit.test('dxpointermove without series over when shared tooltip, series has tw
 
     assert.strictEqual(point2.hover.callCount, 1);
     assert.strictEqual(point1.hover.callCount, 1);
-    assert.equal(this.options.tooltip.stub('show').callCount, 2, 'tooltip show');
-    assert.deepEqual(this.options.tooltip.stub('show').lastCall.args, [point1.getTooltipFormatObject.getCall(0).returnValue, { x: 200 + 3, y: 100 + 5 }, { target: point1 }], 'tooltip show args');
+
+    const showTooltip = this.options.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 2, 'tooltip showing was calling twice');
+    assert.equal(showTooltip.lastCall.args[0], point1.getTooltipFormatObject.getCall(0).returnValue);
+    assert.deepEqual(showTooltip.lastCall.args[1], { x: 200 + 3, y: 100 + 5 });
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: point1 });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
+
     assert.deepEqual(this.options.chart.getStackedPoints.getCall(1).args, [point1]);
     assert.deepEqual(point1.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, 'points_by_stack_name']);
 });
@@ -372,8 +390,14 @@ QUnit.test('dxpointermove on series', function(assert) {
 
     assert.equal(this.options.chart.getStackedPoints.callCount, 0);
     assert.deepEqual(this.point.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, undefined]);
-    assert.equal(this.options.tooltip.stub('show').callCount, 1, 'tooltip show');
-    assert.deepEqual(this.options.tooltip.stub('show').lastCall.args, [this.point.getTooltipFormatObject(), { x: 200 + 3, y: 100 + 5 }, { target: this.point }]);
+
+    const showTooltip = this.options.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
+    assert.equal(showTooltip.lastCall.args[0], this.point.getTooltipFormatObject.getCall(0).returnValue);
+    assert.deepEqual(showTooltip.lastCall.args[1], { x: 200 + 3, y: 100 + 5 });
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: this.point });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
 
     assert.ok(this.options.crosshair.show.calledOnce, 'crosshair[0] moved');
     strictEqualForAllFields(assert, this.options.crosshair.show.lastCall.args[0], { point: this.point, x: 97, y: 45 });
@@ -416,8 +440,13 @@ QUnit.test('move on series between two point', function(assert) {
 
     assert.ok(!this.point.stub('hover').called);
 
-    assert.equal(this.options.tooltip.stub('show').callCount, 1, 'tooltip show');
-    assert.deepEqual(this.options.tooltip.stub('show').lastCall.args, [point1.getTooltipFormatObject(), { x: 200 + 3, y: 100 + 5 }, { target: this.point }]);
+    const showTooltip = this.options.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
+    assert.deepEqual(showTooltip.lastCall.args[0], point1.getTooltipFormatObject());
+    assert.deepEqual(showTooltip.lastCall.args[1], { x: 200 + 3, y: 100 + 5 });
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: this.point });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
 
     assert.equal(this.options.crosshair.show.callCount, 2, 'crosshair[0] moved');
     strictEqualForAllFields(assert, this.options.crosshair.show.lastCall.args[0], { point: this.point, x: 92, y: 45 });
@@ -1762,8 +1791,14 @@ QUnit.test('Work after update with old series', function(assert) {
     // assert
     assert.strictEqual(this.series.hover.callCount, 1, 'setHoverState');
 
-    assert.equal(this.options.tooltip.stub('show').callCount, 1, 'tooltip showing');
-    assert.deepEqual(this.options.tooltip.stub('show').lastCall.args, [point.getTooltipFormatObject(), { x: 200 + 3, y: 100 + 5 }, { target: point }], 'tooltip showing args');
+    const showTooltip = this.options.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
+    assert.deepEqual(showTooltip.lastCall.args[0], point.getTooltipFormatObject());
+    assert.deepEqual(showTooltip.lastCall.args[1], { x: 200 + 3, y: 100 + 5 });
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: point });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
+
     assert.equal(this.options.tooltip.stub('hide').callCount, 0, 'tooltip hiding');
 });
 
@@ -2148,8 +2183,26 @@ QUnit.test('mousemove on point. shared tooltip', function(assert) {
     assert.deepEqual(this.options.chart.getStackedPoints.getCall(0).args, [this.point]);
     assert.deepEqual(this.point.getTooltipFormatObject.getCall(0).args, [this.options.tooltip, 'points_by_stack_name']);
 
-    assert.equal(this.options.tooltip.stub('show').callCount, 1, 'tooltip showing was calling once');
-    assert.deepEqual(this.options.tooltip.stub('show').lastCall.args, [this.point.getTooltipFormatObject.getCall(0).returnValue, { x: 200 + 3, y: 100 + 5 }, { target: this.point }]);
+    const showTooltip = this.options.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
+    assert.deepEqual(showTooltip.lastCall.args[0], this.point.getTooltipFormatObject.getCall(0).returnValue);
+    assert.deepEqual(showTooltip.lastCall.args[1], { x: 200 + 3, y: 100 + 5 });
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: this.point });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
+});
+
+QUnit.test('mousemove on point, async tooltip render', function(assert) {
+    this.options.tooltip.stub('show').returns(undefined);
+    // Act
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+
+    // Assert
+    assert.equal(this.tracker.pointAtShownTooltip, undefined);
+
+    this.options.tooltip.stub('show').lastCall.args[4](true);
+
+    assert.equal(this.tracker.pointAtShownTooltip, this.point);
 });
 
 QUnit.test('mouseout from point', function(assert) {
@@ -2495,8 +2548,14 @@ QUnit.test('show Tooltip event. TooltipShown fired', function(assert) {
     this.tooltip.stub('hide').reset();
     this.environment.options.seriesGroup.trigger(getEvent('showpointtooltip'), this.environment.point1);
 
-    assert.ok(this.tooltip.stub('show').calledOnce);
-    assert.deepEqual(this.tooltip.stub('show').lastCall.args, [{ valueText: 'pointValue' }, this.environment.point1.getTooltipParams.lastCall.returnValue, { target: this.environment.point1 }]);
+    const showTooltip = this.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
+    assert.deepEqual(showTooltip.lastCall.args[0], { valueText: 'pointValue' });
+    assert.deepEqual(showTooltip.lastCall.args[1], this.environment.point1.getTooltipParams.lastCall.returnValue);
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: this.environment.point1 });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
+
     assert.ok(!this.tooltip.stub('hide').called);
     assert.equal(this.tracker.pointAtShownTooltip, this.environment.point1);
 });
@@ -2524,8 +2583,15 @@ QUnit.test('show Tooltip event when there is tooltip on another point. TooltipHi
 
     assert.ok(this.tooltip.stub('hide').calledOnce);
     assert.deepEqual(this.tooltip.stub('hide').lastCall.args, []);
-    assert.ok(this.tooltip.stub('show').calledOnce);
-    assert.deepEqual(this.tooltip.stub('show').lastCall.args, [{ valueText: 'pointValue' }, this.environment.point1.getTooltipParams.lastCall.returnValue, { target: this.environment.point1 }]);
+
+    const showTooltip = this.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
+    assert.deepEqual(showTooltip.lastCall.args[0], { valueText: 'pointValue' });
+    assert.deepEqual(showTooltip.lastCall.args[1], this.environment.point1.getTooltipParams.lastCall.returnValue);
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: this.environment.point1 });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
+
     assert.equal(this.tracker.pointAtShownTooltip, this.environment.point1);
 });
 
@@ -2541,8 +2607,14 @@ QUnit.test('show Tooltip event without text', function(assert) {
 
     $(this.environment.options.seriesGroup.element).trigger(getEvent('showpointtooltip'), this.environment.point1);
 
-    assert.ok(this.tooltip.stub('show').calledOnce);
-    assert.deepEqual(this.tooltip.stub('show').lastCall.args, [{ valueText: 'pointValue' }, this.environment.point1.getTooltipParams.lastCall.returnValue, { target: this.environment.point1 }]);
+    const showTooltip = this.tooltip.stub('show');
+    assert.equal(showTooltip.callCount, 1, 'tooltip showing was calling once');
+    assert.deepEqual(showTooltip.lastCall.args[0], { valueText: 'pointValue' });
+    assert.deepEqual(showTooltip.lastCall.args[1], this.environment.point1.getTooltipParams.lastCall.returnValue);
+    assert.deepEqual(showTooltip.lastCall.args[2], { target: this.environment.point1 });
+    assert.equal(showTooltip.lastCall.args[3], undefined);
+    assert.equal(typeof showTooltip.lastCall.args[4], 'function');
+
     assert.notEqual(this.tracker.pointAtShownTooltip, this.environment.point1);
 });
 

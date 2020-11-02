@@ -2722,6 +2722,37 @@ QUnit.module('Virtual row rendering', baseModuleConfig, () => {
         assert.equal(visibleRows[0].key, 6, 'first visible row key');
         assert.equal($(dataGrid.getRowElement(1, 0)).find('.dx-texteditor').length, 1, 'row has editor');
     });
+
+    // T939449
+    QUnit.test('The virtual row should not be rendered after removing data rows via push API', function(assert) {
+        // arrange
+        const array = [];
+
+        for(let i = 1; i <= 12; i++) {
+            array.push({ id: i });
+        }
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: array,
+            keyExpr: 'id',
+            scrolling: {
+                mode: 'virtual',
+                rowRenderingMode: 'virtual',
+                useNative: false
+            }
+        }).dxDataGrid('instance');
+
+        this.clock.tick();
+        const store = dataGrid.getDataSource().store();
+
+        // act
+        store.push([{ type: 'remove', key: 12 }]);
+        store.push([{ type: 'remove', key: 11 }]);
+        this.clock.tick();
+
+        // assert
+        assert.strictEqual($('#dataGrid').find('.dx-datagrid-rowsview').find('.dx-virtual-row').length, 0, 'no virtual rows');
+    });
 });
 
 
@@ -4327,6 +4358,73 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             assert.equal(data[0].field, 'test', 'change was posted to datasource');
             assert.deepEqual(dataGrid.option('editing.changes'), [], 'change are empty');
             assert.notOk($(dataGrid.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'cell has not modified class');
+        });
+
+        QUnit.test('Reset changes after timeout in onOptionChanged', function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ field: 'field', field2: 'field2', id: 1 }],
+                keyExpr: 'id',
+                editing: {
+                    allowUpdating: true,
+                    mode: 'row'
+                },
+                loadingTimeout: undefined,
+                onOptionChanged: e => {
+                    if(e.fullName === 'editing.changes' && e.value.length) {
+                        setTimeout(() => {
+                            dataGrid.option('editing.changes', []);
+                        });
+                    }
+                }
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.editRow(0);
+            const $firstRow = $(dataGrid.getRowElement(0));
+
+            $firstRow.find('input').first().val('test').trigger('change');
+            this.clock.tick();
+
+            // assert
+            assert.deepEqual(dataGrid.option('editing.changes'), [], 'changes are reset');
+            assert.equal($firstRow.find('input').first().val(), 'field', 'input value');
+
+            // act
+            $firstRow.find('input').eq(1).val('test').trigger('change');
+            this.clock.tick();
+
+            // assert
+            assert.deepEqual(dataGrid.option('editing.changes'), [], 'changes are reset');
+            assert.equal($firstRow.find('input').eq(1).val(), 'field2', 'input value');
+        });
+
+        QUnit.test('Error should not be thrown after changes reset in onOptionChanged', function(assert) {
+            // arrange
+            const dataGrid = $('#dataGrid').dxDataGrid({
+                dataSource: [{ field: 'field', field2: 'field2', id: 1 }],
+                keyExpr: 'id',
+                editing: {
+                    allowUpdating: true,
+                    mode: 'row'
+                },
+                loadingTimeout: undefined,
+                onOptionChanged: e => {
+                    if(e.fullName === 'editing.changes' && e.value.length) {
+                        dataGrid.option('editing.changes', []);
+                    }
+                }
+            }).dxDataGrid('instance');
+
+            // act
+            dataGrid.editRow(0);
+            const $firstRow = $(dataGrid.getRowElement(0));
+
+            $firstRow.find('input').first().val('test').trigger('change');
+            this.clock.tick();
+
+            // assert
+            assert.deepEqual(dataGrid.option('editing.changes'), [], 'changes are reset');
         });
     });
 });

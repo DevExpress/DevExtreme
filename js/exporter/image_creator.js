@@ -563,22 +563,27 @@ function createFilter(element) {
 }
 
 function asyncEach(array, callback, d = new Deferred()) {
-    if(array.length === 0) {
-        return d.resolve();
+    let i = 0;
+    for(; i < array.length; i++) {
+        const result = callback(array[i]);
+        if(isPromise(result)) {
+            result.then(() => {
+                asyncEach(Array.prototype.slice.call(array, i + 1), callback, d);
+            });
+            break;
+        }
     }
 
-    const result = callback(array[0]);
-    function next() {
-        asyncEach(Array.prototype.slice.call(array, 1), callback, d);
-    }
-    if(isPromise(result)) {
-        result.then(next);
-    } else {
-        next();
+    if(i === array.length) {
+        d.resolve();
     }
 
     return d;
 }
+
+///#DEBUG
+export { asyncEach };
+///#ENDDEBUG
 
 function drawCanvasElements(elements, context, parentOptions, shared) {
     return asyncEach(elements, function(element) {

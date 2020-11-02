@@ -261,6 +261,7 @@ export default class ViewDataProvider {
         this._viewDataGenerator = null;
         this._viewData = [];
         this._completeViewDataMap = [];
+        this._completeGroupedViewDataMap = [];
         this._viewDataMap = [];
         this._groupedDataMap = [];
         this._workspace = workspace;
@@ -275,6 +276,9 @@ export default class ViewDataProvider {
 
     get completeViewDataMap() { return this._completeViewDataMap; }
     set completeViewDataMap(value) { this._completeViewDataMap = value; }
+
+    get completeGroupedViewDataMap() { return this._completeGroupedViewDataMap; }
+    set completeGroupedViewDataMap(value) { this._completeGroupedViewDataMap = value; }
 
     get viewData() { return this._viewData; }
     set viewData(value) { this._viewData = value; }
@@ -306,30 +310,53 @@ export default class ViewDataProvider {
     }
 
     getGroupStartDate(groupIndex) {
-        const { dateTable } = this._getGroupData(groupIndex);
+        const { dateTable } = this.getGroupData(groupIndex);
 
         return dateTable[0][0].startDate;
     }
 
     getGroupEndDate(groupIndex) {
-        const { dateTable } = this._getGroupData(groupIndex);
+        const { dateTable } = this.getGroupData(groupIndex);
         const lastRowIndex = dateTable.length - 1;
         const lastCellIndex = dateTable[lastRowIndex].length - 1;
 
         return dateTable[lastRowIndex][lastCellIndex].endDate;
     }
 
-    getGroupCellStartDate(groupIndex, date) {
-        const { dateTable } = this._getGroupData(groupIndex);
-        const cell = dateTable[0].filter(
-            cell => dateUtils.sameDate(cell.startDate, date)
-        )[0];
+    findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
+        const { dateTable } = this.getGroupData(groupIndex);
 
-        return cell && cell.startDate;
+        if(isAllDay) {
+            const groupStartDate = this.getGroupStartDate(groupIndex);
+
+            return groupStartDate > startDate
+                ? groupStartDate
+                : startDate;
+        }
+
+        for(let i = 0; i < dateTable[0].length; ++i) {
+            let cell = dateTable[0][i];
+            const lastRowIndex = dateTable.length - 1;
+
+            if(dateUtils.sameDate(cell.startDate, startDate)) {
+                let lastCell = dateTable[lastRowIndex][i];
+
+                if(lastCell.endDate <= startDate) {
+                    if(endDate.getDate() > startDate.getDate()) {
+                        cell = dateTable[0][i + 1];
+                        lastCell = dateTable[lastRowIndex][i + 1];
+                    }
+                }
+
+                if(lastCell?.endDate > startDate) {
+                    return cell.startDate;
+                }
+            }
+        }
     }
 
     getCellsGroup(groupIndex) {
-        const { dateTable } = this._getGroupData(groupIndex);
+        const { dateTable } = this.getGroupData(groupIndex);
 
         return dateTable[0][0].groups;
     }
@@ -407,7 +434,34 @@ export default class ViewDataProvider {
         return groupedData.map(({ groupIndex }) => groupIndex);
     }
 
-    _getGroupData(groupIndex) {
+    _getLastGroupRow(groupIndex) {
+        const group = this.groupedDataMap[groupIndex];
+        const lastIndex = group.length - 1;
+
+        return group[lastIndex];
+    }
+
+    getLasGroupCellPosition(groupIndex) {
+        const groupRow = this._getLastGroupRow(groupIndex);
+
+        return groupRow[0].position;
+    }
+
+    getLasGroupCellIndex(groupIndex) {
+        const group = this.groupedDataMap[groupIndex];
+        return group.length - 1;
+    }
+
+    getRowCountInGroup(groupIndex) {
+        const groupRow = this._getLastGroupRow(groupIndex);
+        const cellAmount = groupRow.length;
+        const lastCellData = groupRow[cellAmount - 1].cellData;
+        const lastCellIndex = lastCellData.index;
+
+        return (lastCellIndex + 1) / groupRow.length;
+    }
+
+    getGroupData(groupIndex) {
         const { groupedData } = this.viewData;
         return groupedData.filter(item => item.groupIndex === groupIndex)[0];
     }

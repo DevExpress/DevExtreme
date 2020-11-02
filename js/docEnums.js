@@ -1085,7 +1085,7 @@
  */
 /**
  * @typedef {string} Enums.DiagramDataLayoutOrientation
- * @enum {'auto'|'vertical'|'horizontal'}
+ * @enum {'vertical'|'horizontal'}
  */
 
 /**

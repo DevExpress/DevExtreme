@@ -1,4 +1,5 @@
-@use "../base/mixins" as *;
+@use "../mixins" as *;
+@use "./mixins" as *;
 @use "sass:string" as string;
 
 // adduse
@@ -10,13 +11,6 @@
   input::-ms-clear {
     display: none;
   }
-}
-
-@mixin dx-editor-content-wrapper() {
-  display: flex;
-  flex-grow: 1;
-  position: relative;
-  align-items: baseline;
 }
 
 /* B231111 */

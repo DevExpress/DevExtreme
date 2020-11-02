@@ -38,14 +38,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
      */
     dataSource?: string | Array<string | dxTabPanelItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxTabPanelOptions.focusStateEnabled
-     * @type boolean
-     * @default true [for](desktop)
-     * @prevFileNamespace DevExpress.ui
-     * @public
-     */
-    focusStateEnabled?: boolean;
-    /**
      * @docid dxTabPanelOptions.hoverStateEnabled
      * @type boolean
      * @default true

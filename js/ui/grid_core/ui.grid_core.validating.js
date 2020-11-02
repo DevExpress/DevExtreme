@@ -577,7 +577,7 @@ export default {
 
                     if(index >= 0 && options.type !== EDIT_DATA_REMOVE_TYPE) {
                         const change = this.getChanges()[index];
-                        validatingController.updateValidationState(change);
+                        change && validatingController.updateValidationState(change);
                     }
 
                     return index;

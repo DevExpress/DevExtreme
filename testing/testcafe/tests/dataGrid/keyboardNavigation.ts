@@ -1849,7 +1849,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       const dataGrid = new DataGrid('#container');
       const cell = dataGrid.getDataCell(0, 0);
       const cellEditor = cell.getEditor().element;
-      const inputSelector = Selector('#myinput');
+      const inputElement = Selector('#myinput');
 
       // act
       await t
@@ -1863,9 +1863,7 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
       // act
       await t
         .typeText(cellEditor, 'new text')
-        .click(inputSelector);
-
-      const inputElement = await inputSelector();
+        .click(inputElement);
 
       // assert
       await t
@@ -1891,3 +1889,89 @@ test('Moving by Tab key if scrolling.columnRenderingMode: virtual and fixed colu
     })());
   });
 });
+
+test('Empty row should lose focus on Tab (T941246)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const headerCell = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0);
+  const inputElement1 = Selector('#myinput1');
+  const inputElement2 = Selector('#myinput2');
+
+  // Tab
+  // act
+  await t
+    .click(inputElement1);
+
+  // assert
+  await t
+    .expect(inputElement1.focused)
+    .ok('first editor is focused');
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(headerCell.element.focused)
+    .ok('header cell is focused');
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getRowsView().focused)
+    .ok('rows view is focused');
+
+  // act
+  await t
+    .pressKey('tab');
+
+  // assert
+  await t
+    .expect(inputElement2.focused)
+    .ok('second editor is focused');
+  // end Tab
+
+  // Shift+Tab
+  // act
+  await t
+    .pressKey('shift+tab');
+
+  // assert
+  await t
+    .expect(dataGrid.getRowsView().focused)
+    .ok('rows view is focused');
+
+  // act
+  await t
+    .pressKey('shift+tab');
+
+  // assert
+  await t
+    .expect(headerCell.element.focused)
+    .ok('header cell is focused');
+
+  // act
+  await t
+    .pressKey('shift+tab');
+
+  // assert
+  await t
+    .expect(inputElement1.focused)
+    .ok('first editor is focused');
+  // end Shift+Tab
+}).before(async () => {
+  await ClientFunction(() => {
+    $('<input id="myinput1">').prependTo('body');
+    $('<input id="myinput2">').appendTo('body');
+  })();
+  await createWidget('dxDataGrid', {
+    dataSource: [],
+    columns: ['id'],
+  });
+}).after(() => ClientFunction(() => {
+  $('#myinput1').remove();
+  $('#myinput2').remove();
+})());

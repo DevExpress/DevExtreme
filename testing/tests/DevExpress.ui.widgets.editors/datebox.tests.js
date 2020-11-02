@@ -63,6 +63,7 @@ const DROP_DOWN_BUTTON_VISIBLE_CLASS = 'dx-dropdowneditor-button-visible';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const POPUP_CLASS = 'dx-popup';
+const LIST_CLASS = 'dx-list';
 
 const CALENDAR_APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 
@@ -1106,6 +1107,15 @@ QUnit.module('dateView integration', {
 
     QUnit.test('dateView renders', function(assert) {
         assert.equal(this.popup().$content().find('.dx-dateview').length, 1);
+    });
+
+    QUnit.test('dateView popup width should be equal to 100% on mobile ios', function(assert) {
+        if(devices.real().deviceType !== 'phone' || devices.real().platform !== 'ios') {
+            assert.ok(true, 'is actual only for mobile ios');
+            return;
+        }
+
+        assert.strictEqual(this.popup().option('width'), '100%', 'popup width is equal to 100%');
     });
 
     QUnit.test('readOnly input prop should be always true to prevent keyboard open if simulated dateView is using', function(assert) {
@@ -3474,7 +3484,7 @@ QUnit.module('datebox w/ time list', {
         this.dateBox.option('opened', true);
 
         assert.ok(getInstanceWidget(this.dateBox), 'list exist');
-        assert.ok(getInstanceWidget(this.dateBox).$element().hasClass('dx-list'), 'list initialized');
+        assert.ok(getInstanceWidget(this.dateBox).$element().hasClass(LIST_CLASS), 'list initialized');
     });
 
     QUnit.test('list should contain correct values if min/max does not specified', function(assert) {
@@ -3485,7 +3495,7 @@ QUnit.module('datebox w/ time list', {
 
         this.dateBox.option('opened', true);
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         const $listItems = $timeList.find('.dx-list-item-content');
 
         assert.equal($listItems.first().text(), '12:00 AM', 'min value is right');
@@ -3501,7 +3511,7 @@ QUnit.module('datebox w/ time list', {
 
         this.dateBox.option('opened', true);
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         const $listItems = $timeList.find('.dx-list-item-content');
 
         assert.strictEqual($listItems.first().text(), '5:45 AM', 'min value is right');
@@ -3517,7 +3527,7 @@ QUnit.module('datebox w/ time list', {
 
         this.dateBox.option('opened', true);
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         const $listItems = $timeList.find('.dx-list-item-content');
 
         assert.equal($listItems.first().text(), '4:00 AM', 'min value is right');
@@ -3532,7 +3542,7 @@ QUnit.module('datebox w/ time list', {
 
         this.dateBox.option('opened', true);
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         const $listItems = $timeList.find('.dx-list-item-content');
 
         assert.strictEqual($listItems.first().text(), '4:00 AM', 'min value is right');
@@ -3549,7 +3559,7 @@ QUnit.module('datebox w/ time list', {
 
         this.dateBox.option('opened', true);
 
-        let $timeList = $('.dx-list');
+        let $timeList = $(`.${LIST_CLASS}`);
         let items = $timeList.find(LIST_ITEM_SELECTOR);
 
         assert.strictEqual(items.length, 3, 'interval option works');
@@ -3557,7 +3567,7 @@ QUnit.module('datebox w/ time list', {
         this.dateBox.option('interval', 120);
         this.dateBox.option('opened', true);
 
-        $timeList = $('.dx-list');
+        $timeList = $(`.${LIST_CLASS}`);
         items = $timeList.find(LIST_ITEM_SELECTOR);
 
         assert.strictEqual(items.length, 2, 'interval option works');
@@ -3624,7 +3634,7 @@ QUnit.module('datebox w/ time list', {
             opened: true
         });
 
-        const list = $('.dx-list').dxList('instance');
+        const list = $(`.${LIST_CLASS}`).dxList('instance');
         assert.ok(list.option('items').length > 0, 'list is not empty');
     });
 
@@ -3692,7 +3702,7 @@ QUnit.module('datebox w/ time list', {
             opened: true
         });
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         let items = $timeList.find(LIST_ITEM_SELECTOR);
 
         assert.equal(items.length, 24, '24 items should be find');
@@ -3714,7 +3724,7 @@ QUnit.module('datebox w/ time list', {
                 opened: true
             });
 
-            const $timeList = $('.dx-list');
+            const $timeList = $(`.${LIST_CLASS}`);
             let items = $timeList.find(LIST_ITEM_SELECTOR);
 
             assert.equal(items.length, 11, 'interval option works');
@@ -3739,7 +3749,7 @@ QUnit.module('datebox w/ time list', {
             opened: true
         });
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         const items = $timeList.find(LIST_ITEM_SELECTOR);
 
         assert.strictEqual(items.length, 16, 'list should be contain right count of items');
@@ -3754,7 +3764,7 @@ QUnit.module('datebox w/ time list', {
             opened: true
         });
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         const items = $timeList.find(LIST_ITEM_SELECTOR);
 
         assert.equal(items.length, 19, 'list should be contain right count of items');
@@ -3770,7 +3780,7 @@ QUnit.module('datebox w/ time list', {
             opened: true
         });
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         const items = $timeList.find(LIST_ITEM_SELECTOR);
 
         assert.equal(items.eq(0).text(), '12:02 AM', 'first item in list is correct');
@@ -3801,7 +3811,7 @@ QUnit.module('datebox w/ time list', {
 
         this.dateBox.option('opened', true);
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         const $listItems = $timeList.find('.dx-list-item-content');
 
         assert.strictEqual($listItems.first().text(), '8:00 AM', 'min value is right');
@@ -3817,7 +3827,7 @@ QUnit.module('datebox w/ time list', {
 
         this.dateBox.option('opened', true);
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
         const $listItems = $timeList.find('.dx-list-item-content');
 
         assert.strictEqual($listItems.first().text(), '8:00 AM', 'min value is right');
@@ -4097,6 +4107,200 @@ QUnit.module('width of datebox with list', {
     });
 });
 
+QUnit.module('height of datebox with list', {
+    beforeEach: function() {
+        fx.off = true;
+
+        this.$dateBox = $('#dateBox');
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+}, () => {
+    QUnit.module('overlay content height', () => {
+        QUnit.test('should be equal to 0.45 * window height when dropDownOptions.height in not defined and list hight is bigger than 0.45 of window height', function(assert) {
+            this.$dateBox.dxDateBox({
+                opened: true,
+                pickerType: 'list',
+                type: 'time'
+            }).dxDateBox('instance');
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.roughEqual($overlayContent.outerHeight(), 0.45 * $(window).outerHeight(), 0.1, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to 0.45 * window height when dropDownOptions.height in set to auto and list hight is bigger than 0.45 of window height', function(assert) {
+            this.$dateBox.dxDateBox({
+                opened: true,
+                pickerType: 'list',
+                type: 'time',
+                dropDownOptions: {
+                    height: 'auto'
+                }
+            }).dxDateBox('instance');
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.roughEqual($overlayContent.outerHeight(), 0.45 * $(window).outerHeight(), 0.1, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to 0.45 * window height when dropDownOptions.height in not defined after editor height runtime change', function(assert) {
+            const dateBox = this.$dateBox.dxDateBox({
+                opened: true,
+                pickerType: 'list',
+                type: 'time'
+            }).dxDateBox('instance');
+
+            dateBox.option('height', 153);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.roughEqual($overlayContent.outerHeight(), 0.45 * $(window).outerHeight(), 0.1, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to list height when dropDownOptions.height in not defined and content list is smaller than 0.45 of window height', function(assert) {
+            this.$dateBox.dxDateBox({
+                opened: true,
+                pickerType: 'list',
+                type: 'time',
+                min: Date.now(),
+                max: Date.now(),
+            }).dxDateBox('instance');
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $list = $(`.${LIST_CLASS}`);
+            assert.strictEqual($overlayContent.outerHeight(), $list.outerHeight(), 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to list height when dropDownOptions.height in set to auto and content list is smaller than 0.45 of window height', function(assert) {
+            this.$dateBox.dxDateBox({
+                opened: true,
+                pickerType: 'list',
+                type: 'time',
+                min: Date.now(),
+                max: Date.now(),
+                dropDownOptions: {
+                    height: 'auto'
+                }
+            }).dxDateBox('instance');
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $list = $(`.${LIST_CLASS}`);
+            assert.strictEqual($overlayContent.outerHeight(), $list.outerHeight(), 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to dropDownOptions.height if it is defined', function(assert) {
+            const dropDownOptionsHeight = 200;
+            this.$dateBox.dxDateBox({
+                type: 'time',
+                pickerType: 'list',
+                dropDownOptions: {
+                    height: dropDownOptionsHeight
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerHeight(), dropDownOptionsHeight, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to dropDownOptions.height even after editor input height change', function(assert) {
+            const dropDownOptionsHeight = 500;
+            const dateBox = this.$dateBox.dxDateBox({
+                type: 'time',
+                pickerType: 'list',
+                dropDownOptions: {
+                    height: dropDownOptionsHeight
+                },
+                opened: true
+            }).dxDateBox('instance');
+
+            dateBox.option('height', 300);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            assert.strictEqual($overlayContent.outerHeight(), dropDownOptionsHeight, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be equal to wrapper height if dropDownOptions.height is set to 100%', function(assert) {
+            this.$dateBox.dxDateBox({
+                type: 'time',
+                pickerType: 'list',
+                dropDownOptions: {
+                    height: '100%'
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+            assert.strictEqual($overlayContent.outerHeight(), $overlayWrapper.outerHeight(), 'overlay content height is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper when dropDownOptions.height is percent', function(assert) {
+            this.$dateBox.dxDateBox({
+                type: 'time',
+                pickerType: 'list',
+                dropDownOptions: {
+                    height: '50%'
+                },
+                opened: true
+            });
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+            assert.roughEqual($overlayContent.outerHeight(), $overlayWrapper.outerHeight() / 2, 0.1, 'overlay content height is correct');
+        });
+
+        QUnit.test('should be calculated relative to wrapper after editor height runtime change', function(assert) {
+            const dateBox = this.$dateBox.dxDateBox({
+                type: 'time',
+                pickerType: 'list',
+                height: 600,
+                dropDownOptions: {
+                    height: '50%'
+                },
+                opened: true
+            }).dxDateBox('instance');
+
+            dateBox.option('height', 700);
+
+            const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+            const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+            assert.roughEqual($overlayContent.outerHeight(), $overlayWrapper.outerHeight() / 2, 0.1, 'overlay content height is correct');
+        });
+    });
+
+    QUnit.test('dropDownOptions.height should be passed to popup', function(assert) {
+        const dropDownOptionsHeight = 500;
+        this.$dateBox.dxDateBox({
+            type: 'time',
+            pickerType: 'list',
+            dropDownOptions: {
+                height: dropDownOptionsHeight
+            },
+            opened: true
+        });
+
+        const popup = this.$dateBox.find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('height'), dropDownOptionsHeight, 'popup height option value is correct');
+    });
+
+    QUnit.test('popup should have height equal to dropDownOptions.height even after editor input height change', function(assert) {
+        const dropDownOptionsHeight = 500;
+        const dateBox = this.$dateBox.dxDateBox({
+            type: 'time',
+            pickerType: 'list',
+            dropDownOptions: {
+                height: dropDownOptionsHeight
+            },
+            opened: true
+        }).dxDateBox('instance');
+
+        dateBox.option('height', 300);
+
+        const popup = this.$dateBox.find(`.${POPUP_CLASS}`).dxPopup('instance');
+        assert.strictEqual(popup.option('height'), dropDownOptionsHeight, 'popup height option value is correct');
+    });
+});
+
 QUnit.module('width of datebox with calendar', {
     beforeEach: function() {
         fx.off = true;
@@ -4318,7 +4522,7 @@ QUnit.module('keyboard navigation', {
 
         this.$input.focusin();
         this.dateBox.option('opened', true);
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
 
         this.keyboard.keyDown('down');
         this.keyboard.keyDown('end');
@@ -4337,7 +4541,7 @@ QUnit.module('keyboard navigation', {
         this.dateBox.option('opened', true);
         this.keyboard.keyDown('down');
 
-        const $timeList = $('.dx-list');
+        const $timeList = $(`.${LIST_CLASS}`);
 
         assert.ok($timeList.find(LIST_ITEM_SELECTOR).eq(2).hasClass(STATE_FOCUSED_CLASS), 'correct item is focused');
 
