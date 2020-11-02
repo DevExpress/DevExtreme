@@ -1259,7 +1259,7 @@ export const BaseChart = BaseWidget.inherit({
         for(let i = 0; i < allSeriesOptions.length; i++) {
             particularSeriesOptions = extend(true, {}, allSeriesOptions[i], extraOptions);
 
-            if(!particularSeriesOptions.name) {
+            if(!_isDefined(particularSeriesOptions.name) || particularSeriesOptions.name === '') {
                 particularSeriesOptions.name = 'Series ' + (i + 1).toString();
             }
 
