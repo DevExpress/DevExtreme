@@ -193,8 +193,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _onUploadSessionStarted({ sessionInfo }) {
-        const uploadDirectoryPathKeyParts = this._controller.getDirectoryPathKeyParts(this.uploadDirectoryInfo);
-        this._controller.processUploadSession(sessionInfo, uploadDirectoryPathKeyParts);
+        this._controller.processUploadSession(sessionInfo, this.uploadDirectoryInfo);
     }
 
     _onEditActionStarting(actionInfo) {
