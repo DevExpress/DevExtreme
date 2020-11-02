@@ -615,18 +615,22 @@ const SchedulerAppointments = CollectionWidget.inherit({
         });
     },
     _getEndResizeAppointmentStartDate: function(e, rawAppointment, appointmentInfo) {
+        const scheduler = this.option('observer');
+        const appointmentAdapter = scheduler.createAppointmentAdapter(rawAppointment);
+
         let startDate = appointmentInfo.startDate;
         const recurrenceProcessor = getRecurrenceProcessor();
-        const recurrenceRule = this.invoke('getField', 'recurrenceRule', rawAppointment);
+        const { recurrenceRule, allDay: isAllDay } = appointmentAdapter;
         const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
-        const isAllDay = this.invoke('isAllDay', rawAppointment);
 
         if(!e.handles.top && !isRecurrent && !isAllDay) {
-            const scheduler = this.option('observer');
-            startDate = scheduler.timeZoneCalculator.createDate(rawAppointment.startDate, {
-                appointmentTimeZone: rawAppointment.startDateTimeZone,
-                path: 'toGrid'
-            });
+            startDate = scheduler.timeZoneCalculator.createDate(
+                appointmentAdapter.startDate,
+                {
+                    appointmentTimeZone: rawAppointment.startDateTimeZone,
+                    path: 'toGrid'
+                },
+            );
         }
 
         return startDate;
