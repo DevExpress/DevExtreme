@@ -1485,10 +1485,6 @@ const TagBox = SelectBox.inherit({
         }
     },
 
-    _getActualSearchValue: function() {
-        return this.callBase();
-    },
-
     _popupHidingHandler: function() {
         this.callBase();
         this._clearFilter();
