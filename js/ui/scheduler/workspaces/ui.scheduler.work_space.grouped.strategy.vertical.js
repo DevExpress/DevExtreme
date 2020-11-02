@@ -154,6 +154,20 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         };
     }
 
+    shiftIndicator($indicator, height, rtlOffset, i) {
+        const offset = this._workSpace.getIndicatorOffset(0);
+        const tableOffset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
+        const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+        let verticalOffset = this._workSpace._getRowCount() * this._workSpace.getCellHeight() * i;
+
+        if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
+            verticalOffset += this._workSpace.getAllDayHeight() * (i + 1);
+        }
+
+        $indicator.css('left', horizontalOffset + tableOffset);
+        $indicator.css('top', height + verticalOffset);
+    }
+
     getShaderOffset(i, width) {
         const offset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
         return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
