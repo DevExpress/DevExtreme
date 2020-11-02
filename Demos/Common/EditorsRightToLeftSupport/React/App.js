@@ -35,7 +35,7 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <div className={this.state.rtlEnabled && 'dx-rtl'}>
+        <div className={this.state.rtlEnabled ? 'dx-rtl' : null}>
           <div className="options">
             <div className="caption">Options</div>
             <div className="dx-fieldset">
