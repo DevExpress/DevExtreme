@@ -8,10 +8,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         tooltip: {
             enabled: true,
             customizeTooltip: function (args) {
-                var valueText = (args.seriesName.indexOf("Total") != -1) ? 
-                        Globalize.formatCurrency(args.originalValue,
-                            "USD", { maximumFractionDigits: 0 }) :
-                        args.originalValue;
+                var valueText = (args.seriesName.indexOf("Total") != -1)
+                    ? new Intl.NumberFormat('en-EN', { style: 'currency', currency: 'USD' }).format(args.originalValue)
+                    : args.originalValue;
     
                 return {
                     html: args.seriesName + "<div class='currency'>"
