@@ -19,8 +19,6 @@ const BOX_ITEM_CLASS = 'dx-box-item';
 const BOX_ITEM_DATA_KEY = 'dxBoxItemData';
 
 const HD_SCREEN_WIDTH = 1920;
-const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
-const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
 const ResponsiveBox = CollectionWidget.inherit({
 
@@ -199,30 +197,9 @@ const ResponsiveBox = CollectionWidget.inherit({
             return;
         }
 
-        if((property === 'visible' || property === 'disabled') && item.node) {
-            const container = item.node.parent().get(0);
-            switch(property) {
-                case 'visible':
-                    if(value === false) {
-                        container.classList.add(INVISIBLE_STATE_CLASS);
-                    } else {
-                        container.classList.remove(INVISIBLE_STATE_CLASS);
-                    }
-                    break;
-                case 'disabled':
-                    if(value === true) {
-                        container.classList.add(DISABLED_STATE_CLASS);
-                    } else {
-                        container.classList.remove(DISABLED_STATE_CLASS);
-                    }
-                    break;
-            }
-            return;
-        }
-
         this._refreshItem($item, item);
         this._clearItemNodeTemplates();
-        this._update();
+        this._update(true);
     },
 
     _setScreenSize: function() {
@@ -618,11 +595,19 @@ const ResponsiveBox = CollectionWidget.inherit({
         return result;
     },
 
-    _update: function() {
+    _update: function(forceRemove) {
         const $existingRoot = this._$root;
         this._renderItems();
-        $existingRoot && $existingRoot.detach();
-        this._saveAssistantRoot($existingRoot);
+
+        if($existingRoot) {
+            if(forceRemove) {
+                $existingRoot.remove();
+            } else {
+                $existingRoot.detach();
+            }
+            this._saveAssistantRoot($existingRoot);
+        }
+
         this._layoutChangedAction();
         this._updateRootBox();
     },
