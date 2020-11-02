@@ -1,4 +1,4 @@
-import { dxBaseGauge, compareArrays as _compareArrays } from './base_gauge';
+import { BaseGauge, compareArrays as _compareArrays } from './base_gauge';
 import { isDefined as _isDefined, isNumeric as _isNumber } from '../../core/utils/type';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
@@ -32,7 +32,7 @@ function parseArrayOfNumbers(arg) {
     return _isArray(arg) ? arg : _isNumber(arg) ? [arg] : null;
 }
 
-export const dxGauge = dxBaseGauge.inherit({
+export const dxGauge = BaseGauge.inherit({
     _initCore: function() {
         const that = this;
         const renderer = that._renderer;

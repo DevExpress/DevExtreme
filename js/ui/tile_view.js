@@ -71,13 +71,6 @@ const TileView = CollectionWidget.inherit({
             indicateLoading: true
 
             /**
-            * @name dxTileViewItem
-            * @inherits CollectionWidgetItem
-            * @type object
-            */
-
-
-            /**
             * @name dxTileViewOptions.selectedIndex
             * @hidden
             */

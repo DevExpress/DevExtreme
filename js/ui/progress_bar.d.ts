@@ -14,7 +14,7 @@ import dxTrackBar, {
 
 export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
-     * @docid dxProgressBarOptions.onComplete
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -25,7 +25,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      */
     onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxProgressBarOptions.showStatus
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -33,7 +33,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      */
     showStatus?: boolean;
     /**
-     * @docid dxProgressBarOptions.statusFormat
+     * @docid
      * @type string|function
      * @default function(ratio, value) { return "Progress: " + Math.round(ratio * 100) + "%" }
      * @type_function_param1 ratio:number
@@ -44,7 +44,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
      */
     statusFormat?: string | ((ratio: number, value: number) => string);
     /**
-     * @docid dxProgressBarOptions.value
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -53,7 +53,7 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     value?: number;
 }
 /**
- * @docid dxProgressBar
+ * @docid
  * @inherits dxTrackBar
  * @module ui/progress_bar
  * @export default

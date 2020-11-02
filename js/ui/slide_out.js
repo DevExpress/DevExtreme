@@ -28,15 +28,7 @@ const SlideOut = CollectionWidget.inherit({
     },
 
     _getDefaultOptions: function() {
-        /**
-        * @name dxSlideOutItem
-        * @inherits CollectionWidgetItem
-        * @type object
-        */
-
         return extend(this.callBase(), {
-
-
             activeStateEnabled: false,
 
             menuItemTemplate: 'menuItem',
@@ -356,13 +348,13 @@ const SlideOut = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxSlideOutMethods.registerKeyHandler
+    * @name dxSlideOut.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxSlideOutMethods.focus
+    * @name dxSlideOut.focus
     * @publicName focus()
     * @hidden
     */

@@ -9,7 +9,7 @@ import CollectionWidget, {
 
 export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     /**
-     * @docid dxBoxOptions.align
+     * @docid
      * @type Enums.BoxAlign
      * @default 'start'
      * @prevFileNamespace DevExpress.ui
@@ -17,7 +17,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      */
     align?: 'center' | 'end' | 'space-around' | 'space-between' | 'start';
     /**
-     * @docid dxBoxOptions.crossAlign
+     * @docid
      * @type Enums.BoxCrossAlign
      * @default 'start'
      * @prevFileNamespace DevExpress.ui
@@ -25,7 +25,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      */
     crossAlign?: 'center' | 'end' | 'start' | 'stretch';
     /**
-     * @docid dxBoxOptions.dataSource
+     * @docid
      * @type string|Array<string,dxBoxItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -33,7 +33,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      */
     dataSource?: string | Array<string | dxBoxItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxBoxOptions.direction
+     * @docid
      * @type Enums.BoxDirection
      * @default 'row'
      * @prevFileNamespace DevExpress.ui
@@ -41,7 +41,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
      */
     direction?: 'col' | 'row';
     /**
-     * @docid dxBoxOptions.items
+     * @docid
      * @type Array<string, dxBoxItem, object>
      * @fires dxBoxOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -50,7 +50,7 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     items?: Array<string | dxBoxItem | any>;
 }
 /**
- * @docid dxBox
+ * @docid
  * @inherits CollectionWidget
  * @module ui/box
  * @export default
@@ -62,9 +62,14 @@ export default class dxBox extends CollectionWidget {
     constructor(element: JQuery, options?: dxBoxOptions)
 }
 
+/**
+* @docid
+* @inherits CollectionWidgetItem
+* @type object
+*/
 export interface dxBoxItem extends CollectionWidgetItem {
     /**
-     * @docid dxBoxItem.baseSize
+     * @docid
      * @type number | Enums.Mode
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -72,7 +77,7 @@ export interface dxBoxItem extends CollectionWidgetItem {
      */
     baseSize?: number | 'auto';
     /**
-     * @docid dxBoxItem.box
+     * @docid
      * @type dxBoxOptions
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -80,7 +85,7 @@ export interface dxBoxItem extends CollectionWidgetItem {
      */
     box?: dxBoxOptions;
     /**
-     * @docid dxBoxItem.ratio
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -88,7 +93,7 @@ export interface dxBoxItem extends CollectionWidgetItem {
      */
     ratio?: number;
     /**
-     * @docid dxBoxItem.shrink
+     * @docid
      * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui

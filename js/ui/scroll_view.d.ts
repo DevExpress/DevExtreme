@@ -10,7 +10,7 @@ import dxScrollable, {
 
 export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     /**
-     * @docid dxScrollViewOptions.onPullDown
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -18,7 +18,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      */
     onPullDown?: ((e: { component?: dxScrollView, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxScrollViewOptions.onReachBottom
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -26,7 +26,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      */
     onReachBottom?: ((e: { component?: dxScrollView, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxScrollViewOptions.pulledDownText
+     * @docid
      * @type string
      * @default "Release to refresh..."
      * @default "" [for](Material)
@@ -35,7 +35,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      */
     pulledDownText?: string;
     /**
-     * @docid dxScrollViewOptions.pullingDownText
+     * @docid
      * @type string
      * @default "Pull down to refresh..."
      * @default "" [for](Material)
@@ -44,7 +44,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      */
     pullingDownText?: string;
     /**
-     * @docid dxScrollViewOptions.reachBottomText
+     * @docid
      * @type string
      * @default "Loading..."
      * @default "" [for](Material)
@@ -53,7 +53,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
      */
     reachBottomText?: string;
     /**
-     * @docid dxScrollViewOptions.refreshingText
+     * @docid
      * @type string
      * @default "Refreshing..."
      * @default "" [for](Material)
@@ -63,7 +63,7 @@ export interface dxScrollViewOptions extends dxScrollableOptions<dxScrollView> {
     refreshingText?: string;
 }
 /**
- * @docid dxScrollView
+ * @docid
  * @inherits dxScrollable
  * @hasTranscludedContent
  * @module ui/scroll_view
@@ -75,14 +75,14 @@ export default class dxScrollView extends dxScrollable {
     constructor(element: Element, options?: dxScrollViewOptions)
     constructor(element: JQuery, options?: dxScrollViewOptions)
     /**
-     * @docid dxScrollViewMethods.refresh
+     * @docid
      * @publicName refresh()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     refresh(): void;
     /**
-     * @docid dxScrollViewMethods.release
+     * @docid
      * @publicName release(preventScrollBottom)
      * @param1 preventScrollBottom:boolean
      * @return Promise<void>

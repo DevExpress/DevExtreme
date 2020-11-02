@@ -16,7 +16,7 @@ import dxMenuBase, {
 
 export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     /**
-     * @docid dxMenuOptions.adaptivityEnabled
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -24,7 +24,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     adaptivityEnabled?: boolean;
     /**
-     * @docid dxMenuOptions.dataSource
+     * @docid
      * @type string|Array<dxMenuItem>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -32,7 +32,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     dataSource?: string | Array<dxMenuItem> | DataSource | DataSourceOptions;
     /**
-     * @docid dxMenuOptions.hideSubmenuOnMouseLeave
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -40,14 +40,14 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     hideSubmenuOnMouseLeave?: boolean;
     /**
-     * @docid dxMenuOptions.items
+     * @docid
      * @type Array<dxMenuItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxMenuItem>;
     /**
-     * @docid dxMenuOptions.onSubmenuHidden
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -58,7 +58,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     onSubmenuHidden?: ((e: { component?: dxMenu, element?: dxElement, model?: any, rootItem?: dxElement }) => any);
     /**
-     * @docid dxMenuOptions.onSubmenuHiding
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -70,7 +70,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     onSubmenuHiding?: ((e: { component?: dxMenu, element?: dxElement, model?: any, rootItem?: dxElement, cancel?: boolean }) => any);
     /**
-     * @docid dxMenuOptions.onSubmenuShowing
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -81,7 +81,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     onSubmenuShowing?: ((e: { component?: dxMenu, element?: dxElement, model?: any, rootItem?: dxElement }) => any);
     /**
-     * @docid dxMenuOptions.onSubmenuShown
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -92,7 +92,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     onSubmenuShown?: ((e: { component?: dxMenu, element?: dxElement, model?: any, rootItem?: dxElement }) => any);
     /**
-     * @docid dxMenuOptions.orientation
+     * @docid
      * @type Enums.Orientation
      * @default "horizontal"
      * @prevFileNamespace DevExpress.ui
@@ -100,15 +100,39 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
      */
     orientation?: 'horizontal' | 'vertical';
     /**
-     * @docid dxMenuOptions.showFirstSubmenuMode
+     * @docid
      * @type Object|Enums.ShowSubmenuMode
      * @default { name: "onClick", delay: { show: 50, hide: 300 } }
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showFirstSubmenuMode?: { delay?: { hide?: number, show?: number } | number, name?: 'onClick' | 'onHover' } | 'onClick' | 'onHover';
+    showFirstSubmenuMode?: {
+      /**
+      * @docid
+      * @type Object|number
+      * @default { show: 50, hide: 300 }
+      */
+      delay?: {
+        /**
+        * @docid
+        * @default 300
+        */
+        hide?: number,
+        /**
+        * @docid
+        * @default 50
+        */
+        show?: number
+      } | number,
+      /**
+      * @docid
+      * @type Enums.ShowSubmenuMode
+      * @default "onClick"
+      */
+      name?: 'onClick' | 'onHover'
+    } | 'onClick' | 'onHover';
     /**
-     * @docid dxMenuOptions.submenuDirection
+     * @docid
      * @type Enums.SubmenuDirection
      * @default "auto"
      * @prevFileNamespace DevExpress.ui
@@ -117,7 +141,7 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     submenuDirection?: 'auto' | 'leftOrTop' | 'rightOrBottom';
 }
 /**
- * @docid dxMenu
+ * @docid
  * @inherits dxMenuBase
  * @module ui/menu
  * @export default
@@ -129,16 +153,21 @@ export default class dxMenu extends dxMenuBase {
     constructor(element: JQuery, options?: dxMenuOptions)
 }
 
+/**
+ * @docid
+ * @inherits CollectionWidgetItem
+ * @type object
+ */
 export interface dxMenuBaseItem extends CollectionWidgetItem {
     /**
-     * @docid dxMenuBaseItem.beginGroup
+     * @docid
      * @type Boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     beginGroup?: boolean;
     /**
-     * @docid dxMenuBaseItem.closeMenuOnClick
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -146,7 +175,7 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
      */
     closeMenuOnClick?: boolean;
     /**
-     * @docid dxMenuBaseItem.disabled
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -154,21 +183,21 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
      */
     disabled?: boolean;
     /**
-     * @docid dxMenuBaseItem.icon
+     * @docid
      * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxMenuBaseItem.items
+     * @docid
      * @type Array<dxMenuBaseItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxMenuBaseItem>;
     /**
-     * @docid dxMenuBaseItem.selectable
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -176,7 +205,7 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
      */
     selectable?: boolean;
     /**
-     * @docid dxMenuBaseItem.selected
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -184,14 +213,14 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
      */
     selected?: boolean;
     /**
-     * @docid dxMenuBaseItem.text
+     * @docid
      * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
-     * @docid dxMenuBaseItem.visible
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -200,9 +229,14 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
     visible?: boolean;
 }
 
+/**
+* @docid
+* @inherits dxMenuBaseItem
+* @type object
+*/
 export interface dxMenuItem extends dxMenuBaseItem {
     /**
-     * @docid dxMenuItem.items
+     * @docid
      * @type Array<dxMenuItem>
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -371,13 +371,13 @@ const SlideOutView = Widget.inherit({
     }
 
     /**
-    * @name dxSlideOutViewMethods.registerKeyHandler
+    * @name dxSlideOutView.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxSlideOutViewMethods.focus
+    * @name dxSlideOutView.focus
     * @publicName focus()
     * @hidden
     */

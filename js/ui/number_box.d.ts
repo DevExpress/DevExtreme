@@ -9,7 +9,7 @@ import {
 
 export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     /**
-     * @docid dxNumberBoxOptions.buttons
+     * @docid
      * @type Array<Enums.NumberBoxButtonName,dxTextEditorButton>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -17,7 +17,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      */
     buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
     /**
-     * @docid dxNumberBoxOptions.format
+     * @docid
      * @type format
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -25,7 +25,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      */
     format?: format;
     /**
-     * @docid dxNumberBoxOptions.invalidValueMessage
+     * @docid
      * @type string
      * @default "Value must be a number"
      * @prevFileNamespace DevExpress.ui
@@ -33,7 +33,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      */
     invalidValueMessage?: string;
     /**
-     * @docid dxNumberBoxOptions.max
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -41,7 +41,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      */
     max?: number;
     /**
-     * @docid dxNumberBoxOptions.min
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -49,7 +49,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      */
     min?: number;
     /**
-     * @docid dxNumberBoxOptions.mode
+     * @docid
      * @type Enums.NumberBoxMode
      * @default "text"
      * @default 'number' [for](mobile_devices)
@@ -58,7 +58,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      */
     mode?: 'number' | 'text' | 'tel';
     /**
-     * @docid dxNumberBoxOptions.showSpinButtons
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -66,7 +66,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      */
     showSpinButtons?: boolean;
     /**
-     * @docid dxNumberBoxOptions.step
+     * @docid
      * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui
@@ -74,7 +74,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      */
     step?: number;
     /**
-     * @docid dxNumberBoxOptions.useLargeSpinButtons
+     * @docid
      * @type boolean
      * @default true
      * @default false [for](desktop)
@@ -83,7 +83,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
      */
     useLargeSpinButtons?: boolean;
     /**
-     * @docid dxNumberBoxOptions.value
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -92,7 +92,7 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     value?: number;
 }
 /**
- * @docid dxNumberBox
+ * @docid
  * @isEditor
  * @inherits dxTextEditor
  * @module ui/number_box

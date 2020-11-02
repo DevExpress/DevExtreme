@@ -1,7 +1,7 @@
 
 
 /**
- * @docid vizmethods.currentTheme
+ * @docid viz.currentTheme
  * @publicName currentTheme()
  * @return string
  * @static
@@ -13,7 +13,7 @@
 export function currentTheme(): string;
 
 /**
- * @docid vizmethods.currentTheme
+ * @docid viz.currentTheme
  * @publicName currentTheme(platform, colorScheme)
  * @param1 platform:string
  * @param2 colorScheme:string
@@ -26,7 +26,7 @@ export function currentTheme(): string;
 export function currentTheme(platform: string, colorScheme: string): void;
 
 /**
- * @docid vizmethods.currentTheme
+ * @docid viz.currentTheme
  * @publicName currentTheme(theme)
  * @param1 theme:string
  * @static
@@ -38,7 +38,7 @@ export function currentTheme(platform: string, colorScheme: string): void;
 export function currentTheme(theme: string): void;
 
 /**
- * @docid vizmethods.getTheme
+ * @docid viz.getTheme
  * @publicName getTheme(theme)
  * @param1 theme:string
  * @return object
@@ -51,7 +51,7 @@ export function currentTheme(theme: string): void;
 export function getTheme(theme: string): any;
 
 /**
- * @docid vizmethods.refreshTheme
+ * @docid viz.refreshTheme
  * @publicName refreshTheme()
  * @static
  * @module viz/themes
@@ -62,7 +62,7 @@ export function getTheme(theme: string): any;
 export function refreshTheme(): void;
 
 /**
- * @docid vizmethods.registerTheme
+ * @docid viz.registerTheme
  * @publicName registerTheme(customTheme, baseTheme)
  * @param1 customTheme:object
  * @param2 baseTheme:string

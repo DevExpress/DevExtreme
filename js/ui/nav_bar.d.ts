@@ -5,14 +5,14 @@ import dxTabs, {
 
 export interface dxNavBarOptions extends dxTabsOptions<dxNavBar> {
     /**
-     * @docid dxNavBarOptions.scrollByContent
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     scrollByContent?: boolean;
 }
 /**
- * @docid dxNavBar
+ * @docid
  * @inherits dxTabs
  * @module ui/nav_bar
  * @export default
@@ -24,9 +24,14 @@ export default class dxNavBar extends dxTabs {
     constructor(element: JQuery, options?: dxNavBarOptions)
 }
 
+/**
+* @docid
+* @inherits dxTabsItem
+* @type object
+*/
 export interface dxNavBarItem extends dxTabsItem {
     /**
-     * @docid dxNavBarItem.badge
+     * @docid
      * @type String
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -22,51 +22,6 @@ export default {
             highlightChanges: false,
             onDataErrorOccurred: null,
             remoteOperations: 'auto',
-            /**
-             * @name dxDataGridOptions.remoteOperations.sorting
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxDataGridOptions.remoteOperations.filtering
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxDataGridOptions.remoteOperations.paging
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxDataGridOptions.remoteOperations.grouping
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxDataGridOptions.remoteOperations.groupPaging
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxDataGridOptions.remoteOperations.summary
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxTreeListOptions.remoteOperations.sorting
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxTreeListOptions.remoteOperations.filtering
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name dxTreeListOptions.remoteOperations.grouping
-             * @type boolean
-             * @default false
-             */
             paging: {
                 enabled: true,
                 pageSize: undefined,

@@ -212,12 +212,6 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
     });
 }
 
-/**
- * @name LoadOptions
- * @namespace DevExpress.data
- * @type object
- */
-
 const CustomStore = Store.inherit({
     ctor: function(options) {
         options = options || {};

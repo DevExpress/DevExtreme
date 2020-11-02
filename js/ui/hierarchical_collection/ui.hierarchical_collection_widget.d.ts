@@ -4,7 +4,7 @@ import CollectionWidget, {
 
 export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionWidget> extends CollectionWidgetOptions<T> {
     /**
-     * @docid HierarchicalCollectionWidgetOptions.disabledExpr
+     * @docid
      * @type string|function
      * @default 'disabled'
      * @prevFileNamespace DevExpress.ui
@@ -12,7 +12,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
      */
     disabledExpr?: string | Function;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.displayExpr
+     * @docid
      * @type string|function(item)
      * @default 'text'
      * @type_function_param1 item:object
@@ -22,7 +22,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
      */
     displayExpr?: string | ((item: any) => string);
     /**
-     * @docid HierarchicalCollectionWidgetOptions.focusStateEnabled
+     * @docid
      * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -30,7 +30,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.hoverStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -38,7 +38,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.itemsExpr
+     * @docid
      * @type string|function
      * @default 'items'
      * @prevFileNamespace DevExpress.ui
@@ -46,7 +46,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
      */
     itemsExpr?: string | Function;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.keyExpr
+     * @docid
      * @type string|function
      * @default 'id'
      * @prevFileNamespace DevExpress.ui
@@ -54,7 +54,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
      */
     keyExpr?: string | Function;
     /**
-     * @docid HierarchicalCollectionWidgetOptions.selectedExpr
+     * @docid
      * @type string|function
      * @default 'selected'
      * @prevFileNamespace DevExpress.ui
@@ -63,7 +63,7 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
     selectedExpr?: string | Function;
 }
 /**
- * @docid HierarchicalCollectionWidget
+ * @docid
  * @type object
  * @inherits CollectionWidget
  * @module ui/hierarchical_collection/ui.hierarchical_collection_widget

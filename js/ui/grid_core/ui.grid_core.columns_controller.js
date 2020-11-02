@@ -54,22 +54,7 @@ export default {
             columnWidth: undefined,
             adaptColumnWidthByRatio: true,
 
-            /**
-             * @name GridBaseColumn
-             * @type Object
-             */
-            /**
-             * @name dxDataGridColumn
-             * @inherits GridBaseColumn
-             * @type Object
-             */
-            /**
-             * @name dxTreeListColumn
-             * @inherits GridBaseColumn
-             * @type Object
-             */
             columns: undefined,
-
 
             /**
              * @name dxDataGridColumn.grouped
@@ -84,83 +69,10 @@ export default {
              * @default undefined
              */
             /**
-             * @name GridBaseColumn.lookup.dataSource
-             * @type Array<any>|DataSourceOptions|Store|function(options)
-             * @type_function_param1 options:object
-             * @type_function_param1_field1 data:object
-             * @type_function_param1_field2 key:any
-             * @type_function_return Array<any>|DataSourceOptions|Store
-             * @default undefined
-             */
-            /**
-             * @name GridBaseColumn.lookup.valueExpr
-             * @type string
-             * @default undefined
-             */
-            /**
-             * @name GridBaseColumn.lookup.displayExpr
-             * @type string|function(data)
-             * @default undefined
-             * @type_function_param1 data:object
-             * @type_function_return string
-             */
-            /**
-             * @name GridBaseColumn.lookup.allowClearing
-             * @type boolean
-             * @default false
-             */
-            /**
              * @name dxDataGridOptions.regenerateColumnsByVisibleItems
              * @type boolean
              * @hidden
              * @default false
-             */
-            /**
-             * @name GridBaseColumn.headerFilter.dataSource
-             * @type Array<any>|function(options)|DataSourceOptions
-             * @type_function_param1 options:object
-             * @type_function_param1_field1 component:object
-             * @type_function_param1_field2 dataSource:DataSourceOptions
-             * @default undefined
-             */
-            /**
-             * @name GridBaseColumn.headerFilter.groupInterval
-             * @type Enums.HeaderFilterGroupInterval|number
-             * @default undefined
-             */
-            /**
-             * @name GridBaseColumn.headerFilter.allowSearch
-             * @type boolean
-             * @default false
-             */
-            /**
-             * @name GridBaseColumn.headerFilter.searchMode
-             * @type Enums.CollectionSearchMode
-             * @default 'contains'
-             */
-            /**
-             * @name GridBaseColumn.headerFilter.width
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name GridBaseColumn.headerFilter.height
-             * @type number
-             * @default undefined
-             */
-            /**
-             * @name GridBaseColumnButton
-             * @type Object
-             */
-            /**
-             * @name dxDataGridColumnButton
-             * @inherits GridBaseColumnButton
-             * @type Object
-             */
-            /**
-             * @name dxTreeListColumnButton
-             * @inherits GridBaseColumnButton
-             * @type Object
              */
             regenerateColumnsByVisibleItems: false,
             customizeColumns: null,

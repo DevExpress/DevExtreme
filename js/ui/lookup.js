@@ -125,18 +125,7 @@ const Lookup = DropDownList.inherit({
 
             focusStateEnabled: false,
 
-            animation: {
-                /**
-                * @name dxLookupOptions.animation.show
-                * @type animationConfig
-                * @default undefined
-                */
-                /**
-                * @name dxLookupOptions.animation.hide
-                * @type animationConfig
-                * @default undefined
-                */
-            },
+            animation: {},
 
             dropDownOptions: {
                 showTitle: true,
@@ -1154,7 +1143,7 @@ const Lookup = DropDownList.inherit({
     }
 
     /**
-    * @name dxLookupMethods.getButton
+    * @name dxLookup.getButton
     * @publicName getButton(name)
     * @hidden
     */

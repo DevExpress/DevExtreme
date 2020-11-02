@@ -19,17 +19,17 @@ class ValidationGroup extends DOMComponent {
         */
 
         /**
-        * @name dxValidationGroupMethods.beginUpdate
+        * @name dxValidationGroup.beginUpdate
         * @publicName beginUpdate()
         * @hidden
         */
         /**
-        * @name dxValidationGroupMethods.defaultOptions
+        * @name dxValidationGroup.defaultOptions
         * @publicName defaultOptions(rule)
         * @hidden
         */
         /**
-        * @name dxValidationGroupMethods.endUpdate
+        * @name dxValidationGroup.endUpdate
         * @publicName endUpdate()
         * @hidden
         */

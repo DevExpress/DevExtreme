@@ -1,5 +1,5 @@
 /**
- * @docid registerComponent
+ * @docid
  * @publicName registerComponent(name, componentClass)
  * @param1 name:string
  * @param2 componentClass:object
@@ -11,7 +11,7 @@
 export default function registerComponent(name: string, componentClass: any): void;
 
 /**
- * @docid registerComponent
+ * @docid
  * @publicName registerComponent(name, namespace, componentClass)
  * @param1 name:string
  * @param2 namespace:object

@@ -160,10 +160,6 @@ const SummaryCell = function(columnPath, rowPath, data, descriptions, fieldIndex
     }
 
 };
-/**
-* @name dxPivotGridSummaryCell
-* @type object
-*/
 SummaryCell.prototype = extend(SummaryCell.prototype, {
 
     _getPath: function(dimension) {

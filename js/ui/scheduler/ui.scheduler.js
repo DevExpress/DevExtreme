@@ -137,12 +137,6 @@ class Scheduler extends Widget {
                 */
 
             /**
-                * @pseudo FirstDayOfWeek
-                * @type Enums.FirstDayOfWeek
-                * @default undefined
-                */
-
-            /**
                 * @pseudo CellDuration
                 * @type number
                 * @default 30
@@ -224,131 +218,6 @@ class Scheduler extends Widget {
                 */
 
             views: ['day', 'week'],
-
-            /**
-                * @name dxSchedulerOptions.views.type
-                * @type Enums.SchedulerViewType
-                * @default undefined
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.name
-                * @type string
-                * @default undefined
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.maxAppointmentsPerCell
-                * @type number|Enums.MaxAppointmentsPerCell
-                * @default "auto"
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.intervalCount
-                * @type number
-                * @default 1
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.groupByDate
-                * @type boolean
-                * @default false
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.startDate
-                * @type Date|number|string
-                * @default undefined
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.startDayHour
-                * @extends StartDayHour
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.endDayHour
-                * @extends EndDayHour
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.groups
-                * @extends Groups
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.firstDayOfWeek
-                * @extends FirstDayOfWeek
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.cellDuration
-                * @extends CellDuration
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.appointmentTemplate
-                * @extends AppointmentTemplate
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.dropDownAppointmentTemplate
-                * @type template|function
-                * @default "dropDownAppointment"
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 contentElement:dxElement
-                * @type_function_return string|Element|jQuery
-                * @deprecated dxSchedulerOptions.views.appointmentTooltipTemplate
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.appointmentTooltipTemplate
-                * @extends AppointmentTooltipTemplate
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.dateCellTemplate
-                * @extends DateCellTemplate
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.timeCellTemplate
-                * @extends TimeCellTemplate
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.dataCellTemplate
-                * @extends DataCellTemplate
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.resourceCellTemplate
-                * @extends ResourceCellTemplate
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.appointmentCollectorTemplate
-                * @default "appointmentCollector"
-                * @extends AppointmentCollectorTemplate
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.agendaDuration
-                * @type number
-                * @default 7
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.groupOrientation
-                * @type Enums.Orientation
-                */
-
-            /**
-                * @name dxSchedulerOptions.views.scrolling
-                * @type dxSchedulerScrolling
-                */
-
             currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
             currentDate: dateUtils.trimTime(new Date()),
             min: undefined,
@@ -358,57 +227,7 @@ class Scheduler extends Widget {
 
             groups: [],
 
-            resources: [
-                /**
-                    * @name dxSchedulerOptions.resources.fieldExpr
-                    * @type String
-                    * @default ""
-                    */
-
-                /**
-                    * @name dxSchedulerOptions.resources.colorExpr
-                    * @type String
-                    * @default "color"
-                    */
-
-                /**
-                    * @name dxSchedulerOptions.resources.label
-                    * @type String
-                    * @default ""
-                    */
-
-                /**
-                    * @name dxSchedulerOptions.resources.allowMultiple
-                    * @type Boolean
-                    * @default false
-                    */
-
-                /**
-                    * @name dxSchedulerOptions.resources.useColorAsDefault
-                    * @type Boolean
-                    * @default false
-                    */
-
-                /**
-                    * @name dxSchedulerOptions.resources.valueExpr
-                    * @type string|function
-                    * @default 'id'
-                    */
-
-                /**
-                    * @name dxSchedulerOptions.resources.displayExpr
-                    * @type string|function(resource)
-                    * @type_function_param1 resource:object
-                    * @default 'text'
-                 * @type_function_return string
-                    */
-
-                /**
-                    * @name dxSchedulerOptions.resources.dataSource
-                    * @type string|Array<Object>|DataSource|DataSourceOptions
-                    * @default null
-                    */
-            ],
+            resources: [],
 
             dataSource: null,
 
@@ -442,128 +261,6 @@ class Scheduler extends Widget {
                 allowEditingTimeZones: false
             },
 
-            /**
-                * @name dxSchedulerOptions.editing.allowAdding
-                * @type boolean
-                * @default true
-                */
-            /**
-                * @name dxSchedulerOptions.editing.allowUpdating
-                * @type boolean
-                * @default true
-                */
-            /**
-                * @name dxSchedulerOptions.editing.allowDeleting
-                * @type boolean
-                * @default true
-                */
-            /**
-                 * @name dxSchedulerOptions.editing.allowResizing
-                 * @type boolean
-                 * @default true
-                 * @default false @for Android|iOS
-                */
-            /**
-                 * @name dxSchedulerOptions.editing.allowDragging
-                 * @type boolean
-                 * @default true
-                 * @default false @for Android|iOS
-                */
-            /**
-                * @name dxSchedulerOptions.editing.allowTimeZoneEditing
-                * @type boolean
-                * @default false
-                */
-            /**
-                * @name dxSchedulerOptions.editing.allowEditingTimeZones
-                * @type boolean
-                * @default false
-                * @deprecated dxSchedulerOptions.editing.allowTimeZoneEditing
-                */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.autoScroll
-               * @type boolean
-               * @default true
-               */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.scrollSpeed
-               * @type number
-               * @default 60
-               */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.scrollSensitivity
-               * @type number
-               * @default 60
-               */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.group
-               * @type string
-               * @default undefined
-               */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.data
-               * @type any
-               * @default undefined
-               */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.onDragStart
-               * @type function(e)
-               * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 cancel:boolean
-               * @type_function_param1_field3 itemData:any
-               * @type_function_param1_field4 itemElement:dxElement
-               * @type_function_param1_field5 fromData:any
-               */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.onDragMove
-               * @type function(e)
-               * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 cancel:boolean
-               * @type_function_param1_field3 itemData:any
-               * @type_function_param1_field4 itemElement:dxElement
-               * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
-               * @type_function_param1_field7 fromData:any
-               * @type_function_param1_field8 toData:any
-               */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.onDragEnd
-               * @type function(e)
-               * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 cancel:boolean
-               * @type_function_param1_field3 itemData:any
-               * @type_function_param1_field4 itemElement:dxElement
-               * @type_function_param1_field5 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field6 toComponent:dxSortable|dxDraggable
-               * @type_function_param1_field7 fromData:any
-               * @type_function_param1_field8 toData:any
-               */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.onAdd
-               * @type function(e)
-               * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 itemData:any
-               * @type_function_param1_field3 itemElement:dxElement
-               * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field5 toComponent:dxSortable|dxDraggable
-               * @type_function_param1_field6 fromData:any
-               * @type_function_param1_field7 toData:any
-               */
-            /**
-               * @name dxSchedulerOptions.appointmentDragging.onRemove
-               * @type function(e)
-               * @type_function_param1 e:object
-               * @type_function_param1_field1 event:event
-               * @type_function_param1_field2 itemData:any
-               * @type_function_param1_field3 itemElement:dxElement
-               * @type_function_param1_field4 fromComponent:dxSortable|dxDraggable
-               * @type_function_param1_field5 toComponent:dxSortable|dxDraggable
-               * @type_function_param1_field6 fromData:any
-               */
             showAllDayPanel: true,
 
             showCurrentTimeIndicator: true,
@@ -685,11 +382,6 @@ class Scheduler extends Widget {
             /**
                 * @name dxSchedulerOptions.hoverStateEnabled
                 * @hidden
-                */
-            /**
-                * @name dxSchedulerAppointment
-                * @inherits CollectionWidgetItem
-                * @type object
                 */
         });
     }
@@ -2342,8 +2034,8 @@ class Scheduler extends Widget {
 
 
         return (inArray(dayTimeStamp, [startDateTimeStamp, endDateTimeStamp]) > -1)
-                ||
-                (startDateTimeStamp < dayTimeStamp && endDateTimeStamp > dayTimeStamp);
+            ||
+            (startDateTimeStamp < dayTimeStamp && endDateTimeStamp > dayTimeStamp);
     }
 
     setTargetedAppointmentResources(rawAppointment, element, appointmentIndex) {
@@ -2507,7 +2199,7 @@ class Scheduler extends Widget {
     }
 
     /**
-        * @name dxSchedulerMethods.registerKeyHandler
+        * @name dxScheduler.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
         * @hidden
         */

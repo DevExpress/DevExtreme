@@ -14,7 +14,7 @@ import dxDropDownList, {
 
 export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptions<T> {
     /**
-     * @docid dxSelectBoxOptions.acceptCustomValue
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -22,7 +22,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      */
     acceptCustomValue?: boolean;
     /**
-     * @docid dxSelectBoxOptions.fieldTemplate
+     * @docid
      * @type template|function
      * @default null
      * @type_function_param1 selectedItem:object
@@ -33,7 +33,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      */
     fieldTemplate?: template | ((selectedItem: any, fieldElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxSelectBoxOptions.onCustomItemCreating
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -46,14 +46,14 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      */
     onCustomItemCreating?: ((e: { component?: T, element?: dxElement, model?: any, text?: string, customItem?: string | any | Promise<any> | JQueryPromise<any> }) => any);
     /**
-     * @docid dxSelectBoxOptions.openOnFieldClick
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     openOnFieldClick?: boolean;
     /**
-     * @docid dxSelectBoxOptions.placeholder
+     * @docid
      * @type string
      * @default "Select"
      * @prevFileNamespace DevExpress.ui
@@ -61,13 +61,13 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      */
     placeholder?: string;
     /**
-     * @docid dxSelectBoxOptions.showDropDownButton
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
-     * @docid dxSelectBoxOptions.showSelectionControls
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -75,7 +75,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
      */
     showSelectionControls?: boolean;
     /**
-     * @docid dxSelectBoxOptions.valueChangeEvent
+     * @docid
      * @type string
      * @default "change"
      * @prevFileNamespace DevExpress.ui
@@ -84,7 +84,7 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
     valueChangeEvent?: string;
 }
 /**
- * @docid dxSelectBox
+ * @docid
  * @isEditor
  * @inherits dxDropDownList
  * @module ui/select_box

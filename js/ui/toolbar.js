@@ -316,13 +316,13 @@ const Toolbar = ToolbarBase.inherit({
     },
 
     /**
-     * @name dxToolbarMethods.registerKeyHandler
+     * @name dxToolbar.registerKeyHandler
      * @publicName registerKeyHandler(key, handler)
      * @hidden
     */
 
     /**
-     * @name dxToolbarMethods.focus
+     * @name dxToolbar.focus
      * @publicName focus()
      * @hidden
     */

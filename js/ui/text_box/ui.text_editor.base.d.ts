@@ -18,7 +18,7 @@ import Editor, {
 
 export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> {
     /**
-     * @docid dxTextEditorOptions.buttons
+     * @docid
      * @type Array<string, Enums.TextBoxButtonName, dxTextEditorButton>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -26,7 +26,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     buttons?: Array<string | 'clear' | dxTextEditorButton>;
     /**
-     * @docid dxTextEditorOptions.focusStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -34,7 +34,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxTextEditorOptions.hoverStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -42,7 +42,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxTextEditorOptions.inputAttr
+     * @docid
      * @type object
      * @default {}
      * @prevFileNamespace DevExpress.ui
@@ -50,7 +50,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     inputAttr?: any;
     /**
-     * @docid dxTextEditorOptions.mask
+     * @docid
      * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -58,7 +58,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     mask?: string;
     /**
-     * @docid dxTextEditorOptions.maskChar
+     * @docid
      * @type string
      * @default "_"
      * @prevFileNamespace DevExpress.ui
@@ -66,7 +66,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     maskChar?: string;
     /**
-     * @docid dxTextEditorOptions.maskInvalidMessage
+     * @docid
      * @type string
      * @default "Value is invalid"
      * @prevFileNamespace DevExpress.ui
@@ -74,7 +74,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     maskInvalidMessage?: string;
     /**
-     * @docid dxTextEditorOptions.maskRules
+     * @docid
      * @type Object
      * @default "{}"
      * @prevFileNamespace DevExpress.ui
@@ -82,7 +82,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     maskRules?: any;
     /**
-     * @docid dxTextEditorOptions.name
+     * @docid
      * @type string
      * @hidden false
      * @prevFileNamespace DevExpress.ui
@@ -90,7 +90,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     name?: string;
     /**
-     * @docid dxTextEditorOptions.onChange
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -101,7 +101,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onChange?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onCopy
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -112,7 +112,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onCopy?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onCut
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -123,7 +123,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onCut?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onEnterKey
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -134,7 +134,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onEnterKey?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onFocusIn
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -145,7 +145,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onFocusIn?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onFocusOut
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -156,7 +156,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onFocusOut?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onInput
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -167,7 +167,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onInput?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onKeyDown
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -179,7 +179,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onKeyDown?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onKeyPress
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -191,7 +191,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onKeyPress?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onKeyUp
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -202,7 +202,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onKeyUp?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.onPaste
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -213,7 +213,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     onPaste?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
-     * @docid dxTextEditorOptions.placeholder
+     * @docid
      * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -221,7 +221,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     placeholder?: string;
     /**
-     * @docid dxTextEditorOptions.showClearButton
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -229,7 +229,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     showClearButton?: boolean;
     /**
-     * @docid dxTextEditorOptions.showMaskMode
+     * @docid
      * @type Enums.ShowMaskMode
      * @default "always"
      * @prevFileNamespace DevExpress.ui
@@ -237,7 +237,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     showMaskMode?: 'always' | 'onFocus';
     /**
-     * @docid dxTextEditorOptions.spellcheck
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -245,7 +245,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     spellcheck?: boolean;
     /**
-     * @docid dxTextEditorOptions.stylingMode
+     * @docid
      * @type Enums.EditorStylingMode
      * @default 'outlined'
      * @default 'underlined' [for](Material)
@@ -254,7 +254,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     stylingMode?: 'outlined' | 'underlined' | 'filled';
     /**
-     * @docid dxTextEditorOptions.text
+     * @docid
      * @type string
      * @readonly
      * @prevFileNamespace DevExpress.ui
@@ -262,7 +262,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     text?: string;
     /**
-     * @docid dxTextEditorOptions.useMaskedValue
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -270,7 +270,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     useMaskedValue?: boolean;
     /**
-     * @docid dxTextEditorOptions.value
+     * @docid
      * @type any
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -278,7 +278,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
      */
     value?: any;
     /**
-     * @docid dxTextEditorOptions.valueChangeEvent
+     * @docid
      * @type string
      * @default "change"
      * @prevFileNamespace DevExpress.ui
@@ -287,7 +287,7 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     valueChangeEvent?: string;
 }
 /**
- * @docid dxTextEditor
+ * @docid
  * @inherits Editor
  * @hidden
  * @prevFileNamespace DevExpress.ui
@@ -296,21 +296,21 @@ export default class dxTextEditor extends Editor {
     constructor(element: Element, options?: dxTextEditorOptions)
     constructor(element: JQuery, options?: dxTextEditorOptions)
     /**
-     * @docid dxTextEditorMethods.blur
+     * @docid
      * @publicName blur()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     blur(): void;
     /**
-     * @docid dxTextEditorMethods.focus
+     * @docid
      * @publicName focus()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focus(): void;
     /**
-     * @docid dxTextEditorMethods.getButton
+     * @docid
      * @publicName getButton(name)
      * @param1 name:string
      * @return dxButton | undefined
@@ -320,9 +320,13 @@ export default class dxTextEditor extends Editor {
     getButton(name: string): dxButton | undefined;
 }
 
+/**
+* @docid
+* @type object
+*/
 export interface dxTextEditorButton {
     /**
-     * @docid dxTextEditorButton.location
+     * @docid
      * @type Enums.TextEditorButtonLocation
      * @default "after"
      * @prevFileNamespace DevExpress.ui
@@ -330,7 +334,7 @@ export interface dxTextEditorButton {
      */
     location?: 'after' | 'before';
     /**
-     * @docid dxTextEditorButton.name
+     * @docid
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -338,7 +342,7 @@ export interface dxTextEditorButton {
      */
     name?: string;
     /**
-     * @docid dxTextEditorButton.options
+     * @docid
      * @type dxButtonOptions
      * @default undefined
      * @prevFileNamespace DevExpress.ui

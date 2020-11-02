@@ -63,7 +63,7 @@ const Component = Class.inherit({
         return this._optionsByReference;
     },
     /**
-    * @name ComponentMethods.ctor
+    * @name Component.ctor
     * @publicName ctor(options)
     * @param1 options:ComponentOptions|undefined
     * @hidden

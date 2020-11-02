@@ -19,7 +19,7 @@ import {
 export interface dxValidationGroupOptions extends DOMComponentOptions<dxValidationGroup> {
 }
 /**
- * @docid dxValidationGroup
+ * @docid
  * @inherits DOMComponent
  * @hasTranscludedContent
  * @module ui/validation_group
@@ -31,14 +31,14 @@ export default class dxValidationGroup extends DOMComponent {
     constructor(element: Element, options?: dxValidationGroupOptions)
     constructor(element: JQuery, options?: dxValidationGroupOptions)
     /**
-     * @docid dxValidationGroupMethods.reset
+     * @docid
      * @publicName reset()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
     /**
-     * @docid dxValidationGroupMethods.validate
+     * @docid
      * @publicName validate()
      * @return dxValidationGroupResult
      * @prevFileNamespace DevExpress.ui
@@ -47,37 +47,41 @@ export default class dxValidationGroup extends DOMComponent {
     validate(): dxValidationGroupResult;
 }
 
+/**
+ * @docid
+ * @type Object
+ */
 export interface dxValidationGroupResult {
     /**
-     * @docid dxValidationGroupResult.brokenRules
+     * @docid
      * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
-     * @docid dxValidationGroupResult.complete
+     * @docid
      * @type Promise<dxValidationGroupResult>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     complete?: Promise<dxValidationGroupResult> | JQueryPromise<dxValidationGroupResult>;
     /**
-     * @docid dxValidationGroupResult.isValid
+     * @docid
      * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isValid?: boolean;
     /**
-     * @docid dxValidationGroupResult.status
+     * @docid
      * @type Enums.ValidationStatus
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     status?: 'valid' | 'invalid' | 'pending';
     /**
-     * @docid dxValidationGroupResult.validators
+     * @docid
      * @type Array<Object>
      * @prevFileNamespace DevExpress.ui
      * @public

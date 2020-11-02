@@ -5,7 +5,7 @@ import {
 } from './button';
 
 /**
- * @docid ui.dialogmethods.alert
+ * @docid ui.dialog.alert
  * @publicName alert(messageHtml,title)
  * @param1 messageHtml:string
  * @param2 title:string
@@ -20,7 +20,7 @@ import {
 export function alert(messageHtml: string, title: string): Promise<void> & JQueryPromise<void>;
 
 /**
- * @docid ui.dialogmethods.confirm
+ * @docid ui.dialog.confirm
  * @publicName confirm(messageHtml,title)
  * @param1 messageHtml:string
  * @param2 title:string
@@ -35,7 +35,7 @@ export function alert(messageHtml: string, title: string): Promise<void> & JQuer
 export function confirm(messageHtml: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
 
 /**
- * @docid ui.dialogmethods.custom
+ * @docid ui.dialog.custom
  * @publicName custom(options)
  * @return Object
  * @param1 options:object

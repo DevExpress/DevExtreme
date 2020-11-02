@@ -188,28 +188,6 @@ const Popover = Popup.inherit({
             * @hidden
             */
 
-            /**
-            * @name dxPopoverOptions.showEvent.name
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxPopoverOptions.showEvent.delay
-            * @type number
-            * @default undefined
-            */
-
-            /**
-            * @name dxPopoverOptions.hideEvent.name
-            * @type string
-            * @default undefined
-            */
-            /**
-            * @name dxPopoverOptions.hideEvent.delay
-            * @type number
-            * @default undefined
-            */
-
             fullScreen: false,
             closeOnTargetScroll: true,
             arrowPosition: '',
@@ -585,13 +563,13 @@ const Popover = Popup.inherit({
     }
 
     /**
-    * @name dxPopoverMethods.registerKeyHandler
+    * @name dxPopover.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxPopoverMethods.focus
+    * @name dxPopover.focus
     * @publicName focus()
     * @hidden
     */

@@ -21,11 +21,6 @@ const ButtonCollection = CollectionWidget.inherit({
     _initTemplates() {
         this.callBase();
         /**
-         * @name dxButtonGroupItem
-         * @inherits CollectionWidgetItem
-         * @type object
-         */
-        /**
          * @name dxButtonGroupItem.html
          * @hidden
          */

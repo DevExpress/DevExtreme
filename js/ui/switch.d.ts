@@ -4,7 +4,7 @@ import Editor, {
 
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**
-     * @docid dxSwitchOptions.activeStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -12,7 +12,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxSwitchOptions.focusStateEnabled
+     * @docid
      * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -20,7 +20,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxSwitchOptions.hoverStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -28,7 +28,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxSwitchOptions.name
+     * @docid
      * @type string
      * @hidden false
      * @prevFileNamespace DevExpress.ui
@@ -36,7 +36,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
      */
     name?: string;
     /**
-     * @docid dxSwitchOptions.switchedOffText
+     * @docid
      * @type string
      * @default "OFF"
      * @prevFileNamespace DevExpress.ui
@@ -44,7 +44,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
      */
     switchedOffText?: string;
     /**
-     * @docid dxSwitchOptions.switchedOnText
+     * @docid
      * @type string
      * @default "ON"
      * @prevFileNamespace DevExpress.ui
@@ -52,7 +52,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
      */
     switchedOnText?: string;
     /**
-     * @docid dxSwitchOptions.value
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -61,7 +61,7 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     value?: boolean;
 }
 /**
- * @docid dxSwitch
+ * @docid
  * @isEditor
  * @inherits Editor
  * @module ui/switch

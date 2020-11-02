@@ -33,13 +33,6 @@ const ANIM_DATA_KEY = 'dxAnimData';
 const ANIM_QUEUE_KEY = 'dxAnimQueue';
 const TRANSFORM_PROP = 'transform';
 
-
-/**
-* @name animationConfig
-* @namespace DevExpress
-* @type object
-*/
-
 const TransitionAnimationStrategy = {
     initAnimation: function($element, config) {
         $element.css({
@@ -830,13 +823,6 @@ const stop = function(element, jumpToEnd) {
     destroyAnimQueueData($element);
 };
 
-/**
-* @name fx
-* @section utils
-* @module animation/fx
-* @namespace DevExpress
-* @export default
-*/
 const fx = {
     off: false,
     animationTypes: animationConfigurators,

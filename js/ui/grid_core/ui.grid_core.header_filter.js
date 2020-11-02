@@ -464,53 +464,14 @@ export default {
     defaultOptions: function() {
         return {
             headerFilter: {
-                /**
-                 * @name GridBaseOptions.headerFilter.visible
-                 * @type boolean
-                 * @default false
-                 */
                 visible: false,
-                /**
-                 * @name GridBaseOptions.headerFilter.width
-                 * @type number
-                 * @default 252
-                 */
                 width: 252,
                 height: 325,
-                /**
-                 * @name GridBaseOptions.headerFilter.allowSearch
-                 * @type boolean
-                 * @default false
-                 */
                 allowSearch: false,
-                /**
-                 * @name GridBaseOptions.headerFilter.searchTimeout
-                 * @type number
-                 * @default 500
-                 */
                 searchTimeout: 500,
-                /**
-                 * @name GridBaseOptions.headerFilter.texts
-                 * @type object
-                 */
                 texts: {
-                    /**
-                     * @name GridBaseOptions.headerFilter.texts.emptyValue
-                     * @type string
-                     * @default "(Blanks)"
-                     */
                     emptyValue: messageLocalization.format('dxDataGrid-headerFilterEmptyValue'),
-                    /**
-                     * @name GridBaseOptions.headerFilter.texts.ok
-                     * @type string
-                     * @default "Ok"
-                     */
                     ok: messageLocalization.format('dxDataGrid-headerFilterOK'),
-                    /**
-                     * @name GridBaseOptions.headerFilter.texts.cancel
-                     * @type string
-                     * @default "Cancel"
-                     */
                     cancel: messageLocalization.format('dxDataGrid-headerFilterCancel')
                 }
             }

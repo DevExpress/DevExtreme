@@ -36,48 +36,12 @@ export default {
     defaultOptions: function() {
         return {
             searchPanel: {
-                /**
-                 * @name GridBaseOptions.searchPanel.visible
-                 * @type boolean
-                 * @default false
-                 */
                 visible: false,
-                /**
-                 * @name GridBaseOptions.searchPanel.width
-                 * @type number
-                 * @default 160
-                 */
                 width: 160,
-                /**
-                 * @name GridBaseOptions.searchPanel.placeholder
-                 * @type string
-                 * @default "Search..."
-                 */
                 placeholder: messageLocalization.format('dxDataGrid-searchPanelPlaceholder'),
-                /**
-                 * @name GridBaseOptions.searchPanel.highlightSearchText
-                 * @type boolean
-                 * @default true
-                 */
                 highlightSearchText: true,
-                /**
-                 * @name GridBaseOptions.searchPanel.highlightCaseSensitive
-                 * @type boolean
-                 * @default false
-                 */
                 highlightCaseSensitive: false,
-                /**
-                 * @name GridBaseOptions.searchPanel.text
-                 * @type string
-                 * @default ""
-                 * @fires GridBaseOptions.onOptionChanged
-                 */
                 text: '',
-                /**
-                 * @name GridBaseOptions.searchPanel.searchVisibleColumnsOnly
-                 * @type boolean
-                 * @default false
-                 */
                 searchVisibleColumnsOnly: false
             }
         };

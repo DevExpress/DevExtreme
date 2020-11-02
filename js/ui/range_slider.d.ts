@@ -3,13 +3,13 @@ import {
 } from '../core/element';
 
 import {
+    dxSliderBase,
     dxSliderBaseOptions
 } from './slider';
 
-import dxTrackBar from './track_bar';
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
-     * @docid dxRangeSliderOptions.end
+     * @docid
      * @type number
      * @default 60
      * @prevFileNamespace DevExpress.ui
@@ -17,7 +17,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      */
     end?: number;
     /**
-     * @docid dxRangeSliderOptions.endName
+     * @docid
      * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -25,7 +25,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      */
     endName?: string;
     /**
-     * @docid dxRangeSliderOptions.onValueChanged
+     * @docid
      * @action
      * @extends Action
      * @type_function_param1_field4 start:number
@@ -36,7 +36,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      */
     onValueChanged?: ((e: { component?: dxRangeSlider, element?: dxElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
     /**
-     * @docid dxRangeSliderOptions.start
+     * @docid
      * @type number
      * @default 40
      * @prevFileNamespace DevExpress.ui
@@ -44,7 +44,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      */
     start?: number;
     /**
-     * @docid dxRangeSliderOptions.startName
+     * @docid
      * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -52,7 +52,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      */
     startName?: string;
     /**
-     * @docid dxRangeSliderOptions.value
+     * @docid
      * @type Array<number>
      * @default [40, 60]
      * @prevFileNamespace DevExpress.ui
@@ -61,7 +61,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     value?: Array<number>;
 }
 /**
- * @docid dxRangeSlider
+ * @docid
  * @isEditor
  * @inherits dxSliderBase
  * @module ui/range_slider
@@ -69,7 +69,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
  * @prevFileNamespace DevExpress.ui
  * @public
  */
-export default class dxRangeSlider extends dxTrackBar {
+export default class dxRangeSlider extends dxSliderBase {
     constructor(element: Element, options?: dxRangeSliderOptions)
     constructor(element: JQuery, options?: dxRangeSliderOptions)
 }

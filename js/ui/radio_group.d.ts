@@ -10,7 +10,7 @@ import {
 
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
-     * @docid dxRadioGroupOptions.activeStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -18,7 +18,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxRadioGroupOptions.focusStateEnabled
+     * @docid
      * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -26,7 +26,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxRadioGroupOptions.hoverStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -34,7 +34,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxRadioGroupOptions.layout
+     * @docid
      * @default 'horizontal' [for](tablets)
      * @type Enums.Orientation
      * @default "vertical"
@@ -43,7 +43,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
      */
     layout?: 'horizontal' | 'vertical';
     /**
-     * @docid dxRadioGroupOptions.name
+     * @docid
      * @type string
      * @hidden false
      * @prevFileNamespace DevExpress.ui
@@ -51,7 +51,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
      */
     name?: string;
     /**
-     * @docid dxRadioGroupOptions.value
+     * @docid
      * @ref
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -59,7 +59,7 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
     value?: any;
 }
 /**
- * @docid dxRadioGroup
+ * @docid
  * @isEditor
  * @inherits Editor, DataExpressionMixin
  * @module ui/radio_group

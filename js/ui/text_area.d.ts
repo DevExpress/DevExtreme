@@ -4,7 +4,7 @@ import dxTextBox, {
 
 export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     /**
-     * @docid dxTextAreaOptions.autoResizeEnabled
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -12,7 +12,7 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
      */
     autoResizeEnabled?: boolean;
     /**
-     * @docid dxTextAreaOptions.maxHeight
+     * @docid
      * @type numeric|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -20,7 +20,7 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
      */
     maxHeight?: number | string;
     /**
-     * @docid dxTextAreaOptions.minHeight
+     * @docid
      * @type numeric|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -28,7 +28,7 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
      */
     minHeight?: number | string;
     /**
-     * @docid dxTextAreaOptions.spellcheck
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -37,7 +37,7 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     spellcheck?: boolean;
 }
 /**
- * @docid dxTextArea
+ * @docid
  * @isEditor
  * @inherits dxTextBox
  * @module ui/text_area

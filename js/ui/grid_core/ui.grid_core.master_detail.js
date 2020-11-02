@@ -15,27 +15,8 @@ export default {
     defaultOptions: function() {
         return {
             masterDetail: {
-                /**
-                 * @name dxDataGridOptions.masterDetail.enabled
-                 * @type boolean
-                 * @default false
-                 */
                 enabled: false,
-                /**
-                 * @name dxDataGridOptions.masterDetail.autoExpandAll
-                 * @type boolean
-                 * @default false
-                 */
                 autoExpandAll: false,
-                /**
-                 * @name dxDataGridOptions.masterDetail.template
-                 * @type template|function
-                 * @type_function_param1 detailElement:dxElement
-                 * @type_function_param2 detailInfo:object
-                 * @type_function_param2_field1 key:any
-                 * @type_function_param2_field2 data:object
-                 * @type_function_param2_field3 watch:function
-                 */
                 template: null
             }
         };

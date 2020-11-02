@@ -18,7 +18,7 @@ import Widget, {
 
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
-     * @docid dxButtonOptions.activeStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -26,7 +26,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxButtonOptions.focusStateEnabled
+     * @docid
      * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -34,7 +34,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxButtonOptions.hoverStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -42,7 +42,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxButtonOptions.icon
+     * @docid
      * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -50,7 +50,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     icon?: string;
     /**
-     * @docid dxButtonOptions.onClick
+     * @docid
      * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
@@ -62,7 +62,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     onClick?: ((e: { component?: dxButton, element?: dxElement, model?: any, event?: event, validationGroup?: any }) => any);
     /**
-     * @docid dxButtonOptions.stylingMode
+     * @docid
      * @type Enums.ButtonStylingMode
      * @default 'contained'
      * @prevFileNamespace DevExpress.ui
@@ -70,7 +70,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     stylingMode?: 'text' | 'outlined' | 'contained';
     /**
-     * @docid dxButtonOptions.template
+     * @docid
      * @type template|function
      * @default "content"
      * @type_function_param1 buttonData:object
@@ -83,7 +83,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxButtonOptions.text
+     * @docid
      * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -91,7 +91,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     text?: string;
     /**
-     * @docid dxButtonOptions.type
+     * @docid
      * @type Enums.ButtonType
      * @default 'normal'
      * @prevFileNamespace DevExpress.ui
@@ -99,7 +99,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     /**
-     * @docid dxButtonOptions.useSubmitBehavior
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -107,7 +107,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
      */
     useSubmitBehavior?: boolean;
     /**
-     * @docid dxButtonOptions.validationGroup
+     * @docid
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -116,7 +116,7 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     validationGroup?: string;
 }
 /**
- * @docid dxButton
+ * @docid
  * @inherits Widget
  * @hasTranscludedContent
  * @module ui/button

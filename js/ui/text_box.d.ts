@@ -4,7 +4,7 @@ import dxTextEditor, {
 
 export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
     /**
-     * @docid dxTextBoxOptions.maxLength
+     * @docid
      * @type string|number
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -12,7 +12,7 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
      */
     maxLength?: string | number;
     /**
-     * @docid dxTextBoxOptions.mode
+     * @docid
      * @type Enums.TextBoxMode
      * @default "text"
      * @prevFileNamespace DevExpress.ui
@@ -20,7 +20,7 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
      */
     mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
     /**
-     * @docid dxTextBoxOptions.value
+     * @docid
      * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -29,7 +29,7 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
     value?: string;
 }
 /**
- * @docid dxTextBox
+ * @docid
  * @isEditor
  * @inherits dxTextEditor
  * @module ui/text_box

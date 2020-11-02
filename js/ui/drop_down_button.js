@@ -36,11 +36,6 @@ const DropDownButton = Widget.inherit({
         return extend(this.callBase(), {
 
             /**
-             * @name dxDropDownButtonItem
-             * @inherits dxListItem
-             * @type object
-             */
-            /**
              * @name dxDropDownButtonItem.key
              * @hidden
              */

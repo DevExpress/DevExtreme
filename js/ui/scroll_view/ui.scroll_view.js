@@ -290,7 +290,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxScrollViewMethods.toggleLoading
+    * @name dxScrollView.toggleLoading
     * @publicName toggleLoading(showOrHide)
     * @param1 showOrHide:boolean
     * @hidden
@@ -300,7 +300,7 @@ const ScrollView = Scrollable.inherit(isServerSide ? scrollViewServerConfig : {
     },
 
     /**
-    * @name dxScrollViewMethods.isFull
+    * @name dxScrollView.isFull
     * @publicName isFull()
     * @return boolean
     * @hidden

@@ -41,52 +41,20 @@ class MenuBase extends HierarchicalCollectionWidget {
             activeStateEnabled: true,
 
             showSubmenuMode: {
-                /**
-                * @name dxMenuBaseOptions.showSubmenuMode.name
-                * @type Enums.ShowSubmenuMode
-                * @default "onHover"
-                */
                 name: 'onHover',
-
-                /**
-                * @name dxMenuBaseOptions.showSubmenuMode.delay
-                * @type Object|number
-                * @default { show: 50, hide: 300 }
-                */
                 delay: {
-                    /**
-                    * @name dxMenuBaseOptions.showSubmenuMode.delay.show
-                    * @type number
-                    * @default 50
-                    */
                     show: 50,
-
-                    /**
-                    * @name dxMenuBaseOptions.showSubmenuMode.delay.hide
-                    * @type number
-                    * @default 300
-                    */
                     hide: 300
                 }
             },
 
             animation: {
-                /**
-                * @name dxMenuBaseOptions.animation.show
-                * @type animationConfig
-                * @default { type: "fade", from: 0, to: 1, duration: 100 }
-                */
                 show: {
                     type: 'fade',
                     from: 0,
                     to: 1,
                     duration: 100
                 },
-                /**
-                * @name dxMenuBaseOptions.animation.hide
-                * @type animationConfig
-                * @default { type: "fade", from: 1, to: 0, duration: 100 }
-                */
                 hide: {
                     type: 'fade',
                     from: 1,
@@ -140,13 +108,6 @@ class MenuBase extends HierarchicalCollectionWidget {
             * @name dxMenuBaseOptions.expandedExpr
             * @hidden
             */
-
-            /**
-            * @name dxMenuBaseItem
-            * @inherits CollectionWidgetItem
-            * @type object
-            */
-
 
             _itemAttributes: { role: 'menuitem' },
 

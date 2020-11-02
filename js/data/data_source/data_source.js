@@ -23,25 +23,25 @@ import {
 
 export const DataSource = Class.inherit({
     /**
-    * @name DataSourceMethods.ctor
+    * @name DataSource.ctor
     * @publicName ctor(url)
     * @param1 url:string
     * @hidden
     */
     /**
-    * @name DataSourceMethods.ctor
+    * @name DataSource.ctor
     * @publicName ctor(data)
     * @param1 data:Array<any>
     * @hidden
     */
     /**
-    * @name DataSourceMethods.ctor
+    * @name DataSource.ctor
     * @publicName ctor(store)
     * @param1 store:Store
     * @hidden
     */
     /**
-    * @name DataSourceMethods.ctor
+    * @name DataSource.ctor
     * @publicName ctor(options)
     * @param1 options:CustomStoreOptions|DataSourceOptions
     * @hidden

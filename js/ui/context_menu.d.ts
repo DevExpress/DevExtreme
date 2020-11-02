@@ -26,7 +26,7 @@ import {
 
 export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     /**
-     * @docid dxContextMenuOptions.closeOnOutsideClick
+     * @docid
      * @type boolean|function
      * @default true
      * @type_function_param1 event:event
@@ -36,7 +36,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
-     * @docid dxContextMenuOptions.dataSource
+     * @docid
      * @type string|Array<dxContextMenuItem>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -44,14 +44,14 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     dataSource?: string | Array<dxContextMenuItem> | DataSource | DataSourceOptions;
     /**
-     * @docid dxContextMenuOptions.items
+     * @docid
      * @type Array<dxContextMenuItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxContextMenuItem>;
     /**
-     * @docid dxContextMenuOptions.onHidden
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -59,7 +59,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     onHidden?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxContextMenuOptions.onHiding
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -70,7 +70,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     onHiding?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, cancel?: boolean }) => any);
     /**
-     * @docid dxContextMenuOptions.onPositioning
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -82,7 +82,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     onPositioning?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, event?: event, position?: positionConfig }) => any);
     /**
-     * @docid dxContextMenuOptions.onShowing
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -93,7 +93,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     onShowing?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any, cancel?: boolean }) => any);
     /**
-     * @docid dxContextMenuOptions.onShown
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -101,7 +101,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     onShown?: ((e: { component?: dxContextMenu, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxContextMenuOptions.position
+     * @docid
      * @type positionConfig
      * @default { my: 'top left', at: 'top left' }
      * @ref
@@ -110,15 +110,26 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     position?: positionConfig;
     /**
-     * @docid dxContextMenuOptions.showEvent
+     * @docid
      * @type Object|string
      * @default "dxcontextmenu"
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showEvent?: { delay?: number, name?: string } | string;
+    showEvent?: {
+      /**
+      * @docid
+      * @default undefined
+      */
+      delay?: number,
+      /**
+      * @docid
+      * @default undefined
+      */
+      name?: string
+    } | string;
     /**
-     * @docid dxContextMenuOptions.submenuDirection
+     * @docid
      * @type Enums.ContextMenuSubmenuDirection
      * @default "auto"
      * @prevFileNamespace DevExpress.ui
@@ -126,7 +137,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     submenuDirection?: 'auto' | 'left' | 'right';
     /**
-     * @docid dxContextMenuOptions.target
+     * @docid
      * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -134,7 +145,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
      */
     target?: string | Element | JQuery;
     /**
-     * @docid dxContextMenuOptions.visible
+     * @docid
      * @type boolean
      * @default false
      * @fires dxContextMenuOptions.onShowing
@@ -145,7 +156,7 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     visible?: boolean;
 }
 /**
- * @docid dxContextMenu
+ * @docid
  * @inherits dxMenuBase
  * @module ui/context_menu
  * @export default
@@ -156,7 +167,7 @@ export default class dxContextMenu extends dxMenuBase {
     constructor(element: Element, options?: dxContextMenuOptions)
     constructor(element: JQuery, options?: dxContextMenuOptions)
     /**
-     * @docid dxContextMenuMethods.hide
+     * @docid
      * @publicName hide()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -164,7 +175,7 @@ export default class dxContextMenu extends dxMenuBase {
      */
     hide(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxContextMenuMethods.show
+     * @docid
      * @publicName show()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -172,7 +183,7 @@ export default class dxContextMenu extends dxMenuBase {
      */
     show(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxContextMenuMethods.toggle
+     * @docid
      * @publicName toggle(showing)
      * @param1 showing:boolean
      * @return Promise<void>
@@ -182,9 +193,14 @@ export default class dxContextMenu extends dxMenuBase {
     toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
 }
 
+/**
+ * @docid
+ * @inherits dxMenuBaseItem
+ * @type object
+ */
 export interface dxContextMenuItem extends dxMenuBaseItem {
     /**
-     * @docid dxContextMenuItem.items
+     * @docid
      * @type Array<dxContextMenuItem>
      * @prevFileNamespace DevExpress.ui
      * @public

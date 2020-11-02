@@ -12,7 +12,7 @@ import dxDropDownEditor, {
 
 export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     /**
-     * @docid dxColorBoxOptions.applyButtonText
+     * @docid
      * @type string
      * @default "OK"
      * @prevFileNamespace DevExpress.ui
@@ -20,7 +20,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     applyButtonText?: string;
     /**
-     * @docid dxColorBoxOptions.applyValueMode
+     * @docid
      * @type Enums.EditorApplyValueMode
      * @default "useButtons"
      * @prevFileNamespace DevExpress.ui
@@ -28,7 +28,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     applyValueMode?: 'instantly' | 'useButtons';
     /**
-     * @docid dxColorBoxOptions.cancelButtonText
+     * @docid
      * @type string
      * @default "Cancel"
      * @prevFileNamespace DevExpress.ui
@@ -36,7 +36,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     cancelButtonText?: string;
     /**
-     * @docid dxColorBoxOptions.editAlphaChannel
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -44,7 +44,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     editAlphaChannel?: boolean;
     /**
-     * @docid dxColorBoxOptions.fieldTemplate
+     * @docid
      * @type template|function
      * @default null
      * @type_function_param1 value:string
@@ -55,7 +55,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     fieldTemplate?: template | ((value: string, fieldElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxColorBoxOptions.keyStep
+     * @docid
      * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui
@@ -63,7 +63,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
      */
     keyStep?: number;
     /**
-     * @docid dxColorBoxOptions.value
+     * @docid
      * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -71,7 +71,7 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     value?: string;
 }
 /**
- * @docid dxColorBox
+ * @docid
  * @isEditor
  * @inherits dxDropDownEditor
  * @module ui/color_box

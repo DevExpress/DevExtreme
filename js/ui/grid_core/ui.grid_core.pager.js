@@ -168,43 +168,9 @@ export default {
     defaultOptions: function() {
         return {
             pager: {
-                /**
-                 * @name GridBaseOptions.pager.visible
-                 * @type boolean|Enums.Mode
-                 * @default "auto"
-                 */
                 visible: 'auto',
-                /**
-                 * @name GridBaseOptions.pager.showPageSizeSelector
-                 * @type boolean
-                 * @default false
-                */
                 showPageSizeSelector: false,
-                /**
-                 * @name GridBaseOptions.pager.allowedPageSizes
-                 * @type Array<number>|Enums.Mode
-                 * @default "auto"
-                */
                 allowedPageSizes: 'auto'
-                /**
-                 * @name GridBaseOptions.pager.showNavigationButtons
-                 * @type boolean
-                 * @default false
-                 */
-                /**
-                 * @name GridBaseOptions.pager.showInfo
-                 * @type boolean
-                 * @default false
-                 */
-                /**
-                 * @name GridBaseOptions.pager.infoText
-                 * @type string
-                 * @default "Page {0} of {1} ({2} items)"
-                 */
-                /**
-                 * name GridBaseOptions.pager.displayMode
-                 * type Enums.GridPagerDisplayMode
-                */
             }
         };
     },

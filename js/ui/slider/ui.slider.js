@@ -118,7 +118,6 @@ const Slider = TrackBar.inherit({
 
             hoverStateEnabled: true,
 
-
             activeStateEnabled: true,
 
             step: 1,
@@ -126,57 +125,17 @@ const Slider = TrackBar.inherit({
             showRange: true,
 
             tooltip: {
-                /**
-                * @name dxSliderBaseOptions.tooltip.enabled
-                * @type boolean
-                * @default false
-                */
                 enabled: false,
-
-                /**
-                * @name dxSliderBaseOptions.tooltip.format
-                * @type format
-                * @default function(value) { return value }
-                */
                 format: function(value) {
                     return value;
                 },
-
-                /**
-                * @name dxSliderBaseOptions.tooltip.position
-                * @type Enums.VerticalEdge
-                * @default 'top'
-                */
                 position: 'top',
-
-                /**
-                * @name dxSliderBaseOptions.tooltip.showMode
-                * @type Enums.SliderTooltipShowMode
-                * @default 'onHover'
-                */
                 showMode: 'onHover'
             },
 
             label: {
-                /**
-                * @name dxSliderBaseOptions.label.visible
-                * @type boolean
-                * @default false
-                */
                 visible: false,
-
-                /**
-                * @name dxSliderBaseOptions.label.position
-                * @type Enums.VerticalEdge
-                * @default 'bottom'
-                */
                 position: 'bottom',
-
-                /**
-                * @name dxSliderBaseOptions.label.format
-                * @type format
-                * @default function(value) { return value }
-                */
                 format: function(value) {
                     return value;
                 }

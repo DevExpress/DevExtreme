@@ -63,31 +63,9 @@ class Menu extends MenuBase {
             submenuDirection: 'auto',
 
             showFirstSubmenuMode: {
-                /**
-                * @name dxMenuOptions.showFirstSubmenuMode.name
-                * @type Enums.ShowSubmenuMode
-                * @default "onClick"
-                */
                 name: 'onClick',
-
-                /**
-                * @name dxMenuOptions.showFirstSubmenuMode.delay
-                * @type Object|number
-                * @default { show: 50, hide: 300 }
-                */
                 delay: {
-                    /**
-                    * @name dxMenuOptions.showFirstSubmenuMode.delay.show
-                    * @type number
-                    * @default 50
-                    */
                     show: 50,
-
-                    /**
-                    * @name dxMenuOptions.showFirstSubmenuMode.delay.hide
-                    * @type number
-                    * @default 300
-                    */
                     hide: 300
                 }
             },
@@ -118,11 +96,6 @@ class Menu extends MenuBase {
             /**
             * @name dxMenuOptions.onItemReordered
             * @hidden
-            */
-            /**
-            * @name dxMenuItem
-            * @inherits dxMenuBaseItem
-            * @type object
             */
         });
     }

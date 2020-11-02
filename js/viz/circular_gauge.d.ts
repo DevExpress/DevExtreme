@@ -1,5 +1,5 @@
 import {
-    dxBaseGauge,
+    BaseGauge,
     BaseGaugeOptions,
     BaseGaugeRangeContainer,
     BaseGaugeScale,
@@ -9,46 +9,60 @@ import {
 
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
-     * @docid dxCircularGaugeOptions.geometry
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    geometry?: { endAngle?: number, startAngle?: number };
+    geometry?: {
+      /**
+       * @docid
+       * @type number
+       * @default 315
+       */
+      endAngle?: number,
+      /**
+       * @docid
+       * @type number
+       * @default 225
+       */
+      startAngle?: number
+    };
     /**
-     * @docid dxCircularGaugeOptions.rangeContainer
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     rangeContainer?: dxCircularGaugeRangeContainer;
     /**
-     * @docid dxCircularGaugeOptions.scale
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     scale?: dxCircularGaugeScale;
     /**
-     * @docid dxCircularGaugeOptions.subvalueIndicator
-     * @type GaugeIndicator
+     * @docid
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     subvalueIndicator?: GaugeIndicator;
     /**
-     * @docid dxCircularGaugeOptions.valueIndicator
-     * @type GaugeIndicator
+     * @docid
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     valueIndicator?: GaugeIndicator;
 }
+/**
+ * @docid
+ * @inherits BaseGaugeRangeContainer
+ * @hidden
+ */
 export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     /**
-     * @docid dxCircularGaugeOptions.rangeContainer.orientation
+     * @docid
      * @type Enums.CircularGaugeElementOrientation
      * @default 'outside'
      * @prevFileNamespace DevExpress.viz
@@ -56,7 +70,7 @@ export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
      */
     orientation?: 'center' | 'inside' | 'outside';
     /**
-     * @docid dxCircularGaugeOptions.rangeContainer.width
+     * @docid
      * @type number
      * @default 5
      * @prevFileNamespace DevExpress.viz
@@ -64,16 +78,20 @@ export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
      */
     width?: number;
 }
+/**
+ * @docid
+ * @inherits BaseGaugeScale
+ * @hidden
+ */
 export interface dxCircularGaugeScale extends BaseGaugeScale {
     /**
-     * @docid dxCircularGaugeOptions.scale.label
-     * @type object
+     * @docid
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     label?: dxCircularGaugeScaleLabel;
     /**
-     * @docid dxCircularGaugeOptions.scale.orientation
+     * @docid
      * @type Enums.CircularGaugeElementOrientation
      * @default 'outside'
      * @prevFileNamespace DevExpress.viz
@@ -81,9 +99,14 @@ export interface dxCircularGaugeScale extends BaseGaugeScale {
      */
     orientation?: 'center' | 'inside' | 'outside';
 }
+/**
+ * @docid
+ * @inherits BaseGaugeScaleLabel
+ * @hidden
+ */
 export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
-     * @docid dxCircularGaugeOptions.scale.label.hideFirstOrLast
+     * @docid
      * @type Enums.GaugeOverlappingBehavior
      * @default 'last'
      * @prevFileNamespace DevExpress.viz
@@ -91,7 +114,7 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
      */
     hideFirstOrLast?: 'first' | 'last';
     /**
-     * @docid dxCircularGaugeOptions.scale.label.indentFromTick
+     * @docid
      * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
@@ -100,14 +123,14 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     indentFromTick?: number;
 }
 /**
- * @docid dxCircularGauge
+ * @docid
  * @inherits BaseGauge
  * @module viz/circular_gauge
  * @export default
  * @prevFileNamespace DevExpress.viz
  * @public
  */
-export default class dxCircularGauge extends dxBaseGauge {
+export default class dxCircularGauge extends BaseGauge {
     constructor(element: Element, options?: dxCircularGaugeOptions)
     constructor(element: JQuery, options?: dxCircularGaugeOptions)
 }

@@ -12,7 +12,7 @@ import Editor, {
 
 export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     /**
-     * @docid dxCalendarOptions.activeStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -20,7 +20,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxCalendarOptions.cellTemplate
+     * @docid
      * @type template|function
      * @default "cell"
      * @type_function_param1 itemData:object
@@ -35,7 +35,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     cellTemplate?: template | ((itemData: { date?: Date, view?: string, text?: string }, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxCalendarOptions.dateSerializationFormat
+     * @docid
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -43,7 +43,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     dateSerializationFormat?: string;
     /**
-     * @docid dxCalendarOptions.disabledDates
+     * @docid
      * @type Array<Date>|function(data)
      * @default null
      * @type_function_param1 data:object
@@ -56,7 +56,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     disabledDates?: Array<Date> | ((data: { component?: any, date?: Date, view?: string }) => boolean);
     /**
-     * @docid dxCalendarOptions.firstDayOfWeek
+     * @docid
      * @type Enums.FirstDayOfWeek
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -64,7 +64,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
-     * @docid dxCalendarOptions.focusStateEnabled
+     * @docid
      * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -72,7 +72,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxCalendarOptions.hoverStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -80,7 +80,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxCalendarOptions.max
+     * @docid
      * @type Date|number|string
      * @default new Date(3000, 0)
      * @prevFileNamespace DevExpress.ui
@@ -88,7 +88,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     max?: Date | number | string;
     /**
-     * @docid dxCalendarOptions.maxZoomLevel
+     * @docid
      * @type Enums.CalendarZoomLevel
      * @default 'month'
      * @prevFileNamespace DevExpress.ui
@@ -96,7 +96,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
     /**
-     * @docid dxCalendarOptions.min
+     * @docid
      * @type Date|number|string
      * @default new Date(1000, 0)
      * @prevFileNamespace DevExpress.ui
@@ -104,7 +104,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     min?: Date | number | string;
     /**
-     * @docid dxCalendarOptions.minZoomLevel
+     * @docid
      * @type Enums.CalendarZoomLevel
      * @default 'century'
      * @prevFileNamespace DevExpress.ui
@@ -112,7 +112,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     minZoomLevel?: 'century' | 'decade' | 'month' | 'year';
     /**
-     * @docid dxCalendarOptions.name
+     * @docid
      * @type string
      * @hidden false
      * @prevFileNamespace DevExpress.ui
@@ -120,7 +120,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     name?: string;
     /**
-     * @docid dxCalendarOptions.showTodayButton
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -128,7 +128,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     showTodayButton?: boolean;
     /**
-     * @docid dxCalendarOptions.value
+     * @docid
      * @type Date|number|string
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -136,7 +136,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
      */
     value?: Date | number | string;
     /**
-     * @docid dxCalendarOptions.zoomLevel
+     * @docid
      * @type Enums.CalendarZoomLevel
      * @default 'month'
      * @fires dxCalendarOptions.onOptionChanged
@@ -146,7 +146,7 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     zoomLevel?: 'century' | 'decade' | 'month' | 'year';
 }
 /**
- * @docid dxCalendar
+ * @docid
  * @isEditor
  * @inherits Editor
  * @module ui/calendar

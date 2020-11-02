@@ -425,7 +425,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods.startSelectionWithCheckboxes
+         * @name GridBase.startSelectionWithCheckboxes
          * @publicName startSelectionWithCheckboxes()
          * @hidden
          * @return boolean
@@ -442,7 +442,7 @@ const SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods.stopSelectionWithCheckboxes
+         * @name GridBase.stopSelectionWithCheckboxes
          * @publicName stopSelectionWithCheckboxes()
          * @hidden
          * @return boolean
@@ -470,7 +470,7 @@ export default {
                 selectAllMode: 'allPages',
 
                 /**
-                 * @name dxDataGridOptions.selection.maxFilterLengthInRequest
+                 * @name dxDataGridSelection.maxFilterLengthInRequest
                  * @type number
                  * @hidden
                  * @default 1500

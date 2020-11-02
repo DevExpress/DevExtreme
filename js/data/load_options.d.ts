@@ -1,118 +1,124 @@
+
+/**
+ * @docid
+ * @namespace DevExpress.data
+ * @type object
+ */
 export interface LoadOptions {
     /**
-     * @docid LoadOptions.customQueryParams
+     * @docid
      * @type Object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     customQueryParams?: any;
     /**
-     * @docid LoadOptions.expand
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     expand?: any;
     /**
-     * @docid LoadOptions.filter
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     filter?: any;
     /**
-     * @docid LoadOptions.group
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     group?: any;
     /**
-     * @docid LoadOptions.groupSummary
+     * @docid
      * @type Object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     groupSummary?: any;
     /**
-     * @docid LoadOptions.parentIds
+     * @docid
      * @type Array<any>
      * @prevFileNamespace DevExpress.data
      * @public
      */
     parentIds?: Array<any>;
     /**
-     * @docid LoadOptions.requireGroupCount
+     * @docid
      * @type boolean
      * @prevFileNamespace DevExpress.data
      * @public
      */
     requireGroupCount?: boolean;
     /**
-     * @docid LoadOptions.requireTotalCount
+     * @docid
      * @type boolean
      * @prevFileNamespace DevExpress.data
      * @public
      */
     requireTotalCount?: boolean;
     /**
-     * @docid LoadOptions.searchExpr
+     * @docid
      * @type getter|Array<getter>
      * @prevFileNamespace DevExpress.data
      * @public
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid LoadOptions.searchOperation
+     * @docid
      * @type string
      * @prevFileNamespace DevExpress.data
      * @public
      */
     searchOperation?: string;
     /**
-     * @docid LoadOptions.searchValue
+     * @docid
      * @type any
      * @prevFileNamespace DevExpress.data
      * @public
      */
     searchValue?: any;
     /**
-     * @docid LoadOptions.select
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     select?: any;
     /**
-     * @docid LoadOptions.skip
+     * @docid
      * @type number
      * @prevFileNamespace DevExpress.data
      * @public
      */
     skip?: number;
     /**
-     * @docid LoadOptions.sort
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     sort?: any;
     /**
-     * @docid LoadOptions.take
+     * @docid
      * @type number
      * @prevFileNamespace DevExpress.data
      * @public
      */
     take?: number;
     /**
-     * @docid LoadOptions.totalSummary
+     * @docid
      * @type Object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     totalSummary?: any;
     /**
-     * @docid LoadOptions.userData
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.data
      * @public

@@ -8,7 +8,7 @@ import BaseSparkline, {
 
 export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     /**
-     * @docid dxSparkLineOptions.argumentField
+     * @docid
      * @type string
      * @default 'arg'
      * @prevFileNamespace DevExpress.viz
@@ -16,7 +16,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     argumentField?: string;
     /**
-     * @docid dxSparkLineOptions.barNegativeColor
+     * @docid
      * @type string
      * @default '#d7d7d7'
      * @prevFileNamespace DevExpress.viz
@@ -24,7 +24,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     barNegativeColor?: string;
     /**
-     * @docid dxSparkLineOptions.barPositiveColor
+     * @docid
      * @type string
      * @default '#a9a9a9'
      * @prevFileNamespace DevExpress.viz
@@ -32,14 +32,14 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     barPositiveColor?: string;
     /**
-     * @docid dxSparkLineOptions.dataSource
+     * @docid
      * @extends CommonVizDataSource
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     dataSource?: Array<any> | DataSource | DataSourceOptions | string;
     /**
-     * @docid dxSparkLineOptions.firstLastColor
+     * @docid
      * @type string
      * @default '#666666'
      * @prevFileNamespace DevExpress.viz
@@ -47,7 +47,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     firstLastColor?: string;
     /**
-     * @docid dxSparkLineOptions.ignoreEmptyPoints
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
@@ -55,7 +55,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     ignoreEmptyPoints?: boolean;
     /**
-     * @docid dxSparkLineOptions.lineColor
+     * @docid
      * @type string
      * @default '#666666'
      * @prevFileNamespace DevExpress.viz
@@ -63,7 +63,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     lineColor?: string;
     /**
-     * @docid dxSparkLineOptions.lineWidth
+     * @docid
      * @type number
      * @default 2
      * @prevFileNamespace DevExpress.viz
@@ -71,7 +71,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     lineWidth?: number;
     /**
-     * @docid dxSparkLineOptions.lossColor
+     * @docid
      * @type string
      * @default '#d7d7d7'
      * @prevFileNamespace DevExpress.viz
@@ -79,7 +79,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     lossColor?: string;
     /**
-     * @docid dxSparkLineOptions.maxColor
+     * @docid
      * @type string
      * @default '#e55253'
      * @prevFileNamespace DevExpress.viz
@@ -87,7 +87,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     maxColor?: string;
     /**
-     * @docid dxSparkLineOptions.maxValue
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -95,7 +95,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     maxValue?: number;
     /**
-     * @docid dxSparkLineOptions.minColor
+     * @docid
      * @type string
      * @default '#e8c267'
      * @prevFileNamespace DevExpress.viz
@@ -103,7 +103,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     minColor?: string;
     /**
-     * @docid dxSparkLineOptions.minValue
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -111,7 +111,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     minValue?: number;
     /**
-     * @docid dxSparkLineOptions.pointColor
+     * @docid
      * @type string
      * @default '#ffffff'
      * @prevFileNamespace DevExpress.viz
@@ -119,7 +119,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     pointColor?: string;
     /**
-     * @docid dxSparkLineOptions.pointSize
+     * @docid
      * @type number
      * @default 4
      * @prevFileNamespace DevExpress.viz
@@ -127,7 +127,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     pointSize?: number;
     /**
-     * @docid dxSparkLineOptions.pointSymbol
+     * @docid
      * @type Enums.VizPointSymbol
      * @default 'circle'
      * @prevFileNamespace DevExpress.viz
@@ -135,7 +135,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     pointSymbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
     /**
-     * @docid dxSparkLineOptions.showFirstLast
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
@@ -143,7 +143,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     showFirstLast?: boolean;
     /**
-     * @docid dxSparkLineOptions.showMinMax
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
@@ -151,7 +151,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     showMinMax?: boolean;
     /**
-     * @docid dxSparkLineOptions.type
+     * @docid
      * @type Enums.SparklineType
      * @default 'line'
      * @prevFileNamespace DevExpress.viz
@@ -159,7 +159,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     type?: 'area' | 'bar' | 'line' | 'spline' | 'splinearea' | 'steparea' | 'stepline' | 'winloss';
     /**
-     * @docid dxSparkLineOptions.valueField
+     * @docid
      * @type string
      * @default 'val'
      * @prevFileNamespace DevExpress.viz
@@ -167,7 +167,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     valueField?: string;
     /**
-     * @docid dxSparkLineOptions.winColor
+     * @docid
      * @type string
      * @default '#a9a9a9'
      * @prevFileNamespace DevExpress.viz
@@ -175,7 +175,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
      */
     winColor?: string;
     /**
-     * @docid dxSparkLineOptions.winlossThreshold
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
@@ -184,7 +184,7 @@ export interface dxSparklineOptions extends BaseSparklineOptions<dxSparkline> {
     winlossThreshold?: number;
 }
 /**
- * @docid dxSparkline
+ * @docid
  * @inherits BaseSparkline, DataHelperMixin
  * @module viz/sparkline
  * @export default

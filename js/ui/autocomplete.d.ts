@@ -4,7 +4,7 @@ import dxDropDownList, {
 
 export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocomplete> {
     /**
-     * @docid dxAutocompleteOptions.maxItemCount
+     * @docid
      * @type number
      * @default 10
      * @prevFileNamespace DevExpress.ui
@@ -12,7 +12,7 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
      */
     maxItemCount?: number;
     /**
-     * @docid dxAutocompleteOptions.minSearchLength
+     * @docid
      * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui
@@ -20,14 +20,14 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
      */
     minSearchLength?: number;
     /**
-     * @docid dxAutocompleteOptions.showDropDownButton
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showDropDownButton?: boolean;
     /**
-     * @docid dxAutocompleteOptions.value
+     * @docid
      * @type string
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -36,7 +36,7 @@ export interface dxAutocompleteOptions extends dxDropDownListOptions<dxAutocompl
     value?: string;
 }
 /**
- * @docid dxAutocomplete
+ * @docid
  * @isEditor
  * @inherits dxDropDownList
  * @module ui/autocomplete

@@ -83,44 +83,11 @@ export default {
     defaultOptions: function() {
         return {
             stateStoring: {
-                /**
-                 * @name GridBaseOptions.stateStoring.enabled
-                 * @type boolean
-                 * @default false
-                 */
                 enabled: false,
-                /**
-                 * @name GridBaseOptions.stateStoring.storageKey
-                 * @type string
-                 * @default null
-                 */
                 storageKey: null,
-                /**
-                 * @name GridBaseOptions.stateStoring.type
-                 * @type Enums.StateStoringType
-                 * @default "localStorage"
-                 */
                 type: 'localStorage',
-
-                /**
-                 * @name GridBaseOptions.stateStoring.customLoad
-                 * @type function()
-                 * @type_function_return Promise<Object>
-                 */
                 customLoad: null,
-
-                /**
-                 * @name GridBaseOptions.stateStoring.customSave
-                 * @type function(gridState)
-                 * @type_function_param1 gridState:object
-                 */
                 customSave: null,
-
-                /**
-                 * @name GridBaseOptions.stateStoring.savingTimeout
-                 * @type number
-                 * @default 2000
-                 */
                 savingTimeout: 2000
             }
         };

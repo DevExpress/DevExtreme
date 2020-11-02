@@ -1,6 +1,6 @@
 import { dxElementWrapper } from '../core/renderer';
 /**
- * @docid dxElement
+ * @docid
  * @type HTMLElement|jQuery
  * @hidden
  * @prevFileNamespace DevExpress.core
@@ -8,7 +8,7 @@ import { dxElementWrapper } from '../core/renderer';
 export type dxElement = HTMLElement & JQuery;
 
 /**
- * @docid dxSVGElement
+ * @docid
  * @type SVGElement|jQuery
  * @hidden
  * @prevFileNamespace DevExpress.core

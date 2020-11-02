@@ -14,7 +14,7 @@ import Widget, {
 
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
-     * @docid dxDeferRenderingOptions.animation
+     * @docid
      * @type animationConfig
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -22,7 +22,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      */
     animation?: animationConfig;
     /**
-     * @docid dxDeferRenderingOptions.onRendered
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -30,7 +30,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      */
     onRendered?: ((e: { component?: dxDeferRendering, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxDeferRenderingOptions.onShown
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -38,7 +38,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      */
     onShown?: ((e: { component?: dxDeferRendering, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxDeferRenderingOptions.renderWhen
+     * @docid
      * @type Promise<void> | bool
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -46,7 +46,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      */
     renderWhen?: Promise<void> | JQueryPromise<void> | boolean;
     /**
-     * @docid dxDeferRenderingOptions.showLoadIndicator
+     * @docid
      * @type bool
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -54,7 +54,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
      */
     showLoadIndicator?: boolean;
     /**
-     * @docid dxDeferRenderingOptions.staggerItemSelector
+     * @docid
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -63,7 +63,7 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
     staggerItemSelector?: string;
 }
 /**
- * @docid dxDeferRendering
+ * @docid
  * @inherits Widget
  * @module ui/defer_rendering
  * @export default

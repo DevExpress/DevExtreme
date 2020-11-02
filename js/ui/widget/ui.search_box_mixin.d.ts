@@ -4,7 +4,7 @@ import {
 
 export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     /**
-     * @docid SearchBoxMixinOptions.searchEditorOptions
+     * @docid
      * @type dxTextBoxOptions
      * @default {}
      * @prevFileNamespace DevExpress.ui
@@ -12,7 +12,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
      */
     searchEditorOptions?: dxTextBoxOptions;
     /**
-     * @docid SearchBoxMixinOptions.searchEnabled
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -20,7 +20,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
      */
     searchEnabled?: boolean;
     /**
-     * @docid SearchBoxMixinOptions.searchExpr
+     * @docid
      * @type getter|Array<getter>
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -28,7 +28,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
      */
     searchExpr?: string | Function | Array<string | Function>;
     /**
-     * @docid SearchBoxMixinOptions.searchMode
+     * @docid
      * @type Enums.CollectionSearchMode
      * @default 'contains'
      * @prevFileNamespace DevExpress.ui
@@ -36,7 +36,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
      */
     searchMode?: 'contains' | 'startswith' | 'equals';
     /**
-     * @docid SearchBoxMixinOptions.searchTimeout
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -44,7 +44,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
      */
     searchTimeout?: number;
     /**
-     * @docid SearchBoxMixinOptions.searchValue
+     * @docid
      * @type String
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -53,7 +53,7 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     searchValue?: string;
 }
 /**
- * @docid SearchBoxMixin
+ * @docid
  * @module ui/widget/ui.search_box_mixin
  * @export default
  * @hidden

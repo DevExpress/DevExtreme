@@ -4,42 +4,42 @@ import UploadInfo from './upload_info';
 
 export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     /**
-     * @docid FileSystemProviderBaseOptions.dateModifiedExpr
+     * @docid
      * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     dateModifiedExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.isDirectoryExpr
+     * @docid
      * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     isDirectoryExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.keyExpr
+     * @docid
      * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     keyExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.nameExpr
+     * @docid
      * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     nameExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.sizeExpr
+     * @docid
      * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     sizeExpr?: string | Function;
     /**
-     * @docid FileSystemProviderBaseOptions.thumbnailExpr
+     * @docid
      * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
@@ -47,7 +47,7 @@ export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
     thumbnailExpr?: string | Function;
 }
 /**
- * @docid FileSystemProviderBase
+ * @docid
  * @type object
  * @module file_management/provider_base
  * @namespace DevExpress.fileManagement
@@ -58,7 +58,7 @@ export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
 export default class FileSystemProviderBase {
     constructor(options?: FileSystemProviderBaseOptions)
     /**
-     * @docid FileSystemProviderBaseMethods.getItems
+     * @docid
      * @publicName getItems()
      * @param1 parentDirectory:FileSystemItem
      * @return Promise<Array<FileSystemItem>>
@@ -68,7 +68,7 @@ export default class FileSystemProviderBase {
     getItems(parentDirectory: FileSystemItem): Promise<Array<FileSystemItem>> & JQueryPromise<Array<FileSystemItem>>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.renameItem
+     * @docid
      * @publicName renameItem()
      * @param1 item:FileSystemItem
      * @param2 newName:string
@@ -79,7 +79,7 @@ export default class FileSystemProviderBase {
     renameItem(item: FileSystemItem, newName: string): Promise<any> & JQueryPromise<any>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.createDirectory
+     * @docid
      * @publicName createDirectory()
      * @param1 parentDirectory:FileSystemItem
      * @param2 name:string
@@ -90,7 +90,7 @@ export default class FileSystemProviderBase {
     createDirectory(parentDirectory: FileSystemItem, name: string): Promise<any> & JQueryPromise<any>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.deleteItems
+     * @docid
      * @publicName deleteItems()
      * @param1 items:Array<FileSystemItem>
      * @return Array<Promise<any>>
@@ -100,7 +100,7 @@ export default class FileSystemProviderBase {
     deleteItems(items: Array<FileSystemItem>): Array<Promise<any> & JQueryPromise<any>>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.moveItems
+     * @docid
      * @publicName moveItems()
      * @param1 items:Array<FileSystemItem>
      * @param2 destinationDirectory:FileSystemItem
@@ -111,7 +111,7 @@ export default class FileSystemProviderBase {
     moveItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> & JQueryPromise<any>>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.copyItems
+     * @docid
      * @publicName copyItems()
      * @param1 items:Array<FileSystemItem>
      * @param2 destinationDirectory:FileSystemItem
@@ -122,7 +122,7 @@ export default class FileSystemProviderBase {
     copyItems(items: Array<FileSystemItem>, destinationDirectory: FileSystemItem): Array<Promise<any> & JQueryPromise<any>>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.uploadFileChunk
+     * @docid
      * @publicName uploadFileChunk()
      * @param1 fileData:File
      * @param2 uploadInfo:UploadInfo
@@ -134,7 +134,7 @@ export default class FileSystemProviderBase {
     uploadFileChunk(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.abortFileUpload
+     * @docid
      * @publicName abortFileUpload()
      * @param1 fileData:File
      * @param2 uploadInfo:UploadInfo
@@ -146,7 +146,7 @@ export default class FileSystemProviderBase {
     abortFileUpload(fileData: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem): Promise<any> & JQueryPromise<any>;
 
     /**
-     * @docid FileSystemProviderBaseMethods.downloadItems
+     * @docid
      * @publicName downloadItems()
      * @param1 items:Array<FileSystemItem>
      * @prevFileNamespace DevExpress.fileManagement
@@ -155,7 +155,7 @@ export default class FileSystemProviderBase {
     downloadItems(items: Array<FileSystemItem>): void;
 
     /**
-     * @docid FileSystemProviderBaseMethods.getItemsContent
+     * @docid
      * @publicName getItemsContent()
      * @param1 items:Array<FileSystemItem>
      * @return Promise<object>

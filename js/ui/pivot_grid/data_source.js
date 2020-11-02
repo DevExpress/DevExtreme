@@ -558,10 +558,6 @@ export default Class.inherit((function() {
                 that._eventsStrategy.fireEvent('progressChanged', [progress]);
             });
 
-            /**
-            * @name PivotGridDataSourceOptions.store.type
-            * @type Enums.PivotGridStoreType
-            */
             that._store = store;
             that._paginate = !!options.paginate;
             that._pageSize = options.pageSize || 40;
@@ -591,27 +587,10 @@ export default Class.inherit((function() {
 
             that._fields = options.fields || [];
             /**
-            * @name PivotGridDataSourceOptions.fields.index
+            * @name PivotGridDataSourceField.index
             * @type number
             * @default undefined
             * @hidden
-            */
-
-
-            /**
-            * @name PivotGridDataSourceOptions.fields.headerFilter.width
-            * @type number
-            * @default undefined
-            */
-            /**
-            * @name PivotGridDataSourceOptions.fields.headerFilter.height
-            * @type number
-            * @default undefined
-            */
-            /**
-            * @name PivotGridDataSourceOptions.fields.headerFilter.allowSearch
-            * @type boolean
-            * @default undefined
             */
 
             that._descriptions = options.descriptions ? extend(that._createDescriptions(), options.descriptions) : undefined;

@@ -427,11 +427,6 @@ const MultiView = CollectionWidget.inherit({
 
 });
 /**
-* @name dxMultiViewItem
-* @inherits CollectionWidgetItem
-* @type object
-*/
-/**
 * @name dxMultiViewItem.visible
 * @hidden
 */

@@ -207,7 +207,3 @@ treeListCore.registerModule('data', {
         data: DataController
     }
 });
-/**
- * @name dxTreeListNode
- * @type object
- */

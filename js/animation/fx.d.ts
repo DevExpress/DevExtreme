@@ -4,9 +4,14 @@ import {
     dxElement
 } from '../core/element';
 
+/**
+* @docid
+* @namespace DevExpress
+* @type object
+*/
 export interface animationConfig {
     /**
-     * @docid animationConfig.complete
+     * @docid
      * @type function
      * @type_function_param1 $element:dxElement
      * @type_function_param2 config:object
@@ -15,7 +20,7 @@ export interface animationConfig {
      */
     complete?: (($element: dxElement, config: any) => any);
     /**
-     * @docid animationConfig.delay
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.animation
@@ -23,7 +28,7 @@ export interface animationConfig {
      */
     delay?: number;
     /**
-     * @docid animationConfig.direction
+     * @docid
      * @type Enums.Direction
      * @default undefined
      * @prevFileNamespace DevExpress.animation
@@ -31,7 +36,7 @@ export interface animationConfig {
      */
     direction?: 'bottom' | 'left' | 'right' | 'top';
     /**
-     * @docid animationConfig.duration
+     * @docid
      * @type number
      * @default 400
      * @prevFileNamespace DevExpress.animation
@@ -39,7 +44,7 @@ export interface animationConfig {
      */
     duration?: number;
     /**
-     * @docid animationConfig.easing
+     * @docid
      * @type string
      * @default 'ease'
      * @prevFileNamespace DevExpress.animation
@@ -47,7 +52,7 @@ export interface animationConfig {
      */
     easing?: string;
     /**
-     * @docid animationConfig.from
+     * @docid
      * @type number|string|object
      * @default {}
      * @prevFileNamespace DevExpress.animation
@@ -55,7 +60,7 @@ export interface animationConfig {
      */
     from?: number | string | any;
     /**
-     * @docid animationConfig.staggerDelay
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.animation
@@ -63,7 +68,7 @@ export interface animationConfig {
      */
     staggerDelay?: number;
     /**
-     * @docid animationConfig.start
+     * @docid
      * @type function
      * @type_function_param1 $element:dxElement
      * @type_function_param2 config:object
@@ -72,7 +77,7 @@ export interface animationConfig {
      */
     start?: (($element: dxElement, config: any) => any);
     /**
-     * @docid animationConfig.to
+     * @docid
      * @type number|string|object
      * @default {}
      * @prevFileNamespace DevExpress.animation
@@ -80,7 +85,7 @@ export interface animationConfig {
      */
     to?: number | string | any;
     /**
-     * @docid animationConfig.type
+     * @docid
      * @type Enums.AnimationType
      * @default 'custom'
      * @prevFileNamespace DevExpress.animation
@@ -89,9 +94,16 @@ export interface animationConfig {
     type?: 'css' | 'fade' | 'fadeIn' | 'fadeOut' | 'pop' | 'slide' | 'slideIn' | 'slideOut';
 }
 
+/**
+* @docid
+* @section utils
+* @module animation/fx
+* @namespace DevExpress
+* @export default
+*/
 declare const fx: {
     /**
-     * @docid fxmethods.animate
+     * @docid
      * @publicName animate(element, config)
      * @param1 element:Element
      * @param2 config:animationConfig
@@ -101,9 +113,9 @@ declare const fx: {
      * @public
      */
     animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
-    
+
     /**
-     * @docid fxmethods.isAnimating
+     * @docid
      * @publicName isAnimating(element)
      * @param1 element:Element
      * @return boolean
@@ -112,9 +124,9 @@ declare const fx: {
      * @public
      */
     isAnimating(element: Element): boolean;
-    
+
     /**
-     * @docid fxmethods.stop
+     * @docid
      * @publicName stop(element, jumpToEnd)
      * @param1 element:Element
      * @param2 jumpToEnd:boolean

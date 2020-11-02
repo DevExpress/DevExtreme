@@ -18,7 +18,7 @@ import Widget, {
 
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**
-     * @docid dxPivotGridFieldChooserOptions.allowSearch
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -26,7 +26,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     allowSearch?: boolean;
     /**
-     * @docid dxPivotGridFieldChooserOptions.applyChangesMode
+     * @docid
      * @type Enums.ApplyChangesMode
      * @default "instantly"
      * @prevFileNamespace DevExpress.ui
@@ -34,7 +34,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     applyChangesMode?: 'instantly' | 'onDemand';
     /**
-     * @docid dxPivotGridFieldChooserOptions.dataSource
+     * @docid
      * @type PivotGridDataSource
      * @default null
      * @ref
@@ -43,14 +43,60 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     dataSource?: PivotGridDataSource;
     /**
-     * @docid dxPivotGridFieldChooserOptions.headerFilter
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
+    headerFilter?: {
+      /**
+       * @docid
+       * @default undefined
+       */
+      allowSearch?: boolean,
+      /**
+       * @docid
+       * @default 325
+       */
+      height?: number,
+      /**
+       * @docid
+       * @default 500
+       */
+      searchTimeout?: number,
+      /**
+       * @docid
+       * @default false
+       */
+      showRelevantValues?: boolean,
+      /**
+       * @docid
+       */
+      texts?: {
+        /**
+         * @docid
+         * @default "Cancel"
+         */
+        cancel?: string,
+        /**
+         * @docid
+         * @default "(Blanks)"
+         */
+        emptyValue?: string,
+        /**
+         * @docid
+         * @default "Ok"
+         */
+        ok?: string
+      },
+      /**
+       * @docid
+       * @default 252
+       */
+      width?: number
+    };
     /**
-     * @docid dxPivotGridFieldChooserOptions.height
+     * @docid
      * @type number|string|function
      * @default 400
      * @type_function_return number|string
@@ -59,7 +105,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxPivotGridFieldChooserOptions.layout
+     * @docid
      * @type Enums.PivotGridFieldChooserLayout
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -67,7 +113,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     layout?: 0 | 1 | 2;
     /**
-     * @docid dxPivotGridFieldChooserOptions.onContextMenuPreparing
+     * @docid
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 items:Array<Object>
@@ -81,7 +127,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: dxElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: event }) => any);
     /**
-     * @docid dxPivotGridFieldChooserOptions.searchTimeout
+     * @docid
      * @type number
      * @default 500
      * @prevFileNamespace DevExpress.ui
@@ -89,7 +135,7 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     searchTimeout?: number;
     /**
-     * @docid dxPivotGridFieldChooserOptions.state
+     * @docid
      * @type object
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -97,15 +143,41 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
      */
     state?: any;
     /**
-     * @docid dxPivotGridFieldChooserOptions.texts
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string };
+    texts?: {
+      /**
+       * @docid
+       * @default 'All Fields'
+       */
+      allFields?: string,
+      /**
+       * @docid
+       * @default 'Column Fields'
+       */
+      columnFields?: string,
+      /**
+       * @docid
+       * @default 'Data Fields'
+       */
+      dataFields?: string,
+      /**
+       * @docid
+       * @default 'Filter Fields'
+       */
+      filterFields?: string,
+      /**
+       * @docid
+       * @default 'Row Fields'
+       */
+      rowFields?: string
+    };
 }
 /**
- * @docid dxPivotGridFieldChooser
+ * @docid
  * @inherits Widget
  * @module ui/pivot_grid_field_chooser
  * @export default
@@ -116,21 +188,21 @@ export default class dxPivotGridFieldChooser extends Widget {
     constructor(element: Element, options?: dxPivotGridFieldChooserOptions)
     constructor(element: JQuery, options?: dxPivotGridFieldChooserOptions)
     /**
-     * @docid dxPivotGridFieldChooserMethods.applyChanges
+     * @docid
      * @publicName applyChanges()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyChanges(): void;
     /**
-     * @docid dxPivotGridFieldChooserMethods.cancelChanges
+     * @docid
      * @publicName cancelChanges()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelChanges(): void;
     /**
-     * @docid dxPivotGridFieldChooserMethods.getDataSource
+     * @docid
      * @publicName getDataSource()
      * @return PivotGridDataSource
      * @prevFileNamespace DevExpress.ui
@@ -138,7 +210,7 @@ export default class dxPivotGridFieldChooser extends Widget {
      */
     getDataSource(): PivotGridDataSource;
     /**
-     * @docid dxPivotGridFieldChooserMethods.updateDimensions
+     * @docid
      * @publicName updateDimensions()
      * @prevFileNamespace DevExpress.ui
      * @public

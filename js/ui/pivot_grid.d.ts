@@ -21,7 +21,7 @@ import Widget, {
 
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
-     * @docid dxPivotGridOptions.allowExpandAll
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -29,7 +29,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     allowExpandAll?: boolean;
     /**
-     * @docid dxPivotGridOptions.allowFiltering
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -37,7 +37,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     allowFiltering?: boolean;
     /**
-     * @docid dxPivotGridOptions.allowSorting
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -45,7 +45,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     allowSorting?: boolean;
     /**
-     * @docid dxPivotGridOptions.allowSortingBySummary
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -53,7 +53,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     allowSortingBySummary?: boolean;
     /**
-     * @docid dxPivotGridOptions.dataFieldArea
+     * @docid
      * @type Enums.PivotGridDataFieldArea
      * @default "column"
      * @prevFileNamespace DevExpress.ui
@@ -61,7 +61,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     dataFieldArea?: 'column' | 'row';
     /**
-     * @docid dxPivotGridOptions.dataSource
+     * @docid
      * @type Array<Object>|PivotGridDataSource|PivotGridDataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -69,35 +69,270 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     dataSource?: Array<any> | PivotGridDataSource | PivotGridDataSourceOptions;
     /**
-     * @docid dxPivotGridOptions.export
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    export?: { enabled?: boolean, fileName?: string, ignoreExcelErrors?: boolean, proxyUrl?: string };
+    export?: {
+      /**
+       * @docid
+       * @type boolean
+       * @default false
+       */
+      enabled?: boolean,
+      /**
+       * @docid
+       * @type string
+       * @default "PivotGrid"
+       * @deprecated
+       */
+      fileName?: string,
+      /**
+       * @docid
+       * @type boolean
+       * @default true
+       * @deprecated
+       */
+      ignoreExcelErrors?: boolean,
+      /**
+       * @docid
+       * @type string
+       * @default undefined
+       * @deprecated
+       */
+      proxyUrl?: string
+    };
     /**
-     * @docid dxPivotGridOptions.fieldChooser
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldChooser?: { allowSearch?: boolean, applyChangesMode?: 'instantly' | 'onDemand', enabled?: boolean, height?: number, layout?: 0 | 1 | 2, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number };
+    fieldChooser?: {
+      /**
+       * @docid
+       * @type boolean
+       * @default false
+       */
+      allowSearch?: boolean,
+      /**
+       * @docid
+       * @type Enums.ApplyChangesMode
+       * @default "instantly"
+       */
+      applyChangesMode?: 'instantly' | 'onDemand',
+      /**
+       * @docid
+       * @type boolean
+       * @default true
+       */
+      enabled?: boolean,
+      /**
+       * @docid
+       * @type number
+       * @default 600
+       */
+      height?: number,
+      /**
+       * @docid
+       * @type Enums.PivotGridFieldChooserLayout
+       * @default 0
+       */
+      layout?: 0 | 1 | 2,
+      /**
+       * @docid
+       * @type number
+       * @default searchTimeout
+       */
+      searchTimeout?: number,
+      /**
+       * @docid
+       * @type object
+       */
+      texts?: {
+        /**
+         * @docid
+         * @type string
+         * @default 'All Fields'
+         */
+        allFields?: string,
+        /**
+         * @docid
+         * @type string
+         * @default 'Column Fields'
+         */
+        columnFields?: string,
+        /**
+         * @docid
+         * @type string
+         * @default 'Data Fields'
+         */
+        dataFields?: string,
+        /**
+         * @docid
+         * @type string
+         * @default 'Filter Fields'
+         */
+        filterFields?: string,
+        /**
+         * @docid
+         * @type string
+         * @default 'Row Fields'
+         */
+        rowFields?: string
+      },
+      /**
+       * @docid
+       * @type string
+       * @default "Field Chooser"
+       */
+      title?: string,
+      /**
+       * @docid
+       * @type number
+       * @default 600
+       */
+      width?: number
+    };
     /**
-     * @docid dxPivotGridOptions.fieldPanel
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    fieldPanel?: { allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean };
+    fieldPanel?: {
+      /**
+      * @docid
+      * @type boolean
+      * @default true
+      */
+      allowFieldDragging?: boolean,
+      /**
+      * @docid
+      * @type boolean
+      * @default true
+      */
+      showColumnFields?: boolean,
+      /**
+      * @docid
+      * @type boolean
+      * @default true
+      */
+      showDataFields?: boolean,
+      /**
+      * @docid
+      * @type boolean
+      * @default true
+      */
+      showFilterFields?: boolean,
+      /**
+      * @docid
+      * @type boolean
+      * @default true
+      */
+      showRowFields?: boolean,
+      /**
+      * @docid
+      * @type object
+      */
+      texts?: {
+        /**
+        * @docid
+        * @type string
+        * @default "Drop Column Fields Here"
+        */
+        columnFieldArea?: string,
+        /**
+        * @docid
+        * @type string
+        * @default "Drop Data Fields Here"
+        */
+        dataFieldArea?: string,
+        /**
+        * @docid
+        * @type string
+        * @default "Drop Filter Fields Here"
+        */
+        filterFieldArea?: string,
+        /**
+        * @docid
+        * @type string
+        * @default "Drop Row Fields Here"
+        */
+        rowFieldArea?: string
+      },
+      /**
+      * @docid
+      * @type boolean
+      * @default false
+      */
+      visible?: boolean
+    };
     /**
-     * @docid dxPivotGridOptions.headerFilter
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
+    headerFilter?: {
+      /**
+       * @docid
+       * @type boolean
+       * @default false
+       */
+      allowSearch?: boolean,
+      /**
+       * @docid
+       * @type number
+       * @default 325
+       */
+      height?: number,
+      /**
+       * @docid
+       * @type number
+       * @default searchTimeout
+       */
+      searchTimeout?: number,
+      /**
+       * @docid
+       * @type boolean
+       * @default false
+       */
+      showRelevantValues?: boolean,
+      /**
+       * @docid
+       * @type object
+       */
+      texts?: {
+        /**
+         * @docid
+         * @type string
+         * @default "Cancel"
+         */
+        cancel?: string,
+        /**
+         * @docid
+         * @type string
+         * @default "(Blanks)"
+         */
+        emptyValue?: string,
+        /**
+         * @docid
+         * @type string
+         * @default "Ok"
+         */
+        ok?: string
+      },
+      /**
+       * @docid
+       * @type number
+       * @default 252
+       */
+      width?: number
+    };
     /**
-     * @docid dxPivotGridOptions.hideEmptySummaryCells
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -105,14 +340,69 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     hideEmptySummaryCells?: boolean;
     /**
-     * @docid dxPivotGridOptions.loadPanel
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    loadPanel?: { enabled?: boolean, height?: number, indicatorSrc?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number };
+    loadPanel?: {
+      /**
+       * @docid
+       * @type boolean
+       * @default true
+       */
+      enabled?: boolean,
+      /**
+       * @docid
+       * @type number
+       * @default 70
+       */
+      height?: number,
+      /**
+       * @docid
+       * @type string
+       * @default ""
+       */
+      indicatorSrc?: string,
+      /**
+       * @docid
+       * @type boolean
+       * @default false
+       */
+      shading?: boolean,
+      /**
+       * @docid
+       * @type string
+       * @default ''
+       */
+      shadingColor?: string,
+      /**
+       * @docid
+       * @type boolean
+       * @default true
+       */
+      showIndicator?: boolean,
+      /**
+       * @docid
+       * @type boolean
+       * @default true
+       */
+      showPane?: boolean,
+      /**
+       * @docid
+       * @type string
+       * @default 'Loading...'
+       */
+      text?: string,
+      /**
+       * @docid
+       * @type number
+       * @default 200
+       */
+      width?: number
+    };
     /**
-     * @docid dxPivotGridOptions.onCellClick
+     * @docid
      * @type function(e)
      * @type_function_param1 e:Object
      * @type_function_param1_field4 area:string
@@ -132,7 +422,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     onCellClick?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, dataFields?: Array<PivotGridDataSourceField>, event?: event, cancel?: boolean }) => any);
     /**
-     * @docid dxPivotGridOptions.onCellPrepared
+     * @docid
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 area:string
@@ -147,7 +437,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     onCellPrepared?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
     /**
-     * @docid dxPivotGridOptions.onContextMenuPreparing
+     * @docid
      * @type function(e)
      * @type_function_param1 e:Object
      * @type_function_param1_field4 items:Array<Object>
@@ -167,7 +457,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     onContextMenuPreparing?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: dxElement, columnIndex?: number, rowIndex?: number, dataFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, columnFields?: Array<PivotGridDataSourceField>, field?: PivotGridDataSourceField }) => any);
     /**
-     * @docid dxPivotGridOptions.onExported
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -176,7 +466,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     onExported?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxPivotGridOptions.onExporting
+     * @docid
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 fileName:string
@@ -188,7 +478,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     onExporting?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
     /**
-     * @docid dxPivotGridOptions.onFileSaving
+     * @docid
      * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field3 fileName:string
@@ -203,7 +493,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     onFileSaving?: ((e: { component?: dxPivotGrid, element?: dxElement, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
     /**
-     * @docid dxPivotGridOptions.rowHeaderLayout
+     * @docid
      * @type Enums.PivotGridRowHeadersLayout
      * @default "standard"
      * @prevFileNamespace DevExpress.ui
@@ -211,14 +501,27 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     rowHeaderLayout?: 'standard' | 'tree';
     /**
-     * @docid dxPivotGridOptions.scrolling
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    scrolling?: { mode?: 'standard' | 'virtual', useNative?: boolean | 'auto' };
+    scrolling?: {
+      /**
+       * @docid
+       * @type Enums.PivotGridScrollingMode
+       * @default "standard"
+       */
+      mode?: 'standard' | 'virtual',
+      /**
+       * @docid
+       * @type boolean|Enums.Mode
+       * @default "auto"
+       */
+      useNative?: boolean | 'auto'
+    };
     /**
-     * @docid dxPivotGridOptions.showBorders
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -226,7 +529,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     showBorders?: boolean;
     /**
-     * @docid dxPivotGridOptions.showColumnGrandTotals
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -234,7 +537,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     showColumnGrandTotals?: boolean;
     /**
-     * @docid dxPivotGridOptions.showColumnTotals
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -242,7 +545,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     showColumnTotals?: boolean;
     /**
-     * @docid dxPivotGridOptions.showRowGrandTotals
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -250,7 +553,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     showRowGrandTotals?: boolean;
     /**
-     * @docid dxPivotGridOptions.showRowTotals
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -258,7 +561,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     showRowTotals?: boolean;
     /**
-     * @docid dxPivotGridOptions.showTotalsPrior
+     * @docid
      * @type Enums.PivotGridTotalsDisplayMode
      * @default "none"
      * @prevFileNamespace DevExpress.ui
@@ -266,21 +569,125 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
      */
     showTotalsPrior?: 'both' | 'columns' | 'none' | 'rows';
     /**
-     * @docid dxPivotGridOptions.stateStoring
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    stateStoring?: { customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((state: any) => any), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: 'custom' | 'localStorage' | 'sessionStorage' };
+    stateStoring?: {
+      /**
+       * @docid
+       * @type function()
+       * @type_function_return Promise<Object>
+       */
+      customLoad?: (() => Promise<any> | JQueryPromise<any>),
+      /**
+       * @docid
+       * @type function(state)
+       * @type_function_param1 state:object
+       */
+      customSave?: ((state: any) => any),
+      /**
+       * @docid
+       * @type boolean
+       * @default false
+       */
+      enabled?: boolean,
+      /**
+       * @docid
+       * @type number
+       * @default 2000
+       */
+      savingTimeout?: number,
+      /**
+       * @docid
+       * @type string
+       * @default null
+       */
+      storageKey?: string,
+      /**
+       * @docid
+       * @type Enums.StateStoringType
+       * @default "localStorage"
+       */
+      type?: 'custom' | 'localStorage' | 'sessionStorage'
+    };
     /**
-     * @docid dxPivotGridOptions.texts
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    texts?: { collapseAll?: string, dataNotAvailable?: string, expandAll?: string, exportToExcel?: string, grandTotal?: string, noData?: string, removeAllSorting?: string, showFieldChooser?: string, sortColumnBySummary?: string, sortRowBySummary?: string, total?: string };
+    texts?: {
+      /**
+       * @docid
+       * @type string
+       * @default 'Collapse All'
+       */
+      collapseAll?: string,
+      /**
+       * @docid
+       * @type string
+       * @default "N/A"
+       */
+      dataNotAvailable?: string,
+      /**
+       * @docid
+       * @type string
+       * @default 'Expand All'
+       */
+      expandAll?: string,
+      /**
+       * @docid
+       * @type string
+       * @default "Export to Excel file"
+       */
+      exportToExcel?: string,
+      /**
+       * @docid
+       * @type string
+       * @default 'Grand Total'
+       */
+      grandTotal?: string,
+      /**
+       * @docid
+       * @type string
+       * @default 'No data'
+       */
+      noData?: string,
+      /**
+       * @docid
+       * @type string
+       * @default 'Remove All Sorting'
+       */
+      removeAllSorting?: string,
+      /**
+        * @docid
+        * @type string
+        * @default 'Show Field Chooser'
+        */
+      showFieldChooser?: string,
+      /**
+       * @docid
+       * @type string
+       * @default 'Sort {0} by This Column'
+       */
+      sortColumnBySummary?: string,
+      /**
+       * @docid
+       * @type string
+       * @default 'Sort {0} by This Row'
+       */
+      sortRowBySummary?: string,
+      /**
+       * @docid
+       * @type string
+       * @default '{0} Total'
+       */
+      total?: string
+    };
     /**
-     * @docid dxPivotGridOptions.wordWrapEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -289,7 +696,7 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     wordWrapEnabled?: boolean;
 }
 /**
- * @docid dxPivotGrid
+ * @docid
  * @inherits Widget
  * @module ui/pivot_grid
  * @export default
@@ -300,7 +707,7 @@ export default class dxPivotGrid extends Widget {
     constructor(element: Element, options?: dxPivotGridOptions)
     constructor(element: JQuery, options?: dxPivotGridOptions)
     /**
-     * @docid dxPivotGridMethods.bindChart
+     * @docid
      * @publicName bindChart(chart, integrationOptions)
      * @param1 chart:string|jQuery|object
      * @param2 integrationOptions:object
@@ -317,7 +724,7 @@ export default class dxPivotGrid extends Widget {
      */
     bindChart(chart: string | JQuery | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
     /**
-     * @docid dxPivotGridMethods.exportToExcel
+     * @docid
      * @publicName exportToExcel()
      * @deprecated excelExporter.exportPivotGrid
      * @prevFileNamespace DevExpress.ui
@@ -325,7 +732,7 @@ export default class dxPivotGrid extends Widget {
      */
     exportToExcel(): void;
     /**
-     * @docid dxPivotGridMethods.getDataSource
+     * @docid
      * @publicName getDataSource()
      * @return PivotGridDataSource
      * @prevFileNamespace DevExpress.ui
@@ -333,7 +740,7 @@ export default class dxPivotGrid extends Widget {
      */
     getDataSource(): PivotGridDataSource;
     /**
-     * @docid dxPivotGridMethods.getFieldChooserPopup
+     * @docid
      * @publicName getFieldChooserPopup()
      * @return dxPopup
      * @prevFileNamespace DevExpress.ui
@@ -341,7 +748,7 @@ export default class dxPivotGrid extends Widget {
      */
     getFieldChooserPopup(): dxPopup;
     /**
-     * @docid dxPivotGridMethods.updateDimensions
+     * @docid
      * @publicName updateDimensions()
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -349,16 +756,20 @@ export default class dxPivotGrid extends Widget {
     updateDimensions(): void;
 }
 
+/**
+* @docid
+* @type object
+*/
 export interface dxPivotGridPivotGridCell {
     /**
-     * @docid dxPivotGridPivotGridCell.columnPath
+     * @docid
      * @type Array<string, number, Date>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     columnPath?: Array<string | number | Date>;
     /**
-     * @docid dxPivotGridPivotGridCell.columnType
+     * @docid
      * @acceptValues "D" | "T" | "GT"
      * @type string
      * @prevFileNamespace DevExpress.ui
@@ -366,35 +777,35 @@ export interface dxPivotGridPivotGridCell {
      */
     columnType?: 'D' | 'T' | 'GT';
     /**
-     * @docid dxPivotGridPivotGridCell.dataIndex
+     * @docid
      * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataIndex?: number;
     /**
-     * @docid dxPivotGridPivotGridCell.expanded
+     * @docid
      * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     expanded?: boolean;
     /**
-     * @docid dxPivotGridPivotGridCell.path
+     * @docid
      * @type Array<string, number, Date>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     path?: Array<string | number | Date>;
     /**
-     * @docid dxPivotGridPivotGridCell.rowPath
+     * @docid
      * @type Array<string, number, Date>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     rowPath?: Array<string | number | Date>;
     /**
-     * @docid dxPivotGridPivotGridCell.rowType
+     * @docid
      * @acceptValues "D" | "T" | "GT"
      * @type string
      * @prevFileNamespace DevExpress.ui
@@ -402,14 +813,14 @@ export interface dxPivotGridPivotGridCell {
      */
     rowType?: 'D' | 'T' | 'GT';
     /**
-     * @docid dxPivotGridPivotGridCell.text
+     * @docid
      * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
-     * @docid dxPivotGridPivotGridCell.type
+     * @docid
      * @acceptValues "D" | "T" | "GT"
      * @type string
      * @prevFileNamespace DevExpress.ui
@@ -417,16 +828,20 @@ export interface dxPivotGridPivotGridCell {
      */
     type?: 'D' | 'T' | 'GT';
     /**
-     * @docid dxPivotGridPivotGridCell.value
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     value?: any;
 }
 
+/**
+* @docid
+* @type object
+*/
 export interface dxPivotGridSummaryCell {
     /**
-     * @docid dxPivotGridSummaryCell.child
+     * @docid
      * @publicName child(direction, fieldValue)
      * @param1 direction:string
      * @param2 fieldValue:number|string
@@ -436,7 +851,7 @@ export interface dxPivotGridSummaryCell {
      */
     child(direction: string, fieldValue: number | string): dxPivotGridSummaryCell;
     /**
-     * @docid dxPivotGridSummaryCell.children
+     * @docid
      * @publicName children(direction)
      * @param1 direction:string
      * @return Array<dxPivotGridSummaryCell>
@@ -445,7 +860,7 @@ export interface dxPivotGridSummaryCell {
      */
     children(direction: string): Array<dxPivotGridSummaryCell>;
     /**
-     * @docid dxPivotGridSummaryCell.field
+     * @docid
      * @publicName field(area)
      * @param1 area:string
      * @return PivotGridDataSourceOptions.fields
@@ -454,7 +869,7 @@ export interface dxPivotGridSummaryCell {
      */
     field(area: string): PivotGridDataSourceField;
     /**
-     * @docid dxPivotGridSummaryCell.grandTotal
+     * @docid
      * @publicName grandTotal()
      * @return dxPivotGridSummaryCell
      * @prevFileNamespace DevExpress.ui
@@ -462,7 +877,7 @@ export interface dxPivotGridSummaryCell {
      */
     grandTotal(): dxPivotGridSummaryCell;
     /**
-     * @docid dxPivotGridSummaryCell.grandTotal
+     * @docid
      * @publicName grandTotal(direction)
      * @param1 direction:string
      * @return dxPivotGridSummaryCell
@@ -471,7 +886,7 @@ export interface dxPivotGridSummaryCell {
      */
     grandTotal(direction: string): dxPivotGridSummaryCell;
     /**
-     * @docid dxPivotGridSummaryCell.isPostProcessed
+     * @docid
      * @publicName isPostProcessed(field)
      * @param1 field:PivotGridDataSourceOptions.fields|string
      * @return boolean
@@ -480,7 +895,7 @@ export interface dxPivotGridSummaryCell {
      */
     isPostProcessed(field: PivotGridDataSourceField | string): boolean;
     /**
-     * @docid dxPivotGridSummaryCell.next
+     * @docid
      * @publicName next(direction)
      * @param1 direction:string
      * @return dxPivotGridSummaryCell
@@ -489,7 +904,7 @@ export interface dxPivotGridSummaryCell {
      */
     next(direction: string): dxPivotGridSummaryCell;
     /**
-     * @docid dxPivotGridSummaryCell.next
+     * @docid
      * @publicName next(direction, allowCrossGroup)
      * @param1 direction:string
      * @param2 allowCrossGroup:bool
@@ -499,7 +914,7 @@ export interface dxPivotGridSummaryCell {
      */
     next(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
     /**
-     * @docid dxPivotGridSummaryCell.parent
+     * @docid
      * @publicName parent(direction)
      * @param1 direction:string
      * @return dxPivotGridSummaryCell
@@ -508,7 +923,7 @@ export interface dxPivotGridSummaryCell {
      */
     parent(direction: string): dxPivotGridSummaryCell;
     /**
-     * @docid dxPivotGridSummaryCell.prev
+     * @docid
      * @publicName prev(direction)
      * @param1 direction:string
      * @return dxPivotGridSummaryCell
@@ -517,7 +932,7 @@ export interface dxPivotGridSummaryCell {
      */
     prev(direction: string): dxPivotGridSummaryCell;
     /**
-     * @docid dxPivotGridSummaryCell.prev
+     * @docid
      * @publicName prev(direction, allowCrossGroup)
      * @param1 direction:string
      * @param2 allowCrossGroup:bool
@@ -527,7 +942,7 @@ export interface dxPivotGridSummaryCell {
      */
     prev(direction: string, allowCrossGroup: boolean): dxPivotGridSummaryCell;
     /**
-     * @docid dxPivotGridSummaryCell.slice
+     * @docid
      * @publicName slice(field, value)
      * @param1 field:PivotGridDataSourceOptions.fields
      * @param2 value:number|string
@@ -537,7 +952,7 @@ export interface dxPivotGridSummaryCell {
      */
     slice(field: PivotGridDataSourceField, value: number | string): dxPivotGridSummaryCell;
     /**
-     * @docid dxPivotGridSummaryCell.value
+     * @docid
      * @publicName value()
      * @return any
      * @prevFileNamespace DevExpress.ui
@@ -545,7 +960,7 @@ export interface dxPivotGridSummaryCell {
      */
     value(): any;
     /**
-     * @docid dxPivotGridSummaryCell.value
+     * @docid
      * @publicName value(field)
      * @param1 field:PivotGridDataSourceOptions.fields|string
      * @return any
@@ -554,7 +969,7 @@ export interface dxPivotGridSummaryCell {
      */
     value(field: PivotGridDataSourceField | string): any;
     /**
-     * @docid dxPivotGridSummaryCell.value
+     * @docid
      * @publicName value(field, postProcessed)
      * @param1 field:PivotGridDataSourceOptions.fields|string
      * @param2 postProcessed:boolean
@@ -564,7 +979,7 @@ export interface dxPivotGridSummaryCell {
      */
     value(field: PivotGridDataSourceField | string, postProcessed: boolean): any;
     /**
-     * @docid dxPivotGridSummaryCell.value
+     * @docid
      * @publicName value(postProcessed)
      * @param1 postProcessed:boolean
      * @return any

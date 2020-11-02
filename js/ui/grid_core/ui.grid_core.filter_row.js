@@ -727,128 +727,29 @@ export default {
     defaultOptions: function() {
         return {
             filterRow: {
-                /**
-                 * @name GridBaseOptions.filterRow.visible
-                 * @type boolean
-                 * @default false
-                 */
                 visible: false,
-                /**
-                 * @name GridBaseOptions.filterRow.showOperationChooser
-                 * @type boolean
-                 * @default true
-                 */
                 showOperationChooser: true,
-                /**
-                * @name GridBaseOptions.filterRow.showAllText
-                * @type string
-                * @default "(All)"
-                */
                 showAllText: messageLocalization.format('dxDataGrid-filterRowShowAllText'),
-                /**
-                * @name GridBaseOptions.filterRow.resetOperationText
-                * @type string
-                * @default "Reset"
-                */
                 resetOperationText: messageLocalization.format('dxDataGrid-filterRowResetOperationText'),
-                /**
-                 * @name GridBaseOptions.filterRow.applyFilter
-                 * @type Enums.GridApplyFilterMode
-                 * @default "auto"
-                 */
                 applyFilter: 'auto',
-                /**
-                 * @name GridBaseOptions.filterRow.applyFilterText
-                 * @type string
-                 * @default "Apply filter"
-                 */
                 applyFilterText: messageLocalization.format('dxDataGrid-applyFilterText'),
-                /**
-                 * @name GridBaseOptions.filterRow.operationDescriptions
-                 * @type object
-                 */
                 operationDescriptions: {
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.equal
-                     * @type string
-                     * @default "Equals"
-                     */
                     equal: messageLocalization.format('dxDataGrid-filterRowOperationEquals'),
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.notEqual
-                     * @type string
-                     * @default "Does not equal"
-                     */
                     notEqual: messageLocalization.format('dxDataGrid-filterRowOperationNotEquals'),
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.lessThan
-                     * @type string
-                     * @default "Less than"
-                     */
                     lessThan: messageLocalization.format('dxDataGrid-filterRowOperationLess'),
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.lessThanOrEqual
-                     * @type string
-                     * @default "Less than or equal to"
-                     */
                     lessThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationLessOrEquals'),
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.greaterThan
-                     * @type string
-                     * @default "Greater than"
-                     */
                     greaterThan: messageLocalization.format('dxDataGrid-filterRowOperationGreater'),
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.greaterThanOrEqual
-                     * @type string
-                     * @default "Greater than or equal to"
-                     */
                     greaterThanOrEqual: messageLocalization.format('dxDataGrid-filterRowOperationGreaterOrEquals'),
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.startsWith
-                     * @type string
-                     * @default "Starts with"
-                     */
                     startsWith: messageLocalization.format('dxDataGrid-filterRowOperationStartsWith'),
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.contains
-                     * @type string
-                     * @default "Contains"
-                     */
                     contains: messageLocalization.format('dxDataGrid-filterRowOperationContains'),
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.notContains
-                     * @type string
-                     * @default "Does not contain"
-                     */
                     notContains: messageLocalization.format('dxDataGrid-filterRowOperationNotContains'),
 
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.endsWith
-                     * @type string
-                     * @default "Ends with"
-                     */
                     endsWith: messageLocalization.format('dxDataGrid-filterRowOperationEndsWith'),
-                    /**
-                     * @name GridBaseOptions.filterRow.operationDescriptions.between
-                     * @type string
-                     * @default "Between"
-                     */
                     between: messageLocalization.format('dxDataGrid-filterRowOperationBetween'),
                     isBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsBlank'),
                     isNotBlank: messageLocalization.format('dxFilterBuilder-filterOperationIsNotBlank')
                 },
-                /**
-                 * @name GridBaseOptions.filterRow.betweenStartText
-                 * @type string
-                 * @default "Start"
-                 */
                 betweenStartText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenStartText'),
-                /**
-                 * @name GridBaseOptions.filterRow.betweenEndText
-                 * @type string
-                 * @default "End"
-                 */
                 betweenEndText: messageLocalization.format('dxDataGrid-filterRowOperationBetweenEndText')
             }
         };

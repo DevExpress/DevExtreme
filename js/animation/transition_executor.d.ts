@@ -5,7 +5,7 @@ import {
 } from './fx';
 
 /**
- * @docid TransitionExecutor
+ * @docid
  * @namespace DevExpress
  * @module animation/transition_executor
  * @export default
@@ -14,7 +14,7 @@ import {
  */
 export default class TransitionExecutor {
     /**
-     * @docid TransitionExecutorMethods.enter
+     * @docid
      * @publicName enter(elements, animation)
      * @param1 elements:jQuery
      * @param2 animation:animationConfig|string
@@ -23,7 +23,7 @@ export default class TransitionExecutor {
      */
     enter(elements: JQuery, animation: animationConfig | string): void;
     /**
-     * @docid TransitionExecutorMethods.leave
+     * @docid
      * @publicName leave(elements, animation)
      * @param1 elements:jQuery
      * @param2 animation:animationConfig|string
@@ -32,14 +32,14 @@ export default class TransitionExecutor {
      */
     leave(elements: JQuery, animation: animationConfig | string): void;
     /**
-     * @docid TransitionExecutorMethods.reset
+     * @docid
      * @publicName reset()
      * @prevFileNamespace DevExpress.animation
      * @public
      */
     reset(): void;
     /**
-     * @docid TransitionExecutorMethods.start
+     * @docid
      * @publicName start()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.animation
@@ -47,7 +47,7 @@ export default class TransitionExecutor {
      */
     start(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid TransitionExecutorMethods.stop
+     * @docid
      * @publicName stop()
      * @prevFileNamespace DevExpress.animation
      * @public

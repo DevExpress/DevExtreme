@@ -1,5 +1,5 @@
 /**
- * @docid EdmLiteral
+ * @docid
  * @type object
  * @namespace DevExpress.data
  * @module data/odata/utils
@@ -10,7 +10,7 @@
 export class EdmLiteral {
     constructor(value: string);
     /**
-     * @docid EdmLiteralMethods.valueOf
+     * @docid
      * @publicName valueOf()
      * @return string
      * @prevFileNamespace DevExpress.data

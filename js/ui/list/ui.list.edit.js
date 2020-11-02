@@ -106,16 +106,6 @@ const ListEdit = ListBase.inherit({
             */
             selectAllText: localizationMessage.format('dxList-selectAll'),
 
-            /**
-            * @name dxListOptions.menuItems.text
-            * @type string
-            */
-            /**
-            * @name dxListOptions.menuItems.action
-            * @type function
-            * @type_function_param1 itemElement:dxElement
-            * @type_function_param2 itemData:object
-            */
             menuItems: [],
 
             menuMode: 'context',
@@ -313,7 +303,7 @@ const ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods.getFlatIndexByItemElement
+    * @name dxList.getFlatIndexByItemElement
     * @publicName getFlatIndexByItemElement(itemElement)
     * @param1 itemElement:Element
     * @return object
@@ -324,7 +314,7 @@ const ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods.getItemElementByFlatIndex
+    * @name dxList.getItemElementByFlatIndex
     * @publicName getItemElementByFlatIndex(flatIndex)
     * @param1 flatIndex:Number
     * @return Element
@@ -341,7 +331,7 @@ const ListEdit = ListBase.inherit({
     },
 
     /**
-    * @name dxListMethods.getItemByIndex
+    * @name dxList.getItemByIndex
     * @publicName getItemByIndex(index)
     * @param1 index:Number
     * @return object

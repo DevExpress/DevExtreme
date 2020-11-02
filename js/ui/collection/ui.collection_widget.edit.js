@@ -693,7 +693,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods.isItemSelected
+    * @name CollectionWidget.isItemSelected
     * @publicName isItemSelected(itemElement)
     * @param1 itemElement:Element
     * @return boolean
@@ -704,7 +704,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods.selectItem
+    * @name CollectionWidget.selectItem
     * @publicName selectItem(itemElement)
     * @param1 itemElement:Element
     * @hidden
@@ -732,7 +732,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods.unselectItem
+    * @name CollectionWidget.unselectItem
     * @publicName unselectItem(itemElement)
     * @param1 itemElement:Element
     * @hidden
@@ -777,7 +777,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods.deleteItem
+    * @name CollectionWidget.deleteItem
     * @publicName deleteItem(itemElement)
     * @param1 itemElement:Element
     * @return Promise<void>
@@ -816,7 +816,7 @@ const CollectionWidget = BaseCollectionWidget.inherit({
     },
 
     /**
-    * @name CollectionWidgetMethods.reorderItem
+    * @name CollectionWidget.reorderItem
     * @publicName reorderItem(itemElement, toItemElement)
     * @param1 itemElement:Element
     * @param2 toItemElement:Element

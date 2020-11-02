@@ -1533,775 +1533,103 @@ class Diagram extends Widget {
     _getDefaultOptions() {
         return extend(super._getDefaultOptions(), {
             readOnly: false,
-            /**
-            * @name dxDiagramOptions.zoomLevel.value
-            * @type Number
-            * @default undefined
-            */
-            /**
-            * @name dxDiagramOptions.zoomLevel.items
-            * @type Array<Number>
-            * @default undefined
-            */
             zoomLevel: DIAGRAM_DEFAULT_ZOOMLEVEL,
             simpleView: false,
             autoZoomMode: DIAGRAM_DEFAULT_AUTOZOOM_MODE,
             fullScreen: false,
             showGrid: true,
             snapToGrid: true,
-            /**
-            * @name dxDiagramOptions.gridSize.value
-            * @type Number
-            */
-            /**
-            * @name dxDiagramOptions.gridSize.items
-            * @type Array<Number>
-            */
-
             units: DIAGRAM_DEFAULT_UNIT,
             viewUnits: DIAGRAM_DEFAULT_UNIT,
-
-            /**
-            * @name dxDiagramOptions.pageSize.width
-            * @type Number
-            */
-            /**
-            * @name dxDiagramOptions.pageSize.height
-            * @type Number
-            */
-            /**
-            * @name dxDiagramOptions.pageSize.items
-            * @type Array<Object>
-            */
-            /**
-            * @name dxDiagramOptions.pageSize.items.width
-            * @type Number
-            */
-            /**
-            * @name dxDiagramOptions.pageSize.items.height
-            * @type Number
-            */
-            /**
-            * @name dxDiagramOptions.pageSize.items.text
-            * @type String
-            */
             pageOrientation: DIAGRAM_DEFAULT_PAGE_ORIENTATION,
             pageColor: DIAGRAM_DEFAULT_PAGE_COLOR,
             hasChanges: false,
             nodes: {
-                /**
-                * @name dxDiagramOptions.nodes.dataSource
-                * @type Array<Object>|DataSource|DataSourceOptions
-                * @default null
-                */
                 dataSource: null,
-                /**
-                * @name dxDiagramOptions.nodes.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default "id"
-                */
                 keyExpr: 'id',
-                /**
-                * @name dxDiagramOptions.nodes.customDataExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 customDataExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.lockedExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 lockedExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.styleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 styleExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.textStyleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 textStyleExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.zIndexExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 zIndexExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.typeExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default "type"
-                */
                 typeExpr: 'type',
-                /**
-                * @name dxDiagramOptions.nodes.textExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default "text"
-                */
                 textExpr: 'text',
-                /**
-                * @name dxDiagramOptions.nodes.imageUrlExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 imageUrlExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.parentKeyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 parentKeyExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.itemsExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 itemsExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.leftExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 leftExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.topExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 topExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.widthExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 widthExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.heightExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 heightExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.containerKeyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 containerKeyExpr: undefined,
-                /**
-                * @name dxDiagramOptions.nodes.containerChildrenExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default "children"
-                */
                 containerChildrenExpr: 'children',
-                /**
-                 * @name dxDiagramOptions.nodes.autoLayout
-                 * @type Enums.DiagramDataLayoutType|Object
-                 * @default "auto"
-                 */
-                /**
-                 * @name dxDiagramOptions.nodes.autoLayout.type
-                 * @type Enums.DiagramDataLayoutType
-                 */
-                /**
-                 * @name dxDiagramOptions.nodes.autoLayout.orientation
-                 * @type Enums.DiagramDataLayoutOrientation
-                 */
                 autoLayout: 'auto',
-                /**
-                * @name dxDiagramOptions.nodes.autoSizeEnabled
-                * @type boolean
-                * @default true
-                */
                 autoSizeEnabled: true,
             },
             edges: {
-                /**
-                * @name dxDiagramOptions.edges.dataSource
-                * @type Array<Object>|DataSource|DataSourceOptions
-                * @default null
-                */
                 dataSource: null,
-                /**
-                * @name dxDiagramOptions.edges.keyExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default "id"
-                */
                 keyExpr: 'id',
-                /**
-                * @name dxDiagramOptions.edges.customDataExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 customDataExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.lockedExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 lockedExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.styleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 styleExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.textStyleExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 textStyleExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.zIndexExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 zIndexExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.fromExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default "from"
-                */
                 fromExpr: 'from',
-                /**
-                * @name dxDiagramOptions.edges.fromPointIndexExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 fromPointIndexExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.toExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default "to"
-                */
                 toExpr: 'to',
-                /**
-                * @name dxDiagramOptions.edges.toPointIndexExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 toPointIndexExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.pointsExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 pointsExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.textExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 textExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.lineTypeExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 lineTypeExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.fromLineEndExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 fromLineEndExpr: undefined,
-                /**
-                * @name dxDiagramOptions.edges.toLineEndExpr
-                * @type string|function(data)
-                * @type_function_param1 data:object
-                * @default undefined
-                */
                 toLineEndExpr: undefined
             },
 
-            customShapes: [
-                /**
-                * @name dxDiagramOptions.customShapes.category
-                * @type String
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.type
-                * @type String
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.baseType
-                * @type Enums.DiagramShapeType|String
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.title
-                * @type String
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.backgroundImageUrl
-                * @type String
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.backgroundImageToolboxUrl
-                * @type String
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.backgroundImageLeft
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.backgroundImageTop
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.backgroundImageWidth
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.backgroundImageHeight
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.defaultWidth
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.defaultHeight
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.toolboxWidthToHeightRatio
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.minWidth
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.minHeight
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.maxWidth
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.maxHeight
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.allowResize
-                * @type Boolean
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.defaultText
-                * @type String
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.allowEditText
-                * @type Boolean
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.textLeft
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.textTop
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.textWidth
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.textHeight
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.defaultImageUrl
-                * @type String
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.allowEditImage
-                * @type Boolean
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.imageLeft
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.imageTop
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.imageWidth
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.imageHeight
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.connectionPoints
-                * @type Array<Object>
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.connectionPoints.x
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.connectionPoints.y
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.template
-                * @type template|function
-                * @type_function_param1 container:dxSVGElement
-                * @type_function_param2 data:object
-                * @type_function_param2_field1 item:dxDiagramShape
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.toolboxTemplate
-                * @type template|function
-                * @type_function_param1 container:dxSVGElement
-                * @type_function_param2 data:object
-                * @type_function_param2_field1 item:dxDiagramShape
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.templateLeft
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.templateTop
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.templateWidth
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.templateHeight
-                * @type Number
-                */
-                /**
-                * @name dxDiagramOptions.customShapes.keepRatioOnAutoSize
-                * @type Boolean
-                */
-            ],
+            customShapes: [],
             toolbox: {
-                /**
-                * @name dxDiagramOptions.toolbox.visibility
-                * @type Enums.DiagramPanelVisibility
-                * @default 'auto'
-                */
                 visibility: 'auto',
-                /**
-                * @name dxDiagramOptions.toolbox.shapeIconsPerRow
-                * @type Number
-                * @default 3
-                */
                 shapeIconsPerRow: DIAGRAM_TOOLBOX_SHAPES_PER_ROW,
-                /**
-                * @name dxDiagramOptions.toolbox.showSearch
-                * @type Boolean
-                * @default true
-                */
                 showSearch: true,
-                /**
-                * @name dxDiagramOptions.toolbox.width
-                * @type Number
-                * @default undefined
-                */
-                /**
-                * @name dxDiagramOptions.toolbox.groups
-                * @type Array<Object>|Array<Enums.DiagramShapeCategory>
-                * @default undefined
-                */
-                /**
-                * @name dxDiagramOptions.toolbox.groups.category
-                * @type Enums.DiagramShapeCategory|String
-                */
-                /**
-                * @name dxDiagramOptions.toolbox.groups.title
-                * @type String
-                */
-                /**
-                * @name dxDiagramOptions.toolbox.groups.displayMode
-                * @type Enums.DiagramToolboxDisplayMode
-                */
-                /**
-                * @name dxDiagramOptions.toolbox.groups.expanded
-                * @type Boolean
-                */
-                /**
-                * @name dxDiagramOptions.toolbox.groups.shapes
-                * @type Array<Enums.DiagramShapeType>|Array<String>
-                */
             },
             mainToolbar: {
-                /**
-                * @name dxDiagramOptions.mainToolbar.visible
-                * @type boolean
-                * @default false
-                */
                 visible: false,
-                /**
-                * @name dxDiagramOptions.mainToolbar.commands
-                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
-                * @default undefined
-                */
             },
             historyToolbar: {
-                /**
-                * @name dxDiagramOptions.historyToolbar.visible
-                * @type boolean
-                * @default true
-                */
                 visible: true,
-                /**
-                * @name dxDiagramOptions.historyToolbar.commands
-                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
-                * @default undefined
-                */
             },
             viewToolbar: {
-                /**
-                * @name dxDiagramOptions.viewToolbar.visible
-                * @type boolean
-                * @default true
-                */
                 visible: true,
-                /**
-                * @name dxDiagramOptions.viewToolbar.commands
-                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
-                * @default undefined
-                */
             },
             contextMenu: {
-                /**
-                * @name dxDiagramOptions.contextMenu.enabled
-                * @type boolean
-                * @default true
-                */
                 enabled: true,
-                /**
-                * @name dxDiagramOptions.contextMenu.commands
-                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
-                * @default undefined
-                */
             },
             contextToolbox: {
-                /**
-                * @name dxDiagramOptions.contextToolbox.enabled
-                * @type boolean
-                * @default true
-                */
                 enabled: true,
-                /**
-                * @name dxDiagramOptions.contextToolbox.shapeIconsPerRow
-                * @type Number
-                * @default 4
-                */
                 shapeIconsPerRow: DIAGRAM_CONTEXT_TOOLBOX_SHAPES_PER_ROW,
-                /**
-                * @name dxDiagramOptions.contextToolbox.width
-                * @type Number
-                * @default 152
-                */
                 width: DIAGRAM_CONTEXT_TOOLBOX_DEFAULT_WIDTH
-                /**
-                * @name dxDiagramOptions.contextToolbox.category
-                * @type Enums.DiagramShapeCategory|String
-                */
-                /**
-                * @name dxDiagramOptions.contextToolbox.displayMode
-                * @type Enums.DiagramToolboxDisplayMode
-                */
-                /**
-                * @name dxDiagramOptions.contextToolbox.shapes
-                * @type Array<Enums.DiagramShapeType>|Array<String>
-                */
             },
             propertiesPanel: {
-                /**
-                * @name dxDiagramOptions.propertiesPanel.visibility
-                * @type Enums.DiagramPanelVisibility
-                * @default 'auto'
-                */
                 visibility: 'auto',
-                /**
-                * @name dxDiagramOptions.propertiesPanel.tabs
-                * @type Array<Object>
-                * @default undefined
-                */
-                /**
-                * @name dxDiagramOptions.propertiesPanel.tabs.title
-                * @type string
-                */
-                /**
-                * @name dxDiagramOptions.propertiesPanel.tabs.commands
-                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
-                */
-                /**
-                * @name dxDiagramOptions.propertiesPanel.tabs.groups
-                * @type Array<object>
-                */
-                /**
-                * @name dxDiagramOptions.propertiesPanel.tabs.groups.title
-                * @type string
-                */
-                /**
-                * @name dxDiagramOptions.propertiesPanel.tabs.groups.commands
-                * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
-                */
             },
 
             defaultItemProperties: {
-                /**
-                * @name dxDiagramOptions.defaultItemProperties.style
-                * @type Object
-                */
-                /**
-                * @name dxDiagramOptions.defaultItemProperties.textStyle
-                * @type Object
-                */
-                /**
-                * @name dxDiagramOptions.defaultItemProperties.connectorLineType
-                * @type Enums.DiagramConnectorLineType
-                * @default 'orthogonal'
-                */
                 connectorLineType: 'orthogonal',
-                /**
-                * @name dxDiagramOptions.defaultItemProperties.connectorLineStart
-                * @type Enums.DiagramConnectorLineEnd
-                * @default 'none'
-                */
                 connectorLineStart: 'none',
-                /**
-                * @name dxDiagramOptions.defaultItemProperties.connectorLineEnd
-                * @type Enums.DiagramConnectorLineEnd
-                * @default 'arrow'
-                */
                 connectorLineEnd: 'arrow',
-                /**
-                * @name dxDiagramOptions.defaultItemProperties.shapeMinWidth
-                * @type Number
-                * @default undefined
-                */
-                /**
-                * @name dxDiagramOptions.defaultItemProperties.shapeMinHeight
-                * @type Number
-                * @default undefined
-                */
-                /**
-                * @name dxDiagramOptions.defaultItemProperties.shapeMaxWidth
-                * @type Number
-                * @default undefined
-                */
-                /**
-                * @name dxDiagramOptions.defaultItemProperties.shapeMaxHeight
-                * @type Number
-                * @default undefined
-                */
             },
             editing: {
-                /**
-                * @name dxDiagramOptions.editing.allowAddShape
-                * @type boolean
-                * @default true
-                */
                 allowAddShape: true,
-                /**
-                * @name dxDiagramOptions.editing.allowDeleteShape
-                * @type boolean
-                * @default true
-                */
                 allowDeleteShape: true,
-                /**
-                * @name dxDiagramOptions.editing.allowDeleteConnector
-                * @type boolean
-                * @default true
-                */
                 allowDeleteConnector: true,
-                /**
-                * @name dxDiagramOptions.editing.allowChangeConnection
-                * @type boolean
-                * @default true
-                */
                 allowChangeConnection: true,
-                /**
-                * @name dxDiagramOptions.editing.allowChangeConnectorPoints
-                * @type boolean
-                * @default true
-                */
                 allowChangeConnectorPoints: true,
-                /**
-                * @name dxDiagramOptions.editing.allowChangeShapeText
-                * @type boolean
-                * @default true
-                */
                 allowChangeShapeText: true,
-                /**
-                * @name dxDiagramOptions.editing.allowChangeConnectorText
-                * @type boolean
-                * @default true
-                */
                 allowChangeConnectorText: true,
-                /**
-                * @name dxDiagramOptions.editing.allowResizeShape
-                * @type boolean
-                * @default true
-                */
                 allowResizeShape: true,
-                /**
-                * @name dxDiagramOptions.editing.allowMoveShape
-                * @type boolean
-                * @default true
-                */
                 allowMoveShape: true
             },
             export: {
-                /**
-                 * @name dxDiagramOptions.export.fileName
-                 * @type string
-                 * @default "Diagram"
-                 */
                 fileName: 'Diagram',
-                /**
-                 * @name dxDiagramOptions.export.proxyUrl
-                 * @type string
-                 * @default undefined
-                 * @deprecated
-                 */
                 proxyUrl: undefined
             },
 
@@ -2340,7 +1668,7 @@ class Diagram extends Widget {
              * @hidden true
              */
             /**
-             * @name dxDiagramMethods.registerKeyHandler(key, handler)
+             * @name dxDiagram.registerKeyHandler(key, handler)
              * @hidden true
              */
         });

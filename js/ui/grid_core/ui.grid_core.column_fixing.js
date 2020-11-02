@@ -866,40 +866,11 @@ export default {
     defaultOptions: function() {
         return {
             columnFixing: {
-                /**
-                * @name GridBaseOptions.columnFixing.enabled
-                * @type boolean
-                * @default false
-                */
                 enabled: false,
-                /**
-                 * @name GridBaseOptions.columnFixing.texts
-                 * @type object
-                 */
                 texts: {
-                    /**
-                     * @name GridBaseOptions.columnFixing.texts.fix
-                     * @type string
-                     * @default "Fix"
-                     */
                     fix: messageLocalization.format('dxDataGrid-columnFixingFix'),
-                    /**
-                     * @name GridBaseOptions.columnFixing.texts.unfix
-                     * @type string
-                     * @default "Unfix"
-                     */
                     unfix: messageLocalization.format('dxDataGrid-columnFixingUnfix'),
-                    /**
-                     * @name GridBaseOptions.columnFixing.texts.leftPosition
-                     * @type string
-                     * @default "To the left"
-                     */
                     leftPosition: messageLocalization.format('dxDataGrid-columnFixingLeftPosition'),
-                    /**
-                     * @name GridBaseOptions.columnFixing.texts.rightPosition
-                     * @type string
-                     * @default "To the right"
-                     */
                     rightPosition: messageLocalization.format('dxDataGrid-columnFixingRightPosition')
                 }
             }

@@ -8,7 +8,7 @@
  */
 export default class themes {
     /**
-     * @docid ui.themesmethods.current
+     * @docid ui.themes.current
      * @publicName current()
      * @static
      * @return string
@@ -17,7 +17,7 @@ export default class themes {
      */
     static current(): string;
     /**
-     * @docid ui.themesmethods.current
+     * @docid ui.themes.current
      * @publicName current(themeName)
      * @param1 themeName:string
      * @static
@@ -26,7 +26,7 @@ export default class themes {
      */
     static current(themeName: string): void;
     /**
-     * @docid ui.themesmethods.ready
+     * @docid ui.themes.ready
      * @publicName ready(callback)
      * @param1 callback:function
      * @static
@@ -35,7 +35,7 @@ export default class themes {
      */
     static ready(callback: Function): void;
     /**
-     * @docid ui.themesmethods.initialized
+     * @docid ui.themes.initialized
      * @publicName initialized(callback)
      * @param1 callback:function
      * @static

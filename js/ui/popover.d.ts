@@ -19,22 +19,24 @@ import dxPopup, {
 
 export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     /**
-     * @docid dxPopoverOptions.animation
-     * @type object
+     * @docid
      * @default { show: { type: "fade", from: 0, to: 1 }, hide: { type: "fade", to: 0 } }
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     animation?: dxPopoverAnimation;
     /**
-     * @docid dxPopoverOptions.closeOnOutsideClick
+     * @docid
      * @default true
+     * @type boolean|function
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
-     * @docid dxPopoverOptions.height
+     * @docid
      * @type number|string|function
      * @default "auto"
      * @type_function_return number|string
@@ -43,15 +45,26 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      */
     height?: number | string | (() => number | string);
     /**
-     * @docid dxPopoverOptions.hideEvent
+     * @docid
      * @type Object|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    hideEvent?: { delay?: number, name?: string } | string;
+    hideEvent?: {
+      /**
+       * @docid
+       * @default undefined
+       */
+      delay?: number,
+      /**
+       * @docid
+       * @default undefined
+       */
+      name?: string
+    } | string;
     /**
-     * @docid dxPopoverOptions.position
+     * @docid
      * @type Enums.Position|positionConfig
      * @default 'bottom'
      * @prevFileNamespace DevExpress.ui
@@ -59,7 +72,7 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      */
     position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
     /**
-     * @docid dxPopoverOptions.shading
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -67,15 +80,26 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      */
     shading?: boolean;
     /**
-     * @docid dxPopoverOptions.showEvent
+     * @docid
      * @type Object|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    showEvent?: { delay?: number, name?: string } | string;
+    showEvent?: {
+      /**
+       * @docid
+       * @default undefined
+       */
+      delay?: number,
+      /**
+       * @docid
+       * @default undefined
+       */
+      name?: string
+    } | string;
     /**
-     * @docid dxPopoverOptions.showTitle
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -83,14 +107,14 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      */
     showTitle?: boolean;
     /**
-     * @docid dxPopoverOptions.target
+     * @docid
      * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     target?: string | Element | JQuery;
     /**
-     * @docid dxPopoverOptions.width
+     * @docid
      * @type number|string|function
      * @default "auto"
      * @type_function_return number|string
@@ -99,9 +123,15 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
      */
     width?: number | string | (() => number | string);
 }
+/**
+ * @docid
+ * @hidden
+ * @inherits dxPopupAnimation
+ * @type object
+ */
 export interface dxPopoverAnimation extends dxPopupAnimation {
     /**
-     * @docid dxPopoverOptions.animation.hide
+     * @docid
      * @type animationConfig
      * @default { type: "fade", to: 0 }
      * @prevFileNamespace DevExpress.ui
@@ -109,7 +139,7 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
      */
     hide?: animationConfig;
     /**
-     * @docid dxPopoverOptions.animation.show
+     * @docid
      * @type animationConfig
      * @default { type: "fade", from: 0, to: 1 }
      * @prevFileNamespace DevExpress.ui
@@ -118,7 +148,7 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
     show?: animationConfig;
 }
 /**
- * @docid dxPopover
+ * @docid
  * @inherits dxPopup
  * @hasTranscludedContent
  * @module ui/popover
@@ -131,7 +161,7 @@ export default class dxPopover extends dxPopup {
     constructor(element: JQuery, options?: dxPopoverOptions)
     show(): Promise<boolean> & JQueryPromise<boolean>;
     /**
-     * @docid dxPopoverMethods.show
+     * @docid
      * @publicName show(target)
      * @param1 target:string|Element|jQuery
      * @return Promise<boolean>

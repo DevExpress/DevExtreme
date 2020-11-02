@@ -81,11 +81,6 @@ const Tabs = CollectionWidget.inherit({
             loopItemFocus: false,
             useInkRipple: false,
             badgeExpr: function(data) { return data ? data.badge : undefined; }
-            /**
-            * @name dxTabsItem
-            * @inherits CollectionWidgetItem
-            * @type object
-            */
         });
     },
 

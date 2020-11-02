@@ -22,7 +22,7 @@ import {
 
 export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
     /**
-     * @docid dxDropDownBoxOptions.acceptCustomValue
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -30,7 +30,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      */
     acceptCustomValue?: boolean;
     /**
-     * @docid dxDropDownBoxOptions.contentTemplate
+     * @docid
      * @type template|function
      * @default 'content'
      * @type_function_param1 templateData:object
@@ -43,7 +43,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      */
     contentTemplate?: template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxDropDownBoxOptions.displayValueFormatter
+     * @docid
      * @type function(value)
      * @type_function_param1 value:string|Array<any>
      * @type_function_return string
@@ -52,7 +52,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      */
     displayValueFormatter?: ((value: string | Array<any>) => string);
     /**
-     * @docid dxDropDownBoxOptions.fieldTemplate
+     * @docid
      * @type template|function
      * @default null
      * @type_function_param1 value:object
@@ -63,14 +63,14 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
      */
     fieldTemplate?: template | ((value: any, fieldElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxDropDownBoxOptions.openOnFieldClick
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     openOnFieldClick?: boolean;
     /**
-     * @docid dxDropDownBoxOptions.valueChangeEvent
+     * @docid
      * @type string
      * @default "change"
      * @prevFileNamespace DevExpress.ui
@@ -79,7 +79,7 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
     valueChangeEvent?: string;
 }
 /**
- * @docid dxDropDownBox
+ * @docid
  * @isEditor
  * @inherits DataExpressionMixin, dxDropDownEditor
  * @hasTranscludedContent

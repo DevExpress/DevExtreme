@@ -233,13 +233,13 @@ const LoadPanel = Overlay.inherit({
     }
 
     /**
-    * @name dxLoadPanelMethods.registerKeyHandler
+    * @name dxLoadPanel.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxLoadPanelMethods.focus
+    * @name dxLoadPanel.focus
     * @publicName focus()
     * @hidden
     */

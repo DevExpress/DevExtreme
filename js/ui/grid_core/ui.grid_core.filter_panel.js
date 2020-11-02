@@ -258,56 +258,11 @@ export default {
     defaultOptions: function() {
         return {
             filterPanel: {
-                /**
-                 * @name GridBaseOptions.filterPanel.visible
-                 * @type boolean
-                 * @default false
-                 */
                 visible: false,
-
-                /**
-                 * @name GridBaseOptions.filterPanel.filterEnabled
-                 * @type boolean
-                 * @default true
-                 * @fires GridBaseOptions.onOptionChanged
-                 */
                 filterEnabled: true,
-
-                /**
-                 * @name GridBaseOptions.filterPanel.customizeText
-                 * @type function
-                 * @type_function_param1 e:object
-                 * @type_function_param1_field1 component:this
-                 * @type_function_param1_field2 filterValue:object
-                 * @type_function_param1_field3 text:string
-                 * @type_function_return string
-                 */
-
-                /**
-                 * @name GridBaseOptions.filterPanel.texts
-                 * @type object
-                 * @default {}
-                 */
                 texts: {
-                    /**
-                     * @name GridBaseOptions.filterPanel.texts.createFilter
-                     * @type string
-                     * @default "Create Filter"
-                     */
                     createFilter: messageLocalization.format('dxDataGrid-filterPanelCreateFilter'),
-
-                    /**
-                     * @name GridBaseOptions.filterPanel.texts.clearFilter
-                     * @type string
-                     * @default "Clear"
-                     */
                     clearFilter: messageLocalization.format('dxDataGrid-filterPanelClearFilter'),
-
-                    /**
-                     * @name GridBaseOptions.filterPanel.texts.filterEnabledHint
-                     * @type string
-                     * @default "Enable the filter"
-                     */
                     filterEnabledHint: messageLocalization.format('dxDataGrid-filterPanelFilterEnabledHint'),
                 }
             },

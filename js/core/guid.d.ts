@@ -1,5 +1,5 @@
 /**
- * @docid Guid
+ * @docid
  * @type object
  * @namespace DevExpress.data
  * @module core/guid
@@ -11,7 +11,7 @@ export default class Guid {
     constructor();
     constructor(value: string);
     /**
-     * @docid Guidmethods.toString
+     * @docid
      * @publicName toString()
      * @return string
      * @prevFileNamespace DevExpress.core
@@ -19,7 +19,7 @@ export default class Guid {
      */
     toString(): string;
     /**
-     * @docid Guidmethods.valueOf
+     * @docid
      * @publicName valueOf()
      * @return string
      * @prevFileNamespace DevExpress.core

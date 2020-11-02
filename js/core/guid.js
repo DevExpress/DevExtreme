@@ -3,11 +3,11 @@ import Class from './class';
 const Guid = Class.inherit({
 
     /**
-    * @name Guidmethods.ctor
+    * @name Guid.ctor
     * @publicName ctor()
     */
     /**
-    * @name Guidmethods.ctor
+    * @name Guid.ctor
     * @publicName ctor(value)
     * @param1 value:string
     */

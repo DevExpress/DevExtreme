@@ -4,7 +4,7 @@ import Editor, {
 
 export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
     /**
-     * @docid dxTrackBarOptions.max
+     * @docid
      * @type number
      * @default 100
      * @prevFileNamespace DevExpress.ui
@@ -12,7 +12,7 @@ export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
      */
     max?: number;
     /**
-     * @docid dxTrackBarOptions.min
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -21,7 +21,7 @@ export interface dxTrackBarOptions<T = dxTrackBar> extends EditorOptions<T> {
     min?: number;
 }
 /**
- * @docid dxTrackBar
+ * @docid
  * @inherits Editor
  * @hidden
  * @prevFileNamespace DevExpress.ui

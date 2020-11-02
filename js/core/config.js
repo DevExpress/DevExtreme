@@ -3,14 +3,6 @@
 import { extend } from './utils/extend';
 import errors from './errors';
 
-/**
-* @name globalConfig
-* @section commonObjectStructures
-* @type object
-* @namespace DevExpress
-* @module core/config
-* @export default
-*/
 const config = {
     rtlEnabled: false,
     defaultCurrency: 'USD',
@@ -31,32 +23,9 @@ const config = {
     useLegacyVisibleIndex: false,
 
     floatingActionButtonConfig: {
-        /**
-        * @name globalConfig.floatingActionButtonConfig.icon
-        * @type string
-        * @default "add"
-        */
         icon: 'add',
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.closeIcon
-        * @type string
-        * @default "close"
-        */
         closeIcon: 'close',
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.label
-        * @type string
-        * @default ""
-        */
         label: '',
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.position
-        * @type Enums.PositionAlignment|positionConfig|function
-        * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
-        */
         position: {
             at: 'right bottom',
             my: 'right bottom',
@@ -65,26 +34,8 @@ const config = {
                 y: -16
             }
         },
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.maxSpeedDialActionCount
-        * @type number
-        * @default 5
-        */
         maxSpeedDialActionCount: 5,
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.shading
-        * @type boolean
-        * @default false
-        */
         shading: false,
-
-        /**
-        * @name globalConfig.floatingActionButtonConfig.direction
-        * @type Enums.floatingActionButtonDirection
-        * @default "auto"
-        */
         direction: 'auto'
     },
 

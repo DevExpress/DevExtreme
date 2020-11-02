@@ -218,13 +218,13 @@ const ProgressBar = TrackBar.inherit({
     }
 
     /**
-    * @name dxProgressBarMethods.registerKeyHandler
+    * @name dxProgressBar.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxProgressBarMethods.focus
+    * @name dxProgressBar.focus
     * @publicName focus()
     * @hidden
     */

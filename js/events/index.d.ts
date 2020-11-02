@@ -1,42 +1,42 @@
 import '../jquery_augmentation';
 
 /**
- * @docid dxEvent
+ * @docid
  * @section commonObjectStructures
  * @prevFileNamespace DevExpress.events
  * @public
  */
 export class dxEvent {
     /**
-     * @docid dxEventFields.currentTarget
+     * @docid
      * @type Element
      * @prevFileNamespace DevExpress.events
      * @public
      */
     currentTarget: Element;
     /**
-     * @docid dxEventFields.data
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.events
      * @public
      */
     data: any;
     /**
-     * @docid dxEventFields.delegateTarget
+     * @docid
      * @type Element
      * @prevFileNamespace DevExpress.events
      * @public
      */
     delegateTarget: Element;
     /**
-     * @docid dxEventFields.target
+     * @docid
      * @type Element
      * @prevFileNamespace DevExpress.events
      * @public
      */
     target: Element;
     /**
-     * @docid dxEventMethods.isDefaultPrevented
+     * @docid
      * @publicName isDefaultPrevented()
      * @type function
      * @return boolean
@@ -45,7 +45,7 @@ export class dxEvent {
      */
     isDefaultPrevented(): boolean;
     /**
-     * @docid dxEventMethods.isImmediatePropagationStopped
+     * @docid
      * @publicName isImmediatePropagationStopped()
      * @type function
      * @return boolean
@@ -54,7 +54,7 @@ export class dxEvent {
      */
     isImmediatePropagationStopped(): boolean;
     /**
-     * @docid dxEventMethods.isPropagationStopped
+     * @docid
      * @publicName isPropagationStopped()
      * @type function
      * @return boolean
@@ -63,7 +63,7 @@ export class dxEvent {
      */
     isPropagationStopped(): boolean;
     /**
-     * @docid dxEventMethods.preventDefault
+     * @docid
      * @publicName preventDefault()
      * @type function
      * @prevFileNamespace DevExpress.events
@@ -71,7 +71,7 @@ export class dxEvent {
      */
     preventDefault(): void;
     /**
-     * @docid dxEventMethods.stopImmediatePropagation
+     * @docid
      * @publicName stopImmediatePropagation()
      * @type function
      * @prevFileNamespace DevExpress.events
@@ -79,7 +79,7 @@ export class dxEvent {
      */
     stopImmediatePropagation(): void;
     /**
-     * @docid dxEventMethods.stopPropagation
+     * @docid
      * @publicName stopPropagation()
      * @type function
      * @prevFileNamespace DevExpress.events
@@ -89,7 +89,7 @@ export class dxEvent {
 }
 
 /**
- * @docid event
+ * @docid
  * @type dxEvent|jQuery.Event
  * @hidden
  * @prevFileNamespace DevExpress.events
@@ -97,7 +97,7 @@ export class dxEvent {
 export type event = dxEvent | JQueryEventObject;
 
 /**
- * @docid eventsHandler
+ * @docid
  * @publicName handler(event, extraParameters)
  * @type function
  * @param1 event:dxEvent

@@ -7,7 +7,7 @@ import UploadInfo from './upload_info';
 
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**
-     * @docid CustomFileSystemProviderOptions.abortFileUpload
+     * @docid
      * @type function
      * @type_function_param1 file:File
      * @type_function_param2 uploadInfo:UploadInfo
@@ -19,7 +19,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     abortFileUpload?: ((file: File, uploadInfo: UploadInfo, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.copyItem
+     * @docid
      * @type function
      * @type_function_param1 item:FileSystemItem
      * @type_function_param2 destinationDirectory:FileSystemItem
@@ -30,7 +30,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     copyItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.createDirectory
+     * @docid
      * @type function
      * @type_function_param1 parentDirectory:FileSystemItem
      * @type_function_param2 name:string
@@ -41,7 +41,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     createDirectory?: ((parentDirectory: FileSystemItem, name: string) => Promise<any> | JQueryPromise<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.deleteItem
+     * @docid
      * @type function
      * @type_function_param1 item:FileSystemItem
      * @type_function_return Promise<any>|any
@@ -51,7 +51,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     deleteItem?: ((item: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.downloadItems
+     * @docid
      * @type function
      * @type_function_param1 items:Array<FileSystemItem>
      * @prevFileNamespace DevExpress.fileManagement
@@ -60,7 +60,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     downloadItems?: ((items: Array<FileSystemItem>) => any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.getItems
+     * @docid
      * @type function
      * @type_function_param1 parentDirectory:FileSystemItem
      * @type_function_return Promise<Array<object>>|Array<object>
@@ -70,7 +70,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     getItems?: ((parentDirectory: FileSystemItem) => Promise<Array<any>> | JQueryPromise<Array<any>> | Array<any>);
 
     /**
-     * @docid CustomFileSystemProviderOptions.getItemsContent
+     * @docid
      * @type function
      * @type_function_param1 items:Array<FileSystemItem>
      * @type_function_return Promise<object>|object
@@ -80,7 +80,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     getItemsContent?: ((items: Array<FileSystemItem>) => Promise<any> | JQueryPromise<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.hasSubDirectoriesExpr
+     * @docid
      * @type string|function(fileSystemItem)
      * @prevFileNamespace DevExpress.fileManagement
      * @public
@@ -88,7 +88,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     hasSubDirectoriesExpr?: string | Function;
 
     /**
-     * @docid CustomFileSystemProviderOptions.moveItem
+     * @docid
      * @type function
      * @type_function_param1 item:FileSystemItem
      * @type_function_param2 destinationDirectory:FileSystemItem
@@ -99,7 +99,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     moveItem?: ((item: FileSystemItem, destinationDirectory: FileSystemItem) => Promise<any> | JQueryPromise<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.renameItem
+     * @docid
      * @type function
      * @type_function_param1 item:FileSystemItem
      * @type_function_param2 newName:string
@@ -110,7 +110,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
     renameItem?: ((item: FileSystemItem, newName: string) => Promise<any> | JQueryPromise<any> | any);
 
     /**
-     * @docid CustomFileSystemProviderOptions.uploadFileChunk
+     * @docid
      * @type function
      * @type_function_param1 file:File
      * @type_function_param2 uploadInfo:UploadInfo
@@ -123,7 +123,7 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 }
 
 /**
- * @docid CustomFileSystemProvider
+ * @docid
  * @inherits FileSystemProviderBase
  * @type object
  * @module file_management/custom_provider

@@ -1,6 +1,11 @@
+
+/**
+ * @docid
+ * @hidden
+ */
 export interface ColCountResponsible {
     /**
-     * @docid ColCountResponsible.lg
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -8,7 +13,7 @@ export interface ColCountResponsible {
      */
     lg?: number;
     /**
-     * @docid ColCountResponsible.md
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -16,7 +21,7 @@ export interface ColCountResponsible {
      */
     md?: number;
     /**
-     * @docid ColCountResponsible.sm
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -24,7 +29,7 @@ export interface ColCountResponsible {
      */
     sm?: number;
     /**
-     * @docid ColCountResponsible.xs
+     * @docid
      * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui

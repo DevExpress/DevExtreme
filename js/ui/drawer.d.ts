@@ -18,7 +18,7 @@ import Widget, {
 
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**
-     * @docid dxDrawerOptions.animationDuration
+     * @docid
      * @type number
      * @default 400
      * @prevFileNamespace DevExpress.ui
@@ -26,7 +26,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     animationDuration?: number;
     /**
-     * @docid dxDrawerOptions.animationEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -34,7 +34,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     animationEnabled?: boolean;
     /**
-     * @docid dxDrawerOptions.closeOnOutsideClick
+     * @docid
      * @type boolean|function
      * @default false
      * @type_function_param1 event:event
@@ -44,7 +44,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
-     * @docid dxDrawerOptions.maxSize
+     * @docid
      * @type number
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -52,7 +52,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     maxSize?: number;
     /**
-     * @docid dxDrawerOptions.minSize
+     * @docid
      * @type number
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -60,7 +60,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     minSize?: number;
     /**
-     * @docid dxDrawerOptions.opened
+     * @docid
      * @type boolean
      * @fires dxDrawerOptions.onOptionChanged
      * @default false
@@ -69,7 +69,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     opened?: boolean;
     /**
-     * @docid dxDrawerOptions.openedStateMode
+     * @docid
      * @type Enums.DrawerOpenedStateMode
      * @default "shrink"
      * @prevFileNamespace DevExpress.ui
@@ -77,7 +77,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     openedStateMode?: 'overlap' | 'shrink' | 'push';
     /**
-     * @docid dxDrawerOptions.position
+     * @docid
      * @type Enums.DrawerPosition
      * @default "left"
      * @prevFileNamespace DevExpress.ui
@@ -85,7 +85,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     position?: 'left' | 'right' | 'top' | 'bottom' | 'before' | 'after';
     /**
-     * @docid dxDrawerOptions.revealMode
+     * @docid
      * @type Enums.DrawerRevealMode
      * @default "slide"
      * @prevFileNamespace DevExpress.ui
@@ -93,7 +93,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     revealMode?: 'slide' | 'expand';
     /**
-     * @docid dxDrawerOptions.shading
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -101,7 +101,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     shading?: boolean;
     /**
-     * @docid dxDrawerOptions.target
+     * @docid
      * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @deprecated
@@ -109,7 +109,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
      */
     target?: string | Element | JQuery;
     /**
-     * @docid dxDrawerOptions.template
+     * @docid
      * @type_function_param1 Element:dxElement
      * @type template|function
      * @default 'panel'
@@ -119,7 +119,7 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     template?: template | ((Element: dxElement) => any);
 }
 /**
- * @docid dxDrawer
+ * @docid
  * @inherits Widget
  * @hasTranscludedContent
  * @module ui/drawer
@@ -131,7 +131,7 @@ export default class dxDrawer extends Widget {
     constructor(element: Element, options?: dxDrawerOptions)
     constructor(element: JQuery, options?: dxDrawerOptions)
     /**
-     * @docid dxDrawerMethods.content
+     * @docid
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -139,7 +139,7 @@ export default class dxDrawer extends Widget {
      */
     content(): dxElement;
     /**
-     * @docid dxDrawerMethods.hide
+     * @docid
      * @publicName hide()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -147,7 +147,7 @@ export default class dxDrawer extends Widget {
      */
     hide(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxDrawerMethods.show
+     * @docid
      * @publicName show()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -155,7 +155,7 @@ export default class dxDrawer extends Widget {
      */
     show(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxDrawerMethods.toggle
+     * @docid
      * @publicName toggle()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui

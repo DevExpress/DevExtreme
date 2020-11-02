@@ -1,7 +1,7 @@
 import DataSource from './data/data_source';
 
 /**
- * @docid DataHelperMixin
+ * @docid
  * @module data_helper
  * @export default
  * @hidden
@@ -9,7 +9,7 @@ import DataSource from './data/data_source';
  */
 export default class DataHelperMixin {
     /**
-     * @docid DataHelperMixinMethods.getDataSource
+     * @docid
      * @publicName getDataSource()
      * @return DataSource
      * @prevFileNamespace DevExpress

@@ -3,7 +3,7 @@ import {
 } from '../animation/position';
 
 /**
- * @docid config
+ * @docid
  * @publicName config()
  * @type method
  * @return globalConfig
@@ -16,7 +16,7 @@ import {
 declare function config(): globalConfig;
 
 /**
- * @docid config
+ * @docid
  * @publicName config(config)
  * @param1 config:globalConfig
  * @namespace DevExpress
@@ -27,9 +27,17 @@ declare function config(): globalConfig;
  */
 declare function config(config: globalConfig): void;
 
+/**
+* @docid
+* @section commonObjectStructures
+* @type object
+* @namespace DevExpress
+* @module core/config
+* @export default
+*/
 export interface globalConfig {
     /**
-     * @docid globalConfig.decimalSeparator
+     * @docid
      * @type string
      * @default "."
      * @deprecated
@@ -38,7 +46,7 @@ export interface globalConfig {
      */
     decimalSeparator?: string;
     /**
-     * @docid globalConfig.defaultCurrency
+     * @docid
      * @default "USD"
      * @type string
      * @prevFileNamespace DevExpress.core
@@ -46,7 +54,7 @@ export interface globalConfig {
      */
     defaultCurrency?: string;
     /**
-     * @docid globalConfig.editorStylingMode
+     * @docid
      * @type Enums.EditorStylingMode
      * @default undefined
      * @prevFileNamespace DevExpress.core
@@ -54,14 +62,52 @@ export interface globalConfig {
      */
     editorStylingMode?: 'outlined' | 'underlined' | 'filled';
     /**
-     * @docid globalConfig.floatingActionButtonConfig
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.core
      * @public
      */
-    floatingActionButtonConfig?: { closeIcon?: string, direction?: 'auto' | 'up' | 'down', icon?: string, label?: string, maxSpeedDialActionCount?: number, position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function, shading?: boolean };
+    floatingActionButtonConfig?: {
+      /**
+      * @docid
+      * @default "close"
+      */
+      closeIcon?: string,
+      /**
+      * @docid
+      * @type Enums.floatingActionButtonDirection
+      * @default "auto"
+      */
+      direction?: 'auto' | 'up' | 'down',
+      /**
+      * @docid
+      * @default "add"
+      */
+      icon?: string,
+      /**
+      * @docid
+      * @default ""
+      */
+      label?: string,
+      /**
+      * @docid
+      * @default 5
+      */
+      maxSpeedDialActionCount?: number,
+      /**
+      * @docid
+      * @type Enums.PositionAlignment|positionConfig|function
+      * @default "{ at: 'right bottom', my: 'right bottom', offset: '-16 -16' }"
+      */
+      position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function,
+      /**
+      * @docid
+      * @default false
+      */
+      shading?: boolean
+    };
     /**
-     * @docid globalConfig.forceIsoDateParsing
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.core
@@ -69,7 +115,7 @@ export interface globalConfig {
      */
     forceIsoDateParsing?: boolean;
     /**
-     * @docid globalConfig.oDataFilterToLower
+     * @docid
      * @default true
      * @type boolean
      * @prevFileNamespace DevExpress.core
@@ -77,7 +123,7 @@ export interface globalConfig {
      */
     oDataFilterToLower?: boolean;
     /**
-     * @docid globalConfig.rtlEnabled
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.core
@@ -85,7 +131,7 @@ export interface globalConfig {
      */
     rtlEnabled?: boolean;
     /**
-     * @docid globalConfig.serverDecimalSeparator
+     * @docid
      * @type string
      * @default "."
      * @prevFileNamespace DevExpress.core
@@ -93,7 +139,7 @@ export interface globalConfig {
      */
     serverDecimalSeparator?: string;
     /**
-     * @docid globalConfig.thousandsSeparator
+     * @docid
      * @type string
      * @default ","
      * @deprecated
@@ -102,7 +148,7 @@ export interface globalConfig {
      */
     thousandsSeparator?: string;
     /**
-     * @docid globalConfig.useLegacyStoreResult
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.core
@@ -110,7 +156,7 @@ export interface globalConfig {
      */
     useLegacyStoreResult?: boolean;
     /**
-     * @docid globalConfig.useLegacyVisibleIndex
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.core

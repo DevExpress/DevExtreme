@@ -5,7 +5,7 @@ import {
 } from './validation_group';
 
 /**
- * @docid validationEngine
+ * @docid
  * @section Core
  * @namespace DevExpress
  * @module ui/validation_engine
@@ -15,7 +15,7 @@ import {
  */
 export default class validationEngine {
     /**
-     * @docid validationEngineMethods.getGroupConfig
+     * @docid
      * @section Core
      * @publicName getGroupConfig()
      * @return object
@@ -25,7 +25,7 @@ export default class validationEngine {
      */
     static getGroupConfig(): any;
     /**
-     * @docid validationEngineMethods.getGroupConfig
+     * @docid
      * @section Core
      * @publicName getGroupConfig(group)
      * @param1 group:string|object
@@ -36,7 +36,7 @@ export default class validationEngine {
      */
     static getGroupConfig(group: string | any): any;
     /**
-     * @docid validationEngineMethods.registerModelForValidation
+     * @docid
      * @publicName registerModelForValidation(model)
      * @param1 model:object
      * @static
@@ -45,7 +45,7 @@ export default class validationEngine {
      */
     static registerModelForValidation(model: any): void;
     /**
-     * @docid validationEngineMethods.resetGroup
+     * @docid
      * @section Core
      * @publicName resetGroup()
      * @static
@@ -54,7 +54,7 @@ export default class validationEngine {
      */
     static resetGroup(): void;
     /**
-     * @docid validationEngineMethods.resetGroup
+     * @docid
      * @section Core
      * @publicName resetGroup(group)
      * @param1 group:string|object
@@ -64,7 +64,7 @@ export default class validationEngine {
      */
     static resetGroup(group: string | any): void;
     /**
-     * @docid validationEngineMethods.unregisterModelForValidation
+     * @docid
      * @publicName unregisterModelForValidation(model)
      * @param1 model:object
      * @static
@@ -73,7 +73,7 @@ export default class validationEngine {
      */
     static unregisterModelForValidation(model: any): void;
     /**
-     * @docid validationEngineMethods.validateGroup
+     * @docid
      * @section Core
      * @publicName validateGroup()
      * @return dxValidationGroupResult
@@ -83,7 +83,7 @@ export default class validationEngine {
      */
     static validateGroup(): dxValidationGroupResult;
     /**
-     * @docid validationEngineMethods.validateGroup
+     * @docid
      * @section Core
      * @publicName validateGroup(group)
      * @param1 group:string|object
@@ -94,7 +94,7 @@ export default class validationEngine {
      */
     static validateGroup(group: string | any): dxValidationGroupResult;
     /**
-     * @docid validationEngineMethods.validateModel
+     * @docid
      * @publicName validateModel(model)
      * @param1 model:object
      * @return object
@@ -105,9 +105,14 @@ export default class validationEngine {
     static validateModel(model: any): any;
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface AsyncRule {
     /**
-     * @docid AsyncRule.ignoreEmptyValue
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -115,7 +120,7 @@ export interface AsyncRule {
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid AsyncRule.message
+     * @docid
      * @type string
      * @default 'Value is invalid'
      * @prevFileNamespace DevExpress.ui
@@ -123,7 +128,7 @@ export interface AsyncRule {
      */
     message?: string;
     /**
-     * @docid AsyncRule.reevaluate
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -131,14 +136,14 @@ export interface AsyncRule {
      */
     reevaluate?: boolean;
     /**
-     * @docid AsyncRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     /**
-     * @docid AsyncRule.validationCallback
+     * @docid
      * @type function
      * @type_function_return Promise<any>
      * @type_function_param1 options:object
@@ -154,9 +159,14 @@ export interface AsyncRule {
     validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => Promise<any> | JQueryPromise<any>);
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface CompareRule {
     /**
-     * @docid CompareRule.comparisonTarget
+     * @docid
      * @type function
      * @type_function_return object
      * @prevFileNamespace DevExpress.ui
@@ -164,7 +174,7 @@ export interface CompareRule {
      */
     comparisonTarget?: (() => any);
     /**
-     * @docid CompareRule.comparisonType
+     * @docid
      * @type Enums.ComparisonOperator
      * @default '=='
      * @prevFileNamespace DevExpress.ui
@@ -172,7 +182,7 @@ export interface CompareRule {
      */
     comparisonType?: '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
     /**
-     * @docid CompareRule.ignoreEmptyValue
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -180,7 +190,7 @@ export interface CompareRule {
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid CompareRule.message
+     * @docid
      * @type string
      * @default 'Values do not match'
      * @prevFileNamespace DevExpress.ui
@@ -188,7 +198,7 @@ export interface CompareRule {
      */
     message?: string;
     /**
-     * @docid CompareRule.reevaluate
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -196,7 +206,7 @@ export interface CompareRule {
      */
     reevaluate?: boolean;
     /**
-     * @docid CompareRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -204,9 +214,14 @@ export interface CompareRule {
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface CustomRule {
     /**
-     * @docid CustomRule.ignoreEmptyValue
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -214,7 +229,7 @@ export interface CustomRule {
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid CustomRule.message
+     * @docid
      * @type string
      * @default 'Value is invalid'
      * @prevFileNamespace DevExpress.ui
@@ -222,7 +237,7 @@ export interface CustomRule {
      */
     message?: string;
     /**
-     * @docid CustomRule.reevaluate
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -230,14 +245,14 @@ export interface CustomRule {
      */
     reevaluate?: boolean;
     /**
-     * @docid CustomRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     /**
-     * @docid CustomRule.validationCallback
+     * @docid
      * @type function
      * @type_function_return boolean
      * @type_function_param1 options:object
@@ -253,9 +268,14 @@ export interface CustomRule {
     validationCallback?: ((options: { value?: string | number, rule?: any, validator?: any, data?: any, column?: any, formItem?: any }) => boolean);
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface EmailRule {
     /**
-     * @docid EmailRule.ignoreEmptyValue
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -263,7 +283,7 @@ export interface EmailRule {
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid EmailRule.message
+     * @docid
      * @type string
      * @default 'Email is invalid'
      * @prevFileNamespace DevExpress.ui
@@ -271,7 +291,7 @@ export interface EmailRule {
      */
     message?: string;
     /**
-     * @docid EmailRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -279,9 +299,14 @@ export interface EmailRule {
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface NumericRule {
     /**
-     * @docid NumericRule.ignoreEmptyValue
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -289,7 +314,7 @@ export interface NumericRule {
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid NumericRule.message
+     * @docid
      * @type string
      * @default 'Value should be a number'
      * @prevFileNamespace DevExpress.ui
@@ -297,7 +322,7 @@ export interface NumericRule {
      */
     message?: string;
     /**
-     * @docid NumericRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -305,9 +330,14 @@ export interface NumericRule {
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface PatternRule {
     /**
-     * @docid PatternRule.ignoreEmptyValue
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -315,7 +345,7 @@ export interface PatternRule {
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid PatternRule.message
+     * @docid
      * @type string
      * @default 'Value does not match pattern'
      * @prevFileNamespace DevExpress.ui
@@ -323,14 +353,14 @@ export interface PatternRule {
      */
     message?: string;
     /**
-     * @docid PatternRule.pattern
+     * @docid
      * @type regexp|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     pattern?: RegExp | string;
     /**
-     * @docid PatternRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -338,9 +368,14 @@ export interface PatternRule {
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface RangeRule {
     /**
-     * @docid RangeRule.ignoreEmptyValue
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -348,14 +383,14 @@ export interface RangeRule {
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid RangeRule.max
+     * @docid
      * @type datetime|number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: Date | number;
     /**
-     * @docid RangeRule.message
+     * @docid
      * @type string
      * @default 'Value is out of range'
      * @prevFileNamespace DevExpress.ui
@@ -363,14 +398,14 @@ export interface RangeRule {
      */
     message?: string;
     /**
-     * @docid RangeRule.min
+     * @docid
      * @type datetime|number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: Date | number;
     /**
-     * @docid RangeRule.reevaluate
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -378,7 +413,7 @@ export interface RangeRule {
      */
     reevaluate?: boolean;
     /**
-     * @docid RangeRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -386,9 +421,14 @@ export interface RangeRule {
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface RequiredRule {
     /**
-     * @docid RequiredRule.message
+     * @docid
      * @type string
      * @default 'Required'
      * @prevFileNamespace DevExpress.ui
@@ -396,7 +436,7 @@ export interface RequiredRule {
      */
     message?: string;
     /**
-     * @docid RequiredRule.trim
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -404,7 +444,7 @@ export interface RequiredRule {
      */
     trim?: boolean;
     /**
-     * @docid RequiredRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -412,9 +452,14 @@ export interface RequiredRule {
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
 }
 
+/**
+ * @docid
+ * @section dxValidator
+ * @type object
+ */
 export interface StringLengthRule {
     /**
-     * @docid StringLengthRule.ignoreEmptyValue
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -422,14 +467,14 @@ export interface StringLengthRule {
      */
     ignoreEmptyValue?: boolean;
     /**
-     * @docid StringLengthRule.max
+     * @docid
      * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: number;
     /**
-     * @docid StringLengthRule.message
+     * @docid
      * @type string
      * @default 'The length of the value is not correct'
      * @prevFileNamespace DevExpress.ui
@@ -437,14 +482,14 @@ export interface StringLengthRule {
      */
     message?: string;
     /**
-     * @docid StringLengthRule.min
+     * @docid
      * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: number;
     /**
-     * @docid StringLengthRule.trim
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -452,7 +497,7 @@ export interface StringLengthRule {
      */
     trim?: boolean;
     /**
-     * @docid StringLengthRule.type
+     * @docid
      * @type Enums.ValidationRuleType
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -34,13 +34,6 @@ const TOOLBAR_ITEM_DATA_KEY = 'dxToolbarItemDataKey';
 const ToolbarBase = AsyncCollectionWidget.inherit({
     compactMode: false,
 
-
-    /**
-    * @name dxToolbarItem
-    * @inherits CollectionWidgetItem
-    * @type object
-    */
-
     ctor: function(element, options) {
         this._userOptions = options || {};
 

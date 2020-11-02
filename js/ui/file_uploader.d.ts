@@ -16,7 +16,7 @@ import UploadInfo from '../file_management/upload_info';
 
 export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     /**
-     * @docid dxFileUploaderOptions.abortUpload
+     * @docid
      * @type function
      * @type_function_param1 file:File
      * @type_function_param2 uploadInfo?:UploadInfo
@@ -26,7 +26,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     abortUpload?: ((file: File, uploadInfo?: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
     /**
-     * @docid dxFileUploaderOptions.accept
+     * @docid
      * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
@@ -34,7 +34,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     accept?: string;
     /**
-     * @docid dxFileUploaderOptions.allowCanceling
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -42,7 +42,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     allowCanceling?: boolean;
     /**
-     * @docid dxFileUploaderOptions.allowedFileExtensions
+     * @docid
      * @type Array<string>
      * @default []
      * @prevFileNamespace DevExpress.ui
@@ -50,7 +50,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     allowedFileExtensions?: Array<string>;
     /**
-     * @docid dxFileUploaderOptions.chunkSize
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -58,7 +58,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     chunkSize?: number;
     /**
-     * @docid dxFileUploaderOptions.focusStateEnabled
+     * @docid
      * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -66,7 +66,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxFileUploaderOptions.invalidFileExtensionMessage
+     * @docid
      * @type string
      * @default "File type is not allowed"
      * @prevFileNamespace DevExpress.ui
@@ -74,7 +74,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     invalidFileExtensionMessage?: string;
     /**
-     * @docid dxFileUploaderOptions.invalidMaxFileSizeMessage
+     * @docid
      * @type string
      * @default "File is too large"
      * @prevFileNamespace DevExpress.ui
@@ -82,7 +82,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     invalidMaxFileSizeMessage?: string;
     /**
-     * @docid dxFileUploaderOptions.invalidMinFileSizeMessage
+     * @docid
      * @type string
      * @default "File is too small"
      * @prevFileNamespace DevExpress.ui
@@ -90,7 +90,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     invalidMinFileSizeMessage?: string;
     /**
-     * @docid dxFileUploaderOptions.inputAttr
+     * @docid
      * @type object
      * @default {}
      * @prevFileNamespace DevExpress.ui
@@ -98,7 +98,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     inputAttr?: any;
     /**
-     * @docid dxFileUploaderOptions.labelText
+     * @docid
      * @type string
      * @default "or Drop file here"
      * @prevFileNamespace DevExpress.ui
@@ -106,7 +106,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     labelText?: string;
     /**
-     * @docid dxFileUploaderOptions.maxFileSize
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -114,7 +114,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     maxFileSize?: number;
     /**
-     * @docid dxFileUploaderOptions.minFileSize
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -122,7 +122,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     minFileSize?: number;
     /**
-     * @docid dxFileUploaderOptions.multiple
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -130,7 +130,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     multiple?: boolean;
     /**
-     * @docid dxFileUploaderOptions.name
+     * @docid
      * @type string
      * @default "files[]"
      * @prevFileNamespace DevExpress.ui
@@ -138,7 +138,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     name?: string;
     /**
-     * @docid dxFileUploaderOptions.onBeforeSend
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -151,7 +151,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onBeforeSend?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, request?: XMLHttpRequest, file?: File, uploadInfo?: UploadInfo }) => any);
     /**
-     * @docid dxFileUploaderOptions.onDropZoneEnter
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -163,7 +163,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onDropZoneEnter?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, dropZoneElement?: dxElement, event?: event }) => any);
     /**
-     * @docid dxFileUploaderOptions.onDropZoneLeave
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -175,7 +175,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onDropZoneLeave?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, dropZoneElement?: dxElement, event?: event }) => any);
     /**
-     * @docid dxFileUploaderOptions.onFilesUploaded
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -185,7 +185,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onFilesUploaded?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxFileUploaderOptions.onProgress
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -201,7 +201,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onProgress?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, segmentSize?: number, bytesLoaded?: number, bytesTotal?: number, event?: event, request?: XMLHttpRequest }) => any);
     /**
-     * @docid dxFileUploaderOptions.onUploadAborted
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -215,7 +215,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onUploadAborted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest, message?: string }) => any);
     /**
-     * @docid dxFileUploaderOptions.onUploadError
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -230,7 +230,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onUploadError?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest, error?: any, message?: string }) => any);
     /**
-     * @docid dxFileUploaderOptions.onUploadStarted
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -243,7 +243,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onUploadStarted?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest }) => any);
     /**
-     * @docid dxFileUploaderOptions.onUploaded
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -257,7 +257,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onUploaded?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, file?: File, event?: event, request?: XMLHttpRequest, message?: string }) => any);
     /**
-     * @docid dxFileUploaderOptions.onValueChanged
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -270,7 +270,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     onValueChanged?: ((e: { component?: dxFileUploader, element?: dxElement, model?: any, value?: Array<File>, previousValue?: Array<File>, event?: event }) => any);
     /**
-     * @docid dxFileUploaderOptions.progress
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
@@ -278,7 +278,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     progress?: number;
     /**
-     * @docid dxFileUploaderOptions.readyToUploadMessage
+     * @docid
      * @type string
      * @default "Ready to upload"
      * @prevFileNamespace DevExpress.ui
@@ -286,7 +286,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     readyToUploadMessage?: string;
     /**
-     * @docid dxFileUploaderOptions.selectButtonText
+     * @docid
      * @type string
      * @default "Select File"
      * @prevFileNamespace DevExpress.ui
@@ -294,7 +294,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     selectButtonText?: string;
     /**
-     * @docid dxFileUploaderOptions.showFileList
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -302,7 +302,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     showFileList?: boolean;
     /**
-     * @docid dxFileUploaderOptions.dialogTrigger
+     * @docid
      * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -310,7 +310,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     dialogTrigger?: string | Element | JQuery;
     /**
-     * @docid dxFileUploaderOptions.dropZone
+     * @docid
      * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
@@ -318,7 +318,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     dropZone?: string | Element | JQuery;
     /**
-     * @docid dxFileUploaderOptions.uploadButtonText
+     * @docid
      * @type string
      * @default "Upload"
      * @prevFileNamespace DevExpress.ui
@@ -326,7 +326,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadButtonText?: string;
     /**
-     * @docid dxFileUploaderOptions.uploadChunk
+     * @docid
      * @type function
      * @type_function_param1 file:File
      * @type_function_param2 uploadInfo:UploadInfo
@@ -336,7 +336,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadChunk?: ((file: File, uploadInfo: UploadInfo) => Promise<any> | JQueryPromise<any> | any);
     /**
-     * @docid dxFileUploaderOptions.uploadFailedMessage
+     * @docid
      * @type string
      * @default "Upload failed"
      * @prevFileNamespace DevExpress.ui
@@ -344,7 +344,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadFailedMessage?: string;
     /**
-     * @docid dxFileUploaderOptions.uploadAbortedMessage
+     * @docid
      * @type string
      * @default "Upload cancelled"
      * @prevFileNamespace DevExpress.ui
@@ -352,7 +352,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadAbortedMessage?: string;
     /**
-     * @docid dxFileUploaderOptions.uploadFile
+     * @docid
      * @type function
      * @type_function_param1 file:File
      * @type_function_param2 progressCallback:Function
@@ -362,7 +362,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadFile?: ((file: File, progressCallback: Function) => Promise<any> | JQueryPromise<any> | any);
     /**
-     * @docid dxFileUploaderOptions.uploadHeaders
+     * @docid
      * @type object
      * @default {}
      * @prevFileNamespace DevExpress.ui
@@ -370,7 +370,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadHeaders?: any;
     /**
-     * @docid dxFileUploaderOptions.uploadCustomData
+     * @docid
      * @type object
      * @default {}
      * @prevFileNamespace DevExpress.ui
@@ -378,7 +378,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadCustomData?: any;
     /**
-     * @docid dxFileUploaderOptions.uploadMethod
+     * @docid
      * @type Enums.UploadHttpMethod
      * @default "POST"
      * @prevFileNamespace DevExpress.ui
@@ -386,7 +386,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadMethod?: 'POST' | 'PUT';
     /**
-     * @docid dxFileUploaderOptions.uploadMode
+     * @docid
      * @type Enums.FileUploadMode
      * @default "instantly"
      * @prevFileNamespace DevExpress.ui
@@ -394,7 +394,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadMode?: 'instantly' | 'useButtons' | 'useForm';
     /**
-     * @docid dxFileUploaderOptions.uploadUrl
+     * @docid
      * @type string
      * @default "/"
      * @prevFileNamespace DevExpress.ui
@@ -402,7 +402,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadUrl?: string;
     /**
-     * @docid dxFileUploaderOptions.uploadedMessage
+     * @docid
      * @type string
      * @default "Uploaded"
      * @prevFileNamespace DevExpress.ui
@@ -410,7 +410,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
      */
     uploadedMessage?: string;
     /**
-     * @docid dxFileUploaderOptions.value
+     * @docid
      * @type Array<File>
      * @default []
      * @prevFileNamespace DevExpress.ui
@@ -419,7 +419,7 @@ export interface dxFileUploaderOptions extends EditorOptions<dxFileUploader> {
     value?: Array<File>;
 }
 /**
- * @docid dxFileUploader
+ * @docid
  * @inherits Editor
  * @module ui/file_uploader
  * @export default
@@ -430,14 +430,14 @@ export default class dxFileUploader extends Editor {
     constructor(element: Element, options?: dxFileUploaderOptions)
     constructor(element: JQuery, options?: dxFileUploaderOptions)
     /**
-     * @docid dxFileUploaderMethods.upload
+     * @docid
      * @publicName upload()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     upload(): void;
     /**
-     * @docid dxFileUploaderMethods.upload
+     * @docid
      * @publicName upload(fileIndex)
      * @param1 fileIndex:number
      * @prevFileNamespace DevExpress.ui
@@ -445,7 +445,7 @@ export default class dxFileUploader extends Editor {
      */
     upload(fileIndex: number): void;
     /**
-     * @docid dxFileUploaderMethods.upload
+     * @docid
      * @publicName upload(file)
      * @param1 file:File
      * @prevFileNamespace DevExpress.ui
@@ -453,14 +453,14 @@ export default class dxFileUploader extends Editor {
      */
     upload(file: File): void;
     /**
-     * @docid dxFileUploaderMethods.abortUpload
+     * @docid
      * @publicName abortUpload()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     abortUpload(): void;
     /**
-     * @docid dxFileUploaderMethods.abortUpload
+     * @docid
      * @publicName abortUpload(fileIndex)
      * @param1 fileIndex:number
      * @prevFileNamespace DevExpress.ui
@@ -468,7 +468,7 @@ export default class dxFileUploader extends Editor {
      */
     abortUpload(fileIndex: number): void;
     /**
-     * @docid dxFileUploaderMethods.abortUpload
+     * @docid
      * @publicName abortUpload(file)
      * @param1 file:File
      * @prevFileNamespace DevExpress.ui
@@ -476,7 +476,7 @@ export default class dxFileUploader extends Editor {
      */
     abortUpload(file: File): void;
     /**
-     * @docid dxFileUploaderMethods.removeFile
+     * @docid
      * @publicName removeFile(fileIndex)
      * @param1 fileIndex:number
      * @prevFileNamespace DevExpress.ui
@@ -484,7 +484,7 @@ export default class dxFileUploader extends Editor {
      */
     removeFile(fileIndex: number): void;
     /**
-     * @docid dxFileUploaderMethods.removeFile
+     * @docid
      * @publicName removeFile(file)
      * @param1 file:File
      * @prevFileNamespace DevExpress.ui

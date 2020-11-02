@@ -121,11 +121,6 @@ const ActionSheet = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         /**
-        * @name dxActionSheetItem
-        * @inherits CollectionWidgetItem
-        * @type object
-        */
-        /**
         * @name dxActionSheetItem.visible
         * @type boolean
         * @default true
@@ -395,13 +390,13 @@ const ActionSheet = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxActionSheetMethods.registerKeyHandler
+    * @name dxActionSheet.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxActionSheetMethods.focus
+    * @name dxActionSheet.focus
     * @publicName focus()
     * @hidden
     */

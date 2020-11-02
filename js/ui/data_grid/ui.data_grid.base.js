@@ -91,12 +91,6 @@ const DataGrid = Widget.inherit({
                 options: {
                     showRowLines: true,
                     showColumnLines: false,
-                    /**
-                     * @name GridBaseOptions.headerFilter.height
-                     * @type number
-                     * @default 315 @for Material
-                     * @default 325
-                     */
                     headerFilter: {
                         height: 315
                     },
@@ -129,12 +123,6 @@ const DataGrid = Widget.inherit({
                 },
                 options: {
                     grouping: {
-                        /**
-                         * @name dxDataGridOptions.grouping.expandMode
-                         * @default 'rowClick' @for mobile_devices
-                         * @type Enums.GridGroupingExpandMode
-                         * @default "buttonClick"
-                         */
                         expandMode: 'rowClick'
                     }
                 }

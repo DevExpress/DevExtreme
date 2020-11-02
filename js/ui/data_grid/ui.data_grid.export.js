@@ -649,94 +649,18 @@ dataGridCore.registerModule('export', {
     defaultOptions: function() {
         return {
             'export': {
-                /**
-                 * @name dxDataGridOptions.export.enabled
-                 * @type boolean
-                 * @default false
-                 */
                 enabled: false,
-                /**
-                 * @name dxDataGridOptions.export.fileName
-                 * @type string
-                 * @default "DataGrid"
-                 * @deprecated
-                 */
                 fileName: 'DataGrid',
-                /**
-                 * @name dxDataGridOptions.export.excelFilterEnabled
-                 * @type boolean
-                 * @default false
-                 * @deprecated
-                 */
                 excelFilterEnabled: false,
-                /**
-                 * @name dxDataGridOptions.export.excelWrapTextEnabled
-                 * @type boolean
-                 * @default undefined
-                 * @deprecated
-                 */
                 excelWrapTextEnabled: undefined,
-                /**
-                 * @name dxDataGridOptions.export.proxyUrl
-                 * @type string
-                 * @default undefined
-                 * @deprecated
-                 */
                 proxyUrl: undefined,
-                /**
-                 * @name dxDataGridOptions.export.allowExportSelectedData
-                 * @type boolean
-                 * @default false
-                 */
                 allowExportSelectedData: false,
-                /**
-                * @name dxDataGridOptions.export.ignoreExcelErrors
-                * @type boolean
-                * @default true
-                * @deprecated
-                */
                 ignoreExcelErrors: true,
-                /**
-                 * @name dxDataGridOptions.export.texts
-                 * @type object
-                 */
                 texts: {
-                    /**
-                     * @name dxDataGridOptions.export.texts.exportTo
-                     * @type string
-                     * @default "Export"
-                     */
                     exportTo: messageLocalization.format('dxDataGrid-exportTo'),
-                    /**
-                     * @name dxDataGridOptions.export.texts.exportAll
-                     * @type string
-                     * @default "Export all data"
-                     */
                     exportAll: messageLocalization.format('dxDataGrid-exportAll'),
-                    /**
-                     * @name dxDataGridOptions.export.texts.exportSelectedRows
-                     * @type string
-                     * @default "Export selected rows"
-                     */
                     exportSelectedRows: messageLocalization.format('dxDataGrid-exportSelectedRows')
                 }
-                /**
-                 * @name dxDataGridOptions.export.customizeExcelCell
-                 * @deprecated
-                 * @type function(options)
-                 * @type_function_param1 options:object
-                 * @type_function_param1_field1 component:dxDataGrid
-                 * @type_function_param1_field2 horizontalAlignment:Enums.ExcelCellHorizontalAlignment
-                 * @type_function_param1_field3 verticalAlignment:Enums.ExcelCellVerticalAlignment
-                 * @type_function_param1_field4 wrapTextEnabled:boolean
-                 * @type_function_param1_field5 backgroundColor:string
-                 * @type_function_param1_field6 fillPatternType:Enums.ExcelCellPatternType
-                 * @type_function_param1_field7 fillPatternColor:string
-                 * @type_function_param1_field8 font:ExcelFont
-                 * @type_function_param1_field9 value:string|number|date
-                 * @type_function_param1_field10 numberFormat:string
-                 * @type_function_param1_field11 gridCell:ExcelDataGridCell
-                 */
             }
         };
     },

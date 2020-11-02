@@ -11,9 +11,14 @@ export type DashStyleType = 'dash' | 'dot' | 'longDash' | 'solid';
 export type TimeIntervalType = 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
 export type HatchingDirectionType = 'left' | 'none' | 'right';
 
+/**
+* @docid
+* @hidden
+* @type object
+*/
 export interface BaseLegend {
     /**
-     * @docid BaseLegend.backgroundColor
+     * @docid
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -21,14 +26,46 @@ export interface BaseLegend {
      */
     backgroundColor?: string;
     /**
-     * @docid BaseLegend.border
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyleType, opacity?: number, visible?: boolean, width?: number };
+    border?: {
+      /**
+       * @docid
+       * @default '#d3d3d3'
+       */
+      color?: string,
+      /**
+       * @docid
+       * @default 0
+       */
+      cornerRadius?: number,
+      /**
+      * @docid
+       * @type Enums.DashStyle
+       * @default 'solid'
+       */
+      dashStyle?: DashStyleType,
+      /**
+       * @docid
+       * @default undefined
+       */
+      opacity?: number,
+      /**
+       * @docid
+       * @default false
+       */
+      visible?: boolean,
+      /**
+       * @docid
+       * @default 1
+       */
+      width?: number
+    };
     /**
-     * @docid BaseLegend.columnCount
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
@@ -36,7 +73,7 @@ export interface BaseLegend {
      */
     columnCount?: number;
     /**
-     * @docid BaseLegend.columnItemSpacing
+     * @docid
      * @type number
      * @default 20
      * @prevFileNamespace DevExpress.viz
@@ -44,7 +81,7 @@ export interface BaseLegend {
      */
     columnItemSpacing?: number;
     /**
-     * @docid BaseLegend.font
+     * @docid
      * @type Font
      * @default '#767676' [prop](color)
      * @prevFileNamespace DevExpress.viz
@@ -52,7 +89,7 @@ export interface BaseLegend {
      */
     font?: Font;
     /**
-     * @docid BaseLegend.horizontalAlignment
+     * @docid
      * @type Enums.HorizontalAlignment
      * @default 'right'
      * @prevFileNamespace DevExpress.viz
@@ -60,7 +97,7 @@ export interface BaseLegend {
      */
     horizontalAlignment?: 'center' | 'left' | 'right';
     /**
-     * @docid BaseLegend.itemTextPosition
+     * @docid
      * @type Enums.Position
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -68,7 +105,7 @@ export interface BaseLegend {
      */
     itemTextPosition?: 'bottom' | 'left' | 'right' | 'top';
     /**
-     * @docid BaseLegend.itemsAlignment
+     * @docid
      * @type Enums.HorizontalAlignment
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -76,15 +113,36 @@ export interface BaseLegend {
      */
     itemsAlignment?: 'center' | 'left' | 'right';
     /**
-     * @docid BaseLegend.margin
+     * @docid
      * @type number | object
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    margin?: number | { bottom?: number, left?: number, right?: number, top?: number };
+    margin?: number | {
+      /**
+       * @docid
+       * @default 10
+       */
+      bottom?: number,
+      /**
+       * @docid
+       * @default 10
+       */
+      left?: number,
+      /**
+       * @docid
+       * @default 10
+       */
+      right?: number,
+      /**
+       * @docid
+       * @default 10
+       */
+      top?: number
+    };
     /**
-     * @docid BaseLegend.markerSize
+     * @docid
      * @type number
      * @default 20
      * @prevFileNamespace DevExpress.viz
@@ -92,7 +150,7 @@ export interface BaseLegend {
      */
     markerSize?: number;
     /**
-     * @docid BaseLegend.orientation
+     * @docid
      * @type Enums.Orientation
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -100,7 +158,7 @@ export interface BaseLegend {
      */
     orientation?: 'horizontal' | 'vertical';
     /**
-     * @docid BaseLegend.paddingLeftRight
+     * @docid
      * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
@@ -108,7 +166,7 @@ export interface BaseLegend {
      */
     paddingLeftRight?: number;
     /**
-     * @docid BaseLegend.paddingTopBottom
+     * @docid
      * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
@@ -116,7 +174,7 @@ export interface BaseLegend {
      */
     paddingTopBottom?: number;
     /**
-     * @docid BaseLegend.rowCount
+     * @docid
      * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
@@ -124,7 +182,7 @@ export interface BaseLegend {
      */
     rowCount?: number;
     /**
-     * @docid BaseLegend.rowItemSpacing
+     * @docid
      * @type number
      * @default 8
      * @prevFileNamespace DevExpress.viz
@@ -132,14 +190,97 @@ export interface BaseLegend {
      */
     rowItemSpacing?: number;
     /**
-     * @docid BaseLegend.title
+     * @docid
      * @type object|string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    title?: { font?: Font, horizontalAlignment?: 'center' | 'left' | 'right', margin?: { bottom?: number, left?: number, right?: number, top?: number }, placeholderSize?: number, subtitle?: { font?: Font, offset?: number, text?: string } | string, text?: string, verticalAlignment?: 'bottom' | 'top' } | string;
+    title?: {
+      /**
+      * @docid
+      * @type Font
+      * @default '#232323' [prop](color)
+      * @default 18 [prop](size)
+      * @default 200 [prop](weight)
+      * @extends CommonVizLightFontFamily
+      */
+      font?: Font,
+      /**
+      * @docid
+      * @type Enums.HorizontalAlignment
+      * @default undefined
+      */
+      horizontalAlignment?: 'center' | 'left' | 'right',
+      /**
+      * @docid
+      * @type object
+      */
+      margin?: {
+        /**
+        * @docid
+        * @default 9
+        */
+        bottom?: number,
+        /**
+        * @docid
+        * @default 0
+        */
+        left?: number,
+        /**
+        * @docid
+        * @default 0
+        */
+        right?: number,
+        /**
+        * @docid
+        * @default 0
+        */
+        top?: number
+      },
+      /**
+      * @docid
+      * @default undefined
+      */
+      placeholderSize?: number,
+      /**
+      * @docid
+      * @type object|string
+      */
+      subtitle?: {
+        /**
+        * @docid
+        * @type Font
+        * @default '#232323' [prop](color)
+        * @default 14 [prop](size)
+        * @default 200 [prop](weight)
+        * @extends CommonVizLightFontFamily
+        */
+        font?: Font,
+        /**
+        * @docid
+        * @default 0
+        */
+        offset?: number,
+        /**
+        * @docid
+        * @default null
+        */
+        text?: string
+      } | string,
+      /**
+      * @docid
+      * @default null
+      */
+      text?: string,
+      /**
+      * @docid
+      * @type Enums.VerticalEdge
+      * @default 'top'
+      */
+      verticalAlignment?: 'bottom' | 'top'
+    } | string;
     /**
-     * @docid BaseLegend.verticalAlignment
+     * @docid
      * @type Enums.VerticalEdge
      * @default 'top'
      * @prevFileNamespace DevExpress.viz
@@ -147,7 +288,7 @@ export interface BaseLegend {
      */
     verticalAlignment?: 'bottom' | 'top';
     /**
-     * @docid BaseLegend.visible
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
@@ -156,23 +297,46 @@ export interface BaseLegend {
     visible?: boolean;
 }
 
+/**
+* @docid
+* @hidden
+* @type object
+*/
 export interface BaseLegendItem {
     /**
-     * @docid BaseLegendItem.marker
+     * @docid
      * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
-    marker?: { fill?: string, opacity?: number, size?: number, state?: 'normal' | 'hovered' | 'selected' };
+    marker?: {
+      /**
+      * @docid
+      */
+      fill?: string,
+      /**
+      * @docid
+      */
+      opacity?: number,
+      /**
+      * @docid
+      */
+      size?: number,
+      /**
+      * @docid
+      * @type Enums.LegendMarkerState
+      */
+      state?: 'normal' | 'hovered' | 'selected'
+    };
     /**
-     * @docid BaseLegendItem.text
+     * @docid
      * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     text?: string;
     /**
-     * @docid BaseLegendItem.visible
+     * @docid
      * @type boolean
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -180,9 +344,15 @@ export interface BaseLegendItem {
     visible?: boolean;
 }
 
+/**
+ * @docid
+ * @type object
+ * @inherits dxChartSeriesTypesCommonSeries
+ * @hidden
+ */
 export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
     /**
-     * @docid ChartSeries.name
+     * @docid
      * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -190,7 +360,7 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
      */
     name?: string;
     /**
-     * @docid ChartSeries.tag
+     * @docid
      * @type any
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -198,7 +368,7 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
      */
     tag?: any;
     /**
-     * @docid ChartSeries.type
+     * @docid
      * @type Enums.SeriesType
      * @default 'line'
      * @prevFileNamespace DevExpress.viz
@@ -207,9 +377,14 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
     type?: ChartSeriesType;
 }
 
+/**
+* @docid
+* @hidden
+* @type object
+*/
 export interface ScaleBreak {
     /**
-     * @docid ScaleBreak.endValue
+     * @docid
      * @type number|date|string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -217,7 +392,7 @@ export interface ScaleBreak {
      */
     endValue?: number | Date | string;
     /**
-     * @docid ScaleBreak.startValue
+     * @docid
      * @type number|date|string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
@@ -226,9 +401,14 @@ export interface ScaleBreak {
     startValue?: number | Date | string;
 }
 
+/**
+* @docid
+* @hidden
+* @type object
+*/
 export interface VizRange {
     /**
-     * @docid VizRange.endValue
+     * @docid
      * @type number|date|string
      * @default undefined
      * @fires BaseWidgetOptions.onOptionChanged
@@ -237,15 +417,16 @@ export interface VizRange {
      */
     endValue?: number | Date | string;
     /**
-     * @docid VizRange.length
+     * @docid
      * @inherits VizTimeInterval
+     * @type number|object|Enums.VizTimeInterval
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     length?: number | any | TimeIntervalType;
     /**
-     * @docid VizRange.startValue
+     * @docid
      * @type number|date|string
      * @default undefined
      * @fires BaseWidgetOptions.onOptionChanged

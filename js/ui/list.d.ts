@@ -31,7 +31,7 @@ import {
 
 export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBoxMixinOptions<dxList> {
     /**
-     * @docid dxListOptions.activeStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -39,7 +39,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     activeStateEnabled?: boolean;
     /**
-     * @docid dxListOptions.allowItemDeleting
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -47,7 +47,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     allowItemDeleting?: boolean;
     /**
-     * @docid dxListOptions.bounceEnabled
+     * @docid
      * @type boolean
      * @default true
      * @default false [for](desktop)
@@ -56,7 +56,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     bounceEnabled?: boolean;
     /**
-     * @docid dxListOptions.collapsibleGroups
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -64,7 +64,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     collapsibleGroups?: boolean;
     /**
-     * @docid dxListOptions.dataSource
+     * @docid
      * @type string|Array<string,dxListItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -72,7 +72,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     dataSource?: string | Array<string | dxListItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxListOptions.displayExpr
+     * @docid
      * @type string|function(item)
      * @default undefined
      * @type_function_param1 item:object
@@ -82,7 +82,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     displayExpr?: string | ((item: any) => string);
     /**
-     * @docid dxListOptions.focusStateEnabled
+     * @docid
      * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -90,7 +90,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxListOptions.groupTemplate
+     * @docid
      * @type template|function
      * @default "group"
      * @type_function_param1 groupData:object
@@ -102,7 +102,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     groupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: dxElement) => string | Element | JQuery);
     /**
-     * @docid dxListOptions.grouped
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -110,7 +110,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     grouped?: boolean;
     /**
-     * @docid dxListOptions.hoverStateEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -118,7 +118,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     hoverStateEnabled?: boolean;
     /**
-     * @docid dxListOptions.indicateLoading
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -126,7 +126,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     indicateLoading?: boolean;
     /**
-     * @docid dxListOptions.itemDeleteMode
+     * @docid
      * @type Enums.ListItemDeleteMode
      * @default 'static'
      * @default 'slideItem' [for](iOS)
@@ -136,14 +136,14 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     itemDeleteMode?: 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
     /**
-     * @docid dxListOptions.itemDragging
+     * @docid
      * @type dxSortableOptions
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemDragging?: dxSortableOptions;
     /**
-     * @docid dxListOptions.items
+     * @docid
      * @type Array<string, dxListItem, object>
      * @fires dxListOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -151,15 +151,27 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     items?: Array<string | dxListItem | any>;
     /**
-     * @docid dxListOptions.menuItems
+     * @docid
      * @type Array<Object>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    menuItems?: Array<{ action?: ((itemElement: dxElement, itemData: any) => any), text?: string }>;
+    menuItems?: Array<{
+      /**
+      * @docid
+      * @type function
+      * @type_function_param1 itemElement:dxElement
+      * @type_function_param2 itemData:object
+      */
+      action?: ((itemElement: dxElement, itemData: any) => any),
+      /**
+      * @docid
+      */
+      text?: string
+    }>;
     /**
-     * @docid dxListOptions.menuMode
+     * @docid
      * @type Enums.ListMenuMode
      * @default 'context'
      * @default 'slide' [for](iOS)
@@ -168,7 +180,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     menuMode?: 'context' | 'slide';
     /**
-     * @docid dxListOptions.nextButtonText
+     * @docid
      * @type string
      * @default "More"
      * @prevFileNamespace DevExpress.ui
@@ -176,7 +188,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     nextButtonText?: string;
     /**
-     * @docid dxListOptions.onGroupRendered
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -189,7 +201,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onGroupRendered?: ((e: { component?: dxList, element?: dxElement, model?: any, groupData?: any, groupElement?: dxElement, groupIndex?: number }) => any);
     /**
-     * @docid dxListOptions.onItemClick
+     * @docid
      * @extends Action
      * @type function(e)|string
      * @type_function_param1 e:object
@@ -203,7 +215,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onItemClick?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event }) => any) | string;
     /**
-     * @docid dxListOptions.onItemContextMenu
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -217,7 +229,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onItemContextMenu?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event }) => any);
     /**
-     * @docid dxListOptions.onItemDeleted
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -231,7 +243,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onItemDeleted?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any }) => any);
     /**
-     * @docid dxListOptions.onItemDeleting
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -246,7 +258,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onItemDeleting?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
     /**
-     * @docid dxListOptions.onItemHold
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -260,7 +272,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onItemHold?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, event?: event }) => any);
     /**
-     * @docid dxListOptions.onItemReordered
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -276,7 +288,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onItemReordered?: ((e: { component?: dxList, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, fromIndex?: number, toIndex?: number }) => any);
     /**
-     * @docid dxListOptions.onItemSwipe
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -291,7 +303,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onItemSwipe?: ((e: { component?: dxList, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement, itemIndex?: number | any, direction?: string }) => any);
     /**
-     * @docid dxListOptions.onPageLoading
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -299,7 +311,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onPageLoading?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxListOptions.onPullRefresh
+     * @docid
      * @extends Action
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -307,7 +319,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onPullRefresh?: ((e: { component?: dxList, element?: dxElement, model?: any }) => any);
     /**
-     * @docid dxListOptions.onScroll
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -323,7 +335,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onScroll?: ((e: { component?: dxList, element?: dxElement, model?: any, event?: event, scrollOffset?: any, reachedLeft?: boolean, reachedRight?: boolean, reachedTop?: boolean, reachedBottom?: boolean }) => any);
     /**
-     * @docid dxListOptions.onSelectAllValueChanged
+     * @docid
      * @extends Action
      * @type function(e)
      * @type_function_param1 e:object
@@ -334,7 +346,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     onSelectAllValueChanged?: ((e: { component?: dxList, element?: dxElement, model?: any, value?: boolean }) => any);
     /**
-     * @docid dxListOptions.pageLoadMode
+     * @docid
      * @type Enums.ListPageLoadMode
      * @default "scrollBottom"
      * @default 'nextButton' [for](desktop)
@@ -343,7 +355,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     pageLoadMode?: 'nextButton' | 'scrollBottom';
     /**
-     * @docid dxListOptions.pageLoadingText
+     * @docid
      * @type string
      * @default "Loading..."
      * @default "" [for](Material)
@@ -352,7 +364,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     pageLoadingText?: string;
     /**
-     * @docid dxListOptions.pullRefreshEnabled
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -360,7 +372,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     pullRefreshEnabled?: boolean;
     /**
-     * @docid dxListOptions.pulledDownText
+     * @docid
      * @type string
      * @default "Release to refresh..."
      * @default "" [for](Material)
@@ -369,7 +381,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     pulledDownText?: string;
     /**
-     * @docid dxListOptions.pullingDownText
+     * @docid
      * @type string
      * @default "Pull down to refresh..."
      * @default "" [for](Material)
@@ -378,7 +390,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     pullingDownText?: string;
     /**
-     * @docid dxListOptions.refreshingText
+     * @docid
      * @type string
      * @default "Refreshing..."
      * @default "" [for](Material)
@@ -387,7 +399,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     refreshingText?: string;
     /**
-     * @docid dxListOptions.repaintChangesOnly
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -395,7 +407,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     repaintChangesOnly?: boolean;
     /**
-     * @docid dxListOptions.scrollByContent
+     * @docid
      * @type boolean
      * @default true
      * @default false [for](non-touch_devices)
@@ -404,7 +416,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     scrollByContent?: boolean;
     /**
-     * @docid dxListOptions.scrollByThumb
+     * @docid
      * @type boolean
      * @default false
      * @default true [for](desktop)
@@ -413,7 +425,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     scrollByThumb?: boolean;
     /**
-     * @docid dxListOptions.scrollingEnabled
+     * @docid
      * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -421,7 +433,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     scrollingEnabled?: boolean;
     /**
-     * @docid dxListOptions.selectAllMode
+     * @docid
      * @type Enums.SelectAllMode
      * @default 'page'
      * @prevFileNamespace DevExpress.ui
@@ -429,7 +441,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     selectAllMode?: 'allPages' | 'page';
     /**
-     * @docid dxListOptions.selectionMode
+     * @docid
      * @type Enums.ListSelectionMode
      * @default 'none'
      * @prevFileNamespace DevExpress.ui
@@ -437,7 +449,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     selectionMode?: 'all' | 'multiple' | 'none' | 'single';
     /**
-     * @docid dxListOptions.showScrollbar
+     * @docid
      * @type Enums.ShowScrollbarMode
      * @default 'onScroll'
      * @default 'onHover' [for](desktop)
@@ -446,7 +458,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     showScrollbar?: 'always' | 'never' | 'onHover' | 'onScroll';
     /**
-     * @docid dxListOptions.showSelectionControls
+     * @docid
      * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -454,7 +466,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
      */
     showSelectionControls?: boolean;
     /**
-     * @docid dxListOptions.useNativeScrolling
+     * @docid
      * @default false [for](desktop)
      * @default true [for](Mac)
      * @type boolean
@@ -465,7 +477,7 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     useNativeScrolling?: boolean;
 }
 /**
- * @docid dxList
+ * @docid
  * @inherits CollectionWidget, SearchBoxMixin
  * @module ui/list
  * @export default
@@ -476,7 +488,7 @@ export default class dxList extends CollectionWidget {
     constructor(element: Element, options?: dxListOptions)
     constructor(element: JQuery, options?: dxListOptions)
     /**
-     * @docid dxListMethods.clientHeight
+     * @docid
      * @publicName clientHeight()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -484,7 +496,7 @@ export default class dxList extends CollectionWidget {
      */
     clientHeight(): number;
     /**
-     * @docid dxListMethods.collapseGroup
+     * @docid
      * @publicName collapseGroup(groupIndex)
      * @param1 groupIndex:Number
      * @return Promise<void>
@@ -493,7 +505,7 @@ export default class dxList extends CollectionWidget {
      */
     collapseGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.deleteItem
+     * @docid
      * @publicName deleteItem(itemElement)
      * @param1 itemElement:Element
      * @return Promise<void>
@@ -502,7 +514,7 @@ export default class dxList extends CollectionWidget {
      */
     deleteItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.deleteItem
+     * @docid
      * @publicName deleteItem(itemIndex)
      * @param1 itemIndex:Number|Object
      * @return Promise<void>
@@ -511,7 +523,7 @@ export default class dxList extends CollectionWidget {
      */
     deleteItem(itemIndex: number | any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.expandGroup
+     * @docid
      * @publicName expandGroup(groupIndex)
      * @param1 groupIndex:Number
      * @return Promise<void>
@@ -520,7 +532,7 @@ export default class dxList extends CollectionWidget {
      */
     expandGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.isItemSelected
+     * @docid
      * @publicName isItemSelected(itemElement)
      * @param1 itemElement:Element
      * @return boolean
@@ -529,7 +541,7 @@ export default class dxList extends CollectionWidget {
      */
     isItemSelected(itemElement: Element): boolean;
     /**
-     * @docid dxListMethods.isItemSelected
+     * @docid
      * @publicName isItemSelected(itemIndex)
      * @param1 itemIndex:Number|Object
      * @return boolean
@@ -538,14 +550,14 @@ export default class dxList extends CollectionWidget {
      */
     isItemSelected(itemIndex: number | any): boolean;
     /**
-     * @docid dxListMethods.reload
+     * @docid
      * @publicName reload()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reload(): void;
     /**
-     * @docid dxListMethods.reorderItem
+     * @docid
      * @publicName reorderItem(itemElement, toItemElement)
      * @param1 itemElement:Element
      * @param2 toItemElement:Element
@@ -555,7 +567,7 @@ export default class dxList extends CollectionWidget {
      */
     reorderItem(itemElement: Element, toItemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.reorderItem
+     * @docid
      * @publicName reorderItem(itemIndex, toItemIndex)
      * @param1 itemIndex:Number|Object
      * @param2 toItemIndex:Number|Object
@@ -565,7 +577,7 @@ export default class dxList extends CollectionWidget {
      */
     reorderItem(itemIndex: number | any, toItemIndex: number | any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.scrollBy
+     * @docid
      * @publicName scrollBy(distance)
      * @param1 distance:numeric
      * @prevFileNamespace DevExpress.ui
@@ -573,7 +585,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollBy(distance: number): void;
     /**
-     * @docid dxListMethods.scrollHeight
+     * @docid
      * @publicName scrollHeight()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -581,7 +593,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollHeight(): number;
     /**
-     * @docid dxListMethods.scrollTo
+     * @docid
      * @publicName scrollTo(location)
      * @param1 location:numeric
      * @prevFileNamespace DevExpress.ui
@@ -589,7 +601,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollTo(location: number): void;
     /**
-     * @docid dxListMethods.scrollToItem
+     * @docid
      * @publicName scrollToItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
@@ -597,7 +609,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollToItem(itemElement: Element): void;
     /**
-     * @docid dxListMethods.scrollToItem
+     * @docid
      * @publicName scrollToItem(itemIndex)
      * @param1 itemIndex:Number|Object
      * @prevFileNamespace DevExpress.ui
@@ -605,7 +617,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollToItem(itemIndex: number | any): void;
     /**
-     * @docid dxListMethods.scrollTop
+     * @docid
      * @publicName scrollTop()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -613,14 +625,14 @@ export default class dxList extends CollectionWidget {
      */
     scrollTop(): number;
     /**
-     * @docid dxListMethods.selectAll
+     * @docid
      * @publicName selectAll()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectAll(): void;
     /**
-     * @docid dxListMethods.selectItem
+     * @docid
      * @publicName selectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
@@ -628,7 +640,7 @@ export default class dxList extends CollectionWidget {
      */
     selectItem(itemElement: Element): void;
     /**
-     * @docid dxListMethods.selectItem
+     * @docid
      * @publicName selectItem(itemIndex)
      * @param1 itemIndex:Number|Object
      * @prevFileNamespace DevExpress.ui
@@ -636,14 +648,14 @@ export default class dxList extends CollectionWidget {
      */
     selectItem(itemIndex: number | any): void;
     /**
-     * @docid dxListMethods.unselectAll
+     * @docid
      * @publicName unselectAll()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     unselectAll(): void;
     /**
-     * @docid dxListMethods.unselectItem
+     * @docid
      * @publicName unselectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
@@ -651,7 +663,7 @@ export default class dxList extends CollectionWidget {
      */
     unselectItem(itemElement: Element): void;
     /**
-     * @docid dxListMethods.unselectItem
+     * @docid
      * @publicName unselectItem(itemIndex)
      * @param1 itemIndex:Number|Object
      * @prevFileNamespace DevExpress.ui
@@ -659,7 +671,7 @@ export default class dxList extends CollectionWidget {
      */
     unselectItem(itemIndex: number | any): void;
     /**
-     * @docid dxListMethods.updateDimensions
+     * @docid
      * @publicName updateDimensions()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -668,30 +680,35 @@ export default class dxList extends CollectionWidget {
     updateDimensions(): Promise<void> & JQueryPromise<void>;
 }
 
+/**
+* @docid
+* @inherits CollectionWidgetItem
+* @type object
+*/
 export interface dxListItem extends CollectionWidgetItem {
     /**
-     * @docid dxListItem.badge
+     * @docid
      * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
     /**
-     * @docid dxListItem.icon
+     * @docid
      * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
-     * @docid dxListItem.key
+     * @docid
      * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     key?: string;
     /**
-     * @docid dxListItem.showChevron
+     * @docid
      * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public

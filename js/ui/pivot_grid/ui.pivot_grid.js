@@ -166,7 +166,7 @@ function clickedOnFieldsArea($targetElement) {
 */
 
 /**
-* @name dxPivotGridMethods.registerKeyHandler
+* @name dxPivotGrid.registerKeyHandler
 * @publicName registerKeyHandler(key, handler)
 * @hidden
 */
@@ -179,19 +179,8 @@ const PivotGrid = Widget.inherit({
                 timeout: 300,
                 renderingThreshold: 150,
                 minTimeout: 10,
-                /**
-                 * @name dxPivotGridOptions.scrolling.mode
-                 * @type Enums.PivotGridScrollingMode
-                 * @default "standard"
-                 */
                 mode: 'standard',
-                /**
-                 * @name dxPivotGridOptions.scrolling.useNative
-                 * @type boolean|Enums.Mode
-                 * @default "auto"
-                 */
                 useNative: 'auto',
-
                 removeInvisiblePages: true,
                 virtualRowHeight: 50,
                 virtualColumnWidth: 100,
@@ -203,83 +192,14 @@ const PivotGrid = Widget.inherit({
             fieldChooser: {
                 minWidth: 250,
                 minHeight: 250,
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.enabled
-                 * @type boolean
-                 * @default true
-                 */
                 enabled: true,
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.allowSearch
-                 * @type boolean
-                 * @default false
-                 */
                 allowSearch: false,
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.searchTimeout
-                 * @type number
-                 * @default searchTimeout
-                 */
                 searchTimeout: 500,
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.layout
-                 * @type Enums.PivotGridFieldChooserLayout
-                 * @default 0
-                 */
                 layout: 0,
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.title
-                 * @type string
-                 * @default "Field Chooser"
-                 */
                 title: localizationMessage.format('dxPivotGrid-fieldChooserTitle'),
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.width
-                 * @type number
-                 * @default 600
-                 */
                 width: 600,
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.height
-                 * @type number
-                 * @default 600
-                 */
                 height: 600,
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.applyChangesMode
-                 * @type Enums.ApplyChangesMode
-                 * @default "instantly"
-                 */
                 applyChangesMode: 'instantly'
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.texts
-                 * @type object
-                 */
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.texts.columnFields
-                 * @type string
-                 * @default 'Column Fields'
-                 */
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.texts.rowFields
-                 * @type string
-                 * @default 'Row Fields'
-                 */
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.texts.dataFields
-                 * @type string
-                 * @default 'Data Fields'
-                 */
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.texts.filterFields
-                 * @type string
-                 * @default 'Filter Fields'
-                 */
-                /**
-                 * @name dxPivotGridOptions.fieldChooser.texts.allFields
-                 * @type string
-                 * @default 'All Fields'
-                 */
             },
             onContextMenuPreparing: null,
             allowSorting: false,
@@ -288,105 +208,27 @@ const PivotGrid = Widget.inherit({
             allowExpandAll: false,
             wordWrapEnabled: true,
             fieldPanel: {
-                /**
-                * @name dxPivotGridOptions.fieldPanel.showColumnFields
-                * @type boolean
-                * @default true
-                */
                 showColumnFields: true,
-                /**
-                * @name dxPivotGridOptions.fieldPanel.showFilterFields
-                * @type boolean
-                * @default true
-                */
                 showFilterFields: true,
-
-                /**
-                * @name dxPivotGridOptions.fieldPanel.showDataFields
-                * @type boolean
-                * @default true
-                */
                 showDataFields: true,
 
-                /**
-                * @name dxPivotGridOptions.fieldPanel.showRowFields
-                * @type boolean
-                * @default true
-                */
                 showRowFields: true,
-                /**
-                * @name dxPivotGridOptions.fieldPanel.allowFieldDragging
-                * @type boolean
-                * @default true
-                */
                 allowFieldDragging: true,
-                /**
-                * @name dxPivotGridOptions.fieldPanel.visible
-                * @type boolean
-                * @default false
-                */
                 visible: false,
 
-                /**
-                * @name dxPivotGridOptions.fieldPanel.texts
-                * @type object
-                */
                 texts: {
-                    /**
-                    * @name dxPivotGridOptions.fieldPanel.texts.columnFieldArea
-                    * @type string
-                    * @default "Drop Column Fields Here"
-                    */
                     columnFieldArea: localizationMessage.format('dxPivotGrid-columnFieldArea'),
-                    /**
-                    * @name dxPivotGridOptions.fieldPanel.texts.rowFieldArea
-                    * @type string
-                    * @default "Drop Row Fields Here"
-                    */
                     rowFieldArea: localizationMessage.format('dxPivotGrid-rowFieldArea'),
-                    /**
-                    * @name dxPivotGridOptions.fieldPanel.texts.filterFieldArea
-                    * @type string
-                    * @default "Drop Filter Fields Here"
-                    */
                     filterFieldArea: localizationMessage.format('dxPivotGrid-filterFieldArea'),
-                    /**
-                    * @name dxPivotGridOptions.fieldPanel.texts.dataFieldArea
-                    * @type string
-                    * @default "Drop Data Fields Here"
-                    */
                     dataFieldArea: localizationMessage.format('dxPivotGrid-dataFieldArea')
                 }
             },
             dataFieldArea: 'column',
 
             'export': {
-                /**
-                 * @name dxPivotGridOptions.export.enabled
-                 * @type boolean
-                 * @default false
-                 */
                 enabled: false,
-                /**
-                 * @name dxPivotGridOptions.export.fileName
-                 * @type string
-                 * @default "PivotGrid"
-                 * @deprecated
-                 */
                 fileName: 'PivotGrid',
-                /**
-                 * @name dxPivotGridOptions.export.proxyUrl
-                 * @type string
-                 * @default undefined
-                 * @deprecated
-                 */
                 proxyUrl: undefined,
-                /**
-                 * @name dxPivotGridOptions.export.ignoreExcelErrors
-                 * @type boolean
-                 * @default true
-                 * @deprecated
-                 */
                 ignoreExcelErrors: true
             },
             showRowTotals: true,
@@ -398,129 +240,25 @@ const PivotGrid = Widget.inherit({
             rowHeaderLayout: 'standard',
 
             loadPanel: {
-                /**
-                 * @name dxPivotGridOptions.loadPanel.enabled
-                 * @type boolean
-                 * @default true
-                 */
                 enabled: true,
-                /**
-                 * @name dxPivotGridOptions.loadPanel.text
-                 * @type string
-                 * @default 'Loading...'
-                 */
                 text: localizationMessage.format('Loading'),
-                /**
-                 * @name dxPivotGridOptions.loadPanel.width
-                 * @type number
-                 * @default 200
-                 */
                 width: 200,
-                /**
-                 * @name dxPivotGridOptions.loadPanel.height
-                 * @type number
-                 * @default 70
-                 */
                 height: 70,
-                /**
-                * @name dxPivotGridOptions.loadPanel.showIndicator
-                * @type boolean
-                * @default true
-                */
                 showIndicator: true,
-
-                /**
-                * @name dxPivotGridOptions.loadPanel.indicatorSrc
-                * @type string
-                * @default ""
-                */
                 indicatorSrc: '',
-
-                /**
-                * @name dxPivotGridOptions.loadPanel.showPane
-                * @type boolean
-                * @default true
-                */
-                showPane: true
-
-                /**
-                * @name dxPivotGridOptions.loadPanel.shading
-                * @type boolean
-                * @default false
-                */
-
-                /**
-                * @name dxPivotGridOptions.loadPanel.shadingColor
-                * @type string
-                * @default ''
-                */
+                showPane: true,
             },
             texts: {
-                /**
-                 * @name dxPivotGridOptions.texts.grandTotal
-                 * @type string
-                 * @default 'Grand Total'
-                 */
                 grandTotal: localizationMessage.format('dxPivotGrid-grandTotal'),
-                /**
-                 * @name dxPivotGridOptions.texts.total
-                 * @type string
-                 * @default '{0} Total'
-                 */
                 total: localizationMessage.getFormatter('dxPivotGrid-total'),
-                /**
-                 * @name dxPivotGridOptions.texts.noData
-                 * @type string
-                 * @default 'No data'
-                 */
                 noData: localizationMessage.format('dxDataGrid-noDataText'),
-                /**
-                  * @name dxPivotGridOptions.texts.showFieldChooser
-                  * @type string
-                  * @default 'Show Field Chooser'
-                  */
                 showFieldChooser: localizationMessage.format('dxPivotGrid-showFieldChooser'),
-                /**
-                 * @name dxPivotGridOptions.texts.expandAll
-                 * @type string
-                 * @default 'Expand All'
-                 */
                 expandAll: localizationMessage.format('dxPivotGrid-expandAll'),
-                /**
-                 * @name dxPivotGridOptions.texts.collapseAll
-                 * @type string
-                 * @default 'Collapse All'
-                 */
                 collapseAll: localizationMessage.format('dxPivotGrid-collapseAll'),
-                /**
-                 * @name dxPivotGridOptions.texts.sortColumnBySummary
-                 * @type string
-                 * @default 'Sort {0} by This Column'
-                 */
                 sortColumnBySummary: localizationMessage.getFormatter('dxPivotGrid-sortColumnBySummary'),
-                /**
-                 * @name dxPivotGridOptions.texts.sortRowBySummary
-                 * @type string
-                 * @default 'Sort {0} by This Row'
-                 */
                 sortRowBySummary: localizationMessage.getFormatter('dxPivotGrid-sortRowBySummary'),
-                /**
-                 * @name dxPivotGridOptions.texts.removeAllSorting
-                 * @type string
-                 * @default 'Remove All Sorting'
-                 */
                 removeAllSorting: localizationMessage.format('dxPivotGrid-removeAllSorting'),
-                /**
-                 * @name dxPivotGridOptions.texts.exportToExcel
-                 * @type string
-                 * @default "Export to Excel file"
-                 */
                 exportToExcel: localizationMessage.format('dxDataGrid-exportToExcel'),
-                /**
-                 * @name dxPivotGridOptions.texts.dataNotAvailable
-                 * @type string
-                 * @default "N/A"
-                 */
                 dataNotAvailable: localizationMessage.format('dxPivotGrid-dataNotAvailable')
             },
             onCellClick: null,
@@ -528,44 +266,11 @@ const PivotGrid = Widget.inherit({
             showBorders: false,
 
             stateStoring: {
-                /**
-                 * @name dxPivotGridOptions.stateStoring.enabled
-                 * @type boolean
-                 * @default false
-                 */
                 enabled: false,
-                /**
-                 * @name dxPivotGridOptions.stateStoring.storageKey
-                 * @type string
-                 * @default null
-                 */
                 storageKey: null,
-                /**
-                 * @name dxPivotGridOptions.stateStoring.type
-                 * @type Enums.StateStoringType
-                 * @default "localStorage"
-                 */
                 type: 'localStorage',
-
-                /**
-                 * @name dxPivotGridOptions.stateStoring.customLoad
-                 * @type function()
-                 * @type_function_return Promise<Object>
-                 */
                 customLoad: null,
-
-                /**
-                 * @name dxPivotGridOptions.stateStoring.customSave
-                 * @type function(state)
-                 * @type_function_param1 state:object
-                 */
                 customSave: null,
-
-                /**
-                 * @name dxPivotGridOptions.stateStoring.savingTimeout
-                 * @type number
-                 * @default 2000
-                 */
                 savingTimeout: 2000
             },
 
@@ -575,58 +280,14 @@ const PivotGrid = Widget.inherit({
             onExported: null,
             onFileSaving: null,
             headerFilter: {
-                /**
-                 * @name dxPivotGridOptions.headerFilter.width
-                 * @type number
-                 * @default 252
-                 */
                 width: 252,
-                /**
-                 * @name dxPivotGridOptions.headerFilter.height
-                 * @type number
-                 * @default 325
-                 */
                 height: 325,
-                /**
-                 * @name dxPivotGridOptions.headerFilter.allowSearch
-                 * @type boolean
-                 * @default false
-                 */
                 allowSearch: false,
-                /**
-                 * @name dxPivotGridOptions.headerFilter.showRelevantValues
-                 * @type boolean
-                 * @default false
-                 */
                 showRelevantValues: false,
-                /**
-                 * @name dxPivotGridOptions.headerFilter.searchTimeout
-                 * @type number
-                 * @default searchTimeout
-                 */
                 searchTimeout: 500,
-                /**
-                 * @name dxPivotGridOptions.headerFilter.texts
-                 * @type object
-                 */
                 texts: {
-                    /**
-                     * @name dxPivotGridOptions.headerFilter.texts.emptyValue
-                     * @type string
-                     * @default "(Blanks)"
-                     */
                     emptyValue: localizationMessage.format('dxDataGrid-headerFilterEmptyValue'),
-                    /**
-                     * @name dxPivotGridOptions.headerFilter.texts.ok
-                     * @type string
-                     * @default "Ok"
-                     */
                     ok: localizationMessage.format('dxDataGrid-headerFilterOK'),
-                    /**
-                     * @name dxPivotGridOptions.headerFilter.texts.cancel
-                     * @type string
-                     * @default "Cancel"
-                     */
                     cancel: localizationMessage.format('dxDataGrid-headerFilterCancel')
                 }
             }
