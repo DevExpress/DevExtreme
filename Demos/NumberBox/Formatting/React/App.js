@@ -11,7 +11,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <NumberBox
                 format="$ #,##0.##"
-                value={14500.55} />
+                defaultValue={14500.55} />
             </div>
           </div>
           <div className="dx-field">
@@ -19,7 +19,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <NumberBox
                 format="$ #,##0.##;($ #,##0.##)"
-                value={-2314.12} />
+                defaultValue={-2314.12} />
             </div>
           </div>
           <div className="dx-field">
@@ -27,7 +27,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <NumberBox
                 format="#0%"
-                value={0.15}
+                defaultValue={0.15}
                 step={0.01} />
             </div>
           </div>
@@ -36,7 +36,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <NumberBox
                 format="#,##0.00"
-                value={13415.24} />
+                defaultValue={13415.24} />
             </div>
           </div>
           <div className="dx-field">
@@ -44,7 +44,7 @@ class App extends React.Component {
             <div className="dx-field-value">
               <NumberBox
                 format="#0.## kg"
-                value={3.14} />
+                defaultValue={3.14} />
             </div>
           </div>
         </div>

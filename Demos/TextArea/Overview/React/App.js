@@ -37,7 +37,7 @@ class App extends React.Component {
           <TextArea
             height={90}
             maxLength={this.state.maxLength}
-            value={this.state.value} />
+            defaultValue={this.state.value} />
         </div>
         <div className="full-width-content">
           <div className="dx-fieldset">
