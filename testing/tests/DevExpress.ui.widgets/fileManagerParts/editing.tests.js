@@ -1104,7 +1104,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
         this.clock.tick(400);
         // Select destination directory 'Folder 1/Folder 1.2'
-        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getFolderNodeByText('Folder 1.2', true).trigger('dxclick');
         this.wrapper.getDialogButton('Copy').trigger('dxclick');
 
         this.clock.tick(operationDelay + 1);
@@ -1142,7 +1142,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         this.wrapper.getToolbarButton('Move to').trigger('dxclick');
         this.clock.tick(400);
         // Select destination directory 'Folder 1/Folder 1.2'
-        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getFolderNodeByText('Folder 1.2', true).trigger('dxclick');
         this.wrapper.getDialogButton('Move').trigger('dxclick');
 
         this.clock.tick(operationDelay + 1);
