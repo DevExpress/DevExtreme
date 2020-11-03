@@ -451,7 +451,6 @@ class AppointmentModel {
 
     filterLoadedAppointments(filterOption, timeZoneCalculator) {
         const combinedFilter = this._createAppointmentFilter(filterOption, timeZoneCalculator);
-
         return query(this.getPreparedDataItems()).filter(combinedFilter).toArray();
     }
 
@@ -463,7 +462,7 @@ class AppointmentModel {
 
             this.replaceWrongEndDate(item, startDate, endDate);
 
-            return extend(true, {}, item);
+            return item;
         });
     }
 
@@ -475,7 +474,6 @@ class AppointmentModel {
 
             this._dataAccessors.setter.endDate(appointment, endDate);
         }
-        return endDate;
     }
 
     filterLoadedVirtualAppointments(filterOptions, timeZoneCalculator, groupCount) {
@@ -581,6 +579,8 @@ class AppointmentModel {
         return ((appointment) => {
             const startDate = new Date(this._dataAccessors.getter.startDate(appointment));
             const endDate = new Date(this._dataAccessors.getter.endDate(appointment));
+
+            appointment = extend(true, {}, appointment);
 
             const startDateTimeZone = this._dataAccessors.getter.startDateTimeZone(appointment);
             const endDateTimeZone = this._dataAccessors.getter.endDateTimeZone(appointment);

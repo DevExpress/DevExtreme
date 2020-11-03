@@ -1157,4 +1157,44 @@ const timeZoneCalculator = {
 
         assert.deepEqual(appts, [], 'Appointments are OK');
     });
+
+    QUnit.test('Wrong endDate of appointment should be replaced before filtering', function(assert) {
+        const appointmentModel = new dxSchedulerAppointmentModel(new DataSource({ store: [] }), {
+            getter: {
+                startDate: compileGetter('StartDate'),
+                endDate: compileGetter('EndDate'),
+                recurrenceRule: compileGetter('RecurrenceRule'),
+                recurrenceException: compileGetter('Exception'),
+                allDay: compileGetter('AllDay'),
+                startDateTimeZone: compileGetter('StartDateTimeZone'),
+                endDateTimeZone: compileGetter('EndDateTimeZone')
+            },
+            setter: {
+                startDate: compileSetter('StartDate'),
+                endDate: compileSetter('EndDate')
+            },
+            expr: {
+                startDateExpr: 'StartDate',
+                endDateExpr: 'EndDate',
+                allDayExpr: 'AllDay',
+                recurrenceRuleExpr: 'RecurrenceRule',
+                recurrenceExceptionExpr: 'Exception'
+            }
+        }, 60);
+
+        appointmentModel.add({
+            text: 'a',
+            StartDate: new Date(2015, 2, 1, 11, 0),
+            EndDate: new Date(2015, 2, 1, 1, 0)
+        });
+
+        const appts = appointmentModel.filterLoadedAppointments({
+            startDayHour: 0,
+            endDayHour: 24,
+            min: new Date(2015, 2, 1),
+            max: new Date(2015, 2, 8)
+        }, timeZoneCalculator);
+
+        assert.deepEqual(appts[0].EndDate, new Date(2015, 2, 1, 12, 0), 'EndDate of appointment should be replaced by correct value');
+    });
 })('Client side after filtering');
