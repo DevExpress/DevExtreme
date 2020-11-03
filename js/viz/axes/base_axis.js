@@ -1064,7 +1064,7 @@ Axis.prototype = {
         }
     },
 
-    resolveLogarithmicOptionsForRange(range) {
+    _resolveLogarithmicOptionsForRange(range) {
         const options = this._options;
         if(options.type === constants.logarithmic) {
             range.addRange({
@@ -1132,7 +1132,7 @@ Axis.prototype = {
         !isDefined(result.min) && (result.min = result.minVisible);
         !isDefined(result.max) && (result.max = result.maxVisible);
         result.addRange({}); // controlValuesByVisibleBounds
-        that.resolveLogarithmicOptionsForRange(result);
+        that._resolveLogarithmicOptionsForRange(result);
 
         return result;
     },
@@ -1294,7 +1294,7 @@ Axis.prototype = {
             invert: options.inverted
         });
 
-        that.resolveLogarithmicOptionsForRange(that._seriesData);
+        that._resolveLogarithmicOptionsForRange(that._seriesData);
 
         if(!isDiscrete) {
             if(!isDefined(that._seriesData.min) && !isDefined(that._seriesData.max)) {
