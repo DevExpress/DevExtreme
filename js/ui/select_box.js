@@ -12,6 +12,7 @@ import { render } from './widget/utils.ink_ripple';
 import messageLocalization from '../localization/message';
 import registerComponent from '../core/component_registrator';
 import DropDownList from './drop_down_editor/ui.drop_down_list';
+import { normalizeKeyName } from '../events/utils/index';
 
 // STYLE selectBox
 
@@ -345,7 +346,7 @@ const SelectBox = DropDownList.inherit({
             const isLastItem = selectedIndex === this._items().length - 1;
 
             this._saveValueChangeEvent(e);
-            const step = e.key === 'ArrowDown' ? 1 : -1;
+            const step = normalizeKeyName(e) === 'downArrow' ? 1 : -1;
 
             if(hasPages && !isLastPage && isLastItem && step > 0) {
                 if(!this._popup) {
