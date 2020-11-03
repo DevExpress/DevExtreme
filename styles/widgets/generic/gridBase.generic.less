@@ -201,10 +201,16 @@
         }
 
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
-            .dx-command-edit-with-icons .dx-link {
-                .dx-icon-sizing(@GENERIC_COMMAND_EDIT_ICON_SIZE);
+            .dx-command-edit-with-icons {
+                .dx-link {
+                    .dx-icon-sizing(@GENERIC_COMMAND_EDIT_ICON_SIZE);
 
-                margin: 0 @GENERIC_COMMAND_EDIT_ICON_MARGIN;
+                    margin: 0 @GENERIC_COMMAND_EDIT_ICON_MARGIN;
+                }
+
+                .dx-link:not(.dx-link-icon) {
+                    width: auto;
+                }
             }
         }
 
