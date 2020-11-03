@@ -451,17 +451,40 @@ class AppointmentModel {
 
     filterLoadedAppointments(filterOption, timeZoneCalculator) {
         const combinedFilter = this._createAppointmentFilter(filterOption, timeZoneCalculator);
-        return query(this._dataSource.items()).filter(combinedFilter).toArray();
+
+        return query(this.getPreparedDataItems()).filter(combinedFilter).toArray();
+    }
+
+    getPreparedDataItems() {
+        const dataItems = this._dataSource.items();
+        return map(dataItems, (item) => {
+            const startDate = new Date(this._dataAccessors.getter.startDate(item));
+            const endDate = new Date(this._dataAccessors.getter.endDate(item));
+
+            this.replaceWrongEndDate(item, startDate, endDate);
+
+            return extend(true, {}, item);
+        });
+    }
+
+    replaceWrongEndDate(appointment, startDate, endDate) {
+        if(this._isEndDateWrong(startDate, endDate)) {
+            const isAllDay = this._dataAccessors.getter.allDay(appointment);
+
+            endDate = this._calculateAppointmentEndDate(isAllDay, startDate);
+
+            this._dataAccessors.setter.endDate(appointment, endDate);
+        }
+        return endDate;
     }
 
     filterLoadedVirtualAppointments(filterOptions, timeZoneCalculator, groupCount) {
         const combinedFilters = [];
-        const dataItems = this._dataSource.items();
 
-        let itemsToFilter = dataItems;
+        let itemsToFilter = this.getPreparedDataItems();
         const needPreFilter = groupCount > 0;
         if(needPreFilter) {
-            itemsToFilter = dataItems.filter(item => {
+            itemsToFilter = itemsToFilter.filter(item => {
                 for(let i = 0; i < filterOptions.length; ++i) {
                     const { resources } = filterOptions[i];
                     if(this._filterAppointmentByResources(item, resources)) {
@@ -557,11 +580,7 @@ class AppointmentModel {
 
         return ((appointment) => {
             const startDate = new Date(this._dataAccessors.getter.startDate(appointment));
-            let endDate = new Date(this._dataAccessors.getter.endDate(appointment));
-
-            endDate = this.fixWrongEndDate(appointment, startDate, endDate);
-
-            appointment = extend(true, {}, appointment);
+            const endDate = new Date(this._dataAccessors.getter.endDate(appointment));
 
             const startDateTimeZone = this._dataAccessors.getter.startDateTimeZone(appointment);
             const endDateTimeZone = this._dataAccessors.getter.endDateTimeZone(appointment);
@@ -580,17 +599,6 @@ class AppointmentModel {
 
             return query([appointment]).filter(currentFilter).toArray().length > 0;
         }).bind(this);
-    }
-
-    fixWrongEndDate(appointment, startDate, endDate) {
-        if(this._isEndDateWrong(startDate, endDate)) {
-            const isAllDay = this._dataAccessors.getter.allDay(appointment);
-
-            endDate = this._calculateAppointmentEndDate(isAllDay, startDate);
-
-            this._dataAccessors.setter.endDate(appointment, endDate);
-        }
-        return endDate;
     }
 
     _calculateAppointmentEndDate(isAllDay, startDate) {

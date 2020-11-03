@@ -761,8 +761,8 @@ const subscribes = {
         return result;
     },
 
-    fixWrongEndDate: function(appointment, startDate, endDate) {
-        return this._appointmentModel.fixWrongEndDate(appointment, startDate, endDate);
+    replaceWrongEndDate: function(appointment, startDate, endDate) {
+        return this._appointmentModel.replaceWrongEndDate(appointment, startDate, endDate);
     },
 
     calculateAppointmentEndDate: function(isAllDay, startDate) {

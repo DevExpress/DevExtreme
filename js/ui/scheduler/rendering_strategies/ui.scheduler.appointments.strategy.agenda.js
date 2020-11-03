@@ -175,7 +175,7 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
                 const startDate = this.instance.fire('getField', 'startDate', appointment);
                 const endDate = this.instance.fire('getField', 'endDate', appointment);
 
-                this.instance.fire('fixWrongEndDate', appointment, startDate, endDate);
+                this.instance.fire('replaceWrongEndDate', appointment, startDate, endDate);
 
                 needClearSettings && delete appointment.settings;
 
