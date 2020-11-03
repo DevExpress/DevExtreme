@@ -620,14 +620,14 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         let startDate = appointmentInfo.startDate;
         const recurrenceProcessor = getRecurrenceProcessor();
-        const { recurrenceRule, allDay: isAllDay } = appointmentAdapter;
+        const { recurrenceRule, allDay: isAllDay, startDateTimeZone } = appointmentAdapter;
         const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
 
         if(!e.handles.top && !isRecurrent && !isAllDay) {
             startDate = scheduler.timeZoneCalculator.createDate(
                 appointmentAdapter.startDate,
                 {
-                    appointmentTimeZone: rawAppointment.startDateTimeZone,
+                    appointmentTimeZone: startDateTimeZone,
                     path: 'toGrid'
                 },
             );
