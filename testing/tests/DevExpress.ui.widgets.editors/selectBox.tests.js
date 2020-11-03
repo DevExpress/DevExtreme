@@ -4198,13 +4198,20 @@ QUnit.module('keyboard navigation', moduleSetup, () => {
         assert.strictEqual(instance.option('value'), 1, 'upArrow');
     });
 
-    ['ArrowDown', 'ArrowUp'].forEach((key) => {
-        QUnit.test(`${key} should trigger onValueChanged with right e.event when dropDown is closed (T844170)`, function(assert) {
+    [
+        { key: 'ArrowDown', delta: 1 },
+        { key: 'ArrowUp', delta: -1 },
+        { key: 'Down', delta: 1 }, // IE11 (T945185)
+        { key: 'Up', delta: -1 } // IE11 (T945185)
+    ].forEach(({ key, delta }) => {
+        QUnit.test(`${key} should trigger onValueChanged with right e.event and value when dropDown is closed (T844170)`, function(assert) {
+            const initialValue = 1;
             const $element = $('#selectBox').dxSelectBox({
                 dataSource: [0, 1, 2],
-                value: 1,
+                value: initialValue,
                 opened: false,
                 onValueChanged: e => {
+                    assert.strictEqual(e.value, initialValue + delta, 'value is right');
                     assert.notEqual(e.event, undefined, 'e.event is defined');
                     assert.strictEqual(e.event.key, key, 'e.event.key is right');
                 }

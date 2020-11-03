@@ -15,6 +15,7 @@ const inkRipple = require('./widget/utils.ink_ripple');
 const messageLocalization = require('../localization/message');
 const registerComponent = require('../core/component_registrator');
 const DropDownList = require('./drop_down_editor/ui.drop_down_list');
+const normalizeKeyName = require('../events/utils').normalizeKeyName;
 
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
 const SELECTBOX_CLASS = 'dx-selectbox';
@@ -355,7 +356,7 @@ const SelectBox = DropDownList.inherit({
             const isLastItem = selectedIndex === this._items().length - 1;
 
             this._saveValueChangeEvent(e);
-            const step = e.key === 'ArrowDown' ? 1 : -1;
+            const step = normalizeKeyName(e) === 'downArrow' ? 1 : -1;
 
             if(hasPages && !isLastPage && isLastItem && step > 0) {
                 if(!this._popup) {
