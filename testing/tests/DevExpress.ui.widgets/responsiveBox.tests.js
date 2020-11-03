@@ -618,7 +618,7 @@ QUnit.module('option', moduleConfig, () => {
                             isDisposed = true;
                         }
                     });
-                    element.append($button);
+                    $(element).append($button);
                 },
             });
 
@@ -644,7 +644,7 @@ QUnit.module('option', moduleConfig, () => {
                             expected = true;
                         }
                     });
-                    element.append($button);
+                    $(element).append($button);
                 },
             }).dxResponsiveBox('instance');
 
