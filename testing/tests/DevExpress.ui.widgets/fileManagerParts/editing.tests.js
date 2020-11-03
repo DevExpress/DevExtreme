@@ -1083,4 +1083,112 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
     });
 
+    test('refresh during copying does not prevent files from being shown before next refresh (T928871)', function(assert) {
+        const operationDelay = 1000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            currentPath: 'Folder 1/Folder 1.1',
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        // Select folder 'Folder 1/Folder 1.1/File 1-1.txt'
+        this.wrapper.getColumnCellsInDetailsView(2).eq(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        // Invoke copy dialog
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+        // Select destination directory 'Folder 1/Folder 1.2'
+        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+
+        this.clock.tick(operationDelay + 1);
+        fileManager.refresh();
+
+        this.clock.tick(operationDelay);
+
+        const itemNames = this.wrapper.getDetailsItemNamesTexts();
+        const copiedFileIndex = itemNames.indexOf('File 1-1.txt');
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1.2', 'destination folder should be selected');
+        assert.strictEqual(itemNames.length, 1, 'file is copied');
+        assert.ok(copiedFileIndex > -1, 'file is copied');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', copiedFileIndex), '0 B', 'file size is correct');
+    });
+
+    test('refresh during moving does not prevent files from being shown before next refresh (T928871)', function(assert) {
+        const operationDelay = 1000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            currentPath: 'Folder 1/Folder 1.1',
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        // Select folder 'Folder 1/Folder 1.1/File 1-1.txt'
+        this.wrapper.getColumnCellsInDetailsView(2).eq(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        // Invoke copy dialog
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        // Select destination directory 'Folder 1/Folder 1.2'
+        this.wrapper.getFolderNodes(true).eq(3).trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+
+        this.clock.tick(operationDelay + 1);
+        fileManager.refresh();
+
+        this.clock.tick(operationDelay);
+
+        const itemNames = this.wrapper.getDetailsItemNamesTexts();
+        const copiedFileIndex = itemNames.indexOf('File 1-1.txt');
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1.2', 'destination folder should be selected');
+        assert.strictEqual(itemNames.length, 1, 'file is moved');
+        assert.ok(copiedFileIndex > -1, 'file is moved');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', copiedFileIndex), '0 B', 'file size is correct');
+    });
+
+    test('refresh during creating does not prevent folders from being shown before next refresh (T928871)', function(assert) {
+        const operationDelay = 1000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            currentPath: 'Folder 3',
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('New directory').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Create').trigger('dxclick');
+
+        this.clock.tick(operationDelay);
+        fileManager.refresh();
+
+        this.clock.tick(operationDelay);
+
+        const itemNames = this.wrapper.getDetailsItemNamesTexts();
+        const copiedFileIndex = itemNames.indexOf('Untitled directory');
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
+        assert.strictEqual(itemNames.length, 1, 'file is created');
+        assert.ok(copiedFileIndex > -1, 'file is created');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', copiedFileIndex), '\xa0', 'file size is correct');
+    });
+
 });
