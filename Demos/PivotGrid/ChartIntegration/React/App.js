@@ -9,9 +9,6 @@ import Chart, {
   Tooltip,
 } from 'devextreme-react/chart';
 
-import 'devextreme/localization/globalize/currency';
-import Globalize from 'globalize';
-
 import PivotGrid, {
   FieldChooser
 } from 'devextreme-react/pivot-grid';

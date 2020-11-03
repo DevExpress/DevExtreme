@@ -43,10 +43,6 @@ import {
   DxFieldChooser
 } from 'devextreme-vue/pivot-grid';
 
-import 'devextreme/localization/globalize/currency';
-
-import Globalize from 'globalize';
-
 import sales from './data.js';
 
 export default {
