@@ -83,7 +83,8 @@
     flex-direction: column;
     height: 0;
 
-    & > .dx-scrollable-wrapper {
+    & > .dx-scrollable-wrapper,
+    & > div > .dx-scrollable-wrapper {
       display: flex;
       flex-grow: 1;
       flex-direction: column;
