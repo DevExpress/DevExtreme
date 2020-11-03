@@ -1064,6 +1064,18 @@ Axis.prototype = {
         }
     },
 
+    resolveLogarithmicOptionsForRange(range) {
+        const options = this._options;
+        if(options.type === constants.logarithmic) {
+            range.addRange({
+                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
+            });
+            if(!isNaN(options.linearThreshold)) {
+                range.linearThreshold = options.linearThreshold;
+            }
+        }
+    },
+
     adjustViewport(businessRange) {
         const that = this;
         const options = that._options;
@@ -1120,7 +1132,7 @@ Axis.prototype = {
         !isDefined(result.min) && (result.min = result.minVisible);
         !isDefined(result.max) && (result.max = result.maxVisible);
         result.addRange({}); // controlValuesByVisibleBounds
-
+        that.resolveLogarithmicOptionsForRange(result);
 
         return result;
     },
@@ -1282,14 +1294,7 @@ Axis.prototype = {
             invert: options.inverted
         });
 
-        if(options.type === constants.logarithmic) {
-            that._seriesData.addRange({
-                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
-            });
-            if(!isNaN(options.linearThreshold)) {
-                that._seriesData.linearThreshold = options.linearThreshold;
-            }
-        }
+        that.resolveLogarithmicOptionsForRange(that._seriesData);
 
         if(!isDiscrete) {
             if(!isDefined(that._seriesData.min) && !isDefined(that._seriesData.max)) {
