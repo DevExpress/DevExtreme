@@ -194,6 +194,35 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         });
     });
 
+    QUnit.test('The width of the text command button should not equal the width of the icon command button (T945472)', function(assert) {
+        // arrange
+        const columnsWrapper = dataGridWrapper.columns;
+        createDataGrid({
+            dataSource: [{ id: 0, c0: 'c0' }],
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+                useIcons: true
+            },
+            columns: [
+                {
+                    type: 'buttons',
+                    buttons: ['edit', {
+                        text: 'Custom'
+                    }]
+                }
+            ]
+        });
+
+        this.clock.tick();
+
+        const $buttons = columnsWrapper.getCommandButtons();
+
+        // assert
+        assert.equal($buttons.length, 2, 'command buttons are rendered');
+        assert.notEqual($buttons.eq(0).css('width'), $buttons.eq(1).css('width'), 'button widths are not equal');
+    });
+
     QUnit.test('Undelete command buttons should contains aria-label accessibility attribute if rendered as icon and batch edit mode (T755185)', function(assert) {
         // arrange
         const columnsWrapper = dataGridWrapper.columns;
