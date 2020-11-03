@@ -195,10 +195,16 @@
         }
 
         .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row {
-            .dx-command-edit-with-icons .dx-link {
-                .dx-icon-sizing(18px);
+            .dx-command-edit-with-icons {
+                .dx-link {
+                    .dx-icon-sizing(18px);
 
-                margin: 0 3px;
+                    margin: 0 3px;
+                }
+
+                .dx-link:not(.dx-link-icon) {
+                    width: auto;
+                }
             }
         }
 
