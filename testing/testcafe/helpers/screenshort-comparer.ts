@@ -12,7 +12,7 @@ const artifactsPath = path.join(testRoot, '/artifacts');
 
 const screenshotComparerDefault = {
   highlightColor: { r: 0xff, g: 0, b: 0xff },
-  attempt: 3,
+  attempts: 3,
   attemptTimeout: 500,
   looksSameComparisonOptions: {
     strict: false,
@@ -157,19 +157,25 @@ function getMask(diffBuffer, options: ComparerOptions) {
   makeTransparentExceptColor(image, options.highlightColor);
   return PNG.sync.write(image);
 }
+
+type SelectorType = Selector | string | null;
+
 async function tryGetValidScreenshot({
   element, t, screenshotFileName, etalonFileName, maskFileName, options,
-}: { element: string | Selector | null;
+}: { element: SelectorType;
   t: TestController;
   screenshotFileName: string;
   etalonFileName: string;
   maskFileName: string;
   options: ComparerOptions; }) {
   let equal = false;
-  let attemptCount = options.attempt;
+  let attemptCount = options.attempts;
   let screenshotBuffer;
   while (!equal && attemptCount > 0) {
     attemptCount -= 1;
+    if (attemptCount > 0) {
+      fs.unlinkSync(screenshotFileName);
+    }
     await (element
       ? t.takeElementScreenshot(element, screenshotFileName)
       : t.takeScreenshot(screenshotFileName));
@@ -181,16 +187,17 @@ async function tryGetValidScreenshot({
       screenshotBuffer,
       comparisonOptions: options.looksSameComparisonOptions,
     });
-    if (attemptCount > 1) {
+    if (attemptCount > 0) {
       await t.wait(options.attemptTimeout);
     }
   }
   return { equal, screenshotBuffer };
 }
+
 export async function compareScreenshot(
   t: TestController,
   screenshotName: string,
-  element: Selector | string | null = null,
+  element: SelectorType = null,
   comparisonOptions?: Partial<ComparerOptions>,
 ) {
   const screenshotFileName = path.join(screenshotsPath, screenshotName);
@@ -228,7 +235,7 @@ export function createScreenshotsComparer(t: TestController) {
   const errorMessages: string[] = [];
   return {
     takeScreenshot: async (screenshotName: string,
-      element: Selector | string | null = null,
+      element: SelectorType = null,
       comparisonOptions?: Partial<ComparerOptions>,
     ) => {
       try {
