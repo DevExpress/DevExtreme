@@ -5,7 +5,7 @@ const createServer = (echo = true): net.Server => net.createServer((socket) => {
   if (echo) {
     socket.pipe(socket);
   } else {
-    socket.on('data', () => {
+    socket.once('data', () => {
       socket.write('test');
     });
   }
@@ -43,7 +43,12 @@ describe('DartClient tests', () => {
 
   test('"send" method', async () => {
     const longData = [...Array(1000000).keys()].join('');
-    const testData = { a: ['a', 'b'], b: 2, c: longData };
+    const testData = {
+      index: '',
+      file: '',
+      data: longData,
+      items: [{ key: '', value: '' }],
+    };
     await startServer();
     const client = new DartClient();
     await client.check();
@@ -57,7 +62,12 @@ describe('DartClient tests', () => {
 
   test('"send" method - wrong reply', async () => {
     const longData = [...Array(100000).keys()].join('');
-    const testData = { a: ['a', 'b'], b: 2, c: longData };
+    const testData = {
+      index: '',
+      file: '',
+      data: longData,
+      items: [{ key: '', value: '' }],
+    };
     await startServer(false);
     const client = new DartClient();
     await client.check();
@@ -66,6 +76,27 @@ describe('DartClient tests', () => {
     const reply = await client.send(testData);
     await client.dispose();
     await stopServer();
-    expect(reply).toEqual({ error: true });
+    expect(reply).toEqual({ error: 'Unable to parse dart server response: test' });
+  });
+
+  test('"send" method (server stopped while send)', async () => {
+    const testData = {
+      index: '',
+      file: '',
+      data: '',
+      items: [{ key: '', value: '' }],
+    };
+    expect.assertions(2);
+    await startServer(false);
+    const client = new DartClient();
+    await client.check();
+    expect(client.isServerAvailable).toBe(true);
+    await stopServer();
+
+    const result = await client.send(testData);
+
+    await client.dispose();
+
+    expect(result.error).toContain('Error: ');
   });
 });
