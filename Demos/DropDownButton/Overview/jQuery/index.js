@@ -52,6 +52,7 @@ $(function(){
                     items: colors,
                     icon: "square",
                     stylingMode: "text",
+                    dropDownOptions: { width: "auto" },
                     onInitialized: function(e) {
                         dropDownButton = e.component;
                     },

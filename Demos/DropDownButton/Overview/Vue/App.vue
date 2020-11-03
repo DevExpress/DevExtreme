@@ -116,6 +116,7 @@ export default {
             },
             icon: 'square',
             stylingMode: 'text',
+            dropDownOptions: { width: 'auto' },
             dropDownContentTemplate: 'colorpicker'
           }
         },

@@ -88,6 +88,7 @@ class App extends React.Component {
           items: this.data.colors,
           icon: 'square',
           stylingMode: 'text',
+          dropDownOptions: { width: 'auto' },
           onInitialized: ({ component }) => {
             this.colorPicker = component;
           },
