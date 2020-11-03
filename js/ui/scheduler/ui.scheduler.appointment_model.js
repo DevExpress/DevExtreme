@@ -470,9 +470,9 @@ class AppointmentModel {
         if(this._isEndDateWrong(startDate, endDate)) {
             const isAllDay = this._dataAccessors.getter.allDay(appointment);
 
-            endDate = this._calculateAppointmentEndDate(isAllDay, startDate);
+            const calculatedEndDate = this._calculateAppointmentEndDate(isAllDay, startDate);
 
-            this._dataAccessors.setter.endDate(appointment, endDate);
+            this._dataAccessors.setter.endDate(appointment, calculatedEndDate);
         }
     }
 
