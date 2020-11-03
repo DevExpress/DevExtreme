@@ -34,8 +34,15 @@ const DblClick = Class.inherit({
 
     _clickHandler: function(e) {
         const timeStamp = e.timeStamp || Date.now();
+        const timeBetweenClicks = timeStamp - this._lastClickTimeStamp;
+        // NOTE: jQuery sets `timeStamp = Date.now()` for the triggered events, but
+        // in the real event timeStamp is the number of milliseconds elapsed from the
+        // beginning of the current document's lifetime till the event was created
+        // (https://developer.mozilla.org/en-US/docs/Web/API/Event/timeStamp).
+        const isSimulated = timeBetweenClicks < 0;
+        const isDouble = !isSimulated && timeBetweenClicks < DBLCLICK_TIMEOUT;
 
-        if(timeStamp - this._lastClickTimeStamp < DBLCLICK_TIMEOUT) {
+        if(isDouble) {
             fireEvent({
                 type: DBLCLICK_EVENT_NAME,
                 target: closestCommonParent(this._firstClickTarget, e.target),

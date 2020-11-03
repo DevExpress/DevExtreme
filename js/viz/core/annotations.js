@@ -55,11 +55,14 @@ function coreAnnotation(options, contentTemplate) {
             return this.plaque.hitTest(x, y);
         },
         showTooltip(tooltip, { x, y }) {
-            if(tooltip.annotation !== this) {
-                tooltip.setTemplate(this.options.tooltipTemplate);
-                if(tooltip.show(this.options, { x, y }, { target: this.options }, this.options.customizeTooltip)) {
-                    tooltip.annotation = this;
-                }
+            const that = this;
+            const options = that.options;
+            if(tooltip.annotation !== that) {
+                tooltip.setTemplate(options.tooltipTemplate);
+                const callback = (result) => {
+                    result && (tooltip.annotation = that);
+                };
+                callback(tooltip.show(options, { x, y }, { target: options }, options.customizeTooltip, callback));
             } else {
                 tooltip.move(x, y);
             }

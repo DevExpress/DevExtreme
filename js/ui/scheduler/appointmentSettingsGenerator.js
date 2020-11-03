@@ -41,12 +41,17 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         }
 
         let gridAppointmentList = this._createGridAppointmentList(appointmentList);
-        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
+        this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
 
         gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
 
-        const allDay = this.scheduler.appointmentTakesAllDay(rawAppointment) && this.scheduler._workSpace.supportAllDayRow();
-        return this._createAppointmentInfos(gridAppointmentList, itemResources, allDay);
+        return this._createAppointmentInfos(gridAppointmentList, itemResources, this._isAllDayAppointment(rawAppointment));
+    }
+
+    _isAllDayAppointment(rawAppointment) {
+        const scheduler = this.scheduler;
+
+        return scheduler.appointmentTakesAllDay(rawAppointment) && scheduler._workSpace.supportAllDayRow();
     }
 
     _createAppointments(appointment, resources) {
@@ -189,11 +194,12 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _createExtremeRecurrenceDates(rawAppointment, groupIndex) {
-        const dateRange = this._getGroupDateRange(groupIndex);
+        const dateRange = this._getGroupDateRange(rawAppointment, groupIndex);
 
         const startViewDate = this.scheduler.appointmentTakesAllDay(rawAppointment)
             ? dateUtils.trimTime(dateRange[0])
             : dateRange[0];
+
         const commonTimeZone = this.scheduler.option('timeZone');
 
         const minRecurrenceDate = commonTimeZone ?
@@ -209,7 +215,7 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             maxRecurrenceDate
         ];
     }
-    _getGroupDateRange(groupIndex) {
+    _getGroupDateRange(rawAppointment, groupIndex) {
         return this.scheduler._workSpace.getDateRange();
     }
 
@@ -254,9 +260,9 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     }
 
     _cropAppointmentsByStartDayHour(appointments, rawAppointment) {
-        return appointments.map(appointment => {
+        appointments.forEach(appointment => {
             const startDate = new Date(appointment.startDate);
-            const firstViewDate = this._getAppointmentFirstViewDate(appointment, startDate);
+            const firstViewDate = this._getAppointmentFirstViewDate(appointment, rawAppointment);
             const startDayHour = this._getViewStartDayHour(firstViewDate);
 
             appointment.startDate = this._getAppointmentResultDate({
@@ -266,8 +272,6 @@ export class AppointmentSettingsGeneratorBaseStrategy {
                 startDayHour,
                 firstViewDate
             });
-
-            return appointment;
         });
     }
     _getAppointmentFirstViewDate() {
@@ -330,7 +334,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         const { duration } = appointment;
         const result = [];
         const workspace = this.scheduler._workSpace;
-        const groupIndices = workspace._getGroupCount()
+        const groupIndices = workspace._isVerticalGroupedWorkSpace() && workspace._getGroupCount()
             ? this._getGroupIndices(resources)
             : [0];
 
@@ -358,20 +362,24 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
         return firstViewDate.getHours();
     }
 
-    _getAppointmentFirstViewDate(appointment, startDate) {
-        const workspace = this.scheduler.getWorkSpace();
+    _getAppointmentFirstViewDate(appointment, rawAppointment) {
+        const { viewDataProvider } = this.scheduler.getWorkSpace();
         const { groupIndex } = appointment.source;
-        const { viewDataProvider } = workspace;
+        const {
+            startDate,
+            endDate
+        } = appointment;
 
-        let firstViewDate = viewDataProvider.getGroupCellStartDate(groupIndex, startDate);
-        if(!firstViewDate) {
-            firstViewDate = viewDataProvider.getGroupStartDate(groupIndex);
-        }
+        const isAllDay = this._isAllDayAppointment(rawAppointment);
 
-        return firstViewDate;
+        return viewDataProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay);
     }
 
-    _getGroupDateRange(groupIndex) {
+    _getGroupDateRange(rawAppointment, groupIndex) {
+        if(this.scheduler.appointmentTakesAllDay(rawAppointment)) {
+            return super._getGroupDateRange(rawAppointment, groupIndex);
+        }
+
         const { viewDataProvider } = this.scheduler.getWorkSpace();
         const startDate = viewDataProvider.getGroupStartDate(groupIndex);
         const groupEndDate = viewDataProvider.getGroupEndDate(groupIndex);
@@ -386,7 +394,7 @@ export class AppointmentSettingsGeneratorVirtualStrategy extends AppointmentSett
     _updateGroupIndices(appointments, itemResources) {
         const workspace = this.scheduler.getWorkSpace();
         const groupIndices = workspace._isVerticalGroupedWorkSpace()
-            ? workspace._getGroupIndexes(itemResources)
+            ? this._getGroupIndices(itemResources)
             : [0];
 
         groupIndices.forEach(groupIndex => {

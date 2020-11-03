@@ -12834,7 +12834,7 @@ QUnit.module('Refresh changesOnly', {
         assert.ok(this.editingController.isEditRow(1), 'edit row index is corrected');
     });
 
-    QUnit.test('edit row should not be updated on data change', function(assert) {
+    QUnit.test('edit row should be updated on data change', function(assert) {
         this.setupModules();
 
         let changedArgs;
@@ -12858,7 +12858,7 @@ QUnit.module('Refresh changesOnly', {
         assert.deepEqual(changedArgs.changeTypes, ['update', 'update']);
         assert.deepEqual(changedArgs.rowIndices, [0, 1]);
         assert.deepEqual(changedArgs.items, [items[0], items[1]]);
-        assert.deepEqual(changedArgs.columnIndices, [[], [2]], 'only second row cell is updated');
+        assert.deepEqual(changedArgs.columnIndices, [[2], [2]], 'only second row cell is updated');
     });
 
     // T702112

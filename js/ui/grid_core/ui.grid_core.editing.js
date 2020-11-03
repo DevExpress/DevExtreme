@@ -2157,13 +2157,27 @@ const EditingController = modules.ViewController.inherit((function() {
                 if(isDefined(text) && options.column.displayValueMap) {
                     options.column.displayValueMap[value] = text;
                 }
-                if(options.values) {
-                    options.values[options.columnIndex] = value;
-                }
+
+                that._updateRowValues(options);
+
                 that.addDeferred(deferred);
             }
 
             return deferred;
+        },
+
+        _updateRowValues: function(options) {
+            if(options.values) {
+                const dataController = this._dataController;
+                const rowIndex = dataController.getRowIndexByKey(options.key);
+                const row = dataController.getVisibleRows()[rowIndex];
+
+                if(row) {
+                    options.values = row.values;
+                }
+
+                options.values[options.columnIndex] = options.value;
+            }
         },
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
@@ -2798,10 +2812,6 @@ export default {
 
                     if(oldItem.isNewRow !== newItem.isNewRow || oldItem.removed !== newItem.removed || (isRowEditMode && oldItem.isEditing !== newItem.isEditing)) {
                         return;
-                    }
-
-                    if(oldItem.rowType === newItem.rowType && isRowEditMode && editingController.isEditRow(rowIndex) && isLiveUpdate) {
-                        return [];
                     }
 
                     return this.callBase.apply(this, arguments);

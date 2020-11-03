@@ -52,6 +52,7 @@ env:
     - TARGET=test_jest
     - TARGET=native_components
     - TARGET=test_scss
+    - TARGET=font_icons_test
 
 cache:
   directories:

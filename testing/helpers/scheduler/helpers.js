@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import { locate } from 'animation/translator';
 import devices from 'core/devices';
+
+import 'common.css!';
+import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
@@ -10,6 +13,8 @@ const SCHEDULER_ID = 'scheduler';
 const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 
 export const CLASSES = {
+    root: '.dx-scheduler',
+
     header: '.dx-scheduler-header-panel',
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
@@ -21,6 +26,9 @@ export const CLASSES = {
     schedulerSmall: '.dx-scheduler-small',
 
     dateTableCell: '.dx-scheduler-date-table-cell',
+    allDayTableCell: '.dx-scheduler-all-day-table-cell',
+
+    appointment: '.dx-scheduler-appointment',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -32,10 +40,11 @@ export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id=
 
 export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'));
 
-export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop' && !devices.real().mac;
+export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
+const isMACEnvironment = () => devices.real().mac;
 
 export const checkResultByDeviceType = (assert, callback) => {
-    if(isDesktopEnvironment()) {
+    if(isDesktopEnvironment() && !isMACEnvironment()) {
         callback();
     } else {
         const done = assert.async();
