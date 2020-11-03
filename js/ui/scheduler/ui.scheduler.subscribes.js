@@ -762,7 +762,7 @@ const subscribes = {
     },
 
     replaceWrongEndDate: function(appointment, startDate, endDate) {
-        return this._appointmentModel.replaceWrongEndDate(appointment, startDate, endDate);
+        this._appointmentModel.replaceWrongEndDate(appointment, startDate, endDate);
     },
 
     calculateAppointmentEndDate: function(isAllDay, startDate) {

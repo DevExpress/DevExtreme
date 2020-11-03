@@ -40,30 +40,34 @@ QUnit.module('Subscribes', {
             currentView: 'week'
         });
 
-        let checkedDate = this.instance.fire('replaceWrongEndDate',
+        [
             {
-                startDate: new Date(2019, 4, 3, 12),
-                allDay: false
-            }, new Date(2019, 4, 3, 12), undefined);
-
-        assert.equal(checkedDate.getTime(), new Date(2019, 4, 3, 12, 30).getTime(), 'checked date is ok when endDate is undefined');
-
-        checkedDate = this.instance.fire('replaceWrongEndDate',
+                data: {
+                    startDate: new Date(2019, 4, 3, 12),
+                    allDay: false
+                },
+                expectedEndDate: new Date(2019, 4, 3, 12, 30)
+            },
             {
-                startDate: new Date(2019, 4, 3, 12),
-                allDay: false
-            }, new Date(2019, 4, 3, 12), new Date('string'));
-
-        assert.equal(checkedDate.getTime(), new Date(2019, 4, 3, 12, 30).getTime(), 'checked date is ok when endDate is invalid');
-
-        checkedDate = this.instance.fire('replaceWrongEndDate',
+                data: {
+                    startDate: new Date(2019, 4, 3, 12),
+                    allDay: false,
+                    endDate: new Date('string')
+                },
+                expectedEndDate: new Date(2019, 4, 3, 12, 30)
+            },
             {
-                startDate: new Date(2019, 4, 3, 12),
-                allDay: true
-            }, new Date(2019, 4, 3, 12), undefined);
-
-        assert.equal(checkedDate.getHours(), 23, 'checked date is ok when endDate is undefined, allDay appointment');
-        assert.equal(checkedDate.getMinutes(), 59, 'checked date is ok when endDate is undefined, allDay appointment');
+                data: {
+                    startDate: new Date(2019, 4, 3, 12),
+                    allDay: true
+                },
+                expectedEndDate: new Date(2019, 4, 3, 23, 59)
+            }
+        ].forEach(testCase => {
+            this.instance.fire('replaceWrongEndDate', testCase.data, new Date(2019, 4, 3, 12), testCase.data.endDate);
+            assert.equal(testCase.data.endDate.getHours(), testCase.expectedEndDate.getHours(), 'replaced endDate is ok');
+            assert.equal(testCase.data.endDate.getMinutes(), testCase.expectedEndDate.getMinutes(), 'replaced endDate is ok');
+        });
     });
 
     QUnit.test('\'getTargetedAppointmentData\' should return correct data for recurrence appointments (T660901)', function(assert) {

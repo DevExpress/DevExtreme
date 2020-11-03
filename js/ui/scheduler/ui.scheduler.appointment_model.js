@@ -474,7 +474,6 @@ class AppointmentModel {
 
             this._dataAccessors.setter.endDate(appointment, endDate);
         }
-        return endDate;
     }
 
     filterLoadedVirtualAppointments(filterOptions, timeZoneCalculator, groupCount) {
