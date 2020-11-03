@@ -68,8 +68,9 @@ export default {
       const index = this.appointments.indexOf(e.itemData);
 
       if (index >= 0) {
+        this.appointments = [...this.appointments];
         this.appointments.splice(index, 1);
-        this.tasks.push(e.itemData);
+        this.tasks = [...this.tasks, e.itemData];
       }
     },
 
@@ -77,8 +78,9 @@ export default {
       const index = this.tasks.indexOf(e.fromData);
 
       if (index >= 0) {
+        this.tasks = [...this.tasks];
         this.tasks.splice(index, 1);
-        this.appointments.push(e.itemData);
+        this.appointments = [...this.appointments, e.itemData];
       }
     },
 
