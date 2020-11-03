@@ -35,12 +35,12 @@ QUnit.module('Subscribes', {
         this.clock.restore();
     }
 }, function() {
-    QUnit.test('\'fixWrongEndDate\' should process endDate correctly', function(assert) {
+    QUnit.test('\'replaceWrongEndDate\' should process endDate correctly', function(assert) {
         this.createInstance({
             currentView: 'week'
         });
 
-        let checkedDate = this.instance.fire('fixWrongEndDate',
+        let checkedDate = this.instance.fire('replaceWrongEndDate',
             {
                 startDate: new Date(2019, 4, 3, 12),
                 allDay: false
@@ -48,7 +48,7 @@ QUnit.module('Subscribes', {
 
         assert.equal(checkedDate.getTime(), new Date(2019, 4, 3, 12, 30).getTime(), 'checked date is ok when endDate is undefined');
 
-        checkedDate = this.instance.fire('fixWrongEndDate',
+        checkedDate = this.instance.fire('replaceWrongEndDate',
             {
                 startDate: new Date(2019, 4, 3, 12),
                 allDay: false
@@ -56,7 +56,7 @@ QUnit.module('Subscribes', {
 
         assert.equal(checkedDate.getTime(), new Date(2019, 4, 3, 12, 30).getTime(), 'checked date is ok when endDate is invalid');
 
-        checkedDate = this.instance.fire('fixWrongEndDate',
+        checkedDate = this.instance.fire('replaceWrongEndDate',
             {
                 startDate: new Date(2019, 4, 3, 12),
                 allDay: true
