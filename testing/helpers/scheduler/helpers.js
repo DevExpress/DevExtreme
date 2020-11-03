@@ -40,10 +40,11 @@ export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id=
 
 export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'));
 
-export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop' && !devices.real().mac;
+export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
+const isMACEnvironment = () => devices.real().mac;
 
 export const checkResultByDeviceType = (assert, callback) => {
-    if(isDesktopEnvironment()) {
+    if(isDesktopEnvironment() && !isMACEnvironment()) {
         callback();
     } else {
         const done = assert.async();
