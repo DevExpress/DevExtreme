@@ -150,6 +150,29 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         };
     }
 
+    shiftIndicator($indicator, height, rtlOffset, groupIndex) {
+        const offset = this._getIndicatorOffset(groupIndex);
+
+        const horizontalOffset = rtlOffset ? rtlOffset - offset : offset;
+
+        $indicator.css('left', horizontalOffset);
+        $indicator.css('top', height);
+    }
+
+    _getIndicatorOffset(groupIndex) {
+        const groupByDay = this._workSpace.isGroupedByDate();
+
+        return groupByDay ? this._calculateGroupByDateOffset(groupIndex) : this._calculateOffset(groupIndex);
+    }
+
+    _calculateOffset(groupIndex) {
+        return this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex + this._workSpace.getIndicatorOffset(groupIndex) + groupIndex;
+    }
+
+    _calculateGroupByDateOffset(groupIndex) {
+        return this._workSpace.getIndicatorOffset(0) * this._workSpace._getGroupCount() + this._workSpace.getRoundedCellWidth(groupIndex - 1, 0) * groupIndex;
+    }
+
     getShaderOffset(i, width) {
         const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
         return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).width - offset - this._workSpace.getTimePanelWidth() - width : offset;

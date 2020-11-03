@@ -2135,18 +2135,10 @@ const SchedulerWorkSpace = Widget.inherit({
         return extend(true, {}, data);
     },
 
-    _getHorizontalMax: function(groupIndex) {
+    _getHorizontalMax(groupIndex) {
         groupIndex = this.isGroupedByDate() ? this._getGroupCount() - 1 : groupIndex;
 
         return this._groupedStrategy.getHorizontalMax(groupIndex);
-    },
-
-    getCellByDate: function(date, groupIndex) {
-        const index = this.getCellIndexByDate(date);
-        const cellCoordinates = this._getCellCoordinatesByIndex(index);
-        const $cell = this._getCellByCoordinates(cellCoordinates, groupIndex, false);
-
-        return $cell;
     },
 
     getCoordinatesByDate: function(date, groupIndex, inAllDayRow) {
