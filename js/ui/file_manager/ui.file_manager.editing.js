@@ -459,6 +459,7 @@ class FileManagerEditingControl extends Widget {
     get uploadDirectoryInfo() {
         return this._uploadDirectoryInfo || this._getCurrentDirectory();
     }
+
 }
 
 class FileManagerActionContext {

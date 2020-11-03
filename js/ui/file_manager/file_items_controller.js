@@ -504,7 +504,6 @@ export default class FileItemsController {
     _getActualDirectoryInfo(directoryInfo) {
         const keys = this._getDirectoryPathKeyParts(directoryInfo);
         return this._findDirectoryByPathKeyParts(keys);
-
     }
 
     _createDirInfoByName(name, parentDirectoryInfo) {
