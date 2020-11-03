@@ -18,6 +18,6 @@ export class EditorComponent extends React.Component {
     );
   }
   onValueChanged(e) {
-    this.props.setValue(e.value && e.value.length ? e.value : null);
+    this.props.data.setValue(e.value && e.value.length ? e.value : null);
   }
 }
