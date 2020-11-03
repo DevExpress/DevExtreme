@@ -1,4 +1,3 @@
-// import { Selector } from 'testcafe';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
 import createWidget, { disposeWidgets } from '../../helpers/createWidget';

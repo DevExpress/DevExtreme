@@ -169,11 +169,11 @@ async function tryGetValidScreenshot({
   maskFileName: string;
   options: ComparerOptions; }) {
   let equal = false;
-  let attemptCount = options.attempts;
+  let attempt = 0;
   let screenshotBuffer;
-  while (!equal && attemptCount > 0) {
-    attemptCount -= 1;
-    if (attemptCount > 0) {
+  while (!equal && attempt < options.attempts) {
+    attempt += 1;
+    if (attempt > 1) {
       fs.unlinkSync(screenshotFileName);
     }
     await (element
@@ -187,7 +187,7 @@ async function tryGetValidScreenshot({
       screenshotBuffer,
       comparisonOptions: options.looksSameComparisonOptions,
     });
-    if (attemptCount > 0) {
+    if (attempt < options.attempts) {
       await t.wait(options.attemptTimeout);
     }
   }
