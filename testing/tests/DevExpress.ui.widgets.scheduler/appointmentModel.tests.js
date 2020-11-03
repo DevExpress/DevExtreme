@@ -629,7 +629,7 @@ const timeZoneCalculator = {
             },
             setter: {
                 startDate: compileSetter('StartDate'),
-                endDate: compileGetter('EndDate')
+                endDate: compileSetter('EndDate')
             },
             expr: {
                 startDateExpr: 'StartDate',
@@ -665,7 +665,7 @@ const timeZoneCalculator = {
             },
             setter: {
                 startDate: compileSetter('StartDate'),
-                endDate: compileGetter('EndDate')
+                endDate: compileSetter('EndDate')
             },
             expr: {
                 startDateExpr: 'StartDate',
@@ -700,7 +700,7 @@ const timeZoneCalculator = {
             },
             setter: {
                 startDate: compileSetter('StartDate'),
-                endDate: compileGetter('EndDate')
+                endDate: compileSetter('EndDate')
             },
             expr: {
                 startDateExpr: 'StartDate',
@@ -736,7 +736,7 @@ const timeZoneCalculator = {
             },
             setter: {
                 startDate: compileSetter('StartDate'),
-                endDate: compileGetter('EndDate')
+                endDate: compileSetter('EndDate')
             },
             expr: {
                 startDateExpr: 'StartDate',
@@ -779,7 +779,7 @@ const timeZoneCalculator = {
             },
             setter: {
                 startDate: compileSetter('StartDate'),
-                endDate: compileGetter('EndDate')
+                endDate: compileSetter('EndDate')
             },
             expr: {
                 startDateExpr: 'StartDate',
@@ -819,7 +819,7 @@ const timeZoneCalculator = {
             },
             setter: {
                 startDate: compileSetter('StartDate'),
-                endDate: compileGetter('EndDate')
+                endDate: compileSetter('EndDate')
             },
             expr: {
                 startDateExpr: 'StartDate',
@@ -857,7 +857,7 @@ const timeZoneCalculator = {
             },
             setter: {
                 startDate: compileSetter('StartDate'),
-                endDate: compileGetter('EndDate')
+                endDate: compileSetter('EndDate')
             },
             expr: {
                 startDateExpr: 'StartDate',
@@ -898,7 +898,7 @@ const timeZoneCalculator = {
             },
             setter: {
                 startDate: compileSetter('StartDate'),
-                endDate: compileGetter('EndDate')
+                endDate: compileSetter('EndDate')
             },
             expr: {
                 startDateExpr: 'StartDate',
@@ -1027,7 +1027,7 @@ const timeZoneCalculator = {
             },
             setter: {
                 startDate: compileSetter('StartDate'),
-                endDate: compileGetter('EndDate')
+                endDate: compileSetter('EndDate')
             },
             expr: {
                 startDateExpr: 'StartDate',
