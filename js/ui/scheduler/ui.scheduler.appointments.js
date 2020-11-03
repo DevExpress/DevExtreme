@@ -620,7 +620,8 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
         let startDate = appointmentInfo.startDate;
         const recurrenceProcessor = getRecurrenceProcessor();
-        const { recurrenceRule, allDay: isAllDay, startDateTimeZone } = appointmentAdapter;
+        const { recurrenceRule, startDateTimeZone } = appointmentAdapter;
+        const isAllDay = this.invoke('isAllDay', rawAppointment);
         const isRecurrent = recurrenceProcessor.isValidRecurrenceRule(recurrenceRule);
 
         if(!e.handles.top && !isRecurrent && !isAllDay) {
