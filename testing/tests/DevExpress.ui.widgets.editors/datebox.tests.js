@@ -3328,13 +3328,13 @@ QUnit.module('datebox with time component', {
     });
 
     QUnit.test('invalid (by internal validation) value should be displayed if it is selected by time numberboxes (T939117)', function(assert) {
+        const date = new Date('2015/1/25 14:00:00');
         const $dateBox = $('#dateBox').dxDateBox({
             type: 'datetime',
             pickerType: 'calendar',
             opened: true,
-            displayFormat: 'HH:mm',
-            min: new Date('2015/1/25 14:00:00'),
-            value: new Date('2015/1/25 14:00:00')
+            min: date,
+            value: date
         });
         const dateBox = $dateBox.dxDateBox('instance');
         const $hourDownButton = $(dateBox.content()).find('.dx-numberbox-spin-down').first();
@@ -3344,6 +3344,9 @@ QUnit.module('datebox with time component', {
         $(CALENDAR_APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
 
         assert.strictEqual($input.val(), '13:00', 'input displays a correct value');
+        assert.strictEqual(dateBox.option('text'), '13:00', 'text is correct');
+        assert.notOk(dateBox.option('isValid'), 'widget is invalid');
+        assert.deepEqual(dateBox.option('value'), date, 'value does not changed');
     });
 
     QUnit.test('Submit value should not be changed when apply button clicked and an invalid (by internal validation) value is selected', function(assert) {

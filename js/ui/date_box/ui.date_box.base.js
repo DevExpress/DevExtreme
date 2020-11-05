@@ -615,7 +615,8 @@ const DateBox = DropDownEditor.inherit({
             this.dateValue(value, e.event);
         } else if(validationResult.isDate) {
             const displayedText = this._getDisplayedText(value);
-            this._input().val(displayedText);
+            this.option('text', displayedText);
+            this._renderDisplayText(displayedText);
         }
         this.callBase();
     },
