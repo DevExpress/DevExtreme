@@ -65,6 +65,7 @@ const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const POPUP_CLASS = 'dx-popup';
 const LIST_CLASS = 'dx-list';
 
+const CALENDAR_HOURS_NUMBERBOX_SELECTOR = '.dx-numberbox-spin-down';
 const CALENDAR_APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 
 const widgetName = 'dxDateBox';
@@ -327,7 +328,7 @@ QUnit.module('datebox tests', moduleConfig, () => {
 
         const dateBox = $dateBox.dxDateBox('instance');
         const $done = $(dateBox.content()).parent().find(CALENDAR_APPLY_BUTTON_SELECTOR);
-        const $hourDown = $(dateBox.content()).parent().find('.dx-numberbox-spin-down').eq(0);
+        const $hourDown = $(dateBox.content()).parent().find(CALENDAR_HOURS_NUMBERBOX_SELECTOR).eq(0);
 
         $hourDown.trigger('dxpointerdown');
         $done.trigger('dxclick');
@@ -3338,7 +3339,7 @@ QUnit.module('datebox with time component', {
             value: date
         });
         const dateBox = $dateBox.dxDateBox('instance');
-        const $hourDownButton = $(dateBox.content()).find('.dx-numberbox-spin-down').first();
+        const $hourDownButton = $(dateBox.content()).find(CALENDAR_HOURS_NUMBERBOX_SELECTOR).first();
         const $input = $dateBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
         $hourDownButton.trigger('dxpointerdown');
@@ -3359,7 +3360,7 @@ QUnit.module('datebox with time component', {
             value: new Date('2015/1/25 13:00:00')
         }).dxDateBox('instance');
         const $submitElement = $('#dateBox').find('input[type=hidden]');
-        const $hourDownButton = $(dateBox.content()).find('.dx-numberbox-spin-down').first();
+        const $hourDownButton = $(dateBox.content()).find(CALENDAR_HOURS_NUMBERBOX_SELECTOR).first();
 
         $hourDownButton.trigger('dxpointerdown');
         $(CALENDAR_APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
@@ -3386,7 +3387,7 @@ QUnit.module('datebox with time component', {
 
         const dateBox = $dateBox.dxDateBox('instance');
         const $submitElement = $('#dateBox').find('input[type=hidden]');
-        const $hourDownButton = $(dateBox.content()).find('.dx-numberbox-spin-down').first();
+        const $hourDownButton = $(dateBox.content()).find(CALENDAR_HOURS_NUMBERBOX_SELECTOR).first();
 
         $hourDownButton.trigger('dxpointerdown');
         $(CALENDAR_APPLY_BUTTON_SELECTOR).first().trigger('dxclick');

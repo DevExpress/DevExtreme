@@ -532,8 +532,7 @@ const DateBox = DropDownEditor.inherit({
 
         return {
             isValid,
-            isDate,
-            isDateInRange
+            isDate
         };
     },
 
