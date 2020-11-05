@@ -2,7 +2,7 @@ import $ from 'jquery';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 
-import { isFunction } from 'core/utils/type';
+import { isDefined, isFunction } from 'core/utils/type';
 import { JSPdfDataGridTestHelper } from './jspdfTestHelper.js';
 import { exportDataGrid } from 'pdf_exporter';
 
@@ -24,12 +24,13 @@ const moduleConfig = {
         // The transpiling of the script on the drone and locally has differences that affect the imported jsPDF type.
         const _jsPDF = isFunction(jsPDF) ? jsPDF : jsPDF.jsPDF;
         this.jsPDFDocument = _jsPDF();
+        this.customizeCellCallCount = 0;
 
         helper = new JSPdfDataGridTestHelper(this.jsPDFDocument);
     }
 };
 
-const getOptions = (context, dataGrid, options) => {
+const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
     const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {}, customizeCell = () => {} } = options || {};
 
     const result = {
@@ -39,7 +40,12 @@ const getOptions = (context, dataGrid, options) => {
     result.keepColumnWidths = keepColumnWidths;
     result.selectedRowsOnly = selectedRowsOnly;
     result.autoTableOptions = autoTableOptions;
-    result.customizeCell = customizeCell;
+    result.customizeCell = (eventArgs) => {
+        customizeCell(eventArgs);
+        if(isDefined(expectedCustomizeCellArgs)) {
+            helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
+        }
+    };
     return result;
 };
 
@@ -56,7 +62,7 @@ QUnit.module('Simple grid', moduleConfig, () => {
             body: []
         };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, null, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -102,7 +108,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
 
         const expectedCells = { head: [] };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
             helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
@@ -121,7 +127,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
                 loadingTimeout: undefined
             }).dxDataGrid('instance');
 
-            exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, config.expectedCells)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 helper.checkRowAndColumnCount(config.expectedCells, autoTableOptions, 'head');
                 helper.checkCellsContent(config.expectedCells, autoTableOptions, 'head');
@@ -141,7 +147,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
                 loadingTimeout: undefined
             }).dxDataGrid('instance');
 
-            exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, config.expectedCells)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 helper.checkRowAndColumnCount(config.expectedCells, autoTableOptions, 'head');
                 helper.checkCellsContent(config.expectedCells, autoTableOptions, 'head');
@@ -162,7 +168,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
                 head: [[{ content: 'f1', styles: { 'halign': alignment } }]]
             };
 
-            exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
                 helper.checkCellsStyles(expectedCells, autoTableOptions, 'head');
@@ -184,7 +190,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
             head: [[{ content: 'f1' }]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'head');
@@ -213,7 +219,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
             const expectedColumnWidths = keepColumnWidths ? [25, 225] : [100, 'auto'];
             const expectedCells = { head: [[{ content: 'f1' }, { content: 'f2' }]] };
 
-            exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 assert.strictEqual(autoTableOptions.tableWidth, 250, 'autoTableWidth');
                 helper.checkColumnWidths(expectedColumnWidths, autoTableOptions);
@@ -241,7 +247,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
 
         const expectedCells = { head: [[{ content: 'f2' }, { content: 'f3' }]] };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
             helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
@@ -266,7 +272,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
 
         const expectedCells = { head: [[{ content: 'f1' }, { content: 'f3' }]] };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
             helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
@@ -294,7 +300,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
 
         const expectedCells = { head: [[{ content: 'f2' }, { content: 'f1' }]] };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
             helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
@@ -323,7 +329,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
 
         const expectedCells = { head: [[{ content: 'f3' }, { content: 'f1' }]] };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
             helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
@@ -352,7 +358,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
 
         const expectedCells = { head: [[{ content: 'f3' }]] };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
             helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
@@ -372,9 +378,9 @@ QUnit.module('Grid data rows', moduleConfig, () => {
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
-        const expectedCells = { head: [], body: [[{ content: 'text1' }]] };
+        const expectedCells = { head: [], body: [[{ content: 'text1', styles: { 'halign': 'left' } }]] };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -395,11 +401,11 @@ QUnit.module('Grid data rows', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                head: [[{ content: 'f1' }]],
-                body: [[{ content: ds[0].f1 }]]
+                head: [[{ content: 'f1', styles: { 'halign': 'left' } }]],
+                body: [[{ content: ds[0].f1, styles: { 'halign': 'left' } }]]
             };
 
-            exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 ['head', 'body'].forEach((rowType) => {
                     helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -418,9 +424,22 @@ QUnit.module('Grid data rows', moduleConfig, () => {
             loadingTimeout: undefined
         }).dxDataGrid('instance');
 
-        const expectedCells = { body: [[{ content: ds[0].f1 }, { content: ds[0].f2 }, { content: ds[0].f3 }, { content: ds[0].f4 }]] };
+        const expectedCells = {
+            head: [[
+                { content: 'F1', styles: { 'halign': 'left' } },
+                { content: 'F2', styles: { 'halign': 'left' } },
+                { content: 'F3', styles: { 'halign': 'left' } },
+                { content: 'F4', styles: { 'halign': 'left' } }
+            ]],
+            body: [[
+                { content: ds[0].f1, styles: { 'halign': 'left' } },
+                { content: ds[0].f2, styles: { 'halign': 'left' } },
+                { content: ds[0].f3, styles: { 'halign': 'left' } },
+                { content: ds[0].f4, styles: { 'halign': 'left' } }
+            ]]
+        };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
@@ -437,13 +456,14 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
+            head: [[{ content: 'F1', styles: { 'halign': 'left' } }, { content: 'F2', styles: { 'halign': 'left' } }]],
             body: [
-                [{ content: 'text1_1' }, { content: 'text1_2' }],
-                [{ content: 'text2_1' }, { content: 'text2_2' }]
+                [{ content: 'text1_1', styles: { 'halign': 'left' } }, { content: 'text1_2', styles: { 'halign': 'left' } }],
+                [{ content: 'text2_1', styles: { 'halign': 'left' } }, { content: 'text2_2', styles: { 'halign': 'left' } }]
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
@@ -468,7 +488,7 @@ QUnit.module('Grid data rows', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
@@ -487,13 +507,14 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
+            head: [[{ content: 'F1', styles: { 'halign': 'left' } }, { content: 'F2', styles: { 'halign': 'right' } }]],
             body: [
                 [{ content: 'text1_1', styles: { 'halign': 'left' } }, { content: 'text1_2', styles: { 'halign': 'right' } }],
                 [{ content: 'text2_1', styles: { 'halign': 'left' } }, { content: 'text2_2', styles: { 'halign': 'right' } }]
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -516,14 +537,14 @@ QUnit.module('Grid data rows', moduleConfig, () => {
 
         const expectedCells = {
             head: [
-                [{ content: 'f1', }, { content: 'f2', styles: { 'halign': 'right' } }]
+                [{ content: 'F1', styles: { 'halign': 'left' } }, { content: 'F2', styles: { 'halign': 'right' } }]
             ],
             body: [
                 [{ content: '1', styles: { 'halign': 'left', cellWidth: 'wrap' } }, { content: '2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -557,7 +578,7 @@ QUnit.module('Column data types', moduleConfig, () => {
                 body: [[{ content: config.value, styles: { 'halign': config.alignment } }]]
             };
 
-            exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 ['head', 'body'].forEach((rowType) => {
                     helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -598,7 +619,7 @@ QUnit.module('Column data types', moduleConfig, () => {
                 body: [[{ content: 'custom', styles: { 'halign': config.alignment } }]]
             };
 
-            exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
                 helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -634,7 +655,7 @@ QUnit.module('Column data types', moduleConfig, () => {
                 body: [[{ content: config.values[0], styles: { 'halign': config.alignment } }]]
             };
 
-            exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
                 helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -668,7 +689,7 @@ QUnit.module('Column data types', moduleConfig, () => {
                 body: [[{ content: config.values[1], styles: { 'halign': config.alignment } }]]
             };
 
-            exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
                 helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -706,7 +727,7 @@ QUnit.module('Column data types', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -747,7 +768,7 @@ QUnit.module('Column data types', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -797,7 +818,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
                 body: [[{ content: config.expectedPdfCellValue, styles: { 'halign': 'left' } }]]
             };
 
-            exportDataGrid(getOptions(this, dataGrid)).then(() => {
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
                 helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -835,7 +856,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -872,7 +893,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -909,7 +930,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -946,7 +967,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -983,7 +1004,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1020,7 +1041,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1057,7 +1078,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1094,7 +1115,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1131,7 +1152,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1170,7 +1191,7 @@ QUnit.module('Column data formats', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1207,7 +1228,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -1242,7 +1263,7 @@ QUnit.module('Grouping', moduleConfig, () => {
                     ]
                 };
 
-                exportDataGrid(getOptions(this, dataGrid)).then(() => {
+                exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
                     const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
                     ['head', 'body'].forEach((rowType) => {
                         helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -1281,7 +1302,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1315,7 +1336,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1349,7 +1370,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -1385,7 +1406,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1421,7 +1442,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -1460,7 +1481,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -1494,7 +1515,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1526,7 +1547,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1559,7 +1580,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1591,7 +1612,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1624,7 +1645,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1656,7 +1677,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1694,7 +1715,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1732,7 +1753,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1775,7 +1796,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1814,7 +1835,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1854,7 +1875,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1915,7 +1936,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -1970,7 +1991,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2016,7 +2037,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2062,7 +2083,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2106,7 +2127,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2150,7 +2171,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2194,7 +2215,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2240,7 +2261,7 @@ QUnit.module('Grouping', moduleConfig, () => {
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2294,7 +2315,7 @@ QUnit.module('Group summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2343,7 +2364,7 @@ QUnit.module('Group summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2392,7 +2413,7 @@ QUnit.module('Group summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2441,7 +2462,7 @@ QUnit.module('Group summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2488,7 +2509,7 @@ QUnit.module('Group summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2537,7 +2558,7 @@ QUnit.module('Group summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2584,7 +2605,7 @@ QUnit.module('Group summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2636,7 +2657,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2673,7 +2694,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2726,7 +2747,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2779,7 +2800,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2828,7 +2849,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, { selectedRowsOnly: true })).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2874,7 +2895,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2920,7 +2941,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -2965,7 +2986,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -3011,7 +3032,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -3057,7 +3078,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -3103,7 +3124,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -3141,7 +3162,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3181,7 +3202,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3228,7 +3249,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3273,7 +3294,7 @@ QUnit.module('Bands', moduleConfig, () => {
             body: []
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3332,7 +3353,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3394,7 +3415,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3437,7 +3458,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3479,7 +3500,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3521,7 +3542,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3565,7 +3586,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3610,7 +3631,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3657,7 +3678,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3704,7 +3725,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3757,7 +3778,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3808,7 +3829,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3857,7 +3878,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3910,7 +3931,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -3961,7 +3982,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -4014,7 +4035,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -4065,7 +4086,7 @@ QUnit.module('Bands', moduleConfig, () => {
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             ['head', 'body'].forEach((rowType) => {
                 helper.checkRowAndColumnCount(expectedCells, autoTableOptions, rowType);
@@ -4079,7 +4100,7 @@ QUnit.module('Bands', moduleConfig, () => {
 });
 
 QUnit.module('customizeCell', moduleConfig, () => {
-    QUnit.test('Header cells, modifying predefined font settings', function(assert) {
+    QUnit.test('Customize header cells', function(assert) {
         const done = assert.async();
         const dataGrid = $('#dataGrid').dxDataGrid({
             keyExpr: 'f1',
@@ -4093,6 +4114,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
             customizeCell: (options) => {
                 const { gridCell, pdfCell } = options;
                 if(gridCell.rowType === 'header') {
+                    pdfCell.content += ' customText';
                     pdfCell.styles.fontStyle = 'bold';
                 }
             }
@@ -4100,12 +4122,12 @@ QUnit.module('customizeCell', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'f1', styles: { fontStyle: 'bold', 'halign': 'left' } },
-                { content: 'f2', styles: { fontStyle: 'bold', 'halign': 'left' } }
+                { content: 'f1 customText', styles: { fontStyle: 'bold', 'halign': 'left' } },
+                { content: 'f2 customText', styles: { fontStyle: 'bold', 'halign': 'left' } }
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'head');
@@ -4115,43 +4137,48 @@ QUnit.module('customizeCell', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Header cells, modifying predefined content', function(assert) {
+    QUnit.test('Customize data cells', function(assert) {
         const done = assert.async();
+        const ds = [
+            { f1: 'f1', f2: 'f2' }
+        ];
         const dataGrid = $('#dataGrid').dxDataGrid({
-            keyExpr: 'f1',
             columns: [
-                { caption: 'f1', dataType: 'string' },
-                { caption: 'f2', dataType: 'string' }
+                { dataField: 'f1', dataType: 'string' },
+                { dataField: 'f2', dataType: 'string' },
             ],
-            loadingTimeout: undefined
+            dataSource: ds,
+            loadingTimeout: undefined,
+            showColumnHeaders: false
         }).dxDataGrid('instance');
         const options = {
             customizeCell: (options) => {
                 const { gridCell, pdfCell } = options;
-                if(gridCell.rowType === 'header') {
-                    pdfCell.content += '_2';
+                if(gridCell.rowType === 'data') {
+                    pdfCell.content += ' customText';
+                    pdfCell.styles.fontStyle = 'bold';
                 }
             }
         };
 
         const expectedCells = {
-            head: [[
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } }
+            body: [[
+                { content: 'f1 customText', styles: { fontStyle: 'bold', 'halign': 'left' } },
+                { content: 'f2 customText', styles: { fontStyle: 'bold', 'halign': 'left' } }
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
-            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
-            helper.checkCellsStyles(expectedCells, autoTableOptions, 'head');
-            helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
-            helper.checkMergeCells(expectedCells, autoTableOptions, 'head');
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
             done();
         });
     });
 
-    QUnit.test('Data cells, modifying predefined font settings, grouping', function(assert) {
+    QUnit.test('Customize group cells', function(assert) {
         const done = assert.async();
         const ds = [
             { f1: 'f1_1', f2: 'f1_2' },
@@ -4170,6 +4197,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
             customizeCell: (options) => {
                 const { gridCell, pdfCell } = options;
                 if(gridCell.rowType === 'group') {
+                    pdfCell.content += ' customText';
                     pdfCell.styles.fontStyle = 'normal';
                 }
             }
@@ -4177,14 +4205,14 @@ QUnit.module('customizeCell', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'normal' } }],
+                [{ content: 'f1: f1_1 customText', styles: { 'halign': 'left', fontStyle: 'normal' } }],
                 [{ content: 'f1_2', styles: { 'halign': 'left' } }],
-                [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'normal' } }],
+                [{ content: 'f1: f1_2 customText', styles: { 'halign': 'left', fontStyle: 'normal' } }],
                 [{ content: 'f1_2', styles: { 'halign': 'left' } }]
             ]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -4194,7 +4222,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Data cells, modifying predefined font settings, groupSummary', function(assert) {
+    QUnit.test('Customize groupSummary cells', function(assert) {
         const done = assert.async();
         const ds = [
             { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
@@ -4222,6 +4250,9 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 const { gridCell, pdfCell } = options;
                 if(gridCell.rowType === 'groupFooter') {
                     pdfCell.styles.fontStyle = 'normal';
+                    if(pdfCell.content) {
+                        pdfCell.content += ': customText';
+                    }
                 }
             }
         };
@@ -4240,11 +4271,11 @@ QUnit.module('customizeCell', moduleConfig, () => {
             ], [
                 { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
                 { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
+                { content: 'Max: f3_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
@@ -4254,7 +4285,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
         });
     });
 
-    QUnit.test('Data cells, modifying predefined font settings, totalSummary', function(assert) {
+    QUnit.test('Customize totalSummary cells', function(assert) {
         const done = assert.async();
         const ds = [
             { f1: 'f1_1', f2: 'f2_1' },
@@ -4282,6 +4313,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 const { gridCell, pdfCell } = options;
                 if(gridCell.rowType === 'totalFooter') {
                     pdfCell.styles.fontStyle = 'normal';
+                    pdfCell.content += ': customText';
                 }
             }
         };
@@ -4294,216 +4326,15 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 { content: 'f1_2', styles: { 'halign': 'left' } },
                 { content: 'f2_2', styles: { 'halign': 'left' } }
             ], [
-                { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
-                { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
+                { content: 'Max: f1_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
+                { content: 'Max: f2_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
             ], [
-                { content: 'Min: f1_1', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
-                { content: 'Min: f2_1', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
+                { content: 'Min: f1_1: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
+                { content: 'Min: f2_1: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
             ]]
         };
 
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
-            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
-            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
-            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
-            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
-            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
-            done();
-        });
-    });
-
-    QUnit.test('Data cells, modifying predefined content', function(assert) {
-        const done = assert.async();
-        const ds = [
-            { f1: 'f1', f2: 'f2' }
-        ];
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            columns: [
-                { dataField: 'f1', dataType: 'string' },
-                { dataField: 'f2', dataType: 'string' },
-            ],
-            dataSource: ds,
-            loadingTimeout: undefined,
-            showColumnHeaders: false
-        }).dxDataGrid('instance');
-        const options = {
-            customizeCell: (options) => {
-                const { gridCell, pdfCell } = options;
-                if(gridCell.rowType === 'data') {
-                    pdfCell.content += '_2';
-                }
-            }
-        };
-
-        const expectedCells = {
-            body: [[
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } }
-            ]]
-        };
-
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
-            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
-            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
-            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
-            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
-            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
-            done();
-        });
-    });
-
-    QUnit.test('Data cells, modifying predefined content, grouping', function(assert) {
-        const done = assert.async();
-        const ds = [
-            { f1: 'f1_1', f2: 'f1_2' },
-            { f1: 'f1_2', f2: 'f1_2' }
-        ];
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            columns: [
-                { dataField: 'f1', caption: 'f1', dataType: 'string', groupIndex: 0 },
-                { dataField: 'f2', caption: 'f2', dataType: 'string' },
-            ],
-            dataSource: ds,
-            loadingTimeout: undefined,
-            showColumnHeaders: false
-        }).dxDataGrid('instance');
-        const options = {
-            customizeCell: (options) => {
-                const { gridCell, pdfCell } = options;
-                if(gridCell.rowType === 'group') {
-                    pdfCell.content += ': custom';
-                }
-            }
-        };
-
-        const expectedCells = {
-            body: [
-                [{ content: 'f1: f1_1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f1_2', styles: { 'halign': 'left' } }],
-                [{ content: 'f1: f1_2: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f1_2', styles: { 'halign': 'left' } }]
-            ]
-        };
-
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
-            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
-            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
-            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
-            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
-            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
-            done();
-        });
-    });
-
-    QUnit.test('Data cells, modifying predefined content, groupSummary', function(assert) {
-        const done = assert.async();
-        const ds = [
-            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1' },
-            { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2', f4: 'f4_1' }
-        ];
-
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            columns: [
-                { dataField: 'f1', caption: 'f1', dataType: 'string' },
-                { dataField: 'f2', caption: 'f2', dataType: 'string' },
-                { dataField: 'f3', caption: 'f3', dataType: 'string' },
-                { dataField: 'f4', caption: 'f4', dataType: 'string', groupIndex: 0, allowExporting: false },
-            ],
-            summary: {
-                groupItems: [
-                    { column: 'f3', summaryType: 'max', alignByColumn: true, showInGroupFooter: true }
-                ]
-            },
-            dataSource: ds,
-            loadingTimeout: undefined,
-            showColumnHeaders: false
-        }).dxDataGrid('instance');
-        const options = {
-            customizeCell: (options) => {
-                const { gridCell, pdfCell } = options;
-                if(gridCell.rowType === 'groupFooter' && pdfCell.content) {
-                    pdfCell.content += ': custom';
-                }
-            }
-        };
-
-        const expectedCells = {
-            body: [[
-                { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
-            ], [
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
-            ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
-            ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f3_2: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
-            ]]
-        };
-
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
-            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
-            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
-            helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');
-            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
-            helper.checkMergeCells(expectedCells, autoTableOptions, 'body');
-            done();
-        });
-    });
-
-    QUnit.test('Data cells, modifying predefined content, totalSummary', function(assert) {
-        const done = assert.async();
-        const ds = [
-            { f1: 'f1_1', f2: 'f2_1' },
-            { f1: 'f1_2', f2: 'f2_2' }
-        ];
-        const dataGrid = $('#dataGrid').dxDataGrid({
-            columns: [
-                { dataField: 'f1', caption: 'f1', dataType: 'string' },
-                { dataField: 'f2', caption: 'f2', dataType: 'string' },
-            ],
-            dataSource: ds,
-            summary: {
-                totalItems: [
-                    { name: 'TotalSummary 1', column: 'f1', summaryType: 'max' },
-                    { name: 'TotalSummary 2', column: 'f1', summaryType: 'min' },
-                    { name: 'TotalSummary 3', column: 'f2', summaryType: 'max' },
-                    { name: 'TotalSummary 4', column: 'f2', summaryType: 'min' }
-                ]
-            },
-            showColumnHeaders: false,
-            loadingTimeout: undefined
-        }).dxDataGrid('instance');
-        const options = {
-            customizeCell: (options) => {
-                const { gridCell, pdfCell } = options;
-                if(gridCell.rowType === 'totalFooter') {
-                    pdfCell.content += ': custom';
-                }
-            }
-        };
-
-        const expectedCells = {
-            body: [[
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f2_1', styles: { 'halign': 'left' } }
-            ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } }
-            ], [
-                { content: 'Max: f1_2: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f2_2: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
-            ], [
-                { content: 'Min: f1_1: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Min: f2_1: custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
-            ]]
-        };
-
-        exportDataGrid(getOptions(this, dataGrid, options)).then(() => {
+        exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
             helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
             helper.checkCellsStyles(expectedCells, autoTableOptions, 'body');

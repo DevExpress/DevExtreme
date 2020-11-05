@@ -61,6 +61,11 @@ export const Export = {
             selectedRowsOnly
         } = options;
         const dataProvider = component.getDataProvider(selectedRowsOnly);
+        const customizeCellAction = (args) => {
+            if(isDefined(customizeCell)) {
+                customizeCell(args);
+            }
+        };
 
         return new Promise((resolve) => {
             dataProvider.ready().done(() => {
@@ -91,10 +96,6 @@ export const Export = {
                             styles: this._getPDFCellStyles(gridCell.rowType, columns[cellIndex].alignment, cellStyle)
                         };
 
-                        if(isDefined(customizeCell)) {
-                            customizeCell({ gridCell, pdfCell });
-                        }
-
                         if(gridCell.rowType === 'header') {
                             const mergedRange = this._tryGetMergeRange(rowIndex, cellIndex, mergedCells, dataProvider);
                             if(mergedRange && mergedRange.rowSpan > 0) {
@@ -105,6 +106,7 @@ export const Export = {
                             }
                             const isMergedCell = mergedCells[rowIndex] && mergedCells[rowIndex][cellIndex];
                             if(!isMergedCell || pdfCell.rowSpan > 1 || pdfCell.colSpan > 1) {
+                                customizeCellAction({ gridCell, pdfCell });
                                 row.push(pdfCell);
                             }
                         } else if(gridCell.rowType === 'group' && !isDefined(pdfCell.content) && row.length === 1) {
@@ -112,6 +114,7 @@ export const Export = {
                             row[0].colSpan++;
                         } else {
                             pdfCell.content = pdfCell.content ?? '';
+                            customizeCellAction({ gridCell, pdfCell });
                             row.push(pdfCell);
                         }
                     }

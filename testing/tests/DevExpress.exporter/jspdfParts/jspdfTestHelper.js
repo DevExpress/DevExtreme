@@ -6,6 +6,24 @@ class JSPdfDataGridTestHelper {
         this.jsPDFDocument = jsPDFDocument;
     }
 
+    checkCustomizeCell(eventArgs, expectedCells, callIndex) {
+        assert.ok(eventArgs.gridCell);
+        assert.ok(eventArgs.pdfCell);
+
+        const { head = [], body = [] } = expectedCells;
+        const expectedPdfCells = head.concat(body);
+
+        const actualPdfCell = eventArgs.pdfCell;
+        let index = 0;
+        this._iterateCells(expectedPdfCells, (expectedPdfCell, rowIndex, columnIndex) => {
+            if(index === callIndex) {
+                assert.deepEqual(actualPdfCell.content, expectedPdfCell.content, `customizeCell content [${rowIndex}, ${columnIndex}]`);
+                assert.deepEqual(actualPdfCell.styles, expectedPdfCell.styles || {}, `customizeCell styles [${rowIndex}, ${columnIndex}]`);
+            }
+            index++;
+        });
+    }
+
     checkColumnWidths(expectedColumnWidths, actualAutoTableOptions) {
         const columnStyles = actualAutoTableOptions.columnStyles;
         const actualWidths = [];
