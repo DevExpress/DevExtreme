@@ -4778,6 +4778,10 @@ QUnit.module('ScrollTo', () => {
             const scrollableInstance = scheduler.workSpace.getDateTableScrollable().dxScrollable('instance');
             const scrollBy = sinon.spy(scrollableInstance, 'scrollBy');
 
+            const rtlInitialPosition = scrollableInstance.option('rtlEnabled')
+                ? scrollableInstance.scrollLeft()
+                : 0;
+
             scheduler.instance.scrollTo(date, groups, allDay);
 
             const scrollableHeight = $scrollable.height();
@@ -4793,7 +4797,7 @@ QUnit.module('ScrollTo', () => {
                 'Correct top parameter',
             );
             assert.equal(
-                scrollBy.getCall(0).args[0].left,
+                rtlInitialPosition + scrollBy.getCall(0).args[0].left,
                 leftCellCount * cellWidth - (scrollableWidth - cellWidth) / 2,
                 'Correct left parameter',
             );
