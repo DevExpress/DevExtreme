@@ -124,6 +124,13 @@ export class FileManagerWrapper {
         return text.replace(showMoreButtonText, '');
     }
 
+    getFolderNodeByText(text, inDialog) {
+        return this.getFolderNodes(inDialog).filter(function(index, node) {
+            const content = $(node).text();
+            return content === text;
+        }).first();
+    }
+
     getFolderToggles(inDialog) {
         if(inDialog) {
             return $(`.${Consts.DIALOG_CLASS} .${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);

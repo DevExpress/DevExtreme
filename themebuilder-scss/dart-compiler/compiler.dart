@@ -26,6 +26,6 @@ class Compiler {
           functions: [collector.collector]);
     }
 
-    return CompilerResult(css, collector.changedVariables, false);
+    return CompilerResult(css, collector.changedVariables, '');
   }
 }
