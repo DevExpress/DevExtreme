@@ -399,7 +399,7 @@ QUnit.module('dropDownOptions', () => {
         assert.equal(instance.option('dropDownOptions.width'), 300, 'dropDownOptions object has not been rewrited');
     });
 
-    QUnit.test('dropdownOptions should not be cleared after repaint', function(assert) {
+    QUnit.test('dropDownOptions should not be cleared after repaint', function(assert) {
         const instance = $('#dropDownEditorLazy').dxDropDownEditor({
             dropDownOptions: {
                 container: '#dropDownEditorLazy'
@@ -412,6 +412,15 @@ QUnit.module('dropDownOptions', () => {
         instance.repaint();
         assert.strictEqual(instance.option('dropDownOptions.container'), '#dropDownEditorLazy', 'option is correct');
     });
+
+    QUnit.test('dropDownOptions should have dragEnabled = false after popup opened (T946143)', function(assert) {
+        const instance = $('#dropDownEditorLazy').dxDropDownEditor({
+            opened: true
+        }).dxDropDownEditor('instance');
+
+        assert.strictEqual(instance.option('dropDownOptions.dragEnabled'), false);
+    });
+
 });
 
 QUnit.module('focus policy', () => {
