@@ -255,13 +255,16 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         const timeDiff = today.getTime() - date.getTime();
 
         const differenceInDays = Math.floor(timeDiff / toMs('day'));
-        let duration = (timeDiff - differenceInDays * toMs('day')) / this.getCellDuration() - this.option('startDayHour');
+        let duration = (timeDiff - differenceInDays * toMs('day') - this.option('startDayHour') * toMs('hour')) / this.getCellDuration();
 
         if(today.getHours() > this.option('endDayHour')) {
             duration = this._getCellCountInDay();
         }
 
-        const cellCount = differenceInDays * this._getCellCountInDay() + duration < 0 ? duration : 0;
+        if(duration < 0) {
+            duration = 0;
+        }
+        const cellCount = differenceInDays * this._getCellCountInDay() + duration;
 
         return cellCount;
     }
