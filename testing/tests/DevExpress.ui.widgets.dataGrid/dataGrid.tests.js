@@ -7091,7 +7091,7 @@ QUnit.module('columnWidth auto option', {
         }).dxDataGrid('instance');
 
 
-        assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, 'last column width by content');
+        assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 1.01, 'last column width by content');
     });
 
     // T709106
@@ -7135,7 +7135,7 @@ QUnit.module('columnWidth auto option', {
         }).dxDataGrid('instance');
 
 
-        assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 0.51, 'last column width by content');
+        assert.roughEqual($(dataGrid.getCellElement(0, 2)).width(), CONTENT_WIDTH, 1.01, 'last column width by content');
     });
 
     QUnit.test('column with width 0 should be applied', function(assert) {
