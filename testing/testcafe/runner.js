@@ -11,12 +11,14 @@ createTestCafe('localhost', 1437, 1438)
         const args = getArgs();
         const testName = args.test.trim();
         let componentFolder = args.componentFolder.trim();
+        const file = args.file.trim();
+
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
 
         const runner = testCafe.createRunner()
             .browsers(args.browsers.split(' '))
-            .src([`./testing/testcafe/tests/${componentFolder}/*.ts`]);
+            .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
         if(testName) {
             runner.filter(name => name === testName);
@@ -39,6 +41,7 @@ function getArgs() {
             browsers: 'chrome',
             test: '',
             componentFolder: '',
+            file: '*',
             quarantineMode: false
         }
     });
