@@ -199,7 +199,7 @@ const ResponsiveBox = CollectionWidget.inherit({
 
         this._refreshItem($item, item);
         this._clearItemNodeTemplates();
-        this._update();
+        this._update(true);
     },
 
     _setScreenSize: function() {
@@ -595,19 +595,43 @@ const ResponsiveBox = CollectionWidget.inherit({
         return result;
     },
 
-    _update: function() {
+    _update: function(forceRemoveRoot) {
         const $existingRoot = this._$root;
         this._renderItems();
-        $existingRoot.remove();
+
+        if($existingRoot) {
+            if(forceRemoveRoot) {
+                $existingRoot.remove();
+            } else {
+                $existingRoot.detach();
+                this._saveAssistantRoot($existingRoot);
+            }
+        }
 
         this._layoutChangedAction();
         this._updateRootBox();
     },
 
+    _saveAssistantRoot: function($root) {
+        this._assistantRoots = this._assistantRoots || [];
+        this._assistantRoots.push($root);
+    },
+
     _dispose: function() {
         clearTimeout(this._updateTimer);
         this._clearItemNodeTemplates();
+        this._cleanUnusedRoots();
         this.callBase.apply(this, arguments);
+    },
+
+    _cleanUnusedRoots: function() {
+        if(!this._assistantRoots) {
+            return;
+        }
+
+        each(this._assistantRoots, function(_, item) {
+            $(item).remove();
+        });
     },
 
     _clearItemNodeTemplates: function() {
