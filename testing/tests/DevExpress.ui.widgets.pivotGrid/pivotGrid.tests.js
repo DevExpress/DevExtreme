@@ -4434,7 +4434,7 @@ QUnit.module('Field Panel', {
         }));
         const container = pivotGrid.$element().find('.dx-pivotgrid-container').first();
         // assert
-        assert.roughEqual(container.height(), 300, 1, 'height');
+        assert.roughEqual(container.height(), 300, 1.01, 'height');
     });
 
     QUnit.test('PivotGrid should have correct height if filter fields take several lines and pivot has not vertical scroll', function(assert) {
