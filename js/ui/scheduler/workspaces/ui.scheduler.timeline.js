@@ -250,10 +250,18 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _setHorizontalGroupHeaderCellsHeight() { return noop(); }
 
     getIndicationCellCount() {
+        const timeDiff = this._getTimeDiff();
+        return this._calculateDurationInCells(timeDiff);
+    }
+
+    _getTimeDiff() {
         const today = this._getToday();
         const date = this._getIndicationFirstViewDate();
-        const timeDiff = today.getTime() - date.getTime();
+        return today.getTime() - date.getTime();
+    }
 
+    _calculateDurationInCells(timeDiff) {
+        const today = this._getToday();
         const differenceInDays = Math.floor(timeDiff / toMs('day'));
         let duration = (timeDiff - differenceInDays * toMs('day') - this.option('startDayHour') * toMs('hour')) / this.getCellDuration();
 
@@ -264,9 +272,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         if(duration < 0) {
             duration = 0;
         }
-        const cellCount = differenceInDays * this._getCellCountInDay() + duration;
+        return differenceInDays * this._getCellCountInDay() + duration;
 
-        return cellCount;
     }
 
     getIndicationWidth() {
