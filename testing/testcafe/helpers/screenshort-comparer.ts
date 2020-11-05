@@ -1,6 +1,5 @@
 /* eslint-disable no-bitwise */
 /* eslint-disable no-plusplus */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 import * as LooksSame from 'looks-same';
 import * as path from 'path';
 import * as fs from 'fs';
@@ -26,7 +25,7 @@ const screenshotComparerDefault = {
 };
 type ComparerOptions = typeof screenshotComparerDefault;
 
-function ensureArtifactsPath() {
+function ensureArtifactsPath(): void {
   if (!fs.existsSync(artifactsPath)) {
     fs.mkdirSync(artifactsPath, { recursive: true });
   }
@@ -34,8 +33,8 @@ function ensureArtifactsPath() {
 
 function saveArtifacts({
   screenshotFileName, etalonFileName,
-}) {
-  function copyToArtifacts(sourcePath: string, postfix = '') {
+}: Record<'screenshotFileName' | 'etalonFileName', string>): void {
+  function copyToArtifacts(sourcePath: string, postfix = ''): void {
     const fileName = path.basename(sourcePath, '.png');
     const targetPath = path.join(artifactsPath, `${fileName}${postfix}.png`);
     if (fs.existsSync(sourcePath)) {
@@ -47,8 +46,9 @@ function saveArtifacts({
   copyToArtifacts(etalonFileName, '_etalon');
 }
 
-export async function looksSame({ etalonFileName, screenshotBuffer, comparisonOptions }):
-Promise<boolean> {
+export async function looksSame({ etalonFileName, screenshotBuffer, comparisonOptions }:
+{ etalonFileName: string; screenshotBuffer: Buffer; comparisonOptions: ComparerOptions['looksSameComparisonOptions'] }):
+  Promise<boolean> {
   return new Promise<boolean>((resolve, reject) => {
     (LooksSame as any)(etalonFileName, screenshotBuffer, comparisonOptions,
       async (_error, result) => {
@@ -61,17 +61,19 @@ Promise<boolean> {
   });
 }
 
+interface Image { width: number; height: number; data: number[] }
+
 async function getMaskedScreenshotBuffer({
   screenshotFileName, etalonFileName, maskFileName,
-}) {
-  function isSizeEqual(image1, image2): boolean {
+}: Record<'screenshotFileName' | 'etalonFileName' | 'maskFileName', string>): Promise<Buffer> {
+  function isSizeEqual(image1: Image, image2: Image): boolean {
     return image1.height === image2.height && image1.width === image2.width;
   }
-  function getImage(imagePath: string): { width; height} {
+  function getImage(imagePath: string): Image {
     const imageData = fs.readFileSync(imagePath);
     return PNG.sync.read(imageData, { filterType: -1 });
   }
-  function applyMask({ etalonImg, screenshotImg, maskImg }) {
+  function applyMask(etalonImg: Image, screenshotImg: Image, maskImg: Image): Buffer {
     for (let y = 0; y < screenshotImg.height; y += 1) {
       for (let x = 0; x < screenshotImg.width; x += 1) {
         const idx = (screenshotImg.width * y + x) << 2;
@@ -103,7 +105,7 @@ async function getMaskedScreenshotBuffer({
   if (!isSizeEqual(etalonImg, maskImg)) {
     throw new Error('Mask size does not match etalon size');
   }
-  const targetImageBuffer = applyMask({ etalonImg, screenshotImg, maskImg });
+  const targetImageBuffer = applyMask(etalonImg, screenshotImg, maskImg);
   return targetImageBuffer;
 }
 
@@ -111,7 +113,7 @@ async function getDiff({
   etalonFileName, screenshotBuffer, options,
 }: { etalonFileName; screenshotBuffer; options: ComparerOptions }):
   Promise<Buffer> {
-  function colorToString(color: typeof options.highlightColor) {
+  function colorToString(color: typeof options.highlightColor): string {
     return `#${Object.values(color).map((n) => n.toString(16).padStart(2, '0')).join('')}`;
   }
   const highlightColor = colorToString(options.highlightColor);
@@ -132,8 +134,8 @@ async function getDiff({
   });
 }
 
-function getMask(diffBuffer, options: ComparerOptions) {
-  function makeTransparentExceptColor(image, { r, g, b }) {
+function getMask(diffBuffer: Buffer, options: ComparerOptions): Buffer {
+  function makeTransparentExceptColor(image: Image, { r, g, b }: ComparerOptions['highlightColor']): void {
     for (let y = 0; y < image.height; y++) {
       for (let x = 0; x < image.width; x++) {
         const idx = (image.width * y + x) << 2;
@@ -156,12 +158,14 @@ type SelectorType = Selector | string | null;
 
 async function tryGetValidScreenshot({
   element, t, screenshotFileName, etalonFileName, maskFileName, options,
-}: { element: SelectorType;
+}: {
+  element: SelectorType;
   t: TestController;
   screenshotFileName: string;
   etalonFileName: string;
   maskFileName: string;
-  options: ComparerOptions; }) {
+  options: ComparerOptions;
+}): Promise<{ equal: boolean; screenshotBuffer: Buffer }> {
   let equal = false;
   let attempt = 0;
   let screenshotBuffer;
@@ -193,9 +197,9 @@ export async function compareScreenshot(
   screenshotName: string,
   element: SelectorType = null,
   comparisonOptions?: Partial<ComparerOptions>,
-) {
+): Promise<boolean> {
   const screenshotFileName = path.join(screenshotsPath, screenshotName);
-  const etalonsPath = path.join(path.dirname((t as any).testRun.test.testFile.filename), 'etalons');
+  const etalonsPath = path.join(path.dirname((t as unknown as { testRun }).testRun.test.testFile.filename), 'etalons');
   const etalonFileName = path.join(etalonsPath, screenshotName);
   const maskFileName = path.join(etalonsPath, screenshotName.replace('.png', '_mask.png'));
   const options = {
@@ -225,13 +229,15 @@ export async function compareScreenshot(
     throw e;
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function createScreenshotsComparer(t: TestController) {
   const errorMessages: string[] = [];
   return {
     takeScreenshot: async (screenshotName: string,
       element: SelectorType = null,
       comparisonOptions?: Partial<ComparerOptions>,
-    ) => {
+    ): Promise<boolean> => {
       try {
         const isValid = await compareScreenshot(t, screenshotName, element, comparisonOptions);
         if (!isValid) {
@@ -243,8 +249,8 @@ export function createScreenshotsComparer(t: TestController) {
       return true;
     },
     compareResults: {
-      isValid: () => errorMessages.length === 0,
-      errorMessages: () => errorMessages.join('\r\n'),
+      isValid: (): boolean => errorMessages.length === 0,
+      errorMessages: (): string => errorMessages.join('\r\n'),
     },
   };
 }
