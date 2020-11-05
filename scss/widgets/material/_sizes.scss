@@ -50,6 +50,6 @@ $material-base-border-width: 1px;
 * $name 120. Border radius
 * $type text
 */
-$base-border-radius: $material-base-border-radius;
+$base-border-radius: $material-base-border-radius !default;
 
 $material-base-standard-texteditor-input-horizontal-padding: 0;

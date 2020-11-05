@@ -4154,7 +4154,7 @@ QUnit.test('Viewport and whole range can have negative values if logarithmic axi
     assert.equal(businessRange.axisType, 'logarithmic');
 });
 
-QUnit.test('Viewport and whole range can have negative values if logarithmic axis and allowNegatives is set not set', function(assert) {
+QUnit.test('Viewport and whole range can have negative values if logarithmic axis and allowNegatives is not set', function(assert) {
     this.updateOptions({ visualRange: [-10, -100], wholeRange: [-10, -100], type: 'logarithmic' });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -4168,6 +4168,7 @@ QUnit.test('Viewport and whole range can have negative values if logarithmic axi
     assert.equal(businessRange.minVisible, -100);
     assert.equal(businessRange.maxVisible, -10);
     assert.equal(businessRange.axisType, 'logarithmic');
+    assert.equal(businessRange.allowNegatives, true);
 });
 
 QUnit.test('One values of whole range can have null value', function(assert) {
