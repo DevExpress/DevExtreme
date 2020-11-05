@@ -7,7 +7,7 @@ import messageLocalization from '../../localization/message';
 import Widget from '../widget/ui.widget';
 import ProgressBar from '../progress_bar';
 import Button from '../button';
-import ScrollView from '../scroll_view/ui.scroll_view';
+import ScrollView from '../scroll_view';
 
 const FILE_MANAGER_PROGRESS_PANEL_CLASS = 'dx-filemanager-progress-panel';
 const FILE_MANAGER_PROGRESS_PANEL_CONTAINER_CLASS = `${FILE_MANAGER_PROGRESS_PANEL_CLASS}-container`;

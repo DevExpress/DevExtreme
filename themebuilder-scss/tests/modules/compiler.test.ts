@@ -125,10 +125,11 @@ describe('compile with widgets', () => {
 });
 
 describe('compile with server support', () => {
+  const errorMessage = 'Unable to parse dart server response:';
   const createServer = (error: boolean): net.Server => net.createServer((socket) => {
     socket.on('data', (data) => {
       if (error) {
-        const reply = { error: true };
+        const reply = { error: errorMessage };
         socket.write(JSON.stringify(reply));
         socket.end();
         return;
@@ -205,7 +206,7 @@ describe('compile with server support', () => {
     compiler.indexFileContent = defaultIndexFileContent;
     return compiler.compile([], { file }).catch(async (e) => {
       await stopServer();
-      expect(e).toEqual(undefined);
+      expect(e.message).toEqual(errorMessage);
     });
   });
 });

@@ -57,6 +57,12 @@ legendModule.Legend = sinon.spy(function(parameters) {
     legend.getActionCallback = sinon.spy(function(arg) {
         return arg;
     });
+    legend.getTemplatesGroups = sinon.spy(function() {
+        return [];
+    });
+    legend.getTemplatesDef = sinon.spy(function() {
+        return [];
+    });
     return legend;
 });
 
@@ -988,6 +994,10 @@ const environment = {
 
         assert.ok(chart._argumentAxes[0].wasDrawn, 'Horizontal axis was drawn');
         assert.ok(chart._valueAxes[0].wasDrawn, 'Vertical axis was drawn');
+        assert.ok(chart._argumentAxes[0].beforeCleanGroups.called, 'beforeCleanGroups called');
+        assert.ok(chart._argumentAxes[0].afterCleanGroups.called, 'afterCleanGroups called');
+        assert.ok(chart._valueAxes[0].beforeCleanGroups.called, 'beforeCleanGroups called');
+        assert.ok(chart._valueAxes[0].afterCleanGroups.called, 'afterCleanGroups called');
         assert.ok(chart.series[0].wasDrawn, 'Series was drawn');
         assert.ok(!chart._seriesGroup.stub('linkRemove').called, 'Series group should be detached');
         assert.ok(!chart._seriesGroup.stub('clear').called, 'Series group should be cleared');

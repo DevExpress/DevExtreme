@@ -5,6 +5,7 @@ import browser from 'core/utils/browser';
 import executeAsyncMock from '../../helpers/executeAsyncMock.js';
 
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(() => {
     const markup =
@@ -338,8 +339,8 @@ QUnit.module('options changing', {
             value: 'qwertyQWERTY'
         });
 
-        assert.equal(this.element.height(), h, 'widget\'s height set');
-        assert.equal(this.element.width(), w, 'widget\'s width set');
+        assert.equal(this.element.outerHeight(), h, 'widget\'s height set');
+        assert.equal(this.element.outerWidth(), w, 'widget\'s width set');
         assert.equal(this.input.outerHeight(), this.element.height(), 'input outer height should be equal widget height');
         assert.equal(this.input.outerWidth(), this.element.width(), 'input outer width should be equal widget width');
 
@@ -350,8 +351,8 @@ QUnit.module('options changing', {
             width: w
         });
 
-        assert.equal(this.element.height(), h, 'widget\'s height set');
-        assert.equal(this.element.width(), w, 'widget\'s width set');
+        assert.equal(this.element.outerHeight(), h, 'widget\'s height set');
+        assert.equal(this.element.outerWidth(), w, 'widget\'s width set');
         assert.equal(this.input.outerHeight(), this.element.height(), 'input outer height should be equal widget height');
         assert.equal(this.input.outerWidth(), this.element.width(), 'input outer width should be equal widget width');
     });

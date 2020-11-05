@@ -2,6 +2,7 @@ import $ from '../../../core/renderer';
 import { each } from '../../../core/utils/iterator';
 import SchedulerWorkSpaceIndicator from './ui.scheduler.work_space.indicator';
 import dateLocalization from '../../../localization/date';
+import timeZoneUtils from '../utils.timeZone';
 
 class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     _getCellsBetween($first, $last) {
@@ -73,7 +74,7 @@ class SchedulerWorkspaceVertical extends SchedulerWorkSpaceIndicator {
     renovatedRenderSupported() { return true; }
 
     generateRenderOptions() {
-        const startViewDate = this._getDateWithSkippedDST();
+        const startViewDate = timeZoneUtils.getDateWithoutTimezoneChange(this.getStartViewDate());
         const _getTimeText = (row, column) => {
             // T410490: incorrectly displaying time slots on Linux
             const index = row % this._getRowCount();

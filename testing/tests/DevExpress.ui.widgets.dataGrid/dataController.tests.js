@@ -3617,6 +3617,9 @@ const setupVirtualRenderingModule = function() {
         paging: {
             pageSize: 20
         },
+        editing: {
+            mode: 'batch'
+        },
         dataSource: array
     };
 
@@ -3972,6 +3975,130 @@ QUnit.module('Virtual rendering', { beforeEach: setupVirtualRenderingModule, aft
         assert.deepEqual(dataSourceCall.args, [5], 'setViewportItemIndex call args');
     });
 
+    QUnit.test('addRow > scroll to far > scroll back', function(assert) {
+        // arrange
+        this.addRow();
+
+        // act
+        this.dataController.setViewportPosition(500);
+
+        // assert
+        assert.strictEqual(this.dataController.items()[0].key, 50, 'first item key');
+
+        // act
+        this.dataController.setViewportPosition(0);
+
+        // assert
+        assert.strictEqual(this.dataController.items()[0].isNewRow, true, 'first item is new');
+    });
+
+    QUnit.test('addRow > scroll to near > add row > scroll back', function(assert) {
+        // act
+        this.addRow();
+        this.dataController.setViewportPosition(60);
+        this.addRow();
+        this.dataController.setViewportPosition(0);
+
+        // assert
+        assert.strictEqual(this.dataController.items().length, 17, 'item count');
+        assert.strictEqual(this.dataController.items()[0].isNewRow, true, 'item 0 is new');
+        assert.strictEqual(this.dataController.items()[6].isNewRow, true, 'item 6 is new');
+    });
+
+    QUnit.test('addRow > scroll to little near > add row', function(assert) {
+        // act
+        this.addRow();
+        this.dataController.setViewportPosition(20);
+        this._views.rowsView = {
+            getTopVisibleItemIndex: () => 2,
+            _getCellElement: () => {}
+        };
+        this.addRow();
+
+        // assert
+        assert.strictEqual(this.dataController.items().length, 17, 'item count');
+        assert.strictEqual(this.dataController.items()[0].isNewRow, true, 'item 0 is new');
+        assert.strictEqual(this.dataController.items()[2].isNewRow, true, 'item 2 is new');
+    });
+
+    QUnit.test('scroll to near > add row > scroll to far > scroll back', function(assert) {
+        // act
+        this.dataController.setViewportPosition(50);
+        this.addRow();
+        this.dataController.setViewportPosition(500);
+        this.dataController.setViewportPosition(0);
+
+        // assert
+        assert.strictEqual(this.dataController.items().length, 16, 'item count');
+        assert.strictEqual(this.dataController.items()[5].isNewRow, true, 'item 5 is new');
+    });
+
+    QUnit.test('add row > scroll to second page', function(assert) {
+        // act
+        this.addRow();
+        this.dataController.setViewportPosition(100);
+
+        // assert
+        assert.strictEqual(this.dataController.items().length, 15, 'item count');
+        assert.strictEqual(this.dataController.items()[0].key, 10, 'first visible item');
+        assert.strictEqual(this.dataController.items()[9].key, 19, 'item 19 from first page');
+        assert.strictEqual(this.dataController.items()[10].key, 20, 'item 20 from second page');
+    });
+
+    QUnit.test('scroll to second page > add row > scroll back > scroll to second page', function(assert) {
+        // act
+        this.dataController.viewportSize(12);
+        this.dataController.setViewportPosition(200);
+        this.addRow();
+        this.dataController.setViewportPosition(150);
+        this.dataController.setViewportPosition(150);
+        this.dataController.setViewportPosition(100);
+        this.dataController.setViewportPosition(50);
+
+        const changedStub = sinon.stub();
+        this.dataController.changed.add(changedStub);
+        this.dataController.setViewportPosition(0);
+        this.dataController.setViewportPosition(50);
+
+        // assert
+        assert.deepEqual(changedStub
+            .getCalls()
+            .map(c => c.args[0])
+            .filter(e => e.changeType !== 'pageIndex')
+            .map(({
+                changeType, items, removeCount
+            }) => ({
+                changeType, addCount: items.length, removeCount
+            })),
+        [{
+            changeType: 'prepend',
+            addCount: 5,
+            removeCount: 6
+        }, {
+            changeType: 'append',
+            addCount: 6,
+            removeCount: 5
+        }], 'changed call args');
+
+        assert.strictEqual(this.dataController.items().length, 21, 'item count');
+        assert.strictEqual(this.dataController.items()[15].isNewRow, true, 'item 15 is new');
+    });
+
+    QUnit.test('scroll to third page > add row > scroll second page > add row > scroll to third page', function(assert) {
+        // act
+        this.dataController.setViewportPosition(600);
+        this.addRow();
+        this.dataController.setViewportPosition(400);
+        this.dataController.setViewportPosition(200);
+        this.dataController.setViewportPosition(0);
+        this.dataController.setViewportPosition(200);
+        this.dataController.setViewportPosition(400);
+        this.dataController.setViewportPosition(600);
+
+        // assert
+        assert.strictEqual(this.dataController.items().length, 16, 'item count');
+        assert.strictEqual(this.dataController.items()[0].isNewRow, true, 'item 0 is new');
+    });
 // =================================
 // scrollingDataSource tests
 });
@@ -12707,7 +12834,7 @@ QUnit.module('Refresh changesOnly', {
         assert.ok(this.editingController.isEditRow(1), 'edit row index is corrected');
     });
 
-    QUnit.test('edit row should not be updated on data change', function(assert) {
+    QUnit.test('edit row should be updated on data change', function(assert) {
         this.setupModules();
 
         let changedArgs;
@@ -12731,7 +12858,7 @@ QUnit.module('Refresh changesOnly', {
         assert.deepEqual(changedArgs.changeTypes, ['update', 'update']);
         assert.deepEqual(changedArgs.rowIndices, [0, 1]);
         assert.deepEqual(changedArgs.items, [items[0], items[1]]);
-        assert.deepEqual(changedArgs.columnIndices, [[], [2]], 'only second row cell is updated');
+        assert.deepEqual(changedArgs.columnIndices, [[2], [2]], 'only second row cell is updated');
     });
 
     // T702112

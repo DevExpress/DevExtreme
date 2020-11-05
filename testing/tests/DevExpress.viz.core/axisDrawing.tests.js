@@ -168,8 +168,8 @@ QUnit.test('Create groups and append them to groups from options', function(asse
     assert.deepEqual(g.getCall(0).returnValue.append.getCall(0).args[0], axesContainerGroup, '_axisGroup');
     assert.deepEqual(g.getCall(1).returnValue.append.getCall(0).args[0], stripsGroup, '_axisStripGroup');
     assert.deepEqual(g.getCall(2).returnValue.append.getCall(0).args[0], gridGroup, '_axisGridGroup');
-    assert.deepEqual(g.getCall(3).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, '_axisElementsGroup');
-    assert.deepEqual(g.getCall(4).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, '_axisLineGroup');
+    assert.deepEqual(g.getCall(3).returnValue.linkOn.getCall(0).args[0], g.getCall(0).returnValue, '_axisElementsGroup');
+    assert.deepEqual(g.getCall(4).returnValue.linkOn.getCall(0).args[0], g.getCall(0).returnValue, '_axisLineGroup');
     assert.deepEqual(g.getCall(5).returnValue.append.getCall(0).args[0], g.getCall(0).returnValue, '_axisTitleGroup');
     // above
     assert.deepEqual(g.getCall(6).returnValue.append.getCall(0).args[0], constantLinesGroup.above, '_axisConstantLineGroups.above.insideGroup');
@@ -204,10 +204,15 @@ QUnit.test('Some groups are not passed - created groups are not appended', funct
     // assert
     const g = renderer.g;
     assert.deepEqual(g.getCall(0).returnValue.stub('append').getCall(0).args[0], axesContainerGroup, '_axisGroup');
+    assert.strictEqual(g.getCall(0).returnValue.stub('enableLinks').callCount, 1, 'links on');
     assert.deepEqual(g.getCall(1).returnValue.stub('append').callCount, 0, '_axisStripGroup');
     assert.deepEqual(g.getCall(2).returnValue.stub('append').callCount, 0, '_axisGridGroup');
-    assert.deepEqual(g.getCall(3).returnValue.stub('append').getCall(0).args[0], g.getCall(0).returnValue, '_axisElementsGroup');
-    assert.deepEqual(g.getCall(4).returnValue.stub('append').getCall(0).args[0], g.getCall(0).returnValue, '_axisLineGroup');
+    assert.deepEqual(g.getCall(3).returnValue.stub('linkOn').getCall(0).args[0], g.getCall(0).returnValue, '_axisElementsGroup');
+    assert.deepEqual(g.getCall(3).returnValue.stub('linkOn').getCall(0).args[1], 'axisElements', 'axisElements name');
+    assert.strictEqual(g.getCall(3).returnValue.stub('linkAppend').callCount, 1, 'linkAppend called');
+    assert.deepEqual(g.getCall(4).returnValue.stub('linkOn').getCall(0).args[0], g.getCall(0).returnValue, '_axisLineGroup');
+    assert.deepEqual(g.getCall(4).returnValue.stub('linkOn').getCall(0).args[1], 'axisLine', 'axisLine name');
+    assert.strictEqual(g.getCall(4).returnValue.stub('linkAppend').callCount, 1, 'linkAppend called');
     assert.deepEqual(g.getCall(5).returnValue.stub('append').getCall(0).args[0], g.getCall(0).returnValue, '_axisTitleGroup');
     assert.deepEqual(g.getCall(6).returnValue.stub('append').callCount, 0, '_axisConstantLineGroups.insideGroup');
     assert.deepEqual(g.getCall(7).returnValue.stub('append').callCount, 0, '_axisConstantLineGroups.outsideGroup1');
@@ -1791,7 +1796,7 @@ QUnit.test('Template container bbox on adjusting labels. Horizontal = false, rig
     assert.deepEqual(renderer.g.getCall(0).returnValue.attr.lastCall.args[0], { translateX: 99, translateY: 29 });
 });
 
-QUnit.test('No clear labels group on draw drawn axis', function(assert) {
+QUnit.test('No clear labels group on draw drawn axis with template', function(assert) {
     this.createAxis();
     this.updateOptions({
         isHorizontal: true,

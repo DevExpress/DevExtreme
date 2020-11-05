@@ -1,0 +1,100 @@
+$filterbuilder-bg: null !default;
+$filterbuilder-text-color: null !default;
+$filterbuilder-text-focus-color: null !default;
+$filterbuilder-group-operation-color: null !default;
+$filterbuilder-group-operation-hover-color: null !default;
+$filterbuilder-group-operation-focus-color: null !default;
+$filterbuilder-item-operator-color: null !default;
+$filterbuilder-item-operator-hover-color: null !default;
+$filterbuilder-item-operator-focus-color: null !default;
+$filterbuilder-item-field-color: null !default;
+$filterbuilder-item-field-hover-color: null !default;
+$filterbuilder-item-field-focus-color: null !default;
+$filterbuilder-item-value-color: null !default;
+$filterbuilder-item-value-hover-color: null !default;
+$filterbuilder-item-value-focus-color: null !default;
+$filterbuilder-plus-icon-color: null !default;
+$filterbuilder-plus-icon-hover-color: null !default;
+$filterbuilder-plus-icon-focus-color: null !default;
+$filterbuilder-remove-icon-color: null !default;
+$filterbuilder-remove-icon-hover-color: null !default;
+$filterbuilder-remove-icon-focus-color: null !default;
+$filterbuilder-menu-icon-color: null !default;
+
+@use "../icons" as *;
+@use "./common";
+
+.dx-filterbuilder {
+  background-color: $filterbuilder-bg;
+
+  @mixin button-color($color, $hover-color, $focus-color) {
+    background-color: $color;
+
+    &:hover {
+      background-color: $hover-color;
+    }
+
+    &:focus,
+    &.dx-state-active {
+      background-color: $focus-color;
+      color: $filterbuilder-text-focus-color;
+    }
+  }
+
+  .dx-filterbuilder-group {
+    .dx-filterbuilder-text {
+      color: $filterbuilder-text-color;
+
+      &.dx-filterbuilder-group-operation {
+        @include button-color($filterbuilder-group-operation-color, $filterbuilder-group-operation-hover-color, $filterbuilder-group-operation-focus-color);
+      }
+
+      &.dx-filterbuilder-item-field {
+        @include button-color($filterbuilder-item-field-color, $filterbuilder-item-field-hover-color, $filterbuilder-item-field-focus-color);
+      }
+
+      &.dx-filterbuilder-item-operation {
+        @include button-color($filterbuilder-item-operator-color, $filterbuilder-item-operator-hover-color, $filterbuilder-item-operator-focus-color);
+      }
+
+      .dx-filterbuilder-item-value-text {
+        @include button-color($filterbuilder-item-value-color, $filterbuilder-item-value-hover-color, $filterbuilder-item-value-focus-color);
+      }
+    }
+
+    .dx-icon-plus {
+      color: $filterbuilder-plus-icon-color;
+
+      &:hover {
+        color: $filterbuilder-plus-icon-hover-color;
+      }
+
+      &:focus,
+      &.dx-state-active {
+        color: $filterbuilder-plus-icon-focus-color;
+      }
+    }
+
+    .dx-icon-remove {
+      color: $filterbuilder-remove-icon-color;
+
+      &:hover {
+        color: $filterbuilder-remove-icon-hover-color;
+      }
+
+      &:focus {
+        color: $filterbuilder-remove-icon-focus-color;
+      }
+    }
+  }
+}
+
+.dx-filterbuilder-overlay.dx-filterbuilder-operations {
+  .dx-treeview-item {
+    .dx-icon {
+      color: $filterbuilder-menu-icon-color;
+
+      @include dx-icon-sizing(14px);
+    }
+  }
+}

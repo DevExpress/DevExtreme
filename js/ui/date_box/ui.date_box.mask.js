@@ -1,5 +1,5 @@
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
-import { isFunction, isString, isDate } from '../../core/utils/type';
+import { isFunction, isString, isDate, isDefined } from '../../core/utils/type';
 import { clipboardText } from '../../core/utils/dom';
 import { extend } from '../../core/utils/extend';
 import { fitIntoRange, inRange, sign } from '../../core/utils/math';
@@ -540,7 +540,12 @@ const DateBoxMask = DateBoxBase.inherit({
     _maskClickHandler() {
         if(this.option('text')) {
             this._activePartIndex = getDatePartIndexByPosition(this._dateParts, this._caret().start);
-            this._caret(this._getActivePartProp('caret'));
+
+            if(isDefined(this._activePartIndex)) {
+                this._caret(this._getActivePartProp('caret'));
+            } else {
+                this._selectLastPart();
+            }
         }
     },
 

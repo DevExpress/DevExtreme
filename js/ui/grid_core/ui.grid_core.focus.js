@@ -422,9 +422,13 @@ export default {
                 },
 
                 setFocusedRowIndex: function(rowIndex) {
+                    const dataController = this.getController('data');
+
                     this.callBase(rowIndex);
 
-                    const visibleRow = this.getController('data').getVisibleRows()[rowIndex];
+                    const visibleRowIndex = rowIndex - dataController.getRowIndexOffset();
+                    const visibleRow = dataController.getVisibleRows()[visibleRowIndex];
+
                     if(!visibleRow || !visibleRow.isNewRow) {
                         this.option('focusedRowIndex', rowIndex);
                     }
@@ -773,11 +777,13 @@ export default {
                         columnIndex += columnsController.getColumnIndexOffset();
                         this.getController('keyboardNavigation').setFocusedCellPosition(rowIndex, columnIndex);
 
-                        const dataSource = dataController.dataSource();
-                        const operationTypes = dataSource && dataSource.operationTypes();
-                        if(operationTypes && !operationTypes.paging && !dataController.isPagingByRendering()) {
-                            this.resizeCompleted.remove(this._scrollToFocusOnResize);
-                            this.resizeCompleted.add(this._scrollToFocusOnResize);
+                        if(this.getController('focus').isAutoNavigateToFocusedRow()) {
+                            const dataSource = dataController.dataSource();
+                            const operationTypes = dataSource && dataSource.operationTypes();
+                            if(operationTypes && !operationTypes.paging && !dataController.isPagingByRendering()) {
+                                this.resizeCompleted.remove(this._scrollToFocusOnResize);
+                                this.resizeCompleted.add(this._scrollToFocusOnResize);
+                            }
                         }
                     }
                 },

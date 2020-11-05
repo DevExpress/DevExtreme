@@ -720,11 +720,11 @@ Axis.prototype = {
         const renderer = that._renderer;
         const classSelector = that._axisCssPrefix;
 
-        that._axisGroup = renderer.g().attr({ 'class': classSelector + 'axis' });
+        that._axisGroup = renderer.g().attr({ 'class': classSelector + 'axis' }).enableLinks();
         that._axisStripGroup = renderer.g().attr({ 'class': classSelector + 'strips' });
         that._axisGridGroup = renderer.g().attr({ 'class': classSelector + 'grid' });
-        that._axisElementsGroup = renderer.g().attr({ 'class': classSelector + 'elements' }).append(that._axisGroup);
-        that._axisLineGroup = renderer.g().attr({ 'class': classSelector + 'line' }).append(that._axisGroup);
+        that._axisElementsGroup = renderer.g().attr({ 'class': classSelector + 'elements' }).linkOn(that._axisGroup, 'axisElements').linkAppend();
+        that._axisLineGroup = renderer.g().attr({ 'class': classSelector + 'line' }).linkOn(that._axisGroup, 'axisLine').linkAppend();
         that._axisTitleGroup = renderer.g().attr({ 'class': classSelector + 'title' }).append(that._axisGroup);
 
         that._axisConstantLineGroups = {
@@ -746,7 +746,7 @@ Axis.prototype = {
         that._axisGridGroup.remove();
 
         that._axisTitleGroup.clear();
-        !that.isRendered() && that._axisElementsGroup.clear(); // for react async templates
+        (!that._options.label.template || !that.isRendered()) && that._axisElementsGroup.clear(); // for react async templates
 
         that._axisLineGroup && that._axisLineGroup.clear();
         that._axisStripGroup && that._axisStripGroup.clear();
@@ -1074,6 +1074,18 @@ Axis.prototype = {
         }
     },
 
+    _resolveLogarithmicOptionsForRange(range) {
+        const options = this._options;
+        if(options.type === constants.logarithmic) {
+            range.addRange({
+                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
+            });
+            if(!isNaN(options.linearThreshold)) {
+                range.linearThreshold = options.linearThreshold;
+            }
+        }
+    },
+
     adjustViewport(businessRange) {
         const that = this;
         const options = that._options;
@@ -1130,7 +1142,7 @@ Axis.prototype = {
         !isDefined(result.min) && (result.min = result.minVisible);
         !isDefined(result.max) && (result.max = result.maxVisible);
         result.addRange({}); // controlValuesByVisibleBounds
-
+        that._resolveLogarithmicOptionsForRange(result);
 
         return result;
     },
@@ -1292,14 +1304,7 @@ Axis.prototype = {
             invert: options.inverted
         });
 
-        if(options.type === constants.logarithmic) {
-            that._seriesData.addRange({
-                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
-            });
-            if(!isNaN(options.linearThreshold)) {
-                that._seriesData.linearThreshold = options.linearThreshold;
-            }
-        }
+        that._resolveLogarithmicOptionsForRange(that._seriesData);
 
         if(!isDiscrete) {
             if(!isDefined(that._seriesData.min) && !isDefined(that._seriesData.max)) {
@@ -2172,6 +2177,14 @@ Axis.prototype = {
         options.visualRange = options._customVisualRange = that._validateVisualRange(options._customVisualRange);
 
         that._setVisualRange(options._customVisualRange);
+    },
+
+    beforeCleanGroups() {
+        this._options.label.template && this._axisElementsGroup && this._axisElementsGroup.linkRemove();
+    },
+
+    afterCleanGroups() {
+        this._options.label.template && this._axisElementsGroup && this._axisElementsGroup.linkAppend();
     },
 
     validate() {

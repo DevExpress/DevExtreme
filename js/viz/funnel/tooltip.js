@@ -42,20 +42,28 @@ export const plugin = {
             const that = this;
             const tooltip = that._tooltip;
             const item = that._items[index];
-            const state = that._tooltipIndex === index || tooltip.show({
+
+            if(that._tooltipIndex === index) {
+                that._moveTooltip(item, coords);
+                return;
+            }
+
+            const callback = (result) => {
+                if(result) {
+                    that._moveTooltip(item, coords);
+                } else {
+                    tooltip.hide();
+                }
+                that._tooltipIndex = result ? index : -1;
+            };
+
+            callback(tooltip.show({
                 value: item.value,
                 valueText: tooltip.formatValue(item.value),
                 percentText: tooltip.formatValue(item.percent, 'percent'),
                 percent: item.percent,
                 item: item
-            }, { x: 0, y: 0, offset: 0 }, { item: item });
-
-            if(state) {
-                that._moveTooltip(item, coords);
-            } else {
-                tooltip.hide();
-            }
-            that._tooltipIndex = state ? index : -1;
+            }, { x: 0, y: 0, offset: 0 }, { item: item }, undefined, callback));
         }
     },
     customize: function(constructor) {

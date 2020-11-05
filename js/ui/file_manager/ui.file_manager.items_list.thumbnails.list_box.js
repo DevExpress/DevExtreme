@@ -10,7 +10,7 @@ import eventsEngine from '../../events/core/events_engine';
 
 import { BindableTemplate } from '../../core/templates/bindable_template';
 
-import ScrollView from '../scroll_view/ui.scroll_view';
+import ScrollView from '../scroll_view';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import Selection from '../selection/selection';
 

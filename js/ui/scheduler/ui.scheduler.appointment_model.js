@@ -130,6 +130,11 @@ class AppointmentModel {
         this._baseAppointmentDuration = baseAppointmentDuration;
     }
 
+    get keyName() {
+        const store = this._dataSource.store();
+        return store.key();
+    }
+
     _createFilter(min, max, remoteFiltering, dateSerializationFormat) {
         this._filterMaker.make('date', [min, max]);
 
@@ -384,7 +389,7 @@ class AppointmentModel {
         } else {
             this._filterMaker.make('date', [trimmedDates.min, trimmedDates.max]);
 
-            if(this._dataSource.filter() && this._dataSource.filter().length > 1) {
+            if(this._dataSource.filter()?.length > 1) {
                 // TODO: serialize user filter value only necessary for case T838165(details in note)
                 const userFilter = this._serializeRemoteFilter([this._dataSource.filter()[1]], dateSerializationFormat);
                 this._filterMaker.make('user', userFilter);
@@ -446,17 +451,38 @@ class AppointmentModel {
 
     filterLoadedAppointments(filterOption, timeZoneCalculator) {
         const combinedFilter = this._createAppointmentFilter(filterOption, timeZoneCalculator);
-        return query(this._dataSource.items()).filter(combinedFilter).toArray();
+        return query(this.getPreparedDataItems()).filter(combinedFilter).toArray();
+    }
+
+    getPreparedDataItems() {
+        const dataItems = this._dataSource.items();
+        return map(dataItems, (item) => {
+            const startDate = new Date(this._dataAccessors.getter.startDate(item));
+            const endDate = new Date(this._dataAccessors.getter.endDate(item));
+
+            this.replaceWrongEndDate(item, startDate, endDate);
+
+            return item;
+        });
+    }
+
+    replaceWrongEndDate(appointment, startDate, endDate) {
+        if(this._isEndDateWrong(startDate, endDate)) {
+            const isAllDay = this._dataAccessors.getter.allDay(appointment);
+
+            const calculatedEndDate = this._calculateAppointmentEndDate(isAllDay, startDate);
+
+            this._dataAccessors.setter.endDate(appointment, calculatedEndDate);
+        }
     }
 
     filterLoadedVirtualAppointments(filterOptions, timeZoneCalculator, groupCount) {
         const combinedFilters = [];
-        const dataItems = this._dataSource.items();
 
-        let itemsToFilter = dataItems;
+        let itemsToFilter = this.getPreparedDataItems();
         const needPreFilter = groupCount > 0;
         if(needPreFilter) {
-            itemsToFilter = dataItems.filter(item => {
+            itemsToFilter = itemsToFilter.filter(item => {
                 for(let i = 0; i < filterOptions.length; ++i) {
                     const { resources } = filterOptions[i];
                     if(this._filterAppointmentByResources(item, resources)) {
@@ -552,9 +578,7 @@ class AppointmentModel {
 
         return ((appointment) => {
             const startDate = new Date(this._dataAccessors.getter.startDate(appointment));
-            let endDate = new Date(this._dataAccessors.getter.endDate(appointment));
-
-            endDate = this.fixWrongEndDate(appointment, startDate, endDate);
+            const endDate = new Date(this._dataAccessors.getter.endDate(appointment));
 
             appointment = extend(true, {}, appointment);
 
@@ -577,17 +601,6 @@ class AppointmentModel {
         }).bind(this);
     }
 
-    fixWrongEndDate(appointment, startDate, endDate) {
-        if(this._isEndDateWrong(startDate, endDate)) {
-            const isAllDay = this._dataAccessors.getter.allDay(appointment);
-
-            endDate = this._calculateAppointmentEndDate(isAllDay, startDate);
-
-            this._dataAccessors.setter.endDate(appointment, endDate);
-        }
-        return endDate;
-    }
-
     _calculateAppointmentEndDate(isAllDay, startDate) {
         if(isAllDay) {
             return dateUtils.setToDayEnd(new Date(startDate));
@@ -600,7 +613,7 @@ class AppointmentModel {
         return !endDate || isNaN(endDate.getTime()) || startDate.getTime() > endDate.getTime();
     }
 
-    add(data, tz) {
+    add(data) {
         return this._dataSource.store().insert(data).done((() => {
             this._dataSource.load();
         }).bind(this));

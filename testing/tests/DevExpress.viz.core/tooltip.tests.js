@@ -376,21 +376,19 @@ QUnit.test('Set renderer options / rtl enabled', function(assert) {
     assert.strictEqual(tooltip._wrapper.children().first().css('direction'), 'rtl', 'direction');
 });
 
-QUnit.test('Render, enabled', function(assert) {
+QUnit.test('Update', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
-
-    tooltip.setOptions(this.options);
 
     tooltip._wrapper.appendTo = sinon.spy();
     tooltip._wrapper.detach = sinon.spy();
     tooltip._textGroupHtml.css = sinon.spy();
 
-    // act
-    const result = tooltip.render();
+    const result = tooltip.update(this.options);
 
     // assert
     assert.equal(tooltip, result);
+
     assert.equal(tooltip._wrapper.appendTo.callCount, 0, 'wrapper is not added to dom');
     assert.equal(tooltip._wrapper.get(0).style.left, '-9999px', 'wrapper is moved to invisible area');
     assert.equal(tooltip._wrapper.detach.callCount, 1, 'wrapper detached');
@@ -411,27 +409,6 @@ QUnit.test('Render, enabled', function(assert) {
         opacity: null
     });
     // for html text ↑
-});
-
-QUnit.test('Update', function(assert) {
-    const et = { event: 'trigger' };
-    const options = { enabled: false, font: {} };
-    const tooltip = new Tooltip({ eventTrigger: et });
-    const setOptions = tooltip.setOptions;
-    const render = tooltip.render;
-
-    tooltip.setOptions = sinon.spy(function() { return setOptions.apply(tooltip, arguments); });
-    tooltip.render = sinon.spy(function() { return render.apply(tooltip, arguments); });
-
-    // act
-    const result = tooltip.update(options);
-
-    // assert
-    assert.equal(tooltip, result);
-    assert.equal(tooltip.setOptions.callCount, 1);
-    assert.equal(tooltip.setOptions.firstCall.args[0], options);
-    assert.equal(tooltip.render.callCount, 1);
-    assert.ok(tooltip.render.firstCall.calledAfter(tooltip.setOptions.firstCall));
 });
 
 QUnit.test('Disposing', function(assert) {
@@ -548,7 +525,7 @@ QUnit.module('Manipulation', {
                 _getTemplate(callback) {
                     return {
                         render(arg) {
-                            callback(arg.model, arg.container);
+                            callback(arg.model, arg.container, arg.onRendered);
                         }
                     };
                 }
@@ -568,7 +545,7 @@ QUnit.module('Manipulation', {
         if(getComputedStyle) {
             this.getComputedStyle = sinon.stub(window, 'getComputedStyle', function(elem) {
                 if(elem === tooltip._textHtml.get(0)) {
-                    return { width: '83.13px', height: '23.45px' };
+                    return { width: '83.13px', height: '23.45px', getPropertyValue: () => {} };
                 }
                 return getComputedStyle.apply(window, arguments);
             });
@@ -615,17 +592,19 @@ QUnit.test('Show preparations. W/o customize, w/ text', function(assert) {
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: 'some-text' };
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, 'eventData');
 
     assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
+    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', 'eventData'], 'event is triggered');
 
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
         textColor: 'rgba(147,147,147,0.7)',
+        eventData: 'eventData',
         formatObject: formatObject,
-        text: 'some-text'
+        text: 'some-text',
+        templateCallback: undefined
     }, 'state');
 
     const cloudSettings = this.renderer.path.lastCall.returnValue._stored_settings;
@@ -668,17 +647,19 @@ QUnit.test('Show preparations. W/o customize, w/ text from \'description\' filed
 
     const formatObject = { description: 'some-text' };
 
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, 'eventData');
 
     assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
+    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', 'eventData'], 'event is triggered');
 
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
+        eventData: 'eventData',
         textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
-        formatObject: formatObject
+        formatObject: formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -769,10 +750,10 @@ QUnit.test('Show preparations. W/ customize w/o text, w/ text', function(assert)
 
     const formatObject = { valueText: 'some-text' };
 
-    const result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, { x: 10, y: 20 }, 'eventData');
 
     assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
+    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', 'eventData'], 'event is triggered');
 
     assert.equal(this.options.customizeTooltip.callCount, 1);
     assert.equal(this.options.customizeTooltip.firstCall.thisValue, formatObject);
@@ -782,7 +763,9 @@ QUnit.test('Show preparations. W/ customize w/o text, w/ text', function(assert)
         borderColor: 'cColor2',
         textColor: 'cColor3',
         text: 'some-text',
-        formatObject: formatObject
+        eventData: 'eventData',
+        formatObject: formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is not added to dom');
@@ -797,7 +780,7 @@ QUnit.test('Show preparations. customizeTooltip is not function - use custom for
 
     const formatObject = { valueText: 'some-text' };
 
-    const result = this.tooltip.show(formatObject, {});
+    const result = this.tooltip.show(formatObject, { x: 10, y: 20 });
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.tooltip._state.text, 'some-text');
@@ -812,10 +795,10 @@ QUnit.test('Show preparations. W/ customize w/ text, empty text', function(asser
 
     const formatObject = { valueText: '' };
 
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, 'eventData');
 
     assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
+    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', 'eventData'], 'event is triggered');
 
     assert.equal(this.options.customizeTooltip.callCount, 1);
     assert.equal(this.options.customizeTooltip.firstCall.thisValue, formatObject);
@@ -824,8 +807,10 @@ QUnit.test('Show preparations. W/ customize w/ text, empty text', function(asser
         color: 'cColor1',
         borderColor: 'cColor2',
         textColor: 'cColor3',
+        eventData: 'eventData',
         text: 'some-customized-text',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -841,10 +826,10 @@ QUnit.test('Show preparations. W/ customize w/ text, w/ text', function(assert) 
 
     const formatObject = { valueText: 'some-text' };
 
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, 'eventData');
 
     assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
+    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', 'eventData'], 'event is triggered');
 
     assert.equal(this.options.customizeTooltip.callCount, 1);
     assert.equal(this.options.customizeTooltip.firstCall.thisValue, formatObject);
@@ -853,8 +838,10 @@ QUnit.test('Show preparations. W/ customize w/ text, w/ text', function(assert) 
         color: 'cColor1',
         borderColor: 'cColor2',
         textColor: 'cColor3',
+        eventData: 'eventData',
         text: 'some-customized-text',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -945,10 +932,10 @@ QUnit.test('Show preparations. W/ customize w/ html', function(assert) {
 
     const formatObject = { valueText: '' };
 
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, 'eventData');
 
     assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
+    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', 'eventData'], 'event is triggered');
 
     assert.equal(this.options.customizeTooltip.callCount, 1);
     assert.equal(this.options.customizeTooltip.firstCall.thisValue, formatObject);
@@ -957,9 +944,10 @@ QUnit.test('Show preparations. W/ customize w/ html', function(assert) {
         color: 'cColor1',
         borderColor: 'cColor2',
         textColor: 'cColor3',
-        isRendered: true,
+        eventData: 'eventData',
         html: 'some-customized-html',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -975,10 +963,10 @@ QUnit.test('Show preparations. W/ customize w/ html/text', function(assert) {
 
     const formatObject = { valueText: '' };
 
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, 'eventData');
 
     assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
+    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', 'eventData'], 'event is triggered');
 
     assert.equal(this.options.customizeTooltip.callCount, 1);
     assert.equal(this.options.customizeTooltip.firstCall.thisValue, formatObject);
@@ -988,9 +976,10 @@ QUnit.test('Show preparations. W/ customize w/ html/text', function(assert) {
         borderColor: 'cColor2',
         textColor: 'cColor3',
         text: 'some-customized-text',
-        isRendered: true,
+        eventData: 'eventData',
         html: 'some-customized-html',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
@@ -1000,27 +989,42 @@ QUnit.test('Show preparations. W/ customize w/ html/text', function(assert) {
 QUnit.test('Show preparations. Certain container', function(assert) {
     this.options.customizeTooltip = null;
     this.options.container = '.some-correct-class-name';
+    this.tooltip._getCanvas = function() { return CANVAS; };
     this.tooltip.update(this.options);
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._state = { a: 'b' };
 
     const formatObject = { valueText: 'some-text' };
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 });
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, 'eventData');
 
     assert.strictEqual(result, true);
-    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', undefined], 'event is triggered');
+    assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', 'eventData'], 'event is triggered');
 
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
         textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
-        formatObject
+        eventData: 'eventData',
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     assert.equal(this.tooltip._wrapper.appendTo.callCount, 1, 'wrapper is added to dom');
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('.some-correct-class-name').get(0)]);
+});
+
+QUnit.test('Show preparations. Certain container, tooltip out of canvas', function(assert) {
+    this.options.customizeTooltip = null;
+    this.options.container = '.some-correct-class-name';
+    this.tooltip.update(this.options);
+
+    const formatObject = { valueText: 'some-text' };
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, 'eventData');
+
+    assert.strictEqual(result, false, 'tooltip is not drawn');
+    assert.ok(!this.eventTrigger.called, 'event is not triggered');
 });
 
 QUnit.test('Show. W/o params', function(assert) {
@@ -1050,7 +1054,9 @@ QUnit.test('Show. W/o params', function(assert) {
         borderColor: '#252525',
         textColor: 'rgba(147,147,147,0.7)',
         text: 'some-text',
-        formatObject
+        eventData,
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     const cloud = this.renderer.path.lastCall.returnValue;
@@ -1101,9 +1107,10 @@ QUnit.test('Show. W/o params. Html', function(assert) {
         color: '#ffffff',
         borderColor: '#252525',
         textColor: 'rgba(147,147,147,0.7)',
-        isRendered: true,
+        eventData,
         html: 'some-html',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     const cloud = this.renderer.path.lastCall.returnValue;
@@ -1133,8 +1140,9 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     const eventData = { tag: 'event-data' };
     this.tooltip._getCanvas = function() { return CANVAS; };
 
-    this.options.contentTemplate = sinon.spy(function(_, container) {
+    this.options.contentTemplate = sinon.spy(function(_, container, onRendered) {
         $(container).text('custom html');
+        onRendered();
     });
 
     this.tooltip.update(this.options);
@@ -1144,8 +1152,6 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     this.tooltip.move = sinon.spy(function() { return this; });
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._textGroupHtml.css = sinon.spy();
-    this.tooltip._textGroupHtml.width = sinon.spy();
-    this.tooltip._textGroupHtml.height = sinon.spy();
     sinon.spy(this.tooltip._textHtml, 'html');
     this.tooltip._textHtml.empty = sinon.spy();
 
@@ -1155,25 +1161,28 @@ QUnit.test('Show. W/o params. Template', function(assert) {
     }
 
     const formatObject = { valueText: 'some-text' };
+    const callback = sinon.stub();
     // act
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
 
-    assert.strictEqual(result, true);
+    assert.strictEqual(result, undefined);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
 
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
         textColor: 'rgba(147,147,147,0.7)',
-        isRendered: true,
+        eventData,
         html: 'custom html',
         text: 'some-text',
-        formatObject
+        formatObject,
+        templateCallback: callback
     }, 'state');
 
     const cloud = this.renderer.path.lastCall.returnValue;
     assert.equal(cloud._stored_settings.fill, '#ffffff');
     assert.equal(cloud._stored_settings.stroke, '#252525');
+    assert.equal(cloud._stored_settings['pointer-events'], 'none');
 
     assert.equal(this.tooltip._textGroupHtml.css.callCount, 3, 'textGroupHtml styles');
     assert.deepEqual(this.tooltip._textGroupHtml.css.firstCall.args, [{ color: 'rgba(147,147,147,0.7)', width: 3000, 'pointerEvents': 'none', }]);
@@ -1194,13 +1203,15 @@ QUnit.test('Show. W/o params. Template', function(assert) {
 
     assert.equal(this.options.contentTemplate.callCount, 1);
     assert.equal(this.options.contentTemplate.lastCall.args[0], formatObject);
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.getCall(0).args[0], true);
 });
 
 QUnit.test('Do not show tooltip if html is not set in contentTemplate', function(assert) {
     const eventData = { tag: 'event-data' };
     this.tooltip._getCanvas = function() { return CANVAS; };
 
-    this.options.contentTemplate = () => null;
+    this.options.contentTemplate = (_, container, onRendered) => { onRendered(); };
 
     this.tooltip.update(this.options);
 
@@ -1214,15 +1225,62 @@ QUnit.test('Do not show tooltip if html is not set in contentTemplate', function
     sinon.spy(this.tooltip._textHtml, 'html');
 
     const textHtmlElement = this.tooltip._textHtml.get(0);
+    if(this.getComputedStyle) {
+        this.getComputedStyle.restore();
+    }
     if(!this.getComputedStyle) {
         textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
     }
 
     const formatObject = { valueText: 'some-text' };
+    const callback = sinon.stub();
     // act
-    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
 
     assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
+    assert.ok(!this.eventTrigger.called, 'event is not triggered');
+
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.getCall(0).args[0], false);
+});
+
+QUnit.test('Do not show tooltip if html is set in contentTemplate as empty div', function(assert) {
+    const eventData = { tag: 'event-data' };
+    this.tooltip._getCanvas = function() { return CANVAS; };
+
+    this.options.contentTemplate = (_, container, onRendered) => {
+        $(container).html('<div></div>');
+        onRendered();
+    };
+
+    this.tooltip.update(this.options);
+
+    this.resetTooltipMocks();
+
+    this.tooltip.move = sinon.spy(function() { return this; });
+    this.tooltip._wrapper.appendTo = sinon.spy();
+    this.tooltip._textGroupHtml.css = sinon.spy();
+    this.tooltip._textGroupHtml.width = sinon.spy();
+    this.tooltip._textGroupHtml.height = sinon.spy();
+    sinon.spy(this.tooltip._textHtml, 'html');
+
+    const textHtmlElement = this.tooltip._textHtml.get(0);
+    if(this.getComputedStyle) {
+        this.getComputedStyle.restore();
+    }
+    if(!this.getComputedStyle) {
+        textHtmlElement.getBoundingClientRect = sinon.spy(function() { return { right: 103.13, left: 20, bottom: 33.45, top: 10 }; });
+    }
+
+    const formatObject = { valueText: 'some-text' };
+    const callback = sinon.stub();
+    // act
+    this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
+
+    assert.ok(this.renderer.g.getCall(0).returnValue.remove.called);
+    assert.ok(!this.eventTrigger.called, 'event is not triggered');
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.getCall(0).args[0], false);
 });
 
 QUnit.test('Simple text, tooltip is interactive', function(assert) {
@@ -1270,8 +1328,9 @@ QUnit.test('Call template if empty text', function(assert) {
     const eventData = { tag: 'event-data' };
     this.tooltip._getCanvas = function() { return CANVAS; };
 
-    this.options.contentTemplate = sinon.spy(function(_, container) {
+    this.options.contentTemplate = sinon.spy(function(_, container, onRendered) {
         $(container).text('custom html');
+        onRendered();
     });
 
     this.tooltip.update(this.options);
@@ -1291,14 +1350,17 @@ QUnit.test('Call template if empty text', function(assert) {
     }
 
     const formatObject = { valueText: '' };
+    const callback = sinon.stub();
     // act
-    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData);
+    const result = this.tooltip.show(formatObject, { x: 100, y: 200, offset: 300 }, eventData, undefined, callback);
 
-    assert.strictEqual(result, true);
+    assert.strictEqual(result, undefined);
     assert.deepEqual(this.eventTrigger.lastCall.args, ['tooltipShown', eventData], 'event is triggered');
 
     assert.equal(this.options.contentTemplate.callCount, 1);
     assert.equal(this.options.contentTemplate.lastCall.args[0], formatObject);
+    assert.equal(callback.callCount, 1);
+    assert.equal(callback.getCall(0).args[0], true);
 });
 
 QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObject', function(assert) {
@@ -1328,8 +1390,10 @@ QUnit.test('Show. W/o params. Do not call template if skipTemplate in formatObje
         color: '#ffffff',
         borderColor: '#252525',
         textColor: 'rgba(147,147,147,0.7)',
+        eventData,
         text: 'some-text',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 
     const cloud = this.renderer.path.lastCall.returnValue;
@@ -1413,15 +1477,17 @@ QUnit.test('Show. W/ params', function(assert) {
 
     const formatObject = { valueText: 'some-text' };
     // act
-    const result = this.tooltip.show(formatObject, { x: 10, y: 20, offset: 30 });
+    const result = this.tooltip.show(formatObject, { x: 10, y: 20, offset: 30 }, 'eventData');
 
     assert.strictEqual(result, true);
     assert.deepEqual(this.tooltip._state, {
         color: '#ffffff',
         borderColor: '#252525',
         textColor: 'rgba(147,147,147,0.7)',
+        eventData: 'eventData',
         text: 'some-text',
-        formatObject
+        formatObject,
+        templateCallback: undefined
     }, 'state');
 });
 
@@ -1429,9 +1495,9 @@ QUnit.test('\'tooltipHidden\' is triggered on show if tooltip is already shown',
     const eventData1 = { tag: 'data-1' };
     const eventData2 = { tag: 'data-2' };
     this.tooltip.update(this.options);
-    this.tooltip.show({ valueText: 'text-1' }, {}, eventData1);
+    this.tooltip.show({ valueText: 'text-1' }, { x: 10, y: 20 }, eventData1);
 
-    this.tooltip.show({ valueText: 'text-2' }, {}, eventData2);
+    this.tooltip.show({ valueText: 'text-2' }, { x: 10, y: 20 }, eventData2);
 
     assert.strictEqual(this.eventTrigger.callCount, 3, 'event count');
     assert.deepEqual(this.eventTrigger.getCall(0).args, ['tooltipShown', eventData1], 'call 1');
@@ -1461,7 +1527,7 @@ QUnit.test('\'tooltipHidden\' is not triggered on hide if tooltip is already hid
 QUnit.test('Hide.', function(assert) {
     const eventObject = { 'some-event-object': 'some-event-value' };
     this.options.customizeTooltip = null;
-    this.tooltip.update(this.options).show({ valueText: 'some-text' }, {}, eventObject);
+    this.tooltip.update(this.options).show({ valueText: 'some-text' }, { x: 10, y: 20 }, eventObject);
     this.tooltip.move(100, 200, 30);
     this.eventTrigger.reset();
 

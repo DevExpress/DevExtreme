@@ -191,10 +191,11 @@ function applyLayout(canvas, items) {
     }
 }
 
-export function LayoutControl() {
+export function LayoutControl(widget) {
     const that = this;
     that._items = [];
     that._suspended = 0;
+    that._widget = widget;
     that._updateLayout = function() {
         that._update();
     };
@@ -240,6 +241,8 @@ LayoutControl.prototype = {
             _each(this._items, function(_, item) {
                 item.resize(canvas);
             });
+
+            this._widget.resolveItemsDeferred(this._items.filter(el => el.getTemplatesGroups && el.getTemplatesDef));
             applyLayout({ left: canvas.left, top: canvas.top, right: canvas.width + canvas.left, bottom: canvas.height + canvas.top }, this._items);
         }
     }

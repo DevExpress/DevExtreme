@@ -1,3 +1,4 @@
+import $ from '../../core/renderer';
 import Widget from '../widget/ui.widget';
 import { getGanttViewCore } from './gantt_importer';
 import { TaskAreaContainer } from './ui.gantt.task.area.container';
@@ -252,5 +253,17 @@ export class GanttView extends Widget {
     }
     onGanttViewContextMenu(event, key, type) {
         return true;
+    }
+    getFormattedDateText(date) {
+        let result = '';
+        if(date) {
+            const datePart = dateLocalization.format(date, 'shortDate');
+            const timePart = dateLocalization.format(date, 'hh:mm');
+            result = datePart + ' ' + timePart;
+        }
+        return result;
+    }
+    destroyTemplate(container) {
+        $(container).empty();
     }
 }

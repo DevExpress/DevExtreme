@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import devices from 'core/devices';
-import simulatedStrategy from 'ui/scroll_view/ui.scrollable.simulated';
 import pointerMock from '../../../helpers/pointerMock.js';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import translator from 'animation/translator';
@@ -13,7 +12,7 @@ import {
     SCROLLABLE_SCROLL_CLASS,
 } from './scrollable.constants.js';
 
-const SCROLL_LINE_HEIGHT = simulatedStrategy.SCROLL_LINE_HEIGHT;
+const SCROLL_LINE_HEIGHT = 40;
 
 QUnit.module('keyboard support', {
     beforeEach: function() {

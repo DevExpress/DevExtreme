@@ -13,7 +13,8 @@ describe('Overlay', () => {
       const rootElementRef = { } as HTMLDivElement;
       const componentProps = new OverlayProps();
       const props = {
-        props: { ...componentProps, rootElementRef },
+        props: { rootElementRef },
+        componentProps,
         restAttributes: { 'rest-attributes': 'true' },
       } as Partial<Overlay>;
       const tree = shallow(<OverlayView {...props as any} /> as any);
@@ -24,6 +25,18 @@ describe('Overlay', () => {
         componentType: LegacyOverlay,
         'rest-attributes': 'true',
       });
+    });
+  });
+
+  describe('Logic', () => {
+    it('componentProps', () => {
+      const props = new OverlayProps();
+      const validationMessage = new Overlay({
+        ...props,
+        rootElementRef: {} as unknown as HTMLDivElement,
+      });
+
+      expect(validationMessage.componentProps).toMatchObject(props);
     });
   });
 });

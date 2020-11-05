@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:convert';
+
 import './compiler.dart';
 import './importer.dart';
 import './compiler-result.dart';
+import './logger.dart';
 
 class Server {
   ServerSocket server;
@@ -15,7 +17,7 @@ class Server {
   }
 
   void handleConnection(Socket client) async {
-    print('Connection from ${client.remoteAddress.address}:${client.remotePort}');
+    Logger.log('connection from ${client.remoteAddress.address}:${client.remotePort}');
 
     var request = await utf8.decoder.bind(client).join('');
     var options = json.decode(request);
@@ -41,15 +43,20 @@ class Server {
     }
 
     CompilerResult result;
+    Logger.log('compile with items: ${items.toString()}, file: ${file}');
     try {
       result = Compiler().compile(items, indexFileContent, SassOptions(file, data));
+      Logger.log('compiled successfully');
     } catch(e) {
-      result = CompilerResult(null, null, true);
+      result = CompilerResult(null, null, e.toString());
+      Logger.log('compiled with error ${e.toString()}');
     }
 
     try {
+      Logger.log('writing result');
       client.write(json.encode(result)); 
     } finally {
+      Logger.log('connection ${client.remoteAddress.address}:${client.remotePort} closed');
       client.close();
     }
   }

@@ -28,7 +28,7 @@ $material-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $
   height: $material-bar-height;
   background-color: $progressbar-bg;
   background-size: $material-background-width 5px;
-  animation: loader 2s linear infinite;
+  animation: dx-loader 2s linear infinite;
 
   @include gradient-linear($material-progressbar-interdeterminate-state-gradient);
 
@@ -59,7 +59,7 @@ $material-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $
   .dx-progressbar,
   &.dx-progressbar {
     .dx-progressbar-animating-container {
-      animation: loader-rtl 2s linear infinite;
+      animation: dx-loader-rtl 2s linear infinite;
 
       @include gradient-linear($material-progressbar-interdeterminate-state-gradient);
 
@@ -68,7 +68,7 @@ $material-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $
   }
 }
 
-@keyframes loader {
+@keyframes dx-loader {
   0% {
     background-position-x: 0;
   }
@@ -78,7 +78,7 @@ $material-progressbar-interdeterminate-state-gradient: -90deg, transparent 5%, $
   }
 }
 
-@keyframes loader-rtl {
+@keyframes dx-loader-rtl {
   0% {
     background-position-x: 0;
   }

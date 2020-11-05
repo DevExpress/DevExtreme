@@ -95,10 +95,19 @@ const correctRecurrenceExceptionByTimezone = (exception, exceptionByStartDate, t
     return new Date(exception.getTime() + (isBackConversion ? -1 : 1) * timezoneOffset * toMs('hour'));
 };
 
-const isTimezoneChangeInDate = (date) => {
+const isTimezoneChangeInDate = date => {
     const startDayDate = new Date((new Date(date)).setHours(0, 0, 0, 0));
     const endDayDate = new Date((new Date(date)).setHours(23, 59, 59, 0));
     return (startDayDate.getTimezoneOffset() - endDayDate.getTimezoneOffset()) !== 0;
+};
+
+const getDateWithoutTimezoneChange = date => {
+    const clonedDate = new Date(date);
+    if(isTimezoneChangeInDate(clonedDate)) {
+        const result = new Date(clonedDate);
+        return new Date(result.setDate(result.getDate() + 1));
+    }
+    return clonedDate;
 };
 
 const isSameAppointmentDates = (startDate, endDate) => {
@@ -165,7 +174,6 @@ const utils = {
     getTimezoneOffsetChangeInMs,
     calculateTimezoneByValue,
     getCorrectedDateByDaylightOffsets,
-    isTimezoneChangeInDate,
     isSameAppointmentDates,
     correctRecurrenceExceptionByTimezone,
     getClientTimezoneOffset,
@@ -174,6 +182,8 @@ const utils = {
     createDateFromUTCWithLocalOffset,
     createUTCDate,
 
+    isTimezoneChangeInDate,
+    getDateWithoutTimezoneChange,
     hasDSTInLocalTimeZone,
     isEqualLocalTimeZone,
     getTimeZones

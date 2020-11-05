@@ -1,7 +1,7 @@
 class CompilerResult {
   String css;
   Map<String, String> changedVariables;
-  bool error;
+  String error;
 
   CompilerResult(this.css, this.changedVariables, this.error);
 

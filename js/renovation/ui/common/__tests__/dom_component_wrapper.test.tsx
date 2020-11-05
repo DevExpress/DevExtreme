@@ -55,9 +55,9 @@ describe('DomComponentWrapper', () => {
 
         const { properties } = component;
         expect(renderTemplate).not.toBeCalled();
-        (properties as any).template();
+        (properties as any).itemTemplate();
         expect(renderTemplate).toBeCalledTimes(1);
-        expect('template' in properties).toStrictEqual(true);
+        expect('itemTemplate' in properties).toStrictEqual(true);
         expect(properties.tabIndex).toStrictEqual(2);
         expect(properties.disabled).toStrictEqual(true);
       });
@@ -99,7 +99,7 @@ describe('DomComponentWrapper', () => {
           const component = new DomComponentWrapper({
             componentProps: {},
           } as DomComponentWrapperProps);
-          expect(component.properties.rtlEnabled).toBeUndefined();
+          expect(component.properties.rtlEnabled).toBe(false);
         });
       });
 

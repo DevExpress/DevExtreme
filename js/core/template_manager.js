@@ -54,6 +54,7 @@ export class TemplateManager {
                     return noop;
                 },
                 templates: { 'dx-polymorph-widget': DX_POLYMORPH_WIDGET_TEMPLATE },
+                useDeferUpdateForTemplates: true
             }
         };
     }

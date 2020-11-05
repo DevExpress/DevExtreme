@@ -160,6 +160,36 @@ QUnit.module('fileUploader markup', () => {
         assert.strictEqual($fileInput.attr('id'), 'test_id1', 'custom attribute rendered');
     });
 
+    QUnit.test('partically update the "inputAttr" option', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons'
+        });
+
+        $fileUploader.dxFileUploader('option', 'inputAttr.id', 'test_id1');
+
+        const $fileInput = $fileUploader.find(`.${FILEUPLOADER_INPUT_CLASS}`);
+
+        assert.strictEqual($fileInput.attr('id'), 'test_id1', 'custom attribute has been applied');
+    });
+
+    QUnit.test('partial update of the "inputAttr" option should not replace other attibutes', function(assert) {
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useButtons',
+            inputAttr: {
+                role: 'test_role1',
+                autocomplete: 'on',
+                id: 'test_id1'
+            }
+        });
+
+        $fileUploader.dxFileUploader('option', 'inputAttr.id', 'test_id1');
+        const $fileInput = $fileUploader.find(`.${FILEUPLOADER_INPUT_CLASS}`);
+
+        assert.strictEqual($fileInput.attr('role'), 'test_role1', '"role" attribute has the same value');
+        assert.strictEqual($fileInput.attr('id'), 'test_id1', '"id" attribute has been applied');
+        assert.strictEqual($fileInput.attr('autocomplete'), 'on', '"autocomplete" attribute has the same value');
+    });
+
 });
 
 QUnit.module('multiple option', () => {

@@ -22,9 +22,14 @@
   }
 }
 
-.dx-form > .dx-scrollable-wrapper > .dx-scrollable-container {
-  margin-left: -10px;
-  padding-left: 10px;
+.dx-form {
+  > .dx-scrollable-wrapper,
+  > div > .dx-scrollable-wrapper {
+    > .dx-scrollable-container {
+      margin-left: -10px;
+      padding-left: 10px;
+    }
+  }
 }
 
 .dx-scrollable-content > .dx-layout-manager {
@@ -53,14 +58,9 @@
   }
 }
 
-.dx-field-item-content {
-  &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs) {
+.dx-field-item {
+  &:not(.dx-field-item-has-group):not(.dx-field-item-has-tabs):not(.dx-first-row):not(.dx-label-v-align) {
     padding-top: $material-form-default-top-padding;
-
-    .dx-first-row > &,
-    .dx-label-v-align & {
-      padding-top: 0;
-    }
   }
 
   .dx-switch {

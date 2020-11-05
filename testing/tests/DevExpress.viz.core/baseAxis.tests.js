@@ -527,6 +527,57 @@ QUnit.test('Disposing', function(assert) {
     assert.ok(renderer.g.getCall(3).returnValue.dispose.called, 'elements group was cleared');
 });
 
+QUnit.test('beforeCleanGroups with templates for labels', function(assert) {
+    const renderer = this.renderer;
+
+    this.updateOptions({
+        label: {
+            template: ()=>{}
+        }
+    });
+
+    this.axis.beforeCleanGroups();
+
+    assert.strictEqual(renderer.g.getCall(3).returnValue.linkRemove.callCount, 1);
+});
+
+QUnit.test('afterCleanGroups with templates for labels', function(assert) {
+    const renderer = this.renderer;
+
+    this.updateOptions({
+        label: {
+            template: ()=>{}
+        }
+    });
+
+    renderer.g.getCall(3).returnValue.linkAppend.reset();
+    this.axis.afterCleanGroups();
+
+    assert.strictEqual(renderer.g.getCall(3).returnValue.linkAppend.callCount, 1);
+});
+
+
+QUnit.test('beforeCleanGroups without templates for labels', function(assert) {
+    const renderer = this.renderer;
+
+    this.updateOptions();
+
+    this.axis.beforeCleanGroups();
+
+    assert.strictEqual(renderer.g.getCall(3).returnValue.stub('linkRemove').callCount, 0);
+});
+
+QUnit.test('afterCleanGroups without templates for labels', function(assert) {
+    const renderer = this.renderer;
+
+    this.updateOptions();
+
+    renderer.g.getCall(3).returnValue.linkAppend.reset();
+    this.axis.afterCleanGroups();
+
+    assert.strictEqual(renderer.g.getCall(3).returnValue.linkAppend.callCount, 0);
+});
+
 QUnit.test('calculateInterval - returns absolute difference of two numbers', function(assert) {
     this.updateOptions();
 
@@ -4103,7 +4154,7 @@ QUnit.test('Viewport and whole range can have negative values if logarithmic axi
     assert.equal(businessRange.axisType, 'logarithmic');
 });
 
-QUnit.test('Viewport and whole range can have negative values if logarithmic axis and allowNegatives is set not set', function(assert) {
+QUnit.test('Viewport and whole range can have negative values if logarithmic axis and allowNegatives is not set', function(assert) {
     this.updateOptions({ visualRange: [-10, -100], wholeRange: [-10, -100], type: 'logarithmic' });
     this.axis.validate();
     this.axis.setBusinessRange({
@@ -4117,6 +4168,7 @@ QUnit.test('Viewport and whole range can have negative values if logarithmic axi
     assert.equal(businessRange.minVisible, -100);
     assert.equal(businessRange.maxVisible, -10);
     assert.equal(businessRange.axisType, 'logarithmic');
+    assert.equal(businessRange.allowNegatives, true);
 });
 
 QUnit.test('One values of whole range can have null value', function(assert) {

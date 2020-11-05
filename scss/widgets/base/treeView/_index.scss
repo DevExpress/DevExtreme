@@ -1,0 +1,61 @@
+@use "./common";
+
+.dx-treeview-node-loadindicator {
+  left: auto;
+  right: 0;
+}
+
+@mixin dx-treeview-make-rtl($container-with-border-offset, $node-offset, $item-with-checkbox-offset, $checkbox-offset, $select-all-text-offset, $select-all-item-left-padding, $border-padding) {
+  &.dx-treeview-border-visible {
+    .dx-treeview-select-all-item {
+      padding-left: 0;
+      padding-right: $select-all-item-left-padding;
+    }
+
+    .dx-scrollable-content {
+      > .dx-treeview-node-container {
+        padding-left: $border-padding;
+        padding-right: $container-with-border-offset;
+      }
+    }
+  }
+
+  .dx-treeview-node {
+    padding-right: $node-offset;
+  }
+
+  .dx-treeview-item {
+    .dx-treeview-item-content > .dx-icon {
+      margin-left: 5px;
+    }
+  }
+
+  .dx-treeview-item-with-checkbox {
+    .dx-treeview-item {
+      padding-right: $item-with-checkbox-offset;
+    }
+
+    .dx-checkbox {
+      right: $checkbox-offset;
+    }
+  }
+
+  .dx-treeview-select-all-item {
+    padding-left: 0;
+    padding-right: $checkbox-offset;
+
+    .dx-checkbox-text {
+      padding-left: 0;
+      padding-right: $select-all-text-offset;
+    }
+  }
+}
+
+.dx-rtl {
+  .dx-treeview-node {
+    .dx-checkbox {
+      left: auto;
+    }
+  }
+}
+

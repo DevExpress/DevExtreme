@@ -208,7 +208,7 @@ export class Plaque {
         this.moveContentGroup = moveContentGroup;
     }
 
-    draw({ x: anchorX, y: anchorY, canvas = {}, offsetX, offsetY, offset = 0 }) {
+    draw({ x: anchorX, y: anchorY, canvas = {}, offsetX, offsetY, offset = 0, ...restProps }) {
         const options = this.options;
         let { x, y } = options;
 
@@ -221,13 +221,12 @@ export class Plaque {
             height: canvas.height - canvas.bottom - canvas.top
         };
 
-
         if(!(isDefined(anchorX) && isDefined(anchorY)) && !(isDefined(x) && isDefined(y))) {
-            return;
+            return false;
         }
 
         if(isDefined(anchorX) && (anchorX < bounds.xl || bounds.xr < anchorX || anchorY < bounds.yt || bounds.yb < anchorY)) {
-            return;
+            return false;
         }
 
         if(!this._root) {
@@ -314,9 +313,9 @@ export class Plaque {
         if(this.contentTemplate.render) {
             this.contentTemplate.render({ model: options, container: this._contentGroup.element, onRendered: onRender });
         } else {
-            this.contentTemplate(this.widget, this._contentGroup);
-            onRender();
+            return this.contentTemplate({ group: this._contentGroup, onRender, ...restProps });
         }
+        return true;
     }
 
     _draw() {

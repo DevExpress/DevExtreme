@@ -1,29 +1,26 @@
 'use strict';
 
-const path = require('path');
 const gulp = require('gulp');
 const gulpIf = require('gulp-if');
-const plumber = require('gulp-plumber');
-const notify = require('gulp-notify');
-const named = require('vinyl-named');
-const webpack = require('webpack');
-const lazyPipe = require('lazypipe');
-const webpackStream = require('webpack-stream');
 const gulpWatch = require('gulp-watch');
+const lazyPipe = require('lazypipe');
+const named = require('vinyl-named');
+const notify = require('gulp-notify');
+const path = require('path');
+const plumber = require('gulp-plumber');
+const webpack = require('webpack');
+const webpackStream = require('webpack-stream');
 
+const compressionPipes = require('./compression-pipes.js');
+const ctx = require('./context.js');
+const headerPipes = require('./header-pipes.js');
+const renovationPipes = require('./renovation-pipes');
+const { ifRenovation } = require('./utils');
 const webpackConfig = require('../../webpack.config.js');
 const webpackConfigDev = require('../../webpack.config.dev.js');
-const headerPipes = require('./header-pipes.js');
-const compressionPipes = require('./compression-pipes.js');
-const renovationPipes = require('./renovation-pipes');
-const context = require('./context.js');
-const utils = require('./utils');
-const env = require('./env-variables');
 
 const namedDebug = lazyPipe()
-    .pipe(named, function(file) {
-        return path.basename(file.path, path.extname(file.path)) + '.debug';
-    });
+    .pipe(named, (file) => path.basename(file.path, path.extname(file.path)) + '.debug');
 
 const BUNDLES = [
     '/bundles/dx.all.js',
@@ -31,18 +28,10 @@ const BUNDLES = [
     '/bundles/dx.viz.js'
 ];
 
-const DEBUG_BUNDLES = BUNDLES.concat([
-    '/bundles/dx.custom.js'
-]);
+const DEBUG_BUNDLES = BUNDLES.concat(['/bundles/dx.custom.js']);
 
-function processBundles(bundles, pathPrefix) {
-    return bundles.map(function(bundle) {
-        return pathPrefix + bundle;
-    });
-}
-
-function muteWebPack() {
-}
+const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPrefix + bundle);
+const muteWebPack = () => undefined;
 
 const bundleProdPipe = lazyPipe()
     .pipe(named)
@@ -51,31 +40,31 @@ const bundleProdPipe = lazyPipe()
     .pipe(headerPipes.bangLicense)
     .pipe(compressionPipes.minify);
 
-gulp.task('js-bundles-prod-renovation', function() {
-    return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_RENOVATION_PATH))
+const jsBundlesProd = (src, dist) => (() =>
+    gulp.src(processBundles(BUNDLES, src))
         .pipe(bundleProdPipe())
-        .pipe(gulp.dest(context.RESULT_JS_RENOVATION_PATH));
-});
+        .pipe(gulp.dest(dist))
+);
 
-gulp.task('js-bundles-prod', function() {
-    return gulp.src(processBundles(BUNDLES, context.TRANSPILED_PROD_PATH))
-        .pipe(bundleProdPipe())
-        .pipe(gulp.dest(context.RESULT_JS_PATH));
-});
+gulp.task('js-bundles-prod',
+    jsBundlesProd(ctx.TRANSPILED_PROD_PATH, ctx.RESULT_JS_PATH),
+    ifRenovation(jsBundlesProd(ctx.TRANSPILED_PROD_RENOVATION_PATH,
+        ctx.RESULT_JS_RENOVATION_PATH
+    ))
+);
 
 function prepareDebugMeta(watch, renovation) {
-    let debugConfig;
-    let bundles;
-    if(watch) {
-        debugConfig = Object.assign({}, webpackConfigDev);
-        bundles = processBundles(DEBUG_BUNDLES, renovation ? renovationPipes.TEMP_PATH : 'js');
-    } else {
-        debugConfig = Object.assign({}, webpackConfig);
-        bundles = processBundles(DEBUG_BUNDLES, renovation ? context.TRANSPILED_PROD_RENOVATION_PATH : context.TRANSPILED_PROD_PATH);
-    }
+    const debugConfig = Object.assign({}, watch ? webpackConfigDev : webpackConfig);
+    let bundles = watch ?
+        (renovation ? renovationPipes.TEMP_PATH : 'js') :
+        (renovation ? ctx.TRANSPILED_PROD_RENOVATION_PATH : ctx.TRANSPILED_PROD_PATH);
+
+    bundles = processBundles(DEBUG_BUNDLES, bundles);
+
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
-    if(!context.uglify) {
+
+    if(!ctx.uglify) {
         debugConfig.devtool = 'eval-source-map';
     }
 
@@ -85,8 +74,8 @@ function prepareDebugMeta(watch, renovation) {
 function createDebugBundlesStream(watch, renovation) {
     const { debugConfig, bundles } = prepareDebugMeta(watch, renovation);
     const destination = renovation
-        ? context.RESULT_JS_RENOVATION_PATH
-        : context.RESULT_JS_PATH;
+        ? ctx.RESULT_JS_RENOVATION_PATH
+        : ctx.RESULT_JS_PATH;
 
     return gulp.src(bundles)
         .pipe(namedDebug())
@@ -104,27 +93,26 @@ function createDebugBundlesStream(watch, renovation) {
 function createRenovationTemp(isWatch) {
     const src = ['js/**/*.*'];
     const pipe = isWatch ? gulpWatch(src) : gulp.src(src);
+
     return pipe
         .pipe(renovationPipes.replaceWidgets())
         .pipe(gulp.dest(renovationPipes.TEMP_PATH));
 }
 
-gulp.task('create-renovation-temp', utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
-    return createRenovationTemp(false);
-}));
+gulp.task('create-renovation-temp', ifRenovation(() =>
+    createRenovationTemp(false)
+));
 
-gulp.task('create-renovation-temp-watch', utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
-    return createRenovationTemp(true);
-}));
+gulp.task('create-renovation-temp-watch', ifRenovation(() =>
+    createRenovationTemp(true)
+));
 
-gulp.task('js-bundles-debug', gulp.series(function() {
-    return createDebugBundlesStream(false, false);
-}, utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
-    return createDebugBundlesStream(false, true);
-})));
+gulp.task('js-bundles-debug', gulp.series(
+    () => createDebugBundlesStream(false, false),
+    ifRenovation(() => createDebugBundlesStream(false, true))
+));
 
-gulp.task('js-bundles-dev', gulp.parallel(function() {
-    return createDebugBundlesStream(true, false);
-}, utils.runTaskByCondition(env.RUN_RENOVATION_TASK, function() {
-    return createDebugBundlesStream(true, true);
-})));
+gulp.task('js-bundles-dev', gulp.parallel(
+    () => createDebugBundlesStream(true, false),
+    ifRenovation(() => createDebugBundlesStream(true, true))
+));

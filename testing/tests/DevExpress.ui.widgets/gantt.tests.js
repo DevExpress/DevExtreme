@@ -471,7 +471,7 @@ QUnit.module('Actions', moduleConfig, () => {
         const newStart = new Date('2019-02-21');
         const newEnd = new Date('2019-02-22');
         const newTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, '2');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '2');
         this.clock.tick();
 
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
@@ -501,7 +501,7 @@ QUnit.module('Actions', moduleConfig, () => {
         const newStart = new Date('2019-02-21');
         const newEnd = new Date('2019-02-22');
         const newTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, '2');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '2');
         this.clock.tick();
 
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
@@ -822,7 +822,7 @@ QUnit.module('DataSources', moduleConfig, () => {
         const newStart = new Date('2019-02-21');
         const newEnd = new Date('2019-02-22');
         const newTitle = 'New';
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, '1');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '1');
         this.clock.tick();
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = tasks[tasks.length - 1];
@@ -889,7 +889,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             e.cancel = true;
         });
 
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, '1');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute(newStart, newEnd, newTitle, 0, '1');
         this.clock.tick();
         assert.equal(tasks.length, tasksCount, 'new task was not created in ds');
     });
@@ -907,7 +907,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             e.values['end'] = newEnd;
         });
 
-        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute('2019-02-21', '2019-02-22', 'New', '1');
+        getGanttViewCore(this.instance).commandManager.createTaskCommand.execute('2019-02-21', '2019-02-22', 'New', 0, '1');
         this.clock.tick();
         assert.equal(tasks.length, tasksCount + 1, 'new task was created in ds');
         const createdTask = tasks[tasks.length - 1];
@@ -970,6 +970,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const newStart = new Date('2019-02-25');
         const newEnd = new Date('2019-02-26');
         const newTitle = 'New';
+        let keyIsDefined = false;
         this.instance.option('onTaskUpdating', (e) => {
             if(e.newValues['title']) {
                 e.newValues['title'] = newTitle;
@@ -980,11 +981,15 @@ QUnit.module('Client side edit events', moduleConfig, () => {
             if(e.newValues['end']) {
                 e.newValues['end'] = newEnd;
             }
+            keyIsDefined = taskToUpdate.id === e.key;
         });
 
         getGanttViewCore(this.instance).commandManager.changeTaskTitleCommand.execute(taskToUpdate.id.toString(), '1');
+        assert.ok(keyIsDefined, 'key defined');
         getGanttViewCore(this.instance).commandManager.changeTaskStartCommand.execute(taskToUpdate.id.toString(), '2');
+        assert.ok(keyIsDefined, 'key defined');
         getGanttViewCore(this.instance).commandManager.changeTaskEndCommand.execute(taskToUpdate.id.toString(), '3');
+        assert.ok(keyIsDefined, 'key defined');
 
         this.clock.tick();
         assert.equal(taskToUpdate.title, newTitle, 'task title is updated');
@@ -1014,12 +1019,14 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         const newEnd = new Date('2019-02-26');
         const newTitle = 'New';
         const newProgress = 73;
+        let keyIsDefined = false;
 
         this.instance.option('onTaskEditDialogShowing', (e) => {
             e.values['title'] = newTitle;
             e.values['start'] = newStart;
             e.values['end'] = newEnd;
             e.values['progress'] = newProgress;
+            keyIsDefined = !!e.key;
         });
 
         this.clock.tick();
@@ -1032,6 +1039,7 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal((new Date($inputs.eq(1).val())).getTime(), newStart.getTime(), 'start task text is shown');
         assert.equal((new Date($inputs.eq(2).val())).getTime(), newEnd.getTime(), 'end task text is shown');
         assert.equal($inputs.eq(3).val(), newProgress + '%', 'progress text is shown');
+        assert.ok(keyIsDefined, 'key defined');
     });
     test('task dialog showing - disable fields', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -2302,8 +2310,13 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.createInstance(tasksOnlyOptions);
         this.clock.tick();
         const customTooltipText = 'TestTooltipText';
-        this.instance.option('taskTooltipContentTemplate', customTooltipText);
-
+        const customTooltipFunction = (task, container) => {
+            $(container).empty();
+            return customTooltipText;
+        };
+        this.clock.tick();
+        this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
+        this.clock.tick();
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
         ganttCore.taskEditController.showTaskInfo(0, 0);
@@ -2317,8 +2330,13 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const customTooltipText = 'TestCustomTooltipJQuery';
         const customTooltipJQuery = $('<div>TestCustomTooltipJQuery</div>');
-        this.instance.option('taskTooltipContentTemplate', customTooltipJQuery);
-
+        const customTooltipFunction = (task, container) => {
+            $(container).empty();
+            return customTooltipJQuery;
+        };
+        this.clock.tick();
+        this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
+        this.clock.tick();
         const ganttCore = getGanttViewCore(this.instance);
         ganttCore.taskEditController.show(0);
         ganttCore.taskEditController.showTaskInfo(0, 0);
@@ -2326,6 +2344,50 @@ QUnit.module('Tooltip Template', moduleConfig, () => {
         this.clock.tick();
         const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
         assert.equal(tooltipText, customTooltipText, 'Custom template with jQuery works correctly');
+    });
+    test('different tooltips for tasks', function(assert) {
+        this.createInstance(tasksOnlyOptions);
+        this.clock.tick();
+        const customTooltipText = 'TestTooltipText';
+        const customTooltipFunction = (task, container) => {
+            if(task.id === 1) {
+                return;
+            }
+            const template = container.innerHTML;
+            $(container).empty();
+            if(task.id === 2) {
+                return;
+            }
+            if(task.id === 3 || task.id === 4) {
+                return customTooltipText;
+            }
+            return template;
+        };
+        this.clock.tick();
+        this.instance.option('taskTooltipContentTemplate', customTooltipFunction);
+        this.clock.tick();
+        const ganttCore = getGanttViewCore(this.instance);
+        this.clock.tick();
+        ganttCore.taskEditController.show(0);
+        ganttCore.taskEditController.showTaskInfo(0, 0);
+        this.clock.tick();
+        const tooltipTitleText = this.$element.find(TOOLTIP_SELECTOR).text();
+        const taskTitle = tasks[0].title;
+        assert.equal(tooltipTitleText.indexOf(taskTitle), 0, 'Default template works correctly');
+        ganttCore.taskEditController.tooltip.hide();
+        this.clock.tick();
+        ganttCore.taskEditController.show(1);
+        ganttCore.taskEditController.showTaskInfo(0, 0);
+        this.clock.tick();
+        const tooltipDisplayStyle = this.$element.find(TOOLTIP_SELECTOR)[0].style.display;
+        assert.equal(tooltipDisplayStyle, 'none', 'Empty content template doesnt show tooltip');
+        ganttCore.taskEditController.tooltip.hide();
+        this.clock.tick();
+        ganttCore.taskEditController.show(2);
+        ganttCore.taskEditController.showTaskInfo(0, 0);
+        this.clock.tick();
+        const tooltipText = this.$element.find(TOOLTIP_SELECTOR).text();
+        assert.equal(tooltipText, customTooltipText, 'Custom template text works correctly');
     });
 });
 

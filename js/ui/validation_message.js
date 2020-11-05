@@ -74,7 +74,7 @@ const ValidationMessage = Overlay.inherit({
 
     _toggleModeClass() {
         const mode = this.option('mode');
-        this.$element()
+        this._wrapper()
             .toggleClass(INVALID_MESSAGE_AUTO, mode === 'auto')
             .toggleClass(INVALID_MESSAGE_ALWAYS, mode === 'always');
     },
@@ -94,7 +94,8 @@ const ValidationMessage = Overlay.inherit({
         const {
             positionRequest,
             rtlEnabled,
-            offset
+            offset,
+            boundary
         } = this.option();
         const positionSide = getDefaultAlignment(rtlEnabled);
         const verticalPositions = positionRequest === 'below' ? [' top', ' bottom'] : [' bottom', ' top'];
@@ -104,7 +105,7 @@ const ValidationMessage = Overlay.inherit({
 
         this.option('position', {
             offset,
-            boundary: this.option('boundary'),
+            boundary,
             my: positionSide + verticalPositions[0],
             at: positionSide + verticalPositions[1],
             collision: 'none flip'
@@ -116,6 +117,7 @@ const ValidationMessage = Overlay.inherit({
         switch(name) {
             case 'target':
                 this.updateMaxWidth();
+                this.callBase(args);
                 break;
             case 'boundary':
                 this.option('position.boundary', value);

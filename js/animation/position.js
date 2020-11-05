@@ -76,6 +76,7 @@ import devices from '../core/devices';
 const horzRe = /left|right/;
 const vertRe = /top|bottom/;
 const collisionRe = /fit|flip|none/;
+const scaleRe = /scale(.+)/;
 const IS_SAFARI = browser.safari;
 
 const normalizeAlign = function(raw) {
@@ -315,8 +316,8 @@ const calculatePosition = function(what, options) {
                 h.atSize = of[0].visualViewport.width;
                 v.atSize = of[0].visualViewport.height;
             } else {
-                h.atSize = of[0].innerWidth >= of[0].outerWidth ? of[0].innerWidth : of.width();
-                v.atSize = of[0].innerHeight >= of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
+                h.atSize = of[0].innerWidth > of[0].outerWidth ? of[0].innerWidth : of.width();
+                v.atSize = of[0].innerHeight > of[0].outerHeight || IS_SAFARI ? of[0].innerHeight : of.height();
             }
         } else if(of[0].nodeType === 9) {
             h.atLocation = 0;
@@ -409,12 +410,17 @@ const getOffsetWithoutScale = function($startElement, $currentElement = $startEl
         return $startElement.offset();
     }
 
-    const transform = $currentElement.get(0).style.transform;
-    const scale = (transform.match(/scale(.+)/) || [])[0];
+    const style = currentElement.getAttribute('style') || '';
+    const scale = style.match(scaleRe)?.[0];
+    let offset;
 
-    currentElement.style.transform = transform.replace(scale, '');
-    const offset = getOffsetWithoutScale($startElement, $currentElement.parent());
-    currentElement.style.transform = transform;
+    if(scale) {
+        currentElement.setAttribute('style', style.replace(scale, ''));
+        offset = getOffsetWithoutScale($startElement, $currentElement.parent());
+        currentElement.setAttribute('style', style);
+    } else {
+        offset = getOffsetWithoutScale($startElement, $currentElement.parent());
+    }
 
     return offset;
 };

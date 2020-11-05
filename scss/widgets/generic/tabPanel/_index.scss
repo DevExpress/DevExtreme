@@ -75,43 +75,45 @@ $generic-tabpanel-inset-shadow-bottom: inset 0 (-$generic-tabs-border-width);
 }
 
 .dx-tabpanel {
-  .dx-tabs {
-    display: block;
-    border: none;
-    background-color: $tabs-tab-bg;
-    color: $tabs-border-color;
-
-    .dx-tab {
-      color: $tabs-border-color;
-
-      .dx-tab-content {
-        color: $tabs-tab-color;
-      }
-
-      &::after,
-      &::before {
-        content: none;
-      }
-    }
-
-    .dx-tabs-nav-button {
-      color: $tabs-border-color;
-    }
-  }
-
-  .dx-tabs-scrollable {
-    margin-top: 0;
-    margin-bottom: 0;
-    height: 100%;
-
-    .dx-tabs-wrapper {
+  > .dx-tabpanel-tabs {
+    .dx-tabs {
       display: block;
       border: none;
-    }
-  }
+      background-color: $tabs-tab-bg;
+      color: $tabs-border-color;
 
-  .dx-tab {
-    width: 140px;
+      .dx-tab {
+        color: $tabs-border-color;
+
+        .dx-tab-content {
+          color: $tabs-tab-color;
+        }
+
+        &::after,
+        &::before {
+          content: none;
+        }
+      }
+
+      .dx-tabs-nav-button {
+        color: $tabs-border-color;
+      }
+    }
+
+    .dx-tab {
+      width: 140px;
+    }
+
+    .dx-tabs-scrollable {
+      margin-top: 0;
+      margin-bottom: 0;
+      height: 100%;
+
+      .dx-tabs-wrapper {
+        display: block;
+        border: none;
+      }
+    }
   }
 
   &:not(.dx-empty-collection) {

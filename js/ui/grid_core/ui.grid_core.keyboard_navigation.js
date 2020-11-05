@@ -3,7 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import core from './ui.grid_core.modules';
 import gridCoreUtils from './ui.grid_core.utils';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isEmptyObject } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { focused } from '../widget/selectors';
 import { addNamespace, createEvent } from '../../events/utils/index';
@@ -451,7 +451,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _tabKeyHandler: function(eventArgs, isEditing) {
         const editingOptions = this.option('editing');
         const direction = eventArgs.shift ? 'previous' : 'next';
-        let isOriginalHandlerRequired = !eventArgs.shift && this._isLastValidCell(this._focusedCellPosition) || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
+        const isCellPositionDefined = isDefined(this._focusedCellPosition) && !isEmptyObject(this._focusedCellPosition);
+        let isOriginalHandlerRequired = !isCellPositionDefined || (!eventArgs.shift && this._isLastValidCell(this._focusedCellPosition)) || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
         const eventTarget = eventArgs.originalEvent.target;
         const focusedViewElement = this._focusedView && this._focusedView.element();
 
@@ -1087,10 +1088,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                                 return;
                             }
                             !isFocusedElementDefined && this._focus($cell);
-                        } else if(this._isCellEditMode() || this._isNeedFocus) {
+                        } else if(this._isNeedFocus || this._isHiddenFocus) {
                             this._focus($cell, this._isHiddenFocus);
-                        } else if(this._isHiddenFocus) {
-                            this._focus($cell, true);
                         }
                         if(isEditing) {
                             this._focusInteractiveElement.bind(this)($cell);
@@ -1279,14 +1278,12 @@ const KeyboardNavigationController = core.ViewController.inherit({
         if(!this._focusedCellPosition) {
             this._focusedCellPosition = {};
         }
-        this.option('focusedRowIndex', rowIndex);
         this._focusedCellPosition.rowIndex = rowIndex;
     },
     setFocusedColumnIndex: function(columnIndex) {
         if(!this._focusedCellPosition) {
             this._focusedCellPosition = {};
         }
-        this.option('focusedColumnIndex', columnIndex);
         this._focusedCellPosition.columnIndex = columnIndex;
     },
     getRowIndex: function() {
@@ -1308,9 +1305,6 @@ const KeyboardNavigationController = core.ViewController.inherit({
             return -1;
         }
         return columnIndex - this._columnsController.getColumnIndexOffset();
-    },
-    getFocusedColumnIndex: function() {
-        return this._focusedCellPosition ? this._focusedCellPosition.columnIndex : null;
     },
     _applyColumnIndexBoundaries: function(columnIndex) {
         const visibleColumnsCount = this._getVisibleColumnCount();

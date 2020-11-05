@@ -725,6 +725,24 @@ module('Events', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'October 10 2012', 'decrement works');
     });
 
+    test('Change date part by mouse wheel after clicking on stubs before the value part', function(assert) {
+        this.instance.option('displayFormat', '\'stub\'dd/MM/yyyy');
+        this.keyboard.caret(2);
+        this.$input.trigger('dxclick');
+
+        this.pointer.wheel(10);
+        assert.strictEqual(this.$input.val(), 'stub11/10/2012', 'value updated');
+    });
+
+    test('Change date part by mouse wheel after clicking on stubs after the value part', function(assert) {
+        this.instance.option('displayFormat', 'dd/MM/yyyy\'stub\'');
+        this.keyboard.caret(12);
+        this.$input.trigger('dxclick');
+
+        this.pointer.wheel(10);
+        assert.strictEqual(this.$input.val(), '10/10/2013stub', 'value updated');
+    });
+
     test('it should not be possible to drag text in the editor', function(assert) {
         this.keyboard.type('3');
         assert.strictEqual(this.$input.val(), 'March 10 2012', 'text has been changed');

@@ -734,6 +734,7 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleScroll: function() {
+        this._component._updateRtlConfig();
         this._scrollAction();
     },
 
@@ -1106,7 +1107,6 @@ export const SimulatedStrategy = Class.inherit({
 export {
     ACCELERATION,
     MIN_VELOCITY_LIMIT,
-    FRAME_DURATION,
-    SCROLL_LINE_HEIGHT
+    FRAME_DURATION
 };
 ///#ENDDEBUG

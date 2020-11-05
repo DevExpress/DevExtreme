@@ -80,6 +80,7 @@ QUnit.module('Properties Panel', {
         const $boldButton = findPropertiesPanelToolbarItem(this.$element, 'bold');
         assert.notEqual(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
         $boldButton.trigger('dxclick');
+        this.clock.tick(200);
         assert.equal(document.activeElement, this.instance._diagramInstance.render.input.inputElement);
     });
 });

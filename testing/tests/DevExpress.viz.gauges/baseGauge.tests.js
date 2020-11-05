@@ -411,7 +411,9 @@ QUnit.test('Show tooltip', function(assert) {
     assert.deepEqual(this.tooltip.show.lastCall.args, [
         { value: 'value', color: 'color', valueText: 'formatted-value', tag: 'info' },
         { x: 110, y: 220, offset: 50 },
-        { target: info }
+        { target: info },
+        undefined,
+        undefined
     ], 'tooltip is shown');
 });
 

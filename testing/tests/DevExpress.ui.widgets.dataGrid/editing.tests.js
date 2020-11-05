@@ -6141,7 +6141,7 @@ QUnit.module('Editing with real dataController', {
         this.options.editing.changes = changes;
 
         // act
-        this.editingController._addEditData({
+        this.editingController._addChange({
             data: { A: [13] },
             key: 1,
             type: 'number'
@@ -8515,59 +8515,60 @@ QUnit.module('Editing with real dataController', {
         });
     });
 
-    QUnit.testInActiveWindow('Batch - Validation frame should be rendered when a neighboring cell is modified with showEditorAlways and repaintChangesOnly enabled (T906094)', function(assert) {
-        // arrange
-        const rowsView = this.rowsView;
-        const $testElement = $('#container');
+    ['cell', 'batch'].forEach(editMode => {
+        QUnit.testInActiveWindow(`${editMode} - Validation frame should be rendered when a neighboring cell is modified with showEditorAlways and repaintChangesOnly enabled (T906094, T914600)`, function(assert) {
+            // arrange
+            const rowsView = this.rowsView;
+            const $testElement = $('#container');
 
-        this.options.repaintChangesOnly = true;
-        $.extend(this.options.editing, {
-            mode: 'batch',
-            allowUpdating: true
+            this.options.repaintChangesOnly = true;
+            $.extend(this.options.editing, {
+                mode: editMode,
+                allowUpdating: true
+            });
+
+            this.options.columns = [{
+                dataField: 'name'
+            }, {
+                dataField: 'age',
+                showEditorAlways: true,
+                validationRules: [{
+                    type: 'custom',
+                    reevaluate: true,
+                    validationCallback: function(params) {
+                        return params.data.name.length > 0;
+                    }
+                }]
+            }];
+
+            rowsView.render($testElement);
+            this.columnsController.init();
+            this.editCell(0, 0);
+
+            const $firstCell = $(this.getCellElement(0, 0));
+            $firstCell.focus();
+
+            const $targetInput = $firstCell.find('input').first();
+
+            // act
+            $targetInput.val('').trigger('change');
+            this.closeEditCell();
+            this.clock.tick();
+
+            let $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.ok($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as invalid');
+
+            // act
+            this.cancelEditData();
+            this.clock.tick();
+
+            $secondCell = $(this.getCellElement(0, 1));
+
+            // assert
+            assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as valid');
         });
-
-        this.options.columns = [{
-            dataField: 'name'
-        }, {
-            dataField: 'age',
-            showEditorAlways: true,
-            validationRules: [{
-                type: 'custom',
-                reevaluate: true,
-                validationCallback: function(params) {
-                    return params.data.name.length > 0;
-                }
-            }]
-        }];
-
-
-        rowsView.render($testElement);
-        this.columnsController.init();
-        this.editCell(0, 0);
-
-        const $firstCell = $(this.getCellElement(0, 0));
-        $firstCell.focus();
-
-        const $targetInput = $firstCell.find('input').first();
-
-        // act
-        $targetInput.val('').trigger('change');
-        this.closeEditCell();
-        this.clock.tick();
-
-        let $secondCell = $(this.getCellElement(0, 1));
-
-        // assert
-        assert.ok($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as invalid');
-
-        // act
-        this.cancelEditData();
-        this.clock.tick();
-
-        $secondCell = $(this.getCellElement(0, 1));
-
-        // assert
-        assert.notOk($secondCell.hasClass('dx-datagrid-invalid'), 'the second cell is rendered as valid');
     });
 
     ['Row', 'Batch', 'Cell'].forEach((editMode) => {
@@ -9521,8 +9522,32 @@ QUnit.module('Editing with real dataController', {
             // arrange
             const rowsView = this.rowsView;
             const $testElement = $('#container');
-            const onSaving = sinon.spy();
-            const onSaved = sinon.spy();
+            const onSaving = sinon.spy(e => {
+                assert.deepEqual(e.changes, [{
+                    'data': {
+                        'name': 'new value'
+                    },
+                    'key': 1,
+                    'type': 'update'
+                }], 'onSaving args');
+            });
+            const onSaved = sinon.spy(e => {
+                assert.deepEqual(e.changes, [{
+                    'data': {
+                        'age': 15,
+                        'lastName': 'John',
+                        'name': 'new value',
+                        'phone': '555555',
+                        'room': 1,
+                        'state': {
+                            'name': 'state 1'
+                        },
+                        'stateId': 0
+                    },
+                    'key': 1,
+                    'type': 'update'
+                }], 'onSaved args');
+            });
 
             $.extend(this.options.editing, {
                 allowUpdating: true,
@@ -9537,16 +9562,11 @@ QUnit.module('Editing with real dataController', {
             // act
             this.editRow(0);
             this.cellValue(0, 0, 'new value');
-
-            const changes = this.option('editing.changes');
-
             this.saveEditData();
 
             // assert
             assert.equal(onSaving.callCount, 1, 'onSaving was called');
-            assert.deepEqual(onSaving.firstCall.args[0].changes, changes, 'onSaving args');
             assert.equal(onSaved.callCount, 1, 'onSaved was called');
-            assert.deepEqual(onSaved.firstCall.args[0].changes, changes, 'onSaved args');
             assert.equal($(this.getCellElement(0, 0)).text(), 'new value', 'cell was modified');
         });
 
@@ -14438,8 +14458,8 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(result.status, 'result should be restored from cache');
 
-        const editData = this.editingController.getEditDataByKey(rowKey);
-        this.validatingController.cancelCellValidationResult({ editData, columnIndex: 0 });
+        const change = this.editingController.getChangeByKey(rowKey);
+        this.validatingController.cancelCellValidationResult({ change, columnIndex: 0 });
         result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
         // assert
@@ -14481,8 +14501,8 @@ QUnit.module('Editing with validation', {
         // assert
         assert.ok(result.status, 'result should be restored from cache');
 
-        const editData = this.editingController.getEditDataByKey(rowKey);
-        this.validatingController.removeCellValidationResult({ editData, columnIndex: 0 });
+        const change = this.editingController.getChangeByKey(rowKey);
+        this.validatingController.removeCellValidationResult({ change, columnIndex: 0 });
         result = this.validatingController.getCellValidationResult({ rowKey, columnIndex: 0 });
 
         // assert

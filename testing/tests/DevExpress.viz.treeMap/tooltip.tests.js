@@ -23,8 +23,26 @@ QUnit.test('Show tooltip', function(assert) {
 
     root.getChild(1).showTooltip();
 
-    assert.deepEqual(this.tooltip.show.lastCall.args, [{ value: 2, valueText: 'formatted', node: root.getChild(1) }, { x: 0, y: 0, offset: 0 }, { node: root.getChild(1) }], 'show');
+    assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 2, valueText: 'formatted', node: root.getChild(1) });
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 });
+    assert.deepEqual(this.tooltip.show.lastCall.args[2], { node: root.getChild(1) });
+    assert.equal(this.tooltip.show.lastCall.args[3], undefined);
+    assert.equal(typeof this.tooltip.show.lastCall.args[4], 'function');
+
     assert.deepEqual(this.tooltip.move.lastCall.args, [490, 163.5, 0], 'move');
+});
+
+QUnit.test('Show tooltip, async render', function(assert) {
+    this.tooltip.stub('show').returns(false);
+    const root = common.createWidget({
+        dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }]
+    }).getRootNode();
+
+    root.getChild(1).showTooltip();
+
+    assert.equal(this.tooltip.hide.callCount, 1);
+    this.tooltip.show.lastCall.args[4](true);
+    assert.equal(this.tooltip.move.callCount, 1);
 });
 
 QUnit.test('Show tooltip / coords', function(assert) {
@@ -34,7 +52,12 @@ QUnit.test('Show tooltip / coords', function(assert) {
 
     root.getChild(1).showTooltip([20, 10]);
 
-    assert.deepEqual(this.tooltip.show.lastCall.args, [{ value: 2, valueText: 'formatted', node: root.getChild(1) }, { x: 0, y: 0, offset: 0 }, { node: root.getChild(1) }], 'show');
+    assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 2, valueText: 'formatted', node: root.getChild(1) });
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 });
+    assert.deepEqual(this.tooltip.show.lastCall.args[2], { node: root.getChild(1) });
+    assert.equal(this.tooltip.show.lastCall.args[3], undefined);
+    assert.equal(typeof this.tooltip.show.lastCall.args[4], 'function');
+
     assert.deepEqual(this.tooltip.move.lastCall.args, [20, 10, 0], 'move');
 });
 
@@ -46,7 +69,12 @@ QUnit.test('Show tooltip / disabled by customization', function(assert) {
 
     root.getChild(1).showTooltip();
 
-    assert.deepEqual(this.tooltip.show.lastCall.args, [{ value: 2, valueText: 'formatted', node: root.getChild(1) }, { x: 0, y: 0, offset: 0 }, { node: root.getChild(1) }], 'show');
+    assert.deepEqual(this.tooltip.show.lastCall.args[0], { value: 2, valueText: 'formatted', node: root.getChild(1) });
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 0, y: 0, offset: 0 });
+    assert.deepEqual(this.tooltip.show.lastCall.args[2], { node: root.getChild(1) });
+    assert.equal(this.tooltip.show.lastCall.args[3], undefined);
+    assert.equal(typeof this.tooltip.show.lastCall.args[4], 'function');
+
     assert.strictEqual(this.tooltip.stub('move').callCount, 0, 'move');
     assert.deepEqual(this.tooltip.hide.lastCall.args, [], 'hide');
 });

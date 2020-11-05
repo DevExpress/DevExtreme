@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import { locate } from 'animation/translator';
 import devices from 'core/devices';
+
+import 'common.css!';
+import 'generic_light.css!';
 import 'ui/scheduler/ui.scheduler';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
@@ -10,6 +13,8 @@ const SCHEDULER_ID = 'scheduler';
 const TEST_ROOT_ELEMENT_ID = 'qunit-fixture';
 
 export const CLASSES = {
+    root: '.dx-scheduler',
+
     header: '.dx-scheduler-header-panel',
     navigator: '.dx-scheduler-navigator',
     navigatorCaption: '.dx-scheduler-navigator-caption',
@@ -19,6 +24,11 @@ export const CLASSES = {
     navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
+
+    dateTableCell: '.dx-scheduler-date-table-cell',
+    allDayTableCell: '.dx-scheduler-all-day-table-cell',
+
+    appointment: '.dx-scheduler-appointment',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -30,10 +40,11 @@ export const initTestMarkup = () => $(`#${TEST_ROOT_ELEMENT_ID}`).html(`<div id=
 
 export const createWrapper = (option) => new SchedulerTestWrapper($(`#${SCHEDULER_ID}`).dxScheduler(option).dxScheduler('instance'));
 
-export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop' && !devices.real().mac;
+export const isDesktopEnvironment = () => devices.real().deviceType === 'desktop';
+const isMACEnvironment = () => devices.real().mac;
 
 export const checkResultByDeviceType = (assert, callback) => {
-    if(isDesktopEnvironment()) {
+    if(isDesktopEnvironment() && !isMACEnvironment()) {
         callback();
     } else {
         const done = assert.async();
@@ -131,10 +142,10 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 return $('.dx-scheduler-time-panel');
             },
             getTimeValues: () => {
-                const cellClassName = this.instance.option('currentView').indexOf('timeline') > -1 ? '.dx-scheduler-header-panel-cell' : '.dx-scheduler-time-panel-cell > div';
-                return $(cellClassName).filter((i, el) => {
-                    return $(el).text() !== '';
-                }).map((i, el) => { return $(el).text(); });
+                const cellClassName = this.instance.option('currentView').indexOf('timeline') > -1 ?
+                    '.dx-scheduler-header-panel-cell' : '.dx-scheduler-time-panel-cell > div';
+
+                return $(cellClassName).not('.dx-scheduler-header-panel-week-cell').map((i, el) => $(el).text());
             }
         },
 
@@ -313,12 +324,12 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
             getRowCount: () => $('.dx-scheduler-date-table-row').length,
             getRows: (index = 0) => $('.dx-scheduler-date-table-row').eq(index),
-            getCells: () => $('.dx-scheduler-date-table-cell'),
+            getCells: () => $(CLASSES.dateTableCell),
             getSelectedCells: () => this.workSpace.getCells().filter('.dx-state-focused'),
             getFocusedCell: () => this.workSpace.getCells().filter('.dx-scheduler-focused-cell'),
             getCell: (rowIndex, cellIndex) => {
                 if(cellIndex !== undefined) {
-                    return $('.dx-scheduler-date-table-row').eq(rowIndex).find('.dx-scheduler-date-table-cell').eq(cellIndex);
+                    return $('.dx-scheduler-date-table-row').eq(rowIndex).find(CLASSES.dateTableCell).eq(cellIndex);
                 }
                 return this.workSpace.getCells().eq(rowIndex);
             },

@@ -1,0 +1,137 @@
+// adduse
+
+
+.dx-filterbuilder {
+  &.dx-rtl {
+    .dx-filterbuilder-text,
+    .dx-filterbuilder-action-icon {
+      margin-left: 5px;
+      margin-right: 0;
+    }
+
+    .dx-filterbuilder-group {
+      .dx-filterbuilder-group-content .dx-filterbuilder-group-content {
+        padding-left: 0;
+        padding-right: 26px;
+      }
+    }
+  }
+
+  .dx-filterbuilder-text,
+  .dx-filterbuilder-action-icon {
+    margin-left: 0;
+    margin-right: 5px;
+  }
+
+  .dx-filterbuilder-text,
+  .dx-filterbuilder-item-value-text,
+  .dx-filterbuilder-action-icon {
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .dx-filterbuilder-group {
+    .dx-filterbuilder-group-item {
+      display: inline-block;
+      white-space: nowrap;
+
+      .dx-filterbuilder-text {
+        display: inline-block;
+        cursor: pointer;
+        white-space: pre;
+
+        .dx-filterbuilder-range {
+          white-space: nowrap;
+        }
+
+        .dx-filterbuilder-text-separator,
+        .dx-filterbuilder-range-separator {
+          margin: 0 7px;
+          opacity: 0.3;
+        }
+
+        &.dx-filterbuilder-group-operation,
+        &.dx-filterbuilder-item-field,
+        &.dx-filterbuilder-item-operation,
+        .dx-filterbuilder-item-value-text {
+          min-width: 20px;
+          padding: 2px 7px 3px 7px;
+        }
+
+        .dx-texteditor {
+          vertical-align: middle;
+          margin-top: -7px;
+          margin-bottom: -4px;
+          display: inline-block;
+        }
+      }
+
+      .dx-filterbuilder-action {
+        display: inline-block;
+        cursor: pointer;
+        position: relative;
+
+        &.dx-filterbuilder-action-icon {
+          padding: 5px 8px;
+        }
+      }
+    }
+
+    .dx-filterbuilder-group-content .dx-filterbuilder-group-content {
+      padding-left: 26px;
+    }
+  }
+}
+
+.dx-filterbuilder-operations {
+  .dx-treeview-item {
+    padding-left: 5px;
+  }
+
+  .dx-rtl {
+    .dx-treeview-item {
+      padding-right: 5px;
+    }
+  }
+}
+
+.dx-filterbuilder-overlay {
+  white-space: nowrap;
+
+  .dx-treeview {
+    .dx-treeview-node {
+      padding-left: 0;
+
+      .dx-treeview-node-container-opened {
+        margin-left: 15px;
+      }
+    }
+
+    &.dx-rtl {
+      .dx-treeview-node {
+        padding-right: 0;
+
+        .dx-treeview-node-container-opened {
+          margin-right: 15px;
+        }
+      }
+    }
+  }
+
+  .dx-overlay-content.dx-popup-normal {
+    border-radius: 0;
+
+    > .dx-popup-content {
+      padding: 0;
+    }
+  }
+
+  .dx-scrollable-container {
+    max-height: 360px;
+  }
+
+  .dx-menu-items-container {
+    padding: 0;
+  }
+}

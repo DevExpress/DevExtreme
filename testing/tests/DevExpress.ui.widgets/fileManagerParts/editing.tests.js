@@ -700,7 +700,7 @@ QUnit.module('Editing operations', moduleConfig, () => {
         const itemNames = this.wrapper.getDetailsItemNamesTexts();
         const uploadedFileIndex = itemNames.indexOf(file.name);
 
-        assert.strictEqual(initialItemCount + 1, itemNames.length, 'item count increased');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased');
         assert.ok(uploadedFileIndex > -1, 'file is uploaded');
         assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
     });
@@ -712,8 +712,106 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
 
         itemViewPanel.trigger('dragenter');
-        assert.roughEqual(itemViewPanel.offset().top, dropZonePlaceholder.offset().top, 0.02, 'drop zone has correct offset');
-        assert.roughEqual(itemViewPanel.offset().left, dropZonePlaceholder.offset().left, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        itemViewPanel.trigger('dragleave');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+    });
+
+    test('upload drop zone does not hide on drag interaction', function(assert) {
+        const itemViewPanel = this.wrapper.getItemsViewPanel();
+        const detailsItemRow = $(this.wrapper.getRowsInDetailsView()[0]);
+        const dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        itemViewPanel.trigger('dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        detailsItemRow.trigger('dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        detailsItemRow.trigger('dragleave');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
+        assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
+
+        itemViewPanel.trigger('dragleave');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+    });
+
+    test('upload with drag and drop should not ignore correspondent permission', function(assert) {
+        const fileManager = this.$element.dxFileManager('instance');
+        fileManager.option('permissions.upload', false);
+        this.clock.tick(400);
+        stubFileReader(fileManager._controller._fileProvider);
+
+        const initialItemCount = this.wrapper.getDetailsItemsNames().length;
+
+        const file = createUploaderFiles(1)[0];
+        const event = $.Event($.Event('drop', { dataTransfer: { files: [file] } }));
+
+        this.wrapper.getItemsViewPanel().trigger(event);
+        this.clock.tick(400);
+
+        let itemNames = this.wrapper.getDetailsItemNamesTexts();
+        let uploadedFileIndex = itemNames.indexOf(file.name);
+        let infos = this.progressPanelWrapper.getInfos();
+
+        assert.equal(infos.length, 0, 'there are no operation notifiactions');
+        assert.strictEqual(itemNames.length, initialItemCount, 'item count not increased');
+        assert.strictEqual(uploadedFileIndex, -1, 'file is not uploaded');
+
+        fileManager.option('permissions.upload', true);
+        this.clock.tick(400);
+        stubFileReader(fileManager._controller._fileProvider);
+
+        this.wrapper.getItemsViewPanel().trigger(event);
+        this.clock.tick(400);
+
+        itemNames = this.wrapper.getDetailsItemNamesTexts();
+        uploadedFileIndex = itemNames.indexOf(file.name);
+        infos = this.progressPanelWrapper.getInfos();
+
+        assert.equal(infos.length, 1, 'there is one operation notifiaction');
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased after allowing to upload');
+        assert.ok(uploadedFileIndex > -1, 'file is uploaded after allowing to upload');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
+    });
+
+    test('upload drop zone does not respond on drag interaction when upload is not permitted', function(assert) {
+        const fileManager = this.$element.dxFileManager('instance');
+        fileManager.option('permissions.upload', false);
+        this.clock.tick(400);
+
+        let itemViewPanel = this.wrapper.getItemsViewPanel();
+        let dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        itemViewPanel.trigger('dragenter');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+
+        itemViewPanel.trigger('dragleave');
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible');
+
+        fileManager.option('permissions.upload', true);
+        this.clock.tick(400);
+
+        itemViewPanel = this.wrapper.getItemsViewPanel();
+        dropZonePlaceholder = this.wrapper.getUploaderDropZonePlaceholder();
+
+        assert.notOk(dropZonePlaceholder.is(':visible'), 'drop zone is invisible in initail state');
+
+        itemViewPanel.trigger('dragenter');
+        assert.roughEqual(dropZonePlaceholder.offset().top, itemViewPanel.offset().top, 0.02, 'drop zone has correct offset');
+        assert.roughEqual(dropZonePlaceholder.offset().left, itemViewPanel.offset().left, 0.02, 'drop zone has correct offset');
         assert.ok(dropZonePlaceholder.is(':visible'), 'drop zone is visible');
 
         itemViewPanel.trigger('dragleave');
@@ -945,6 +1043,152 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(infos[1].details[0].$progressBar.length, 1, 'Info 1 has progress bar');
         assert.strictEqual(infos[1].details[0].progressBarStatusText, 'Done', 'Progress bar has correct status');
         assert.strictEqual(infos[1].details[0].commonText, file0.name, 'Detail text is correct');
+    });
+
+    test('refresh during upload does not prevent files from being shown before next refresh (T928871)', function(assert) {
+        const operationDelay = 1000;
+        const chunkSize = 50000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            currentPath: 'Folder 1',
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            upload: {
+                chunkSize
+            }
+        });
+        this.clock.tick(400);
+
+        const initialItemCount = this.wrapper.getDetailsItemsNames().length;
+        const file0 = createUploaderFiles(1)[0];
+
+        this.wrapper.getItemsViewPanel().trigger(getDropFileEvent(file0));
+        this.clock.tick(operationDelay / 2);
+        fileManager.refresh();
+
+        let itemNames = this.wrapper.getDetailsItemNamesTexts();
+        let uploadedFileIndex = itemNames.indexOf(file0.name);
+
+        assert.strictEqual(itemNames.length, initialItemCount, 'item count not increased');
+        assert.strictEqual(uploadedFileIndex, -1, 'file is not uploaded');
+
+        this.clock.tick((file0.size / chunkSize + 1) * operationDelay);
+
+        itemNames = this.wrapper.getDetailsItemNamesTexts();
+        uploadedFileIndex = itemNames.indexOf(file0.name);
+
+        assert.strictEqual(itemNames.length, initialItemCount + 1, 'item count increased');
+        assert.ok(uploadedFileIndex > -1, 'file is uploaded');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', uploadedFileIndex), '293 KB', 'file size is correct');
+    });
+
+    test('refresh during copying does not prevent files from being shown before next refresh (T928871)', function(assert) {
+        const operationDelay = 1000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            currentPath: 'Folder 1/Folder 1.1',
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        // Select folder 'Folder 1/Folder 1.1/File 1-1.txt'
+        this.wrapper.getColumnCellsInDetailsView(2).eq(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        // Invoke copy dialog
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+        // Select destination directory 'Folder 1/Folder 1.2'
+        this.wrapper.getFolderNodeByText('Folder 1.2', true).trigger('dxclick');
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+
+        this.clock.tick(operationDelay + 1);
+        fileManager.refresh();
+
+        this.clock.tick(operationDelay);
+
+        const itemNames = this.wrapper.getDetailsItemNamesTexts();
+        const copiedFileIndex = itemNames.indexOf('File 1-1.txt');
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1.2', 'destination folder should be selected');
+        assert.strictEqual(itemNames.length, 1, 'file is copied');
+        assert.ok(copiedFileIndex > -1, 'file is copied');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', copiedFileIndex), '0 B', 'file size is correct');
+    });
+
+    test('refresh during moving does not prevent files from being shown before next refresh (T928871)', function(assert) {
+        const operationDelay = 1000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            currentPath: 'Folder 1/Folder 1.1',
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        // Select folder 'Folder 1/Folder 1.1/File 1-1.txt'
+        this.wrapper.getColumnCellsInDetailsView(2).eq(1).trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+        // Invoke copy dialog
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+        // Select destination directory 'Folder 1/Folder 1.2'
+        this.wrapper.getFolderNodeByText('Folder 1.2', true).trigger('dxclick');
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+
+        this.clock.tick(operationDelay + 1);
+        fileManager.refresh();
+
+        this.clock.tick(operationDelay);
+
+        const itemNames = this.wrapper.getDetailsItemNamesTexts();
+        const copiedFileIndex = itemNames.indexOf('File 1-1.txt');
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 1.2', 'destination folder should be selected');
+        assert.strictEqual(itemNames.length, 1, 'file is moved');
+        assert.ok(copiedFileIndex > -1, 'file is moved');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', copiedFileIndex), '0 B', 'file size is correct');
+    });
+
+    test('refresh during creating does not prevent folders from being shown before next refresh (T928871)', function(assert) {
+        const operationDelay = 1000;
+        const fileManager = this.wrapper.getInstance();
+        fileManager.option({
+            currentPath: 'Folder 3',
+            fileSystemProvider: new SlowFileProvider({
+                operationDelay
+            }),
+            itemView: {
+                showFolders: true
+            }
+        });
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('New directory').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Create').trigger('dxclick');
+
+        this.clock.tick(operationDelay);
+        fileManager.refresh();
+
+        this.clock.tick(operationDelay);
+
+        const itemNames = this.wrapper.getDetailsItemNamesTexts();
+        const copiedFileIndex = itemNames.indexOf('Untitled directory');
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Folder 3', 'destination folder should be selected');
+        assert.strictEqual(itemNames.length, 1, 'file is created');
+        assert.ok(copiedFileIndex > -1, 'file is created');
+        assert.strictEqual(this.wrapper.getDetailsCellText('File Size', copiedFileIndex), '\xa0', 'file size is correct');
     });
 
 });

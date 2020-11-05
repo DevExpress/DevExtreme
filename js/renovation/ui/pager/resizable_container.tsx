@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import {
   Component, ComponentBindings, JSXComponent,
-  Effect, Template, InternalState, OneWay, Ref, JSXTemplate,
+  Effect, Template, InternalState, OneWay, ForwardRef, Ref, JSXTemplate,
 } from 'devextreme-generator/component_declaration/common';
 
 import resizeCallbacks from '../../../core/utils/resize_callbacks';
@@ -81,24 +81,19 @@ export class ResizableContainerProps {
   view: viewFunction,
 })
 export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'pagerProps' | 'contentTemplate'>() {
-  @Ref() parentRef!: HTMLDivElement;
+  @ForwardRef() parentRef!: HTMLDivElement;
 
-  @Ref() pageSizesRef?: HTMLDivElement;
+  @ForwardRef() pageSizesRef?: HTMLDivElement;
 
-  @Ref() infoTextRef?: HTMLDivElement;
+  @ForwardRef() infoTextRef?: HTMLDivElement;
 
-  @Ref() pagesRef?: HTMLElement;
+  @ForwardRef() pagesRef?: HTMLElement;
 
   @InternalState() infoTextVisible = true;
 
   @InternalState() isLargeDisplayMode = true;
 
-  @InternalState() elementsWidth: ChildElementsWidth & { isEmpty: boolean } = {
-    isEmpty: true,
-    pageSizes: 0,
-    pages: 0,
-    info: 0,
-  };
+  @Ref() elementsWidth!: ChildElementsWidth;
 
   @Effect() subscribeToResize(): DisposeEffectReturn {
     const callback = (): void => this.updateChildrenProps();
@@ -113,35 +108,33 @@ export class ResizableContainer extends JSXComponent<ResizableContainerProps, 'p
     }
   }
 
-  updateElementsWidth(currentElementsWidth): void {
-    this.elementsWidth.isEmpty = false;
-    this.elementsWidth.pageSizes = currentElementsWidth.pageSizes;
-    this.elementsWidth.info = currentElementsWidth.info;
-    this.elementsWidth.pages = currentElementsWidth.pages;
+  updateElementsWidth({ info, pageSizes, pages }: ChildElementsWidth): void {
+    this.elementsWidth = { info, pageSizes, pages };
   }
 
   // Vitik generator problem if use same name for updateChildProps and updateChildrenProps
   updateChildrenProps(): void {
-    const elementsWidth = getElementsWidth({
+    const currentElementsWidth = getElementsWidth({
       parent: this.parentRef,
       pageSizes: this.pageSizesRef,
       info: this.infoTextRef,
       pages: this.pagesRef,
     });
-    const current = calculateAdaptivityProps(elementsWidth);
+    const current = calculateAdaptivityProps(currentElementsWidth);
     const isNotFittedWithCurrentWidths = (!current.infoTextVisible && this.infoTextVisible)
     || (!current.isLargeDisplayMode && this.isLargeDisplayMode);
-    if (this.elementsWidth.isEmpty || isNotFittedWithCurrentWidths) {
-      this.updateElementsWidth(elementsWidth);
+    const isEmpty = this.elementsWidth === undefined;
+    if (isEmpty || isNotFittedWithCurrentWidths) {
+      this.updateElementsWidth(currentElementsWidth);
       this.infoTextVisible = current.infoTextVisible;
       this.isLargeDisplayMode = current.isLargeDisplayMode;
     } else {
       const cached = calculateAdaptivityProps({
-        parent: elementsWidth.parent,
+        parent: currentElementsWidth.parent,
         ...this.elementsWidth,
       });
       if (cached.infoTextVisible && cached.isLargeDisplayMode) {
-        this.updateElementsWidth(elementsWidth);
+        this.updateElementsWidth(currentElementsWidth);
       }
       this.infoTextVisible = cached.infoTextVisible;
       this.isLargeDisplayMode = cached.isLargeDisplayMode;

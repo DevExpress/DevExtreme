@@ -1,0 +1,160 @@
+@use "./mixins" as *;
+
+// adduse
+.dx-gallery {
+  width: 100%;
+  height: 100%;
+
+  @include user-select(none);
+
+  touch-action: pinch-zoom pan-y;
+}
+
+.dx-gallery-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  white-space: nowrap;
+
+  & > .dx-empty-message {
+    text-align: center;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+.dx-gallery-container {
+  position: relative;
+  height: 100%;
+}
+
+.dx-gallery-item {
+  display: inline-block;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.dx-gallery-item-image {
+  max-width: 100%;
+  align-self: flex-start;
+  flex-shrink: 0;
+  height: auto;
+  margin: auto;
+}
+
+.dx-gallery-item-content {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.dx-gallery .dx-gallery-item-loop {
+  display: none;
+}
+
+.dx-gallery-loop .dx-gallery-item-loop {
+  display: inline-block;
+  position: absolute;
+}
+
+.dx-gallery-item-invisible {
+  visibility: hidden;
+}
+
+.dx-gallery-nav-button-prev,
+.dx-gallery-nav-button-next {
+  position: absolute;
+  top: 50%;
+  cursor: pointer;
+
+  @include user-select(none);
+
+  background-size: 100% 100%;
+}
+
+.dx-gallery-nav-button-prev {
+  left: 0;
+}
+
+.dx-gallery-nav-button-next {
+  right: 0;
+}
+
+.dx-gallery-indicator {
+  position: absolute;
+  bottom: 10px;
+  width: 100%;
+  height: 10px;
+  font-size: 0;
+}
+
+.dx-gallery-indicator-item {
+  display: inline-block;
+  margin: 0 2px;
+  height: 10px;
+  cursor: pointer;
+}
+
+
+.dx-state-disabled {
+  .dx-gallery-nav-button-prev,
+  .dx-gallery-nav-button-next,
+  .dx-gallery-indicator-item {
+    cursor: default;
+  }
+}
+
+.dx-rtl {
+  .dx-gallery-nav-button-prev {
+    right: 0;
+    left: auto;
+
+    @include flip-horizontally();
+  }
+
+  .dx-gallery-nav-button-next {
+    right: auto;
+    left: 0;
+
+    @include flip-horizontally();
+  }
+}
+
+
+.dx-device-android {
+  .dx-scrollable-native {
+    .dx-gallery-item,
+    .dx-gallery-indicator,
+    .dx-gallery-nav-button-prev,
+    .dx-gallery-nav-button-next {
+      backface-visibility: visible;
+    }
+
+    .dx-gallery-active .dx-gallery-item,
+    .dx-gallery-active .dx-gallery-indicator,
+    .dx-gallery-active .dx-gallery-nav-button-prev,
+    .dx-gallery-active .dx-gallery-nav-button-next {
+      backface-visibility: hidden;
+    }
+  }
+
+  .dx-gallery-item {
+    backface-visibility: hidden;
+  }
+}
+
+.dx-device-ios-6 { /* NOTE: fix blinking on ios (B254535) */
+  .dx-gallery,
+  .dx-gallery-item,
+  .dx-gallery-indicator,
+  .dx-gallery-nav-button-prev,
+  .dx-gallery-nav-button-next {
+    backface-visibility: hidden;
+  }
+}
