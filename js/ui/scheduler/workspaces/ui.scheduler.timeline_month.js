@@ -26,8 +26,17 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return 0;
     }
 
-    _getIndicationFirstViewDate() {
-        return dateUtils.trimTime(new Date(this._firstViewDate));
+    getIndicationCellCount() {
+        const today = this._getToday();
+        const date = this._getIndicationFirstViewDate();
+        const hiddenInterval = this._getHiddenInterval();
+        const timeDiff = today.getTime() - date.getTime();
+
+        const differenceInDays = Math.ceil(timeDiff / toMs('day')) - 1;
+        const duration = timeDiff - differenceInDays * hiddenInterval;
+        const cellCount = duration / this.getCellDuration();
+
+        return cellCount;
     }
 
     getCellDuration() {
