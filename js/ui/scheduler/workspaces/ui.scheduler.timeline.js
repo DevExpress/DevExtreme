@@ -425,7 +425,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _getIndicationFirstViewDate() {
         return dateUtils.trimTime(new Date(this._firstViewDate));
-        // return new Date(this._firstViewDate);
     }
 
     _getIntervalBetween(currentDate, allDay) {
