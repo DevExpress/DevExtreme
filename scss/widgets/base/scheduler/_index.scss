@@ -1058,7 +1058,9 @@ $scheduler-appointment-form-label-padding: 20px;
     }
 
     .dx-scrollable-native .dx-scrollable-content {
-      height: 100%;
+      &.dx-scheduler-scrollable-fixed-content {
+        height: 100%;
+      }
     }
 
     .dx-scheduler-date-table-cell {
