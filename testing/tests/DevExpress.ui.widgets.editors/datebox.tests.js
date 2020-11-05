@@ -3334,6 +3334,7 @@ QUnit.module('datebox with time component', {
             pickerType: 'calendar',
             opened: true,
             min: date,
+            displayFormat: 'HH:mm',
             value: date
         });
         const dateBox = $dateBox.dxDateBox('instance');
@@ -3344,7 +3345,7 @@ QUnit.module('datebox with time component', {
         $(CALENDAR_APPLY_BUTTON_SELECTOR).first().trigger('dxclick');
 
         assert.strictEqual($input.val(), '13:00', 'input displays a correct value');
-        assert.strictEqual(dateBox.option('text'), '13:00', 'text is correct');
+        assert.strictEqual(dateBox.option('text'), '13:00', 'text is invalid');
         assert.notOk(dateBox.option('isValid'), 'widget is invalid');
         assert.deepEqual(dateBox.option('value'), date, 'value does not changed');
     });
