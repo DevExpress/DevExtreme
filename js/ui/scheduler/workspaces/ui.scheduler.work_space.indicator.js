@@ -20,10 +20,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _needRenderDateTimeIndicator() {
-        const today = this._getToday();
-        const endViewDate = dateUtils.trimTime(this.getEndViewDate());
+        if(this.option('showCurrentTimeIndicator')) {
+            const today = this._getToday();
+            const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
-        return this.option('showCurrentTimeIndicator') && dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+            return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+        }
+        return false;
     }
 
     needRenderDateTimeIndication() {
