@@ -7914,6 +7914,10 @@ declare module DevExpress.ui {
          */
         unassignResourceFromTask(resourceKey: any, taskKey: any): void;
         /**
+         * [descr:dxGantt.updateDimensions()]
+         */
+        updateDimensions(): void;
+        /**
          * [descr:dxGantt.updateTask(key, data)]
          */
         updateTask(key: any, data: any): void;

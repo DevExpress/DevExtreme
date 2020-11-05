@@ -562,6 +562,13 @@ export default class dxGantt extends Widget {
      * @public
      */
     getVisibleResourceAssignmentKeys(): Array<any>;
+    /**
+     * @docid dxGanttMethods.updateDimensions
+     * @publicName updateDimensions()     
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    updateDimensions(): void;
 }
 
 export interface dxGanttToolbar {
