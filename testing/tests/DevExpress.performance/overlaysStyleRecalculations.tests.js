@@ -10,7 +10,7 @@ const positionUtils = require('animation/position');
 
 // TODO - remove it after update Docker image
 const browser = require('core/utils/browser');
-const isChrome85 = browser.chrome && parseInt(browser.version) === 85;
+const isChrome85OrNewer = browser.chrome && parseInt(browser.version) >= 85;
 
 positionUtils.calculateScrollbarWidth();
 
@@ -77,7 +77,7 @@ QUnit.performanceTest('dxOverlay should not force relayout on creation', functio
             });
         };
 
-        if(isChrome85) {
+        if(isChrome85OrNewer) {
             assert.measureStyleRecalculation(measureFunction, shading ? 16 : 15);
         } else {
             assert.measureStyleRecalculation(measureFunction, 16);
