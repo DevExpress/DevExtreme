@@ -518,6 +518,7 @@ const DropDownEditor = TextBox.inherit({
             deferRendering: false,
             focusStateEnabled: false,
             showCloseButton: false,
+            dragEnabled: false,
             toolbarItems: this._getPopupToolbarItems(),
             onPositioned: this._popupPositionedHandler.bind(this),
             fullScreen: false,
