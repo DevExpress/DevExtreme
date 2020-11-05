@@ -277,6 +277,10 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
               margin: 0 $material-command-edit-icon-margin;
               vertical-align: middle;
             }
+
+            .dx-link:not(.dx-link-icon) {
+              width: auto;
+            }
           }
         }
 
