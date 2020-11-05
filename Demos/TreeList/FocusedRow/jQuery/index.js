@@ -67,7 +67,7 @@ $(function(){
 
             if (rowData) {
                 cellValue = e.component.cellValue(e.row.rowIndex, "Assigned");
-                taskEmployees.byKey(cellValue).done((item) => {
+                taskEmployees.byKey(cellValue).done(function(item) {
                     assigned = item.Name;
                 });
 

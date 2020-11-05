@@ -22,8 +22,8 @@ $(function () {
             e.cancel = true;
 
             if (e.changes.length) {
-                e.promise = sendBatchRequest(URL + "/Batch", e.changes).done(() => {
-                    e.component.refresh(true).done(() => {
+                e.promise = sendBatchRequest(URL + "/Batch", e.changes).done(function() {
+                    e.component.refresh(true).done(function() {
                         e.component.cancelEditData();
                     });
                 });

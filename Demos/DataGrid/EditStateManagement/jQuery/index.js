@@ -10,8 +10,8 @@ $(function () {
 
     loadPanel.show();
     sendRequest(URL + "/Orders?skip=700")
-        .always(() => { loadPanel.hide(); })
-        .then((data) => {
+        .always(function() { loadPanel.hide(); })
+        .then(function(data) {
             dataGrid.option("dataSource", data);
         });
 
@@ -33,7 +33,7 @@ $(function () {
 
                 $("#editRowKey").text(editRowKey === null ? "null" : editRowKey);
 
-                changes = changes.map((change) => { 
+                changes = changes.map(function(change) {
                     return {
                         type: change.type,
                         key: change.type !== "insert" ? change.key : undefined,
@@ -51,8 +51,8 @@ $(function () {
                 e.cancel = true;
                 loadPanel.show();
                 e.promise = saveChange(URL, change)
-                    .always(() => { loadPanel.hide(); })
-                    .then((data) => {
+                    .always(function() { loadPanel.hide(); })
+                    .then(function(data) {
                         var orders = e.component.option("dataSource");
 
                         if(change.type === "insert") {
