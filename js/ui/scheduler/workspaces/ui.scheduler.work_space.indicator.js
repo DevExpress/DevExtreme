@@ -20,7 +20,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _needRenderDateTimeIndicator() {
-        // replace at all
         const today = this._getToday();
         const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
@@ -169,7 +168,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _isCurrentTime(date) {
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this._needRenderDateTimeIndicator()) {
             const today = this._getToday();
             let result = false;
             date = new Date(date);
@@ -192,7 +191,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _isCurrentTimeHeaderCell(headerIndex) {
         let result = false;
 
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this._needRenderDateTimeIndicator()) {
             const date = this._getDateByIndex(headerIndex);
             const now = this.option('indicatorTime') || new Date();
 
