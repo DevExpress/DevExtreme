@@ -44,7 +44,7 @@ function saveArtifacts({
   }
 
   copyToArtifacts(screenshotFileName);
-  copyToArtifacts(etalonFileName, '_ethalon');
+  copyToArtifacts(etalonFileName, '_etalon');
 }
 
 export async function looksSame({ etalonFileName, screenshotBuffer, comparisonOptions }):
@@ -67,10 +67,7 @@ async function getMaskedScreenshotBuffer({
   function isSizeEqual(image1, image2): boolean {
     return image1.height === image2.height && image1.width === image2.width;
   }
-  function getImage(imagePath: string): { width; height} | undefined {
-    if (!fs.existsSync(imagePath)) {
-      return undefined;
-    }
+  function getImage(imagePath: string): { width; height} {
     const imageData = fs.readFileSync(imagePath);
     return PNG.sync.read(imageData, { filterType: -1 });
   }
@@ -90,22 +87,19 @@ async function getMaskedScreenshotBuffer({
     }
     return PNG.sync.write(screenshotImg);
   }
-
-  const etalonImg = getImage(etalonFileName);
-  const screenshotImg = getImage(screenshotFileName);
-  const maskImg = getImage(maskFileName);
-
   if (!fs.existsSync(etalonFileName)) {
     throw new Error(`Etalon file not found: ${etalonFileName}`);
   }
-
+  const etalonImg = getImage(etalonFileName);
+  const screenshotImg = getImage(screenshotFileName);
   if (!isSizeEqual(etalonImg, screenshotImg)) {
     throw new Error('Screenshot size does not match etalon size');
   }
 
-  if (!maskImg) {
+  if (!fs.existsSync(maskFileName)) {
     return fs.readFileSync(screenshotFileName);
   }
+  const maskImg = getImage(maskFileName);
   if (!isSizeEqual(etalonImg, maskImg)) {
     throw new Error('Mask size does not match etalon size');
   }
@@ -115,7 +109,7 @@ async function getMaskedScreenshotBuffer({
 
 async function getDiff({
   etalonFileName, screenshotBuffer, options,
-}: { etalonFileName; screenshotBuffer; options: ComparerOptions}):
+}: { etalonFileName; screenshotBuffer; options: ComparerOptions }):
   Promise<Buffer> {
   function colorToString(color: typeof options.highlightColor) {
     return `#${Object.values(color).map((n) => n.toString(16).padStart(2, '0')).join('')}`;
@@ -241,10 +235,10 @@ export function createScreenshotsComparer(t: TestController) {
       try {
         const isValid = await compareScreenshot(t, screenshotName, element, comparisonOptions);
         if (!isValid) {
-          errorMessages.push(`Screenshort:'${screenshotName}' isn't valid`);
+          errorMessages.push(`Screenshot:'${screenshotName}' invalid`);
         }
       } catch (e) {
-        errorMessages.push(`Screenshort:'${screenshotName}' isn't valid, internalError: ${e.message}`);
+        errorMessages.push(`Screenshot:'${screenshotName}' invalid, internalError: ${e.message}`);
       }
       return true;
     },
