@@ -252,12 +252,16 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     getIndicationCellCount() {
         const today = this._getToday();
         const date = this._getIndicationFirstViewDate();
-        const hiddenInterval = this._getHiddenInterval();
         const timeDiff = today.getTime() - date.getTime();
 
-        const differenceInDays = Math.ceil(timeDiff / toMs('day')) - 1;
-        const duration = timeDiff - differenceInDays * hiddenInterval;
-        const cellCount = duration / this.getCellDuration();
+        const differenceInDays = Math.floor(timeDiff / toMs('day'));
+        let duration = (timeDiff - differenceInDays * toMs('day')) / this.getCellDuration() - this.option('startDayHour');
+
+        if(today.getHours() > this.option('endDayHour')) {
+            duration = this._getCellCountInDay();
+        }
+
+        const cellCount = differenceInDays * this._getCellCountInDay() + duration < 0 ? duration : 0;
 
         return cellCount;
     }
@@ -410,7 +414,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getIndicationFirstViewDate() {
-        return new Date(this._firstViewDate);
+        return dateUtils.trimTime(new Date(this._firstViewDate));
+        // return new Date(this._firstViewDate);
     }
 
     _getIntervalBetween(currentDate, allDay) {

@@ -20,10 +20,11 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _needRenderDateTimeIndicator() {
+        // replace at all
         const today = this._getToday();
         const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
-        return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+        return this.option('showCurrentTimeIndicator') && dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
     }
 
     needRenderDateTimeIndication() {
@@ -36,13 +37,23 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         return today >= dateUtils.trimTime(new Date(this.getStartViewDate()));
     }
 
+    _isIndicatorVisible() {
+        const today = this._getToday();
+        const endViewDate = new Date(this.getEndViewDate());
+        const firstViewDate = new Date(this.getStartViewDate());
+        firstViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+        endViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+
+        return dateUtils.dateInRange(today, firstViewDate, endViewDate);
+    }
+
     _renderDateTimeIndication() {
         if(this.needRenderDateTimeIndication()) {
             if(this.option('shadeUntilCurrentTime')) {
                 this._shader.render();
             }
 
-            if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+            if(this._needRenderDateTimeIndicator() && this._isIndicatorVisible()) {
                 const groupCount = this._getGroupCount() || 1;
                 const $container = this._dateTableScrollable.$content();
                 const height = this.getIndicationHeight();
