@@ -406,6 +406,15 @@ export class HeadersWrapper extends GridTableElement {
     getColumnsIndicators() {
         return this.getElement().find(`.${HEADER_COLUMN_INDICATORS_CLASS}`);
     }
+
+    isColumnHidden(index) {
+        const $colsHeadersView = this.getContainer().find('.dx-datagrid-headers col');
+        const $colsRowsView = this.getContainer().find('.dx-datagrid-headers col');
+        const headersColWidth = $colsHeadersView.get(index).style.width;
+        const rowsViewWidth = $colsRowsView.get(index).style.width;
+
+        return (headersColWidth === '0.0001px' || headersColWidth === '0px') && (rowsViewWidth === '0.0001px' || rowsViewWidth === '0px');
+    }
 }
 
 export class FilterBuilderWrapper extends GridElement {
