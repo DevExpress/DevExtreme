@@ -161,8 +161,9 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _getMaxLeftOffset: function() {
-        const containerElement = this._container().get(0);
-        return containerElement.scrollWidth - containerElement.clientWidth;
+        const { scrollWidth, clientWidth } = this._container().get(0);
+
+        return scrollWidth - clientWidth;
     },
 
     _updateBounds: function() {

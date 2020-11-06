@@ -6,8 +6,7 @@ import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
-import browser from '../../core/utils/browser';
-// import { getNavigator } from '../../core/utils/window';
+import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 
 const SCROLLABLE_NATIVE = 'dxNativeScrollable';
 const SCROLLABLE_NATIVE_CLASS = 'dx-scrollable-native';
@@ -18,7 +17,6 @@ const VERTICAL = 'vertical';
 const HORIZONTAL = 'horizontal';
 
 const HIDE_SCROLLBAR_TIMEOUT = 500;
-
 
 const NativeStrategy = Class.inherit({
 
@@ -41,7 +39,6 @@ const NativeStrategy = Class.inherit({
         this._isLocked = scrollable._isLocked.bind(scrollable);
         this._isDirection = scrollable._isDirection.bind(scrollable);
         this._allowedDirection = scrollable._allowedDirection.bind(scrollable);
-        this._isRtlNativeStrategy = scrollable._isRtlNativeStrategy.bind(scrollable);
         this._getMaxLeftOffset = scrollable._getMaxLeftOffset.bind(scrollable);
     },
 
@@ -138,8 +135,8 @@ const NativeStrategy = Class.inherit({
         return {
             event: this._eventForUserAction,
             scrollOffset: this.getScrollOffset(),
-            reachedLeft: this._isRtlNativeStrategy() && !this._isRtlInconsistentBrowser() ? this._isReachedRight(-left) : this._isReachedLeft(left),
-            reachedRight: this._isRtlNativeStrategy() && !this._isRtlInconsistentBrowser() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
+            reachedLeft: this._isScrollInverted() ? this._isReachedRight(-left) : this._isReachedLeft(left),
+            reachedRight: this._isScrollInverted() ? this._isReachedLeft(-Math.abs(left)) : this._isReachedRight(left),
             reachedTop: this._isDirection(VERTICAL) ? top >= 0 : undefined,
             reachedBottom: this._isDirection(VERTICAL) ? Math.abs(top) >= containerElement.scrollHeight - containerElement.clientHeight - 2 * pushBackValue : undefined
         };
@@ -150,12 +147,15 @@ const NativeStrategy = Class.inherit({
 
         return {
             top: -top,
-            left: this.option('rtlEnabled') && !this._isRtlInconsistentBrowser() ? this._getMaxLeftOffset() - Math.abs(left) : -left
+            left: this._isScrollInverted() ? this._getMaxLeftOffset() - Math.abs(left) : -left
         };
     },
 
-    _isRtlInconsistentBrowser: function() {
-        return ((browser.webkit && parseInt(browser.version) < 86) && !browser.safari); // (browser.safari && getNavigator().vendor && getNavigator().vendor.indexOf('Google') > -1)
+    _isScrollInverted: function() {
+        const { rtlEnabled } = this.option();
+        const { decreasing, positive } = getScrollRtlBehavior();
+
+        return rtlEnabled && (decreasing ^ positive);
     },
 
     _isReachedLeft: function(left) {
@@ -310,9 +310,10 @@ const NativeStrategy = Class.inherit({
     },
 
     _normalizeLeftOffset: function(offset) {
+        if(this._isScrollInverted()) {
+            const { positive } = getScrollRtlBehavior();
 
-        if(this._isRtlNativeStrategy() && !this._isRtlInconsistentBrowser()) {
-            if(browser.msie) {
+            if(positive) {
                 offset = Math.abs(offset - this._getMaxLeftOffset());
             } else {
                 offset -= this._getMaxLeftOffset();
