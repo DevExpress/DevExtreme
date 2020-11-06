@@ -315,7 +315,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _isCurrentTimeHeaderCell(headerIndex) {
         let result = false;
 
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this.option('showCurrentTimeIndicator') && this.isIndicationOnView()) {
             let date = this._getDateByIndex(headerIndex);
 
             const now = this._getToday();
