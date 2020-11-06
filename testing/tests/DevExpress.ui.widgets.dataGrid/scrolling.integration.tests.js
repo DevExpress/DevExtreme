@@ -1012,4 +1012,28 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
         // assert
         assert.strictEqual(instance.getScrollable().scrollLeft(), 100, 'scroll left position');
     });
+
+    // T235091
+    QUnit.test('pageSize state is applied when scrolling mode is not virtual', function(assert) {
+        const dataGrid = createDataGrid({
+            columns: ['field1', 'field2'],
+            dataSource: [],
+            loadingTimeout: undefined,
+            stateStoring: {
+                enabled: true,
+                type: 'custom',
+                customLoad: function() {
+                    return {
+                        pageSize: 10
+                    };
+                }
+            }
+        });
+
+        // act
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.pageSize(), 10, 'pageSize from stateStoring is applied');
+    });
 });
