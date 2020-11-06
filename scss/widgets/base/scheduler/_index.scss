@@ -523,8 +523,11 @@ $scheduler-appointment-form-label-padding: 20px;
       position: fixed;
       top: 0;
       left: 0;
-      box-shadow: $scheduler-appointment-dragging-shadow, $scheduler-vertical-appointment-resizing-shadow;
       z-index: 1000;
+
+      .dx-scheduler-appointment {
+        box-shadow: $scheduler-appointment-dragging-shadow, $scheduler-vertical-appointment-resizing-shadow;
+      }
     }
   }
 
@@ -1945,7 +1948,10 @@ $scheduler-appointment-form-label-padding: 20px;
         }
       }
     }
+  }
 
+  .dx-scheduler-timeline .dx-draggable-dragging,
+  .dx-scheduler-work-space-month .dx-draggable-dragging {
     &.dx-draggable-dragging {
       box-shadow: $scheduler-horizontal-appointment-resizing-shadow, $scheduler-appointment-dragging-shadow;
     }
