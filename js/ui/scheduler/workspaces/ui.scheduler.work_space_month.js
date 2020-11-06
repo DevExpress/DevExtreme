@@ -222,7 +222,7 @@ const SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
         return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, 'date');
     },
 
-    needRenderDateTimeIndication: function() {
+    isIndicationAvailable: function() {
         return false;
     },
 
