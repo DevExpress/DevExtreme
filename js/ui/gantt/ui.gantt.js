@@ -1292,6 +1292,10 @@ class Gantt extends Widget {
         this._ganttView._ganttViewCore.unassignResourceFromTask(resourceKey, taskKey);
     }
 
+    updateDimensions() {
+        this._setInnerElementsWidth();
+    }
+
     _optionChanged(args) {
         switch(args.name) {
             case 'tasks':

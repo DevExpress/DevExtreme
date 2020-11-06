@@ -164,10 +164,16 @@ $generic-grid-base-checkbox-icon-size: 16px;
     }
 
     .dx-#{$widget-name}-content .dx-#{$widget-name}-table .dx-row {
-      .dx-command-edit-with-icons .dx-link {
-        @include dx-icon-sizing($generic-command-edit-icon-size);
+      .dx-command-edit-with-icons {
+        .dx-link {
+          @include dx-icon-sizing($generic-command-edit-icon-size);
 
-        margin: 0 $generic-command-edit-icon-margin;
+          margin: 0 $generic-command-edit-icon-margin;
+        }
+
+        .dx-link:not(.dx-link-icon) {
+          width: auto;
+        }
       }
     }
 

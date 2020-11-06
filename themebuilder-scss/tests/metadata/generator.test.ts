@@ -38,7 +38,7 @@ describe('Metadata generator - getMetaItems (one item)', () => {
 * $name Slide out background
 * $type color
 */
-$slideout-background: #000;`,
+$slideout-background: #000 !default;`,
     }, {
       '2 new lines after comment':
 `/**
@@ -47,7 +47,7 @@ $slideout-background: #000;`,
 */
 
 
-$slideout-background: #000;`,
+$slideout-background: #000 !default;`,
     }, {
       'extra constant before comment':
 `
@@ -57,14 +57,14 @@ $base-color: rgb(0,170,0);
 * $type color
 */
 
-$slideout-background:  $base-color;`,
+$slideout-background:  $base-color !default;`,
     }, {
       'spaces after comments':
 `/**
 * $name Slide out background
 * $type color
 */
-$slideout-background: #000;`,
+$slideout-background: #000 !default;`,
     }];
 
   scssSamples.forEach((sample) => {
@@ -85,14 +85,14 @@ describe('Metadata generator - getMetaItems (several item)', () => {
 * $name Slide out background
 * $type color
 */
-$slideout-background0: #000;
+$slideout-background0: #000 !default;
 
 /**
 * $name Slide out background
 * $type color
 */
 
-$slideout-background1: #000;
+$slideout-background1: #000 !default;
 
 $base-color: rgb(0,170,0);
 /**
@@ -100,13 +100,13 @@ $base-color: rgb(0,170,0);
 * $type color
 */
 
-$slideout-background2:  $base-color;
+$slideout-background2:  $base-color !default;
 
 /**
 * $name Slide out background
 * $type color
 */
-$slideout-background3: #000;`;
+$slideout-background3: #000 !default;`;
 
   test('parse several items', () => {
     const result = MetadataGenerator.getMetaItems(sample);
@@ -128,20 +128,33 @@ describe('Metadata generator - getMetaItems (duplicate comment throw an error)',
 * $name Slide out background1
 * $type color
 */
-$slideout-background: #000;
+$slideout-background: #000 !default;
 
 /**
 * $name Slide out background2
 * $type color
 */
 
-$slideout-background: #000;
+$slideout-background: #000 !default;
 
 $base-color: rgb(0,170,0);
 `;
 
   test('parse items with duplicates', () => {
     expect(() => MetadataGenerator.getMetaItems(sample)).toThrowError('$slideout-background has duplicated comment');
+  });
+});
+
+describe('Metadata generator - getMetaItems (variable without !default flag throw an error - T944915)', () => {
+  const sample = `/**
+* $name Slide out background1
+* $type color
+*/
+$slideout-background: #000;
+`;
+
+  test('parse items with duplicates', () => {
+    expect(() => MetadataGenerator.getMetaItems(sample)).toThrowError('$slideout-background value has no \'!default\' flag');
   });
 });
 
@@ -175,7 +188,7 @@ describe('Metadata generator - collectMetadata', () => {
 * $name Slide out background
 * $type color
 */
-$slideout-background: #000;
+$slideout-background: #000 !default;
 `;
 
     const expected = `
@@ -184,7 +197,7 @@ $slideout-background: #000;
 * $name Slide out background
 * $type color
 */
-$slideout-background: #000;
+$slideout-background: #000 !default;
 $never-used: collector((
 "$slideout-background": $slideout-background,
 ));
@@ -220,7 +233,7 @@ $never-used: collector((
 * $name Slide out background
 * $type color
 */
-$slideout-background: #000;
+$slideout-background: #000 !default;
 `;
 
     generator.collectMetadata(path1, content);

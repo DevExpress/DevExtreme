@@ -169,8 +169,9 @@ const NativeStrategy = Class.inherit({
     },
 
     handleScroll: function(e) {
-        // NOTE: ignoring scroll events when scroll location was not changed (for Android browser - B250122)
+        this._component._updateRtlConfig();
         if(!this._isScrollLocationChanged()) {
+            // NOTE: ignoring scroll events when scroll location was not changed (for Android browser - B250122)
             e.stopImmediatePropagation();
             return;
         }

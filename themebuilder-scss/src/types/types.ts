@@ -111,3 +111,16 @@ interface AstComment {
 interface SyntaxTree {
   comments?: AstComment[];
 }
+
+interface DartCompilerConfig {
+  data: string;
+  file: string;
+  index: string;
+  items: ConfigMetaItem[];
+}
+
+interface DartCompilerResult {
+  changedVariables?: { [key: string]: string };
+  css?: string;
+  error?: string;
+}
