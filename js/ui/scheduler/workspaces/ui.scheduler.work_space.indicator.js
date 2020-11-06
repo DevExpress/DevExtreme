@@ -19,14 +19,17 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         return this.invoke('convertDateByTimezone', date) || date;
     },
 
-    _needRenderDateTimeIndicator: function() {
-        const today = this._getToday();
-        const endViewDate = dateUtils.trimTime(this.getEndViewDate());
+    isIndicationOnView: function() {
+        if(this.option('showCurrentTimeIndicator')) {
+            const today = this._getToday();
+            const endViewDate = dateUtils.trimTime(this.getEndViewDate());
 
-        return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+            return dateUtils.dateInRange(today, this._firstViewDate, new Date(endViewDate.getTime() + toMs('day')));
+        }
+        return false;
     },
 
-    needRenderDateTimeIndication: function() {
+    isIndicationAvailable: function() {
         if(!windowUtils.hasWindow()) {
             return false;
         }
@@ -36,13 +39,23 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         return today >= dateUtils.trimTime(new Date(this.getStartViewDate()));
     },
 
+    isIndicatorVisible: function() {
+        const today = this._getToday();
+        const endViewDate = new Date(this.getEndViewDate());
+        const firstViewDate = new Date(this.getStartViewDate());
+        firstViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+        endViewDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+
+        return dateUtils.dateInRange(today, firstViewDate, endViewDate);
+    },
+
     _renderDateTimeIndication: function() {
-        if(this.needRenderDateTimeIndication()) {
+        if(this.isIndicationAvailable()) {
             if(this.option('shadeUntilCurrentTime')) {
                 this._shader.render();
             }
 
-            if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+            if(this.isIndicationOnView() && this.isIndicatorVisible()) {
                 const groupCount = this._getGroupCount() || 1;
                 const $container = this._dateTableScrollable.$content();
                 const height = this.getIndicationHeight();
@@ -136,7 +149,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         const cellHeight = this.getCellHeight();
         const date = new Date(this._firstViewDate);
 
-        if(this._needRenderDateTimeIndicator()) {
+        if(this.isIndicationOnView()) {
             date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
         }
 
@@ -158,7 +171,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _isCurrentTime: function(date) {
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this.isIndicationOnView()) {
             const today = this._getToday();
             let result = false;
             date = new Date(date);
@@ -181,7 +194,7 @@ const SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _isCurrentTimeHeaderCell: function(headerIndex) {
         let result = false;
 
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this.isIndicationOnView()) {
             const date = this._getDateByIndex(headerIndex);
             const now = this.option('indicatorTime') || new Date();
 
