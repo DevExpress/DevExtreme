@@ -2140,46 +2140,48 @@ QUnit.module('Editing', baseModuleConfig, () => {
         assert.roughEqual(errorMessageTopOffset, -0.5, 0.6, 'error message offset');
     });
 
-    QUnit.testInActiveWindow('data parameter in validationCallback function should be correct if showEditorAlways and repaintChangesOnly', function(assert) {
-        // arrange
-        const validationCallback = sinon.spy(e => {
-            assert.deepEqual(e.data, { field: 1, field2: 123, id: 1 }, 'row data');
+    ['close edit cell', 'cancel editing'].forEach(action => {
+        QUnit.testInActiveWindow(`data parameter in validationCallback function should be correct if showEditorAlways and repaintChangesOnly after ${action}`, function(assert) {
+            // arrange
+            const validationCallback = sinon.spy(e => {
+                assert.deepEqual(e.data, { field: 1, field2: 123, id: 1 }, 'row data');
 
-            return true;
+                return true;
+            });
+
+            const grid = createDataGrid({
+                dataSource: [{ field: 1, field2: 2, id: 1 }],
+                keyExpr: 'id',
+                repaintChangesOnly: true,
+                editing: {
+                    mode: 'cell',
+                    allowUpdating: true
+                },
+                columns: [{
+                    dataField: 'field'
+                }, {
+                    dataField: 'field2',
+                    showEditorAlways: true,
+                    validationRules: [{
+                        type: 'custom',
+                        reevaluate: true,
+                        validationCallback
+                    }]
+                }],
+                loadingTimeout: undefined
+            });
+
+            // act
+            $(grid.$element()).find('input').val(123).trigger('change');
+            action === 'close edit cell' ? grid.closeEditCell() : grid.cancelEditData();
+            this.clock.tick();
+
+            $(grid.getCellElement(0, 1)).trigger('dxclick');
+            this.clock.tick();
+
+            // assert
+            assert.equal(validationCallback.callCount, 3, 'validation callback call count');
         });
-
-        const grid = createDataGrid({
-            dataSource: [{ field: 1, field2: 2, id: 1 }],
-            keyExpr: 'id',
-            repaintChangesOnly: true,
-            editing: {
-                mode: 'cell',
-                allowUpdating: true
-            },
-            columns: [{
-                dataField: 'field'
-            }, {
-                dataField: 'field2',
-                showEditorAlways: true,
-                validationRules: [{
-                    type: 'custom',
-                    reevaluate: true,
-                    validationCallback
-                }]
-            }],
-            loadingTimeout: undefined
-        });
-
-        // act
-        $(grid.$element()).find('input').val(123).trigger('change');
-        grid.closeEditCell();
-        this.clock.tick();
-
-        $(grid.getCellElement(0, 1)).trigger('dxclick');
-        this.clock.tick();
-
-        // assert
-        assert.equal(validationCallback.callCount, 3, 'validation callback call count');
     });
 });
 
