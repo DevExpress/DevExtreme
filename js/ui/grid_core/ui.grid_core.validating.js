@@ -360,7 +360,7 @@ const ValidatingController = modules.Controller.inherit((function() {
                     showEditorAlways = visibleColumns.some(function(column) { return column.showEditorAlways; });
                 }
 
-                const isEditRow = this.option('editing.editRowKey') === parameters.key;
+                const isEditRow = equalByValue(this.option('editing.editRowKey'), parameters.key);
                 const isCellOrBatchEditingAllowed = editingController.isCellOrBatchEditMode() && editingController.allowUpdating({ row: parameters.row });
 
                 needCreateValidator = isEditRow || isCellOrBatchEditingAllowed && showEditorAlways;
