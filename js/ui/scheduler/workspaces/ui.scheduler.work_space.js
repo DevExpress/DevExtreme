@@ -3216,8 +3216,16 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
 
     _createDragBehavior($element) {
+        const getItemData = (itemElement, appointments) => appointments._getItemData(itemElement);
+        const getItemSettings = ($itemElement) => $itemElement.data(APPOINTMENT_SETTINGS_KEY);
+
+        this._createDragBehaviorBase($element, getItemData, getItemSettings);
+    }
+
+    _createDragBehaviorBase($element, getItemData, getItemSettings, { isSetCursorOffset, ...restOptions } = {}) {
         let dragElement;
         const dragBehavior = this.dragBehavior;
+        let itemData;
 
         dragBehavior.addTo($element, {
             container: this.$element().find(`.${FIXED_CONTAINER_CLASS}`),
@@ -3230,8 +3238,8 @@ class SchedulerWorkSpace extends WidgetObserver {
                 const $itemElement = $(e.itemElement);
                 const appointments = e.component._appointments;
 
-                const itemData = appointments._getItemData(e.itemElement);
-                const settings = $itemElement.data(APPOINTMENT_SETTINGS_KEY);
+                itemData = getItemData(e.itemElement, appointments);
+                const settings = getItemSettings($itemElement, e);
 
                 if(itemData && !itemData.disabled) {
                     event.data = event.data || {};
@@ -3246,11 +3254,22 @@ class SchedulerWorkSpace extends WidgetObserver {
                     dragBehavior.onDragStart(event.data);
                 }
             },
-
             onDragEnd: (e) => {
-                dragBehavior.onDragEnd(e);
+                if(itemData && !itemData.disabled) {
+                    dragBehavior.onDragEnd(e);
+                }
                 dragElement?.remove();
             },
+            cursorOffset: isSetCursorOffset
+                ? () => {
+                    const $dragElement = $(dragElement);
+                    return {
+                        x: $dragElement.width() / 2,
+                        y: $dragElement.height() / 2
+                    };
+                }
+                : undefined,
+            ...restOptions,
         });
     }
 
