@@ -890,30 +890,6 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.pageSize(), 20, 'pageSize from stateStoring is not applied');
     });
 
-    // T235091
-    QUnit.test('pageSize state is applied when scrolling mode is not virtual', function(assert) {
-        const dataGrid = createDataGrid({
-            columns: ['field1', 'field2'],
-            dataSource: [],
-            loadingTimeout: undefined,
-            stateStoring: {
-                enabled: true,
-                type: 'custom',
-                customLoad: function() {
-                    return {
-                        pageSize: 10
-                    };
-                }
-            }
-        });
-
-        // act
-        this.clock.tick();
-
-        // assert
-        assert.equal(dataGrid.pageSize(), 10, 'pageSize from stateStoring is applied');
-    });
-
     QUnit.test('Rows after push are showed correctly when virtual scrolling and grouping are enabled', function(assert) {
         // arrange
 
