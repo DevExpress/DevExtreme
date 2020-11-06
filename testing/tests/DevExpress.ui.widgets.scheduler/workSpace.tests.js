@@ -966,7 +966,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2016, 2, 14)
         });
 
-        assert.equal(spy.callCount, 345);
+        assert.equal(spy.callCount, 343);
         spy.restore();
     });
 
