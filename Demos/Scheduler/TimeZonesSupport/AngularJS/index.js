@@ -1,8 +1,8 @@
 var DemoApp = angular.module('DemoApp', ['dx']);
 
-getLocations = (date) => {
+getLocations = function(date) {
     const timeZones = DevExpress.utils.getTimeZones(date);
-    return timeZones.filter((timeZone) => {
+    return timeZones.filter(function(timeZone) {
         return this.locations.indexOf(timeZone.id) !== -1;
     });
 };
@@ -22,12 +22,12 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         currentDate: new Date(2021, 4, 25),
         height: 600,
         startDayHour: 8,
-        onOptionChanged: (e) => {
+        onOptionChanged: function(e) {
             if(e.name === 'currentDate') {   
                 $scope.demoLocations = getLocations(e.value);
             }
         },
-        onAppointmentFormOpening: (e) => {
+        onAppointmentFormOpening: function(e) {
             const form = e.form;
 
             const startDateTimezoneEditor = form.getEditor('startDateTimeZone');

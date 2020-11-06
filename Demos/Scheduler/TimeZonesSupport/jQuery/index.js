@@ -1,9 +1,9 @@
 $(function () {
     const currentDate = new Date(2021, 4, 25);
 
-    const getLocations = (date) => {
+    const getLocations = function(date) {
         const timeZones = DevExpress.utils.getTimeZones(date);
-        return timeZones.filter((timeZone) => {
+        return timeZones.filter(function(timeZone) {
             return locations.indexOf(timeZone.id) !== -1;
         });
     };
@@ -21,12 +21,12 @@ $(function () {
         editing: {
             allowTimeZoneEditing: true
         },
-        onOptionChanged: (e) => {
+        onOptionChanged: function(e) {
             if(e.name === 'currentDate') {                        
                 locationSwitcher.option('items', getLocations(e.value));
             }
         },
-        onAppointmentFormOpening: (e) => {
+        onAppointmentFormOpening: function(e) {
             const form = e.form;
 
             const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
