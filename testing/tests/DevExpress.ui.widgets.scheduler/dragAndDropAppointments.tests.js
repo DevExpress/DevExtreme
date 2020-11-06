@@ -1413,4 +1413,34 @@ module('appointmentDragging customization', $.extend({}, {
 
         assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
     });
+
+    test('Appointment dragged from tooltip should be visible outside the scheduler', function(assert) {
+        const group = 'testGroup';
+        const appointmentDragging = {
+            group,
+        };
+
+        const scheduler = this.createScheduler({
+            appointmentDragging
+        });
+
+        const draggable = this.createDraggable({ group });
+
+        scheduler.appointments.compact.click(0);
+
+        const appointment = scheduler.appointments.compact.getAppointment();
+        const appointmentPosition = getAbsolutePosition(appointment);
+        const draggablePosition = getAbsolutePosition(draggable);
+
+        const pointer = pointerMock(appointment).start();
+
+        pointer
+            .down(appointmentPosition.left, appointmentPosition.top)
+            .move(draggablePosition.left - appointmentPosition.left, draggablePosition.top - appointmentPosition.top);
+
+        const draggedAppointment = scheduler.appointments.find('App 2').parent();
+        assert.equal(draggedAppointment.css('z-index'), 1000, 'Correct z-index');
+
+        pointer.up();
+    });
 });
