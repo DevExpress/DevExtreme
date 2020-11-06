@@ -98,7 +98,8 @@ export class CompactAppointmentsHelper {
         return (e) => {
             let dragElement;
             const $element = $(e.element);
-            const dragBehavior = this.instance.getWorkSpace().dragBehavior;
+            const workSpace = this.instance.getWorkSpace();
+            const { dragBehavior } = workSpace;
 
             dragBehavior.addTo($element, {
                 filter: `.${LIST_ITEM_CLASS}`,
@@ -119,7 +120,11 @@ export class CompactAppointmentsHelper {
 
                     if(itemData && !itemData.appointment.disabled) {
                         event.data = event.data || {};
-                        event.data.itemElement = dragElement = this._createDragAppointment(itemData.appointment, e.itemSettings);
+                        dragElement = workSpace._createDragAppointment(
+                            itemData.appointment, e.itemSettings, this.instance.getAppointmentsInstance(),
+                        );
+
+                        event.data.itemElement = dragElement;
 
                         dragBehavior.onDragStart(event.data);
                         resetPosition($(dragElement));
@@ -133,21 +138,6 @@ export class CompactAppointmentsHelper {
                 }
             });
         };
-    }
-
-    _createDragAppointment(itemData, settings) {
-        const appointments = this.instance.getAppointmentsInstance();
-        const appointmentIndex = appointments.option('items').length;
-
-        settings.isCompact = false;
-        settings.virtual = false;
-
-        appointments._renderItem(appointmentIndex, {
-            itemData: itemData,
-            settings: [settings]
-        });
-
-        return appointments._findItemElementByItem(itemData)[0];
     }
 
     _getCollectorOffset(width, cellWidth) {
