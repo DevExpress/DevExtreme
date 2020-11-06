@@ -3247,11 +3247,11 @@ class SchedulerWorkSpace extends WidgetObserver {
                         $itemElement.addClass(APPOINTMENT_DRAG_SOURCE_CLASS);
                         dragElement = this._createDragAppointment(itemData, settings, appointments);
                         event.data.itemElement = dragElement;
+                        event.data.initialPosition = locate($(dragElement));
+                        dragBehavior.onDragStart(event.data);
                         resetPosition($(dragElement));
-                        event.data.initialPosition = locate($itemElement);
                     }
 
-                    dragBehavior.onDragStart(event.data);
                 }
             },
             onDragEnd: (e) => {
