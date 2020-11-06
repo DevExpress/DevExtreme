@@ -250,16 +250,30 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _setHorizontalGroupHeaderCellsHeight() { return noop(); }
 
     getIndicationCellCount() {
+        const timeDiff = this._getTimeDiff();
+        return this._calculateDurationInCells(timeDiff);
+    }
+
+    _getTimeDiff() {
         const today = this._getToday();
         const date = this._getIndicationFirstViewDate();
-        const hiddenInterval = this._getHiddenInterval();
-        const timeDiff = today.getTime() - date.getTime();
+        return today.getTime() - date.getTime();
+    }
 
-        const differenceInDays = Math.ceil(timeDiff / toMs('day')) - 1;
-        const duration = timeDiff - differenceInDays * hiddenInterval;
-        const cellCount = duration / this.getCellDuration();
+    _calculateDurationInCells(timeDiff) {
+        const today = this._getToday();
+        const differenceInDays = Math.floor(timeDiff / toMs('day'));
+        let duration = (timeDiff - differenceInDays * toMs('day') - this.option('startDayHour') * toMs('hour')) / this.getCellDuration();
 
-        return cellCount;
+        if(today.getHours() > this.option('endDayHour')) {
+            duration = this._getCellCountInDay();
+        }
+
+        if(duration < 0) {
+            duration = 0;
+        }
+        return differenceInDays * this._getCellCountInDay() + duration;
+
     }
 
     getIndicationWidth() {
@@ -301,7 +315,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _isCurrentTimeHeaderCell(headerIndex) {
         let result = false;
 
-        if(this.option('showCurrentTimeIndicator') && this._needRenderDateTimeIndicator()) {
+        if(this.isIndicationOnView()) {
             let date = this._getDateByIndex(headerIndex);
 
             const now = this._getToday();
@@ -410,7 +424,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     }
 
     _getIndicationFirstViewDate() {
-        return new Date(this._firstViewDate);
+        return dateUtils.trimTime(new Date(this._firstViewDate));
     }
 
     _getIntervalBetween(currentDate, allDay) {

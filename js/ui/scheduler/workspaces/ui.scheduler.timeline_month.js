@@ -26,8 +26,8 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return 0;
     }
 
-    _getIndicationFirstViewDate() {
-        return dateUtils.trimTime(new Date(this._firstViewDate));
+    _calculateDurationInCells(timeDiff) {
+        return timeDiff / this.getCellDuration();
     }
 
     getCellDuration() {
