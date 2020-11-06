@@ -609,10 +609,10 @@ const DateBox = DropDownEditor.inherit({
 
     _applyButtonHandler: function(e) {
         const value = this._strategy.getValue();
-        const validationResult = this._applyInternalValidation(value);
-        if(validationResult.isValid) {
+        const { isValid, isDate } = this._applyInternalValidation(value);
+        if(isValid) {
             this.dateValue(value, e.event);
-        } else if(validationResult.isDate) {
+        } else if(isDate) {
             const displayedText = this._getDisplayedText(value);
             this.option('text', displayedText);
             this._renderDisplayText(displayedText);
