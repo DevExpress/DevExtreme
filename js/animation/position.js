@@ -410,7 +410,7 @@ const getOffsetWithoutScale = function($startElement, $currentElement = $startEl
         return $startElement.offset();
     }
 
-    const style = currentElement?.getAttribute?.('style') || '';
+    const style = currentElement.getAttribute?.('style') || '';
     const scale = style.match(scaleRe)?.[0];
     let offset;
 
