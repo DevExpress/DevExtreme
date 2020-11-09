@@ -3315,6 +3315,12 @@ QUnit.module('Multiple axes chart', $.extend({}, moduleSetup, {
         coords1.forEach((coord, index) => {
             assert.roughEqual(coord, coords2[index], 1.1);
         });
+    },
+
+    checkTickCoordsAreFinite(assert, coords) {
+        coords.forEach((coord) => {
+            assert.ok(isFinite(coord));
+        });
     }
 }));
 
@@ -3363,6 +3369,42 @@ QUnit.test('Two axes syncronization with margins', function(assert) {
     assert.deepEqual(axis1.getTicksValues().majorTicksValues, [0, 25, 50, 75, 100, 125, 150]);
 
     this.compareTickCoords(assert, axis2._majorTicks.map(t => t.coords.y), axis1._majorTicks.map(t => t.coords.y));
+});
+
+QUnit.test('Rendered coordinates are finite (T946603)', function(assert) {
+    this.options = {
+        dataSource: [{
+            arg: 'A',
+            val: 106000000,
+            val2: 0
+        }, {
+            arg: 'B',
+            val: 811101000,
+            val2: 0
+        }, {
+            arg: 'C',
+            val: 2191599000,
+            val2: 0
+        }],
+        series: [{}, {
+            axis: 'axis2',
+            type: 'spline',
+            valueField: 'val2'
+        }],
+        valueAxis: [{
+            name: 'axis1',
+        }, {
+            name: 'axis2',
+            position: 'right'
+        }]
+    };
+    const chart = this.createChart(this.options);
+
+    const axis1 = chart.getValueAxis('axis1');
+    const axis2 = chart.getValueAxis('axis2');
+
+    this.checkTickCoordsAreFinite(assert, axis1._majorTicks.map(t => t.coords.y));
+    this.checkTickCoordsAreFinite(assert, axis2._majorTicks.map(t => t.coords.y));
 });
 
 QUnit.module('Axis templates', moduleSetup);
