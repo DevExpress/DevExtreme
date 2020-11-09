@@ -4663,6 +4663,44 @@ QUnit.module('Scrolling to time', () => {
         });
     });
 
+    QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is greater than default', function(assert) {
+        const scheduler = createWrapper({
+            height: 1500,
+            views: ['month'],
+            currentView: 'month',
+        });
+
+        const scrollable = scheduler.workSpace.getScrollable();
+        scrollable.option('useNative', true);
+
+        const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+        const scrollHeight = scrollable.scrollHeight();
+        const scrollableHeight = scrollable.$element().height();
+
+        assert.equal(scrollableHeight, dateTableHeight, 'Correct dateTable height');
+        assert.equal(scrollableHeight, scrollHeight, 'Correct scroll content height');
+    });
+
+    QUnit.test('Scrollable content should have correct height when native scrolling is used and a cell\'s height is equal to default', function(assert) {
+        const scheduler = createWrapper({
+            height: 500,
+            views: [{
+                type: 'month',
+                intervalCount: 5,
+            }],
+            currentView: 'month',
+        });
+
+        const scrollable = scheduler.workSpace.getScrollable();
+        scrollable.option('useNative', true);
+
+        const dateTableHeight = scheduler.workSpace.getDateTableHeight();
+        const scrollHeight = scrollable.scrollHeight();
+        const scrollableHeight = scrollable.$element().height();
+
+        assert.equal(scrollHeight, dateTableHeight, 'Correct dateTable height');
+        assert.notEqual(scrollableHeight, scrollHeight, 'Correct scroll content height');
+    });
 })('View with configuration');
 
 QUnit.module('Options for Material theme in components', {
