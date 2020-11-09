@@ -4,6 +4,7 @@ import { isDxMouseWheelEvent } from '../../events/utils/index';
 import { noop } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import devices from '../../core/devices';
+import { isDefined } from '../../core/utils/type';
 import Class from '../../core/class';
 import Scrollbar from './ui.scrollbar';
 import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
@@ -55,12 +56,15 @@ const NativeStrategy = Class.inherit({
         if(this._showScrollbar && this._useSimulatedScrollbar) {
             this._renderScrollbars();
         }
+
+        this._scrollRtlBehavior = getScrollRtlBehavior();
     },
 
-    updateBounds: noop,
+    updateRtlPosition: noop,
 
     _renderPushBackOffset: function() {
         const pushBackValue = this.option('pushBackValue');
+
         if(!pushBackValue && !this._component._lastPushBackValue) {
             return;
         }
@@ -153,7 +157,7 @@ const NativeStrategy = Class.inherit({
 
     _isScrollInverted: function() {
         const { rtlEnabled } = this.option();
-        const { decreasing, positive } = getScrollRtlBehavior();
+        const { decreasing, positive } = this._scrollRtlBehavior;
 
         return rtlEnabled && (decreasing ^ positive);
     },
@@ -163,13 +167,10 @@ const NativeStrategy = Class.inherit({
     },
 
     _isReachedRight: function(left) {
-        const containerElement = this._$container.get(0);
-
-        return this._isDirection(HORIZONTAL) ? Math.abs(left) >= containerElement.scrollWidth - containerElement.clientWidth : undefined;
+        return this._isDirection(HORIZONTAL) ? Math.abs(left) >= this._getMaxLeftOffset() : undefined;
     },
 
     handleScroll: function(e) {
-        this._component._updateRtlConfig();
         if(!this._isScrollLocationChanged()) {
             // NOTE: ignoring scroll events when scroll location was not changed (for Android browser - B250122)
             e.stopImmediatePropagation();
@@ -303,6 +304,10 @@ const NativeStrategy = Class.inherit({
     },
 
     scrollBy: function(distance) {
+        if(!distance.top && !isDefined(distance.left)) {
+            return;
+        }
+
         const { top, left } = this.location();
         const { pushBackValue } = this.option();
 
@@ -312,7 +317,7 @@ const NativeStrategy = Class.inherit({
 
     _normalizeLeftOffset: function(offset) {
         if(this._isScrollInverted()) {
-            const { positive } = getScrollRtlBehavior();
+            const { positive } = this._scrollRtlBehavior;
 
             if(positive) {
                 offset = Math.abs(offset - this._getMaxLeftOffset());
@@ -346,7 +351,7 @@ const NativeStrategy = Class.inherit({
             result = e.shiftKey ? !container.scrollLeft : !container.scrollTop;
         } else {
             if(e.shiftKey) {
-                result = (container.clientWidth + container.scrollLeft) >= container.scrollWidth;
+                result = container.scrollLeft >= this._getMaxLeftOffset();
             } else {
                 result = (container.clientHeight + container.scrollTop) >= container.scrollHeight;
             }
