@@ -7,21 +7,29 @@ class JSPdfDataGridTestHelper {
     }
 
     checkCustomizeCell(eventArgs, expectedCells, callIndex) {
-        assert.ok(eventArgs.gridCell);
-        assert.ok(eventArgs.pdfCell);
+        const { gridCell: actualGridCell, pdfCell: actualPdfCell } = eventArgs;
+        const { gridCell: expectedGridCell, pdfCell: expectedPdfCell } = expectedCells[callIndex];
 
-        const { head = [], body = [] } = expectedCells;
-        const expectedPdfCells = head.concat(body);
+        assert.strictEqual(actualPdfCell.content, expectedPdfCell.content, `checkCustomizeCell: pdfCell.content ${callIndex}`);
+        assert.deepEqual(actualPdfCell.styles, expectedPdfCell.styles || {}, `checkCustomizeCell: pdfCell.styles ${callIndex}`);
 
-        const actualPdfCell = eventArgs.pdfCell;
-        let index = 0;
-        this._iterateCells(expectedPdfCells, (expectedPdfCell, rowIndex, columnIndex) => {
-            if(index === callIndex) {
-                assert.deepEqual(actualPdfCell.content, expectedPdfCell.content, `customizeCell content [${rowIndex}, ${columnIndex}]`);
-                assert.deepEqual(actualPdfCell.styles, expectedPdfCell.styles || {}, `customizeCell styles [${rowIndex}, ${columnIndex}]`);
+        assert.strictEqual(actualGridCell.column.dataField, actualGridCell.column.dataField, `checkCustomizeCell: column.dataField, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.dataType, actualGridCell.column.dataType, `checkCustomizeCell: column.dataType, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.caption, actualGridCell.column.caption, `checkCustomizeCell: column.caption, ${callIndex}`);
+        assert.strictEqual(actualGridCell.column.index, actualGridCell.column.index, `checkCustomizeCell: column.index, ${callIndex}`);
+
+        const gridCellSkipProperties = ['column'];
+        for(const propertyName in actualGridCell) {
+            if(gridCellSkipProperties.indexOf(propertyName) === -1) {
+                if(propertyName === 'groupSummaryItems' || propertyName === 'value') {
+                    assert.deepEqual(actualGridCell[propertyName], expectedGridCell[propertyName], `checkCustomizeCell: gridCell[${propertyName}], ${callIndex}`);
+                } else {
+                    assert.strictEqual(actualGridCell[propertyName], expectedGridCell[propertyName], `checkCustomizeCell: gridCell[${propertyName}], ${callIndex}`);
+                }
             }
-            index++;
-        });
+        }
+
+        callIndex++;
     }
 
     checkColumnWidths(expectedColumnWidths, actualAutoTableOptions) {
@@ -45,23 +53,23 @@ class JSPdfDataGridTestHelper {
 
     checkCellsContent(expectedCells, actualAutoTableOptions, rowType) {
         this._iterateCells(expectedCells[rowType], (cell, rowIndex, columnIndex) => {
-            assert.strictEqual(actualAutoTableOptions[rowType][rowIndex][columnIndex].content, cell.content, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].content`);
+            assert.strictEqual(actualAutoTableOptions[rowType][rowIndex][columnIndex].content, cell.pdfCell.content, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].content`);
         });
     }
 
     checkCellsStyles(expectedCells, actualAutoTableOptions, rowType) {
         this._iterateCells(expectedCells[rowType], (cell, rowIndex, columnIndex) => {
-            const expectedCellStyles = cell.styles || {};
-            const actualCellStyles = actualAutoTableOptions[rowType][rowIndex][columnIndex].styles;
+            const expectedPdfCellStyles = cell.pdfCell.styles || {};
+            const actualPdfCellStyles = actualAutoTableOptions[rowType][rowIndex][columnIndex].styles;
 
             ['halign', 'fontStyle', 'cellWidth'].forEach((styleName) => {
                 assert.strictEqual(
-                    actualCellStyles[styleName],
-                    expectedCellStyles[styleName],
+                    actualPdfCellStyles[styleName],
+                    expectedPdfCellStyles[styleName],
                     `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.${styleName}`);
                 assert.strictEqual(
-                    isDefined(actualCellStyles[styleName]),
-                    Object.prototype.hasOwnProperty.call(actualCellStyles, styleName),
+                    isDefined(actualPdfCellStyles[styleName]),
+                    Object.prototype.hasOwnProperty.call(actualPdfCellStyles, styleName),
                     `AutoTable ${rowType}[${rowIndex}][${columnIndex}].styles.${styleName} is defined`);
             });
         });
@@ -69,9 +77,9 @@ class JSPdfDataGridTestHelper {
 
     checkMergeCells(expectedCells, actualAutoTableOptions, rowType) {
         this._iterateCells(expectedCells[rowType], (expectedCell, rowIndex, columnIndex) => {
-            const actualCell = actualAutoTableOptions[rowType][rowIndex][columnIndex];
-            assert.strictEqual(actualCell.colSpan, expectedCell.colSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].colSpan`);
-            assert.strictEqual(actualCell.rowSpan, expectedCell.rowSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].rowSpan`);
+            const actualPdfCell = actualAutoTableOptions[rowType][rowIndex][columnIndex];
+            assert.strictEqual(actualPdfCell.colSpan, expectedCell.pdfCell.colSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].colSpan`);
+            assert.strictEqual(actualPdfCell.rowSpan, expectedCell.pdfCell.rowSpan, `AutoTable ${rowType}[${rowIndex}][${columnIndex}].rowSpan`);
         });
     }
 

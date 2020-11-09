@@ -33,6 +33,12 @@ const moduleConfig = {
 const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
     const { keepColumnWidths = true, selectedRowsOnly = false, autoTableOptions = {}, customizeCell = () => {} } = options || {};
 
+    let flatArrayExpectedCells;
+    if(isDefined(expectedCustomizeCellArgs)) {
+        const { head = [], body = [] } = expectedCustomizeCellArgs;
+        flatArrayExpectedCells = [].concat.apply([], head.concat(body));
+    }
+
     const result = {
         component: dataGrid,
         jsPDFDocument: context.jsPDFDocument
@@ -42,8 +48,8 @@ const getOptions = (context, dataGrid, expectedCustomizeCellArgs, options) => {
     result.autoTableOptions = autoTableOptions;
     result.customizeCell = (eventArgs) => {
         customizeCell(eventArgs);
-        if(isDefined(expectedCustomizeCellArgs)) {
-            helper.checkCustomizeCell(eventArgs, expectedCustomizeCellArgs, context.customizeCellCallCount++);
+        if(isDefined(flatArrayExpectedCells)) {
+            helper.checkCustomizeCell(eventArgs, flatArrayExpectedCells, context.customizeCellCallCount++);
         }
     };
     return result;
@@ -82,8 +88,8 @@ QUnit.module('Simple grid', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[{ content: 'f1' }]],
-            body: [[{ content: 'text1' }]]
+            head: [[{ pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }]],
+            body: [[{ pdfCell: { content: 'text1' }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }]]
         };
 
         exportDataGrid(getOptions(this, dataGrid)).then(() => {
@@ -117,8 +123,8 @@ QUnit.module('Grid headers', moduleConfig, () => {
     });
 
     [
-        { visible: true, expectedCells: { head: [[{ content: 'f1' }]] } },
-        { visible: false, expectedCells: { head: [] } }
+        { visible: true, },
+        { visible: false }
     ].forEach((config) => {
         QUnit.test(`Header - 1 column, column.visible: ${config.visible}`, function(assert) {
             const done = assert.async();
@@ -127,18 +133,22 @@ QUnit.module('Grid headers', moduleConfig, () => {
                 loadingTimeout: undefined
             }).dxDataGrid('instance');
 
-            exportDataGrid(getOptions(this, dataGrid, config.expectedCells)).then(() => {
+            const expectedCells = config.visible
+                ? { head: [[{ pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }]] }
+                : { head: [] };
+
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
-                helper.checkRowAndColumnCount(config.expectedCells, autoTableOptions, 'head');
-                helper.checkCellsContent(config.expectedCells, autoTableOptions, 'head');
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
+                helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
                 done();
             });
         });
     });
 
     [
-        { allowExporting: true, expectedCells: { head: [[{ content: 'f1' }]] } },
-        { allowExporting: false, expectedCells: { head: [] } }
+        { allowExporting: true },
+        { allowExporting: false }
     ].forEach((config) => {
         QUnit.test(`Header - 1 column, column.allowExporting: ${config.allowExporting}`, function(assert) {
             const done = assert.async();
@@ -147,10 +157,14 @@ QUnit.module('Grid headers', moduleConfig, () => {
                 loadingTimeout: undefined
             }).dxDataGrid('instance');
 
-            exportDataGrid(getOptions(this, dataGrid, config.expectedCells)).then(() => {
+            const expectedCells = config.allowExporting
+                ? { head: [[{ pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }]] }
+                : { head: [] };
+
+            exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
-                helper.checkRowAndColumnCount(config.expectedCells, autoTableOptions, 'head');
-                helper.checkCellsContent(config.expectedCells, autoTableOptions, 'head');
+                helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
+                helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
                 done();
             });
         });
@@ -165,7 +179,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                head: [[{ content: 'f1', styles: { 'halign': alignment } }]]
+                head: [[{ pdfCell: { content: 'f1', styles: { 'halign': alignment } }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }]]
             };
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -187,7 +201,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[{ content: 'f1' }]]
+            head: [[{ pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -217,7 +231,12 @@ QUnit.module('Grid headers', moduleConfig, () => {
             };
 
             const expectedColumnWidths = keepColumnWidths ? [25, 225] : [100, 'auto'];
-            const expectedCells = { head: [[{ content: 'f1' }, { content: 'f2' }]] };
+            const expectedCells = {
+                head: [[
+                    { pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } },
+                    { pdfCell: { content: 'f2' }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(1) } }
+                ]]
+            };
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
                 const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
@@ -245,7 +264,12 @@ QUnit.module('Grid headers', moduleConfig, () => {
             }
         };
 
-        const expectedCells = { head: [[{ content: 'f2' }, { content: 'f3' }]] };
+        const expectedCells = {
+            head: [[
+                { pdfCell: { content: 'f2' }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3' }, gridCell: { rowType: 'header', value: 'f3', column: dataGrid.columnOption(2) } }
+            ]]
+        };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
@@ -270,7 +294,12 @@ QUnit.module('Grid headers', moduleConfig, () => {
             }
         };
 
-        const expectedCells = { head: [[{ content: 'f1' }, { content: 'f3' }]] };
+        const expectedCells = {
+            head: [[
+                { pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3' }, gridCell: { rowType: 'header', value: 'f3', column: dataGrid.columnOption(2) } }
+            ]]
+        };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
@@ -298,7 +327,12 @@ QUnit.module('Grid headers', moduleConfig, () => {
             }
         };
 
-        const expectedCells = { head: [[{ content: 'f2' }, { content: 'f1' }]] };
+        const expectedCells = {
+            head: [[
+                { pdfCell: { content: 'f2' }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }
+            ]]
+        };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
@@ -327,7 +361,12 @@ QUnit.module('Grid headers', moduleConfig, () => {
             }
         };
 
-        const expectedCells = { head: [[{ content: 'f3' }, { content: 'f1' }]] };
+        const expectedCells = {
+            head: [[
+                { pdfCell: { content: 'f3' }, gridCell: { rowType: 'header', value: 'f3', column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }
+            ]]
+        };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
@@ -356,7 +395,11 @@ QUnit.module('Grid headers', moduleConfig, () => {
             }
         };
 
-        const expectedCells = { head: [[{ content: 'f3' }]] };
+        const expectedCells = {
+            head: [[
+                { pdfCell: { content: 'f3' }, gridCell: { rowType: 'header', value: 'f3', column: dataGrid.columnOption(2) } }
+            ]]
+        };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
@@ -378,7 +421,10 @@ QUnit.module('Grid data rows', moduleConfig, () => {
             showColumnHeaders: false
         }).dxDataGrid('instance');
 
-        const expectedCells = { head: [], body: [[{ content: 'text1', styles: { 'halign': 'left' } }]] };
+        const expectedCells = {
+            head: [],
+            body: [[{ pdfCell: { content: 'text1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }]]
+        };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
             const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
@@ -401,8 +447,8 @@ QUnit.module('Grid data rows', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                head: [[{ content: 'f1', styles: { 'halign': 'left' } }]],
-                body: [[{ content: ds[0].f1, styles: { 'halign': 'left' } }]]
+                head: [[{ pdfCell: { content: 'f1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }]],
+                body: [[{ pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }]]
             };
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -426,16 +472,16 @@ QUnit.module('Grid data rows', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', styles: { 'halign': 'left' } },
-                { content: 'F2', styles: { 'halign': 'left' } },
-                { content: 'F3', styles: { 'halign': 'left' } },
-                { content: 'F4', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'F4', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F4', column: dataGrid.columnOption(3) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f2, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } },
-                { content: ds[0].f4, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: ds[0].f4, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ]]
         };
 
@@ -456,11 +502,17 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[{ content: 'F1', styles: { 'halign': 'left' } }, { content: 'F2', styles: { 'halign': 'left' } }]],
-            body: [
-                [{ content: 'text1_1', styles: { 'halign': 'left' } }, { content: 'text1_2', styles: { 'halign': 'left' } }],
-                [{ content: 'text2_1', styles: { 'halign': 'left' } }, { content: 'text2_2', styles: { 'halign': 'left' } }]
-            ]
+            head: [[
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } }
+            ]],
+            body: [[
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } }
+            ], [
+                { pdfCell: { content: ds[1].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[1].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -482,10 +534,14 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[{ content: 'F1', styles: { 'halign': 'right' } }, { content: 'F2', styles: { 'halign': 'right' } }]],
-            body: [
-                [{ content: ds[0].f1, styles: { 'halign': 'right' } }, { content: ds[0].f2, styles: { 'halign': 'right' } }]
-            ]
+            head: [[
+                { pdfCell: { content: 'F1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } }
+            ]],
+            body: [[
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -507,11 +563,17 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[{ content: 'F1', styles: { 'halign': 'left' } }, { content: 'F2', styles: { 'halign': 'right' } }]],
-            body: [
-                [{ content: 'text1_1', styles: { 'halign': 'left' } }, { content: 'text1_2', styles: { 'halign': 'right' } }],
-                [{ content: 'text2_1', styles: { 'halign': 'left' } }, { content: 'text2_2', styles: { 'halign': 'right' } }]
-            ]
+            head: [[
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } }
+            ]],
+            body: [[
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } }
+            ], [
+                { pdfCell: { content: ds[1].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[1].f2, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -536,12 +598,14 @@ QUnit.module('Grid data rows', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [
-                [{ content: 'F1', styles: { 'halign': 'left' } }, { content: 'F2', styles: { 'halign': 'right' } }]
-            ],
-            body: [
-                [{ content: '1', styles: { 'halign': 'left', cellWidth: 'wrap' } }, { content: '2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
-            ]
+            head: [[
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } }
+            ]],
+            body: [[
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -556,12 +620,15 @@ QUnit.module('Grid data rows', moduleConfig, () => {
 });
 
 QUnit.module('Column data types', moduleConfig, () => {
+    const dateValue1 = new Date(2019, 9, 9, 9, 9, 9, 9);
+    const dateValue2 = new Date(2020, 9, 9, 9, 9, 9, 9);
+
     [
-        { dataType: 'string', value: '1', alignment: 'left' },
-        { dataType: 'number', value: 1, alignment: 'right' },
-        { dataType: 'boolean', value: true, alignment: 'center' },
-        { dataType: 'date', value: '1/1/2001', alignment: 'left' },
-        { dataType: 'datetime', value: '1/1/2001, 12:00 AM', alignment: 'left' }
+        { dataType: 'string', value: '1', expectedValue: '1', alignment: 'left' },
+        { dataType: 'number', value: 1, expectedValue: 1, alignment: 'right' },
+        { dataType: 'boolean', value: true, expectedValue: true, alignment: 'center' },
+        { dataType: 'date', value: dateValue1, expectedValue: '10/9/2019', alignment: 'left' },
+        { dataType: 'datetime', value: dateValue1, expectedValue: '10/9/2019, 9:09 AM', alignment: 'left' }
     ].forEach((config) => {
         QUnit.test(`Data - columns.dataType: ${config.dataType}`, function(assert) {
             const done = assert.async();
@@ -574,8 +641,12 @@ QUnit.module('Column data types', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                head: [[{ content: 'F1', styles: { 'halign': config.alignment } }]],
-                body: [[{ content: config.value, styles: { 'halign': config.alignment } }]]
+                head: [[
+                    { pdfCell: { content: 'F1', styles: { 'halign': config.alignment } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } }
+                ]],
+                body: [[
+                    { pdfCell: { content: config.expectedValue, styles: { 'halign': config.alignment } }, gridCell: { rowType: 'data', value: config.value, data: ds[0], column: dataGrid.columnOption(0) } }
+                ]]
             };
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -592,11 +663,11 @@ QUnit.module('Column data types', moduleConfig, () => {
     });
 
     [
-        { dataType: 'string', value: '1', alignment: 'left' },
-        { dataType: 'number', value: 1, alignment: 'right' },
-        { dataType: 'boolean', value: true, alignment: 'center' },
-        { dataType: 'date', value: '1/1/2001', alignment: 'left' },
-        { dataType: 'datetime', value: '1/1/2001, 12:00 AM', alignment: 'left' }
+        { dataType: 'string', value: '1', expectedValue: '1', alignment: 'left' },
+        { dataType: 'number', value: 1, expectedValue: 1, alignment: 'right' },
+        { dataType: 'boolean', value: true, expectedValue: true, alignment: 'center' },
+        { dataType: 'date', value: dateValue1, expectedValue: '10/9/2019', alignment: 'left' },
+        { dataType: 'datetime', value: dateValue1, expectedValue: '10/9/2019, 9:09 AM', alignment: 'left' }
     ].forEach((config) => {
         QUnit.test(`Data - columns.dataType: ${config.dataType}, col_1.customizeText: (cell) => 'custom'`, function(assert) {
             const done = assert.async();
@@ -616,7 +687,9 @@ QUnit.module('Column data types', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                body: [[{ content: 'custom', styles: { 'halign': config.alignment } }]]
+                body: [[
+                    { pdfCell: { content: 'custom', styles: { 'halign': config.alignment } }, gridCell: { rowType: 'data', value: config.value, data: ds[0], column: dataGrid.columnOption(0) } }
+                ]]
             };
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -631,11 +704,11 @@ QUnit.module('Column data types', moduleConfig, () => {
     });
 
     [
-        { dataType: 'string', values: ['1', '2'], alignment: 'left' },
-        { dataType: 'number', values: [1, 2], alignment: 'right' },
-        { dataType: 'boolean', values: [true, false], alignment: 'center' },
-        { dataType: 'date', values: ['1/1/2001', '2/2/2002'], alignment: 'left' },
-        { dataType: 'datetime', values: ['1/1/2001, 12:00 AM', '2/2/2002, 12:00 AM'], alignment: 'left' }
+        { dataType: 'string', values: ['1', '2'], expectedValue: '1', alignment: 'left' },
+        { dataType: 'number', values: [1, 2], expectedValue: 1, alignment: 'right' },
+        { dataType: 'boolean', values: [true, false], expectedValue: true, alignment: 'center' },
+        { dataType: 'date', values: [dateValue1, dateValue2], expectedValue: '10/9/2019', alignment: 'left' },
+        { dataType: 'datetime', values: [dateValue1, dateValue2], expectedValue: '10/9/2019, 9:09 AM', alignment: 'left' }
     ].forEach((config) => {
         QUnit.test(`Data - columns.dataType: ${config.dataType}, selectedRowKeys: [ds[0]]`, function(assert) {
             const done = assert.async();
@@ -652,7 +725,9 @@ QUnit.module('Column data types', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                body: [[{ content: config.values[0], styles: { 'halign': config.alignment } }]]
+                body: [[
+                    { pdfCell: { content: config.expectedValue, styles: { 'halign': config.alignment } }, gridCell: { rowType: 'data', value: config.values[0], data: ds[0], column: dataGrid.columnOption(0) } }
+                ]]
             };
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
@@ -667,11 +742,11 @@ QUnit.module('Column data types', moduleConfig, () => {
     });
 
     [
-        { dataType: 'string', values: ['1', '2'], alignment: 'left' },
-        { dataType: 'number', values: [1, 2], alignment: 'right' },
-        { dataType: 'boolean', values: [true, false], alignment: 'center' },
-        { dataType: 'date', values: ['1/1/2001', '2/2/2002'], alignment: 'left' },
-        { dataType: 'datetime', values: ['1/1/2001, 12:00 AM', '2/2/2002, 12:00 AM'], alignment: 'left' }
+        { dataType: 'string', values: ['1', '2'], expectedValue: '2', alignment: 'left' },
+        { dataType: 'number', values: [1, 2], expectedValue: 2, alignment: 'right' },
+        { dataType: 'boolean', values: [true, false], expectedValue: false, alignment: 'center' },
+        { dataType: 'date', values: [dateValue1, dateValue2], expectedValue: '10/9/2020', alignment: 'left' },
+        { dataType: 'datetime', values: [dateValue1, dateValue2], expectedValue: '10/9/2020, 9:09 AM', alignment: 'left' }
     ].forEach((config) => {
         QUnit.test(`Data - columns.dataType: ${config.dataType}, selectedRowKeys: [ds[1]]`, function(assert) {
             const done = assert.async();
@@ -686,7 +761,9 @@ QUnit.module('Column data types', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                body: [[{ content: config.values[1], styles: { 'halign': config.alignment } }]]
+                body: [[
+                    { pdfCell: { content: config.expectedValue, styles: { 'halign': config.alignment } }, gridCell: { rowType: 'data', value: config.values[1], data: ds[1], column: dataGrid.columnOption(0) } }
+                ]]
             };
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
@@ -719,11 +796,11 @@ QUnit.module('Column data types', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '', styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } },
-                { content: 'str1', styles: { 'halign': 'left' } },
-                { content: 'str2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: null, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: '', data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'str1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str1', data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'str2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str2', data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -758,13 +835,13 @@ QUnit.module('Column data types', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '', styles: { 'halign': 'right' } },
-                { content: '', styles: { 'halign': 'right' } },
-                { content: 0, styles: { 'halign': 'right' } },
-                { content: 1, styles: { 'halign': 'right' } },
-                { content: -2, styles: { 'halign': 'right' } },
-                { content: 'Infinity', styles: { 'halign': 'right' } },
-                { content: '-Infinity', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: null, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 0, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 0, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 1, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 1, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: -2, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: -2, data: ds[0], column: dataGrid.columnOption(4) } },
+                { pdfCell: { content: 'Infinity', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: Number.POSITIVE_INFINITY, data: ds[0], column: dataGrid.columnOption(5) } },
+                { pdfCell: { content: '-Infinity', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: Number.NEGATIVE_INFINITY, data: ds[0], column: dataGrid.columnOption(6) } }
             ]]
         };
 
@@ -815,7 +892,9 @@ QUnit.module('Column data formats', moduleConfig, () => {
             }).dxDataGrid('instance');
 
             const expectedCells = {
-                body: [[{ content: config.expectedPdfCellValue, styles: { 'halign': 'left' } }]]
+                body: [[
+                    { pdfCell: { content: config.expectedPdfCellValue, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: dateValue, data: ds[0], column: dataGrid.columnOption(0) } }
+                ]]
             };
 
             exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -848,11 +927,11 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '100.000%', styles: { 'halign': 'right' } },
-                { content: '100%', styles: { 'halign': 'right' } },
-                { content: '100%', styles: { 'halign': 'right' } },
-                { content: '100.0%', styles: { 'halign': 'right' } },
-                { content: '100.000000%', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '100.000%', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '100%', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '100%', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '100.0%', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '100.000000%', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -885,11 +964,11 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '1.000', styles: { 'halign': 'right' } },
-                { content: '1', styles: { 'halign': 'right' } },
-                { content: '1', styles: { 'halign': 'right' } },
-                { content: '1.0', styles: { 'halign': 'right' } },
-                { content: '1.000000', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '1.000', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '1.0', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '1.000000', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -922,11 +1001,11 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '001', styles: { 'halign': 'right' } },
-                { content: '1', styles: { 'halign': 'right' } },
-                { content: '1', styles: { 'halign': 'right' } },
-                { content: '1', styles: { 'halign': 'right' } },
-                { content: '000001', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '001', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '000001', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -959,11 +1038,11 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '1.000E+0', styles: { 'halign': 'right' } },
-                { content: '1E+0', styles: { 'halign': 'right' } },
-                { content: '1.0E+0', styles: { 'halign': 'right' } },
-                { content: '1.0E+0', styles: { 'halign': 'right' } },
-                { content: '1.000000E+0', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '1.000E+0', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '1E+0', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '1.0E+0', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '1.0E+0', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '1.000000E+0', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -996,11 +1075,11 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '1.000', styles: { 'halign': 'right' } },
-                { content: '1', styles: { 'halign': 'right' } },
-                { content: '1', styles: { 'halign': 'right' } },
-                { content: '1.0', styles: { 'halign': 'right' } },
-                { content: '1.000000', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '1.000', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '1.0', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '1.000000', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -1033,11 +1112,11 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '0.001K', styles: { 'halign': 'right' } },
-                { content: '0K', styles: { 'halign': 'right' } },
-                { content: '0K', styles: { 'halign': 'right' } },
-                { content: '0.0K', styles: { 'halign': 'right' } },
-                { content: '0.001000K', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '0.001K', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '0K', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '0K', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '0.0K', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '0.001000K', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -1070,11 +1149,11 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '0.000M', styles: { 'halign': 'right' } },
-                { content: '0M', styles: { 'halign': 'right' } },
-                { content: '0M', styles: { 'halign': 'right' } },
-                { content: '0.0M', styles: { 'halign': 'right' } },
-                { content: '0.000001M', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '0.000M', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '0M', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '0M', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '0.0M', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '0.000001M', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -1107,11 +1186,11 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '0.000B', styles: { 'halign': 'right' } },
-                { content: '0B', styles: { 'halign': 'right' } },
-                { content: '0B', styles: { 'halign': 'right' } },
-                { content: '0.0B', styles: { 'halign': 'right' } },
-                { content: '0.000000B', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '0.000B', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '0B', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '0B', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '0.0B', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '0.000000B', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -1144,11 +1223,11 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '0.000T', styles: { 'halign': 'right' } },
-                { content: '0T', styles: { 'halign': 'right' } },
-                { content: '0T', styles: { 'halign': 'right' } },
-                { content: '0.0T', styles: { 'halign': 'right' } },
-                { content: '0.000000T', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '0.000T', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '0T', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '0T', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '0.0T', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '0.000000T', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -1182,12 +1261,12 @@ QUnit.module('Column data formats', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: '$1.00', styles: { 'halign': 'right' } },
-                { content: '$1.0000', styles: { 'halign': 'right' } },
-                { content: '$1', styles: { 'halign': 'right' } },
-                { content: '$1', styles: { 'halign': 'right' } },
-                { content: '$1.0', styles: { 'halign': 'right' } },
-                { content: '$1.00000', styles: { 'halign': 'right' } }
+                { pdfCell: { content: '$1.00', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '$1.0000', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '$1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '$1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '$1.0', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f5, data: ds[0], column: dataGrid.columnOption(4) } },
+                { pdfCell: { content: '$1.00000', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: ds[0].f6, data: ds[0], column: dataGrid.columnOption(5) } }
             ]]
         };
 
@@ -1219,12 +1298,12 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[{ content: 'f2', styles: { 'halign': 'left' } }]],
+            head: [[{ pdfCell: { content: 'f2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(0) } }]],
             body: [
-                [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f1_2', styles: { 'halign': 'left' } }],
-                [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f1_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1242,7 +1321,7 @@ QUnit.module('Grouping', moduleConfig, () => {
 
     [true, false].forEach((remoteOperations) => {
         [new Date(1996, 6, 4), '1996/7/4', '1996-07-04T00:00:00', new Date(1996, 6, 4).getTime()].forEach((dateValue) => {
-            QUnit.test(`Grouping - 1 level, column.dataType: date, format: 'yyyy-MM-dd', cell.value: ${JSON.stringify(dateValue.value)}, remoteOperations: ${remoteOperations}`, function(assert) {
+            QUnit.test(`Grouping - 1 level, column.dataType: date, format: 'yyyy-MM-dd', cell.value: ${JSON.stringify(dateValue)}, remoteOperations: ${remoteOperations}`, function(assert) {
                 const done = assert.async();
                 const ds = [{ f1: dateValue, f2: 'f1_1' }];
                 const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1256,10 +1335,10 @@ QUnit.module('Grouping', moduleConfig, () => {
                 }).dxDataGrid('instance');
 
                 const expectedCells = {
-                    head: [[{ content: 'f2', styles: { 'halign': 'left' } }]],
+                    head: [[{ pdfCell: { content: 'f2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(0) } }]],
                     body: [
-                        [{ content: 'f1: 1996-07-04', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                        [{ content: 'f1_1', styles: { 'halign': 'left' } }]
+                        [{ pdfCell: { content: 'f1: 1996-07-04', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: remoteOperations ? ds[0].f1 : new Date(ds[0].f1), data: ds[0], column: dataGrid.columnOption(0) } }],
+                        [{ pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(1) } }]
                     ]
                 };
 
@@ -1295,10 +1374,10 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_1', styles: { 'halign': 'left' } }],
-                [{ content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1330,9 +1409,9 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_1', styles: { 'halign': 'left' } }],
-                [{ content: 'f2_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'custom', data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1362,12 +1441,19 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[ { content: 'f1', styles: { 'halign': 'left' } }, { content: 'f2', styles: { 'halign': 'left' } } ]],
-            body: [
-                [{ content: 'f1: custom', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f1_1', styles: { 'halign': 'left' } }, { content: 'f2_1', styles: { 'halign': 'left' } }],
-                [{ content: 'f1_2', styles: { 'halign': 'left' } }, { content: 'f2_2', styles: { 'halign': 'left' } }]
-            ]
+            head: [[
+                { pdfCell: { content: 'f1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(1) } }
+            ]],
+            body: [[
+                { pdfCell: { content: 'f1: custom', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'custom', data: ds[0], column: dataGrid.columnOption(0) } }
+            ], [
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }
+            ], [
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -1400,9 +1486,9 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'custom_2', styles: { 'halign': 'left' } }],
-                [{ content: 'custom_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'f1: custom', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'custom', data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'custom_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'custom_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1433,12 +1519,14 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[ { content: 'f2', styles: { 'halign': 'right' } } ]],
+            head: [[
+                { pdfCell: { content: 'f2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(0) } }
+            ]],
             body: [
-                [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }],
-                [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
+                [{ pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1472,12 +1560,14 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[ { content: 'f2', styles: { 'halign': 'right' } } ]],
+            head: [[
+                { pdfCell: { content: 'f2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(0) } }
+            ]],
             body: [
-                [{ content: 'f1: f1_1', styles: { 'halign': 'right', fontStyle: 'bold' } }],
-                [{ content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }],
-                [{ content: 'f1: f1_2', styles: { 'halign': 'right', fontStyle: 'bold' } }],
-                [{ content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }]
+                [{ pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'right', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'f1: f1_2', styles: { 'halign': 'right', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1510,8 +1600,8 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'F1: str1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'str1_1', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'F1: str1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'str1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str1_1', data: ds[0], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1542,8 +1632,8 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'F1: str1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'str_1_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'F1: str1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'str_1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str_1_2', data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1574,9 +1664,9 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'F1: str1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'str1_1', styles: { 'halign': 'left' } }],
-                [{ content: 'str_1_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'F1: str1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'str1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str1_1', data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'str_1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str_1_2', data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1605,11 +1695,15 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            body: [
-                [{ content: 'Field 3: str1!', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'str1', styles: { 'halign': 'left' } }, { content: 'str1_f2', styles: { 'halign': 'left' } }],
-                [{ content: 'str1', styles: { 'halign': 'left' } }, { content: 'str1_f2', styles: { 'halign': 'left' } }]
-            ]
+            body: [[
+                { pdfCell: { content: 'Field 3: str1!', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'str1!', column: dataGrid.columnOption(2) } }
+            ], [
+                { pdfCell: { content: 'str1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'str1_f2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str1_f2', data: ds[0], column: dataGrid.columnOption(1) } }
+            ], [
+                { pdfCell: { content: 'str1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str1', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'str1_f2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str1_f2', data: ds[1], column: dataGrid.columnOption(1) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -1640,8 +1734,11 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'Field 3: str1!', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'str1', styles: { 'halign': 'left' } }, { content: 'str1_f2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'Field 3: str1!', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'str1!', column: dataGrid.columnOption(2) } }],
+                [
+                    { pdfCell: { content: 'str1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str1', data: ds[1], column: dataGrid.columnOption(0) } },
+                    { pdfCell: { content: 'str1_f2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'str1_f2', data: ds[1], column: dataGrid.columnOption(1) } }
+                ]
             ]
         };
 
@@ -1672,8 +1769,8 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'F1: str2_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'str2_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'F1: str2_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'str2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1708,10 +1805,10 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'f1: f1_1 (Max of f2 is 1)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 1, styles: { 'halign': 'right' } }],
-                [{ content: 'f1: f1_2 (Max of f2 is 3)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 3, styles: { 'halign': 'right' } }]
+                [{ pdfCell: { content: 'f1: f1_1 (Max of f2 is 1)', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 1 }] } }],
+                [{ pdfCell: { content: 1, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 1, data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'f1: f1_2 (Max of f2 is 3)', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 3 }] } }],
+                [{ pdfCell: { content: 3, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 3, data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1746,10 +1843,10 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'f1: f1_1 (custom)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 1, styles: { 'halign': 'right' } }],
-                [{ content: 'f1: f1_2 (custom)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 3, styles: { 'halign': 'right' } }]
+                [{ pdfCell: { content: 'f1: f1_1 (custom)', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 1 }] } }],
+                [{ pdfCell: { content: 1, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 1, data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'f1: f1_2 (custom)', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 3 }] } }],
+                [{ pdfCell: { content: 3, styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 3, data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
 
@@ -1766,7 +1863,7 @@ QUnit.module('Grouping', moduleConfig, () => {
     QUnit.test('Grouping - 1 level & 2 column', function(assert) {
         const done = assert.async();
         const ds = [
-            { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1' },
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1' },
             { f1: 'f1_2', f2: 'f2_2', f3: 'f3_2' }
         ];
 
@@ -1789,10 +1886,16 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'f1: f1_1 (Count: 1, Count: 1)', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f1_2', styles: { 'halign': 'left' } }, { content: 'f3_1', styles: { 'halign': 'left' } }],
-                [{ content: 'f1: f1_2 (Count: 1, Count: 1)', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2_2', styles: { 'halign': 'left' } }, { content: 'f3_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'f1: f1_1 (Count: 1, Count: 1)', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 1 }, { 'name': 'GroupItems 2', 'value': 1 }] } }],
+                [
+                    { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                    { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(1) } }
+                ],
+                [{ pdfCell: { content: 'f1: f1_2 (Count: 1, Count: 1)', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 1 }, { 'name': 'GroupItems 2', 'value': 1 }] } }],
+                [
+                    { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                    { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(1) } }
+                ]
             ]
         };
 
@@ -1826,12 +1929,12 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f3_1', styles: { 'halign': 'left' } }],
-                [{ content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f3_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f2: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }],
+                [{ pdfCell: { content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f2: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1) } }],
+                [{ pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }]
             ]
         };
 
@@ -1867,11 +1970,11 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             body: [
-                [{ content: 'f1: f1_1 (Max of f3 is f3_2, Count: 2)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f2: f1_2 (Max of f3 is f3_1, Count: 1)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f3_1', styles: { 'halign': 'left' } }],
-                [{ content: 'f2: f2_2 (Max of f3 is f3_2, Count: 1)', styles: { 'halign': 'left', fontStyle: 'bold' } }],
-                [{ content: 'f3_2', styles: { 'halign': 'left' } }]
+                [{ pdfCell: { content: 'f1: f1_1 (Max of f3 is f3_2, Count: 2)', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }, { 'name': 'GroupItems 2', 'value': 2 }] } }],
+                [{ pdfCell: { content: 'f2: f1_2 (Max of f3 is f3_1, Count: 1)', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_1' }, { 'name': 'GroupItems 2', 'value': 1 }] } }],
+                [{ pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }],
+                [{ pdfCell: { content: 'f2: f2_2 (Max of f3 is f3_2, Count: 1)', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(0), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }, { 'name': 'GroupItems 2', 'value': 1 }] } }],
+                [{ pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }]
             ]
         };
 
@@ -1888,7 +1991,7 @@ QUnit.module('Grouping', moduleConfig, () => {
     QUnit.test('Grouping - 2 level & 2 column - 2 summary alignByColumn', function(assert) {
         const done = assert.async();
         const ds = [
-            { f1: 'f1_1', f2: 'f1_2', f3: 'f3_1', f4: 'f4_1', f5: 'f5_1' },
+            { f1: 'f1_1', f2: 'f2_1', f3: 'f3_1', f4: 'f4_1', f5: 'f5_1' },
             { f1: 'f1_1', f2: 'f2_2', f3: 'f3_2', f4: 'f4_2', f5: 'f5_2' }
         ];
         const dataGrid = $('#dataGrid').dxDataGrid({
@@ -1911,29 +2014,27 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            body: [
-                [
-                    { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f4_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                    { content: 'Max: f5_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
-                ], [
-                    { content: 'f2: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f4_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                    { content: 'Max: f5_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
-                ], [
-                    { content: 'f3_1', styles: { 'halign': 'left' } },
-                    { content: 'f4_1', styles: { 'halign': 'left' } },
-                    { content: 'f5_1', styles: { 'halign': 'left' } }
-                ], [
-                    { content: 'f2: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                    { content: 'Max: f4_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                    { content: 'Max: f5_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
-                ], [
-                    { content: 'f3_2', styles: { 'halign': 'left' } },
-                    { content: 'f4_2', styles: { 'halign': 'left' } },
-                    { content: 'f5_2', styles: { 'halign': 'left' } }
-                ]
-            ]
+            body: [[
+                { pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Max: f4_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f4_2\nCount: 2', data: ds[0], column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_2' }, { 'name': 'GroupItems 2', 'value': 2 }] } },
+                { pdfCell: { content: 'Max: f5_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f5_2\nCount: 2', data: ds[0], column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', 'value': 'f5_2' }, { 'name': 'GroupItems 4', 'value': 2 }] } }
+            ], [
+                { pdfCell: { content: 'f2: f2_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[0].f2, data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Max: f4_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f4_1\nCount: 1', data: ds[0], column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_1' }, { 'name': 'GroupItems 2', 'value': 1 }] } },
+                { pdfCell: { content: 'Max: f5_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f5_1\nCount: 1', data: ds[0], column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', 'value': 'f5_1' }, { 'name': 'GroupItems 4', 'value': 1 }] } }
+            ], [
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'f4_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f4_1', data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'f5_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f5_1', data: ds[0], column: dataGrid.columnOption(4) } }
+            ], [
+                { pdfCell: { content: 'f2: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[1].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Max: f4_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f4_2\nCount: 1', data: ds[1], column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_2' }, { 'name': 'GroupItems 2', 'value': 1 }] } },
+                { pdfCell: { content: 'Max: f5_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f5_2\nCount: 1', data: ds[1], column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', 'value': 'f5_2' }, { 'name': 'GroupItems 4', 'value': 1 }] } }
+            ], [
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'f4_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f4_2', data: ds[1], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'f5_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f5_2', data: ds[1], column: dataGrid.columnOption(4) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -1972,23 +2073,21 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            body: [
-                [
-                    { content: 'f1: f1_1 (Max of f4 is f4_2, Count: 2, Max of f5 is f5_2, Count: 2)', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
-                ], [
-                    { content: 'f2: f1_2 (Max of f4 is f4_1, Count: 1, Max of f5 is f5_1, Count: 1)', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
-                ], [
-                    { content: 'f3_1', styles: { 'halign': 'left' } },
-                    { content: 'f4_1', styles: { 'halign': 'left' } },
-                    { content: 'f5_1', styles: { 'halign': 'left' } }
-                ], [
-                    { content: 'f2: f2_2 (Max of f4 is f4_2, Count: 1, Max of f5 is f5_2, Count: 1)', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
-                ], [
-                    { content: 'f3_2', styles: { 'halign': 'left' } },
-                    { content: 'f4_2', styles: { 'halign': 'left' } },
-                    { content: 'f5_2', styles: { 'halign': 'left' } }
-                ]
-            ]
+            body: [[
+                { pdfCell: { content: 'f1: f1_1 (Max of f4 is f4_2, Count: 2, Max of f5 is f5_2, Count: 2)', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_2' }, { 'name': 'GroupItems 2', 'value': 2 }, { 'name': 'GroupItems 3', 'value': 'f5_2' }, { 'name': 'GroupItems 4', 'value': 2 }] } }
+            ], [
+                { pdfCell: { content: 'f2: f1_2 (Max of f4 is f4_1, Count: 1, Max of f5 is f5_1, Count: 1)', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_1' }, { 'name': 'GroupItems 2', 'value': 1 }, { 'name': 'GroupItems 3', 'value': 'f5_1' }, { 'name': 'GroupItems 4', 'value': 1 }] } }
+            ], [
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'f4_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f4_1', data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'f5_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f5_1', data: ds[0], column: dataGrid.columnOption(4) } }
+            ], [
+                { pdfCell: { content: 'f2: f2_2 (Max of f4 is f4_2, Count: 1, Max of f5 is f5_2, Count: 1)', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[1].f2, data: ds[0], column: dataGrid.columnOption(1), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_2' }, { 'name': 'GroupItems 2', 'value': 1 }, { 'name': 'GroupItems 3', 'value': 'f5_2' }, { 'name': 'GroupItems 4', 'value': 1 }] } }
+            ], [
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'f4_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f4_2', data: ds[1], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'f5_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f5_2', data: ds[1], column: dataGrid.columnOption(4) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -2022,19 +2121,17 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            body: [
-                [
-                    { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
-                ], [
-                    { content: 'f1_1', styles: { 'halign': 'left' } },
-                    { content: 'f2_1', styles: { 'halign': 'left' } },
-                    { content: 'f3_1', styles: { 'halign': 'left' } }
-                ], [
-                    { content: 'f1_2', styles: { 'halign': 'left' } },
-                    { content: 'f2_2', styles: { 'halign': 'left' } },
-                    { content: 'f3_2', styles: { 'halign': 'left' } }
-                ]
-            ]
+            body: [[
+                { pdfCell: { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
+            ], [
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
+            ], [
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -2068,19 +2165,17 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            body: [
-                [
-                    { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
-                ], [
-                    { content: 'f1_1', styles: { 'halign': 'left' } },
-                    { content: 'f2_1', styles: { 'halign': 'left' } },
-                    { content: 'f3_1', styles: { 'halign': 'left' } }
-                ], [
-                    { content: 'f1_2', styles: { 'halign': 'left' } },
-                    { content: 'f2_2', styles: { 'halign': 'left' } },
-                    { content: 'f3_2', styles: { 'halign': 'left' } }
-                ]
-            ]
+            body: [[
+                { pdfCell: { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
+            ], [
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
+            ], [
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -2114,17 +2209,15 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            body: [
-                [
-                    { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
-                ], [
-                    { content: 'f2_1', styles: { 'halign': 'left' } },
-                    { content: 'f3_1', styles: { 'halign': 'left' } }
-                ], [
-                    { content: 'f2_2', styles: { 'halign': 'left' } },
-                    { content: 'f3_2', styles: { 'halign': 'left' } }
-                ]
-            ]
+            body: [[
+                { pdfCell: { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
+            ], [
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
+            ], [
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -2158,17 +2251,15 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            body: [
-                [
-                    { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
-                ], [
-                    { content: 'f1_1', styles: { 'halign': 'left' } },
-                    { content: 'f3_1', styles: { 'halign': 'left' } }
-                ], [
-                    { content: 'f1_2', styles: { 'halign': 'left' } },
-                    { content: 'f3_2', styles: { 'halign': 'left' } }
-                ]
-            ]
+            body: [[
+                { pdfCell: { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
+            ], [
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
+            ], [
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -2202,17 +2293,15 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            body: [
-                [
-                    { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
-                ], [
-                    { content: 'f1_1', styles: { 'halign': 'left' } },
-                    { content: 'f2_1', styles: { 'halign': 'left' } }
-                ], [
-                    { content: 'f1_2', styles: { 'halign': 'left' } },
-                    { content: 'f2_2', styles: { 'halign': 'left' } }
-                ]
-            ]
+            body: [[
+                { pdfCell: { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
+            ], [
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }
+            ], [
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -2246,19 +2335,17 @@ QUnit.module('Grouping', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            body: [
-                [
-                    { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
-                ], [
-                    { content: 'f3_1', styles: { 'halign': 'left' } },
-                    { content: 'f1_1', styles: { 'halign': 'left' } },
-                    { content: 'f2_1', styles: { 'halign': 'left' } }
-                ], [
-                    { content: 'f3_2', styles: { 'halign': 'left' } },
-                    { content: 'f1_2', styles: { 'halign': 'left' } },
-                    { content: 'f2_2', styles: { 'halign': 'left' } }
-                ]
-            ]
+            body: [[
+                { pdfCell: { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
+            ], [
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }
+            ], [
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -2299,19 +2386,19 @@ QUnit.module('Group summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { pdfCell: { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ], [
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2351,16 +2438,16 @@ QUnit.module('Group summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f3_2', data: ds[0], column: dataGrid.columnOption(2), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }] } }
             ], [
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2400,16 +2487,16 @@ QUnit.module('Group summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { pdfCell: { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ], [
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2449,16 +2536,16 @@ QUnit.module('Group summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { pdfCell: { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ], [
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2498,14 +2585,14 @@ QUnit.module('Group summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f3_2', data: ds[0], column: dataGrid.columnOption(2), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }] } }
             ], [
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2545,16 +2632,16 @@ QUnit.module('Group summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { pdfCell: { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ], [
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2594,14 +2681,14 @@ QUnit.module('Group summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f3_2', data: ds[0], column: dataGrid.columnOption(2), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }] } }
             ], [
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2643,17 +2730,17 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f2_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
+                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
             ], [
-                { content: 'Min: f1_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Min: f2_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'Min: f1_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
+                { pdfCell: { content: 'Min: f2_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
             ]]
         };
 
@@ -2688,9 +2775,9 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } }
             ]]
         };
 
@@ -2732,18 +2819,17 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1_1', styles: { 'halign': 'right' } },
-                { content: 'f2_1', styles: { 'halign': 'right' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'right' } },
-                { content: 'f2_2', styles: { 'halign': 'right' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'Max: f1_2', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f2_2', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }
-            ],
-            [
-                { content: 'Min: f1_1', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Min: f2_1', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
+                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
+            ], [
+                { pdfCell: { content: 'Min: f1_1', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
+                { pdfCell: { content: 'Min: f2_1', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
             ]]
         };
 
@@ -2785,18 +2871,17 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1_1', styles: { 'halign': 'left', cellWidth: 'wrap' } },
-                { content: 'f2_1', styles: { 'halign': 'left', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left', cellWidth: 'wrap' } },
-                { content: 'f2_2', styles: { 'halign': 'left', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
-            ],
-            [
-                { content: 'Min: f1_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Min: f2_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
+                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
+            ], [
+                { pdfCell: { content: 'Min: f1_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
+                { pdfCell: { content: 'Min: f2_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
             ]]
         };
 
@@ -2837,15 +2922,14 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
-            ],
-            [
-                { content: 'Min: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Min: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
+                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
+            ], [
+                { pdfCell: { content: 'Min: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
+                { pdfCell: { content: 'Min: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
             ]]
         };
 
@@ -2884,14 +2968,14 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -2930,14 +3014,14 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -2975,14 +3059,14 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -3021,14 +3105,14 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -3067,14 +3151,14 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -3113,14 +3197,14 @@ QUnit.module('Total summary', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } },
-                { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -3153,12 +3237,12 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', styles: { 'halign': 'left' } },
-                { content: 'Band1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Band1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(1) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: null, data: ds[0], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -3193,12 +3277,12 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'Band1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1F1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'F1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(1) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }
             ]]
         };
 
@@ -3236,16 +3320,16 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'F2', styles: { 'halign': 'left' } },
-                { content: 'F3', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(2) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(2) } },
             ]]
         };
 
@@ -3284,12 +3368,12 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'F2', styles: { 'halign': 'left' } },
-                { content: 'F3', styles: { 'halign': 'left' } },
-                { content: 'F4', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'F4', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F4', column: dataGrid.columnOption(3) } }
             ]],
             body: []
         };
@@ -3335,21 +3419,21 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band2', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Band2', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band2', column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'F2', styles: { 'halign': 'left' } },
-                { content: 'F3', styles: { 'halign': 'left' } },
-                { content: 'F4', styles: { 'halign': 'left' } },
-                { content: 'F5', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: 'F4', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F4', column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'F5', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F5', column: dataGrid.columnOption(4) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(4) } }
             ]]
         };
 
@@ -3397,21 +3481,21 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band2', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Band2', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band2', column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'F2', styles: { 'halign': 'left' } },
-                { content: 'F4', styles: { 'halign': 'left' } },
-                { content: 'F6', styles: { 'halign': 'left' } },
-                { content: 'F7', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: 'F4', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F4', column: dataGrid.columnOption(5) } },
+                { pdfCell: { content: 'F6', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F6', column: dataGrid.columnOption(7) } },
+                { pdfCell: { content: 'F7', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F7', column: dataGrid.columnOption(8) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(3) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(5) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(7) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: undefined, data: ds[0], column: dataGrid.columnOption(8) } }
             ]]
         };
 
@@ -3451,10 +3535,10 @@ QUnit.module('Bands', moduleConfig, () => {
         const expectedCells = {
             head: [],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f2, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } },
-                { content: ds[0].f4, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: ds[0].f4, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ]]
         };
 
@@ -3494,9 +3578,9 @@ QUnit.module('Bands', moduleConfig, () => {
         const expectedCells = {
             head: [],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } },
-                { content: ds[0].f4, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: ds[0].f4, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ]]
         };
 
@@ -3536,9 +3620,9 @@ QUnit.module('Bands', moduleConfig, () => {
         const expectedCells = {
             head: [],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } },
-                { content: ds[0].f4, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: ds[0].f4, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ]]
         };
 
@@ -3577,12 +3661,12 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', styles: { 'halign': 'left' } },
-                { content: 'F4', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F4', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F4', column: dataGrid.columnOption(3) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f4, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f4, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ]]
         };
 
@@ -3622,12 +3706,12 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', styles: { 'halign': 'left' } },
-                { content: 'Band1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Band1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(1) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: '', styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: null, data: ds[0], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -3665,16 +3749,16 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'F3', styles: { 'halign': 'left' } },
-                { content: 'F4', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F4', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F4', column: dataGrid.columnOption(1) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } },
-                { content: ds[0].f4, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: ds[0].f4, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ]]
         };
 
@@ -3712,16 +3796,16 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'F3', styles: { 'halign': 'left' } },
-                { content: 'F4', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F4', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F4', column: dataGrid.columnOption(1) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } },
-                { content: ds[0].f4, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
+                { pdfCell: { content: ds[0].f4, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
             ]]
         };
 
@@ -3763,18 +3847,18 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'Band1_1', colSpan: 3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1_1', colSpan: 3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1_1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'F1', styles: { 'halign': 'left' } },
-                { content: 'F2', styles: { 'halign': 'left' } },
-                { content: 'F3', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(2) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f2, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -3816,16 +3900,16 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1_1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'F2', styles: { 'halign': 'left' } },
-                { content: 'F3', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(2) } }
             ]],
             body: [[
-                { content: ds[0].f2, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -3867,14 +3951,14 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'Band1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'Band1_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1_1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'F1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }
             ]]
         };
 
@@ -3916,18 +4000,18 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', rowSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1_1', column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'F2', styles: { 'halign': 'left' } },
-                { content: 'F3', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(2) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f2, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -3969,16 +4053,16 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1_1', column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'F2', styles: { 'halign': 'left' } },
-                { content: 'F3', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'F3', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(2) } }
             ]],
             body: [[
-                { content: ds[0].f2, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -4020,18 +4104,18 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1', colSpan: 3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } },
-                { content: 'F3', rowSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1_1', column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'F3', rowSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F3', column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'F1', styles: { 'halign': 'left' } },
-                { content: 'F2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f2, styles: { 'halign': 'left' } },
-                { content: ds[0].f3, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -4073,16 +4157,16 @@ QUnit.module('Bands', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1', column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'Band1_1', colSpan: 2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'Band1_1', column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'F1', styles: { 'halign': 'left' } },
-                { content: 'F2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } }
             ]],
             body: [[
-                { content: ds[0].f1, styles: { 'halign': 'left' } },
-                { content: ds[0].f2, styles: { 'halign': 'left' } }
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -4122,8 +4206,8 @@ QUnit.module('customizeCell', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { content: 'f1 customText', styles: { fontStyle: 'bold', 'halign': 'left' } },
-                { content: 'f2 customText', styles: { fontStyle: 'bold', 'halign': 'left' } }
+                { pdfCell: { content: 'f1 customText', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'header', value: 'f1 customText', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2 customText', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'header', value: 'f2 customText', column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -4163,8 +4247,8 @@ QUnit.module('customizeCell', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1 customText', styles: { fontStyle: 'bold', 'halign': 'left' } },
-                { content: 'f2 customText', styles: { fontStyle: 'bold', 'halign': 'left' } }
+                { pdfCell: { content: 'f1 customText', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'data', value: 'f1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2 customText', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'data', value: 'f2', data: ds[0], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -4204,12 +4288,15 @@ QUnit.module('customizeCell', moduleConfig, () => {
         };
 
         const expectedCells = {
-            body: [
-                [{ content: 'f1: f1_1 customText', styles: { 'halign': 'left', fontStyle: 'normal' } }],
-                [{ content: 'f1_2', styles: { 'halign': 'left' } }],
-                [{ content: 'f1: f1_2 customText', styles: { 'halign': 'left', fontStyle: 'normal' } }],
-                [{ content: 'f1_2', styles: { 'halign': 'left' } }]
-            ]
+            body: [[
+                { pdfCell: { content: 'f1: f1_1 customText', styles: { 'halign': 'left', fontStyle: 'normal' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }
+            ], [
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[0], column: dataGrid.columnOption(1) } }
+            ], [
+                { pdfCell: { content: 'f1: f1_2 customText', styles: { 'halign': 'left', fontStyle: 'normal' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }
+            ], [
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(1) } }
+            ]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells, options)).then(() => {
@@ -4259,19 +4346,19 @@ QUnit.module('customizeCell', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }
+                { pdfCell: { content: 'f4: f4_1', colSpan: 3, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(0) } }
             ], [
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f2_1', styles: { 'halign': 'left' } },
-                { content: 'f3_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } },
-                { content: 'f3_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
-                { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
-                { content: 'Max: f3_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Max: f3_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -4320,17 +4407,17 @@ QUnit.module('customizeCell', moduleConfig, () => {
 
         const expectedCells = {
             body: [[
-                { content: 'f1_1', styles: { 'halign': 'left' } },
-                { content: 'f2_1', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'f1_2', styles: { 'halign': 'left' } },
-                { content: 'f2_2', styles: { 'halign': 'left' } }
+                { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
             ], [
-                { content: 'Max: f1_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
-                { content: 'Max: f2_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'Max: f1_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
+                { pdfCell: { content: 'Max: f2_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
             ], [
-                { content: 'Min: f1_1: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } },
-                { content: 'Min: f2_1: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }
+                { pdfCell: { content: 'Min: f1_1: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
+                { pdfCell: { content: 'Min: f2_1: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
             ]]
         };
 
