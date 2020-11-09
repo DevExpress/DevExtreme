@@ -127,10 +127,6 @@ $(function(){
         });
     });
     
-    function formatCurrency(value) { 
-        return Globalize.formatCurrency(value, "USD"); 
-    }
-    function formatNumber(value) { 
-        return Globalize.formatNumber(value, { maximumFractionDigits: 0 }); 
-    }
+    var formatCurrency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format;
+    var formatNumber = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format;
 });

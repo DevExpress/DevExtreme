@@ -35,9 +35,11 @@ $(function(){
                 total = data[startIndex].copper;
             }
     
-            $("#total").text(Globalize.formatNumber(total, { maximumFractionDigits: 0 }));
+            $("#total").text(formatNumber(total));
         }
     };
+
+    var formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
     
     $("#range-selector").dxRangeSelector(rangeOptions);
     

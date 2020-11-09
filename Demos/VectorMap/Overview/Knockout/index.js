@@ -1,8 +1,6 @@
 window.onload = function() {
-    function format(data) {
-        return Globalize.formatNumber(data, { maximumfractiondigits: 0 });
-    }
-    
+    var format = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format;
+
     var viewModel = {
         vectorMapOptions: {
             layers: {

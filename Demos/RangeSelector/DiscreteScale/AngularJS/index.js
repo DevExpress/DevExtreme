@@ -39,7 +39,9 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 total = data[startIndex].copper;
             }
     
-            $scope.totalResult = Globalize.formatNumber(total, { maximumFractionDigits: 0 });
+            $scope.totalResult = formatNumber(total);
         }
     };
+
+    var formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
 });

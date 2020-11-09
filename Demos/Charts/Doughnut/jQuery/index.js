@@ -8,14 +8,8 @@ $(function(){
             enabled: true,
             format: "millions",
             customizeTooltip: function (arg) {
-                var percentText = Globalize.formatNumber(arg.percent, {  
-                    style: "percent",
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2
-                });
-    
                 return {
-                    text: arg.valueText + " - " + percentText
+                    text: arg.valueText + " - " + (arg.percent * 100).toFixed(2) + "%"
                 };
             }
         },

@@ -2,7 +2,7 @@
     height: 500px;
 }
 
-h4 {
+::ng-deep h4 {
     font-size: 14px;
     margin-bottom: 5px;
 }

@@ -80,11 +80,11 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                 })[0];
                 
                 return "<div class='tooltip-template'><div>" + pointInfo.argumentText + "</div>" +
-                    "<div><span>Open: </span>" + Globalize.formatCurrency(prices.openValue, "USD") + "</div>" +
-                    "<div><span>High: </span>" + Globalize.formatCurrency(prices.highValue, "USD") + "</div>" +
-                    "<div><span>Low: </span>" + Globalize.formatCurrency(prices.lowValue, "USD") + "</div>" +
-                    "<div><span>Close: </span>" + Globalize.formatCurrency(prices.closeValue, "USD") + "</div>" +
-                    "<div><span>Volume: </span>" + Globalize.formatNumber(volume.value, { maximumFractionDigits: 0 }) + "</div>";
+                    "<div><span>Open: </span>" + formatCurrency(prices.openValue) + "</div>" +
+                    "<div><span>High: </span>" + formatCurrency(prices.highValue) + "</div>" +
+                    "<div><span>Low: </span>" + formatCurrency(prices.lowValue) + "</div>" +
+                    "<div><span>Close: </span>" + formatCurrency(prices.closeValue) + "</div>" +
+                    "<div><span>Volume: </span>" + formatNumber(volume.value) + "</div>";
             }
         },
         crosshair: {
@@ -127,4 +127,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
             $scope.connectionStarted = true;
             $scope.$apply();
         });
+    
+    var formatCurrency = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format;
+    var formatNumber = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format;
 });

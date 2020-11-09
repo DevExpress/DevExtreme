@@ -1,9 +1,7 @@
 var DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', function DemoController($scope) {
-    function format(data) {
-        return Globalize.formatNumber(data, { maximumfractiondigits: 0 });
-    }
+    var format = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format;
 
     $scope.vectorMapOptions = {
         layers: {

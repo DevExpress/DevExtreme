@@ -1,5 +1,6 @@
 $(function () {
    
+    var formatNumber = new Intl.NumberFormat("en-US", { maximumFractionDigits: 0 }).format;
     var commonSettings = {
         innerRadius: 0.65,
         resolveLabelOverlapping: "shift",
@@ -31,7 +32,7 @@ $(function () {
                     '<text text-anchor="middle" style="font-size: 18px" x="100" y="120" fill="#494949">' +
                     '<tspan x="100" >' + country + '</tspan>' +
                     '<tspan x="100" dy="20px" style="font-weight: 600">' +
-                    Globalize.formatNumber(total, { maximumFractionDigits: 0 }) +
+                    formatNumber(total) +
                     '</tspan></text></svg>');
             
             container.appendChild(content.get(0));

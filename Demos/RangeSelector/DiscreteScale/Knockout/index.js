@@ -39,10 +39,12 @@ window.onload = function() {
                     total = data[startIndex].copper;
                 }
     
-                totalResult(Globalize.formatNumber(total, { maximumFractionDigits: 0 }));
+                totalResult(formatNumber(total));
             }
         }
     };
+
+    var formatNumber = new Intl.NumberFormat('en-US', { minimumFractionDigits: 0 }).format;
     
     ko.applyBindings(viewModel, $("#range-selector-demo").get(0));
 };
