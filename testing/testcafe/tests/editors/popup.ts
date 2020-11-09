@@ -65,5 +65,5 @@ fixture`Popup T946851`
 
 test('There should not be any errors when position.of is html (T946851)', async (t) => {
   await t
-      .expect(true).ok();
+    .expect(true).ok();
 });
