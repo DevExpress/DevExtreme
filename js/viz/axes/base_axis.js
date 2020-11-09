@@ -1787,7 +1787,7 @@ Axis.prototype = {
         let end;
         let correctedMin;
         let correctedMax;
-        function correctZeroLevel(minPoint, maxPoint) {
+        const correctZeroLevel = (minPoint, maxPoint) => {
             const minExpectedPadding = _abs(canvasStartEnd.start - minPoint);
             const maxExpectedPadding = _abs(canvasStartEnd.end - maxPoint);
 
@@ -1795,7 +1795,7 @@ Axis.prototype = {
 
             start = minExpectedPadding / coeff;
             end = maxExpectedPadding / coeff;
-        }
+        };
         if(!that.isArgumentAxis && options.dataType !== 'datetime') {
             if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
                 correctZeroLevel(translator.translate(0), translator.translate(maxValue));
@@ -1808,8 +1808,8 @@ Axis.prototype = {
             }
         }
         return {
-            start,
-            end,
+            start: isFinite(start) ? start : null,
+            end: isFinite(end) ? end : null,
             correctedMin,
             correctedMax
         };
