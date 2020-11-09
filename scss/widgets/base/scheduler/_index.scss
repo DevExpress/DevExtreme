@@ -1057,6 +1057,12 @@ $scheduler-appointment-form-label-padding: 20px;
       min-height: $scheduler-month-workspace-date-table-height;
     }
 
+    .dx-scrollable-native .dx-scrollable-content {
+      &.dx-scheduler-scrollable-fixed-content {
+        height: 100%;
+      }
+    }
+
     .dx-scheduler-date-table-cell {
       height: $scheduler-workspace-date-table-cell-height;
       vertical-align: top;
