@@ -736,6 +736,32 @@ QUnit.test('Set two series with invisible series', function(assert) {
     });
 });
 
+QUnit.test('Set two series, barWidth is not correct, more then 1 (T942650)', function(assert) {
+    const series1 = createSeries({ points: pointsForStacking.points1() });
+    const series2 = createSeries({ points: pointsForStacking.points2() });
+    const series = [series1, series2];
+    const expectedSpacing = 7;
+    const expectedWidth = 32;
+
+    createSeriesFamily('bar', series, { barWidth: 5 });
+
+    checkSeries(assert, series1, expectedWidth, ZERO - expectedWidth / 2 - expectedSpacing / 2);
+    checkSeries(assert, series2, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing / 2);
+});
+
+QUnit.test('Set two series, barWidth is not correct (T942650), less then 0', function(assert) {
+    const series1 = createSeries({ points: pointsForStacking.points1() });
+    const series2 = createSeries({ points: pointsForStacking.points2() });
+    const series = [series1, series2];
+    const expectedSpacing = 7;
+    const expectedWidth = 32;
+
+    createSeriesFamily('bar', series, { barWidth: -1 });
+
+    checkSeries(assert, series1, expectedWidth, ZERO - expectedWidth / 2 - expectedSpacing / 2);
+    checkSeries(assert, series2, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing / 2);
+});
+
 QUnit.test('Set five series', function(assert) {
     const series1 = createSeries({ points: pointsForStacking.points1() });
     const series2 = createSeries({ points: pointsForStacking.points2() });

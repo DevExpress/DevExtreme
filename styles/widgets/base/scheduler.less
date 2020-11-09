@@ -1021,6 +1021,12 @@
             min-height: @SCHEDULER_MONTH_WORKSPACE_DATE_TABLE_HEIGHT;
         }
 
+        .dx-scrollable-native .dx-scrollable-content {
+            &.dx-scheduler-scrollable-fixed-content {
+                height: 100%;
+            }
+        }
+
         .dx-scheduler-date-table-cell {
             height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
             vertical-align: top;
