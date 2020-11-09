@@ -947,16 +947,6 @@ module.exports = {
 
                     if(dxScrollable) {
                         dxScrollable.update();
-                        this._updateHorizontalScrollPosition();
-                    }
-                },
-
-                _updateHorizontalScrollPosition: function() {
-                    const scrollable = this.getScrollable();
-                    const scrollLeft = scrollable && scrollable.scrollOffset().left;
-
-                    if(this._scrollLeft >= 0 && scrollLeft !== this._scrollLeft) {
-                        scrollable.scrollTo({ x: this._scrollLeft });
                     }
                 },
 
