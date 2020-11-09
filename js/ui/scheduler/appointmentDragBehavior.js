@@ -80,7 +80,6 @@ export default class AppointmentDragBehavior {
             e.itemSettings = this.getItemSettings(e.itemElement);
 
             appointmentDragging.onDragStart && appointmentDragging.onDragStart(e);
-            // debugger;
 
             if(!e.cancel) {
                 options.onDragStart(e);
