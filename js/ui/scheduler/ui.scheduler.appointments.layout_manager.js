@@ -54,6 +54,13 @@ class AppointmentLayoutManager {
     }
 
     _createAppointmentsMapCore(list, positionMap) {
+        const dragBehavior = this.instance._workSpace?.dragBehavior;
+        let draggedAppointmentInfo;
+
+        if(dragBehavior) {
+            draggedAppointmentInfo = dragBehavior.appointmentInfo;
+        }
+
         return list.map((data, index) => {
             if(!this._renderingStrategyInstance.keepAppointmentSettings()) {
                 delete data.settings;
@@ -62,6 +69,7 @@ class AppointmentLayoutManager {
             const appointmentSettings = positionMap[index];
             appointmentSettings.forEach(settings => {
                 settings.direction = this.renderingStrategy === 'vertical' && !settings.allDay ? 'vertical' : 'horizontal';
+                settings.isDragSource = this._isAppointmentDragSource(draggedAppointmentInfo, data, settings);
             });
 
             return {
@@ -71,6 +79,41 @@ class AppointmentLayoutManager {
                 needRemove: false
             };
         });
+    }
+
+    _isAppointmentDragSource(draggedAppointmentInfo, appointment, settings) {
+        if(!draggedAppointmentInfo) {
+            return false;
+        }
+
+        const {
+            appointment: draggedAppointment,
+            targetedAppointment: draggedTargetedAppointment,
+            appointmentPart: draggedAppointmentPart,
+        } = draggedAppointmentInfo;
+        const {
+            appointmentReduced,
+        } = settings;
+
+        if(draggedAppointment !== appointment || appointmentReduced !== draggedAppointmentPart) {
+            return false;
+        }
+
+        const {
+            startDate: draggedStartDate,
+            endDate: draggedEndDate,
+            source: draggedSource,
+        } = draggedTargetedAppointment;
+        const draggedGroupIndex = draggedSource.groupIndex;
+
+        const appointmentInfo = settings.info.appointment;
+
+        const { startDate, endDate } = appointmentInfo;
+        const groupIndex = appointmentInfo.source.groupIndex;
+
+        return groupIndex === draggedGroupIndex
+            && startDate.getTime() === draggedStartDate.getTime()
+            && endDate.getTime() === draggedEndDate.getTime();
     }
 
     _isDataChanged(data) {

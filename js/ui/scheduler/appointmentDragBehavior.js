@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import Draggable from '../draggable';
-import { locate, move } from '../../animation/translator';
+import { move } from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
 
@@ -17,6 +17,7 @@ export default class AppointmentDragBehavior {
         };
 
         this.currentAppointment = null;
+        this.appointmentInfo = null;
     }
 
     isAllDay(appointment) {
@@ -24,7 +25,15 @@ export default class AppointmentDragBehavior {
     }
 
     onDragStart(e) {
-        this.initialPosition = e.initialPosition || locate($(e.itemElement));
+        const { itemSettings, itemData, initialPosition } = e;
+
+        this.initialPosition = initialPosition;
+        this.appointmentInfo = {
+            appointment: itemData,
+            targetedAppointment: itemSettings.info.appointment,
+            appointmentPart: itemSettings.appointmentReduced,
+        };
+
         this.appointments.notifyObserver('hideAppointmentTooltip');
     }
 
@@ -71,6 +80,7 @@ export default class AppointmentDragBehavior {
             e.itemSettings = this.getItemSettings(e.itemElement);
 
             appointmentDragging.onDragStart && appointmentDragging.onDragStart(e);
+            // debugger;
 
             if(!e.cancel) {
                 options.onDragStart(e);

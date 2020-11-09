@@ -29,7 +29,7 @@ import tableCreatorModule from '../ui.scheduler.table_creator';
 const { tableCreator } = tableCreatorModule;
 import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
-import { APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_SETTINGS_KEY, FIXED_CONTAINER_CLASS } from '../constants';
+import { APPOINTMENT_SETTINGS_KEY, FIXED_CONTAINER_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
 import { resetPosition, locate } from '../../../animation/translator';
@@ -3244,10 +3244,16 @@ class SchedulerWorkSpace extends WidgetObserver {
                 if(itemData && !itemData.disabled) {
                     event.data = event.data || {};
                     if(!canceled) {
-                        $itemElement.addClass(APPOINTMENT_DRAG_SOURCE_CLASS);
+                        if(!settings.isCompact) {
+                            const appointment = e.itemElement.dxSchedulerAppointment('instance');
+                            appointment.option('isDragSource', true);
+                        }
+
                         dragElement = this._createDragAppointment(itemData, settings, appointments);
                         event.data.itemElement = dragElement;
                         event.data.initialPosition = locate($(dragElement));
+                        event.data.itemData = itemData;
+                        event.data.itemSettings = settings;
                         dragBehavior.onDragStart(event.data);
                         resetPosition($(dragElement));
                     }
