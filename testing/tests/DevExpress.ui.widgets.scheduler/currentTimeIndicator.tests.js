@@ -713,7 +713,7 @@ const stubInvokeMethod = function(instance, options) {
             const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
 
             testCase.bottomShaderWidth !== 0 && assert.roughEqual($bottomShader.outerWidth(), testCase.bottomShaderWidth * cellWidth, 1, 'Bottom shader has correct width');
-            assert.roughEqual($topShader.outerWidth(), testCase.topShaderWidth * cellWidth, 1, 'Top shader has correct width');
+            assert.roughEqual($topShader.outerWidth(), testCase.topShaderWidth * cellWidth, 1.5, 'Top shader has correct width');
 
             const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
             assert.equal($indicators.length, testCase.indicatorCount, 'Indicator count is correct');
