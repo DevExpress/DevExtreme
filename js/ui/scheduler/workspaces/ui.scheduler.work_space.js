@@ -3018,7 +3018,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     needUpdateScrollPosition(date, groups, inAllDayRow) {
         const cells = this._getCellsInViewport(inAllDayRow);
-        const groupIndex = groups
+        const groupIndex = groups && this.option('groups').length
             ? this._getGroupIndexByResourceId(groups)
             : 0;
         const time = date.getTime();
