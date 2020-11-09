@@ -32,7 +32,7 @@ export class AppComponent {
         this.dependencies = service.getDependencies();
         this.resources = service.getResources();
         this.resourceAssignments = service.getResourceAssignments();
-        this.scaleType = "quarters";
+        this.scaleType = "months";
         this.titlePosition = "outside";
         this.showResources = true;
         this.taskTooltipContentTemplate = this.getTaskTooltipContentTemplate;

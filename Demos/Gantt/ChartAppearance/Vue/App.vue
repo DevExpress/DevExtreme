@@ -102,7 +102,7 @@ export default {
       dependencies: dependencies,
       resources: resources,
       resourceAssignments: resourceAssignments,
-      scaleType: 'quarters',
+      scaleType: 'months',
       taskTitlePosition: 'outside',
       showResources: true,
       taskTooltipContentTemplate: this.getTaskTooltipContentTemplate
@@ -166,6 +166,10 @@ export default {
   .custom-task-edit-tooltip::before {
       border-top-color: white;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .custom-task-edit-tooltip::after {
+      border-bottom-color: white;
   }
 
   .custom-tooltip-title {

@@ -8,7 +8,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      scaleType: 'quarters',
+      scaleType: 'months',
       taskTitlePosition: 'outside',
       showResources: true,
       taskTooltipContentTemplate: this.getTaskTooltipContentTemplate

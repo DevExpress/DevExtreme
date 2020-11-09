@@ -1,7 +1,7 @@
 $(function() {
     var gantt = $("#gantt").dxGantt({
         taskTitlePosition: "outside",
-        scaleType: "quarters",
+        scaleType: "months",
         tasks: {
             dataSource: tasks
         },
@@ -43,7 +43,7 @@ $(function() {
             "quarters",
             "years"
         ],
-        value: "quarters",
+        value: "months",
         onValueChanged: function (e) {
             gantt.option("scaleType", e.value);
         }
