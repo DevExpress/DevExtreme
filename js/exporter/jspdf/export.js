@@ -101,7 +101,9 @@ export const Export = {
                             }
                             const isMergedCell = mergedCells[rowIndex] && mergedCells[rowIndex][cellIndex];
                             if(!isMergedCell || pdfCell.rowSpan > 1 || pdfCell.colSpan > 1) {
-                                isFunction(customizeCell) && customizeCell({ gridCell, pdfCell });
+                                if(isFunction(customizeCell)) {
+                                    customizeCell({ gridCell, pdfCell });
+                                }
                                 row.push(pdfCell);
                             }
                         } else if(gridCell.rowType === 'group' && !isDefined(pdfCell.content) && row.length === 1) {
@@ -109,7 +111,9 @@ export const Export = {
                             row[0].colSpan++;
                         } else {
                             pdfCell.content = pdfCell.content ?? '';
-                            isFunction(customizeCell) && customizeCell({ gridCell, pdfCell });
+                            if(isFunction(customizeCell)) {
+                                customizeCell({ gridCell, pdfCell });
+                            }
                             row.push(pdfCell);
                         }
                     }
