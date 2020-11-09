@@ -87,17 +87,12 @@ class App extends React.Component {
       topLeftCell: { row: 4, column: 1 }
     }).then((cellRange) => {
       // header
-      // https://github.com/exceljs/exceljs#rows
       const headerRow = worksheet.getRow(2);
       headerRow.height = 30;
-      // https://github.com/exceljs/exceljs#merged-cells
       worksheet.mergeCells(2, 1, 2, 8);
 
-      // https://github.com/exceljs/exceljs#value-types
       headerRow.getCell(1).value = 'Country Area, Population, and GDP Structure';
-      // https://github.com/exceljs/exceljs#fonts
       headerRow.getCell(1).font = { name: 'Segoe UI Light', size: 22 };
-      // https://github.com/exceljs/exceljs#alignment
       headerRow.getCell(1).alignment = { horizontal: 'center' };
 
       // footer
@@ -109,7 +104,6 @@ class App extends React.Component {
       footerRow.getCell(1).font = { color: { argb: 'BFBFBF' }, italic: true };
       footerRow.getCell(1).alignment = { horizontal: 'right' };
     }).then(() => {
-      // https://github.com/exceljs/exceljs#writing-xlsx
       workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'CountriesPopulation.xlsx');
       });

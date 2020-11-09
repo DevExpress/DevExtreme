@@ -52,12 +52,11 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     onExporting: function(e) {
       var workbook = new ExcelJS.Workbook();
       var worksheet = workbook.addWorksheet('Companies');
-      
-      // https://github.com/exceljs/exceljs#columns
+
       worksheet.columns = [
         { width: 5 }, { width: 30 }, { width: 25 }, { width: 15 }, { width: 25 }, { width: 40 }
       ];
-      
+
       DevExpress.excelExporter.exportDataGrid({
         component: e.component,
         worksheet: worksheet,
@@ -66,24 +65,19 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         customizeCell: function(options) {
           var gridCell = options.gridCell;
           var excelCell = options.excelCell;
-          
+
           if(gridCell.rowType === "data") {
             if(gridCell.column.dataField === 'Phone') {
               excelCell.value = parseInt(gridCell.value);
-              // https://github.com/exceljs/exceljs#number-formats
               excelCell.numFmt = '[<=9999999]###-####;(###) ###-####';
             }
             if(gridCell.column.dataField === 'Website') {
-              // https://github.com/exceljs/exceljs#hyperlink-value
               excelCell.value = { text: gridCell.value, hyperlink: gridCell.value };
-              // https://github.com/exceljs/exceljs#fonts
               excelCell.font = { color: { argb: 'FF0000FF' }, underline: true };
-              // https://github.com/exceljs/exceljs#alignment
               excelCell.alignment = { horizontal: 'left' };
             }
           }
           if(gridCell.rowType === "group") {
-            // https://github.com/exceljs/exceljs#fills
             excelCell.fill = { type: 'pattern', pattern:'solid', fgColor: { argb: "BEDFE6" } };
           }
           if(gridCell.rowType === "totalFooter" && excelCell.value) {

@@ -22,7 +22,6 @@ window.onload = function() {
           worksheet: worksheet,
           autoFilterEnabled: true
         }).then(function() {
-          // https://github.com/exceljs/exceljs#writing-xlsx
           workbook.xlsx.writeBuffer().then(function(buffer) {
             saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'Employees.xlsx');
           });

@@ -172,8 +172,8 @@ export default {
         }
       }).then(function(cellRange) {
         // header
-        worksheet.getRow(2).height = 20; // https://github.com/exceljs/exceljs#rows
-        worksheet.mergeCells(2, 1, 2, 4); // https://github.com/exceljs/exceljs#merged-cells
+        worksheet.getRow(2).height = 20;
+        worksheet.mergeCells(2, 1, 2, 4);
         Object.assign(worksheet.getRow(2).getCell(1), {
           value: 'Sales amounts report',
           font: { bold: true, size: 16 },
@@ -188,7 +188,7 @@ export default {
           alignment: { horizontal: 'right' }
         });
       }).then(function() {
-        workbook.xlsx.writeBuffer().then(function(buffer) { // https://github.com/exceljs/exceljs#writing-xlsx
+        workbook.xlsx.writeBuffer().then(function(buffer) {
           saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
         });
       });

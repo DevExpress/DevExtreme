@@ -72,7 +72,7 @@ export default {
             if(gridCell.column.dataField === 'Picture') {
               excelCell.value = undefined;
 
-              const image = workbook.addImage({ // https://github.com/exceljs/exceljs#images
+              const image = workbook.addImage({
                 base64: gridCell.value,
                 extension: 'png',
               });

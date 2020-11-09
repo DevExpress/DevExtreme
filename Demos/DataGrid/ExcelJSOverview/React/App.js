@@ -51,7 +51,6 @@ class App extends React.Component {
       worksheet: worksheet,
       autoFilterEnabled: true
     }).then(() => {
-      // https://github.com/exceljs/exceljs#writing-xlsx
       workbook.xlsx.writeBuffer().then((buffer) => {
         saveAs(new Blob([buffer], { type: 'application/octet-stream' }), 'DataGrid.xlsx');
       });

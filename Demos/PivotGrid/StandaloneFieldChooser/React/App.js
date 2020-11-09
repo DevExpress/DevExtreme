@@ -68,7 +68,6 @@ class App extends React.Component {
             height={400}
             layout={this.state.layout}
             applyChangesMode={this.state.applyChangesMode}
-            state={this.state.state}
           >
             <Texts
               allFields="All"
