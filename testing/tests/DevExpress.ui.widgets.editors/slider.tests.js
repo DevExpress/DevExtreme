@@ -1690,4 +1690,29 @@ module('small float step', () => {
         pointerMock($handle).start().move(handleX).down().move(step).up();
         assert.strictEqual(slider.option('value'), startValue + step, 'new value is correct');
     });
+
+    test('keyboard navigation shound work correctly even when step is very small', function(assert) {
+        const step = 0.0000000001;
+        const epsilon = step / 10;
+        const startValue = 0.50000000005;
+        const $slider = $('#slider').dxSlider({
+            step,
+            min: 0,
+            max: 1,
+            value: startValue
+        });
+        const slider = $slider.dxSlider('instance');
+        const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
+
+        const keyboard = keyboardMock($handle);
+
+        $handle.focusin();
+
+        let currentValue = 0.5;
+        for(let i = 0; i < 15; ++i) {
+            keyboard.press('left');
+            assert.roughEqual(slider.option('value'), currentValue, epsilon, 'value is correct');
+            currentValue -= step;
+        }
+    });
 });

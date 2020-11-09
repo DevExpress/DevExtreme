@@ -42,10 +42,13 @@ const Slider = TrackBar.inherit({
             const step = that.option('step');
             const value = that.option('value');
 
-            const division = (value - that.option('min')) % step;
+            const currentPosition = value - that.option('min');
+            const quotient = that._roundToExponentLength(currentPosition / step);
+            const remainder = (quotient - parseInt(quotient)) * step;
+
             let result = isLeftDirection
-                ? value - offset + (division ? step - division : 0)
-                : value + offset - division;
+                ? value - offset + (remainder ? step - remainder : 0)
+                : value + offset - remainder;
 
             const min = that.option('min');
             const max = that.option('max');
@@ -56,7 +59,7 @@ const Slider = TrackBar.inherit({
                 result = max;
             }
 
-            return result;
+            return that._roundToExponentLength(result);
         };
 
         const moveHandleRight = function(offset) {
@@ -540,6 +543,21 @@ const Slider = TrackBar.inherit({
             || 0;
     },
 
+    _getValueExponentLength: function() {
+        const { step, min } = this.option();
+
+        return Math.max(
+            this._getExponentLength(step),
+            this._getExponentLength(min)
+        );
+    },
+
+    _roundToExponentLength: function(value) {
+        const valueExponentLength = this._getValueExponentLength();
+
+        return parseFloat(value.toFixed(valueExponentLength));
+    },
+
     _changeValueOnSwipe: function(ratio) {
         const min = this.option('min');
         const max = this.option('max');
@@ -554,13 +572,8 @@ const Slider = TrackBar.inherit({
         if(newValue === max || newValue === min) {
             this._setValueOnSwipe(newValue);
         } else {
-            const exponentLength = Math.max(
-                this._getExponentLength(step),
-                this._getExponentLength(min)
-            );
             const stepCount = Math.round((newValue - min) / step);
-
-            newValue = Number((stepCount * step + min).toFixed(exponentLength));
+            newValue = this._roundToExponentLength(stepCount * step + min);
             this._setValueOnSwipe(Math.max(Math.min(newValue, max), min));
         }
     },
