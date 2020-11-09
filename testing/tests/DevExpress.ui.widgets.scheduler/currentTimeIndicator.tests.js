@@ -1168,6 +1168,45 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         });
     });
 
+    [{
+        startDayHour: 9,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 5, 12, 30),
+        testDescription: 'indicatorTime is between startDayHour and endDayHour'
+    },
+    {
+        startDayHour: 13,
+        endDayHour: 14,
+        indicatorTime: new Date(2017, 8, 5, 12, 30),
+        testDescription: 'indicatorTime is less than startDateHour'
+    },
+    {
+        startDayHour: 0,
+        endDayHour: 11,
+        indicatorTime: new Date(2017, 8, 5, 12, 30),
+        testDescription: 'indicatorTime is greater than endDayHour'
+    }].forEach(testCase => {
+        QUnit.test(`Shader should have correct height & width on timelineMonth, ${testCase.testDescription}, (T923329)`, function(assert) {
+            const instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
+                currentDate: new Date(2017, 8, 5),
+                height: 307,
+                indicatorTime: testCase.indicatorTime,
+                startDayHour: testCase.startDayHour,
+                endDayHour: testCase.endDayHour,
+                hoursInterval: 1
+            }).dxSchedulerTimelineMonth('instance');
+            const $element = instance.$element();
+            const $shader = $element.find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
+            const cellWidth = $element.find('.dx-scheduler-date-table-cell').eq(0).outerWidth();
+
+            assert.roughEqual($shader.outerHeight(), 200, 1, 'Shader has correct height');
+            assert.roughEqual($shader.outerWidth(), 4.5 * cellWidth, 6, 'Shader has correct width');
+
+            const $indicators = $element.find('.' + SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+            assert.equal($indicators.length, 1, 'Indicator count is correct');
+        });
+    });
+
     QUnit.test('DateHeader currentTime cell should have specific class, TimelineWeek view', function(assert) {
         const instance = $('#scheduler-work-space').dxSchedulerTimelineWeek({
             showCurrentTimeIndicator: true,
