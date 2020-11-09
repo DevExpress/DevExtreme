@@ -406,11 +406,11 @@ const calculatePosition = function(what, options) {
 
 const getOffsetWithoutScale = function($startElement, $currentElement = $startElement) {
     const currentElement = $currentElement.get(0);
-    if(!currentElement || $currentElement.is('body')) {
+    if(!currentElement) {
         return $startElement.offset();
     }
 
-    const style = currentElement.getAttribute('style') || '';
+    const style = currentElement?.getAttribute?.('style') || '';
     const scale = style.match(scaleRe)?.[0];
     let offset;
 
