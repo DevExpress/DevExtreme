@@ -197,7 +197,7 @@ const ResponsiveBox = CollectionWidget.inherit({
 
         this._refreshItem($item, item);
         this._clearItemNodeTemplates();
-        this._update();
+        this._update(true);
     },
 
     _setScreenSize: function() {
@@ -593,11 +593,19 @@ const ResponsiveBox = CollectionWidget.inherit({
         return result;
     },
 
-    _update: function() {
+    _update: function(forceRemoveRoot) {
         const $existingRoot = this._$root;
         this._renderItems();
-        $existingRoot && $existingRoot.detach();
-        this._saveAssistantRoot($existingRoot);
+
+        if($existingRoot) {
+            if(forceRemoveRoot) {
+                $existingRoot.remove();
+            } else {
+                $existingRoot.detach();
+                this._saveAssistantRoot($existingRoot);
+            }
+        }
+
         this._layoutChangedAction();
         this._updateRootBox();
     },
