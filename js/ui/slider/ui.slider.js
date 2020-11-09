@@ -524,13 +524,20 @@ const Slider = TrackBar.inherit({
             step = 1;
         }
 
-        step = parseFloat(step.toFixed(5));
         // TODO or exception?
         if(step === 0) {
             step = 0.00001;
         }
 
         return step;
+    },
+
+    _getExponentLength: function(value) {
+        const valueString = value.toString();
+
+        return valueString.split('.')[1]?.length
+            || parseInt(valueString.split('e-')[1])
+            || 0;
     },
 
     _changeValueOnSwipe: function(ratio) {
@@ -547,11 +554,9 @@ const Slider = TrackBar.inherit({
         if(newValue === max || newValue === min) {
             this._setValueOnSwipe(newValue);
         } else {
-            const stepExponent = (step + '').split('.')[1];
-            const minExponent = (min + '').split('.')[1];
             const exponentLength = Math.max(
-                stepExponent && stepExponent.length || 0,
-                minExponent && minExponent.length || 0
+                this._getExponentLength(step),
+                this._getExponentLength(min)
             );
             const stepCount = Math.round((newValue - min) / step);
 

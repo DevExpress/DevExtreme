@@ -1672,3 +1672,22 @@ module('validation', () => {
         assert.strictEqual($('.dx-overlay-wrapper.dx-invalid-message').css('visibility'), 'hidden', 'validation message is hidden');
     });
 });
+
+module('small float step', () => {
+    test('handle should move on correct step when step is very small (T945742)', function(assert) {
+        const step = 0.0000001;
+        const startValue = 0.5;
+        const $slider = $('#slider').dxSlider({
+            step,
+            min: 0,
+            max: 1,
+            value: startValue
+        });
+        const slider = $slider.dxSlider('instance');
+        const $handle = $slider.find('.' + SLIDER_HANDLE_CLASS);
+        const handleX = $handle.offset().left + $handle.outerWidth() / 2;
+
+        pointerMock($handle).start().move(handleX).down().move(step).up();
+        assert.strictEqual(slider.option('value'), startValue + step, 'new value is correct');
+    });
+});
