@@ -7,6 +7,7 @@ $(function(){
     }).dxSwitch("instance"); 
 
     var scheduler = $("#scheduler").dxScheduler({
+        timeZone: "America/Los_Angeles",
         dataSource: data,
         views: [{
             type: "week",

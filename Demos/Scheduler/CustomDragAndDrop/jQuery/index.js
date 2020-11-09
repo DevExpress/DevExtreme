@@ -36,6 +36,7 @@ $(function () {
     });
 
     $("#scheduler").dxScheduler({
+        timeZone: "America/Los_Angeles",
         dataSource: appointments,
         views: [{
             type: "day",

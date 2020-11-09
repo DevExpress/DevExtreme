@@ -1,5 +1,6 @@
 $(function(){
     var scheduler = $("#scheduler").dxScheduler({
+        timeZone: "America/Los_Angeles",
         dataSource: data,
         views: ["workWeek"],
         currentView: "workWeek",

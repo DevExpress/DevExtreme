@@ -20,6 +20,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     }];
 
     $scope.schedulerOptions = {
+        timeZone: "America/Los_Angeles",
         bindingOptions: {
             resources: {
                 deep: true,

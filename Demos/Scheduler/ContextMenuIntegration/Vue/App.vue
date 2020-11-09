@@ -1,6 +1,7 @@
 <template>
   <div>
     <DxScheduler
+      time-zone="America/Los_Angeles"
       :data-source="dataSource"
       :views="views"
       :current-date="currentDate"

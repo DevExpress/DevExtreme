@@ -3,6 +3,7 @@ $(function() {
     var url = BASE_PATH + "api/SchedulerSignalR";
     var createScheduler = function(index) {
         $("#scheduler" + index).dxScheduler({
+        timeZone: "America/Los_Angeles",
             dataSource: DevExpress.data.AspNet.createStore({
                 key: "AppointmentId",
                 loadUrl: url,

@@ -1,5 +1,6 @@
 <template>
   <DxScheduler
+    time-zone="America/Los_Angeles"
     :data-source="dataSource"
     :groups="groups"
     :current-date="currentDate"

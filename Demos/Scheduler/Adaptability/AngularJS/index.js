@@ -3,6 +3,7 @@ var DemoApp = angular.module('DemoApp', ['dx']);
 DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.scheduler = null;
     $scope.schedulerOptions = {
+        timeZone: "America/Los_Angeles",
         dataSource: data,
         views: ["week", "month"],
         adaptivityEnabled: true,

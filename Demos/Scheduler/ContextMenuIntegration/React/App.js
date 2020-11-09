@@ -36,6 +36,7 @@ class App extends React.Component {
     return (
       <React.Fragment>
         <Scheduler
+          timeZone="America/Los_Angeles"
           dataSource={data}
           views={views}
           defaultCurrentView="month"

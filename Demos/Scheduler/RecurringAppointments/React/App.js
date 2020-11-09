@@ -11,6 +11,7 @@ class App extends React.Component {
   render() {
     return (
       <Scheduler
+        timeZone="America/Los_Angeles"
         dataSource={data}
         views={views}
         defaultCurrentView="month"

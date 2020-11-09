@@ -1,6 +1,7 @@
 <div class="schedulers">
     <div class="column-1">
         <dx-scheduler
+    timeZone="America/Los_Angeles"
             [dataSource]="store1"
             [remoteFiltering] ="true"
             [views]='["day", "workWeek"]'
@@ -19,6 +20,7 @@
     </div>
     <div class="column-2">
         <dx-scheduler
+    timeZone="America/Los_Angeles"
             [dataSource]="store2"
             [remoteFiltering] ="true"
             [views]='["day", "workWeek"]'

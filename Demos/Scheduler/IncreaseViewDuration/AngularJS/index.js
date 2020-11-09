@@ -2,6 +2,7 @@ var DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.schedulerOptions = {
+        timeZone: "America/Los_Angeles",
         dataSource: data,
         views: [
             { name: "3 Days", type: "day", intervalCount: 3, startDate: new Date(2021, 3, 4) },

@@ -15,6 +15,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.disabledValue = false;
     
     $scope.schedulerOptions = {
+        timeZone: "America/Los_Angeles",
         dataSource: data,
         views: ["day", "week"],
         currentView: "week",

@@ -1,6 +1,7 @@
 $(function() {
     var url = "https://js.devexpress.com/Demos/Mvc/api/SchedulerData";
     $("#scheduler").dxScheduler({
+        timeZone: "America/Los_Angeles",
         dataSource: DevExpress.data.AspNet.createStore({
             key: "AppointmentId",
             loadUrl: url + "/Get",

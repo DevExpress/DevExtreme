@@ -1,6 +1,7 @@
 window.onload = function() {    
     var viewModel = {
         schedulerOptions: {
+            timeZone: "America/Los_Angeles",
             dataSource: data,
             views: ["day", "week", "month"],
             currentView: "month",

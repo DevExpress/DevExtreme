@@ -1,6 +1,7 @@
 <template>
   <div id="scheduler">
     <DxScheduler
+      time-zone="America/Los_Angeles"
       :data-source="dataSource"
       :groups="groups"
       :group-by-date="groupByDate"

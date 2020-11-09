@@ -35,6 +35,7 @@ class App extends React.Component {
     return (
       <div id="scheduler">
         <Scheduler
+          timeZone="America/Los_Angeles"
           dataSource={data}
           views={views}
           groups={groups}

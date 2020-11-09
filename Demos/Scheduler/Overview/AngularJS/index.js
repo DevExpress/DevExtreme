@@ -6,6 +6,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     });
 
     $scope.schedulerOptions = {
+        timeZone: "America/Los_Angeles",
         dataSource: dataSource,
         views: ["month"],
         currentView: "month",

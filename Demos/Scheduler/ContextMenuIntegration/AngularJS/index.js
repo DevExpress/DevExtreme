@@ -27,6 +27,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     };
 
     $scope.schedulerOptions = {
+        timeZone: "America/Los_Angeles",
         bindingOptions: {
             groups: "groups",
             crossScrollingEnabled: "crossScrolling",

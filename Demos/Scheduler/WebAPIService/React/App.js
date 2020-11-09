@@ -23,6 +23,7 @@ class App extends React.Component {
   render() {
     return (
       <Scheduler
+        timeZone="America/Los_Angeles"
         dataSource={dataSource}
         views={views}
         defaultCurrentView="day"

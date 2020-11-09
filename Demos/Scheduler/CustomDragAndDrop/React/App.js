@@ -45,6 +45,7 @@ class App extends React.Component {
           </Draggable>
         </ScrollView>
         <Scheduler
+          timeZone="America/Los_Angeles"
           id="scheduler"
           dataSource={appointments}
           views={views}

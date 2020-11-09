@@ -3,6 +3,7 @@ var DemoApp = angular.module('DemoApp', ['dx']);
 DemoApp.controller('DemoController', function DemoController($scope) {
     var url = "https://js.devexpress.com/Demos/Mvc/api/SchedulerData";
     $scope.schedulerOptions = {
+        timeZone: "America/Los_Angeles",
         dataSource: DevExpress.data.AspNet.createStore({
             key: "AppointmentId",
             loadUrl: url + "/Get",

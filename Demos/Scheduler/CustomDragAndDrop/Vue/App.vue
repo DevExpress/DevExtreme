@@ -23,6 +23,7 @@
     </DxScrollView>
 
     <DxScheduler
+      time-zone="America/Los_Angeles"
       id="scheduler"
       :data-source="appointments"
       :current-date="currentDate"
