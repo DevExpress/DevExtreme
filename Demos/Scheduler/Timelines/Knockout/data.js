@@ -69,8 +69,8 @@ var data = [{
 }, {
     text: "Non-Compete Agreements",
     ownerId: [4],
-    startDate: new Date("2021-02-03T15:15:00.000Z"),
-    endDate: new Date("2021-02-03T16:00:00.000Z"),
+    startDate: new Date("2021-02-03T16:15:00.000Z"),
+    endDate: new Date("2021-02-03T17:00:00.000Z"),
     priority: 1
 }, {
     text: "Approve Hiring of John Jeffers",

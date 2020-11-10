@@ -67,6 +67,8 @@ class App extends React.Component {
             height={600}
             startDayHour={9}
             endDayHour={19}
+            remoteFiltering={true}
+            dateSerializationFormat="yyyy-MM-ddTHH:mm:ssZ"
             textExpr= "Text"
             startDateExpr="StartDate"
             descriptionExpr="Description"
@@ -83,6 +85,7 @@ class App extends React.Component {
             height={600}
             startDayHour={9}
             endDayHour={19}
+            remoteFiltering={true}
             dateSerializationFormat="yyyy-MM-ddTHH:mm:ssZ"
             textExpr="Text"
             startDateExpr="StartDate"

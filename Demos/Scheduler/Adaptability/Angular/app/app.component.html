@@ -1,16 +1,19 @@
-<dx-scheduler [dataSource]="appointments"
-              [views]='["week", "month"]'
-              currentView="month"
-              [adaptivityEnabled]="true"
-              [(currentDate)]="currentDate"
-              [cellDuration]="cellDuration"
-              [startDayHour]="9"
-              [height]="590">
+<dx-scheduler
+    [dataSource]="appointments"
+    [views]='["week", "month"]'
+    timeZone="America/Los_Angeles"
+    currentView="month"
+    [adaptivityEnabled]="true"
+    [(currentDate)]="currentDate"
+    [cellDuration]="cellDuration"
+    [startDayHour]="9"
+    [height]="590">
     <dxi-resource fieldExpr="priorityId"
-                  label="Priority"
-                  [dataSource]="priorities"></dxi-resource>
+        label="Priority"
+        [dataSource]="priorities">
+    </dxi-resource>
 </dx-scheduler>
 <dx-speed-dial-action #speedDialAction
-                      icon="plus"
-                      (onClick)="showAppointmentPopup($event)">
+    icon="plus"
+    (onClick)="showAppointmentPopup($event)">
 </dx-speed-dial-action>

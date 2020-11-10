@@ -1,20 +1,22 @@
-<dx-scheduler [dataSource]="dataSource"
-              [views]="['month']"
-              currentView="month"
-              [currentDate]="currentDate"
-              [firstDayOfWeek]="1"
-              [startDayHour]="8"
-              [endDayHour]="18"
-              [showAllDayPanel]="false"
-              [height]="600"
-              [groups]="['employeeID']"
-              resourceCellTemplate="resourceCellTemplate"
-              dataCellTemplate="dataCellTemplate">
+<dx-scheduler
+    timeZone="America/Los_Angeles"
+    [dataSource]="dataSource"
+    [views]="['month']"
+    currentView="month"
+    [currentDate]="currentDate"
+    [firstDayOfWeek]="1"
+    [startDayHour]="8"
+    [endDayHour]="18"
+    [showAllDayPanel]="false"
+    [height]="600"
+    [groups]="['employeeID']"
+    resourceCellTemplate="resourceCellTemplate"
+    dataCellTemplate="dataCellTemplate">
 
     <dxi-resource fieldExpr="employeeID"
-                  [allowMultiple]="false"
-                  [dataSource]="resourcesDataSource"
-                  label="Employee">
+        [allowMultiple]="false"
+        [dataSource]="resourcesDataSource"
+        label="Employee">
     </dxi-resource>
 
     <div *dxTemplate="let employee of 'resourceCellTemplate'">
