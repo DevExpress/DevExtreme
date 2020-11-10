@@ -996,7 +996,49 @@ QUnit.module('Client side edit events', moduleConfig, () => {
         assert.equal(taskToUpdate.start, newStart, 'new task start is updated');
         assert.equal(taskToUpdate.end, newEnd, 'new task end is updated');
     });
+    test('updating with custom field', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
 
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+
+        this.instance.option('onTaskUpdating', (e) => {
+            e.newValues['ItemName'] = 'new item text';
+            e.newValues['CustomText'] = 'new custom text';
+        });
+        this.clock.tick();
+
+        const data = {
+            CustomText: 'new',
+            ItemName: 'new'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick();
+        assert.equal(task.CustomText, 'new custom text', 'task cust field  is updated');
+        assert.equal(task.ItemName, 'new item text', 'task cust field  is updated');
+    });
 
     test('task dialog showing - cancel', function(assert) {
         this.createInstance(allSourcesOptions);
@@ -1262,6 +1304,82 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(taskToUpdate.start, data.start, 'new task start is updated');
         assert.equal(taskToUpdate.end, data.end, 'new task end is updated');
         assert.equal(taskToUpdate.progress, data.progress, 'new task progress is updated');
+    });
+    test('taskUpdate with custom and core fields', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+
+        const data = {
+            ItemName: 'New',
+            CustomText: 'new text'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick();
+
+        assert.equal(task.ItemName, data.ItemName, 'task title is updated');
+        assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
+    });
+    test('taskUpdate with only custom field', function(assert) {
+        this.createInstance(allSourcesOptions);
+        this.instance.option('editing.enabled', true);
+
+        const task = {
+            Id: 1,
+            ParentId: 0,
+            ItemName: 'custom text',
+            CustomText: 'test',
+            SprintStartDate: new Date('2019-02-11T05:00:00.000Z'),
+            SprintEndDate: new Date('2019-02-14T05:00:00.000Z'),
+            TaskColor: 'red',
+            TaskProgress: 31
+        };
+        const tasksMap = {
+            dataSource: [ task ],
+            keyExpr: 'Id',
+            parentIdExpr: 'ParentId',
+            titleExpr: 'ItemName',
+            startExpr: 'SprintStartDate',
+            colorExpr: 'TaskColor',
+            endExpr: 'SprintEndDate',
+            progressExpr: 'TaskProgress'
+        };
+        this.instance.option('tasks', tasksMap);
+        this.instance.option('columns', [{ dataField: 'CustomText', caption: 'Task' }]);
+        this.clock.tick();
+
+        const data = {
+            CustomText: 'new text'
+        };
+
+        this.instance.updateTask(task.Id, data);
+        this.clock.tick(300);
+
+        assert.equal(task.CustomText, data.CustomText, 'task cust field  is updated');
     });
     test('insertDependency', function(assert) {
         this.createInstance(allSourcesOptions);
