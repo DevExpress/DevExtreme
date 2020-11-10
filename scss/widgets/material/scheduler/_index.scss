@@ -728,10 +728,8 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
-.dx-scheduler-fixed-appointments {
-  .dx-draggable-dragging {
-    box-shadow: none;
-  }
+.dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-appointment {
+  box-shadow: none;
 }
 
 .dx-scheduler-dropdown-appointment-date {
