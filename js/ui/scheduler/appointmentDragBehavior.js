@@ -55,6 +55,7 @@ export default class AppointmentDragBehavior {
         container.append($appointment);
 
         this.currentAppointment = $appointment;
+        this.appointmentInfo = null;
 
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
             event: e,

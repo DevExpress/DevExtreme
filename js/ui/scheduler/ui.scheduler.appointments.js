@@ -21,6 +21,7 @@ import messageLocalization from '../../localization/message';
 import CollectionWidget from '../collection/ui.collection_widget.edit';
 import { Deferred } from '../../core/utils/deferred';
 import timeZoneUtils from './utils.timeZone.js';
+import { APPOINTMENT_DRAG_SOURCE_CLASS } from './constants';
 
 const APPOINTMENT_SETTINGS_NAME = 'dxAppointmentSettings';
 
@@ -933,7 +934,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     moveAppointmentBack: function(dragEvent) {
         const $appointment = this._$currentAppointment;
-        $appointment?.removeClass('dx-scheduler-appointment-drag-source');
+        this._removeDragSourceClassFromDraggedAppointment();
         const size = this._initialSize;
         const coords = this._initialCoordinates;
 
@@ -1029,6 +1030,16 @@ const SchedulerAppointments = CollectionWidget.inherit({
             currentDate.setHours(endDayHour, 0, 0, 0);
         } else {
             currentDate.setHours(originalDate.getHours(), originalDate.getMinutes(), originalDate.getSeconds(), originalDate.getMilliseconds());
+        }
+    },
+
+    _removeDragSourceClassFromDraggedAppointment: function() {
+        const $element = this.$element();
+        const $dragSource = $element.find(`.${APPOINTMENT_DRAG_SOURCE_CLASS}`).eq(0);
+
+        if($dragSource.length > 0) {
+            const appointment = $dragSource.dxSchedulerAppointment('instance');
+            appointment.option('isDragSource', false);
         }
     }
 
