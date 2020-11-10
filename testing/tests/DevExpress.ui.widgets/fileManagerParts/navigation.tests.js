@@ -920,4 +920,20 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(this.fileManager.getCurrentDirectory().path, '', 'Current directory is root');
         assert.strictEqual(this.fileManager.option('currentPath'), '', 'Current path is correct');
     });
+
+    test('Repaint at non-root level without jQuery does not lead to js errors (T931481)', function(assert) {
+        const folderName = 'Folder 1';
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Files', 'root folder is focused after init');
+
+        this.fileManager.option('currentPath', folderName);
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), folderName, 'current folder is focused');
+
+        this.fileManager.repaint();
+        this.clock.tick(800);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), folderName, 'current folder is still focused');
+    });
 });
