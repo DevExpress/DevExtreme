@@ -527,6 +527,18 @@ $scheduler-appointment-form-label-padding: 20px;
 
       .dx-scheduler-appointment {
         box-shadow: $scheduler-appointment-dragging-shadow, $scheduler-vertical-appointment-resizing-shadow;
+
+        &::before {
+          pointer-events: none;
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: $scheduler-appointment-start-color;
+          opacity: 0.98;
+        }
       }
     }
   }
