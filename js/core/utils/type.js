@@ -86,7 +86,7 @@ const isDeferred = function(object) {
 };
 
 const isEvent = function(object) {
-    return !!(object?.preventDefault);
+    return !!(object && object.preventDefault);
 };
 
 export {
