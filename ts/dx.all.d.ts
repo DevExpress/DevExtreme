@@ -2993,6 +2993,39 @@ declare module DevExpress.fx {
 }
 declare module DevExpress.pdfExporter {
     /**
+     * [descr:PdfDataGridCell]
+     */
+    export interface PdfDataGridCell {
+        /**
+         * [descr:PdfDataGridCell.column]
+         */
+        column?: DevExpress.ui.dxDataGridColumn;
+        /**
+         * [descr:PdfDataGridCell.data]
+         */
+        data?: any;
+        /**
+         * [descr:PdfDataGridCell.groupIndex]
+         */
+        groupIndex?: number;
+        /**
+         * [descr:PdfDataGridCell.groupSummaryItems]
+         */
+        groupSummaryItems?: Array<{ name?: string, value?: any }>;
+        /**
+         * [descr:PdfDataGridCell.rowType]
+         */
+        rowType?: string;
+        /**
+         * [descr:PdfDataGridCell.totalSummaryItemName]
+         */
+        totalSummaryItemName?: string;
+        /**
+         * [descr:PdfDataGridCell.value]
+         */
+        value?: any;
+    }
+    /**
      * [descr:PdfExportDataGridProps]
      */
     export interface PdfExportDataGridProps {
@@ -3004,6 +3037,10 @@ declare module DevExpress.pdfExporter {
          * [descr:PdfExportDataGridProps.component]
          */
         component?: DevExpress.ui.dxDataGrid;
+        /**
+         * [descr:PdfExportDataGridProps.customizeCell]
+         */
+        customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any }) => any);
         /**
          * [descr:PdfExportDataGridProps.jsPDFDocument]
          */
