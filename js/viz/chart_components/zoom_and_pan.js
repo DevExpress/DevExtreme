@@ -110,20 +110,20 @@ export default {
                     const translate = -offsetCalc(e, actionData, coordField, scale);
                     zoom = extend(true, zoom, axis.getTranslator().zoom(translate, scale, axis.getZoomBounds()));
                     const range = axis.adjustRange(getVizRangeObject([zoom.min, zoom.max]));
-                    const isMinZoom = axis.isZoomingLowerLimitOvercome(actionField, scale, range);
+                    const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome(actionField, scale, range);
 
                     if(!isDefined(viewport) ||
-                        viewport.startValue.valueOf() !== range.startValue.valueOf() ||
-                        viewport.endValue.valueOf() !== range.endValue.valueOf()) {
-                        axis.handleZooming(isMinZoom ? null : range, { start: true, end: true }, e, actionField);
-                        if(!isMinZoom) {
+                        viewport.startValue.valueOf() !== correctedRange.startValue.valueOf() ||
+                        viewport.endValue.valueOf() !== correctedRange.endValue.valueOf()) {
+                        axis.handleZooming(stopInteraction ? null : correctedRange, { start: true, end: true }, e, actionField);
+                        if(!stopInteraction) {
                             zoom.zoomed = true;
                             zoom.deltaTranslate = translate - zoom.translate;
                         }
                     } else if(e.pointerType === 'touch' && options.type === 'discrete') {
                         const isMinPosition = axis.isExtremePosition(false);
                         const isMaxPosition = axis.isExtremePosition(true);
-                        const zoomInEnabled = scale > 1 && !isMinZoom;
+                        const zoomInEnabled = scale > 1 && !stopInteraction;
                         const zoomOutEnabled = scale < 1 && (!isMinPosition || !isMaxPosition);
                         const panningEnabled = scale === 1 && !(isMinPosition && (translate < 0 && !options.inverted || translate > 0 && options.inverted) ||
                             isMaxPosition && (translate > 0 && !options.inverted || translate < 0 && options.inverted));
@@ -177,10 +177,10 @@ export default {
                     const scale = e.scale || 1;
                     const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
                     const range = { startValue: zoom.min, endValue: zoom.max };
-                    const isMinZoom = axis.isZoomingLowerLimitOvercome(actionField, scale, range);
+                    const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome(actionField, scale, range);
 
-                    axis.handleZooming(isMinZoom ? null : range, { start: true, end: silent }, e, actionField);
-                    isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
+                    axis.handleZooming(stopInteraction ? null : correctedRange, { start: true, end: silent }, e, actionField);
+                    stopInteraction ? axis.handleZoomEnd() : (zoomStarted = true);
                 });
                 return zoomStarted;
             }
@@ -389,10 +389,10 @@ export default {
                                 }
                                 const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
                                 const range = [tr.from(startCoord), tr.from(curCoord)];
-                                const isMinZoom = axis.isZoomingLowerLimitOvercome(actionData.action, tr.getMinScale(true), range);
+                                const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome(actionData.action, tr.getMinScale(true), range);
 
-                                const result = axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, actionData.action);
-                                isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
+                                const result = axis.handleZooming(stopInteraction ? null : correctedRange, { start: !!silent, end: !!silent }, e, actionData.action);
+                                stopInteraction ? axis.handleZoomEnd() : (zoomStarted = true);
                                 return onlyAxisToNotify && result.isPrevented;
                             });
                         }
@@ -473,10 +473,10 @@ export default {
                                 const scale = translator.getMinScale(delta > 0);
                                 const zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds());
                                 const range = { startValue: zoom.min, endValue: zoom.max };
-                                const isMinZoom = axis.isZoomingLowerLimitOvercome('zoom', scale, range);
+                                const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome('zoom', scale, range);
 
-                                const result = axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, 'zoom');
-                                isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
+                                const result = axis.handleZooming(stopInteraction ? null : correctedRange, { start: !!silent, end: !!silent }, e, 'zoom');
+                                stopInteraction ? axis.handleZoomEnd() : (zoomStarted = true);
                                 return onlyAxisToNotify && result.isPrevented;
                             });
 

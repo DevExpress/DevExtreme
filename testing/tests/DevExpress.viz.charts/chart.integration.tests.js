@@ -1118,6 +1118,116 @@ QUnit.test('Move visual frame by visualRangeLength', function(assert) {
     });
 });
 
+QUnit.test('Reject the visualRange less then minVisualRangeLength, categories', function(assert) {
+    this.$container.css({ width: '500px', height: '500px' });
+    const dataSource = [{
+        arg: 'a1',
+        val: 4
+    }, {
+        arg: 'a2',
+        val: 5
+    }, {
+        arg: 'a3',
+        val: 7
+    }, {
+        arg: 'a4',
+        val: 3
+    }, {
+        arg: 'a5',
+        val: 8
+    }];
+    const visualRangeChanged = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+
+    const chart = this.createChart({
+        dataSource: dataSource,
+        series: { type: 'line', point: { visible: false } },
+        onOptionChanged: visualRangeChanged,
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd,
+        argumentAxis: { minVisualRangeLength: 3 }
+    });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const visualRange = argumentAxis.visualRange();
+
+    visualRangeChanged.reset();
+    argumentAxis.visualRange({ startValue: 'a4' });
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, visualRange);
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), visualRange);
+    assert.notOk(chart.option().valueAxis._customVisualRange);
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, visualRange);
+
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, visualRange);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, {
+        categories: [
+            'a4',
+            'a5'
+        ],
+        endValue: 'a5',
+        startValue: 'a4'
+    });
+    assert.ok(onZoomEnd.getCall(0).args[0].cancel);
+});
+
+QUnit.test('Reject the visualRange less then minVisualRangeLength, numeric, startValue = endValue', function(assert) {
+    this.$container.css({ width: '500px', height: '500px' });
+    const dataSource = [{
+        arg: 1,
+        val: 4
+    }, {
+        arg: 2,
+        val: 5
+    }, {
+        arg: 3,
+        val: 7
+    }, {
+        arg: 4,
+        val: 3
+    }, {
+        arg: 5,
+        val: 8
+    }];
+    const visualRangeChanged = sinon.spy();
+    const onZoomStart = sinon.spy();
+    const onZoomEnd = sinon.spy();
+
+    const chart = this.createChart({
+        dataSource: dataSource,
+        series: { type: 'line', point: { visible: false } },
+        onOptionChanged: visualRangeChanged,
+        onZoomStart: onZoomStart,
+        onZoomEnd: onZoomEnd,
+        argumentAxis: { minVisualRangeLength: 3 }
+    });
+
+    const argumentAxis = chart.getArgumentAxis();
+    const visualRange = argumentAxis.visualRange();
+
+    visualRangeChanged.reset();
+    argumentAxis.visualRange({ startValue: 3, endValue: 3 });
+
+    assert.deepEqual(visualRangeChanged.firstCall.args[0].value, visualRange);
+    assert.deepEqual(chart.option('argumentAxis.visualRange'), visualRange);
+    assert.notOk(chart.option().valueAxis._customVisualRange);
+
+    assert.equal(onZoomStart.callCount, 1);
+    assert.deepEqual(onZoomStart.getCall(0).args[0].range, visualRange);
+
+    assert.equal(onZoomEnd.callCount, 1);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, visualRange);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, {
+        endValue: 3,
+        startValue: 3
+    });
+    assert.ok(onZoomEnd.getCall(0).args[0].cancel);
+});
+
 QUnit.test('Reset axis viewport', function(assert) {
     this.$container.css({ width: '1000px', height: '600px' });
 
