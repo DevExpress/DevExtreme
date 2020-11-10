@@ -8,10 +8,14 @@ export const getElementMaxHeightByWindow = ($element, startLocation) => {
     const window = getWindow();
 
     let actualOffset;
+    const offsetTop = $element.offset().top - $(window).scrollTop();
     if(isNumeric(startLocation)) {
-        actualOffset = $(window).innerHeight() - startLocation + $(window).scrollTop();
+        if(startLocation < offsetTop) {
+            return offsetTop - startLocation;
+        } else {
+            actualOffset = $(window).innerHeight() - startLocation + $(window).scrollTop();
+        }
     } else {
-        const offsetTop = $element.offset().top - $(window).scrollTop();
         const offsetBottom = $(window).innerHeight() - offsetTop - $element.outerHeight();
         actualOffset = Math.max(offsetTop, offsetBottom);
     }

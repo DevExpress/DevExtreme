@@ -469,7 +469,6 @@ QUnit.module('popup options', moduleConfig, () => {
     });
 
     QUnit.test('maxHeight should be 90% to bottom bound if popup has been rendered at the top already (T874949)', function(assert) {
-
         let startPopupHeight;
         this.$element.dxDropDownBox({
             width: 300,
@@ -493,12 +492,11 @@ QUnit.module('popup options', moduleConfig, () => {
 
         try {
             instance.open();
-
             this.clock.tick();
-            const popup = $('.dx-popup').dxPopup('instance');
-            const maxHeight = popup.option('maxHeight');
 
-            assert.roughEqual(Math.floor(maxHeight()), (1 + startPopupHeight + elementHeight) * 0.9, 3, 'maxHeight is correct');
+            const popup = this.$element.find('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+            assert.roughEqual(Math.floor(maxHeight()), startPopupHeight, 3, 'maxHeight is correct');
         } finally {
             scrollTop.restore();
             this.$element.css('margin-top', 0);
@@ -507,7 +505,6 @@ QUnit.module('popup options', moduleConfig, () => {
 
     QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949)', function(assert) {
         const contentHeight = 90;
-
         const windowHeight = $(window).height();
         const marginTop = Math.max(windowHeight - 50, 200);
         this.$element.dxDropDownBox({
@@ -530,17 +527,19 @@ QUnit.module('popup options', moduleConfig, () => {
 
         try {
             instance.open();
-
             this.clock.tick();
-            const popup = $('.dx-popup').dxPopup('instance');
-            const maxHeight = popup.option('maxHeight');
-
             instance.close();
             instance.open();
             this.clock.tick();
-            const overlayContentHeight = $(popup.content()).outerHeight();
-            assert.roughEqual(Math.floor(maxHeight()), (windowHeight - (marginTop - overlayContentHeight)) * 0.9, 3, 'maxHeight is correct');
 
+            const popup = this.$element.find('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+            const $popupContent = $(popup.content());
+            const overlayContentHeight = $popupContent.outerHeight();
+            const overlayOffset = $popupContent.offset().top;
+            const elementOffset = this.$element.offset().top;
+            assert.ok(overlayContentHeight >= contentHeight, 'height is recalculated');
+            assert.roughEqual(Math.floor(maxHeight()), elementOffset - overlayOffset, 3, 'maxHeight is correct');
         } finally {
             this.$element.css('margin-top', 0);
             $('#container').css('min-height', 0);
