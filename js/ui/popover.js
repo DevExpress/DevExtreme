@@ -470,20 +470,10 @@ const Popover = Popup.inherit({
         }
     },
 
-    _renderWrapperPosition: function() {
-        if(this.option('shading')) {
-            this._$wrapper.css({ top: 0, left: 0 });
-        }
+    _getContainer: function() {
+        return $(window);
     },
 
-    _renderWrapperDimensions: function() {
-        if(this.option('shading')) {
-            this._$wrapper.css({
-                width: '100%',
-                height: '100%'
-            });
-        }
-    },
 
     _normalizePosition: function() {
         const position = extend({}, this._transformStringPosition(this.option('position'), POSITION_ALIASES));
