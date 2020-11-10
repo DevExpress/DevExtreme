@@ -3245,8 +3245,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     event.data = event.data || {};
                     if(!canceled) {
                         if(!settings.isCompact) {
-                            const appointment = e.itemElement.dxSchedulerAppointment('instance');
-                            appointment.option('isDragSource', true);
+                            appointments._setDragSourceAppointment(itemData, settings);
                         }
 
                         dragElement = this._createDragAppointment(itemData, settings, appointments);
