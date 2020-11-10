@@ -81,5 +81,5 @@ script:
     -e MOBILE_UA=$MOBILE_UA
     -e QUARANTINE_MODE=$QUARANTINE_MODE
     -v $TRAVIS_BUILD_DIR:/devextreme
-    docker.io/devexpress/devextreme-build:20_2
+    docker.io/devexpress/devextreme-build:21_1
     ./docker-ci.sh
