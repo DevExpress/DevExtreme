@@ -82,7 +82,8 @@ const Appointment = DOMComponent.inherit({
             handles: this.option('reduced') ? reducedHandles[this.option('reduced')] : DEFAULT_HORIZONTAL_HANDLES,
             minHeight: 0,
             minWidth: this.invoke('getCellWidth'),
-            step: this.invoke('getResizableStep')
+            step: this.invoke('getResizableStep'),
+            roundStepValue: false
         };
     },
 
@@ -92,7 +93,8 @@ const Appointment = DOMComponent.inherit({
             handles: DEFAULT_VERTICAL_HANDLES,
             minWidth: 0,
             minHeight: height,
-            step: height
+            step: height,
+            roundStepValue: true,
         };
     },
 
@@ -202,7 +204,6 @@ const Appointment = DOMComponent.inherit({
 
     _createResizingConfig: function() {
         const config = this.option('direction') === 'vertical' ? this._getVerticalResizingRule() : this._getHorizontalResizingRule();
-        config.roundStepValue = true;
 
         if(!this.invoke('isGroupedByDate')) {
             config.stepPrecision = 'strict';
