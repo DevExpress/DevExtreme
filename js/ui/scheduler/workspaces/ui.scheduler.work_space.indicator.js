@@ -61,9 +61,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                 const height = this.getIndicationHeight();
                 const rtlOffset = this._getRtlOffset(this.getCellWidth());
 
-                if(height > 0) {
-                    this._renderIndicator(height, rtlOffset, $container, groupCount);
-                }
+                this._renderIndicator(height, rtlOffset, $container, groupCount);
             }
         }
     }
