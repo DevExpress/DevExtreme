@@ -16,6 +16,7 @@ import { isMaterial, current as currentTheme } from '../themes';
 import TrackBar from '../track_bar';
 import { render } from '../widget/utils.ink_ripple';
 import SliderHandle from './ui.slider_handle';
+import { roundFloatPart, getExponentLength, getRemainderByDivision } from '../../core/utils/math';
 
 // STYLE slider
 
@@ -38,19 +39,20 @@ const Slider = TrackBar.inherit({
     _supportedKeys: function() {
         const isRTL = this.option('rtlEnabled');
 
-        const that = this;
         const roundedValue = (offset, isLeftDirection) => {
-            offset = that._valueStep(offset);
-            const step = that.option('step');
-            const value = that.option('value');
+            offset = this._valueStep(offset);
+            const step = this.option('step');
+            const value = this.option('value');
 
-            const division = (value - that.option('min')) % step;
+            const currentPosition = value - this.option('min');
+            const remainder = getRemainderByDivision(currentPosition, step, this._getValueExponentLength());
+
             let result = isLeftDirection
-                ? value - offset + (division ? step - division : 0)
-                : value + offset - division;
+                ? value - offset + (remainder ? step - remainder : 0)
+                : value + offset - remainder;
 
-            const min = that.option('min');
-            const max = that.option('max');
+            const min = this.option('min');
+            const max = this.option('max');
 
             if(result < min) {
                 result = min;
@@ -58,14 +60,14 @@ const Slider = TrackBar.inherit({
                 result = max;
             }
 
-            return result;
+            return this._roundToExponentLength(result);
         };
 
-        const moveHandleRight = offset => {
-            that.option('value', roundedValue(offset, isRTL));
+        const moveHandleRight = (offset) => {
+            this.option('value', roundedValue(offset, isRTL));
         };
-        const moveHandleLeft = offset => {
-            that.option('value', roundedValue(offset, !isRTL));
+        const moveHandleLeft = (offset) => {
+            this.option('value', roundedValue(offset, !isRTL));
         };
 
         return extend(this.callBase(), {
@@ -526,13 +528,27 @@ const Slider = TrackBar.inherit({
             step = 1;
         }
 
-        step = parseFloat(step.toFixed(5));
         // TODO or exception?
         if(step === 0) {
             step = 0.00001;
         }
 
         return step;
+    },
+
+    _getValueExponentLength: function() {
+        const { step, min } = this.option();
+
+        return Math.max(
+            getExponentLength(step),
+            getExponentLength(min)
+        );
+    },
+
+    _roundToExponentLength: function(value) {
+        const valueExponentLength = this._getValueExponentLength();
+
+        return roundFloatPart(value, valueExponentLength);
     },
 
     _changeValueOnSwipe: function(ratio) {
@@ -549,15 +565,8 @@ const Slider = TrackBar.inherit({
         if(newValue === max || newValue === min) {
             this._setValueOnSwipe(newValue);
         } else {
-            const stepExponent = (step + '').split('.')[1];
-            const minExponent = (min + '').split('.')[1];
-            const exponentLength = Math.max(
-                stepExponent && stepExponent.length || 0,
-                minExponent && minExponent.length || 0
-            );
             const stepCount = Math.round((newValue - min) / step);
-
-            newValue = Number((stepCount * step + min).toFixed(exponentLength));
+            newValue = this._roundToExponentLength(stepCount * step + min);
             this._setValueOnSwipe(Math.max(Math.min(newValue, max), min));
         }
     },
