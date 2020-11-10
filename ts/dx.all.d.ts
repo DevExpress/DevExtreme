@@ -8814,6 +8814,10 @@ declare module DevExpress.ui {
      */
     export interface dxMapOptions extends WidgetOptions<dxMap> {
         /**
+         * [descr:dxMap.Options.apiKey]
+         */
+        apiKey?: string | { bing?: string, google?: string, googleStatic?: string };
+        /**
          * [descr:dxMap.Options.autoAdjust]
          */
         autoAdjust?: boolean;
@@ -8835,6 +8839,7 @@ declare module DevExpress.ui {
         height?: number | string | (() => number | string);
         /**
          * [descr:dxMap.Options.key]
+         * @deprecated [depNote:dxMap.Options.key]
          */
         key?: string | { bing?: string, google?: string, googleStatic?: string };
         /**
