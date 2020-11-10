@@ -81,7 +81,6 @@ $list-group-header-border-bottom: null !default;
 $list-group-header-default-padding-top: null !default;
 $list-group-header-compact-padding-top: null !default;
 $list-item-chevron-icon-color: $base-icon-color !default;
-$list-item-icon-toggle-delete-bg: null !default;
 
 @if $color == "carmine" {
   $list-group-color: $base-header-color !default;
@@ -103,7 +102,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png') !default;
 }
 
 @if $color == "contrast" {
@@ -126,7 +124,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-group-header-border-bottom: 1px solid $list-border-color !default;
   $list-group-header-default-padding-top: 10px !default;
   $list-group-header-compact-padding-top: 5px !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/contrast/list/delete.png') !default;
 }
 
 @if $color == "dark" {
@@ -149,7 +146,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/dark/list/delete.png') !default;
 }
 
 @if $color == "darkmoon" {
@@ -172,7 +168,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/dark/list/delete.png') !default;
 }
 
 @if $color == "darkviolet" {
@@ -195,7 +190,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/dark/list/delete.png') !default;
 }
 
 @if $color == "greenmist" {
@@ -218,7 +212,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png') !default;
 }
 
 @if $color == "light" {
@@ -241,7 +234,6 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png') !default;
 }
 
 @if $color == "softblue" {
@@ -264,6 +256,5 @@ $list-item-icon-toggle-delete-bg: null !default;
   $list-group-header-border-bottom: 2px solid $list-border-color !default;
   $list-group-header-default-padding-top: 20px !default;
   $list-group-header-compact-padding-top: 10px !default;
-  $list-item-icon-toggle-delete-bg: data-uri('images/widgets/generic/color-schemes/light/list/delete.png') !default;
 }
 
