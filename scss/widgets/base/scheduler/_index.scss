@@ -1950,11 +1950,10 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  .dx-scheduler-timeline .dx-draggable-dragging,
-  .dx-scheduler-work-space-month .dx-draggable-dragging {
-    &.dx-draggable-dragging {
-      box-shadow: $scheduler-horizontal-appointment-resizing-shadow, $scheduler-appointment-dragging-shadow;
-    }
+  .dx-scheduler-timeline .dx-draggable-dragging .dx-scheduler-appointment,
+  .dx-scheduler-work-space-month .dx-draggable-dragging .dx-scheduler-appointment,
+  .dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-all-day-appointment {
+    box-shadow: $scheduler-horizontal-appointment-resizing-shadow, $scheduler-appointment-dragging-shadow;
   }
 
   .dx-scheduler-appointment { // stylelint-disable-line no-duplicate-selectors
