@@ -156,14 +156,9 @@ gulp.task('npm-sass', gulp
             .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss`))),
 
         () => gulp
-            .src('fonts/**/*', { base: '.' })
-            .pipe(gulp.dest(`${resultPath}/devextreme/scss/widgets/material/typography`))
-            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/material/typography`))),
-
-        () => gulp
-            .src('icons/**/*', { base: '.' })
-            .pipe(gulp.dest(`${resultPath}/devextreme/scss/widgets/base`))
-            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/widgets/base`))),
+            .src(['fonts/**/*', 'icons/**/*'], { base: '.' })
+            .pipe(gulp.dest(`${resultPath}/devextreme/scss/bundles`))
+            .pipe(gulpIf(renovation, gulp.dest(`${resultPath}/devextreme-renovation/scss/bundles`))),
     ));
 
 gulp.task('npm', gulp.series('npm-sources', 'ts-modules-check', 'npm-sass'));
