@@ -7,7 +7,7 @@ import VerticalAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.s
 import HorizontalMonthAppointmentsStrategy from 'ui/scheduler/rendering_strategies/ui.scheduler.appointments.strategy.horizontal_month';
 import SchedulerAppointments from 'ui/scheduler/ui.scheduler.appointments';
 import eventsEngine from 'events/core/events_engine';
-// import dblclickEvent from 'events/dblclick';
+import dblclickEvent from 'events/dblclick';
 import translator from 'animation/translator';
 import dataCoreUtils from 'core/utils/data';
 import commonUtils from 'core/utils/common';
