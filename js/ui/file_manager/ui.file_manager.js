@@ -718,7 +718,7 @@ class FileManager extends Widget {
         const currentPath = this._controller.getCurrentPath();
         const currentPathKeys = currentDirectory.fileItem.pathKeys;
 
-        if(this._filesTreeView) {
+        if(this._filesTreeView && !this._filesTreeView._disposed) {
             this._filesTreeView.updateCurrentDirectory();
         }
 
