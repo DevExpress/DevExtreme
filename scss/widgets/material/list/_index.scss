@@ -9,6 +9,7 @@
 @use "../button/mixins" as *;
 @use "../checkBox/colors" as *;
 @use "../../base/list";
+@use "../../base/list/mixins" as *;
 
 // adduse
 @use "../badge";
@@ -110,10 +111,6 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
 @mixin dx-list-sizing($item-horizontal-padding) {
   .dx-list {
     border: none;
-
-    .dx-list-item .dx-icon {
-      color: $list-icon-color;
-    }
 
     &.dx-list-with-search .dx-scrollable-wrapper {
       height: calc(100% - #{$material-list-item-height});
@@ -229,6 +226,8 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
   }
 
   .dx-list-item {
+    @include toggle-delete-icon($list-icon-color);
+
     &.dx-state-hover,
     &.dx-state-active {
       background-color: $list-item-hover-bg;
@@ -249,8 +248,11 @@ $material-list-item-border: $material-list-item-border-width solid $list-border-
       margin-bottom: $material-list-vertical-padding;
     }
 
+    .dx-icon {
+      color: $list-icon-color;
+    }
+
     .dx-icon-toggle-delete {
-      background-image: $list-item-icon-toggle-delete-bg;
       background-size: 100%;
     }
 
