@@ -128,3 +128,10 @@ QUnit.test('isPromise', function(assert) {
     assert.strictEqual(typeUtils.isPromise({ then: function() {} }), true, 'thenable is Promise');
     assert.strictEqual(typeUtils.isPromise({ then: 1 }), false, 'object with property \'then\' isn\'t Promise');
 });
+
+QUnit.test('isEvent', function(assert) {
+    assert.strictEqual(typeUtils.isEvent($('body')), false, 'body is not event');
+    assert.strictEqual(typeUtils.isEvent(window), false, 'window is not event');
+    assert.strictEqual(typeUtils.isEvent(undefined), false, 'undefined is not event');
+    assert.strictEqual(typeUtils.isEvent($.Event('dxpointerdown')), true, 'dxpointerdown event is event');
+});
