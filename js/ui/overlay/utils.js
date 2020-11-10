@@ -6,16 +6,17 @@ const WINDOW_HEIGHT_PERCENT = 0.9;
 
 export const getElementMaxHeightByWindow = ($element, startLocation) => {
     const window = getWindow();
-
+    const elementOffset = $element.offset().top;
     let actualOffset;
-    const offsetTop = $element.offset().top - $(window).scrollTop();
+
     if(isNumeric(startLocation)) {
-        if(startLocation < offsetTop) {
-            return offsetTop - startLocation;
+        if(startLocation < elementOffset) {
+            return elementOffset - startLocation;
         } else {
             actualOffset = $(window).innerHeight() - startLocation + $(window).scrollTop();
         }
     } else {
+        const offsetTop = elementOffset - $(window).scrollTop();
         const offsetBottom = $(window).innerHeight() - offsetTop - $element.outerHeight();
         actualOffset = Math.max(offsetTop, offsetBottom);
     }

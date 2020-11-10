@@ -468,7 +468,7 @@ QUnit.module('popup options', moduleConfig, () => {
         }
     });
 
-    QUnit.test('maxHeight should be 90% to bottom bound if popup has been rendered at the top already (T874949)', function(assert) {
+    QUnit.test('maxHeight should be distance between the popup top bound and the element top bound if the popup has been rendered at the top already (T874949, T942217)', function(assert) {
         let startPopupHeight;
         this.$element.dxDropDownBox({
             width: 300,
@@ -503,7 +503,43 @@ QUnit.module('popup options', moduleConfig, () => {
         }
     });
 
-    QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949)', function(assert) {
+    QUnit.test('maxHeight should be distance between the popup top bound and the element top bound if the popup has been rendered at the top already and the window was scrolled (T874949, T942217)', function(assert) {
+        const scrollTopValue = 50;
+        let startPopupHeight;
+        this.$element.dxDropDownBox({
+            width: 300,
+            contentTemplate: (e) => {
+                const content = $('<div id=\'dd-content\'></div>');
+
+                setTimeout(() => {
+                    startPopupHeight = $(e.component.content()).parent('.dx-overlay-content').height();
+                    $('#dd-content').height(300);
+                });
+
+                return content;
+            }
+        });
+
+        const elementHeight = this.$element.height();
+        const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(scrollTopValue);
+        const windowHeight = $(window).height();
+        this.$element.css('margin-top', windowHeight - elementHeight - 1 - scrollTopValue);
+        const instance = this.$element.dxDropDownBox('instance');
+
+        try {
+            instance.open();
+            this.clock.tick();
+
+            const popup = this.$element.find('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+            assert.roughEqual(Math.floor(maxHeight()), startPopupHeight + scrollTopValue, 3, 'maxHeight is correct');
+        } finally {
+            scrollTop.restore();
+            this.$element.css('margin-top', 0);
+        }
+    });
+
+    QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949, T942217)', function(assert) {
         const contentHeight = 90;
         const windowHeight = $(window).height();
         const marginTop = Math.max(windowHeight - 50, 200);
