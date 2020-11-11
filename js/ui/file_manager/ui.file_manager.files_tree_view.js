@@ -220,6 +220,9 @@ class FileManagerFilesTreeView extends Widget {
     }
 
     updateCurrentDirectory() {
+        if(this._disposed) {
+            return;
+        }
         this._updateFocusedElement();
         this._storeExpandedState && this._updateExpandedStateToCurrentDirectory();
     }
