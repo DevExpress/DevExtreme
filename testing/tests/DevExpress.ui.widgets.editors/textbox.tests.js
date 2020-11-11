@@ -95,6 +95,26 @@ QUnit.module('common', {}, () => {
         }
     });
 
+    QUnit.test('"maxLength" option on IE should works correctly with the hotkeys (T944726, T944493)', function(assert) {
+        const originalIE = browser.msie;
+
+        try {
+            browser.msie = true;
+            const $element = $('#textbox').dxTextBox({ maxLength: 1, value: 'b' });
+            const $input = $element.find(`.${INPUT_CLASS}`);
+            let event = $.Event('keydown', { key: 'a', ctrlKey: true });
+
+            $input.trigger(event);
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+
+            event = $.Event('keydown', { key: 'z', ctrlKey: true });
+            $input.trigger(event);
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
+        } finally {
+            browser.msie = originalIE;
+        }
+    });
+
     QUnit.test('call focus() method', function(assert) {
         executeAsyncMock.setup();
         try {
