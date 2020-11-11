@@ -47,7 +47,7 @@ QUnit.test('show warning when using outdated "key" option', function(assert) {
             key: 'testKey'
         });
 
-        assert.equal(errors.log.callCount, 1, 'the log method is called once');
+        assert.ok(errors.log.calledOnce, 'the log method is called once');
         assert.deepEqual(errors.log.getCall(0).args, [
             'W0001',
             'dxMap',
