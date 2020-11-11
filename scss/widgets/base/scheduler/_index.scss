@@ -518,6 +518,12 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-fixed-appointments {
     z-index: 100;
     position: absolute;
+
+    .dx-draggable-dragging {
+      z-index: 1000;
+      opacity: 0.7;
+      position: 'fixed';
+    }
   }
 
   .dx-scheduler-header {
