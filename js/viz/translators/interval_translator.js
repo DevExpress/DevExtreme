@@ -52,11 +52,11 @@ export default {
         return this._businessRange.dataType === 'datetime' ? new Date(value) : Number(value);
     },
 
-    _fromValue: function(value) {
+    fromValue: function(value) {
         return this._parse(value);
     },
 
-    _toValue: function(value) {
+    toValue: function(value) {
         return this._parse(value);
     },
 

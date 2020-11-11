@@ -100,7 +100,7 @@ function calculateSumErrorBars(result, data, series) {
 }
 
 function getMinMaxAggregator(compare) {
-    return ({ intervalStart, data }, series) => {
+    return ({ intervalStart, intervalEnd, data }, series) => {
         const valueField = series.getValueFields()[0];
         let targetData = data[0];
 
@@ -116,7 +116,7 @@ function getMinMaxAggregator(compare) {
         }, targetData);
 
         return _extend({}, targetData, {
-            [series.getArgumentField()]: intervalStart
+            [series.getArgumentField()]: series._getIntervalCenter(intervalStart, intervalEnd)
         });
     };
 }
@@ -313,6 +313,19 @@ const baseScatterMethods = {
         return checkFields(data, fieldsToCheck, skippedFields || {}) && data.value === data.value;
     },
 
+    getArgumentRangeInitialValue() {
+        const points = this.getPoints();
+
+        if(this.useAggregation() && points.length) {
+            return {
+                min: points[0].aggregationInfo.intervalStart,
+                max: points[points.length - 1].aggregationInfo.intervalEnd
+            };
+        }
+
+        return undefined;
+    },
+
     getValueRangeInitialValue: function() {
         return undefined;
     },
@@ -384,10 +397,18 @@ const baseScatterMethods = {
         });
     },
 
+    _getIntervalCenter(intervalStart, intervalEnd) {
+        const argAxis = this.getArgumentAxis();
+
+        return argAxis.getOptions().type !== 'discrete'
+            ? argAxis.getVisualRangeCenter({ minVisible: intervalStart, maxVisible: intervalEnd }, true)
+            : intervalStart;
+    },
+
     _defaultAggregator: 'avg',
 
     _aggregators: {
-        avg({ data, intervalStart }, series) {
+        avg({ data, intervalStart, intervalEnd }, series) {
             if(!data.length) {
                 return;
             }
@@ -406,11 +427,11 @@ const baseScatterMethods = {
 
             return calculateAvgErrorBars({
                 [valueField]: aggregationResult[2] === data.length ? null : aggregationResult[0] / aggregationResult[1],
-                [series.getArgumentField()]: intervalStart
+                [series.getArgumentField()]: series._getIntervalCenter(intervalStart, intervalEnd)
             }, data, series);
         },
 
-        sum({ intervalStart, data }, series) {
+        sum({ intervalStart, intervalEnd, data }, series) {
             if(!data.length) {
                 return;
             }
@@ -441,15 +462,15 @@ const baseScatterMethods = {
 
             return calculateSumErrorBars({
                 [valueField]: value,
-                [series.getArgumentField()]: intervalStart
+                [series.getArgumentField()]: series._getIntervalCenter(intervalStart, intervalEnd)
             }, data, series);
         },
 
-        count({ data, intervalStart }, series) {
+        count({ data, intervalStart, intervalEnd }, series) {
             const valueField = series.getValueFields()[0];
 
             return {
-                [series.getArgumentField()]: intervalStart,
+                [series.getArgumentField()]: series._getIntervalCenter(intervalStart, intervalEnd),
                 [valueField]: data.filter(i => i[valueField] !== undefined).length
             };
         },

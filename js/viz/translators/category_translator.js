@@ -151,7 +151,7 @@ export default {
         return NaN;
     },
 
-    _toValue: getValue,
+    toValue: getValue,
 
     isValueProlonged: true
 };
