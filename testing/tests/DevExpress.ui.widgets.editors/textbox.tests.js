@@ -101,15 +101,15 @@ QUnit.module('common', {}, () => {
         try {
             browser.msie = true;
             const $element = $('#textbox').dxTextBox({ maxLength: 1, value: 'b' });
-            const $input = $element.find('.' + INPUT_CLASS);
+            const $input = $element.find(`.${INPUT_CLASS}`);
             let event = $.Event('keydown', { key: 'a', ctrlKey: true });
 
             $input.trigger(event);
-            assert.ok(!event.isDefaultPrevented(), 'default is not prevented');
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
 
             event = $.Event('keydown', { key: 'z', ctrlKey: true });
             $input.trigger(event);
-            assert.ok(!event.isDefaultPrevented(), 'default is not prevented');
+            assert.notOk(event.isDefaultPrevented(), 'default is not prevented');
         } finally {
             browser.msie = originalIE;
         }
