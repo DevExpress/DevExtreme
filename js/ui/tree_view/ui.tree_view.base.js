@@ -144,7 +144,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+        const defaultOptions = extend(this.callBase(), {
             animationEnabled: true,
             dataStructure: 'tree',
             deferRendering: true,
@@ -165,10 +165,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             expandEvent: 'dblclick',
             selectByClick: false,
             createChildren: null,
-            onSelectAllValueChanged: null,
-            integrationOptions: {
-                useDeferUpdateForTemplates: false
-            }
+            onSelectAllValueChanged: null
 
             /**
             * @name dxTreeViewOptions.selectedItem
@@ -191,6 +188,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @inherits CollectionWidgetItem
             * @type object
             */
+        });
+
+        return extend(true, defaultOptions, {
+            integrationOptions: {
+                useDeferUpdateForTemplates: false
+            }
         });
     },
 
