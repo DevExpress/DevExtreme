@@ -56,6 +56,7 @@ export const Export = {
             jsPDFDocument,
             autoTableOptions,
             component,
+            customizeCell,
             keepColumnWidths,
             selectedRowsOnly
         } = options;
@@ -100,6 +101,9 @@ export const Export = {
                             }
                             const isMergedCell = mergedCells[rowIndex] && mergedCells[rowIndex][cellIndex];
                             if(!isMergedCell || pdfCell.rowSpan > 1 || pdfCell.colSpan > 1) {
+                                if(isFunction(customizeCell)) {
+                                    customizeCell({ gridCell, pdfCell });
+                                }
                                 row.push(pdfCell);
                             }
                         } else if(gridCell.rowType === 'group' && !isDefined(pdfCell.content) && row.length === 1) {
@@ -107,6 +111,9 @@ export const Export = {
                             row[0].colSpan++;
                         } else {
                             pdfCell.content = pdfCell.content ?? '';
+                            if(isFunction(customizeCell)) {
+                                customizeCell({ gridCell, pdfCell });
+                            }
                             row.push(pdfCell);
                         }
                     }
