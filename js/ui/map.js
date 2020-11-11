@@ -197,6 +197,29 @@ const Map = Widget.inherit({
                 googleStatic: ''
             },
 
+            apiKey: {
+                /**
+                * @name dxMapOptions.apiKey.bing
+                * @type string
+                * @default ""
+                */
+                bing: '',
+
+                /**
+                * @name dxMapOptions.apiKey.google
+                * @type string
+                * @default ""
+                */
+                google: '',
+
+                /**
+                * @name dxMapOptions.apiKey.googleStatic
+                * @type string
+                * @default ""
+                */
+                googleStatic: ''
+            },
+
             controls: false,
 
             onReady: null,
@@ -226,6 +249,14 @@ const Map = Widget.inherit({
                 }
             }
         ]);
+    },
+
+    _setDeprecatedOptions: function() {
+        this.callBase();
+
+        extend(this._deprecatedOptions, {
+            'key': { since: '20.2', alias: 'apiKey' }
+        });
     },
 
     _init: function() {
@@ -340,6 +371,7 @@ const Map = Widget.inherit({
                 this._invalidate();
                 break;
             case 'key':
+            case 'apiKey':
                 errors.log('W1001');
                 break;
             case 'bounds':
