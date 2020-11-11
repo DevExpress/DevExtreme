@@ -1,5 +1,5 @@
 import url from '../../helpers/getPageUrl';
-import createWidget, { disposeWidgets } from '../../helpers/createWidget';
+import createWidget from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 
 async function getMaxRightOffset(dataGrid: DataGrid): Promise<number> {
@@ -27,9 +27,8 @@ function getData(rowCount, colCount): any[] {
   return items;
 }
 
-fixture.disablePageReloads`Scrolling`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(() => disposeWidgets());
+fixture`Scrolling`
+  .page(url(__dirname, '../container.html'));
 
 test('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
   const dataGrid = new DataGrid('#container');
