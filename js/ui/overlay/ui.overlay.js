@@ -1438,6 +1438,9 @@ const Overlay = Widget.inherit({
                 this._contentAlreadyRendered = false;
                 this.callBase(args);
                 break;
+            case '_fixedPosition':
+                this._fixWrapperPosition();
+                break;
             default:
                 this.callBase(args);
         }
