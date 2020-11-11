@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import DataGrid, { Column, Editing } from 'devextreme-react/data-grid';
+import DataGrid, { Button, Column, Editing, Lookup } from 'devextreme-react/data-grid';
 
 import service from './data.js';
 
@@ -58,23 +58,18 @@ class App extends React.Component {
           useIcons={true}
           allowUpdating={true}
           allowDeleting={this.allowDeleting} />
-        <Column type="buttons" width={110}
-          buttons={['edit', 'delete', {
-            hint: 'Clone',
-            icon: 'repeat',
-            visible: this.isCloneIconVisible,
-            onClick: this.cloneIconClick
-          }]} />
+        <Column type="buttons" width={110}>
+          <Button name="edit" />
+          <Button name="delete" />
+          <Button hint="Clone" icon="repeat" visible={this.isCloneIconVisible} onClick={this.cloneIconClick} />
+        </Column>
         <Column dataField="Prefix" caption="Title" />
         <Column dataField="FirstName" />
         <Column dataField="LastName" />
         <Column dataField="Position" width={130} />
-        <Column dataField="StateID" caption="State" width={125}
-          lookup={{
-            dataSource: this.states,
-            displayExpr: 'Name',
-            valueExpr: 'ID'
-          }} />
+        <Column dataField="StateID" caption="State" width={125}>
+          <Lookup dataSource={this.states} displayExpr="Name" valueExpr="ID" />
+        </Column>
         <Column dataField="BirthDate" dataType="date" width={125} />
       </DataGrid>
     );
