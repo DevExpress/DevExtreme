@@ -157,8 +157,8 @@ export default {
 
     getRangeByMinZoomValue(minZoom, visualRange) {
         const categories = this._categories;
-        const minVisibleIndex = categories.findIndex((el) => { return el === visualRange.minVisible; });
-        const maxVisibleIndex = categories.findIndex((el) => { return el === visualRange.maxVisible; });
+        const minVisibleIndex = categories.indexOf(visualRange.minVisible);
+        const maxVisibleIndex = categories.indexOf(visualRange.maxVisible);
         const startIndex = minVisibleIndex + minZoom - 1;
         const endIndex = maxVisibleIndex - minZoom + 1;
         if(categories[startIndex]) {
