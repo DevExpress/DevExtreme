@@ -680,7 +680,7 @@ const Lookup = DropDownList.inherit({
                 showEvent: null,
                 hideEvent: null,
                 target: this.$element(),
-                _fixesPosition: false,
+                _fixedPosition: false,
                 fullScreen: false,
                 shading: false,
                 closeOnTargetScroll: true,
