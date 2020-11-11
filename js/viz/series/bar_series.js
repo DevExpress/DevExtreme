@@ -97,7 +97,7 @@ const baseBarSeriesMethods = {
     getValueRangeInitialValue: areaSeries.getValueRangeInitialValue,
 
     _patchMarginOptions: function(options) {
-        options.checkInterval = true;
+        options.checkInterval = !this.useAggregation();
         return options;
     },
 

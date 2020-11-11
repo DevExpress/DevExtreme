@@ -192,7 +192,7 @@ export const stock = _extend({}, scatterSeries, {
     _defaultAggregator: 'ohlc',
 
     _aggregators: {
-        'ohlc': ({ intervalStart, data }, series) => {
+        'ohlc': ({ intervalStart, intervalEnd, data }, series) => {
             if(!data.length) {
                 return;
             }
@@ -221,7 +221,7 @@ export const stock = _extend({}, scatterSeries, {
             if(!isFinite(result[lowValueField])) {
                 result[lowValueField] = null;
             }
-            result[series.getArgumentField()] = intervalStart;
+            result[series.getArgumentField()] = series._getIntervalCenter(intervalStart, intervalEnd);
 
             return result;
         }

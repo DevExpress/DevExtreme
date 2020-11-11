@@ -4,9 +4,9 @@ function parse(value) {
 }
 
 export default {
-    _fromValue: parse,
+    fromValue: parse,
 
-    _toValue: parse,
+    toValue: parse,
 
     _add: dateUtils.addDateInterval,
 

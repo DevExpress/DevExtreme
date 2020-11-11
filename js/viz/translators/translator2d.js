@@ -529,8 +529,8 @@ _Translator2d.prototype = {
             return 1;
         }
 
-        val1 = isDefined(val1) ? this._fromValue(val1) : canvasOptions.rangeMin;
-        val2 = isDefined(val2) ? this._fromValue(val2) : canvasOptions.rangeMax;
+        val1 = isDefined(val1) ? this.fromValue(val1) : canvasOptions.rangeMin;
+        val2 = isDefined(val2) ? this.fromValue(val2) : canvasOptions.rangeMax;
         return (canvasOptions.rangeMax - canvasOptions.rangeMin) / Math.abs(val1 - val2);
     },
 
@@ -538,7 +538,7 @@ _Translator2d.prototype = {
     isValid: function(value) {
         const co = this._canvasOptions;
 
-        value = this._fromValue(value);
+        value = this.fromValue(value);
 
         return value !== null &&
             !isNaN(value) &&
@@ -551,16 +551,16 @@ _Translator2d.prototype = {
         const breaks = that._breaks;
         let prop;
 
-        value = that._fromValue(value);
+        value = that.fromValue(value);
 
         if(that._breaks) {
             prop = that._checkValueAboutBreaks(breaks, value, 'trFrom', 'trTo', that._checkingMethodsAboutBreaks[0]);
             if(prop.inBreak === true) {
-                return that._toValue(direction > 0 ? prop.break.trTo : prop.break.trFrom);
+                return that.toValue(direction > 0 ? prop.break.trTo : prop.break.trFrom);
             }
         }
 
-        return that._toValue(value);
+        return that.toValue(value);
     },
 
     to: function(bp, direction) {
@@ -574,7 +574,7 @@ _Translator2d.prototype = {
             return this.translateSpecialCase(bp === 0 && this._options.shiftZeroValue ? 'canvas_position_default' : 'canvas_position_middle');
         }
 
-        bp = this._fromValue(bp);
+        bp = this.fromValue(bp);
         const that = this;
         const canvasOptions = that._canvasOptions;
         const breaks = that._breaks;
@@ -613,15 +613,15 @@ _Translator2d.prototype = {
 
         if(prop.inBreak === true) {
             if(direction > 0) {
-                return that._toValue(prop.break.trTo);
+                return that.toValue(prop.break.trTo);
             } else if(direction < 0) {
-                return that._toValue(prop.break.trFrom);
+                return that.toValue(prop.break.trFrom);
             } else {
                 return null;
             }
         }
 
-        return that._toValue(that._calculateUnProjection((pos - startPoint - commonBreakSize) / canvasOptions.ratioOfCanvasRange + prop.length));
+        return that.toValue(that._calculateUnProjection((pos - startPoint - commonBreakSize) / canvasOptions.ratioOfCanvasRange + prop.length));
     },
 
     isValueProlonged: false,
@@ -630,7 +630,7 @@ _Translator2d.prototype = {
 
     // TODO: Rename to getValueRange
     getRange: function() {
-        return [this._toValue(this._canvasOptions.rangeMin), this._toValue(this._canvasOptions.rangeMax)];
+        return [this.toValue(this._canvasOptions.rangeMin), this.toValue(this._canvasOptions.rangeMax)];
     },
 
     getScreenRange: function() {
@@ -642,14 +642,14 @@ _Translator2d.prototype = {
     },
 
     _add: function(value, diff, coeff) {
-        return this._toValue(this._fromValue(value) + diff * coeff);
+        return this.toValue(this.fromValue(value) + diff * coeff);
     },
 
-    _fromValue: function(value) {
+    fromValue: function(value) {
         return value !== null ? Number(value) : null;
     },
 
-    _toValue: function(value) {
+    toValue: function(value) {
         return value !== null ? Number(value) : null;
     },
 

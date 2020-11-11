@@ -1096,7 +1096,7 @@ AxisWrapper.prototype = {
     }
 };
 
-['setMarginOptions', 'getFullTicks', 'updateCanvas', 'updateOptions', 'getAggregationInfo', 'getTranslator', 'getVisualRangeLength', 'getVisibleArea', 'getMarginOptions'].forEach(methodName => {
+['setMarginOptions', 'getFullTicks', 'updateCanvas', 'updateOptions', 'getAggregationInfo', 'getTranslator', 'getVisualRangeLength', 'getVisibleArea', 'getMarginOptions', 'getVisualRangeCenter'].forEach(methodName => {
     AxisWrapper.prototype[methodName] = function() {
         const axis = this._axis;
 

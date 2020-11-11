@@ -1165,3 +1165,15 @@ QUnit.test('bar series', function(assert) {
         percentStick: false
     });
 });
+
+QUnit.test('bar series (useAggregation)', function(assert) {
+    const series = createSeries({
+        type: 'bar',
+        aggregation: { enabled: true }
+    });
+
+    assert.deepEqual(series.getMarginOptions(), {
+        checkInterval: false,
+        percentStick: false
+    });
+});
