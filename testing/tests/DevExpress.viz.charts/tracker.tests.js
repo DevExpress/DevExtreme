@@ -89,7 +89,6 @@ const createAxis = function(translator) {
     axis.getOptions = function() { return { hoverMode: 'allargumentpoints' }; };
 
     axis.stub('getZoomStartEventArg').returns({ mockArg: true });
-    axis.stub('getZoomEndEventArg').returns({ mockArg: true });
     axis.stub('getZoomBounds').returns({ mockWholeRange: true });
 
     return axis;
