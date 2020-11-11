@@ -1064,6 +1064,18 @@ Axis.prototype = {
         }
     },
 
+    _resolveLogarithmicOptionsForRange(range) {
+        const options = this._options;
+        if(options.type === constants.logarithmic) {
+            range.addRange({
+                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
+            });
+            if(!isNaN(options.linearThreshold)) {
+                range.linearThreshold = options.linearThreshold;
+            }
+        }
+    },
+
     adjustViewport(businessRange) {
         const that = this;
         const options = that._options;
@@ -1120,7 +1132,7 @@ Axis.prototype = {
         !isDefined(result.min) && (result.min = result.minVisible);
         !isDefined(result.max) && (result.max = result.maxVisible);
         result.addRange({}); // controlValuesByVisibleBounds
-
+        that._resolveLogarithmicOptionsForRange(result);
 
         return result;
     },
@@ -1282,14 +1294,7 @@ Axis.prototype = {
             invert: options.inverted
         });
 
-        if(options.type === constants.logarithmic) {
-            that._seriesData.addRange({
-                allowNegatives: options.allowNegatives !== undefined ? options.allowNegatives : (range.min <= 0)
-            });
-            if(!isNaN(options.linearThreshold)) {
-                that._seriesData.linearThreshold = options.linearThreshold;
-            }
-        }
+        that._resolveLogarithmicOptionsForRange(that._seriesData);
 
         if(!isDiscrete) {
             if(!isDefined(that._seriesData.min) && !isDefined(that._seriesData.max)) {
@@ -1845,7 +1850,7 @@ Axis.prototype = {
         let end;
         let correctedMin;
         let correctedMax;
-        function correctZeroLevel(minPoint, maxPoint) {
+        const correctZeroLevel = (minPoint, maxPoint) => {
             const minExpectedPadding = _abs(canvasStartEnd.start - minPoint);
             const maxExpectedPadding = _abs(canvasStartEnd.end - maxPoint);
 
@@ -1853,7 +1858,7 @@ Axis.prototype = {
 
             start = minExpectedPadding / coeff;
             end = maxExpectedPadding / coeff;
-        }
+        };
         if(!that.isArgumentAxis && options.dataType !== 'datetime') {
             if(minValue * dataRange.min <= 0 && minValue * dataRange.minVisible <= 0) {
                 correctZeroLevel(translator.translate(0), translator.translate(maxValue));
@@ -1866,8 +1871,8 @@ Axis.prototype = {
             }
         }
         return {
-            start,
-            end,
+            start: isFinite(start) ? start : null,
+            end: isFinite(end) ? end : null,
             correctedMin,
             correctedMax
         };

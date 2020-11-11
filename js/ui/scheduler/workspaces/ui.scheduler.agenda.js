@@ -319,7 +319,7 @@ const SchedulerAgenda = SchedulerWorkSpace.inherit({
     _attachEvents: noop,
     _cleanCellDataCache: noop,
 
-    needRenderDateTimeIndication: function() {
+    isIndicationAvailable: function() {
         return false;
     },
 

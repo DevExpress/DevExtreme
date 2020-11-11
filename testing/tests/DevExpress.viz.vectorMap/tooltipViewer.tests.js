@@ -48,8 +48,12 @@ QUnit.test('Focus-on - tooltip is shown', function(assert) {
 
     this.trigger('focus-on', { x: 10, y: 20, data: { name: 'test-layer', index: 'test-index' }, done: done });
 
-    assert.deepEqual(this.tooltip.show.lastCall.args, [proxy, { x: 0, y: 0, offset: 0 }, { target: proxy }], 'show');
-    assert.deepEqual(this.tooltip.move.lastCall.args, [10, 20, 12], 'move');
+    assert.equal(this.tooltip.show.lastCall.args[0], proxy);
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 10, y: 20, offset: 12 });
+    assert.deepEqual(this.tooltip.show.lastCall.args[2], { target: proxy });
+    assert.equal(this.tooltip.show.lastCall.args[3], undefined);
+    assert.equal(typeof this.tooltip.show.lastCall.args[4], 'function');
+
     assert.deepEqual(done.lastCall.args, [true], 'callback');
 });
 
@@ -65,9 +69,13 @@ QUnit.test('Focus-on - tooltip is not shown because of tooltip.show', function(a
 
     this.trigger('focus-on', { x: 10, y: 20, data: { name: 'test-layer', index: 'test-index' }, done: done });
 
-    assert.deepEqual(this.tooltip.show.lastCall.args, [proxy, { x: 0, y: 0, offset: 0 }, { target: proxy }], 'show');
-    assert.strictEqual(this.tooltip.stub('move').lastCall, null, 'move');
-    assert.deepEqual(done.lastCall.args, [false], 'callback');
+    assert.equal(this.tooltip.show.lastCall.args[0], proxy);
+    assert.deepEqual(this.tooltip.show.lastCall.args[1], { x: 10, y: 20, offset: 12 });
+    assert.deepEqual(this.tooltip.show.lastCall.args[2], { target: proxy });
+    assert.equal(this.tooltip.show.lastCall.args[3], undefined);
+    assert.equal(typeof this.tooltip.show.lastCall.args[4], 'function');
+
+    assert.ok(!done.called, 'callback');
 });
 
 QUnit.test('Focus-on - tooltip is not shown because of index', function(assert) {
@@ -82,7 +90,7 @@ QUnit.test('Focus-on - tooltip is not shown because of index', function(assert) 
 
     assert.strictEqual(this.tooltip.stub('show').lastCall, null, 'show');
     assert.strictEqual(this.tooltip.stub('move').lastCall, null, 'move');
-    assert.deepEqual(done.lastCall.args, [false], 'callback');
+    assert.ok(!done.called, 'callback');
 });
 
 QUnit.test('Focus-on - tooltip is not shown because of name', function(assert) {
@@ -94,7 +102,24 @@ QUnit.test('Focus-on - tooltip is not shown because of name', function(assert) {
 
     assert.strictEqual(this.tooltip.stub('show').lastCall, null, 'show');
     assert.strictEqual(this.tooltip.stub('move').lastCall, null, 'move');
-    assert.deepEqual(done.lastCall.args, [false], 'callback');
+    assert.ok(!done.called, 'callback');
+});
+
+QUnit.test('Focus-on - tooltips is shown, async render', function(assert) {
+    const done = sinon.spy();
+    const proxy = { tag: 'proxy' };
+    const layer = {
+        getProxy: sinon.stub().withArgs('test-index').returns(proxy)
+    };
+    this.tooltip.stub('isEnabled').returns(true);
+    this.tooltip.stub('show').returns(false);
+    this.layerCollection.stub('byName').withArgs('test-layer').returns(layer);
+
+    this.trigger('focus-on', { x: 10, y: 20, data: { name: 'test-layer', index: 'test-index' }, done: done });
+
+    assert.ok(!done.called, 'callback');
+    this.tooltip.show.lastCall.args[4](true);
+    assert.deepEqual(done.lastCall.args, [true], 'callback');
 });
 
 QUnit.test('Focus-on - tooltip is not shown because of tooltip.isEnabled', function(assert) {
@@ -105,7 +130,7 @@ QUnit.test('Focus-on - tooltip is not shown because of tooltip.isEnabled', funct
 
     assert.strictEqual(this.tooltip.stub('show').lastCall, null, 'show');
     assert.strictEqual(this.tooltip.stub('move').lastCall, null, 'move');
-    assert.deepEqual(done.lastCall.args, [false], 'callback');
+    assert.ok(!done.called, 'callback');
 });
 
 QUnit.test('Focus-move', function(assert) {

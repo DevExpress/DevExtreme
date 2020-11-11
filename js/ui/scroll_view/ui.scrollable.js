@@ -6,7 +6,7 @@ import commonUtils from '../../core/utils/common';
 import typeUtils from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/utils/dom';
-import windowUtils from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import domAdapter from '../../core/dom_adapter';
 import devices from '../../core/devices';
 import registerComponent from '../../core/component_registrator';
@@ -131,6 +131,12 @@ const Scrollable = DOMComponent.inherit({
         this._locked = false;
     },
 
+    _getWindowDevicePixelRatio: function() {
+        return hasWindow()
+            ? getWindow().devicePixelRatio
+            : 1;
+    },
+
     _visibilityChanged: function(visible) {
         if(visible) {
             this.update();
@@ -163,6 +169,7 @@ const Scrollable = DOMComponent.inherit({
 
     _dimensionChanged: function() {
         this.update();
+        this._updateRtlPosition();
     },
 
     _initMarkup: function() {
@@ -179,17 +186,37 @@ const Scrollable = DOMComponent.inherit({
         this.update();
 
         this.callBase();
+
+        this._rtlConfig = {
+            scrollRight: 0,
+            clientWidth: this._container().get(0).clientWidth,
+            windowPixelRatio: this._getWindowDevicePixelRatio()
+        };
         this._updateRtlPosition();
+    },
+
+    _isHorizontalAndRtlEnabled: function() {
+        return this.option('rtlEnabled') && this.option('direction') !== VERTICAL;
     },
 
     _updateRtlPosition: function() {
         this._updateBounds();
-        if(this.option('rtlEnabled') && this.option('direction') !== VERTICAL) {
+        if(this._isHorizontalAndRtlEnabled()) {
             commonUtils.deferUpdate(() => {
                 const containerElement = this._container().get(0);
-                const maxLeftOffset = containerElement.scrollWidth - containerElement.clientWidth;
+                let scrollLeft = containerElement.scrollWidth - containerElement.clientWidth - this._rtlConfig.scrollRight;
+
+                if(scrollLeft <= 0) {
+                    scrollLeft = 0;
+                    this._rtlConfig.scrollRight = containerElement.scrollWidth - containerElement.clientWidth;
+                }
+
                 commonUtils.deferRender(() => {
-                    this.scrollTo({ left: maxLeftOffset });
+                    if(this.scrollLeft() !== scrollLeft) {
+                        this._rtlConfig.skipUpdating = true;
+                        this.scrollTo({ left: scrollLeft });
+                        this._rtlConfig.skipUpdating = false;
+                    }
                 });
             });
         }
@@ -219,6 +246,18 @@ const Scrollable = DOMComponent.inherit({
 
         eventsEngine.off(this._$container, '.' + SCROLLABLE);
         eventsEngine.on(this._$container, eventUtils.addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
+    },
+
+    _updateRtlConfig: function() {
+        if(this._isHorizontalAndRtlEnabled() && !this._rtlConfig.skipUpdating) {
+            const { clientWidth, scrollWidth, scrollLeft } = this._container().get(0);
+            const windowPixelRatio = this._getWindowDevicePixelRatio();
+            if(this._rtlConfig.windowPixelRatio === windowPixelRatio && this._rtlConfig.clientWidth === clientWidth) {
+                this._rtlConfig.scrollRight = (scrollWidth - (scrollLeft + clientWidth));
+            }
+            this._rtlConfig.clientWidth = clientWidth;
+            this._rtlConfig.windowPixelRatio = windowPixelRatio;
+        }
     },
 
     _validate: function(e) {
@@ -319,7 +358,7 @@ const Scrollable = DOMComponent.inherit({
 
     _resetInactiveDirection: function() {
         const inactiveProp = this._getInactiveProp();
-        if(!inactiveProp || !windowUtils.hasWindow()) {
+        if(!inactiveProp || !hasWindow()) {
             return;
         }
 
@@ -464,6 +503,7 @@ const Scrollable = DOMComponent.inherit({
 
         this._updateIfNeed();
         this._strategy.scrollBy(distance);
+        this._updateRtlConfig();
     },
 
     scrollTo: function(targetLocation) {
@@ -488,6 +528,7 @@ const Scrollable = DOMComponent.inherit({
         }
 
         this._strategy.scrollBy(distance);
+        this._updateRtlConfig();
     },
 
     scrollToElement: function(element, offset) {

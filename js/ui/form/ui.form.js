@@ -55,6 +55,7 @@ const GROUP_COL_COUNT_CLASS = 'dx-group-colcount-';
 const GROUP_COL_COUNT_ATTR = 'group-col-count';
 const FIELD_ITEM_CONTENT_CLASS = 'dx-field-item-content';
 const FORM_VALIDATION_SUMMARY = 'dx-form-validation-summary';
+const ROOT_SIMPLE_ITEM_CLASS = 'dx-root-simple-item';
 
 const WIDGET_CLASS = 'dx-widget';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
@@ -107,6 +108,7 @@ const Form = Widget.inherit({
             minColWidth: 200,
             alignItemLabels: true,
             alignItemLabelsInAllGroups: true,
+            alignRootItemLabels: true,
             showColonAfterLabel: true,
             showRequiredMark: true,
             showOptionalMark: false,
@@ -348,8 +350,11 @@ const Form = Widget.inherit({
     },
 
     _applyLabelsWidthWithGroups: function($container, colCount, excludeTabbed) {
-        const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
+        if(this.option('alignRootItemLabels') === true) {
+            this._alignRootSimpleItems($container, colCount, excludeTabbed);
+        }
 
+        const alignItemLabelsInAllGroups = this.option('alignItemLabelsInAllGroups');
         if(alignItemLabelsInAllGroups) {
             this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
         } else {
@@ -358,6 +363,13 @@ const Form = Widget.inherit({
             for(i = 0; i < $groups.length; i++) {
                 this._applyLabelsWidth($groups.eq(i), excludeTabbed);
             }
+        }
+    },
+
+    _alignRootSimpleItems: function($container, colCount, excludeTabbed) {
+        const $rootSimpleItems = $container.find(`.${ROOT_SIMPLE_ITEM_CLASS}`);
+        for(let colIndex = 0; colIndex < colCount; colIndex++) {
+            this._applyLabelsWidthByCol($rootSimpleItems, colIndex, excludeTabbed);
         }
     },
 
@@ -852,6 +864,7 @@ const Form = Widget.inherit({
                     this._invalidate();
                 }
                 break;
+            case 'alignRootItemLabels':
             case 'readOnly':
                 break;
             case 'width':

@@ -4,7 +4,6 @@ import dataUtils from '../core/element_data';
 import typeUtils from '../core/utils/type';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
-import browser from '../core/utils/browser';
 import { noop, ensureDefined, equalByValue } from '../core/utils/common';
 import { SelectionFilterCreator as FilterCreator } from '../core/utils/selection_filter';
 import { Deferred, when } from '../core/utils/deferred';
@@ -19,6 +18,7 @@ import { addNamespace, normalizeKeyName } from '../events/utils';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
+import getScrollRtlBehavior from '../core/utils/scroll_rtl_behavior';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -240,13 +240,11 @@ const TagBox = SelectBox.inherit({
         const rtlEnabled = this.option('rtlEnabled');
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
 
-        // NOTE: for affecting this Chrome BC: https://www.chromestatus.com/feature/5759578031521792
-        const browserVersion = parseInt(browser.version, 10);
-        const isNewChrome = browser.chrome && browserVersion >= 85;
-        const isScrollReverted = rtlEnabled && (!browser.webkit || isNewChrome);
-        const scrollSign = (!rtlEnabled || browser.webkit && !isNewChrome || browser.msie) ? 1 : -1;
+        const scrollBehavior = getScrollRtlBehavior();
+        const isScrollInverted = rtlEnabled && (scrollBehavior.decreasing ^ scrollBehavior.positive);
+        const scrollSign = !rtlEnabled || scrollBehavior.positive ? 1 : -1;
 
-        return (isScrollLeft ^ !isScrollReverted)
+        return (isScrollLeft ^ !isScrollInverted)
             ? 0
             : scrollSign * (this._$tagsContainer.get(0).scrollWidth - this._$tagsContainer.outerWidth());
     },
@@ -262,7 +260,8 @@ const TagBox = SelectBox.inherit({
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
-            const scrollCorrection = rtlEnabled && browser.msie ? -1 : 1;
+            const scrollBehavior = getScrollRtlBehavior();
+            const scrollCorrection = rtlEnabled && !scrollBehavior.decreasing && scrollBehavior.positive ? -1 : 1;
             scrollLeft += scrollOffset * scrollCorrection;
         }
 

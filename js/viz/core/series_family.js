@@ -25,6 +25,10 @@ function isStackExist(series, arg, equalBarWidth) {
     });
 }
 
+function validateBarWidth(barWidth) {
+    return (barWidth < 0 || barWidth > 1) ? undefined : barWidth;
+}
+
 function correctStackCoordinates(series, currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback) {
     series.forEach(function(series) {
         const stackIndex = seriesStackIndexCallback(currentStacks.indexOf(stack), currentStacks.length);
@@ -53,7 +57,7 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     const commonStacks = [];
     const allArguments = [];
     const seriesInStacks = {};
-    const barWidth = options.barWidth;
+    const barWidth = validateBarWidth(options.barWidth);
     const barGroupWidth = options.barGroupWidth;
     const interval = series[0] && series[0].getArgumentAxis().getTranslator().getInterval();
     const barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
