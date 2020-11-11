@@ -1974,6 +1974,48 @@ QUnit.module('keyboard navigation', {
         assert.deepEqual(this.instance.option('value'), [], 'values is empty');
     });
 
+    QUnit.test('Correct event should be passed to valueChanged when tag is removed using backspace (T947619)', function(assert) {
+        const valueChangedHandler = sinon.stub();
+        this.instance.on('valueChanged', valueChangedHandler);
+
+        this.keyboard
+            .focus()
+            .keyDown('backspace');
+
+        const data = valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
+        assert.strictEqual(data.event.key, 'Backspace', 'correct event is passed');
+    });
+
+    QUnit.test('Correct event should be passed to valueChanged when tag is removed using delete', function(assert) {
+        const valueChangedHandler = sinon.stub();
+        this.instance.on('valueChanged', valueChangedHandler);
+
+        this.keyboard
+            .focus()
+            .press('left')
+            .keyDown('del');
+
+        const data = valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
+        assert.strictEqual(data.event.key, 'Delete', 'correct event is passed');
+    });
+
+    QUnit.test('event passed to valueChanged should be undefined when value runtime changes after tag removing', function(assert) {
+        const valueChangedHandler = sinon.stub();
+
+        this.keyboard
+            .focus()
+            .press('backspace');
+
+
+        this.instance.on('valueChanged', valueChangedHandler);
+        this.instance.option('value', [3]);
+
+        const data = valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event, undefined, 'correct event is passed');
+    });
+
     QUnit.test('backspace UI', function(assert) {
         assert.expect(2);
 

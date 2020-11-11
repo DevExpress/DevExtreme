@@ -57,6 +57,7 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
+                this._saveValueChangeEvent(e);
                 e.preventDefault();
                 e.stopPropagation();
                 this._isTagRemoved = true;
@@ -86,6 +87,7 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
+                this._saveValueChangeEvent(e);
                 e.preventDefault();
                 e.stopPropagation();
                 this._isTagRemoved = true;
