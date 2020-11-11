@@ -95,7 +95,7 @@ QUnit.module('common', {}, () => {
         }
     });
 
-    QUnit.test('"maxLength" option on IE should works correctly with the control commands', function(assert) {
+    QUnit.test('"maxLength" option on IE should works correctly with the hotkeys (T944726, T944493)', function(assert) {
         const originalIE = browser.msie;
 
         try {
