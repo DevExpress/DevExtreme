@@ -280,7 +280,8 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       return relativeLocation + elementOffset - containerSize + scrollOffsetEnd + scrollBarSize;
     }
 
-    if (relativeLocation + elementOffset >= offset + containerSize - scrollOffsetEnd) {
+    if (relativeLocation + elementOffset
+      >= offset + containerSize - scrollOffsetEnd - scrollBarSize) {
       if (elementOffset < containerSize - scrollOffsetBegin - scrollOffsetEnd) {
         return relativeLocation + elementOffset + scrollBarSize - containerSize + scrollOffsetEnd;
       }
