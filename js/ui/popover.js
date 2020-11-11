@@ -473,15 +473,15 @@ const Popover = Popup.inherit({
 
     _renderWrapperPosition: function() {
         if(this.option('shading')) {
-            this._$wrapper.css({ left: 0, top: 0 });
+            this._$wrapper.css({ top: 0, left: 0 });
         }
     },
 
     _renderWrapperDimensions: function() {
         if(this.option('shading')) {
             this._$wrapper.css({
-                width: '',
-                height: ''
+                width: '100%',
+                height: '100%'
             });
         }
     },
