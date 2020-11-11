@@ -235,7 +235,8 @@ const Overlay = Widget.inherit({
             boundaryOffset: { h: 0, v: 0 },
             propagateOutsideClick: false,
             ignoreChildEvents: true,
-            _checkParentVisibility: true
+            _checkParentVisibility: true,
+            _fixedPosition: false
         });
     },
 
@@ -1156,7 +1157,8 @@ const Overlay = Widget.inherit({
 
     _useFixedPosition: function() {
         const $container = this._getContainer();
-        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined);
+        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined)
+            || this.option('_fixedPosition');
     },
 
     _toggleSafariScrolling: function(scrollingEnabled) {

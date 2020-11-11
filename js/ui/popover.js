@@ -214,7 +214,8 @@ const Popover = Popup.inherit({
             closeOnTargetScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
-            boundaryOffset: { h: 10, v: 10 }
+            boundaryOffset: { h: 10, v: 10 },
+            _fixedPosition: true
 
             /**
             * @name dxPopoverOptions.focusStateEnabled
@@ -470,10 +471,20 @@ const Popover = Popup.inherit({
         }
     },
 
-    _getContainer: function() {
-        return $(window);
+    _renderWrapperPosition: function() {
+        if(this.option('shading')) {
+            this._$wrapper.css({ left: 0, top: 0 });
+        }
     },
 
+    _renderWrapperDimensions: function() {
+        if(this.option('shading')) {
+            this._$wrapper.css({
+                width: '',
+                height: ''
+            });
+        }
+    },
 
     _normalizePosition: function() {
         const position = extend({}, this._transformStringPosition(this.option('position'), POSITION_ALIASES));
