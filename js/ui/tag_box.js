@@ -57,9 +57,7 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
-                this._saveValueChangeEvent(e);
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
                 this._isTagRemoved = true;
 
                 const $tagToDelete = this._$focusedTag || this._tagElements().last();
@@ -87,9 +85,7 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
-                this._saveValueChangeEvent(e);
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
                 this._isTagRemoved = true;
 
                 const $tagToDelete = this._$focusedTag;
@@ -159,6 +155,12 @@ const TagBox = SelectBox.inherit({
                 !this.option('multiline') && this._scrollContainer(direction);
             }
         });
+    },
+
+    _processKeyboardEvent: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._saveValueChangeEvent(e);
     },
 
     _updateTagsContainer: function($element) {
