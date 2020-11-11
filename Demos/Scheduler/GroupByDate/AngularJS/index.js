@@ -3,6 +3,7 @@ var DemoApp = angular.module('DemoApp', ['dx']);
 DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.groupByDate = true;
     $scope.options = {
+        timeZone: "America/Los_Angeles",
         dataSource: data,
         views: [{
             type: "week",

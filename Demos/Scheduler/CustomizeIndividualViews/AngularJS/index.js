@@ -2,6 +2,7 @@ var DemoApp = angular.module('DemoApp', ['dx']);
 
 DemoApp.controller('DemoController', function DemoController($scope) {    
     $scope.options = {
+        timeZone: "America/Los_Angeles",
         height: 600,
         dataSource: data,
         showAllDayPanel: false,

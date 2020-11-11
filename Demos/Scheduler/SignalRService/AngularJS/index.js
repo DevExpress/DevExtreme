@@ -52,6 +52,7 @@ var createStore = function() {
 var createOptions = function(store) {
     return {
         dataSource: store,
+        timeZone: "America/Los_Angeles",
         remoteFiltering: true,
         views: ["day", "workWeek"],
         currentView: "day",
