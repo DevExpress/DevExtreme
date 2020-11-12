@@ -272,7 +272,7 @@ export const ListBase = CollectionWidget.inherit({
     },
 
     _saveSelectionChangeEvent: function(e) {
-        this._selectionChangeEvent = e;
+        this._selectionChangeEventInstance = e;
     },
 
     _getSelectionChangeEvent: function() {
