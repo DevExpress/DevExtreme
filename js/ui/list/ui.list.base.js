@@ -271,12 +271,12 @@ export const ListBase = CollectionWidget.inherit({
         return this._$container;
     },
 
-    _saveValueChangeEvent: function(e) {
-        this._valueChangeEventInstance = e;
+    _saveSelectionChangeEvent: function(e) {
+        this._selectionChangeEvent = e;
     },
 
-    _getValueChangeEvent: function() {
-        return this._valueChangeEventInstance;
+    _getSelectionChangeEvent: function() {
+        return this._selectionChangeEventInstance;
     },
 
     _refreshItemElements: function() {

@@ -1150,11 +1150,11 @@ const TagBox = SelectBox.inherit({
         this._updateWidgetHeight();
 
         if(!equalByValue(this._list.option('selectedItemKeys'), this.option('value'))) {
-            const listValueChangeEvent = this._list._getValueChangeEvent();
-            listValueChangeEvent && this._saveValueChangeEvent(listValueChangeEvent);
+            const listSelectionChangeEvent = this._list._getSelectionChangeEvent();
+            listSelectionChangeEvent && this._saveValueChangeEvent(listSelectionChangeEvent);
             this.option('value', value);
         }
-        this._list._saveValueChangeEvent(undefined);
+        this._list._saveSelectionChangeEvent(undefined);
     },
 
     _removeTag: function(value, item) {
