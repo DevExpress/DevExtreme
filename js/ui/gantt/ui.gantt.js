@@ -1219,7 +1219,13 @@ class Gantt extends Widget {
                 * @type boolean
                 * @default true
                 */
-                allowResourceUpdating: true
+                allowResourceUpdating: true,
+                /**
+                * @name dxGanttOptions.editing.allowTaskResourceUpdating
+                * @type boolean
+                * @default true
+                */
+                allowTaskResourceUpdating: true
             },
             validation: {
                 /**
