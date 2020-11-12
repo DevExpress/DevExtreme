@@ -1883,6 +1883,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option('dataCellTemplate'),
             addTemplateWrapper: true,
+            templateWrapperClass: `${DATE_TABLE_CELL_CLASS}-template-wrapper`,
             getCellData: this._getCellData.bind(this),
             allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayPanels : undefined,
             groupCount: groupCount,

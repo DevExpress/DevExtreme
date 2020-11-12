@@ -80,7 +80,7 @@ class SchedulerTableCreator {
                     let $templateContainer = $(td);
                     if(options.addTemplateWrapper) {
                         $templateContainer = $('<div>').appendTo($(td));
-                        $templateContainer.addClass('dx-scheduler-date-cell-template-wrapper');
+                        $templateContainer.addClass(options.templateWrapperClass);
                     }
 
                     const templateOptions = {
