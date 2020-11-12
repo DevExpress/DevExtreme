@@ -56,11 +56,11 @@ export default class AppointmentDragBehavior {
     }
 
     getItemData(appointmentElement) {
-        const itemDataFromTooltip = $(appointmentElement).data(LIST_ITEM_DATA_KEY);
-        const appointmentDataFromTooltip = itemDataFromTooltip?.appointment;
-        const appointmentDataFromGrid = this.appointments._getItemData(appointmentElement);
+        const dataFromTooltip = $(appointmentElement).data(LIST_ITEM_DATA_KEY);
+        const itemDataFromTooltip = dataFromTooltip?.appointment;
+        const itemDataFromGrid = this.appointments._getItemData(appointmentElement);
 
-        return appointmentDataFromTooltip || appointmentDataFromGrid;
+        return itemDataFromTooltip || itemDataFromGrid;
     }
 
     getItemSettings(appointment) {
