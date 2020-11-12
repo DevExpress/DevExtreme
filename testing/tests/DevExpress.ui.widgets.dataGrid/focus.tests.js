@@ -5786,7 +5786,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
         });
 
         // T948636
-        QUnit.skip('DataGrid should reset focused row if focusedRowKey is set to null', function(assert) {
+        QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowKey is set to null', function(assert) {
             // arrange
             const onFocusedRowChanged = sinon.spy();
 
