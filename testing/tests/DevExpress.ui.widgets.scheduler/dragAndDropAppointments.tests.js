@@ -1402,7 +1402,6 @@ module('appointmentDragging customization', $.extend({}, {
                 ? scheduler.appointments.compact.getAppointment()
                 : scheduler.appointments.find('App 1');
             const appointmentPosition = getAbsolutePosition(appointment);
-            scheduler.drawControl();
 
             const pointer = pointerMock(appointment).start();
 
