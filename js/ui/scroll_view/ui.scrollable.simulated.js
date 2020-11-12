@@ -734,6 +734,7 @@ const SimulatedStrategy = Class.inherit({
     },
 
     handleScroll: function() {
+        this._component._updateRtlConfig();
         this._scrollAction();
     },
 

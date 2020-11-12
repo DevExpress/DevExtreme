@@ -18,7 +18,6 @@ Flags.prototype = {
         for(i = 0; i < ii; ++i) {
             flags[codes[i]] = 1;
         }
-        this._k += ii;
     },
 
     has: function(code) {
@@ -26,12 +25,11 @@ Flags.prototype = {
     },
 
     count: function() {
-        return this._k;
+        return Object.keys(this._flags).length;
     },
 
     reset: function() {
         this._flags = {};
-        this._k = 0;
     }
 };
 

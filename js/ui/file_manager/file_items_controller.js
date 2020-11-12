@@ -195,7 +195,7 @@ export default class FileItemsController {
         const actionInfo = this._createEditActionInfo('create', tempDirInfo, parentDirectoryInfo);
         return this._processEditAction(actionInfo,
             () => this._fileProvider.createDirectory(parentDirectoryInfo.fileItem, name),
-            () => this._resetDirectoryState(parentDirectoryInfo));
+            () => this._resetDirectoryState(parentDirectoryInfo, true));
     }
 
     renameItem(fileItemInfo, name) {
@@ -208,8 +208,9 @@ export default class FileItemsController {
                 return this._fileProvider.renameItem(fileItemInfo.fileItem, name);
             },
             () => {
-                this._resetDirectoryState(fileItemInfo.parentDirectory);
-                this.setCurrentDirectory(fileItemInfo.parentDirectory);
+                const parentDirectory = this._getActualDirectoryInfo(fileItemInfo.parentDirectory);
+                this._resetDirectoryState(parentDirectory);
+                this.setCurrentDirectory(parentDirectory);
             });
     }
 
@@ -219,9 +220,11 @@ export default class FileItemsController {
         return this._processEditAction(actionInfo,
             () => this._fileProvider.moveItems(items, destinationDirectory.fileItem),
             () => {
-                itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory));
+                destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
+                itemInfos.forEach(itemInfo => this._resetDirectoryState(itemInfo.parentDirectory, true));
                 this._resetDirectoryState(destinationDirectory);
                 this.setCurrentDirectory(destinationDirectory);
+                destinationDirectory.expanded = true;
             });
     }
 
@@ -231,6 +234,7 @@ export default class FileItemsController {
         return this._processEditAction(actionInfo,
             () => this._fileProvider.copyItems(items, destinationDirectory.fileItem),
             () => {
+                destinationDirectory = this._getActualDirectoryInfo(destinationDirectory);
                 this._resetDirectoryState(destinationDirectory);
                 this.setCurrentDirectory(destinationDirectory);
                 destinationDirectory.expanded = true;
@@ -245,7 +249,7 @@ export default class FileItemsController {
             () => this._fileProvider.deleteItems(items),
             () => {
                 itemInfos.forEach(itemInfo => {
-                    const parentDir = itemInfo.parentDirectory;
+                    const parentDir = this._getActualDirectoryInfo(itemInfo.parentDirectory);
                     this._resetDirectoryState(parentDir);
                     this.setCurrentDirectory(parentDir);
                 });
@@ -257,7 +261,7 @@ export default class FileItemsController {
         const actionInfo = this._createEditActionInfo('upload', itemInfos, uploadDirectoryInfo, { sessionInfo });
         return this._processEditAction(actionInfo,
             () => sessionInfo.deferreds,
-            () => this._resetDirectoryState(uploadDirectoryInfo));
+            () => this._resetDirectoryState(uploadDirectoryInfo, true));
     }
 
     uploadFileChunk(fileData, chunksInfo, destinationDirectory) {
@@ -289,6 +293,7 @@ export default class FileItemsController {
     }
 
     _handleItemLoadError(parentDirectoryInfo, errorInfo, skipNavigationOnError) {
+        parentDirectoryInfo = this._getActualDirectoryInfo(parentDirectoryInfo);
         const actionInfo = this._createEditActionInfo('getItems', parentDirectoryInfo, parentDirectoryInfo);
         this._raiseEditActionStarting(actionInfo);
         this._raiseEditActionResultAcquired(actionInfo);
@@ -313,8 +318,8 @@ export default class FileItemsController {
 
         try {
             actionResult = action();
-        } catch(error) {
-            this._raiseEditActionError(actionInfo, error);
+        } catch(errorInfo) {
+            this._raiseEditActionError(actionInfo, errorInfo);
             return new Deferred().reject().promise();
         }
 
@@ -329,7 +334,7 @@ export default class FileItemsController {
         return whenSome(
             actionResult,
             info => this._raiseCompleteEditActionItem(actionInfo, info),
-            info => this._raiseEditActionItemError(actionInfo, info)
+            errorInfo => this._raiseEditActionItemError(actionInfo, errorInfo)
         ).then(() => {
             completeAction();
             this._raiseCompleteEditAction(actionInfo);
@@ -378,7 +383,7 @@ export default class FileItemsController {
 
         return this._loadItemsRecursive(this._rootDirectoryInfo, cachedRootInfo)
             .then(() => {
-                const dirInfo = this._findSelectedDirectoryByPathKeyParts(selectedKeyParts);
+                const dirInfo = this._findDirectoryByPathKeyParts(selectedKeyParts);
                 this.setCurrentDirectory(dirInfo);
 
                 delete this._lockRefresh;
@@ -477,7 +482,7 @@ export default class FileItemsController {
         return pathParts;
     }
 
-    _findSelectedDirectoryByPathKeyParts(keyParts) {
+    _findDirectoryByPathKeyParts(keyParts) {
         let selectedDirInfo = this._rootDirectoryInfo;
         if(keyParts.length === 0) {
             return selectedDirInfo;
@@ -494,6 +499,11 @@ export default class FileItemsController {
         }
 
         return selectedDirInfo;
+    }
+
+    _getActualDirectoryInfo(directoryInfo) {
+        const keys = this._getDirectoryPathKeyParts(directoryInfo);
+        return this._findDirectoryByPathKeyParts(keys);
     }
 
     _createDirInfoByName(name, parentDirectoryInfo) {
@@ -524,7 +534,10 @@ export default class FileItemsController {
         };
     }
 
-    _resetDirectoryState(directoryInfo) {
+    _resetDirectoryState(directoryInfo, isActualDirectoryRequired) {
+        if(isActualDirectoryRequired) {
+            directoryInfo = this._getActualDirectoryInfo(directoryInfo);
+        }
         directoryInfo.itemsLoaded = false;
         directoryInfo.items = [ ];
     }
@@ -599,15 +612,15 @@ export default class FileItemsController {
         }
     }
 
-    _raiseEditActionError(actionInfo, error) {
+    _raiseEditActionError(actionInfo, errorInfo) {
         if(this._options.onEditActionError) {
-            this._options.onEditActionError(actionInfo, error);
+            this._options.onEditActionError(actionInfo, errorInfo);
         }
     }
 
-    _raiseEditActionItemError(actionInfo, info) {
+    _raiseEditActionItemError(actionInfo, errorInfo) {
         if(this._options.onEditActionItemError) {
-            this._options.onEditActionItemError(actionInfo, info);
+            this._options.onEditActionItemError(actionInfo, errorInfo);
         }
     }
 

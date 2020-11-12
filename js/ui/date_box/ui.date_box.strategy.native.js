@@ -4,12 +4,15 @@ const support = require('../../core/utils/support');
 const inArray = require('../../core/utils/array').inArray;
 const dateUtils = require('./ui.date_utils');
 const dateSerialization = require('../../core/utils/date_serialization');
+const extend = require('../../core/utils/extend').extend;
 
 const NativeStrategy = DateBoxStrategy.inherit({
 
     NAME: 'Native',
 
-    popupConfig: noop,
+    popupConfig: function(popupConfig) {
+        return extend({}, popupConfig, { width: 'auto' });
+    },
 
     getParsedText: function(text, format) {
         if(!text) {

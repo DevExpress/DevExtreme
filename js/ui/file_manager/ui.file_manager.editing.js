@@ -66,7 +66,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _getFileUploaderController() {
-        const uploadDirectory = this._uploadDirectoryInfo && this._uploadDirectoryInfo.fileItem;
+        const uploadDirectory = this.uploadDirectoryInfo.fileItem;
         return {
             chunkSize: this._controller.getFileUploadChunkSize(),
             uploadFileChunk: (fileData, chunksInfo) => this._controller.uploadFileChunk(fileData, chunksInfo, uploadDirectory),
@@ -188,7 +188,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _onUploadSessionStarted({ sessionInfo }) {
-        this._controller.processUploadSession(sessionInfo, this._uploadDirectoryInfo);
+        this._controller.processUploadSession(sessionInfo, this.uploadDirectoryInfo);
     }
 
     _onEditActionStarting(actionInfo) {
@@ -220,16 +220,16 @@ class FileManagerEditingControl extends Widget {
         this._notificationControl.addOperationDetails(operationInfo, details, context.actionMetadata.allowCancel);
     }
 
-    _onEditActionError(actionInfo, error) {
+    _onEditActionError(actionInfo, errorInfo) {
         const { context, operationInfo } = actionInfo.customData;
         context.singleRequest = actionInfo.singleRequest;
-        this._handleActionError(operationInfo, context, error);
+        this._handleActionError(operationInfo, context, errorInfo);
         this._completeAction(operationInfo, context);
     }
 
-    _onEditActionItemError(actionInfo, info) {
+    _onEditActionItemError(actionInfo, errorInfo) {
         const { context, operationInfo } = actionInfo.customData;
-        this._handleActionError(operationInfo, context, info);
+        this._handleActionError(operationInfo, context, errorInfo);
     }
 
     _onCompleteEditActionItem(actionInfo, info) {
@@ -283,7 +283,7 @@ class FileManagerEditingControl extends Widget {
     }
 
     _tryUpload(destinationFolder) {
-        this._uploadDirectoryInfo = destinationFolder && destinationFolder[0] || this._getCurrentDirectory();
+        this._uploadDirectoryInfo = destinationFolder?.[0];
         this._fileUploader.tryUpload();
     }
 
@@ -350,7 +350,7 @@ class FileManagerEditingControl extends Widget {
 
     _getErrorText(errorInfo, itemInfo, itemName) {
         itemName = itemName || itemInfo?.fileItem.name;
-        const errorText = FileManagerMessages.get(errorInfo.errorId, itemName);
+        const errorText = errorInfo.errorText || FileManagerMessages.get(errorInfo.errorId, itemName);
 
         const errorArgs = {
             fileSystemItem: itemInfo?.fileItem,
@@ -446,6 +446,10 @@ class FileManagerEditingControl extends Widget {
 
     _getCurrentDirectory() {
         return this._controller.getCurrentDirectory();
+    }
+
+    get uploadDirectoryInfo() {
+        return this._uploadDirectoryInfo || this._getCurrentDirectory();
     }
 
 }

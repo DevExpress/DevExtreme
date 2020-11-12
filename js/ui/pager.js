@@ -358,6 +358,9 @@ const Pager = Widget.inherit({
             max: pageCount,
             width: that._calculateLightPagesWidth($pageIndex, pageCount),
             onValueChanged: function(e) {
+                if(e.value === null) {
+                    return;
+                }
                 that.option('pageIndex', e.value);
             }
         });

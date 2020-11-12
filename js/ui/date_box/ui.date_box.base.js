@@ -259,7 +259,15 @@ const DateBox = DropDownEditor.inherit({
     _renderDimensions: function() {
         this.callBase();
         this.$element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option('width'));
-        this._strategy?._dimensionChanged();
+        this._dimensionChanged();
+    },
+
+    _dimensionChanged: function() {
+        this.callBase(arguments);
+
+        if(this._popup) {
+            this._strategy._updatePopupHeight?.();
+        }
     },
 
     _refreshFormatClass: function() {
@@ -485,7 +493,7 @@ const DateBox = DropDownEditor.inherit({
         const newValue = uiDateUtils.mergeDates(value, parsedDate, type);
         const date = parsedDate && type === 'time' ? newValue : parsedDate;
 
-        if(this._applyInternalValidation(date)) {
+        if(this._applyInternalValidation(date).isValid) {
             const displayedText = this._getDisplayedText(newValue);
 
             if(value && newValue && value.getTime() === newValue.getTime() && displayedText !== text) {
@@ -529,7 +537,10 @@ const DateBox = DropDownEditor.inherit({
             }
         });
 
-        return isValid;
+        return {
+            isValid,
+            isDate
+        };
     },
 
     _applyCustomValidation: function(value) {
@@ -605,8 +616,13 @@ const DateBox = DropDownEditor.inherit({
 
     _applyButtonHandler: function(e) {
         const value = this._strategy.getValue();
-        if(this._applyInternalValidation(value)) {
+        const { isValid, isDate } = this._applyInternalValidation(value);
+        if(isValid) {
             this.dateValue(value, e.event);
+        } else if(isDate) {
+            const displayedText = this._getDisplayedText(value);
+            this.option('text', displayedText);
+            this._renderDisplayText(displayedText);
         }
         this.callBase();
     },

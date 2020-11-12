@@ -144,6 +144,27 @@ function trunc(value) {
     return Math.trunc ? Math.trunc(value) : (value > 0 ? Math.floor(value) : Math.ceil(value));
 }
 
+function getRemainderByDivision(dividend, divider, digitsCount) {
+    if(divider === parseInt(divider)) {
+        return dividend % divider;
+    }
+
+    const quotient = roundFloatPart(dividend / divider, digitsCount);
+    return (quotient - parseInt(quotient)) * divider;
+}
+
+function getExponentLength(value) {
+    const valueString = value.toString();
+
+    return valueString.split('.')[1]?.length
+        || parseInt(valueString.split('e-')[1])
+        || 0;
+}
+
+function roundFloatPart(value, digitsCount = 0) {
+    return parseFloat(value.toFixed(digitsCount));
+}
+
 exports.sign = sign;
 exports.fitIntoRange = fitIntoRange;
 exports.inRange = inRange;
@@ -153,3 +174,6 @@ exports.getExponent = getExponent;
 exports.getRoot = getRoot;
 exports.solveCubicEquation = solveCubicEquation;
 exports.trunc = trunc;
+exports.roundFloatPart = roundFloatPart;
+exports.getExponentLength = getExponentLength;
+exports.getRemainderByDivision = getRemainderByDivision;

@@ -3,7 +3,7 @@ import domAdapter from '../../core/dom_adapter';
 import eventsEngine from '../../events/core/events_engine';
 import core from './ui.grid_core.modules';
 import { focusAndSelectElement, getWidgetInstance } from './ui.grid_core.utils';
-import { isDefined } from '../../core/utils/type';
+import { isDefined, isEmptyObject } from '../../core/utils/type';
 import { inArray } from '../../core/utils/array';
 import { focused } from '../widget/selectors';
 import * as eventUtils from '../../events/utils';
@@ -440,7 +440,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
     _tabKeyHandler: function(eventArgs, isEditing) {
         const editingOptions = this.option('editing');
         const direction = eventArgs.shift ? 'previous' : 'next';
-        let isOriginalHandlerRequired = !eventArgs.shift && this._isLastValidCell(this._focusedCellPosition) || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
+        const isCellPositionDefined = isDefined(this._focusedCellPosition) && !isEmptyObject(this._focusedCellPosition);
+        let isOriginalHandlerRequired = !isCellPositionDefined || (!eventArgs.shift && this._isLastValidCell(this._focusedCellPosition)) || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
         const eventTarget = eventArgs.originalEvent.target;
         const focusedViewElement = this._focusedView && this._focusedView.element();
 
@@ -972,10 +973,8 @@ const KeyboardNavigationController = core.ViewController.inherit({
                         if((isRenderView || !isCommandCell) && that.getController('editorFactory').focus()) {
                             const $focusedElementInsideCell = $cell.find(':focus');
                             !isElementDefined($focusedElementInsideCell) && that._focus($cell);
-                        } else if(that._isCellEditMode()) {
+                        } else if(that._isNeedFocus || that._isHiddenFocus) {
                             that._focus($cell, that._isHiddenFocus);
-                        } else if(that._isHiddenFocus) {
-                            that._focus($cell, true);
                         }
                         if(isEditing) {
                             that._focusInteractiveElement.bind(that)($cell);

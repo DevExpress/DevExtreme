@@ -1649,6 +1649,30 @@ QUnit.module('Lookup Value', function() {
         });
     });
 
+    QUnit.test('lookup data source is a function', function(assert) {
+        const field = {
+            lookup: {
+                dataSource: () => [{
+                    data: 1,
+                    text: 'DataGrid'
+                }, {
+                    data: 2,
+                    text: 'PivotGrid'
+                }, {
+                    data: 3,
+                    text: 'TreeList'
+                }],
+                valueExpr: 'data',
+                displayExpr: 'text'
+            }
+        };
+        const value = 1;
+
+        utils.getCurrentLookupValueText(field, value, function(r) {
+            assert.strictEqual(r, 'DataGrid');
+        });
+    });
+
     // T597637
     QUnit.test('lookup with ODataStore shouldn\'t send getValueText query when value is empty', function(assert) {
         const fakeStore = {
