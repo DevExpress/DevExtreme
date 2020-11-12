@@ -1394,6 +1394,7 @@ module('appointmentDragging customization', $.extend({}, {
 
         assert.equal(draggedAppointment.css('z-index'), 1000, 'Correct z-index');
         assert.equal(draggedAppointment.css('position'), 'fixed', 'Appointment has fixed position');
+        assert.equal(draggedAppointment.css('opacity'), 0.7, 'Appointment has correct opacity');
 
         pointer.up();
     });

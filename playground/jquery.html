@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
 
@@ -27,147 +26,16 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <!-- RENOVATION -->
     <!-- <script type="text/javascript" src="../artifacts/js-renovation/dx.all.debug.js" charset="utf-8"></script> -->
-    <style>
-        #scroll,
-        #list {
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 240px;
-        }
-
-        .item {
-            box-sizing: border-box;
-            padding: 10px 20px;
-            margin-bottom: 10px;
-        }
-
-        #scheduler {
-            margin-left: 270px;
-        }
-
-        .dx-draggable-source {
-            opacity: 0.5;
-        }
-
-        .dx-draggable-dragging>* {
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 6px 8px rgba(0, 0, 0, 0.2);
-        }
-    </style>
 </head>
-
 <body>
-    <div id="scroll">
-        <div id="list"></div>
-    </div>
-    <div id="scheduler"></div>
+    <div id="button"></div>
     <script>
-        $(function () {
-            var draggingGroupName = "appointmentsGroup";
-
-            var createItemElement = function (data) {
-                $("<div>")
-                    .text(data.text)
-                    .addClass("item dx-card dx-theme-background-color dx-theme-text-color")
-                    .appendTo("#list")
-                    .dxDraggable({
-                        group: draggingGroupName,
-                        data: data,
-                        clone: true,
-                        onDragEnd: function (e) {
-                            if (e.toData) {
-                                e.cancel = true;
-                            }
-                        },
-                        onDragStart: function (e) {
-                            e.itemData = e.fromData;
-                        }
-                    });
-            }
-
-            $("#scroll").dxScrollView({});
-
-            $("#list").dxDraggable({
-                data: "dropArea",
-                group: draggingGroupName,
-                onDragStart: function (e) {
-                    e.cancel = true;
-                }
-            });
-
-            tasks.forEach(function (task) {
-                createItemElement(task);
-            });
-
-            $("#scheduler").dxScheduler({
-                dataSource: appointments,
-                views: [{
-                    type: "day",
-                    intervalCount: 3
-                }],
-                currentDate: new Date(2017, 4, 22),
-                startDayHour: 9,
-                height: 600,
-                editing: true,
-                appointmentDragging: {
-                    group: draggingGroupName,
-                    onRemove: function (e) {
-                        e.component.deleteAppointment(e.itemData);
-                        createItemElement(e.itemData);
-                    },
-                    onAdd: function (e) {
-                        e.component.addAppointment(e.itemData);
-                        e.itemElement.remove();
-                    }
-                }
+        $(function() {
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
-
-
-        var tasks = [
-            {
-                text: "New Brochures"
-            }, {
-                text: "Brochure Design Review"
-            }, {
-                text: "Upgrade Personal Computers"
-            }, {
-                text: "Install New Router in Dev Room"
-            }, {
-                text: "Upgrade Server Hardware"
-            }, {
-                text: "Install New Database"
-            }, {
-                text: "Website Re-Design Plan"
-            }, {
-                text: "Create Icons for Website"
-            }, {
-                text: "Submit New Website Design"
-            }, {
-                text: "Launch New Website"
-            }
-        ];
-
-        var appointments = [{
-            text: "Book Flights to San Fran for Sales Trip",
-            startDate: new Date(2017, 4, 23, 12, 0),
-            endDate: new Date(2017, 4, 23, 13, 0),
-            allDay: true
-        }, {
-            text: "Approve Personal Computer Upgrade Plan",
-            startDate: new Date(2017, 4, 23, 10, 0),
-            endDate: new Date(2017, 4, 23, 11, 0),
-            allDay: true
-        }, {
-            text: "Final Budget Review",
-            startDate: new Date(2017, 4, 23, 12, 0),
-            endDate: new Date(2017, 4, 23, 13, 35),
-            allDay: true
-        }
-        ];
-
     </script>
 </body>
-
 </html>
