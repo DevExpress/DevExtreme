@@ -29,7 +29,7 @@ export class AppComponent {
     };
 
     rowValidating(e) {
-        var position = e.newData.Position;
+        const position = e.newData.Position;
 
         if(AppComponent.isChief(position)) {
             e.errorText = "The company can have only one " + position.toUpperCase() + ". Please choose another position.";
@@ -52,7 +52,7 @@ export class AppComponent {
     }
 
     cloneIconClick(e) {
-        var clonedItem = Object.assign({}, e.row.data, { ID: this.service.getMaxID() });
+        const clonedItem = { ...e.row.data, ID: this.service.getMaxID() };
 
         this.employees.splice(e.row.rowIndex, 0, clonedItem);
         e.event.preventDefault();

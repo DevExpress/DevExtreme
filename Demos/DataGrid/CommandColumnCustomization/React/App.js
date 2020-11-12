@@ -21,7 +21,7 @@ class App extends React.Component {
     return !this.isChief(e.row.data.Position);
   }
   onRowValidating(e) {
-    var position = e.newData.Position;
+    const position = e.newData.Position;
 
     if(this.isChief(position)) {
       e.errorText = `The company can have only one ${ position.toUpperCase() }. Please choose another position.`;
@@ -37,8 +37,8 @@ class App extends React.Component {
     return !e.row.isEditing && !this.isChief(e.row.data.Position);
   }
   cloneIconClick(e) {
-    var employees = this.state.employees.slice(),
-      clonedItem = Object.assign({}, e.row.data, { ID: service.getMaxID() });
+    const employees = [...this.state.employees];
+    const clonedItem = { ...e.row.data, ID: service.getMaxID() };
 
     employees.splice(e.row.rowIndex, 0, clonedItem);
     this.setState({ employees: employees });

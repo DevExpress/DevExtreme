@@ -94,14 +94,15 @@ export default {
       return !e.row.isEditing && !this.isChief(e.row.data.Position);
     },
     cloneIconClick(e) {
-      var clonedItem = Object.assign({}, e.row.data, { ID: service.getMaxID() });
+      const employees = [...this.employees];
+      const clonedItem = { ...e.row.data, ID: service.getMaxID() };
 
-      this.employees.splice(e.row.rowIndex, 0, clonedItem);
-      e.component.refresh(true);
+      employees.splice(e.row.rowIndex, 0, clonedItem);
+      this.employees = employees;
       e.event.preventDefault();
     },
     rowValidating(e) {
-      var position = e.newData.Position;
+      const position = e.newData.Position;
 
       if(this.isChief(position)) {
         e.errorText = `The company can have only one ${ position.toUpperCase() }. Please choose another position.`;
