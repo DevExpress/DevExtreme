@@ -908,6 +908,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-date-table-cell-template-wrapper {
     position: relative;
+    box-sizing: content-box;
     height: 100%;
     width: 100%;
   }
