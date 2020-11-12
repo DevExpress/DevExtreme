@@ -938,6 +938,22 @@ testModule('position', moduleConfig, () => {
 
         assert.strictEqual(instance._position.of, 'body');
     });
+
+    test('overlay wrapper should have correct position even when there is "target" property in window', function(assert) {
+        $('<div>')
+            .attr('id', 'target')
+            .appendTo('#qunit-fixture');
+
+        $('#overlay').dxOverlay({
+            visible: true
+        });
+
+        const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+        const { left, top } = $overlayWrapper.position();
+
+        assert.strictEqual(left, 0, 'overlay wrapper left position is correct');
+        assert.strictEqual(top, 0, 'overlay wrapper left position is correct');
+    });
 });
 
 
