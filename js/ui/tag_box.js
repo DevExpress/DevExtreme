@@ -107,6 +107,7 @@ const TagBox = SelectBox.inherit({
                 }
 
                 if(this.option('opened')) {
+                    this._saveValueChangeEvent(e);
                     sendToList(options);
                     e.preventDefault();
                 }
@@ -116,6 +117,7 @@ const TagBox = SelectBox.inherit({
                 const isInputActive = this._shouldRenderSearchEvent();
 
                 if(isOpened && !isInputActive) {
+                    this._saveValueChangeEvent(e);
                     sendToList(options);
                     e.preventDefault();
                 }
@@ -669,6 +671,7 @@ const TagBox = SelectBox.inherit({
         }
 
         this.callBase(e);
+        this._saveValueChangeEvent(undefined);
     },
 
     _shouldClearFilter: function() {
@@ -1147,8 +1150,11 @@ const TagBox = SelectBox.inherit({
         this._updateWidgetHeight();
 
         if(!equalByValue(this._list.option('selectedItemKeys'), this.option('value'))) {
+            const listValueChangeEvent = this._list._getValueChangeEvent();
+            listValueChangeEvent && this._saveValueChangeEvent(listValueChangeEvent);
             this.option('value', value);
         }
+        this._list._saveValueChangeEvent(undefined);
     },
 
     _removeTag: function(value, item) {

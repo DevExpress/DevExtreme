@@ -271,6 +271,14 @@ export const ListBase = CollectionWidget.inherit({
         return this._$container;
     },
 
+    _saveValueChangeEvent: function(e) {
+        this._valueChangeEventInstance = e;
+    },
+
+    _getValueChangeEvent: function() {
+        return this._valueChangeEventInstance;
+    },
+
     _refreshItemElements: function() {
         if(!this.option('grouped')) {
             this._itemElementsCache = this._itemContainer().children(this._itemSelector());

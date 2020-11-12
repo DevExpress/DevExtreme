@@ -215,7 +215,7 @@ const ListEdit = ListBase.inherit({
         if(handledByEditProvider) {
             return;
         }
-
+        this._saveValueChangeEvent(e);
         this.callBase(...arguments);
     },
 
