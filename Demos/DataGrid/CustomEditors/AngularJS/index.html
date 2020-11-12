@@ -20,7 +20,7 @@
         <div id="gridContainer" dx-data-grid="dataGridOptions" dx-item-alias="row">
             <div data-options="dxTemplate:{ name: 'statusTemplate' }">
                 <div ng-if="row != null">
-                    <img ng-src="{{'images/icons/status-' + row.id + '.png'}}" class="status-icon middle"></img>
+                    <img ng-src="{{'images/icons/status-' + row.id + '.svg'}}" class="status-icon middle"></img>
                     <span class="middle">{{row.name}}</span>
                 </div>
                 <span ng-if="row == null">

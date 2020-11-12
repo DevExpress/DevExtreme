@@ -63,7 +63,7 @@
       <span v-if="data == null">(All)</span>
       <div v-else>
         <img
-          :src="'images/icons/status-' + data.id + '.png'"
+          :src="'images/icons/status-' + data.id + '.svg'"
           class="status-icon middle"
         >
         <span class="middle">{{ data.name }}</span>

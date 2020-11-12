@@ -72,7 +72,7 @@ class App extends React.Component {
   }
 
   itemRender(data) {
-    let imageSource = `images/icons/status-${ data.id }.png`;
+    let imageSource = `images/icons/status-${ data.id }.svg`;
     if(data != null) {
       return <div>
         <img src={imageSource} className="status-icon middle"></img>

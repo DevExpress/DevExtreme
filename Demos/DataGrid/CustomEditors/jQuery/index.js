@@ -82,7 +82,7 @@ $(function(){
                     itemTemplate: function(itemData, itemIndex, itemElement) {
                         if(itemData != null) {
                             var imageContainer = $("<span>").addClass("status-icon middle").appendTo(itemElement);
-                            $("<img>").attr("src", "images/icons/status-" + itemData.id + ".png").appendTo(imageContainer);
+                            $("<img>").attr("src", "images/icons/status-" + itemData.id + ".svg").appendTo(imageContainer);
                             $("<span>").addClass("middle").text(itemData.name).appendTo(itemElement);
                         } else {
                             $("<span>").text("(All)").appendTo(itemElement);
