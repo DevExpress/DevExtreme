@@ -105,13 +105,15 @@ describe('ScrollView', () => {
     ): HTMLDivElement => {
       const offsetWidth = 300;
       const offsetHeight = 300;
+      const scrollWidth = 500;
+      const scrollHeight = 500;
       return ({
         scrollTop: location.top,
         scrollLeft: location.left,
         offsetHeight: offsetWidth,
         offsetWidth: offsetHeight,
-        scrollWidth: direction === 'horizontal' || direction === 'both' ? 483 : 500,
-        scrollHeight: direction === 'vertical' || direction === 'both' ? 483 : 500,
+        scrollWidth: direction === 'horizontal' || direction === 'both' ? scrollWidth - scrollBarWidth : scrollWidth,
+        scrollHeight: direction === 'vertical' || direction === 'both' ? scrollHeight - scrollBarWidth : scrollHeight,
         clientWidth: direction === 'horizontal' || direction === 'both' ? offsetWidth - scrollBarWidth : offsetWidth,
         clientHeight: direction === 'vertical' || direction === 'both' ? offsetHeight - scrollBarWidth : offsetHeight,
       }) as HTMLDivElement;
