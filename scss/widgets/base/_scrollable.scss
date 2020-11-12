@@ -189,6 +189,11 @@
     direction: rtl;
   }
 
+  @at-root #{selector-append(".dx-scrollable-renovated", &)} {
+    direction: rtl;
+    float: none;
+  }
+
   .dx-scrollable-scrollbar {
     &.dx-scrollbar-vertical {
       right: auto;
