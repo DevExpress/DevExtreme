@@ -710,7 +710,11 @@ $material-grid-base-cell-padding: $material-grid-base-cell-vertical-padding $mat
     }
 
     td .dx-editor-container .dx-filter-range-content {
-      padding: $material-grid-base-cell-vertical-padding 0 $material-grid-base-cell-vertical-padding $material-grid-base-texteditor-input-padding;
+      padding:
+        $material-grid-base-cell-vertical-padding
+        $material-grid-base-cell-horizontal-padding
+        $material-grid-base-cell-vertical-padding
+        $material-grid-base-texteditor-input-padding;
     }
 
     .dx-#{$widget-name} .dx-#{$widget-name}-table & {
