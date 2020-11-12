@@ -97,8 +97,12 @@ const forceRepaint = function($element) {
 };
 
 
-const getElement = function(value) {
-    return value && $(value.target || value);
+const getElement = value => {
+    if(typeUtils.isEvent(value)) {
+        value = value.target;
+    }
+
+    return $(value);
 };
 
 ready(function() {
@@ -227,7 +231,8 @@ const Overlay = Widget.inherit({
             boundaryOffset: { h: 0, v: 0 },
             propagateOutsideClick: false,
             ignoreChildEvents: true,
-            _checkParentVisibility: true
+            _checkParentVisibility: true,
+            _fixedPosition: false
         });
     },
 
@@ -1148,7 +1153,8 @@ const Overlay = Widget.inherit({
 
     _useFixedPosition: function() {
         const $container = this._getContainer();
-        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined);
+        return this._isWindow($container) && (!iOS || this._bodyScrollTop !== undefined)
+            || this.option('_fixedPosition');
     },
 
     _toggleSafariScrolling: function(scrollingEnabled) {
@@ -1208,8 +1214,7 @@ const Overlay = Widget.inherit({
         let positionOf = null;
 
         if(!container && position) {
-            const isEvent = !!(position.of && position.of.preventDefault);
-            positionOf = isEvent ? window : (position.of || window);
+            positionOf = typeUtils.isEvent(position.of) ? window : (position.of || window);
         }
 
         return getElement(container || positionOf);
@@ -1428,6 +1433,9 @@ const Overlay = Widget.inherit({
             case 'rtlEnabled':
                 this._contentAlreadyRendered = false;
                 this.callBase(args);
+                break;
+            case '_fixedPosition':
+                this._fixWrapperPosition();
                 break;
             default:
                 this.callBase(args);
