@@ -550,7 +550,7 @@ const Scrollable = DOMComponent.inherit({
         const elementPosition = elementPositionRelativeToContent - pushBackOffset;
         const elementSize = $element[isVertical ? 'outerHeight' : 'outerWidth']();
         const scrollLocation = (isVertical ? this.scrollTop() : this.scrollLeft());
-        const clientSize = (isVertical ? this.clientHeight() : this.clientWidth());
+        const clientSize = this._container().get(0)[isVertical ? 'clientHeight' : 'clientWidth'];
 
         const startDistance = scrollLocation - elementPosition + startOffset;
         const endDistance = scrollLocation - elementPosition - elementSize + clientSize - endOffset;
