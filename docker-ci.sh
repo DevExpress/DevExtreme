@@ -189,13 +189,6 @@ function run_test_testcafe {
     npm run test-testcafe -- $args
 }
 
-function run_test_scss {
-    npm i
-    npx gulp generate-scss
-    npm run build-themes
-    node build/gulp/scss/tests/identical.test.js
-}
-
 function start_runner_watchdog {
     local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
     local last_suite_time=unknown
