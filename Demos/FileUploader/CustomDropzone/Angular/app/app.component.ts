@@ -15,7 +15,8 @@ if(!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
     isDropZoneActive = false;
-    imageSource = "#";
+    imageSource = "";
+    textVisible = true;
     progressVisible = false;
     progressValue = 0;
 
@@ -39,14 +40,13 @@ export class AppComponent {
 
     onUploaded(e) {
         const file = e.file;
-        const dropZoneText = document.getElementById("dropzone-text");
         const fileReader = new FileReader();
         fileReader.onload = () => {
             this.isDropZoneActive = false;
             this.imageSource = fileReader.result as string;
         }
         fileReader.readAsDataURL(file);
-        dropZoneText.style.display = "none";
+        this.textVisible = false;
         this.progressVisible = false;
         this.progressValue = 0;
     }
