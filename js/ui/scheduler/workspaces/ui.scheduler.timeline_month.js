@@ -39,6 +39,10 @@ const SchedulerTimelineMonth = SchedulerTimeline.inherit({
         return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * toMs('hour'));
     },
 
+    isIndicatorVisible: function() {
+        return true;
+    },
+
     _getCellCount: function() {
         const currentDate = this.option('currentDate');
         let cellCount = 0;

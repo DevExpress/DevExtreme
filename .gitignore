@@ -6,7 +6,6 @@
 /js/localization/cldr-data
 /themebuilder/data/less
 /themebuilder/data/metadata
-/scss
 bin
 node_modules
 obj
