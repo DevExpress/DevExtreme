@@ -1,6 +1,7 @@
 <template>
   <div>
     <DxMap
+      :apiKey="keys"
       :zoom="14"
       :height="400"
       v-model:type="mapTypeValue"
@@ -8,11 +9,6 @@
       width="100%"
       provider="bing"
     >
-      <DxKey
-        :bing="keys.bing"
-        :google="keys.google"
-        :google-static="keys.googleStatic"
-      />
     </DxMap>
     <div class="options">
       <div class="caption">Options</div>
@@ -30,20 +26,19 @@
 </template>
 <script>
 
-import { DxMap, DxKey } from 'devextreme-vue/map';
+import DxMap from 'devextreme-vue/map';
 import DxSelectBox from 'devextreme-vue/select-box';
 import { mapTypes } from './data.js';
 
 export default {
   components: {
     DxMap,
-    DxSelectBox,
-    DxKey
+    DxSelectBox
   },
   data() {
     return {
       keys: {
-        // NOTE: Specify your map API keys for every used provider
+        // Specify your API keys for each map provider:
         //bing: "YOUR_BING_MAPS_API_KEY",
         //google: "YOUR_GOOGLE_MAPS_API_KEY",
         //googleStatic: "YOUR_GOOGLE_STATIC_MAPS_API_KEY"

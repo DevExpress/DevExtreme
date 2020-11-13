@@ -23,7 +23,7 @@ export class AppComponent {
 
     constructor(service: Service) {
         this.mapTypes = service.getMapTypes();
-        // NOTE: Specify your map API keys for every used provider
+        // Specify your API keys for each map provider:
         //this.keys["bing"] = "YOUR_BING_MAPS_API_KEY";
         //this.keys["google"] = "YOUR_GOOGLE_MAPS_API_KEY";
         //this.keys["googleStatic"] = "YOUR_GOOGLE_STATIC_MAPS_API_KEY";
