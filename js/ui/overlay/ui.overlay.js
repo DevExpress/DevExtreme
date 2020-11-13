@@ -1152,12 +1152,18 @@ const Overlay = Widget.inherit({
     },
 
     _useFixedPosition: function() {
+        return this._shouldFixBodyPosition()
+            || this.option('_fixedPosition');
+    },
+
+    _shouldFixBodyPosition: function() {
         const $container = this._getContainer();
-        return (this._isWindow($container) || this.option('_fixedPosition')) && (!iOS || this._bodyScrollTop !== undefined);
+        return this._isWindow($container)
+            && (!iOS || this._bodyScrollTop !== undefined);
     },
 
     _toggleSafariScrolling: function(scrollingEnabled) {
-        if(iOS && this._useFixedPosition()) {
+        if(iOS && this._shouldFixBodyPosition()) {
             const body = domAdapter.getBody();
             if(scrollingEnabled) {
                 $(body).removeClass(PREVENT_SAFARI_SCROLLING_CLASS);
