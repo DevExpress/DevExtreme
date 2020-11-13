@@ -461,20 +461,10 @@ QUnit.module('popup options', moduleConfig, () => {
         }
     });
 
-    QUnit.test('maxHeight should be 90% to bottom bound if popup has been rendered at the top already (T874949)', function(assert) {
-
-        let startPopupHeight;
+    QUnit.test('maxHeight should be distance between the popup top bound and the element top bound if the popup has been rendered at the top already (T874949, T942217)', function(assert) {
         this.$element.dxDropDownBox({
-            contentTemplate: (e) => {
-                const content = $('<div id=\'dd-content\'></div>');
-
-                setTimeout(() => {
-                    startPopupHeight = $(e.component.content()).parent('.dx-overlay-content').height();
-                    $('#dd-content').height(300);
-                });
-
-                return content;
-            }
+            width: 300,
+            contentTemplate: (e) => $('<div id=\'dd-content\'></div>')
         });
 
         const elementHeight = this.$element.height();
@@ -485,33 +475,24 @@ QUnit.module('popup options', moduleConfig, () => {
 
         try {
             instance.open();
+            const startPopupHeight = $(instance.content()).parent('.dx-overlay-content').outerHeight();
+            $('#dd-content').height(300);
 
-            this.clock.tick();
-            const popup = $('.dx-popup').dxPopup('instance');
+            const popup = this.$element.find('.dx-popup').dxPopup('instance');
             const maxHeight = popup.option('maxHeight');
-
-            assert.roughEqual(Math.floor(maxHeight()), (1 + startPopupHeight + elementHeight) * 0.9, 3, 'maxHeight is correct');
+            assert.roughEqual(maxHeight(), startPopupHeight, 1.01, 'maxHeight is correct');
         } finally {
             scrollTop.restore();
-            this.$element.css('margin-top', 0);
         }
     });
 
-    QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949)', function(assert) {
+    QUnit.test('maxHeight should be recalculated if popup has been reopened after content change (T874949, T942217)', function(assert) {
         const contentHeight = 90;
-
         const windowHeight = $(window).height();
         const marginTop = Math.max(windowHeight - 50, 200);
         this.$element.dxDropDownBox({
-            contentTemplate: (e) => {
-                const content = $('<div id=\'dd-content\'></div>');
-
-                setTimeout(() => {
-                    $('#dd-content').height(contentHeight);
-                });
-
-                return content;
-            }
+            width: 300,
+            contentTemplate: (e) => $('<div id=\'dd-content\'></div>')
         });
 
         const scrollTop = sinon.stub(renderer.fn, 'scrollTop').returns(0);
@@ -521,20 +502,20 @@ QUnit.module('popup options', moduleConfig, () => {
 
         try {
             instance.open();
-
-            this.clock.tick();
-            const popup = $('.dx-popup').dxPopup('instance');
-            const maxHeight = popup.option('maxHeight');
-
+            $('#dd-content').height(contentHeight);
             instance.close();
             instance.open();
             this.clock.tick();
-            const overlayContentHeight = $(popup.content()).outerHeight();
-            assert.roughEqual(Math.floor(maxHeight()), (windowHeight - (marginTop - overlayContentHeight)) * 0.9, 3, 'maxHeight is correct');
 
+            const popup = this.$element.find('.dx-popup').dxPopup('instance');
+            const maxHeight = popup.option('maxHeight');
+            const $popupContent = $(popup.content());
+            const overlayContentHeight = $popupContent.outerHeight();
+            const overlayOffset = $popupContent.offset().top;
+            const elementOffset = this.$element.offset().top;
+            assert.ok(overlayContentHeight >= contentHeight, 'height is recalculated');
+            assert.roughEqual(maxHeight(), elementOffset - overlayOffset, 1.01, 'maxHeight is correct');
         } finally {
-            this.$element.css('margin-top', 0);
-            $('#container').css('min-height', 0);
             scrollTop.restore();
         }
     });
