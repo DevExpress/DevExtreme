@@ -2294,4 +2294,32 @@ module('Validation', () => {
         testWrapper.checkValidationResult({ isValid: false, brokenRulesCount: 1, validatorsCount: 1 });
         testWrapper.checkValidationSummaryContent(['Required']);
     });
+
+    [
+        () => {},
+        (form) => { form.itemOption('group1', 'visible', false); },
+        (form) => { form.repaint(); },
+        (form) => { form._refresh(); }
+    ].forEach(additionalTestAction => {
+        test(`field1.optionChange, field2.optionChange (T948708). Additional action: ${additionalTestAction.toString()}`, function(assert) {
+            const testWrapper = new FormTestWrapper({
+                items: [ {
+                    itemType: 'group',
+                    name: 'group1',
+                    items: ['field1', {
+                        itemType: 'group',
+                        name: 'group2',
+                        items: ['field2']
+                    }]
+                }]
+            });
+
+            testWrapper.setItemOption('group1.field1', 'colSpan', 1);
+            additionalTestAction(testWrapper._form);
+            testWrapper.setItemOption('group1.group2.field2', 'colSpan', 1);
+
+            assert.ok('no error is raised');
+            assert.strictEqual(testWrapper._form.itemOption('group1.group2.field2').colSpan, 1);
+        });
+    });
 });
