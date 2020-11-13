@@ -55,8 +55,7 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
                 this._isTagRemoved = true;
 
                 const $tagToDelete = this._$focusedTag || this._tagElements().last();
@@ -84,8 +83,7 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
                 this._isTagRemoved = true;
 
                 const $tagToDelete = this._$focusedTag;
@@ -107,6 +105,7 @@ const TagBox = SelectBox.inherit({
                 }
 
                 if(this.option('opened')) {
+                    this._saveValueChangeEvent(e);
                     sendToList(options);
                     e.preventDefault();
                 }
@@ -116,6 +115,7 @@ const TagBox = SelectBox.inherit({
                 const isInputActive = this._shouldRenderSearchEvent();
 
                 if(isOpened && !isInputActive) {
+                    this._saveValueChangeEvent(e);
                     sendToList(options);
                     e.preventDefault();
                 }
@@ -155,6 +155,12 @@ const TagBox = SelectBox.inherit({
                 !this.option('multiline') && this._scrollContainer(direction);
             }
         });
+    },
+
+    _processKeyboardEvent: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._saveValueChangeEvent(e);
     },
 
     _updateTagsContainer: function($element) {
@@ -663,6 +669,7 @@ const TagBox = SelectBox.inherit({
         }
 
         this.callBase(e);
+        this._saveValueChangeEvent(undefined);
     },
 
     _shouldClearFilter: function() {
@@ -1141,8 +1148,11 @@ const TagBox = SelectBox.inherit({
         this._updateWidgetHeight();
 
         if(!equalByValue(this._list.option('selectedItemKeys'), this.option('value'))) {
+            const listSelectionChangeEvent = this._list._getSelectionChangeEvent();
+            listSelectionChangeEvent && this._saveValueChangeEvent(listSelectionChangeEvent);
             this.option('value', value);
         }
+        this._list._saveSelectionChangeEvent(undefined);
     },
 
     _removeTag: function(value, item) {
