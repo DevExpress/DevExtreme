@@ -192,6 +192,12 @@
   @at-root #{selector-append(".dx-scrollable-renovated", &)} {
     direction: rtl;
     float: none;
+
+    .dx-scrollable-container,
+    .dx-scrollable-content {
+      direction: rtl;
+      float: none;
+    }
   }
 
   .dx-scrollable-scrollbar {
