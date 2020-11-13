@@ -233,21 +233,22 @@ export async function compareScreenshot(
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function createScreenshotsComparer(t: TestController) {
   const errorMessages: string[] = [];
-  return {
-    takeScreenshot: async (screenshotName: string,
-      element: SelectorType = null,
-      comparisonOptions?: Partial<ComparerOptions>,
-    ): Promise<boolean> => {
-      try {
-        const isValid = await compareScreenshot(t, screenshotName, element, comparisonOptions);
-        if (!isValid) {
-          errorMessages.push(`Screenshot:'${screenshotName}' invalid`);
-        }
-      } catch (e) {
-        errorMessages.push(`Screenshot:'${screenshotName}' invalid, internalError: ${e.message}`);
+  const takeScreenshot = async (screenshotName: string,
+    element: SelectorType = null,
+    comparisonOptions?: Partial<ComparerOptions>,
+  ): Promise<boolean> => {
+    try {
+      const isValid = await compareScreenshot(t, screenshotName, element, comparisonOptions);
+      if (!isValid) {
+        errorMessages.push(`Screenshot:'${screenshotName}' invalid`);
       }
-      return true;
-    },
+    } catch (e) {
+      errorMessages.push(`Screenshot:'${screenshotName}' invalid, internalError: ${e.message}`);
+    }
+    return true;
+  };
+  return {
+    takeScreenshot,
     compareResults: {
       isValid: (): boolean => errorMessages.length === 0,
       errorMessages: (): string => errorMessages.join('\r\n'),
