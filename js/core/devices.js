@@ -112,6 +112,12 @@ const uaParsers = {
 
 class Devices {
     /**
+    * @name DevicesObjectevents.orientationChanged
+    * @type classEventType
+    * @type_function_param1 e:object
+    * @type_function_param1_field1 orientation:String
+    */
+    /**
     * @name DevicesObjectMethods.ctor
     * @publicName ctor(options)
     * @param1 options:object
