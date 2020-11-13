@@ -2302,7 +2302,7 @@ module('Validation', () => {
         (form) => { form._refresh(); }
     ].forEach(additionalTestAction => {
         test(`field1.optionChange, field2.optionChange (T948708). Additional action: ${additionalTestAction.toString()}`, function(assert) {
-            const testWrapper = new FormTestWrapper({
+            const form = new FormTestWrapper({
                 items: [ {
                     itemType: 'group',
                     name: 'group1',
@@ -2312,14 +2312,14 @@ module('Validation', () => {
                         items: ['field2']
                     }]
                 }]
-            });
+            })._form;
 
-            testWrapper.setItemOption('group1.field1', 'colSpan', 1);
-            additionalTestAction(testWrapper._form);
-            testWrapper.setItemOption('group1.group2.field2', 'colSpan', 1);
+            form.itemOption('group1.field1', 'colSpan', 1);
+            additionalTestAction(form);
+            form.itemOption('group1.group2.field2', 'colSpan', 1);
 
             assert.ok('no error is raised');
-            assert.strictEqual(testWrapper._form.itemOption('group1.group2.field2').colSpan, 1);
+            assert.strictEqual(form.itemOption('group1.group2.field2').colSpan, 1);
         });
     });
 });
