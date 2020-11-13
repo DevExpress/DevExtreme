@@ -233,7 +233,8 @@ export async function compareScreenshot(
 // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 export function createScreenshotsComparer(t: TestController) {
   const errorMessages: string[] = [];
-  const takeScreenshot = async (screenshotName: string,
+  const takeScreenshot = async (
+    screenshotName: string,
     element: SelectorType = null,
     comparisonOptions?: Partial<ComparerOptions>,
   ): Promise<boolean> => {
