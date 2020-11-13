@@ -41,7 +41,6 @@ import Widget, {
 export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid dxFormOptions.alignItemLabels
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -49,7 +48,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     alignItemLabels?: boolean;
     /**
      * @docid dxFormOptions.alignItemLabelsInAllGroups
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -74,7 +72,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     colCountByScreen?: any;
     /**
      * @docid dxFormOptions.customizeItem
-     * @type function
      * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem|dxFormButtonItem
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -108,7 +105,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     labelLocation?: 'left' | 'right' | 'top';
     /**
      * @docid dxFormOptions.minColWidth
-     * @type number
      * @default 200
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -139,7 +135,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     onFieldDataChanged?: ((e: { component?: dxForm, element?: dxElement, model?: any, dataField?: string, value?: any }) => any);
     /**
      * @docid dxFormOptions.optionalMark
-     * @type string
      * @default "optional"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -147,7 +142,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     optionalMark?: string;
     /**
      * @docid dxFormOptions.readOnly
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -155,7 +149,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     readOnly?: boolean;
     /**
      * @docid dxFormOptions.requiredMark
-     * @type string
      * @default "*"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -163,7 +156,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     requiredMark?: string;
     /**
      * @docid dxFormOptions.requiredMessage
-     * @type string
      * @default "{0} is required"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -171,7 +163,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     requiredMessage?: string;
     /**
      * @docid dxFormOptions.screenByWidth
-     * @type function
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -179,7 +170,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     screenByWidth?: Function;
     /**
      * @docid dxFormOptions.scrollingEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -187,7 +177,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     scrollingEnabled?: boolean;
     /**
      * @docid dxFormOptions.showColonAfterLabel
-     * @type boolean
      * @default true
      * @default false [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -196,7 +185,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     showColonAfterLabel?: boolean;
     /**
      * @docid dxFormOptions.showOptionalMark
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -204,7 +192,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     showOptionalMark?: boolean;
     /**
      * @docid dxFormOptions.showRequiredMark
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -212,7 +199,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     showRequiredMark?: boolean;
     /**
      * @docid dxFormOptions.showValidationSummary
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -220,7 +206,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     showValidationSummary?: boolean;
     /**
      * @docid dxFormOptions.validationGroup
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -337,7 +322,6 @@ export interface dxFormButtonItem {
     buttonOptions?: dxButtonOptions;
     /**
      * @docid dxFormButtonItem.colSpan
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -345,7 +329,6 @@ export interface dxFormButtonItem {
     colSpan?: number;
     /**
      * @docid dxFormButtonItem.cssClass
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -369,7 +352,6 @@ export interface dxFormButtonItem {
     itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
     /**
      * @docid dxFormButtonItem.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -385,7 +367,6 @@ export interface dxFormButtonItem {
     verticalAlignment?: 'bottom' | 'center' | 'top';
     /**
      * @docid dxFormButtonItem.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -393,7 +374,6 @@ export interface dxFormButtonItem {
     visible?: boolean;
     /**
      * @docid dxFormButtonItem.visibleIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -404,7 +384,6 @@ export interface dxFormButtonItem {
 export interface dxFormEmptyItem {
     /**
      * @docid dxFormEmptyItem.colSpan
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -412,7 +391,6 @@ export interface dxFormEmptyItem {
     colSpan?: number;
     /**
      * @docid dxFormEmptyItem.cssClass
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -428,7 +406,6 @@ export interface dxFormEmptyItem {
     itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
     /**
      * @docid dxFormEmptyItem.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -436,7 +413,6 @@ export interface dxFormEmptyItem {
     name?: string;
     /**
      * @docid dxFormEmptyItem.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -444,7 +420,6 @@ export interface dxFormEmptyItem {
     visible?: boolean;
     /**
      * @docid dxFormEmptyItem.visibleIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -455,7 +430,6 @@ export interface dxFormEmptyItem {
 export interface dxFormGroupItem {
     /**
      * @docid dxFormGroupItem.alignItemLabels
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -463,7 +437,6 @@ export interface dxFormGroupItem {
     alignItemLabels?: boolean;
     /**
      * @docid dxFormGroupItem.caption
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -471,7 +444,6 @@ export interface dxFormGroupItem {
     caption?: string;
     /**
      * @docid dxFormGroupItem.colCount
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -488,7 +460,6 @@ export interface dxFormGroupItem {
     colCountByScreen?: any;
     /**
      * @docid dxFormGroupItem.colSpan
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -496,7 +467,6 @@ export interface dxFormGroupItem {
     colSpan?: number;
     /**
      * @docid dxFormGroupItem.cssClass
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -520,7 +490,6 @@ export interface dxFormGroupItem {
     items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>;
     /**
      * @docid dxFormGroupItem.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -540,7 +509,6 @@ export interface dxFormGroupItem {
     template?: template | ((data: { component?: dxForm, formData?: any }, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxFormGroupItem.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -548,7 +516,6 @@ export interface dxFormGroupItem {
     visible?: boolean;
     /**
      * @docid dxFormGroupItem.visibleIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -559,7 +526,6 @@ export interface dxFormGroupItem {
 export interface dxFormSimpleItem {
     /**
      * @docid dxFormSimpleItem.colSpan
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -567,7 +533,6 @@ export interface dxFormSimpleItem {
     colSpan?: number;
     /**
      * @docid dxFormSimpleItem.cssClass
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -575,7 +540,6 @@ export interface dxFormSimpleItem {
     cssClass?: string;
     /**
      * @docid dxFormSimpleItem.dataField
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -598,7 +562,6 @@ export interface dxFormSimpleItem {
     editorType?: 'dxAutocomplete' | 'dxCalendar' | 'dxCheckBox' | 'dxColorBox' | 'dxDateBox' | 'dxDropDownBox' | 'dxHtmlEditor' | 'dxLookup' | 'dxNumberBox' | 'dxRadioGroup' | 'dxRangeSlider' | 'dxSelectBox' | 'dxSlider' | 'dxSwitch' | 'dxTagBox' | 'dxTextArea' | 'dxTextBox';
     /**
      * @docid dxFormSimpleItem.helpText
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -606,7 +569,6 @@ export interface dxFormSimpleItem {
     helpText?: string;
     /**
      * @docid dxFormSimpleItem.isRequired
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -630,7 +592,6 @@ export interface dxFormSimpleItem {
     label?: { alignment?: 'center' | 'left' | 'right', location?: 'left' | 'right' | 'top', showColon?: boolean, text?: string, visible?: boolean };
     /**
      * @docid dxFormSimpleItem.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -661,7 +622,6 @@ export interface dxFormSimpleItem {
     validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
      * @docid dxFormSimpleItem.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -669,7 +629,6 @@ export interface dxFormSimpleItem {
     visible?: boolean;
     /**
      * @docid dxFormSimpleItem.visibleIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -680,7 +639,6 @@ export interface dxFormSimpleItem {
 export interface dxFormTabbedItem {
     /**
      * @docid dxFormTabbedItem.colSpan
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -688,7 +646,6 @@ export interface dxFormTabbedItem {
     colSpan?: number;
     /**
      * @docid dxFormTabbedItem.cssClass
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -704,7 +661,6 @@ export interface dxFormTabbedItem {
     itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
     /**
      * @docid dxFormTabbedItem.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -728,7 +684,6 @@ export interface dxFormTabbedItem {
     tabs?: Array<{ alignItemLabels?: boolean, badge?: string, colCount?: number, colCountByScreen?: any, disabled?: boolean, icon?: string, items?: Array<dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem>, tabTemplate?: template | ((tabData: any, tabIndex: number, tabElement: dxElement) => any), template?: template | ((tabData: any, tabIndex: number, tabElement: dxElement) => any), title?: string }>;
     /**
      * @docid dxFormTabbedItem.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -736,7 +691,6 @@ export interface dxFormTabbedItem {
     visible?: boolean;
     /**
      * @docid dxFormTabbedItem.visibleIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

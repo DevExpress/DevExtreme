@@ -52,7 +52,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     dataSource?: Array<any> | DataSource | DataSourceOptions | string;
     /**
      * @docid dxSankeyOptions.hoverEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -95,7 +94,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid dxSankeyOptions.onLinkHoverChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:dxSankeyLink
      * @notUsedInTheme
@@ -120,7 +118,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid dxSankeyOptions.onNodeHoverChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:dxSankeyNode
      * @notUsedInTheme
@@ -154,7 +151,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     sortData?: any;
     /**
      * @docid dxSankeyOptions.sourceField
-     * @type string
      * @default 'source'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -162,7 +158,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     sourceField?: string;
     /**
      * @docid dxSankeyOptions.targetField
-     * @type string
      * @default 'target'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -177,7 +172,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     tooltip?: dxSankeyTooltip;
     /**
      * @docid dxSankeyOptions.weightField
-     * @type string
      * @default 'weight'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -214,7 +208,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     customizeNodeTooltip?: ((info: { title?: string, label?: string, weightIn?: number, weightOut?: number }) => any);
     /**
      * @docid dxSankeyOptions.tooltip.enabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -289,21 +282,18 @@ export default class dxSankey extends BaseWidget {
 export interface dxSankeyConnectionInfoObject {
     /**
      * @docid dxSankeyConnectionInfoObject.source
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     source?: string;
     /**
      * @docid dxSankeyConnectionInfoObject.target
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     target?: string;
     /**
      * @docid dxSankeyConnectionInfoObject.weight
-     * @type Number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -376,7 +366,6 @@ export interface dxSankeyNode {
     isHovered(): boolean;
     /**
      * @docid dxSankeyNodefields.label
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -404,7 +393,6 @@ export interface dxSankeyNode {
     showTooltip(): void;
     /**
      * @docid dxSankeyNodefields.title
-     * @type string
      * @deprecated
      * @prevFileNamespace DevExpress.viz
      * @public

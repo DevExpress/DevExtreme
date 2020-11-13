@@ -19,7 +19,6 @@ import Widget, {
 export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGridFieldChooser> {
     /**
      * @docid dxPivotGridFieldChooserOptions.allowSearch
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,7 +81,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     onContextMenuPreparing?: ((e: { component?: dxPivotGridFieldChooser, element?: dxElement, model?: any, items?: Array<any>, area?: string, field?: PivotGridDataSourceField, event?: event }) => any);
     /**
      * @docid dxPivotGridFieldChooserOptions.searchTimeout
-     * @type number
      * @default 500
      * @prevFileNamespace DevExpress.ui
      * @public

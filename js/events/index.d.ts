@@ -38,7 +38,6 @@ export class dxEvent {
     /**
      * @docid dxEventMethods.isDefaultPrevented
      * @publicName isDefaultPrevented()
-     * @type function
      * @return boolean
      * @prevFileNamespace DevExpress.events
      * @public
@@ -47,7 +46,6 @@ export class dxEvent {
     /**
      * @docid dxEventMethods.isImmediatePropagationStopped
      * @publicName isImmediatePropagationStopped()
-     * @type function
      * @return boolean
      * @prevFileNamespace DevExpress.events
      * @public
@@ -56,7 +54,6 @@ export class dxEvent {
     /**
      * @docid dxEventMethods.isPropagationStopped
      * @publicName isPropagationStopped()
-     * @type function
      * @return boolean
      * @prevFileNamespace DevExpress.events
      * @public
@@ -65,7 +62,6 @@ export class dxEvent {
     /**
      * @docid dxEventMethods.preventDefault
      * @publicName preventDefault()
-     * @type function
      * @prevFileNamespace DevExpress.events
      * @public
      */
@@ -73,7 +69,6 @@ export class dxEvent {
     /**
      * @docid dxEventMethods.stopImmediatePropagation
      * @publicName stopImmediatePropagation()
-     * @type function
      * @prevFileNamespace DevExpress.events
      * @public
      */
@@ -81,7 +76,6 @@ export class dxEvent {
     /**
      * @docid dxEventMethods.stopPropagation
      * @publicName stopPropagation()
-     * @type function
      * @prevFileNamespace DevExpress.events
      * @public
      */
@@ -99,7 +93,6 @@ export type event = dxEvent | JQueryEventObject;
 /**
  * @docid eventsHandler
  * @publicName handler(event, extraParameters)
- * @type function
  * @param1 event:dxEvent
  * @param2 extraParameters:object
  * @return boolean

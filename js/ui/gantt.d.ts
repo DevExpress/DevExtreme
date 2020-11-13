@@ -33,7 +33,6 @@ import {
 export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid dxGanttOptions.allowSelection
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -312,7 +311,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     selectedRowKey?: any;
     /**
      * @docid dxGanttOptions.showResources
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -320,7 +318,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     showResources?: boolean;
     /**
      * @docid dxGanttOptions.showRowLines
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -328,7 +325,6 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     showRowLines?: boolean;
     /**
      * @docid dxGanttOptions.taskListWidth
-     * @type number
      * @default 300
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -584,7 +580,6 @@ export interface dxGanttToolbar {
 export interface dxGanttContextMenu {
     /**
      * @docid dxGanttContextMenu.enabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -629,7 +624,6 @@ export interface dxGanttContextMenuItem extends dxContextMenuItem {
 export interface dxGanttStripLine {
     /**
      * @docid dxGanttStripLine.cssClass
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -655,7 +649,6 @@ export interface dxGanttStripLine {
     start?: Date | number | string | (() => Date | number | string);
     /**
      * @docid dxGanttStripLine.title
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -5,7 +5,6 @@ import Editor, {
 export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     /**
      * @docid dxSwitchOptions.activeStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -13,7 +12,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     activeStateEnabled?: boolean;
     /**
      * @docid dxSwitchOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -21,7 +19,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxSwitchOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -29,7 +26,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     hoverStateEnabled?: boolean;
     /**
      * @docid dxSwitchOptions.name
-     * @type string
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -37,7 +33,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     name?: string;
     /**
      * @docid dxSwitchOptions.switchedOffText
-     * @type string
      * @default "OFF"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -45,7 +40,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     switchedOffText?: string;
     /**
      * @docid dxSwitchOptions.switchedOnText
-     * @type string
      * @default "ON"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -53,7 +47,6 @@ export interface dxSwitchOptions extends EditorOptions<dxSwitch> {
     switchedOnText?: string;
     /**
      * @docid dxSwitchOptions.value
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

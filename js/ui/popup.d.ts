@@ -37,7 +37,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     container?: string | Element | JQuery;
     /**
      * @docid dxPopupOptions.dragEnabled
-     * @type boolean
      * @default false
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -46,7 +45,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     dragEnabled?: boolean;
     /**
      * @docid dxPopupOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -54,7 +52,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxPopupOptions.fullScreen
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -111,7 +108,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     position?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | positionConfig | Function;
     /**
      * @docid dxPopupOptions.resizeEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -119,7 +115,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     resizeEnabled?: boolean;
     /**
      * @docid dxPopupOptions.showCloseButton
-     * @type boolean
      * @default false
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -128,7 +123,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     showCloseButton?: boolean;
     /**
      * @docid dxPopupOptions.showTitle
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -136,7 +130,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     showTitle?: boolean;
     /**
      * @docid dxPopupOptions.title
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -186,7 +179,6 @@ export interface dxPopupAnimation extends dxOverlayAnimation {
 export interface dxPopupToolbarItem {
     /**
      * @docid dxPopupOptions.toolbarItems.disabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -194,7 +186,6 @@ export interface dxPopupToolbarItem {
     disabled?: boolean;
     /**
      * @docid dxPopupOptions.toolbarItems.html
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -223,7 +214,6 @@ export interface dxPopupToolbarItem {
     template?: template;
     /**
      * @docid dxPopupOptions.toolbarItems.text
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -238,7 +228,6 @@ export interface dxPopupToolbarItem {
     toolbar?: 'bottom' | 'top';
     /**
      * @docid dxPopupOptions.toolbarItems.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

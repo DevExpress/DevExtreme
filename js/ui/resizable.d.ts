@@ -30,7 +30,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     height?: number | string | (() => number | string);
     /**
      * @docid dxResizableOptions.maxHeight
-     * @type number
      * @default Infinity
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -38,7 +37,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     maxHeight?: number;
     /**
      * @docid dxResizableOptions.maxWidth
-     * @type number
      * @default Infinity
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -46,7 +44,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     maxWidth?: number;
     /**
      * @docid dxResizableOptions.minHeight
-     * @type number
      * @default 30
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -54,7 +51,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     minHeight?: number;
     /**
      * @docid dxResizableOptions.minWidth
-     * @type number
      * @default 30
      * @prevFileNamespace DevExpress.ui
      * @public

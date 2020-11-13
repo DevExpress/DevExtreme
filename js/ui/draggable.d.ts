@@ -19,7 +19,6 @@ import dxSortable from './sortable';
 export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends DOMComponentOptions<T> {
     /**
      * @docid DraggableBaseOptions.autoScroll
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -66,7 +65,6 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     dragDirection?: 'both' | 'horizontal' | 'vertical';
     /**
      * @docid DraggableBaseOptions.group
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -74,7 +72,6 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     group?: string;
     /**
      * @docid DraggableBaseOptions.handle
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,7 +79,6 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     handle?: string;
     /**
      * @docid DraggableBaseOptions.scrollSensitivity
-     * @type number
      * @default 60
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -90,7 +86,6 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     scrollSensitivity?: number;
     /**
      * @docid DraggableBaseOptions.scrollSpeed
-     * @type number
      * @default 30
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -109,7 +104,6 @@ export interface DraggableBase { }
 export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     /**
      * @docid dxDraggableOptions.clone
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

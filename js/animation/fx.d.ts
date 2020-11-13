@@ -7,7 +7,6 @@ import {
 export interface animationConfig {
     /**
      * @docid animationConfig.complete
-     * @type function
      * @type_function_param1 $element:dxElement
      * @type_function_param2 config:object
      * @prevFileNamespace DevExpress.animation
@@ -16,7 +15,6 @@ export interface animationConfig {
     complete?: (($element: dxElement, config: any) => any);
     /**
      * @docid animationConfig.delay
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.animation
      * @public
@@ -32,7 +30,6 @@ export interface animationConfig {
     direction?: 'bottom' | 'left' | 'right' | 'top';
     /**
      * @docid animationConfig.duration
-     * @type number
      * @default 400
      * @prevFileNamespace DevExpress.animation
      * @public
@@ -40,7 +37,6 @@ export interface animationConfig {
     duration?: number;
     /**
      * @docid animationConfig.easing
-     * @type string
      * @default 'ease'
      * @prevFileNamespace DevExpress.animation
      * @public
@@ -56,7 +52,6 @@ export interface animationConfig {
     from?: number | string | any;
     /**
      * @docid animationConfig.staggerDelay
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.animation
      * @public
@@ -64,7 +59,6 @@ export interface animationConfig {
     staggerDelay?: number;
     /**
      * @docid animationConfig.start
-     * @type function
      * @type_function_param1 $element:dxElement
      * @type_function_param2 config:object
      * @prevFileNamespace DevExpress.animation

@@ -21,7 +21,6 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
     mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
     /**
      * @docid dxTextBoxOptions.value
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public

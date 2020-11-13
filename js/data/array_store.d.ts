@@ -5,7 +5,6 @@ import Store, {
 export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
     /**
      * @docid ArrayStoreOptions.data
-     * @type Array<any>
      * @prevFileNamespace DevExpress.data
      * @public
      */

@@ -30,7 +30,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     container?: string | Element | JQuery;
     /**
      * @docid dxLoadPanelOptions.delay
-     * @type Number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -38,7 +37,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     delay?: number;
     /**
      * @docid dxLoadPanelOptions.focusStateEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -54,7 +52,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     height?: number | string | (() => number | string);
     /**
      * @docid dxLoadPanelOptions.indicatorSrc
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -76,7 +73,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     maxWidth?: number | string | (() => number | string);
     /**
      * @docid dxLoadPanelOptions.message
-     * @type string
      * @default "Loading ..."
      * @default "" [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -100,7 +96,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     shadingColor?: string;
     /**
      * @docid dxLoadPanelOptions.showIndicator
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -108,7 +103,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     showIndicator?: boolean;
     /**
      * @docid dxLoadPanelOptions.showPane
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -25,7 +25,6 @@ import {
 export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid dxHtmlEditorOptions.customizeModules
-     * @type function
      * @type_function_param1 config:object
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -33,7 +32,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     customizeModules?: ((config: any) => any);
     /**
      * @docid dxHtmlEditorOptions.focusStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -57,7 +55,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     mentions?: Array<dxHtmlEditorMention>;
     /**
      * @docid dxHtmlEditorOptions.name
-     * @type string
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -87,7 +84,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     onFocusOut?: ((e: { component?: dxHtmlEditor, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxHtmlEditorOptions.placeholder
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -323,7 +319,6 @@ export interface dxHtmlEditorMediaResizing {
     allowedTargets?: Array<string>;
     /**
      * @docid dxHtmlEditorMediaResizing.enabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -364,7 +359,6 @@ export interface dxHtmlEditorMention {
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxHtmlEditorMention.marker
-     * @type string
      * @default "@"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -372,7 +366,6 @@ export interface dxHtmlEditorMention {
     marker?: string;
     /**
      * @docid dxHtmlEditorMention.minSearchLength
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -388,7 +381,6 @@ export interface dxHtmlEditorMention {
     searchExpr?: string | Function | Array<string | Function>;
     /**
      * @docid dxHtmlEditorMention.searchTimeout
-     * @type number
      * @default 500
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -435,7 +427,6 @@ export interface dxHtmlEditorToolbar {
     items?: Array<dxHtmlEditorToolbarItem | 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable'>;
     /**
      * @docid dxHtmlEditorToolbar.multiline
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

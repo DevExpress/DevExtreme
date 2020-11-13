@@ -1,7 +1,6 @@
 export interface XmlaStoreOptions {
     /**
      * @docid XmlaStoreOptions.beforeSend
-     * @type function
      * @type_function_param1 options:object
      * @type_function_param1_field1 url:string
      * @type_function_param1_field2 method:string
@@ -15,21 +14,18 @@ export interface XmlaStoreOptions {
     beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
     /**
      * @docid XmlaStoreOptions.catalog
-     * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     catalog?: string;
     /**
      * @docid XmlaStoreOptions.cube
-     * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cube?: string;
     /**
      * @docid XmlaStoreOptions.url
-     * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */

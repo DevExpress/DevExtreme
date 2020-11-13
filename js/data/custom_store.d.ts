@@ -11,7 +11,6 @@ import {
 export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     /**
      * @docid CustomStoreOptions.byKey
-     * @type function
      * @type_function_param1 key:object|string|number
      * @type_function_return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -20,7 +19,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
     /**
      * @docid CustomStoreOptions.cacheRawData
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.data
      * @public
@@ -28,7 +26,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     cacheRawData?: boolean;
     /**
      * @docid CustomStoreOptions.insert
-     * @type function
      * @type_function_param1 values:object
      * @type_function_return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -37,7 +34,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
     /**
      * @docid CustomStoreOptions.load
-     * @type function
      * @type_function_param1 options:LoadOptions
      * @type_function_return Promise<any>|Array<any>
      * @prevFileNamespace DevExpress.data
@@ -55,7 +51,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     loadMode?: 'processed' | 'raw';
     /**
      * @docid CustomStoreOptions.remove
-     * @type function
      * @type_function_param1 key:object|string|number
      * @type_function_return Promise<void>
      * @prevFileNamespace DevExpress.data
@@ -64,7 +59,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     remove?: ((key: any | string | number) => Promise<void> | JQueryPromise<void>);
     /**
      * @docid CustomStoreOptions.totalCount
-     * @type function
      * @type_function_param1 loadOptions:object
      * @type_function_param1_field1 filter:object
      * @type_function_param1_field2 group:object
@@ -75,7 +69,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> | JQueryPromise<number>);
     /**
      * @docid CustomStoreOptions.update
-     * @type function
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @type_function_return Promise<any>
@@ -85,7 +78,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
     update?: ((key: any | string | number, values: any) => Promise<any> | JQueryPromise<any>);
     /**
      * @docid CustomStoreOptions.useDefaultSearch
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.data
      * @public

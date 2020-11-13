@@ -26,7 +26,6 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     onComplete?: ((e: { component?: dxProgressBar, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxProgressBarOptions.showStatus
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -45,7 +44,6 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     statusFormat?: string | ((ratio: number, value: number) => string);
     /**
      * @docid dxProgressBarOptions.value
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -23,7 +23,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid HierarchicalCollectionWidgetOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -31,7 +30,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
     focusStateEnabled?: boolean;
     /**
      * @docid HierarchicalCollectionWidgetOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

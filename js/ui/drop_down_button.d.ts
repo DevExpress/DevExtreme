@@ -39,7 +39,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     dataSource?: string | Array<dxDropDownButtonItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxDropDownButtonOptions.deferRendering
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -76,7 +75,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     dropDownOptions?: dxPopupOptions;
     /**
      * @docid dxDropDownButtonOptions.focusStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -84,7 +82,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     focusStateEnabled?: boolean;
     /**
      * @docid dxDropDownButtonOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -92,7 +89,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     hoverStateEnabled?: boolean;
     /**
      * @docid dxDropDownButtonOptions.icon
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -120,7 +116,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     items?: Array<dxDropDownButtonItem | any>;
     /**
      * @docid dxDropDownButtonOptions.keyExpr
-     * @type string
      * @default 'this'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -128,7 +123,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     keyExpr?: string;
     /**
      * @docid dxDropDownButtonOptions.noDataText
-     * @type string
      * @default 'No data to display'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -173,7 +167,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     onSelectionChanged?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, item?: any, previousItem?: any }) => any) | string;
     /**
      * @docid dxDropDownButtonOptions.opened
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -198,7 +191,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     selectedItemKey?: string | number;
     /**
      * @docid dxDropDownButtonOptions.showArrowIcon
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -206,7 +198,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     showArrowIcon?: boolean;
     /**
      * @docid dxDropDownButtonOptions.splitButton
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -222,7 +213,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     stylingMode?: 'text' | 'outlined' | 'contained';
     /**
      * @docid dxDropDownButtonOptions.text
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -230,7 +220,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     text?: string;
     /**
      * @docid dxDropDownButtonOptions.useSelectMode
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -238,7 +227,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     useSelectMode?: boolean;
     /**
      * @docid dxDropDownButtonOptions.wrapItemText
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

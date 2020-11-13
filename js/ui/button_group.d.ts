@@ -32,7 +32,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     buttonTemplate?: template | ((buttonData: any, buttonContent: dxElement) => string | Element | JQuery);
     /**
      * @docid dxButtonGroupOptions.focusStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -40,7 +39,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxButtonGroupOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -136,14 +134,12 @@ export default class dxButtonGroup extends Widget {
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**
      * @docid dxButtonGroupItem.hint
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hint?: string;
     /**
      * @docid dxButtonGroupItem.icon
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */

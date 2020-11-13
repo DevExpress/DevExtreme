@@ -112,7 +112,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     export?: { fileName?: string, proxyUrl?: string };
     /**
      * @docid dxDiagramOptions.fullScreen
-     * @type Boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -135,7 +134,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     nodes?: { autoLayout?: 'off' | 'tree' | 'layered' | { orientation?: 'vertical' | 'horizontal', type?: 'off' | 'tree' | 'layered' }, autoSizeEnabled?: boolean, containerChildrenExpr?: string | ((data: any) => any), containerKeyExpr?: string | ((data: any) => any), dataSource?: Array<any> | DataSource | DataSourceOptions, heightExpr?: string | ((data: any) => any), imageUrlExpr?: string | ((data: any) => any), itemsExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), leftExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), parentKeyExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), topExpr?: string | ((data: any) => any), typeExpr?: string | ((data: any) => any), widthExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
     /**
      * @docid dxDiagramOptions.hasChanges
-     * @type Boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -202,7 +200,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     onRequestLayoutUpdate?: ((e: { component?: dxDiagram, element?: dxElement, model?: any, changes?: any[], allowed?: boolean }) => any);
     /**
      * @docid dxDiagramOptions.pageColor
-     * @type String
      * @default "white"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -233,7 +230,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     propertiesPanel?: { tabs?: Array<{ commands?: Array<'separator'|'exportSvg'|'exportPng'|'exportJpg'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'layoutTreeTopToBottom'|'layoutTreeBottomToTop'|'layoutTreeLeftToRight'|'layoutTreeRightToLeft'|'layoutLayeredTopToBottom'|'layoutLayeredBottomToTop'|'layoutLayeredLeftToRight'|'layoutLayeredRightToLeft'|'fullScreen'|'zoomLevel'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'> }>, visibility?: 'auto' | 'visible' | 'collapsed' | 'disabled' };
     /**
      * @docid dxDiagramOptions.readOnly
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -241,7 +237,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     readOnly?: boolean;
     /**
      * @docid dxDiagramOptions.showGrid
-     * @type Boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -249,7 +244,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     showGrid?: boolean;
     /**
      * @docid dxDiagramOptions.simpleView
-     * @type Boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -257,7 +251,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     simpleView?: boolean;
     /**
      * @docid dxDiagramOptions.snapToGrid
-     * @type Boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -414,14 +407,12 @@ export interface dxDiagramConnector extends dxDiagramItem {
     fromKey?: any;
     /**
      * @docid dxDiagramConnector.fromId
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     fromId?: string;
     /**
      * @docid dxDiagramConnector.fromPointIndex
-     * @type Number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -457,14 +448,12 @@ export interface dxDiagramConnector extends dxDiagramItem {
     toKey?: any;
     /**
      * @docid dxDiagramConnector.toId
-     * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     toId?: string;
     /**
      * @docid dxDiagramConnector.toPointIndex
-     * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -484,7 +473,6 @@ export interface dxDiagramItem {
     dataItem?: any;
     /**
      * @docid dxDiagramItem.id
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -512,7 +500,6 @@ export interface dxDiagramItem {
 export interface dxDiagramShape extends dxDiagramItem {
     /**
      * @docid dxDiagramShape.text
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -576,14 +563,12 @@ export interface dxDiagramCustomCommand {
     name?: string;
     /**
      * @docid dxDiagramCustomCommand.text
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
      * @docid dxDiagramCustomCommand.icon
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -689,7 +674,6 @@ export interface dxDiagramChangeConnectionArgs {
   connector?: dxDiagramConnector;
   /**
    * @docid dxDiagramChangeConnectionArgs.connectionPointIndex
-   * @type number
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -768,7 +752,6 @@ export interface dxDiagramChangeShapeTextArgs {
   shape?: dxDiagramShape;
   /**
    * @docid dxDiagramChangeShapeTextArgs.text
-   * @type string
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -788,7 +771,6 @@ export interface dxDiagramBeforeChangeConnectorTextArgs {
   connector?: dxDiagramConnector;
   /**
    * @docid dxDiagramBeforeChangeConnectorTextArgs.index
-   * @type number
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -808,14 +790,12 @@ export interface dxDiagramChangeConnectorTextArgs {
   connector?: dxDiagramConnector;
   /**
    * @docid dxDiagramChangeConnectorTextArgs.index
-   * @type number
    * @prevFileNamespace DevExpress.ui
    * @public
    */
   index?: number;
   /**
    * @docid dxDiagramChangeConnectorTextArgs.text
-   * @type string
    * @prevFileNamespace DevExpress.ui
    * @public
    */

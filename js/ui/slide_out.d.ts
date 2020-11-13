@@ -20,7 +20,6 @@ import CollectionWidget, {
 export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     /**
      * @docid dxSlideOutOptions.activeStateEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -66,7 +65,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     menuGroupTemplate?: template | ((groupData: any, groupIndex: number, groupElement: any) => string | Element | JQuery);
     /**
      * @docid dxSlideOutOptions.menuGrouped
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -94,7 +92,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     menuPosition?: 'inverted' | 'normal';
     /**
      * @docid dxSlideOutOptions.menuVisible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -118,7 +115,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     onMenuItemRendered?: ((e: { component?: dxSlideOut, element?: dxElement, model?: any }) => any);
     /**
      * @docid dxSlideOutOptions.selectedIndex
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -126,7 +122,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     selectedIndex?: number;
     /**
      * @docid dxSlideOutOptions.swipeEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

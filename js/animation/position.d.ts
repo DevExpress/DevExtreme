@@ -8,14 +8,12 @@ export interface positionConfig {
     at?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
     /**
      * @docid positionConfig.boundary
-     * @type string|Element|jQuery|window
      * @prevFileNamespace DevExpress.animation
      * @public
      */
     boundary?: string | Element | JQuery | Window;
     /**
      * @docid positionConfig.boundaryOffset
-     * @type string|object
      * @prevFileNamespace DevExpress.animation
      * @public
      */
@@ -36,14 +34,12 @@ export interface positionConfig {
     my?: 'bottom' | 'center' | 'left' | 'left bottom' | 'left top' | 'right' | 'right bottom' | 'right top' | 'top' | { x?: 'center' | 'left' | 'right', y?: 'bottom' | 'center' | 'top' };
     /**
      * @docid positionConfig.of
-     * @type string|Element|jQuery|window
      * @prevFileNamespace DevExpress.animation
      * @public
      */
     of?: string | Element | JQuery | Window;
     /**
      * @docid positionConfig.offset
-     * @type string|object
      * @prevFileNamespace DevExpress.animation
      * @public
      */

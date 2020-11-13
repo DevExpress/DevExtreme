@@ -63,7 +63,6 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     customizeTooltip?: ((pointsInfo: any) => any);
     /**
      * @docid BaseSparklineOptions.tooltip.enabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -71,7 +70,6 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid BaseSparklineOptions.tooltip.interactive
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public

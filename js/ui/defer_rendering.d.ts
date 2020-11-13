@@ -55,7 +55,6 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
     showLoadIndicator?: boolean;
     /**
      * @docid dxDeferRenderingOptions.staggerItemSelector
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

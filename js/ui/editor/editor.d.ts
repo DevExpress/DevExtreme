@@ -15,7 +15,6 @@ import Widget, {
 export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     /**
      * @docid EditorOptions.isValid
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -36,7 +35,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     onValueChanged?: ((e: { component?: T, element?: dxElement, model?: any, value?: any, previousValue?: any, event?: event }) => any);
     /**
      * @docid EditorOptions.readOnly
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

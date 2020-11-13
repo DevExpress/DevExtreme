@@ -30,21 +30,18 @@ import BaseWidget, {
 export interface BarGaugeBarInfo {
     /**
      * @docid BarGaugeBarInfo.color
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
     /**
      * @docid BarGaugeBarInfo.index
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     index?: number;
     /**
      * @docid BarGaugeBarInfo.value
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -72,7 +69,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     animation?: any;
     /**
      * @docid dxBarGaugeOptions.backgroundColor
-     * @type string
      * @default '#e0e0e0'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -80,7 +76,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     backgroundColor?: string;
     /**
      * @docid dxBarGaugeOptions.barSpacing
-     * @type number
      * @default 4
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -88,7 +83,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     barSpacing?: number;
     /**
      * @docid dxBarGaugeOptions.baseValue
-     * @type number
      * @default 0
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -97,7 +91,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     baseValue?: number;
     /**
      * @docid dxBarGaugeOptions.endValue
-     * @type number
      * @default 100
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -174,7 +167,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid dxBarGaugeOptions.relativeInnerRadius
-     * @type number
      * @default 0.3
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -190,7 +182,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     resolveLabelOverlapping?: 'hide' | 'none';
     /**
      * @docid dxBarGaugeOptions.startValue
-     * @type number
      * @default 0
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -268,7 +259,6 @@ export interface dxBarGaugeLegend extends BaseLegend {
     markerTemplate?: template | ((legendItem: BarGaugeLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxBarGaugeOptions.legend.visible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -307,7 +297,6 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     customizeTooltip?: ((scaleValue: { value?: number, valueText?: string, index?: number }) => any);
     /**
      * @docid dxBarGaugeOptions.tooltip.interactive
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public

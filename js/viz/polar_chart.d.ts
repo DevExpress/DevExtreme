@@ -47,7 +47,6 @@ export type PolarChartSeriesType = 'area' | 'bar' | 'line' | 'scatter' | 'stacke
 export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid PolarChartSeries.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -97,7 +96,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     argumentAxis?: dxPolarChartArgumentAxis;
     /**
      * @docid dxPolarChartOptions.barGroupPadding
-     * @type number
      * @default 0.3
      * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -106,7 +104,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     barGroupPadding?: number;
     /**
      * @docid dxPolarChartOptions.barGroupWidth
-     * @type number
      * @default undefined
      * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -139,7 +136,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     commonSeriesSettings?: dxPolarChartCommonSeriesSettings;
     /**
      * @docid dxPolarChartOptions.containerBackgroundColor
-     * @type string
      * @default '#FFFFFF'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -172,7 +168,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     legend?: dxPolarChartLegend;
     /**
      * @docid dxPolarChartOptions.negativesAsZeroes
-     * @type boolean
      * @default false
      * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -322,7 +317,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     tooltip?: dxPolarChartTooltip;
     /**
      * @docid dxPolarChartOptions.useSpiderWeb
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -340,7 +334,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
 export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
      * @docid dxPolarChartOptions.adaptiveLayout.height
-     * @type number
      * @default 170
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -348,7 +341,6 @@ export interface dxPolarChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     height?: number;
     /**
      * @docid dxPolarChartOptions.adaptiveLayout.width
-     * @type number
      * @default 170
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -366,7 +358,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     argumentType?: 'datetime' | 'numeric' | 'string';
     /**
      * @docid dxPolarChartOptions.argumentAxis.axisDivisionFactor
-     * @type number
      * @default 50
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -390,7 +381,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     constantLines?: Array<dxPolarChartArgumentAxisConstantLines>;
     /**
      * @docid dxPolarChartOptions.argumentAxis.firstPointOnStartAngle
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -413,7 +403,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     label?: dxPolarChartArgumentAxisLabel;
     /**
      * @docid dxPolarChartOptions.argumentAxis.linearThreshold
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -421,7 +410,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     linearThreshold?: number;
     /**
      * @docid dxPolarChartOptions.argumentAxis.logarithmBase
-     * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -436,7 +424,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     minorTick?: dxPolarChartArgumentAxisMinorTick;
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTickCount
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -451,7 +438,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     minorTickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.argumentAxis.originValue
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -459,7 +445,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     originValue?: number;
     /**
      * @docid dxPolarChartOptions.argumentAxis.period
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -467,7 +452,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     period?: number;
     /**
      * @docid dxPolarChartOptions.argumentAxis.startAngle
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -508,7 +492,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
 export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxPolarChartOptions.argumentAxis.constantLines.displayBehindSeries
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -516,7 +499,6 @@ export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommo
     displayBehindSeries?: boolean;
     /**
      * @docid dxPolarChartOptions.argumentAxis.constantLines.extendAxis
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -541,7 +523,6 @@ export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommo
 export interface dxPolarChartArgumentAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxPolarChartOptions.argumentAxis.constantLines.label.text
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -583,7 +564,6 @@ export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSet
 export interface dxPolarChartArgumentAxisMinorTick extends dxPolarChartCommonAxisSettingsMinorTick {
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTick.shift
-     * @type number
      * @default 3
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -593,7 +573,6 @@ export interface dxPolarChartArgumentAxisMinorTick extends dxPolarChartCommonAxi
 export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.color
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -626,7 +605,6 @@ export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSe
 export interface dxPolarChartArgumentAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.label.text
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -636,7 +614,6 @@ export interface dxPolarChartArgumentAxisStripsLabel extends dxPolarChartCommonA
 export interface dxPolarChartArgumentAxisTick extends dxPolarChartCommonAxisSettingsTick {
     /**
      * @docid dxPolarChartOptions.argumentAxis.tick.shift
-     * @type number
      * @default 3
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -646,7 +623,6 @@ export interface dxPolarChartArgumentAxisTick extends dxPolarChartCommonAxisSett
 export interface dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.allowDecimals
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -654,7 +630,6 @@ export interface dxPolarChartCommonAxisSettings {
     allowDecimals?: boolean;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.color
-     * @type string
      * @default '#767676'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -677,7 +652,6 @@ export interface dxPolarChartCommonAxisSettings {
     discreteAxisDivisionMode?: 'betweenLabels' | 'crossLabels';
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.endOnTick
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -692,7 +666,6 @@ export interface dxPolarChartCommonAxisSettings {
     grid?: { color?: string, opacity?: number, visible?: boolean, width?: number };
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.inverted
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -721,7 +694,6 @@ export interface dxPolarChartCommonAxisSettings {
     minorTick?: dxPolarChartCommonAxisSettingsMinorTick;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.opacity
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -743,7 +715,6 @@ export interface dxPolarChartCommonAxisSettings {
     tick?: dxPolarChartCommonAxisSettingsTick;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -751,7 +722,6 @@ export interface dxPolarChartCommonAxisSettings {
     visible?: boolean;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.width
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -761,7 +731,6 @@ export interface dxPolarChartCommonAxisSettings {
 export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.color
-     * @type string
      * @default '#000000'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -784,7 +753,6 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
     label?: dxPolarChartCommonAxisSettingsConstantLineStyleLabel;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.width
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -802,7 +770,6 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     font?: Font;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -820,7 +787,6 @@ export interface dxPolarChartCommonAxisSettingsLabel {
     font?: Font;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.indentFromAxis
-     * @type number
      * @default 5
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -836,7 +802,6 @@ export interface dxPolarChartCommonAxisSettingsLabel {
     overlappingBehavior?: 'none' | 'hide';
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -846,7 +811,6 @@ export interface dxPolarChartCommonAxisSettingsLabel {
 export interface dxPolarChartCommonAxisSettingsMinorTick {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.minorTick.color
-     * @type string
      * @default '#767676'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -854,7 +818,6 @@ export interface dxPolarChartCommonAxisSettingsMinorTick {
     color?: string;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.minorTick.length
-     * @type number
      * @default 7
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -862,7 +825,6 @@ export interface dxPolarChartCommonAxisSettingsMinorTick {
     length?: number;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.minorTick.opacity
-     * @type number
      * @default 0.3
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -870,7 +832,6 @@ export interface dxPolarChartCommonAxisSettingsMinorTick {
     opacity?: number;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.minorTick.visible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -878,7 +839,6 @@ export interface dxPolarChartCommonAxisSettingsMinorTick {
     visible?: boolean;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.minorTick.width
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -907,7 +867,6 @@ export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
 export interface dxPolarChartCommonAxisSettingsTick {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.tick.color
-     * @type string
      * @default '#767676'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -915,7 +874,6 @@ export interface dxPolarChartCommonAxisSettingsTick {
     color?: string;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.tick.length
-     * @type number
      * @default 7
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -923,7 +881,6 @@ export interface dxPolarChartCommonAxisSettingsTick {
     length?: number;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.tick.opacity
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -931,7 +888,6 @@ export interface dxPolarChartCommonAxisSettingsTick {
     opacity?: number;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.tick.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -939,7 +895,6 @@ export interface dxPolarChartCommonAxisSettingsTick {
     visible?: boolean;
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.tick.width
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1029,7 +984,6 @@ export interface dxPolarChartLegend extends BaseChartLegend {
 export interface dxPolarChartTooltip extends BaseChartTooltip {
     /**
      * @docid dxPolarChartOptions.tooltip.shared
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1039,7 +993,6 @@ export interface dxPolarChartTooltip extends BaseChartTooltip {
 export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.axisDivisionFactor
-     * @type number
      * @default 30
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1063,7 +1016,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     constantLines?: Array<dxPolarChartValueAxisConstantLines>;
     /**
      * @docid dxPolarChartOptions.valueAxis.endOnTick
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1078,7 +1030,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     label?: dxPolarChartValueAxisLabel;
     /**
      * @docid dxPolarChartOptions.valueAxis.linearThreshold
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1086,7 +1037,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     linearThreshold?: number;
     /**
      * @docid dxPolarChartOptions.valueAxis.logarithmBase
-     * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1094,7 +1044,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     logarithmBase?: number;
     /**
      * @docid dxPolarChartOptions.valueAxis.maxValueMargin
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1102,7 +1051,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     maxValueMargin?: number;
     /**
      * @docid dxPolarChartOptions.valueAxis.minValueMargin
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1119,7 +1067,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     minVisualRangeLength?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickCount
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1134,7 +1081,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     minorTickInterval?: number | any | TimeIntervalType;
     /**
      * @docid dxPolarChartOptions.valueAxis.showZero
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1173,7 +1119,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     type?: 'continuous' | 'discrete' | 'logarithmic';
     /**
      * @docid dxPolarChartOptions.valueAxis.valueMarginsEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1216,7 +1161,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
 export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAxisSettingsConstantLineStyle {
     /**
      * @docid dxPolarChartOptions.valueAxis.constantLines.displayBehindSeries
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1224,7 +1168,6 @@ export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAx
     displayBehindSeries?: boolean;
     /**
      * @docid dxPolarChartOptions.valueAxis.constantLines.extendAxis
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1249,7 +1192,6 @@ export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAx
 export interface dxPolarChartValueAxisConstantLinesLabel extends dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxPolarChartOptions.valueAxis.constantLines.label.text
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1291,7 +1233,6 @@ export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettin
 export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSettingsStripStyle {
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.color
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1324,7 +1265,6 @@ export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSetti
 export interface dxPolarChartValueAxisStripsLabel extends dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.label.text
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1334,7 +1274,6 @@ export interface dxPolarChartValueAxisStripsLabel extends dxPolarChartCommonAxis
 export interface dxPolarChartValueAxisTick extends dxPolarChartCommonAxisSettingsTick {
     /**
      * @docid dxPolarChartOptions.valueAxis.tick.visible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1372,7 +1311,6 @@ export default class dxPolarChart extends BaseChart {
 export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotationConfig {
     /**
      * @docid dxPolarChartAnnotationConfig.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1383,7 +1321,6 @@ export interface dxPolarChartAnnotationConfig extends dxPolarChartCommonAnnotati
 export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationConfig {
     /**
      * @docid dxPolarChartCommonAnnotationConfig.angle
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1391,7 +1328,6 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
     angle?: number;
     /**
      * @docid dxPolarChartCommonAnnotationConfig.radius
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1489,7 +1425,6 @@ export interface dxPolarChartSeriesTypes {
 export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.argumentField
-     * @type string
      * @default 'arg'
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -1498,7 +1433,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     argumentField?: string;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.barPadding
-     * @type number
      * @default undefined
      * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1507,7 +1441,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     barPadding?: number;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.barWidth
-     * @type number
      * @default undefined
      * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1524,7 +1457,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.closed
-     * @type boolean
      * @default true
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.linepolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1533,7 +1465,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     closed?: boolean;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.color
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1566,7 +1497,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     hoverStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, dashStyle?: DashStyleType, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.ignoreEmptyPoints
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1581,7 +1511,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     label?: dxPolarChartSeriesTypesCommonPolarChartSeriesLabel;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.maxLabelCount
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1589,7 +1518,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     maxLabelCount?: number;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.minBarSize
-     * @type number
      * @default undefined
      * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries,dxPolarChartSeriesTypes.barpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1598,7 +1526,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     minBarSize?: number;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.opacity
-     * @type number
      * @default 0.5
      * @propertyOf dxPolarChartSeriesTypes.areapolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1631,7 +1558,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     selectionStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, dashStyle?: DashStyleType, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.showInLegend
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1639,7 +1565,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     showInLegend?: boolean;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.stack
-     * @type string
      * @default 'default'
      * @propertyOf dxPolarChartSeriesTypes.stackedbarpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1648,7 +1573,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     stack?: string;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.tagField
-     * @type string
      * @default 'tag'
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -1665,7 +1589,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     valueErrorBar?: { color?: string, displayMode?: 'auto' | 'high' | 'low' | 'none', edgeLength?: number, highValueField?: string, lineWidth?: number, lowValueField?: string, opacity?: number, type?: 'fixed' | 'percent' | 'stdDeviation' | 'stdError' | 'variance', value?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.valueField
-     * @type string
      * @default 'val'
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -1674,7 +1597,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     valueField?: string;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1682,7 +1604,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
     visible?: boolean;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.width
-     * @type number
      * @default 2
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1700,7 +1621,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     argumentFormat?: format;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.backgroundColor
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1758,7 +1678,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     position?: 'inside' | 'outside';
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.rotationAngle
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1766,7 +1685,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     rotationAngle?: number;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.showForZeroValues
-     * @type boolean
      * @default true
      * @propertyOf dxPolarChartSeriesTypes.barpolarseries,dxPolarChartSeriesTypes.stackedbarpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1775,7 +1693,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     showForZeroValues?: boolean;
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.visible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1793,7 +1710,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     border?: { color?: string, visible?: boolean, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.color
-     * @type string
      * @default undefined
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1845,7 +1761,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, size?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.size
-     * @type number
      * @default 12
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1863,7 +1778,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     symbol?: 'circle' | 'cross' | 'polygon' | 'square' | 'triangle';
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.visible
-     * @type boolean
      * @default true
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @prevFileNamespace DevExpress.viz
@@ -1901,7 +1815,6 @@ export interface dxPolarChartSeriesTypesAreapolarseries extends dxPolarChartSeri
 export interface dxPolarChartSeriesTypesAreapolarseriesPoint extends dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     /**
      * @docid dxPolarChartSeriesTypes.areapolarseries.point.visible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public

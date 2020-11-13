@@ -32,7 +32,6 @@ import Widget from './widget/ui.widget';
 export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     /**
      * @docid dxTreeListOptions.autoExpandAll
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -71,7 +70,6 @@ export interface dxTreeListOptions extends GridBaseOptions<dxTreeList> {
     editing?: dxTreeListEditing;
     /**
      * @docid dxTreeListOptions.expandNodesOnFiltering
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -521,7 +519,6 @@ export interface dxTreeListEditing extends GridBaseEditing {
 export interface dxTreeListEditingTexts extends GridBaseEditingTexts {
     /**
      * @docid dxTreeListOptions.editing.texts.addRowToNode
-     * @type string
      * @default "Add"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -531,7 +528,6 @@ export interface dxTreeListEditingTexts extends GridBaseEditingTexts {
 export interface dxTreeListPaging extends GridBasePaging {
     /**
      * @docid dxTreeListOptions.paging.enabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -551,7 +547,6 @@ export interface dxTreeListScrolling extends GridBaseScrolling {
 export interface dxTreeListSelection extends GridBaseSelection {
     /**
      * @docid dxTreeListOptions.selection.recursive
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -962,7 +957,6 @@ export interface dxTreeListNode {
     data?: any;
     /**
      * @docid dxTreeListNode.hasChildren
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -976,7 +970,6 @@ export interface dxTreeListNode {
     key?: any;
     /**
      * @docid dxTreeListNode.level
-     * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -990,7 +983,6 @@ export interface dxTreeListNode {
     parent?: dxTreeListNode;
     /**
      * @docid dxTreeListNode.visible
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -1000,28 +992,24 @@ export interface dxTreeListNode {
 export interface dxTreeListRowObject {
     /**
      * @docid dxTreeListRowObject.isEditing
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isEditing?: boolean;
     /**
      * @docid dxTreeListRowObject.isExpanded
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isExpanded?: boolean;
     /**
      * @docid dxTreeListRowObject.isNewRow
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     isNewRow?: boolean;
     /**
      * @docid dxTreeListRowObject.isSelected
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -1035,7 +1023,6 @@ export interface dxTreeListRowObject {
     key?: any;
     /**
      * @docid dxTreeListRowObject.level
-     * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -1049,14 +1036,12 @@ export interface dxTreeListRowObject {
     node?: dxTreeListNode;
     /**
      * @docid dxTreeListRowObject.rowIndex
-     * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     rowIndex?: number;
     /**
      * @docid dxTreeListRowObject.rowType
-     * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */

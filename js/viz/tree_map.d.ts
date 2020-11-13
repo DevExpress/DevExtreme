@@ -32,7 +32,6 @@ import BaseWidget, {
 export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid dxTreeMapOptions.childrenField
-     * @type string
      * @default 'items'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -40,7 +39,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     childrenField?: string;
     /**
      * @docid dxTreeMapOptions.colorField
-     * @type string
      * @default 'color'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -69,7 +67,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     group?: { border?: { color?: string, width?: number }, color?: string, headerHeight?: number, hoverEnabled?: boolean, hoverStyle?: { border?: { color?: string, width?: number }, color?: string }, label?: { font?: Font, textOverflow?: VizTextOverflowType, visible?: boolean }, selectionStyle?: { border?: { color?: string, width?: number }, color?: string } };
     /**
      * @docid dxTreeMapOptions.hoverEnabled
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -77,7 +74,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     hoverEnabled?: boolean;
     /**
      * @docid dxTreeMapOptions.idField
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -85,7 +81,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     idField?: string;
     /**
      * @docid dxTreeMapOptions.interactWithGroup
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -93,7 +88,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     interactWithGroup?: boolean;
     /**
      * @docid dxTreeMapOptions.labelField
-     * @type string
      * @default 'name'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -121,7 +115,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     layoutDirection?: 'leftBottomRightTop' | 'leftTopRightBottom' | 'rightBottomLeftTop' | 'rightTopLeftBottom';
     /**
      * @docid dxTreeMapOptions.maxDepth
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -143,7 +136,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid dxTreeMapOptions.onDrill
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -155,7 +147,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid dxTreeMapOptions.onHoverChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -167,7 +158,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid dxTreeMapOptions.onNodesInitialized
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 root:dxTreeMapNode
      * @notUsedInTheme
@@ -179,7 +169,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid dxTreeMapOptions.onNodesRendering
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -191,7 +180,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid dxTreeMapOptions.onSelectionChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeMapNode
      * @notUsedInTheme
@@ -202,7 +190,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     onSelectionChanged?: ((e: { component?: dxTreeMap, element?: dxElement, model?: any, node?: dxTreeMapNode }) => any);
     /**
      * @docid dxTreeMapOptions.parentField
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -232,7 +219,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     tooltip?: dxTreeMapTooltip;
     /**
      * @docid dxTreeMapOptions.valueField
-     * @type string
      * @default 'value'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -392,7 +378,6 @@ export interface dxTreeMapNode {
     getParent(): dxTreeMapNode;
     /**
      * @docid dxTreeMapNodeFields.index
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -447,7 +432,6 @@ export interface dxTreeMapNode {
     label(label: string): void;
     /**
      * @docid dxTreeMapNodeFields.level
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */

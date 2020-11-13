@@ -10,7 +10,6 @@ import dxTrackBar from './track_bar';
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
      * @docid dxRangeSliderOptions.end
-     * @type number
      * @default 60
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -18,7 +17,6 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     end?: number;
     /**
      * @docid dxRangeSliderOptions.endName
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -37,7 +35,6 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     onValueChanged?: ((e: { component?: dxRangeSlider, element?: dxElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
     /**
      * @docid dxRangeSliderOptions.start
-     * @type number
      * @default 40
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -45,7 +42,6 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     start?: number;
     /**
      * @docid dxRangeSliderOptions.startName
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -209,7 +209,6 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
 export interface BaseChartAdaptiveLayout {
     /**
      * @docid BaseChartOptions.adaptiveLayout.height
-     * @type number
      * @default 80
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -217,7 +216,6 @@ export interface BaseChartAdaptiveLayout {
     height?: number;
     /**
      * @docid BaseChartOptions.adaptiveLayout.keepLabels
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -225,7 +223,6 @@ export interface BaseChartAdaptiveLayout {
     keepLabels?: boolean;
     /**
      * @docid BaseChartOptions.adaptiveLayout.width
-     * @type number
      * @default 80
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -286,7 +283,6 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
     customizeTooltip?: ((pointInfo: any) => any);
     /**
      * @docid BaseChartOptions.tooltip.shared
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -294,7 +290,6 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
     shared?: boolean;
     /**
      * @docid BaseChartOptions.tooltip.interactive
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -391,7 +386,6 @@ export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
     argument?: number | Date | string;
     /**
      * @docid BaseChartAnnotationConfig.series
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

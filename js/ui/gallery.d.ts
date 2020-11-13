@@ -12,7 +12,6 @@ import CollectionWidget, {
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     /**
      * @docid dxGalleryOptions.animationDuration
-     * @type number
      * @default 400
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -20,7 +19,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     animationDuration?: number;
     /**
      * @docid dxGalleryOptions.animationEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -36,7 +34,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     dataSource?: string | Array<string | dxGalleryItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxGalleryOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -44,7 +41,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxGalleryOptions.indicatorEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -52,7 +48,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     indicatorEnabled?: boolean;
     /**
      * @docid dxGalleryOptions.initialItemWidth
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -68,7 +63,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     items?: Array<string | dxGalleryItem | any>;
     /**
      * @docid dxGalleryOptions.loop
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,7 +76,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     noDataText?: string;
     /**
      * @docid dxGalleryOptions.selectedIndex
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -90,7 +83,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     selectedIndex?: number;
     /**
      * @docid dxGalleryOptions.showIndicator
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -98,7 +90,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     showIndicator?: boolean;
     /**
      * @docid dxGalleryOptions.showNavButtons
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -106,7 +97,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     showNavButtons?: boolean;
     /**
      * @docid dxGalleryOptions.slideshowDelay
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -114,7 +104,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     slideshowDelay?: number;
     /**
      * @docid dxGalleryOptions.stretchImages
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -122,7 +111,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     stretchImages?: boolean;
     /**
      * @docid dxGalleryOptions.swipeEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -130,7 +118,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     swipeEnabled?: boolean;
     /**
      * @docid dxGalleryOptions.wrapAround
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -181,14 +168,12 @@ export default class dxGallery extends CollectionWidget {
 export interface dxGalleryItem extends CollectionWidgetItem {
     /**
      * @docid dxGalleryItem.imageAlt
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     imageAlt?: string;
     /**
      * @docid dxGalleryItem.imageSrc
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */

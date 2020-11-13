@@ -15,7 +15,6 @@ import Widget, {
 export interface MapLocation {
     /**
      * @docid MapLocation.lat
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -23,7 +22,6 @@ export interface MapLocation {
     lat?: number;
     /**
      * @docid MapLocation.lng
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -34,7 +32,6 @@ export interface MapLocation {
 export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid dxMapOptions.autoAdjust
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -52,14 +49,12 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid dxMapOptions.controls
      * @default false
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     controls?: boolean;
     /**
      * @docid dxMapOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,7 +77,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     key?: string | { bing?: string, google?: string, googleStatic?: string };
     /**
      * @docid dxMapOptions.markerIconSrc
-     * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -199,7 +193,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     width?: number | string | (() => number | string);
     /**
      * @docid dxMapOptions.zoom
-     * @type number
      * @default 1
      * @fires dxMapOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui

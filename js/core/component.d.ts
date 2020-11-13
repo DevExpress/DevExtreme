@@ -5,7 +5,6 @@ import {
 export interface ComponentOptions<T = Component> {
   /**
    * @docid ComponentOptions.onDisposing
-   * @type function
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @default null
@@ -16,7 +15,6 @@ export interface ComponentOptions<T = Component> {
   onDisposing?: ((e: { component?: T }) => any);
   /**
    * @docid ComponentOptions.onInitialized
-   * @type function
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @type_function_param1_field2 element:dxElement
@@ -28,7 +26,6 @@ export interface ComponentOptions<T = Component> {
   onInitialized?: ((e: { component?: T, element?: dxElement }) => any);
   /**
    * @docid ComponentOptions.onOptionChanged
-   * @type function
    * @type_function_param1 e:object
    * @type_function_param1_field1 component:this
    * @type_function_param1_field4 name:string

@@ -17,7 +17,6 @@ import dxMenuBase, {
 export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     /**
      * @docid dxMenuOptions.adaptivityEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -33,7 +32,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     dataSource?: string | Array<dxMenuItem> | DataSource | DataSourceOptions;
     /**
      * @docid dxMenuOptions.hideSubmenuOnMouseLeave
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -132,14 +130,12 @@ export default class dxMenu extends dxMenuBase {
 export interface dxMenuBaseItem extends CollectionWidgetItem {
     /**
      * @docid dxMenuBaseItem.beginGroup
-     * @type Boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     beginGroup?: boolean;
     /**
      * @docid dxMenuBaseItem.closeMenuOnClick
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -147,7 +143,6 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
     closeMenuOnClick?: boolean;
     /**
      * @docid dxMenuBaseItem.disabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -155,7 +150,6 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
     disabled?: boolean;
     /**
      * @docid dxMenuBaseItem.icon
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -169,7 +163,6 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
     items?: Array<dxMenuBaseItem>;
     /**
      * @docid dxMenuBaseItem.selectable
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -177,7 +170,6 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
     selectable?: boolean;
     /**
      * @docid dxMenuBaseItem.selected
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -185,14 +177,12 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
     selected?: boolean;
     /**
      * @docid dxMenuBaseItem.text
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
      * @docid dxMenuBaseItem.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

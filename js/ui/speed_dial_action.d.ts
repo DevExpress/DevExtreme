@@ -13,7 +13,6 @@ import Widget, {
 export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialAction> {
     /**
      * @docid dxSpeedDialActionOptions.icon
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -21,7 +20,6 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     icon?: string;
     /**
      * @docid dxSpeedDialActionOptions.index
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -29,7 +27,6 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     index?: number;
     /**
      * @docid dxSpeedDialActionOptions.label
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -50,7 +47,6 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     onClick?: ((e: { event?: event, component?: dxSpeedDialAction, element?: dxElement, actionElement?: dxElement }) => any);
     /**
      * @docid dxSpeedDialActionOptions.onContentReady
-     * @type function
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 actionElement:dxElement

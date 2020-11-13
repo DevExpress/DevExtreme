@@ -5,7 +5,6 @@ import CollectionWidget, {
 export interface dxValidationSummaryOptions extends CollectionWidgetOptions<dxValidationSummary> {
     /**
      * @docid dxValidationSummaryOptions.validationGroup
-     * @type string
      * @ref
      * @prevFileNamespace DevExpress.ui
      * @public

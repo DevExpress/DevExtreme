@@ -135,7 +135,6 @@ export interface dxContextMenuOptions extends dxMenuBaseOptions<dxContextMenu> {
     target?: string | Element | JQuery;
     /**
      * @docid dxContextMenuOptions.visible
-     * @type boolean
      * @default false
      * @fires dxContextMenuOptions.onShowing
      * @fires dxContextMenuOptions.onHiding

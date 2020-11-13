@@ -26,7 +26,6 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     adapter?: { applyValidationResults?: Function, bypass?: Function, focus?: Function, getValue?: Function, reset?: Function, validationRequestsCallbacks?: Array<Function> };
     /**
      * @docid dxValidatorOptions.name
-     * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -49,7 +48,6 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>, status?: 'valid' | 'invalid' | 'pending' }) => any);
     /**
      * @docid dxValidatorOptions.validationGroup
-     * @type string
      * @ref
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -123,7 +121,6 @@ export interface dxValidatorResult {
     complete?: Promise<dxValidatorResult> | JQueryPromise<dxValidatorResult>;
     /**
      * @docid dxValidatorResult.isValid
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */

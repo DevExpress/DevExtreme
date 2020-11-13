@@ -5,7 +5,6 @@ import ArrayStore, {
 export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
     /**
      * @docid LocalStoreOptions.flushInterval
-     * @type number
      * @default 10000
      * @prevFileNamespace DevExpress.data
      * @public
@@ -13,7 +12,6 @@ export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
     flushInterval?: number;
     /**
      * @docid LocalStoreOptions.immediate
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
@@ -21,7 +19,6 @@ export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
     immediate?: boolean;
     /**
      * @docid LocalStoreOptions.name
-     * @type string
      * @prevFileNamespace DevExpress.data
      * @public
      */

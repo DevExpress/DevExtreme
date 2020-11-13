@@ -11,7 +11,6 @@ import {
 export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     /**
      * @docid ODataStoreOptions.beforeSend
-     * @type function
      * @type_function_param1 options:object
      * @type_function_param1_field1 url:string
      * @type_function_param1_field2 async:boolean
@@ -26,14 +25,12 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
     /**
      * @docid ODataStoreOptions.deserializeDates
-     * @type boolean
      * @prevFileNamespace DevExpress.data
      * @public
      */
     deserializeDates?: boolean;
     /**
      * @docid ODataStoreOptions.errorHandler
-     * @type function
      * @type_function_param1 e:Error
      * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
@@ -52,14 +49,12 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     fieldTypes?: any;
     /**
      * @docid ODataStoreOptions.filterToLower
-     * @type boolean
      * @prevFileNamespace DevExpress.data
      * @public
      */
     filterToLower?: boolean;
     /**
      * @docid ODataStoreOptions.jsonp
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
@@ -82,14 +77,12 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     onLoading?: ((loadOptions: LoadOptions) => any);
     /**
      * @docid ODataStoreOptions.url
-     * @type string
      * @prevFileNamespace DevExpress.data
      * @public
      */
     url?: string;
     /**
      * @docid ODataStoreOptions.version
-     * @type number
      * @default 2
      * @acceptValues 2|3|4
      * @prevFileNamespace DevExpress.data
@@ -98,7 +91,6 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     version?: number;
     /**
      * @docid ODataStoreOptions.withCredentials
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public

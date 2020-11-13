@@ -53,7 +53,6 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     contentTemplate?: template | ((contentElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxOverlayOptions.deferRendering
-     * @type Boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -61,7 +60,6 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     deferRendering?: boolean;
     /**
      * @docid dxOverlayOptions.dragEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -158,7 +156,6 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     position?: any;
     /**
      * @docid dxOverlayOptions.shading
-     * @type Boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -166,7 +163,6 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     shading?: boolean;
     /**
      * @docid dxOverlayOptions.shadingColor
-     * @type string
      * @default ''
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -174,7 +170,6 @@ export interface dxOverlayOptions<T = dxOverlay> extends WidgetOptions<T> {
     shadingColor?: string;
     /**
      * @docid dxOverlayOptions.visible
-     * @type Boolean
      * @default false
      * @fires dxOverlayOptions.onShowing
      * @fires dxOverlayOptions.onHiding

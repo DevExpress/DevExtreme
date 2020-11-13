@@ -46,7 +46,6 @@ export interface MapLayer {
     clearSelection(): void;
     /**
      * @docid MapLayerFields.elementType
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -69,21 +68,18 @@ export interface MapLayer {
     getElements(): Array<MapLayerElement>;
     /**
      * @docid MapLayerFields.index
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     index?: number;
     /**
      * @docid MapLayerFields.name
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     name?: string;
     /**
      * @docid MapLayerFields.type
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -153,28 +149,24 @@ export interface MapLayerElement {
 export interface VectorMapLegendItem extends BaseLegendItem {
     /**
      * @docid VectorMapLegendItem.color
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
     /**
      * @docid VectorMapLegendItem.end
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     end?: number;
     /**
      * @docid VectorMapLegendItem.size
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     size?: number;
     /**
      * @docid VectorMapLegendItem.start
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -234,7 +226,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     legends?: Array<dxVectorMapLegends>;
     /**
      * @docid dxVectorMapOptions.maxZoomFactor
-     * @type number
      * @default 256
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -244,7 +235,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onCenterChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 center:Array<number>
      * @notUsedInTheme
@@ -269,7 +259,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onSelectionChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement
      * @notUsedInTheme
@@ -305,7 +294,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onZoomFactorChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 zoomFactor:number
      * @notUsedInTheme
@@ -316,7 +304,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, zoomFactor?: number }) => any);
     /**
      * @docid dxVectorMapOptions.panningEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -340,7 +327,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     tooltip?: dxVectorMapTooltip;
     /**
      * @docid dxVectorMapOptions.touchEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -348,7 +334,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     touchEnabled?: boolean;
     /**
      * @docid dxVectorMapOptions.wheelEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -356,7 +341,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     wheelEnabled?: boolean;
     /**
      * @docid dxVectorMapOptions.zoomFactor
-     * @type number
      * @default 1
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -365,7 +349,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     zoomFactor?: number;
     /**
      * @docid dxVectorMapOptions.zoomingEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -402,7 +385,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
 export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
     /**
      * @docid dxVectorMapAnnotationConfig.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -504,7 +486,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     font?: Font;
     /**
      * @docid dxVectorMapOptions.legends.markerColor
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -520,7 +501,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     markerShape?: 'circle' | 'square';
     /**
      * @docid dxVectorMapOptions.legends.markerSize
-     * @type number
      * @default 12
      * @prevFileNamespace DevExpress.viz
      * @public

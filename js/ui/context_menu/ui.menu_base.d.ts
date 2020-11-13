@@ -17,7 +17,6 @@ import {
 export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectionWidgetOptions<T> {
     /**
      * @docid dxMenuBaseOptions.activeStateEnabled
-     * @type Boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -34,7 +33,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     animation?: { hide?: animationConfig, show?: animationConfig };
     /**
      * @docid dxMenuBaseOptions.cssClass
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -57,7 +55,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     items?: Array<dxMenuBaseItem>;
     /**
      * @docid dxMenuBaseOptions.selectByClick
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

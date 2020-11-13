@@ -36,7 +36,6 @@ export interface PivotGridDataSourceOptions {
     filter?: string | Array<any> | Function;
     /**
      * @docid PivotGridDataSourceOptions.onChanged
-     * @type function
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -71,7 +70,6 @@ export interface PivotGridDataSourceOptions {
     onLoadingChanged?: ((isLoading: boolean) => any);
     /**
      * @docid PivotGridDataSourceOptions.paginate
-     * @type Boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -79,7 +77,6 @@ export interface PivotGridDataSourceOptions {
     paginate?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.remoteOperations
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -87,7 +84,6 @@ export interface PivotGridDataSourceOptions {
     remoteOperations?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.retrieveFields
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -104,7 +100,6 @@ export interface PivotGridDataSourceOptions {
 export interface PivotGridDataSourceField {
     /**
      * @docid PivotGridDataSourceOptions.fields.allowCrossGroupCalculation
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -112,7 +107,6 @@ export interface PivotGridDataSourceField {
     allowCrossGroupCalculation?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.allowExpandAll
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -120,7 +114,6 @@ export interface PivotGridDataSourceField {
     allowExpandAll?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.allowFiltering
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -128,7 +121,6 @@ export interface PivotGridDataSourceField {
     allowFiltering?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.allowSorting
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -136,7 +128,6 @@ export interface PivotGridDataSourceField {
     allowSorting?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.allowSortingBySummary
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -153,7 +144,6 @@ export interface PivotGridDataSourceField {
     area?: 'column' | 'data' | 'filter' | 'row' | undefined;
     /**
      * @docid PivotGridDataSourceOptions.fields.areaIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -182,7 +172,6 @@ export interface PivotGridDataSourceField {
     calculateSummaryValue?: ((e: dxPivotGridSummaryCell) => number);
     /**
      * @docid PivotGridDataSourceOptions.fields.caption
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -201,7 +190,6 @@ export interface PivotGridDataSourceField {
     customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
     /**
      * @docid PivotGridDataSourceOptions.fields.dataField
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -217,7 +205,6 @@ export interface PivotGridDataSourceField {
     dataType?: 'date' | 'number' | 'string';
     /**
      * @docid PivotGridDataSourceOptions.fields.displayFolder
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -225,7 +212,6 @@ export interface PivotGridDataSourceField {
     displayFolder?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.expanded
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -257,7 +243,6 @@ export interface PivotGridDataSourceField {
     format?: format;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -273,7 +258,6 @@ export interface PivotGridDataSourceField {
     groupInterval?: 'day' | 'dayOfWeek' | 'month' | 'quarter' | 'year' | number;
     /**
      * @docid PivotGridDataSourceOptions.fields.groupName
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -288,7 +272,6 @@ export interface PivotGridDataSourceField {
     headerFilter?: { allowSearch?: boolean, height?: number, width?: number };
     /**
      * @docid PivotGridDataSourceOptions.fields.isMeasure
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -296,7 +279,6 @@ export interface PivotGridDataSourceField {
     isMeasure?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -320,7 +302,6 @@ export interface PivotGridDataSourceField {
     selector?: Function;
     /**
      * @docid PivotGridDataSourceOptions.fields.showGrandTotals
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -328,7 +309,6 @@ export interface PivotGridDataSourceField {
     showGrandTotals?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.showTotals
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -336,7 +316,6 @@ export interface PivotGridDataSourceField {
     showTotals?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.showValues
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -352,7 +331,6 @@ export interface PivotGridDataSourceField {
     sortBy?: 'displayText' | 'value' | 'none';
     /**
      * @docid PivotGridDataSourceOptions.fields.sortBySummaryField
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -407,7 +385,6 @@ export interface PivotGridDataSourceField {
     summaryType?: 'avg' | 'count' | 'custom' | 'max' | 'min' | 'sum' | string;
     /**
      * @docid PivotGridDataSourceOptions.fields.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -415,7 +392,6 @@ export interface PivotGridDataSourceField {
     visible?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.fields.width
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -423,7 +399,6 @@ export interface PivotGridDataSourceField {
     width?: number;
     /**
      * @docid PivotGridDataSourceOptions.fields.wordWrapEnabled
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

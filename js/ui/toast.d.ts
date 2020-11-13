@@ -27,7 +27,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     animation?: dxToastAnimation;
     /**
      * @docid dxToastOptions.closeOnClick
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -42,7 +41,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
      * @docid dxToastOptions.closeOnSwipe
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -50,7 +48,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     closeOnSwipe?: boolean;
     /**
      * @docid dxToastOptions.displayTime
-     * @type number
      * @default 2000
      * @default 4000 [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -73,7 +70,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     maxWidth?: number | string | (() => number | string);
     /**
      * @docid dxToastOptions.message
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -98,7 +94,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     position?: positionConfig | string;
     /**
      * @docid dxToastOptions.shading
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -60,7 +60,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     position?: 'bottom' | 'left' | 'right' | 'top' | positionConfig;
     /**
      * @docid dxPopoverOptions.shading
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -76,7 +75,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     showEvent?: { delay?: number, name?: string } | string;
     /**
      * @docid dxPopoverOptions.showTitle
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

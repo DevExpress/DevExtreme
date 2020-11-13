@@ -32,7 +32,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     elementAttr?: any;
     /**
      * @docid DOMComponentOptions.height
-     * @type number|string|function
      * @default undefined
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.core
@@ -49,7 +48,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     onDisposing?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
      * @docid DOMComponentOptions.onOptionChanged
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 name:string
      * @type_function_param1_field5 fullName:string
@@ -62,7 +60,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     onOptionChanged?: ((e: { component?: T, element?: dxElement, model?: any, name?: string, fullName?: string, value?: any }) => any);
     /**
      * @docid DOMComponentOptions.rtlEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.core
      * @public
@@ -70,7 +67,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     rtlEnabled?: boolean;
     /**
      * @docid DOMComponentOptions.width
-     * @type number|string|function
      * @default undefined
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.core

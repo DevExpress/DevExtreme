@@ -68,7 +68,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     algorithm?: 'dynamicHeight' | 'dynamicSlope';
     /**
      * @docid dxFunnelOptions.argumentField
-     * @type string
      * @default 'arg'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -76,7 +75,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     argumentField?: string;
     /**
      * @docid dxFunnelOptions.colorField
-     * @type string
      * @default 'color'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -91,7 +89,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     dataSource?: Array<any> | DataSource | DataSourceOptions | string;
     /**
      * @docid dxFunnelOptions.hoverEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -99,7 +96,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     hoverEnabled?: boolean;
     /**
      * @docid dxFunnelOptions.inverted
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -129,7 +125,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     legend?: dxFunnelLegend;
     /**
      * @docid dxFunnelOptions.neckHeight
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -137,7 +132,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     neckHeight?: number;
     /**
      * @docid dxFunnelOptions.neckWidth
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -146,7 +140,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid dxFunnelOptions.onHoverChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
@@ -184,7 +177,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid dxFunnelOptions.onSelectionChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxFunnelItem
      * @notUsedInTheme
@@ -226,7 +218,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     selectionMode?: 'multiple' | 'none' | 'single';
     /**
      * @docid dxFunnelOptions.sortData
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -241,7 +232,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     tooltip?: dxFunnelTooltip;
     /**
      * @docid dxFunnelOptions.valueField
-     * @type string
      * @default 'val'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -294,7 +284,6 @@ export interface dxFunnelLegend extends BaseLegend {
     markerTemplate?: template | ((legendItem: FunnelLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxFunnelOptions.legend.visible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -419,7 +408,6 @@ export interface dxFunnelItem {
     isSelected(): boolean;
     /**
      * @docid dxFunnelItemFields.percent
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -441,7 +429,6 @@ export interface dxFunnelItem {
     showTooltip(): void;
     /**
      * @docid dxFunnelItemFields.value
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */

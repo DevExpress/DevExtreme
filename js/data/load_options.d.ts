@@ -36,21 +36,18 @@ export interface LoadOptions {
     groupSummary?: any;
     /**
      * @docid LoadOptions.parentIds
-     * @type Array<any>
      * @prevFileNamespace DevExpress.data
      * @public
      */
     parentIds?: Array<any>;
     /**
      * @docid LoadOptions.requireGroupCount
-     * @type boolean
      * @prevFileNamespace DevExpress.data
      * @public
      */
     requireGroupCount?: boolean;
     /**
      * @docid LoadOptions.requireTotalCount
-     * @type boolean
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -64,14 +61,12 @@ export interface LoadOptions {
     searchExpr?: string | Function | Array<string | Function>;
     /**
      * @docid LoadOptions.searchOperation
-     * @type string
      * @prevFileNamespace DevExpress.data
      * @public
      */
     searchOperation?: string;
     /**
      * @docid LoadOptions.searchValue
-     * @type any
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -85,7 +80,6 @@ export interface LoadOptions {
     select?: any;
     /**
      * @docid LoadOptions.skip
-     * @type number
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -99,7 +93,6 @@ export interface LoadOptions {
     sort?: any;
     /**
      * @docid LoadOptions.take
-     * @type number
      * @prevFileNamespace DevExpress.data
      * @public
      */

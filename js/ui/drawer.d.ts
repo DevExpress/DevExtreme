@@ -19,7 +19,6 @@ import Widget, {
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**
      * @docid dxDrawerOptions.animationDuration
-     * @type number
      * @default 400
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -27,7 +26,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     animationDuration?: number;
     /**
      * @docid dxDrawerOptions.animationEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -45,7 +43,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
      * @docid dxDrawerOptions.maxSize
-     * @type number
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -53,7 +50,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     maxSize?: number;
     /**
      * @docid dxDrawerOptions.minSize
-     * @type number
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -61,7 +57,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     minSize?: number;
     /**
      * @docid dxDrawerOptions.opened
-     * @type boolean
      * @fires dxDrawerOptions.onOptionChanged
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -94,7 +89,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     revealMode?: 'slide' | 'expand';
     /**
      * @docid dxDrawerOptions.shading
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

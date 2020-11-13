@@ -1,7 +1,6 @@
 export interface dxTemplateOptions {
     /**
      * @docid dxTemplateOptions.name
-     * @type string
      * @prevFileNamespace DevExpress.core
      * @public
      */
@@ -21,7 +20,6 @@ export class Template {
 
 /**
  * @docid template
- * @type String|function|Element|jQuery
  * @section Common
  * @prevFileNamespace DevExpress.core
  * @public

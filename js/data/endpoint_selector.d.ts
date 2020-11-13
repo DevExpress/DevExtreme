@@ -13,7 +13,6 @@ export default class EndpointSelector {
      * @docid EndpointSelectorMethods.urlFor
      * @publicName urlFor(key)
      * @param1 key:string
-     * @type method
      * @return string
      * @prevFileNamespace DevExpress.data
      * @public

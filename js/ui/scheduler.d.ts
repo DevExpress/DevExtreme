@@ -35,7 +35,6 @@ import Widget, {
 export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.adaptivityEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -43,7 +42,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     adaptivityEnabled?: boolean;
     /**
      * @docid dxSchedulerOptions.allDayExpr
-     * @type string
      * @default 'allDay'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -87,7 +85,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     cellDuration?: number;
     /**
      * @docid dxSchedulerOptions.crossScrollingEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -148,7 +145,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     dateCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxSchedulerOptions.dateSerializationFormat
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -156,7 +152,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     dateSerializationFormat?: string;
     /**
      * @docid dxSchedulerOptions.descriptionExpr
-     * @type string
      * @default 'description'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -185,7 +180,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     editing?: boolean | { allowAdding?: boolean, allowDeleting?: boolean, allowDragging?: boolean, allowResizing?: boolean, allowUpdating?: boolean, allowEditingTimeZones?: boolean };
     /**
      * @docid dxSchedulerOptions.endDateExpr
-     * @type string
      * @default 'endDate'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -193,7 +187,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     endDateExpr?: string;
     /**
      * @docid dxSchedulerOptions.endDateTimeZoneExpr
-     * @type string
      * @default 'endDateTimeZone'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -215,7 +208,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     /**
      * @docid dxSchedulerOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -223,7 +215,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxSchedulerOptions.groupByDate
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -238,7 +229,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     groups?: Array<string>;
     /**
      * @docid dxSchedulerOptions.indicatorUpdateInterval
-     * @type number
      * @default 300000
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -270,7 +260,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     min?: Date | number | string;
     /**
      * @docid dxSchedulerOptions.noDataText
-     * @type string
      * @default "No data to display"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -457,7 +446,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     recurrenceEditMode?: 'dialog' | 'occurrence' | 'series';
     /**
      * @docid dxSchedulerOptions.recurrenceExceptionExpr
-     * @type string
      * @default 'recurrenceException'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -465,7 +453,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     recurrenceExceptionExpr?: string;
     /**
      * @docid dxSchedulerOptions.recurrenceRuleExpr
-     * @type string
      * @default 'recurrenceRule'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -473,7 +460,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     recurrenceRuleExpr?: string;
     /**
      * @docid dxSchedulerOptions.remoteFiltering
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -512,7 +498,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     selectedCellData?: Array<any>;
     /**
      * @docid dxSchedulerOptions.shadeUntilCurrentTime
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -520,7 +505,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     shadeUntilCurrentTime?: boolean;
     /**
      * @docid dxSchedulerOptions.showAllDayPanel
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -528,7 +512,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     showAllDayPanel?: boolean;
     /**
      * @docid dxSchedulerOptions.showCurrentTimeIndicator
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -536,7 +519,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     showCurrentTimeIndicator?: boolean;
     /**
      * @docid dxSchedulerOptions.startDateExpr
-     * @type string
      * @default 'startDate'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -544,7 +526,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     startDateExpr?: string;
     /**
      * @docid dxSchedulerOptions.startDateTimeZoneExpr
-     * @type string
      * @default 'startDateTimeZone'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -559,7 +540,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     startDayHour?: number;
     /**
      * @docid dxSchedulerOptions.textExpr
-     * @type string
      * @default 'text'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -574,7 +554,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     timeCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxSchedulerOptions.timeZone
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -582,7 +561,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     timeZone?: string;
     /**
      * @docid dxSchedulerOptions.useDropDownViewSwitcher
-     * @type boolean
      * @default false
      * @default true [for](Android|iOS)
      * @default true [for](Material)
@@ -703,21 +681,18 @@ export default class dxScheduler extends Widget {
 export interface dxSchedulerAppointment extends CollectionWidgetItem {
     /**
      * @docid dxSchedulerAppointment.allDay
-     * @type Boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     allDay?: boolean;
     /**
      * @docid dxSchedulerAppointment.description
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     description?: string;
     /**
      * @docid dxSchedulerAppointment.disabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -732,28 +707,24 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     endDate?: Date;
     /**
      * @docid dxSchedulerAppointment.endDateTimeZone
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     endDateTimeZone?: string;
     /**
      * @docid dxSchedulerAppointment.html
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     html?: string;
     /**
      * @docid dxSchedulerAppointment.recurrenceException
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     recurrenceException?: string;
     /**
      * @docid dxSchedulerAppointment.recurrenceRule
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -767,7 +738,6 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     startDate?: Date;
     /**
      * @docid dxSchedulerAppointment.startDateTimeZone
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -781,14 +751,12 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     template?: template;
     /**
      * @docid dxSchedulerAppointment.text
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
      * @docid dxSchedulerAppointment.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

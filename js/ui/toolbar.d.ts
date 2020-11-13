@@ -71,7 +71,6 @@ export default class dxToolbar extends CollectionWidget {
 export interface dxToolbarItem extends CollectionWidgetItem {
     /**
      * @docid dxToolbarItem.cssClass
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

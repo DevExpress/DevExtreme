@@ -8,7 +8,6 @@ import UploadInfo from './upload_info';
 export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseOptions<CustomFileSystemProvider> {
     /**
      * @docid CustomFileSystemProviderOptions.abortFileUpload
-     * @type function
      * @type_function_param1 file:File
      * @type_function_param2 uploadInfo:UploadInfo
      * @type_function_param3 destinationDirectory:FileSystemItem
@@ -20,7 +19,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid CustomFileSystemProviderOptions.copyItem
-     * @type function
      * @type_function_param1 item:FileSystemItem
      * @type_function_param2 destinationDirectory:FileSystemItem
      * @type_function_return Promise<any>|any
@@ -31,7 +29,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid CustomFileSystemProviderOptions.createDirectory
-     * @type function
      * @type_function_param1 parentDirectory:FileSystemItem
      * @type_function_param2 name:string
      * @type_function_return Promise<any>|any
@@ -42,7 +39,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid CustomFileSystemProviderOptions.deleteItem
-     * @type function
      * @type_function_param1 item:FileSystemItem
      * @type_function_return Promise<any>|any
      * @prevFileNamespace DevExpress.fileManagement
@@ -52,7 +48,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid CustomFileSystemProviderOptions.downloadItems
-     * @type function
      * @type_function_param1 items:Array<FileSystemItem>
      * @prevFileNamespace DevExpress.fileManagement
      * @public
@@ -61,7 +56,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid CustomFileSystemProviderOptions.getItems
-     * @type function
      * @type_function_param1 parentDirectory:FileSystemItem
      * @type_function_return Promise<Array<object>>|Array<object>
      * @prevFileNamespace DevExpress.fileManagement
@@ -71,7 +65,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid CustomFileSystemProviderOptions.getItemsContent
-     * @type function
      * @type_function_param1 items:Array<FileSystemItem>
      * @type_function_return Promise<object>|object
      * @prevFileNamespace DevExpress.fileManagement
@@ -89,7 +82,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid CustomFileSystemProviderOptions.moveItem
-     * @type function
      * @type_function_param1 item:FileSystemItem
      * @type_function_param2 destinationDirectory:FileSystemItem
      * @type_function_return Promise<any>|any
@@ -100,7 +92,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid CustomFileSystemProviderOptions.renameItem
-     * @type function
      * @type_function_param1 item:FileSystemItem
      * @type_function_param2 newName:string
      * @type_function_return Promise<any>|any
@@ -111,7 +102,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 
     /**
      * @docid CustomFileSystemProviderOptions.uploadFileChunk
-     * @type function
      * @type_function_param1 file:File
      * @type_function_param2 uploadInfo:UploadInfo
      * @type_function_param3 destinationDirectory:FileSystemItem

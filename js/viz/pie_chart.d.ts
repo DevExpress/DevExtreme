@@ -57,7 +57,6 @@ export interface PieChartLegendItem extends BaseLegendItem {
     argument?: string | Date | number;
     /**
      * @docid PieChartLegendItem.argumentIndex
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -81,7 +80,6 @@ export interface PieChartLegendItem extends BaseLegendItem {
 export interface PieChartSeries extends dxPieChartSeriesTypesCommonPieChartSeries {
     /**
      * @docid PieChartSeries.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -127,7 +125,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     commonSeriesSettings?: any;
     /**
      * @docid dxPieChartOptions.diameter
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -135,7 +132,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     diameter?: number;
     /**
      * @docid dxPieChartOptions.innerRadius
-     * @type number
      * @default 0.5
      * @propertyOf dxPieChartSeriesTypes.DoughnutSeries
      * @prevFileNamespace DevExpress.viz
@@ -151,7 +147,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     legend?: dxPieChartLegend;
     /**
      * @docid dxPieChartOptions.minDiameter
-     * @type number
      * @default 0.5
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -215,7 +210,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     seriesTemplate?: { customizeSeries?: ((seriesName: any) => PieChartSeries), nameField?: string };
     /**
      * @docid dxPieChartOptions.sizeGroup
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -223,7 +217,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     sizeGroup?: string;
     /**
      * @docid dxPieChartOptions.startAngle
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -267,7 +260,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
 export interface dxPieChartAnnotationConfig extends dxPieChartCommonAnnotationConfig {
     /**
      * @docid dxPieChartAnnotationConfig.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -294,7 +286,6 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
     argument?: number | Date | string;
     /**
      * @docid dxPieChartCommonAnnotationConfig.series
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -337,7 +328,6 @@ export interface dxPieChartCommonAnnotationConfig extends BaseWidgetAnnotationCo
 export interface dxPieChartAdaptiveLayout extends BaseChartAdaptiveLayout {
     /**
      * @docid dxPieChartOptions.adaptiveLayout.keepLabels
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -448,7 +438,6 @@ export interface dxPieChartSeriesTypes {
 export interface dxPieChartSeriesTypesCommonPieChartSeries {
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.argumentField
-     * @type string
      * @default 'arg'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -471,7 +460,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.color
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -501,7 +489,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     label?: { argumentFormat?: format, backgroundColor?: string, border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, connector?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((pointInfo: any) => string), font?: Font, format?: format, position?: 'columns' | 'inside' | 'outside', radialOffset?: number, rotationAngle?: number, textOverflow?: VizTextOverflowType, visible?: boolean, wordWrap?: WordWrapType };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.maxLabelCount
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -509,7 +496,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     maxLabelCount?: number;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.minSegmentSize
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -539,7 +525,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     smallValuesGrouping?: { groupName?: string, mode?: 'none' | 'smallValueThreshold' | 'topN', threshold?: number, topCount?: number };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.tagField
-     * @type string
      * @default 'tag'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -547,7 +532,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     tagField?: string;
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.valueField
-     * @type string
      * @default 'val'
      * @prevFileNamespace DevExpress.viz
      * @public

@@ -59,7 +59,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     chart?: { barGroupPadding?: number, barGroupWidth?: number, bottomIndent?: number, commonSeriesSettings?: dxChartCommonSeriesSettings, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, maxBubbleSize?: number, minBubbleSize?: number, negativesAsZeroes?: boolean, palette?: Array<string> | PaletteType, paletteExtensionMode?: PaletteExtensionModeType, series?: ChartSeries | Array<ChartSeries>, seriesTemplate?: { customizeSeries?: ((seriesName: any) => ChartSeries), nameField?: string }, topIndent?: number, valueAxis?: { inverted?: boolean, logarithmBase?: number, max?: number, min?: number, type?: 'continuous' | 'logarithmic', valueType?: 'datetime' | 'numeric' | 'string' } };
     /**
      * @docid dxRangeSelectorOptions.containerBackgroundColor
-     * @type string
      * @default '#FFFFFF'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -74,7 +73,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     dataSource?: Array<any> | DataSource | DataSourceOptions | string;
     /**
      * @docid dxRangeSelectorOptions.dataSourceField
-     * @type string
      * @default 'arg'
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -111,7 +109,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     scale?: { aggregateByCategory?: boolean, aggregationGroupWidth?: number, aggregationInterval?: number | any | TimeIntervalType, allowDecimals?: boolean, breakStyle?: { color?: string, line?: 'straight' | 'waved', width?: number }, breaks?: Array<ScaleBreak>, categories?: Array<number | string | Date>, endOnTick?: boolean, endValue?: number | Date | string, holidays?: Array<Date | string> | Array<number>, label?: { customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string), font?: Font, format?: format, overlappingBehavior?: 'hide' | 'none', topIndent?: number, visible?: boolean }, linearThreshold?: number, logarithmBase?: number, marker?: { label?: { customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string), format?: format }, separatorHeight?: number, textLeftIndent?: number, textTopIndent?: number, topIndent?: number, visible?: boolean }, maxRange?: number | any | TimeIntervalType, minRange?: number | any | TimeIntervalType, minorTick?: { color?: string, opacity?: number, visible?: boolean, width?: number }, minorTickCount?: number, minorTickInterval?: number | any | TimeIntervalType, placeholderHeight?: number, showCustomBoundaryTicks?: boolean, singleWorkdays?: Array<Date | string> | Array<number>, startValue?: number | Date | string, tick?: { color?: string, opacity?: number, width?: number }, tickInterval?: number | any | TimeIntervalType, type?: 'continuous' | 'discrete' | 'logarithmic' | 'semidiscrete', valueType?: 'datetime' | 'numeric' | 'string', workWeek?: Array<number>, workdaysOnly?: boolean };
     /**
      * @docid dxRangeSelectorOptions.selectedRangeColor
-     * @type string
      * @default "#606060"
      * @prevFileNamespace DevExpress.viz
      * @public

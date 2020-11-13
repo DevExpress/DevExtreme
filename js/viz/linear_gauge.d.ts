@@ -89,7 +89,6 @@ export interface dxLinearGaugeScale extends BaseGaugeScale {
     label?: dxLinearGaugeScaleLabel;
     /**
      * @docid dxLinearGaugeOptions.scale.scaleDivisionFactor
-     * @type number
      * @default 25
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -107,7 +106,6 @@ export interface dxLinearGaugeScale extends BaseGaugeScale {
 export interface dxLinearGaugeScaleLabel extends BaseGaugeScaleLabel {
     /**
      * @docid dxLinearGaugeOptions.scale.label.indentFromTick
-     * @type number
      * @default -10
      * @prevFileNamespace DevExpress.viz
      * @public

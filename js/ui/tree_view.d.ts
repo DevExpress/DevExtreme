@@ -27,7 +27,6 @@ import {
 export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<dxTreeView>, SearchBoxMixinOptions<dxTreeView> {
     /**
      * @docid dxTreeViewOptions.animationEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -35,7 +34,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     animationEnabled?: boolean;
     /**
      * @docid dxTreeViewOptions.createChildren
-     * @type function
      * @type_function_param1 parentNode:dxTreeViewNode
      * @type_function_return Promise<any>|Array<Object>
      * @prevFileNamespace DevExpress.ui
@@ -60,7 +58,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     dataStructure?: 'plain' | 'tree';
     /**
      * @docid dxTreeViewOptions.expandAllEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -76,7 +73,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     expandEvent?: 'dblclick' | 'click';
     /**
      * @docid dxTreeViewOptions.expandNodesRecursive
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -254,7 +250,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     scrollDirection?: 'both' | 'horizontal' | 'vertical';
     /**
      * @docid dxTreeViewOptions.selectAllText
-     * @type string
      * @default "Select All"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -262,7 +257,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     selectAllText?: string;
     /**
      * @docid dxTreeViewOptions.selectByClick
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -270,7 +264,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     selectByClick?: boolean;
     /**
      * @docid dxTreeViewOptions.selectNodesRecursive
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -294,7 +287,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     showCheckBoxesMode?: 'none' | 'normal' | 'selectAll';
     /**
      * @docid dxTreeViewOptions.virtualModeEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -512,7 +504,6 @@ export default class dxTreeView extends HierarchicalCollectionWidget {
 export interface dxTreeViewItem extends CollectionWidgetItem {
     /**
      * @docid dxTreeViewItem.expanded
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -520,7 +511,6 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
     expanded?: boolean;
     /**
      * @docid dxTreeViewItem.hasItems
-     * @type boolean
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -528,7 +518,6 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
     hasItems?: boolean;
     /**
      * @docid dxTreeViewItem.icon
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -550,7 +539,6 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
     parentId?: number | string;
     /**
      * @docid dxTreeViewItem.selected
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -568,14 +556,12 @@ export interface dxTreeViewNode {
     children?: Array<dxTreeViewNode>;
     /**
      * @docid dxTreeViewNode.disabled
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     disabled?: boolean;
     /**
      * @docid dxTreeViewNode.expanded
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -603,14 +589,12 @@ export interface dxTreeViewNode {
     parent?: dxTreeViewNode;
     /**
      * @docid dxTreeViewNode.selected
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selected?: boolean;
     /**
      * @docid dxTreeViewNode.text
-     * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */

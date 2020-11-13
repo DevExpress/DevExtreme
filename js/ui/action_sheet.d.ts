@@ -20,7 +20,6 @@ import CollectionWidget, {
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**
      * @docid dxActionSheetOptions.cancelText
-     * @type string
      * @default "Cancel"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -55,7 +54,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     onCancelClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, cancel?: boolean }) => any) | string;
     /**
      * @docid dxActionSheetOptions.showCancelButton
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -63,7 +61,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     showCancelButton?: boolean;
     /**
      * @docid dxActionSheetOptions.showTitle
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -78,7 +75,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     target?: string | Element | JQuery;
     /**
      * @docid dxActionSheetOptions.title
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -86,7 +82,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     title?: string;
     /**
      * @docid dxActionSheetOptions.usePopover
-     * @type boolean
      * @default false
      * @default true [for](iPad)
      * @prevFileNamespace DevExpress.ui
@@ -95,7 +90,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     usePopover?: boolean;
     /**
      * @docid dxActionSheetOptions.visible
-     * @type boolean
      * @default false
      * @fires dxActionSheetOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -144,7 +138,6 @@ export default class dxActionSheet extends CollectionWidget {
 export interface dxActionSheetItem extends CollectionWidgetItem {
     /**
      * @docid dxActionSheetItem.icon
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -10,7 +10,6 @@
 export default interface UploadInfo {
     /**
      * @docid UploadInfo.bytesUploaded
-     * @type Number
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -18,7 +17,6 @@ export default interface UploadInfo {
 
     /**
      * @docid UploadInfo.chunkCount
-     * @type Number
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -42,7 +40,6 @@ export default interface UploadInfo {
 
     /**
      * @docid UploadInfo.chunkIndex
-     * @type Number
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */

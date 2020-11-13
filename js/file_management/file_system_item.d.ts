@@ -12,7 +12,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.path
-     * @type string
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -28,7 +27,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.key
-     * @type string
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -36,7 +34,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.name
-     * @type string
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -52,7 +49,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.size
-     * @type number
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -60,7 +56,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.isDirectory
-     * @type boolean
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -68,7 +63,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.hasSubDirectories
-     * @type boolean
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -76,7 +70,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.thumbnail
-     * @type string
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */

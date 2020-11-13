@@ -5,17 +5,14 @@
 export interface dxSchedulerTimeZone {
     /** 
      * @docid dxSchedulerTimeZone.id
-     *  @type string
      */
     id: string;
     /**
      * @docid dxSchedulerTimeZone.offset
-     * @type number
      */
     offset: number;
     /**
      * @docid dxSchedulerTimeZone.title
-     * @type string
      */
     title: string;
 }

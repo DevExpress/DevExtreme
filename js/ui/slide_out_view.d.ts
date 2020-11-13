@@ -41,7 +41,6 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     menuTemplate?: template | ((menuElement: dxElement) => any);
     /**
      * @docid dxSlideOutViewOptions.menuVisible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -49,7 +48,6 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     menuVisible?: boolean;
     /**
      * @docid dxSlideOutViewOptions.swipeEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

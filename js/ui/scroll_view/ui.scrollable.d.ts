@@ -16,7 +16,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     /**
      * @docid dxScrollableOptions.bounceEnabled
      * @default false [for](desktop)
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -32,7 +31,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     direction?: 'both' | 'horizontal' | 'vertical';
     /**
      * @docid dxScrollableOptions.disabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -73,7 +71,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     /**
      * @docid dxScrollableOptions.scrollByContent
      * @default false [for](non-touch_devices)
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,7 +79,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     /**
      * @docid dxScrollableOptions.scrollByThumb
      * @default true [for](desktop)
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -102,7 +98,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
      * @docid dxScrollableOptions.useNative
      * @default false [for](desktop)
      * @default true [for](Mac)
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

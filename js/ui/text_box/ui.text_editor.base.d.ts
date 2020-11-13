@@ -27,7 +27,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     buttons?: Array<string | 'clear' | dxTextEditorButton>;
     /**
      * @docid dxTextEditorOptions.focusStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -35,7 +34,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     focusStateEnabled?: boolean;
     /**
      * @docid dxTextEditorOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -51,7 +49,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     inputAttr?: any;
     /**
      * @docid dxTextEditorOptions.mask
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -59,7 +56,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     mask?: string;
     /**
      * @docid dxTextEditorOptions.maskChar
-     * @type string
      * @default "_"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -67,7 +63,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     maskChar?: string;
     /**
      * @docid dxTextEditorOptions.maskInvalidMessage
-     * @type string
      * @default "Value is invalid"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -83,7 +78,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     maskRules?: any;
     /**
      * @docid dxTextEditorOptions.name
-     * @type string
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -214,7 +208,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     onPaste?: ((e: { component?: T, element?: dxElement, model?: any, event?: event }) => any);
     /**
      * @docid dxTextEditorOptions.placeholder
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -222,7 +215,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     placeholder?: string;
     /**
      * @docid dxTextEditorOptions.showClearButton
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -238,7 +230,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     showMaskMode?: 'always' | 'onFocus';
     /**
      * @docid dxTextEditorOptions.spellcheck
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -255,7 +246,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     stylingMode?: 'outlined' | 'underlined' | 'filled';
     /**
      * @docid dxTextEditorOptions.text
-     * @type string
      * @readonly
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -263,7 +253,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     text?: string;
     /**
      * @docid dxTextEditorOptions.useMaskedValue
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -279,7 +268,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     value?: any;
     /**
      * @docid dxTextEditorOptions.valueChangeEvent
-     * @type string
      * @default "change"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -331,7 +319,6 @@ export interface dxTextEditorButton {
     location?: 'after' | 'before';
     /**
      * @docid dxTextEditorButton.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

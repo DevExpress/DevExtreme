@@ -19,7 +19,6 @@ import Widget, {
 export interface dxButtonOptions extends WidgetOptions<dxButton> {
     /**
      * @docid dxButtonOptions.activeStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -27,7 +26,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     activeStateEnabled?: boolean;
     /**
      * @docid dxButtonOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -35,7 +33,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxButtonOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -43,7 +40,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     hoverStateEnabled?: boolean;
     /**
      * @docid dxButtonOptions.icon
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -84,7 +80,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     template?: template | ((buttonData: { text?: string, icon?: string }, contentElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxButtonOptions.text
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -100,7 +95,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     type?: 'back' | 'danger' | 'default' | 'normal' | 'success';
     /**
      * @docid dxButtonOptions.useSubmitBehavior
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -108,7 +102,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     useSubmitBehavior?: boolean;
     /**
      * @docid dxButtonOptions.validationGroup
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -40,7 +40,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     contextMenu?: dxFileManagerContextMenu;
     /**
      * @docid dxFileManagerOptions.currentPath
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -56,7 +55,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     currentPathKeys?: Array<string>;
     /**
      * @docid dxFileManagerOptions.customizeDetailColumns
-     * @type function
      * @type_function_param1 columns:Array<dxFileManagerDetailsColumn>
      * @type_function_return Array<dxFileManagerDetailsColumn>
      * @prevFileNamespace DevExpress.ui
@@ -65,7 +63,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     customizeDetailColumns?: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>);
     /**
      * @docid dxFileManagerOptions.customizeThumbnail
-     * @type function
      * @type_function_param1 fileSystemItem:FileSystemItem
      * @type_function_return string
      * @prevFileNamespace DevExpress.ui
@@ -193,7 +190,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     permissions?: { copy?: boolean, create?: boolean, download?: boolean, move?: boolean, delete?: boolean, rename?: boolean, upload?: boolean };
     /**
      * @docid dxFileManagerOptions.rootFolderName
-     * @type string
      * @default "Files"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -217,7 +213,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     selectedItemKeys?: Array<string>;
     /**
      * @docid dxFileManagerOptions.focusedItemKey
-     * @type string
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -332,7 +327,6 @@ export interface dxFileManagerToolbar {
 export interface dxFileManagerToolbarItem extends dxToolbarItem {
     /**
      * @docid dxFileManagerToolbarItem.icon
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -373,7 +367,6 @@ export interface dxFileManagerDetailsColumn {
     alignment?: 'center' | 'left' | 'right' | undefined;
     /**
      * @docid dxFileManagerDetailsColumn.caption
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -381,7 +374,6 @@ export interface dxFileManagerDetailsColumn {
     caption?: string;
     /**
      * @docid dxFileManagerDetailsColumn.cssClass
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -389,7 +381,6 @@ export interface dxFileManagerDetailsColumn {
     cssClass?: string;
     /**
      * @docid dxFileManagerDetailsColumn.dataField
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -405,7 +396,6 @@ export interface dxFileManagerDetailsColumn {
     dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
     /**
      * @docid dxFileManagerDetailsColumn.hidingPriority
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -413,7 +403,6 @@ export interface dxFileManagerDetailsColumn {
     hidingPriority?: number;
     /**
      * @docid dxFileManagerDetailsColumn.sortIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -430,7 +419,6 @@ export interface dxFileManagerDetailsColumn {
     sortOrder?: 'asc' | 'desc' | undefined;
     /**
      * @docid dxFileManagerDetailsColumn.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -438,7 +426,6 @@ export interface dxFileManagerDetailsColumn {
     visible?: boolean;
     /**
      * @docid dxFileManagerDetailsColumn.visibleIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

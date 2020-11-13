@@ -22,7 +22,6 @@ import dxMultiView, {
 export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid dxTabPanelOptions.animationEnabled
-     * @type boolean
      * @default false
      * @default true [for](Android|iOS)
      * @prevFileNamespace DevExpress.ui
@@ -39,7 +38,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     dataSource?: string | Array<string | dxTabPanelItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxTabPanelOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -105,7 +103,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     onTitleRendered?: ((e: { component?: dxTabPanel, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement }) => any);
     /**
      * @docid dxTabPanelOptions.repaintChangesOnly
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -113,7 +110,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     repaintChangesOnly?: boolean;
     /**
      * @docid dxTabPanelOptions.scrollByContent
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -121,7 +117,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     scrollByContent?: boolean;
     /**
      * @docid dxTabPanelOptions.scrollingEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -129,7 +124,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     scrollingEnabled?: boolean;
     /**
      * @docid dxTabPanelOptions.showNavButtons
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -137,7 +131,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     showNavButtons?: boolean;
     /**
      * @docid dxTabPanelOptions.swipeEnabled
-     * @type boolean
      * @default false [for](non-touch_devices)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -160,14 +153,12 @@ export default class dxTabPanel extends dxMultiView {
 export interface dxTabPanelItem extends dxMultiViewItem {
     /**
      * @docid dxTabPanelItem.badge
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     badge?: string;
     /**
      * @docid dxTabPanelItem.icon
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -182,7 +173,6 @@ export interface dxTabPanelItem extends dxMultiViewItem {
     tabTemplate?: template | (() => string | Element | JQuery);
     /**
      * @docid dxTabPanelItem.title
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */

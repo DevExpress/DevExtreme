@@ -24,7 +24,6 @@ import CollectionWidget, {
 export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion> {
     /**
      * @docid dxAccordionOptions.animationDuration
-     * @type number
      * @default 300
      * @default 200 [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -33,7 +32,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     animationDuration?: number;
     /**
      * @docid dxAccordionOptions.collapsible
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -49,7 +47,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     dataSource?: string | Array<string | dxAccordionItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxAccordionOptions.deferRendering
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -57,7 +54,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     deferRendering?: boolean;
     /**
      * @docid dxAccordionOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -74,7 +70,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     height?: number | string | (() => number | string);
     /**
      * @docid dxAccordionOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -114,7 +109,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     items?: Array<string | dxAccordionItem | any>;
     /**
      * @docid dxAccordionOptions.multiple
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -136,7 +130,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     onItemTitleClick?: ((e: { component?: dxAccordion, element?: dxElement, model?: any, itemData?: any, itemElement?: dxElement, itemIndex?: number, event?: event }) => any) | string;
     /**
      * @docid dxAccordionOptions.repaintChangesOnly
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -144,7 +137,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     repaintChangesOnly?: boolean;
     /**
      * @docid dxAccordionOptions.selectedIndex
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -193,14 +185,12 @@ export default class dxAccordion extends CollectionWidget {
 export interface dxAccordionItem extends CollectionWidgetItem {
     /**
      * @docid dxAccordionItem.icon
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
      * @docid dxAccordionItem.title
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -22,7 +22,6 @@ import Widget, {
 export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     /**
      * @docid dxPivotGridOptions.allowExpandAll
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -30,7 +29,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     allowExpandAll?: boolean;
     /**
      * @docid dxPivotGridOptions.allowFiltering
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -38,7 +36,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     allowFiltering?: boolean;
     /**
      * @docid dxPivotGridOptions.allowSorting
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -46,7 +43,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     allowSorting?: boolean;
     /**
      * @docid dxPivotGridOptions.allowSortingBySummary
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -98,7 +94,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
     /**
      * @docid dxPivotGridOptions.hideEmptySummaryCells
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -219,7 +214,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     scrolling?: { mode?: 'standard' | 'virtual', useNative?: boolean | 'auto' };
     /**
      * @docid dxPivotGridOptions.showBorders
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -227,7 +221,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     showBorders?: boolean;
     /**
      * @docid dxPivotGridOptions.showColumnGrandTotals
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -235,7 +228,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     showColumnGrandTotals?: boolean;
     /**
      * @docid dxPivotGridOptions.showColumnTotals
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -243,7 +235,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     showColumnTotals?: boolean;
     /**
      * @docid dxPivotGridOptions.showRowGrandTotals
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -251,7 +242,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     showRowGrandTotals?: boolean;
     /**
      * @docid dxPivotGridOptions.showRowTotals
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -281,7 +271,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     texts?: { collapseAll?: string, dataNotAvailable?: string, expandAll?: string, exportToExcel?: string, grandTotal?: string, noData?: string, removeAllSorting?: string, showFieldChooser?: string, sortColumnBySummary?: string, sortRowBySummary?: string, total?: string };
     /**
      * @docid dxPivotGridOptions.wordWrapEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -367,14 +356,12 @@ export interface dxPivotGridPivotGridCell {
     columnType?: 'D' | 'T' | 'GT';
     /**
      * @docid dxPivotGridPivotGridCell.dataIndex
-     * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataIndex?: number;
     /**
      * @docid dxPivotGridPivotGridCell.expanded
-     * @type boolean
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -403,7 +390,6 @@ export interface dxPivotGridPivotGridCell {
     rowType?: 'D' | 'T' | 'GT';
     /**
      * @docid dxPivotGridPivotGridCell.text
-     * @type string
      * @prevFileNamespace DevExpress.ui
      * @public
      */

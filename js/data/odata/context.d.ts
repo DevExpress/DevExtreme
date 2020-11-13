@@ -3,7 +3,6 @@ import '../../jquery_augmentation';
 export interface ODataContextOptions {
     /**
      * @docid ODataContextOptions.beforeSend
-     * @type function
      * @type_function_param1 options:object
      * @type_function_param1_field1 url:string
      * @type_function_param1_field2 async:boolean
@@ -18,7 +17,6 @@ export interface ODataContextOptions {
     beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
     /**
      * @docid ODataContextOptions.deserializeDates
-     * @type boolean
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -32,7 +30,6 @@ export interface ODataContextOptions {
     entities?: any;
     /**
      * @docid ODataContextOptions.errorHandler
-     * @type function
      * @type_function_param1 e:Error
      * @type_function_param1_field1 httpStatus:number
      * @type_function_param1_field2 errorDetails:object
@@ -43,14 +40,12 @@ export interface ODataContextOptions {
     errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
     /**
      * @docid ODataContextOptions.filterToLower
-     * @type boolean
      * @prevFileNamespace DevExpress.data
      * @public
      */
     filterToLower?: boolean;
     /**
      * @docid ODataContextOptions.jsonp
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
@@ -58,14 +53,12 @@ export interface ODataContextOptions {
     jsonp?: boolean;
     /**
      * @docid ODataContextOptions.url
-     * @type string
      * @prevFileNamespace DevExpress.data
      * @public
      */
     url?: string;
     /**
      * @docid ODataContextOptions.version
-     * @type number
      * @default 2
      * @acceptValues 2|3|4
      * @prevFileNamespace DevExpress.data
@@ -74,7 +67,6 @@ export interface ODataContextOptions {
     version?: number;
     /**
      * @docid ODataContextOptions.withCredentials
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public

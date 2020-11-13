@@ -14,7 +14,6 @@ export type HatchingDirectionType = 'left' | 'none' | 'right';
 export interface BaseLegend {
     /**
      * @docid BaseLegend.backgroundColor
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -29,7 +28,6 @@ export interface BaseLegend {
     border?: { color?: string, cornerRadius?: number, dashStyle?: DashStyleType, opacity?: number, visible?: boolean, width?: number };
     /**
      * @docid BaseLegend.columnCount
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -37,7 +35,6 @@ export interface BaseLegend {
     columnCount?: number;
     /**
      * @docid BaseLegend.columnItemSpacing
-     * @type number
      * @default 20
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -85,7 +82,6 @@ export interface BaseLegend {
     margin?: number | { bottom?: number, left?: number, right?: number, top?: number };
     /**
      * @docid BaseLegend.markerSize
-     * @type number
      * @default 20
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -101,7 +97,6 @@ export interface BaseLegend {
     orientation?: 'horizontal' | 'vertical';
     /**
      * @docid BaseLegend.paddingLeftRight
-     * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -109,7 +104,6 @@ export interface BaseLegend {
     paddingLeftRight?: number;
     /**
      * @docid BaseLegend.paddingTopBottom
-     * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -117,7 +111,6 @@ export interface BaseLegend {
     paddingTopBottom?: number;
     /**
      * @docid BaseLegend.rowCount
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -125,7 +118,6 @@ export interface BaseLegend {
     rowCount?: number;
     /**
      * @docid BaseLegend.rowItemSpacing
-     * @type number
      * @default 8
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -148,7 +140,6 @@ export interface BaseLegend {
     verticalAlignment?: 'bottom' | 'top';
     /**
      * @docid BaseLegend.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -166,14 +157,12 @@ export interface BaseLegendItem {
     marker?: { fill?: string, opacity?: number, size?: number, state?: 'normal' | 'hovered' | 'selected' };
     /**
      * @docid BaseLegendItem.text
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     text?: string;
     /**
      * @docid BaseLegendItem.visible
-     * @type boolean
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -183,7 +172,6 @@ export interface BaseLegendItem {
 export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
     /**
      * @docid ChartSeries.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

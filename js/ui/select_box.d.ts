@@ -15,7 +15,6 @@ import dxDropDownList, {
 export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptions<T> {
     /**
      * @docid dxSelectBoxOptions.acceptCustomValue
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -54,7 +53,6 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
     openOnFieldClick?: boolean;
     /**
      * @docid dxSelectBoxOptions.placeholder
-     * @type string
      * @default "Select"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -68,7 +66,6 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
     showDropDownButton?: boolean;
     /**
      * @docid dxSelectBoxOptions.showSelectionControls
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -76,7 +73,6 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
     showSelectionControls?: boolean;
     /**
      * @docid dxSelectBoxOptions.valueChangeEvent
-     * @type string
      * @default "change"
      * @prevFileNamespace DevExpress.ui
      * @public

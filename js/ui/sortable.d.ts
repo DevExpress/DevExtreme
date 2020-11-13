@@ -20,7 +20,6 @@ import dxDraggable, {
 export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     /**
      * @docid dxSortableOptions.allowDropInsideItem
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -28,7 +27,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     allowDropInsideItem?: boolean;
     /**
      * @docid dxSortableOptions.allowReordering
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -58,7 +56,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     dropFeedbackMode?: 'push' | 'indicate';
     /**
      * @docid dxSortableOptions.filter
-     * @type string
      * @default "> *"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -74,7 +71,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     itemOrientation?: 'horizontal' | 'vertical';
     /**
      * @docid dxSortableOptions.moveItemOnDrop
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

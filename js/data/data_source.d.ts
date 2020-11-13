@@ -18,7 +18,6 @@ export interface DataSourceOptions {
     customQueryParams?: any;
     /**
      * @docid DataSourceOptions.expand
-     * @type Array<string>|string
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -39,7 +38,6 @@ export interface DataSourceOptions {
     group?: string | Array<any> | Function;
     /**
      * @docid DataSourceOptions.map
-     * @type function
      * @type_function_param1 dataItem:object
      * @type_function_return object
      * @prevFileNamespace DevExpress.data
@@ -48,7 +46,6 @@ export interface DataSourceOptions {
     map?: ((dataItem: any) => any);
     /**
      * @docid DataSourceOptions.onChanged
-     * @type function
      * @type_function_param1 e:Object
      * @type_function_param1_field1 changes:Array<any>
      * @action
@@ -58,7 +55,6 @@ export interface DataSourceOptions {
     onChanged?: ((e: { changes?: Array<any> }) => any);
     /**
      * @docid DataSourceOptions.onLoadError
-     * @type function
      * @type_function_param1 error:Object
      * @type_function_param1_field1 message:string
      * @action
@@ -68,7 +64,6 @@ export interface DataSourceOptions {
     onLoadError?: ((error: { message?: string }) => any);
     /**
      * @docid DataSourceOptions.onLoadingChanged
-     * @type function
      * @type_function_param1 isLoading:boolean
      * @action
      * @prevFileNamespace DevExpress.data
@@ -77,7 +72,6 @@ export interface DataSourceOptions {
     onLoadingChanged?: ((isLoading: boolean) => any);
     /**
      * @docid DataSourceOptions.pageSize
-     * @type number
      * @default 20
      * @prevFileNamespace DevExpress.data
      * @public
@@ -85,7 +79,6 @@ export interface DataSourceOptions {
     pageSize?: number;
     /**
      * @docid DataSourceOptions.paginate
-     * @type Boolean
      * @default undefined
      * @prevFileNamespace DevExpress.data
      * @public
@@ -93,7 +86,6 @@ export interface DataSourceOptions {
     paginate?: boolean;
     /**
      * @docid DataSourceOptions.postProcess
-     * @type function
      * @type_function_param1 data:Array<any>
      * @type_function_return Array<any>
      * @prevFileNamespace DevExpress.data
@@ -102,7 +94,6 @@ export interface DataSourceOptions {
     postProcess?: ((data: Array<any>) => Array<any>);
     /**
      * @docid DataSourceOptions.pushAggregationTimeout
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.data
      * @public
@@ -110,14 +101,12 @@ export interface DataSourceOptions {
     pushAggregationTimeout?: number;
     /**
      * @docid DataSourceOptions.requireTotalCount
-     * @type Boolean
      * @prevFileNamespace DevExpress.data
      * @public
      */
     requireTotalCount?: boolean;
     /**
      * @docid DataSourceOptions.reshapeOnPush
-     * @type Boolean
      * @default false
      * @prevFileNamespace DevExpress.data
      * @public
@@ -132,7 +121,6 @@ export interface DataSourceOptions {
     searchExpr?: string | Function | Array<string | Function>;
     /**
      * @docid DataSourceOptions.searchOperation
-     * @type string
      * @default "contains"
      * @prevFileNamespace DevExpress.data
      * @public
@@ -140,7 +128,6 @@ export interface DataSourceOptions {
     searchOperation?: string;
     /**
      * @docid DataSourceOptions.searchValue
-     * @type any
      * @default null
      * @prevFileNamespace DevExpress.data
      * @public
@@ -162,7 +149,6 @@ export interface DataSourceOptions {
     sort?: string | Array<any> | Function;
     /**
      * @docid DataSourceOptions.store
-     * @type Store|StoreOptions|Array<any>|any
      * @prevFileNamespace DevExpress.data
      * @public
      */

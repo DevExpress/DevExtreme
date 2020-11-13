@@ -21,7 +21,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     applyValueMode?: 'instantly' | 'useButtons';
     /**
      * @docid dxTagBoxOptions.hideSelectedItems
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -29,7 +28,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     hideSelectedItems?: boolean;
     /**
      * @docid dxTagBoxOptions.maxDisplayedTags
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -37,7 +35,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     maxDisplayedTags?: number;
     /**
      * @docid dxTagBoxOptions.multiline
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -105,7 +102,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     showDropDownButton?: boolean;
     /**
      * @docid dxTagBoxOptions.showMultiTagOnly
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

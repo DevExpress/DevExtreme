@@ -81,7 +81,6 @@ export interface dxBoxItem extends CollectionWidgetItem {
     box?: dxBoxOptions;
     /**
      * @docid dxBoxItem.ratio
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -89,7 +88,6 @@ export interface dxBoxItem extends CollectionWidgetItem {
     ratio?: number;
     /**
      * @docid dxBoxItem.shrink
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public

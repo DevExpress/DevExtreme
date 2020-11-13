@@ -57,7 +57,6 @@ export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
     orientation?: 'center' | 'inside' | 'outside';
     /**
      * @docid dxCircularGaugeOptions.rangeContainer.width
-     * @type number
      * @default 5
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -92,7 +91,6 @@ export interface dxCircularGaugeScaleLabel extends BaseGaugeScaleLabel {
     hideFirstOrLast?: 'first' | 'last';
     /**
      * @docid dxCircularGaugeOptions.scale.label.indentFromTick
-     * @type number
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public

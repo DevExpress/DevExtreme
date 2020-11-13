@@ -7,21 +7,18 @@ import {
 export interface StoreOptions<T = Store> {
     /**
      * @docid StoreOptions.errorHandler
-     * @type function
      * @prevFileNamespace DevExpress.data
      * @public
      */
     errorHandler?: Function;
     /**
      * @docid StoreOptions.key
-     * @type string|Array<string>
      * @prevFileNamespace DevExpress.data
      * @public
      */
     key?: string | Array<string>;
     /**
      * @docid StoreOptions.onInserted
-     * @type function
      * @type_function_param1 values:object
      * @type_function_param2 key:object|string|number
      * @action
@@ -31,7 +28,6 @@ export interface StoreOptions<T = Store> {
     onInserted?: ((values: any, key: any | string | number) => any);
     /**
      * @docid StoreOptions.onInserting
-     * @type function
      * @type_function_param1 values:object
      * @action
      * @prevFileNamespace DevExpress.data
@@ -40,7 +36,6 @@ export interface StoreOptions<T = Store> {
     onInserting?: ((values: any) => any);
     /**
      * @docid StoreOptions.onLoaded
-     * @type function
      * @type_function_param1 result:Array<any>
      * @action
      * @prevFileNamespace DevExpress.data
@@ -49,7 +44,6 @@ export interface StoreOptions<T = Store> {
     onLoaded?: ((result: Array<any>) => any);
     /**
      * @docid StoreOptions.onLoading
-     * @type function
      * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @prevFileNamespace DevExpress.data
@@ -58,7 +52,6 @@ export interface StoreOptions<T = Store> {
     onLoading?: ((loadOptions: LoadOptions) => any);
     /**
      * @docid StoreOptions.onModified
-     * @type function
      * @action
      * @prevFileNamespace DevExpress.data
      * @public
@@ -66,7 +59,6 @@ export interface StoreOptions<T = Store> {
     onModified?: Function;
     /**
      * @docid StoreOptions.onModifying
-     * @type function
      * @action
      * @prevFileNamespace DevExpress.data
      * @public
@@ -74,7 +66,6 @@ export interface StoreOptions<T = Store> {
     onModifying?: Function;
     /**
      * @docid StoreOptions.onPush
-     * @type function
      * @type_function_param1 changes:Array<any>
      * @action
      * @prevFileNamespace DevExpress.data
@@ -83,7 +74,6 @@ export interface StoreOptions<T = Store> {
     onPush?: ((changes: Array<any>) => any);
     /**
      * @docid StoreOptions.onRemoved
-     * @type function
      * @type_function_param1 key:object|string|number
      * @action
      * @prevFileNamespace DevExpress.data
@@ -92,7 +82,6 @@ export interface StoreOptions<T = Store> {
     onRemoved?: ((key: any | string | number) => any);
     /**
      * @docid StoreOptions.onRemoving
-     * @type function
      * @type_function_param1 key:object|string|number
      * @action
      * @prevFileNamespace DevExpress.data
@@ -101,7 +90,6 @@ export interface StoreOptions<T = Store> {
     onRemoving?: ((key: any | string | number) => any);
     /**
      * @docid StoreOptions.onUpdated
-     * @type function
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @action
@@ -111,7 +99,6 @@ export interface StoreOptions<T = Store> {
     onUpdated?: ((key: any | string | number, values: any) => any);
     /**
      * @docid StoreOptions.onUpdating
-     * @type function
      * @type_function_param1 key:object|string|number
      * @type_function_param2 values:object
      * @action

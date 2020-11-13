@@ -108,7 +108,6 @@ export default class validationEngine {
 export interface AsyncRule {
     /**
      * @docid AsyncRule.ignoreEmptyValue
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -116,7 +115,6 @@ export interface AsyncRule {
     ignoreEmptyValue?: boolean;
     /**
      * @docid AsyncRule.message
-     * @type string
      * @default 'Value is invalid'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -124,7 +122,6 @@ export interface AsyncRule {
     message?: string;
     /**
      * @docid AsyncRule.reevaluate
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -139,7 +136,6 @@ export interface AsyncRule {
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     /**
      * @docid AsyncRule.validationCallback
-     * @type function
      * @type_function_return Promise<any>
      * @type_function_param1 options:object
      * @type_function_param1_field1 value:string|number
@@ -157,7 +153,6 @@ export interface AsyncRule {
 export interface CompareRule {
     /**
      * @docid CompareRule.comparisonTarget
-     * @type function
      * @type_function_return object
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -173,7 +168,6 @@ export interface CompareRule {
     comparisonType?: '!=' | '!==' | '<' | '<=' | '==' | '===' | '>' | '>=';
     /**
      * @docid CompareRule.ignoreEmptyValue
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -181,7 +175,6 @@ export interface CompareRule {
     ignoreEmptyValue?: boolean;
     /**
      * @docid CompareRule.message
-     * @type string
      * @default 'Values do not match'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -189,7 +182,6 @@ export interface CompareRule {
     message?: string;
     /**
      * @docid CompareRule.reevaluate
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -207,7 +199,6 @@ export interface CompareRule {
 export interface CustomRule {
     /**
      * @docid CustomRule.ignoreEmptyValue
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -215,7 +206,6 @@ export interface CustomRule {
     ignoreEmptyValue?: boolean;
     /**
      * @docid CustomRule.message
-     * @type string
      * @default 'Value is invalid'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -223,7 +213,6 @@ export interface CustomRule {
     message?: string;
     /**
      * @docid CustomRule.reevaluate
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -238,7 +227,6 @@ export interface CustomRule {
     type?: 'required' | 'numeric' | 'range' | 'stringLength' | 'custom' | 'compare' | 'pattern' | 'email' | 'async';
     /**
      * @docid CustomRule.validationCallback
-     * @type function
      * @type_function_return boolean
      * @type_function_param1 options:object
      * @type_function_param1_field1 value:string|number
@@ -256,7 +244,6 @@ export interface CustomRule {
 export interface EmailRule {
     /**
      * @docid EmailRule.ignoreEmptyValue
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -264,7 +251,6 @@ export interface EmailRule {
     ignoreEmptyValue?: boolean;
     /**
      * @docid EmailRule.message
-     * @type string
      * @default 'Email is invalid'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -282,7 +268,6 @@ export interface EmailRule {
 export interface NumericRule {
     /**
      * @docid NumericRule.ignoreEmptyValue
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -290,7 +275,6 @@ export interface NumericRule {
     ignoreEmptyValue?: boolean;
     /**
      * @docid NumericRule.message
-     * @type string
      * @default 'Value should be a number'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -308,7 +292,6 @@ export interface NumericRule {
 export interface PatternRule {
     /**
      * @docid PatternRule.ignoreEmptyValue
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -316,7 +299,6 @@ export interface PatternRule {
     ignoreEmptyValue?: boolean;
     /**
      * @docid PatternRule.message
-     * @type string
      * @default 'Value does not match pattern'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -341,7 +323,6 @@ export interface PatternRule {
 export interface RangeRule {
     /**
      * @docid RangeRule.ignoreEmptyValue
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -356,7 +337,6 @@ export interface RangeRule {
     max?: Date | number;
     /**
      * @docid RangeRule.message
-     * @type string
      * @default 'Value is out of range'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -371,7 +351,6 @@ export interface RangeRule {
     min?: Date | number;
     /**
      * @docid RangeRule.reevaluate
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -389,7 +368,6 @@ export interface RangeRule {
 export interface RequiredRule {
     /**
      * @docid RequiredRule.message
-     * @type string
      * @default 'Required'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -397,7 +375,6 @@ export interface RequiredRule {
     message?: string;
     /**
      * @docid RequiredRule.trim
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -415,7 +392,6 @@ export interface RequiredRule {
 export interface StringLengthRule {
     /**
      * @docid StringLengthRule.ignoreEmptyValue
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -423,14 +399,12 @@ export interface StringLengthRule {
     ignoreEmptyValue?: boolean;
     /**
      * @docid StringLengthRule.max
-     * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     max?: number;
     /**
      * @docid StringLengthRule.message
-     * @type string
      * @default 'The length of the value is not correct'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -438,14 +412,12 @@ export interface StringLengthRule {
     message?: string;
     /**
      * @docid StringLengthRule.min
-     * @type number
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     min?: number;
     /**
      * @docid StringLengthRule.trim
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

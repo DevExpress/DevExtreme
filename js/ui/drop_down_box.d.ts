@@ -23,7 +23,6 @@ import {
 export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropDownBox>, dxDropDownEditorOptions<dxDropDownBox> {
     /**
      * @docid dxDropDownBoxOptions.acceptCustomValue
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -71,7 +70,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
     openOnFieldClick?: boolean;
     /**
      * @docid dxDropDownBoxOptions.valueChangeEvent
-     * @type string
      * @default "change"
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -13,7 +13,6 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     searchEditorOptions?: dxTextBoxOptions;
     /**
      * @docid SearchBoxMixinOptions.searchEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -37,7 +36,6 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     searchMode?: 'contains' | 'startswith' | 'equals';
     /**
      * @docid SearchBoxMixinOptions.searchTimeout
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -45,7 +43,6 @@ export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     searchTimeout?: number;
     /**
      * @docid SearchBoxMixinOptions.searchValue
-     * @type String
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public

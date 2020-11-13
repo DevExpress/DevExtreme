@@ -1,7 +1,6 @@
 export interface Device {
     /**
      * @docid Device.android
-     * @type boolean
      * @prevFileNamespace DevExpress.core
      * @public
      */
@@ -16,7 +15,6 @@ export interface Device {
     deviceType?: 'phone' | 'tablet' | 'desktop';
     /**
      * @docid Device.generic
-     * @type boolean
      * @prevFileNamespace DevExpress.core
      * @public
      */
@@ -31,14 +29,12 @@ export interface Device {
     grade?: 'A' | 'B' | 'C';
     /**
      * @docid Device.ios
-     * @type boolean
      * @prevFileNamespace DevExpress.core
      * @public
      */
     ios?: boolean;
     /**
      * @docid Device.phone
-     * @type boolean
      * @prevFileNamespace DevExpress.core
      * @public
      */
@@ -53,14 +49,12 @@ export interface Device {
     platform?: 'android' | 'ios' | 'generic';
     /**
      * @docid Device.tablet
-     * @type boolean
      * @prevFileNamespace DevExpress.core
      * @public
      */
     tablet?: boolean;
     /**
      * @docid Device.version
-     * @type Array<number>
      * @prevFileNamespace DevExpress.core
      * @public
      */
@@ -154,7 +148,6 @@ declare class DevicesObject {
 
 /**
  * @const devices
- * @type DevicesObject
  * @namespace DevExpress
  * @hidden
  * @prevFileNamespace DevExpress.core

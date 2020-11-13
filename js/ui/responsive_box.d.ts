@@ -47,7 +47,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     rows?: Array<{ baseSize?: number | 'auto', ratio?: number, screen?: string, shrink?: number }>;
     /**
      * @docid dxResponsiveBoxOptions.screenByWidth
-     * @type function
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -55,7 +54,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     screenByWidth?: Function;
     /**
      * @docid dxResponsiveBoxOptions.singleColumnScreen
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
