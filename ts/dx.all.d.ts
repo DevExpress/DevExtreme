@@ -760,6 +760,10 @@ declare module DevExpress {
     export class DevicesObject {
         constructor(options: { window?: Window });
         /**
+         * [descr:DevicesObject.orientationChanged]
+         */
+        orientationChanged?: EventType;
+        /**
          * [descr:DevicesObject.current()]
          */
         current(): Device;
@@ -992,39 +996,39 @@ declare module DevExpress {
     /**
      * [descr:localization]
      */
-    export class localization {
+    declare module localization {
         /**
          * [descr:localization.formatDate(value, format)]
          */
-        static formatDate(value: Date, format: DevExpress.ui.format): string;
+        export function formatDate(value: Date, format: DevExpress.ui.format): string;
         /**
          * [descr:localization.formatMessage(key, value)]
          */
-        static formatMessage(key: string, value: string | Array<string>): string;
+        export function formatMessage(key: string, value: string | Array<string>): string;
         /**
          * [descr:localization.formatNumber(value, format)]
          */
-        static formatNumber(value: number, format: DevExpress.ui.format): string;
+        export function formatNumber(value: number, format: DevExpress.ui.format): string;
         /**
          * [descr:localization.loadMessages(messages)]
          */
-        static loadMessages(messages: any): void;
+        export function loadMessages(messages: any): void;
         /**
          * [descr:localization.locale()]
          */
-        static locale(): string;
+        export function locale(): string;
         /**
          * [descr:localization.locale(locale)]
          */
-        static locale(locale: string): void;
+        export function locale(locale: string): void;
         /**
          * [descr:localization.parseDate(text, format)]
          */
-        static parseDate(text: string, format: DevExpress.ui.format): Date;
+        export function parseDate(text: string, format: DevExpress.ui.format): Date;
         /**
          * [descr:localization.parseNumber(text, format)]
          */
-        static parseNumber(text: string, format: DevExpress.ui.format): number;
+        export function parseNumber(text: string, format: DevExpress.ui.format): number;
     }
     /**
      * [descr:positionConfig]
@@ -1078,137 +1082,137 @@ declare module DevExpress {
     /**
      * [descr:ui]
      */
-    export class ui {
+    declare module ui {
         /**
          * [descr:ui.notify(message,type,displayTime)]
          */
-        static notify(message: string, type?: string, displayTime?: number): void;
+        export function notify(message: string, type?: string, displayTime?: number): void;
         /**
          * [descr:ui.notify(options,type,displayTime)]
          */
-        static notify(options: any, type?: string, displayTime?: number): void;
+        export function notify(options: any, type?: string, displayTime?: number): void;
         /**
          * [descr:ui.repaintFloatingActionButton()]
          */
-        static repaintFloatingActionButton(): void;
+        export function repaintFloatingActionButton(): void;
         /**
          * [descr:ui.setTemplateEngine(name)]
          */
-        static setTemplateEngine(templateEngineName: string): void;
+        export function setTemplateEngine(templateEngineName: string): void;
         /**
          * [descr:ui.setTemplateEngine(options)]
          */
-        static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
+        export function setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
     }
     /**
      * [descr:validationEngine]
      */
-    export class validationEngine {
+    declare module validationEngine {
         /**
          * [descr:validationEngine.getGroupConfig()]
          */
-        static getGroupConfig(): any;
+        export function getGroupConfig(): any;
         /**
          * [descr:validationEngine.getGroupConfig(group)]
          */
-        static getGroupConfig(group: string | any): any;
+        export function getGroupConfig(group: string | any): any;
         /**
          * [descr:validationEngine.registerModelForValidation(model)]
          */
-        static registerModelForValidation(model: any): void;
+        export function registerModelForValidation(model: any): void;
         /**
          * [descr:validationEngine.resetGroup()]
          */
-        static resetGroup(): void;
+        export function resetGroup(): void;
         /**
          * [descr:validationEngine.resetGroup(group)]
          */
-        static resetGroup(group: string | any): void;
+        export function resetGroup(group: string | any): void;
         /**
          * [descr:validationEngine.unregisterModelForValidation(model)]
          */
-        static unregisterModelForValidation(model: any): void;
+        export function unregisterModelForValidation(model: any): void;
         /**
          * [descr:validationEngine.validateGroup()]
          */
-        static validateGroup(): DevExpress.ui.dxValidationGroupResult;
+        export function validateGroup(): DevExpress.ui.dxValidationGroupResult;
         /**
          * [descr:validationEngine.validateGroup(group)]
          */
-        static validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
+        export function validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
         /**
          * [descr:validationEngine.validateModel(model)]
          */
-        static validateModel(model: any): any;
+        export function validateModel(model: any): any;
     }
     /**
      * [descr:viz]
      */
-    export class viz {
+    declare module viz {
         /**
          * [descr:viz.currentPalette()]
          */
-        static currentPalette(): string;
+        export function currentPalette(): string;
         /**
          * [descr:viz.currentPalette(paletteName)]
          */
-        static currentPalette(paletteName: string): void;
+        export function currentPalette(paletteName: string): void;
         /**
          * [descr:viz.currentTheme()]
          */
-        static currentTheme(): string;
+        export function currentTheme(): string;
         /**
          * [descr:viz.currentTheme(platform, colorScheme)]
          */
-        static currentTheme(platform: string, colorScheme: string): void;
+        export function currentTheme(platform: string, colorScheme: string): void;
         /**
          * [descr:viz.currentTheme(theme)]
          */
-        static currentTheme(theme: string): void;
+        export function currentTheme(theme: string): void;
         /**
          * [descr:viz.exportFromMarkup(markup, options)]
          */
-        static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
+        export function exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function, margin?: number, svgToCanvas?: Function }): void;
         /**
          * [descr:viz.exportWidgets(widgetInstances)]
          */
-        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>): void;
+        export function exportWidgets(widgetInstances: Array<Array<DevExpress.DOMComponent>>): void;
         /**
          * [descr:viz.exportWidgets(widgetInstances, options)]
          */
-        static exportWidgets(widgetInstances: Array<Array<DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
+        export function exportWidgets(widgetInstances: Array<Array<DevExpress.DOMComponent>>, options: { fileName?: string, format?: 'GIF' | 'JPEG' | 'PDF' | 'PNG' | 'SVG', backgroundColor?: string, margin?: number, gridLayout?: boolean, verticalAlignment?: 'bottom' | 'center' | 'top', horizontalAlignment?: 'center' | 'left' | 'right', proxyUrl?: string, onExporting?: Function, onExported?: Function, onFileSaving?: Function, svgToCanvas?: Function }): void;
         /**
          * [descr:viz.generateColors(palette, count, options)]
          */
-        static generateColors(palette: 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
+        export function generateColors(palette: 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office' | Array<string>, count: number, options: { paletteExtensionMode?: 'alternate' | 'blend' | 'extrapolate', baseColorSet?: 'simpleSet' | 'indicatingSet' | 'gradientSet' }): Array<string>;
         /**
          * [descr:viz.getMarkup(widgetInstances)]
          */
-        static getMarkup(widgetInstances: Array<DOMComponent>): string;
+        export function getMarkup(widgetInstances: Array<DevExpress.DOMComponent>): string;
         /**
          * [descr:viz.getPalette(paletteName)]
          */
-        static getPalette(paletteName: string): any;
+        export function getPalette(paletteName: string): any;
         /**
          * [descr:viz.getTheme(theme)]
          */
-        static getTheme(theme: string): any;
+        export function getTheme(theme: string): any;
         /**
          * [descr:viz.refreshPaths()]
          */
-        static refreshPaths(): void;
+        export function refreshPaths(): void;
         /**
          * [descr:viz.refreshTheme()]
          */
-        static refreshTheme(): void;
+        export function refreshTheme(): void;
         /**
          * [descr:viz.registerPalette(paletteName, palette)]
          */
-        static registerPalette(paletteName: string, palette: any): void;
+        export function registerPalette(paletteName: string, palette: any): void;
         /**
          * [descr:viz.registerTheme(customTheme, baseTheme)]
          */
-        static registerTheme(customTheme: any, baseTheme: string): void;
+        export function registerTheme(customTheme: any, baseTheme: string): void;
     }
 }
 declare module DevExpress.core {
@@ -1780,7 +1784,7 @@ declare module DevExpress.data {
         /**
          * [descr:ODataStore.Options.onLoading]
          */
-        onLoading?: ((loadOptions: LoadOptions) => any);
+        onLoading?: Function;
         /**
          * [descr:ODataStore.Options.url]
          */
@@ -2398,22 +2402,6 @@ declare module DevExpress.events {
      */
     export class dxEvent {
         /**
-         * [descr:dxEvent.currentTarget]
-         */
-        currentTarget: Element;
-        /**
-         * [descr:dxEvent.data]
-         */
-        data: any;
-        /**
-         * [descr:dxEvent.delegateTarget]
-         */
-        delegateTarget: Element;
-        /**
-         * [descr:dxEvent.target]
-         */
-        target: Element;
-        /**
          * [descr:dxEvent.isDefaultPrevented()]
          */
         isDefaultPrevented(): boolean;
@@ -2437,6 +2425,27 @@ declare module DevExpress.events {
          * [descr:dxEvent.stopPropagation()]
          */
         stopPropagation(): void;
+    }
+    /**
+     * [descr:dxEventFields]
+     */
+    export interface dxEventField {
+        /**
+         * [descr:dxEventFields.currentTarget]
+         */
+        currentTarget: Element;
+        /**
+         * [descr:dxEventFields.data]
+         */
+        data: any;
+        /**
+         * [descr:dxEventFields.delegateTarget]
+         */
+        delegateTarget: Element;
+        /**
+         * [descr:dxEventFields.target]
+         */
+        target: Element;
     }
     /**
      * [descr:event]
@@ -2790,49 +2799,54 @@ declare module DevExpress.fileManagement {
      */
     export class FileSystemItem {
         /**
-         * [descr:FileSystemItem.dataItem]
-         */
-        dataItem: any;
-        /**
-         * [descr:FileSystemItem.dateModified]
-         */
-        dateModified: Date;
-        /**
-         * [descr:FileSystemItem.hasSubDirectories]
-         */
-        hasSubDirectories: boolean;
-        /**
-         * [descr:FileSystemItem.isDirectory]
-         */
-        isDirectory: boolean;
-        /**
-         * [descr:FileSystemItem.key]
-         */
-        key: string;
-        /**
-         * [descr:FileSystemItem.name]
-         */
-        name: string;
-        /**
-         * [descr:FileSystemItem.path]
-         */
-        path: string;
-        /**
-         * [descr:FileSystemItem.pathKeys]
-         */
-        pathKeys: Array<string>;
-        /**
-         * [descr:FileSystemItem.size]
-         */
-        size: number;
-        /**
-         * [descr:FileSystemItem.thumbnail]
-         */
-        thumbnail: string;
-        /**
          * [descr:FileSystemItem.getFileExtension()]
          */
         getFileExtension(): string;
+    }
+    /**
+     * [descr:FileSystemItemFields]
+     */
+    export interface FileSystemItemField {
+        /**
+         * [descr:FileSystemItemFields.dataItem]
+         */
+        dataItem: any;
+        /**
+         * [descr:FileSystemItemFields.dateModified]
+         */
+        dateModified: Date;
+        /**
+         * [descr:FileSystemItemFields.hasSubDirectories]
+         */
+        hasSubDirectories: boolean;
+        /**
+         * [descr:FileSystemItemFields.isDirectory]
+         */
+        isDirectory: boolean;
+        /**
+         * [descr:FileSystemItemFields.key]
+         */
+        key: string;
+        /**
+         * [descr:FileSystemItemFields.name]
+         */
+        name: string;
+        /**
+         * [descr:FileSystemItemFields.path]
+         */
+        path: string;
+        /**
+         * [descr:FileSystemItemFields.pathKeys]
+         */
+        pathKeys: Array<string>;
+        /**
+         * [descr:FileSystemItemFields.size]
+         */
+        size: number;
+        /**
+         * [descr:FileSystemItemFields.thumbnail]
+         */
+        thumbnail: string;
     }
     /**
      * [descr:FileSystemProviderBase.Options]
@@ -8605,7 +8619,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxLoadPanel.Options.height]
          */
-        height?: number | string | (() => number | string);
+        height?: number | string | Function;
         /**
          * [descr:dxLoadPanel.Options.indicatorSrc]
          */
@@ -8613,11 +8627,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxLoadPanel.Options.maxHeight]
          */
-        maxHeight?: number | string | (() => number | string);
+        maxHeight?: number | string | Function;
         /**
          * [descr:dxLoadPanel.Options.maxWidth]
          */
-        maxWidth?: number | string | (() => number | string);
+        maxWidth?: number | string | Function;
         /**
          * [descr:dxLoadPanel.Options.message]
          */
@@ -8641,7 +8655,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxLoadPanel.Options.width]
          */
-        width?: number | string | (() => number | string);
+        width?: number | string | Function;
     }
     /**
      * [descr:dxLoadPanel.Options.animation]
@@ -8873,7 +8887,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxMap.Options.height]
          */
-        height?: number | string | (() => number | string);
+        height?: number | string | Function;
         /**
          * [descr:dxMap.Options.key]
          * @deprecated [depNote:dxMap.Options.key]
@@ -8926,7 +8940,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxMap.Options.width]
          */
-        width?: number | string | (() => number | string);
+        width?: number | string | Function;
         /**
          * [descr:dxMap.Options.zoom]
          */
@@ -9704,7 +9718,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxPopover.Options.closeOnOutsideClick]
          */
-        closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
+        closeOnOutsideClick?: boolean | Function;
         /**
          * [descr:dxPopover.Options.height]
          */
@@ -9793,7 +9807,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxPopup.Options.height]
          */
-        height?: number | string | (() => number | string);
+        height?: number | string | Function;
         /**
          * [descr:dxPopup.Options.onResize]
          */
@@ -9841,7 +9855,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxPopup.Options.width]
          */
-        width?: number | string | (() => number | string);
+        width?: number | string | Function;
     }
     /**
      * [descr:dxPopup.Options.animation]
@@ -10035,7 +10049,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxResizable.Options.height]
          */
-        height?: number | string | (() => number | string);
+        height?: number | string | Function;
         /**
          * [descr:dxResizable.Options.maxHeight]
          */
@@ -10067,7 +10081,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxResizable.Options.width]
          */
-        width?: number | string | (() => number | string);
+        width?: number | string | Function;
     }
     /**
      * [descr:dxResizable]
@@ -10091,7 +10105,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxResponsiveBox.Options.height]
          */
-        height?: number | string | (() => number | string);
+        height?: number | string | Function;
         /**
          * [descr:dxResponsiveBox.Options.items]
          */
@@ -10111,7 +10125,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxResponsiveBox.Options.width]
          */
-        width?: number | string | (() => number | string);
+        width?: number | string | Function;
     }
     /**
      * [descr:dxResponsiveBox]
@@ -11553,7 +11567,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxToast.Options.closeOnOutsideClick]
          */
-        closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
+        closeOnOutsideClick?: boolean | Function;
         /**
          * [descr:dxToast.Options.closeOnSwipe]
          */
@@ -11565,11 +11579,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxToast.Options.height]
          */
-        height?: number | string | (() => number | string);
+        height?: number | string | Function;
         /**
          * [descr:dxToast.Options.maxWidth]
          */
-        maxWidth?: number | string | (() => number | string);
+        maxWidth?: number | string | Function;
         /**
          * [descr:dxToast.Options.message]
          */
@@ -11577,7 +11591,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxToast.Options.minWidth]
          */
-        minWidth?: number | string | (() => number | string);
+        minWidth?: number | string | Function;
         /**
          * [descr:dxToast.Options.position]
          */
@@ -11593,7 +11607,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxToast.Options.width]
          */
-        width?: number | string | (() => number | string);
+        width?: number | string | Function;
     }
     /**
      * [descr:dxToast.Options.animation]
@@ -12554,23 +12568,23 @@ declare module DevExpress.ui {
     /**
      * [descr:ui.themes]
      */
-    export class themes {
+    declare module themes {
         /**
          * [descr:ui.themes.current()]
          */
-        static current(): string;
+        export function current(): string;
         /**
          * [descr:ui.themes.current(themeName)]
          */
-        static current(themeName: string): void;
+        export function current(themeName: string): void;
         /**
          * [descr:ui.themes.initialized(callback)]
          */
-        static initialized(callback: Function): void;
+        export function initialized(callback: Function): void;
         /**
          * [descr:ui.themes.ready(callback)]
          */
-        static ready(callback: Function): void;
+        export function ready(callback: Function): void;
     }
 }
 declare module DevExpress.ui.dialog {
@@ -12693,7 +12707,7 @@ declare module DevExpress.viz {
         /**
          * [descr:BaseChart.Options.palette]
          */
-        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | PaletteType;
         /**
          * [descr:BaseChart.Options.paletteExtensionMode]
          */
@@ -12917,7 +12931,7 @@ declare module DevExpress.viz {
         /**
          * [descr:BaseGauge.Options.rangeContainer.palette]
          */
-        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | PaletteType;
         /**
          * [descr:BaseGauge.Options.rangeContainer.paletteExtensionMode]
          */
@@ -13644,7 +13658,7 @@ declare module DevExpress.viz {
         /**
          * [descr:CommonIndicator.palette]
          */
-        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | PaletteType;
         /**
          * [descr:CommonIndicator.secondColor]
          */
@@ -13726,22 +13740,6 @@ declare module DevExpress.viz {
      */
     export class MapLayer {
         /**
-         * [descr:MapLayer.elementType]
-         */
-        elementType?: string;
-        /**
-         * [descr:MapLayer.index]
-         */
-        index?: number;
-        /**
-         * [descr:MapLayer.name]
-         */
-        name?: string;
-        /**
-         * [descr:MapLayer.type]
-         */
-        type?: string;
-        /**
          * [descr:MapLayer.clearSelection()]
          */
         clearSelection(): void;
@@ -13758,10 +13756,6 @@ declare module DevExpress.viz {
      * [descr:MapLayerElement]
      */
     export class MapLayerElement {
-        /**
-         * [descr:MapLayerElement.layer]
-         */
-        layer?: any;
         /**
          * [descr:MapLayerElement.applySettings(settings)]
          */
@@ -13786,6 +13780,36 @@ declare module DevExpress.viz {
          * [descr:MapLayerElement.selected(state)]
          */
         selected(state: boolean): void;
+    }
+    /**
+     * [descr:MapLayerElementFields]
+     */
+    export interface MapLayerElementField {
+        /**
+         * [descr:MapLayerElementFields.layer]
+         */
+        layer?: any;
+    }
+    /**
+     * [descr:MapLayerFields]
+     */
+    export interface MapLayerField {
+        /**
+         * [descr:MapLayerFields.elementType]
+         */
+        elementType?: string;
+        /**
+         * [descr:MapLayerFields.index]
+         */
+        index?: number;
+        /**
+         * [descr:MapLayerFields.name]
+         */
+        name?: string;
+        /**
+         * [descr:MapLayerFields.type]
+         */
+        type?: string;
     }
     /**
      * [descr:PieChartLegendItem]
@@ -13900,7 +13924,7 @@ declare module DevExpress.viz {
         /**
          * [descr:VizRange.length]
          */
-        length?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        length?: number | any | TimeIntervalType;
         /**
          * [descr:VizRange.startValue]
          */
@@ -13944,30 +13968,6 @@ declare module DevExpress.viz {
      */
     export class basePointObject {
         /**
-         * [descr:basePointObject.data]
-         */
-        data?: any;
-        /**
-         * [descr:basePointObject.fullState]
-         */
-        fullState?: number;
-        /**
-         * [descr:basePointObject.originalArgument]
-         */
-        originalArgument?: string | number | Date;
-        /**
-         * [descr:basePointObject.originalValue]
-         */
-        originalValue?: string | number | Date;
-        /**
-         * [descr:basePointObject.series]
-         */
-        series?: any;
-        /**
-         * [descr:basePointObject.tag]
-         */
-        tag?: any;
-        /**
          * [descr:basePointObject.clearHover()]
          */
         clearHover(): void;
@@ -14009,25 +14009,38 @@ declare module DevExpress.viz {
         showTooltip(): void;
     }
     /**
-     * [descr:baseSeriesObject]
+     * [descr:basePointObjectFields]
      */
-    export class baseSeriesObject {
+    export interface basePointObjectField {
         /**
-         * [descr:baseSeriesObject.fullState]
+         * [descr:basePointObjectFields.data]
+         */
+        data?: any;
+        /**
+         * [descr:basePointObjectFields.fullState]
          */
         fullState?: number;
         /**
-         * [descr:baseSeriesObject.name]
+         * [descr:basePointObjectFields.originalArgument]
          */
-        name?: any;
+        originalArgument?: string | number | Date;
         /**
-         * [descr:baseSeriesObject.tag]
+         * [descr:basePointObjectFields.originalValue]
+         */
+        originalValue?: string | number | Date;
+        /**
+         * [descr:basePointObjectFields.series]
+         */
+        series?: any;
+        /**
+         * [descr:basePointObjectFields.tag]
          */
         tag?: any;
-        /**
-         * [descr:baseSeriesObject.type]
-         */
-        type?: string;
+    }
+    /**
+     * [descr:baseSeriesObject]
+     */
+    export class baseSeriesObject {
         /**
          * [descr:baseSeriesObject.clearHover()]
          */
@@ -14094,6 +14107,27 @@ declare module DevExpress.viz {
         show(): void;
     }
     /**
+     * [descr:baseSeriesObjectFields]
+     */
+    export interface baseSeriesObjectField {
+        /**
+         * [descr:baseSeriesObjectFields.fullState]
+         */
+        fullState?: number;
+        /**
+         * [descr:baseSeriesObjectFields.name]
+         */
+        name?: any;
+        /**
+         * [descr:baseSeriesObjectFields.tag]
+         */
+        tag?: any;
+        /**
+         * [descr:baseSeriesObjectFields.type]
+         */
+        type?: string;
+    }
+    /**
      * [descr:chartAxisObject]
      */
     export class chartAxisObject {
@@ -14132,58 +14166,47 @@ declare module DevExpress.viz {
      */
     export class chartPointObject extends basePointObject {
         /**
-         * [descr:chartPointObject.aggregationInfo]
-         */
-        aggregationInfo?: chartPointAggregationInfoObject;
-        /**
-         * [descr:chartPointObject.originalCloseValue]
-         */
-        originalCloseValue?: number | string;
-        /**
-         * [descr:chartPointObject.originalHighValue]
-         */
-        originalHighValue?: number | string;
-        /**
-         * [descr:chartPointObject.originalLowValue]
-         */
-        originalLowValue?: number | string;
-        /**
-         * [descr:chartPointObject.originalMinValue]
-         */
-        originalMinValue?: string | number | Date;
-        /**
-         * [descr:chartPointObject.originalOpenValue]
-         */
-        originalOpenValue?: number | string;
-        /**
-         * [descr:chartPointObject.size]
-         */
-        size?: number | string;
-        /**
          * [descr:chartPointObject.getBoundingRect()]
          */
         getBoundingRect(): any;
     }
     /**
+     * [descr:chartPointObjectFields]
+     */
+    export interface chartPointObjectField {
+        /**
+         * [descr:chartPointObjectFields.aggregationInfo]
+         */
+        aggregationInfo?: chartPointAggregationInfoObject;
+        /**
+         * [descr:chartPointObjectFields.originalCloseValue]
+         */
+        originalCloseValue?: number | string;
+        /**
+         * [descr:chartPointObjectFields.originalHighValue]
+         */
+        originalHighValue?: number | string;
+        /**
+         * [descr:chartPointObjectFields.originalLowValue]
+         */
+        originalLowValue?: number | string;
+        /**
+         * [descr:chartPointObjectFields.originalMinValue]
+         */
+        originalMinValue?: string | number | Date;
+        /**
+         * [descr:chartPointObjectFields.originalOpenValue]
+         */
+        originalOpenValue?: number | string;
+        /**
+         * [descr:chartPointObjectFields.size]
+         */
+        size?: number | string;
+    }
+    /**
      * [descr:chartSeriesObject]
      */
     export class chartSeriesObject extends baseSeriesObject {
-        /**
-         * [descr:chartSeriesObject.axis]
-         */
-        axis?: string;
-        /**
-         * [descr:chartSeriesObject.barOverlapGroup]
-         */
-        barOverlapGroup?: string;
-        /**
-         * [descr:chartSeriesObject.pane]
-         */
-        pane?: string;
-        /**
-         * [descr:chartSeriesObject.stack]
-         */
-        stack?: string;
         /**
          * [descr:chartSeriesObject.getArgumentAxis()]
          */
@@ -14192,6 +14215,27 @@ declare module DevExpress.viz {
          * [descr:chartSeriesObject.getValueAxis()]
          */
         getValueAxis(): chartAxisObject;
+    }
+    /**
+     * [descr:chartSeriesObjectFields]
+     */
+    export interface chartSeriesObjectField {
+        /**
+         * [descr:chartSeriesObjectFields.axis]
+         */
+        axis?: string;
+        /**
+         * [descr:chartSeriesObjectFields.barOverlapGroup]
+         */
+        barOverlapGroup?: string;
+        /**
+         * [descr:chartSeriesObjectFields.pane]
+         */
+        pane?: string;
+        /**
+         * [descr:chartSeriesObjectFields.stack]
+         */
+        stack?: string;
     }
     /**
      * [descr:circularRangeBar]
@@ -14268,7 +14312,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxBarGauge.Options.palette]
          */
-        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | PaletteType;
         /**
          * [descr:dxBarGauge.Options.paletteExtensionMode]
          */
@@ -14584,7 +14628,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.argumentAxis.aggregationInterval]
          */
-        aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        aggregationInterval?: number | any | TimeIntervalType;
         /**
          * [descr:dxChart.Options.argumentAxis.argumentType]
          */
@@ -14644,7 +14688,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.argumentAxis.minVisualRangeLength]
          */
-        minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        minVisualRangeLength?: number | any | TimeIntervalType;
         /**
          * [descr:dxChart.Options.argumentAxis.minorTickCount]
          */
@@ -14652,7 +14696,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.argumentAxis.minorTickInterval]
          */
-        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        minorTickInterval?: number | any | TimeIntervalType;
         /**
          * [descr:dxChart.Options.argumentAxis.offset]
          */
@@ -14672,7 +14716,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.argumentAxis.tickInterval]
          */
-        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        tickInterval?: number | any | TimeIntervalType;
         /**
          * [descr:dxChart.Options.argumentAxis.title]
          */
@@ -15277,7 +15321,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.valueAxis.minVisualRangeLength]
          */
-        minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        minVisualRangeLength?: number | any | TimeIntervalType;
         /**
          * [descr:dxChart.Options.valueAxis.minorTickCount]
          */
@@ -15285,7 +15329,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.valueAxis.minorTickInterval]
          */
-        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        minorTickInterval?: number | any | TimeIntervalType;
         /**
          * [descr:dxChart.Options.valueAxis.multipleAxesSpacing]
          */
@@ -15321,7 +15365,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.valueAxis.tickInterval]
          */
-        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        tickInterval?: number | any | TimeIntervalType;
         /**
          * [descr:dxChart.Options.valueAxis.title]
          */
@@ -17304,7 +17348,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxFunnel.Options.palette]
          */
-        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | PaletteType;
         /**
          * [descr:dxFunnel.Options.paletteExtensionMode]
          */
@@ -17396,22 +17440,6 @@ declare module DevExpress.viz {
      */
     export class dxFunnelItem {
         /**
-         * [descr:dxFunnelItem.argument]
-         */
-        argument?: string | Date | number;
-        /**
-         * [descr:dxFunnelItem.data]
-         */
-        data?: any;
-        /**
-         * [descr:dxFunnelItem.percent]
-         */
-        percent?: number;
-        /**
-         * [descr:dxFunnelItem.value]
-         */
-        value?: number;
-        /**
          * [descr:dxFunnelItem.getColor()]
          */
         getColor(): string;
@@ -17435,6 +17463,27 @@ declare module DevExpress.viz {
          * [descr:dxFunnelItem.showTooltip()]
          */
         showTooltip(): void;
+    }
+    /**
+     * [descr:dxFunnelItemFields]
+     */
+    export interface dxFunnelItemField {
+        /**
+         * [descr:dxFunnelItemFields.argument]
+         */
+        argument?: string | Date | number;
+        /**
+         * [descr:dxFunnelItemFields.data]
+         */
+        data?: any;
+        /**
+         * [descr:dxFunnelItemFields.percent]
+         */
+        percent?: number;
+        /**
+         * [descr:dxFunnelItemFields.value]
+         */
+        value?: number;
     }
     /**
      * [descr:dxLinearGauge.Options]
@@ -17566,7 +17615,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChart.Options.palette]
          */
-        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | PaletteType;
         /**
          * [descr:dxPieChart.Options.resolveLabelOverlapping]
          */
@@ -17934,7 +17983,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.argumentAxis.minorTickInterval]
          */
-        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        minorTickInterval?: number | any | TimeIntervalType;
         /**
          * [descr:dxPolarChart.Options.argumentAxis.originValue]
          */
@@ -17958,7 +18007,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.argumentAxis.tickInterval]
          */
-        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        tickInterval?: number | any | TimeIntervalType;
         /**
          * [descr:dxPolarChart.Options.argumentAxis.type]
          */
@@ -18345,7 +18394,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.valueAxis.minVisualRangeLength]
          */
-        minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        minVisualRangeLength?: number | any | TimeIntervalType;
         /**
          * [descr:dxPolarChart.Options.valueAxis.minorTickCount]
          */
@@ -18353,7 +18402,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.valueAxis.minorTickInterval]
          */
-        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        minorTickInterval?: number | any | TimeIntervalType;
         /**
          * [descr:dxPolarChart.Options.valueAxis.showZero]
          */
@@ -18369,7 +18418,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.valueAxis.tickInterval]
          */
-        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
+        tickInterval?: number | any | TimeIntervalType;
         /**
          * [descr:dxPolarChart.Options.valueAxis.type]
          */
@@ -18975,7 +19024,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankey.Options.palette]
          */
-        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
+        palette?: Array<string> | PaletteType;
         /**
          * [descr:dxSankey.Options.paletteExtensionMode]
          */
@@ -19071,10 +19120,6 @@ declare module DevExpress.viz {
      */
     export class dxSankeyLink {
         /**
-         * [descr:dxSankeyLink.connection]
-         */
-        connection?: dxSankeyConnectionInfoObject;
-        /**
          * [descr:dxSankeyLink.hideTooltip()]
          */
         hideTooltip(): void;
@@ -19092,26 +19137,18 @@ declare module DevExpress.viz {
         showTooltip(): void;
     }
     /**
+     * [descr:dxSankeyLinkfields]
+     */
+    export interface dxSankeyLinkfield {
+        /**
+         * [descr:dxSankeyLinkfields.connection]
+         */
+        connection?: dxSankeyConnectionInfoObject;
+    }
+    /**
      * [descr:dxSankeyNode]
      */
     export class dxSankeyNode {
-        /**
-         * [descr:dxSankeyNode.label]
-         */
-        label?: string;
-        /**
-         * [descr:dxSankeyNode.linksIn]
-         */
-        linksIn?: Array<any>;
-        /**
-         * [descr:dxSankeyNode.linksOut]
-         */
-        linksOut?: Array<any>;
-        /**
-         * [descr:dxSankeyNode.title]
-         * @deprecated [depNote:dxSankeyNode.title]
-         */
-        title?: string;
         /**
          * [descr:dxSankeyNode.hideTooltip()]
          */
@@ -19128,6 +19165,28 @@ declare module DevExpress.viz {
          * [descr:dxSankeyNode.showTooltip()]
          */
         showTooltip(): void;
+    }
+    /**
+     * [descr:dxSankeyNodefields]
+     */
+    export interface dxSankeyNodefield {
+        /**
+         * [descr:dxSankeyNodefields.label]
+         */
+        label?: string;
+        /**
+         * [descr:dxSankeyNodefields.linksIn]
+         */
+        linksIn?: Array<any>;
+        /**
+         * [descr:dxSankeyNodefields.linksOut]
+         */
+        linksOut?: Array<any>;
+        /**
+         * [descr:dxSankeyNodefields.title]
+         * @deprecated [depNote:dxSankeyNodefields.title]
+         */
+        title?: string;
     }
     /**
      * [descr:dxSparkline.Options]
@@ -19383,18 +19442,6 @@ declare module DevExpress.viz {
      */
     export class dxTreeMapNode {
         /**
-         * [descr:dxTreeMapNode.data]
-         */
-        data?: any;
-        /**
-         * [descr:dxTreeMapNode.index]
-         */
-        index?: number;
-        /**
-         * [descr:dxTreeMapNode.level]
-         */
-        level?: number;
-        /**
          * [descr:dxTreeMapNode.customize(options)]
          */
         customize(options: any): void;
@@ -19462,6 +19509,23 @@ declare module DevExpress.viz {
          * [descr:dxTreeMapNode.value()]
          */
         value(): number;
+    }
+    /**
+     * [descr:dxTreeMapNodeFields]
+     */
+    export interface dxTreeMapNodeField {
+        /**
+         * [descr:dxTreeMapNodeFields.data]
+         */
+        data?: any;
+        /**
+         * [descr:dxTreeMapNodeFields.index]
+         */
+        index?: number;
+        /**
+         * [descr:dxTreeMapNodeFields.level]
+         */
+        level?: number;
     }
     /**
      * [descr:dxVectorMap.Options]
@@ -19738,10 +19802,6 @@ declare module DevExpress.viz {
      */
     export class piePointObject extends basePointObject {
         /**
-         * [descr:piePointObject.percent]
-         */
-        percent?: string | number | Date;
-        /**
          * [descr:piePointObject.hide()]
          */
         hide(): void;
@@ -19755,9 +19815,18 @@ declare module DevExpress.viz {
         show(): void;
     }
     /**
-     * [descr:polarChartSeriesObject]
+     * [descr:piePointObjectFields]
      */
-    export class polarChartSeriesObject extends baseSeriesObject {
+    export interface piePointObjectField {
+        /**
+         * [descr:piePointObjectFields.percent]
+         */
+        percent?: string | number | Date;
+    }
+    /**
+     * [descr:polarChartSeriesObjectFields]
+     */
+    export interface polarChartSeriesObjectField {
     }
     /**
      * [descr:polarPointObject]
