@@ -590,6 +590,7 @@ const Form = Widget.inherit({
         //#ENDDEBUG
 
         that._rootLayoutManager = that._renderLayoutManager(items, $content, {
+            isRoot: true,
             colCount: that.option('colCount'),
             alignItemLabels: that.option('alignItemLabels'),
             screenByWidth: this.option('screenByWidth'),
@@ -742,6 +743,7 @@ const Form = Widget.inherit({
     _getLayoutManagerConfig: function(items, options) {
         const baseConfig = {
             form: this,
+            isRoot: options.isRoot,
             validationGroup: this._getValidationGroup(),
             showRequiredMark: this.option('showRequiredMark'),
             showOptionalMark: this.option('showOptionalMark'),
