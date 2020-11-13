@@ -1046,6 +1046,7 @@ QUnit.module('positioning', () => {
                 .css('height', '2000px')
                 .appendTo('body');
 
+            window.scrollTo(0, $target.offset().top);
             new Popover($popover, {
                 target: $target,
                 visible: true,
@@ -1058,6 +1059,7 @@ QUnit.module('positioning', () => {
             assert.roughEqual($shader.width(), $(window).width(), 1.01, 'shader width is equal to window width');
         } finally {
             fixtures.simple.drop();
+            window.scrollTo(0, 0);
         }
     });
 
