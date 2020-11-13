@@ -760,10 +760,6 @@ declare module DevExpress {
     export class DevicesObject {
         constructor(options: { window?: Window });
         /**
-         * [descr:DevicesObject.orientationChanged]
-         */
-        orientationChanged?: EventType;
-        /**
          * [descr:DevicesObject.current()]
          */
         current(): Device;
