@@ -1450,15 +1450,48 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
         return;
     }
 
-    const views = ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'];
-    const appointmentTitle = 'App';
-    const getDataSource = () => [{
-        text: appointmentTitle,
-        startDate: new Date(2020, 10, 14, 9, 30),
-        endDate: new Date(2020, 10, 14, 11, 30)
-    }];
+    const checkAppointmentDragging = (
+        assert, scheduler, appointmentTitle, dX, dY,
+    ) => {
+        let appointments = scheduler.appointments.find(appointmentTitle);
+        let dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
+        assert.equal(dragSource.length, 0, 'Drag source does not exist');
+
+        const appointment = $(appointments[0]);
+
+        const appointmentPosition = getAbsolutePosition(appointment);
+        const pointer = pointerMock(appointment).start();
+
+        pointer
+            .down(appointmentPosition.left, appointmentPosition.top)
+            .move(dX, dY);
+
+        appointments = scheduler.appointments.find(appointmentTitle);
+        dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, 2, 'Phantom appointment exists');
+        assert.equal(dragSource.length, 1, 'Drag source exists');
+
+        pointer.up();
+
+        appointments = scheduler.appointments.find(appointmentTitle);
+        dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
+        assert.equal(dragSource.length, 0, 'Drag source does not exist');
+    };
 
     QUnit.test('A phantom appointment should be created on appointment dragging', function(assert) {
+        const views = ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'];
+        const appointmentTitle = 'App';
+        const getDataSource = () => [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 14, 9, 30),
+            endDate: new Date(2020, 10, 14, 11, 30),
+        }];
+
         const scheduler = createWrapper({
             views: views,
             currentView: views[0],
@@ -1468,42 +1501,35 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
             height: 600
         });
 
-        scheduler.drawControl();
         views.forEach((view, index) => {
             scheduler.option('currentView', view);
             scheduler.option('dataSource', getDataSource());
 
-            let appointments = scheduler.appointments.find(appointmentTitle);
-            let dragSource = scheduler.appointments.getDragSource();
-
-            assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
-            assert.equal(dragSource.length, 0, 'Drag source does not exist');
-
-            const appointment = $(appointments[0]);
-
-            const offset = getAbsolutePosition(appointment);
-            const pointer = pointerMock(appointment).start();
-
             const dX = index < 3 ? 0 : 30;
             const dY = index < 3 ? 30 : 0;
 
-            pointer
-                .down(offset.left, offset.top)
-                .move(dX, dY);
-
-            appointments = scheduler.appointments.find(appointmentTitle);
-            dragSource = scheduler.appointments.getDragSource();
-
-            assert.equal(appointments.length, 2, 'Phantom appointment exists');
-            assert.equal(dragSource.length, 1, 'Drag source exists');
-
-            pointer.up();
-
-            appointments = scheduler.appointments.find(appointmentTitle);
-            dragSource = scheduler.appointments.getDragSource();
-
-            assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
-            assert.equal(dragSource.length, 0, 'Drag source does not exist');
+            checkAppointmentDragging(assert, scheduler, appointmentTitle, dX, dY);
         });
+    });
+
+    QUnit.test('Dragging should work correctly when an appointment is dragged from the all-day panel', function(assert) {
+        const appointmentTitle = 'App';
+        const getDataSource = () => [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 14, 9, 30),
+            endDate: new Date(2020, 10, 14, 11, 30),
+            allDay: true,
+        }];
+
+        const scheduler = createWrapper({
+            views: ['week'],
+            currentView: 'week',
+            dataSource: getDataSource(),
+            currentDate: new Date(2020, 10, 14),
+            startDayHour: 9,
+            height: 600
+        });
+
+        checkAppointmentDragging(assert, scheduler, appointmentTitle, -30, 0);
     });
 });
