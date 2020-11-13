@@ -1032,24 +1032,13 @@ const SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _removeDragSourceClassFromDraggedAppointment: function() {
-        const $appointment = this._$currentAppointment;
-        const appointmentData = this._getItemData($appointment);
-        const $appointments = this._findItemElementByItem(appointmentData);
+        const $appointments = this._itemElements().filter(`.${APPOINTMENT_DRAG_SOURCE_CLASS}`);
 
-        $appointments.forEach(($item) => {
-            const appointmentInstance = $item.dxSchedulerAppointment('instance');
+        $appointments.each((_, element) => {
+            const appointmentInstance = $(element).dxSchedulerAppointment('instance');
 
             appointmentInstance.option('isDragSource', false);
         });
-        // debugger;
-        // const $element = this.$element();
-        // const $dragSource = $element.find(`.${APPOINTMENT_DRAG_SOURCE_CLASS}`);
-        // debugger;
-
-        // $dragSource.each(function() {
-        //     const appointment = $(this).dxSchedulerAppointment('instance');
-        //     appointment.option('isDragSource', false);
-        // });
     },
 
     _setDragSourceAppointment: function(appointment, settings) {
