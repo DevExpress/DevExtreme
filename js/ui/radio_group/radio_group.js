@@ -209,6 +209,7 @@ class RadioGroup extends Editor {
 
         switch(name) {
             case 'useInkRipple':
+            case 'dataSource':
                 this._invalidate();
                 break;
             case 'focusStateEnabled':
@@ -219,10 +220,6 @@ class RadioGroup extends Editor {
             case 'disabled':
                 super._optionChanged(args);
                 this._setCollectionWidgetOption(name, value);
-                break;
-            case 'dataSource':
-                this._setCollectionWidgetOption('dataSource', this._dataSource);
-                this._setSelection(this.option('value'));
                 break;
             case 'valueExpr':
                 this._setCollectionWidgetOption('keyExpr', this._getCollectionKeyExpr());
