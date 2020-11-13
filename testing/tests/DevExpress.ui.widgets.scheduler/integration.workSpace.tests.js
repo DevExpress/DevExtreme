@@ -826,8 +826,8 @@ QUnit.test('dataCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         dataCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellData.allDay && !cellIndex) {
-                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 85, 1.001, 'Data cell width is OK');
-                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 50, 'Data cell height is OK');
+                assert.roughEqual($(cellElement).get(0).getBoundingClientRect().width, 81, 1.001, 'Data cell width is OK');
+                assert.equal($(cellElement).get(0).getBoundingClientRect().height, 48, 'Data cell height is OK');
             }
         }
     });
