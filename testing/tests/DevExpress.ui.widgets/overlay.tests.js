@@ -951,8 +951,8 @@ testModule('position', moduleConfig, () => {
 
         const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
 
-        assert.roughEqual($overlayWrapper.width(), $(window).width(), 1.01, 'overlay wrapper left position is correct');
-        assert.roughEqual($overlayWrapper.height(), $(window).height(), 1.01, 'overlay wrapper left position is correct');
+        assert.roughEqual($overlayWrapper.width(), $(window).width(), 1.01, 'overlay wrapper width is correct');
+        assert.roughEqual($overlayWrapper.height(), $(window).height(), 1.01, 'overlay wrapper height is correct');
     });
 });
 
