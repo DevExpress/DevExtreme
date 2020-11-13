@@ -237,12 +237,12 @@
                     </div>`
                 );
 
-                $container.appendTo(document.body);
+                $container.appendTo($('#qunit-fixture'));
 
                 // NOTE: converts HtmlElement to SvgElement
                 $container.html($container.html());
 
-                $('<div id=what>').appendTo(document.body);
+                $('<div id=what>').appendTo($('#qunit-fixture'));
             },
 
             drop: function() {
