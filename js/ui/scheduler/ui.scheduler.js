@@ -1012,7 +1012,7 @@ class Scheduler extends Widget {
             case 'allDayExpr':
             case 'recurrenceRuleExpr':
             case 'recurrenceExceptionExpr':
-            case 'disableExpr':
+            case 'disabledExpr':
                 this._updateExpression(name, value);
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
 
