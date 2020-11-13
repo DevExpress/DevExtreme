@@ -12,6 +12,7 @@ const ADAPTIVE_STATE_SCREEN_WIDTH = 573;
 
 const FILE_MANAGER_ADAPTIVITY_DRAWER_PANEL_CLASS = 'dx-filemanager-adaptivity-drawer-panel';
 const DRAWER_PANEL_CONTENT_INITIAL = 'dx-drawer-panel-content-initial';
+const DRAWER_PANEL_CONTENT_ADAPTIVE = 'dx-drawer-panel-content-adaptive';
 
 class FileManagerAdaptivityControl extends Widget {
 
@@ -76,7 +77,7 @@ class FileManagerAdaptivityControl extends Widget {
     _setDrawerWidth(width) {
         $(this._drawer.content()).width(width);
         this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
-        // this._drawer.resizeViewContent();
+        this._drawer.resizeViewContent();
     }
 
     _dimensionChanged(dimension) {
@@ -90,6 +91,8 @@ class FileManagerAdaptivityControl extends Widget {
         this._isInAdaptiveState = this._isSmallScreen();
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
+            $(this._drawer.content()).toggleClass(DRAWER_PANEL_CONTENT_ADAPTIVE, this._isInAdaptiveState);
+            this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
         }
     }
