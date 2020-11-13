@@ -89,27 +89,22 @@ class AppointmentLayoutManager {
         const {
             appointment: draggedAppointment,
             targetedAppointment: draggedTargetedAppointment,
-            appointmentPart: draggedAppointmentPart,
+            groupIndex: draggedGroupIndex,
         } = draggedAppointmentInfo;
-        const {
-            appointmentReduced,
-        } = settings;
 
-        if(draggedAppointment !== appointment || appointmentReduced !== draggedAppointmentPart) {
+        if(draggedAppointment !== appointment) {
             return false;
         }
 
         const {
             startDate: draggedStartDate,
             endDate: draggedEndDate,
-            source: draggedSource,
         } = draggedTargetedAppointment;
-        const draggedGroupIndex = draggedSource.groupIndex;
 
         const appointmentInfo = settings.info.appointment;
 
         const { startDate, endDate } = appointmentInfo;
-        const groupIndex = appointmentInfo.source.groupIndex;
+        const { groupIndex } = settings;
 
         return groupIndex === draggedGroupIndex
             && startDate.getTime() === draggedStartDate.getTime()

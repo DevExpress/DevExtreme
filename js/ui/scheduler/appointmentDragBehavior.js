@@ -31,7 +31,7 @@ export default class AppointmentDragBehavior {
         this.appointmentInfo = {
             appointment: itemData,
             targetedAppointment: itemSettings.info.appointment,
-            appointmentPart: itemSettings.appointmentReduced,
+            groupIndex: itemSettings.groupIndex,
         };
 
         this.appointments.notifyObserver('hideAppointmentTooltip');
