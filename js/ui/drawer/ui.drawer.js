@@ -318,17 +318,11 @@ const Drawer = Widget.inherit({
             if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return this.getElementWidth(this._strategy.getPanelContent());
+                return getBoundingRect(this.getPanelTemplateElement()).width;
             }
         } else {
             return 0;
         }
-    },
-
-    getElementWidth($element) {
-        const $children = $element.children();
-
-        return $children.length ? getBoundingRect($children.eq(0).get(0)).width : getBoundingRect($element.get(0)).width;
     },
 
     getRealPanelHeight() {
@@ -336,17 +330,24 @@ const Drawer = Widget.inherit({
             if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return this.getElementHeight(this._strategy.getPanelContent());
+                return getBoundingRect(this.getPanelTemplateElement()).height;
             }
         } else {
             return 0;
         }
     },
 
-    getElementHeight($element) {
-        const $children = $element.children();
+    getPanelTemplateElement() {
+        let $result = this._strategy.getPanelContent();
 
-        return $children.length ? getBoundingRect($children.eq(0).get(0)).height : getBoundingRect($element.get(0)).height;
+        if($result.children().length) {
+            $result = $result.children().eq(0);
+            if($result.hasClass('dx-template-wrapper') && $result.children().length) { // For Angular, T948509
+                $result = $result.children().eq(0);
+            }
+        }
+
+        return $result.get(0);
     },
 
     isHorizontalDirection() {
