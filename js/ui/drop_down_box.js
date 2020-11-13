@@ -86,6 +86,11 @@ const DropDownBox = DropDownEditor.inherit({
              * @hidden
              */
 
+            /**
+             * @name dxDropDownBoxOptions.items
+             * @hidden
+             */
+
             openOnFieldClick: true,
 
 
