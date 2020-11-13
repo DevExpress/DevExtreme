@@ -1385,6 +1385,8 @@ module('appointmentDragging customization', $.extend({}, {
         };
 
         test(`itemData should be correct in appointmentDragging events when dragging from ${testText}`, function(assert) {
+            assert.expect(3);
+
             const scheduler = this.createScheduler({
                 dataSource: data,
                 appointmentDragging: {
