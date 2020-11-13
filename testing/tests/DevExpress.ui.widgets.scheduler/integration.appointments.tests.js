@@ -4763,5 +4763,49 @@ QUnit.module('Integration: Appointments', {
 
             assert.equal(scheduler.appointments.getAppointmentPosition(0).top, scheduler.appointments.getAppointmentPosition(1).top, 'Appointment positions are correct');
         });
+
+        QUnit.test('targetedAppointmentData should has valid targeted resource on onAppointmentClick event', function(assert) {
+            const data = [{
+                text: 'Website Re-Design Plan',
+                priorityId: [1, 2],
+                startDate: new Date(2021, 4, 21, 1),
+                endDate: new Date(2021, 4, 21, 1, 30)
+            }];
+
+            const priorityData = [{
+                text: 'Low Priority',
+                id: 1
+            }, {
+                text: 'High Priority',
+                id: 2
+            }];
+
+            let currentResourceId = 1;
+
+            const scheduler = createWrapper({
+                dataSource: data,
+                views: ['day'],
+                onAppointmentClick: e => {
+                    const assertText = `priorityId should be equal ${currentResourceId} of targetedAppointmentData`;
+                    assert.equal(e.targetedAppointmentData.priorityId, currentResourceId, assertText);
+                    assert.equal(e.appointmentData, data[0], 'e.appointmentData should be equal item of dataSource');
+
+                    currentResourceId++;
+                },
+                currentView: 'day',
+                currentDate: new Date(2021, 4, 21),
+                groups: ['priorityId'],
+                resources: [{
+                    fieldExpr: 'priorityId',
+                    dataSource: priorityData,
+                    label: 'Priority'
+                }]
+            });
+
+            scheduler.appointments.click(0);
+            scheduler.appointments.click(1);
+
+            assert.expect(4);
+        });
     });
 });
