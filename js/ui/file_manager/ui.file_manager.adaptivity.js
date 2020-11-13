@@ -41,6 +41,7 @@ class FileManagerAdaptivityControl extends Widget {
         if(isFunction(contentRenderer)) {
             contentRenderer($drawerContent);
         }
+        this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
     }
 
     _createDrawerTemplate(container) {
@@ -65,19 +66,17 @@ class FileManagerAdaptivityControl extends Widget {
         }
 
         if(!this._splitter.isSplitterMoved()) {
-            this._updateDrawerDimensions();
+            this._setDrawerWidth('');
             return;
         }
         $(this._drawer.content()).removeClass(DRAWER_PANEL_CONTENT_INITIAL);
-        $(this._drawer.content()).css('width', e.leftPanelWidth);
-        this._drawer._initSize();
-        this._drawer.resizeContent();
+        this._setDrawerWidth(e.leftPanelWidth);
     }
 
-    _updateDrawerDimensions() {
-        $(this._drawer.content()).css('width', '');
-        this._drawer._initSize();
-        this._drawer._strategy.setPanelSize(true);
+    _setDrawerWidth(width) {
+        $(this._drawer.content()).width(width);
+        this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
+        // this._drawer.resizeViewContent();
     }
 
     _dimensionChanged(dimension) {
