@@ -1451,12 +1451,12 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
     }
 
     const checkAppointmentDragging = (
-        assert, scheduler, appointmentTitle, dX, dY,
+        assert, scheduler, appointmentTitle, dX, dY, appointmentCount = 1,
     ) => {
         let appointments = scheduler.appointments.find(appointmentTitle);
         let dragSource = scheduler.appointments.getDragSource();
 
-        assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
+        assert.equal(appointments.length, appointmentCount, 'Phantom appointment does not exist');
         assert.equal(dragSource.length, 0, 'Drag source does not exist');
 
         const appointment = $(appointments[0]);
@@ -1471,15 +1471,15 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
         appointments = scheduler.appointments.find(appointmentTitle);
         dragSource = scheduler.appointments.getDragSource();
 
-        assert.equal(appointments.length, 2, 'Phantom appointment exists');
-        assert.equal(dragSource.length, 1, 'Drag source exists');
+        assert.equal(appointments.length, appointmentCount + 1, 'Phantom appointment exists');
+        assert.equal(dragSource.length, appointmentCount, 'Drag source exists');
 
         pointer.up();
 
         appointments = scheduler.appointments.find(appointmentTitle);
         dragSource = scheduler.appointments.getDragSource();
 
-        assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
+        assert.equal(appointments.length, appointmentCount, 'Phantom appointment does not exist');
         assert.equal(dragSource.length, 0, 'Drag source does not exist');
     };
 
@@ -1498,7 +1498,7 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
             dataSource: getDataSource(),
             currentDate: new Date(2020, 10, 14),
             startDayHour: 9,
-            height: 600
+            height: 600,
         });
 
         views.forEach((view, index) => {
@@ -1527,9 +1527,49 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
             dataSource: getDataSource(),
             currentDate: new Date(2020, 10, 14),
             startDayHour: 9,
-            height: 600
+            height: 600,
         });
 
         checkAppointmentDragging(assert, scheduler, appointmentTitle, -30, 0);
+    });
+
+    QUnit.test('Dragging should work correctly with long appoinments', function(assert) {
+        const appointmentTitle = 'App';
+        const getDataSource = () => [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 13, 10, 30),
+            endDate: new Date(2020, 10, 14, 9, 30),
+        }];
+
+        const scheduler = createWrapper({
+            views: ['week'],
+            currentView: 'week',
+            dataSource: getDataSource(),
+            currentDate: new Date(2020, 10, 14),
+            startDayHour: 9,
+            height: 600,
+        });
+
+        checkAppointmentDragging(assert, scheduler, appointmentTitle, -30, 0, 2);
+    });
+
+    QUnit.test('Dragging should work correctly with long appoinments in month view', function(assert) {
+        const appointmentTitle = 'App';
+        const getDataSource = () => [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 1, 10, 30),
+            endDate: new Date(2020, 10, 30, 9, 30),
+        }];
+
+        const scheduler = createWrapper({
+            views: ['month'],
+            currentView: 'month',
+            dataSource: getDataSource(),
+            currentDate: new Date(2020, 10, 14),
+            startDayHour: 9,
+            height: 600,
+        });
+
+        checkAppointmentDragging(assert, scheduler, appointmentTitle, 30, 0, 5);
     });
 });
