@@ -212,7 +212,8 @@ const Popover = Popup.inherit({
             closeOnTargetScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
-            boundaryOffset: { h: 10, v: 10 }
+            boundaryOffset: { h: 10, v: 10 },
+            _fixedPosition: true
 
             /**
             * @name dxPopoverOptions.focusStateEnabled
