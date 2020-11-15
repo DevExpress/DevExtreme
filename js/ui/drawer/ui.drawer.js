@@ -318,7 +318,7 @@ const Drawer = Widget.inherit({
             if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return getBoundingRect(this.getPanelTemplateElement()).width;
+                return getBoundingRect(this._getPanelTemplateElement()).width;
             }
         } else {
             return 0;
@@ -330,14 +330,14 @@ const Drawer = Widget.inherit({
             if(isDefined(this.option('templateSize'))) {
                 return this.option('templateSize'); // number is expected
             } else {
-                return getBoundingRect(this.getPanelTemplateElement()).height;
+                return getBoundingRect(this._getPanelTemplateElement()).height;
             }
         } else {
             return 0;
         }
     },
 
-    getPanelTemplateElement() {
+    _getPanelTemplateElement() {
         let $result = this._strategy.getPanelContent();
 
         if($result.children().length) {
