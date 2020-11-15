@@ -355,13 +355,7 @@ const RightDrawerTester = {
 const topTemplateSize = 75;
 const TopDrawerTester = {
     templateSize: topTemplateSize,
-    template: (forceTemplateWrapper) => {
-        let result = `<div id="template" style="width: 100%; height: ${topTemplateSize}px; background-color: green">template</div>`;
-        if(forceTemplateWrapper === true) {
-            result = '<div class="dx-template-wrapper" style="height: 100%; width: 100%;">' + result + '<div>'; // Emulate Angular environment, T948509
-        }
-        return result;
-    },
+    template: (forceTemplateWrapper) => generateTemplate(`<div id="template" style="width: 100%; height: ${topTemplateSize}px; background-color: green">template</div>`, forceTemplateWrapper),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
@@ -498,13 +492,7 @@ const TopDrawerTester = {
 const bottomTemplateSize = 75;
 const BottomDrawerTester = {
     templateSize: bottomTemplateSize,
-    template: (forceTemplateWrapper) => {
-        let result = `<div id="template" style="width: 100%; height: ${bottomTemplateSize}px; background-color: green">template</div>`;
-        if(forceTemplateWrapper === true) {
-            result = '<div class="dx-template-wrapper" style="height: 100%; width: 100%;">' + result + '<div>'; // Emulate Angular environment, T948509
-        }
-        return result;
-    },
+    template: (forceTemplateWrapper) => generateTemplate(`<div id="template" style="width: 100%; height: ${bottomTemplateSize}px; background-color: green">template</div>`, forceTemplateWrapper),
 
     checkOpened: function(assert, drawer, drawerElement) {
         function checkPush(assert, env) {
