@@ -3061,8 +3061,8 @@ QUnit.module('Editing with real dataController', {
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
         testElement.find('input').first().val('Test update cell');
 
-        assert.ok(this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass('dx-state-disabled'), 'save changes button disabled');
-        assert.ok(this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass('dx-state-disabled'), 'cancel changes button disabled');
+        assert.notOk(this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass('dx-state-disabled'), 'save changes button enabled');
+        assert.notOk(this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass('dx-state-disabled'), 'cancel changes button enabled');
 
         testElement.find('input').first().trigger('change');
         assert.ok(testElement.find('td').first().hasClass('dx-cell-modified'));

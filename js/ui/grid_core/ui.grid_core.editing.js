@@ -1987,14 +1987,20 @@ const EditingController = modules.ViewController.inherit((function() {
             }
         },
 
+        _isEditButtonDisabled: function() {
+            const hasChanges = this.hasChanges();
+            const isEditRowDefined = isDefined(this.option('editing.editRowKey'));
+
+            return !(isEditRowDefined || hasChanges);
+        },
+
         _updateEditButtons: function() {
-            const that = this;
-            const headerPanel = that.getView('headerPanel');
-            const hasChanges = that.hasChanges();
+            const headerPanel = this.getView('headerPanel');
+            const isButtonDisabled = this._isEditButtonDisabled();
 
             if(headerPanel) {
-                headerPanel.setToolbarItemDisabled('saveButton', !hasChanges);
-                headerPanel.setToolbarItemDisabled('revertButton', !hasChanges);
+                headerPanel.setToolbarItemDisabled('saveButton', isButtonDisabled);
+                headerPanel.setToolbarItemDisabled('revertButton', isButtonDisabled);
             }
         },
 
@@ -2618,7 +2624,7 @@ const EditingController = modules.ViewController.inherit((function() {
                     $(e.element).addClass(headerPanel._getToolbarButtonClass(EDIT_BUTTON_CLASS + ' ' + that.addWidgetPrefix(className) + '-button'));
                 };
                 const hintText = titleButtonTextByClassNames[name];
-                const isButtonDisabled = (className === 'save' || className === 'cancel') && !that.hasChanges();
+                const isButtonDisabled = (className === 'save' || className === 'cancel') && that._isEditButtonDisabled();
 
                 return {
                     widget: 'dxButton',
