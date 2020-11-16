@@ -1514,7 +1514,7 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
 
     QUnit.test('Dragging should work correctly when an appointment is dragged from the all-day panel', function(assert) {
         const appointmentTitle = 'App';
-        const getDataSource = () => [{
+        const dataSource = [{
             text: appointmentTitle,
             startDate: new Date(2020, 10, 14, 9, 30),
             endDate: new Date(2020, 10, 14, 11, 30),
@@ -1524,7 +1524,7 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
         const scheduler = createWrapper({
             views: ['week'],
             currentView: 'week',
-            dataSource: getDataSource(),
+            dataSource: dataSource,
             currentDate: new Date(2020, 10, 14),
             startDayHour: 9,
             height: 600,
@@ -1535,7 +1535,7 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
 
     QUnit.test('Dragging should work correctly with long appoinments', function(assert) {
         const appointmentTitle = 'App';
-        const getDataSource = () => [{
+        const dataSource = [{
             text: appointmentTitle,
             startDate: new Date(2020, 10, 13, 10, 30),
             endDate: new Date(2020, 10, 14, 9, 30),
@@ -1544,7 +1544,7 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
         const scheduler = createWrapper({
             views: ['week'],
             currentView: 'week',
-            dataSource: getDataSource(),
+            dataSource: dataSource,
             currentDate: new Date(2020, 10, 14),
             startDayHour: 9,
             height: 600,
@@ -1555,7 +1555,7 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
 
     QUnit.test('Dragging should work correctly with long appoinments in month view', function(assert) {
         const appointmentTitle = 'App';
-        const getDataSource = () => [{
+        const dataSource = [{
             text: appointmentTitle,
             startDate: new Date(2020, 10, 1, 10, 30),
             endDate: new Date(2020, 10, 30, 9, 30),
@@ -1564,12 +1564,50 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
         const scheduler = createWrapper({
             views: ['month'],
             currentView: 'month',
-            dataSource: getDataSource(),
+            dataSource: dataSource,
             currentDate: new Date(2020, 10, 14),
             startDayHour: 9,
             height: 600,
         });
 
         checkAppointmentDragging(assert, scheduler, appointmentTitle, 30, 0, 5);
+    });
+
+    QUnit.test('Phantom appointment should be removed after DnD from tooltip', function(assert) {
+        const dataSource = [{
+            text: 'App 1',
+            startDate: new Date(2020, 10, 14, 10, 30),
+            endDate: new Date(2020, 10, 14, 9, 30),
+        }, {
+            text: 'App 2',
+            startDate: new Date(2020, 10, 14, 10, 30),
+            endDate: new Date(2020, 10, 14, 9, 30),
+        }];
+
+        const scheduler = createWrapper({
+            views: [{ type: 'week', maxAppointmentsPerCell: 1 }],
+            currentView: 'week',
+            dataSource: dataSource,
+            currentDate: new Date(2020, 10, 14),
+            startDayHour: 9,
+            height: 600,
+
+        });
+
+        scheduler.appointments.compact.click(0);
+
+        const appointment = scheduler.appointments.compact.getAppointment();
+        const appointmentPosition = getAbsolutePosition(appointment);
+        const pointer = pointerMock(appointment).start();
+
+        pointer
+            .down(appointmentPosition.left, appointmentPosition.top)
+            .move(50, 50)
+            .move(-50, -50)
+            .up();
+
+        const appointments = scheduler.appointments.find('App 2');
+
+        assert.equal(appointments.length, 0, 'Phantom appointment does not exist');
     });
 });
