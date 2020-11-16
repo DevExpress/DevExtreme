@@ -22,7 +22,7 @@ export default class EditForm extends FocusableElement {
   }
 
   getItem(id): Selector {
-    return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}]`);
+    return this.form.find(`.${CLASS.textEditorInput}[id*=_${id}], .dx-checkbox[id*=_${id}]`);
   }
 
   getInvalids(): Selector {

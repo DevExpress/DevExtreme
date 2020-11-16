@@ -8,5 +8,7 @@ export default {
 
     _toValue: parse,
 
-    _add: dateUtils.addDateInterval
+    _add: dateUtils.addDateInterval,
+
+    convert: dateUtils.dateToMilliseconds,
 };

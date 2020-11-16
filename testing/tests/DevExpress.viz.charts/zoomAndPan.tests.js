@@ -1129,7 +1129,7 @@ QUnit.test('Zoom argument axis', function(assert) {
     assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 2);
 });
 
-QUnit.test('Reject zooming by minVisualRangeLength option', function(assert) {
+QUnit.test('Correct zooming by minVisualRangeLength option', function(assert) {
     const onZoomStart = sinon.spy();
     const onZoomEnd = sinon.spy();
     const chart = this.createChart({
@@ -1163,11 +1163,11 @@ QUnit.test('Reject zooming by minVisualRangeLength option', function(assert) {
     assert.equal(onZoomEnd.callCount, 1);
     assert.equal(onZoomEnd.getCall(0).args[0].axis, argumentAxis);
     assert.deepEqual(onZoomEnd.getCall(0).args[0].previousRange, visualRange);
-    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, visualRange);
+    assert.deepEqual(onZoomEnd.getCall(0).args[0].range, { startValue: 7.0625, endValue: 8.0625 });
     assert.equal(onZoomEnd.getCall(0).args[0].actionType, 'zoom');
     assert.equal(onZoomEnd.getCall(0).args[0].event.type, 'dxdragend');
-    assert.equal(onZoomEnd.getCall(0).args[0].shift, 0);
-    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1);
+    assert.equal(onZoomEnd.getCall(0).args[0].shift, 0.3125);
+    assert.equal(onZoomEnd.getCall(0).args[0].zoomFactor, 1.5);
 });
 
 QUnit.test('Zoom value axis', function(assert) {

@@ -1,5 +1,7 @@
-import FocusableElement from '../internal/focusable';
+// eslint-disable-next-line max-classes-per-file
 import NavPage from './navPage';
+import FocusableElement from '../internal/focusable';
+import { SelectableElement } from './SelectableElement';
 
 const CLASS = {
   pagerPageSize: 'dx-page-size',
@@ -8,8 +10,8 @@ const CLASS = {
 };
 
 export default class Pager extends FocusableElement {
-  getPageSize(index: number): FocusableElement {
-    return new FocusableElement(this.element.find(`.${CLASS.pagerPageSize}:nth-child(${index + 1})`));
+  getPageSize(index: number): SelectableElement {
+    return new SelectableElement(this.element.find(`.${CLASS.pagerPageSize}:nth-child(${index + 1})`));
   }
 
   getPrevNavButton(): FocusableElement {
@@ -20,7 +22,11 @@ export default class Pager extends FocusableElement {
     return new FocusableElement(this.element.find(`.${CLASS.pagerNextNavButton}`));
   }
 
-  getNavPage(index: number): NavPage {
-    return new NavPage(this.element, index);
+  getNavPage(pageIndexText: string): NavPage {
+    return new NavPage(this.element, pageIndexText);
+  }
+
+  get infoText() {
+    return this.element.find('.dx-info');
   }
 }

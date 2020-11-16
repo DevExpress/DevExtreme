@@ -15140,6 +15140,40 @@ QUnit.module('Editing with validation', {
         assert.notOk($(rowsView.getCellElement(0, 1)).hasClass('dx-cell-modified'), 'cell is not marked as modified');
         assert.deepEqual(this.getDataSource().items()[0], { field1: true, field2: true }, 'data is saved');
     });
+
+    // T946816
+    QUnit.test('Validation should work with composite keys', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+        const validationCallback = sinon.spy();
+
+        rowsView.render($testElement);
+
+        this.applyOptions({
+            dataSource: [{ field: 'aaa', field2: 'bbb' }],
+            keyExpr: ['field', 'field2'],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            columns: [{
+                dataField: 'field',
+                validationRules: [{
+                    type: 'custom',
+                    validationCallback
+                }]
+            }]
+        });
+
+        this.editCell(0, 0);
+        $testElement.find('input').val('new value').trigger('change');
+
+        this.clock.tick();
+
+        // assert
+        assert.equal(validationCallback.callCount, 1, 'validation callback was called');
+    });
 });
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {

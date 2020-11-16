@@ -361,6 +361,27 @@ QUnit.test('WorkSpace should have a correct \'groups\' option', function(assert)
         'Groups are OK');
 });
 
+QUnit.test('updateScrollPosition should work correctly when groups were not set (T946739)', function(assert) {
+    this.createInstance({
+        resources: [
+            {
+                displayExpr: 'name',
+                valueExpr: 'key',
+                field: 'resource1',
+                dataSource: [
+                    { key: 1, name: 'One' },
+                    { key: 2, name: 'Two' }
+                ]
+            }
+        ]
+    });
+
+    const resources = { name: [1] };
+    const workSpace = this.instance.$element().find('.dx-scheduler-work-space').dxSchedulerWorkSpaceDay('instance');
+    workSpace.updateScrollPosition(new Date(2015, 2, 4), resources);
+    assert.ok(true, 'Scroll position was updated');
+});
+
 QUnit.test('WorkSpace should have a correct \'startDayHour\' option', function(assert) {
     this.createInstance({
         startDayHour: 1
