@@ -1451,10 +1451,11 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
     }
 
     const checkAppointmentDragging = (
-        assert, scheduler, appointmentTitle, dX, dY, appointmentCount = 1,
+        assert, scheduler, appointmentTitle, dX, dY, appointmentCount = 1, dragSourceCount,
     ) => {
         let appointments = scheduler.appointments.find(appointmentTitle);
         let dragSource = scheduler.appointments.getDragSource();
+        const validDragSourceCount = dragSourceCount || appointmentCount;
 
         assert.equal(appointments.length, appointmentCount, 'Phantom appointment does not exist');
         assert.equal(dragSource.length, 0, 'Drag source does not exist');
@@ -1472,7 +1473,7 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
         dragSource = scheduler.appointments.getDragSource();
 
         assert.equal(appointments.length, appointmentCount + 1, 'Phantom appointment exists');
-        assert.equal(dragSource.length, appointmentCount, 'Drag source exists');
+        assert.equal(dragSource.length, validDragSourceCount, 'Drag source exists');
 
         pointer.up();
 
@@ -1576,12 +1577,12 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
     QUnit.test('Phantom appointment should be removed after DnD from tooltip', function(assert) {
         const dataSource = [{
             text: 'App 1',
-            startDate: new Date(2020, 10, 14, 10, 30),
-            endDate: new Date(2020, 10, 14, 9, 30),
+            startDate: new Date(2020, 10, 14, 9, 30),
+            endDate: new Date(2020, 10, 14, 10, 30),
         }, {
             text: 'App 2',
-            startDate: new Date(2020, 10, 14, 10, 30),
-            endDate: new Date(2020, 10, 14, 9, 30),
+            startDate: new Date(2020, 10, 14, 9, 30),
+            endDate: new Date(2020, 10, 14, 10, 30),
         }];
 
         const scheduler = createWrapper({
@@ -1609,5 +1610,89 @@ module('Phantom Appointment Dragging', zoomModuleConfig, () => {
         const appointments = scheduler.appointments.find('App 2');
 
         assert.equal(appointments.length, 0, 'Phantom appointment does not exist');
+    });
+
+    QUnit.test('Dragging should work correctly with recurrent appointments', function(assert) {
+        const appointmentTitle = 'App 1';
+        const dataSource = [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 16, 10, 30),
+            endDate: new Date(2020, 10, 16, 9, 30),
+            recurrenceRule: 'FREQ=DAILY;COUNT=3'
+        }];
+
+        const scheduler = createWrapper({
+            views: ['week'],
+            currentView: 'week',
+            dataSource: dataSource,
+            currentDate: new Date(2020, 10, 16),
+            startDayHour: 9,
+            height: 600,
+
+        });
+
+        let appointments = scheduler.appointments.find(appointmentTitle);
+        let dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, 3, 'Phantom appointment does not exist');
+        assert.equal(dragSource.length, 0, 'Drag source does not exist');
+
+        const appointment = $(appointments[0]);
+
+        const appointmentPosition = getAbsolutePosition(appointment);
+        const pointer = pointerMock(appointment).start();
+
+        pointer
+            .down(appointmentPosition.left, appointmentPosition.top)
+            .move(30, 30);
+
+        appointments = scheduler.appointments.find(appointmentTitle);
+        dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, 4, 'Phantom appointment exists');
+        assert.equal(dragSource.length, 1, 'Drag source exists');
+
+        pointer.up();
+
+        scheduler.appointmentPopup.dialog.hide();
+
+        appointments = scheduler.appointments.find(appointmentTitle);
+        dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, 3, 'Phantom appointment does not exist');
+        assert.equal(dragSource.length, 0, 'Drag source does not exist');
+    });
+
+    QUnit.test('Dragging should work correctly with multiple resources', function(assert) {
+        const appointmentTitle = 'App';
+        const dataSource = [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 16, 9, 30),
+            endDate: new Date(2020, 10, 16, 10, 30),
+            roomId: [1, 2],
+        }];
+
+        const scheduler = createWrapper({
+            views: ['month'],
+            currentView: 'month',
+            dataSource: dataSource,
+            currentDate: new Date(2020, 10, 16),
+            startDayHour: 9,
+            height: 600,
+            resources: [{
+                fieldExpr: 'roomId',
+                dataSource: [{
+                    text: 'Room 101',
+                    id: 1,
+                }, {
+                    text: 'Room 102',
+                    id: 2,
+                }],
+                label: 'Room'
+            }],
+            groups: ['roomId'],
+        });
+
+        checkAppointmentDragging(assert, scheduler, appointmentTitle, 30, 0, 2, 1);
     });
 });
