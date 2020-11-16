@@ -154,9 +154,9 @@ export default class AppointmentPopup {
         const { expr } = this.scheduler._dataAccessors;
         const resources = this.scheduler.option('resources');
         const allowTimeZoneEditing = this._getAllowTimeZoneEditing();
-        const appointmentData = this.state.appointment.data;
-        const formData = this._createAppointmentFormData(appointmentData);
-        const readOnly = this._isReadOnly(appointmentData);
+        const rawAppointment = this.state.appointment.data;
+        const formData = this._createAppointmentFormData(rawAppointment);
+        const readOnly = this._isReadOnly(rawAppointment);
 
         AppointmentForm.prepareAppointmentFormEditors(
             expr,
@@ -185,8 +185,9 @@ export default class AppointmentPopup {
         return scheduler.option('editing.allowTimeZoneEditing') || scheduler.option('editing.allowEditingTimeZones');
     }
 
-    _isReadOnly(data) {
-        if(data && data.disabled) {
+    _isReadOnly(rawAppointment) {
+        const adapter = this.scheduler.createAppointmentAdapter(rawAppointment);
+        if(rawAppointment && adapter.disabled) {
             return true;
         }
         return this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false;
