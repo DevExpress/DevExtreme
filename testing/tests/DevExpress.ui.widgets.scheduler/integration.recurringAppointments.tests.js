@@ -8,8 +8,9 @@ import translator from 'animation/translator';
 import { DataSource } from 'data/data_source/data_source';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dateSerialization from 'core/utils/date_serialization';
-import { SchedulerTestWrapper, isDesktopEnvironment } from './helpers.js';
+import { createWrapper, SchedulerTestWrapper, isDesktopEnvironment } from './helpers.js';
 import dateUtils from 'core/utils/date';
+import ArrayStore from 'data/array_store';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -41,6 +42,61 @@ QUnit.module('Integration: Recurring Appointments', {
         this.clock.restore();
     }
 });
+
+if(isDesktopEnvironment()) {
+    QUnit.test('Key property should be removed in excluded appointment from recurrence(T929772)', function(assert) {
+        const data = [{
+            id: 1,
+            text: 'Appointment',
+            startDate: new Date(2017, 4, 22, 1, 30),
+            endDate: new Date(2017, 4, 22, 2, 30),
+            recurrenceRule: 'FREQ=DAILY',
+        }];
+
+        const scheduler = createWrapper({
+            dataSource: {
+                store: new ArrayStore({
+                    data: data,
+                    key: 'id'
+                })
+            },
+            views: ['week'],
+            currentView: 'week',
+            currentDate: new Date(2017, 4, 22),
+            onAppointmentAdding: e => {
+                assert.equal(e.appointmentData.id, undefined, 'key property \'id\' shouldn\'t exist in appointment on onAppointmentAdding event');
+            },
+            onAppointmentAdded: e => {
+                assert.equal(e.appointmentData.id, undefined, 'key property \'id\' shouldn\'t exist in appointment on onAppointmentAdded event');
+            },
+            height: 600
+        });
+
+        const appointment = scheduler.appointments.getAppointment(3);
+        const pointer = pointerMock(appointment).start();
+        const offset = appointment.offset();
+
+        pointer
+            .down(offset.left, offset.top)
+            .move(0, 100);
+
+        pointer.up();
+
+        scheduler.appointmentPopup.dialog.clickEditAppointment();
+
+        const appointments = scheduler.instance.getDataSource().items();
+        const recurrenceAppointment = appointments[0];
+        const excludedAppointment = appointments[1];
+
+        const expectedDate = new Date(excludedAppointment.startDate);
+        expectedDate.setHours(recurrenceAppointment.startDate.getHours() + 1);
+
+        assert.equal(excludedAppointment.startDate.valueOf(), expectedDate.valueOf(), 'appointment should be shifted down');
+        assert.equal(excludedAppointment.id.length, 36, 'id property should be equal GUID');
+
+        assert.expect(4);
+    });
+}
 
 QUnit.test('Tasks should be duplicated according to recurrence rule', function(assert) {
     const tasks = [

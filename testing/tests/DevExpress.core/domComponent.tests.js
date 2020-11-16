@@ -512,6 +512,15 @@ QUnit.module('default', {
         assert.strictEqual(template.render(), 'Default content markup', 'name1 is not found in integrationOptions. Use the default');
     });
 
+    QUnit.test('component does not use deferUpdate strategy for template rendering', function(assert) {
+        const $element = $('#component').TestComponent();
+        const instance = $element.TestComponent('instance');
+
+        const useDeferUpdate = instance.option('integrationOptions.useDeferUpdateForTemplates');
+
+        assert.strictEqual(useDeferUpdate, true);
+    });
+
     QUnit.test('option \'rtl\'', function(assert) {
         const $element = $('#component').TestComponent();
         const instance = $element.TestComponent('instance');

@@ -46,7 +46,7 @@ const dxBaseGauge = BaseWidget.inherit({
         const tooltip = that._tooltip;
 
         that._tracker.setCallbacks({
-            'tooltip-show': function(target, info) {
+            'tooltip-show': function(target, info, callback) {
                 const tooltipParameters = target.getTooltipParameters();
                 const offset = renderer.getRootOffset();
                 const formatObject = _extend({
@@ -59,7 +59,7 @@ const dxBaseGauge = BaseWidget.inherit({
                     x: tooltipParameters.x + offset.left,
                     y: tooltipParameters.y + offset.top,
                     offset: tooltipParameters.offset
-                }, { target: info });
+                }, { target: info }, undefined, callback);
             },
             'tooltip-hide': function() {
                 return tooltip.hide();

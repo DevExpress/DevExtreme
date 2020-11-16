@@ -2467,3 +2467,46 @@ QUnit.test('Remove canvas if rejected', function(assert) {
 
     deferred.reject();
 });
+
+
+// T943072
+QUnit.module('asyncEach');
+
+QUnit.test('Large array items. All items sync', function(assert) {
+    const done = assert.async();
+    const arraySize = 7000;
+    const callbackSpy = sinon.spy();
+
+    const asyncEachDeferred = exporter.image.asyncEach(new Array(arraySize), callbackSpy);
+
+    asyncEachDeferred.then(() => {
+        assert.strictEqual(callbackSpy.callCount, arraySize);
+        done();
+    });
+});
+
+QUnit.test('Some items is async', function(assert) {
+    const done = assert.async();
+    let callsCounter = 0;
+    const arraySize = 5;
+    function getDeferred() {
+        const d = new Deferred();
+        setTimeout(() => {
+            d.resolve();
+        }, 0);
+        return d;
+    }
+    const callbackSpy = sinon.spy(() => {
+        return (callsCounter >= 1 && callsCounter++ <= 3) ? undefined : getDeferred();
+    });
+
+    const asyncEachDeferred = exporter.image.asyncEach(new Array(arraySize), callbackSpy);
+
+    asyncEachDeferred.then(function() {
+        assert.strictEqual(callbackSpy.callCount, arraySize);
+        for(let i = 0; i < arraySize - 1; i++) {
+            assert.ok(callbackSpy.getCall(i).calledBefore(callbackSpy.getCall(i + 1)), `Order of calls. ${i}`);
+        }
+        done();
+    });
+});

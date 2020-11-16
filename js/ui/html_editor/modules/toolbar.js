@@ -576,7 +576,7 @@ if(Quill) {
                 this._markActiveFormatWidget(formatName, formatWidget, formats);
             }
 
-            this._toggleClearFormatting(hasFormats);
+            this._toggleClearFormatting(hasFormats || selection.length > 1);
         }
 
         _markActiveFormatWidget(name, widget, formats) {

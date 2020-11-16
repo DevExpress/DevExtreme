@@ -4,7 +4,6 @@ import dataUtils from '../core/element_data';
 import typeUtils from '../core/utils/type';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
-import browser from '../core/utils/browser';
 import { noop, ensureDefined, equalByValue } from '../core/utils/common';
 import { SelectionFilterCreator as FilterCreator } from '../core/utils/selection_filter';
 import { Deferred, when } from '../core/utils/deferred';
@@ -19,6 +18,7 @@ import { addNamespace, normalizeKeyName } from '../events/utils';
 import { name as clickEvent } from '../events/click';
 import caret from './text_box/utils.caret';
 import { normalizeLoadResult } from '../data/data_source/utils';
+import getScrollRtlBehavior from '../core/utils/scroll_rtl_behavior';
 
 import SelectBox from './select_box';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -55,8 +55,7 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
                 this._isTagRemoved = true;
 
                 const $tagToDelete = this._$focusedTag || this._tagElements().last();
@@ -84,8 +83,7 @@ const TagBox = SelectBox.inherit({
                     return;
                 }
 
-                e.preventDefault();
-                e.stopPropagation();
+                this._processKeyboardEvent(e);
                 this._isTagRemoved = true;
 
                 const $tagToDelete = this._$focusedTag;
@@ -107,6 +105,7 @@ const TagBox = SelectBox.inherit({
                 }
 
                 if(this.option('opened')) {
+                    this._saveValueChangeEvent(e);
                     sendToList(options);
                     e.preventDefault();
                 }
@@ -116,6 +115,7 @@ const TagBox = SelectBox.inherit({
                 const isInputActive = this._shouldRenderSearchEvent();
 
                 if(isOpened && !isInputActive) {
+                    this._saveValueChangeEvent(e);
                     sendToList(options);
                     e.preventDefault();
                 }
@@ -155,6 +155,12 @@ const TagBox = SelectBox.inherit({
                 !this.option('multiline') && this._scrollContainer(direction);
             }
         });
+    },
+
+    _processKeyboardEvent: function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        this._saveValueChangeEvent(e);
     },
 
     _updateTagsContainer: function($element) {
@@ -239,10 +245,12 @@ const TagBox = SelectBox.inherit({
     _getBorderPosition: function(direction) {
         const rtlEnabled = this.option('rtlEnabled');
         const isScrollLeft = (direction === 'end') ^ rtlEnabled;
-        const isScrollReverted = rtlEnabled && !browser.webkit;
-        const scrollSign = (!rtlEnabled || browser.webkit || browser.msie) ? 1 : -1;
 
-        return (isScrollLeft ^ !isScrollReverted)
+        const scrollBehavior = getScrollRtlBehavior();
+        const isScrollInverted = rtlEnabled && (scrollBehavior.decreasing ^ scrollBehavior.positive);
+        const scrollSign = !rtlEnabled || scrollBehavior.positive ? 1 : -1;
+
+        return (isScrollLeft ^ !isScrollInverted)
             ? 0
             : scrollSign * (this._$tagsContainer.get(0).scrollWidth - this._$tagsContainer.outerWidth());
     },
@@ -258,7 +266,8 @@ const TagBox = SelectBox.inherit({
         }
 
         if(isScrollLeft ^ (scrollOffset < 0)) {
-            const scrollCorrection = rtlEnabled && browser.msie ? -1 : 1;
+            const scrollBehavior = getScrollRtlBehavior();
+            const scrollCorrection = rtlEnabled && !scrollBehavior.decreasing && scrollBehavior.positive ? -1 : 1;
             scrollLeft += scrollOffset * scrollCorrection;
         }
 
@@ -660,6 +669,7 @@ const TagBox = SelectBox.inherit({
         }
 
         this.callBase(e);
+        this._saveValueChangeEvent(undefined);
     },
 
     _shouldClearFilter: function() {
@@ -1138,8 +1148,11 @@ const TagBox = SelectBox.inherit({
         this._updateWidgetHeight();
 
         if(!equalByValue(this._list.option('selectedItemKeys'), this.option('value'))) {
+            const listSelectionChangeEvent = this._list._getSelectionChangeEvent();
+            listSelectionChangeEvent && this._saveValueChangeEvent(listSelectionChangeEvent);
             this.option('value', value);
         }
+        this._list._saveSelectionChangeEvent(undefined);
     },
 
     _removeTag: function(value, item) {

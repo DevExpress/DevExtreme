@@ -43,7 +43,6 @@ env:
     - TARGET=test_testcafe COMPONENT=editors
     - TARGET=test_testcafe COMPONENT=navigation
     - TARGET=test_themebuilder
-    - TARGET=test_scss
 
 build:
 

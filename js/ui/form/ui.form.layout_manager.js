@@ -57,6 +57,7 @@ const LAYOUT_MANAGER_LAST_ROW_CLASS = 'dx-last-row';
 const LAYOUT_MANAGER_FIRST_COL_CLASS = 'dx-first-col';
 const LAYOUT_MANAGER_LAST_COL_CLASS = 'dx-last-col';
 const LAYOUT_MANAGER_ONE_COLUMN = 'dx-layout-manager-one-col';
+const ROOT_SIMPLE_ITEM_CLASS = 'dx-root-simple-item';
 
 const FLEX_LAYOUT_CLASS = 'dx-flex-layout';
 
@@ -435,6 +436,14 @@ const LayoutManager = Widget.inherit({
                 }
                 if(e.location.col === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_COL_CLASS);
+                }
+
+                const form = that.option('form');
+                if(item.itemType === SIMPLE_ITEM_TYPE && form && form._itemsRunTimeInfo) {
+                    const formItems = form._itemsRunTimeInfo.getItems();
+                    if(formItems && formItems[item.guid] && formItems[item.guid].path.indexOf('.') === -1) {
+                        $itemElement.addClass(ROOT_SIMPLE_ITEM_CLASS);
+                    }
                 }
                 const isLastColumn = (e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount);
                 const rowsCount = that._getRowsCount();

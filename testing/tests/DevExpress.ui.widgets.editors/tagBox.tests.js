@@ -3,7 +3,6 @@ import { DataSource } from 'data/data_source/data_source';
 import { isRenderer } from 'core/utils/type';
 import { createTextElementHiddenCopy } from 'core/utils/dom';
 import ajaxMock from '../../helpers/ajaxMock.js';
-import browser from 'core/utils/browser';
 import config from 'core/config';
 import dataQuery from 'data/query';
 import devices from 'core/devices';
@@ -17,6 +16,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import TagBox from 'ui/tag_box';
+import getScrollRtlBehavior from 'core/utils/scroll_rtl_behavior';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -33,6 +33,8 @@ const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const LIST_CKECKBOX_CLASS = 'dx-list-select-checkbox';
+const SELECT_ALL_CLASS = 'dx-list-select-all';
+const SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const POPUP_DONE_BUTTON_CLASS = 'dx-popup-done';
 const TEXTBOX_CLASS = 'dx-texteditor-input';
 const EMPTY_INPUT_CLASS = 'dx-texteditor-empty';
@@ -5047,32 +5049,33 @@ QUnit.module('single line mode', {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit || browser.msie ? 1 : -1;
+        const scrollBehavior = getScrollRtlBehavior();
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
 
-        const expectedScrollPosition = (browser.msie || browser.mozilla)
-            ? 0
-            : ($container.get(0).scrollWidth - $container.outerWidth()) * sign;
+        const expectedScrollPosition = isScrollInverted ? 0 : scrollSign * ($container.get(0).scrollWidth - $container.outerWidth());
 
         assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on rendering');
 
         this.instance.focus();
         this.instance.blur();
 
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'scroll position is correct on focus out');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'scroll position is correct on focus out');
     });
 
     QUnit.test('tags container should be scrolled to the end on focusin in the RTL mode (T390041)', function(assert) {
         this.instance.option('rtlEnabled', true);
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const sign = browser.webkit || browser.msie ? 1 : -1;
 
-        const expectedScrollPosition = (browser.msie || browser.mozilla)
-            ? sign * ($container.get(0).scrollWidth - $container.outerWidth())
-            : 0;
+        const scrollBehavior = getScrollRtlBehavior();
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
+
+        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
         this.instance.focus();
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the end');
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the end');
     });
 
     QUnit.test('tags container should be scrolled on mobile devices', function(assert) {
@@ -5176,14 +5179,14 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('right');
 
         let $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1.01, 'focused tag is visible');
 
         this.keyboard
             .press('right')
             .press('right');
 
         $focusedTag = this.getFocusedTag();
-        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1, 'focused tag is visible');
+        assert.roughEqual($focusedTag.position().left + $focusedTag.width(), containerWidth, 1.01, 'focused tag is visible');
     });
 
     QUnit.test('tags container should be scrolled to the end after the last tag loses focus during navigation to the right', function(assert) {
@@ -5218,18 +5221,21 @@ QUnit.module('keyboard navigation through tags in single line mode', {
         });
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const isScrollReverted = (browser.msie || browser.mozilla);
-        const sign = browser.webkit || browser.msie ? 1 : -1;
+
+        const scrollBehavior = getScrollRtlBehavior();
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
 
         this.instance.focus();
         this.instance.option('value', [this.items[0]]);
 
-        let expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the start');
+        let expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
 
         this.instance.option('value', this.items);
-        expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the start');
+        expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 
     QUnit.test('the focused tag should be visible during keyboard navigation to the right in the RTL mode', function(assert) {
@@ -5291,13 +5297,13 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('left')
             .press('left');
 
-        assert.roughEqual(this.getFocusedTag().position().left, 0, 1, 'focused tag is not hidden at left');
+        assert.roughEqual(this.getFocusedTag().position().left, 0, 1.01, 'focused tag is not hidden at left');
 
         this.keyboard
             .press('left')
             .press('left');
 
-        assert.roughEqual(this.getFocusedTag().position().left, 0, 1, 'focused tag is not hidden at left');
+        assert.roughEqual(this.getFocusedTag().position().left, 0, 1.01, 'focused tag is not hidden at left');
     });
 
     QUnit.test('tags container should be scrolled to the start after the last tag loses focus during navigation to the left in the RTL mode', function(assert) {
@@ -5320,11 +5326,13 @@ QUnit.module('keyboard navigation through tags in single line mode', {
             .press('left');
 
         const $container = this.$element.find('.' + TAGBOX_TAG_CONTAINER_CLASS);
-        const isScrollReverted = browser.msie || browser.mozilla;
-        const sign = browser.webkit || browser.msie ? 1 : -1;
-        const expectedScrollPosition = isScrollReverted ? sign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
 
-        assert.equal($container.scrollLeft(), expectedScrollPosition, 'tags container is scrolled to the start');
+        const scrollBehavior = getScrollRtlBehavior();
+        const scrollSign = scrollBehavior.positive ? 1 : -1;
+        const isScrollInverted = scrollBehavior.decreasing ^ scrollBehavior.positive;
+        const expectedScrollPosition = isScrollInverted ? scrollSign * ($container.get(0).scrollWidth - $container.outerWidth()) : 0;
+
+        assert.roughEqual($container.scrollLeft(), expectedScrollPosition, 1.01, 'tags container is scrolled to the start');
     });
 });
 
@@ -6276,5 +6284,217 @@ QUnit.module('regression', {
         }
 
         assert.ok(true, 'Widget rendered');
+    });
+});
+
+QUnit.module('event passed to valueChanged (showSelectionControls=true)', {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+
+        this._init = (options) => {
+            this.$element = $('<div>')
+                .appendTo('#qunit-fixture')
+                .dxTagBox(options);
+            this.instance = this.$element.dxTagBox('instance');
+            this.$input = this.$element.find('.' + TEXTBOX_CLASS);
+            this.keyboard = keyboardMock(this.$input);
+        };
+
+
+        this.valueChangedHandler = sinon.stub();
+        this._init({
+            focusStateEnabled: true,
+            showSelectionControls: true,
+            items: [1, 2, 3],
+            value: [1, 2],
+            onValueChanged: this.valueChangedHandler,
+            opened: true,
+        });
+
+        this.$listItems = $(`.${LIST_ITEM_CLASS}`);
+        this.$firstItem = this.$listItems.eq(0);
+        this.$firstItemCheckBox = this.$firstItem.find(`.${LIST_CKECKBOX_CLASS}`);
+        this.$selectAllItem = $(`.${SELECT_ALL_CLASS}`);
+        this.$selectAllItemCheckBox = $(`.${SELECT_ALL_CHECKBOX_CLASS}`);
+    },
+    afterEach: function() {
+        this.$element.remove();
+        this.clock.restore();
+        fx.off = false;
+    }
+}, () => {
+    QUnit.test('Correct event should be passed to valueChanged when tag is removed using backspace (T947619)', function(assert) {
+        this.keyboard
+            .focus()
+            .keyDown('backspace');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
+        assert.strictEqual(data.event.key, 'Backspace', 'event key is correct');
+    });
+
+    QUnit.test('Correct event should be passed to valueChanged when tag is removed using delete', function(assert) {
+        this.keyboard
+            .focus()
+            .press('left')
+            .keyDown('del');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
+        assert.strictEqual(data.event.key, 'Delete', 'event key is correct');
+    });
+
+    QUnit.test('event passed to valueChanged should be undefined when value runtime changes after tag removing', function(assert) {
+        this.keyboard
+            .focus()
+            .press('backspace');
+
+        this.instance.option('value', [3]);
+
+        const data = this.valueChangedHandler.getCall(1).args[0];
+        assert.strictEqual(data.event, undefined, 'correct event is passed');
+    });
+
+    QUnit.test('event passed to valueChanged should be correct after click on item (T947619)', function(assert) {
+        this.$firstItem.trigger('dxclick');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
+        assert.strictEqual(data.event.target, this.$firstItem.get(0), 'event target is correct');
+    });
+
+    QUnit.test('event passed to valueChanged should be correct after click on item checkBox (T947619)', function(assert) {
+        this.$firstItemCheckBox.trigger('dxclick');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
+        assert.strictEqual(data.event.target, this.$firstItemCheckBox.get(0), 'event target is correct');
+    });
+
+    QUnit.test('event passed to valueChanged should be correct after click on selectAll item (T947619)', function(assert) {
+        this.$selectAllItem.trigger('dxclick');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
+        assert.strictEqual(data.event.target, this.$selectAllItem.get(0), 'event target is correct');
+    });
+
+    QUnit.test('event passed to valueChanged should be correct after click on selectAll item checkBox (T947619)', function(assert) {
+        this.$selectAllItemCheckBox.trigger('dxclick');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'dxclick', 'correct event is passed');
+        assert.strictEqual(data.event.target, this.$selectAllItemCheckBox.get(0), 'event target is correct');
+    });
+
+    QUnit.test('Correct event should be passed to valueChanged when item is selected using enter', function(assert) {
+        this.keyboard
+            .focus()
+            .press('down')
+            .keyDown('enter');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
+        assert.strictEqual(data.event.key, 'Enter', 'event key is correct');
+        assert.strictEqual(data.event.target.get(0), this.$firstItem.get(0), 'target is correct');
+    });
+
+    QUnit.test('Correct event should be passed to valueChanged when item is selected using space', function(assert) {
+        this.keyboard
+            .focus()
+            .press('down')
+            .keyDown('space');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
+        assert.strictEqual(data.event.key, ' ', 'event key is correct');
+        assert.strictEqual(data.event.target.get(0), this.$firstItem.get(0), 'target is correct');
+    });
+
+    QUnit.test('Correct event should be passed to valueChanged when selectAll item is selected using enter', function(assert) {
+        this.keyboard
+            .focus()
+            .press('down')
+            .press('up')
+            .keyDown('enter');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
+        assert.strictEqual(data.event.key, 'Enter', 'event key is correct');
+    });
+
+    QUnit.test('Correct event should be passed to valueChanged when selectAll item is selected using space', function(assert) {
+        this.keyboard
+            .focus()
+            .press('down')
+            .press('up')
+            .keyDown('space');
+
+        const data = this.valueChangedHandler.getCall(0).args[0];
+        assert.strictEqual(data.event.type, 'keydown', 'correct event is passed');
+        assert.strictEqual(data.event.key, ' ', 'event key is correct');
+    });
+
+    QUnit.test('event=undefined should be passed to valueChanged when value changes runtime after selectAll item is selected using enter', function(assert) {
+        this.keyboard
+            .focus()
+            .press('down')
+            .press('up')
+            .keyDown('enter');
+
+        this.instance.option('value', [3]);
+
+        const data = this.valueChangedHandler.getCall(1).args[0];
+        assert.strictEqual(data.event, undefined, 'correct event is passed');
+    });
+
+    QUnit.test('event=undefined should be passed to valueChanged when value changes runtime after selectAll item is selected using space', function(assert) {
+        this.keyboard
+            .focus()
+            .press('down')
+            .press('up')
+            .keyDown('space');
+
+        this.instance.option('value', [3]);
+
+        const data = this.valueChangedHandler.getCall(1).args[0];
+        assert.strictEqual(data.event, undefined, 'correct event is passed');
+    });
+
+    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on item', function(assert) {
+        this.$firstItem.trigger('dxclick');
+
+        this.instance.option('value', [3]);
+
+        const data = this.valueChangedHandler.getCall(1).args[0];
+        assert.strictEqual(data.event, undefined, 'correct event is passed');
+    });
+
+    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on selectAll item', function(assert) {
+        this.$selectAllItem.trigger('dxclick');
+
+        this.instance.option('value', [3]);
+
+        const data = this.valueChangedHandler.getCall(1).args[0];
+        assert.strictEqual(data.event, undefined, 'correct event is passed');
+    });
+
+    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on item checkBox', function(assert) {
+        this.$firstItemCheckBox.trigger('dxclick');
+
+        this.instance.option('value', [3]);
+
+        const data = this.valueChangedHandler.getCall(1).args[0];
+        assert.strictEqual(data.event, undefined, 'correct event is passed');
+    });
+
+    QUnit.test('event passed to valueChanged should be undefined when value changes runtime after click on selectAll item checkBox', function(assert) {
+        this.$selectAllItemCheckBox.trigger('dxclick');
+
+        this.instance.option('value', [3]);
+
+        const data = this.valueChangedHandler.getCall(1).args[0];
+        assert.strictEqual(data.event, undefined, 'correct event is passed');
     });
 });

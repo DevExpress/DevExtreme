@@ -131,6 +131,11 @@ class AppointmentModel {
         this._baseAppointmentDuration = baseAppointmentDuration;
     }
 
+    get keyName() {
+        const store = this._dataSource.store();
+        return store.key();
+    }
+
     _createFilter(min, max, remoteFiltering, dateSerializationFormat) {
         this._filterMaker.make('date', [min, max]);
 

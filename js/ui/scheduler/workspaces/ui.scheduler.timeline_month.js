@@ -27,8 +27,8 @@ const SchedulerTimelineMonth = SchedulerTimeline.inherit({
         return 0;
     },
 
-    _getIndicationFirstViewDate: function() {
-        return dateUtils.trimTime(new Date(this._firstViewDate));
+    _calculateDurationInCells: function(timeDiff) {
+        return timeDiff / this.getCellDuration();
     },
 
     getCellDuration: function() {
@@ -37,6 +37,10 @@ const SchedulerTimelineMonth = SchedulerTimeline.inherit({
 
     calculateEndViewDate: function(dateOfLastViewCell) {
         return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * toMs('hour'));
+    },
+
+    isIndicatorVisible: function() {
+        return true;
     },
 
     _getCellCount: function() {
