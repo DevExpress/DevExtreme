@@ -10,6 +10,7 @@ import {
   Effect,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../utils/subscribe_to_event';
+import { StandardRtlCoordinatesConverter, RtlCoordinatesConverter } from './rtl_coordinates_converter';
 import { isNumeric } from '../../core/utils/type';
 import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
@@ -125,20 +126,23 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   scrollBy(distance: number | Partial<ScrollViewLocation>): void {
     const location = ensureLocation(distance);
 
+    const containerPosition = this.getContainerPosition();
     if (this.isDirection(DIRECTION_VERTICAL)) {
-      this.containerRef.scrollTop = Math.round(this.scrollOffset().top + location.top);
+      this.containerRef.scrollTop = Math.round(containerPosition.top + location.top);
     }
     if (this.isDirection(DIRECTION_HORIZONTAL)) {
-      this.containerRef.scrollLeft = Math.round(this.scrollOffset().left + location.left);
+      this.containerRef.scrollLeft = Math.round(containerPosition.left
+        + this.convertRtlTo(location.left));
     }
   }
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollViewLocation>): void {
     const location = ensureLocation(targetLocation);
+    const containerPosition = this.getContainerPosition();
     this.scrollBy({
-      left: location.left - this.scrollOffset().left,
-      top: location.top - this.scrollOffset().top,
+      left: this.convertRtlFrom(location.left) - this.convertRtlFrom(containerPosition.left),
+      top: location.top - containerPosition.top,
     });
   }
 
@@ -152,6 +156,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
         bottom: 0,
         ...(offset as Partial<ScrollOffset>),
       };
+
       this.scrollTo({
         top: this.getScrollLocation(element, scrollOffset, DIRECTION_VERTICAL),
         left: this.getScrollLocation(element, scrollOffset, DIRECTION_HORIZONTAL),
@@ -171,9 +176,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   scrollOffset(): ScrollViewLocation {
+    const containerPosition = this.getContainerPosition();
     return {
-      left: this.containerRef.scrollLeft,
-      top: this.containerRef.scrollTop,
+      left: this.convertRtlFrom(containerPosition.left),
+      top: containerPosition.top,
     };
   }
 
@@ -239,6 +245,13 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     return currentDirection === direction;
   }
 
+  private getContainerPosition(): ScrollViewLocation {
+    return {
+      left: this.containerRef.scrollLeft,
+      top: this.containerRef.scrollTop,
+    };
+  }
+
   get cssClasses(): string {
     const { direction } = this.props;
 
@@ -272,9 +285,9 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     const scrollOffsetBegin = scrollOffset[prop];
     const scrollOffsetEnd = scrollOffset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'];
 
-    const offset = this.scrollOffset()[prop];
+    const containerPosition = this.getContainerPosition()[prop];
 
-    if (relativeLocation < offset + scrollOffsetBegin) {
+    if (relativeLocation < containerPosition + scrollOffsetBegin) {
       if (elementOffset < containerSize - scrollOffsetBegin - scrollOffsetEnd) {
         return relativeLocation - scrollOffsetBegin;
       }
@@ -282,13 +295,27 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     }
 
     if (relativeLocation + elementOffset
-      >= offset + containerSize - scrollOffsetEnd - scrollBarSize) {
+      >= containerPosition + containerSize - scrollOffsetEnd - scrollBarSize) {
       if (elementOffset < containerSize - scrollOffsetBegin - scrollOffsetEnd) {
         return relativeLocation + elementOffset + scrollBarSize - containerSize + scrollOffsetEnd;
       }
       return relativeLocation - scrollOffsetBegin;
     }
 
-    return offset;
+    return containerPosition;
   }
+
+  private convertRtlFrom(coordinate: number): number {
+    return this.props.rtlEnabled
+      ? this.getConverter().convertFrom(coordinate)
+      : coordinate;
+  }
+
+  private convertRtlTo(coordinate: number): number {
+    return this.props.rtlEnabled
+      ? this.getConverter().convertTo(coordinate)
+      : coordinate;
+  }
+
+  readonly getConverter = () => new StandardRtlCoordinatesConverter() as RtlCoordinatesConverter;
 }
