@@ -1478,7 +1478,7 @@ QUnit.module('initialization from options', { beforeEach: setupModule, afterEach
             // assert
             assert.equal(errors.log.callCount, 1, 'one error');
             assert.equal(errors.log.lastCall.args[0], 'E1059', 'error code');
-            assert.equal(errors.log.lastCall.args[1], '"TestField","TestField2"', 'error argument');
+            assert.equal(errors.log.lastCall.args[1], '"TestField", "TestField2"', 'error argument');
             errors.log.restore();
         });
 
