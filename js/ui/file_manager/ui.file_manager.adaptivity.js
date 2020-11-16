@@ -75,7 +75,7 @@ class FileManagerAdaptivityControl extends Widget {
     }
 
     _setDrawerWidth(width) {
-        $(this._drawer.content()).width(width);
+        $(this._drawer.content()).css('width', width);
         this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
         this._drawer.resizeViewContent();
     }
