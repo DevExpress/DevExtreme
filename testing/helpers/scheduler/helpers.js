@@ -29,6 +29,7 @@ export const CLASSES = {
     allDayTableCell: '.dx-scheduler-all-day-table-cell',
 
     appointment: '.dx-scheduler-appointment',
+    appointmentDragSource: '.dx-scheduler-appointment-drag-source',
 
     resizableHandle: {
         left: '.dx-resizable-handle-left',
@@ -241,7 +242,10 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 getAppointment: (index = 0) => $('.dx-list-item').eq(index),
 
                 getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment')
-            }
+            },
+            getDragSource: () => this.appointments
+                .getAppointments()
+                .filter(CLASSES.appointmentDragSource),
         };
 
         this.appointmentPopup = {
