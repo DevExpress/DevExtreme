@@ -1736,7 +1736,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             scrolling: { mode: 'virtual' },
         });
         const schedulerInstance = scheduler.instance;
-        scheduler.drawControl();
 
         const $appointment = scheduler.appointments.find(appointmentTitle).first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
@@ -1747,7 +1746,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
         assert.equal(dragSource.length, 0, 'Drag source does not exist');
 
-        const pointer = pointerMock($appointment)
+        pointerMock($appointment)
             .start()
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
@@ -1764,14 +1763,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
             assert.equal(appointments.length, 2, 'Phantom appointment exists');
             assert.equal(dragSource.length, 1, 'Drag source exists');
-
-            pointer.up();
-
-            appointments = scheduler.appointments.find(appointmentTitle);
-            dragSource = scheduler.appointments.getDragSource();
-
-            assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
-            assert.equal(dragSource.length, 0, 'Drag source does not exist');
             done();
         });
     });
@@ -1812,7 +1803,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             groups: ['roomId'],
         });
         const schedulerInstance = scheduler.instance;
-        scheduler.drawControl();
 
         const $appointment = scheduler.appointments.find(appointmentTitle).first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
@@ -1823,7 +1813,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(appointments.length, 2, 'Phantom appointment does not exist');
         assert.equal(dragSource.length, 0, 'Drag source does not exist');
 
-        const pointer = pointerMock($appointment)
+        pointerMock($appointment)
             .start()
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
@@ -1840,14 +1830,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
             assert.equal(appointments.length, 3, 'Phantom appointment exists');
             assert.equal(dragSource.length, 1, 'Drag source exists');
-
-            pointer.up();
-
-            appointments = scheduler.appointments.find(appointmentTitle);
-            dragSource = scheduler.appointments.getDragSource();
-
-            assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
-            assert.equal(dragSource.length, 0, 'Drag source does not exist');
             done();
         });
     });
@@ -1873,7 +1855,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             scrolling: { mode: 'virtual' },
         });
         const schedulerInstance = scheduler.instance;
-        scheduler.drawControl();
 
         const $appointment = scheduler.appointments.find(appointmentTitle).first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
@@ -1884,7 +1865,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(appointments.length, 3, 'Phantom appointment does not exist');
         assert.equal(dragSource.length, 0, 'Drag source does not exist');
 
-        const pointer = pointerMock($appointment)
+        pointerMock($appointment)
             .start()
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
@@ -1901,16 +1882,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
             assert.equal(appointments.length, 4, 'Phantom appointment exists');
             assert.equal(dragSource.length, 1, 'Drag source exists');
-
-            pointer.up();
-
-            scheduler.appointmentPopup.dialog.hide();
-
-            appointments = scheduler.appointments.find(appointmentTitle);
-            dragSource = scheduler.appointments.getDragSource();
-
-            assert.equal(appointments.length, 3, 'Phantom appointment does not exist');
-            assert.equal(dragSource.length, 0, 'Drag source does not exist');
             done();
         });
     });
