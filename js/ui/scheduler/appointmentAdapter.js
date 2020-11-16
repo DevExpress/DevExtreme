@@ -11,7 +11,8 @@ const PROPERTY_NAMES = {
     startDateTimeZone: 'startDateTimeZone',
     endDateTimeZone: 'endDateTimeZone',
     recurrenceRule: 'recurrenceRule',
-    recurrenceException: 'recurrenceException'
+    recurrenceException: 'recurrenceException',
+    disabled: 'disabled'
 };
 class AppointmentAdapter {
     constructor(rawAppointment, options) {
@@ -90,7 +91,7 @@ class AppointmentAdapter {
     }
 
     get disabled() {
-        return !!this.rawAppointment.disabled;
+        return this.getField(PROPERTY_NAMES.disabled);
     }
 
     get timeZoneCalculator() {
