@@ -10,8 +10,13 @@ import {
   Effect,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../utils/subscribe_to_event';
-import { StandardRtlCoordinatesConverter, RtlCoordinatesConverter } from './rtl_coordinates_converter';
+import {
+  StandardRtlCoordinatesConverter,
+  RtlCoordinatesConverter,
+  NonStandardRtlCoordinatesConverter,
+} from './rtl_coordinates_converter';
 import { isNumeric } from '../../core/utils/type';
+import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
@@ -116,6 +121,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   @Ref() contentRef!: HTMLDivElement;
 
   @Ref() containerRef!: HTMLDivElement;
+
+  readonly rtlConverter = getScrollRtlBehavior().positive
+    ? new NonStandardRtlCoordinatesConverter()
+    : new StandardRtlCoordinatesConverter();
 
   @Method()
   content(): HTMLDivElement {
@@ -317,5 +326,5 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       : coordinate;
   }
 
-  readonly getConverter = () => new StandardRtlCoordinatesConverter() as RtlCoordinatesConverter;
+  readonly getConverter = () => this.rtlConverter as RtlCoordinatesConverter;
 }
