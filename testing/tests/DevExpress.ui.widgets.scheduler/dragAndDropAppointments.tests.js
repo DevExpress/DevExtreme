@@ -1581,7 +1581,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             text: appointmentTitle,
             startDate: new Date(2020, 10, 16, 10, 30),
             endDate: new Date(2020, 10, 16, 9, 30),
-            recurrenceRule: 'FREQ=DAILY;COUNT=3'
+            recurrenceRule: 'FREQ=DAILY;COUNT=3',
         }];
 
         const scheduler = createWrapper({
@@ -1591,7 +1591,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             currentDate: new Date(2020, 10, 16),
             startDayHour: 9,
             height: 600,
-
         });
 
         let appointments = scheduler.appointments.find(appointmentTitle);
@@ -1660,7 +1659,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     });
 
     test('DnD should work correctly with virtual scrolling while scrolling', function(assert) {
-        // this.clock.restore();
         const done = assert.async();
         const appointmentTitle = 'Appointment';
         const data = [{
@@ -1713,6 +1711,205 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             dragSource = scheduler.appointments.getDragSource();
 
             assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
+            assert.equal(dragSource.length, 0, 'Drag source does not exist');
+            done();
+        });
+    });
+
+    test('Drag Source should be rerendered correctly when virtual scrolling is used', function(assert) {
+        const done = assert.async();
+        const appointmentTitle = 'Appointment';
+        const data = [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 9, 14, 0, 0),
+            endDate: new Date(2020, 9, 14, 0, 5),
+        }];
+
+        const scheduler = createWrapper({
+            height: 600,
+            views: ['day'],
+            currentView: 'day',
+            cellDuration: 1,
+            dataSource: data,
+            currentDate: new Date(2020, 9, 14),
+            showAllDayPanel: false,
+            scrolling: { mode: 'virtual' },
+        });
+        const schedulerInstance = scheduler.instance;
+        scheduler.drawControl();
+
+        const $appointment = scheduler.appointments.find(appointmentTitle).first();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+
+        let appointments = scheduler.appointments.find(appointmentTitle);
+        let dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
+        assert.equal(dragSource.length, 0, 'Drag source does not exist');
+
+        const pointer = pointerMock($appointment)
+            .start()
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(0, 50);
+
+        const { virtualScrollingDispatcher } = schedulerInstance.getWorkSpace();
+        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+        scheduler.instance.scrollTo(new Date(2020, 9, 14, 18)); // Scroll to cause a rerender
+        scheduler.instance.scrollTo(new Date(2020, 9, 14, 0)); // Scroll back to where the appointment was
+
+        realSetTimeout(() => {
+            appointments = scheduler.appointments.find(appointmentTitle);
+            dragSource = scheduler.appointments.getDragSource();
+
+            assert.equal(appointments.length, 2, 'Phantom appointment exists');
+            assert.equal(dragSource.length, 1, 'Drag source exists');
+
+            pointer.up();
+
+            appointments = scheduler.appointments.find(appointmentTitle);
+            dragSource = scheduler.appointments.getDragSource();
+
+            assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
+            assert.equal(dragSource.length, 0, 'Drag source does not exist');
+            done();
+        });
+    });
+
+    test('Drag Source should be rerendered correctly when virtual scrolling and multiple resources are used', function(assert) {
+        const done = assert.async();
+        const appointmentTitle = 'Appointment';
+        const data = [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 9, 14, 0, 0),
+            endDate: new Date(2020, 9, 14, 0, 5),
+            roomId: [1, 2],
+        }];
+
+        const scheduler = createWrapper({
+            height: 600,
+            views: [{
+                type: 'day',
+                groupOrientation: 'horizontal',
+            }],
+            currentView: 'day',
+            cellDuration: 1,
+            dataSource: data,
+            currentDate: new Date(2020, 9, 14),
+            showAllDayPanel: false,
+            scrolling: { mode: 'virtual' },
+            resources: [{
+                fieldExpr: 'roomId',
+                dataSource: [{
+                    text: 'Room 101',
+                    id: 1,
+                }, {
+                    text: 'Room 102',
+                    id: 2,
+                }],
+                label: 'Room'
+            }],
+            groups: ['roomId'],
+        });
+        const schedulerInstance = scheduler.instance;
+        scheduler.drawControl();
+
+        const $appointment = scheduler.appointments.find(appointmentTitle).first();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+
+        let appointments = scheduler.appointments.find(appointmentTitle);
+        let dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, 2, 'Phantom appointment does not exist');
+        assert.equal(dragSource.length, 0, 'Drag source does not exist');
+
+        const pointer = pointerMock($appointment)
+            .start()
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(0, 50);
+
+        const { virtualScrollingDispatcher } = schedulerInstance.getWorkSpace();
+        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+        scheduler.instance.scrollTo(new Date(2020, 9, 14, 18)); // Scroll to cause a rerender
+        scheduler.instance.scrollTo(new Date(2020, 9, 14, 0)); // Scroll back to where the appointment was
+
+        realSetTimeout(() => {
+            appointments = scheduler.appointments.find(appointmentTitle);
+            dragSource = scheduler.appointments.getDragSource();
+
+            assert.equal(appointments.length, 3, 'Phantom appointment exists');
+            assert.equal(dragSource.length, 1, 'Drag source exists');
+
+            pointer.up();
+
+            appointments = scheduler.appointments.find(appointmentTitle);
+            dragSource = scheduler.appointments.getDragSource();
+
+            assert.equal(appointments.length, 1, 'Phantom appointment does not exist');
+            assert.equal(dragSource.length, 0, 'Drag source does not exist');
+            done();
+        });
+    });
+
+    test('Drag Source should be rerendered correctly when virtual scrolling and recurrent appointments are used', function(assert) {
+        const done = assert.async();
+        const appointmentTitle = 'Appointment';
+        const data = [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 16, 0, 0),
+            endDate: new Date(2020, 10, 16, 0, 5),
+            recurrenceRule: 'FREQ=DAILY;COUNT=3',
+        }];
+
+        const scheduler = createWrapper({
+            height: 600,
+            views: ['week'],
+            currentView: 'week',
+            cellDuration: 1,
+            dataSource: data,
+            currentDate: new Date(2020, 10, 16),
+            showAllDayPanel: false,
+            scrolling: { mode: 'virtual' },
+        });
+        const schedulerInstance = scheduler.instance;
+        scheduler.drawControl();
+
+        const $appointment = scheduler.appointments.find(appointmentTitle).first();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+
+        let appointments = scheduler.appointments.find(appointmentTitle);
+        let dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, 3, 'Phantom appointment does not exist');
+        assert.equal(dragSource.length, 0, 'Drag source does not exist');
+
+        const pointer = pointerMock($appointment)
+            .start()
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(0, 50);
+
+        const { virtualScrollingDispatcher } = schedulerInstance.getWorkSpace();
+        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+        scheduler.instance.scrollTo(new Date(2020, 10, 16, 18)); // Scroll to cause a rerender
+        scheduler.instance.scrollTo(new Date(2020, 10, 16, 0)); // Scroll back to where the appointment was
+
+        realSetTimeout(() => {
+            appointments = scheduler.appointments.find(appointmentTitle);
+            dragSource = scheduler.appointments.getDragSource();
+
+            assert.equal(appointments.length, 4, 'Phantom appointment exists');
+            assert.equal(dragSource.length, 1, 'Drag source exists');
+
+            pointer.up();
+
+            scheduler.appointmentPopup.dialog.hide();
+
+            appointments = scheduler.appointments.find(appointmentTitle);
+            dragSource = scheduler.appointments.getDragSource();
+
+            assert.equal(appointments.length, 3, 'Phantom appointment does not exist');
             assert.equal(dragSource.length, 0, 'Drag source does not exist');
             done();
         });
