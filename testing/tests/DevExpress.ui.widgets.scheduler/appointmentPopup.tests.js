@@ -1431,20 +1431,25 @@ QUnit.test('Popup should be readOnly if appointment is disabled', function(asser
 
 [{
     disabled: true,
-    result: true
+    result: true,
+    text: 'disabled is true'
 }, {
     disabled: false,
-    result: false
+    result: false,
+    text: 'disabled is false'
 }, {
-    result: false
+    result: false,
+    text: 'disabled is undefined'
 }, {
     disabled: () => false,
-    result: false
+    result: false,
+    text: 'disabled is function, return false'
 }, {
     disabled: () => true,
-    result: true
+    result: true,
+    text: 'disabled is function, return true'
 }].forEach(testCase => {
-    QUnit.test('Appointment form should be consider disabled property of appointment', function(assert) {
+    QUnit.test(`Appointment form should be consider disabled property of appointment (${testCase.text})`, function(assert) {
         const scheduler = createWrapper({
             dataSource: [],
             views: ['day'],
