@@ -1,6 +1,8 @@
-const $ = require('jquery');
-const SchedulerAppointment = require('ui/scheduler/ui.scheduler.appointment');
-const fx = require('animation/fx');
+import $ from 'jquery';
+import SchedulerAppointment from 'ui/scheduler/ui.scheduler.appointment';
+import fx from 'animation/fx';
+
+const APPOINTMENT_DRAG_SOURCE_CLASS = 'dx-scheduler-appointment-drag-source';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div id="scheduler-appointment"></div>');
@@ -117,4 +119,19 @@ QUnit.test('Scheduler appointment has right resizing handles, horizontal directi
 
     this.instance.option('reduced', 'tail');
     assert.equal(resizableInstance.option('handles'), 'left', 'Appointment has right resizing handle');
+});
+
+QUnit.test('Appointment should process "isDragSource" property', function(assert) {
+    assert.ok(
+        !this.instance.$element().hasClass(APPOINTMENT_DRAG_SOURCE_CLASS),
+        'Appointment is not a drag source by default',
+    );
+
+    this.instance.option('isDragSource', true);
+
+    assert.ok(
+        this.instance.$element().hasClass(APPOINTMENT_DRAG_SOURCE_CLASS),
+        'Appointment is a drag source by',
+    );
+
 });
