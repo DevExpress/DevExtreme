@@ -125,7 +125,8 @@ export class GanttView extends Widget {
             allowTaskUpdate: value.allowTaskUpdating,
             allowResourceDelete: value.allowResourceDeleting,
             allowResourceInsert: value.allowResourceAdding,
-            allowResourceUpdate: value.allowResourceUpdating
+            allowResourceUpdate: value.allowResourceUpdating,
+            allowTaskResourceUpdate: value.allowTaskResourceUpdating
         };
     }
 
