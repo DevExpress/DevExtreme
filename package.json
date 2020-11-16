@@ -28,8 +28,8 @@
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
   "dependencies": {
-    "devexpress-diagram": "2.0.1",
-    "devexpress-gantt": "2.0.2",
+    "devexpress-diagram": "2.0.3",
+    "devexpress-gantt": "2.0.6",
     "jszip": "^2.0.0 || ^3.0.0",
     "devextreme-quill": "^0.9.5",
     "rrule": "2.6.6",
@@ -124,6 +124,7 @@
     "knockout": "^3.4.2",
     "lazypipe": "^1.0.1",
     "lint-staged": "^10.0.7",
+    "looks-same": "^7.2.3",
     "map-stream": "0.0.7",
     "merge-stream": "^2.0.0",
     "minimist": "^1.2.0",

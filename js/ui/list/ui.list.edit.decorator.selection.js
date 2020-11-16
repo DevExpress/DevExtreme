@@ -57,6 +57,7 @@ registerDecorator(
                 focusStateEnabled: false,
                 hoverStateEnabled: false,
                 onValueChanged: (function(e) {
+                    e.event && this._list._saveSelectionChangeEvent(e.event);
                     this._processCheckedState($itemElement, e.value);
                     e.event && e.event.stopPropagation();
                 }).bind(this)
@@ -164,6 +165,7 @@ registerDecorator(
                 return;
             }
 
+            e.event && this._list._saveSelectionChangeEvent(e.event);
             if(isSelectedAll === true) {
                 this._selectAllItems();
             } else if(isSelectedAll === false) {
@@ -194,7 +196,8 @@ registerDecorator(
             this._list._selection.deselectAll(this._list.option('selectAllMode') === 'page');
         },
 
-        _selectAllClickHandler: function() {
+        _selectAllClickHandler: function(e) {
+            this._list._saveSelectionChangeEvent(e);
             this._selectAllCheckBox.option('value', !this._selectAllCheckBox.option('value'));
         },
 

@@ -1343,7 +1343,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             let { groupIndex } = cellData;
 
             if(!groupIndex) {
-                groupIndex = this.option('groups').length && groups
+                groupIndex = this._isGroupsSpecified(groups)
                     ? this._getGroupIndexByResourceId(groups)
                     : 0;
             }
@@ -1367,6 +1367,10 @@ class SchedulerWorkSpace extends WidgetObserver {
         });
 
         this._selectedCells = cells;
+    }
+
+    _isGroupsSpecified(resources) {
+        return this.option('groups').length && resources;
     }
 
     _getGroupIndexByResourceId(id) {
@@ -2293,7 +2297,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _getGroupIndexes(appointmentResources) {
         let result = [];
-        if(appointmentResources && this.option('groups').length) {
+        if(this._isGroupsSpecified(appointmentResources)) {
             const tree = this.invoke('createResourcesTree', this.option('groups'));
             result = this.invoke('getResourceTreeLeaves', tree, appointmentResources);
         }
@@ -3019,7 +3023,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     needUpdateScrollPosition(date, groups, inAllDayRow) {
         const cells = this._getCellsInViewport(inAllDayRow);
-        const groupIndex = groups
+        const groupIndex = this._isGroupsSpecified(groups)
             ? this._getGroupIndexByResourceId(groups)
             : 0;
         const time = date.getTime();

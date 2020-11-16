@@ -322,7 +322,7 @@ class SchedulerAgenda extends SchedulerWorkSpace {
     _attachEvents() { return noop(); }
     _cleanCellDataCache() { return noop(); }
 
-    needRenderDateTimeIndication() {
+    isIndicationAvailable() {
         return false;
     }
 

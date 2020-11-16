@@ -2044,8 +2044,6 @@ const EditingController = modules.ViewController.inherit((function() {
             if(editMode === EDIT_MODE_POPUP) {
                 this._hideEditPopup();
             }
-
-            this._internalState = [];
         },
 
         _hideEditPopup: function() {

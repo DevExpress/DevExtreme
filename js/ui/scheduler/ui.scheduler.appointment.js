@@ -83,7 +83,7 @@ const Appointment = DOMComponent.inherit({
             minHeight: 0,
             minWidth: this.invoke('getCellWidth'),
             step: this.invoke('getResizableStep'),
-            roundStepValue: false
+            roundStepValue: false,
         };
     },
 

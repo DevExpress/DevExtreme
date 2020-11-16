@@ -2993,6 +2993,39 @@ declare module DevExpress.fx {
 }
 declare module DevExpress.pdfExporter {
     /**
+     * [descr:PdfDataGridCell]
+     */
+    export interface PdfDataGridCell {
+        /**
+         * [descr:PdfDataGridCell.column]
+         */
+        column?: DevExpress.ui.dxDataGridColumn;
+        /**
+         * [descr:PdfDataGridCell.data]
+         */
+        data?: any;
+        /**
+         * [descr:PdfDataGridCell.groupIndex]
+         */
+        groupIndex?: number;
+        /**
+         * [descr:PdfDataGridCell.groupSummaryItems]
+         */
+        groupSummaryItems?: Array<{ name?: string, value?: any }>;
+        /**
+         * [descr:PdfDataGridCell.rowType]
+         */
+        rowType?: string;
+        /**
+         * [descr:PdfDataGridCell.totalSummaryItemName]
+         */
+        totalSummaryItemName?: string;
+        /**
+         * [descr:PdfDataGridCell.value]
+         */
+        value?: any;
+    }
+    /**
      * [descr:PdfExportDataGridProps]
      */
     export interface PdfExportDataGridProps {
@@ -3004,6 +3037,10 @@ declare module DevExpress.pdfExporter {
          * [descr:PdfExportDataGridProps.component]
          */
         component?: DevExpress.ui.dxDataGrid;
+        /**
+         * [descr:PdfExportDataGridProps.customizeCell]
+         */
+        customizeCell?: ((options: { gridCell?: PdfDataGridCell, pdfCell?: any }) => any);
         /**
          * [descr:PdfExportDataGridProps.jsPDFDocument]
          */
@@ -7713,7 +7750,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGantt.Options.editing]
          */
-        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
+        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
         /**
          * [descr:dxGantt.Options.firstDayOfWeek]
          */
@@ -8814,6 +8851,10 @@ declare module DevExpress.ui {
      */
     export interface dxMapOptions extends WidgetOptions<dxMap> {
         /**
+         * [descr:dxMap.Options.apiKey]
+         */
+        apiKey?: string | { bing?: string, google?: string, googleStatic?: string };
+        /**
          * [descr:dxMap.Options.autoAdjust]
          */
         autoAdjust?: boolean;
@@ -8835,6 +8876,7 @@ declare module DevExpress.ui {
         height?: number | string | (() => number | string);
         /**
          * [descr:dxMap.Options.key]
+         * @deprecated [depNote:dxMap.Options.key]
          */
         key?: string | { bing?: string, google?: string, googleStatic?: string };
         /**
