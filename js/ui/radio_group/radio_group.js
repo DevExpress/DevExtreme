@@ -279,7 +279,14 @@ class RadioGroup extends Editor {
         } = this.option();
         const isNullSelectable = valueExpr !== 'this';
 
-        this._radios = this._createComponent($radios, RadioCollection, {
+        this._createComponent($radios, RadioCollection, {
+            onInitialized: ({ component }) => {
+                this._radios = component;
+            },
+            onContentReady: (e) => {
+                this._fireContentReadyAction(true);
+            },
+            onItemClick: this._itemClickHandler.bind(this),
             displayExpr,
             accessKey,
             dataSource: this._dataSource,
@@ -287,8 +294,6 @@ class RadioGroup extends Editor {
             itemTemplate,
             keyExpr: this._getCollectionKeyExpr(),
             noDataText: '',
-            onContentReady: () => this._fireContentReadyAction(true),
-            onItemClick: this._itemClickHandler.bind(this),
             scrollingEnabled: false,
             selectionByClick: false,
             selectionMode: 'single',
@@ -347,11 +352,11 @@ class RadioGroup extends Editor {
     }
 
     focus() {
-        this._radios && this._radios.focus();
+        this._radios?.focus();
     }
 
     itemElements() {
-        return this._radios.itemElements();
+        return this._radios?.itemElements();
     }
 }
 
