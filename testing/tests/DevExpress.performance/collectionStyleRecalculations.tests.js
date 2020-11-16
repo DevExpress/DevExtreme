@@ -1,6 +1,7 @@
 require('../../helpers/qunitPerformanceExtension.js');
 
 require('common.css!');
+require('generic_light.css!');
 
 const $ = require('jquery');
 const resizeCallbacks = require('core/utils/resize_callbacks');
@@ -27,7 +28,7 @@ QUnit.performanceTest('dxTabs should force minimum relayout count on creation', 
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 5);
+    assert.measureStyleRecalculation(measureFunction, 3);
 });
 
 QUnit.performanceTest('dxTabs without scrolling should not force relayout on dxshown event', function(assert) {
@@ -50,7 +51,7 @@ QUnit.performanceTest('Accordion should force minimum relayout count on creation
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 10);
+    assert.measureStyleRecalculation(measureFunction, 9);
 });
 
 QUnit.performanceTest('Accordion should force minimum relayout count on selection change', function(assert) {
