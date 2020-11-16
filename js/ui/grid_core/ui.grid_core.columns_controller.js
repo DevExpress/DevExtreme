@@ -2339,7 +2339,7 @@ export default {
                     });
 
                     if(duplicatedNames.length) {
-                        errors.log('E1059', duplicatedNames.toString());
+                        errors.log('E1059', duplicatedNames.join(', '));
                     }
 
                     if(hasEditableColumnWithoutName) {
