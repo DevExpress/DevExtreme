@@ -2114,9 +2114,12 @@ class Scheduler extends Widget {
             targetedAdapter.endDate = info ? info.sourceAppointment.endDate : adapter.endDate;
         }
 
-        element && this.setTargetedAppointmentResources(targetedAdapter.source(), element, appointmentIndex);
+        const rawTargetedAppointment = targetedAdapter.source();
+        if(element) {
+            this.setTargetedAppointmentResources(rawTargetedAppointment, element, appointmentIndex);
+        }
 
-        return targetedAdapter.source();
+        return rawTargetedAppointment;
     }
 
     subscribe(subject, action) {
@@ -2339,10 +2342,10 @@ class Scheduler extends Widget {
                 (startDateTimeStamp < dayTimeStamp && endDateTimeStamp > dayTimeStamp);
     }
 
-    setTargetedAppointmentResources(targetedAppointment, appointmentElement, appointmentIndex) {
+    setTargetedAppointmentResources(rawAppointment, element, appointmentIndex) {
         const groups = this._getCurrentViewOption('groups');
 
-        if(groups && groups.length) {
+        if(groups?.length) {
             const resourcesSetter = this._resourcesManager._dataAccessors.setter;
             const workSpace = this._workSpace;
             let getGroups;
@@ -2355,16 +2358,17 @@ class Scheduler extends Widget {
                 };
 
                 setResourceCallback = function(_, group) {
-                    resourcesSetter[group.name](targetedAppointment, group.id);
+                    resourcesSetter[group.name](rawAppointment, group.id);
                 };
             } else {
                 getGroups = function() {
-                    const setting = $(appointmentElement).data('dxAppointmentSettings') || {}; // TODO: in the future, necessary refactor the engine of determining groups
+                    // TODO: in the future, necessary refactor the engine of determining groups
+                    const setting = utils.dataAccessors.getAppointmentSettings(element) || {};
                     return workSpace.getCellDataByCoordinates({ left: setting.left, top: setting.top }).groups;
                 };
 
                 setResourceCallback = function(field, value) {
-                    resourcesSetter[field](targetedAppointment, value);
+                    resourcesSetter[field](rawAppointment, value);
                 };
             }
 

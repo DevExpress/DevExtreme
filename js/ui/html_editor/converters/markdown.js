@@ -21,6 +21,18 @@ class MarkdownConverter {
         }
 
         this._html2Markdown = new turndown();
+
+        if(this._html2Markdown?.addRule) {
+            this._html2Markdown.addRule('emptyLine', {
+                filter: (element) => {
+                    return element.nodeName.toLowerCase() === 'p' && element.innerHTML === '<br>';
+                },
+                replacement: function() {
+                    return '<br>';
+                }
+            });
+        }
+
         this._markdown2Html = new showdown.Converter({
             simpleLineBreaks: true,
             strikethrough: true
