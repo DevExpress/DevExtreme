@@ -1482,21 +1482,22 @@ QUnit.test('DateTimeIndicator should show correct time in current time zone', fu
         views: ['week'],
         currentView: 'week',
         cellDuration: 60,
+        startDayHour: 8,
         showCurrentTimeIndicator: true,
         currentDate: currentDate,
         indicatorTime: new Date(2018, 1, 4, 9, 30),
         height: 600
     });
-
+    const $initialIndicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(7);
     const indicatorPositionBefore = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
-    const cellHeight = $(this.instance.$element()).find('.dx-scheduler-date-table td').eq(0).get(0).getBoundingClientRect().height;
+    assert.ok($initialIndicationCell.children().eq(0).hasClass('dx-scheduler-date-time-indicator'), 'Indicator was placed in a right cell');
 
     this.instance.option('timeZone', 'Asia/Yekaterinburg');
-
+    const $indicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(21);
     const indicatorPositionAfter = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
-    const tzDiff = this.instance.fire('getClientTimezoneOffset', currentDate) / 3600000 + this.instance.fire('getTimezone');
 
-    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * tzDiff, 'indicator has correct position');
+    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top, 'indicator has correct position');
+    assert.ok($indicationCell.children().eq(0).hasClass('dx-scheduler-date-time-indicator'), 'Indicator was placed in a right cell');
 });
 
 QUnit.test('Tables should take css class after width calculation(T491453)', function(assert) {

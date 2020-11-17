@@ -641,7 +641,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-date-time-indicator {
     background-color: $scheduler-time-indicator-color;
-    position: relative;
+    position: absolute;
     z-index: 1000;
     width: 100%;
     pointer-events: none;
@@ -1801,6 +1801,7 @@ $scheduler-appointment-form-label-padding: 20px;
     border-left: $scheduler-base-border;
     border-right: $scheduler-base-border;
     height: $scheduler-workspace-date-table-cell-height;
+    position: relative;
   }
 
   // stylelint-disable-next-line no-duplicate-selectors
