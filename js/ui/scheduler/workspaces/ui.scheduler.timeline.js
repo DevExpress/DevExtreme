@@ -304,8 +304,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         $indicator.css('left', left);
     }
 
-    _isIndicatorSimple(i) {
-        return this._isVerticalGroupedWorkSpace() && i > 0;
+    _isIndicatorSimple(index) {
+        return this._isVerticalGroupedWorkSpace() && index > 0;
     }
 
     _isVerticalShader() {

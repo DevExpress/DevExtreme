@@ -64,8 +64,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         }
     }
 
-    _isIndicatorSimple(i) {
-        return this.isGroupedByDate() && i > 0;
+    _isIndicatorSimple(index) {
+        return this.isGroupedByDate() && index > 0;
     }
 
     _renderIndicator(date, groupCount) {
