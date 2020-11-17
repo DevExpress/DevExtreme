@@ -99,7 +99,7 @@ const Provider = Class.inherit({
     },
 
     _keyOption: function(providerName) {
-        const key = this._option('key');
+        const key = this._option('apiKey');
 
         return key[providerName] === undefined ? key : key[providerName];
     },

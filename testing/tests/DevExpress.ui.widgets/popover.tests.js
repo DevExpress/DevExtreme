@@ -1035,18 +1035,18 @@ QUnit.module('positioning', () => {
         }
     });
 
-    QUnit.test('popover shading should cover the parent element with absolute position, not target element', function(assert) {
+    QUnit.test('popover shading should cover all window including scrolled space (T945429)', function(assert) {
         fixtures.simple.create();
 
         try {
             const $popover = $('#what');
             const $target = $('#where');
 
-            $popover.css({
-                width: '111px',
-                height: '333px'
-            });
+            $('<div>')
+                .css('height', '2000px')
+                .appendTo('body');
 
+            window.scrollTo(0, $target.offset().top);
             new Popover($popover, {
                 target: $target,
                 visible: true,
@@ -1055,10 +1055,11 @@ QUnit.module('positioning', () => {
 
             const $shader = $('.dx-overlay-shader');
 
-            assert.equal($shader.height(), $popover.height(), 'shading height is equal to height of parent with absolute position');
-            assert.equal($shader.width(), $popover.width(), 'shading width is equal to width of parent with absolute position');
+            assert.roughEqual($shader.height(), $(window).height(), 1.01, 'shader height is equal to window height');
+            assert.roughEqual($shader.width(), $(window).width(), 1.01, 'shader width is equal to window width');
         } finally {
             fixtures.simple.drop();
+            window.scrollTo(0, 0);
         }
     });
 
