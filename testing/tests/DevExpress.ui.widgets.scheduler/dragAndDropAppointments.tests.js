@@ -1693,9 +1693,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             height: 600,
         });
 
-
-        scheduler.drawControl();
-
         scheduler.appointments.compact.click(0);
 
         const appointment = scheduler.appointments.compact.getAppointment();
