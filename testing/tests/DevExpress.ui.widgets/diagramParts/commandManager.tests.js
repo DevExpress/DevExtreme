@@ -25,7 +25,9 @@ const customCommands = [
             'selectAll'
         ]
     },
-    'toolbox'
+    'toolbox',
+    { name: 'zoomLevel' },
+    { name: 'pageSize' }
 ];
 
 const customTabs = [
@@ -88,7 +90,7 @@ QUnit.module('CommandManager', {
     });
     test('custom main toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getMainToolbarCommands(customCommands);
-        assert.equal(commands.length, 12);
+        assert.equal(commands.length, 14);
         assert.equal(commands[6].command, 16);
         assert.equal(commands[6].icon, 'bold');
         assert.equal(commands[6].text, 'Bold');
@@ -107,19 +109,29 @@ QUnit.module('CommandManager', {
     });
     test('custom history toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getHistoryToolbarCommands(customCommands);
-        assert.equal(commands.length, 12);
+        assert.equal(commands.length, 14);
         assert.equal(commands[10].items.length, 2);
         assert.equal(commands[10].items[1].beginGroup, true);
     });
     test('custom view toolbar commands', function(assert) {
         const commands = DiagramCommandsManager.getViewToolbarCommands(customCommands);
-        assert.equal(commands.length, 12);
+        assert.equal(commands.length, 14);
         assert.equal(commands[10].items.length, 2);
         assert.equal(commands[10].items[1].beginGroup, true);
+        assert.equal(commands[11].command, 'toolbox');
+        assert.notEqual(commands[11].iconChecked, undefined);
+        assert.notEqual(commands[11].iconUnchecked, undefined);
+        assert.equal(commands[12].command, 60);
+        assert.equal(commands[12].name, 'zoomLevel');
+        assert.notEqual(commands[12].getEditorDisplayValue, undefined);
+        assert.equal(commands[13].command, 54);
+        assert.equal(commands[13].name, 'pageSize');
+        assert.notEqual(commands[13].getCommandValue, undefined);
+        assert.notEqual(commands[13].getEditorValue, undefined);
     });
     test('custom view toolbar commands with excludes', function(assert) {
         const commands = DiagramCommandsManager.getViewToolbarCommands(customCommands, ['toolbox']);
-        assert.equal(commands.length, 11);
+        assert.equal(commands.length, 13);
         assert.equal(commands[10].items.length, 2);
         assert.equal(commands[10].items[1].beginGroup, true);
     });
@@ -128,7 +140,7 @@ QUnit.module('CommandManager', {
     });
     test('custom context menu commands', function(assert) {
         const commands = DiagramCommandsManager.getContextMenuCommands(customCommands);
-        assert.equal(commands.length, 11);
+        assert.equal(commands.length, 13);
         assert.equal(commands[2].beginGroup, true);
         assert.equal(commands[5].command, 16);
         assert.equal(commands[5].icon, 'bold');
