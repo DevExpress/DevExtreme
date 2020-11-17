@@ -144,66 +144,41 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+        const defaultOptions = extend(this.callBase(), {
             animationEnabled: true,
-
             dataStructure: 'tree',
-
             deferRendering: true,
-
             expandAllEnabled: false,
-
             hasItemsExpr: 'hasItems',
-
             selectNodesRecursive: true,
-
             expandNodesRecursive: true,
-
             showCheckBoxesMode: 'none',
-
             selectAllText: messageLocalization.format('dxList-selectAll'),
-
             onItemSelectionChanged: null,
-
-
             onItemExpanded: null,
-
             onItemCollapsed: null,
-
             scrollDirection: 'vertical',
-
             virtualModeEnabled: false,
-
             rootValue: 0,
-
             focusStateEnabled: false,
-
             selectionMode: 'multiple',
-
             expandEvent: 'dblclick',
-
             selectByClick: false,
-
             createChildren: null,
-
             onSelectAllValueChanged: null
-
 
             /**
             * @name dxTreeViewOptions.selectedItem
             * @hidden
             */
-
             /**
             * @name dxTreeViewOptions.selectedItems
             * @hidden
             */
-
             /**
             * @name dxTreeViewOptions.selectedItemKeys
             * @hidden
             */
-
             /**
             * @name dxTreeViewOptions.selectedIndex
             * @hidden
@@ -213,6 +188,12 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @inherits CollectionWidgetItem
             * @type object
             */
+        });
+
+        return extend(true, defaultOptions, {
+            integrationOptions: {
+                useDeferUpdateForTemplates: false
+            }
         });
     },
 
