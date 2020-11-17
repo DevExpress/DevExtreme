@@ -3742,7 +3742,7 @@ QUnit.module('searchEnabled', moduleSetup, () => {
         this.clock.tick(TIME_TO_WAIT);
     });
 
-    QUnit.test('Unnecessary a load calls do not happen of custom store when item is selected from search results if all selected items are available (T944099)', function(assert) {
+    QUnit.test('TagBox should not request dataSource after item selecting using search when all selected items are available (T944099)', function(assert) {
         const loadStub = sinon.stub().returns([{ id: 1, text: 'item1' }, { id: 2, text: 'item2' }]);
         const instance = $('#tagBox').dxTagBox({
             dataSource: {
