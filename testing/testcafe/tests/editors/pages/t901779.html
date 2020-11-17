@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>T901779</title>
+
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.common.css"/>
+        <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.light.css"/>
+
+        <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+        <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+    </head>
+    <body>
+        <div id="rb"></div>
+        <script>
+            $(function(){
+                let items = [
+                    { id: 1, value: "t1" },
+                    { id: 2, value: "t2" },
+                    { id: 3, value: "t3" }
+                ];
+                const storeOptions = {
+                    key: "id",
+                    loadMode: 'processed',
+                    load(loadOptions) {
+                        return new Promise((resolve) => {
+                            resolve(items);
+                        });
+                    }
+                };
+                const { DataSource, CustomStore } = DevExpress.data;
+                let options = {
+                    dataSource: new DataSource({ store: new CustomStore(storeOptions) }),
+                    valueExpr: 'id',
+                    displayExpr: 'id',
+                    value: null
+                };
+
+                const radioGroup = $("#rb")
+                    .dxRadioGroup(options)
+                    .dxRadioGroup("instance");
+
+                setTimeout(() => {
+                    const newValue2 = 2;
+
+                    options.value = newValue2;
+                    radioGroup.option(options);
+
+                    items = [
+                        { id: 1, value: "t1" },
+                        { id: 2, value: "t2" }
+                    ];
+                    options.dataSource = new DataSource({ store: new CustomStore(storeOptions) });
+                    options.value = newValue2;
+                    radioGroup.option(options);
+                });
+            });
+        </script>
+    </body>
+</html>
