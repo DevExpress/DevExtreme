@@ -483,6 +483,10 @@ const Scrollable = DOMComponent.inherit({
             scrollPosition.left = this.option('rtlEnabled') === true
                 ? leftPosition + $element.width() - this.clientWidth()
                 : leftPosition;
+
+            if(this._isRtlNativeStrategy()) {
+                scrollPosition.left += this._getMaxLeftOffset();
+            }
         }
         if(direction !== HORIZONTAL) {
             scrollPosition.top = this._elementPositionRelativeToContent($element, 'top');

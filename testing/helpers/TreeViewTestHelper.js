@@ -125,8 +125,13 @@ class TreeViewTestWrapper {
         }
 
         if(scrollDirection === 'horizontal' || scrollDirection === 'both') {
-            assert.equal(itemTextRect.left >= treeViewRect.left && itemTextRect.left <= treeViewRect.right, true, ` horizontal item ${itemKey} left location ${itemTextRect.left} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
-            assert.equal(itemTextRect.right >= treeViewRect.left && itemTextRect.right <= treeViewRect.right, true, ` horizontal item ${itemKey} right location ${itemTextRect.right} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
+            const { useNative, rtlEnabled } = this.getInstance()._scrollableContainer.option();
+            const scrollBarWidth = this.getInstance()._scrollableContainer._container().get(0).offsetWidth - this.getInstance()._scrollableContainer._container().get(0).clientWidth;
+
+            const itemTextRectLeft = Math.round(itemTextRect.left);
+            const itemTextRectRight = Math.round(itemTextRect.right - (useNative && rtlEnabled ? scrollBarWidth : 0));
+            assert.equal(itemTextRectLeft >= treeViewRect.left && itemTextRectLeft <= treeViewRect.right, true, ` horizontal item ${itemKey} left location ${itemTextRectLeft} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
+            assert.equal(itemTextRectRight >= treeViewRect.left && itemTextRectRight <= treeViewRect.right, true, ` horizontal item ${itemKey} right location ${itemTextRectRight} must be between ${treeViewRect.left} and ${treeViewRect.right}`);
         }
     }
 

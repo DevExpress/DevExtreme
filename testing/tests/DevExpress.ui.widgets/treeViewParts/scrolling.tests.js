@@ -2,7 +2,19 @@ import TreeViewTestWrapper from '../../../helpers/TreeViewTestHelper.js';
 import browser from 'core/utils/browser';
 import $ from 'jquery';
 
-QUnit.module('scrollToItem', () => {
+import 'common.css!';
+import 'generic_light.css!';
+
+QUnit.module('scrollToItem', {
+    beforeEach: function() {
+        this.nativeScrollableStyleElement = $('<style id="scrollableRtlStyles"></style>').get(0);
+        this.nativeScrollableStyleElement.innerHTML = '.dx-treeview-node-container { overflow: visible;}';
+    },
+    afterEach: function() {
+        $('#scrollableRtlStyles').remove();
+        delete this.nativeScrollableStyleElement;
+    }
+}, () => {
     if(browser.msie) {
         return;
     }
@@ -51,13 +63,16 @@ QUnit.module('scrollToItem', () => {
         [false, true].forEach(expanded => {
             [false, true].forEach(disabled => {
                 [false, true].forEach(rtlEnabled => {
-                    configs.push({
-                        expanded,
-                        scrollDirection,
-                        disabled,
-                        rtlEnabled,
-                        keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'],
-                        description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}`
+                    [false, true].forEach(useNative => {
+                        configs.push({
+                            expanded,
+                            scrollDirection,
+                            disabled,
+                            rtlEnabled,
+                            useNative,
+                            keysToScroll: ['item1', 'item1_1_1', 'item9', 'item9_1_1_1_1', 'item10', 'item10_1_1_1_1_1'],
+                            description: `expanded: ${expanded}, rtlEnabled: ${rtlEnabled}, disabled: ${disabled}, scrollDirection: ${scrollDirection}, useNative: ${useNative}`
+                        });
                     });
                 });
             });
@@ -70,9 +85,14 @@ QUnit.module('scrollToItem', () => {
                 let completionCallback = null;
                 let isFirstContentReadyEvent = true;
                 const options = $.extend({}, config, {
-                    onContentReady: function(e) {
+                    onContentReady: (e) => {
                         if(isFirstContentReadyEvent) {
                             isFirstContentReadyEvent = false;
+
+                            if(config.useNative) {
+                                document.body.appendChild(this.nativeScrollableStyleElement);
+                                e.component._scrollableContainer.option('useNative', true);
+                            }
                             completionCallback = e.component.scrollToItem(key);
                         }
                     }
@@ -98,13 +118,28 @@ QUnit.module('scrollToItem', () => {
 
         [{ top: 0, left: 0 }, { top: 1000, left: 0 }, { top: 0, left: 1000 }, { top: 1000, left: 1000 }].forEach(initialPosition => {
             QUnit.test(`config:${config.description}, initialPosition: ${JSON.stringify(initialPosition)} -> scrollToItem() -> focusOut() -> focusIn()`, function(assert) {
-                const options = $.extend({}, config, { initialPosition });
+                let isFirstContentReadyEvent = true;
+                const options = $.extend({}, config, {
+                    initialPosition, onContentReady: (e) => {
+                        if(isFirstContentReadyEvent) {
+                            isFirstContentReadyEvent = false;
+
+                            if(config.useNative) {
+                                document.body.appendChild(this.nativeScrollableStyleElement);
+                                e.component._scrollableContainer.option('useNative', true);
+                            }
+                        }
+                    }
+                });
                 const wrapper = createWrapper(options, createDataSource(config.expanded, config.disabled));
                 config.keysToScroll.forEach(key => {
                     const completionCallback = wrapper.instance.scrollToItem(key);
                     const done = assert.async();
                     if(isNotSupported(key, config)) {
-                        completionCallback.fail(() => { assert.ok('scroll must fail'); done(); });
+                        completionCallback.fail(() => {
+                            assert.ok('scroll must fail');
+                            done();
+                        });
                     } else {
                         completionCallback.done(() => {
                             wrapper.getElement().focusout();
