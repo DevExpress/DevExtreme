@@ -786,7 +786,9 @@ const DiagramCommandsManager = {
                     getParameter: internalCommand && internalCommand.getParameter,
                     getCommandValue: internalCommand && internalCommand.getCommandValue,
                     getEditorValue: internalCommand && internalCommand.getEditorValue,
-                    getEditorDisplayValue: internalCommand && internalCommand.getEditorDisplayValue
+                    getEditorDisplayValue: internalCommand && internalCommand.getEditorDisplayValue,
+                    iconChecked: internalCommand && internalCommand.iconChecked,
+                    iconUnchecked: internalCommand && internalCommand.iconUnchecked
                 };
                 if(Array.isArray(c.items)) {
                     command.items = this._getPreparedCommands(allCommands, c.items);
