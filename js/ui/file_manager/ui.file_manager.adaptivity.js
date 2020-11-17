@@ -92,8 +92,10 @@ class FileManagerAdaptivityControl extends Widget {
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
             $(this._drawer.content()).toggleClass(DRAWER_PANEL_CONTENT_ADAPTIVE, this._isInAdaptiveState);
-            this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
+        }
+        if(this._isInAdaptiveState) {
+            this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
         }
     }
 
