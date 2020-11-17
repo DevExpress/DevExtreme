@@ -4458,4 +4458,50 @@ QUnit.module('Editing state', baseModuleConfig, () => {
             assert.deepEqual(dataGrid.option('editing.changes'), [], 'changes are reset');
         });
     });
+
+    ['Row', 'Form', 'Popup', 'Cell', 'Batch'].forEach(editMode => {
+        ['changes', 'editRowKey', 'editColumnName'].forEach(editingOption => {
+            QUnit.test(`${editMode} - Changing the editing.${editingOption} option should not raise the onToolbarPreparing event (T949025)`, function(assert) {
+                // arrange
+                const onToolbarPreparingSpy = sinon.spy();
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: [{ id: 1, field: 'field' }],
+                    keyExpr: 'id',
+                    editing: {
+                        allowUpdating: true,
+                        allowAdding: true,
+                        mode: editMode.toLowerCase()
+                    },
+                    loadingTimeout: undefined,
+                    onToolbarPreparing: onToolbarPreparingSpy
+                }).dxDataGrid('instance');
+
+                // assert
+                assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing should be called initially');
+
+                // act
+                let optionValue;
+                switch(editingOption) {
+                    case 'changes': {
+                        optionValue = [{ type: 'update', key: 1, data: { field: 'new value' } }];
+                        break;
+                    }
+                    case 'editRowKey': {
+                        optionValue = 1;
+                        break;
+                    }
+                    case 'editColumnName': {
+                        optionValue = 'field';
+                        break;
+                    }
+
+                }
+                dataGrid.option(`editing.${editingOption}`, optionValue);
+                this.clock.tick();
+
+                // assert
+                assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing should not be called on option change');
+            });
+        });
+    });
 });
