@@ -42,7 +42,7 @@ class FileManagerAdaptivityControl extends Widget {
         if(isFunction(contentRenderer)) {
             contentRenderer($drawerContent);
         }
-        this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
+        this._updateDrawerMaxSize();
     }
 
     _createDrawerTemplate(container) {
@@ -76,8 +76,12 @@ class FileManagerAdaptivityControl extends Widget {
 
     _setDrawerWidth(width) {
         $(this._drawer.content()).css('width', width);
-        this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
+        this._updateDrawerMaxSize();
         this._drawer.resizeViewContent();
+    }
+
+    _updateDrawerMaxSize() {
+        this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
     }
 
     _dimensionChanged(dimension) {
@@ -91,16 +95,19 @@ class FileManagerAdaptivityControl extends Widget {
         this._isInAdaptiveState = this._isSmallScreen();
         if(oldState !== this._isInAdaptiveState) {
             this.toggleDrawer(!this._isInAdaptiveState, true);
-            $(this._drawer.content()).toggleClass(DRAWER_PANEL_CONTENT_ADAPTIVE, this._isInAdaptiveState);
             this._raiseAdaptiveStateChanged(this._isInAdaptiveState);
         }
-        if(this._isInAdaptiveState) {
-            this._drawer.option('maxSize', this._drawer.getRealPanelWidth());
+        if(this._isInAdaptiveState && this._isDrawerOpened()) {
+            this._updateDrawerMaxSize();
         }
     }
 
     _isSmallScreen() {
         return $(window).width() <= ADAPTIVE_STATE_SCREEN_WIDTH;
+    }
+
+    _isDrawerOpened() {
+        return this._drawer.option('opened');
     }
 
     _initActions() {
@@ -144,8 +151,9 @@ class FileManagerAdaptivityControl extends Widget {
     toggleDrawer(showing, skipAnimation) {
         this._drawer.option('animationEnabled', !skipAnimation);
         this._drawer.toggle(showing);
-        const isSplitterActive = this._drawer.option('opened') && !this.isInAdaptiveState();
+        const isSplitterActive = this._isDrawerOpened() && !this.isInAdaptiveState();
         this._splitter.toggleState(isSplitterActive);
+        $(this._drawer.content()).toggleClass(DRAWER_PANEL_CONTENT_ADAPTIVE, showing);
     }
 }
 
