@@ -479,7 +479,14 @@ QUnit.test('Appointment tooltip should be hidden when drag is started', function
             startDate: new Date(2015, 1, 9, 8),
             endDate: new Date(2015, 1, 9, 9)
         },
-        settings: [{ info: { appointment: {} } }]
+        settings: [{
+            info: {
+                appointment: {
+                    startDate: new Date(2015, 1, 9, 8),
+                    endDate: new Date(2015, 1, 9, 9),
+                },
+            },
+        }],
     };
 
     this.instance.option({
