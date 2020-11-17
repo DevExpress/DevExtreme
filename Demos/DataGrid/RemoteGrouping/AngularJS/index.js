@@ -18,12 +18,6 @@ DemoApp.controller('DemoController', function DemoController($scope) {
         groupPanel: {
             visible: true
         },
-        summary: {
-            groupItems: [{
-                column: "Id",
-                summaryType: "count"
-            }]
-        },
         columns: [{
             dataField: "Id",
             dataType: "number",
