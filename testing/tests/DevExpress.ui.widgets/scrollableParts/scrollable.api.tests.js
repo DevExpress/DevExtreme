@@ -767,7 +767,7 @@ class ScrollableTestHelper {
 
                 const expectedTopOffset = direction !== 'horizontal' ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') : 0;
 
-                helper.checkScrollOffset({ left: 0, top: -expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: 0, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
 
             QUnit.test(`Scroll from left to right, direction: ${direction}, rtlEnabled: false`, function() {
@@ -780,7 +780,7 @@ class ScrollableTestHelper {
 
                 const expectedLeftOffset = direction !== 'vertical' ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') : 0;
 
-                helper.checkScrollOffset({ left: -expectedLeftOffset, top: 0, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: expectedLeftOffset, top: 0, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
 
             QUnit.test(`Scroll from bottom to top, direction: ${direction}, rtlEnabled: false`, function() {
@@ -796,7 +796,7 @@ class ScrollableTestHelper {
 
                 const expectedTopOffset = direction !== 'horizontal' ? elementOffset.top : 0;
 
-                helper.checkScrollOffset({ left: 0, top: -expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: 0, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
 
             QUnit.test(`Scroll from right to left, direction: ${direction}, rtlEnabled: false`, function() {
@@ -812,7 +812,7 @@ class ScrollableTestHelper {
 
                 const expectedLeftOffset = direction !== 'vertical' ? elementOffset.left : 0;
 
-                helper.checkScrollOffset({ left: -expectedLeftOffset, top: 0, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: expectedLeftOffset, top: 0, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
 
             QUnit.test(`Scroll from left-top to right-bottom, direction: ${direction}, rtlEnabled: false`, function() {
@@ -827,7 +827,7 @@ class ScrollableTestHelper {
                 const expectedTopOffset = direction !== 'horizontal' ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') : 0;
                 const expectedLeftOffset = direction !== 'vertical' ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') : 0;
 
-                helper.checkScrollOffset({ left: -expectedLeftOffset, top: -expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
 
             QUnit.test(`Scroll from left-bottom to right-top, direction: ${direction}, rtlEnabled: false`, function() {
@@ -845,7 +845,7 @@ class ScrollableTestHelper {
                 const expectedTopOffset = direction !== 'horizontal' ? elementOffset.top : 0;
                 const expectedLeftOffset = direction !== 'vertical' ? helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width') : 0;
 
-                helper.checkScrollOffset({ left: -expectedLeftOffset, top: -expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
 
             QUnit.test(`Scroll from right-bottom to left-top, direction: ${direction}, rtlEnabled: false`, function() {
@@ -863,7 +863,7 @@ class ScrollableTestHelper {
                 const expectedTopOffset = direction !== 'horizontal' ? elementOffset.top : 0;
                 const expectedLeftOffset = direction !== 'vertical' ? elementOffset.left : 0;
 
-                helper.checkScrollOffset({ left: -expectedLeftOffset, top: -expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
 
             QUnit.test(`Scroll from right-top to left-bottom, direction: ${direction}, rtlEnabled: false`, function() {
@@ -881,7 +881,7 @@ class ScrollableTestHelper {
                 const expectedTopOffset = direction !== 'horizontal' ? helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height') : 0;
                 const expectedLeftOffset = direction !== 'vertical' ? elementOffset.left : 0;
 
-                helper.checkScrollOffset({ left: -expectedLeftOffset, top: -expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
 
             QUnit.test('Scroll from left to right, bottom border on scrollbar, direction: both, rtlEnabled: false', function() {
@@ -899,7 +899,7 @@ class ScrollableTestHelper {
                 const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width');
                 const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height');
 
-                helper.checkScrollOffset({ left: -expectedLeftOffset, top: -expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
 
             QUnit.test('Scroll from top to bottom, right border on scrollbar, direction: both, rtlEnabled: false', function() {
@@ -916,7 +916,7 @@ class ScrollableTestHelper {
                 const expectedLeftOffset = helper.$container.get(0).offsetWidth + elementWidth + helper.getScrollbarSize('Width');
                 const expectedTopOffset = helper.$container.get(0).offsetHeight + elementHeight + helper.getScrollbarSize('Height');
 
-                helper.checkScrollOffset({ left: -expectedLeftOffset, top: -expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
+                helper.checkScrollOffset({ left: expectedLeftOffset, top: expectedTopOffset, maxScrollOffset: helper.getMaxScrollOffset().horizontal });
             });
         });
     });
