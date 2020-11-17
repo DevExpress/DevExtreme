@@ -470,6 +470,8 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 }
 
+// TODO: highlighted appointment mixin
+
 @mixin dx-scheduler-appointment-focused-mixin() {
   &.dx-state-focused {
     box-shadow: none;

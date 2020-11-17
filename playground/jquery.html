@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css" />
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.contrast.compact.css" /> -->
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
 
@@ -27,15 +29,98 @@
     <!-- RENOVATION -->
     <!-- <script type="text/javascript" src="../artifacts/js-renovation/dx.all.debug.js" charset="utf-8"></script> -->
 </head>
+
 <body>
+    <div id="scheduler"></div>
     <div id="button"></div>
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
+        var priorityData = [
+            {
+                text: "Low Priority",
+                id: 1,
+                color: "#1e90ff"
+            }, {
+                text: "High Priority",
+                id: 2,
+                color: "#ff9747"
+            }
+        ];
+        var data = [{
+            text: "Website Re-Design Plan",
+            priorityId: [1, 2],
+            // startDate: new Date(2020, 10, 2, 9, 30),
+            // endDate: new Date(2020, 10, 3, 9, 20),
+            startDate: new Date(2020, 10, 2, 9, 30),
+            endDate: new Date(2020, 10, 2, 11, 15),
+            // recurrenceRule: 'FREQ=DAILY',
+        }];
+
+        const views = ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'];
+    const appointmentTitle = 'App';
+    const getDataSource = () => [{
+        text: appointmentTitle,
+        start: new Date(2020, 10, 14, 9, 30),
+        end: new Date(2020, 10, 14, 11, 30)
+    }];
+    let scheduler;
+    let counter = 0;
+
+        $(function () {
+            scheduler = $("#scheduler").dxScheduler({
+                // dataSource: data,
+                // views: [{
+                //     type: "workWeek",
+                //     name: "Vertical Grouping",
+                //     groupOrientation: "vertical",
+                //     cellDuration: 15,
+                //     // intervalCount: 2
+                // }, {
+                //     type: "week",
+                //     name: "Vertihorcal Grouping",
+                //     groupOrientation: "vertical",
+                //     cellDuration: 15,
+                //     // intervalCount: 2
+                // }],
+                // currentView: "Vertical Grouping",
+                // crossScrollingEnabled: true,
+                // currentDate: new Date(2020, 10, 2),
+                // startDayHour: 9,
+                // endDayHour: 13,
+                // groups: ["priorityId"],
+                // resources: [
+                //     {
+                //         fieldExpr: "priorityId",
+                //         allowMultiple: false,
+                //         dataSource: priorityData,
+                //         label: "Priority"
+                //     }
+                // ],
+                // showCurrentTimeIndicator: false,
+                // showAllDayPanel: true,
+                // height: 600,
+                // // scrolling: { mode: 'virtual' },
+
+                views: views,
+                currentView: views[0],
+                dataSource: getDataSource(),
+                currentDate: new Date(2020, 10, 14),
+                startDayHour: 9,
+                height: 600,
+                startDateExpr: 'start',
+                endDateExpr: 'end',
+        }).dxScheduler('instance');
+        $("#button").dxButton({
+            text: 'Click',
+            onClick: () => {
+                counter += 1;
+                scheduler.option('currentView', views[counter]);
+                scheduler.option('dataSource', getDataSource());
+            }
         });
+
+    });
+
     </script>
 </body>
+
 </html>
