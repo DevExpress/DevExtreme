@@ -1535,7 +1535,8 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     };
 
     const checkVirtualAppointmentDragging = (
-        assert, done, scheduler, appointmentTitle, appointmentCount,
+        assert, done, scheduler, appointmentTitle,
+        appointmentCount, appointmentCountAfterDND, isCloseDialog = false,
     ) => {
         const schedulerInstance = scheduler.instance;
 
@@ -1553,20 +1554,33 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
 
-        const { virtualScrollingDispatcher } = schedulerInstance.getWorkSpace();
+        const workSpace = schedulerInstance.getWorkSpace();
+
+        const { virtualScrollingDispatcher } = workSpace;
         virtualScrollingDispatcher.getRenderTimeout = () => -1;
 
-        scheduler.instance.scrollTo(new Date(2020, 9, 14, 18)); // Scroll to cause a rerender
-        scheduler.instance.scrollTo(new Date(2020, 9, 14, 0)); // Scroll back to where the appointment was
+        // Cause rerender of the grid and appointments
+        virtualScrollingDispatcher._updateRender();
 
-        realSetTimeout(() => {
-            appointments = scheduler.appointments.find(appointmentTitle);
-            dragSource = scheduler.appointments.getDragSource();
+        appointments = scheduler.appointments.find(appointmentTitle);
+        dragSource = scheduler.appointments.getDragSource();
 
-            assert.equal(appointments.length, appointmentCount + 1, 'Phantom appointment exists');
-            assert.equal(dragSource.length, 1, 'Drag source exists');
-            done();
-        });
+        assert.equal(appointments.length, appointmentCount + 1, 'Phantom appointment exists');
+        assert.equal(dragSource.length, 1, 'Drag source exists');
+
+        const draggedAppointment = $(appointments[0]).parent();
+        const nextPointer = pointerMock(draggedAppointment);
+        nextPointer.up();
+
+        isCloseDialog && scheduler.appointmentPopup.dialog.hide();
+
+        appointments = scheduler.appointments.find(appointmentTitle);
+        dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, appointmentCountAfterDND, 'Phantom appointment exists');
+        assert.equal(dragSource.length, 0, 'Drag source exists');
+
+        done();
     };
 
     QUnit.test('A phantom appointment should be created on appointment dragging', function(assert) {
@@ -1858,7 +1872,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             scrolling: { mode: 'virtual' },
         });
 
-        checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 1);
+        checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 1, 1);
     });
 
     test('Drag Source should be rerendered correctly when virtual scrolling and multiple resources are used', function(assert) {
@@ -1897,7 +1911,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             groups: ['roomId'],
         });
 
-        checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 2);
+        checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 2, 1);
     });
 
     test('Drag Source should be rerendered correctly when virtual scrolling and recurrent appointments are used', function(assert) {
@@ -1921,6 +1935,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             scrolling: { mode: 'virtual' },
         });
 
-        checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 3);
+        checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 3, 3, true);
     });
 });
