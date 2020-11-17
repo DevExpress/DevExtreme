@@ -110,6 +110,9 @@ const ACTION_OPTION_NAMES = {
 const BUTTON_NAMES = ['edit', 'save', 'cancel', 'delete', 'undelete'];
 
 const EDITING_POPUP_OPTION_NAME = 'editing.popup';
+const EDITING_CHANGES_OPTION_NAME = 'editing.changes';
+const EDITING_EDITROWKEY_OPTION_NAME = 'editing.editRowKey';
+const EDITING_EDITCOLUMNNAME_OPTION_NAME = 'editing.editColumnName';
 
 const createFailureHandler = function(deferred) {
     return function(arg) {
@@ -282,19 +285,19 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._internalState = [];
             }
 
-            this.component._optionsByReference['editing.editRowKey'] = true;
-            this.component._optionsByReference['editing.changes'] = true;
+            this.component._optionsByReference[EDITING_EDITROWKEY_OPTION_NAME] = true;
+            this.component._optionsByReference[EDITING_CHANGES_OPTION_NAME] = true;
         },
 
         getChanges: function() {
-            return this.option('editing.changes');
+            return this.option(EDITING_CHANGES_OPTION_NAME);
         },
 
         resetChanges: function() {
             const changes = this.getChanges();
             const needReset = changes?.length;
             if(needReset) {
-                this._silentOption('editing.changes', []);
+                this._silentOption(EDITING_CHANGES_OPTION_NAME, []);
             }
         },
 
@@ -532,7 +535,7 @@ const EditingController = modules.ViewController.inherit((function() {
             let columnIndex;
 
             if(getEditMode(this) === EDIT_MODE_FORM && firstFormItem) {
-                const editRowKey = this.option('editing.editRowKey');
+                const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
                 const editRowIndex = this._dataController.getRowIndexByKey(editRowKey);
                 const $editFormElements = this._rowsView.getCellElements(editRowIndex);
                 columnIndex = this._rowsView._getEditFormEditorVisibleIndex($editFormElements, firstFormItem.column);
@@ -600,11 +603,11 @@ const EditingController = modules.ViewController.inherit((function() {
                     }
                 } else if(editPopup && editPopup.option('visible') && fullName.indexOf('editing.form') === 0) {
                     this._repaintEditPopup();
-                } else if(fullName === 'editing.editRowKey') {
+                } else if(fullName === EDITING_EDITROWKEY_OPTION_NAME) {
                     this._handleEditRowKeyChange(args);
-                } else if(fullName === 'editing.editColumnName') {
+                } else if(fullName === EDITING_EDITCOLUMNNAME_OPTION_NAME) {
                     this._handleEditColumnNameChange(args);
-                } else if(fullName === 'editing.changes') {
+                } else if(fullName === EDITING_CHANGES_OPTION_NAME) {
                     this._handleChangesChange(args);
                 } else {
                     this.init();
@@ -689,7 +692,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 this.resetChanges();
                 this.init();
                 // TODO this condition is for T733748
-                if(isDefined(this.option('editing.editRowKey'))) {
+                if(isDefined(this.option(EDITING_EDITROWKEY_OPTION_NAME))) {
                     this._resetEditRowKey();
                 }
             } else if(needResetIndexes) {
@@ -699,8 +702,8 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         isEditing: function() {
-            const isEditRowKeyDefined = isDefined(this.option('editing.editRowKey'));
-            const isEditColumnNameDefined = isDefined(this.option('editing.editColumnName'));
+            const isEditRowKeyDefined = isDefined(this.option(EDITING_EDITROWKEY_OPTION_NAME));
+            const isEditColumnNameDefined = isDefined(this.option(EDITING_EDITCOLUMNNAME_OPTION_NAME));
 
             if(this.isCellOrBatchEditMode()) {
                 return isEditRowKeyDefined && isEditColumnNameDefined;
@@ -716,9 +719,9 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _setEditRowKey: function(value, silent) {
             if(silent) {
-                this._silentOption('editing.editRowKey', value);
+                this._silentOption(EDITING_EDITROWKEY_OPTION_NAME, value);
             } else {
-                this.option('editing.editRowKey', value);
+                this.option(EDITING_EDITROWKEY_OPTION_NAME, value);
             }
         },
 
@@ -1069,7 +1072,7 @@ const EditingController = modules.ViewController.inherit((function() {
         _beforeUpdateItems: function() { },
 
         _getVisibleEditColumnIndex: function() {
-            const editColumnName = this.option('editing.editColumnName');
+            const editColumnName = this.option(EDITING_EDITCOLUMNNAME_OPTION_NAME);
 
             if(!isDefined(editColumnName)) {
                 return -1;
@@ -1085,9 +1088,9 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _setEditColumnName: function(name, silent) {
             if(silent) {
-                this._silentOption('editing.editColumnName', name);
+                this._silentOption(EDITING_EDITCOLUMNNAME_OPTION_NAME, name);
             } else {
-                this.option('editing.editColumnName', name);
+                this.option(EDITING_EDITCOLUMNNAME_OPTION_NAME, name);
             }
         },
 
@@ -1096,7 +1099,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         _getEditColumn: function() {
-            const editColumnName = this.option('editing.editColumnName');
+            const editColumnName = this.option(EDITING_EDITCOLUMNNAME_OPTION_NAME);
 
             return this._getColumnByName(editColumnName);
         },
@@ -1117,7 +1120,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
         _getVisibleEditRowIndex: function(columnName) {
             const dataController = this._dataController;
-            const editRowKey = this.option('editing.editRowKey');
+            const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
             const rowIndex = dataController.getRowIndexByKey(editRowKey);
 
             if(rowIndex === -1) {
@@ -1332,7 +1335,7 @@ const EditingController = modules.ViewController.inherit((function() {
                 this._removeInternalData(changes[index].key);
 
                 changes.splice(index, 1);
-                this._silentOption('editing.changes', changes);
+                this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
             }
         },
 
@@ -1756,7 +1759,7 @@ const EditingController = modules.ViewController.inherit((function() {
             }
 
             if(changes.length < changesLength) {
-                this._silentOption('editing.changes', changes);
+                this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
             }
 
             return hasSavedData;
@@ -2355,7 +2358,7 @@ const EditingController = modules.ViewController.inherit((function() {
 
             changes[index] = change;
 
-            this._silentOption('editing.changes', changes);
+            this._silentOption(EDITING_CHANGES_OPTION_NAME, changes);
 
             return index;
         },
@@ -2769,7 +2772,7 @@ export default {
                 },
                 _updateEditRow: function(items) {
                     const editingController = this._editingController;
-                    const editRowKey = this.option('editing.editRowKey');
+                    const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
                     const editRowIndex = gridCoreUtils.getIndexByKey(editRowKey, items);
                     const editItem = items[editRowIndex];
 
@@ -3117,10 +3120,10 @@ export default {
                     const fullName = args.fullName;
                     switch(args.name) {
                         case 'editing': {
-                            const isEditingPopupOption = fullName && fullName.indexOf(EDITING_POPUP_OPTION_NAME) === 0;
-                            if(!isEditingPopupOption) {
-                                this._invalidate();
-                            }
+                            const excludedOptions = [EDITING_POPUP_OPTION_NAME, EDITING_CHANGES_OPTION_NAME, EDITING_EDITCOLUMNNAME_OPTION_NAME, EDITING_EDITROWKEY_OPTION_NAME];
+                            const shouldInvalidate = fullName && !excludedOptions.some(optionName => optionName === fullName);
+
+                            shouldInvalidate && this._invalidate();
                             this.callBase(args);
                             break;
                         }
