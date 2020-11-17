@@ -5224,7 +5224,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             assert.equal(focusedRowChangedCount, 1, 'onFocusedRowChanged fires count');
         });
 
-        QUnit.testInActiveWindow('onFocusedRowChanged event should fire if \'focusedRowKey\' is null', function(assert) {
+        QUnit.testInActiveWindow('onFocusedRowChanged event should not fire if \'focusedRowKey\' is null', function(assert) {
         // arrange, act
             let focusedRowChangedCount = 0;
 
@@ -5253,7 +5253,7 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             this.clock.tick();
 
             // assert
-            assert.equal(focusedRowChangedCount, 2, 'onFocusedRowChanged fires count');
+            assert.equal(focusedRowChangedCount, 1, 'onFocusedRowChanged fires count');
         });
 
         QUnit.testInActiveWindow('onFocusedRowChanged event should fire only once if row focused and fixed columns enabled (T729593)', function(assert) {
@@ -5783,6 +5783,37 @@ QUnit.module('Focused row', getModuleConfig(true), () => {
             assert.equal(this.option('focusedRowKey'), undefined, 'focusedRowKey');
             assert.equal(this.option('focusedRowIndex'), -1, 'focusedRowIndex');
             assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, this.option('focusedRowIndex'), 'Keyboard navigation focused row index');
+        });
+
+        // T948636
+        QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowKey is set to null', function(assert) {
+            // arrange
+            const onFocusedRowChanged = sinon.spy();
+
+            this.options = {
+                keyExpr: 'name',
+                focusedRowEnabled: true,
+                focusedRowIndex: 1,
+                onFocusedRowChanged
+            };
+
+            this.setupModule();
+            addOptionChangedHandlers(this);
+            this.gridView.render($('#container'));
+            this.clock.tick();
+
+            // assert
+            const rowsView = this.gridView.getView('rowsView');
+            assert.ok($(rowsView.getRow(1)).hasClass('dx-row-focused'), 'focused row');
+            assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, this.option('focusedRowIndex'), 'Keyboard navigation focused row index');
+
+            // act
+            this.option('focusedRowKey', null);
+
+            // assert
+            assert.equal(onFocusedRowChanged.callCount, 1, 'Focused row calls count');
+            assert.notOk($(rowsView.getRow(1)).hasClass('dx-row-focused'), 'no focused row');
+            assert.equal(this.option('focusedRowIndex'), -1, 'focusedRowIndex');
         });
 
         QUnit.testInActiveWindow('DataGrid should reset focused row if focusedRowIndex is set to < 0', function(assert) {
