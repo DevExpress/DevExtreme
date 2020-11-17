@@ -800,6 +800,45 @@ module('Common', commonModuleConfig, () => {
         const data = scheduler.instance.option('dataSource')[1];
         assert.ok(data.allDay, 'second appointment - allDay is true');
     });
+
+    // T938908
+    test('Appointment dragged from tooltip should have correct css', function(assert) {
+        const scheduler = createWrapper({
+            dataSource: [{
+                text: 'App 1',
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            }, {
+                text: 'App 2',
+                startDate: new Date(2018, 4, 21, 9, 30),
+                endDate: new Date(2018, 4, 21, 11, 30)
+            }],
+            height: 600,
+            views: [{ type: 'day', maxAppointmentsPerCell: 1 }],
+            currentDate: new Date(2018, 4, 21),
+            startDayHour: 9,
+            endDayHour: 16
+        });
+
+        scheduler.appointments.compact.click(0);
+
+        const appointment = scheduler.appointments.compact.getAppointment();
+        const appointmentPosition = getAbsolutePosition(appointment);
+
+        const pointer = pointerMock(appointment).start();
+
+        pointer
+            .down(appointmentPosition.left, appointmentPosition.top)
+            .move(50, 50);
+
+        const draggedAppointment = scheduler.appointments.find('App 2').parent();
+
+        assert.equal(draggedAppointment.css('z-index'), 1000, 'Correct z-index');
+        assert.equal(draggedAppointment.css('position'), 'fixed', 'Appointment has fixed position');
+        assert.equal(draggedAppointment.css('opacity'), 0.7, 'Appointment has correct opacity');
+
+        pointer.up();
+    });
 });
 
 module('appointmentDragging customization', $.extend({}, {
