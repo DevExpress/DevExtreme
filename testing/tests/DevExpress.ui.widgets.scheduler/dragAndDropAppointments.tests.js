@@ -843,7 +843,7 @@ module('Common', commonModuleConfig, () => {
 
 module('appointmentDragging customization', $.extend({}, {
     createScheduler: options => {
-        return createWrapper($.extend(true, {}, {
+        return createWrapper({
             dataSource: [{
                 text: 'App 1',
                 startDate: new Date(2018, 4, 21, 9, 30),
@@ -858,8 +858,9 @@ module('appointmentDragging customization', $.extend({}, {
             views: [{ type: 'day', maxAppointmentsPerCell: 1 }],
             currentDate: new Date(2018, 4, 21),
             startDayHour: 9,
-            endDayHour: 16
-        }, options));
+            endDayHour: 16,
+            ...options,
+        });
     },
 
     createDraggable: (options, data) => {
@@ -1402,5 +1403,53 @@ module('appointmentDragging customization', $.extend({}, {
         pointer.up();
 
         assert.notOk($cellElement.hasClass(DROPPABLE_CELL_CLASS), 'cell has not droppable class');
+    });
+
+    [true, false].forEach((isDragFromTooltip) => {
+        const testText = isDragFromTooltip
+            ? 'tooltip'
+            : 'grid';
+        const data = [{
+            text: 'App 1',
+            startDate: new Date(2018, 4, 21, 9, 30),
+            endDate: new Date(2018, 4, 21, 11, 30)
+        }, {
+            text: 'App 2',
+            startDate: new Date(2018, 4, 21, 9, 30),
+            endDate: new Date(2018, 4, 21, 10, 30)
+        }];
+        const checkItemData = (assert) => (e) => {
+            const index = isDragFromTooltip ? 1 : 0;
+            assert.strictEqual(e.itemData, data[index], 'Correct itemData');
+        };
+
+        test(`itemData should be correct in appointmentDragging events when dragging from ${testText}`, function(assert) {
+            assert.expect(3);
+
+            const scheduler = this.createScheduler({
+                dataSource: data,
+                appointmentDragging: {
+                    onDragStart: checkItemData(assert),
+                    onDragMove: checkItemData(assert),
+                    onDragEnd: checkItemData(assert),
+                }
+            });
+
+            if(isDragFromTooltip) {
+                scheduler.appointments.compact.click(0);
+            }
+
+            const appointment = isDragFromTooltip
+                ? scheduler.appointments.compact.getAppointment()
+                : scheduler.appointments.find('App 1');
+            const appointmentPosition = getAbsolutePosition(appointment);
+
+            const pointer = pointerMock(appointment).start();
+
+            pointer
+                .down(appointmentPosition.left, appointmentPosition.top)
+                .move(50, 50)
+                .up();
+        });
     });
 });
