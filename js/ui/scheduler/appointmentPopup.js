@@ -182,7 +182,8 @@ export default class AppointmentPopup {
     }
 
     _isReadOnly(data) {
-        if(data && data.disabled) {
+        const disabled = this.scheduler.fire('getField', 'disabled', data);
+        if(data && disabled) {
             return true;
         }
         return this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false;

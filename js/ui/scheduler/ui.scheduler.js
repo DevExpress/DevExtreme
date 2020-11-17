@@ -634,6 +634,8 @@ const Scheduler = Widget.inherit({
 
             recurrenceExceptionExpr: 'recurrenceException',
 
+            disabledExpr: 'disabled',
+
             remoteFiltering: false,
 
             timeZone: '',
@@ -988,6 +990,7 @@ const Scheduler = Widget.inherit({
             case 'allDayExpr':
             case 'recurrenceRuleExpr':
             case 'recurrenceExceptionExpr':
+            case 'disabledExpr':
                 this._updateExpression(name, value);
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
 
@@ -1208,7 +1211,8 @@ const Scheduler = Widget.inherit({
             text: this.option('textExpr'),
             description: this.option('descriptionExpr'),
             recurrenceRule: this.option('recurrenceRuleExpr'),
-            recurrenceException: this.option('recurrenceExceptionExpr')
+            recurrenceException: this.option('recurrenceExceptionExpr'),
+            disabled: this.option('disabledExpr')
         });
 
         this.callBase();
