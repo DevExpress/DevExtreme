@@ -103,7 +103,6 @@ export default class AppointmentDragBehavior {
 
     createDragEndHandler(options, appointmentDragging) {
         return (e) => {
-            debugger;
             appointmentDragging.onDragEnd && appointmentDragging.onDragEnd(e);
 
             if(!e.cancel) {

@@ -899,8 +899,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             useKeyboard: false,
             bounceEnabled: false,
             updateManually: true,
-            pushBackValue: 0,
-            useNative: false,
+            pushBackValue: 0
         };
         if(this._needCreateCrossScrolling()) {
             config = extend(config, this._createCrossScrollingConfig());
@@ -3265,7 +3264,6 @@ class SchedulerWorkSpace extends WidgetObserver {
                 }
             },
             onDragEnd: (e) => {
-                debugger;
                 if(itemData && !itemData.disabled) {
                     dragBehavior.onDragEnd(e);
                 }

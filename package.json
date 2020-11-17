@@ -201,5 +201,6 @@
     "modulePathIgnorePatterns": [
       "node_modules"
     ]
-  }
+  },
+  "pre-commit": "lint-staged"
 }

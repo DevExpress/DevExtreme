@@ -44,9 +44,6 @@
                 }, args));
 
             $(event.delegatedTarget || event.target).trigger(event);
-            // if(type === 'dxpointerup') {
-            //     debugger;
-            // }
 
             _lastEvent = event;
 
