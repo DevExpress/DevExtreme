@@ -641,7 +641,7 @@ $scheduler-appointment-form-label-padding: 20px;
 
   .dx-scheduler-date-time-indicator {
     background-color: $scheduler-time-indicator-color;
-    position: absolute;
+    position: relative;
     z-index: 1000;
     width: 100%;
     pointer-events: none;
