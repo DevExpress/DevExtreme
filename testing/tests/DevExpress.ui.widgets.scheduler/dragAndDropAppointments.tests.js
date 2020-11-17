@@ -1676,35 +1676,50 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     QUnit.test('Phantom appointment should be removed after DnD from tooltip', function(assert) {
         const dataSource = [{
             text: 'App 1',
-            startDate: new Date(2020, 10, 14, 9, 30),
-            endDate: new Date(2020, 10, 14, 10, 30),
+            startDate: new Date(2020, 10, 12, 9, 30),
+            endDate: new Date(2020, 10, 12, 10, 30),
         }, {
             text: 'App 2',
-            startDate: new Date(2020, 10, 14, 9, 30),
-            endDate: new Date(2020, 10, 14, 10, 30),
+            startDate: new Date(2020, 10, 12, 9, 30),
+            endDate: new Date(2020, 10, 12, 10, 30),
         }];
 
         const scheduler = createWrapper({
             views: [{ type: 'week', maxAppointmentsPerCell: 1 }],
             currentView: 'week',
             dataSource: dataSource,
-            currentDate: new Date(2020, 10, 14),
+            currentDate: new Date(2020, 10, 12),
             startDayHour: 9,
             height: 600,
-
         });
+
+
+        scheduler.drawControl();
 
         scheduler.appointments.compact.click(0);
 
         const appointment = scheduler.appointments.compact.getAppointment();
         const appointmentPosition = getAbsolutePosition(appointment);
+
         const pointer = pointerMock(appointment).start();
+
+        const $collectorCell = scheduler.workSpace.getCell(1, 4);
+        const cellPosition = getAbsolutePosition($collectorCell);
+        const cellHeight = $collectorCell.outerHeight();
+        const cellWidth = $collectorCell.outerWidth();
+        const cellCenter = {
+            x: cellPosition.left + cellWidth / 2,
+            y: cellPosition.top + cellHeight / 2,
+        };
 
         pointer
             .down(appointmentPosition.left, appointmentPosition.top)
-            .move(50, 50)
-            .move(-50, -50)
-            .up();
+            .move(0, 60);
+        const nextTop = appointmentPosition.top + 60;
+
+        pointer.move(cellCenter.x - appointmentPosition.left, cellCenter.y - nextTop);
+
+        pointer.up();
 
         const appointments = scheduler.appointments.find('App 2');
 
