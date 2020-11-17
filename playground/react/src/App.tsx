@@ -1,13 +1,18 @@
 import React from 'react';
-import Button from './artifacts/react/renovation/ui/button';
+import Tooltip from './artifacts/react/renovation/viz/core/tooltip';
 
 function App() {
     return (
-        <Button
-            text={'Click Me!'}
-            icon={'download'}
-            onClick={() => alert('Clicked!')}
-        ></Button>
+        <svg width="500" height="600">
+        <Tooltip
+            text={'Tooltip Text'}
+            color="#fff"
+            border={{
+                color: "#000",
+                width: 2
+            }}
+        ></Tooltip>
+        </svg>
     );
 }
 
