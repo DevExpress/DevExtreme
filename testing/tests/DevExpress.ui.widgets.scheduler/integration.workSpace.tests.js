@@ -1475,7 +1475,7 @@ QUnit.test('Timepanel text should be calculated correctly if DST makes sense (T4
 });
 
 QUnit.test('DateTimeIndicator should show correct time in current time zone', function(assert) {
-    const currentDate = new Date(2018, 1, 4);
+    const currentDate = new Date(2021, 4, 26);
 
     this.createInstance({
         dataSource: [],
@@ -1485,15 +1485,17 @@ QUnit.test('DateTimeIndicator should show correct time in current time zone', fu
         startDayHour: 8,
         showCurrentTimeIndicator: true,
         currentDate: currentDate,
-        indicatorTime: new Date(2018, 1, 4, 9, 30),
+        timeZone: 'Europe/Moscow',
+        indicatorTime: new Date('2021-05-26T08:30:00.000Z'),
         height: 600
     });
-    const $initialIndicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(7);
+
+    const $initialIndicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(24);
     const indicatorPositionBefore = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
     assert.ok($initialIndicationCell.children().eq(0).hasClass('dx-scheduler-date-time-indicator'), 'Indicator was placed in a right cell');
 
     this.instance.option('timeZone', 'Asia/Yekaterinburg');
-    const $indicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(21);
+    const $indicationCell = this.instance.$element().find('.dx-scheduler-date-table-cell').eq(38);
     const indicatorPositionAfter = this.instance.$element().find('.dx-scheduler-date-time-indicator').position();
 
     assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top, 'indicator has correct position');
