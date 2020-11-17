@@ -485,6 +485,16 @@
     .dx-scheduler-fixed-appointments {
         z-index: 100;
         position: absolute;
+
+        .dx-draggable-dragging {
+            z-index: 1000;
+            position: 'fixed';
+            opacity: 0.7;
+
+            .dx-scheduler-appointment {
+                box-shadow: @SCHEDULER_APPOINTMENT_DRAGGING_SHADOW, @SCHEDULER_VERTICAL_APPOINTMENT_RESIZING_SHADOW;
+            }
+        }
     }
 
     .dx-scheduler-header {
@@ -1902,6 +1912,12 @@
         &.dx-draggable-dragging {
             box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZING_SHADOW, @SCHEDULER_APPOINTMENT_DRAGGING_SHADOW;
         }
+    }
+
+    .dx-scheduler-timeline .dx-draggable-dragging .dx-scheduler-appointment,
+    .dx-scheduler-work-space-month .dx-draggable-dragging .dx-scheduler-appointment,
+    .dx-scheduler-fixed-appointments .dx-draggable-dragging .dx-scheduler-all-day-appointment {
+        box-shadow: @SCHEDULER_HORIZONTAL_APPOINTMENT_RESIZING_SHADOW, @SCHEDULER_APPOINTMENT_DRAGGING_SHADOW;
     }
 
     .dx-scheduler-appointment { // stylelint-disable-line no-duplicate-selectors
