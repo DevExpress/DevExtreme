@@ -20,7 +20,7 @@ class OrderHistory extends React.Component {
         dataSource={this.state.orderHistoryStore}
         showBorders={true}
       >
-        <Paging pageSize={5} />
+        <Paging defaultPageSize={5} />
 
         <Column dataField="OrderID" />
         <Column dataField="OrderDate" dataType="date" />

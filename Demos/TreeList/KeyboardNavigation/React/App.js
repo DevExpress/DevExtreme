@@ -1,6 +1,16 @@
 ﻿import React from 'react';
-import TreeList from 'devextreme-react/tree-list';
+import TreeList, {
+  Pager,
+  Paging,
+  Editing,
+  HeaderFilter,
+  FilterPanel,
+  FilterRow,
+  Scrolling,
+  Column } from 'devextreme-react/tree-list';
 import { employees } from './data.js';
+
+const allowedPageSizes = [5, 10];
 
 class App extends React.Component {
   render() {
@@ -10,39 +20,44 @@ class App extends React.Component {
         keyExpr="ID"
         parentIdExpr="Head_ID"
         showBorders={true}
-        editing = {{
-          allowUpdating: true,
-          allowDeleting: true,
-          selectTextOnEditStart: true,
-          useIcons: true
-        }}
-        headerFilter={{ visible: true }}
-        filterPanel={{ visible: true }}
-        filterRow={{ visible: true }}
-        pager={
-          {
-            allowedPageSizes: [5, 10],
-            showPageSizeSelector: true,
-            showNavigationButtons: true
-          }
-        }
-        paging={{
-          enabled: true,
-          pageSize: 10
-        }}
-        scrolling={{ mode: 'standard' }}
         focusedRowEnabled={true}
-        columns={[
-          'Full_Name',
-          {
-            dataField: 'Title',
-            caption: 'Position'
-          },
-          'City',
-          'State'
-        ]}
-        expandedRowKeys={[1, 2, 3, 5]}
-      />
+        defaultExpandedRowKeys={[1, 2, 3, 5]}
+      >
+        <Editing
+          allowUpdating={true}
+          allowDeleting={true}
+          selectTextOnEditStart={true}
+          useIcons={true}
+        />
+        <HeaderFilter
+          visible={true}
+        />
+        <FilterPanel
+          visible={true}
+        />
+        <FilterRow
+          visible={true}
+        />
+        <Scrolling
+          mode="standard"
+        />
+        <Column dataField="Full_Name" />
+        <Column
+          dataField="Title"
+          caption="Position"
+        />
+        <Column dataField="City" />
+        <Column dataField= "State" />
+        <Pager
+          allowedPageSizes={allowedPageSizes}
+          showPageSizeSelector={true}
+          showNavigationButtons={true}
+        />
+        <Paging
+          enabled={true}
+          defaultPageSize={10}
+        />
+      </TreeList>
     );
   }
 }

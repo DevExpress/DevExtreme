@@ -44,7 +44,7 @@ class App extends React.Component {
           dataSource={this.dataSource}
           rtlEnabled={rtlEnabled}
           showBorders={true}>
-          <Paging pageSize={15} />
+          <Paging defaultPageSize={15} />
           <SearchPanel visible={true} placeholder={placeholder} />
           <Column dataField={rtlEnabled ? 'nameAr' : 'nameEn'}
             caption={rtlEnabled ? 'الدولة' : 'Name'} />

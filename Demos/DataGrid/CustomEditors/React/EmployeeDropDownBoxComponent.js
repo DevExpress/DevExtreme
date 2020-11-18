@@ -36,7 +36,7 @@ export default class EmployeeDropDownBoxComponent extends React.Component {
         <Column dataField="FullName" />
         <Column dataField="Title" />
         <Column dataField="Department" />
-        <Paging enabled={true} pageSize={10} />
+        <Paging enabled={true} defaultPageSize={10} />
         <Scrolling mode="virtual" />
         <Selection mode="single" />
       </DataGrid>

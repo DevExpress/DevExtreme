@@ -1,6 +1,16 @@
 ﻿import React from 'react';
-import DataGrid, { Column, Lookup } from 'devextreme-react/data-grid';
+import DataGrid, {
+  Column,
+  Lookup,
+  Editing,
+  HeaderFilter,
+  FilterPanel,
+  FilterRow,
+  Pager,
+  Paging } from 'devextreme-react/data-grid';
 import { employees, states } from './data.js';
+
+const allowedPageSizes = [5, 10];
 
 class App extends React.Component {
   render() {
@@ -8,26 +18,24 @@ class App extends React.Component {
       <DataGrid
         dataSource={employees}
         keyExpr="ID"
-        editing = {{
-          allowUpdating: true,
-          allowDeleting: true,
-          selectTextOnEditStart: true,
-          useIcons: true
-        }}
-        headerFilter={{ visible: true }}
-        filterPanel={{ visible: true }}
-        filterRow={{ visible: true }}
-        pager={
-          {
-            allowedPageSizes: [5, 10],
-            showPageSizeSelector: true,
-            showNavigationButtons: true
-          }
-        }
-        paging={{ pageSize: 10 }}
         focusedRowEnabled={true}
         showBorders={true}
       >
+        <Editing
+          allowUpdating={true}
+          allowDeleting={true}
+          selectTextOnEditStart={true}
+          useIcons={true}
+        />
+        <HeaderFilter visible={true} />
+        <FilterPanel visible={true} />
+        <FilterRow visible={true} />
+        <Pager
+          allowedPageSizes={allowedPageSizes}
+          showPageSizeSelector={true}
+          showNavigationButtons={true}
+        />
+        <Paging defaultPageSize={10} />
         <Column dataField="FirstName" />
         <Column dataField="LastName" />
         <Column dataField="Position" />

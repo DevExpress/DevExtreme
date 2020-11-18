@@ -89,7 +89,7 @@ class App extends React.Component {
           onFocusedRowChanging={this.onFocusedRowChanging}
           onFocusedRowChanged={this.onFocusedRowChanged}
           showBorders={true}>
-          <Paging pageSize={10} />
+          <Paging defaultPageSize={10} />
           <Column
             dataField="Task_ID"
             width={80} />

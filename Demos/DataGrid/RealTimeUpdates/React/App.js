@@ -39,7 +39,7 @@ class App extends React.Component {
           repaintChangesOnly={true}
           columnAutoWidth={true}
           showBorders={true}>
-          <Paging pageSize={10} />
+          <Paging defaultPageSize={10} />
           <Column
             dataField="ProductName"
             dataType="string" />
@@ -97,7 +97,7 @@ class App extends React.Component {
         repaintChangesOnly={true}
         columnAutoWidth={true}
         showBorders={true}>
-        <Paging pageSize={5} />
+        <Paging defaultPageSize={5} />
         <Column
           dataField="OrderID"
           dataType="number" />

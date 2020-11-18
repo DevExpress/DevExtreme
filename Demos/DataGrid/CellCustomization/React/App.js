@@ -22,7 +22,7 @@ class App extends React.Component {
         showColumnLines={false}
         showBorders={true}>
         <Sorting mode="none" />
-        <Paging pageSize={10} />
+        <Paging defaultPageSize={10} />
         <Column dataField="date" width={110} dataType="date" />
         <Column caption="Open" cellRender={DiffCell} />
         <Column caption="Close" cellRender={DiffCell} />

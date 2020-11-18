@@ -95,7 +95,7 @@ class App extends React.Component {
           showBorders={true}
           onRowInserted={this.onRowInserted}
         >
-          <Paging enabled={true} pageSize={15} />
+          <Paging enabled={true} defaultPageSize={15} />
           <HeaderFilter visible={true} />
           <SearchPanel visible={true} />
           <Editing

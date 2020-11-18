@@ -25,7 +25,7 @@ class App extends React.Component {
             showNavigationButtons={true}
             showPageSizeSelector={true}
             visible={true} />
-          <Paging pageSize={8} />
+          <Paging defaultPageSize={8} />
           <ColumnChooser enabled={true} mode="select" />
           <Column allowGrouping={false} dataField="OrderNumber" width={130} caption="Invoice Number" />
           <Column dataField="CustomerStoreCity" caption="City" />

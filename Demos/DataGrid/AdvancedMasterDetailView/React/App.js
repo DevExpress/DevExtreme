@@ -24,7 +24,7 @@ class App extends React.Component {
           enabled={true}
           component={MasterDetailView}
         />
-        <Paging pageSize={15} />
+        <Paging defaultPageSize={15} />
 
         <Column dataField="ContactName" />
         <Column dataField="ContactTitle" />
