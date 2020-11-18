@@ -992,7 +992,7 @@ declare module DevExpress {
     /**
      * [descr:localization]
      */
-    declare module localization {
+    module localization {
         /**
          * [descr:localization.formatDate(value, format)]
          */
@@ -1078,7 +1078,7 @@ declare module DevExpress {
     /**
      * [descr:ui]
      */
-    declare module ui {
+    module ui {
         /**
          * [descr:ui.notify(message,type,displayTime)]
          */
@@ -1103,7 +1103,7 @@ declare module DevExpress {
     /**
      * [descr:validationEngine]
      */
-    declare module validationEngine {
+    module validationEngine {
         /**
          * [descr:validationEngine.getGroupConfig()]
          */
@@ -1144,7 +1144,7 @@ declare module DevExpress {
     /**
      * [descr:viz]
      */
-    declare module viz {
+    module viz {
         /**
          * [descr:viz.currentPalette()]
          */
@@ -12554,7 +12554,7 @@ declare module DevExpress.ui {
     /**
      * [descr:ui.themes]
      */
-    declare module themes {
+    module themes {
         /**
          * [descr:ui.themes.current()]
          */
