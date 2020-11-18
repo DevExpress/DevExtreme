@@ -926,6 +926,12 @@ $scheduler-appointment-form-label-padding: 20px;
     height: $scheduler-workspace-date-table-cell-height;
   }
 
+  .dx-scheduler-date-table-cell-template-wrapper {
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+
   .dx-scheduler-date-table-cell,
   .dx-scheduler-header-panel-cell,
   .dx-scheduler-time-panel-cell,
