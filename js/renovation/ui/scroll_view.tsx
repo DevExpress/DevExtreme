@@ -12,6 +12,7 @@ import {
 import { subscribeToScrollEvent } from '../utils/subscribe_to_event';
 import { isNumeric } from '../../core/utils/type';
 import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
+import { camelize } from '../../core/utils/inflector';
 import { Widget } from './common/widget';
 import BaseWidgetProps from '../utils/base_props';
 import { combineClasses } from '../utils/combine_classes';
@@ -127,10 +128,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     const location = ensureLocation(distance);
 
     if (this.isDirection(DIRECTION_VERTICAL)) {
-      this.containerRef.scrollTop += this.normalizeRtlProp('top', Math.round(location.top));
+      this.containerRef.scrollTop += Math.round(location.top);
     }
     if (this.isDirection(DIRECTION_HORIZONTAL)) {
-      this.containerRef.scrollLeft += this.normalizeRtlProp('left', Math.round(location.left));
+      this.containerRef.scrollLeft += this.normalizeCoordinate('left', Math.round(location.left));
     }
   }
 
@@ -175,10 +176,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   scrollOffset(): ScrollViewLocation {
-    const containerPosition = this.getContainerOffsetInternal();
+    const { left, top } = this.getContainerOffsetInternal();
     return {
-      left: this.toPublicProp('left', containerPosition.left),
-      top: this.toPublicProp('top', containerPosition.top),
+      left: this.getPublicCoordinate('left', left),
+      top: this.getPublicCoordinate('top', top),
     };
   }
 
@@ -213,23 +214,24 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   private getBoundaryProps(): Partial<ScrollViewBoundaryProps> {
     const { left, top } = this.scrollOffset();
-    const {
-      scrollWidth, clientWidth, scrollHeight, clientHeight,
-    } = this.containerRef;
 
     const boundaryProps: Partial<ScrollViewBoundaryProps> = {};
 
     if (this.isDirection(DIRECTION_HORIZONTAL) || this.isDirection(DIRECTION_BOTH)) {
       boundaryProps.reachedLeft = left <= 0;
-      boundaryProps.reachedRight = Math.round(left) >= scrollWidth - clientWidth;
+      boundaryProps.reachedRight = Math.round(left) >= this.getMaxScrollOffset('width');
     }
 
     if (this.isDirection(DIRECTION_VERTICAL) || this.isDirection(DIRECTION_BOTH)) {
       boundaryProps.reachedTop = top <= 0;
-      boundaryProps.reachedBottom = top >= scrollHeight - clientHeight;
+      boundaryProps.reachedBottom = top >= this.getMaxScrollOffset('height');
     }
 
     return boundaryProps;
+  }
+
+  private getMaxScrollOffset(dimension: string): number {
+    return this.containerRef[`scroll${camelize(dimension, true)}`] - this.containerRef[`client${camelize(dimension, true)}`];
   }
 
   private isDirection(direction: ScrollViewDirection): boolean {
@@ -273,10 +275,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     element: HTMLElement, offset: ScrollOffset, direction: ScrollViewDirection,
   ): number {
     const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
-    const location = this.normalizeRtlProp(prop,
+    const location = this.normalizeCoordinate(prop,
       this.getElementLocationInternal(element, prop, offset, direction));
 
-    return this.toPublicProp(prop, location);
+    return this.getPublicCoordinate(prop, location);
   }
 
   private getElementLocationInternal(
@@ -292,7 +294,8 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     const offsetStart = offset[prop];
     const offsetEnd = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'];
 
-    const containerLocation = this.normalizeRtlProp(prop, this.getContainerOffsetInternal()[prop]);
+    const containerLocation = this.normalizeCoordinate(prop,
+      this.getContainerOffsetInternal()[prop]);
 
     if (relativeLocation < containerLocation + offsetStart) {
       if (elementOffset < containerSize - offsetStart - offsetEnd) {
@@ -312,20 +315,21 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     return containerLocation;
   }
 
-  private toPublicProp(prop: string, coordinate: number): number {
-    return this.isRtlProp(prop)
-      ? this.containerRef.scrollWidth - this.contentRef.clientWidth
-        + this.normalizeRtlProp(prop, coordinate)
+  private getPublicCoordinate(prop: string, coordinate: number): number {
+    return this.needNormalizeCoordinate(prop)
+      ? this.getMaxScrollOffset('width') + this.normalizeCoordinate(prop, coordinate)
       : coordinate;
   }
 
-  private normalizeRtlProp(prop: string, coordinate: number): number {
-    return this.isRtlProp(prop) && getScrollRtlBehavior().positive
+  private normalizeCoordinate(prop: string, coordinate: number): number {
+    return this.needNormalizeCoordinate(prop) && getScrollRtlBehavior().positive
       ? -1 * coordinate
       : coordinate;
   }
 
-  private isRtlProp(prop: string): boolean {
-    return this.props.rtlEnabled === true && prop === 'left';
+  private needNormalizeCoordinate(prop: string): boolean {
+    const { rtlEnabled } = this.props;
+
+    return rtlEnabled === true && prop === 'left';
   }
 }
