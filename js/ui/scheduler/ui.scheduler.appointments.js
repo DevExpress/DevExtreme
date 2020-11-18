@@ -932,7 +932,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     moveAppointmentBack: function(dragEvent) {
         const $appointment = this._$currentAppointment;
-        this._removeDragSourceClassFromDraggedAppointment();
+        dragEvent && this._removeDragSourceClassFromDraggedAppointment();
         const size = this._initialSize;
         const coords = this._initialCoordinates;
 
