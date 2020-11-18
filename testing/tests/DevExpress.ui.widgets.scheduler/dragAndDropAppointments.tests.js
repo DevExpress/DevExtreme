@@ -217,7 +217,7 @@ const draggingFromTooltipConfig = $.extend({}, {
     },
 
     getFakeAppointmentPosition: function(scheduler) {
-        const fakeAppointment = scheduler.appointments.compact.getFakeAppointment();
+        const fakeAppointment = scheduler.appointments.getFakeAppointment();
         const position = getAbsolutePosition(fakeAppointment.parent());
 
         return {
