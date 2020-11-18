@@ -51,7 +51,7 @@
 
 /**
  * @typedef {string} Enums.Format
- * @enum {'billions'|'currency'|'day'|'decimal'|'exponential'|'fixedPoint'|'largeNumber'|'longDate'|'longTime'|'millions'|'millisecond'|'month'|'monthAndDay'|'monthAndYear'|'percent'|'quarter'|'quarterAndYear'|'shortDate'|'shortTime'|'thousands'|'trillions'|'year'|'dayOfWeek'|'hour'|'longDateLongTime'|'minute'|'second'|'shortDateShortTime'}
+ * @enum {'currency'|'day'|'decimal'|'fixedPoint'|'longDate'|'longTime'|'millisecond'|'month'|'monthAndDay'|'monthAndYear'|'percent'|'quarter'|'quarterAndYear'|'shortDate'|'shortTime'|'year'|'dayOfWeek'|'hour'|'longDateLongTime'|'minute'|'second'|'shortDateShortTime'}
  */
 
 /**
