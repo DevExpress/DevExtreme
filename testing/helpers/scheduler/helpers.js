@@ -215,6 +215,7 @@ export class SchedulerTestWrapper extends ElementWrapper {
                 .filter(CLASSES.appointmentDragSource),
 
             getFakeAppointment: () => $('.dx-scheduler-fixed-appointments .dx-scheduler-appointment'),
+            getFakeAppointmentWrapper: () => this.appointments.getFakeAppointment().parent(),
 
             find: (text) => {
                 return this.appointments

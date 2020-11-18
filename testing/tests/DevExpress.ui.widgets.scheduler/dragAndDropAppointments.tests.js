@@ -371,7 +371,7 @@ const moveAsMouseConfig = $.extend({}, {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(dragCase.left, dragCase.top);
 
-        const draggedAppointment = $(scheduler.appointments.find(text).get(0)).parent();
+        const draggedAppointment = scheduler.appointments.getFakeAppointmentWrapper();
 
         const positionAfterDrag = getAbsolutePosition(draggedAppointment);
 
@@ -596,7 +596,6 @@ module('Common', commonModuleConfig, () => {
             }]
         });
 
-        const text = 'Watercolor Landscape';
         const $appointment = scheduler.appointments.find('Watercolor Landscape').first();
         const positionBeforeDrag = getAbsolutePosition($appointment);
         const pointer = pointerMock($appointment).start();
@@ -606,7 +605,7 @@ module('Common', commonModuleConfig, () => {
                 .down(positionBeforeDrag.left, positionBeforeDrag.top)
                 .move(150, 0);
 
-            const $draggedAppointment = $(scheduler.appointments.find(text).get(0)).parent();
+            const $draggedAppointment = scheduler.appointments.getFakeAppointmentWrapper();
 
             const positionAfterDrag = getAbsolutePosition($draggedAppointment);
 
@@ -668,7 +667,7 @@ module('Common', commonModuleConfig, () => {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(cellWidth, 0);
 
-        $appointment = scheduler.appointments.find('Task 1').first().parent();
+        $appointment = scheduler.appointments.getFakeAppointmentWrapper();
         let positionAfterDrag = getAbsolutePosition($appointment);
 
         pointer.up();
@@ -836,7 +835,7 @@ module('Common', commonModuleConfig, () => {
             .down(appointmentPosition.left, appointmentPosition.top)
             .move(50, 50);
 
-        const draggedAppointment = scheduler.appointments.find('App 2').parent();
+        const draggedAppointment = scheduler.appointments.getFakeAppointmentWrapper();
 
         assert.equal(draggedAppointment.css('z-index'), 1000, 'Correct z-index');
         assert.equal(draggedAppointment.css('position'), 'fixed', 'Appointment has fixed position');
@@ -889,7 +888,6 @@ module('appointmentDragging customization', $.extend({}, {
             onAdd: sinon.spy(),
             onRemove: sinon.spy()
         };
-        const text = 'App 1';
 
         const scheduler = this.createScheduler({
             appointmentDragging
@@ -904,7 +902,7 @@ module('appointmentDragging customization', $.extend({}, {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
 
-        const $draggedAppointment = $(scheduler.appointments.find(text).get(0)).parent();
+        const $draggedAppointment = scheduler.appointments.getFakeAppointmentWrapper();
 
         const positionAfterDrag = getAbsolutePosition($draggedAppointment);
 
@@ -1546,7 +1544,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(appointments.length, appointmentCount + 1, 'Phantom appointment exists');
         assert.equal(dragSource.length, 1, 'Drag source exists');
 
-        const draggedAppointment = $(appointments[0]).parent();
+        const draggedAppointment = scheduler.appointments.getFakeAppointmentWrapper();
         const nextPointer = pointerMock(draggedAppointment);
         nextPointer.up();
 
@@ -1941,7 +1939,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
                 resources,
                 groups,
             });
-            scheduler.drawControl();
 
             const $appointment = scheduler.appointments.find(firstAppointmentTitle).eq(draggedAppointmentIndex);
             const positionBeforeDrag = getAbsolutePosition($appointment);
@@ -2097,9 +2094,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         // Cause rerender of the grid and appointments
         virtualScrollingDispatcher._updateRender();
 
-        const appointments = scheduler.appointments.find(appointmentTitle);
-
-        const draggedAppointment = $(appointments[0]).parent();
+        const draggedAppointment = scheduler.appointments.getFakeAppointmentWrapper();
         const nextPointer = pointerMock(draggedAppointment);
         nextPointer.up();
 
