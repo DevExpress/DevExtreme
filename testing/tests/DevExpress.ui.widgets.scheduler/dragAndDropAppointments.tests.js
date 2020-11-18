@@ -1589,7 +1589,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(dragSource.length, 0, 'Drag source exists');
     };
 
-    QUnit.test('A phantom appointment should be created on appointment dragging', function(assert) {
+    test('A phantom appointment should be created on appointment dragging', function(assert) {
         const views = ['day', 'week', 'month', 'timelineDay', 'timelineWeek', 'timelineMonth'];
         const appointmentTitle = 'App';
         const getDataSource = () => [{
@@ -1618,7 +1618,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
     });
 
-    QUnit.test('Dragging should work correctly when an appointment is dragged from the all-day panel', function(assert) {
+    test('Dragging should work correctly when an appointment is dragged from the all-day panel', function(assert) {
         const appointmentTitle = 'App';
         const dataSource = [{
             text: appointmentTitle,
@@ -1639,7 +1639,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkAppointmentDragging(assert, scheduler, appointmentTitle, -30, 0);
     });
 
-    QUnit.test('Dragging should work correctly with long appoinments', function(assert) {
+    test('Dragging should work correctly with long appoinments', function(assert) {
         const appointmentTitle = 'App';
         const dataSource = [{
             text: appointmentTitle,
@@ -1659,7 +1659,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkAppointmentDragging(assert, scheduler, appointmentTitle, -30, 0, 2);
     });
 
-    QUnit.test('Dragging should work correctly with long appoinments in month view', function(assert) {
+    test('Dragging should work correctly with long appoinments in month view', function(assert) {
         const appointmentTitle = 'App';
         const dataSource = [{
             text: appointmentTitle,
@@ -1679,7 +1679,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkAppointmentDragging(assert, scheduler, appointmentTitle, 30, 0, 5);
     });
 
-    QUnit.test('Phantom appointment should be removed after DnD from tooltip', function(assert) {
+    test('Phantom appointment should be removed after DnD from tooltip', function(assert) {
         const dataSource = [{
             text: 'App 1',
             startDate: new Date(2020, 10, 12, 9, 30),
@@ -1729,7 +1729,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(appointments.length, 0, 'Phantom appointment does not exist');
     });
 
-    QUnit.test('Dragging should work correctly with recurrent appointments', function(assert) {
+    test('Dragging should work correctly with recurrent appointments', function(assert) {
         const appointmentTitle = 'App 1';
         const dataSource = [{
             text: appointmentTitle,
@@ -1779,7 +1779,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         assert.equal(dragSource.length, 0, 'Drag source does not exist');
     });
 
-    QUnit.test('Dragging should work correctly with multiple resources', function(assert) {
+    test('Dragging should work correctly with multiple resources', function(assert) {
         const appointmentTitle = 'App';
         const dataSource = [{
             text: appointmentTitle,
