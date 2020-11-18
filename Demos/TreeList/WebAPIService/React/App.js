@@ -38,7 +38,7 @@ class App extends React.Component {
         keyExpr="Task_ID"
         parentIdExpr="Task_Parent_ID"
         hasItemsExpr="Has_Items"
-        expandedRowKeys={[1, 2]}
+        defaultExpandedRowKeys={[1, 2]}
         showRowLines={true}
         showBorders={true}
         columnAutoWidth={true}
