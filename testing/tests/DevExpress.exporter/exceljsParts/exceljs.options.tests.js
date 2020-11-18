@@ -1,5 +1,5 @@
 import messageLocalization from 'localization/message';
-import { runCommonOptionTests } from '../commonParts/option.tests.js';
+import { runCommonOptionTests } from '../commonParts/options.tests.js';
 import DataGrid from 'ui/data_grid/ui.data_grid';
 
 const ExcelJSOptionTests = {
