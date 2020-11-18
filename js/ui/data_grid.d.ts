@@ -977,11 +977,11 @@ export interface GridBaseOptions<T = GridBase> extends WidgetOptions<T> {
        * @default "auto"
        */
       allowedPageSizes?: Array<(number | 'all')> | 'auto',
-      /**
-       * @docid
-       * @type Enums.GridPagerDisplayMode
-       */
-      displayMode: 'adaptive' | 'compact' | 'full',
+      // /**
+      //  * docid
+      //  * @type Enums.GridPagerDisplayMode
+      //  */
+      // displayMode: 'adaptive' | 'compact' | 'full',
       /**
        * @docid
        * @type string
