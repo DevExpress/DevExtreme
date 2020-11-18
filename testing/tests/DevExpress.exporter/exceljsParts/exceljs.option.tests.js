@@ -5,7 +5,7 @@ import DataGrid from 'ui/data_grid/ui.data_grid';
 const ExcelJSOptionTests = {
     runTests(moduleConfig, _getFullOptions, getComponent) {
         QUnit.module('_getFullOptions', moduleConfig, () => {
-            runCommonOptionTests(_getFullOptions, getComponent);
+            runCommonOptionTests(_getFullOptions, getComponent, 'worksheet');
 
             [[], '1', 1, undefined, null].forEach((worksheet) => {
                 QUnit.test(`worksheet: ${JSON.stringify(worksheet)}`, function(assert) {
@@ -59,16 +59,19 @@ const ExcelJSOptionTests = {
             });
 
             QUnit.test('autoFilterEnabled', function(assert) {
-                if(getComponent() instanceof DataGrid) {
-                    const component = getComponent();
-
-                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).autoFilterEnabled, false, 'no member');
-                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: undefined }).autoFilterEnabled, false, 'undefined');
-                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: null }).autoFilterEnabled, false, 'null');
-
-                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: false }).autoFilterEnabled, false, 'false');
-                    assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: true }).autoFilterEnabled, true, 'true');
+                if(!(getComponent() instanceof DataGrid)) {
+                    assert.ok(true, 'The test relevant for DataGrid widget only');
+                    return;
                 }
+
+                const component = getComponent();
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet }).autoFilterEnabled, false, 'no member');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: undefined }).autoFilterEnabled, false, 'undefined');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: null }).autoFilterEnabled, false, 'null');
+
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: false }).autoFilterEnabled, false, 'false');
+                assert.deepEqual(_getFullOptions({ component, worksheet: this.worksheet, autoFilterEnabled: true }).autoFilterEnabled, true, 'true');
             });
         });
     }

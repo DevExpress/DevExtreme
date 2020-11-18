@@ -3,7 +3,7 @@ import { runCommonOptionTests } from '../commonParts/option.tests.js';
 const JSPdfOptionTests = {
     runTests(moduleConfig, _getFullOptions, getComponent) {
         QUnit.module('_getFullOptions', moduleConfig, () => {
-            runCommonOptionTests(_getFullOptions, getComponent);
+            runCommonOptionTests(_getFullOptions, getComponent, 'jsPDFDocument');
 
             [[], '1', 1, undefined, null].forEach((jsPDFDocument) => {
                 QUnit.test(`jsPDFDocument: ${JSON.stringify(jsPDFDocument)}`, function(assert) {

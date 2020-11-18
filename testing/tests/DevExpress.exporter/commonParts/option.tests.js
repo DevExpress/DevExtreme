@@ -1,6 +1,7 @@
 import DataGrid from 'ui/data_grid/ui.data_grid';
+import { extend } from 'core/utils/extend';
 
-export function runCommonOptionTests(_getFullOptions, getComponent) {
+export function runCommonOptionTests(_getFullOptions, getComponent, document) {
     [[], '1', 1, undefined, null].forEach((options) => {
         QUnit.test(`options: ${JSON.stringify(options)}`, function(assert) {
             let errorMessage;
@@ -18,7 +19,10 @@ export function runCommonOptionTests(_getFullOptions, getComponent) {
         QUnit.test(`component: ${JSON.stringify(component)}`, function(assert) {
             let errorMessage;
             try {
-                _getFullOptions({ component, worksheet: this.worksheet });
+                const initialConfig = { component };
+                initialConfig[document] = this[document];
+
+                _getFullOptions(initialConfig);
             } catch(e) {
                 errorMessage = e.message;
             }
@@ -27,26 +31,31 @@ export function runCommonOptionTests(_getFullOptions, getComponent) {
     });
 
     QUnit.test('selectedRowsOnly', function(assert) {
-        if(getComponent() instanceof DataGrid) {
-            const component = getComponent();
-
-            assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument }).selectedRowsOnly, false, 'no member');
-            assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument, selectedRowsOnly: undefined }).selectedRowsOnly, false, 'undefined');
-            assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument, selectedRowsOnly: null }).selectedRowsOnly, false, 'null');
-
-            assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument, selectedRowsOnly: false }).selectedRowsOnly, false, 'false');
-            assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument, selectedRowsOnly: true }).selectedRowsOnly, true, 'true');
+        if(!(getComponent() instanceof DataGrid)) {
+            assert.ok(true, 'The test relevant for DataGrid widget only');
+            return;
         }
+
+        const initialConfig = { component: getComponent() };
+        initialConfig[document] = this[document];
+
+        assert.deepEqual(_getFullOptions(initialConfig).selectedRowsOnly, false, 'no member');
+        assert.deepEqual(_getFullOptions(extend(initialConfig, { selectedRowsOnly: undefined })).selectedRowsOnly, false, 'undefined');
+        assert.deepEqual(_getFullOptions(extend(initialConfig, { selectedRowsOnly: null })).selectedRowsOnly, false, 'null');
+
+        assert.deepEqual(_getFullOptions(extend(initialConfig, { selectedRowsOnly: false })).selectedRowsOnly, false, 'false');
+        assert.deepEqual(_getFullOptions(extend(initialConfig, { selectedRowsOnly: true })).selectedRowsOnly, true, 'true');
     });
 
     QUnit.test('keepColumnWidths', function(assert) {
-        const component = getComponent();
+        const initialConfig = { component: getComponent() };
+        initialConfig[document] = this[document];
 
-        assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument }).keepColumnWidths, true, 'no member');
-        assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument, keepColumnWidths: undefined }).keepColumnWidths, true, 'undefined');
-        assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument, keepColumnWidths: null }).keepColumnWidths, true, 'null');
+        assert.deepEqual(_getFullOptions(initialConfig).keepColumnWidths, true, 'no member');
+        assert.deepEqual(_getFullOptions(extend(initialConfig, { keepColumnWidths: undefined })).keepColumnWidths, true, 'undefined');
+        assert.deepEqual(_getFullOptions(extend(initialConfig, { keepColumnWidths: null })).keepColumnWidths, true, 'null');
 
-        assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument, keepColumnWidths: false }).keepColumnWidths, false, 'false');
-        assert.deepEqual(_getFullOptions({ component, jsPDFDocument: this.jsPDFDocument, keepColumnWidths: true }).keepColumnWidths, true, 'true');
+        assert.deepEqual(_getFullOptions(extend(initialConfig, { keepColumnWidths: false })).keepColumnWidths, false, 'false');
+        assert.deepEqual(_getFullOptions(extend(initialConfig, { keepColumnWidths: true })).keepColumnWidths, true, 'true');
     });
 }
