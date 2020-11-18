@@ -671,6 +671,14 @@ $scheduler-appointment-form-label-padding: 20px;
     pointer-events: none;
   }
 
+  .dx-scheduler-date-time-shader1 {
+    background-color: $scheduler-time-indicator-background-color;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+  }
+
   .dx-scheduler-work-space-week,
   .dx-scheduler-work-space-work-week,
   .dx-scheduler-work-space-day {
@@ -1012,6 +1020,7 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-all-day-table-cell {
     border-left: $scheduler-base-border;
     border-top: $scheduler-base-border;
+    position: relative;
   }
 
   .dx-scheduler-work-space-day { // stylelint-disable-line no-duplicate-selectors

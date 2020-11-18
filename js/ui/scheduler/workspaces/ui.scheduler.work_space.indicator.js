@@ -4,6 +4,7 @@ import registerComponent from '../../../core/component_registrator';
 import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
 import { hasWindow } from '../../../core/utils/window';
+import { each } from '../../../core/utils/iterator';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -11,6 +12,8 @@ const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS = 'dx-scheduler-date-time-indicator-simple';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
+const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader1';
+const LAST_DATE_TIME_SHADER_CLASS = 'dx-scheduler-last-date-time-shader1';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _getToday() {
@@ -52,7 +55,8 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _renderDateTimeIndication() {
         if(this.isIndicationAvailable()) {
             if(this.option('shadeUntilCurrentTime')) {
-                this._shader.render();
+                // this._shader.render();
+                this._renderShading();
             }
 
             if(this.isIndicationOnView() && this.isIndicatorVisible()) {
@@ -62,6 +66,49 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                 this._renderIndicator(date, groupCount);
             }
         }
+    }
+
+    _renderShading() {
+        const today = this._getToday();
+        this._renderDateTableShading(today);
+        this._renderAllDayPanelShading(today);
+    }
+
+    _renderDateTableShading(date) {
+        const cells = this._getCells();
+
+        each(cells, (_, cell) => {
+            const $cell = $(cell);
+            const { startDate, endDate } = this.getCellData($cell);
+
+            // NOTE: Need we clear shader after templates were ready or after dimensionChanged
+            $cell.find('.' + DATE_TIME_SHADER_CLASS).remove();
+            if(startDate < date && endDate < date) {
+                // $cell.addClass(DATE_TIME_SHADER_CLASS);
+                $('<div>').addClass(DATE_TIME_SHADER_CLASS).appendTo($cell);
+            }
+            if(startDate <= date && endDate > date) {
+                const offset = (date.getTime() - startDate.getTime()) * 100 / (endDate.getTime() - startDate.getTime());
+                const $lastShader = $('<div>').addClass(DATE_TIME_SHADER_CLASS).addClass(LAST_DATE_TIME_SHADER_CLASS).appendTo($cell);
+                $lastShader.height(offset + '%');
+            }
+        });
+    }
+
+    _renderAllDayPanelShading(date) {
+        const cells = this._getCells(true);
+
+        each(cells, (_, cell) => {
+            const $cell = $(cell);
+            const { startDate, endDate } = this.getCellData($cell);
+
+            // NOTE: Need we clear shader after templates were ready or after dimensionChanged
+            $cell.find('.' + DATE_TIME_SHADER_CLASS).remove();
+            if(startDate < date && endDate < date) {
+                // $cell.addClass(DATE_TIME_SHADER_CLASS);
+                $('<div>').addClass(DATE_TIME_SHADER_CLASS).appendTo($cell);
+            }
+        });
     }
 
     _isIndicatorSimple(index) {
@@ -109,6 +156,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         this._clearIndicatorUpdateInterval();
 
         this._indicatorInterval = setInterval(function() {
+            // NOTE: indicator and cells shader is totally rerendered
             this._refreshDateTimeIndication();
         }.bind(this), this.option('indicatorUpdateInterval'));
     }
@@ -273,6 +321,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                 this._refreshDateTimeIndication();
                 break;
             case 'allDayExpanded':
+                // NOTE: need we do this refreshing
                 super._optionChanged(args);
                 this._refreshDateTimeIndication();
                 break;
