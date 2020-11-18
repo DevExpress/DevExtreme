@@ -2138,4 +2138,39 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
         pointer.up();
     });
+
+    test('Esc click should be processed crrectly', function(assert) {
+        const appointmentTitle = 'Appointment';
+        const data = [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 9, 14, 0, 0),
+            endDate: new Date(2020, 9, 14, 0, 5),
+        }];
+
+        const scheduler = createWrapper({
+            height: 600,
+            views: ['day'],
+            currentView: 'day',
+            cellDuration: 1,
+            dataSource: data,
+            currentDate: new Date(2020, 9, 14),
+            showAllDayPanel: false,
+        });
+
+        const $appointment = scheduler.appointments.find(appointmentTitle).first();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+
+        const pointer = pointerMock($appointment)
+            .start()
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(0, 50);
+
+        keyboardMock($appointment.get(0)).keyDown('esc');
+
+        const dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(dragSource.length, 1, 'Drag source did not disappear');
+
+        pointer.up();
+    });
 });
