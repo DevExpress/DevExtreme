@@ -2322,23 +2322,24 @@ export default {
                 _checkColumns: function() {
                     const usedNames = {};
                     let hasEditableColumnWithoutName = false;
-                    let hasDuplicatedNames = false;
+                    const duplicatedNames = [];
                     this._columns.forEach(column => {
                         const name = column.name;
                         const isBand = column.columns?.length;
                         const isEditable = column.allowEditing && (column.dataField || column.setCellValue) && !isBand;
                         if(name) {
                             if(usedNames[name]) {
-                                hasDuplicatedNames = true;
+                                duplicatedNames.push(`"${name}"`);
                             }
+
                             usedNames[name] = true;
                         } else if(isEditable) {
                             hasEditableColumnWithoutName = true;
                         }
                     });
 
-                    if(hasDuplicatedNames) {
-                        errors.log('E1059');
+                    if(duplicatedNames.length) {
+                        errors.log('E1059', duplicatedNames.join(', '));
                     }
 
                     if(hasEditableColumnWithoutName) {
