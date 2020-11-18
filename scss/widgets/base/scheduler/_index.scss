@@ -471,7 +471,8 @@ $scheduler-appointment-form-label-padding: 20px;
 }
 
 @mixin dx-scheduler-appointment-focused-mixin() {
-  &.dx-state-focused {
+  &.dx-state-focused,
+  .dx-scheduler-appointment {
     box-shadow: none;
 
     // T314382
@@ -525,29 +526,10 @@ $scheduler-appointment-form-label-padding: 20px;
       left: 0;
       z-index: 1000;
 
+      @include dx-scheduler-appointment-focused-mixin();
+
       .dx-scheduler-appointment {
         box-shadow: $scheduler-appointment-dragging-shadow, $scheduler-vertical-appointment-resizing-shadow;
-
-        // T314382
-        @if $scheduler-fill-focused-appointment {
-          background-color: $scheduler-appointment-start-color;
-        }
-
-        &::before {
-          pointer-events: none;
-          content: "";
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-
-          // T314382
-          @if not $scheduler-fill-focused-appointment {
-            background-color: $scheduler-appointment-start-color;
-            opacity: 0.98;
-          }
-        }
       }
     }
   }
