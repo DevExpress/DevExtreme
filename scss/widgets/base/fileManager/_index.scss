@@ -192,6 +192,10 @@
         min-width: 250px;
         max-width: 300px;
       }
+
+      &.dx-drawer-panel-content-adaptive {
+        max-width: 100%;
+      }
     }
   }
 
