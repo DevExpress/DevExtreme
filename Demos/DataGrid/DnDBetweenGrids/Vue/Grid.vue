@@ -82,6 +82,7 @@ export default {
         values = { Status: e.toData };
 
       this.tasksStore.update(key, values).then(() => {
+        // eslint-disable-next-line vue/no-mutating-props
         this.tasksStore.push([{
           type: 'update', key: key, data: values
         }]);

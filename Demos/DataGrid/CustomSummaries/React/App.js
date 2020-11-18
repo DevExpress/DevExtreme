@@ -44,7 +44,7 @@ class App extends React.Component {
               name="SelectedRowsSummary"
               summaryType="custom"
               valueFormat="currency"
-              displayFormat={'Sum: {0}'}
+              displayFormat="Sum: {0}"
               showInColumn="SaleAmount" />
           </Summary>
         </DataGrid>

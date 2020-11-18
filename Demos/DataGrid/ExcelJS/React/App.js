@@ -44,19 +44,19 @@ class App extends React.Component {
             <GroupItem
               column="OrderNumber"
               summaryType="count"
-              displayFormat={'{0} orders'}
+              displayFormat="{0} orders"
               alignByColumn={false} />
             <GroupItem
               column="SaleAmount"
               summaryType="max"
-              displayFormat={'Max: {0}'}
+              displayFormat="Max: {0}"
               valueFormat="currency"
               alignByColumn={true}
               showInGroupFooter={false} />
             <GroupItem
               column="SaleAmount"
               summaryType="sum"
-              displayFormat={'Sum: {0}'}
+              displayFormat="Sum: {0}"
               valueFormat="currency"
               alignByColumn={true}
               showInGroupFooter={true} />
@@ -64,7 +64,7 @@ class App extends React.Component {
             <TotalItem
               column="SaleAmount"
               summaryType="sum"
-              displayFormat={'Total Sum: {0}'}
+              displayFormat="Total Sum: {0}"
               valueFormat="currency" />
           </Summary>
         </DataGrid>

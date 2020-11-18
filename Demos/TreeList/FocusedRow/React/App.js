@@ -83,19 +83,17 @@ class App extends React.Component {
           <Column dataField="Task_Start_Date" caption="Start Data" dataType="date" width={160} />
           <Column dataField="Task_Due_Date" caption="Due Data" dataType="date" width={160} />
         </TreeList>
-        {
-          <div className="task-info">
-            <div className="info">
-              <div className="task-subject">{this.state.taskSubject}</div>
-              <span className="task-assigned">{this.state.taskAssigned}</span>
-              <span className="start-date">{this.state.startDate}</span>
-            </div>
-            <div className="progress">
-              <span className="task-status">{this.state.taskStatus}</span>
-              <span className="task-progress">{this.state.taskProgress}</span>
-            </div>
+        <div className="task-info">
+          <div className="info">
+            <div className="task-subject">{this.state.taskSubject}</div>
+            <span className="task-assigned">{this.state.taskAssigned}</span>
+            <span className="start-date">{this.state.startDate}</span>
           </div>
-        }
+          <div className="progress">
+            <span className="task-status">{this.state.taskStatus}</span>
+            <span className="task-progress">{this.state.taskProgress}</span>
+          </div>
+        </div>
 
         <div className="options">
           <div className="caption">Options</div>

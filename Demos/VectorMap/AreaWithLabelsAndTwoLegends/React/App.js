@@ -39,7 +39,7 @@ export default function App() {
         <Label enabled={false}></Label>
       </Layer>
       <Legend
-        title={'World Population<br/>Percentages'}
+        title="World Population<br/>Percentages"
         horizontalAlignment="left"
         verticalAlignment="bottom"
         customizeItems={customizeItems}

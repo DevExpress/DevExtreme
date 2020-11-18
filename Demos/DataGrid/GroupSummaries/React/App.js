@@ -28,7 +28,7 @@ class App extends React.Component {
             <GroupItem
               column="OrderNumber"
               summaryType="count"
-              displayFormat={'{0} orders'} />
+              displayFormat="{0} orders" />
             <GroupItem
               column="SaleAmount"
               summaryType="max"
@@ -45,7 +45,7 @@ class App extends React.Component {
               column="TotalAmount"
               summaryType="sum"
               valueFormat="currency"
-              displayFormat={'Total: {0}'}
+              displayFormat="Total: {0}"
               showInGroupFooter={true} />
           </Summary>
           <SortByGroupSummaryInfo summaryItem="count" />

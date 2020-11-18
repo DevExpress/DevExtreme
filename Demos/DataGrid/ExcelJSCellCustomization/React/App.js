@@ -43,7 +43,7 @@ class App extends React.Component {
             <TotalItem
               column="Name"
               summaryType="count"
-              displayFormat={'Total count: {0} companies'}
+              displayFormat="Total count: {0} companies"
             />
           </Summary>
         </DataGrid>

@@ -112,18 +112,16 @@ class App extends React.Component {
             dataField="Task_Status" />
         </DataGrid>
 
-        {
-          <div className="task-info">
-            <div className="info">
-              <div id="taskSubject">{this.state.taskSubject}</div>
-              <p id="taskDetails" dangerouslySetInnerHTML={{ __html: this.state.taskDetails }}></p>
-            </div>
-            <div className="progress">
-              <span id="taskStatus">{this.state.taskStatus}</span>
-              <span id="taskProgress">{this.state.taskProgress}</span>
-            </div>
+        <div className="task-info">
+          <div className="info">
+            <div id="taskSubject">{this.state.taskSubject}</div>
+            <p id="taskDetails" dangerouslySetInnerHTML={{ __html: this.state.taskDetails }}></p>
           </div>
-        }
+          <div className="progress">
+            <span id="taskStatus">{this.state.taskStatus}</span>
+            <span id="taskProgress">{this.state.taskProgress}</span>
+          </div>
+        </div>
 
         <div className="options">
           <div className="caption">Options</div>
