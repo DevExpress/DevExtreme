@@ -1785,7 +1785,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             text: appointmentTitle,
             startDate: new Date(2020, 10, 16, 9, 30),
             endDate: new Date(2020, 10, 16, 10, 30),
-            roomId: [1, 2],
+            priorityId: [1, 2],
         }];
 
         const scheduler = createWrapper({
@@ -1796,17 +1796,11 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             startDayHour: 9,
             height: 600,
             resources: [{
-                fieldExpr: 'roomId',
-                dataSource: [{
-                    text: 'Room 101',
-                    id: 1,
-                }, {
-                    text: 'Room 102',
-                    id: 2,
-                }],
-                label: 'Room'
+                fieldExpr: 'priorityId',
+                dataSource: priorityData,
+                label: 'Priority',
             }],
-            groups: ['roomId'],
+            groups: ['priorityId'],
         });
 
         checkAppointmentDragging(assert, scheduler, appointmentTitle, 30, 0, 2, 1);
@@ -1906,25 +1900,19 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             text: 'App 1',
             startDate: new Date(2020, 10, 16, 0, 0),
             endDate: new Date(2020, 10, 16, 0, 30),
-            roomId: [1, 2],
+            priorityId: [1, 2],
         }, {
             text: 'App 2',
             startDate: new Date(2020, 10, 16, 1, 0),
             endDate: new Date(2020, 10, 16, 1, 30),
-            roomId: [1, 2],
+            priorityId: [1, 2],
         }],
         resources: [{
-            fieldExpr: 'roomId',
-            dataSource: [{
-                text: 'Room 101',
-                id: 1,
-            }, {
-                text: 'Room 102',
-                id: 2,
-            }],
-            label: 'Room'
+            fieldExpr: 'priorityId',
+            dataSource: priorityData,
+            label: 'Priority'
         }],
-        groups: ['roomId'],
+        groups: ['priorityId'],
         draggedAppointmentIndex: 1,
         dragSourceIndex: 2,
         text: 'in case of grouping and multiple resources',
@@ -2045,7 +2033,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             text: appointmentTitle,
             startDate: new Date(2020, 9, 14, 0, 0),
             endDate: new Date(2020, 9, 14, 0, 5),
-            roomId: [1, 2],
+            priorityId: [1, 2],
         }];
 
         const scheduler = createWrapper({
@@ -2061,17 +2049,11 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             showAllDayPanel: false,
             scrolling: { mode: 'virtual' },
             resources: [{
-                fieldExpr: 'roomId',
-                dataSource: [{
-                    text: 'Room 101',
-                    id: 1,
-                }, {
-                    text: 'Room 102',
-                    id: 2,
-                }],
-                label: 'Room'
+                fieldExpr: 'priorityId',
+                dataSource: priorityData,
+                label: 'Priority'
             }],
-            groups: ['roomId'],
+            groups: ['priorityId'],
         });
 
         checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 2, 1);
