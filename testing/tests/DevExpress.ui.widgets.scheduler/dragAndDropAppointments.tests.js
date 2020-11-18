@@ -1535,7 +1535,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     };
 
     const checkVirtualAppointmentDragging = (
-        assert, done, scheduler, appointmentTitle,
+        assert, scheduler, appointmentTitle,
         appointmentCount, appointmentCountAfterDND, isCloseDialog = false,
     ) => {
         const schedulerInstance = scheduler.instance;
@@ -1579,8 +1579,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
         assert.equal(appointments.length, appointmentCountAfterDND, 'Phantom appointment exists');
         assert.equal(dragSource.length, 0, 'Drag source exists');
-
-        done();
     };
 
     QUnit.test('A phantom appointment should be created on appointment dragging', function(assert) {
@@ -1865,7 +1863,6 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     });
 
     test('Drag Source should be rerendered correctly when virtual scrolling is used', function(assert) {
-        const done = assert.async();
         const appointmentTitle = 'Appointment';
         const data = [{
             text: appointmentTitle,
@@ -1884,11 +1881,10 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             scrolling: { mode: 'virtual' },
         });
 
-        checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 1, 1);
+        checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 1, 1);
     });
 
     test('Drag Source should be rerendered correctly when virtual scrolling and multiple resources are used', function(assert) {
-        const done = assert.async();
         const appointmentTitle = 'Appointment';
         const data = [{
             text: appointmentTitle,
@@ -1923,11 +1919,10 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             groups: ['roomId'],
         });
 
-        checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 2, 1);
+        checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 2, 1);
     });
 
     test('Drag Source should be rerendered correctly when virtual scrolling and recurrent appointments are used', function(assert) {
-        const done = assert.async();
         const appointmentTitle = 'Appointment';
         const data = [{
             text: appointmentTitle,
@@ -1947,7 +1942,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             scrolling: { mode: 'virtual' },
         });
 
-        checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 3, 3, true);
+        checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 3, 3, true);
     });
 
     test('Appointment should be updated correctly after DnD with virtual scrolling', function(assert) {
