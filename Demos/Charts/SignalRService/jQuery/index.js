@@ -36,7 +36,7 @@ $(function(){
                         });
                         if (prices.length) {
                             return {
-                                Date: e.intervalStart,
+                                Date: new Date((e.intervalStart.valueOf() + e.intervalEnd.valueOf()) / 2),
                                 open: prices[0],
                                 high: Math.max.apply(null, prices),
                                 low: Math.min.apply(null, prices),

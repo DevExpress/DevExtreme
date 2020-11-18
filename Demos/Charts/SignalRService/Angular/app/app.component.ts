@@ -51,7 +51,7 @@ export class AppComponent {
         const prices = e.data.map(d => d.price);
         if (prices.length) {
             return {
-                date: e.intervalStart,
+                date: new Date((e.intervalStart.valueOf() + e.intervalEnd.valueOf()) / 2),
                 open: prices[0],
                 high: Math.max.apply(null, prices),
                 low: Math.min.apply(null, prices),

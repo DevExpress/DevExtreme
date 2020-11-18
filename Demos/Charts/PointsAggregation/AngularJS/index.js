@@ -68,7 +68,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
                             minTemp = Math.min.apply(null, temp);
 
                         return { 
-                            date: aggregationInfo.intervalStart,
+                            date: new Date((aggregationInfo.intervalStart.valueOf() + aggregationInfo.intervalEnd.valueOf()) / 2),
                             maxTemp: maxTemp,
                             minTemp: minTemp
                         };

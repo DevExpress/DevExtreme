@@ -158,7 +158,7 @@ function calculateRangeArea(aggregationInfo) {
 
   let temp = aggregationInfo.data.map(item => item.temp);
   return {
-    date: aggregationInfo.intervalStart,
+    date: new Date((aggregationInfo.intervalStart.valueOf() + aggregationInfo.intervalEnd.valueOf()) / 2),
     maxTemp: Math.max.apply(null, temp),
     minTemp: Math.min.apply(null, temp)
   };
