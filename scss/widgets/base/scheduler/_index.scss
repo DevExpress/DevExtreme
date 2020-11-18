@@ -652,6 +652,8 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-date-time-indicator {
     background-color: $scheduler-time-indicator-color;
     position: absolute;
+    z-index: 1000;
+    width: 100%;
     pointer-events: none;
     box-shadow: $scheduler-time-indicator-shadow;
 
@@ -659,7 +661,6 @@ $scheduler-appointment-form-label-padding: 20px;
       font-size: $scheduler-time-indicator-font-size;
       color: $scheduler-time-indicator-color;
       position: absolute;
-      z-index: 1000;
       margin-top: -$scheduler-time-indicator-top;
       margin-left: -$scheduler-time-indicator-left;
       text-shadow: $scheduler-time-indicator-text-shadow;
@@ -691,14 +692,9 @@ $scheduler-appointment-form-label-padding: 20px;
     }
 
     .dx-scheduler-date-time-indicator {
-      margin-left: $scheduler-left-column-width;
       height: $scheduler-time-indicator-size;
 
       @include dx-icon(spinright);
-
-      .dx-scheduler-small & {
-        margin-left: $scheduler-small-size-element-offset;
-      }
     }
 
     .dx-scheduler-date-time-shader,
@@ -767,6 +763,12 @@ $scheduler-appointment-form-label-padding: 20px;
         &::before {
           margin-right: -$scheduler-time-indicator-left;
         }
+
+        &.dx-scheduler-date-time-indicator-simple {
+          &::before {
+            content: "";
+          }
+        }
       }
 
       .dx-scheduler-date-time-shader-top,
@@ -820,6 +822,7 @@ $scheduler-appointment-form-label-padding: 20px;
   .dx-scheduler-timeline {
     .dx-scheduler-date-time-indicator {
       width: $scheduler-time-indicator-size;
+      height: 100%;
       top: 0;
 
       @include dx-icon(spindown);
@@ -903,6 +906,12 @@ $scheduler-appointment-form-label-padding: 20px;
         border-bottom: $scheduler-base-border;
       }
     }
+
+    .dx-scheduler-date-time-indicator-simple {
+      &::before {
+        content: "";
+      }
+    }
   }
 
 
@@ -912,6 +921,7 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-date-table-cell {
+    vertical-align: top;
     border-top: $scheduler-base-border;
     height: $scheduler-workspace-date-table-cell-height;
   }
@@ -1801,6 +1811,7 @@ $scheduler-appointment-form-label-padding: 20px;
     border-left: $scheduler-base-border;
     border-right: $scheduler-base-border;
     height: $scheduler-workspace-date-table-cell-height;
+    position: relative;
   }
 
   // stylelint-disable-next-line no-duplicate-selectors

@@ -289,23 +289,23 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     }
 
-    _renderIndicator(height, rtlOffset, $container, groupCount) {
-        let $indicator;
-        const width = this.getIndicationWidth();
+    getIndicatorLeft(date, $cell) {
+        const cellWidth = this.getCellWidth();
+        const cellDate = this.getCellData($cell).startDate;
 
-        if(this.option('groupOrientation') === 'vertical') {
-            $indicator = this._createIndicator($container);
-            $indicator.height(getBoundingRect($container.get(0)).height);
-            $indicator.css('left', rtlOffset ? rtlOffset - width : width);
-        } else {
-            for(let i = 0; i < groupCount; i++) {
-                const offset = this.isGroupedByDate() ? i * this.getCellWidth() : this._getCellCount() * this.getCellWidth() * i;
-                $indicator = this._createIndicator($container);
-                $indicator.height(getBoundingRect($container.get(0)).height);
+        const duration = date.getTime() - cellDate.getTime();
+        const cellCount = duration / this.getCellDuration();
 
-                $indicator.css('left', rtlOffset ? rtlOffset - width - offset : width + offset);
-            }
-        }
+        return cellCount * cellWidth;
+    }
+
+    _shiftIndicator(date, $cell, $indicator) {
+        const left = this.getIndicatorLeft(date, $cell);
+        $indicator.css('left', left);
+    }
+
+    _isIndicatorSimple(index) {
+        return this._isVerticalGroupedWorkSpace() && index > 0;
     }
 
     _isVerticalShader() {
