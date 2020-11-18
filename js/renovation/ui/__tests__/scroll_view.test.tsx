@@ -855,6 +855,60 @@ describe('ScrollView', () => {
             });
           });
         });
+
+        describe('rtlEnabled', () => {
+          describe('Element is smaller than container. rtlEnabled: true', () => {
+            it('should scroll to element from right side by horizontal orientation', () => {
+              const element = createTargetElement({ location: { top: 0, left: -320 } });
+              const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
+
+              const scrollView = new ScrollView({ rtlEnabled: true, direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element);
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
+            });
+
+            it('should scroll to element from left side by horizontal orientation', () => {
+              const element = createTargetElement({ location: { top: 0, left: 0 } });
+              const containerRef = createContainerRef({ top: 0, left: -320 }, 'both', undefined, true);
+
+              const scrollView = new ScrollView({ rtlEnabled: true, direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element);
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
+            });
+          });
+
+          describe('Element is larger than container. rtlEnabled: true', () => {
+            it('should scroll to element from right side by horizontal orientation', () => {
+              const element = createTargetElement({
+                location: {
+                  top: 0, left: -320, width: 400, height: 400,
+                },
+              });
+              const containerRef = createContainerRef({ top: 0, left: 0 }, 'both', undefined, true);
+
+              const scrollView = new ScrollView({ rtlEnabled: true, direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element);
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
+            });
+
+            it('should scroll to element from left side by horizontal orientation', () => {
+              const element = createTargetElement({
+                location: {
+                  top: 0, left: 0, width: 400, height: 400,
+                },
+              });
+              const containerRef = createContainerRef({ top: 0, left: -320 }, 'both', undefined, true);
+
+              const scrollView = new ScrollView({ rtlEnabled: true, direction: 'both' } as ScrollViewProps);
+              scrollView.containerRef = containerRef;
+              scrollView.scrollToElement(element);
+              expect(containerRef.scrollLeft).toEqual(element.offsetLeft);
+            });
+          });
+        });
       });
 
       describe('ScrollHeight', () => {
