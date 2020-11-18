@@ -1,0 +1,24 @@
+<dx-chart id="chart" [dataSource]="temperaturesData" title="Temperature in September" [customizePoint]="customizePoint"
+    [customizeLabel]="customizeLabel">
+    <dxi-series argumentField="day" valueField="temperature" type="spline" color="#a3aaaa"></dxi-series>
+    <dxi-value-axis>
+        <dxo-label [customizeText]="customizeText"></dxo-label>
+        <dxi-strip [startValue]="highAverage" color="rgba(255,155,85,0.15)">
+            <dxo-label text="Above average">
+                <dxo-font [color]="highAverageColor"></dxo-font>
+            </dxo-label>
+        </dxi-strip>
+        <dxi-strip [endValue]="lowAverage" color="rgba(97,153,230,0.10)">
+            <dxo-label text="Below average">
+                <dxo-font [color]="lowAverageColor"></dxo-font>
+            </dxo-label>
+        </dxi-strip>
+        <dxo-strip-style>
+            <dxo-label>
+                <dxo-font weight="500" size="14"></dxo-font>
+            </dxo-label>
+        </dxo-strip-style>
+    </dxi-value-axis>
+    <dxo-legend [visible]="false"></dxo-legend>
+    <dxo-export [enabled]="true"></dxo-export>
+</dx-chart>
