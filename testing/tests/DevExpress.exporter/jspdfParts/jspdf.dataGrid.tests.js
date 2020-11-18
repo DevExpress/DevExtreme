@@ -201,7 +201,7 @@ QUnit.module('Grid headers', moduleConfig, () => {
         }).dxDataGrid('instance');
 
         const expectedCells = {
-            head: [[{ pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }]]
+            head: [[{ pdfCell: { content: 'f1', styles: { cellWidth: 'wrap' } }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }]]
         };
 
         exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
@@ -599,8 +599,8 @@ QUnit.module('Grid data rows', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { pdfCell: { content: 'F1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: 'F2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } }
+                { pdfCell: { content: 'F1', styles: { 'halign': 'left', cellWidth: 'wrap' } }, gridCell: { rowType: 'header', value: 'F1', column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'F2', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'header', value: 'F2', column: dataGrid.columnOption(1) } }
             ]],
             body: [[
                 { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
@@ -1520,12 +1520,12 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { pdfCell: { content: 'f2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(0) } }
+                { pdfCell: { content: 'f2', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(0) } }
             ]],
             body: [
-                [{ pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'left', cellWidth: 'wrap', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
                 [{ pdfCell: { content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }],
-                [{ pdfCell: { content: 'f1: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f1: f1_2', styles: { 'halign': 'left', cellWidth: 'wrap', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
                 [{ pdfCell: { content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
@@ -1561,12 +1561,12 @@ QUnit.module('Grouping', moduleConfig, () => {
 
         const expectedCells = {
             head: [[
-                { pdfCell: { content: 'f2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(0) } }
+                { pdfCell: { content: 'f2', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'header', value: 'f2', column: dataGrid.columnOption(0) } }
             ]],
             body: [
-                [{ pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'right', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'right', cellWidth: 'wrap', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }],
                 [{ pdfCell: { content: 'f2_1', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } }],
-                [{ pdfCell: { content: 'f1: f1_2', styles: { 'halign': 'right', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
+                [{ pdfCell: { content: 'f1: f1_2', styles: { 'halign': 'right', cellWidth: 'wrap', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }],
                 [{ pdfCell: { content: 'f2_2', styles: { 'halign': 'right', cellWidth: 'wrap' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }]
             ]
         };
@@ -2016,20 +2016,20 @@ QUnit.module('Grouping', moduleConfig, () => {
         const expectedCells = {
             body: [[
                 { pdfCell: { content: 'f1: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: 'Max: f4_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f4_2\nCount: 2', data: ds[0], column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_2' }, { 'name': 'GroupItems 2', 'value': 2 }] } },
-                { pdfCell: { content: 'Max: f5_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f5_2\nCount: 2', data: ds[0], column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', 'value': 'f5_2' }, { 'name': 'GroupItems 4', 'value': 2 }] } }
+                { pdfCell: { content: 'Max: f4_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f4_2\nCount: 2', data: ds[0], column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_2' }, { 'name': 'GroupItems 2', 'value': 2 }] } },
+                { pdfCell: { content: 'Max: f5_2\nCount: 2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f5_2\nCount: 2', data: ds[0], column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', 'value': 'f5_2' }, { 'name': 'GroupItems 4', 'value': 2 }] } }
             ], [
                 { pdfCell: { content: 'f2: f2_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[0].f2, data: ds[1], column: dataGrid.columnOption(1) } },
-                { pdfCell: { content: 'Max: f4_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f4_1\nCount: 1', data: ds[0], column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_1' }, { 'name': 'GroupItems 2', 'value': 1 }] } },
-                { pdfCell: { content: 'Max: f5_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f5_1\nCount: 1', data: ds[0], column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', 'value': 'f5_1' }, { 'name': 'GroupItems 4', 'value': 1 }] } }
+                { pdfCell: { content: 'Max: f4_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f4_1\nCount: 1', data: ds[0], column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_1' }, { 'name': 'GroupItems 2', 'value': 1 }] } },
+                { pdfCell: { content: 'Max: f5_1\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f5_1\nCount: 1', data: ds[0], column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', 'value': 'f5_1' }, { 'name': 'GroupItems 4', 'value': 1 }] } }
             ], [
                 { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } },
                 { pdfCell: { content: 'f4_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f4_1', data: ds[0], column: dataGrid.columnOption(3) } },
                 { pdfCell: { content: 'f5_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f5_1', data: ds[0], column: dataGrid.columnOption(4) } }
             ], [
                 { pdfCell: { content: 'f2: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: ds[1].f2, data: ds[0], column: dataGrid.columnOption(1) } },
-                { pdfCell: { content: 'Max: f4_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f4_2\nCount: 1', data: ds[1], column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_2' }, { 'name': 'GroupItems 2', 'value': 1 }] } },
-                { pdfCell: { content: 'Max: f5_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f5_2\nCount: 1', data: ds[1], column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', 'value': 'f5_2' }, { 'name': 'GroupItems 4', 'value': 1 }] } }
+                { pdfCell: { content: 'Max: f4_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f4_2\nCount: 1', data: ds[1], column: dataGrid.columnOption(3), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f4_2' }, { 'name': 'GroupItems 2', 'value': 1 }] } },
+                { pdfCell: { content: 'Max: f5_2\nCount: 1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 1, value: 'Max: f5_2\nCount: 1', data: ds[1], column: dataGrid.columnOption(4), groupSummaryItems: [{ 'name': 'GroupItems 3', 'value': 'f5_2' }, { 'name': 'GroupItems 4', 'value': 1 }] } }
             ], [
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } },
                 { pdfCell: { content: 'f4_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f4_2', data: ds[1], column: dataGrid.columnOption(3) } },
@@ -2396,9 +2396,9 @@ QUnit.module('Group summary', moduleConfig, () => {
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
-                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2439,7 +2439,7 @@ QUnit.module('Group summary', moduleConfig, () => {
         const expectedCells = {
             body: [[
                 { pdfCell: { content: 'f4: f4_1', colSpan: 2, styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
-                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f3_2', data: ds[0], column: dataGrid.columnOption(2), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }] } }
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f3_2', data: ds[0], column: dataGrid.columnOption(2), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }] } }
             ], [
                 { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
@@ -2495,8 +2495,8 @@ QUnit.module('Group summary', moduleConfig, () => {
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
-                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2544,8 +2544,8 @@ QUnit.module('Group summary', moduleConfig, () => {
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(2) } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2586,7 +2586,7 @@ QUnit.module('Group summary', moduleConfig, () => {
         const expectedCells = {
             body: [[
                 { pdfCell: { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
-                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f3_2', data: ds[0], column: dataGrid.columnOption(2), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }] } }
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f3_2', data: ds[0], column: dataGrid.columnOption(2), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }] } }
             ], [
                 { pdfCell: { content: 'f2_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_1', data: ds[0], column: dataGrid.columnOption(1) } },
                 { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
@@ -2640,8 +2640,8 @@ QUnit.module('Group summary', moduleConfig, () => {
                 { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[0], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[0], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -2682,7 +2682,7 @@ QUnit.module('Group summary', moduleConfig, () => {
         const expectedCells = {
             body: [[
                 { pdfCell: { content: 'f4: f4_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } },
-                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f3_2', data: ds[0], column: dataGrid.columnOption(2), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }] } }
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'group', groupIndex: 0, value: 'Max: f3_2', data: ds[0], column: dataGrid.columnOption(2), groupSummaryItems: [{ 'name': 'GroupItems 1', 'value': 'f3_2' }] } }
             ], [
                 { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f3_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_1', data: ds[0], column: dataGrid.columnOption(2) } }
@@ -2736,11 +2736,11 @@ QUnit.module('Total summary', moduleConfig, () => {
                 { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
             ], [
-                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
-                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
+                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
+                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
             ], [
-                { pdfCell: { content: 'Min: f1_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
-                { pdfCell: { content: 'Min: f2_1', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
+                { pdfCell: { content: 'Min: f1_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
+                { pdfCell: { content: 'Min: f2_1', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
             ]]
         };
 
@@ -2777,7 +2777,7 @@ QUnit.module('Total summary', moduleConfig, () => {
             body: [[
                 { pdfCell: { content: 'f1_1', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_1', data: ds[0], column: dataGrid.columnOption(0) } }
             ], [
-                { pdfCell: { content: 'custom', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } }
+                { pdfCell: { content: 'custom', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } }
             ]]
         };
 
@@ -2825,11 +2825,11 @@ QUnit.module('Total summary', moduleConfig, () => {
                 { pdfCell: { content: 'f1_2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'right' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
             ], [
-                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
-                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
+                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'right', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
+                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'right', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
             ], [
-                { pdfCell: { content: 'Min: f1_1', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
-                { pdfCell: { content: 'Min: f2_1', styles: { 'halign': 'right', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
+                { pdfCell: { content: 'Min: f1_1', styles: { 'halign': 'right', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
+                { pdfCell: { content: 'Min: f2_1', styles: { 'halign': 'right', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
             ]]
         };
 
@@ -2925,11 +2925,11 @@ QUnit.module('Total summary', moduleConfig, () => {
                 { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
             ], [
-                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
-                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
+                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
+                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
             ], [
-                { pdfCell: { content: 'Min: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
-                { pdfCell: { content: 'Min: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
+                { pdfCell: { content: 'Min: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
+                { pdfCell: { content: 'Min: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
             ]]
         };
 
@@ -2974,8 +2974,8 @@ QUnit.module('Total summary', moduleConfig, () => {
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -3020,8 +3020,8 @@ QUnit.module('Total summary', moduleConfig, () => {
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } }
+                { pdfCell: { content: 'Max: f2_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -3065,8 +3065,8 @@ QUnit.module('Total summary', moduleConfig, () => {
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(1) } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(1) } }
             ]]
         };
 
@@ -3111,8 +3111,8 @@ QUnit.module('Total summary', moduleConfig, () => {
                 { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(2) } }
+                { pdfCell: { content: 'Max: f1_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -3157,8 +3157,8 @@ QUnit.module('Total summary', moduleConfig, () => {
                 { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(2) } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -3203,8 +3203,8 @@ QUnit.module('Total summary', moduleConfig, () => {
                 { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: 'Max: f3_2', styles: { 'halign': 'left', fontStyle: 'bold' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -4356,9 +4356,9 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } },
                 { pdfCell: { content: 'f3_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f3_2', data: ds[1], column: dataGrid.columnOption(2) } }
             ], [
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
-                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
-                { pdfCell: { content: 'Max: f3_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'normal' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(0) } },
+                { pdfCell: { content: '', styles: { 'halign': 'left', fontStyle: 'normal' } }, gridCell: { rowType: 'groupFooter', value: undefined, data: ds[1], column: dataGrid.columnOption(1) } },
+                { pdfCell: { content: 'Max: f3_2: customText', styles: { 'halign': 'left', fontStyle: 'normal' } }, gridCell: { rowType: 'groupFooter', value: ds[1].f3, data: ds[1], column: dataGrid.columnOption(2) } }
             ]]
         };
 
@@ -4413,11 +4413,11 @@ QUnit.module('customizeCell', moduleConfig, () => {
                 { pdfCell: { content: 'f1_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f1_2', data: ds[1], column: dataGrid.columnOption(0) } },
                 { pdfCell: { content: 'f2_2', styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: 'f2_2', data: ds[1], column: dataGrid.columnOption(1) } }
             ], [
-                { pdfCell: { content: 'Max: f1_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
-                { pdfCell: { content: 'Max: f2_2: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
+                { pdfCell: { content: 'Max: f1_2: customText', styles: { 'halign': 'left', fontStyle: 'normal' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 1' } },
+                { pdfCell: { content: 'Max: f2_2: customText', styles: { 'halign': 'left', fontStyle: 'normal' } }, gridCell: { rowType: 'totalFooter', value: ds[1].f2, data: ds[1], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 3' } }
             ], [
-                { pdfCell: { content: 'Min: f1_1: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
-                { pdfCell: { content: 'Min: f2_1: customText', styles: { 'halign': 'left', fontStyle: 'normal', cellWidth: 'wrap' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
+                { pdfCell: { content: 'Min: f1_1: customText', styles: { 'halign': 'left', fontStyle: 'normal' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0), totalSummaryItemName: 'TotalSummary 2' } },
+                { pdfCell: { content: 'Min: f2_1: customText', styles: { 'halign': 'left', fontStyle: 'normal' } }, gridCell: { rowType: 'totalFooter', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1), totalSummaryItemName: 'TotalSummary 4' } }
             ]]
         };
 
