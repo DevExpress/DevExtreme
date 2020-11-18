@@ -44,7 +44,7 @@ QUnit.module('Header panel', {
 }, () => {
 
     QUnit.test('Draw searchPanel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -71,7 +71,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Change search text', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
         let input;
@@ -99,7 +99,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Draw groupPanel without grouping', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -124,7 +124,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Render groupPanel with visible="auto"', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
         const countOfRenderedElements = devices.current().deviceType === 'desktop' ? 1 : 0;
@@ -148,7 +148,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Bounding rect of groupPanel when panel is not visible', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -167,7 +167,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Bounding rect of groupPanel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -188,7 +188,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Group items with cssClass', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -213,7 +213,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Draw groupPanel with grouping', function(assert) {
-    // arrange
+        // arrange
 
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
@@ -244,7 +244,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Group panel with sorting, check alignment', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -265,7 +265,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Group panel with sorting, height after change font size', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -290,7 +290,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Draw header panel with group panel and search panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -315,7 +315,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Not draw header panel without group panel and search panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -327,7 +327,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Enter text in searchPanel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -346,7 +346,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('Draw searchPanel custom width', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -366,8 +366,26 @@ QUnit.module('Header panel', {
         assert.equal(searchPanel.outerWidth(), 213, 'default search panel width');
     });
 
+    // T947070
+    QUnit.test('Toolbar must have aria-label', function(assert) {
+        // arrange
+        const headerPanel = this.headerPanel;
+        const testElement = $('#container');
+
+        this.options.searchPanel = {
+            visible: true
+        };
+
+        // act
+        headerPanel.render(testElement);
+
+        // assert
+        const $toolbar = testElement.find('.dx-toolbar');
+        assert.equal($toolbar.attr('aria-label'), 'Grid\'s toolbar', 'aria-label');
+    });
+
     QUnit.test('Hide search panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const container = $('#container');
 
@@ -392,7 +410,7 @@ QUnit.module('Header panel', {
     });
 
     function updateSearchTextTest(assert, that, eventToTrigger) {
-    // arrange
+        // arrange
         const headerPanel = that.headerPanel;
         const container = $('#container');
 
@@ -432,7 +450,7 @@ QUnit.module('Header panel', {
 
     // T117339
     QUnit.test('Not allow dragging when no visible group panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -449,7 +467,7 @@ QUnit.module('Header panel', {
 
     // T117339
     QUnit.test('Not allow dragging when allowGrouping in column false', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -466,7 +484,7 @@ QUnit.module('Header panel', {
 
     // T117339
     QUnit.test('Allow dragging when visible group panel', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -482,7 +500,7 @@ QUnit.module('Header panel', {
     });
 
     QUnit.test('EmptyPanelText is displayed when allowColumnDragging is false', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -518,7 +536,7 @@ QUnit.module('Draw buttons in header panel', {
 }, () => {
 
     QUnit.test('Draw add row button', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -539,7 +557,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Draw cancel and save buttons', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -568,7 +586,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Draw show column chooser button', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container');
 
@@ -587,7 +605,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Draw hidden show column chooser button', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const testElement = $('#container').width(10);
 
@@ -625,7 +643,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Add button via the onToolbarPreparing option', function(assert) {
-    // arrange
+        // arrange
         let callCountToolbarPreparing = 0;
         const headerPanel = this.headerPanel;
         const $testElement = $('#container');
@@ -660,7 +678,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('Add button via the onToolbarPreparing option when there is column chooser button', function(assert) {
-    // arrange
+        // arrange
         const headerPanel = this.headerPanel;
         const $testElement = $('#container');
 
@@ -701,7 +719,7 @@ QUnit.module('Draw buttons in header panel', {
     });
 
     QUnit.test('onToolbarPreparing - setting handler to the click event for column chooser button', function(assert) {
-    // arrange
+        // arrange
         let callCountClick = 0;
         const headerPanel = this.headerPanel;
         const $testElement = $('#container');

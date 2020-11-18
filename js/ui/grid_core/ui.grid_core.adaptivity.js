@@ -14,6 +14,7 @@ import { equalByValue } from '../../core/utils/common';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { Deferred, when } from '../../core/utils/deferred';
+import messageLocalization from '../../localization/message';
 
 const COLUMN_HEADERS_VIEW = 'columnHeadersView';
 const ROWS_VIEW = 'rowsView';
@@ -43,6 +44,9 @@ const EDIT_MODE_POPUP = 'popup';
 const REVERT_TOOLTIP_CLASS = 'revert-tooltip';
 const GROUP_CELL_CLASS = 'dx-group-cell';
 const GROUP_ROW_CLASS = 'dx-group-row';
+
+const EXPAND_ARIA_NAME = 'dxDataGrid-ariaAdaptiveExpand';
+const COLLAPSE_ARIA_NAME = 'dxDataGrid-ariaAdaptiveCollapse';
 
 function getColumnId(that, column) {
     return that._columnsController.getColumnId(column);
@@ -754,6 +758,11 @@ export default {
                     if(hidingColumnsQueueLength && !hiddenColumnsLength) {
                         getDataCellElements($row).last().addClass(LAST_DATA_CELL_CLASS);
                     }
+
+                    if(options.row.rowType === 'data') {
+                        const $adaptiveCommand = $row.find('.dx-command-adaptive');
+                        $adaptiveCommand.attr('aria-label', messageLocalization.format(EXPAND_ARIA_NAME));
+                    }
                 },
 
                 _getColumnIndexByElementCore: function($element) {
@@ -1091,6 +1100,7 @@ export default {
                         newExpandLoadedRowIndex = -1;
                     }
 
+                    const oldKey = that._adaptiveExpandedKey;
                     that._adaptiveExpandedKey = key;
 
                     if(oldExpandLoadedRowIndex >= 0) {
@@ -1107,6 +1117,15 @@ export default {
                         changeType: 'update',
                         rowIndices: [oldExpandLoadedRowIndex - rowIndexDelta, newExpandLoadedRowIndex - rowIndexDelta]
                     });
+
+                    const dataController = that.getController('data');
+                    const rowIndex = dataController.getRowIndexByKey(key || oldKey);
+                    const $row = $(that.component.getRowElement(rowIndex));
+                    const $adaptiveCommand = $row.find('.dx-command-adaptive');
+                    const isExpanded = isDefined(key);
+                    const label = messageLocalization.format(isExpanded ? COLLAPSE_ARIA_NAME : EXPAND_ARIA_NAME);
+
+                    $adaptiveCommand.attr('aria-label', label);
                 },
 
                 init: function() {

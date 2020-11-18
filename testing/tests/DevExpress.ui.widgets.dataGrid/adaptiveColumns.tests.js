@@ -1991,16 +1991,25 @@ QUnit.module('API', {
         this.resizingController.updateDimensions();
         this.clock.tick();
 
+        // assert
+        const $adaptiveCommand = $(this.getRowElement(0)).find('.dx-command-adaptive');
+        assert.equal($adaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
+
         // act
         this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
         this.clock.tick();
 
+        // assert
         assert.ok($('.dx-adaptive-detail-row').length, 'render field items');
+        assert.equal($adaptiveCommand.attr('aria-label'), 'Hide adaptive columns', 'command cell aria-label'); // T947070
 
+        // act
         this.adaptiveColumnsController.collapseAdaptiveDetailRow();
         this.clock.tick();
 
+        // assert
         assert.ok(!$('.dx-adaptive-detail-row').length, 'there is no field items');
+        assert.equal($adaptiveCommand.attr('aria-label'), 'Show adaptive columns', 'command cell aria-label'); // T947070
     });
 
     QUnit.test('Is adaptive row expanded', function(assert) {
