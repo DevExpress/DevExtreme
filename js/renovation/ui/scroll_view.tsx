@@ -10,11 +10,6 @@ import {
   Effect,
 } from 'devextreme-generator/component_declaration/common';
 import { subscribeToScrollEvent } from '../utils/subscribe_to_event';
-import {
-  StandardRtlCoordinatesConverter,
-  RtlCoordinatesConverter,
-  NonStandardRtlCoordinatesConverter,
-} from './rtl_coordinates_converter';
 import { isNumeric } from '../../core/utils/type';
 import getScrollRtlBehavior from '../../core/utils/scroll_rtl_behavior';
 import { Widget } from './common/widget';
@@ -122,10 +117,6 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Ref() containerRef!: HTMLDivElement;
 
-  readonly rtlConverter = getScrollRtlBehavior().positive
-    ? new NonStandardRtlCoordinatesConverter()
-    : new StandardRtlCoordinatesConverter();
-
   @Method()
   content(): HTMLDivElement {
     return this.contentRef;
@@ -135,24 +126,23 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   scrollBy(distance: number | Partial<ScrollViewLocation>): void {
     const location = ensureLocation(distance);
 
-    const containerPosition = this.getContainerPosition();
     if (this.isDirection(DIRECTION_VERTICAL)) {
-      this.containerRef.scrollTop = Math.round(containerPosition.top + location.top);
+      this.containerRef.scrollTop += this.normalizeRtlProp('top', Math.round(location.top));
     }
     if (this.isDirection(DIRECTION_HORIZONTAL)) {
-      this.containerRef.scrollLeft = Math.round(containerPosition.left
-        + this.convertRtlTo(location.left));
+      this.containerRef.scrollLeft += this.normalizeRtlProp('left', Math.round(location.left));
     }
   }
 
   @Method()
   scrollTo(targetLocation: number | Partial<ScrollViewLocation>): void {
     const location = ensureLocation(targetLocation);
-    const containerPosition = this.getContainerPosition();
-    this.scrollBy({
-      left: this.convertRtlFrom(location.left) - this.convertRtlFrom(containerPosition.left),
-      top: location.top - containerPosition.top,
-    });
+    const containerPosition = this.scrollOffset();
+
+    const top = location.top - containerPosition.top;
+    const left = location.left - containerPosition.left;
+
+    this.scrollBy({ top, left });
   }
 
   @Method()
@@ -167,8 +157,8 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
       };
 
       this.scrollTo({
-        top: this.getScrollLocation(element, scrollOffset, DIRECTION_VERTICAL),
-        left: this.getScrollLocation(element, scrollOffset, DIRECTION_HORIZONTAL),
+        top: this.getElementLocation(element, scrollOffset, DIRECTION_VERTICAL),
+        left: this.getElementLocation(element, scrollOffset, DIRECTION_HORIZONTAL),
       });
     }
   }
@@ -185,10 +175,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   scrollOffset(): ScrollViewLocation {
-    const containerPosition = this.getContainerPosition();
+    const containerPosition = this.getContainerOffsetInternal();
     return {
-      left: this.convertRtlFrom(containerPosition.left),
-      top: containerPosition.top,
+      left: this.toPublicProp('left', containerPosition.left),
+      top: this.toPublicProp('top', containerPosition.top),
     };
   }
 
@@ -254,7 +244,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     return currentDirection === direction;
   }
 
-  private getContainerPosition(): ScrollViewLocation {
+  private getContainerOffsetInternal(): ScrollViewLocation {
     return {
       left: this.containerRef.scrollLeft,
       top: this.containerRef.scrollTop,
@@ -279,52 +269,63 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     return this.containerRef[`offset${dimension}`] - this.containerRef[`client${dimension}`];
   }
 
-  private getScrollLocation(
-    element: HTMLElement, scrollOffset: ScrollOffset, direction: ScrollViewDirection,
+  private getElementLocation(
+    element: HTMLElement, offset: ScrollOffset, direction: ScrollViewDirection,
+  ): number {
+    const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
+    const location = this.normalizeRtlProp(prop,
+      this.getElementLocationInternal(element, prop, offset, direction));
+
+    return this.toPublicProp(prop, location);
+  }
+
+  private getElementLocationInternal(
+    element: HTMLElement, prop: string, offset: ScrollOffset, direction: ScrollViewDirection,
   ): number {
     const dimension = direction === DIRECTION_VERTICAL ? 'Height' : 'Width';
-    const prop = direction === DIRECTION_VERTICAL ? 'top' : 'left';
-
     const relativeLocation = getRelativeLocation(element)[prop];
     const scrollBarSize = this.getScrollBarSize(dimension);
 
     const containerSize = this.containerRef[`offset${dimension}`];
     const elementOffset = element[`offset${dimension}`];
 
-    const scrollOffsetBegin = scrollOffset[prop];
-    const scrollOffsetEnd = scrollOffset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'];
+    const offsetStart = offset[prop];
+    const offsetEnd = offset[direction === DIRECTION_VERTICAL ? 'bottom' : 'right'];
 
-    const containerPosition = this.getContainerPosition()[prop];
+    const containerLocation = this.normalizeRtlProp(prop, this.getContainerOffsetInternal()[prop]);
 
-    if (relativeLocation < containerPosition + scrollOffsetBegin) {
-      if (elementOffset < containerSize - scrollOffsetBegin - scrollOffsetEnd) {
-        return relativeLocation - scrollOffsetBegin;
+    if (relativeLocation < containerLocation + offsetStart) {
+      if (elementOffset < containerSize - offsetStart - offsetEnd) {
+        return relativeLocation - offsetStart;
       }
-      return relativeLocation + elementOffset - containerSize + scrollOffsetEnd + scrollBarSize;
+      return relativeLocation + elementOffset - containerSize + offsetEnd + scrollBarSize;
     }
 
     if (relativeLocation + elementOffset
-      >= containerPosition + containerSize - scrollOffsetEnd - scrollBarSize) {
-      if (elementOffset < containerSize - scrollOffsetBegin - scrollOffsetEnd) {
-        return relativeLocation + elementOffset + scrollBarSize - containerSize + scrollOffsetEnd;
+      >= containerLocation + containerSize - offsetEnd - scrollBarSize) {
+      if (elementOffset < containerSize - offsetStart - offsetEnd) {
+        return relativeLocation + elementOffset + scrollBarSize - containerSize + offsetEnd;
       }
-      return relativeLocation - scrollOffsetBegin;
+      return relativeLocation - offsetStart;
     }
 
-    return containerPosition;
+    return containerLocation;
   }
 
-  private convertRtlFrom(coordinate: number): number {
-    return this.props.rtlEnabled
-      ? this.getConverter().convertFrom(coordinate)
+  private toPublicProp(prop: string, coordinate: number): number {
+    return this.isRtlProp(prop)
+      ? this.containerRef.scrollWidth - this.contentRef.clientWidth
+        + this.normalizeRtlProp(prop, coordinate)
       : coordinate;
   }
 
-  private convertRtlTo(coordinate: number): number {
-    return this.props.rtlEnabled
-      ? this.getConverter().convertTo(coordinate)
+  private normalizeRtlProp(prop: string, coordinate: number): number {
+    return this.isRtlProp(prop) && getScrollRtlBehavior().positive
+      ? -1 * coordinate
       : coordinate;
   }
 
-  readonly getConverter = () => this.rtlConverter as RtlCoordinatesConverter;
+  private isRtlProp(prop: string): boolean {
+    return this.props.rtlEnabled === true && prop === 'left';
+  }
 }
