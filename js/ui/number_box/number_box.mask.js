@@ -112,7 +112,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const inputValue = this._getInputVal();
 
         if(this._hasValueBeenChanged(inputValue)) {
-            this._parsedValue = this._tryParse(inputValue, this._caret());
+            this._updateParsedValue();
 
             this._adjustParsedValue();
             this._setTextByParsedValue();
@@ -723,6 +723,11 @@ const NumberBoxMask = NumberBoxBase.inherit({
         return this.callBase();
     },
 
+    _updateParsedValue: function() {
+        const inputValue = this._getInputVal();
+        this._parsedValue = this._tryParse(inputValue, this._caret());
+    },
+
     _adjustParsedValue: function() {
         if(!this._useMaskBehavior()) {
             return;
@@ -750,6 +755,7 @@ const NumberBoxMask = NumberBoxBase.inherit({
         this._lastKey = null;
         this._lastKeyName = null;
 
+        this._updateParsedValue();
         this._adjustParsedValue();
         this.option('value', this._parsedValue);
 
