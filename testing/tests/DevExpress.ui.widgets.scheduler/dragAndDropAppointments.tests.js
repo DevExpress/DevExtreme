@@ -6,7 +6,8 @@ import browser from 'core/utils/browser';
 import {
     createWrapper,
     initTestMarkup,
-    isDesktopEnvironment
+    isDesktopEnvironment,
+    CLASSES,
 } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
@@ -84,6 +85,7 @@ const zoomModuleConfig = {
 };
 
 const DROPPABLE_CELL_CLASS = 'dx-scheduler-date-table-droppable-cell';
+const DRAG_SOURCE_CLASS = CLASSES.appointmentDragSource.slice(1);
 
 module('Browser zoom', zoomModuleConfig, () => {
     if(!isDesktopEnvironment() || !browser.webkit) {
@@ -1556,6 +1558,12 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
         const workSpace = schedulerInstance.getWorkSpace();
 
+        appointments = scheduler.appointments.find(appointmentTitle);
+        dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(appointments.length, appointmentCount + 1, 'Phantom appointment exists');
+        assert.equal(dragSource.length, 1, 'Drag source exists');
+
         const { virtualScrollingDispatcher } = workSpace;
         virtualScrollingDispatcher.getRenderTimeout = () => -1;
 
@@ -1862,6 +1870,58 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         });
     });
 
+    [{
+        data: [{
+            text: 'App 1',
+            startDate: new Date(2020, 9, 14, 0, 0),
+            endDate: new Date(2020, 9, 14, 0, 30),
+        }, {
+            text: 'App 2',
+            startDate: new Date(2020, 9, 14, 1, 0),
+            endDate: new Date(2020, 9, 14, 1, 30),
+        }],
+        resources: undefined,
+        groups: undefined,
+        draggedAppointmentIndex: 0,
+        dragSourceIndex: 1,
+    }].forEach(({ data, resources, groups, draggedAppointmentIndex, dragSourceIndex }) => {
+        test('Drag Source should be selected correctly', function(assert) {
+            const firstAppointmentTitle = data[0].text;
+            const secondAppointmentTitle = data[1].text;
+
+            const scheduler = createWrapper({
+                height: 600,
+                views: ['day'],
+                currentView: 'day',
+                dataSource: data,
+                currentDate: new Date(2020, 9, 14),
+                showAllDayPanel: false,
+                resources,
+                groups,
+            });
+
+            const $appointment = scheduler.appointments.find(firstAppointmentTitle).eq(draggedAppointmentIndex);
+            const positionBeforeDrag = getAbsolutePosition($appointment);
+
+            const pointer = pointerMock($appointment)
+                .start()
+                .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                .move(0, 50);
+
+            const $firstAppointment = scheduler.appointments.find(firstAppointmentTitle).eq(dragSourceIndex);
+            const $secondAppointment = scheduler.appointments.find(secondAppointmentTitle);
+
+            assert.ok($firstAppointment.hasClass(DRAG_SOURCE_CLASS), 'Correct drag source');
+            $secondAppointment.each(function() {
+                const $element = $(this);
+
+                assert.notOk($element.hasClass(DRAG_SOURCE_CLASS), 'Second appointment is not drag source');
+            });
+
+            pointer.up();
+        });
+    });
+
     test('Drag Source should be rerendered correctly when virtual scrolling is used', function(assert) {
         const appointmentTitle = 'Appointment';
         const data = [{
@@ -1997,5 +2057,43 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         nextPointer.up();
 
         assert.equal(scheduler.appointments.getDateText(0), '12:01 AM - 12:06 AM', 'Correct appointment after drag');
+    });
+
+    test('Drag source should not be created while dragging from tooltip', function(assert) {
+        const dataSource = [{
+            text: 'App 1',
+            startDate: new Date(2020, 10, 12, 9, 30),
+            endDate: new Date(2020, 10, 12, 10, 30),
+        }, {
+            text: 'App 2',
+            startDate: new Date(2020, 10, 12, 9, 30),
+            endDate: new Date(2020, 10, 12, 10, 30),
+        }];
+
+        const scheduler = createWrapper({
+            views: [{ type: 'week', maxAppointmentsPerCell: 1 }],
+            currentView: 'week',
+            dataSource: dataSource,
+            currentDate: new Date(2020, 10, 12),
+            startDayHour: 9,
+            height: 600,
+        });
+
+        scheduler.appointments.compact.click(0);
+
+        const appointment = scheduler.appointments.compact.getAppointment();
+        const appointmentPosition = getAbsolutePosition(appointment);
+
+        const pointer = pointerMock(appointment).start();
+
+        pointer
+            .down(appointmentPosition.left, appointmentPosition.top)
+            .move(0, 60);
+
+        const dragSource = scheduler.appointments.getDragSource();
+
+        assert.equal(dragSource.length, 0, 'Drag source does not exist');
+
+        pointer.up();
     });
 });
