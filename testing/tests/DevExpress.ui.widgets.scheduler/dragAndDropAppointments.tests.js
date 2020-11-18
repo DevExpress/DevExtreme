@@ -1873,17 +1873,58 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     [{
         data: [{
             text: 'App 1',
-            startDate: new Date(2020, 9, 14, 0, 0),
-            endDate: new Date(2020, 9, 14, 0, 30),
+            startDate: new Date(2020, 10, 16, 0, 0),
+            endDate: new Date(2020, 10, 16, 0, 30),
         }, {
             text: 'App 2',
-            startDate: new Date(2020, 9, 14, 1, 0),
-            endDate: new Date(2020, 9, 14, 1, 30),
+            startDate: new Date(2020, 10, 16, 1, 0),
+            endDate: new Date(2020, 10, 16, 1, 30),
         }],
         resources: undefined,
         groups: undefined,
         draggedAppointmentIndex: 0,
         dragSourceIndex: 1,
+    }, {
+        data: [{
+            text: 'App 1',
+            startDate: new Date(2020, 10, 16, 0, 0),
+            endDate: new Date(2020, 10, 16, 0, 30),
+            recurrenceRule: 'FREQ=DAILY;COUNT=3',
+        }, {
+            text: 'App 2',
+            startDate: new Date(2020, 10, 16, 1, 0),
+            endDate: new Date(2020, 10, 16, 1, 30),
+        }],
+        resources: undefined,
+        groups: undefined,
+        draggedAppointmentIndex: 1,
+        dragSourceIndex: 2,
+    }, {
+        data: [{
+            text: 'App 1',
+            startDate: new Date(2020, 10, 16, 0, 0),
+            endDate: new Date(2020, 10, 16, 0, 30),
+            roomId: [1, 2],
+        }, {
+            text: 'App 2',
+            startDate: new Date(2020, 10, 16, 1, 0),
+            endDate: new Date(2020, 10, 16, 1, 30),
+            roomId: [1, 2],
+        }],
+        resources: [{
+            fieldExpr: 'roomId',
+            dataSource: [{
+                text: 'Room 101',
+                id: 1,
+            }, {
+                text: 'Room 102',
+                id: 2,
+            }],
+            label: 'Room'
+        }],
+        groups: ['roomId'],
+        draggedAppointmentIndex: 1,
+        dragSourceIndex: 2,
     }].forEach(({ data, resources, groups, draggedAppointmentIndex, dragSourceIndex }) => {
         test('Drag Source should be selected correctly', function(assert) {
             const firstAppointmentTitle = data[0].text;
@@ -1891,10 +1932,10 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
             const scheduler = createWrapper({
                 height: 600,
-                views: ['day'],
-                currentView: 'day',
+                views: ['week'],
+                currentView: 'week',
                 dataSource: data,
-                currentDate: new Date(2020, 9, 14),
+                currentDate: new Date(2020, 10, 16),
                 showAllDayPanel: false,
                 resources,
                 groups,
@@ -1919,6 +1960,8 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
             });
 
             pointer.up();
+
+            data[0].recurrenceRule && scheduler.appointmentPopup.dialog.hide();
         });
     });
 
