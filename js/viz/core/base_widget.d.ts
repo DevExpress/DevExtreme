@@ -157,6 +157,10 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
      */
     tooltip?: BaseWidgetTooltip;
 }
+/**
+ * @docid
+ * @hidden
+ */
 export interface BaseWidgetExport {
     /**
      * @docid
@@ -275,6 +279,10 @@ export interface BaseWidgetLoadingIndicator {
      */
     text?: string;
 }
+/**
+ * @docid
+ * @hidden
+ */
 export interface BaseWidgetMargin {
     /**
      * @docid
@@ -309,6 +317,10 @@ export interface BaseWidgetMargin {
      */
     top?: number;
 }
+/**
+ * @docid
+ * @hidden
+ */
 export interface BaseWidgetSize {
     /**
      * @docid
@@ -327,6 +339,10 @@ export interface BaseWidgetSize {
      */
     width?: number;
 }
+/**
+ * @docid
+ * @hidden
+ */
 export interface BaseWidgetTitle {
     /**
      * @docid

@@ -106,6 +106,10 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
      */
     value?: number;
 }
+/**
+ * @docid
+ * @hidden
+ */
 export interface BaseGaugeAnimation {
     /**
      * @docid
