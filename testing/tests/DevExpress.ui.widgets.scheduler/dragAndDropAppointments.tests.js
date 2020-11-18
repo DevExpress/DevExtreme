@@ -1949,4 +1949,58 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
         checkVirtualAppointmentDragging(assert, done, scheduler, appointmentTitle, 3, 3, true);
     });
+
+    test('Appointment should be updated correctly after DnD with virtual scrolling', function(assert) {
+        const appointmentTitle = 'Appointment';
+        const data = [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 16, 0, 0),
+            endDate: new Date(2020, 10, 16, 0, 5),
+        }];
+
+        const scheduler = createWrapper({
+            height: 600,
+            views: ['week'],
+            currentView: 'week',
+            cellDuration: 1,
+            dataSource: data,
+            currentDate: new Date(2020, 10, 16),
+            showAllDayPanel: false,
+            scrolling: { mode: 'virtual' },
+        });
+
+        const schedulerInstance = scheduler.instance;
+        const workSpace = schedulerInstance.getWorkSpace();
+
+        const { virtualScrollingDispatcher } = workSpace;
+        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+        const $appointment = scheduler.appointments.find(appointmentTitle).first();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+
+        const $nextCell = scheduler.workSpace.getCell(1, 1);
+        const cellHeight = $nextCell.outerHeight();
+        const cellWidth = $nextCell.outerWidth();
+        const cellAbsolutePosition = getAbsolutePosition($nextCell);
+        const cellCenter = {
+            left: cellAbsolutePosition.left + cellWidth / 2,
+            top: cellAbsolutePosition.top + cellHeight / 2,
+        };
+
+        pointerMock($appointment)
+            .start()
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(cellCenter.left - positionBeforeDrag.left, cellCenter.top - positionBeforeDrag.top);
+
+        // Cause rerender of the grid and appointments
+        virtualScrollingDispatcher._updateRender();
+
+        const appointments = scheduler.appointments.find(appointmentTitle);
+
+        const draggedAppointment = $(appointments[0]).parent();
+        const nextPointer = pointerMock(draggedAppointment);
+        nextPointer.up();
+
+        assert.equal(scheduler.appointments.getDateText(0), '12:01 AM - 12:06 AM', 'Correct appointment after drag');
+    });
 });
