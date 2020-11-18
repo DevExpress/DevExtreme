@@ -1871,7 +1871,7 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
     });
 
     [{
-        data: [{
+        getData: () => [{
             text: 'App 1',
             startDate: new Date(2020, 10, 16, 0, 0),
             endDate: new Date(2020, 10, 16, 0, 30),
@@ -1884,8 +1884,9 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         groups: undefined,
         draggedAppointmentIndex: 0,
         dragSourceIndex: 1,
+        text: 'in a simple case',
     }, {
-        data: [{
+        getData: () => [{
             text: 'App 1',
             startDate: new Date(2020, 10, 16, 0, 0),
             endDate: new Date(2020, 10, 16, 0, 30),
@@ -1899,8 +1900,9 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         groups: undefined,
         draggedAppointmentIndex: 1,
         dragSourceIndex: 2,
+        text: 'in case of dragging a recurrent appointment',
     }, {
-        data: [{
+        getData: () => [{
             text: 'App 1',
             startDate: new Date(2020, 10, 16, 0, 0),
             endDate: new Date(2020, 10, 16, 0, 30),
@@ -1925,10 +1927,13 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         groups: ['roomId'],
         draggedAppointmentIndex: 1,
         dragSourceIndex: 2,
-    }].forEach(({ data, resources, groups, draggedAppointmentIndex, dragSourceIndex }) => {
-        test('Drag Source should be selected correctly', function(assert) {
-            const firstAppointmentTitle = data[0].text;
-            const secondAppointmentTitle = data[1].text;
+        text: 'in case of grouping and multiple resources',
+    }].forEach(({ getData, resources, groups, draggedAppointmentIndex, dragSourceIndex, text }) => {
+        const firstAppointmentTitle = getData()[0].text;
+        const secondAppointmentTitle = getData()[1].text;
+
+        test(`Drag Source should be selected correctly ${text}`, function(assert) {
+            const data = getData();
 
             const scheduler = createWrapper({
                 height: 600,
@@ -1948,6 +1953,53 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
                 .start()
                 .down(positionBeforeDrag.left, positionBeforeDrag.top)
                 .move(0, 50);
+
+            const $firstAppointment = scheduler.appointments.find(firstAppointmentTitle).eq(dragSourceIndex);
+            const $secondAppointment = scheduler.appointments.find(secondAppointmentTitle);
+
+            assert.ok($firstAppointment.hasClass(DRAG_SOURCE_CLASS), 'Correct drag source');
+            $secondAppointment.each(function() {
+                const $element = $(this);
+
+                assert.notOk($element.hasClass(DRAG_SOURCE_CLASS), 'Second appointment is not drag source');
+            });
+
+            pointer.up();
+
+            data[0].recurrenceRule && scheduler.appointmentPopup.dialog.hide();
+        });
+
+        test(`Drag Source should be updated correctly when using virtual scrolling ${text}`, function(assert) {
+            const data = getData();
+
+            const scheduler = createWrapper({
+                height: 600,
+                views: ['week'],
+                currentView: 'week',
+                dataSource: data,
+                currentDate: new Date(2020, 10, 16),
+                showAllDayPanel: false,
+                scrolling: { mode: 'virtual' },
+                resources,
+                groups,
+            });
+            scheduler.drawControl();
+
+            const $appointment = scheduler.appointments.find(firstAppointmentTitle).eq(draggedAppointmentIndex);
+            const positionBeforeDrag = getAbsolutePosition($appointment);
+
+            const pointer = pointerMock($appointment)
+                .start()
+                .down(positionBeforeDrag.left, positionBeforeDrag.top)
+                .move(0, 50);
+
+            const schedulerInstance = scheduler.instance;
+            const { virtualScrollingDispatcher } = schedulerInstance.getWorkSpace();
+
+            virtualScrollingDispatcher.getRenderTimeout = () => -1;
+            // Cause rerender of the grid and appointments
+            virtualScrollingDispatcher._updateRender();
+
 
             const $firstAppointment = scheduler.appointments.find(firstAppointmentTitle).eq(dragSourceIndex);
             const $secondAppointment = scheduler.appointments.find(secondAppointmentTitle);
