@@ -12,8 +12,8 @@ const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS = 'dx-scheduler-date-time-indicator-simple';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
-const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader1';
-const LAST_DATE_TIME_SHADER_CLASS = 'dx-scheduler-last-date-time-shader1';
+const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
+const LAST_DATE_TIME_SHADER_CLASS = `${DATE_TIME_SHADER_CLASS}-last`;
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _getToday() {

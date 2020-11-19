@@ -642,13 +642,6 @@ $scheduler-appointment-form-label-padding: 20px;
     }
   }
 
-  .dx-scheduler-date-time-shader-all-day {
-    width: 100%;
-    background-color: $scheduler-time-indicator-background-color;
-    position: absolute;
-    pointer-events: none;
-  }
-
   .dx-scheduler-date-time-indicator {
     background-color: $scheduler-time-indicator-color;
     position: absolute;
@@ -668,15 +661,12 @@ $scheduler-appointment-form-label-padding: 20px;
   }
 
   .dx-scheduler-date-time-shader {
-    pointer-events: none;
-  }
-
-  .dx-scheduler-date-time-shader1 {
     background-color: $scheduler-time-indicator-background-color;
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0;
+    pointer-events: none;
   }
 
   .dx-scheduler-work-space-week,
@@ -705,32 +695,6 @@ $scheduler-appointment-form-label-padding: 20px;
       @include dx-icon(spinright);
     }
 
-    .dx-scheduler-date-time-shader,
-    .dx-scheduler-date-time-shader-all-day {
-      margin-left: $scheduler-left-column-width;
-
-      .dx-scheduler-small & {
-        margin-left: $scheduler-small-size-element-offset;
-      }
-    }
-
-    .dx-scheduler-date-time-shader-top,
-    .dx-scheduler-date-time-shader-bottom {
-      &::before {
-        width: inherit;
-        height: inherit;
-        content: "";
-        left: inherit;
-        position: absolute;
-        margin-left: $scheduler-left-column-width;
-        background-color: $scheduler-time-indicator-background-color;
-
-        .dx-scheduler-small & {
-          margin-left: $scheduler-small-size-element-offset;
-        }
-      }
-    }
-
     &.dx-scheduler-work-space-odd-cells {
       .dx-scheduler-date-table-row:nth-child(odd) .dx-scheduler-date-table-cell {
         border-top: $scheduler-accent-border;
@@ -743,21 +707,6 @@ $scheduler-appointment-form-label-padding: 20px;
       .dx-scheduler-time-panel-row:nth-child(2n) .dx-scheduler-time-panel-cell {
         &::after {
           background-color: $scheduler-accent-border-color;
-        }
-      }
-    }
-
-    &.dx-scheduler-work-space-both-scrollbar {
-      .dx-scheduler-date-time-shader,
-      .dx-scheduler-date-time-indicator,
-      .dx-scheduler-date-time-shader-all-day {
-        margin-left: 0;
-      }
-
-      .dx-scheduler-date-time-shader-top,
-      .dx-scheduler-date-time-shader-bottom {
-        &::before {
-          margin-left: 0;
         }
       }
     }
@@ -776,13 +725,6 @@ $scheduler-appointment-form-label-padding: 20px;
           &::before {
             content: "";
           }
-        }
-      }
-
-      .dx-scheduler-date-time-shader-top,
-      .dx-scheduler-date-time-shader-bottom {
-        &::before {
-          margin-left: 0;
         }
       }
     }
@@ -838,20 +780,6 @@ $scheduler-appointment-form-label-padding: 20px;
       &::before {
         margin-left: -$scheduler-time-indicator-top;
         margin-top: -$scheduler-time-indicator-left;
-      }
-    }
-
-    .dx-scheduler-date-time-shader {
-      height: 100%;
-      position: absolute;
-
-      &::before {
-        width: inherit;
-        height: 100%;
-        content: "";
-        left: 0;
-        position: absolute;
-        background-color: $scheduler-time-indicator-background-color;
       }
     }
 
@@ -2518,11 +2446,6 @@ $scheduler-appointment-form-label-padding: 20px;
     .dx-scheduler-work-space-vertical-group-table {
       border-right: none;
       border-left: $scheduler-base-border;
-    }
-
-    .dx-scheduler-date-time-shader-all-day {
-      margin-left: 0;
-      margin-right: $scheduler-left-column-width;
     }
 
     .dx-scheduler-navigator {
