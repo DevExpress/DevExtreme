@@ -257,12 +257,8 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     const { direction } = this.props;
 
     const classesMap = {
-      'dx-scrollview': true,
-      'dx-scrollable': true,
+      'dx-scrollview dx-scrollable dx-scrollable-native dx-scrollable-renovated dx-scrollable-native-generic': true,
       [`dx-scrollable-${direction}`]: true,
-      'dx-scrollable-native': true,
-      'dx-scrollable-renovated': true,
-      'dx-scrollable-native-generic': true,
     };
     return combineClasses(classesMap);
   }
