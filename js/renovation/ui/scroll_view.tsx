@@ -282,7 +282,10 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   private getElementLocationInternal(
-    element: HTMLElement, prop: string, offset: ScrollOffset, direction: ScrollViewDirection,
+    element: HTMLElement,
+    prop: keyof ScrollOffset,
+    offset: ScrollOffset,
+    direction: ScrollViewDirection,
   ): number {
     const dimension = direction === DIRECTION_VERTICAL ? 'Height' : 'Width';
     const relativeLocation = getRelativeLocation(element)[prop];
@@ -315,19 +318,19 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
     return containerLocation;
   }
 
-  private getPublicCoordinate(prop: string, coordinate: number): number {
+  private getPublicCoordinate(prop: keyof ScrollOffset, coordinate: number): number {
     return this.needNormalizeCoordinate(prop)
       ? this.getMaxScrollOffset('width') + this.normalizeCoordinate(prop, coordinate)
       : coordinate;
   }
 
-  private normalizeCoordinate(prop: string, coordinate: number): number {
+  private normalizeCoordinate(prop: keyof ScrollOffset, coordinate: number): number {
     return this.needNormalizeCoordinate(prop) && getScrollRtlBehavior().positive
       ? -1 * coordinate
       : coordinate;
   }
 
-  private needNormalizeCoordinate(prop: string): boolean {
+  private needNormalizeCoordinate(prop: keyof ScrollOffset): boolean {
     const { rtlEnabled } = this.props;
 
     return rtlEnabled === true && prop === 'left';
