@@ -336,7 +336,7 @@ const VirtualScrollingRowsViewExtender = (function() {
                 scrollPosition = itemIndex * itemSize;
 
                 for(const index in itemSizes) {
-                    if(index <= itemIndex) {
+                    if(index < itemIndex) {
                         scrollPosition += itemSizes[index] - itemSize;
                     }
                 }

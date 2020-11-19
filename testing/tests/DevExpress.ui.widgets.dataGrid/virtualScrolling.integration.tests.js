@@ -1563,6 +1563,36 @@ QUnit.module('Virtual Scrolling', baseModuleConfig, () => {
         assert.equal(dataGrid.getScrollable().scrollTop(), scrollTop, 'scroll top is not changed');
     });
 
+    // T945892
+    QUnit.test('scroll position should not be changed on initial load when there is a filter, virtual scrolling is enabled and the row count is large', function(assert) {
+        // arrange, act
+        const dataGrid = createDataGrid({
+            dataSource: createLargeDataSource(1000000),
+            columns: ['id', {
+                caption: 'Test',
+                calculateDisplayValue: function() {
+                    return 'Test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test.';
+                },
+            }],
+            filterValue: ['id', 'noneof', [1000000]],
+            filterPanel: {
+                visible: true
+            },
+            wordWrapEnabled: true,
+            remoteOperations: true,
+            height: 500,
+            scrolling: {
+                mode: 'virtual',
+                useNative: false
+            }
+        });
+
+        this.clock.tick(300);
+
+        // assert
+        assert.equal(dataGrid.getScrollable().scrollTop(), 0, 'scroll top is not changed');
+    });
+
     // T838096
     QUnit.test('group position should not be changed after expanding if virtual scrolling is enabled', function(assert) {
         // arrange, act
