@@ -4,6 +4,7 @@ import 'jspdf-autotable';
 
 import { isDefined, isFunction } from 'core/utils/type';
 import { JSPdfDataGridTestHelper } from './jspdfTestHelper.js';
+import { JSPdfOptionTests } from './jspdf.options.tests.js';
 import { exportDataGrid } from 'pdf_exporter';
 
 import 'ui/data_grid/ui.data_grid';
@@ -4431,3 +4432,7 @@ QUnit.module('customizeCell', moduleConfig, () => {
         });
     });
 });
+
+JSPdfOptionTests.runTests(moduleConfig, exportDataGrid.__internals._getFullOptions, function() { return $('#dataGrid').dxDataGrid({}).dxDataGrid('instance'); });
+
+
