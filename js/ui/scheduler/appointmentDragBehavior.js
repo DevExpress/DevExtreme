@@ -15,7 +15,6 @@ export default class AppointmentDragBehavior {
             top: 0
         };
 
-        this.currentAppointment = null;
         this.appointmentInfo = null;
     }
 
@@ -53,7 +52,6 @@ export default class AppointmentDragBehavior {
         const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
         container.append($appointment);
 
-        this.currentAppointment = $appointment;
         this.appointmentInfo = null;
 
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
