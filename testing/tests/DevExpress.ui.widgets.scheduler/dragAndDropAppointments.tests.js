@@ -2047,6 +2047,43 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
         checkVirtualAppointmentDragging(assert, scheduler, appointmentTitle, 3, 3, true);
     });
 
+    test('Drag source should not be rendered if an appointment is not being dragged', function(assert) {
+        const appointmentTitle = 'Appointment';
+        const data = [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 16, 0, 0),
+            endDate: new Date(2020, 10, 16, 0, 5),
+        }, {
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 16, 0, 5),
+            endDate: new Date(2020, 10, 16, 0, 10),
+        }];
+
+        const scheduler = createWrapper({
+            height: 600,
+            views: ['week'],
+            currentView: 'week',
+            cellDuration: 1,
+            dataSource: data,
+            currentDate: new Date(2020, 10, 16),
+            showAllDayPanel: false,
+            scrolling: { mode: 'virtual' },
+        });
+
+        const schedulerInstance = scheduler.instance;
+        const workSpace = schedulerInstance.getWorkSpace();
+
+        const { virtualScrollingDispatcher } = workSpace;
+        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+        // Cause rerender of the grid and appointments
+        virtualScrollingDispatcher._updateRender();
+
+        const dragSource = scheduler.appointments.getDragSource(0);
+
+        assert.equal(dragSource.length, 0, 'Drag Source was not rendered');
+    });
+
     test('Appointment should be updated correctly after DnD with virtual scrolling', function(assert) {
         const appointmentTitle = 'Appointment';
         const data = [{
