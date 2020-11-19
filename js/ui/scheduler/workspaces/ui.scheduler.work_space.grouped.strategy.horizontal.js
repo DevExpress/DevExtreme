@@ -166,29 +166,6 @@ class HorizontalGroupedStrategy extends GroupedStrategy {
         };
     }
 
-    getShaderOffset(i, width) {
-        const offset = this._workSpace._getCellCount() * this._workSpace.getRoundedCellWidth(i - 1) * i;
-        return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).width - offset - this._workSpace.getTimePanelWidth() - width : offset;
-    }
-
-    getShaderTopOffset(i) {
-        return -this.getShaderMaxHeight() * (i > 0 ? 1 : 0);
-    }
-
-    getShaderHeight() {
-        const height = this._workSpace.getIndicationHeight();
-
-        return height;
-    }
-
-    getShaderMaxHeight() {
-        return getBoundingRect(this._workSpace._dateTableScrollable.$content().get(0)).height;
-    }
-
-    getShaderWidth(i) {
-        return this._workSpace.getIndicationWidth(i);
-    }
-
     getScrollableScrollTop(allDay) {
         return !allDay ? this._workSpace.getScrollable().scrollTop() : 0;
     }

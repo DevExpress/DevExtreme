@@ -27,7 +27,6 @@ import HorizontalGroupedStrategy from './ui.scheduler.work_space.grouped.strateg
 import VerticalGroupedStrategy from './ui.scheduler.work_space.grouped.strategy.vertical';
 import tableCreatorModule from '../ui.scheduler.table_creator';
 const { tableCreator } = tableCreatorModule;
-import VerticalShader from '../shaders/ui.scheduler.current_time_shader.vertical';
 import AppointmentDragBehavior from '../appointmentDragBehavior';
 import { FIXED_CONTAINER_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
@@ -1195,8 +1194,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         this._updateGroupTableHeight();
-
-        this._shader = new VerticalShader(this);
     }
 
     isGroupedAllDayPanel() {
@@ -2150,7 +2147,6 @@ class SchedulerWorkSpace extends WidgetObserver {
         this.virtualSelectionState?.releaseSelectedAndFocusedCells();
         this._$thead.empty();
         this._$dateTable.empty();
-        this._shader && this._shader.clean();
         this._$timePanel.empty();
         this._$allDayTable && this._$allDayTable.empty();
         this._$groupTable.empty();

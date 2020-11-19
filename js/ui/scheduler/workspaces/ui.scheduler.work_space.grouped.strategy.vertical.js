@@ -162,39 +162,6 @@ class VerticalGroupedStrategy extends GroupedStrategy {
         });
     }
 
-    getShaderOffset(i, width) {
-        const offset = this._workSpace.option('crossScrollingEnabled') ? 0 : this._workSpace.getGroupTableWidth();
-        return this._workSpace.option('rtlEnabled') ? getBoundingRect(this._$container.get(0)).width - offset - this._workSpace.getWorkSpaceLeftOffset() - width : offset;
-    }
-
-    getShaderTopOffset(i) {
-        return 0;
-    }
-
-    getShaderHeight() {
-        let height = this._workSpace.getIndicationHeight();
-
-        if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
-            height += this._workSpace.getCellHeight();
-        }
-
-        return height;
-    }
-
-    getShaderMaxHeight() {
-        let height = this._workSpace._getRowCount() * this._workSpace.getCellHeight();
-
-        if(this._workSpace.supportAllDayRow() && this._workSpace.option('showAllDayPanel')) {
-            height += this._workSpace.getCellHeight();
-        }
-
-        return height;
-    }
-
-    getShaderWidth() {
-        return this._workSpace.getIndicationWidth(0);
-    }
-
     getScrollableScrollTop() {
         return this._workSpace.getScrollable().scrollTop();
     }

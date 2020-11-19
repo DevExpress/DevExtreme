@@ -55,7 +55,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _renderDateTimeIndication() {
         if(this.isIndicationAvailable()) {
             if(this.option('shadeUntilCurrentTime')) {
-                // this._shader.render();
                 this._renderShading();
             }
 
@@ -173,10 +172,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         }
     }
 
-    _isVerticalShader() {
-        return true;
-    }
-
     getIndicationWidth(groupIndex) {
         const maxWidth = this.getCellWidth() * this._getCellCount();
 
@@ -229,7 +224,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _refreshDateTimeIndication() {
         this._cleanDateTimeIndicator();
-        this._shader && this._shader.clean();
         this._renderDateTimeIndication();
     }
 

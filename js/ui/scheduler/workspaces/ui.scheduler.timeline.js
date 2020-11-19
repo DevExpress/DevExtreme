@@ -7,7 +7,6 @@ import SchedulerWorkSpace from './ui.scheduler.work_space.indicator';
 import dateUtils from '../../../core/utils/date';
 import tableCreatorModule from '../ui.scheduler.table_creator';
 const { tableCreator } = tableCreatorModule;
-import HorizontalShader from '../shaders/ui.scheduler.current_time_shader.horizontal';
 
 import timeZoneUtils from '../utils.timeZone';
 
@@ -239,8 +238,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         this._renderTimePanel();
         this._renderDateTable();
 
-        this._shader = new HorizontalShader(this);
-
         this._updateGroupTableHeight();
 
         this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
@@ -306,10 +303,6 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _isIndicatorSimple(index) {
         return this._isVerticalGroupedWorkSpace() && index > 0;
-    }
-
-    _isVerticalShader() {
-        return false;
     }
 
     _setShaderSize($shader, size) {
