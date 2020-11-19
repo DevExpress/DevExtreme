@@ -940,13 +940,11 @@ module('appointmentDragging customization', $.extend({}, {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
 
-        const $draggedAppointment = $(scheduler.appointments.find(text).get(0));
-
-        const positionAfterDrag = getAbsolutePosition($draggedAppointment);
+        const $draggedAppointment = scheduler.appointments.getFakeAppointment();
 
         pointer.up();
 
-        assert.strictEqual(positionAfterDrag.top, positionBeforeDrag.top, 'appointment position is not changed');
+        assert.strictEqual($draggedAppointment.length, 0, 'Fake dragged appointment has not been created');
         assert.deepEqual(dataSource[0].startDate, new Date(2018, 4, 21, 9, 30), 'startDate is not changed');
         assert.strictEqual(appointmentDragging.onDragStart.callCount, 1, 'onDragStart is called once');
         assert.strictEqual(appointmentDragging.onDragEnd.callCount, 0, 'onDragEnd is not called');
@@ -973,7 +971,7 @@ module('appointmentDragging customization', $.extend({}, {
             .down(positionBeforeDrag.left, positionBeforeDrag.top)
             .move(0, 50);
 
-        const $draggedAppointment = $(scheduler.appointments.find(text).get(0));
+        const $draggedAppointment = scheduler.appointments.getFakeAppointment();
 
         const positionAfterDrag = getAbsolutePosition($draggedAppointment);
 
