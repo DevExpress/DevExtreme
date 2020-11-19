@@ -3428,6 +3428,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
     QUnit.test('Cell data cache should be cleared when dimensions were changed', function(assert) {
         const workSpace = this.instance;
+        this.instance.option('shadeUntilCurrentTime', false);
         const $element = this.instance.$element();
         const appointment = {
             cellIndex: 0,
@@ -3448,9 +3449,7 @@ QUnit.module('Workspace Mouse Interaction', () => {
 
         const cache = workSpace.cache;
 
-        assert.equal(cache.size, 2, 'Cache has no cell data');
-        assert.ok(cache.get('cellWidth'), 'Has cached cell width');
-        assert.ok(cache.get('cellHeight'), 'Has cached cell height');
+        assert.equal(cache.size, 1, 'Cache has cell data');
     });
 
 })('Work Space cellData Cache');
@@ -4154,7 +4153,9 @@ QUnit.module('Renovated Render', {
             });
 
             QUnit.test('should work with vertical grouping', function(assert) {
-                this.createInstance();
+                this.createInstance({
+                    shadeUntilCurrentTime: false
+                });
                 this.instance.option('groups', [
                     {
                         name: 'res',
