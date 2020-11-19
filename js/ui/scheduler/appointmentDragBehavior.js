@@ -52,8 +52,6 @@ export default class AppointmentDragBehavior {
         const container = this.appointments._getAppointmentContainer(this.isAllDay($appointment));
         container.append($appointment);
 
-        this.appointmentInfo = null;
-
         this.appointments.notifyObserver('updateAppointmentAfterDrag', {
             event: e,
             data: this.appointments._getItemData($appointment),
@@ -101,6 +99,7 @@ export default class AppointmentDragBehavior {
     createDragEndHandler(options, appointmentDragging) {
         return (e) => {
             appointmentDragging.onDragEnd && appointmentDragging.onDragEnd(e);
+            this.appointmentInfo = null;
 
             if(!e.cancel) {
                 options.onDragEnd(e);
