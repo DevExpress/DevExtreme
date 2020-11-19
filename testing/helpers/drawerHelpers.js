@@ -121,6 +121,7 @@ const LeftDrawerTester = {
                 window.getComputedStyle(getTemplateParent(env.templateElement)).position === 'absolute' &&
                 window.getComputedStyle(env.viewElement.parentElement).transform.indexOf('matrix') >= 0,
                 'template element should be hidden, view element should be visible');
+            assert.ok(env.viewElement.parentElement.classList.contains('dx-theme-background-color'), 'view element should override panel element');
         }
         function checkShrink(assert, env) {
             if(env.revealMode === 'expand') {
