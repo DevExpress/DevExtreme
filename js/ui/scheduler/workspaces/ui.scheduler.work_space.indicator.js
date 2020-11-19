@@ -88,11 +88,16 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                 $('<div>').addClass(DATE_TIME_SHADER_CLASS).appendTo($cell);
             }
             if(startDate <= date && endDate > date) {
-                const offset = (date.getTime() - startDate.getTime()) * 100 / (endDate.getTime() - startDate.getTime());
+                const size = (date.getTime() - startDate.getTime()) * 100 / (endDate.getTime() - startDate.getTime());
                 const $lastShader = $('<div>').addClass(DATE_TIME_SHADER_CLASS).addClass(LAST_DATE_TIME_SHADER_CLASS).appendTo($cell);
-                $lastShader.height(offset + '%');
+                this._setShaderSize($lastShader, size);
+                // $lastShader.height(size + '%');
             }
         });
+    }
+
+    _setShaderSize($shader, size) {
+        $shader.height(size + '%');
     }
 
     _renderAllDayPanelShading(date) {

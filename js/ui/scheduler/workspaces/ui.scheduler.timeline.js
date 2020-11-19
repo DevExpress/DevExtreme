@@ -312,6 +312,10 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return false;
     }
 
+    _setShaderSize($shader, size) {
+        $shader.width(size + '%');
+    }
+
     _isCurrentTimeHeaderCell(headerIndex) {
         let result = false;
 
