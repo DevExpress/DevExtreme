@@ -117,7 +117,7 @@ const VIEWS_CONFIG = {
 
 class Scheduler extends Widget {
     _getDefaultOptions() {
-        const defaultOptions = extend(this.callBase(), {
+        const defaultOptions = extend(super._getDefaultOptions(), {
             /**
                 * @pseudo StartDayHour
                 * @type number
