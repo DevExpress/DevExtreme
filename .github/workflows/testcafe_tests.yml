@@ -34,7 +34,7 @@ jobs:
       env:
         ARGS: ${{ matrix.ARGS }}
       run: |
-        all_args="--browsers=chrome:headless ${ARGS}"
+        all_args="--concurrency 2 --browsers=chrome:headless ${ARGS}"
         echo "$all_args"
         npm run test-testcafe -- $all_args
     - name: Copy screenshots artifacts
