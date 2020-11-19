@@ -93,7 +93,7 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            const today = new Date();
+            const today = this.option('_todayDate')();
 
             return sameDate(cellDate, today);
         },
@@ -174,7 +174,9 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return sameMonthAndYear(cellDate, new Date());
+            const today = this.option('_todayDate')();
+
+            return sameMonthAndYear(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
@@ -232,7 +234,9 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return sameYear(cellDate, new Date());
+            const today = this.option('_todayDate')();
+
+            return sameYear(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
@@ -300,7 +304,9 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return sameDecade(cellDate, new Date());
+            const today = this.option('_todayDate')();
+
+            return sameDecade(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
