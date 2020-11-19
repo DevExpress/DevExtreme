@@ -13,6 +13,7 @@ const SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS = 'dx-scheduler-date-time-indic
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
+const SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
 const LAST_DATE_TIME_SHADER_CLASS = `${DATE_TIME_SHADER_CLASS}-last`;
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
@@ -110,7 +111,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             $cell.find('.' + DATE_TIME_SHADER_CLASS).remove();
             if(startDate < date && endDate < date) {
                 // $cell.addClass(DATE_TIME_SHADER_CLASS);
-                $('<div>').addClass(DATE_TIME_SHADER_CLASS).appendTo($cell);
+                $('<div>').addClass(DATE_TIME_SHADER_CLASS).addClass(SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).appendTo($cell);
             }
         });
     }
@@ -224,7 +225,13 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _refreshDateTimeIndication() {
         this._cleanDateTimeIndicator();
+        this._cleanShader();
         this._renderDateTimeIndication();
+    }
+
+    _cleanShader() {
+        const $shader = this.$element().find('.' + DATE_TIME_SHADER_CLASS);
+        $shader.remove();
     }
 
     _isCurrentTime(date) {
