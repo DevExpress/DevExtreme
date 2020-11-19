@@ -85,6 +85,10 @@ const isDeferred = function(object) {
     return object && isFunction(object.done) && isFunction(object.fail);
 };
 
+const isEvent = function(object) {
+    return !!(object && object.preventDefault);
+};
+
 exports.isBoolean = isBoolean;
 exports.isExponential = isExponential;
 exports.isDate = isDate;
@@ -101,3 +105,4 @@ exports.isRenderer = isRenderer;
 exports.isPromise = isPromise;
 exports.isDeferred = isDeferred;
 exports.type = type;
+exports.isEvent = isEvent;

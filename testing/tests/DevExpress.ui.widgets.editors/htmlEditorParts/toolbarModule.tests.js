@@ -575,6 +575,36 @@ testModule('Active formats', simpleModuleConfig, () => {
         assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is active because there is active format');
     });
 
+    test('clear formatting with a selected range greater than 1 character long [T947981]', function(assert) {
+        this.quillMock.getSelection = () => { return { index: 0, length: 5 }; };
+        this.quillMock.getFormat = () => {};
+        this.options.items = ['clear'];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        const $clearFormat = this.$element.find(`.${CLEAR_FORMAT_CLASS}`);
+
+        assert.ok($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is disabled by default');
+
+        toolbar.updateFormatWidgets();
+
+        assert.notOk($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is active because long range can contain formats');
+    });
+
+    test('clear formatting with a selected range 1 character long', function(assert) {
+        this.quillMock.getSelection = () => { return { index: 0, length: 1 }; };
+        this.quillMock.getFormat = () => {};
+        this.options.items = ['clear'];
+
+        const toolbar = new Toolbar(this.quillMock, this.options);
+        const $clearFormat = this.$element.find(`.${CLEAR_FORMAT_CLASS}`);
+
+        assert.ok($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is disabled by default');
+
+        toolbar.updateFormatWidgets();
+
+        assert.ok($clearFormat.hasClass(DISABLED_STATE_CLASS), 'Clear formats button is disabled because there is no active format');
+    });
+
     test('simple format', function(assert) {
         this.quillMock.getFormat = () => { return { bold: true }; };
         this.options.items = ['bold', 'italic', 'strike'];

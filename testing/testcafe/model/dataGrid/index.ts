@@ -101,6 +101,15 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  getScrollWidth(): Promise<number> {
+    const { getGridInstance } = this;
+
+    return ClientFunction(
+      () => (getGridInstance() as any).getScrollable().scrollWidth(),
+      { dependencies: { getGridInstance } },
+    )();
+  }
+
   getScrollTop(): Promise<number> {
     const { getGridInstance } = this;
 

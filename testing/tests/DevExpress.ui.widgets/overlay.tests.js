@@ -939,6 +939,22 @@ testModule('position', moduleConfig, () => {
 
         assert.strictEqual(instance._position.of, 'body');
     });
+
+    test('overlay wrapper should have correct dimensions even when there is "target" property in window', function(assert) {
+        $('<div>')
+            .css({ width: 100, height: 100 })
+            .attr('id', 'target')
+            .appendTo('#qunit-fixture');
+
+        $('#overlay').dxOverlay({
+            visible: true
+        });
+
+        const $overlayWrapper = $(`.${OVERLAY_WRAPPER_CLASS}`);
+
+        assert.roughEqual($overlayWrapper.width(), $(window).width(), 1.01, 'overlay wrapper width is correct');
+        assert.roughEqual($overlayWrapper.height(), $(window).height(), 1.01, 'overlay wrapper height is correct');
+    });
 });
 
 

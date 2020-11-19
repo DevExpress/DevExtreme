@@ -1360,7 +1360,8 @@ QUnit.module('Initialization', {
                 'descriptionExpr': '_description',
                 'allDayExpr': '_allDay',
                 'recurrenceRuleExpr': '_recurrenceRule',
-                'recurrenceExceptionExpr': '_recurrenceException'
+                'recurrenceExceptionExpr': '_recurrenceException',
+                'disabledExpr': '_disabled'
             });
 
             const data = {
@@ -1372,7 +1373,8 @@ QUnit.module('Initialization', {
                 description: 'b',
                 allDay: true,
                 recurrenceRule: 'abc',
-                recurrenceException: 'def'
+                recurrenceException: 'def',
+                disabled: false
             };
             const appointment = {
                 _startDate: data.startDate,
@@ -1383,7 +1385,8 @@ QUnit.module('Initialization', {
                 _description: data.description,
                 _allDay: data.allDay,
                 _recurrenceRule: data.recurrenceRule,
-                _recurrenceException: data.recurrenceException
+                _recurrenceException: data.recurrenceException,
+                _disabled: data.disabled
             };
 
             const dataAccessors = this.instance._dataAccessors;
