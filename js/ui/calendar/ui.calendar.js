@@ -97,7 +97,9 @@ const Calendar = Editor.inherit({
             onContouredChanged: null,
             hasFocus: function(element) {
                 return element.hasClass(FOCUSED_STATE_CLASS);
-            }
+            },
+
+            _todayDate: () => new Date()
 
 
             /**
@@ -639,7 +641,8 @@ const Calendar = Editor.inherit({
             disabledDates: disabledDates,
             onCellClick: this._cellClickHandler.bind(this),
             cellTemplate: this._getTemplateByOption('cellTemplate'),
-            allowValueSelection: this._isMaxZoomLevel()
+            allowValueSelection: this._isMaxZoomLevel(),
+            _todayDate: this.option('_todayDate')
         };
     },
 
@@ -1221,6 +1224,9 @@ const Calendar = Editor.inherit({
                 this._invalidate();
                 break;
             case 'hasFocus':
+                break;
+            case '_todayDate':
+                this._refreshViews();
                 break;
             default:
                 this.callBase(args);
