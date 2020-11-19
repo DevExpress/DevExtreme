@@ -20,8 +20,12 @@ createTestCafe('localhost', 1437, 1438)
         fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
         const runner = testCafe.createRunner()
             .browsers(args.browsers.split(' '))
+
             .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
 
+        if(args.concurrency > 0) {
+            runner.concurrency(args.concurrency);
+        }
         if(testName) {
             runner.filter(name => name === testName);
         }
@@ -40,6 +44,7 @@ createTestCafe('localhost', 1437, 1438)
 function getArgs() {
     return parseArgs(process.argv.slice(1), {
         default: {
+            concurrency: 0,
             browsers: 'chrome',
             test: '',
             componentFolder: '',
