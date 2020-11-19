@@ -781,12 +781,6 @@ const subscribes = {
         return this.option('adaptivityEnabled');
     },
 
-    moveBack: function() {
-        const dragBehavior = this.getWorkSpace().dragBehavior;
-
-        dragBehavior && dragBehavior.moveBack();
-    },
-
     validateDayHours: function() {
         const endDayHour = this._getCurrentViewOption('endDayHour');
         const startDayHour = this._getCurrentViewOption('startDayHour');

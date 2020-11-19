@@ -944,8 +944,6 @@ const SchedulerAppointments = CollectionWidget.inherit({
             }
         }
 
-        this.notifyObserver('moveBack');
-
         if($appointment && !dragEvent) {
             if(coords) {
                 move($appointment, coords);

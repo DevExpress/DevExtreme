@@ -1,6 +1,5 @@
 import $ from '../../core/renderer';
 import Draggable from '../draggable';
-import { move } from '../../animation/translator';
 import { extend } from '../../core/utils/extend';
 import { LIST_ITEM_DATA_KEY } from './constants';
 
@@ -146,11 +145,5 @@ export default class AppointmentDragBehavior {
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
         }));
-    }
-
-    moveBack() {
-        if(this.currentAppointment && this.initialPosition.left !== undefined && this.initialPosition.top !== undefined) {
-            move(this.currentAppointment, this.initialPosition);
-        }
     }
 }
