@@ -1,3 +1,8 @@
+// This code is used for backwards compatibility with the older jsPDF variable name
+// Read more: https://github.com/MrRio/jsPDF/releases/tag/v2.0.0
+window.jsPDF = window.jspdf.jsPDF;
+applyPlugin(window.jsPDF);
+
 $(function(){
     $('#exportButton').dxButton({
         icon: 'exportpdf',
