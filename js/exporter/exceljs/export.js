@@ -233,7 +233,7 @@ export const Export = {
                 this.setAlignment(excelCell, wrapText, horizontalAlignment);
             }
 
-            if(isDefined(customizeCell)) {
+            if(isFunction(customizeCell)) {
                 customizeCell(privateOptions._getCustomizeCellOptions(excelCell, cell));
             }
 
