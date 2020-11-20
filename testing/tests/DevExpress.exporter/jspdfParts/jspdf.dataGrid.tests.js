@@ -214,6 +214,29 @@ QUnit.module('Grid headers', moduleConfig, () => {
         });
     });
 
+    QUnit.test('Header - 1 column, paging.enabled: true', function(assert) {
+        const done = assert.async();
+
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            columns: [{ caption: 'f1' }],
+            paging: {
+                enabled: true
+            }
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            head: [[{ pdfCell: { content: 'f1' }, gridCell: { rowType: 'header', value: 'f1', column: dataGrid.columnOption(0) } }]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'head');
+            helper.checkCellsStyles(expectedCells, autoTableOptions, 'head');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'head');
+            done();
+        });
+    });
+
     [true, false].forEach((keepColumnWidths) => {
         QUnit.test(`Header - 2 Columns - column widths, keepColumnWidths: ${keepColumnWidths}`, function(assert) {
             const done = assert.async();
@@ -483,6 +506,38 @@ QUnit.module('Grid data rows', moduleConfig, () => {
                 { pdfCell: { content: ds[0].f2, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f2, data: ds[0], column: dataGrid.columnOption(1) } },
                 { pdfCell: { content: ds[0].f3, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f3, data: ds[0], column: dataGrid.columnOption(2) } },
                 { pdfCell: { content: ds[0].f4, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f4, data: ds[0], column: dataGrid.columnOption(3) } }
+            ]]
+        };
+
+        exportDataGrid(getOptions(this, dataGrid, expectedCells)).then(() => {
+            const autoTableOptions = this.jsPDFDocument.autoTable.__autoTableOptions;
+            helper.checkRowAndColumnCount(expectedCells, autoTableOptions, 'body');
+            helper.checkCellsContent(expectedCells, autoTableOptions, 'body');
+            done();
+        });
+    });
+
+    QUnit.test('Data - 1 column & 3 rows, paging[enabled: true; pageSize: 1]', function(assert) {
+        const done = assert.async();
+        const ds = [{ f1: 'f1_1' }, { f1: 'f2_1' }, { f1: 'f3_1' }];
+        const dataGrid = $('#dataGrid').dxDataGrid({
+            dataSource: ds,
+            paging: {
+                enabled: true,
+                pageSize: 1,
+                pageIndex: 2
+            },
+            showColumnHeaders: false,
+            loadingTimeout: undefined
+        }).dxDataGrid('instance');
+
+        const expectedCells = {
+            body: [[
+                { pdfCell: { content: ds[0].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[0].f1, data: ds[0], column: dataGrid.columnOption(0) } }
+            ], [
+                { pdfCell: { content: ds[1].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[1].f1, data: ds[1], column: dataGrid.columnOption(0) } }
+            ], [
+                { pdfCell: { content: ds[2].f1, styles: { 'halign': 'left' } }, gridCell: { rowType: 'data', value: ds[2].f1, data: ds[2], column: dataGrid.columnOption(0) } }
             ]]
         };
 
