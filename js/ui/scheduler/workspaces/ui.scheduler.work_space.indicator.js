@@ -5,6 +5,7 @@ import dateUtils from '../../../core/utils/date';
 import { extend } from '../../../core/utils/extend';
 import { hasWindow } from '../../../core/utils/window';
 import { each } from '../../../core/utils/iterator';
+import browser from '../../../core/utils/browser';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -84,8 +85,10 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             // NOTE: Need we clear shader after templates were ready or after dimensionChanged
             $cell.find('.' + DATE_TIME_SHADER_CLASS).remove();
             if(startDate < date && endDate < date) {
-                // $cell.addClass(DATE_TIME_SHADER_CLASS);
-                $('<div>').addClass(DATE_TIME_SHADER_CLASS).appendTo($cell);
+                const $shader = $('<div>').addClass(DATE_TIME_SHADER_CLASS).appendTo($cell);
+                if(browser.msie) {
+                    $shader.height(this.getCellHeight());
+                }
             }
             if(startDate <= date && endDate > date) {
                 const size = (date.getTime() - startDate.getTime()) * 100 / (endDate.getTime() - startDate.getTime());
@@ -98,6 +101,9 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _setShaderSize($shader, size) {
         $shader.height(size + '%');
+        if(browser.msie) {
+            $shader.height(size * this.getCellHeight() / 100);
+        }
     }
 
     _renderAllDayPanelShading(date) {
