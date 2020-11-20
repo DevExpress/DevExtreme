@@ -2955,3 +2955,154 @@ if(devices.real().deviceType === 'desktop') {
         });
     });
 }
+
+QUnit.module('dateCellTemplate', () => {
+    const viewsBase = [{
+        type: 'day',
+        dateCellCount: 2,
+        intervalCount: 2,
+    }, {
+        type: 'week',
+        dateCellCount: 7,
+        intervalCount: 1,
+    }, {
+        type: 'month',
+        dateCellCount: 7,
+        intervalCount: 1,
+    }, {
+        type: 'timelineDay',
+        dateCellCount: 2,
+        intervalCount: 2,
+    }, {
+        type: 'timelineWeek',
+        dateCellCount: 7,
+        intervalCount: 1,
+    }, {
+        type: 'timelineMonth',
+        dateCellCount: 30,
+        intervalCount: 1,
+    }];
+    const totalCells = 55;
+    const priorityData = [{
+        text: 'Low Priority',
+        id: 1
+    }, {
+        text: 'High Priority',
+        id: 2
+    }];
+
+    [true, false].forEach((isRenovatedView) => {
+        QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
+            assert.expect(totalCells * 2);
+
+            const scheduler = createWrapper({
+                views: viewsBase,
+                currentView: 'day',
+                currentDate: new Date(2020, 10, 19),
+                dateCellTemplate: ({ groups, groupIndex }) => {
+                    assert.equal(groups, undefined, 'Groups property is undefined');
+                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
+                },
+            });
+
+            viewsBase.forEach(({ type }) => {
+                scheduler.instance.option('currentView', type);
+            });
+        });
+
+        QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and vertical grouping is used`, function(assert) {
+            assert.expect(totalCells * 2);
+            const views = viewsBase.map(({ type, intervalCount }) => ({
+                type,
+                intervalCount,
+                groupOrientation: 'vertical',
+            }));
+
+            const scheduler = createWrapper({
+                views: views,
+                currentView: 'day',
+                currentDate: new Date(2020, 10, 19),
+                dateCellTemplate: ({ groups, groupIndex }) => {
+                    assert.equal(groups, undefined, 'Groups property is undefined');
+                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
+                },
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority',
+                }],
+            });
+
+            viewsBase.forEach(({ type }) => {
+                scheduler.instance.option('currentView', type);
+            });
+        });
+
+        QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and grouping by date is used`, function(assert) {
+            assert.expect(totalCells * 2);
+            const views = viewsBase.map(({ type, intervalCount }) => ({
+                type,
+                intervalCount,
+                groupOrientation: 'horizontal',
+                groupByDate: true,
+            }));
+
+            const scheduler = createWrapper({
+                views: views,
+                currentView: 'day',
+                currentDate: new Date(2020, 10, 19),
+                dateCellTemplate: ({ groups, groupIndex }) => {
+                    assert.equal(groups, undefined, 'Groups property is undefined');
+                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
+                },
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority',
+                }],
+            });
+
+            viewsBase.forEach(({ type }) => {
+                scheduler.instance.option('currentView', type);
+            });
+        });
+
+        QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and horizontal grouping is used`, function(assert) {
+            assert.expect(totalCells * 4);
+            const views = viewsBase.map(({ type, intervalCount }) => ({
+                type,
+                intervalCount,
+                groupOrientation: 'horizontal',
+            }));
+            let cellCountPerGroup = 2;
+
+            const scheduler = createWrapper({
+                views: views,
+                currentView: 'day',
+                currentDate: new Date(2020, 10, 19),
+                dateCellTemplate: ({ groups, groupIndex }, index) => {
+                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+
+                    assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
+                    assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+                },
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority',
+                }],
+            });
+
+            viewsBase.forEach(({ type, dateCellCount }) => {
+                cellCountPerGroup = dateCellCount;
+                scheduler.instance.option('currentView', type);
+            });
+        });
+    });
+});

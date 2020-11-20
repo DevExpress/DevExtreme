@@ -183,23 +183,32 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _renderDateHeader() {
         const $headerRow = super._renderDateHeader();
         if(this._needRenderWeekHeader()) {
-            const firstViewDate = new Date(this._firstViewDate);
             const $cells = [];
-            const colspan = this._getCellCountInDay();
+            const cellsPerDay = this._getCellCountInDay();
             const cellTemplate = this.option('dateCellTemplate');
 
-            for(let i = 0; i < this._getWeekDuration() * this.option('intervalCount'); i++) {
+            const groupCount = this._getGroupCount();
+            const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
+                ? groupCount
+                : 1;
+            const cellsInGroup = this._getWeekDuration() * this.option('intervalCount');
+
+            const cellsCount = cellsInGroup * horizontalGroupCount;
+
+            for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
                 const $th = $('<th>');
-                const text = this._formatWeekdayAndDay(firstViewDate);
+                const date = this._getDateByIndex((templateIndex * cellsPerDay) % (cellsInGroup * cellsPerDay));
+                const text = this._formatWeekdayAndDay(date);
 
                 if(cellTemplate) {
                     const templateOptions = {
                         model: {
-                            text: text,
-                            date: new Date(firstViewDate)
+                            text,
+                            date,
+                            ...this._getGroupsForDateHeaderTemplate(templateIndex, cellsPerDay),
                         },
                         container: $th,
-                        index: i
+                        index: templateIndex,
                     };
 
                     cellTemplate.render(templateOptions);
@@ -207,10 +216,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
                     $th.text(text);
                 }
 
-                $th.addClass(HEADER_PANEL_CELL_CLASS).addClass(HEADER_PANEL_WEEK_CELL_CLASS).attr('colSpan', colspan);
+                $th.addClass(HEADER_PANEL_CELL_CLASS).addClass(HEADER_PANEL_WEEK_CELL_CLASS).attr('colSpan', cellsPerDay);
                 $cells.push($th);
-
-                this._incrementDate(firstViewDate);
             }
 
             const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells);

@@ -1665,7 +1665,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         if(!groupByDate) {
             for(let rowIndex = 0; rowIndex < repeatCount; rowIndex++) {
                 for(let cellIndex = 0; cellIndex < count; cellIndex++) {
-                    const templateIndex = rowIndex * repeatCount + cellIndex;
+                    const templateIndex = rowIndex * count + cellIndex;
                     this._renderDateHeaderTemplate($headerRow, cellIndex, templateIndex, cellTemplate, templateCallbacks);
                 }
             }
@@ -1699,7 +1699,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             templateCallbacks.push(cellTemplate.render.bind(cellTemplate, {
                 model: {
                     text: text,
-                    date: this._getDateByIndex(panelCellIndex)
+                    date: this._getDateByIndex(panelCellIndex),
+                    ...this._getGroupsForDateHeaderTemplate(templateIndex),
                 },
                 index: templateIndex,
                 container: getPublicElement($cell)
@@ -1710,6 +1711,23 @@ class SchedulerWorkSpace extends WidgetObserver {
 
         container.append($cell);
         return $cell;
+    }
+
+    _getGroupsForDateHeaderTemplate(templateIndex, indexMultiplier = 1) {
+        let groupIndex;
+        let groups;
+
+        if(this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()) {
+            groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
+            const groupsArray = this._getCellGroups(groupIndex);
+
+            groups = groupsArray.reduce((currentGroups, { name, id }) => ({
+                ...currentGroups,
+                [name]: id,
+            }), {});
+        }
+
+        return { groups, groupIndex };
     }
 
     _getHeaderPanelCellClass(i) {
