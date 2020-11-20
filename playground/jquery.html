@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.common.css" />
 
-    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css"/>
+    <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.light.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="../artifacts/css/dx.contrast.compact.css" /> -->
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
 
@@ -27,15 +29,63 @@
     <!-- RENOVATION -->
     <!-- <script type="text/javascript" src="../artifacts/js-renovation/dx.all.debug.js" charset="utf-8"></script> -->
 </head>
+
 <body>
+    <div id="scheduler"></div>
     <div id="button"></div>
     <script>
-        $(function() {
-            $("#button").dxButton({
-                text: 'Click me!',
-                onClick: function() { alert("clicked"); }
-            });
+
+
+        $(function () {
+            var priorityData = [
+                {
+                    text: "Low Priority",
+                    id: 1,
+                    color: "#1e90ff"
+                }, {
+                    text: "High Priority",
+                    id: 2,
+                    color: "#ff9747"
+                }
+            ];
+            var data = [{
+                text: "Website Re-Design Plan",
+                priorityId: [1, 2],
+                startDate: new Date(2020, 10, 2, 3, 30),
+                endDate: new Date(2020, 10, 2, 5, 15),
+            }];
+            $("#scheduler").dxScheduler({
+                dataSource: data,
+                views: [{
+                    type: "workWeek",
+                    name: "Vertical Grouping",
+                    groupOrientation: "horizontal",
+                    cellDuration: 15,
+                    // intervalCount: 2
+                }],
+                currentView: "Vertical Grouping",
+                crossScrollingEnabled: true,
+                currentDate: new Date(2020, 10, 2),
+                // startDayHour: 5,
+                // endDayHour: 13,
+                groups: ["priorityId"],
+                resources: [
+                    {
+                        fieldExpr: "priorityId",
+                        allowMultiple: false,
+                        dataSource: priorityData,
+                        label: "Priority"
+                    }
+                ],
+                showCurrentTimeIndicator: false,
+                showAllDayPanel: true,
+                height: 600,
+                scrolling: { mode: 'virtual' },
+                timeZone: 'Europe/London',
+            }).dxScheduler('instance');
         });
+
     </script>
 </body>
+
 </html>
