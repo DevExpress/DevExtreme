@@ -28,7 +28,7 @@ export default class AppointmentDragBehavior {
         this.initialPosition = initialPosition;
         this.appointmentInfo = {
             appointment: itemData,
-            targetedAppointment: itemSettings.info.appointment,
+            targetedAppointment: itemSettings.info.appointment.sourceWithConvertedDates,
             groupIndex: itemSettings.groupIndex,
         };
 

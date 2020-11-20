@@ -101,7 +101,7 @@ class AppointmentLayoutManager {
             endDate: draggedEndDate,
         } = draggedTargetedAppointment;
 
-        const appointmentInfo = settings.info.appointment;
+        const appointmentInfo = settings.info.sourceWithConvertedDates;
 
         const { startDate, endDate } = appointmentInfo;
         const { groupIndex } = settings;
