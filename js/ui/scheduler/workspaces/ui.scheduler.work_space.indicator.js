@@ -146,11 +146,14 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     getIndicatorTopOffset(date, $cell) {
         const cellHeight = this.getCellHeight();
-        const cellDate = this.getCellData($cell).startDate;
-        const duration = date.getTime() - cellDate.getTime();
-        const cellCount = duration / this.getCellDuration();
+        return this._calculateOffset(date, $cell) * cellHeight;
+    }
 
-        return cellCount * cellHeight;
+    _calculateOffset(date, $cell) {
+        const cellData = this.getCellData($cell);
+
+        const duration = date.getTime() - cellData.startDate.getTime();
+        return duration / this.getCellDuration();
     }
 
     _setIndicationUpdateInterval() {

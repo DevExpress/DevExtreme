@@ -286,18 +286,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     }
 
-    getIndicatorLeft(date, $cell) {
+    getIndicatorLeftOffset(date, $cell) {
         const cellWidth = this.getCellWidth();
-        const cellDate = this.getCellData($cell).startDate;
-
-        const duration = date.getTime() - cellDate.getTime();
-        const cellCount = duration / this.getCellDuration();
-
-        return cellCount * cellWidth;
+        return this._calculateOffset(date, $cell) * cellWidth;
     }
 
     _shiftIndicator(date, $cell, $indicator) {
-        const left = this.getIndicatorLeft(date, $cell);
+        const left = this.getIndicatorLeftOffset(date, $cell);
         $indicator.css('left', left);
     }
 
