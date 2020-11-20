@@ -13,15 +13,15 @@ $pivotgrid-field-indicators-offset: 6px !default;
 $pivotgrid-indicators-line-height: 12px !default;
 
 @if $size == "default" {
-  $material-pivotgrid-cell-padding: 10px 14px;
-  $pivotgrid-common-left-right-padding: 10px;
-  $material-pivotgrid-expanded-cell-padding: 10px 14px 10px 19px;
-  $material-pivotgrid-total-text-left-padding: 22px;
+  $material-pivotgrid-cell-padding: 10px 14px !default;
+  $pivotgrid-common-left-right-padding: 10px !default;
+  $material-pivotgrid-expanded-cell-padding: 10px 14px 10px 19px !default;
+  $material-pivotgrid-total-text-left-padding: 22px !default;
 }
 
 @else if $size == "compact" {
-  $material-pivotgrid-cell-padding: 7px 8px;
-  $pivotgrid-common-left-right-padding: 8px;
-  $material-pivotgrid-expanded-cell-padding: 7px 8px 7px 13px;
-  $material-pivotgrid-total-text-left-padding: 16px;
+  $material-pivotgrid-cell-padding: 7px 8px !default;
+  $pivotgrid-common-left-right-padding: 8px !default;
+  $material-pivotgrid-expanded-cell-padding: 7px 8px 7px 13px !default;
+  $material-pivotgrid-total-text-left-padding: 16px !default;
 }
