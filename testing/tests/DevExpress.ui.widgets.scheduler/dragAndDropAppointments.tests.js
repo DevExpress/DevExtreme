@@ -2208,4 +2208,52 @@ module('Phantom Appointment Dragging', commonModuleConfig, () => {
 
         pointer.up();
     });
+
+    test('Drag Source should be rerendered correctly while dragging a long appointment and using virtual scrolling', function(assert) {
+        const done = assert.async();
+        const appointmentTitle = 'Appointment';
+        const data = [{
+            text: appointmentTitle,
+            startDate: new Date(2020, 10, 16, 0, 0),
+            endDate: new Date(2020, 10, 16, 15, 0),
+        }];
+
+        const scheduler = createWrapper({
+            height: 600,
+            views: ['week'],
+            currentView: 'week',
+            cellDuration: 1,
+            dataSource: data,
+            currentDate: new Date(2020, 10, 16),
+            showAllDayPanel: false,
+            scrolling: { mode: 'virtual' },
+        });
+
+        const schedulerInstance = scheduler.instance;
+        const workSpace = schedulerInstance.getWorkSpace();
+
+        const { virtualScrollingDispatcher } = workSpace;
+        virtualScrollingDispatcher.getRenderTimeout = () => -1;
+
+        const $appointment = scheduler.appointments.find(appointmentTitle).first();
+        const positionBeforeDrag = getAbsolutePosition($appointment);
+
+        pointerMock($appointment)
+            .start()
+            .down(positionBeforeDrag.left, positionBeforeDrag.top)
+            .move(0, 50);
+
+        schedulerInstance.scrollTo(new Date(2020, 10, 16, 0, 0));
+
+        realSetTimeout(() => {
+            const dragSource = scheduler.appointments.getDragSource();
+            assert.equal(dragSource.length, 1, 'Drag source has been rerendered');
+
+            const draggedAppointment = scheduler.appointments.getFakeAppointmentWrapper();
+            const nextPointer = pointerMock(draggedAppointment);
+            nextPointer.up();
+
+            done();
+        });
+    });
 });
