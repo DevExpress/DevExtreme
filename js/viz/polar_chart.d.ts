@@ -131,7 +131,7 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     commonAxisSettings?: dxPolarChartCommonAxisSettings;
     /**
      * @docid
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
+     * @inherits dxPolarChartSeriesTypesCommonPolarChartSeries
      * @hideDefaults true
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
@@ -1648,14 +1648,8 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
 export interface dxPolarChartSeriesTypes {
     /**
      * @docid
-     * @hidden
-     * @prevFileNamespace DevExpress.viz
-     */
-    CommonPolarChartSeries?: dxPolarChartSeriesTypesCommonPolarChartSeries;
-    /**
-     * @docid
      * @publicName AreaSeries
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
+     * @inherits dxPolarChartSeriesTypesCommonPolarChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -1663,7 +1657,7 @@ export interface dxPolarChartSeriesTypes {
     /**
      * @docid
      * @publicName BarSeries
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
+     * @inherits dxPolarChartSeriesTypesCommonPolarChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -1671,7 +1665,7 @@ export interface dxPolarChartSeriesTypes {
     /**
      * @docid
      * @publicName LineSeries
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
+     * @inherits dxPolarChartSeriesTypesCommonPolarChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -1680,7 +1674,7 @@ export interface dxPolarChartSeriesTypes {
      * @docid
      * @publicName ScatterSeries
      * @type object
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
+     * @inherits dxPolarChartSeriesTypesCommonPolarChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -1688,7 +1682,7 @@ export interface dxPolarChartSeriesTypes {
     /**
      * @docid
      * @publicName StackedBarSeries
-     * @inherits dxPolarChartSeriesTypes.CommonPolarChartSeries
+     * @inherits dxPolarChartSeriesTypesCommonPolarChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */

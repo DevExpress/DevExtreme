@@ -128,7 +128,7 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     /**
      * @docid
      * @type object
-     * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
+     * @inherits dxPieChartSeriesTypesCommonPieChartSeries
      * @hideDefaults true
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
@@ -472,14 +472,8 @@ export default class dxPieChart extends BaseChart {
 export interface dxPieChartSeriesTypes {
     /**
      * @docid
-     * @hidden
-     * @prevFileNamespace DevExpress.viz
-     */
-    CommonPieChartSeries?: dxPieChartSeriesTypesCommonPieChartSeries;
-    /**
-     * @docid
      * @type object
-     * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
+     * @inherits dxPieChartSeriesTypesCommonPieChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -487,7 +481,7 @@ export interface dxPieChartSeriesTypes {
     /**
      * @docid
      * @type object
-     * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
+     * @inherits dxPieChartSeriesTypesCommonPieChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */

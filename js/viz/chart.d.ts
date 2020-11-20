@@ -627,7 +627,7 @@ export interface dxChartOptions extends BaseChartOptions<dxChart> {
     commonPaneSettings?: dxChartCommonPaneSettings;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @hideDefaults true
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
@@ -3247,167 +3247,161 @@ export interface dxChartCommonAnnotationConfig extends BaseChartAnnotationConfig
 export interface dxChartSeriesTypes {
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     AreaSeries?: dxChartSeriesTypesAreaSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     BarSeries?: dxChartSeriesTypesBarSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     BubbleSeries?: dxChartSeriesTypesBubbleSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     CandleStickSeries?: dxChartSeriesTypesCandleStickSeries;
     /**
      * @docid
-     * @hidden
-     * @prevFileNamespace DevExpress.viz
-     */
-    CommonSeries?: dxChartSeriesTypesCommonSeries;
-    /**
-     * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     FullStackedAreaSeries?: dxChartSeriesTypesFullStackedAreaSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     FullStackedBarSeries?: dxChartSeriesTypesFullStackedBarSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     FullStackedLineSeries?: dxChartSeriesTypesFullStackedLineSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     FullStackedSplineAreaSeries?: dxChartSeriesTypesFullStackedSplineAreaSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     FullStackedSplineSeries?: dxChartSeriesTypesFullStackedSplineSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     LineSeries?: dxChartSeriesTypesLineSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     RangeAreaSeries?: dxChartSeriesTypesRangeAreaSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     RangeBarSeries?: dxChartSeriesTypesRangeBarSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     ScatterSeries?: dxChartSeriesTypesScatterSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     SplineAreaSeries?: dxChartSeriesTypesSplineAreaSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     SplineSeries?: dxChartSeriesTypesSplineSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     StackedAreaSeries?: dxChartSeriesTypesStackedAreaSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     StackedBarSeries?: dxChartSeriesTypesStackedBarSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     StackedLineSeries?: dxChartSeriesTypesStackedLineSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     StackedSplineAreaSeries?: dxChartSeriesTypesStackedSplineAreaSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     StackedSplineSeries?: dxChartSeriesTypesStackedSplineSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     StepAreaSeries?: dxChartSeriesTypesStepAreaSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     StepLineSeries?: dxChartSeriesTypesStepLineSeries;
     /**
      * @docid
-     * @inherits dxChartSeriesTypes.CommonSeries
+     * @inherits dxChartSeriesTypesCommonSeries
      * @prevFileNamespace DevExpress.viz
      * @public
      */
