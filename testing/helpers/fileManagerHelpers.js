@@ -53,6 +53,7 @@ export const Consts = {
     POPUP_NORMAL_CLASS: 'dx-popup-normal',
     POPUP_BOTTOM_CLASS: 'dx-popup-bottom',
     BUTTON_CLASS: 'dx-button',
+    BUTTON_HAS_TEXT_CLASS: 'dx-button-has-text',
     BUTTON_TEXT_CLASS: 'dx-button-text',
     DROP_DOWN_BUTTON_CLASS: 'dx-dropdownbutton',
     DROP_DOWN_BUTTON_ACTION_CLASS: 'dx-dropdownbutton-action',
@@ -176,7 +177,7 @@ export class FileManagerWrapper {
 
     getToolbarElementsInSection(sectionName) {
         const visibleToolbarSection = this.getToolbar().find(`.${Consts.NATIVE_TOOLBAR_CLASS}:visible .${Consts.NATIVE_TOOLBAR_CLASS}-${sectionName}`);
-        return visibleToolbarSection.find(`.${Consts.BUTTON_TEXT_CLASS}:visible, .${Consts.DROP_DOWN_BUTTON_CLASS}`);
+        return visibleToolbarSection.find(`.${Consts.BUTTON_CLASS}:not(.${Consts.DROP_DOWN_BUTTON_ACTION_CLASS}), .${Consts.DROP_DOWN_BUTTON_CLASS}`);
     }
 
     getGeneralToolbarElements() {
@@ -211,6 +212,10 @@ export class FileManagerWrapper {
 
     getToolbarViewSwitcherListItem(childIndex) {
         return $(`.${Consts.POPUP_NORMAL_CLASS} .${Consts.DROPDOWN_MENU_CONTENT_CLASS} .${Consts.DROPDOWN_MENU_LIST_ITEM_CLASS}`)[childIndex];
+    }
+
+    getToolbarNavigationPaneToggleButton() {
+        return this.getToolbarElementsInSection('before').not(`.${Consts.BUTTON_HAS_TEXT_CLASS}`);
     }
 
     getCustomThumbnails() {

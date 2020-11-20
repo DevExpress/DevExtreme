@@ -109,7 +109,7 @@ const VIEWS_CONFIG = {
 
 const Scheduler = Widget.inherit({
     _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+        const defaultOptions = extend(this.callBase(), {
             /**
                 * @pseudo StartDayHour
                 * @type number
@@ -672,6 +672,12 @@ const Scheduler = Widget.inherit({
                 * @inherits CollectionWidgetItem
                 * @type object
                 */
+        });
+
+        return extend(true, defaultOptions, {
+            integrationOptions: {
+                useDeferUpdateForTemplates: false
+            }
         });
     },
 

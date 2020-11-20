@@ -1642,6 +1642,30 @@ QUnit.module('Options', {
 
         assert.deepEqual(getCurrentViewInstance(this.calendar).option('contouredDate'), new Date(2015, 10, 18), 'view contoured is set');
     });
+
+    QUnit.test('_todayDate option should be passed to calendar view', function(assert) {
+        const calendarTodayDate = () => new Date(2021, 1, 1);
+
+        this.reinit({ _todayDate: calendarTodayDate });
+        assert.strictEqual(getCurrentViewInstance(this.calendar).option('_todayDate'), calendarTodayDate, '_todayDate is passed to calendar view');
+    });
+
+    QUnit.test('_todayDate option should be passed to calendar view after runtime option change', function(assert) {
+        const calendarTodayDate = () => new Date(2021, 1, 1);
+
+        this.calendar.option({ _todayDate: calendarTodayDate });
+        assert.strictEqual(getCurrentViewInstance(this.calendar).option('_todayDate'), calendarTodayDate, '_todayDate is passed to calendar view');
+    });
+
+    QUnit.test('_todayDate should return new Date() if it is not specified', function(assert) {
+        const today = new Date();
+        const result = this.calendar.option('_todayDate')();
+
+        today.setHours(0, 0, 0, 0);
+        result.setHours(0, 0, 0, 0);
+
+        assert.deepEqual(today, result, 'today date is correct');
+    });
 });
 
 
