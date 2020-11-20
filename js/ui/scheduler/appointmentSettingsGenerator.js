@@ -312,9 +312,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
         let result = [];
 
         for(let i = 0; i < gridAppointments.length; i++) {
-            const currentAppointment = gridAppointments[i];
             const coordinates = this.scheduler._workSpace.getCoordinatesByDateInGroup(
-                currentAppointment.startDate,
+                gridAppointments[i].startDate,
                 appointmentResources,
                 allDay
             );
@@ -322,9 +321,8 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             coordinates.forEach(coordinate => {
                 extend(coordinate, {
                     info: {
-                        appointment: currentAppointment,
-                        sourceAppointment: currentAppointment.source,
-                        sourceWithConvertedDates: currentAppointment.sourceWithConvertedDates,
+                        appointment: gridAppointments[i],
+                        sourceAppointment: gridAppointments[i].source
                     }
                 });
             });

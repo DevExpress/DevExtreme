@@ -1042,7 +1042,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
 
     _setDragSourceAppointment: function(appointment, settings) {
         const $appointments = this._findItemElementByItem(appointment);
-        const { startDate, endDate } = settings.info.sourceWithConvertedDates;
+        const { startDate, endDate } = settings.info.sourceAppointment;
         const { groupIndex } = settings;
 
         $appointments.forEach(($item) => {
@@ -1051,7 +1051,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
             const {
                 startDate: itemStartDate,
                 endDate: itemEndDate,
-            } = itemInfo.appointment;
+            } = itemInfo.sourceAppointment;
 
             const appointmentInstance = $item.dxSchedulerAppointment('instance');
             const isDragSource = startDate.getTime() === itemStartDate.getTime()
