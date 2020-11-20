@@ -5,9 +5,9 @@
 $generic-actionsheet-item-margin: null !default;
 
 @if $size == "default" {
-  $generic-actionsheet-item-margin: 0 0 10px 0;
+  $generic-actionsheet-item-margin: 0 0 10px 0 !default;
 }
 
 @else if $size == "compact" {
-  $generic-actionsheet-item-margin: 0 0 5px 0;
+  $generic-actionsheet-item-margin: 0 0 5px 0 !default;
 }

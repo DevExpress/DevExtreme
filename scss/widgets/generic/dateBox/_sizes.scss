@@ -9,17 +9,17 @@ $generic-datebox-popup-content-margin: null !default;
 $generic-datebox-input-min-height: null !default;
 
 @if $size == "default" {
-  $generic-datebox-overlay-item-margin: 30px;
-  $generic-datebox-overlay-item-margin-adaptive: 18px;
-  $generic-datebox-overlay-button-width: 85px;
-  $generic-datebox-popup-content-margin: 0 34px;
-  $generic-datebox-input-min-height: 33px;
+  $generic-datebox-overlay-item-margin: 30px !default;
+  $generic-datebox-overlay-item-margin-adaptive: 18px !default;
+  $generic-datebox-overlay-button-width: 85px !default;
+  $generic-datebox-popup-content-margin: 0 34px !default;
+  $generic-datebox-input-min-height: 33px !default;
 }
 
 @else if $size == "compact" {
-  $generic-datebox-overlay-item-margin: 15px;
-  $generic-datebox-overlay-item-margin-adaptive: 15px;
-  $generic-datebox-overlay-button-width: 60px;
-  $generic-datebox-popup-content-margin: 0 14px;
-  $generic-datebox-input-min-height: 23px;
+  $generic-datebox-overlay-item-margin: 15px !default;
+  $generic-datebox-overlay-item-margin-adaptive: 15px !default;
+  $generic-datebox-overlay-button-width: 60px !default;
+  $generic-datebox-popup-content-margin: 0 14px !default;
+  $generic-datebox-input-min-height: 23px !default;
 }

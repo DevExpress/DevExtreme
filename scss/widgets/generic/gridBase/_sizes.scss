@@ -21,43 +21,43 @@ $generic-command-edit-icon-margin: null !default;
 $generic-grid-base-nodata-font-size: null !default;
 
 @if $size == "default" {
-  $generic-grid-base-cell-padding: 7px;
-  $generic-grid-base-texteditor-input-padding: 32px;
-  $generic-grid-base-header-panel-margin-bottom: 10px;
-  $generic-grid-base-menu-item-padding: 6px 5px 7px;
-  $generic-grid-base-column-chooser-padding: 20px;
-  $generic-grid-base-column-chooser-item-margin: 10px;
-  $generic-grid-base-grouppanel-item-margin: 10px;
-  $generic-grid-base-command-select-column-width: 70px;
-  $generic-grid-base-command-handle-column-width: 36px;
-  $generic-grid-base-command-edit-column-width: 85px;
-  $generic-grid-base-command-expand-column-width: 30px;
-  $generic-grid-base-checkbox-fontsize: 12px;
-  $generic-grid-base-adaptive-text-padding: 8px;
-  $generic-grid-base-treeview-search-margin: 10px;
-  $generic-command-edit-icon-size: 18px;
-  $generic-command-edit-icon-margin: 3px;
-  $generic-grid-base-nodata-font-size: 17px;
+  $generic-grid-base-cell-padding: 7px !default;
+  $generic-grid-base-texteditor-input-padding: 32px !default;
+  $generic-grid-base-header-panel-margin-bottom: 10px !default;
+  $generic-grid-base-menu-item-padding: 6px 5px 7px !default;
+  $generic-grid-base-column-chooser-padding: 20px !default;
+  $generic-grid-base-column-chooser-item-margin: 10px !default;
+  $generic-grid-base-grouppanel-item-margin: 10px !default;
+  $generic-grid-base-command-select-column-width: 70px !default;
+  $generic-grid-base-command-handle-column-width: 36px !default;
+  $generic-grid-base-command-edit-column-width: 85px !default;
+  $generic-grid-base-command-expand-column-width: 30px !default;
+  $generic-grid-base-checkbox-fontsize: 12px !default;
+  $generic-grid-base-adaptive-text-padding: 8px !default;
+  $generic-grid-base-treeview-search-margin: 10px !default;
+  $generic-command-edit-icon-size: 18px !default;
+  $generic-command-edit-icon-margin: 3px !default;
+  $generic-grid-base-nodata-font-size: 17px !default;
 }
 
 @else if $size == "compact" {
-  $generic-grid-base-cell-padding: 5px;
-  $generic-grid-base-texteditor-input-padding: 24px;
-  $generic-grid-base-header-panel-margin-bottom: 5px;
-  $generic-grid-base-menu-item-padding: 5px 3px 3px;
-  $generic-grid-base-column-chooser-padding: 10px;
-  $generic-grid-base-column-chooser-item-margin: 5px;
-  $generic-grid-base-grouppanel-item-margin: 5px;
-  $generic-grid-base-command-select-column-width: 55px;
-  $generic-grid-base-command-handle-column-width: 32px;
-  $generic-grid-base-command-edit-column-width: 70px;
-  $generic-grid-base-command-expand-column-width: 15px;
-  $generic-grid-base-checkbox-fontsize: 10px;
-  $generic-grid-base-adaptive-text-padding: 6px;
-  $generic-grid-base-treeview-search-margin: 5px;
-  $generic-command-edit-icon-size: 14px;
-  $generic-command-edit-icon-margin: 1px;
-  $generic-grid-base-nodata-font-size: 14px;
+  $generic-grid-base-cell-padding: 5px !default;
+  $generic-grid-base-texteditor-input-padding: 24px !default;
+  $generic-grid-base-header-panel-margin-bottom: 5px !default;
+  $generic-grid-base-menu-item-padding: 5px 3px 3px !default;
+  $generic-grid-base-column-chooser-padding: 10px !default;
+  $generic-grid-base-column-chooser-item-margin: 5px !default;
+  $generic-grid-base-grouppanel-item-margin: 5px !default;
+  $generic-grid-base-command-select-column-width: 55px !default;
+  $generic-grid-base-command-handle-column-width: 32px !default;
+  $generic-grid-base-command-edit-column-width: 70px !default;
+  $generic-grid-base-command-expand-column-width: 15px !default;
+  $generic-grid-base-checkbox-fontsize: 10px !default;
+  $generic-grid-base-adaptive-text-padding: 6px !default;
+  $generic-grid-base-treeview-search-margin: 5px !default;
+  $generic-command-edit-icon-size: 14px !default;
+  $generic-command-edit-icon-margin: 1px !default;
+  $generic-grid-base-nodata-font-size: 14px !default;
 }
 
-$generic-grid-base-column-chooser-paddings: 0 $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding;
+$generic-grid-base-column-chooser-paddings: 0 $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding !default;

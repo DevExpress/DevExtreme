@@ -21,58 +21,58 @@ $generic-scheduler-appointment-transparent-left-border: null !default;
 $generic-scheduler-appointment-transparent-right-border: null !default;
 $generic-scheduler-appointment-collector-height: null !default;
 
-$scheduler-left-column-width: 100px;
-$generic-scheduler-navigator-border-radius: $button-border-radius;
-$generic-scheduler-group-header-agenda-font-size: 14px;
+$scheduler-left-column-width: 100px !default;
+$generic-scheduler-navigator-border-radius: $button-border-radius !default;
+$generic-scheduler-group-header-agenda-font-size: 14px !default;
 
 @if $size == "default" {
-  $generic-scheduler-workspace-date-table-cell-height: 50px;
-  $generic-scheduler-timeline-date-table-cell-height: 75px;
+  $generic-scheduler-workspace-date-table-cell-height: 50px !default;
+  $generic-scheduler-timeline-date-table-cell-height: 75px !default;
 
-  $generic-scheduler-header-panel-top-gap: 10px;
+  $generic-scheduler-header-panel-top-gap: 10px !default;
 
-  $generic-scheduler-header-height: 56px;
-  $generic-scheduler-navigator-height: 36px;
-  $generic-scheduler-navigation-buttons-padding: 6px;
+  $generic-scheduler-header-height: 56px !default;
+  $generic-scheduler-navigator-height: 36px !default;
+  $generic-scheduler-navigation-buttons-padding: 6px !default;
 
-  $generic-scheduler-appointment-month-text-size: 13px;
-  $generic-scheduler-workspace-info-text-size: 14px;
-  $generic-scheduler-all-day-title-font-size: 14px;
+  $generic-scheduler-appointment-month-text-size: 13px !default;
+  $generic-scheduler-workspace-info-text-size: 14px !default;
+  $generic-scheduler-all-day-title-font-size: 14px !default;
 
-  $generic-scheduler-appointment-content-padding: 5px 7px;
-  $generic-scheduler-appointment-recurrence-content-padding: 5px 25px 5px 7px;
-  $generic-scheduler-appointment-recurrence-content-padding-rtl: 5px 7px 5px 25px;
+  $generic-scheduler-appointment-content-padding: 5px 7px !default;
+  $generic-scheduler-appointment-recurrence-content-padding: 5px 25px 5px 7px !default;
+  $generic-scheduler-appointment-recurrence-content-padding-rtl: 5px 7px 5px 25px !default;
 
-  $generic-scheduler-agenda-appointment-font-size: 16px;
-  $generic-scheduler-group-header-table-cell-width: 80px;
-  $generic-scheduler-appointment-transparent-left-border: 3px solid transparent;
-  $generic-scheduler-appointment-transparent-right-border: 2px solid transparent;
+  $generic-scheduler-agenda-appointment-font-size: 16px !default;
+  $generic-scheduler-group-header-table-cell-width: 80px !default;
+  $generic-scheduler-appointment-transparent-left-border: 3px solid transparent !default;
+  $generic-scheduler-appointment-transparent-right-border: 2px solid transparent !default;
 
-  $generic-scheduler-appointment-collector-height: 20px;
+  $generic-scheduler-appointment-collector-height: 20px !default;
 }
 
 @else if $size == "compact" {
-  $generic-scheduler-workspace-date-table-cell-height: 36px;
-  $generic-scheduler-timeline-date-table-cell-height: 50px;
+  $generic-scheduler-workspace-date-table-cell-height: 36px !default;
+  $generic-scheduler-timeline-date-table-cell-height: 50px !default;
 
-  $generic-scheduler-header-panel-top-gap: 5px;
+  $generic-scheduler-header-panel-top-gap: 5px !default;
 
-  $generic-scheduler-header-height: 39px;
-  $generic-scheduler-navigator-height: 25px;
-  $generic-scheduler-navigation-buttons-padding: 4px;
+  $generic-scheduler-header-height: 39px !default;
+  $generic-scheduler-navigator-height: 25px !default;
+  $generic-scheduler-navigation-buttons-padding: 4px !default;
 
-  $generic-scheduler-appointment-month-text-size: 11px;
-  $generic-scheduler-workspace-info-text-size: 12px;
-  $generic-scheduler-all-day-title-font-size: 11px;
+  $generic-scheduler-appointment-month-text-size: 11px !default;
+  $generic-scheduler-workspace-info-text-size: 12px !default;
+  $generic-scheduler-all-day-title-font-size: 11px !default;
 
-  $generic-scheduler-appointment-content-padding: 2px 5px;
-  $generic-scheduler-appointment-recurrence-content-padding: 2px 25px 2px 5px;
-  $generic-scheduler-appointment-recurrence-content-padding-rtl: 2px 5px 2px 25px;
+  $generic-scheduler-appointment-content-padding: 2px 5px !default;
+  $generic-scheduler-appointment-recurrence-content-padding: 2px 25px 2px 5px !default;
+  $generic-scheduler-appointment-recurrence-content-padding-rtl: 2px 5px 2px 25px !default;
 
-  $generic-scheduler-agenda-appointment-font-size: 14px;
-  $generic-scheduler-group-header-table-cell-width: 60px;
-  $generic-scheduler-appointment-transparent-left-border: 2px solid transparent;
-  $generic-scheduler-appointment-transparent-right-border: 1px solid transparent;
+  $generic-scheduler-agenda-appointment-font-size: 14px !default;
+  $generic-scheduler-group-header-table-cell-width: 60px !default;
+  $generic-scheduler-appointment-transparent-left-border: 2px solid transparent !default;
+  $generic-scheduler-appointment-transparent-right-border: 1px solid transparent !default;
 
-  $generic-scheduler-appointment-collector-height: 17px;
+  $generic-scheduler-appointment-collector-height: 17px !default;
 }

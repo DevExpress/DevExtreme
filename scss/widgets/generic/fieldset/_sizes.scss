@@ -8,24 +8,24 @@ $generic-fieldset-header-vertical-margin: null !default;
 $generic-field-vertical-margin: null !default;
 $generic-field-labelvalue-spacing: null !default;
 $generic-radiogroup-min-height: null !default;
-$generic-field-value-top-padding: $generic-base-inline-widget-top-padding;
-$generic-field-value-horizontal-padding: $generic-base-inline-horizontal-padding;
-$generic-field-value-bottom-padding: $generic-base-inline-widget-bottom-padding;
+$generic-field-value-top-padding: $generic-base-inline-widget-top-padding !default;
+$generic-field-value-horizontal-padding: $generic-base-inline-horizontal-padding !default;
+$generic-field-value-bottom-padding: $generic-base-inline-widget-bottom-padding !default;
 
 @if $size == "default" {
-  $generic-fieldset-vertical-margin: 30px;
-  $generic-fieldset-horizontal-margin: 20px;
-  $generic-fieldset-header-vertical-margin: 20px;
-  $generic-field-vertical-margin: 10px;
-  $generic-field-labelvalue-spacing: 15px;
-  $generic-radiogroup-min-height: 26px;
+  $generic-fieldset-vertical-margin: 30px !default;
+  $generic-fieldset-horizontal-margin: 20px !default;
+  $generic-fieldset-header-vertical-margin: 20px !default;
+  $generic-field-vertical-margin: 10px !default;
+  $generic-field-labelvalue-spacing: 15px !default;
+  $generic-radiogroup-min-height: 26px !default;
 }
 
 @else if $size == "compact" {
-  $generic-fieldset-vertical-margin: 15px;
-  $generic-fieldset-horizontal-margin: 10px;
-  $generic-fieldset-header-vertical-margin: 10px;
-  $generic-field-vertical-margin: 5px;
-  $generic-field-labelvalue-spacing: 8px;
-  $generic-radiogroup-min-height: 20px;
+  $generic-fieldset-vertical-margin: 15px !default;
+  $generic-fieldset-horizontal-margin: 10px !default;
+  $generic-fieldset-header-vertical-margin: 10px !default;
+  $generic-field-vertical-margin: 5px !default;
+  $generic-field-labelvalue-spacing: 8px !default;
+  $generic-radiogroup-min-height: 20px !default;
 }

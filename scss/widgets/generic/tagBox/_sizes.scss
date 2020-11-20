@@ -14,27 +14,27 @@ $generic-tagbox-select-all-padding-bottom: null !default;
 $generic-tagbox-select-all-margin-bottom: null !default;
 
 @if $size == "default" {
-  $generic-tagbox-tag-container-padding-bottom: 4px;
-  $generic-tagbox-tag-content-margin: 4px 0 0 4px;
-  $generic-tagbox-tag-content-padding-left: 6px;
-  $generic-tagbox-tag-content-padding-right: 25px;
-  $generic-tagbox-tag-content-padding: 3px $generic-tagbox-tag-content-padding-right 4px $generic-tagbox-tag-content-padding-left;
-  $generic-tagbox-remove-button-right: 5px;
-  $generic-tagbox-remove-button-width: 25px;
-  $generic-tagbox-input-margin-left: 5px;
-  $generic-tagbox-select-all-padding-bottom: 11px;
-  $generic-tagbox-select-all-margin-bottom: 3px;
+  $generic-tagbox-tag-container-padding-bottom: 4px !default;
+  $generic-tagbox-tag-content-margin: 4px 0 0 4px !default;
+  $generic-tagbox-tag-content-padding-left: 6px !default;
+  $generic-tagbox-tag-content-padding-right: 25px !default;
+  $generic-tagbox-tag-content-padding: 3px $generic-tagbox-tag-content-padding-right 4px $generic-tagbox-tag-content-padding-left !default;
+  $generic-tagbox-remove-button-right: 5px !default;
+  $generic-tagbox-remove-button-width: 25px !default;
+  $generic-tagbox-input-margin-left: 5px !default;
+  $generic-tagbox-select-all-padding-bottom: 11px !default;
+  $generic-tagbox-select-all-margin-bottom: 3px !default;
 }
 
 @else if $size == "compact" {
-  $generic-tagbox-tag-container-padding-bottom: 2px;
-  $generic-tagbox-tag-content-margin: 2px 0 0 2px;
-  $generic-tagbox-tag-content-padding-left: 4px;
-  $generic-tagbox-tag-content-padding-right: 17px;
-  $generic-tagbox-tag-content-padding: 2px $generic-tagbox-tag-content-padding-right 2px $generic-tagbox-tag-content-padding-left;
-  $generic-tagbox-remove-button-right: 3px;
-  $generic-tagbox-remove-button-width: 17px;
-  $generic-tagbox-input-margin-left: 3px;
-  $generic-tagbox-select-all-padding-bottom: 5px;
-  $generic-tagbox-select-all-margin-bottom: 1px;
+  $generic-tagbox-tag-container-padding-bottom: 2px !default;
+  $generic-tagbox-tag-content-margin: 2px 0 0 2px !default;
+  $generic-tagbox-tag-content-padding-left: 4px !default;
+  $generic-tagbox-tag-content-padding-right: 17px !default;
+  $generic-tagbox-tag-content-padding: 2px $generic-tagbox-tag-content-padding-right 2px $generic-tagbox-tag-content-padding-left !default;
+  $generic-tagbox-remove-button-right: 3px !default;
+  $generic-tagbox-remove-button-width: 17px !default;
+  $generic-tagbox-input-margin-left: 3px !default;
+  $generic-tagbox-select-all-padding-bottom: 5px !default;
+  $generic-tagbox-select-all-margin-bottom: 1px !default;
 }
