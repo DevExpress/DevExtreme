@@ -153,7 +153,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
         const cellData = this.getCellData($cell);
 
         const duration = date.getTime() - cellData.startDate.getTime();
-        return duration / this.getCellDuration();
+        return duration / (cellData.endDate.getTime() - cellData.startDate.getTime());
     }
 
     _setIndicationUpdateInterval() {

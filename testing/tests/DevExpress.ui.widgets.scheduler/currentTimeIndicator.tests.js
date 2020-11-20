@@ -1001,7 +1001,7 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         endDayHour: 14,
         expectedCellCount: 5,
         indicatorCount: 1,
-        lastShaderWidth: 149.25,
+        lastShaderWidth: 119.391,
         indicatorTime: new Date(2017, 8, 5, 12),
         testDescription: 'indicatorTime is between startDayHour and endDayHour'
     },
@@ -1009,7 +1009,7 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
         startDayHour: 13,
         endDayHour: 14,
         expectedCellCount: 4,
-        indicatorCount: 0,
+        indicatorCount: 1,
         lastShaderWidth: undefined,
         indicatorTime: new Date(2017, 8, 5, 12),
         testDescription: 'indicatorTime is less than startDateHour'
@@ -1017,11 +1017,13 @@ QUnit.module('DateTime indicator on grouped Week View', moduleConfig, () => {
     {
         startDayHour: 0,
         endDayHour: 11,
+        indicatorCount: 1,
+        expectedCellCount: 5,
         lastShaderWidth: undefined,
-        indicatorTime: new Date(2017, 8, 5, 12),
+        indicatorTime: new Date(2017, 8, 5, 12, 45),
         testDescription: 'indicatorTime is greater than endDayHour'
     }].forEach(schedulerConfig => {
-        QUnit.skip(`Shader should have correct height & width on timelineMonth, ${schedulerConfig.testDescription}, (T923329)`, function(assert) {
+        QUnit.test(`Shader should have correct height & width on timelineMonth, ${schedulerConfig.testDescription}, (T923329)`, function(assert) {
             const instance = $('#scheduler-work-space').dxSchedulerTimelineMonth({
                 currentDate: new Date(2017, 8, 5),
                 height: 307,

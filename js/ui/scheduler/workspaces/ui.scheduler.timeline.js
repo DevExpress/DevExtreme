@@ -293,7 +293,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
     _shiftIndicator(date, $cell, $indicator) {
         const left = this.getIndicatorLeftOffset(date, $cell);
-        $indicator.css('left', left);
+        left > 0 && $indicator.css('left', left);
     }
 
     _isIndicatorSimple(index) {
