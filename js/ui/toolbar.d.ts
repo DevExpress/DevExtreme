@@ -102,7 +102,6 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     menuItemTemplate?: template | (() => string | Element | JQuery);
     /**
      * @docid dxToolbarItem.options
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */

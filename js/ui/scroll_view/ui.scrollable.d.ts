@@ -106,7 +106,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
 }
 /**
  * @docid dxScrollable
- * @type object
  * @inherits DOMComponent
  * @namespace DevExpress.ui
  * @hidden

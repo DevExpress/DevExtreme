@@ -57,7 +57,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     appointmentCollectorTemplate?: template | ((data: { appointmentCount?: number, isCompact?: boolean }, collectorElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxSchedulerOptions.appointmentDragging
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */

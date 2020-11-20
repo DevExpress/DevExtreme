@@ -391,7 +391,6 @@ export interface BaseWidgetTooltip {
     arrowLength?: number;
     /**
      * @docid BaseWidgetOptions.tooltip.border
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -464,7 +463,6 @@ export interface BaseWidgetTooltip {
     paddingTopBottom?: number;
     /**
      * @docid BaseWidgetOptions.tooltip.shadow
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -479,7 +477,6 @@ export interface BaseWidgetTooltip {
 }
 /**
  * @docid BaseWidget
- * @type object
  * @hidden
  * @inherits DOMComponent
  * @prevFileNamespace DevExpress.viz
@@ -604,7 +601,6 @@ export interface BaseWidgetAnnotationConfig {
     arrowWidth?: number;
     /**
      * @docid BaseWidgetAnnotationConfig.border
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -618,7 +614,6 @@ export interface BaseWidgetAnnotationConfig {
     color?: string;
     /**
      * @docid BaseWidgetAnnotationConfig.data
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -689,7 +684,6 @@ export interface BaseWidgetAnnotationConfig {
     paddingTopBottom?: number;
     /**
      * @docid BaseWidgetAnnotationConfig.shadow
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */

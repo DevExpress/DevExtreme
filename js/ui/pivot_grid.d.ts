@@ -66,28 +66,24 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     dataSource?: Array<any> | PivotGridDataSource | PivotGridDataSourceOptions;
     /**
      * @docid dxPivotGridOptions.export
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     export?: { enabled?: boolean, fileName?: string, ignoreExcelErrors?: boolean, proxyUrl?: string };
     /**
      * @docid dxPivotGridOptions.fieldChooser
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     fieldChooser?: { allowSearch?: boolean, applyChangesMode?: 'instantly' | 'onDemand', enabled?: boolean, height?: number, layout?: 0 | 1 | 2, searchTimeout?: number, texts?: { allFields?: string, columnFields?: string, dataFields?: string, filterFields?: string, rowFields?: string }, title?: string, width?: number };
     /**
      * @docid dxPivotGridOptions.fieldPanel
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     fieldPanel?: { allowFieldDragging?: boolean, showColumnFields?: boolean, showDataFields?: boolean, showFilterFields?: boolean, showRowFields?: boolean, texts?: { columnFieldArea?: string, dataFieldArea?: string, filterFieldArea?: string, rowFieldArea?: string }, visible?: boolean };
     /**
      * @docid dxPivotGridOptions.headerFilter
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -101,7 +97,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     hideEmptySummaryCells?: boolean;
     /**
      * @docid dxPivotGridOptions.loadPanel
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -207,7 +202,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     rowHeaderLayout?: 'standard' | 'tree';
     /**
      * @docid dxPivotGridOptions.scrolling
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -257,14 +251,12 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     showTotalsPrior?: 'both' | 'columns' | 'none' | 'rows';
     /**
      * @docid dxPivotGridOptions.stateStoring
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     stateStoring?: { customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((state: any) => any), enabled?: boolean, savingTimeout?: number, storageKey?: string, type?: 'custom' | 'localStorage' | 'sessionStorage' };
     /**
      * @docid dxPivotGridOptions.texts
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */

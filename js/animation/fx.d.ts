@@ -44,7 +44,6 @@ export interface animationConfig {
     easing?: string;
     /**
      * @docid animationConfig.from
-     * @type number|string|object
      * @default {}
      * @prevFileNamespace DevExpress.animation
      * @public
@@ -67,7 +66,6 @@ export interface animationConfig {
     start?: (($element: dxElement, config: any) => any);
     /**
      * @docid animationConfig.to
-     * @type number|string|object
      * @default {}
      * @prevFileNamespace DevExpress.animation
      * @public

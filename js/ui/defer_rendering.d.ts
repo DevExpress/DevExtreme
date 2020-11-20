@@ -15,7 +15,6 @@ import Widget, {
 export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering> {
     /**
      * @docid dxDeferRenderingOptions.animation
-     * @type animationConfig
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -47,7 +46,6 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
     renderWhen?: Promise<void> | JQueryPromise<void> | boolean;
     /**
      * @docid dxDeferRenderingOptions.showLoadIndicator
-     * @type bool
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public

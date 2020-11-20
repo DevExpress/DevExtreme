@@ -200,7 +200,6 @@ export interface dxPopupToolbarItem {
     location?: 'after' | 'before' | 'center';
     /**
      * @docid dxPopupOptions.toolbarItems.options
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */

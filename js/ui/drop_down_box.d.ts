@@ -30,7 +30,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
     acceptCustomValue?: boolean;
     /**
      * @docid dxDropDownBoxOptions.contentTemplate
-     * @type template|function
      * @default 'content'
      * @type_function_param1 templateData:object
      * @type_function_param1_field1 component:dxDropDownBox
@@ -43,7 +42,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
     contentTemplate?: template | ((templateData: { component?: dxDropDownBox, value?: any }, contentElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxDropDownBoxOptions.displayValueFormatter
-     * @type function(value)
      * @type_function_param1 value:string|Array<any>
      * @type_function_return string
      * @prevFileNamespace DevExpress.ui
@@ -52,7 +50,6 @@ export interface dxDropDownBoxOptions extends DataExpressionMixinOptions<dxDropD
     displayValueFormatter?: ((value: string | Array<any>) => string);
     /**
      * @docid dxDropDownBoxOptions.fieldTemplate
-     * @type template|function
      * @default null
      * @type_function_param1 value:object
      * @type_function_param2 fieldElement:dxElement

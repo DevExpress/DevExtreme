@@ -207,7 +207,6 @@ export interface dxOverlayAnimation {
 }
 /**
  * @docid dxOverlay
- * @type object
  * @inherits Widget
  * @module ui/overlay
  * @hidden

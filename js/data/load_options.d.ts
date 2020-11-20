@@ -1,35 +1,30 @@
 export interface LoadOptions {
     /**
      * @docid LoadOptions.customQueryParams
-     * @type Object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     customQueryParams?: any;
     /**
      * @docid LoadOptions.expand
-     * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     expand?: any;
     /**
      * @docid LoadOptions.filter
-     * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     filter?: any;
     /**
      * @docid LoadOptions.group
-     * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     group?: any;
     /**
      * @docid LoadOptions.groupSummary
-     * @type Object
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -73,7 +68,6 @@ export interface LoadOptions {
     searchValue?: any;
     /**
      * @docid LoadOptions.select
-     * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -86,7 +80,6 @@ export interface LoadOptions {
     skip?: number;
     /**
      * @docid LoadOptions.sort
-     * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -99,14 +92,12 @@ export interface LoadOptions {
     take?: number;
     /**
      * @docid LoadOptions.totalSummary
-     * @type Object
      * @prevFileNamespace DevExpress.data
      * @public
      */
     totalSummary?: any;
     /**
      * @docid LoadOptions.userData
-     * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */

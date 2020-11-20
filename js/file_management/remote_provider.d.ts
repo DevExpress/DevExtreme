@@ -20,7 +20,6 @@ export interface RemoteFileSystemProviderOptions extends FileSystemProviderBaseO
 /**
  * @docid RemoteFileSystemProvider
  * @inherits FileSystemProviderBase
- * @type object
  * @module file_management/remote_provider
  * @namespace DevExpress.fileManagement
  * @export default

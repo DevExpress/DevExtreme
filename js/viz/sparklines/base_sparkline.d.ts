@@ -78,7 +78,6 @@ export interface BaseSparklineTooltip extends BaseWidgetTooltip {
 }
 /**
  * @docid BaseSparkline
- * @type object
  * @hidden
  * @inherits BaseWidget
  * @prevFileNamespace DevExpress.viz

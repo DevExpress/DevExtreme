@@ -1,6 +1,5 @@
 /**
  * @docid FileSystemItem
- * @type object
  * @module file_management/file_system_item
  * @namespace DevExpress.fileManagement
  * @export default
@@ -19,7 +18,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.pathKeys
-     * @type Array<string>
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -41,7 +39,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.dateModified
-     * @type Date
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -77,7 +74,6 @@ export default class FileSystemItem {
 
     /**
      * @docid FileSystemItemFields.dataItem
-     * @type object
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */

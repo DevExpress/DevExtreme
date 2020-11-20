@@ -40,7 +40,6 @@ export interface ComponentOptions<T = Component> {
 }
 /**
 * @docid Component
-* @type object
 * @module core/component
 * @export default
 * @namespace DevExpress

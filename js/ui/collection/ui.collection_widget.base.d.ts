@@ -148,7 +148,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     selectedIndex?: number;
     /**
      * @docid CollectionWidgetOptions.selectedItem
-     * @type object
      * @default null
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @ref
@@ -175,7 +174,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
 }
 /**
  * @docid CollectionWidget
- * @type object
  * @inherits Widget, DataHelperMixin
  * @module ui/collection/ui.collection_widget.base
  * @export default

@@ -19,7 +19,6 @@ import {
 export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     /**
      * @docid dxValidatorOptions.adapter
-     * @type Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */

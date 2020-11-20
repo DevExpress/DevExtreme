@@ -88,7 +88,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     searchTimeout?: number;
     /**
      * @docid dxPivotGridFieldChooserOptions.state
-     * @type object
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -96,7 +95,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     state?: any;
     /**
      * @docid dxPivotGridFieldChooserOptions.texts
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */

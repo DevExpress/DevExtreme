@@ -10,7 +10,6 @@ import {
 export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge> {
     /**
      * @docid dxCircularGaugeOptions.geometry
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */

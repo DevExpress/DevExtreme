@@ -9,28 +9,24 @@ import '../jquery_augmentation';
 export class dxEvent {
     /**
      * @docid dxEventFields.currentTarget
-     * @type Element
      * @prevFileNamespace DevExpress.events
      * @public
      */
     currentTarget: Element;
     /**
      * @docid dxEventFields.data
-     * @type object
      * @prevFileNamespace DevExpress.events
      * @public
      */
     data: any;
     /**
      * @docid dxEventFields.delegateTarget
-     * @type Element
      * @prevFileNamespace DevExpress.events
      * @public
      */
     delegateTarget: Element;
     /**
      * @docid dxEventFields.target
-     * @type Element
      * @prevFileNamespace DevExpress.events
      * @public
      */

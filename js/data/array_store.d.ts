@@ -13,7 +13,6 @@ export interface ArrayStoreOptions<T = ArrayStore> extends StoreOptions<T> {
 /**
  * @docid ArrayStore
  * @inherits Store
- * @type object
  * @module data/array_store
  * @export default
  * @prevFileNamespace DevExpress.data

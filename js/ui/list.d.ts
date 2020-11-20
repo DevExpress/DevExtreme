@@ -61,7 +61,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     collapsibleGroups?: boolean;
     /**
      * @docid dxListOptions.dataSource
-     * @type string|Array<string,dxListItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -69,7 +68,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     dataSource?: string | Array<string | dxListItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxListOptions.displayExpr
-     * @type string|function(item)
      * @default undefined
      * @type_function_param1 item:object
      * @type_function_return string
@@ -86,7 +84,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     focusStateEnabled?: boolean;
     /**
      * @docid dxListOptions.groupTemplate
-     * @type template|function
      * @default "group"
      * @type_function_param1 groupData:object
      * @type_function_param2 groupIndex:number
@@ -129,14 +126,12 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     itemDeleteMode?: 'context' | 'slideButton' | 'slideItem' | 'static' | 'swipe' | 'toggle';
     /**
      * @docid dxListOptions.itemDragging
-     * @type dxSortableOptions
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemDragging?: dxSortableOptions;
     /**
      * @docid dxListOptions.items
-     * @type Array<string, dxListItem, object>
      * @fires dxListOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -144,7 +139,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     items?: Array<string | dxListItem | any>;
     /**
      * @docid dxListOptions.menuItems
-     * @type Array<Object>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -169,7 +163,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onGroupRendered
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 groupData:object
      * @type_function_param1_field5 groupElement:dxElement
@@ -182,7 +175,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onItemClick
      * @extends Action
-     * @type function(e)|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -196,7 +188,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onItemContextMenu
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -210,7 +201,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onItemDeleted
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -224,7 +214,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onItemDeleting
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -239,7 +228,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onItemHold
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -253,7 +241,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onItemReordered
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -269,7 +256,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onItemSwipe
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 itemData:object
@@ -300,7 +286,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onScroll
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -316,7 +301,6 @@ export interface dxListOptions extends CollectionWidgetOptions<dxList>, SearchBo
     /**
      * @docid dxListOptions.onSelectAllValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
      * @action

@@ -24,7 +24,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     activeStateEnabled?: boolean;
     /**
      * @docid dxMenuBaseOptions.animation
-     * @type object
      * @default { show: { type: "fade", from: 0, to: 1, duration: 100 }, hide: { type: "fade", from: 1, to: 0, duration: 100 } }
      * @ref
      * @prevFileNamespace DevExpress.ui
@@ -79,7 +78,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
 }
 /**
  * @docid dxMenuBase
- * @type object
  * @inherits HierarchicalCollectionWidget
  * @hidden
  * @prevFileNamespace DevExpress.ui

@@ -21,7 +21,6 @@ export interface BaseLegend {
     backgroundColor?: string;
     /**
      * @docid BaseLegend.border
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -150,7 +149,6 @@ export interface BaseLegend {
 export interface BaseLegendItem {
     /**
      * @docid BaseLegendItem.marker
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */

@@ -27,7 +27,6 @@ export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
 /**
  * @docid LocalStore
  * @inherits ArrayStore
- * @type object
  * @module data/local_store
  * @export default
  * @prevFileNamespace DevExpress.data

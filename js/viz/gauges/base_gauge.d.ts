@@ -218,7 +218,6 @@ export interface BaseGaugeScale {
     label?: BaseGaugeScaleLabel;
     /**
      * @docid BaseGaugeOptions.scale.minorTick
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -247,7 +246,6 @@ export interface BaseGaugeScale {
     startValue?: number;
     /**
      * @docid BaseGaugeOptions.scale.tick
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -511,7 +509,6 @@ export interface CommonIndicator {
     spindleSize?: number;
     /**
      * @docid CommonIndicator.text
-     * @type object
      * @propertyOf circularRangeBar,linearRangeBar,circularTextCloud,linearTextCloud
      * @prevFileNamespace DevExpress.viz
      * @public

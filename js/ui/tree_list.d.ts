@@ -950,7 +950,6 @@ export interface dxTreeListNode {
     children?: Array<dxTreeListNode>;
     /**
      * @docid dxTreeListNode.data
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */

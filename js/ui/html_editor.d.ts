@@ -39,7 +39,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxHtmlEditorOptions.mediaResizing
-     * @type dxHtmlEditorMediaResizing
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -47,7 +46,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     mediaResizing?: dxHtmlEditorMediaResizing;
     /**
      * @docid dxHtmlEditorOptions.mentions
-     * @type Array<dxHtmlEditorMention>
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -63,7 +61,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid dxHtmlEditorOptions.onFocusIn
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -74,7 +71,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     /**
      * @docid dxHtmlEditorOptions.onFocusOut
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -91,7 +87,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     placeholder?: string;
     /**
      * @docid dxHtmlEditorOptions.toolbar
-     * @type dxHtmlEditorToolbar
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -107,7 +102,6 @@ export interface dxHtmlEditorOptions extends EditorOptions<dxHtmlEditor> {
     valueType?: 'html' | 'markdown';
     /**
      * @docid dxHtmlEditorOptions.variables
-     * @type dxHtmlEditorVariables
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -311,7 +305,6 @@ export default class dxHtmlEditor extends Editor {
 export interface dxHtmlEditorMediaResizing {
     /**
      * @docid dxHtmlEditorMediaResizing.allowedTargets
-     * @type Array<string>
      * @default ["image"]
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -329,7 +322,6 @@ export interface dxHtmlEditorMediaResizing {
 export interface dxHtmlEditorMention {
     /**
      * @docid dxHtmlEditorMention.dataSource
-     * @type Array<string>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -337,7 +329,6 @@ export interface dxHtmlEditorMention {
     dataSource?: Array<string> | DataSource | DataSourceOptions;
     /**
      * @docid dxHtmlEditorMention.displayExpr
-     * @type string|function(item)
      * @default "this"
      * @type_function_param1 item:object
      * @type_function_return string
@@ -347,7 +338,6 @@ export interface dxHtmlEditorMention {
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid dxHtmlEditorMention.itemTemplate
-     * @type template|function
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -388,7 +378,6 @@ export interface dxHtmlEditorMention {
     searchTimeout?: number;
     /**
      * @docid dxHtmlEditorMention.template
-     * @type template|function
      * @default null
      * @type_function_param1 mentionData:object
      * @type_function_param1_field1 marker:string
@@ -413,7 +402,6 @@ export interface dxHtmlEditorMention {
 export interface dxHtmlEditorToolbar {
     /**
      * @docid dxHtmlEditorToolbar.container
-     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -444,7 +432,6 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     formatName?: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'image' | 'size' | 'strike' | 'subscript' | 'superscript' | 'underline' | 'blockquote' | 'header' | 'increaseIndent' | 'decreaseIndent' | 'orderedList' | 'bulletList' | 'alignLeft' | 'alignCenter' | 'alignRight' | 'alignJustify' | 'codeBlock' | 'variable' | 'separator' | 'undo' | 'redo' | 'clear' | 'insertTable' | 'insertRowAbove' | 'insertRowBelow' | 'insertColumnLeft' | 'insertColumnRight' | 'deleteColumn' | 'deleteRow' | 'deleteTable' | string;
     /**
      * @docid dxHtmlEditorToolbarItem.formatValues
-     * @type Array<string,number,boolean>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -461,7 +448,6 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
 export interface dxHtmlEditorVariables {
     /**
      * @docid dxHtmlEditorVariables.dataSource
-     * @type string|Array<string>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -469,7 +455,6 @@ export interface dxHtmlEditorVariables {
     dataSource?: string | Array<string> | DataSource | DataSourceOptions;
     /**
      * @docid dxHtmlEditorVariables.escapeChar
-     * @type string|Array<string>
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public

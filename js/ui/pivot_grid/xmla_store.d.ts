@@ -33,7 +33,6 @@ export interface XmlaStoreOptions {
 }
 /**
  * @docid XmlaStore
- * @type object
  * @namespace DevExpress.data
  * @module ui/pivot_grid/xmla_store
  * @export default

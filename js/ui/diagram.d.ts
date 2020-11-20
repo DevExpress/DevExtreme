@@ -25,7 +25,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     autoZoomMode?: 'fitContent' | 'fitWidth' | 'disabled';
     /**
      * @docid dxDiagramOptions.contextMenu
-     * @type Object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -33,7 +32,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     contextMenu?: { commands?: Array<'separator'|'exportSvg'|'exportPng'|'exportJpg'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'layoutTreeTopToBottom'|'layoutTreeBottomToTop'|'layoutTreeLeftToRight'|'layoutTreeRightToLeft'|'layoutLayeredTopToBottom'|'layoutLayeredBottomToTop'|'layoutLayeredLeftToRight'|'layoutLayeredRightToLeft'|'fullScreen'|'zoomLevel'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'>, enabled?: boolean };
     /**
      * @docid dxDiagramOptions.contextToolbox
-     * @type Object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -41,7 +39,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     contextToolbox?: { category?: 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom' | string, displayMode?: 'icons' | 'texts', enabled?: boolean, shapes?: Array<'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight'> | Array<string> };
     /**
      * @docid dxDiagramOptions.onCustomCommand
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:this
      * @type_function_param1_field2 element:dxElement
@@ -53,7 +50,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     onCustomCommand?: ((e: { component?: dxDiagram, element?: dxElement, name?: string }) => any);
     /**
      * @docid dxDiagramOptions.customShapeTemplate
-     * @type template|function
      * @type_function_param1 container:dxSVGElement
      * @type_function_param2 data:object
      * @type_function_param2_field1 item:dxDiagramShape
@@ -63,7 +59,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     customShapeTemplate?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any);
     /**
      * @docid dxDiagramOptions.customShapeToolboxTemplate
-     * @type template|function
      * @type_function_param1 container:dxSVGElement
      * @type_function_param2 data:object
      * @type_function_param2_field1 item:dxDiagramShape
@@ -73,7 +68,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     customShapeToolboxTemplate?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any);
     /**
      * @docid dxDiagramOptions.customShapes
-     * @type Array<Object>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -81,7 +75,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     customShapes?: Array<{ allowEditImage?: boolean, allowEditText?: boolean, allowResize?: boolean, backgroundImageHeight?: number, backgroundImageLeft?: number, backgroundImageTop?: number, backgroundImageUrl?: string, backgroundImageToolboxUrl?: string, backgroundImageWidth?: number, baseType?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string, category?: string, connectionPoints?: Array<{ x?: number, y?: number }>, defaultHeight?: number, defaultImageUrl?: string, defaultText?: string, defaultWidth?: number, imageHeight?: number, imageLeft?: number, imageTop?: number, imageWidth?: number, maxHeight?: number, maxWidth?: number, minHeight?: number, minWidth?: number, template?: template | ((container: dxSVGElement, data: { item?: dxDiagramShape }) => any), templateHeight?: number, templateLeft?: number, templateTop?: number, templateWidth?: number, textHeight?: number, textLeft?: number, textTop?: number, textWidth?: number, title?: string, type?: string, keepRatioOnAutoSize?: boolean }>;
     /**
      * @docid dxDiagramOptions.defaultItemProperties
-     * @type Object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -89,7 +82,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     defaultItemProperties?: { style?: Object, textStyle?: Object, connectorLineType?: 'straight' | 'orthogonal', connectorLineStart?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', connectorLineEnd?: 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle', shapeMinWidth?: number, shapeMaxWidth?: number, shapeMinHeight?: number, shapeMaxHeight?: number };
     /**
      * @docid dxDiagramOptions.editing
-     * @type Object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -97,7 +89,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     editing?: { allowAddShape?: boolean, allowDeleteShape?: boolean, allowDeleteConnector?: boolean, allowChangeConnection?: boolean, allowChangeConnectorPoints?: boolean, allowChangeConnectorText?: boolean, allowChangeShapeText?: boolean, allowResizeShape?: boolean, allowMoveShape?: boolean };
     /**
      * @docid dxDiagramOptions.edges
-     * @type Object
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -105,7 +96,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     edges?: { dataSource?: Array<any> | DataSource | DataSourceOptions, fromExpr?: string | ((data: any) => any), fromLineEndExpr?: string | ((data: any) => any), fromPointIndexExpr?: string | ((data: any) => any), keyExpr?: string | ((data: any) => any), lineTypeExpr?: string | ((data: any) => any), lockedExpr?: string | ((data: any) => any), pointsExpr?: string | ((data: any) => any), styleExpr?: string | ((data: any) => any), textExpr?: string | ((data: any) => any), textStyleExpr?: string | ((data: any) => any), toExpr?: string | ((data: any) => any), toLineEndExpr?: string | ((data: any) => any), toPointIndexExpr?: string | ((data: any) => any), zIndexExpr?: string | ((data: any) => any) };
     /**
      * @docid dxDiagramOptions.export
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -119,14 +109,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     fullScreen?: boolean;
     /**
      * @docid dxDiagramOptions.gridSize
-     * @type Number|Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     gridSize?: number | { items?: Array<number>, value?: number };
     /**
      * @docid dxDiagramOptions.nodes
-     * @type Object
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -142,7 +130,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid dxDiagramOptions.onItemClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
@@ -153,7 +140,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid dxDiagramOptions.onItemDblClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:dxDiagramItem
      * @action
@@ -164,7 +150,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid dxDiagramOptions.onSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 items:Array<dxDiagramItem>
      * @action
@@ -175,7 +160,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid dxDiagramOptions.onRequestEditOperation
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 operation:Enums.DiagramModelOperation
      * @type_function_param1_field5 args:dxDiagramAddShapeArgs|dxDiagramAddShapeFromToolboxArgs|dxDiagramDeleteShapeArgs|dxDiagramDeleteConnectorArgs|dxDiagramChangeConnectionArgs|dxDiagramChangeConnectorPointsArgs|dxDiagramBeforeChangeShapeTextArgs|dxDiagramChangeShapeTextArgs|dxDiagramBeforeChangeConnectorTextArgs|dxDiagramChangeConnectorTextArgs|dxDiagramResizeShapeArgs|dxDiagramMoveShapeArgs
@@ -189,7 +173,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     /**
      * @docid dxDiagramOptions.onRequestLayoutUpdate
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 changes:Array<any>
      * @type_function_param1_field5 allowed:boolean
@@ -215,14 +198,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     pageOrientation?: 'portrait' | 'landscape';
     /**
      * @docid dxDiagramOptions.pageSize
-     * @type Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     pageSize?: { height?: number, items?: Array<{ height?: number, text?: string, width?: number }>, width?: number };
     /**
      * @docid dxDiagramOptions.propertiesPanel
-     * @type Object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -258,7 +239,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     snapToGrid?: boolean;
     /**
      * @docid dxDiagramOptions.mainToolbar
-     * @type Object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -266,7 +246,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     mainToolbar?: { commands?: Array<'separator'|'exportSvg'|'exportPng'|'exportJpg'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'layoutTreeTopToBottom'|'layoutTreeBottomToTop'|'layoutTreeLeftToRight'|'layoutTreeRightToLeft'|'layoutLayeredTopToBottom'|'layoutLayeredBottomToTop'|'layoutLayeredLeftToRight'|'layoutLayeredRightToLeft'|'fullScreen'|'zoomLevel'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'>, visible?: boolean };
     /**
      * @docid dxDiagramOptions.historyToolbar
-     * @type Object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -274,7 +253,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     historyToolbar?: { commands?: Array<'separator'|'exportSvg'|'exportPng'|'exportJpg'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'layoutTreeTopToBottom'|'layoutTreeBottomToTop'|'layoutTreeLeftToRight'|'layoutTreeRightToLeft'|'layoutLayeredTopToBottom'|'layoutLayeredBottomToTop'|'layoutLayeredLeftToRight'|'layoutLayeredRightToLeft'|'fullScreen'|'zoomLevel'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'>, visible?: boolean };
     /**
      * @docid dxDiagramOptions.viewToolbar
-     * @type Object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -282,7 +260,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     viewToolbar?: { commands?: Array<'separator'|'exportSvg'|'exportPng'|'exportJpg'|'undo'|'redo'|'cut'|'copy'|'paste'|'selectAll'|'delete'|'fontName'|'fontSize'|'bold'|'italic'|'underline'|'fontColor'|'lineColor'|'fillColor'|'textAlignLeft'|'textAlignCenter'|'textAlignRight'|'lock'|'unlock'|'sendToBack'|'bringToFront'|'insertShapeImage'|'editShapeImage'|'deleteShapeImage'|'connectorLineType'|'connectorLineStart'|'connectorLineEnd'|'layoutTreeTopToBottom'|'layoutTreeBottomToTop'|'layoutTreeLeftToRight'|'layoutTreeRightToLeft'|'layoutLayeredTopToBottom'|'layoutLayeredBottomToTop'|'layoutLayeredLeftToRight'|'layoutLayeredRightToLeft'|'fullScreen'|'zoomLevel'|'showGrid'|'snapToGrid'|'gridSize'|'units'|'pageSize'|'pageOrientation'|'pageColor'>, visible?: boolean };
     /**
      * @docid dxDiagramOptions.toolbox
-     * @type Object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -306,7 +283,6 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     viewUnits?: 'in' | 'cm' | 'px';
     /**
      * @docid dxDiagramOptions.zoomLevel
-     * @type Number|Object
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -400,7 +376,6 @@ export default class dxDiagram extends Widget {
 export interface dxDiagramConnector extends dxDiagramItem {
     /**
      * @docid dxDiagramConnector.fromKey
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -419,7 +394,6 @@ export interface dxDiagramConnector extends dxDiagramItem {
     fromPointIndex?: number;
     /**
      * @docid dxDiagramConnector.points
-     * @type Array<Object>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -434,14 +408,12 @@ export interface dxDiagramConnector extends dxDiagramItem {
      */
     /**
      * @docid dxDiagramConnector.texts
-     * @type Array<String>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     texts?: Array<string>;
     /**
      * @docid dxDiagramConnector.toKey
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -466,7 +438,6 @@ export interface dxDiagramConnector extends dxDiagramItem {
 export interface dxDiagramItem {
     /**
      * @docid dxDiagramItem.dataItem
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -479,7 +450,6 @@ export interface dxDiagramItem {
     id?: string;
     /**
      * @docid dxDiagramItem.key
-     * @type Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -513,7 +483,6 @@ export interface dxDiagramShape extends dxDiagramItem {
     type?: 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight' | string;
     /**
      * @docid dxDiagramShape.position
-     * @type Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -528,7 +497,6 @@ export interface dxDiagramShape extends dxDiagramItem {
      */
     /**
      * @docid dxDiagramShape.size
-     * @type Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -543,11 +511,10 @@ export interface dxDiagramShape extends dxDiagramItem {
      */
     /**
      * @docid dxDiagramShape.attachedConnectorIds
-     * @type Array<String>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    attachedConnectorIds?: string[];
+    attachedConnectorIds?: Array<String>;
 }
 
 /**
@@ -575,7 +542,6 @@ export interface dxDiagramCustomCommand {
     icon?: string;
     /**
      * @docid dxDiagramCustomCommand.items
-     * @type Array<dxDiagramCustomCommand>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -588,14 +554,12 @@ export interface dxDiagramCustomCommand {
 export interface dxDiagramAddShapeArgs {
     /**
      * @docid dxDiagramAddShapeArgs.shape
-     * @type dxDiagramShape
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     shape?: dxDiagramShape;
     /**
      * @docid dxDiagramAddShapeArgs.position
-     * @type Object
      */
     position?: Object;
     /**
@@ -627,7 +591,6 @@ export interface dxDiagramAddShapeFromToolboxArgs {
 export interface dxDiagramDeleteShapeArgs {
   /**
    * @docid dxDiagramDeleteShapeArgs.shape
-   * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -640,7 +603,6 @@ export interface dxDiagramDeleteShapeArgs {
 export interface dxDiagramDeleteConnectorArgs {
   /**
    * @docid dxDiagramDeleteConnectorArgs.connector
-   * @type dxDiagramConnector
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -653,21 +615,18 @@ export interface dxDiagramDeleteConnectorArgs {
 export interface dxDiagramChangeConnectionArgs {
   /**
    * @docid dxDiagramChangeConnectionArgs.newShape
-   * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
    */
   newShape?: dxDiagramShape;
   /**
    * @docid dxDiagramChangeConnectionArgs.oldShape
-   * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
    */
   oldShape?: dxDiagramShape;
   /**
    * @docid dxDiagramChangeConnectionArgs.connector
-   * @type dxDiagramConnector
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -693,14 +652,12 @@ export interface dxDiagramChangeConnectionArgs {
 export interface dxDiagramChangeConnectorPointsArgs {
   /**
    * @docid dxDiagramChangeConnectorPointsArgs.connector
-   * @type dxDiagramConnector
    * @prevFileNamespace DevExpress.ui
    * @public
    */
   connector?: dxDiagramConnector;
   /**
     * @docid dxDiagramChangeConnectorPointsArgs.newPoints
-    * @type Array<Object>
     */
    newPoints?: Array<Object>;
    /**
@@ -713,7 +670,6 @@ export interface dxDiagramChangeConnectorPointsArgs {
     */
   /**
     * @docid dxDiagramChangeConnectorPointsArgs.oldPoints
-    * @type Array<Object>
     */
    oldPoints?: Array<Object>;
    /**
@@ -732,7 +688,6 @@ export interface dxDiagramChangeConnectorPointsArgs {
 export interface dxDiagramBeforeChangeShapeTextArgs {
   /**
    * @docid dxDiagramBeforeChangeShapeTextArgs.shape
-   * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -745,7 +700,6 @@ export interface dxDiagramBeforeChangeShapeTextArgs {
 export interface dxDiagramChangeShapeTextArgs {
   /**
    * @docid dxDiagramChangeShapeTextArgs.shape
-   * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -764,7 +718,6 @@ export interface dxDiagramChangeShapeTextArgs {
 export interface dxDiagramBeforeChangeConnectorTextArgs {
   /**
    * @docid dxDiagramBeforeChangeConnectorTextArgs.connector
-   * @type dxDiagramConnector
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -783,7 +736,6 @@ export interface dxDiagramBeforeChangeConnectorTextArgs {
 export interface dxDiagramChangeConnectorTextArgs {
   /**
    * @docid dxDiagramChangeConnectorTextArgs.connector
-   * @type dxDiagramConnector
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -808,7 +760,6 @@ export interface dxDiagramChangeConnectorTextArgs {
 export interface dxDiagramResizeShapeArgs {
   /**
    * @docid dxDiagramResizeShapeArgs.shape
-   * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
    */
@@ -847,7 +798,6 @@ export interface dxDiagramResizeShapeArgs {
 export interface dxDiagramMoveShapeArgs {
   /**
    * @docid dxDiagramMoveShapeArgs.shape
-   * @type dxDiagramShape
    * @prevFileNamespace DevExpress.ui
    * @public
    */

@@ -59,21 +59,18 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     hoverEnabled?: boolean;
     /**
      * @docid dxSankeyOptions.label
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     label?: { border?: { color?: string, visible?: boolean, width?: number }, customizeText?: ((itemInfo: dxSankeyNode) => string), font?: Font, horizontalOffset?: number, overlappingBehavior?: 'ellipsis' | 'hide' | 'none', shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, useNodeColors?: boolean, verticalOffset?: number, visible?: boolean };
     /**
      * @docid dxSankeyOptions.link
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     link?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, colorMode?: 'none' | 'source' | 'target' | 'gradient', hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number }, opacity?: number }, opacity?: number };
     /**
      * @docid dxSankeyOptions.node
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -143,7 +140,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid dxSankeyOptions.sortData
-     * @type object
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

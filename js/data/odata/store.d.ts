@@ -41,7 +41,6 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     errorHandler?: ((e: { httpStatus?: number, errorDetails?: any, requestOptions?: any }) => any);
     /**
      * @docid ODataStoreOptions.fieldTypes
-     * @type object
      * @default {}
      * @prevFileNamespace DevExpress.data
      * @public
@@ -100,7 +99,6 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
 /**
  * @docid ODataStore
  * @inherits Store
- * @type object
  * @module data/odata/store
  * @export default
  * @prevFileNamespace DevExpress.data

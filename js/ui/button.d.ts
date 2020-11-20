@@ -47,7 +47,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     icon?: string;
     /**
      * @docid dxButtonOptions.onClick
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -67,7 +66,6 @@ export interface dxButtonOptions extends WidgetOptions<dxButton> {
     stylingMode?: 'text' | 'outlined' | 'contained';
     /**
      * @docid dxButtonOptions.template
-     * @type template|function
      * @default "content"
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string

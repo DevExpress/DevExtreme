@@ -9,7 +9,6 @@ export interface ExcelDataGridCell {
     column?: dxDataGridColumn;
     /**
      * @docid
-     * @type Object
      * @public
      */
     data?: any;
@@ -42,7 +41,6 @@ export interface ExcelDataGridCell {
 
 /**
 * @docid ExcelPivotGridCell
-* @type object
 * @namespace DevExpress.excelExporter
 * @inherits dxPivotGridPivotGridCell
 */
@@ -140,7 +138,6 @@ export interface ExportLoadPanel {
 
 /**
 * @docid
-* @type object
 * @namespace DevExpress.excelExporter
 * @hidden
 */
@@ -172,7 +169,6 @@ export interface ExcelExportBaseProps {
 
 /**
 * @docid ExcelExportDataGridProps
-* @type object
 * @namespace DevExpress.excelExporter
 * @inherits ExcelExportBaseProps
 */
@@ -207,7 +203,6 @@ export interface ExcelExportDataGridProps extends ExcelExportBaseProps {
 
 /**
 * @docid
-* @type object
 * @namespace DevExpress.excelExporter
 * @inherits ExcelExportBaseProps
 */

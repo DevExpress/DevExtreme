@@ -61,7 +61,6 @@ export interface BarGaugeLegendItem extends BaseLegendItem {
 export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid dxBarGaugeOptions.animation
-     * @type object
      * @inherits BaseGaugeOptions.animation
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -99,14 +98,12 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     endValue?: number;
     /**
      * @docid dxBarGaugeOptions.geometry
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     geometry?: { endAngle?: number, startAngle?: number };
     /**
      * @docid dxBarGaugeOptions.label
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */

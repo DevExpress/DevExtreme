@@ -62,7 +62,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
 }
 /**
  * @docid HierarchicalCollectionWidget
- * @type object
  * @inherits CollectionWidget
  * @module ui/hierarchical_collection/ui.hierarchical_collection_widget
  * @export default

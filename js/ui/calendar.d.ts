@@ -20,7 +20,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     activeStateEnabled?: boolean;
     /**
      * @docid dxCalendarOptions.cellTemplate
-     * @type template|function
      * @default "cell"
      * @type_function_param1 itemData:object
      * @type_function_param1_field1 date:Date
@@ -42,7 +41,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     dateSerializationFormat?: string;
     /**
      * @docid dxCalendarOptions.disabledDates
-     * @type Array<Date>|function(data)
      * @default null
      * @type_function_param1 data:object
      * @type_function_param1_field1 component:object
@@ -77,7 +75,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     hoverStateEnabled?: boolean;
     /**
      * @docid dxCalendarOptions.max
-     * @type Date|number|string
      * @default new Date(3000, 0)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -93,7 +90,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     maxZoomLevel?: 'century' | 'decade' | 'month' | 'year';
     /**
      * @docid dxCalendarOptions.min
-     * @type Date|number|string
      * @default new Date(1000, 0)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -123,7 +119,6 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
     showTodayButton?: boolean;
     /**
      * @docid dxCalendarOptions.value
-     * @type Date|number|string
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public

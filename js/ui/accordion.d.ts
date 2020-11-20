@@ -39,7 +39,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     collapsible?: boolean;
     /**
      * @docid dxAccordionOptions.dataSource
-     * @type string|Array<string,dxAccordionItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -61,7 +60,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     focusStateEnabled?: boolean;
     /**
      * @docid dxAccordionOptions.height
-     * @type number|string|function
      * @default undefined
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -77,7 +75,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     hoverStateEnabled?: boolean;
     /**
      * @docid dxAccordionOptions.itemTemplate
-     * @type template|function
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -89,7 +86,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxAccordionOptions.itemTitleTemplate
-     * @type template|function
      * @default "title"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -101,7 +97,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxAccordionOptions.items
-     * @type Array<string, dxAccordionItem, object>
      * @fires dxAccordionOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -116,7 +111,6 @@ export interface dxAccordionOptions extends CollectionWidgetOptions<dxAccordion>
     multiple?: boolean;
     /**
      * @docid dxAccordionOptions.onItemTitleClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object

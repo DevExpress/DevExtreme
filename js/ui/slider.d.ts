@@ -66,7 +66,6 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     keyStep?: number;
     /**
      * @docid dxSliderBaseOptions.label
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -94,7 +93,6 @@ export interface dxSliderBaseOptions<T> extends dxTrackBarOptions<T> {
     step?: number;
     /**
      * @docid dxSliderBaseOptions.tooltip
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -74,7 +74,6 @@ export interface WidgetOptions<T = Widget> extends DOMComponentOptions<T> {
 }
 /**
  * @docid Widget
- * @type object
  * @inherits DOMComponent
  * @module ui/widget/ui.widget
  * @export default
@@ -111,7 +110,6 @@ export default class Widget extends DOMComponent {
 
 /**
  * @const dxItem
- * @type object
  * @section uiWidgetMarkupComponents
  * @prevFileNamespace DevExpress.ui
  * @public

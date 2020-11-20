@@ -46,7 +46,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     colorField?: string;
     /**
      * @docid dxTreeMapOptions.colorizer
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -60,7 +59,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     dataSource?: Array<any> | DataSource | DataSourceOptions | string;
     /**
      * @docid dxTreeMapOptions.group
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -205,7 +203,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     selectionMode?: 'multiple' | 'none' | 'single';
     /**
      * @docid dxTreeMapOptions.tile
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -323,7 +320,6 @@ export interface dxTreeMapNode {
     customize(options: any): void;
     /**
      * @docid dxTreeMapNodeFields.data
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */

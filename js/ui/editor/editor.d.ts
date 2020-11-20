@@ -42,7 +42,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     readOnly?: boolean;
     /**
      * @docid EditorOptions.validationError
-     * @type object
      * @ref
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -85,7 +84,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
 }
 /**
  * @docid Editor
- * @type object
  * @inherits Widget
  * @module ui/editor/editor
  * @export default

@@ -201,7 +201,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     center?: Array<number>;
     /**
      * @docid dxVectorMapOptions.controlBar
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -519,7 +518,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxVectorMapOptions.legends.source
-     * @type object
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
      * @public

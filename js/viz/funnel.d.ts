@@ -110,7 +110,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     item?: { border?: { color?: string, visible?: boolean, width?: number }, hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { color?: string, visible?: boolean, width?: number }, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } } };
     /**
      * @docid dxFunnelOptions.label
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -369,7 +368,6 @@ export interface dxFunnelItem {
     argument?: string | Date | number;
     /**
      * @docid dxFunnelItemFields.data
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */

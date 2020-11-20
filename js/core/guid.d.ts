@@ -1,6 +1,5 @@
 /**
  * @docid Guid
- * @type object
  * @namespace DevExpress.data
  * @module core/guid
  * @export default

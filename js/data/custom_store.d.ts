@@ -87,7 +87,6 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
 /**
  * @docid CustomStore
  * @inherits Store
- * @type object
  * @module data/custom_store
  * @export default
  * @prevFileNamespace DevExpress.data

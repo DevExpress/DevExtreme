@@ -33,7 +33,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     animationEnabled?: boolean;
     /**
      * @docid dxDrawerOptions.closeOnOutsideClick
-     * @type boolean|function
      * @default false
      * @type_function_param1 event:event
      * @type_function_return Boolean
@@ -96,7 +95,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     shading?: boolean;
     /**
      * @docid dxDrawerOptions.target
-     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @deprecated
      * @public
@@ -105,7 +103,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**
      * @docid dxDrawerOptions.template
      * @type_function_param1 Element:dxElement
-     * @type template|function
      * @default 'panel'
      * @prevFileNamespace DevExpress.ui
      * @public

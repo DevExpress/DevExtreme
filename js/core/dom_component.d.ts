@@ -16,7 +16,6 @@ import { FunctionTemplate } from './templates/function_template';
 export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<T> {
     /**
      * @docid DOMComponentOptions.bindingOptions
-     * @type object
      * @default {}
      * @prevFileNamespace DevExpress.integration
      * @public
@@ -24,7 +23,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
     bindingOptions?: any;
     /**
      * @docid DOMComponentOptions.elementAttr
-     * @type object
      * @default {}
      * @prevFileNamespace DevExpress.core
      * @public
@@ -77,7 +75,6 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
 /**
  * @docid DOMComponent
  * @section uiWidgets
- * @type object
  * @inherits Component
  * @namespace DevExpress
  * @module core/dom_component

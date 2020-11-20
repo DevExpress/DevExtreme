@@ -23,7 +23,6 @@ export interface ODataContextOptions {
     deserializeDates?: boolean;
     /**
      * @docid ODataContextOptions.entities
-     * @type object
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -75,7 +74,6 @@ export interface ODataContextOptions {
 }
 /**
  * @docid ODataContext
- * @type object
  * @module data/odata/context
  * @export default
  * @prevFileNamespace DevExpress.data

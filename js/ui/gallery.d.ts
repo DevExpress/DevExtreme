@@ -26,7 +26,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     animationEnabled?: boolean;
     /**
      * @docid dxGalleryOptions.dataSource
-     * @type string|Array<string,dxGalleryItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -55,7 +54,6 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     initialItemWidth?: number;
     /**
      * @docid dxGalleryOptions.items
-     * @type Array<string, dxGalleryItem, object>
      * @fires dxGalleryOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public

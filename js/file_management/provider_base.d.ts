@@ -48,7 +48,6 @@ export interface FileSystemProviderBaseOptions<T = FileSystemProviderBase> {
 }
 /**
  * @docid FileSystemProviderBase
- * @type object
  * @module file_management/provider_base
  * @namespace DevExpress.fileManagement
  * @export default

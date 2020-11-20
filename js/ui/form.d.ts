@@ -79,7 +79,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     customizeItem?: ((item: dxFormSimpleItem | dxFormGroupItem | dxFormTabbedItem | dxFormEmptyItem | dxFormButtonItem) => any);
     /**
      * @docid dxFormOptions.formData
-     * @type object
      * @default {}
      * @fires dxFormOptions.onFieldDataChanged
      * @prevFileNamespace DevExpress.ui
@@ -88,7 +87,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     formData?: any;
     /**
      * @docid dxFormOptions.items
-     * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -113,7 +111,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid dxFormOptions.onEditorEnterKey
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @action
@@ -124,7 +121,6 @@ export interface dxFormOptions extends WidgetOptions<dxForm> {
     /**
      * @docid dxFormOptions.onFieldDataChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 dataField:string
      * @type_function_param1_field5 value:object
@@ -314,7 +310,6 @@ export default class dxForm extends Widget {
 export interface dxFormButtonItem {
     /**
      * @docid dxFormButtonItem.buttonOptions
-     * @type dxButtonOptions
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -482,7 +477,6 @@ export interface dxFormGroupItem {
     itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
     /**
      * @docid dxFormGroupItem.items
-     * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem,dxFormButtonItem>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -497,7 +491,6 @@ export interface dxFormGroupItem {
     name?: string;
     /**
      * @docid dxFormGroupItem.template
-     * @type template|function
      * @type_function_param1 data:object
      * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field2 formData:object
@@ -547,7 +540,6 @@ export interface dxFormSimpleItem {
     dataField?: string;
     /**
      * @docid dxFormSimpleItem.editorOptions
-     * @type object
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -584,7 +576,6 @@ export interface dxFormSimpleItem {
     itemType?: 'empty' | 'group' | 'simple' | 'tabbed' | 'button';
     /**
      * @docid dxFormSimpleItem.label
-     * @type object
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -599,7 +590,6 @@ export interface dxFormSimpleItem {
     name?: string;
     /**
      * @docid dxFormSimpleItem.template
-     * @type template|function
      * @type_function_param1 data:object
      * @type_function_param1_field1 component:dxForm
      * @type_function_param1_field2 dataField:string
@@ -614,7 +604,6 @@ export interface dxFormSimpleItem {
     template?: template | ((data: { component?: dxForm, dataField?: string, editorOptions?: any, editorType?: string, name?: string }, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxFormSimpleItem.validationRules
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -668,7 +657,6 @@ export interface dxFormTabbedItem {
     name?: string;
     /**
      * @docid dxFormTabbedItem.tabPanelOptions
-     * @type dxTabPanelOptions
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -676,7 +664,6 @@ export interface dxFormTabbedItem {
     tabPanelOptions?: dxTabPanelOptions;
     /**
      * @docid dxFormTabbedItem.tabs
-     * @type Array<Object>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

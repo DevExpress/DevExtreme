@@ -31,7 +31,6 @@ import {
 export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid dxLookupOptions.animation
-     * @type object
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

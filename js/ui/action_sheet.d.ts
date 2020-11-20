@@ -27,7 +27,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     cancelText?: string;
     /**
      * @docid dxActionSheetOptions.dataSource
-     * @type string|Array<string,dxActionSheetItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -35,7 +34,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     dataSource?: string | Array<string | dxActionSheetItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxActionSheetOptions.items
-     * @type Array<string, dxActionSheetItem, object>
      * @fires dxActionSheetOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -43,7 +41,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     items?: Array<string | dxActionSheetItem | any>;
     /**
      * @docid dxActionSheetOptions.onCancelClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
@@ -68,7 +65,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     showTitle?: boolean;
     /**
      * @docid dxActionSheetOptions.target
-     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -144,7 +140,6 @@ export interface dxActionSheetItem extends CollectionWidgetItem {
     icon?: string;
     /**
      * @docid dxActionSheetItem.onClick
-     * @type function(e)|string
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxActionSheet

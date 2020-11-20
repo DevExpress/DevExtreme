@@ -11,7 +11,6 @@ import {
 export interface DataSourceOptions {
     /**
      * @docid DataSourceOptions.customQueryParams
-     * @type Object
      * @prevFileNamespace DevExpress.data
      * @public
      */
@@ -156,7 +155,6 @@ export interface DataSourceOptions {
 }
 /**
  * @docid DataSource
- * @type object
  * @module data/data_source
  * @export default
  * @prevFileNamespace DevExpress.data

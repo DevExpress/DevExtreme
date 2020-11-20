@@ -31,7 +31,6 @@ import Widget, {
 export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton> {
     /**
      * @docid dxDropDownButtonOptions.dataSource
-     * @type string|Array<dxDropDownButtonItem, object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -46,7 +45,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     deferRendering?: boolean;
     /**
      * @docid dxDropDownButtonOptions.displayExpr
-     * @type string|function
      * @default 'this'
      * @type_function_param1 itemData:object
      * @type_function_return string
@@ -56,7 +54,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     displayExpr?: string | ((itemData: any) => string);
     /**
      * @docid dxDropDownButtonOptions.dropDownContentTemplate
-     * @type template|function
      * @default "content"
      * @type_function_param1 data:Array<string,number,Object>|DataSource
      * @type_function_param2 contentElement:dxElement
@@ -67,7 +64,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     dropDownContentTemplate?: template | ((data: Array<string | number | any> | DataSource, contentElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxDropDownButtonOptions.dropDownOptions
-     * @type dxPopupOptions
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -96,7 +92,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     icon?: string;
     /**
      * @docid dxDropDownButtonOptions.itemTemplate
-     * @type template|function
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -108,7 +103,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxDropDownButtonOptions.items
-     * @type Array<dxDropDownButtonItem, object>
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -130,7 +124,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     noDataText?: string;
     /**
      * @docid dxDropDownButtonOptions.onButtonClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -142,7 +135,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     onButtonClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event, selectedItem?: any }) => any) | string;
     /**
      * @docid dxDropDownButtonOptions.onItemClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -155,7 +147,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     onItemClick?: ((e: { component?: dxDropDownButton, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement }) => any) | string;
     /**
      * @docid dxDropDownButtonOptions.onSelectionChanged
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:object
@@ -174,7 +165,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     opened?: boolean;
     /**
      * @docid dxDropDownButtonOptions.selectedItem
-     * @type string|integer|object
      * @default null
      * @readonly
      * @prevFileNamespace DevExpress.ui
@@ -183,7 +173,6 @@ export interface dxDropDownButtonOptions extends WidgetOptions<dxDropDownButton>
     selectedItem?: string | number | any;
     /**
      * @docid dxDropDownButtonOptions.selectedItemKey
-     * @type string|integer
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -283,7 +272,6 @@ export default class dxDropDownButton extends Widget {
 export interface dxDropDownButtonItem extends dxListItem {
     /**
      * @docid dxDropDownButtonItem.onClick
-     * @type function(e)|string
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxDropDownButton

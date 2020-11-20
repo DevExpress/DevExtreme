@@ -265,7 +265,6 @@ export interface PivotGridDataSourceField {
     groupName?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.headerFilter
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -407,7 +406,6 @@ export interface PivotGridDataSourceField {
 }
 /**
  * @docid PivotGridDataSource
- * @type object
  * @namespace DevExpress.data
  * @module ui/pivot_grid/data_source
  * @export default

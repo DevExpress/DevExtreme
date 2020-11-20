@@ -298,7 +298,6 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
 }
 /**
  * @docid BaseChart
- * @type object
  * @hidden
  * @inherits BaseWidget, DataHelperMixin
  * @prevFileNamespace DevExpress.viz

@@ -26,7 +26,6 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     autoScroll?: boolean;
     /**
      * @docid DraggableBaseOptions.boundary
-     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -34,7 +33,6 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     boundary?: string | Element | JQuery;
     /**
      * @docid DraggableBaseOptions.container
-     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -42,14 +40,12 @@ export interface DraggableBaseOptions<T = DraggableBase & DOMComponent> extends 
     container?: string | Element | JQuery;
     /**
      * @docid DraggableBaseOptions.cursorOffset
-     * @type string|object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cursorOffset?: string | { x?: number, y?: number };
     /**
      * @docid DraggableBaseOptions.data
-     * @type any
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -111,7 +107,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     clone?: boolean;
     /**
      * @docid dxDraggableOptions.dragTemplate
-     * @type template|function
      * @type_function_param1 dragInfo:object
      * @type_function_param1_field1 itemData:any
      * @type_function_param1_field2 itemElement:dxElement
@@ -124,7 +119,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     dragTemplate?: template | ((dragInfo: { itemData?: any, itemElement?: dxElement }, containerElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxDraggableOptions.onDragEnd
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -142,7 +136,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     onDragEnd?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
     /**
      * @docid dxDraggableOptions.onDragMove
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -160,7 +153,6 @@ export interface dxDraggableOptions extends DraggableBaseOptions<dxDraggable> {
     onDragMove?: ((e: { component?: dxDraggable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
     /**
      * @docid dxDraggableOptions.onDragStart
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event

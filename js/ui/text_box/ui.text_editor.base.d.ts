@@ -41,7 +41,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     hoverStateEnabled?: boolean;
     /**
      * @docid dxTextEditorOptions.inputAttr
-     * @type object
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -70,7 +69,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     maskInvalidMessage?: string;
     /**
      * @docid dxTextEditorOptions.maskRules
-     * @type Object
      * @default "{}"
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -8,7 +8,6 @@ export interface PdfDataGridCell {
     column?: dxDataGridColumn;
     /**
      * @docid PdfDataGridCell.data
-     * @type Object
      * @public
      */
     data?: any;
@@ -42,7 +41,6 @@ export interface PdfDataGridCell {
 /**
 * @docid PdfExportDataGridProps
 * @namespace DevExpress.pdfExporter
-* @type object
 */
 export interface PdfExportDataGridProps {
      /**

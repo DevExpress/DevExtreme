@@ -38,21 +38,18 @@ import BaseWidget, {
 export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelector> {
     /**
      * @docid dxRangeSelectorOptions.background
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     background?: { color?: string, image?: { location?: 'center' | 'centerBottom' | 'centerTop' | 'full' | 'leftBottom' | 'leftCenter' | 'leftTop' | 'rightBottom' | 'rightCenter' | 'rightTop', url?: string }, visible?: boolean };
     /**
      * @docid dxRangeSelectorOptions.behavior
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     behavior?: { allowSlidersSwap?: boolean, animationEnabled?: boolean, callValueChanged?: 'onMoving' | 'onMovingComplete', manualRangeSelectionEnabled?: boolean, moveSelectedRangeByClick?: boolean, snapToTicks?: boolean };
     /**
      * @docid dxRangeSelectorOptions.chart
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -80,7 +77,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     dataSourceField?: string;
     /**
      * @docid dxRangeSelectorOptions.indent
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -102,7 +98,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     onValueChanged?: ((e: { component?: dxRangeSelector, element?: dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date>, event?: event }) => any);
     /**
      * @docid dxRangeSelectorOptions.scale
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -124,21 +119,18 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     selectedRangeUpdateMode?: 'auto' | 'keep' | 'reset' | 'shift';
     /**
      * @docid dxRangeSelectorOptions.shutter
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     shutter?: { color?: string, opacity?: number };
     /**
      * @docid dxRangeSelectorOptions.sliderHandle
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     sliderHandle?: { color?: string, opacity?: number, width?: number };
     /**
      * @docid dxRangeSelectorOptions.sliderMarker
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */

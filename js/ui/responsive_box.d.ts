@@ -69,7 +69,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
 }
 /**
  * @docid dxResponsiveBox
- * @type object
  * @inherits CollectionWidget
  * @module ui/responsive_box
  * @export default

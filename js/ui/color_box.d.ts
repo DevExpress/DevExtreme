@@ -42,7 +42,6 @@ export interface dxColorBoxOptions extends dxDropDownEditorOptions<dxColorBox> {
     editAlphaChannel?: boolean;
     /**
      * @docid dxColorBoxOptions.fieldTemplate
-     * @type template|function
      * @default null
      * @type_function_param1 value:string
      * @type_function_param2 fieldElement:dxElement

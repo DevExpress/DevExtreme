@@ -25,7 +25,6 @@ import Widget, {
 export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.allowedFileExtensions
-     * @type Array<string>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -33,7 +32,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     allowedFileExtensions?: Array<string>;
     /**
      * @docid dxFileManagerOptions.contextMenu
-     * @type dxFileManagerContextMenu
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -47,7 +45,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     currentPath?: string;
     /**
      * @docid dxFileManagerOptions.currentPathKeys
-     * @type Array<string>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -71,7 +68,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     customizeThumbnail?: ((fileSystemItem: FileSystemItem) => string);
     /**
      * @docid dxFileManagerOptions.fileSystemProvider
-     * @type object
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -79,7 +75,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     fileSystemProvider?: any;
     /**
      * @docid dxFileManagerOptions.itemView
-     * @type object
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -88,7 +83,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onContextMenuItemClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -104,7 +98,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onCurrentDirectoryChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 directory:FileSystemItem
      * @default null
@@ -116,7 +109,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onSelectedFileOpened
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 file:FileSystemItem
      * @default null
@@ -128,7 +120,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 currentSelectedItemKeys:Array<string>
      * @type_function_param1_field5 currentDeselectedItemKeys:Array<string>
@@ -143,7 +134,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onToolbarItemClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -157,7 +147,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onFocusedItemChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:FileSystemItem
      * @type_function_param1_field5 itemElement:dxElement
@@ -170,7 +159,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onErrorOccurred
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 errorCode:number
      * @type_function_param1_field5 errorText:string
@@ -183,7 +171,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onErrorOccurred?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, errorCode?: number, errorText?: string, fileSystemItem?: FileSystemItem }) => any);
     /**
      * @docid dxFileManagerOptions.permissions
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -205,7 +192,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     selectionMode?: 'multiple' | 'single';
     /**
      * @docid dxFileManagerOptions.selectedItemKeys
-     * @type Array<string>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -220,14 +206,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     focusedItemKey?: string;
     /**
      * @docid dxFileManagerOptions.toolbar
-     * @type dxFileManagerToolbar
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     toolbar?: dxFileManagerToolbar;
     /**
      * @docid dxFileManagerOptions.upload
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -284,7 +268,6 @@ export interface dxFileManagerContextMenu {
 export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
     /**
      * @docid dxFileManagerContextMenuItem.items
-     * @type Array<dxFileManagerContextMenuItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -433,7 +416,6 @@ export interface dxFileManagerDetailsColumn {
     visibleIndex?: number;
     /**
      * @docid dxFileManagerDetailsColumn.width
-     * @type number|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

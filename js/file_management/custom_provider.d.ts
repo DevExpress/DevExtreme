@@ -115,7 +115,6 @@ export interface CustomFileSystemProviderOptions extends FileSystemProviderBaseO
 /**
  * @docid CustomFileSystemProvider
  * @inherits FileSystemProviderBase
- * @type object
  * @module file_management/custom_provider
  * @namespace DevExpress.fileManagement
  * @export default

@@ -1,6 +1,5 @@
 /**
  * @docid EndpointSelector
- * @type object
  * @namespace DevExpress
  * @module data/endpoint_selector
  * @export default

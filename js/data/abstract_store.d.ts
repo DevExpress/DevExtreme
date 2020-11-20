@@ -109,7 +109,6 @@ export interface StoreOptions<T = Store> {
 }
 /**
  * @docid Store
- * @type object
  * @hidden
  * @module data/abstract_store
  * @export default

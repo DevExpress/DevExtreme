@@ -115,7 +115,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     centerTemplate?: template | ((component: dxPieChart, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxPieChartOptions.commonSeriesSettings
-     * @type object
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
      * @hideDefaults true
      * @inheritAll
@@ -201,7 +200,6 @@ export interface dxPieChartOptions extends BaseChartOptions<dxPieChart> {
     series?: PieChartSeries | Array<PieChartSeries>;
     /**
      * @docid dxPieChartOptions.seriesTemplate
-     * @type object
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -420,7 +418,6 @@ export interface dxPieChartSeriesTypes {
     CommonPieChartSeries?: dxPieChartSeriesTypesCommonPieChartSeries;
     /**
      * @docid dxPieChartSeriesTypes.DoughnutSeries
-     * @type object
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -428,7 +425,6 @@ export interface dxPieChartSeriesTypes {
     DoughnutSeries?: any;
     /**
      * @docid dxPieChartSeriesTypes.PieSeries
-     * @type object
      * @inherits dxPieChartSeriesTypes.CommonPieChartSeries
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -453,7 +449,6 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     argumentType?: 'datetime' | 'numeric' | 'string';
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.border
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -475,14 +470,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     hoverMode?: 'none' | 'onlyPoint';
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.hoverStyle
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hoverStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.label
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -511,14 +504,12 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
     selectionMode?: 'none' | 'onlyPoint';
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.selectionStyle
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     selectionStyle?: { border?: { color?: string, dashStyle?: DashStyleType, visible?: boolean, width?: number }, color?: string, hatching?: { direction?: HatchingDirectionType, opacity?: number, step?: number, width?: number } };
     /**
      * @docid dxPieChartSeriesTypes.CommonPieChartSeries.smallValuesGrouping
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */

@@ -10,7 +10,6 @@ import {
 export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     /**
      * @docid dxLinearGaugeOptions.geometry
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
