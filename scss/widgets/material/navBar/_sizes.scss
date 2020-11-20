@@ -4,12 +4,12 @@
 
 $material-navbar-icon-size: null !default;
 
-$material-navbar-badge-top: 11%;
+$material-navbar-badge-top: 11% !default;
 
 @if $size == "default" {
-  $material-navbar-icon-size: 31px;
+  $material-navbar-icon-size: 31px !default;
 }
 
 @else if $size == "compact" {
-  $material-navbar-icon-size: 28px;
+  $material-navbar-icon-size: 28px !default;
 }
