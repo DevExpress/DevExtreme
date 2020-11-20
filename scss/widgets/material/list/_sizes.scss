@@ -12,30 +12,30 @@ $material-list-select-all-label-margin-top: null !default;
 $material-list-select-all-label-line-height: null !default;
 $material-list-main-font-size: null !default;
 
-$material-list-searchbox-vertical-padding: 6px;
-$material-list-next-button-horizontal-padding: 58px;
-$material-list-deletebutton-padding: 3px;
-$material-list-select-all-margin-right: 0;
-$material-list-select-all-margin-top: -1px;
+$material-list-searchbox-vertical-padding: 6px !default;
+$material-list-next-button-horizontal-padding: 58px !default;
+$material-list-deletebutton-padding: 3px !default;
+$material-list-select-all-margin-right: 0 !default;
+$material-list-select-all-margin-top: -1px !default;
 
 @if $size == "default" {
-  $material-list-vertical-padding: 8px;
-  $material-list-item-height: 48px;
-  $material-list-item-vertical-padding: 14px;
-  $material-list-item-horizontal-padding: 16px;
-  $material-list-group-header-vertical-padding: 14px;
-  $material-list-select-all-label-margin-top: 2px;
-  $material-list-select-all-label-line-height: 17px;
-  $material-list-main-font-size: 16px;
+  $material-list-vertical-padding: 8px !default;
+  $material-list-item-height: 48px !default;
+  $material-list-item-vertical-padding: 14px !default;
+  $material-list-item-horizontal-padding: 16px !default;
+  $material-list-group-header-vertical-padding: 14px !default;
+  $material-list-select-all-label-margin-top: 2px !default;
+  $material-list-select-all-label-line-height: 17px !default;
+  $material-list-main-font-size: 16px !default;
 }
 
 @else if $size == "compact" {
-  $material-list-vertical-padding: 4px;
-  $material-list-item-height: 36px;
-  $material-list-item-vertical-padding: 10px;
-  $material-list-item-horizontal-padding: 8px;
-  $material-list-group-header-vertical-padding: 10px;
-  $material-list-select-all-label-margin-top: 1px;
-  $material-list-select-all-label-line-height: 15px;
-  $material-list-main-font-size: 13px;
+  $material-list-vertical-padding: 4px !default;
+  $material-list-item-height: 36px !default;
+  $material-list-item-vertical-padding: 10px !default;
+  $material-list-item-horizontal-padding: 8px !default;
+  $material-list-group-header-vertical-padding: 10px !default;
+  $material-list-select-all-label-margin-top: 1px !default;
+  $material-list-select-all-label-line-height: 15px !default;
+  $material-list-main-font-size: 13px !default;
 }

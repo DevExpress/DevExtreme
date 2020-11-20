@@ -9,22 +9,22 @@ $material-form-group-caption-font-size: null !default;
 $material-form-group-content-padding-bottom: null !default;
 $material-form-default-top-padding: null !default;
 
-$material-form-label-font-size: 12px;
+$material-form-label-font-size: 12px !default;
 
 @if $size == "default" {
-  $material-form-group-caption-bottom-margin: 6px;
-  $material-form-group-caption-bottom-padding: 19px;
-  $material-form-top-label-padding: 16px 0 3px;
-  $material-form-group-caption-font-size: 20px;
-  $material-form-group-content-padding-bottom: 20px;
-  $material-form-default-top-padding: 26px;
+  $material-form-group-caption-bottom-margin: 6px !default;
+  $material-form-group-caption-bottom-padding: 19px !default;
+  $material-form-top-label-padding: 16px 0 3px !default;
+  $material-form-group-caption-font-size: 20px !default;
+  $material-form-group-content-padding-bottom: 20px !default;
+  $material-form-default-top-padding: 26px !default;
 }
 
 @else if $size == "compact" {
-  $material-form-group-caption-bottom-margin: 4px;
-  $material-form-group-caption-bottom-padding: 10px;
-  $material-form-top-label-padding: 4px 0 2px;
-  $material-form-group-caption-font-size: 16px;
-  $material-form-group-content-padding-bottom: 10px;
-  $material-form-default-top-padding: 20px;
+  $material-form-group-caption-bottom-margin: 4px !default;
+  $material-form-group-caption-bottom-padding: 10px !default;
+  $material-form-top-label-padding: 4px 0 2px !default;
+  $material-form-group-caption-font-size: 16px !default;
+  $material-form-group-content-padding-bottom: 10px !default;
+  $material-form-default-top-padding: 20px !default;
 }

@@ -2,14 +2,14 @@
 
 // adduse
 
-$material-line-height: 1.2857;
+$material-line-height: 1.2857 !default;
 
 $material-inline-borderedwidget-inner-size:
   $material-base-inline-widget-height -
-  $material-base-border-width * 2;
+  $material-base-border-width * 2 !default;
 
-$material-invalid-badge-size: $material-base-icon-size - 2px;
-$material-invalid-badge-horizontal-padding: ($material-inline-borderedwidget-inner-size - $material-invalid-badge-size) / 2;
-$material-invalid-badge-halfhorizontal-padding: $material-invalid-badge-horizontal-padding / 2;
+$material-invalid-badge-size: $material-base-icon-size - 2px !default;
+$material-invalid-badge-horizontal-padding: ($material-inline-borderedwidget-inner-size - $material-invalid-badge-size) / 2 !default;
+$material-invalid-badge-halfhorizontal-padding: $material-invalid-badge-horizontal-padding / 2 !default;
 
-$material-valid-badge-font-size: $material-base-font-size + 6px;
+$material-valid-badge-font-size: $material-base-font-size + 6px !default;
