@@ -7,21 +7,21 @@ $material-switch-handle-width: null !default;
 $material-switch-container-margin: null !default;
 $material-switch-height: null !default;
 
-$material-switch-handle-offset: 2px;
-$material-switch-handle-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2);
-$material-switch-container-adjustment: 6px;
-$material-switch-on-off-adding-padding: 2px;
+$material-switch-handle-offset: 2px !default;
+$material-switch-handle-shadow: 0 1px 4px 0 rgba(0, 0, 0, 0.2) !default;
+$material-switch-container-adjustment: 6px !default;
+$material-switch-on-off-adding-padding: 2px !default;
 
 @if $size == "default" {
-  $material-switch-width: 36px;
-  $material-switch-handle-width: 14px;
-  $material-switch-container-margin: 3px;
-  $material-switch-height: 20px;
+  $material-switch-width: 36px !default;
+  $material-switch-handle-width: 14px !default;
+  $material-switch-container-margin: 3px !default;
+  $material-switch-height: 20px !default;
 }
 
 @else if $size == "compact" {
-  $material-switch-width: 32px;
-  $material-switch-handle-width: 12px;
-  $material-switch-container-margin: 2px;
-  $material-switch-height: 18px;
+  $material-switch-width: 32px !default;
+  $material-switch-handle-width: 12px !default;
+  $material-switch-container-margin: 2px !default;
+  $material-switch-height: 18px !default;
 }

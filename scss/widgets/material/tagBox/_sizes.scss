@@ -8,25 +8,25 @@ $material-tagbox-tag-margin: null !default;
 $material-tagbox-tag-container-padding: null !default;
 $material-tagbox-tag-height: null !default;
 
-$material-tagbox-tag-content-padding-right: 32px;
-$material-tagbox-remove-button-right: 4px;
-$material-tagbox-remove-button-width: 24px;
-$material-tagbox-select-all-padding-bottom: 12px;
-$material-tagbox-select-all-margin-bottom: 3px;
+$material-tagbox-tag-content-padding-right: 32px !default;
+$material-tagbox-remove-button-right: 4px !default;
+$material-tagbox-remove-button-width: 24px !default;
+$material-tagbox-select-all-padding-bottom: 12px !default;
+$material-tagbox-select-all-margin-bottom: 3px !default;
 $tagbox-tag-border-radius: 16px !default;
 
 @if $size == "default" {
-  $material-tagbox-tag-content-padding-left: 12px;
-  $material-tagbox-tag-content-padding: 8px $material-tagbox-tag-content-padding-right 7px $material-tagbox-tag-content-padding-left;
-  $material-tagbox-tag-margin: 8px;
-  $material-tagbox-tag-container-padding: 4px 12px 12px 12px;
-  $material-tagbox-tag-height: 32px;
+  $material-tagbox-tag-content-padding-left: 12px !default;
+  $material-tagbox-tag-content-padding: 8px $material-tagbox-tag-content-padding-right 7px $material-tagbox-tag-content-padding-left !default;
+  $material-tagbox-tag-margin: 8px !default;
+  $material-tagbox-tag-container-padding: 4px 12px 12px 12px !default;
+  $material-tagbox-tag-height: 32px !default;
 }
 
 @else if $size == "compact" {
-  $material-tagbox-tag-content-padding-left: 8px;
-  $material-tagbox-tag-content-padding: 5px $material-tagbox-tag-content-padding-right 5px $material-tagbox-tag-content-padding-left;
-  $material-tagbox-tag-margin: 5px;
-  $material-tagbox-tag-container-padding: 2px 8px 7px 8px;
-  $material-tagbox-tag-height: 26px;
+  $material-tagbox-tag-content-padding-left: 8px !default;
+  $material-tagbox-tag-content-padding: 5px $material-tagbox-tag-content-padding-right 5px $material-tagbox-tag-content-padding-left !default;
+  $material-tagbox-tag-margin: 5px !default;
+  $material-tagbox-tag-container-padding: 2px 8px 7px 8px !default;
+  $material-tagbox-tag-height: 26px !default;
 }

@@ -7,19 +7,19 @@ $material-button-vertical-padding: null !default;
 $material-button-height: null !default;
 $material-button-min-width: null !default;
 
-$material-button-box-shadow-size: 0 1px 3px;
-$material-button-active-box-shadow-size: 0 4px 6px;
+$material-button-box-shadow-size: 0 1px 3px !default;
+$material-button-active-box-shadow-size: 0 4px 6px !default;
 
 @if $size == "default" {
-  $material-button-horizontal-padding: 16px;
-  $material-button-vertical-padding: 6px;
-  $material-button-height: 36px;
-  $material-button-min-width: 64px;
+  $material-button-horizontal-padding: 16px !default;
+  $material-button-vertical-padding: 6px !default;
+  $material-button-height: 36px !default;
+  $material-button-min-width: 64px !default;
 }
 
 @else if $size == "compact" {
-  $material-button-horizontal-padding: 16px;
-  $material-button-vertical-padding: 5px;
-  $material-button-height: 28px;
-  $material-button-min-width: 48px;
+  $material-button-horizontal-padding: 16px !default;
+  $material-button-vertical-padding: 5px !default;
+  $material-button-height: 28px !default;
+  $material-button-min-width: 48px !default;
 }
