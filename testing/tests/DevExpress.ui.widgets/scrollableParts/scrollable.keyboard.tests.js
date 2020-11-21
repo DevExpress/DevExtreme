@@ -12,6 +12,8 @@ import {
     SCROLLABLE_SCROLL_CLASS,
 } from './scrollable.constants.js';
 
+import 'ui/scrollable';
+
 const SCROLL_LINE_HEIGHT = 40;
 
 QUnit.module('keyboard support', {

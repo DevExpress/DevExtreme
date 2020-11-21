@@ -3,6 +3,7 @@ import eventsEngine from '../events/core/events_engine';
 import devices from '../core/devices';
 import registerComponent from '../core/component_registrator';
 import Button from './button';
+import Scrollable from './scrollable';
 import { render } from './widget/utils.ink_ripple';
 import { addNamespace } from '../events/utils/index';
 import { extend } from '../core/utils/extend';
@@ -13,7 +14,7 @@ import TabsItem from './tabs/item';
 import { TABS_EXPANDED_CLASS } from './tabs/constants';
 import { isMaterial, current as currentTheme } from './themes';
 import holdEvent from '../events/hold';
-import Scrollable from './scroll_view/ui.scrollable';
+
 import { default as CollectionWidget } from './collection/ui.collection_widget.live_update';
 import { getImageContainer } from '../core/utils/icon';
 import { BindableTemplate } from '../core/templates/bindable_template';
@@ -56,16 +57,10 @@ const Tabs = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-
-
             hoverStateEnabled: true,
-
             showNavButtons: true,
-
             scrollByContent: true,
-
             scrollingEnabled: true,
-
             selectionMode: 'single',
 
             /**
@@ -73,7 +68,6 @@ const Tabs = CollectionWidget.inherit({
              * @hidden
              * @default true
             */
-
 
             activeStateEnabled: true,
             selectionRequired: false,
@@ -209,7 +203,7 @@ const Tabs = CollectionWidget.inherit({
                 this._renderNavButtons();
             }
 
-            this._scrollable.update();
+            // this._scrollable.update();
             this._updateNavButtonsVisibility();
 
             if(this.option('rtlEnabled')) {
@@ -333,21 +327,24 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderNavButtons: function() {
-        this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, this.option('showNavButtons'));
+        const { showNavButtons, rtlEnabled } = this.option();
 
-        if(!this.option('showNavButtons')) return;
+        this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, showNavButtons);
 
-        const rtlEnabled = this.option('rtlEnabled');
+        if(!showNavButtons) return;
+
         this._leftButton = this._createNavButton(-TAB_OFFSET, rtlEnabled ? BUTTON_NEXT_ICON : BUTTON_PREV_ICON);
 
         const $leftButton = this._leftButton.$element();
-        $leftButton.addClass(TABS_LEFT_NAV_BUTTON_CLASS);
+        this._leftButton.option('elementAttr', { class: TABS_LEFT_NAV_BUTTON_CLASS });
+
         this.$element().prepend($leftButton);
 
         this._rightButton = this._createNavButton(TAB_OFFSET, rtlEnabled ? BUTTON_PREV_ICON : BUTTON_NEXT_ICON);
 
         const $rightButton = this._rightButton.$element();
-        $rightButton.addClass(TABS_RIGHT_NAV_BUTTON_CLASS);
+        this._rightButton.option('elementAttr', { class: TABS_RIGHT_NAV_BUTTON_CLASS });
+
         this.$element().append($rightButton);
     },
 
@@ -357,7 +354,7 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _updateScrollPosition: function(offset, duration) {
-        this._scrollable.update();
+        // this._scrollable.update();
         this._scrollable.scrollBy(offset / duration);
     },
 

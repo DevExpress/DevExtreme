@@ -10,7 +10,6 @@ import support from 'core/utils/support';
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import initMobileViewport from 'mobile/init_mobile_viewport';
-import 'ui/scroll_view/ui.scrollable';
 import Scrollbar from 'ui/scroll_view/ui.scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import {
@@ -25,6 +24,8 @@ import {
     SCROLLABLE_WRAPPER_CLASS,
     SCROLLBAR_HOVERABLE_CLASS
 } from './scrollable.constants.js';
+
+import 'ui/scrollable';
 
 
 const moduleConfig = {

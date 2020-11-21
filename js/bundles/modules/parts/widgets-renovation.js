@@ -8,6 +8,7 @@ require('../../../ui/data_grid'); // TODO: Remove it. This is hack!
 renovation.dxButton = require('../../../renovation/ui/button.j').default;
 renovation.dxCheckBox = require('../../../renovation/ui/check_box.j').default;
 renovation.dxScrollView = require('../../../renovation/ui/scroll_view.j').default;
+renovation.dxScrollable = require('../../../renovation/ui/scrollable.j').default;
 renovation.dxWidget = require('../../../renovation/ui/common/widget.j').default;
 renovation.dxGridPager = require('../../../renovation/ui/pager/pager.j').default;
 renovation.dxDataGrid = require('../../../renovation/ui/data_grid/data_grid.j').default;

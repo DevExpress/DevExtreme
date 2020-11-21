@@ -13,6 +13,8 @@ import {
     calculateInertiaDistance
 } from './scrollable.constants.js';
 
+import 'ui/scrollable';
+
 const INERTIA_TIMEOUT = 100;
 
 const GESTURE_LOCK_KEY = 'dxGestureLock';

@@ -35,6 +35,10 @@
     touch-action: pan-y;
     overflow-x: hidden;
     overflow-y: auto;
+
+    @at-root #{selector-append(".dx-scrollable-scrollbars-hidden", &)} {
+      overflow: hidden;
+    }
   }
 
   &.dx-scrollable-horizontal,
@@ -44,6 +48,10 @@
     float: none;
     overflow-x: auto;
     overflow-y: hidden;
+
+    @at-root #{selector-append(".dx-scrollable-scrollbars-hidden", &)} {
+      overflow: hidden;
+    }
   }
 
   &.dx-scrollable-both,
@@ -53,6 +61,10 @@
     float: none;
     overflow-x: auto;
     overflow-y: auto;
+
+    @at-root #{selector-append(".dx-scrollable-scrollbars-hidden", &)} {
+      overflow: hidden;
+    }
   }
 
   &.dx-scrollable-disabled,

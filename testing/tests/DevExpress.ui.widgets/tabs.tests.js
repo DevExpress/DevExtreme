@@ -258,7 +258,7 @@ QUnit.module('Horizontal scrolling', () => {
 
     QUnit.test('tabs should be wrapped into scrollable if scrollingEnabled=true', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
             wordWrap: false,
             scrollingEnabled: true,
             width: 100
@@ -293,7 +293,7 @@ QUnit.module('Horizontal scrolling', () => {
 
     QUnit.test('scrollable should have correct option scrollByContent', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
             wordWrap: false,
             scrollingEnabled: true,
             scrollByContent: true,
@@ -311,7 +311,7 @@ QUnit.module('Horizontal scrolling', () => {
 
     QUnit.test('tabs should not crash in IE and Firefox after creation', function(assert) {
         $('#tabs').addClass('bigtab').dxTabs({
-            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
             wordWrap: false,
             scrollingEnabled: true,
             showNavButtons: true
@@ -322,7 +322,7 @@ QUnit.module('Horizontal scrolling', () => {
 
     QUnit.test('nav buttons class should be added if showNavButtons=true', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
             wordWrap: false,
             showNavButtons: true,
             width: 100
@@ -360,7 +360,7 @@ QUnit.module('Horizontal scrolling', () => {
 
     QUnit.test('right nav button should be rendered if showNavButtons=true and possible to scroll right', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
             wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
@@ -374,7 +374,7 @@ QUnit.module('Horizontal scrolling', () => {
 
     QUnit.test('click on right nav button should scroll tabs to right', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
             wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
@@ -412,7 +412,7 @@ QUnit.module('Horizontal scrolling', () => {
 
     QUnit.test('left nav button should be rendered if showNavButtons=true and possible to scroll left', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
             wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
@@ -426,7 +426,7 @@ QUnit.module('Horizontal scrolling', () => {
 
     QUnit.test('click on left nav button should scroll tabs to left', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
-            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
             wordWrap: false,
             showNavButtons: true,
             scrollingEnabled: true,
@@ -435,7 +435,7 @@ QUnit.module('Horizontal scrolling', () => {
         const $button = $element.find('.' + TABS_LEFT_NAV_BUTTON_CLASS);
         const scrollable = $element.find('.' + SCROLLABLE_CLASS).dxScrollable('instance');
 
-        scrollable.update();
+        // scrollable.update();
         scrollable.scrollTo(TAB_OFFSET);
         $($button).trigger('dxclick');
         assert.equal(scrollable.scrollLeft(), 0, 'scroll position is correct');
@@ -455,7 +455,7 @@ QUnit.module('Horizontal scrolling', () => {
 
         this.clock = sinon.useFakeTimers();
 
-        scrollable.update();
+        // scrollable.update();
         scrollable.scrollTo(200);
 
         $($button).trigger(holdEvent.name);
@@ -470,7 +470,7 @@ QUnit.module('Horizontal scrolling', () => {
     QUnit.test('selected item should be visible after selectedIndex was changed', function(assert) {
         assert.expect(1);
         const $element = $('#scrollableTabs').dxTabs({
-            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            items: [{ text: 'item 1' }, { text: 'item 2' }, { text: 'item 3' }, { text: 'item 4' }],
             selectedIndex: 0,
             wordWrap: false,
             scrollingEnabled: true,

@@ -13,6 +13,8 @@ import {
     SCROLLABLE_CONTENT_CLASS
 } from './scrollable.constants.js';
 
+import 'ui/scrollable';
+
 const moduleConfig = {
     beforeEach: function() {
         const markup = '\

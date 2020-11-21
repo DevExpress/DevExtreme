@@ -17,6 +17,8 @@ import {
     SCROLLABLE_SCROLLBAR_ACTIVE_CLASS
 } from './scrollable.constants.js';
 
+import 'ui/scrollable';
+
 const moduleConfig = {
     beforeEach: function() {
         const markup = '\

@@ -7,6 +7,8 @@ import pointerMock from '../../../helpers/pointerMock.js';
 import 'common.css!';
 import 'generic_light.css!';
 
+import 'ui/scrollable';
+
 import {
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_CONTENT_CLASS,
