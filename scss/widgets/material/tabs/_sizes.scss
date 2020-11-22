@@ -6,16 +6,16 @@ $material-tabs-item-padding: null !default;
 $material-tab-height: null !default;
 $material-tab-min-width: null !default;
 
-$material-tab-text-line-height: 24px;
+$material-tab-text-line-height: 24px !default;
 
 @if $size == "default" {
-  $material-tabs-item-padding: 12px 16px;
-  $material-tab-height: 48px;
-  $material-tab-min-width: 90px;
+  $material-tabs-item-padding: 12px 16px !default;
+  $material-tab-height: 48px !default;
+  $material-tab-min-width: 90px !default;
 }
 
 @else if $size == "compact" {
-  $material-tabs-item-padding: 6px 12px;
-  $material-tab-height: 36px;
-  $material-tab-min-width: 82px;
+  $material-tabs-item-padding: 6px 12px !default;
+  $material-tab-height: 36px !default;
+  $material-tab-min-width: 82px !default;
 }

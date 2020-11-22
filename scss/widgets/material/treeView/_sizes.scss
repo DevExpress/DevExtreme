@@ -17,39 +17,39 @@ $material-select-all-text-offset: null !default;
 $material-treeview-searchbox-margin-bottom: null !default;
 
 @if $size == "default" {
-  $material-treeview-toggle-item-width: 24px;
-  $material-treeview-checkbox-offset: 35px;
-  $material-treeview-checkbox-vertical-offset: 14px;
-  $material-select-all-item-offset: $material-treeview-checkbox-offset;
-  $material-select-all-item-padding: 15px 0 15px $material-select-all-item-offset;
+  $material-treeview-toggle-item-width: 24px !default;
+  $material-treeview-checkbox-offset: 35px !default;
+  $material-treeview-checkbox-vertical-offset: 14px !default;
+  $material-select-all-item-offset: $material-treeview-checkbox-offset !default;
+  $material-select-all-item-padding: 15px 0 15px $material-select-all-item-offset !default;
 
-  $material-treeview-item-padding: 13px 8px;
-  $material-treeview-min-item-height: 48px;
+  $material-treeview-item-padding: 13px 8px !default;
+  $material-treeview-min-item-height: 48px !default;
 
-  $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset + 5;
+  $material-treeview-item-with-checkbox-offset: $material-treeview-checkbox-offset + 5 !default;
 
-  $material-treeview-loadincicator-offset-top: 13px;
-  $material-treeview-loadincicator-offset-left: 2px;
-  $material-treeview-loadincicator-size: 20px;
-  $material-select-all-text-offset: 31px;
+  $material-treeview-loadincicator-offset-top: 13px !default;
+  $material-treeview-loadincicator-offset-left: 2px !default;
+  $material-treeview-loadincicator-size: 20px !default;
+  $material-select-all-text-offset: 31px !default;
 
-  $material-treeview-searchbox-margin-bottom: 8px;
+  $material-treeview-searchbox-margin-bottom: 8px !default;
 }
 
 @else if $size == "compact" {
-  $material-treeview-toggle-item-width: 16px;
-  $material-treeview-checkbox-offset: 26px;
-  $material-treeview-checkbox-vertical-offset: 10px;
-  $material-select-all-item-offset: $material-treeview-checkbox-offset;
-  $material-select-all-item-padding: 10px 0 10px $material-select-all-item-offset;
+  $material-treeview-toggle-item-width: 16px !default;
+  $material-treeview-checkbox-offset: 26px !default;
+  $material-treeview-checkbox-vertical-offset: 10px !default;
+  $material-select-all-item-offset: $material-treeview-checkbox-offset !default;
+  $material-select-all-item-padding: 10px 0 10px $material-select-all-item-offset !default;
 
-  $material-treeview-item-padding: 10px 8px;
-  $material-treeview-min-item-height: 36px;
+  $material-treeview-item-padding: 10px 8px !default;
+  $material-treeview-min-item-height: 36px !default;
 
-  $material-treeview-loadincicator-offset-top: 8px;
-  $material-treeview-loadincicator-offset-left: 0;
-  $material-treeview-loadincicator-size: 18px;
-  $material-select-all-text-offset: 20px;
+  $material-treeview-loadincicator-offset-top: 8px !default;
+  $material-treeview-loadincicator-offset-left: 0 !default;
+  $material-treeview-loadincicator-size: 18px !default;
+  $material-select-all-text-offset: 20px !default;
 
-  $material-treeview-searchbox-margin-bottom: 4px;
+  $material-treeview-searchbox-margin-bottom: 4px !default;
 }

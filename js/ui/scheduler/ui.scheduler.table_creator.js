@@ -114,7 +114,10 @@ class SchedulerTableCreator {
 
                 } else {
                     if(options.getCellText) {
-                        td.innerHTML = '<div>' + options.getCellText(i, j) + '</div>';
+                        $('<div>')
+                            .text(options.getCellText(i, j))
+                            .addClass(options.getCellTextClass)
+                            .appendTo($(td));
                     }
                 }
             }

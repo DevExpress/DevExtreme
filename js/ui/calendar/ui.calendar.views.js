@@ -74,7 +74,7 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            const today = new Date();
+            const today = this.option('_todayDate')();
 
             return dateUtils.sameDate(cellDate, today);
         },
@@ -155,7 +155,9 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return dateUtils.sameMonthAndYear(cellDate, new Date());
+            const today = this.option('_todayDate')();
+
+            return dateUtils.sameMonthAndYear(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
@@ -213,7 +215,9 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return dateUtils.sameYear(cellDate, new Date());
+            const today = this.option('_todayDate')();
+
+            return dateUtils.sameYear(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {
@@ -281,7 +285,9 @@ const Views = {
         },
 
         _isTodayCell: function(cellDate) {
-            return dateUtils.sameDecade(cellDate, new Date());
+            const today = this.option('_todayDate')();
+
+            return dateUtils.sameDecade(cellDate, today);
         },
 
         _isDateOutOfRange: function(cellDate) {

@@ -5,15 +5,15 @@
 $filterbuilder-item-margin-bottom: null !default;
 $filterbuilder-treeview-item-padding: null !default;
 
-$filterbuilder-treeview-item-horizontal-padding: 15px;
+$filterbuilder-treeview-item-horizontal-padding: 15px !default;
 
 @if $size == "default" {
-  $filterbuilder-item-margin-bottom: 9px;
-  $filterbuilder-treeview-item-padding: 5px $filterbuilder-treeview-item-horizontal-padding;
+  $filterbuilder-item-margin-bottom: 9px !default;
+  $filterbuilder-treeview-item-padding: 5px $filterbuilder-treeview-item-horizontal-padding !default;
 }
 
 @else if $size == "compact" {
-  $filterbuilder-item-margin-bottom: 5px;
-  $filterbuilder-treeview-item-padding: 3px $filterbuilder-treeview-item-horizontal-padding;
+  $filterbuilder-item-margin-bottom: 5px !default;
+  $filterbuilder-treeview-item-padding: 3px $filterbuilder-treeview-item-horizontal-padding !default;
 }
 
