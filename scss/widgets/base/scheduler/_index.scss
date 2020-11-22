@@ -669,6 +669,11 @@ $scheduler-appointment-form-label-padding: 20px;
     pointer-events: none;
   }
 
+  .dx-scheduler-all-day-appointments {
+    position: absolute;
+    z-index: 1000;
+  }
+
   .dx-scheduler-work-space-week,
   .dx-scheduler-work-space-work-week,
   .dx-scheduler-work-space-day {

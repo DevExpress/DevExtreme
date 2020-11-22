@@ -114,10 +114,14 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             const { startDate, endDate } = this.getCellData($cell);
 
             // NOTE: Need we clear shader after templates were ready or after dimensionChanged
-            $cell.find('.' + DATE_TIME_SHADER_CLASS).remove();
+            $cell.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).remove();
             if(startDate < date && endDate < date) {
+                const $shader = $('<div>').addClass(DATE_TIME_SHADER_CLASS).addClass(SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).appendTo($cell);
                 // $cell.addClass(DATE_TIME_SHADER_CLASS);
-                $('<div>').addClass(DATE_TIME_SHADER_CLASS).addClass(SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).appendTo($cell);
+
+                if(browser.msie) {
+                    $shader.height(this.getAllDayHeight());
+                }
             }
         });
     }
@@ -241,6 +245,9 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _cleanShader() {
         const $shader = this.$element().find('.' + DATE_TIME_SHADER_CLASS);
         $shader.remove();
+
+        const $allDayShader = this.$element().find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);
+        $allDayShader.remove();
     }
 
     _isCurrentTime(date) {
