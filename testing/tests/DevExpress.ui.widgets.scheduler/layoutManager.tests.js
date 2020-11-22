@@ -2032,15 +2032,14 @@ QUnit.test('Appointment should have a right top position, Day view, \'auto\' mod
     );
 
     let $appointment = $(this.instance.$element().find('.dx-scheduler-all-day-appointment'));
-    const $header = $(this.instance.$element().find('.dx-scheduler-header'));
 
-    assert.roughEqual($appointment.eq(0).position().top, $header.outerHeight(), 1.5, 'appointment has a correct position');
+    assert.roughEqual($appointment.eq(0).position().top, 0, 1.5, 'appointment has a correct position');
 
     this.instance.addAppointment({ text: 'Task 2', startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0), allDay: true });
     $appointment = $(this.instance.$element().find('.dx-scheduler-all-day-appointment'));
 
-    assert.roughEqual($appointment.eq(0).position().top, $header.outerHeight(), 1.5, 'appointment has a correct position');
-    assert.roughEqual($appointment.eq(1).position().top, $header.outerHeight() + $appointment.outerHeight(), 1.5, 'appointment has a correct position');
+    assert.roughEqual($appointment.eq(0).position().top, 0, 1.5, 'appointment has a correct position');
+    assert.roughEqual($appointment.eq(1).position().top, $appointment.outerHeight(), 1.5, 'appointment has a correct position');
 });
 
 QUnit.test('Full-size appointment count depends on maxAppointmentsPerCell option, Week view, \'unlimited\' mode', function(assert) {
