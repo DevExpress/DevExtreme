@@ -184,10 +184,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         const $headerRow = super._renderDateHeader();
         if(this._needRenderWeekHeader()) {
             const $cells = [];
-            const cellsPerDay = this._getCellCountInDay();
+            const groupCount = this._getGroupCount();
+            const cellCountInDay = this._getCellCountInDay();
+            const colSpan = this.isGroupedByDate()
+                ? cellCountInDay * groupCount
+                : cellCountInDay;
             const cellTemplate = this.option('dateCellTemplate');
 
-            const groupCount = this._getGroupCount();
             const horizontalGroupCount = this._isHorizontalGroupedWorkSpace() && !this.isGroupedByDate()
                 ? groupCount
                 : 1;
@@ -197,7 +200,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
             for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
                 const $th = $('<th>');
-                const date = this._getDateByIndex((templateIndex * cellsPerDay) % (cellsInGroup * cellsPerDay));
+                const date = this._getDateByCellIndexes(0, templateIndex * colSpan);
                 const text = this._formatWeekdayAndDay(date);
 
                 if(cellTemplate) {
@@ -205,7 +208,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
                         model: {
                             text,
                             date,
-                            ...this._getGroupsForDateHeaderTemplate(templateIndex, cellsPerDay),
+                            ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
                         },
                         container: $th,
                         index: templateIndex,
@@ -216,7 +219,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
                     $th.text(text);
                 }
 
-                $th.addClass(HEADER_PANEL_CELL_CLASS).addClass(HEADER_PANEL_WEEK_CELL_CLASS).attr('colSpan', cellsPerDay);
+                $th
+                    .addClass(HEADER_PANEL_CELL_CLASS)
+                    .addClass(HEADER_PANEL_WEEK_CELL_CLASS)
+                    .attr('colSpan', colSpan);
+
                 $cells.push($th);
             }
 
