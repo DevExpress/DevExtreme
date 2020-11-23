@@ -25,6 +25,7 @@ const FILEUPLOADER_CONTENT_CLASS = 'dx-fileuploader-content';
 const FILEUPLOADER_INPUT_WRAPPER_CLASS = 'dx-fileuploader-input-wrapper';
 const FILEUPLOADER_BUTTON_CLASS = 'dx-fileuploader-button';
 const FILEUPLOADER_INPUT_CONTAINER_CLASS = 'dx-fileuploader-input-container';
+const FILEUPLOADER_INPUT_LABEL_CLASS = 'dx-fileuploader-input-label';
 const FILEUPLOADER_INPUT_CLASS = 'dx-fileuploader-input';
 const FILEUPLOADER_FILES_CONTAINER_CLASS = 'dx-fileuploader-files-container';
 const FILEUPLOADER_FILE_CONTAINER_CLASS = 'dx-fileuploader-file-container';
@@ -3227,14 +3228,19 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.deepEqual($fileUploader.dxFileUploader('option', 'value'), files, 'files are correct');
     });
 
-    QUnit.test('T328503 - drop field should be hidden if upload mode is useForm and native drop is not supported', function(assert) {
+    QUnit.test('T328503 - drop field should be visible, but default text is empty if upload mode is useForm and native drop is not supported', function(assert) {
+        // behavior changed beacause of T936087
         const $fileUploader = $('#fileuploader').dxFileUploader({
             uploadMode: 'useForm',
             nativeDropSupported: false
         });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
         const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
+        const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
 
-        assert.ok(!$inputContainer.is(':visible'), 'input container is hidden');
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), '', 'label has empty line text');
+        assert.strictEqual(fileUploader.option('labelText'), '', 'labelText option has empty line text');
     });
 
     QUnit.test('T370412 - it is impossible to drop some files if the \'multiple\' option is false', function(assert) {
@@ -3435,6 +3441,37 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called once');
         assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, $inputWrapper[0], 'dropZone argument is correct');
 
+    });
+
+    QUnit.test('Custom label text must be shown anyway, enven if upload mode is useForm and native drop is not supported (T936087)', function(assert) {
+        const customLabelText = 'custom label text';
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useForm',
+            nativeDropSupported: false,
+            labelText: customLabelText
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+        const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
+        const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
+
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), customLabelText, 'label has custom text');
+        assert.strictEqual(fileUploader.option('labelText'), customLabelText, 'labelText option has custom text');
+    });
+
+    QUnit.test('Default label text must be shown if upload mode is useForm and native drop is supported (T936087)', function(assert) {
+        const defaultLabelText = 'or Drop file here';
+        const $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: 'useForm',
+            nativeDropSupported: true
+        });
+        const fileUploader = $fileUploader.dxFileUploader('instance');
+        const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
+        const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
+
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), defaultLabelText, 'label has custom text');
+        assert.strictEqual(fileUploader.option('labelText'), defaultLabelText, 'labelText option has custom text');
     });
 });
 
