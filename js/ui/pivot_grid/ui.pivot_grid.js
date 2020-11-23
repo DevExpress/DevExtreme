@@ -635,7 +635,7 @@ const PivotGrid = Widget.inherit({
         });
     },
 
-    _updateCalculatedProperties: function(fields, isNewDataSource) {
+    _updateCalculatedOptions: function(fields, isNewDataSource) {
         const that = this;
         each(fields, function(index, field) {
             each(FIELD_CALCULATED_OPTIONS, function(_, optionName) {
@@ -665,7 +665,7 @@ const PivotGrid = Widget.inherit({
             hideEmptySummaryCells: that.option('hideEmptySummaryCells'),
 
             onFieldsPrepared: function(fields) {
-                that._updateCalculatedProperties(fields, true);
+                that._updateCalculatedOptions(fields, true);
             }
         };
     },
@@ -746,7 +746,7 @@ const PivotGrid = Widget.inherit({
             case 'stateStoring':
                 if(FIELD_CALCULATED_OPTIONS.indexOf(args.name) >= 0) {
                     const fields = this.getDataSource().fields();
-                    this._updateCalculatedProperties(fields, false);
+                    this._updateCalculatedOptions(fields, false);
                 }
                 that._initDataController();
                 that._fieldChooserPopup.hide();
