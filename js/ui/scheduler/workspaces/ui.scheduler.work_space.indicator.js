@@ -13,9 +13,9 @@ const SCHEDULER_DATE_TIME_INDICATOR_CLASS = 'dx-scheduler-date-time-indicator';
 const SCHEDULER_DATE_TIME_INDICATOR_SIMPLE_CLASS = 'dx-scheduler-date-time-indicator-simple';
 const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time-cell';
 const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
-const DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
+const SCHEDULER_DATE_TIME_SHADER_CLASS = 'dx-scheduler-date-time-shader';
 const SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS = 'dx-scheduler-date-time-shader-all-day';
-const LAST_DATE_TIME_SHADER_CLASS = `${DATE_TIME_SHADER_CLASS}-last`;
+const SCHEDULER_LAST_DATE_TIME_SHADER_CLASS = `${SCHEDULER_DATE_TIME_SHADER_CLASS}-last`;
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     _getToday() {
@@ -71,59 +71,39 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
 
     _renderShading() {
         const today = this._getToday();
-        this._renderDateTableShading(today);
-        this._renderAllDayPanelShading(today);
+        this._renderShadingInTable(today);
+        this._renderShadingInTable(today, true, SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);
     }
 
-    _renderDateTableShading(date) {
-        const cells = this._getCells();
+    _renderShadingInTable(date, isAllDay = false, additionalClass = undefined) {
+        const cells = this._getCells(isAllDay);
 
         each(cells, (_, cell) => {
             const $cell = $(cell);
             const { startDate, endDate } = this.getCellData($cell);
 
             // NOTE: Need we clear shader after templates were ready or after dimensionChanged
-            $cell.find('.' + DATE_TIME_SHADER_CLASS).remove();
+            $cell.find(`.${SCHEDULER_DATE_TIME_SHADER_CLASS}`).remove();
             if(startDate < date && endDate < date) {
-                const $shader = $('<div>').addClass(DATE_TIME_SHADER_CLASS).appendTo($cell);
+                const $shader = $('<div>').addClass(SCHEDULER_DATE_TIME_SHADER_CLASS).appendTo($cell);
+                additionalClass && $shader.addClass(additionalClass);
                 if(browser.msie) {
-                    $shader.height(this.getCellHeight());
+                    isAllDay ? $shader.height(this.getAllDayHeight()) : $shader.height(this.getCellHeight());
                 }
             }
-            if(startDate <= date && endDate > date) {
+            if(!isAllDay && startDate <= date && endDate > date) {
                 const size = (date.getTime() - startDate.getTime()) * 100 / (endDate.getTime() - startDate.getTime());
-                const $lastShader = $('<div>').addClass(DATE_TIME_SHADER_CLASS).addClass(LAST_DATE_TIME_SHADER_CLASS).appendTo($cell);
-                this._setShaderSize($lastShader, size);
-                // $lastShader.height(size + '%');
+                const $lastShader = $('<div>').addClass(SCHEDULER_DATE_TIME_SHADER_CLASS).addClass(SCHEDULER_LAST_DATE_TIME_SHADER_CLASS).appendTo($cell);
+                this._setLastShaderSize($lastShader, size);
             }
         });
     }
 
-    _setShaderSize($shader, size) {
+    _setLastShaderSize($shader, size) {
         $shader.height(size + '%');
         if(browser.msie) {
             $shader.height(size * this.getCellHeight() / 100);
         }
-    }
-
-    _renderAllDayPanelShading(date) {
-        const cells = this._getCells(true);
-
-        each(cells, (_, cell) => {
-            const $cell = $(cell);
-            const { startDate, endDate } = this.getCellData($cell);
-
-            // NOTE: Need we clear shader after templates were ready or after dimensionChanged
-            $cell.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).remove();
-            if(startDate < date && endDate < date) {
-                const $shader = $('<div>').addClass(DATE_TIME_SHADER_CLASS).addClass(SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).appendTo($cell);
-                // $cell.addClass(DATE_TIME_SHADER_CLASS);
-
-                if(browser.msie) {
-                    $shader.height(this.getAllDayHeight());
-                }
-            }
-        });
     }
 
     _isIndicatorSimple(index) {
@@ -243,7 +223,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _cleanShader() {
-        const $shader = this.$element().find('.' + DATE_TIME_SHADER_CLASS);
+        const $shader = this.$element().find('.' + SCHEDULER_DATE_TIME_SHADER_CLASS);
         $shader.remove();
 
         const $allDayShader = this.$element().find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);

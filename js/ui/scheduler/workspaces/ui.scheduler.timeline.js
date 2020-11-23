@@ -300,7 +300,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
         return this._isVerticalGroupedWorkSpace() && index > 0;
     }
 
-    _setShaderSize($shader, size) {
+    _setLastShaderSize($shader, size) {
         $shader.width(size + '%');
     }
 
