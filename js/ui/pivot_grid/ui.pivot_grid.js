@@ -53,6 +53,8 @@ const TD = '<td>';
 const DIV = '<div>';
 const TEST_HEIGHT = 66666;
 
+const CALCULATED_FIELDS_PROPERTIES = ['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll'];
+
 function getArraySum(array) {
     let sum = 0;
 
@@ -633,6 +635,18 @@ const PivotGrid = Widget.inherit({
         });
     },
 
+    _updateCalculatedFieldProperties: function() {
+        const that = this;
+        const fields = this.getDataSource().fields();
+        each(fields, function(index, field) {
+            each(CALCULATED_FIELDS_PROPERTIES, function(_, optionName) {
+                if(field._initProperties && (optionName in field._initProperties)) {
+                    setFieldProperty(field, optionName, that.option(optionName));
+                }
+            });
+        });
+    },
+
     _getDataControllerOptions: function() {
         const that = this;
         return {
@@ -650,7 +664,7 @@ const PivotGrid = Widget.inherit({
 
             onFieldsPrepared: function(fields) {
                 each(fields, function(index, field) {
-                    each(['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll'], function(_, optionName) {
+                    each(CALCULATED_FIELDS_PROPERTIES, function(_, optionName) {
                         if(field[optionName] === undefined) {
                             setFieldProperty(field, optionName, that.option(optionName));
                         }
@@ -734,6 +748,9 @@ const PivotGrid = Widget.inherit({
             case 'allowSortingBySummary':
             case 'scrolling':
             case 'stateStoring':
+                if(CALCULATED_FIELDS_PROPERTIES.indexOf(args.name) >= 0) {
+                    this._updateCalculatedFieldProperties();
+                }
                 that._initDataController();
                 that._fieldChooserPopup.hide();
                 that._renderFieldChooser();
