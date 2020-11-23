@@ -34,7 +34,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     allowReordering?: boolean;
     /**
      * @docid dxSortableOptions.dragTemplate
-     * @type template|function
      * @type_function_param1 dragInfo:object
      * @type_function_param1_field1 itemData:any
      * @type_function_param1_field2 itemElement:dxElement
@@ -78,7 +77,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     moveItemOnDrop?: boolean;
     /**
      * @docid dxSortableOptions.onAdd
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -98,7 +96,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onAdd?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
     /**
      * @docid dxSortableOptions.onDragChange
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -119,7 +116,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onDragChange?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
     /**
      * @docid dxSortableOptions.onDragEnd
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -140,7 +136,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onDragEnd?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
     /**
      * @docid dxSortableOptions.onDragMove
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -161,7 +156,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onDragMove?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any, dropInsideItem?: boolean }) => any);
     /**
      * @docid dxSortableOptions.onDragStart
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -177,7 +171,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onDragStart?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, cancel?: boolean, itemData?: any, itemElement?: dxElement, fromIndex?: number, fromData?: any }) => any);
     /**
      * @docid dxSortableOptions.onRemove
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
@@ -196,7 +189,6 @@ export interface dxSortableOptions extends DraggableBaseOptions<dxSortable> {
     onRemove?: ((e: { component?: dxSortable, element?: dxElement, model?: any, event?: event, itemData?: any, itemElement?: dxElement, fromIndex?: number, toIndex?: number, fromComponent?: dxSortable | dxDraggable, toComponent?: dxSortable | dxDraggable, fromData?: any, toData?: any }) => any);
     /**
      * @docid dxSortableOptions.onReorder
-     * @type function(e)
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event

@@ -13,7 +13,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
     disabledExpr?: string | Function;
     /**
      * @docid HierarchicalCollectionWidgetOptions.displayExpr
-     * @type string|function(item)
      * @default 'text'
      * @type_function_param1 item:object
      * @type_function_return string

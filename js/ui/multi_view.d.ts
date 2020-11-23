@@ -17,7 +17,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     animationEnabled?: boolean;
     /**
      * @docid dxMultiViewOptions.dataSource
-     * @type string|Array<string,dxMultiViewItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -39,7 +38,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     focusStateEnabled?: boolean;
     /**
      * @docid dxMultiViewOptions.items
-     * @type Array<string, dxMultiViewItem, object>
      * @fires dxMultiViewOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public

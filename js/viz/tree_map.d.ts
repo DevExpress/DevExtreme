@@ -121,7 +121,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
     /**
      * @docid dxTreeMapOptions.onClick
      * @extends Action
-     * @type function|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 node:dxTreeMapNode
@@ -225,7 +224,6 @@ export interface dxTreeMapOptions extends BaseWidgetOptions<dxTreeMap> {
 export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.contentTemplate
-     * @type template|function(info, element)
      * @type_function_param1 info:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
@@ -240,7 +238,6 @@ export interface dxTreeMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxTreeMapOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type function(info)
      * @type_function_param1 info:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string

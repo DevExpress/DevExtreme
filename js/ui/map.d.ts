@@ -69,7 +69,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     height?: number | string | (() => number | string);
     /**
      * @docid dxMapOptions.key
-     * @type string|object
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -83,7 +82,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     markerIconSrc?: string;
     /**
      * @docid dxMapOptions.markers
-     * @type Array<Object>
      * @fires dxMapOptions.onMarkerAdded
      * @fires dxMapOptions.onMarkerRemoved
      * @prevFileNamespace DevExpress.ui
@@ -92,7 +90,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     markers?: Array<{ iconSrc?: string, location?: any | string | Array<number>, onClick?: Function, tooltip?: string | { isShown?: boolean, text?: string } }>;
     /**
      * @docid dxMapOptions.onClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 location:object
@@ -105,7 +102,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid dxMapOptions.onMarkerAdded
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalMarker:object
@@ -117,7 +113,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid dxMapOptions.onMarkerRemoved
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @action
@@ -128,7 +123,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid dxMapOptions.onReady
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 originalMap:object
      * @action
@@ -139,7 +133,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid dxMapOptions.onRouteAdded
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @type_function_param1_field5 originalRoute:object
@@ -151,7 +144,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid dxMapOptions.onRouteRemoved
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 options:object
      * @action
@@ -169,7 +161,6 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     provider?: 'bing' | 'google' | 'googleStatic';
     /**
      * @docid dxMapOptions.routes
-     * @type Array<Object>
      * @fires dxMapOptions.onRouteAdded
      * @fires dxMapOptions.onRouteRemoved
      * @prevFileNamespace DevExpress.ui

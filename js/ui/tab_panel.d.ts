@@ -30,7 +30,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     animationEnabled?: boolean;
     /**
      * @docid dxTabPanelOptions.dataSource
-     * @type string|Array<string,dxTabPanelItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -45,7 +44,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     hoverStateEnabled?: boolean;
     /**
      * @docid dxTabPanelOptions.itemTitleTemplate
-     * @type template|function
      * @default "title"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -57,7 +55,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     itemTitleTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxTabPanelOptions.items
-     * @type Array<string, dxTabPanelItem, object>
      * @fires dxTabPanelOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -66,7 +63,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid dxTabPanelOptions.onTitleClick
      * @extends Action
-     * @type function(e)|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -79,7 +75,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid dxTabPanelOptions.onTitleHold
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -92,7 +87,6 @@ export interface dxTabPanelOptions extends dxMultiViewOptions<dxTabPanel> {
     /**
      * @docid dxTabPanelOptions.onTitleRendered
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -165,7 +159,6 @@ export interface dxTabPanelItem extends dxMultiViewItem {
     icon?: string;
     /**
      * @docid dxTabPanelItem.tabTemplate
-     * @type template|function
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -12,7 +12,6 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     autoResizeEnabled?: boolean;
     /**
      * @docid dxTextAreaOptions.maxHeight
-     * @type numeric|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -20,7 +19,6 @@ export interface dxTextAreaOptions extends dxTextBoxOptions<dxTextArea> {
     maxHeight?: number | string;
     /**
      * @docid dxTextAreaOptions.minHeight
-     * @type numeric|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

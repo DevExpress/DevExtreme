@@ -30,7 +30,6 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
     scale?: dxCircularGaugeScale;
     /**
      * @docid dxCircularGaugeOptions.subvalueIndicator
-     * @type GaugeIndicator
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -38,7 +37,6 @@ export interface dxCircularGaugeOptions extends BaseGaugeOptions<dxCircularGauge
     subvalueIndicator?: GaugeIndicator;
     /**
      * @docid dxCircularGaugeOptions.valueIndicator
-     * @type GaugeIndicator
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public

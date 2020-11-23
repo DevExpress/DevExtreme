@@ -5,7 +5,6 @@ import dxTextEditor, {
 export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
     /**
      * @docid dxTextBoxOptions.maxLength
-     * @type string|number
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public

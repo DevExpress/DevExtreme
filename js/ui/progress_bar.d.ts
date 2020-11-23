@@ -16,7 +16,6 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     /**
      * @docid dxProgressBarOptions.onComplete
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -33,7 +32,6 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
     showStatus?: boolean;
     /**
      * @docid dxProgressBarOptions.statusFormat
-     * @type string|function
      * @default function(ratio, value) { return "Progress: " + Math.round(ratio * 100) + "%" }
      * @type_function_param1 ratio:number
      * @type_function_param2 value:number

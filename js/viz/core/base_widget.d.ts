@@ -68,7 +68,6 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     onExported?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
      * @docid BaseWidgetOptions.onExporting
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
@@ -81,7 +80,6 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     onExporting?: ((e: { component?: T, element?: dxElement, model?: any, fileName?: string, cancel?: boolean, format?: string }) => any);
     /**
      * @docid BaseWidgetOptions.onFileSaving
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field3 fileName:string
      * @type_function_param1_field4 format:string
@@ -96,7 +94,6 @@ export interface BaseWidgetOptions<T = BaseWidget> extends DOMComponentOptions<T
     /**
      * @docid BaseWidgetOptions.onIncidentOccurred
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:any
      * @action
@@ -239,7 +236,6 @@ export interface BaseWidgetLoadingIndicator {
     enabled?: boolean;
     /**
      * @docid BaseWidgetOptions.loadingIndicator.font
-     * @type Font
      * @default '#767676' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -310,7 +306,6 @@ export interface BaseWidgetSize {
 export interface BaseWidgetTitle {
     /**
      * @docid BaseWidgetOptions.title.font
-     * @type Font
      * @default '#232323' [prop](color)
      * @default 28 [prop](size)
      * @default 200 [prop](weight)
@@ -329,7 +324,6 @@ export interface BaseWidgetTitle {
     horizontalAlignment?: 'center' | 'left' | 'right';
     /**
      * @docid BaseWidgetOptions.title.margin
-     * @type number | object
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -344,7 +338,6 @@ export interface BaseWidgetTitle {
     placeholderSize?: number;
     /**
      * @docid BaseWidgetOptions.title.subtitle
-     * @type object|string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -404,7 +397,6 @@ export interface BaseWidgetTooltip {
     color?: string;
     /**
      * @docid BaseWidgetOptions.tooltip.container
-     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -427,7 +419,6 @@ export interface BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid BaseWidgetOptions.tooltip.font
-     * @type Font
      * @default '#232323' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -562,7 +553,6 @@ export interface Font {
     opacity?: number;
     /**
      * @docid Font.size
-     * @type string|number
      * @default 12
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -627,7 +617,6 @@ export interface BaseWidgetAnnotationConfig {
     description?: string;
     /**
      * @docid BaseWidgetAnnotationConfig.font
-     * @type Font
      * @default '#333333' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -642,7 +631,6 @@ export interface BaseWidgetAnnotationConfig {
     height?: number;
     /**
      * @docid BaseWidgetAnnotationConfig.image
-     * @type string|object
      * @prevFileNamespace DevExpress.viz
      * @public
      */

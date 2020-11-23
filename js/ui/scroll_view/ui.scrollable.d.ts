@@ -39,7 +39,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     /**
      * @docid dxScrollableOptions.onScroll
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -55,7 +54,6 @@ export interface dxScrollableOptions<T = dxScrollable> extends DOMComponentOptio
     /**
      * @docid dxScrollableOptions.onUpdated
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object

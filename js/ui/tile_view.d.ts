@@ -31,7 +31,6 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     baseItemWidth?: number;
     /**
      * @docid dxTileViewOptions.dataSource
-     * @type string|Array<string,dxTileViewItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -54,7 +53,6 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxTileViewOptions.height
-     * @type number|string|function
      * @default 500
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -77,7 +75,6 @@ export interface dxTileViewOptions extends CollectionWidgetOptions<dxTileView> {
     itemMargin?: number;
     /**
      * @docid dxTileViewOptions.items
-     * @type Array<string, dxTileViewItem, object>
      * @fires dxTileViewOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public

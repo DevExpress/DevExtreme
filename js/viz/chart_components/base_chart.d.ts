@@ -55,14 +55,12 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     adaptiveLayout?: BaseChartAdaptiveLayout;
     /**
      * @docid BaseChartOptions.animation
-     * @type object|boolean
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     animation?: { duration?: number, easing?: 'easeOutCubic' | 'linear', enabled?: boolean, maxPointCountSupported?: number } | boolean;
     /**
      * @docid BaseChartOptions.customizeLabel
-     * @type function(pointInfo)
      * @type_function_param1 pointInfo:object
      * @type_function_return dxChartSeriesTypes.CommonSeries.label
      * @prevFileNamespace DevExpress.viz
@@ -71,7 +69,6 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     customizeLabel?: ((pointInfo: any) => dxChartSeriesTypesCommonSeriesLabel);
     /**
      * @docid BaseChartOptions.customizePoint
-     * @type function(pointInfo)
      * @type_function_param1 pointInfo:object
      * @type_function_return dxChartSeriesTypes.CommonSeries.point
      * @prevFileNamespace DevExpress.viz
@@ -105,7 +102,6 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     /**
      * @docid BaseChartOptions.onPointClick
      * @extends Action
-     * @type function(e)|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:basePointObject
@@ -117,7 +113,6 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     onPointClick?: ((e: { component?: T, element?: dxElement, model?: any, event?: event, target?: basePointObject }) => any) | string;
     /**
      * @docid BaseChartOptions.onPointHoverChanged
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:object
      * @type_function_param1_field2 element:object
@@ -130,7 +125,6 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     onPointHoverChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
     /**
      * @docid BaseChartOptions.onPointSelectionChanged
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:object
      * @type_function_param1_field2 element:object
@@ -144,7 +138,6 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     /**
      * @docid BaseChartOptions.onTooltipHidden
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
@@ -156,7 +149,6 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     /**
      * @docid BaseChartOptions.onTooltipShown
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:basePointObject|dxChartAnnotationConfig|any
      * @notUsedInTheme
@@ -190,7 +182,6 @@ export interface BaseChartOptions<T = BaseChart> extends BaseWidgetOptions<T> {
     pointSelectionMode?: 'multiple' | 'single';
     /**
      * @docid BaseChartOptions.series
-     * @type Object|Array<Object>
      * @default undefined
      * @notUsedInTheme
      * @hideDefaults true
@@ -232,7 +223,6 @@ export interface BaseChartAdaptiveLayout {
 export interface BaseChartLegend extends BaseLegend {
     /**
      * @docid BaseChartOptions.legend.customizeItems
-     * @type function(items)
      * @type_function_param1 items:Array<BaseChartLegendItem>
      * @type_function_return Array<BaseChartLegendItem>
      * @prevFileNamespace DevExpress.viz
@@ -241,7 +231,6 @@ export interface BaseChartLegend extends BaseLegend {
     customizeItems?: ((items: Array<BaseChartLegendItem>) => Array<BaseChartLegendItem>);
     /**
      * @docid BaseChartOptions.legend.markerTemplate
-     * @type template|function
      * @default undefined
      * @type_function_param1 legendItem:BaseChartLegendItem
      * @type_function_param2 element:SVGGElement
@@ -261,7 +250,6 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
     argumentFormat?: format;
     /**
      * @docid BaseChartOptions.tooltip.contentTemplate
-     * @type template|function(pointInfo, element)
      * @type_function_param1 pointInfo:object
      * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
@@ -272,7 +260,6 @@ export interface BaseChartTooltip extends BaseWidgetTooltip {
     contentTemplate?: template | ((pointInfo: any, element: dxElement) => string | Element | JQuery);
     /**
      * @docid BaseChartOptions.tooltip.customizeTooltip
-     * @type function(pointInfo)
      * @type_function_param1 pointInfo:object
      * @type_function_return object
      * @default undefined
@@ -367,7 +354,6 @@ export class BaseChart extends BaseWidget {
 export interface BaseChartLegendItem extends BaseLegendItem {
     /**
      * @docid BaseChartLegendItem.series
-     * @type baseSeriesObject
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -377,7 +363,6 @@ export interface BaseChartLegendItem extends BaseLegendItem {
 export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * @docid BaseChartAnnotationConfig.argument
-     * @type number | datetime | string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -392,7 +377,6 @@ export interface BaseChartAnnotationConfig extends BaseWidgetAnnotationConfig {
     series?: string;
     /**
      * @docid BaseChartAnnotationConfig.value
-     * @type number | datetime | string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public

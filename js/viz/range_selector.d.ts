@@ -84,7 +84,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     /**
      * @docid dxRangeSelectorOptions.onValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:Array<number,string,Date>
      * @type_function_param1_field5 previousValue:Array<number,string,Date>
@@ -137,7 +136,6 @@ export interface dxRangeSelectorOptions extends BaseWidgetOptions<dxRangeSelecto
     sliderMarker?: { color?: string, customizeText?: ((scaleValue: { value?: Date | number | string, valueText?: string }) => string), font?: Font, format?: format, invalidRangeColor?: string, paddingLeftRight?: number, paddingTopBottom?: number, placeholderHeight?: number, visible?: boolean };
     /**
      * @docid dxRangeSelectorOptions.value
-     * @type Array<number,string,Date> | VizRange
      * @fires dxRangeSelectorOptions.onValueChanged
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz

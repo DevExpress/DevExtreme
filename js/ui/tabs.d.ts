@@ -10,7 +10,6 @@ import CollectionWidget, {
 export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     /**
      * @docid dxTabsOptions.dataSource
-     * @type string|Array<string,dxTabsItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -32,7 +31,6 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     hoverStateEnabled?: boolean;
     /**
      * @docid dxTabsOptions.items
-     * @type Array<string, dxTabsItem, object>
      * @fires dxTabsOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -62,7 +60,6 @@ export interface dxTabsOptions<T = dxTabs> extends CollectionWidgetOptions<T> {
     scrollingEnabled?: boolean;
     /**
      * @docid dxTabsOptions.selectedItems
-     * @type Array<string,number,Object>
      * @prevFileNamespace DevExpress.ui
      * @public
      */

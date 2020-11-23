@@ -31,7 +31,6 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     name?: string;
     /**
      * @docid dxValidatorOptions.onValidated
-     * @type function(validatedInfo)
      * @type_function_param1 validatedInfo:Object
      * @type_function_param1_field1 name:string
      * @type_function_param1_field2 isValid:boolean
@@ -54,7 +53,6 @@ export interface dxValidatorOptions extends DOMComponentOptions<dxValidator> {
     validationGroup?: string;
     /**
      * @docid dxValidatorOptions.validationRules
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -99,14 +97,12 @@ export default class dxValidator extends DOMComponent {
 export interface dxValidatorResult {
     /**
      * @docid dxValidatorResult.brokenRule
-     * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule|AsyncRule
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule;
     /**
      * @docid dxValidatorResult.brokenRules
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -126,7 +122,6 @@ export interface dxValidatorResult {
     isValid?: boolean;
     /**
      * @docid dxValidatorResult.pendingRules
-     * @type Array<AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -140,14 +135,12 @@ export interface dxValidatorResult {
     status?: 'valid' | 'invalid' | 'pending';
     /**
      * @docid dxValidatorResult.validationRules
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>;
     /**
      * @docid dxValidatorResult.value
-     * @type any
      * @prevFileNamespace DevExpress.ui
      * @public
      */

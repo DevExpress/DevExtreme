@@ -16,7 +16,6 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**
      * @docid dxSlideOutViewOptions.contentTemplate
      * @type_function_param1 contentElement:dxElement
-     * @type template|function
      * @default "content"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -33,7 +32,6 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**
      * @docid dxSlideOutViewOptions.menuTemplate
      * @type_function_param1 menuElement:dxElement
-     * @type template|function
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public

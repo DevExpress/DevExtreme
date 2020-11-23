@@ -34,7 +34,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     displayValue?: string;
     /**
      * @docid dxDropDownListOptions.groupTemplate
-     * @type template|function
      * @default "group"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -68,7 +67,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     /**
      * @docid dxDropDownListOptions.onItemClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:object
@@ -82,7 +80,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     /**
      * @docid dxDropDownListOptions.onSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 selectedItem:object
      * @action
@@ -93,7 +90,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     /**
      * @docid dxDropDownListOptions.onValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
@@ -135,7 +131,6 @@ export interface dxDropDownListOptions<T = dxDropDownList> extends DataExpressio
     searchTimeout?: number;
     /**
      * @docid dxDropDownListOptions.selectedItem
-     * @type any
      * @readonly
      * @default null
      * @ref

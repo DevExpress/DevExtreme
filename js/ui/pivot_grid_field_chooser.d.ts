@@ -34,7 +34,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     applyChangesMode?: 'instantly' | 'onDemand';
     /**
      * @docid dxPivotGridFieldChooserOptions.dataSource
-     * @type PivotGridDataSource
      * @default null
      * @ref
      * @prevFileNamespace DevExpress.ui
@@ -43,14 +42,12 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     dataSource?: PivotGridDataSource;
     /**
      * @docid dxPivotGridFieldChooserOptions.headerFilter
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     headerFilter?: { allowSearch?: boolean, height?: number, searchTimeout?: number, showRelevantValues?: boolean, texts?: { cancel?: string, emptyValue?: string, ok?: string }, width?: number };
     /**
      * @docid dxPivotGridFieldChooserOptions.height
-     * @type number|string|function
      * @default 400
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -67,7 +64,6 @@ export interface dxPivotGridFieldChooserOptions extends WidgetOptions<dxPivotGri
     layout?: 0 | 1 | 2;
     /**
      * @docid dxPivotGridFieldChooserOptions.onContextMenuPreparing
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 items:Array<Object>
      * @type_function_param1_field5 area:string

@@ -41,7 +41,6 @@ export interface BaseLegend {
     columnItemSpacing?: number;
     /**
      * @docid BaseLegend.font
-     * @type Font
      * @default '#767676' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -73,7 +72,6 @@ export interface BaseLegend {
     itemsAlignment?: 'center' | 'left' | 'right';
     /**
      * @docid BaseLegend.margin
-     * @type number | object
      * @default 10
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -124,7 +122,6 @@ export interface BaseLegend {
     rowItemSpacing?: number;
     /**
      * @docid BaseLegend.title
-     * @type object|string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -177,7 +174,6 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
     name?: string;
     /**
      * @docid ChartSeries.tag
-     * @type any
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -196,7 +192,6 @@ export interface ChartSeries extends dxChartSeriesTypesCommonSeries {
 export interface ScaleBreak {
     /**
      * @docid ScaleBreak.endValue
-     * @type number|date|string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -204,7 +199,6 @@ export interface ScaleBreak {
     endValue?: number | Date | string;
     /**
      * @docid ScaleBreak.startValue
-     * @type number|date|string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -215,7 +209,6 @@ export interface ScaleBreak {
 export interface VizRange {
     /**
      * @docid VizRange.endValue
-     * @type number|date|string
      * @default undefined
      * @fires BaseWidgetOptions.onOptionChanged
      * @prevFileNamespace DevExpress.viz
@@ -232,7 +225,6 @@ export interface VizRange {
     length?: number | any | TimeIntervalType;
     /**
      * @docid VizRange.startValue
-     * @type number|date|string
      * @default undefined
      * @fires BaseWidgetOptions.onOptionChanged
      * @prevFileNamespace DevExpress.viz

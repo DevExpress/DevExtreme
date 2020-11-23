@@ -84,7 +84,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onChange
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -95,7 +94,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onCopy
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -106,7 +104,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onCut
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -117,7 +114,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onEnterKey
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -128,7 +124,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onFocusIn
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -139,7 +134,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onFocusOut
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -150,7 +144,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onInput
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -161,7 +154,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onKeyDown
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @default null
@@ -173,7 +165,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onKeyPress
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @deprecated
@@ -185,7 +176,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onKeyUp
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -196,7 +186,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     /**
      * @docid dxTextEditorOptions.onPaste
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @action
@@ -258,7 +247,6 @@ export interface dxTextEditorOptions<T = dxTextEditor> extends EditorOptions<T> 
     useMaskedValue?: boolean;
     /**
      * @docid dxTextEditorOptions.value
-     * @type any
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -324,7 +312,6 @@ export interface dxTextEditorButton {
     name?: string;
     /**
      * @docid dxTextEditorButton.options
-     * @type dxButtonOptions
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

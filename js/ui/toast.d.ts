@@ -84,7 +84,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     minWidth?: number | string | (() => number | string);
     /**
      * @docid dxToastOptions.position
-     * @type positionConfig|string
      * @default "bottom center"
      * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} [for](Android)
      * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } [for](phones_on_Android)
@@ -120,7 +119,6 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
 export interface dxToastAnimation extends dxOverlayAnimation {
     /**
      * @docid dxToastOptions.animation.hide
-     * @type animationConfig
      * @default { type: "fade", duration: 400, to: 0 }
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -128,7 +126,6 @@ export interface dxToastAnimation extends dxOverlayAnimation {
     hide?: animationConfig;
     /**
      * @docid dxToastOptions.animation.show
-     * @type animationConfig
      * @default { type: "fade", duration: 400, from: 0, to: 1 }
      * @prevFileNamespace DevExpress.ui
      * @public

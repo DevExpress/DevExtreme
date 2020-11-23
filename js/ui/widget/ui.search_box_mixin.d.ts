@@ -5,7 +5,6 @@ import {
 export interface SearchBoxMixinOptions<T = SearchBoxMixin> {
     /**
      * @docid SearchBoxMixinOptions.searchEditorOptions
-     * @type dxTextBoxOptions
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public

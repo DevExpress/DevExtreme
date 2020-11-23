@@ -34,7 +34,6 @@ export interface dxSpeedDialActionOptions extends WidgetOptions<dxSpeedDialActio
     label?: string;
     /**
      * @docid dxSpeedDialActionOptions.onClick
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field1 event:event
      * @type_function_param1_field2 component:this

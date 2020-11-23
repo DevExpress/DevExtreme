@@ -75,7 +75,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     clearButtonText?: string;
     /**
      * @docid dxLookupOptions.closeOnOutsideClick
-     * @type boolean|function
      * @default false
      * @type_function_return boolean
      * @publicName closeOnOutsideClick
@@ -87,7 +86,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     closeOnOutsideClick?: boolean | (() => boolean);
     /**
      * @docid dxLookupOptions.fieldTemplate
-     * @type template|function
      * @default null
      * @type_function_param1 selectedItem:object
      * @type_function_param2 fieldElement:dxElement
@@ -115,7 +113,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     fullScreen?: boolean;
     /**
      * @docid dxLookupOptions.groupTemplate
-     * @type template|function
      * @default "group"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -158,7 +155,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid dxLookupOptions.onScroll
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 scrollOffset:object
@@ -174,7 +170,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid dxLookupOptions.onTitleRendered
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 titleElement:dxElement
      * @action
@@ -186,7 +181,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid dxLookupOptions.onValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
@@ -220,7 +214,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     placeholder?: string;
     /**
      * @docid dxLookupOptions.popupHeight
-     * @type number|string|function
      * @default function() { return $(window).height() * 0.8 }
      * @type_function_return number|string
      * @default 'auto' [for](desktop|iPad)
@@ -231,7 +224,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     popupHeight?: number | string | (() => number | string);
     /**
      * @docid dxLookupOptions.popupWidth
-     * @type number|string|function
      * @default function() {return $(window).width() * 0.8 }
      * @type_function_return number|string
      * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } [for](iPad)
@@ -243,7 +235,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     popupWidth?: number | string | (() => number | string);
     /**
      * @docid dxLookupOptions.position
-     * @type positionConfig
      * @default undefined
      * @publicName position
      * @default { my: 'left top', at: 'left top', of: lookupContainer } [for](Material)
@@ -340,7 +331,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     title?: string;
     /**
      * @docid dxLookupOptions.titleTemplate
-     * @type template|function
      * @default "title"
      * @type_function_param1 titleElement:dxElement
      * @type_function_return string|Element|jQuery
@@ -378,7 +368,6 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     dropDownCentered?: boolean;
     /**
      * @docid dxLookupOptions.dropDownOptions
-     * @type dxPopoverOptions
      */
     dropDownOptions?: dxPopoverOptions;
 

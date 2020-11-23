@@ -24,7 +24,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     adaptivityEnabled?: boolean;
     /**
      * @docid dxMenuOptions.dataSource
-     * @type string|Array<dxMenuItem>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -39,7 +38,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     hideSubmenuOnMouseLeave?: boolean;
     /**
      * @docid dxMenuOptions.items
-     * @type Array<dxMenuItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -47,7 +45,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     /**
      * @docid dxMenuOptions.onSubmenuHidden
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @action
@@ -58,7 +55,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     /**
      * @docid dxMenuOptions.onSubmenuHiding
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @type_function_param1_field5 cancel:boolean
@@ -70,7 +66,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     /**
      * @docid dxMenuOptions.onSubmenuShowing
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @action
@@ -81,7 +76,6 @@ export interface dxMenuOptions extends dxMenuBaseOptions<dxMenu> {
     /**
      * @docid dxMenuOptions.onSubmenuShown
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 rootItem:dxElement
      * @action
@@ -156,7 +150,6 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
     icon?: string;
     /**
      * @docid dxMenuBaseItem.items
-     * @type Array<dxMenuBaseItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -193,7 +186,6 @@ export interface dxMenuBaseItem extends CollectionWidgetItem {
 export interface dxMenuItem extends dxMenuBaseItem {
     /**
      * @docid dxMenuItem.items
-     * @type Array<dxMenuItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */

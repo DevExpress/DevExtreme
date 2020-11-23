@@ -43,7 +43,6 @@ export interface PivotGridDataSourceOptions {
     onChanged?: Function;
     /**
      * @docid PivotGridDataSourceOptions.onFieldsPrepared
-     * @type function(fields)
      * @type_function_param1 fields:Array<PivotGridDataSourceOptions.fields>
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -52,7 +51,6 @@ export interface PivotGridDataSourceOptions {
     onFieldsPrepared?: ((fields: Array<PivotGridDataSourceField>) => any);
     /**
      * @docid PivotGridDataSourceOptions.onLoadError
-     * @type function(error)
      * @type_function_param1 error:Object
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -61,7 +59,6 @@ export interface PivotGridDataSourceOptions {
     onLoadError?: ((error: any) => any);
     /**
      * @docid PivotGridDataSourceOptions.onLoadingChanged
-     * @type function(isLoading)
      * @type_function_param1 isLoading:boolean
      * @action
      * @prevFileNamespace DevExpress.ui
@@ -91,7 +88,6 @@ export interface PivotGridDataSourceOptions {
     retrieveFields?: boolean;
     /**
      * @docid PivotGridDataSourceOptions.store
-     * @type Store|StoreOptions|XmlaStore|XmlaStoreOptions|Array<Object>|Object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -151,7 +147,6 @@ export interface PivotGridDataSourceField {
     areaIndex?: number;
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateCustomSummary
-     * @type function(options)
      * @type_function_param1 options:object
      * @type_function_param1_field1 summaryProcess:string
      * @type_function_param1_field2 value:any
@@ -162,7 +157,6 @@ export interface PivotGridDataSourceField {
     calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
     /**
      * @docid PivotGridDataSourceOptions.fields.calculateSummaryValue
-     * @type function(e)
      * @type_function_param1 e:dxPivotGridSummaryCell
      * @type_function_return number
      * @default undefined
@@ -179,7 +173,6 @@ export interface PivotGridDataSourceField {
     caption?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.customizeText
-     * @type function(cellInfo)
      * @type_function_param1 cellInfo:object
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 valueText:string
@@ -227,7 +220,6 @@ export interface PivotGridDataSourceField {
     filterType?: 'exclude' | 'include';
     /**
      * @docid PivotGridDataSourceOptions.fields.filterValues
-     * @type Array<any>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -235,7 +227,6 @@ export interface PivotGridDataSourceField {
     filterValues?: Array<any>;
     /**
      * @docid PivotGridDataSourceOptions.fields.format
-     * @type format
      * @default ''
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -337,7 +328,6 @@ export interface PivotGridDataSourceField {
     sortBySummaryField?: string;
     /**
      * @docid PivotGridDataSourceOptions.fields.sortBySummaryPath
-     * @type Array<number,string>
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -353,7 +343,6 @@ export interface PivotGridDataSourceField {
     sortOrder?: 'asc' | 'desc';
     /**
      * @docid PivotGridDataSourceOptions.fields.sortingMethod
-     * @type function(a, b)
      * @type_function_param1 a:object
      * @type_function_param1_field1 value:string|number
      * @type_function_param1_field2 children:Array<any>

@@ -22,7 +22,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     animation?: dxLoadPanelAnimation;
     /**
      * @docid dxLoadPanelOptions.container
-     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -120,7 +119,6 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
 export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     /**
      * @docid dxLoadPanelOptions.animation.hide
-     * @type animationConfig
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -128,7 +126,6 @@ export interface dxLoadPanelAnimation extends dxOverlayAnimation {
     hide?: animationConfig;
     /**
      * @docid dxLoadPanelOptions.animation.show
-     * @type animationConfig
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public

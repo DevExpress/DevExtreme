@@ -23,7 +23,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     /**
      * @docid EditorOptions.onValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
@@ -50,7 +49,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     validationError?: any;
     /**
      * @docid EditorOptions.validationErrors
-     * @type Array<object>
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -74,7 +72,6 @@ export interface EditorOptions<T = Editor> extends WidgetOptions<T> {
     validationStatus?: 'valid' | 'invalid' | 'pending';
     /**
      * @docid EditorOptions.value
-     * @type any
      * @default null
      * @fires EditorOptions.onValueChanged
      * @prevFileNamespace DevExpress.ui

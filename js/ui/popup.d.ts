@@ -29,7 +29,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     animation?: dxPopupAnimation;
     /**
      * @docid dxPopupOptions.container
-     * @type string|Element|jQuery
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -91,7 +90,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     /**
      * @docid dxPopupOptions.onTitleRendered
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 titleElement:dxElement
      * @action
@@ -137,7 +135,6 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     title?: string;
     /**
      * @docid dxPopupOptions.titleTemplate
-     * @type template|function
      * @default "title"
      * @type_function_param1 titleElement:dxElement
      * @type_function_return string|Element|jQuery
@@ -206,7 +203,6 @@ export interface dxPopupToolbarItem {
     options?: any;
     /**
      * @docid dxPopupOptions.toolbarItems.template
-     * @type template
      * @prevFileNamespace DevExpress.ui
      * @public
      */

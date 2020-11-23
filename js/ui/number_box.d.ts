@@ -18,7 +18,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
     /**
      * @docid dxNumberBoxOptions.format
-     * @type format
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public

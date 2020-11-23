@@ -43,7 +43,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     applyValueMode?: 'instantly' | 'useButtons';
     /**
      * @docid dxDropDownEditorOptions.dropDownOptions
-     * @type dxPopupOptions
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -66,7 +65,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     deferRendering?: boolean;
     /**
      * @docid dxDropDownEditorOptions.dropDownButtonTemplate
-     * @type template|function
      * @default "dropDownButton"
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
@@ -118,7 +116,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     showDropDownButton?: boolean;
     /**
      * @docid dxDropDownEditorOptions.value
-     * @type any
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public

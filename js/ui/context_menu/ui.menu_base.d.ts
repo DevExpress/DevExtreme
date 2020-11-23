@@ -39,7 +39,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     cssClass?: string;
     /**
      * @docid dxMenuBaseOptions.dataSource
-     * @type string|Array<dxMenuBaseItem>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -47,7 +46,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     dataSource?: string | Array<dxMenuBaseItem> | DataSource | DataSourceOptions;
     /**
      * @docid dxMenuBaseOptions.items
-     * @type Array<dxMenuBaseItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */

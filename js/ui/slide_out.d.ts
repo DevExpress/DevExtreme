@@ -27,7 +27,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     activeStateEnabled?: boolean;
     /**
      * @docid dxSlideOutOptions.contentTemplate
-     * @type template|function
      * @default "content"
      * @type_function_param1 container:dxElement
      * @type_function_return string|Element|jQuery
@@ -37,7 +36,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     contentTemplate?: template | ((container: dxElement) => string | Element | JQuery);
     /**
      * @docid dxSlideOutOptions.dataSource
-     * @type string|Array<string,dxSlideOutItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -45,7 +43,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     dataSource?: string | Array<string | dxSlideOutItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxSlideOutOptions.items
-     * @type Array<string, dxSlideOutItem, object>
      * @fires dxSlideOutOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -53,7 +50,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     items?: Array<string | dxSlideOutItem | any>;
     /**
      * @docid dxSlideOutOptions.menuGroupTemplate
-     * @type template|function
      * @default "menuGroup"
      * @type_function_param1 groupData:object
      * @type_function_param2 groupIndex:number
@@ -72,7 +68,6 @@ export interface dxSlideOutOptions extends CollectionWidgetOptions<dxSlideOut> {
     menuGrouped?: boolean;
     /**
      * @docid dxSlideOutOptions.menuItemTemplate
-     * @type template|function
      * @default "menuItem"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -169,7 +164,6 @@ export default class dxSlideOut extends CollectionWidget {
 export interface dxSlideOutItem extends CollectionWidgetItem {
     /**
      * @docid dxSlideOutItem.menuTemplate
-     * @type template|function
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

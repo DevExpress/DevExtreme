@@ -49,7 +49,6 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     startName?: string;
     /**
      * @docid dxRangeSliderOptions.value
-     * @type Array<number>
      * @default [40, 60]
      * @prevFileNamespace DevExpress.ui
      * @public

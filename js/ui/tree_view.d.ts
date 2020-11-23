@@ -42,7 +42,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     createChildren?: ((parentNode: dxTreeViewNode) => Promise<any> | JQueryPromise<any> | Array<any>);
     /**
      * @docid  dxTreeViewOptions.dataSource
-     * @type string|Array<dxTreeViewItem>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -97,7 +96,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     hasItemsExpr?: string | Function;
     /**
      * @docid dxTreeViewOptions.items
-     * @type Array<dxTreeViewItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -105,7 +103,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid dxTreeViewOptions.onItemClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -120,7 +117,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid dxTreeViewOptions.onItemCollapsed
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -135,7 +131,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid dxTreeViewOptions.onItemContextMenu
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -150,7 +145,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid dxTreeViewOptions.onItemExpanded
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -165,7 +159,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid dxTreeViewOptions.onItemHold
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -180,7 +173,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid dxTreeViewOptions.onItemRendered
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -194,7 +186,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid dxTreeViewOptions.onItemSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 node:dxTreeViewNode
      * @type_function_param1_field5 itemElement:dxElement
@@ -206,7 +197,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     /**
      * @docid dxTreeViewOptions.onSelectAllValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
      * @action
@@ -234,7 +224,6 @@ export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions<d
     parentIdExpr?: string | Function;
     /**
      * @docid dxTreeViewOptions.rootValue
-     * @type any
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -524,14 +513,12 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
     icon?: string;
     /**
      * @docid dxTreeViewItem.items
-     * @type Array<dxTreeViewItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxTreeViewItem>;
     /**
      * @docid dxTreeViewItem.parentId
-     * @type number|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -549,7 +536,6 @@ export interface dxTreeViewItem extends CollectionWidgetItem {
 export interface dxTreeViewNode {
     /**
      * @docid dxTreeViewNode.children
-     * @type Array<dxTreeViewNode>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -568,21 +554,18 @@ export interface dxTreeViewNode {
     expanded?: boolean;
     /**
      * @docid dxTreeViewNode.itemData
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     itemData?: any;
     /**
      * @docid dxTreeViewNode.key
-     * @type any
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     key?: any;
     /**
      * @docid dxTreeViewNode.parent
-     * @type dxTreeViewNode
      * @prevFileNamespace DevExpress.ui
      * @public
      */

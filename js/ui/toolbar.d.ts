@@ -18,7 +18,6 @@ import CollectionWidget, {
 export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**
      * @docid  dxToolbarOptions.dataSource
-     * @type string|Array<string,dxToolbarItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -26,7 +25,6 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     dataSource?: string | Array<string | dxToolbarItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxToolbarOptions.items
-     * @type Array<string, dxToolbarItem, object>
      * @fires dxToolbarOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -34,7 +32,6 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     items?: Array<string | dxToolbarItem | any>;
     /**
      * @docid dxToolbarOptions.menuItemTemplate
-     * @type template|function
      * @default "menuItem"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -47,7 +44,6 @@ export interface dxToolbarOptions extends CollectionWidgetOptions<dxToolbar> {
     /**
      * @docid dxToolbarOptions.height
      * @deprecated
-     * @type number|string|function
      * @default undefined
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -94,7 +90,6 @@ export interface dxToolbarItem extends CollectionWidgetItem {
     location?: 'after' | 'before' | 'center';
     /**
      * @docid dxToolbarItem.menuItemTemplate
-     * @type template|function
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public

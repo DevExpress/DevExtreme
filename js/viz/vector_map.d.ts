@@ -123,7 +123,6 @@ export interface MapLayerElement {
     coordinates(): any;
     /**
      * @docid MapLayerElementFields.layer
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -176,14 +175,12 @@ export interface VectorMapLegendItem extends BaseLegendItem {
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.background
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     background?: { borderColor?: string, color?: string };
     /**
      * @docid dxVectorMapOptions.bounds
-     * @type Array<number>
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -192,7 +189,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     bounds?: Array<number>;
     /**
      * @docid dxVectorMapOptions.center
-     * @type Array<number>
      * @default [0, 0]
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -207,7 +203,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     controlBar?: { borderColor?: string, color?: string, enabled?: boolean, horizontalAlignment?: 'center' | 'left' | 'right', margin?: number, opacity?: number, verticalAlignment?: 'bottom' | 'top' };
     /**
      * @docid dxVectorMapOptions.layers
-     * @type Array<Object>|Object
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -245,7 +240,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onClick
      * @extends Action
-     * @type function|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:MapLayerElement
@@ -269,7 +263,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onTooltipHidden
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -281,7 +274,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onTooltipShown
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -355,14 +347,12 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     zoomingEnabled?: boolean;
     /**
      * @docid dxVectorMapOptions.commonAnnotationSettings
-     * @type dxVectorMapCommonAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     commonAnnotationSettings?: dxVectorMapCommonAnnotationConfig;
     /**
      * @docid dxVectorMapOptions.annotations
-     * @type Array<dxVectorMapAnnotationConfig,object>
      * @inherits dxVectorMapOptions.commonAnnotationSettings
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -370,7 +360,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     annotations?: Array<dxVectorMapAnnotationConfig | any>;
     /**
      * @docid dxVectorMapOptions.customizeAnnotation
-     * @type function(annotation)
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_return dxVectorMapAnnotationConfig
      * @default undefined
@@ -394,7 +383,6 @@ export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotation
 export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * @docid dxVectorMapCommonAnnotationConfig.coordinates
-     * @type Array<number>
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -402,7 +390,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     coordinates?: Array<number>;
     /**
      * @docid dxVectorMapCommonAnnotationConfig.customizeTooltip
-     * @type function(annotation)
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_return object
      * @default undefined
@@ -413,7 +400,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
     /**
      * @docid dxVectorMapCommonAnnotationConfig.template
-     * @type template|function
      * @default undefined
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_param2 element:SVGGElement
@@ -424,7 +410,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxVectorMapCommonAnnotationConfig.tooltipTemplate
-     * @type template|function(annotation, element)
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
@@ -438,7 +423,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
-     * @type function(itemInfo)
      * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 start:number
      * @type_function_param1_field2 end:number
@@ -453,7 +437,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
     /**
      * @docid dxVectorMapOptions.legends.customizeItems
-     * @type function(items)
      * @type_function_param1 items:Array<VectorMapLegendItem>
      * @type_function_return Array<VectorMapLegendItem>
      * @prevFileNamespace DevExpress.viz
@@ -462,7 +445,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>);
     /**
      * @docid dxVectorMapOptions.legends.customizeText
-     * @type function(itemInfo)
      * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 start:number
      * @type_function_param1_field2 end:number
@@ -477,7 +459,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
     /**
      * @docid dxVectorMapOptions.legends.font
-     * @type Font
      * @default '#2b2b2b' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -507,7 +488,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     markerSize?: number;
     /**
      * @docid dxVectorMapOptions.legends.markerTemplate
-     * @type template|function
      * @default undefined
      * @type_function_param1 legendItem:VectorMapLegendItem
      * @type_function_param2 element:SVGGElement
@@ -527,7 +507,6 @@ export interface dxVectorMapLegends extends BaseLegend {
 export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
-     * @type template | function(info, element)
      * @type_function_param1 info:MapLayerElement
      * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
@@ -538,7 +517,6 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     contentTemplate?: template | ((info: MapLayerElement, element: dxElement) => string | Element | JQuery);
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
-     * @type function(info)
      * @type_function_param1 info:MapLayerElement
      * @type_function_return object
      * @default undefined

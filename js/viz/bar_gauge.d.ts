@@ -51,7 +51,6 @@ export interface BarGaugeBarInfo {
 export interface BarGaugeLegendItem extends BaseLegendItem {
     /**
      * @docid BarGaugeLegendItem.item
-     * @type BarGaugeBarInfo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -126,7 +125,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid dxBarGaugeOptions.onTooltipHidden
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -138,7 +136,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     /**
      * @docid dxBarGaugeOptions.onTooltipShown
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -194,7 +191,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
     tooltip?: dxBarGaugeTooltip;
     /**
      * @docid dxBarGaugeOptions.values
-     * @type Array<number>
      * @default []
      * @notUsedInTheme
      * @fires BaseWidgetOptions.onOptionChanged
@@ -206,7 +202,6 @@ export interface dxBarGaugeOptions extends BaseWidgetOptions<dxBarGauge> {
 export interface dxBarGaugeLegend extends BaseLegend {
     /**
      * @docid dxBarGaugeOptions.legend.customizeHint
-     * @type function(arg)
      * @type_function_param1 arg:object
      * @type_function_param1_field1 item:BarGaugeBarInfo
      * @type_function_param1_field2 text:string
@@ -217,7 +212,6 @@ export interface dxBarGaugeLegend extends BaseLegend {
     customizeHint?: ((arg: { item?: BarGaugeBarInfo, text?: string }) => string);
     /**
      * @docid dxBarGaugeOptions.legend.customizeItems
-     * @type function(items)
      * @type_function_param1 items:Array<BarGaugeLegendItem>
      * @type_function_return Array<BarGaugeLegendItem>
      * @prevFileNamespace DevExpress.viz
@@ -226,7 +220,6 @@ export interface dxBarGaugeLegend extends BaseLegend {
     customizeItems?: ((items: Array<BarGaugeLegendItem>) => Array<BarGaugeLegendItem>);
     /**
      * @docid dxBarGaugeOptions.legend.customizeText
-     * @type function(arg)
      * @type_function_param1 arg:object
      * @type_function_param1_field1 item:BarGaugeBarInfo
      * @type_function_param1_field2 text:string
@@ -245,7 +238,6 @@ export interface dxBarGaugeLegend extends BaseLegend {
     itemTextFormat?: format;
     /**
      * @docid dxBarGaugeOptions.legend.markerTemplate
-     * @type template|function
      * @default undefined
      * @type_function_param1 legendItem:BarGaugeLegendItem
      * @type_function_param2 element:SVGGElement
@@ -267,7 +259,6 @@ export interface dxBarGaugeLoadingIndicator extends BaseWidgetLoadingIndicator {
 export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.contentTemplate
-     * @type template|function(scaleValue, element)
      * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
@@ -282,7 +273,6 @@ export interface dxBarGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxBarGaugeOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type function(scaleValue)
      * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string

@@ -50,7 +50,6 @@ export default class dxValidationGroup extends DOMComponent {
 export interface dxValidationGroupResult {
     /**
      * @docid dxValidationGroupResult.brokenRules
-     * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule,AsyncRule>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -77,7 +76,6 @@ export interface dxValidationGroupResult {
     status?: 'valid' | 'invalid' | 'pending';
     /**
      * @docid dxValidationGroupResult.validators
-     * @type Array<Object>
      * @prevFileNamespace DevExpress.ui
      * @public
      */

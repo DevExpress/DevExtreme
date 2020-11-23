@@ -54,7 +54,6 @@ export interface PolarChartSeries extends dxPolarChartSeriesTypesCommonPolarChar
     name?: string;
     /**
      * @docid PolarChartSeries.tag
-     * @type any
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -80,7 +79,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     adaptiveLayout?: dxPolarChartAdaptiveLayout;
     /**
      * @docid dxPolarChartOptions.annotations
-     * @type Array<dxPolarChartAnnotationConfig,object>
      * @inherits dxPolarChartOptions.commonAnnotationSettings
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -112,7 +110,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     barGroupWidth?: number;
     /**
      * @docid dxPolarChartOptions.commonAnnotationSettings
-     * @type dxPolarChartCommonAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -143,7 +140,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     containerBackgroundColor?: string;
     /**
      * @docid dxPolarChartOptions.customizeAnnotation
-     * @type function(annotation)
      * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
      * @type_function_return dxPolarChartAnnotationConfig
      * @default undefined
@@ -176,7 +172,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid dxPolarChartOptions.onArgumentAxisClick
      * @extends Action
-     * @type function(e)|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 argument:Date|Number|string
@@ -189,7 +184,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid dxPolarChartOptions.onLegendClick
      * @extends Action
-     * @type function(e)|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
@@ -202,7 +196,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid dxPolarChartOptions.onSeriesClick
      * @extends Action
-     * @type function(e)|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:polarChartSeriesObject
@@ -215,7 +208,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid dxPolarChartOptions.onSeriesHoverChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -227,7 +219,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid dxPolarChartOptions.onSeriesSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:polarChartSeriesObject
      * @notUsedInTheme
@@ -239,7 +230,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid dxPolarChartOptions.onZoomEnd
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
@@ -258,7 +248,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     /**
      * @docid dxPolarChartOptions.onZoomStart
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 axis:chartAxisObject
@@ -281,7 +270,6 @@ export interface dxPolarChartOptions extends BaseChartOptions<dxPolarChart> {
     resolveLabelOverlapping?: 'hide' | 'none';
     /**
      * @docid dxPolarChartOptions.series
-     * @type PolarChartSeries|Array<PolarChartSeries>
      * @default undefined
      * @hideDefaults true
      * @notUsedInTheme
@@ -363,7 +351,6 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     axisDivisionFactor?: number;
     /**
      * @docid dxPolarChartOptions.argumentAxis.categories
-     * @type Array<number,string,Date>
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -511,7 +498,6 @@ export interface dxPolarChartArgumentAxisConstantLines extends dxPolarChartCommo
     label?: dxPolarChartArgumentAxisConstantLinesLabel;
     /**
      * @docid dxPolarChartOptions.argumentAxis.constantLines.value
-     * @type number | datetime | string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -530,7 +516,6 @@ export interface dxPolarChartArgumentAxisConstantLinesLabel extends dxPolarChart
 export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.customizeHint
-     * @type function(argument)
      * @type_function_param1 argument:object
      * @type_function_param1_field1 value:Date|Number|string
      * @type_function_param1_field2 valueText:string
@@ -541,7 +526,6 @@ export interface dxPolarChartArgumentAxisLabel extends dxPolarChartCommonAxisSet
     customizeHint?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.argumentAxis.label.customizeText
-     * @type function(argument)
      * @type_function_param1 argument:object
      * @type_function_param1_field1 value:Date|Number|string
      * @type_function_param1_field2 valueText:string
@@ -578,7 +562,6 @@ export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSe
     color?: string;
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.endValue
-     * @type number | datetime | string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -593,7 +576,6 @@ export interface dxPolarChartArgumentAxisStrips extends dxPolarChartCommonAxisSe
     label?: dxPolarChartArgumentAxisStripsLabel;
     /**
      * @docid dxPolarChartOptions.argumentAxis.strips.startValue
-     * @type number | datetime | string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -758,7 +740,6 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyle {
 export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.constantLineStyle.label.font
-     * @type Font
      * @default '#767676' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -775,7 +756,6 @@ export interface dxPolarChartCommonAxisSettingsConstantLineStyleLabel {
 export interface dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.label.font
-     * @type Font
      * @default '#767676' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -853,7 +833,6 @@ export interface dxPolarChartCommonAxisSettingsStripStyle {
 export interface dxPolarChartCommonAxisSettingsStripStyleLabel {
     /**
      * @docid dxPolarChartOptions.commonAxisSettings.stripStyle.label.font
-     * @type Font
      * @default '#767676' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -940,7 +919,6 @@ export interface dxPolarChartCommonSeriesSettings extends dxPolarChartSeriesType
 export interface dxPolarChartLegend extends BaseChartLegend {
     /**
      * @docid dxPolarChartOptions.legend.customizeHint
-     * @type function(seriesInfo)
      * @type_function_param1 seriesInfo:object
      * @type_function_param1_field1 seriesName:any
      * @type_function_param1_field2 seriesIndex:Number
@@ -952,7 +930,6 @@ export interface dxPolarChartLegend extends BaseChartLegend {
     customizeHint?: ((seriesInfo: { seriesName?: any, seriesIndex?: number, seriesColor?: string }) => string);
     /**
      * @docid dxPolarChartOptions.legend.customizeText
-     * @type function(seriesInfo)
      * @type_function_param1 seriesInfo:object
      * @type_function_param1_field1 seriesName:any
      * @type_function_param1_field2 seriesIndex:Number
@@ -991,7 +968,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     axisDivisionFactor?: number;
     /**
      * @docid dxPolarChartOptions.valueAxis.categories
-     * @type Array<number,string,Date>
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -1125,7 +1101,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     valueType?: 'datetime' | 'numeric' | 'string';
     /**
      * @docid dxPolarChartOptions.valueAxis.visualRange
-     * @type VizRange | Array<number,string,Date>
      * @fires BaseWidgetOptions.onOptionChanged
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -1142,7 +1117,6 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     visualRangeUpdateMode?: 'auto' | 'keep' | 'reset';
     /**
      * @docid dxPolarChartOptions.valueAxis.wholeRange
-     * @type VizRange | Array<number,string,Date>
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1173,7 +1147,6 @@ export interface dxPolarChartValueAxisConstantLines extends dxPolarChartCommonAx
     label?: dxPolarChartValueAxisConstantLinesLabel;
     /**
      * @docid dxPolarChartOptions.valueAxis.constantLines.value
-     * @type number | datetime | string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1192,7 +1165,6 @@ export interface dxPolarChartValueAxisConstantLinesLabel extends dxPolarChartCom
 export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettingsLabel {
     /**
      * @docid dxPolarChartOptions.valueAxis.label.customizeHint
-     * @type function(axisValue)
      * @type_function_param1 axisValue:object
      * @type_function_param1_field1 value:Date|Number|string
      * @type_function_param1_field2 valueText:string
@@ -1203,7 +1175,6 @@ export interface dxPolarChartValueAxisLabel extends dxPolarChartCommonAxisSettin
     customizeHint?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
     /**
      * @docid dxPolarChartOptions.valueAxis.label.customizeText
-     * @type function(axisValue)
      * @type_function_param1 axisValue:object
      * @type_function_param1_field1 value:Date|Number|string
      * @type_function_param1_field2 valueText:string
@@ -1231,7 +1202,6 @@ export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSetti
     color?: string;
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.endValue
-     * @type number | datetime | string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1246,7 +1216,6 @@ export interface dxPolarChartValueAxisStrips extends dxPolarChartCommonAxisSetti
     label?: dxPolarChartValueAxisStripsLabel;
     /**
      * @docid dxPolarChartOptions.valueAxis.strips.startValue
-     * @type number | datetime | string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -1324,38 +1293,35 @@ export interface dxPolarChartCommonAnnotationConfig extends BaseChartAnnotationC
      * @public
      */
     radius?: number;
-    /**	
-     * @docid dxPolarChartCommonAnnotationConfig.customizeTooltip	
-     * @type function(annotation)	
-     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any	
-     * @type_function_return object	
-     * @default undefined	
-     * @notUsedInTheme	
-     * @prevFileNamespace DevExpress.viz	
-     * @public	
-     */	
+    /**
+     * @docid dxPolarChartCommonAnnotationConfig.customizeTooltip
+     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
+     * @type_function_return object
+     * @default undefined
+     * @notUsedInTheme
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
     customizeTooltip?: ((annotation: dxPolarChartAnnotationConfig | any) => any);
-    /**	
-     * @docid dxPolarChartCommonAnnotationConfig.template	
-     * @type template|function	
-     * @default undefined	
-     * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any	
-     * @type_function_param2 element:SVGGElement	
-     * @type_function_return string|SVGElement|jQuery	
-     * @prevFileNamespace DevExpress.viz	
-     * @public	
-     */	
+    /**
+     * @docid dxPolarChartCommonAnnotationConfig.template
+     * @default undefined
+     * @type_function_param1 annotation:dxPolarChartCommonAnnotationConfig|any
+     * @type_function_param2 element:SVGGElement
+     * @type_function_return string|SVGElement|jQuery
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
     template?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
-    /**	
-     * @docid dxPolarChartCommonAnnotationConfig.tooltipTemplate	
-     * @type template|function(annotation, element)	
-     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any	
-     * @type_function_param2 element:dxElement	
-     * @type_function_return string|Element|jQuery	
-     * @default undefined	
-     * @prevFileNamespace DevExpress.viz	
-     * @public	
-     */	
+    /**
+     * @docid dxPolarChartCommonAnnotationConfig.tooltipTemplate
+     * @type_function_param1 annotation:dxPolarChartAnnotationConfig|any
+     * @type_function_param2 element:dxElement
+     * @type_function_return string|Element|jQuery
+     * @default undefined
+     * @prevFileNamespace DevExpress.viz
+     * @public
+     */
     tooltipTemplate?: template | ((annotation: dxPolarChartAnnotationConfig | any, element: dxElement) => string | Element | JQuery);
 }
 
@@ -1627,7 +1593,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     connector?: { color?: string, visible?: boolean, width?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.customizeText
-     * @type function(pointInfo)
      * @type_function_param1 pointInfo:object
      * @type_function_return string
      * @notUsedInTheme
@@ -1637,7 +1602,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
     customizeText?: ((pointInfo: any) => string);
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.label.font
-     * @type Font
      * @default '#FFFFFF' [prop](color)
      * @default 14 [prop](size)
      * @prevFileNamespace DevExpress.viz
@@ -1717,7 +1681,6 @@ export interface dxPolarChartSeriesTypesCommonPolarChartSeriesPoint {
     hoverStyle?: { border?: { color?: string, visible?: boolean, width?: number }, color?: string, size?: number };
     /**
      * @docid dxPolarChartSeriesTypes.CommonPolarChartSeries.point.image
-     * @type string|object
      * @default undefined
      * @propertyOf dxPolarChartSeriesTypes.linepolarseries,dxPolarChartSeriesTypes.areapolarseries,dxPolarChartSeriesTypes.scatterpolarseries
      * @prevFileNamespace DevExpress.viz

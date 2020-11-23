@@ -43,7 +43,6 @@ import BaseWidget, {
 export interface FunnelLegendItem extends BaseLegendItem {
     /**
      * @docid FunnelLegendItem.item
-     * @type dxFunnelItem
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -53,7 +52,6 @@ export interface FunnelLegendItem extends BaseLegendItem {
 export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid dxFunnelOptions.adaptiveLayout
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -103,7 +101,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     inverted?: boolean;
     /**
      * @docid dxFunnelOptions.item
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -150,7 +147,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid dxFunnelOptions.onItemClick
      * @extends Action
-     * @type function|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
@@ -163,7 +159,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
     /**
      * @docid dxFunnelOptions.onLegendClick
      * @extends Action
-     * @type function|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 item:dxFunnelItem
@@ -240,7 +235,6 @@ export interface dxFunnelOptions extends BaseWidgetOptions<dxFunnel> {
 export interface dxFunnelLegend extends BaseLegend {
     /**
      * @docid dxFunnelOptions.legend.customizeHint
-     * @type function(itemInfo)
      * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 item:dxFunnelItem
      * @type_function_param1_field2 text:string
@@ -251,7 +245,6 @@ export interface dxFunnelLegend extends BaseLegend {
     customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
     /**
      * @docid dxFunnelOptions.legend.customizeItems
-     * @type function(items)
      * @type_function_param1 items:Array<FunnelLegendItem>
      * @type_function_return Array<FunnelLegendItem>
      * @prevFileNamespace DevExpress.viz
@@ -260,7 +253,6 @@ export interface dxFunnelLegend extends BaseLegend {
     customizeItems?: ((items: Array<FunnelLegendItem>) => Array<FunnelLegendItem>);
     /**
      * @docid dxFunnelOptions.legend.customizeText
-     * @type function(itemInfo)
      * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 item:dxFunnelItem
      * @type_function_param1_field2 text:string
@@ -272,7 +264,6 @@ export interface dxFunnelLegend extends BaseLegend {
     customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string);
     /**
      * @docid dxFunnelOptions.legend.markerTemplate
-     * @type template|function
      * @default undefined
      * @type_function_param1 legendItem:FunnelLegendItem
      * @type_function_param2 element:SVGGElement
@@ -292,7 +283,6 @@ export interface dxFunnelLegend extends BaseLegend {
 export interface dxFunnelTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxFunnelOptions.tooltip.contentTemplate
-     * @type template|function(info, element)
      * @type_function_param1 info:object
      * @type_function_param1_field1 item:dxFunnelItem
      * @type_function_param1_field2 value:Number
@@ -309,7 +299,6 @@ export interface dxFunnelTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxFunnelOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type function(info)
      * @type_function_param1 info:object
      * @type_function_param1_field1 item:dxFunnelItem
      * @type_function_param1_field2 value:Number
@@ -361,7 +350,6 @@ export default class dxFunnel extends BaseWidget {
 export interface dxFunnelItem {
     /**
      * @docid dxFunnelItemFields.argument
-     * @type string|Date|number
      * @prevFileNamespace DevExpress.viz
      * @public
      */

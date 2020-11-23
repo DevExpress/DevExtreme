@@ -30,7 +30,6 @@ import { HatchingDirectionType } from './common';
 export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid dxSankeyOptions.adaptiveLayout
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -78,7 +77,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid dxSankeyOptions.onLinkClick
      * @extends Action
-     * @type function|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyLink
@@ -102,7 +100,6 @@ export interface dxSankeyOptions extends BaseWidgetOptions<dxSankey> {
     /**
      * @docid dxSankeyOptions.onNodeClick
      * @extends Action
-     * @type function|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:dxSankeyNode
@@ -178,7 +175,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeLinkTooltip
      * @default undefined
-     * @type function(info)
      * @type_function_param1 info:object
      * @type_function_param1_field1 source:string
      * @type_function_param1_field2 target:string
@@ -191,7 +187,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     /**
      * @docid  dxSankeyOptions.tooltip.customizeNodeTooltip
      * @default undefined
-     * @type function(info)
      * @type_function_param1 info:object
      * @type_function_param1_field1 title:string:deprecated(label)
      * @type_function_param1_field2 label:string
@@ -211,7 +206,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     enabled?: boolean;
     /**
      * @docid dxSankeyOptions.tooltip.linkTooltipTemplate
-     * @type template|function(info, element)
      * @type_function_param1 info:object
      * @type_function_param1_field1 source:string
      * @type_function_param1_field2 target:string
@@ -225,7 +219,6 @@ export interface dxSankeyTooltip extends BaseWidgetTooltip {
     linkTooltipTemplate?: template | ((info: { source?: string, target?: string, weight?: number }, element: dxElement) => string | Element | JQuery);
     /**
      * @docid dxSankeyOptions.tooltip.nodeTooltipTemplate
-     * @type template|function(info, element)
      * @type_function_param1 info:object
      * @type_function_param1_field1 label:string
      * @type_function_param1_field2 weightIn:Number
@@ -299,7 +292,6 @@ export interface dxSankeyConnectionInfoObject {
 export interface dxSankeyLink {
     /**
      * @docid dxSankeyLinkfields.connection
-     * @type dxSankeyConnectionInfoObject
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -368,14 +360,12 @@ export interface dxSankeyNode {
     label?: string;
     /**
      * @docid dxSankeyNodefields.linksIn
-     * @type Array<Object>
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     linksIn?: Array<any>;
     /**
      * @docid dxSankeyNodefields.linksOut
-     * @type Array<Object>
      * @prevFileNamespace DevExpress.viz
      * @public
      */

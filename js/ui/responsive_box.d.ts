@@ -10,14 +10,12 @@ import CollectionWidget, {
 export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxResponsiveBox> {
     /**
      * @docid dxResponsiveBoxOptions.cols
-     * @type Array<Object>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cols?: Array<{ baseSize?: number | 'auto', ratio?: number, screen?: string, shrink?: number }>;
     /**
      * @docid dxResponsiveBoxOptions.dataSource
-     * @type string|Array<string,dxResponsiveBoxItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -32,7 +30,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     height?: number | string | (() => number | string);
     /**
      * @docid dxResponsiveBoxOptions.items
-     * @type Array<string, dxResponsiveBoxItem, object>
      * @fires dxResponsiveBoxOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -40,7 +37,6 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     items?: Array<string | dxResponsiveBoxItem | any>;
     /**
      * @docid dxResponsiveBoxOptions.rows
-     * @type Array<Object>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -83,7 +79,6 @@ export default class dxResponsiveBox extends CollectionWidget {
 export interface dxResponsiveBoxItem extends CollectionWidgetItem {
     /**
      * @docid dxResponsiveBoxItem.location
-     * @type Object|Array<Object>
      * @prevFileNamespace DevExpress.ui
      * @public
      */

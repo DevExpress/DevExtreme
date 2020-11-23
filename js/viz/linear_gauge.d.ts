@@ -30,7 +30,6 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     scale?: dxLinearGaugeScale;
     /**
      * @docid dxLinearGaugeOptions.subvalueIndicator
-     * @type GaugeIndicator
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -38,7 +37,6 @@ export interface dxLinearGaugeOptions extends BaseGaugeOptions<dxLinearGauge> {
     subvalueIndicator?: GaugeIndicator;
     /**
      * @docid dxLinearGaugeOptions.valueIndicator
-     * @type GaugeIndicator
      * @inheritAll
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -64,7 +62,6 @@ export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
     verticalOrientation?: 'bottom' | 'center' | 'top';
     /**
      * @docid dxLinearGaugeOptions.rangeContainer.width
-     * @type object|number
      * @prevFileNamespace DevExpress.viz
      * @public
      */

@@ -35,7 +35,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
      * @docid dxPopoverOptions.height
-     * @type number|string|function
      * @default "auto"
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -44,7 +43,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     height?: number | string | (() => number | string);
     /**
      * @docid dxPopoverOptions.hideEvent
-     * @type Object|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -67,7 +65,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     shading?: boolean;
     /**
      * @docid dxPopoverOptions.showEvent
-     * @type Object|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,14 +79,12 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     showTitle?: boolean;
     /**
      * @docid dxPopoverOptions.target
-     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     target?: string | Element | JQuery;
     /**
      * @docid dxPopoverOptions.width
-     * @type number|string|function
      * @default "auto"
      * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
@@ -100,7 +95,6 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
 export interface dxPopoverAnimation extends dxPopupAnimation {
     /**
      * @docid dxPopoverOptions.animation.hide
-     * @type animationConfig
      * @default { type: "fade", to: 0 }
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -108,7 +102,6 @@ export interface dxPopoverAnimation extends dxPopupAnimation {
     hide?: animationConfig;
     /**
      * @docid dxPopoverOptions.animation.show
-     * @type animationConfig
      * @default { type: "fade", from: 0, to: 1 }
      * @prevFileNamespace DevExpress.ui
      * @public

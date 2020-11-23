@@ -59,7 +59,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid dxResizableOptions.onResize
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
@@ -72,7 +71,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid dxResizableOptions.onResizeEnd
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number
@@ -85,7 +83,6 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     /**
      * @docid dxResizableOptions.onResizeStart
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 width:number

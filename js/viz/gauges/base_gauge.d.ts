@@ -47,7 +47,6 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
     /**
      * @docid BaseGaugeOptions.onTooltipHidden
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -59,7 +58,6 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
     /**
      * @docid BaseGaugeOptions.onTooltipShown
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:object
      * @notUsedInTheme
@@ -84,7 +82,6 @@ export interface BaseGaugeOptions<T = BaseGauge> extends BaseWidgetOptions<T> {
     scale?: BaseGaugeScale;
     /**
      * @docid BaseGaugeOptions.subvalues
-     * @type Array<number>
      * @default undefined
      * @notUsedInTheme
      * @fires BaseWidgetOptions.onOptionChanged
@@ -167,7 +164,6 @@ export interface BaseGaugeRangeContainer {
     paletteExtensionMode?: PaletteExtensionModeType;
     /**
      * @docid BaseGaugeOptions.rangeContainer.ranges
-     * @type Array<Object>
      * @default []
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -185,7 +181,6 @@ export interface BaseGaugeScale {
     allowDecimals?: boolean;
     /**
      * @docid BaseGaugeOptions.scale.customMinorTicks
-     * @type Array<number>
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -194,7 +189,6 @@ export interface BaseGaugeScale {
     customMinorTicks?: Array<number>;
     /**
      * @docid BaseGaugeOptions.scale.customTicks
-     * @type Array<number>
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -261,7 +255,6 @@ export interface BaseGaugeScale {
 export interface BaseGaugeScaleLabel {
     /**
      * @docid BaseGaugeOptions.scale.label.customizeText
-     * @type function(scaleValue)
      * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
@@ -273,7 +266,6 @@ export interface BaseGaugeScaleLabel {
     customizeText?: ((scaleValue: { value?: number, valueText?: string }) => string);
     /**
      * @docid BaseGaugeOptions.scale.label.font
-     * @type Font
      * @default '#767676' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -312,7 +304,6 @@ export interface BaseGaugeScaleLabel {
 export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseGaugeOptions.tooltip.contentTemplate
-     * @type template|function(scaleValue, element)
      * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string
@@ -326,7 +317,6 @@ export interface BaseGaugeTooltip extends BaseWidgetTooltip {
     /**
      * @docid BaseGaugeOptions.tooltip.customizeTooltip
      * @default undefined
-     * @type function(scaleValue)
      * @type_function_param1 scaleValue:object
      * @type_function_param1_field1 value:Number
      * @type_function_param1_field2 valueText:string

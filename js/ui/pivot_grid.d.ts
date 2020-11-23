@@ -58,7 +58,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     dataFieldArea?: 'column' | 'row';
     /**
      * @docid dxPivotGridOptions.dataSource
-     * @type Array<Object>|PivotGridDataSource|PivotGridDataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -103,7 +102,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     loadPanel?: { enabled?: boolean, height?: number, indicatorSrc?: string, showIndicator?: boolean, showPane?: boolean, text?: string, width?: number };
     /**
      * @docid dxPivotGridOptions.onCellClick
-     * @type function(e)
      * @type_function_param1 e:Object
      * @type_function_param1_field4 area:string
      * @type_function_param1_field5 cellElement:dxElement
@@ -123,7 +121,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     onCellClick?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<PivotGridDataSourceField>, rowFields?: Array<PivotGridDataSourceField>, dataFields?: Array<PivotGridDataSourceField>, event?: event, cancel?: boolean }) => any);
     /**
      * @docid dxPivotGridOptions.onCellPrepared
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 area:string
      * @type_function_param1_field5 cellElement:dxElement
@@ -138,7 +135,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     onCellPrepared?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, area?: string, cellElement?: dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
     /**
      * @docid dxPivotGridOptions.onContextMenuPreparing
-     * @type function(e)
      * @type_function_param1 e:Object
      * @type_function_param1_field4 items:Array<Object>
      * @type_function_param1_field5 area:string
@@ -167,7 +163,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     onExported?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any }) => any);
     /**
      * @docid dxPivotGridOptions.onExporting
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 fileName:string
      * @type_function_param1_field5 cancel:boolean
@@ -179,7 +174,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     onExporting?: ((e: { component?: dxPivotGrid, element?: dxElement, model?: any, fileName?: string, cancel?: boolean }) => any);
     /**
      * @docid dxPivotGridOptions.onFileSaving
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field3 fileName:string
      * @type_function_param1_field4 format:string
@@ -333,7 +327,6 @@ export default class dxPivotGrid extends Widget {
 export interface dxPivotGridPivotGridCell {
     /**
      * @docid dxPivotGridPivotGridCell.columnPath
-     * @type Array<string, number, Date>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -360,14 +353,12 @@ export interface dxPivotGridPivotGridCell {
     expanded?: boolean;
     /**
      * @docid dxPivotGridPivotGridCell.path
-     * @type Array<string, number, Date>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     path?: Array<string | number | Date>;
     /**
      * @docid dxPivotGridPivotGridCell.rowPath
-     * @type Array<string, number, Date>
      * @prevFileNamespace DevExpress.ui
      * @public
      */

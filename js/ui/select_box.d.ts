@@ -22,7 +22,6 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
     acceptCustomValue?: boolean;
     /**
      * @docid dxSelectBoxOptions.fieldTemplate
-     * @type template|function
      * @default null
      * @type_function_param1 selectedItem:object
      * @type_function_param2 fieldElement:dxElement
@@ -34,7 +33,6 @@ export interface dxSelectBoxOptions<T = dxSelectBox> extends dxDropDownListOptio
     /**
      * @docid dxSelectBoxOptions.onCustomItemCreating
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 text:string
      * @type_function_param1_field5 customItem:string|object|Promise<any>

@@ -91,7 +91,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     crossScrollingEnabled?: boolean;
     /**
      * @docid dxSchedulerOptions.currentDate
-     * @type Date|number|string
      * @default new Date()
      * @fires dxSchedulerOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -109,7 +108,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     currentView?: 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
     /**
      * @docid dxSchedulerOptions.customizeDateNavigatorText
-     * @type function(info)
      * @type_function_param1 info:object
      * @type_function_param1_field1 startDate:date
      * @type_function_param1_field2 endDate:date
@@ -129,7 +127,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     dataCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxSchedulerOptions.dataSource
-     * @type string|Array<dxSchedulerAppointment>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -158,7 +155,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     descriptionExpr?: string;
     /**
      * @docid dxSchedulerOptions.dropDownAppointmentTemplate
-     * @type template|function
      * @default "dropDownAppointment"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -171,7 +167,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     dropDownAppointmentTemplate?: template | ((itemData: any, itemIndex: number, contentElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxSchedulerOptions.editing
-     * @type boolean|object
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -235,7 +230,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     indicatorUpdateInterval?: number;
     /**
      * @docid dxSchedulerOptions.max
-     * @type Date|number|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -251,7 +245,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     maxAppointmentsPerCell?: number | 'auto' | 'unlimited';
     /**
      * @docid dxSchedulerOptions.min
-     * @type Date|number|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -267,7 +260,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.onAppointmentAdded
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -279,7 +271,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.onAppointmentAdding
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
@@ -290,7 +281,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentAdding?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, cancel: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
     /**
      * @docid dxSchedulerOptions.onAppointmentClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
@@ -305,7 +295,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: event, cancel: boolean }) => any) | string;
     /**
      * @docid dxSchedulerOptions.onAppointmentContextMenu
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
@@ -319,7 +308,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentContextMenu?: ((e: { component: dxScheduler, element: dxElement, model?: any, appointmentData: any, targetedAppointmentData?: any, appointmentElement: dxElement, event?: event }) => any) | string;
     /**
      * @docid dxSchedulerOptions.onAppointmentDblClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
@@ -335,7 +323,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.onAppointmentDeleted
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -347,7 +334,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.onAppointmentDeleting
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
@@ -359,7 +345,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.onAppointmentFormOpening
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 form:dxForm
@@ -373,7 +358,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.onAppointmentRendered
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:object
      * @type_function_param1_field5 targetedAppointmentData:object|undefined
@@ -386,7 +370,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.onAppointmentUpdated
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 appointmentData:Object
      * @type_function_param1_field5 error:Error
@@ -398,7 +381,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.onAppointmentUpdating
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 oldData:Object
      * @type_function_param1_field5 newData:Object
@@ -410,7 +392,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onAppointmentUpdating?: ((e: { component: dxScheduler, element: dxElement, model?: any, oldData?: any, newData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
     /**
      * @docid dxSchedulerOptions.onCellClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 cellData:object
@@ -424,7 +405,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     onCellClick?: ((e: { component: dxScheduler, element: dxElement, model?: any, cellData: any, cellElement: dxElement, event?: event, cancel: boolean }) => any) | string;
     /**
      * @docid dxSchedulerOptions.onCellContextMenu
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 cellData:object
@@ -473,7 +453,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     resourceCellTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxSchedulerOptions.resources
-     * @type Array<Object>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -481,7 +460,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     resources?: Array<{ allowMultiple?: boolean, colorExpr?: string, dataSource?: string | Array<any> | DataSource | DataSourceOptions, displayExpr?: string | ((resource: any) => string), fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: string | Function }>;
     /**
      * @docid dxSchedulerOptions.scrolling
-     * @type dxSchedulerScrolling
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -489,7 +467,6 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.selectedCellData
      * @readonly
-     * @type Array<any>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -699,7 +676,6 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     disabled?: boolean;
     /**
      * @docid dxSchedulerAppointment.endDate
-     * @type Date
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -730,7 +706,6 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     recurrenceRule?: string;
     /**
      * @docid dxSchedulerAppointment.startDate
-     * @type Date
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -743,7 +718,6 @@ export interface dxSchedulerAppointment extends CollectionWidgetItem {
     startDateTimeZone?: string;
     /**
      * @docid dxSchedulerAppointment.template
-     * @type template
      * @prevFileNamespace DevExpress.ui
      * @public
      */
