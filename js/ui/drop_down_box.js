@@ -268,6 +268,12 @@ const DropDownBox = DropDownEditor.inherit({
     _popupPositionedHandler: function(e) {
         this.callBase(e);
         this._popupPosition = e.position;
+        this._focusTabbableElement();
+    },
+
+    _focusTabbableElement: function() {
+        const $firstElement = this._getTabbableElements().first();
+        eventsEngine.trigger($firstElement, 'focus');
     },
 
     _getDefaultPopupPosition: function(isRtlEnabled) {
@@ -300,12 +306,6 @@ const DropDownBox = DropDownEditor.inherit({
                 return getElementMaxHeightByWindow(this.$element(), popupLocation);
             }.bind(this)
         });
-    },
-
-    _popupShownHandler: function() {
-        this.callBase();
-        const $firstElement = this._getTabbableElements().first();
-        eventsEngine.trigger($firstElement, 'focus');
     },
 
     _setCollectionWidgetOption: noop,
