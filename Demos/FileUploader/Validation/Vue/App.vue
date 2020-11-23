@@ -4,7 +4,7 @@
       <DxFileUploader
         :multiple="true"
         :allowed-file-extensions="['.jpg', '.jpeg', '.gif', '.png']"
-        upload-url="https://js.devexpress.com/Content/Services/upload.aspx"
+        upload-url="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"
         upload-mode="useButtons"
       />
       <span class="note">
@@ -19,7 +19,7 @@
       <DxFileUploader
         :multiple="true"
         :max-file-size="4000000"
-        upload-url="https://js.devexpress.com/Content/Services/upload.aspx"
+        upload-url="https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"
         upload-mode="useButtons"
       />
       <span class="note">

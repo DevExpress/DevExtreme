@@ -16,7 +16,7 @@ window.onload = function() {
             accept: that.accept,
             value: that.value,
             uploadMode: that.uploadMode,
-            uploadUrl: "https://js.devexpress.com/Content/Services/upload.aspx"
+            uploadUrl: "https://js.devexpress.com/Demos/NetCore/FileUploader/Upload"
         };
         
         that.acceptOptions = {

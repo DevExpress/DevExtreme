@@ -4,7 +4,7 @@ $(function(){
         accept: "*",
         value: [],
         uploadMode: "instantly",
-        uploadUrl: "https://js.devexpress.com/Content/Services/upload.aspx",
+        uploadUrl: "https://js.devexpress.com/Demos/NetCore/FileUploader/Upload",
         onValueChanged: function(e) {
             var files = e.value;
             if(files.length > 0) {

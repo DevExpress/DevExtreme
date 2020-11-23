@@ -5,7 +5,7 @@ $(function(){
         multiple: false,
         allowedFileExtensions: [".jpg", ".jpeg", ".gif", ".png"],
         uploadMode: "instantly",
-        uploadUrl: "https://js.devexpress.com/Content/Services/upload.aspx",
+        uploadUrl: "https://js.devexpress.com/Demos/NetCore/FileUploader/Upload",
         visible: false,
         onDropZoneEnter: function(e) {
             if(e.dropZoneElement.id === "dropzone-external")

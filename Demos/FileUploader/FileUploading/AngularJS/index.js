@@ -7,7 +7,7 @@ DemoApp.controller('DemoController', function DemoController($scope) {
     $scope.uploadMode = "instantly";
     
     $scope.options = {
-        uploadUrl: "https://js.devexpress.com/Content/Services/upload.aspx",
+        uploadUrl: "https://js.devexpress.com/Demos/NetCore/FileUploader/Upload",
         bindingOptions: {
             multiple: "multiple",
             accept: "accept",
