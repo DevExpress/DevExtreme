@@ -1,0 +1,133 @@
+@use "../icons" as *;
+$scheduler-time-indicator-color: null !default;
+$scheduler-time-indicator-background-color: null !default;
+$scheduler-current-time-cell-color: null !default;
+
+$scheduler-time-indicator-font-size: 30px;
+$scheduler-time-indicator-size: 1px;
+$scheduler-time-indicator-top: 14px;
+$scheduler-time-indicator-left: 12px;
+
+$scheduler-time-indicator-shadow-color: rgba(255, 255, 255, 0.1);
+$scheduler-time-indicator-shadow: 0 1px 0 0 $scheduler-time-indicator-shadow-color;
+$scheduler-time-indicator-text-shadow: $scheduler-time-indicator-shadow-color 1px 0 0;
+$scheduler-current-time-cell-border-size: 2px;
+$scheduler-workspace-date-table-cell-height: 50px;
+$scheduler-header-panel-table-cell-height: $scheduler-workspace-date-table-cell-height - 10px;
+
+.dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
+  color: $scheduler-current-time-cell-color;
+
+  &::before {
+    position: absolute;
+    top: $scheduler-header-panel-table-cell-height - $scheduler-current-time-cell-border-size - 1;
+    right: 0;
+    width: 100%;
+    height: $scheduler-current-time-cell-border-size;
+    content: '';
+    background-color: $scheduler-time-indicator-color;
+  }
+}
+
+.dx-scheduler-date-time-indicator {
+  background-color: $scheduler-time-indicator-color;
+  position: absolute;
+  z-index: 1000;
+  width: 100%;
+  pointer-events: none;
+  box-shadow: $scheduler-time-indicator-shadow;
+
+  &::before {
+    font-size: $scheduler-time-indicator-font-size;
+    color: $scheduler-time-indicator-color;
+    position: absolute;
+    margin-top: -$scheduler-time-indicator-top;
+    margin-left: -$scheduler-time-indicator-left;
+    text-shadow: $scheduler-time-indicator-text-shadow;
+  }
+}
+
+.dx-scheduler-date-time-shader {
+  background-color: $scheduler-time-indicator-background-color;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  pointer-events: none;
+}
+
+.dx-scheduler-work-space-week,
+.dx-scheduler-work-space-work-week,
+.dx-scheduler-work-space-day {
+  .dx-scheduler-date-time-indicator {
+    height: $scheduler-time-indicator-size;
+
+    @include dx-icon(spinright);
+  }
+
+  &.dx-rtl {
+    .dx-scheduler-date-time-indicator {
+      margin-left: 0;
+
+      @include dx-icon(spinleft);
+
+      &::before {
+        margin-right: -$scheduler-time-indicator-left;
+      }
+
+      &.dx-scheduler-date-time-indicator-simple {
+        &::before {
+          content: "";
+        }
+      }
+    }
+  }
+}
+
+.dx-scheduler-timeline {
+  .dx-scheduler-date-time-indicator {
+    width: $scheduler-time-indicator-size;
+    height: 100%;
+    top: 0;
+
+    @include dx-icon(spindown);
+
+    &::before {
+      margin-left: -$scheduler-time-indicator-top;
+      margin-top: -$scheduler-time-indicator-left;
+    }
+  }
+
+  .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
+    border-bottom: 2px solid $scheduler-time-indicator-color;
+    box-shadow: none;
+
+    &::before {
+      content: none;
+    }
+  }
+}
+
+.dx-scheduler-work-space {
+  .dx-scheduler-date-time-indicator-simple {
+    &::before {
+      content: "";
+    }
+  }
+}
+
+.dx-scheduler-time-panel-cell {
+  &.dx-scheduler-time-panel-current-time-cell {
+    color: $scheduler-current-time-cell-color;
+
+    &::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: $scheduler-current-time-cell-border-size;
+      height: inherit;
+      content: '';
+      background-color: $scheduler-time-indicator-color;
+    }
+  }
+}
