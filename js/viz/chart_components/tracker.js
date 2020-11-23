@@ -245,7 +245,7 @@ const baseTrackerPrototype = {
             const rootOffset = that._renderer.getRootOffset();
             const x = _floor(e.pageX - rootOffset.left);
             const y = _floor(e.pageY - rootOffset.top);
-            if(!inCanvas(that._mainCanvas, x, y)) {
+            if(!inCanvas(that._mainCanvas, x, y) && !that._tooltip.isCursorOnTooltip(e.pageX, e.pageY)) {
                 that._pointerOut();
                 that._disableOutHandler();
             }
