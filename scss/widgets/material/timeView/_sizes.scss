@@ -6,20 +6,20 @@ $material-timeview-clock-min-size: null !default;
 $material-timeview-clock-image-min-size: null !default;
 $material-timeview-format12-width: null !default;
 
-$material-timeview-field-min-height: 35px;
-$material-timeview-arrow-height-reduce: 0;
-$material-timeview-field-numberbox-reduce: 0;
-$material-timeview-clock-additional-size: 8px;
-$material-timeview-time-separator-margin: 5px;
+$material-timeview-field-min-height: 35px !default;
+$material-timeview-arrow-height-reduce: 0 !default;
+$material-timeview-field-numberbox-reduce: 0 !default;
+$material-timeview-clock-additional-size: 8px !default;
+$material-timeview-time-separator-margin: 5px !default;
 
 @if $size == "default" {
-  $material-timeview-clock-min-size: 252px;
-  $material-timeview-clock-image-min-size: 215px;
-  $material-timeview-format12-width: 74px;
+  $material-timeview-clock-min-size: 252px !default;
+  $material-timeview-clock-image-min-size: 215px !default;
+  $material-timeview-format12-width: 74px !default;
 }
 
 @else if $size == "compact" {
-  $material-timeview-clock-min-size: 200px;
-  $material-timeview-clock-image-min-size: 190px;
-  $material-timeview-format12-width: 63px;
+  $material-timeview-clock-min-size: 200px !default;
+  $material-timeview-clock-image-min-size: 190px !default;
+  $material-timeview-format12-width: 63px !default;
 }

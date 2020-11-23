@@ -7,13 +7,13 @@ $material-toast-height: null !default;
 $material-toast-shadow-color: null !default;
 
 @if $size == "default" {
-  $material-toast-content-padding: 0 16px;
-  $material-toast-height: 48px;
-  $material-toast-shadow-color: 0.25;
+  $material-toast-content-padding: 0 16px !default;
+  $material-toast-height: 48px !default;
+  $material-toast-shadow-color: 0.25 !default;
 }
 
 @else if $size == "compact" {
-  $material-toast-content-padding: 0 12px;
-  $material-toast-height: 36px;
-  $material-toast-shadow-color: 0.15;
+  $material-toast-content-padding: 0 12px !default;
+  $material-toast-height: 36px !default;
+  $material-toast-shadow-color: 0.15 !default;
 }
