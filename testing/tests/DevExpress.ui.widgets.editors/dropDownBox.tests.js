@@ -584,6 +584,30 @@ QUnit.module('popup options', moduleConfig, () => {
         assert.ok(typeUtils.isFunction(instance.option('dropDownOptions.closeOnTargetScroll')));
     });
 
+    QUnit.test('DropDownBox should not hide overlay when scrolling internal content', function(assert) {
+        const $content = $('<div>').attr('id', 'content');
+        const instance = new DropDownBox($('#dropDownBox'), {
+            opened: true,
+            contentTemplate: () => $content
+        });
+
+        $content.trigger('scroll');
+
+        assert.ok(instance.option('opened'), 'DropDownBox is opened');
+    });
+
+    QUnit.test('DropDownBox should hide overlay when scrolling outer content', function(assert) {
+        const $content = $('<div>').attr('id', 'content');
+        const instance = new DropDownBox($('#dropDownBox'), {
+            opened: true,
+            contentTemplate: () => $content
+        });
+
+        $('#qunit-fixture').trigger('scroll');
+
+        assert.notOk(instance.option('opened'), 'DropDownBox is closed');
+    });
+
     [true, false].forEach((isMac) => {
         QUnit.test(`Dropdownbox should ${isMac ? 'not' : ''} close the popup after window scroll for ${isMac ? '' : 'non'} Mac desktop devices (T845484)`, function(assert) {
             if(realDevice.deviceType !== 'desktop') {

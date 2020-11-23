@@ -1,7 +1,7 @@
 import DropDownEditor from './drop_down_editor/ui.drop_down_editor';
 import DataExpressionMixin from './editor/ui.data_expression';
 import { ensureDefined, noop, grep } from '../core/utils/common';
-import { isObject } from '../core/utils/type';
+import { isObject, isWindow } from '../core/utils/type';
 import { map } from '../core/utils/iterator';
 import { tabbable } from './widget/selectors';
 import { when, Deferred } from '../core/utils/deferred';
@@ -15,6 +15,7 @@ import { keyboard } from '../events/short';
 import devices from '../core/devices';
 import domAdapter from '../core/dom_adapter';
 import { getPublicElement } from '../core/element';
+import { contains } from '../core/utils/dom';
 
 // STYLE dropDownBox
 const getActiveElement = domAdapter.getActiveElement;
@@ -242,17 +243,21 @@ const DropDownBox = DropDownEditor.inherit({
         });
     },
 
-    _canShowVirtualKeyboard: function() {
-        return realDevice.mac; // T845484
-    },
-
     _isNestedElementActive: function() {
         const activeElement = getActiveElement();
-        return activeElement && this._popup.$content().get(0).contains(activeElement);
+        return activeElement && contains(this._popup.$content().get(0), activeElement);
     },
 
-    _shouldCloseOnTargetScroll: function() {
-        return realDevice.deviceType === 'desktop' && this._canShowVirtualKeyboard() && this._isNestedElementActive();
+    _shouldCloseOnTargetScroll: function(e) {
+        return realDevice.mac ?
+            realDevice.deviceType !== 'desktop' && this._isNestedElementActive() : // T845484
+            isWindow(e.target) ?
+                true : // close on Window scroll
+                !this._isPopupContentScrolling(e.target);
+    },
+
+    _isPopupContentScrolling: function(target) {
+        return contains(this._popup.$content().get(0), target);
     },
 
     _popupHiddenHandler: function() {

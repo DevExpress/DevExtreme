@@ -842,13 +842,10 @@ const Overlay = Widget.inherit({
     },
 
     _targetParentsScrollHandler: function(e) {
-        let closeHandled = false;
         const closeOnScroll = this.option('closeOnTargetScroll');
-        if(isFunction(closeOnScroll)) {
-            closeHandled = closeOnScroll(e);
-        }
+        const shouldClose = isFunction(closeOnScroll) ? closeOnScroll(e) : closeOnScroll;
 
-        if(!closeHandled && !this._showAnimationProcessing) {
+        if(shouldClose && !this._showAnimationProcessing) {
             this.hide();
         }
     },

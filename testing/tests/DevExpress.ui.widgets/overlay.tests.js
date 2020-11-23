@@ -2150,7 +2150,7 @@ testModule('close on target scroll', moduleConfig, () => {
 
         const $overlay1 = $('#overlay').dxOverlay({
             closeOnTargetScroll: function() {
-                return $overlay2.dxOverlay('option', 'visible');
+                return !$overlay2.dxOverlay('option', 'visible');
             },
             position: {
                 of: $target
