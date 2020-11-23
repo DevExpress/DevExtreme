@@ -13,11 +13,14 @@ const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time
 const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
+    _getTimeZoneCalculator() {
+        return this.invoke('getTimeZoneCalculator');
+    }
     _getToday() {
         const todayDate = this.option('indicatorTime') || new Date();
 
-        const scheduler = this.option('observer');
-        return scheduler.timeZoneCalculator.createDate(todayDate, { path: 'toGrid' });
+        const timeZoneCalculator = this._getTimeZoneCalculator();
+        return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
     }
 
     isIndicationOnView() {
