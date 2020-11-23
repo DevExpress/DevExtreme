@@ -1843,6 +1843,22 @@ class SchedulerWorkSpace extends WidgetObserver {
             return '';
         };
 
+        const getTimeCellGroups = (rowIndex) => {
+            if(!this._isVerticalGroupedWorkSpace()) {
+                return {};
+            }
+
+            const groupIndex = this._getGroupIndex(rowIndex, 0);
+            const groupsArray = this._getCellGroups(groupIndex);
+
+            const groups = groupsArray.reduce((currentGroups, { name, id }) => ({
+                ...currentGroups,
+                [name]: id,
+            }), {});
+
+            return { groupIndex, groups };
+        };
+
         this._renderTableBody({
             container: getPublicElement(this._$timePanel),
             rowCount: this._getTimePanelRowCount() * repeatCount,
@@ -1853,7 +1869,8 @@ class SchedulerWorkSpace extends WidgetObserver {
             getCellText: _getTimeText.bind(this),
             getCellDate: this._getTimeCellDate.bind(this),
             groupCount: this._getGroupCount(),
-            allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined
+            allDayElements: this._insertAllDayRowsIntoDateTable() ? this._allDayTitles : undefined,
+            getTemplateData: getTimeCellGroups.bind(this),
         });
     }
 
