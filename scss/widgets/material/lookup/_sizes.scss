@@ -8,28 +8,28 @@ $material-lookup-font-size: null !default;
 $material-lookup-popup-content-padding: null !default;
 $material-lookup-list-top: null !default;
 
-$material-lookup-popup-content-top: 49px;
-$material-lookup-arrow-margin: -6px;
-$material-lookup-arrow-right: 10px;
-$material-lookup-arrow-left: 16px;
-$material-lookup-invalid-message-font-size: 14px;
-$material-lookup-invalid-message-padding-horizontal: 20px;
-$material-lookup-invalid-message-padding-top: 13px;
-$material-lookup-invalid-message-padding-bottom: 12px;
-$material-lookup-invalid-message-margin-bottom: 20px;
+$material-lookup-popup-content-top: 49px !default;
+$material-lookup-arrow-margin: -6px !default;
+$material-lookup-arrow-right: 10px !default;
+$material-lookup-arrow-left: 16px !default;
+$material-lookup-invalid-message-font-size: 14px !default;
+$material-lookup-invalid-message-padding-horizontal: 20px !default;
+$material-lookup-invalid-message-padding-top: 13px !default;
+$material-lookup-invalid-message-padding-bottom: 12px !default;
+$material-lookup-invalid-message-margin-bottom: 20px !default;
 
 @if $size == "default" {
-  $material-filled-lookup-height: 56px;
-  $material-standard-lookup-height: 32px;
-  $material-lookup-font-size: 16px;
-  $material-lookup-popup-content-padding: 20px;
-  $material-lookup-list-top: 66px;
+  $material-filled-lookup-height: 56px !default;
+  $material-standard-lookup-height: 32px !default;
+  $material-lookup-font-size: 16px !default;
+  $material-lookup-popup-content-padding: 20px !default;
+  $material-lookup-list-top: 66px !default;
 }
 
 @else if $size == "compact" {
-  $material-filled-lookup-height: 40px;
-  $material-standard-lookup-height: 26px;
-  $material-lookup-font-size: 13px;
-  $material-lookup-popup-content-padding: 8px;
-  $material-lookup-list-top: 36px;
+  $material-filled-lookup-height: 40px !default;
+  $material-standard-lookup-height: 26px !default;
+  $material-lookup-font-size: 13px !default;
+  $material-lookup-popup-content-padding: 8px !default;
+  $material-lookup-list-top: 36px !default;
 }

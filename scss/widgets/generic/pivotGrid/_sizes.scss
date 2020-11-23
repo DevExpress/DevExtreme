@@ -9,18 +9,18 @@ $pivotgrid-field-indicators-offset: null !default;
 $pivotgrid-indicators-line-height: null !default;
 
 @if $size == "default" {
-  $pivotgrid-empty-column-width: 19px;
-  $pivotgrid-common-left-right-padding: 10px;
-  $pivotgrid-common-top-bottom-padding: 7px;
-  $pivotgrid-field-indicators-offset: 6px;
-  $pivotgrid-indicators-line-height: 19px;
+  $pivotgrid-empty-column-width: 19px !default;
+  $pivotgrid-common-left-right-padding: 10px !default;
+  $pivotgrid-common-top-bottom-padding: 7px !default;
+  $pivotgrid-field-indicators-offset: 6px !default;
+  $pivotgrid-indicators-line-height: 19px !default;
 }
 
 @else if $size == "compact" {
-  $pivotgrid-empty-column-width: 16px;
-  $pivotgrid-common-left-right-padding: 6px;
-  $pivotgrid-common-top-bottom-padding: 5px;
-  $pivotgrid-field-indicators-offset: 4px;
-  $pivotgrid-indicators-line-height: 16px;
+  $pivotgrid-empty-column-width: 16px !default;
+  $pivotgrid-common-left-right-padding: 6px !default;
+  $pivotgrid-common-top-bottom-padding: 5px !default;
+  $pivotgrid-field-indicators-offset: 4px !default;
+  $pivotgrid-indicators-line-height: 16px !default;
 }
 

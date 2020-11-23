@@ -7,13 +7,13 @@ $material-context-menu-container-vertical-padding: null !default;
 $material-context-menu-font-size: null !default;
 
 @if $size == "default" {
-  $material-context-menu-horizontal-padding: 16px;
-  $material-context-menu-container-vertical-padding: 8px;
-  $material-context-menu-font-size: 15px;
+  $material-context-menu-horizontal-padding: 16px !default;
+  $material-context-menu-container-vertical-padding: 8px !default;
+  $material-context-menu-font-size: 15px !default;
 }
 
 @else if $size == "compact" {
-  $material-context-menu-horizontal-padding: 8px;
-  $material-context-menu-container-vertical-padding: 4px;
-  $material-context-menu-font-size: 13px;
+  $material-context-menu-horizontal-padding: 8px !default;
+  $material-context-menu-container-vertical-padding: 4px !default;
+  $material-context-menu-font-size: 13px !default;
 }

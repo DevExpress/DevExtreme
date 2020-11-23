@@ -21,54 +21,54 @@ $diagram-small-editor-width: null !default;
 $diagram-medium-editor-width: null !default;
 $diagram-large-editor-width: null !default;
 
-$diagram-toolbox-input-margin: 2px;
+$diagram-toolbox-input-margin: 2px !default;
 
 @if $size == "default" {
-  $diagram-toolbox-width: 156px;
-  $diagram-toolbox-h-padding: 12px;
-  $diagram-toolbox-accordion-v-padding: 8px;
-  $diagram-toolbox-input-h-padding: 9px;
-  $diagram-toolbox-input-v-padding: 12px;
-  $diagram-toolbox-input-image-size: 18px;
-  $diagram-toolbox-input-image-padding: 6px 4px;
-  $diagram-toolbox-mobile-padding: 68px;
+  $diagram-toolbox-width: 156px !default;
+  $diagram-toolbox-h-padding: 12px !default;
+  $diagram-toolbox-accordion-v-padding: 8px !default;
+  $diagram-toolbox-input-h-padding: 9px !default;
+  $diagram-toolbox-input-v-padding: 12px !default;
+  $diagram-toolbox-input-image-size: 18px !default;
+  $diagram-toolbox-input-image-padding: 6px 4px !default;
+  $diagram-toolbox-mobile-padding: 68px !default;
 
-  $diagram-properties-panel-padding: 0;
-  $diagram-properties-panel-spacing: 16px;
-  $diagram-properties-layout-icon-size: 64px;
+  $diagram-properties-panel-padding: 0 !default;
+  $diagram-properties-panel-spacing: 16px !default;
+  $diagram-properties-layout-icon-size: 64px !default;
 
-  $diagram-touchbar-item-padding: 10px;
+  $diagram-touchbar-item-padding: 10px !default;
 
-  $diagram-floating-toolbar-items-height: 36px;
-  $diagram-floating-toolbar-editor-padding: 8px 6px;
-  $diagram-floating-toolbar-editor-button-padding: 4px;
+  $diagram-floating-toolbar-items-height: 36px !default;
+  $diagram-floating-toolbar-editor-padding: 8px 6px !default;
+  $diagram-floating-toolbar-editor-button-padding: 4px !default;
 
-  $diagram-small-editor-width: 100px;
-  $diagram-medium-editor-width: 180px;
-  $diagram-large-editor-width: 280px;
+  $diagram-small-editor-width: 100px !default;
+  $diagram-medium-editor-width: 180px !default;
+  $diagram-large-editor-width: 280px !default;
 }
 
 @else if $size == "compact" {
-  $diagram-toolbox-width: 130px;
-  $diagram-toolbox-h-padding: 10px;
-  $diagram-toolbox-accordion-v-padding: 6px;
-  $diagram-toolbox-input-h-padding: 8px;
-  $diagram-toolbox-input-v-padding: 8px;
-  $diagram-toolbox-input-image-size: 14px;
-  $diagram-toolbox-input-image-padding: 3px 4px;
-  $diagram-toolbox-mobile-padding: 58px;
+  $diagram-toolbox-width: 130px !default;
+  $diagram-toolbox-h-padding: 10px !default;
+  $diagram-toolbox-accordion-v-padding: 6px !default;
+  $diagram-toolbox-input-h-padding: 8px !default;
+  $diagram-toolbox-input-v-padding: 8px !default;
+  $diagram-toolbox-input-image-size: 14px !default;
+  $diagram-toolbox-input-image-padding: 3px 4px !default;
+  $diagram-toolbox-mobile-padding: 58px !default;
 
-  $diagram-properties-panel-padding: 6px;
-  $diagram-properties-panel-spacing: 8px;
-  $diagram-properties-layout-icon-size: 48px;
+  $diagram-properties-panel-padding: 6px !default;
+  $diagram-properties-panel-spacing: 8px !default;
+  $diagram-properties-layout-icon-size: 48px !default;
 
-  $diagram-touchbar-item-padding: 7px;
+  $diagram-touchbar-item-padding: 7px !default;
 
-  $diagram-floating-toolbar-items-height: 28px;
-  $diagram-floating-toolbar-editor-padding: 6px 4px;
-  $diagram-floating-toolbar-editor-button-padding: 2px;
+  $diagram-floating-toolbar-items-height: 28px !default;
+  $diagram-floating-toolbar-editor-padding: 6px 4px !default;
+  $diagram-floating-toolbar-editor-button-padding: 2px !default;
 
-  $diagram-small-editor-width: 80px;
-  $diagram-medium-editor-width: 120px;
-  $diagram-large-editor-width: 220px;
+  $diagram-small-editor-width: 80px !default;
+  $diagram-medium-editor-width: 120px !default;
+  $diagram-large-editor-width: 220px !default;
 }

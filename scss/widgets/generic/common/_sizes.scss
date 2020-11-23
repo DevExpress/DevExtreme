@@ -6,13 +6,13 @@ $generic-invalid-badge-size: null !default;
 $generic-dropdownlist-min-height: null !default;
 
 @if $size == "default" {
-  $generic-invalid-badge-size: $generic-base-icon-size;
+  $generic-invalid-badge-size: $generic-base-icon-size !default;
 }
 
 @else if $size == "compact" {
-  $generic-invalid-badge-size: $generic-base-icon-size + 2px;
+  $generic-invalid-badge-size: $generic-base-icon-size + 2px !default;
 }
 
-$generic-pending-indicator-size: $generic-invalid-badge-size + 4px;
-$generic-invalid-badge-horizontal-padding: ($generic-base-inline-borderedwidget-inner-size - $generic-invalid-badge-size) / 2;
-$generic-invalid-badge-halfhorizontal-padding: $generic-invalid-badge-horizontal-padding / 2;
+$generic-pending-indicator-size: $generic-invalid-badge-size + 4px !default;
+$generic-invalid-badge-horizontal-padding: ($generic-base-inline-borderedwidget-inner-size - $generic-invalid-badge-size) / 2 !default;
+$generic-invalid-badge-halfhorizontal-padding: $generic-invalid-badge-horizontal-padding / 2 !default;
