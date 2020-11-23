@@ -497,8 +497,7 @@ const DropDownList = DropDownEditor.inherit({
 
         this._list && this._updateActiveDescendant();
         this.setAria({
-            'controls': this._list && this._listId,
-            'owns': this._popup && this._popupContentId
+            'controls': this._list && this._listId
         });
     },
 

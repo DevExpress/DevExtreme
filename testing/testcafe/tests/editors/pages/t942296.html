@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>T942296</title>
+
+    <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.common.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../../../artifacts/css/dx.light.css"/>
+
+    <script type="text/javascript" src="../../../../../artifacts/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../../../artifacts/js/dx.all.debug.js"></script>
+</head>
+<body>
+    <div style="height: 800px;background-color:lightblue"> some long content</div>
+    <div id="editor"></div>
+    <div style="height: 700px;background-color:gray"> some long content</div>
+    <script>
+        $(function() {
+            $('#editor').dxDropDownBox({
+                valueExpr: 'OrderID',
+                displayExpr: 'ShipCity',
+                dataSource: {
+                    load() {
+                        const d = $.Deferred();
+                        setTimeout(() => {
+                            d.resolve([
+                                { OrderID: '1', ShipCity: 'a' },
+                                { OrderID: '2', ShipCity: 'b' },
+                                { OrderID: '3', ShipCity: 'c' },
+                            ]);
+                        }, 200);
+                        return d.promise();
+                    }
+                },
+                contentTemplate(data, container) {
+                    return $('<div>').attr('id', 'grid').dxDataGrid({
+                        dataSource: data.component.option('dataSource'),
+                        columns: ['OrderID', 'ShipCity'],
+                        paging: { enabled: true, pageSize: 10 },
+                        filterRow: { visible: true },
+                        scrolling: { mode: 'infinite' },
+                        height: 345,
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

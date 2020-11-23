@@ -1913,5 +1913,25 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
+
+    QUnit.test('aria-owns should point to popup content', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
+        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
+    });
+
+    QUnit.test('aria-owns should point to the popup even if popup is closed but rendered', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            deferRendering: false
+        });
+        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
+        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
+        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
+    });
 });
 

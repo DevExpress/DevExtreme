@@ -28,7 +28,6 @@ QUnit.testStart(() => {
 const LIST_ITEM_SELECTOR = '.dx-list-item';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const POPUP_CONTENT_CLASS = 'dx-popup-content';
 const LIST_CLASS = 'dx-list';
 
 const getPopup = (instance) => {
@@ -1416,35 +1415,6 @@ QUnit.module('render input addons', moduleConfig, () => {
 });
 
 QUnit.module('aria accessibility', moduleConfig, () => {
-    QUnit.test('aria-owns should point to list', function(assert) {
-        const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
-        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
-        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
-
-        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
-        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
-    });
-
-    QUnit.test('aria-owns should point to the list even if popup is closed but rendered', function(assert) {
-        const $dropDownList = $('#dropDownList').dxDropDownList({
-            deferRendering: false
-        });
-        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
-        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
-
-        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
-        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
-    });
-
-    QUnit.test('input aria-owns should point to list', function(assert) {
-        const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
-        const $input = $dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS);
-        const $popupContent = $(`.${POPUP_CONTENT_CLASS}`);
-
-        assert.notEqual($input.attr('aria-owns'), undefined, 'aria-owns exists');
-        assert.equal($input.attr('aria-owns'), $popupContent.attr('id'), 'aria-owns equals popup content\'s id');
-    });
-
     QUnit.test('aria-controls should not be removed when popup is not visible', function(assert) {
         const $dropDownList = $('#dropDownList').dxDropDownList({ opened: true });
         const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
