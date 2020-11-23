@@ -3470,8 +3470,8 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
 
         assert.ok($inputContainer.is(':visible'), 'input container is visible');
-        assert.strictEqual($inputLabel.text(), defaultLabelText, 'label has custom text');
-        assert.strictEqual(fileUploader.option('labelText'), defaultLabelText, 'labelText option has custom text');
+        assert.strictEqual($inputLabel.text(), defaultLabelText, 'label has default text');
+        assert.strictEqual(fileUploader.option('labelText'), defaultLabelText, 'labelText option has default text');
     });
 });
 
@@ -3561,21 +3561,27 @@ QUnit.module('disabled option', () => {
 });
 
 QUnit.module('readOnly option', moduleConfig, () => {
-    QUnit.test('file input container should be hidden', function(assert) {
+    QUnit.test('file input container should be shown but text empty', function(assert) {
+        // behavior changed beacause of T936087
+        const defaultLabelText = 'or Drop file here';
         const $fileUploader = $('#fileuploader').dxFileUploader({
             readOnly: false,
             useDragOver: true,
             uploadMode: 'useButtons'
         });
         const $inputContainer = $fileUploader.find('.' + FILEUPLOADER_INPUT_CONTAINER_CLASS);
+        const $inputLabel = $inputContainer.find('.' + FILEUPLOADER_INPUT_LABEL_CLASS);
 
-        assert.ok($inputContainer.is(':visible'), 'input container is hidden');
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), defaultLabelText, 'label has default text');
 
         $fileUploader.dxFileUploader('option', 'readOnly', true);
-        assert.notOk($inputContainer.is(':visible'), 'input container is hidden');
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), '', 'label has empty line text');
 
         $fileUploader.dxFileUploader('option', 'readOnly', false);
-        assert.ok($inputContainer.is(':visible'), 'input container is hidden');
+        assert.ok($inputContainer.is(':visible'), 'input container is visible');
+        assert.strictEqual($inputLabel.text(), defaultLabelText, 'label has default text');
     });
 
     QUnit.test('select button should be disabled', function(assert) {
