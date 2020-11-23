@@ -117,7 +117,7 @@ const VIEWS_CONFIG = {
 
 class Scheduler extends Widget {
     _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
+        const defaultOptions = extend(super._getDefaultOptions(), {
             /**
                 * @pseudo StartDayHour
                 * @type number
@@ -647,6 +647,8 @@ class Scheduler extends Widget {
 
             recurrenceExceptionExpr: 'recurrenceException',
 
+            disabledExpr: 'disabled',
+
             remoteFiltering: false,
 
             timeZone: '',
@@ -689,6 +691,12 @@ class Scheduler extends Widget {
                 * @inherits CollectionWidgetItem
                 * @type object
                 */
+        });
+
+        return extend(true, defaultOptions, {
+            integrationOptions: {
+                useDeferUpdateForTemplates: false
+            }
         });
     }
 
@@ -1010,6 +1018,7 @@ class Scheduler extends Widget {
             case 'allDayExpr':
             case 'recurrenceRuleExpr':
             case 'recurrenceExceptionExpr':
+            case 'disabledExpr':
                 this._updateExpression(name, value);
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
 
@@ -1218,7 +1227,8 @@ class Scheduler extends Widget {
             text: this.option('textExpr'),
             description: this.option('descriptionExpr'),
             recurrenceRule: this.option('recurrenceRuleExpr'),
-            recurrenceException: this.option('recurrenceExceptionExpr')
+            recurrenceException: this.option('recurrenceExceptionExpr'),
+            disabled: this.option('disabledExpr')
         });
 
         super._init();

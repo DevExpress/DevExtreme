@@ -141,4 +141,11 @@ QUnit.module('Adaptivity', moduleConfig, () => {
         renderer.fn.width = originalWidth;
     });
 
+    test('dirs panel must complete its expand on small screens', function(assert) {
+        this.wrapper.getToolbarNavigationPaneToggleButton().trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getDrawerPanelContent().css('margin-left'), '0px', 'Dirs panel has correct left margin');
+    });
+
 });

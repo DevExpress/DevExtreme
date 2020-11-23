@@ -11,25 +11,25 @@ $generic-popup-toolbartop-padding: null !default;
 $generic-popup-toolbarbottom-padding: null !default;
 
 @if $size == "default" {
-  $generic-popup-closebutton-size: 23px;
-  $generic-popup-closebutton-icon-size: 15px;
+  $generic-popup-closebutton-size: 23px !default;
+  $generic-popup-closebutton-icon-size: 15px !default;
 
-  $generic-popup-content-padding: 20px;
-  $generic-popup-button-margin: 0 10px;
+  $generic-popup-content-padding: 20px !default;
+  $generic-popup-button-margin: 0 10px !default;
 
-  $generic-popup-toolbar-item-spacing: 10px;
-  $generic-popup-toolbartop-padding: 6px 20px;
-  $generic-popup-toolbarbottom-padding: 20px;
+  $generic-popup-toolbar-item-spacing: 10px !default;
+  $generic-popup-toolbartop-padding: 6px 20px !default;
+  $generic-popup-toolbarbottom-padding: 20px !default;
 }
 
 @else if $size == "compact" {
-  $generic-popup-closebutton-size: 19px;
-  $generic-popup-closebutton-icon-size: 11px;
+  $generic-popup-closebutton-size: 19px !default;
+  $generic-popup-closebutton-icon-size: 11px !default;
 
-  $generic-popup-content-padding: 10px;
-  $generic-popup-button-margin: 0 5px;
+  $generic-popup-content-padding: 10px !default;
+  $generic-popup-button-margin: 0 5px !default;
 
-  $generic-popup-toolbar-item-spacing: 5px;
-  $generic-popup-toolbartop-padding: 2px 10px;
-  $generic-popup-toolbarbottom-padding: 10px;
+  $generic-popup-toolbar-item-spacing: 5px !default;
+  $generic-popup-toolbartop-padding: 2px 10px !default;
+  $generic-popup-toolbarbottom-padding: 10px !default;
 }

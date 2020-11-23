@@ -246,6 +246,20 @@ configs.forEach(config => {
             drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
         });
 
+        testOrSkip('opened: false -> opened: true, forceTemplateWrapper', () => configIs('overlap', 'right', 'expand'), function(assert) {
+            const drawerElement = document.getElementById(drawerTesters.drawerElementId);
+            const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({
+                opened: false,
+                template: drawerTesters[config.position].template(true)
+            }));
+
+            this.clock.tick(100);
+            drawer.option('opened', true);
+            this.clock.tick(100);
+
+            drawerTesters[config.position].checkOpened(assert, drawer, drawerElement);
+        });
+
         testOrSkip('opened: false, visible: false -> visible: true', () => configIs('overlap') && config.minSize, function(assert) {
             const drawerElement = document.getElementById(drawerTesters.drawerElementId);
             const drawer = new dxDrawer(drawerElement, getFullDrawerOptions({

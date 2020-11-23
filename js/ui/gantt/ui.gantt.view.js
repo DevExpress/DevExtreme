@@ -136,6 +136,9 @@ export class GanttView extends Widget {
                 super._optionChanged(args);
                 this._ganttViewCore.setWidth(args.value);
                 break;
+            case 'height':
+                this._ganttViewCore.setHeight(args.value);
+                break;
             case 'tasks':
             case 'dependencies':
             case 'resources':

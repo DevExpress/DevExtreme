@@ -90,7 +90,7 @@ class Gantt extends Widget {
             parentIdExpr: parentIdExpr,
             columns: this.option('columns'),
             columnResizingMode: 'nextColumn',
-            height: this._$treeList.height() ? this._$treeList.height() : '100%',
+            height: this._getTreeListHeight(),
             width: this.option('taskListWidth'),
             selection: { mode: this._getSelectionMode(this.option('allowSelection')) },
             selectedRowKeys: this._getArrayFromOneElement(this.option('selectedRowKey')),
@@ -102,8 +102,8 @@ class Gantt extends Widget {
             rootValue: this.option('rootValue'),
             onContentReady: (e) => { this._onTreeListContentReady(e); },
             onSelectionChanged: (e) => { this._onTreeListSelectionChanged(e); },
-            onRowCollapsed: (e) => this._ganttView.changeTaskExpanded(e.key, false),
-            onRowExpanded: (e) => this._ganttView.changeTaskExpanded(e.key, true),
+            onRowCollapsed: (e) => { this._onTreeListRowCollapsed(e); },
+            onRowExpanded: (e) => { this._onTreeListRowExpanded(e); },
             onRowPrepared: (e) => { this._onTreeListRowPrepared(e); },
             onContextMenuPreparing: (e) => { this._onTreeListContextMenuPreparing(e); },
             onRowClick: (e) => { this._onTreeListRowClick(e); },
@@ -211,6 +211,27 @@ class Gantt extends Widget {
         this._setGanttViewOption('selectedRowKey', selectedRowKey);
         this.option('selectedRowKey', selectedRowKey);
         this._raiseSelectionChangedAction(selectedRowKey);
+    }
+    _onTreeListRowCollapsed(e) {
+        this._ganttView.changeTaskExpanded(e.key, false);
+        this._adjustHeight();
+    }
+    _onTreeListRowExpanded(e) {
+        this._ganttView.changeTaskExpanded(e.key, true);
+        this._adjustHeight();
+    }
+    _adjustHeight() {
+        if(!this._hasHeight) {
+            this._setGanttViewOption('height', 0);
+            this._setGanttViewOption('height', this._treeList._$element.get(0).offsetHeight);
+        }
+    }
+    _getTreeListHeight() {
+        if(this._$treeList.height()) {
+            return this._$treeList.height();
+        }
+        this._hasHeight = isDefined(this.option('height')) && this.option('height') !== '';
+        return this._hasHeight ? '100%' : '';
     }
     _onGanttViewSelectionChanged(e) {
         this._setTreeListOption('selectedRowKeys', this._getArrayFromOneElement(e.id));

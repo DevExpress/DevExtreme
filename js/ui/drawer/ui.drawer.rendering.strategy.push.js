@@ -51,6 +51,10 @@ class PushStrategy extends DrawerStrategy {
             maxSize: this._getPanelSize(true)
         });
     }
+
+    onViewContentWrapperCreated($viewContentWrapper, panelPosition) {
+        $viewContentWrapper.addClass('dx-theme-background-color');
+    }
 }
 
 export default PushStrategy;
