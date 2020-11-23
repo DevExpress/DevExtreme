@@ -1456,10 +1456,14 @@ const EditingController = modules.ViewController.inherit((function() {
 
             this._setEditRowKey(item.key);
             this._setEditColumnNameByIndex(editColumnIndex);
-            this._addInternalData({
-                key: item.key,
-                oldData: item.data
-            });
+
+            if(!params.column.showEditorAlways) {
+                this._addInternalData({
+                    key: item.key,
+                    oldData: item.data
+                });
+            }
+
             return true;
         },
 
