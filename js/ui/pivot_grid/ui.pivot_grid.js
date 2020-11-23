@@ -53,7 +53,7 @@ const TD = '<td>';
 const DIV = '<div>';
 const TEST_HEIGHT = 66666;
 
-const CALCULATED_FIELDS_PROPERTIES = ['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll'];
+const FIELD_CALCULATED_OPTIONS = ['allowSorting', 'allowSortingBySummary', 'allowFiltering', 'allowExpandAll'];
 
 function getArraySum(array) {
     let sum = 0;
@@ -635,12 +635,14 @@ const PivotGrid = Widget.inherit({
         });
     },
 
-    _updateCalculatedFieldProperties: function() {
+    _updateCalculatedProperties: function(fields, isNewDataSource) {
         const that = this;
-        const fields = this.getDataSource().fields();
         each(fields, function(index, field) {
-            each(CALCULATED_FIELDS_PROPERTIES, function(_, optionName) {
-                if(field._initProperties && (optionName in field._initProperties)) {
+            each(FIELD_CALCULATED_OPTIONS, function(_, optionName) {
+                const needUpdate = isNewDataSource
+                    ? field[optionName] === undefined
+                    : field._initProperties && (optionName in field._initProperties);
+                if(needUpdate) {
                     setFieldProperty(field, optionName, that.option(optionName));
                 }
             });
@@ -663,13 +665,7 @@ const PivotGrid = Widget.inherit({
             hideEmptySummaryCells: that.option('hideEmptySummaryCells'),
 
             onFieldsPrepared: function(fields) {
-                each(fields, function(index, field) {
-                    each(CALCULATED_FIELDS_PROPERTIES, function(_, optionName) {
-                        if(field[optionName] === undefined) {
-                            setFieldProperty(field, optionName, that.option(optionName));
-                        }
-                    });
-                });
+                that._updateCalculatedProperties(fields, true);
             }
         };
     },
@@ -748,8 +744,9 @@ const PivotGrid = Widget.inherit({
             case 'allowSortingBySummary':
             case 'scrolling':
             case 'stateStoring':
-                if(CALCULATED_FIELDS_PROPERTIES.indexOf(args.name) >= 0) {
-                    this._updateCalculatedFieldProperties();
+                if(FIELD_CALCULATED_OPTIONS.indexOf(args.name) >= 0) {
+                    const fields = this.getDataSource().fields();
+                    this._updateCalculatedProperties(fields, false);
                 }
                 that._initDataController();
                 that._fieldChooserPopup.hide();
