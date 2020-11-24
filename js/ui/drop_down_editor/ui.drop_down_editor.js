@@ -31,6 +31,9 @@ const DROP_DOWN_EDITOR_OVERLAY_FLIPPED = 'dx-dropdowneditor-overlay-flipped';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
+const TEXT_EDITOR_CONTAINER = 'dx-texteditor-container';
+const TEXT_EDITOR_INPUT_CONTAINER = 'dx-texteditor-input-container';
+const TEXT_EDITOR_BUTTONS_CONTAINER = 'dx-texteditor-buttons-container';
 
 const isIOs = devices.current().platform === 'ios';
 
@@ -349,15 +352,32 @@ const DropDownEditor = TextBox.inherit({
             }
         });
 
-        $container.prepend(this._$beforeButtonsContainer);
-        $container.append(this._$afterButtonsContainer);
+        this._$textEditorContainer
+            .prepend(this._$beforeButtonsContainer)
+            .append(this._$afterButtonsContainer);
     },
 
     _integrateInput: function() {
+        this._removeNestedTextBoxButtons();
+        this._refreshCachedContainers();
         this._refreshEvents();
         this._refreshValueChangeEvent();
         this._renderFocusState();
         this._refreshEmptinessEvent();
+    },
+
+    _removeNestedTextBoxButtons() {
+        this
+            .$element()
+            .find(`.${TEXT_EDITOR_BUTTONS_CONTAINER}`)
+            .remove();
+    },
+
+    _refreshCachedContainers() {
+        const $input = this._input();
+
+        this._$textEditorContainer = $input.closest(`.${TEXT_EDITOR_CONTAINER}`);
+        this._$textEditorInputContainer = $input.closest(`.${TEXT_EDITOR_INPUT_CONTAINER}`);
     },
 
     _refreshEmptinessEvent: function() {
