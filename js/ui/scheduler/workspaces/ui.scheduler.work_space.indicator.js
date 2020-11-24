@@ -82,8 +82,9 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
             const $cell = $(cell);
             const { startDate, endDate } = this.getCellData($cell);
 
-            // NOTE: Need we clear shader after templates were ready or after dimensionChanged
             $cell.find(`.${SCHEDULER_DATE_TIME_SHADER_CLASS}`).remove();
+
+            // NOTE: the cell is expired
             if(startDate < date && endDate < date) {
                 const $shader = $('<div>').addClass(SCHEDULER_DATE_TIME_SHADER_CLASS).appendTo($cell);
                 additionalClass && $shader.addClass(additionalClass);
@@ -91,6 +92,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                     isAllDay ? $shader.height(this.getAllDayHeight()) : $shader.height(this.getCellHeight());
                 }
             }
+            // NOTE: the cell is not completely expired
             if(!isAllDay && startDate <= date && endDate > date) {
                 const size = (date.getTime() - startDate.getTime()) * 100 / (endDate.getTime() - startDate.getTime());
                 const $lastShader = $('<div>').addClass(SCHEDULER_DATE_TIME_SHADER_CLASS).addClass(SCHEDULER_LAST_DATE_TIME_SHADER_CLASS).appendTo($cell);
@@ -217,6 +219,7 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _refreshDateTimeIndication() {
+        // NOTE: We must not refresh indication after dimensionChanged, templates ready, expanding allDay panel. But in IE we calculate shading height
         this._cleanDateTimeIndicator();
         this._cleanShader();
         this._renderDateTimeIndication();
@@ -323,7 +326,6 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
                 this._refreshDateTimeIndication();
                 break;
             case 'allDayExpanded':
-                // NOTE: need we do this refreshing
                 super._optionChanged(args);
                 this._refreshDateTimeIndication();
                 break;
