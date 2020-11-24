@@ -31,9 +31,6 @@ const DROP_DOWN_EDITOR_OVERLAY_FLIPPED = 'dx-dropdowneditor-overlay-flipped';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
-const TEXT_EDITOR_CONTAINER = 'dx-texteditor-container';
-const TEXT_EDITOR_INPUT_CONTAINER = 'dx-texteditor-input-container';
-const TEXT_EDITOR_BUTTONS_CONTAINER = 'dx-texteditor-buttons-container';
 
 const isIOs = devices.current().platform === 'ios';
 
@@ -333,10 +330,12 @@ const DropDownEditor = TextBox.inherit({
         afterButtonsContainerParent && afterButtonsContainerParent.removeChild(this._$afterButtonsContainer[0]);
 
         this._detachFocusEvents();
+
         $container.empty();
 
-        const $templateWrapper = $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
-
+        const $templateWrapper = this._prepareFieldWrapper();
+        this._$buttonsContainer
+            .append(this._$afterButtonsContainer);
         fieldTemplate.render({
             model: data,
             container: getPublicElement($templateWrapper),
@@ -351,33 +350,27 @@ const DropDownEditor = TextBox.inherit({
                 isFocused && eventsEngine.trigger($input, 'focus');
             }
         });
+    },
 
-        this._$textEditorContainer
-            .prepend(this._$beforeButtonsContainer)
-            .append(this._$afterButtonsContainer);
+    _prepareFieldWrapper() {
+        this._refreshButtonsContainer();
+
+        this._$buttonsContainer.append(this._$beforeButtonsContainer);
+        const $templateWrapper = $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo(this._$buttonsContainer);
+        this._$buttonsContainer.append(this._$afterButtonsContainer);
+
+        return $templateWrapper;
     },
 
     _integrateInput: function() {
-        this._removeNestedTextBoxButtons();
-        this._refreshCachedContainers();
         this._refreshEvents();
         this._refreshValueChangeEvent();
         this._renderFocusState();
         this._refreshEmptinessEvent();
     },
 
-    _removeNestedTextBoxButtons() {
-        this
-            .$element()
-            .find(`.${TEXT_EDITOR_BUTTONS_CONTAINER}`)
-            .remove();
-    },
-
-    _refreshCachedContainers() {
-        const $input = this._input();
-
-        this._$textEditorContainer = $input.closest(`.${TEXT_EDITOR_CONTAINER}`);
-        this._$textEditorInputContainer = $input.closest(`.${TEXT_EDITOR_INPUT_CONTAINER}`);
+    _refreshButtonsContainer() {
+        this._$buttonsContainer = this.$element().children().eq(0);
     },
 
     _refreshEmptinessEvent: function() {

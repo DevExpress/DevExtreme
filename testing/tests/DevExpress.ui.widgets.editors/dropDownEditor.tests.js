@@ -1176,40 +1176,6 @@ QUnit.module('Templates', () => {
         assert.strictEqual($buttons.length, 1, 'there is only one button');
         assert.strictEqual($buttons.text(), 'test button', 'correct text');
     });
-
-    QUnit.test('dropDownEditor buttons priority over textBox buttons in the fieldTemplate', function(assert) {
-        const disposingStub = sinon.stub();
-        const editor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dataSource: [1, 2],
-            buttons: [
-                {
-                    name: 'ddeButton',
-                    options: {
-                        text: 'ddeButton'
-                    }
-                }
-            ],
-            fieldTemplate: (data, container) => {
-                $('<div>').dxTextBox({
-                    buttons: [
-                        {
-                            name: 'test',
-                            options: {
-                                text: 'test',
-                                onDisposing: disposingStub
-                            }
-                        }
-                    ]
-                }).appendTo(container);
-            }
-        }).dxDropDownEditor('instance');
-
-        const $buttons = editor.$element().find('.dx-button');
-
-        assert.strictEqual($buttons.length, 1, 'there is only one button');
-        assert.strictEqual($buttons.text(), 'ddeButton', 'correct text');
-        assert.ok(disposingStub.calledOnce, 'TextBox buttons removed');
-    });
 });
 
 QUnit.module('options', () => {
