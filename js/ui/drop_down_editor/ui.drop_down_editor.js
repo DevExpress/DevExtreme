@@ -322,6 +322,7 @@ const DropDownEditor = TextBox.inherit({
         const $container = this._$container;
 
         this._detachKeyboardEvents();
+        this._refreshButtonsContainer();
 
         // NOTE: to prevent buttons disposition
         const beforeButtonsContainerParent = this._$beforeButtonsContainer && this._$beforeButtonsContainer[0].parentNode;
@@ -330,10 +331,9 @@ const DropDownEditor = TextBox.inherit({
         afterButtonsContainerParent && afterButtonsContainerParent.removeChild(this._$afterButtonsContainer[0]);
 
         this._detachFocusEvents();
-
         $container.empty();
 
-        const $templateWrapper = this._prepareFieldWrapper();
+        const $templateWrapper = $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
 
         fieldTemplate.render({
             model: data,
@@ -349,16 +349,9 @@ const DropDownEditor = TextBox.inherit({
                 isFocused && eventsEngine.trigger($input, 'focus');
             }
         });
-    },
 
-    _prepareFieldWrapper() {
-        this._refreshButtonsContainer();
-
-        this._$buttonsContainer.append(this._$beforeButtonsContainer);
-        const $templateWrapper = $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo(this._$buttonsContainer);
-        this._$buttonsContainer.append(this._$afterButtonsContainer);
-
-        return $templateWrapper;
+        $container.prepend(this._$beforeButtonsContainer);
+        $container.append(this._$afterButtonsContainer);
     },
 
     _refreshButtonsContainer() {
