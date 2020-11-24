@@ -1161,7 +1161,7 @@ QUnit.module('Templates', () => {
         });
     });
 
-    QUnit.test('editor with fieldTemplate should correctly render additional action buttons', function(assert) {
+    QUnit.test('editor with fieldTemplate should correctly render additional action buttons on changing the "buttons" option', function(assert) {
         const editor = $('#dropDownEditorLazy').dxDropDownEditor({
             dataSource: [1, 2],
             fieldTemplate: (data, container) => {
