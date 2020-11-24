@@ -11175,7 +11175,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxTabs.Options.selectedItems]
          */
-        selectedItems?: Array<string | number | any>;
+        selectedItems?: Array<any>;
         /**
          * [descr:dxTabs.Options.selectionMode]
          */
