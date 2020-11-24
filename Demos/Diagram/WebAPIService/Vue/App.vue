@@ -11,16 +11,24 @@
     >
       <DxAutoLayout :type="'tree'"/>
     </DxNodes>
-    <DxToolbox>
+    <DxContextToolbox
+      :shape-icons-per-row="2"
+      :width="100"
+      :shapes="['rectangle']"
+    />
+    <DxToolbox
+      :show-search="false"
+      :shape-icons-per-row="2"
+    >
       <DxGroup
-        :category="'general'"
-        :title="'General'"
+        :title="'Items'"
+        :shapes="['rectangle']"
       />
     </DxToolbox>
   </DxDiagram>
 </template>
 <script>
-import { DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxGroup } from 'devextreme-vue/diagram';
+import { DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxContextToolbox, DxGroup } from 'devextreme-vue/diagram';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DiagramEmployees';
@@ -36,8 +44,7 @@ const dataSource = createStore({
   },
   onInserting: function(values) {
     values['ID'] = 0;
-    values['HeadID'] = 0;
-    values['Title'] = 'New Position';
+    values['Title'] = values['Title'] || 'New Position';
     values['Prefix'] = 'Mr';
     values['FullName'] = 'New Employee';
     values['City'] = 'LA';
@@ -48,7 +55,7 @@ const dataSource = createStore({
 
 export default {
   components: {
-    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxGroup
+    DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxContextToolbox, DxGroup
   },
   data() {
     return {

@@ -2,7 +2,9 @@
     <dxo-nodes [dataSource]="dataSource" keyExpr="ID" textExpr="Title" parentKeyExpr="HeadID">
         <dxo-auto-layout type="tree"></dxo-auto-layout>
     </dxo-nodes>
-    <dxo-toolbox>
-        <dxi-group category="general" title="General"></dxi-group>
+    <dxo-context-toolbox [width]="100" [shapeIconsPerRow]="2" [shapes]="['rectangle']">
+    </dxo-context-toolbox>
+    <dxo-toolbox [shapeIconsPerRow]="2" [showSearch]="false">
+        <dxi-group title="Items" [shapes]="['rectangle']"></dxi-group>
     </dxo-toolbox>
 </dx-diagram>

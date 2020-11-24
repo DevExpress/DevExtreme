@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import Diagram, { Nodes, AutoLayout, Toolbox, Group } from 'devextreme-react/diagram';
+import Diagram, { Nodes, AutoLayout, ContextToolbox, Toolbox, Group } from 'devextreme-react/diagram';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/DiagramEmployees';
@@ -15,8 +15,7 @@ const dataSource = createStore({
   },
   onInserting: function(values) {
     values['ID'] = 0;
-    values['HeadID'] = 0;
-    values['Title'] = 'New Position';
+    values['Title'] = values['Title'] || 'New Position';
     values['Prefix'] = 'Mr';
     values['FullName'] = 'New Employee';
     values['City'] = 'LA';
@@ -32,8 +31,10 @@ class App extends React.Component {
         <Nodes dataSource={dataSource} keyExpr="ID" textExpr="Title" parentKeyExpr="HeadID">
           <AutoLayout type="tree" />
         </Nodes>
-        <Toolbox>
-          <Group category="general" title="General" />
+        <ContextToolbox shapeIconsPerRow={2} width={100} shapes={['rectangle']}>
+        </ContextToolbox>
+        <Toolbox showSearch={false} shapeIconsPerRow={2}>
+          <Group title="Items" shapes={['rectangle']} />
         </Toolbox>
       </Diagram>
     );

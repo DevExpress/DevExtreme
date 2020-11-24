@@ -11,8 +11,7 @@ $(function() {
         },
         onInserting: function(values) {
             values["ID"] = 0;
-            values["HeadID"] = 0;
-            values["Title"] = "New Position";
+            values["Title"] = values["Title"] || "New Position";
             values["Prefix"] = "Mr";
             values["FullName"] = "New Employee";
             values["City"] = "LA";
@@ -30,8 +29,17 @@ $(function() {
                 type: "tree"
             }
         },
+        contextToolbox: {
+            shapeIconsPerRow: 2,
+            width: 100,
+            shapes: [ "rectangle" ]
+        },
         toolbox: {
-            groups: ["general"]
+            shapeIconsPerRow: 2,
+            groups: [
+                { title: "Items", shapes: [ "rectangle" ] }
+            ],
+            showSearch: false
         }
     });
 });

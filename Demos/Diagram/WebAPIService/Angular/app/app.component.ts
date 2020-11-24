@@ -35,8 +35,7 @@ export class AppComponent {
             },
             onInserting: function(values) { 
                 values["ID"] = 0;
-                values["HeadID"] = 0;
-                values["Title"] = "New Position";
+                values["Title"] = values["Title"] || "New Position";
                 values["Prefix"] = "Mr";
                 values["FullName"] = "New Employee";
                 values["City"] = "LA";
