@@ -1118,9 +1118,12 @@ export default {
                         rowIndices: [oldExpandLoadedRowIndex - rowIndexDelta, newExpandLoadedRowIndex - rowIndexDelta]
                     });
 
-                    const dataController = that.getController('data');
-                    const rowIndex = dataController.getRowIndexByKey(key || oldKey);
-                    const $row = $(that.component.getRowElement(rowIndex));
+                    this.setCommandAdaptiveAriaLabel(key, oldKey);
+                },
+
+                setCommandAdaptiveAriaLabel: function(key, oldKey) {
+                    const rowIndex = this.getRowIndexByKey(key || oldKey);
+                    const $row = $(this.component.getRowElement(rowIndex));
                     const $adaptiveCommand = $row.find('.dx-command-adaptive');
                     const isExpanded = isDefined(key);
                     const label = messageLocalization.format(isExpanded ? COLLAPSE_ARIA_NAME : EXPAND_ARIA_NAME);
