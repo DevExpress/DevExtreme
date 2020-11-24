@@ -100,7 +100,6 @@ const Drawer = Widget.inherit({
         this._$wrapper = $('<div>').addClass(DRAWER_WRAPPER_CLASS);
 
         this._$viewContentWrapper = $('<div>').addClass(DRAWER_VIEW_CONTENT_CLASS);
-        this._strategy.onViewContentWrapperCreated(this._$viewContentWrapper, this.calcTargetPosition());
         this._$wrapper.append(this._$viewContentWrapper);
 
         this.$element().append(this._$wrapper);
@@ -165,6 +164,7 @@ const Drawer = Widget.inherit({
 
         this._whenPanelContentRendered = new Deferred();
         this._strategy.renderPanelContent(this._whenPanelContentRendered);
+        this._strategy.onPanelContentRendered();
 
         this._renderViewContent();
 
@@ -191,11 +191,15 @@ const Drawer = Widget.inherit({
             this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide' || !this.isHorizontalDirection());
 
             this._renderPosition(this.option('opened'), false);
-            if(this._$panelContentWrapper.attr('manualposition')) {
-                this._$panelContentWrapper.removeAttr('manualPosition');
-                this._$panelContentWrapper.css({ position: '', top: '', left: '', right: '', bottom: '' });
-            }
+            this._removePanelManualPosition();
         });
+    },
+
+    _removePanelManualPosition() {
+        if(this._$panelContentWrapper.attr('manualposition')) {
+            this._$panelContentWrapper.removeAttr('manualPosition');
+            this._$panelContentWrapper.css({ position: '', top: '', left: '', right: '', bottom: '' });
+        }
     },
 
     _renderPanelContentWrapper() {
@@ -448,9 +452,14 @@ const Drawer = Widget.inherit({
     },
 
     _refreshPanel() {
+        // TODO: removeAttr('style')?
         $(this.viewContent()).css('paddingLeft', 0);
+        $(this.viewContent()).css('paddingRight', 0);
+        $(this.viewContent()).css('paddingTop', 0);
+        $(this.viewContent()).css('paddingBottom', 0);
         $(this.viewContent()).css('left', 0);
         $(this.viewContent()).css('transform', 'translate(0px, 0px)');
+        $(this.viewContent()).removeClass('dx-theme-background-color');
 
         this._removePanelContentWrapper();
         this._removeOverlay();
@@ -460,11 +469,13 @@ const Drawer = Widget.inherit({
 
         this._whenPanelContentRefreshed = new Deferred();
         this._strategy.renderPanelContent(this._whenPanelContentRefreshed);
+        this._strategy.onPanelContentRendered();
 
         if(hasWindow()) {
             this._whenPanelContentRefreshed.always(() => {
                 this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
                 this._renderPosition(this.option('opened'), false, true);
+                this._removePanelManualPosition();
             });
         }
     },
