@@ -1721,10 +1721,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex = this._getGroupIndex(0, templateIndex * indexMultiplier);
             const groupsArray = this._getCellGroups(groupIndex);
 
-            groups = groupsArray.reduce((currentGroups, { name, id }) => ({
-                ...currentGroups,
-                [name]: id,
-            }), {});
+            groups = this._getGroupsObjectFromGroupsArray(groupsArray);
         }
 
         return { groups, groupIndex };
@@ -1793,14 +1790,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex: cellGroupIndex,
         };
 
-        const groups = this._getCellGroups(cellGroupIndex);
+        const groupsArray = this._getCellGroups(cellGroupIndex);
 
-        if(groups.length) {
-            data.groups = {};
-        }
-
-        for(let i = 0; i < groups.length; i++) {
-            data.groups[groups[i].name] = groups[i].id;
+        if(groupsArray.length) {
+            data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
         }
 
         return {
@@ -1851,10 +1844,7 @@ class SchedulerWorkSpace extends WidgetObserver {
             const groupIndex = this._getGroupIndex(rowIndex, 0);
             const groupsArray = this._getCellGroups(groupIndex);
 
-            const groups = groupsArray.reduce((currentGroups, { name, id }) => ({
-                ...currentGroups,
-                [name]: id,
-            }), {});
+            const groups = this._getGroupsObjectFromGroupsArray(groupsArray);
 
             return { groupIndex, groups };
         };
@@ -1965,14 +1955,10 @@ class SchedulerWorkSpace extends WidgetObserver {
             groupIndex,
         };
 
-        const groups = this._getCellGroups(groupIndex);
+        const groupsArray = this._getCellGroups(groupIndex);
 
-        if(groups.length) {
-            data.groups = {};
-        }
-
-        for(let i = 0; i < groups.length; i++) {
-            data.groups[groups[i].name] = groups[i].id;
+        if(groupsArray.length) {
+            data.groups = this._getGroupsObjectFromGroupsArray(groupsArray);
         }
 
         return data;
@@ -2062,6 +2048,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         }
 
         return result;
+    }
+
+    _getGroupsObjectFromGroupsArray(groupsArray) {
+        return groupsArray.reduce((currentGroups, { name, id }) => ({
+            ...currentGroups,
+            [name]: id,
+        }), {});
     }
 
     _attachTablesEvents() {

@@ -227,7 +227,8 @@ class SchedulerTimeline extends SchedulerWorkSpace {
                     .attr('colSpan', colSpan);
 
                 $cells.push($th);
-                if(templateIndex % cellsInGroup === cellsInGroup - 1) {
+
+                if((templateIndex % cellsInGroup) === (cellsInGroup - 1)) {
                     currentDate = new Date(firstViewDate);
                 } else {
                     this._incrementDate(currentDate);
