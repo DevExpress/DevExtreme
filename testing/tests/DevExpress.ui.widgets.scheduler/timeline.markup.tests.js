@@ -1156,17 +1156,17 @@ QUnit.module('TimelineMonth with horizontal scrolling markup', timelineMonthModu
     });
 
     QUnit.test('TimelineMonth shoud render date cells correctly', function(assert) {
-        this.instance.option('currentDate', new Date(2020, 10, 24));
+        this.instance.option('currentDate', new Date(2020, 11, 1));
 
         const $element = this.instance.$element();
         const $firstRow = $element.find('.dx-scheduler-header-row').first();
         const $headerCells = $firstRow.find('.dx-scheduler-header-panel-cell');
 
-        assert.equal($headerCells.length, 60, 'Header row has 14 cells');
-        assert.equal($headerCells.eq(0).text(), 'Sun 1', 'First header cell text is correct');
-        assert.equal($headerCells.eq(29).text(), 'Mon 30', 'Second header cell text is correct');
-        assert.equal($headerCells.eq(30).text(), 'Sun 1', 'Third header cell text is correct');
-        assert.equal($headerCells.eq(59).text(), 'Mon 30', 'Fourth header cell text is correct');
+        assert.equal($headerCells.length, 62, 'Header row has 62 cells');
+        assert.equal($headerCells.eq(0).text(), 'Tue 1', 'First header cell text is correct');
+        assert.equal($headerCells.eq(30).text(), 'Thu 31', 'Second header cell text is correct');
+        assert.equal($headerCells.eq(31).text(), 'Tue 1', 'Third header cell text is correct');
+        assert.equal($headerCells.eq(61).text(), 'Thu 31', 'Fourth header cell text is correct');
     });
 });
 
