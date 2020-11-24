@@ -209,7 +209,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
                     const templateOptions = {
                         model: {
                             text,
-                            date: currentDate,
+                            date: new Date(currentDate),
                             ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
                         },
                         container: $th,
