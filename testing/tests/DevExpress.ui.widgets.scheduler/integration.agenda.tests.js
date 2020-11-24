@@ -1599,6 +1599,7 @@ QUnit.module('Cell Templates', () => {
 
     QUnit.test('Date cell template should have correct data without grouping', function(assert) {
         let currentTemplateIndex = 0;
+        const rowsCount = 2;
         const expectedData = [{
             date: new Date(2020, 10, 24),
             groups: {},
@@ -1614,7 +1615,7 @@ QUnit.module('Cell Templates', () => {
         createWrapper({
             ...basicOptions,
             dateCellTemplate: (data) => {
-                assert.deepEqual(data, expectedData[currentTemplateIndex % 2], 'Correct template data');
+                assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
                 currentTemplateIndex += 1;
             },
         });
@@ -1622,6 +1623,7 @@ QUnit.module('Cell Templates', () => {
 
     QUnit.test('Date cell template should have correct data with grouping', function(assert) {
         let currentTemplateIndex = 0;
+        const rowsCount = 4;
         const expectedData = [{
             date: new Date(2020, 10, 24),
             groups: { priorityId: 1 },
@@ -1647,7 +1649,7 @@ QUnit.module('Cell Templates', () => {
         createWrapper({
             ...basicOptions,
             dateCellTemplate: (data) => {
-                assert.deepEqual(data, expectedData[currentTemplateIndex % 4], 'Correct template data');
+                assert.deepEqual(data, expectedData[currentTemplateIndex % rowsCount], 'Correct template data');
                 currentTemplateIndex += 1;
             },
             groups: ['priorityId'],
