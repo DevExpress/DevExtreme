@@ -1049,7 +1049,6 @@ QUnit.module('positioning', () => {
                 .css('height', '2000px')
                 .appendTo('body');
 
-            window.scrollTo(0, $target.offset().top);
             new Popover($popover, {
                 target: $target,
                 visible: true,
@@ -1063,7 +1062,6 @@ QUnit.module('positioning', () => {
         } finally {
             $scrollElement.remove();
             fixtures.simple.drop();
-            window.scrollTo(0, 0);
         }
     });
 
