@@ -750,6 +750,10 @@ class FileUploader extends Editor {
         return !this.option('readOnly') && (this.option('uploadMode') !== 'useForm' || this.option('nativeDropSupported'));
     }
 
+    _isInteractionDisabled() {
+        return this.option('readOnly') || this.option('disabled');
+    }
+
     _renderInputContainer() {
         this._$inputContainer = $('<div>')
             .addClass(FILEUPLOADER_INPUT_CONTAINER_CLASS)
