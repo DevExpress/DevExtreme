@@ -12707,7 +12707,7 @@ declare module DevExpress.viz {
         /**
          * [descr:BaseChart.Options.palette]
          */
-        palette?: Array<string> | PaletteType;
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
          * [descr:BaseChart.Options.paletteExtensionMode]
          */
@@ -12931,7 +12931,7 @@ declare module DevExpress.viz {
         /**
          * [descr:BaseGauge.Options.rangeContainer.palette]
          */
-        palette?: Array<string> | PaletteType;
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
          * [descr:BaseGauge.Options.rangeContainer.paletteExtensionMode]
          */
@@ -13658,7 +13658,7 @@ declare module DevExpress.viz {
         /**
          * [descr:CommonIndicator.palette]
          */
-        palette?: Array<string> | PaletteType;
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
          * [descr:CommonIndicator.secondColor]
          */
@@ -13924,7 +13924,7 @@ declare module DevExpress.viz {
         /**
          * [descr:VizRange.length]
          */
-        length?: number | any | TimeIntervalType;
+        length?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:VizRange.startValue]
          */
@@ -14312,7 +14312,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxBarGauge.Options.palette]
          */
-        palette?: Array<string> | PaletteType;
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
          * [descr:dxBarGauge.Options.paletteExtensionMode]
          */
@@ -14628,7 +14628,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.argumentAxis.aggregationInterval]
          */
-        aggregationInterval?: number | any | TimeIntervalType;
+        aggregationInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxChart.Options.argumentAxis.argumentType]
          */
@@ -14688,7 +14688,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.argumentAxis.minVisualRangeLength]
          */
-        minVisualRangeLength?: number | any | TimeIntervalType;
+        minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxChart.Options.argumentAxis.minorTickCount]
          */
@@ -14696,7 +14696,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.argumentAxis.minorTickInterval]
          */
-        minorTickInterval?: number | any | TimeIntervalType;
+        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxChart.Options.argumentAxis.offset]
          */
@@ -14716,7 +14716,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.argumentAxis.tickInterval]
          */
-        tickInterval?: number | any | TimeIntervalType;
+        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxChart.Options.argumentAxis.title]
          */
@@ -15321,7 +15321,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.valueAxis.minVisualRangeLength]
          */
-        minVisualRangeLength?: number | any | TimeIntervalType;
+        minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxChart.Options.valueAxis.minorTickCount]
          */
@@ -15329,7 +15329,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.valueAxis.minorTickInterval]
          */
-        minorTickInterval?: number | any | TimeIntervalType;
+        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxChart.Options.valueAxis.multipleAxesSpacing]
          */
@@ -15365,7 +15365,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxChart.Options.valueAxis.tickInterval]
          */
-        tickInterval?: number | any | TimeIntervalType;
+        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxChart.Options.valueAxis.title]
          */
@@ -17348,7 +17348,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxFunnel.Options.palette]
          */
-        palette?: Array<string> | PaletteType;
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
          * [descr:dxFunnel.Options.paletteExtensionMode]
          */
@@ -17615,7 +17615,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPieChart.Options.palette]
          */
-        palette?: Array<string> | PaletteType;
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
          * [descr:dxPieChart.Options.resolveLabelOverlapping]
          */
@@ -17983,7 +17983,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.argumentAxis.minorTickInterval]
          */
-        minorTickInterval?: number | any | TimeIntervalType;
+        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxPolarChart.Options.argumentAxis.originValue]
          */
@@ -18007,7 +18007,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.argumentAxis.tickInterval]
          */
-        tickInterval?: number | any | TimeIntervalType;
+        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxPolarChart.Options.argumentAxis.type]
          */
@@ -18394,7 +18394,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.valueAxis.minVisualRangeLength]
          */
-        minVisualRangeLength?: number | any | TimeIntervalType;
+        minVisualRangeLength?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxPolarChart.Options.valueAxis.minorTickCount]
          */
@@ -18402,7 +18402,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.valueAxis.minorTickInterval]
          */
-        minorTickInterval?: number | any | TimeIntervalType;
+        minorTickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxPolarChart.Options.valueAxis.showZero]
          */
@@ -18418,7 +18418,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxPolarChart.Options.valueAxis.tickInterval]
          */
-        tickInterval?: number | any | TimeIntervalType;
+        tickInterval?: number | any | 'day' | 'hour' | 'millisecond' | 'minute' | 'month' | 'quarter' | 'second' | 'week' | 'year';
         /**
          * [descr:dxPolarChart.Options.valueAxis.type]
          */
@@ -19024,7 +19024,7 @@ declare module DevExpress.viz {
         /**
          * [descr:dxSankey.Options.palette]
          */
-        palette?: Array<string> | PaletteType;
+        palette?: Array<string> | 'Bright' | 'Harmony Light' | 'Ocean' | 'Pastel' | 'Soft' | 'Soft Pastel' | 'Vintage' | 'Violet' | 'Carmine' | 'Dark Moon' | 'Dark Violet' | 'Green Mist' | 'Soft Blue' | 'Material' | 'Office';
         /**
          * [descr:dxSankey.Options.paletteExtensionMode]
          */
