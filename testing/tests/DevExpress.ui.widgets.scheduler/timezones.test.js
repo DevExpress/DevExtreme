@@ -78,6 +78,37 @@ const createScheduler = (options = {}) => {
 };
 
 module('Common', moduleConfig, () => {
+    test('T946335', function(assert) {
+        // -64800000 = -18 hours
+        const getClientTimezoneOffsetStub = sinon.stub(subscribes, 'getClientTimezoneOffset').returns(-64800000);
+
+        try {
+            const scheduler = createWrapper({
+                dataSource: [],
+                views: ['month'],
+                timeZone: timeZones.LosAngeles,
+                currentView: 'month',
+                startDayHour: 8,
+                height: 600
+            });
+
+            const realCurrentDay = new Date();
+            const prevDay = new Date(realCurrentDay.setDate(realCurrentDay.getDate() - 1)).getDate();
+
+            const viewCurrentDay = parseInt(scheduler.getElement().find('.dx-scheduler-date-table-current-date > div').text());
+            assert.equal(viewCurrentDay, prevDay, 'Current day should be prev');
+
+            const navigator = scheduler.header.navigator;
+            navigator.caption.click();
+
+            const calendarDay = parseInt(navigator.popover.content.getElement().find('.dx-calendar-today span').text());
+            assert.equal(calendarDay, prevDay, 'Current calendar day should be prev');
+
+        } finally {
+            getClientTimezoneOffsetStub.restore();
+        }
+    });
+
     if(isDesktopEnvironment()) {
         module('Appointments rendering when appointment timeZone is set', () => {
             const cases = [{
