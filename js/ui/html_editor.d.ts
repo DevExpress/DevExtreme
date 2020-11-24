@@ -439,6 +439,7 @@ export interface dxHtmlEditorToolbarItem extends dxToolbarItem {
     /**
      * @docid dxHtmlEditorToolbarItem.location
      * @default "before"
+     * @type Enums.ToolbarItemLocation
      * @prevFileNamespace DevExpress.ui
      * @public
      */

@@ -417,6 +417,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.minorTickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.VizTimeInterval
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -461,6 +462,7 @@ export interface dxPolarChartArgumentAxis extends dxPolarChartCommonAxisSettings
     /**
      * @docid dxPolarChartOptions.argumentAxis.tickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.VizTimeInterval
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -1026,6 +1028,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minVisualRangeLength
      * @inherits VizTimeInterval
+     * @type number|object|Enums.VizTimeInterval
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -1042,6 +1045,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.minorTickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.VizTimeInterval
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -1072,6 +1076,7 @@ export interface dxPolarChartValueAxis extends dxPolarChartCommonAxisSettings {
     /**
      * @docid dxPolarChartOptions.valueAxis.tickInterval
      * @inherits VizTimeInterval
+     * @type number|object|Enums.VizTimeInterval
      * @prevFileNamespace DevExpress.viz
      * @public
      */

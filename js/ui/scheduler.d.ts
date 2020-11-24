@@ -196,6 +196,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
     /**
      * @docid dxSchedulerOptions.firstDayOfWeek
      * @extends FirstDayOfWeek
+     * @type Enums.FirstDayOfWeek
      * @prevFileNamespace DevExpress.ui
      * @public
      */

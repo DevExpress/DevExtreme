@@ -83,7 +83,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onCustomCommand?: ((e: { component?: dxGantt, element?: dxElement, name?: string }) => any);    
+    onCustomCommand?: ((e: { component?: dxGantt, element?: dxElement, name?: string }) => any);
         /**
      * @docid dxGanttOptions.onContextMenuPreparing
      * @extends Action
@@ -98,7 +98,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @prevFileNamespace DevExpress.ui
      * @public
      */
-    onContextMenuPreparing?: ((e: { component?: dxGantt, element?: dxElement, cancel?: boolean, event?: event, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => any);   
+    onContextMenuPreparing?: ((e: { component?: dxGantt, element?: dxElement, cancel?: boolean, event?: event, targetKey?: any, targetType?: string, data?: any, items?: Array<any> }) => any);
     /**
      * @docid dxGanttOptions.onTaskInserting
      * @extends Action
@@ -157,7 +157,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
      * @type_function_param1_field6 key:any
      * @type_function_param1_field7 readOnlyFields:Array<string>
      * @type_function_param1_field8 hiddenFields:Array<string>
-     * 
+     *
      * @action
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -318,6 +318,7 @@ export interface dxGanttOptions extends WidgetOptions<dxGantt> {
     /**
      * @docid dxGanttOptions.firstDayOfWeek
      * @extends FirstDayOfWeek
+     * @type Enums.FirstDayOfWeek
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -499,7 +500,7 @@ export default class dxGantt extends Widget {
     getTaskResources(key: any): Array<any>;
     /**
      * @docid dxGanttMethods.getVisibleTaskKeys
-     * @publicName getVisibleTaskKeys()     
+     * @publicName getVisibleTaskKeys()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -507,7 +508,7 @@ export default class dxGantt extends Widget {
     getVisibleTaskKeys(): Array<any>;
     /**
      * @docid dxGanttMethods.getVisibleDependencyKeys
-     * @publicName getVisibleDependencyKeys()     
+     * @publicName getVisibleDependencyKeys()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -515,7 +516,7 @@ export default class dxGantt extends Widget {
     getVisibleDependencyKeys(): Array<any>;
     /**
      * @docid dxGanttMethods.getVisibleResourceKeys
-     * @publicName getVisibleResourceKeys()     
+     * @publicName getVisibleResourceKeys()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -523,7 +524,7 @@ export default class dxGantt extends Widget {
     getVisibleResourceKeys(): Array<any>;
     /**
      * @docid dxGanttMethods.getVisibleResourceAssignmentKeys
-     * @publicName getVisibleResourceAssignmentKeys()     
+     * @publicName getVisibleResourceAssignmentKeys()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -531,7 +532,7 @@ export default class dxGantt extends Widget {
     getVisibleResourceAssignmentKeys(): Array<any>;
     /**
      * @docid dxGanttMethods.updateDimensions
-     * @publicName updateDimensions()     
+     * @publicName updateDimensions()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -576,6 +577,7 @@ export interface dxGanttToolbarItem extends dxToolbarItem {
     /**
      * @docid dxGanttToolbarItem.location
      * @default "before"
+     * @type Enums.ToolbarItemLocation
      * @prevFileNamespace DevExpress.ui
      * @public
      */

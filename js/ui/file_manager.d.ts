@@ -318,6 +318,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
     /**
      * @docid dxFileManagerToolbarItem.location
      * @default "before"
+     * @type Enums.ToolbarItemLocation
      * @prevFileNamespace DevExpress.ui
      * @public
      */

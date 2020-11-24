@@ -218,6 +218,7 @@ export interface VizRange {
     /**
      * @docid VizRange.length
      * @inherits VizTimeInterval
+     * @type number|object|Enums.VizTimeInterval
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
