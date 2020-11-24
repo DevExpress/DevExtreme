@@ -67,15 +67,11 @@ export default {
     color: rgba(0, 0, 0, 0.3);
 }
 
-.dx-scheduler-date-table-cell, .dx-template-wrapper {
-    position: relative;
-    height: 100%;
-}
-
 .dx-scheduler-date-table-cell .dx-template-wrapper {
     position: absolute;
     width: 100%;
     height: 100%;
+    padding-right: 6px;
 }
 
 </style>
