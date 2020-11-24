@@ -9,7 +9,7 @@ import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import subscribes from 'ui/scheduler/ui.scheduler.subscribes';
 import dataUtils from 'core/element_data';
-import { SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
+import { createWrapper, SchedulerTestWrapper } from '../../helpers/scheduler/helpers.js';
 
 import 'common.css!';
 import 'generic_light.css!';
@@ -1558,4 +1558,99 @@ QUnit.test('Long appointment should not affect render the next appointment', fun
     const { itemData } = items[2];
     assert.deepEqual(itemData.startDate, data[1].startDate, 'Simple item startDate is correct');
     assert.deepEqual(itemData.endDate, data[1].endDate, 'Simple item endDate is correct');
+});
+
+QUnit.module('Cell Templates', () => {
+    const data = [{
+        startDate: new Date(2020, 10, 24, 10),
+        endDate: new Date(2020, 10, 24, 11),
+        priorityId: 1,
+    }, {
+        startDate: new Date(2020, 10, 25, 10),
+        endDate: new Date(2020, 10, 25, 11),
+        priorityId: 1,
+    }, {
+        startDate: new Date(2020, 10, 24, 10),
+        endDate: new Date(2020, 10, 24, 11),
+        priorityId: 2,
+    }, {
+        startDate: new Date(2020, 10, 25, 10),
+        endDate: new Date(2020, 10, 25, 11),
+        priorityId: 2,
+    }];
+    const basicOptions = {
+        dataSource: data,
+        views: ['agenda'],
+        currentView: 'agenda',
+        currentDate: new Date(2020, 10, 24),
+        resources: [{
+            fieldExpr: 'priorityId',
+            allowMultiple: false,
+            dataSource: [{
+                text: 'Low Priority',
+                id: 1
+            }, {
+                text: 'High Priority',
+                id: 2
+            }],
+            label: 'Priority',
+        }],
+    };
+
+    QUnit.test('Date cell template should have correct data without grouping', function(assert) {
+        let currentTemplateIndex = 0;
+        const expectedData = [{
+            date: new Date(2020, 10, 24),
+            groups: {},
+            groupIndex: undefined,
+            text: '24 Tue',
+        }, {
+            date: new Date(2020, 10, 25),
+            groups: {},
+            groupIndex: undefined,
+            text: '25 Wed',
+        }];
+
+        createWrapper({
+            ...basicOptions,
+            dateCellTemplate: (data) => {
+                assert.deepEqual(data, expectedData[currentTemplateIndex % 2], 'Correct template data');
+                currentTemplateIndex += 1;
+            },
+        });
+    });
+
+    QUnit.test('Date cell template should have correct data with grouping', function(assert) {
+        let currentTemplateIndex = 0;
+        const expectedData = [{
+            date: new Date(2020, 10, 24),
+            groups: { priorityId: 1 },
+            groupIndex: 0,
+            text: '24 Tue',
+        }, {
+            date: new Date(2020, 10, 25),
+            groups: { priorityId: 1 },
+            groupIndex: 0,
+            text: '25 Wed',
+        }, {
+            date: new Date(2020, 10, 24),
+            groups: { priorityId: 2 },
+            groupIndex: 1,
+            text: '24 Tue',
+        }, {
+            date: new Date(2020, 10, 25),
+            groups: { priorityId: 2 },
+            groupIndex: 1,
+            text: '25 Wed',
+        }];
+
+        createWrapper({
+            ...basicOptions,
+            dateCellTemplate: (data) => {
+                assert.deepEqual(data, expectedData[currentTemplateIndex % 4], 'Correct template data');
+                currentTemplateIndex += 1;
+            },
+            groups: ['priorityId'],
+        });
+    });
 });

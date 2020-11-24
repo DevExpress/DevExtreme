@@ -329,18 +329,23 @@ class SchedulerAgenda extends SchedulerWorkSpace {
     _prepareCellTemplateOptions(text, date, rowIndex, $cell) {
         const groupsOpt = this.option('groups');
         const groups = {};
-        const path = groupsOpt.length && this._getPathToLeaf(rowIndex) || [];
+        const isGroupedView = !!groupsOpt.length;
+        const path = isGroupedView && this._getPathToLeaf(rowIndex) || [];
 
         path.forEach(function(resourceValue, resourceIndex) {
             const resourceName = groupsOpt[resourceIndex].name;
             groups[resourceName] = resourceValue;
         });
+        const groupIndex = isGroupedView
+            ? this._getGroupIndexByResourceId(groups)
+            : undefined;
 
         return {
             model: {
-                text: text,
-                date: date,
-                groups: groups
+                text,
+                date,
+                groups,
+                groupIndex,
             },
             container: getPublicElement($cell),
             index: rowIndex
