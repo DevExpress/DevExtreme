@@ -264,11 +264,11 @@ const testIndicators = function(testCases, $element, assert) {
         });
         const $element = this.instance.$element();
 
-        assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 23, 1, 'Indicator has correct height');
+        assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 23, 2.1, 'Indicator has correct height');
 
         this.instance.option('allDayExpanded', true);
 
-        assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 73, 1, 'Indicator has correct height');
+        assert.roughEqual($element.find('.' + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS).eq(0).get(0).getBoundingClientRect().height, 73, 2.1, 'Indicator has correct height');
     });
 
     QUnit.test('Shader should occupy correct cell count', function(assert) {
