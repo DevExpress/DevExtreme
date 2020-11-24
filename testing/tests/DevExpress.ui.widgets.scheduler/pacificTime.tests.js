@@ -250,6 +250,48 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
     });
 
     module('Common', moduleConfig, () => {
+        const getToday = (offset = 0) => {
+            const realCurrentDay = new Date();
+            return (new Date(realCurrentDay.setDate(realCurrentDay.getDate() + offset))).getDate();
+        };
+
+        [{
+            currentView: 'month',
+            getViewToday: scheduler => scheduler.workSpace.getMonthCurrentDay()
+        }, {
+            currentView: 'week',
+            getViewToday: scheduler => scheduler.workSpace.getWeekCurrentDay()
+        }].forEach(({ currentView, getViewToday }) => {
+            [{
+                timeZone: undefined,
+                today: getToday()
+            }, {
+                timeZone: 18, // TODO so that the difference between the local time zone is more than a day
+                today: getToday(1)
+            }].forEach(({ timeZone, today }) => {
+                test(`Today in calendar should be equal with today in grid, view='${currentView}' timeZone='${timeZone}' (T946335)`, function(assert) {
+                    const scheduler = createWrapper({
+                        timeZone,
+                        currentView,
+                        dataSource: [],
+                        views: ['month', 'week'],
+                        height: 600
+                    });
+
+                    assert.equal(getViewToday(scheduler), today, 'Grid\'s today value should be valid');
+
+                    const { navigator } = scheduler.header;
+                    navigator.caption.click();
+
+                    const calendarToday = navigator.popover.calendar.today.value;
+                    const calendarSelected = navigator.popover.calendar.selected.value;
+
+                    assert.equal(calendarToday, today, 'Calendar\'s today value should be valid');
+                    assert.equal(calendarSelected, today, 'Calendar\'s selected value should be valid');
+                });
+            });
+        });
+
         test('onAppointmentFormOpening should have correct dates on new appointment when custom timezone(T862350)', function(assert) {
             const assertDate = new Date(2015, 0, 25, 2, 0);
             const scheduler = createWrapper({
