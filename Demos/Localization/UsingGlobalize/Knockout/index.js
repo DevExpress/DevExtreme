@@ -64,17 +64,17 @@ window.onload = function() {
     }
 
     $.when(
-        $.getJSON("../../../../node_modules/cldr-dates-full/main/de/ca-gregorian.json"),
-        $.getJSON("../../../../node_modules/cldr-numbers-full/main/de/numbers.json"),
-        $.getJSON("../../../../node_modules/cldr-numbers-full/main/de/currencies.json"),
-        $.getJSON("../../../../node_modules/cldr-dates-full/main/ru/ca-gregorian.json"),
-        $.getJSON("../../../../node_modules/cldr-numbers-full/main/ru/numbers.json"),
-        $.getJSON("../../../../node_modules/cldr-numbers-full/main/ru/currencies.json"),
-        $.getJSON("../../../../node_modules/cldr-core/supplemental/likelySubtags.json"),
-        $.getJSON("../../../../node_modules/cldr-core/supplemental/timeData.json"),
-        $.getJSON("../../../../node_modules/cldr-core/supplemental/weekData.json"),
-        $.getJSON("../../../../node_modules/cldr-core/supplemental/currencyData.json"),
-        $.getJSON("../../../../node_modules/cldr-core/supplemental/numberingSystems.json")
+        $.getJSON("../../../../../node_modules/cldr-dates-full/main/de/ca-gregorian.json"),
+        $.getJSON("../../../../../node_modules/cldr-numbers-full/main/de/numbers.json"),
+        $.getJSON("../../../../../node_modules/cldr-numbers-full/main/de/currencies.json"),
+        $.getJSON("../../../../../node_modules/cldr-dates-full/main/ru/ca-gregorian.json"),
+        $.getJSON("../../../../../node_modules/cldr-numbers-full/main/ru/numbers.json"),
+        $.getJSON("../../../../../node_modules/cldr-numbers-full/main/ru/currencies.json"),
+        $.getJSON("../../../../../node_modules/cldr-core/supplemental/likelySubtags.json"),
+        $.getJSON("../../../../../node_modules/cldr-core/supplemental/timeData.json"),
+        $.getJSON("../../../../../node_modules/cldr-core/supplemental/weekData.json"),
+        $.getJSON("../../../../../node_modules/cldr-core/supplemental/currencyData.json"),
+        $.getJSON("../../../../../node_modules/cldr-core/supplemental/numberingSystems.json")
     ).then(function() {
         return [].slice.apply(arguments, [0]).map(function(result) {
             return result[0];

@@ -17,7 +17,7 @@ System.config({
     /**/
   },
   paths: {
-    'npm:': '../../../../node_modules/'
+    'npm:': '../../../../../node_modules/'
   },
   map: {
     'vue': 'npm:vue/dist/vue.esm-browser.js',

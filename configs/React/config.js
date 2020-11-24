@@ -14,7 +14,7 @@ System.config({
     /**/
 },
   paths: {
-    'npm:': '../../../../node_modules/'
+    'npm:': '../../../../../node_modules/'
   },
   defaultExtension: 'js',
   map: {
