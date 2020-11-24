@@ -236,14 +236,10 @@ class FileUploader extends Editor {
     }
 
     _initOptions(options) {
-        let isLabelTextDefined = true;
-        if(!('labelText' in options)) {
-            isLabelTextDefined = false;
-        }
+        const isLabelTextDefined = 'labelText' in options;
         super._initOptions(options);
-        if(!isLabelTextDefined) {
-            const correctedValue = this._shouldDragOverBeRendered() ? this.option('labelText') : '';
-            this.option('labelText', correctedValue);
+        if(!isLabelTextDefined && !this._shouldDragOverBeRendered()) {
+            this.option('labelText', '');
         }
     }
 
