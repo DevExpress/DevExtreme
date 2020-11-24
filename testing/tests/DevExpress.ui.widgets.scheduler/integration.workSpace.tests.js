@@ -2961,28 +2961,37 @@ QUnit.module('dateCellTemplate', () => {
         type: 'day',
         dateCellCount: 2,
         intervalCount: 2,
+        timeCellCount: 4,
     }, {
         type: 'week',
         dateCellCount: 7,
         intervalCount: 1,
+        timeCellCount: 4,
     }, {
         type: 'month',
         dateCellCount: 7,
         intervalCount: 1,
+        timeCellCount: 0,
     }, {
         type: 'timelineDay',
         dateCellCount: 2,
         intervalCount: 2,
+        timeCellCount: 8,
     }, {
         type: 'timelineWeek',
         dateCellCount: 7,
         intervalCount: 1,
+        timeCellCount: 28,
     }, {
         type: 'timelineMonth',
         dateCellCount: 30,
         intervalCount: 1,
+        timeCellCount: 0,
     }];
-    const totalCells = 55;
+
+    const totalDateCells = 55;
+    const totalTimeCells = 44;
+
     const priorityData = [{
         text: 'Low Priority',
         id: 1
@@ -2993,7 +3002,7 @@ QUnit.module('dateCellTemplate', () => {
 
     [true, false].forEach((isRenovatedView) => {
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
-            assert.expect(totalCells * 2);
+            assert.expect(totalDateCells * 2);
 
             const scheduler = createWrapper({
                 views: viewsBase,
@@ -3011,7 +3020,7 @@ QUnit.module('dateCellTemplate', () => {
         });
 
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and vertical grouping is used`, function(assert) {
-            assert.expect(totalCells * 2);
+            assert.expect(totalDateCells * 2);
             const views = viewsBase.map(({ type, intervalCount }) => ({
                 type,
                 intervalCount,
@@ -3041,7 +3050,7 @@ QUnit.module('dateCellTemplate', () => {
         });
 
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and grouping by date is used`, function(assert) {
-            assert.expect(totalCells * 2);
+            assert.expect(totalDateCells * 2);
             const views = viewsBase.map(({ type, intervalCount }) => ({
                 type,
                 intervalCount,
@@ -3072,7 +3081,7 @@ QUnit.module('dateCellTemplate', () => {
         });
 
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView} and horizontal grouping is used`, function(assert) {
-            assert.expect(totalCells * 4);
+            assert.expect(totalDateCells * 4);
             const views = viewsBase.map(({ type, intervalCount }) => ({
                 type,
                 intervalCount,
@@ -3101,6 +3110,200 @@ QUnit.module('dateCellTemplate', () => {
 
             viewsBase.forEach(({ type, dateCellCount }) => {
                 cellCountPerGroup = dateCellCount;
+                scheduler.instance.option('currentView', type);
+            });
+        });
+
+        QUnit.test(`'"groups" and "groupIndex" shoud be correct in timrCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
+            assert.expect(totalTimeCells * 2);
+
+            const scheduler = createWrapper({
+                views: viewsBase,
+                currentView: 'day',
+                currentDate: new Date(2020, 10, 19),
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    assert.equal(groups, undefined, 'Groups property is undefined');
+                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
+                },
+                startDayHour: 10,
+                endDayHour: 12,
+            });
+
+            viewsBase.forEach(({ type }) => {
+                scheduler.instance.option('currentView', type);
+            });
+        });
+
+        QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+            + `when renovateRender is ${isRenovatedView} and vertical grouping is used in simple views`, function(assert) {
+            assert.expect(32);
+            const views = viewsBase.map(({ type, intervalCount }) => ({
+                type,
+                intervalCount,
+                groupOrientation: 'vertical',
+            }));
+            let cellCountPerGroup = 4;
+
+            const scheduler = createWrapper({
+                views: views,
+                currentView: 'day',
+                currentDate: new Date(2020, 10, 19),
+                timeCellTemplate: ({ groups, groupIndex }, index) => {
+                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+
+                    assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
+                    assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+                },
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority',
+                }],
+                startDayHour: 10,
+                endDayHour: 12,
+            });
+
+            viewsBase.slice(0, 3).forEach(({ type, timeCellCount }) => {
+                cellCountPerGroup = timeCellCount;
+                scheduler.instance.option('currentView', type);
+            });
+        });
+
+        QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+            + `when renovateRender is ${isRenovatedView} and vertical grouping is used in timleine views`, function(assert) {
+            assert.expect(72);
+            const views = viewsBase.map(({ type, intervalCount }) => ({
+                type,
+                intervalCount,
+                groupOrientation: 'vertical',
+            }));
+
+            const scheduler = createWrapper({
+                views: views,
+                currentView: 'timelineDay',
+                currentDate: new Date(2020, 10, 19),
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    assert.equal(groups, undefined, 'Groups property is undefined');
+                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
+                },
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority',
+                }],
+                startDayHour: 10,
+                endDayHour: 12,
+            });
+
+            viewsBase.slice(3, 6).forEach(({ type }) => {
+                scheduler.instance.option('currentView', type);
+            });
+        });
+
+        QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+            + ` when renovateRender is ${isRenovatedView} and grouping by date is used`, function(assert) {
+            assert.expect(totalTimeCells * 2);
+            const views = viewsBase.map(({ type, intervalCount }) => ({
+                type,
+                intervalCount,
+                groupOrientation: 'horizontal',
+                groupByDate: true,
+            }));
+
+            const scheduler = createWrapper({
+                views: views,
+                currentView: 'day',
+                currentDate: new Date(2020, 10, 19),
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    assert.equal(groups, undefined, 'Groups property is undefined');
+                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
+                },
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority',
+                }],
+                startDayHour: 10,
+                endDayHour: 12,
+            });
+
+            viewsBase.forEach(({ type }) => {
+                scheduler.instance.option('currentView', type);
+            });
+        });
+
+        QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+            + ` when renovateRender is ${isRenovatedView} and horizontal grouping is used in simple views`, function(assert) {
+            assert.expect(16);
+            const views = viewsBase.map(({ type, intervalCount }) => ({
+                type,
+                intervalCount,
+                groupOrientation: 'horizontal',
+            }));
+
+            const scheduler = createWrapper({
+                views: views,
+                currentView: 'day',
+                currentDate: new Date(2020, 10, 19),
+                timeCellTemplate: ({ groups, groupIndex }) => {
+                    assert.equal(groups, undefined, 'Groups property is undefined');
+                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
+                },
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority',
+                }],
+                startDayHour: 10,
+                endDayHour: 12,
+            });
+
+            viewsBase.slice(0, 3).forEach(({ type }) => {
+                scheduler.instance.option('currentView', type);
+            });
+        });
+
+        QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+            + ` when renovateRender is ${isRenovatedView} and horizontal grouping is used in timeline views`, function(assert) {
+            assert.expect((totalTimeCells - 8) * 4);
+            const views = viewsBase.map(({ type, intervalCount }) => ({
+                type,
+                intervalCount,
+                groupOrientation: 'horizontal',
+            }));
+            let cellCountPerGroup = 8;
+
+            const scheduler = createWrapper({
+                views: views,
+                currentView: 'timelineDay',
+                currentDate: new Date(2020, 10, 19),
+                timeCellTemplate: ({ groups, groupIndex }, index) => {
+                    const currentGroupIndex = Math.floor(index / cellCountPerGroup);
+
+                    assert.deepEqual(groups, { priority: currentGroupIndex + 1 }, 'Groups property is correct');
+                    assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
+                },
+                groups: ['priority'],
+                resources: [{
+                    fieldExpr: 'priority',
+                    allowMultiple: false,
+                    dataSource: priorityData,
+                    label: 'Priority',
+                }],
+                startDayHour: 10,
+                endDayHour: 12,
+            });
+
+            viewsBase.slice(3, 6).forEach(({ type, timeCellCount }) => {
+                cellCountPerGroup = timeCellCount;
                 scheduler.instance.option('currentView', type);
             });
         });
