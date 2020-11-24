@@ -8,8 +8,16 @@ import 'ui/range_slider';
 import 'ui/number_box/number_box';
 import 'ui/validator';
 import 'common.css!';
+import 'generic_light.css!';
 
 QUnit.testStart(function() {
+    $(`<style>
+        .dx-slider-handle { margin: 0 !important; width: auto; height: auto; border: none !important;}
+        .dx-slider-range.dx-slider-range-visible { border: none; }
+        .dx-slider-bar { margin-left: 0 !important; margin-right: 0 !important; }
+       </style>`
+    ).appendTo('head');
+
     const markup =
         '<div id="slider"></div><div id="start-value"></div><div id="end-value"></div>';
 
