@@ -1148,8 +1148,7 @@ const EditingController = modules.ViewController.inherit((function() {
         },
 
         editRow: function(rowIndex) {
-            const that = this;
-            const dataController = that._dataController;
+            const dataController = this._dataController;
             const items = dataController.items();
             const item = items[rowIndex];
             const params = { data: item && item.data, cancel: false };
@@ -1172,15 +1171,18 @@ const EditingController = modules.ViewController.inherit((function() {
                 params.key = item.key;
             }
 
-            if(that._isEditingStart(params)) {
+            if(this._isEditingStart(params)) {
                 return;
             }
 
             this.resetChanges();
-            that.init();
-            that._resetEditColumnName();
-            that._pageIndex = dataController.pageIndex();
-
+            this.init();
+            this._resetEditColumnName();
+            this._pageIndex = dataController.pageIndex();
+            this._addInternalData({
+                key: item.key,
+                oldData: item.data
+            });
             this._setEditRowKey(item.key);
         },
 
@@ -1442,20 +1444,25 @@ const EditingController = modules.ViewController.inherit((function() {
         _processCanceledEditingCell: function() { },
 
         _prepareEditCell: function(params, item, editColumnIndex, editRowIndex) {
-            const that = this;
-
             if(!item.isNewRow) {
                 params.key = item.key;
             }
 
-            if(that._isEditingStart(params)) {
+            if(this._isEditingStart(params)) {
                 return false;
             }
 
-            that._pageIndex = that._dataController.pageIndex();
+            this._pageIndex = this._dataController.pageIndex();
 
-            that._setEditRowKey(item.key);
-            that._setEditColumnNameByIndex(editColumnIndex);
+            this._setEditRowKey(item.key);
+            this._setEditColumnNameByIndex(editColumnIndex);
+
+            if(!params.column.showEditorAlways) {
+                this._addInternalData({
+                    key: item.key,
+                    oldData: item.data
+                });
+            }
 
             return true;
         },
