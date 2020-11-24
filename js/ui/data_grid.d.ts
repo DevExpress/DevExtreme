@@ -883,6 +883,7 @@ export interface GridBaseScrolling {
     scrollByThumb?: boolean;
     /**
      * @docid GridBaseOptions.scrolling.showScrollbar
+     * @default 'onHover' [for](desktop)
      * @type Enums.ShowScrollbarMode
      * @default 'onScroll'
      * @prevFileNamespace DevExpress.ui

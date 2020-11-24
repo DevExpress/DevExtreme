@@ -480,7 +480,7 @@ function checkPercentValue(assert, point, total) {
     assert.equal(point.percent, point.value / total);
 }
 
-function getArgAxis(visibleArea, interval) {
+function getArgAxis(visibleArea, interval, aggregationInterval) {
     const translator = new MockTranslator({
         interval: interval || 100,
         translate: { 10: 311, 11: 312, 12: 313, 20: 222, 21: 310, 22: 223, 30: 114, 31: 112, 32: 218, 0: 315 },
@@ -492,7 +492,13 @@ function getArgAxis(visibleArea, interval) {
         },
         getVisibleArea() {
             return visibleArea && [visibleArea.min, visibleArea.max] || [];
-        }
+        },
+        getTickInterval() {
+            return translator.getBusinessRange().interval;
+        },
+        getAggregationInterval() {
+            return aggregationInterval;
+        },
     };
 }
 
@@ -531,9 +537,9 @@ function getValAxes(name, visibleArea) {
     }[name || 'axis1'];
 }
 
-function createSeries(options, valAxis, visibleArea, interval) {
+function createSeries(options, valAxis, visibleArea, interval, aggregationInterval) {
     return new MockSeries($.extend({
-        argumentAxis: getArgAxis(visibleArea && visibleArea.arg, interval),
+        argumentAxis: getArgAxis(visibleArea && visibleArea.arg, interval, aggregationInterval),
         valueAxis: getValAxes(valAxis, visibleArea && visibleArea.val)
     }, options));
 }
@@ -1276,6 +1282,34 @@ QUnit.test('null values. ignoreEmptyPoints is set for the second series - null v
     assert.deepEqual(series3Points[0].coordinatesCorrection, { width: 20, offset: 25 }, 'Width and offset, Series 3, point 1');
     assert.deepEqual(series3Points[1].coordinatesCorrection, { width: 32, offset: 19.5 }, 'Width and offset, Series 3, point 2');
     assert.deepEqual(series3Points[2].coordinatesCorrection, { width: 32, offset: 19.5 }, 'Width and offset, Series 3, point 3');
+});
+
+QUnit.module('Bar series - size by aggregation');
+
+QUnit.test('Translator interval is less then aggregation interval', function(assert) {
+    const series = createSeries({
+        points: pointsForStacking.points1DateArgument(),
+        aggregation: { enabled: true }
+    }, undefined, undefined, 50, 100);
+    const expectedWidth = 35;
+
+    createSeriesFamily('bar', [series]);
+
+    checkSeries(assert, series, expectedWidth, 0);
+});
+
+QUnit.test('Translator interval is greater then aggregation interval', function(assert) {
+    const series = createSeries({
+        points: pointsForStacking.points1DateArgument(),
+        aggregation: { enabled: true }
+    }, undefined, undefined, { milliseconds: 100 }, { milliseconds: 50 });
+    series.argumentType = 'datetime';
+    series.getArgumentAxis().getTranslator().getInterval = function(interval) { return interval; };
+    const expectedWidth = 35;
+
+    createSeriesFamily('bar', [series]);
+
+    checkSeries(assert, series, expectedWidth, 0);
 });
 
 QUnit.module('Bar series - custom min size');

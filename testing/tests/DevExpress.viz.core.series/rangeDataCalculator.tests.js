@@ -30,8 +30,12 @@ const createSeries = function(options, renderSettings, widgetType) {
         },
         getOptions() {
             return {
-                logarithmBase: 10
+                logarithmBase: 10,
+                type: 'continuous'
             };
+        },
+        getVisualRangeCenter({ minVisible, maxVisible }) {
+            return (minVisible + maxVisible) / 2;
         }
     };
     renderSettings.valueAxis = renderSettings.valueAxis || {
@@ -2990,8 +2994,19 @@ QUnit.test('Calculate interval in range data when aggregation is enabled', funct
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
-    assert.strictEqual(rangeData.arg.max, 20, 'Max arg should be correct');
-    assert.strictEqual(rangeData.arg.interval, 3, 'Min interval arg should be correct');
+    assert.strictEqual(rangeData.arg.max, 25, 'Max arg should be correct');
+    assert.strictEqual(rangeData.arg.interval, 4, 'Min interval arg should be correct');
+});
+
+QUnit.test('Calculate range data when aggregation is enabled. Discrete data', function(assert) {
+    const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
+    const series = createSeries({ type: 'bar', argumentAxisType: 'discrete', aggregation: { enabled: true, type: 'sum' } });
+
+    series.updateData(data);
+    series.createPoints();
+    const rangeData = series.getRangeData();
+
+    assert.deepEqual(rangeData.arg, { categories: [2, 5, 13, 20] });
 });
 
 QUnit.test('Calculate range data when aggregation enabled. Add data range if axis viewport is set ', function(assert) {
@@ -3043,7 +3058,7 @@ QUnit.test('Calculate range data when aggregation enabled. Do not inculde data r
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 5, 'Min arg should be correct');
-    assert.strictEqual(rangeData.arg.max, 10, 'Max arg should be correct');
+    assert.strictEqual(rangeData.arg.max, 15, 'Max arg should be correct');
     assert.strictEqual(rangeData.arg.interval, 5, 'Min interval arg should be correct');
 });
 
@@ -3070,7 +3085,7 @@ QUnit.test('Calculate range data when aggregation enabled. Do not inculde data m
 
     assert.ok(rangeData, 'Range data should be created');
     assert.strictEqual(rangeData.arg.min, 2, 'Min arg should be correct');
-    assert.strictEqual(rangeData.arg.max, 10, 'Max arg should be correct');
+    assert.strictEqual(rangeData.arg.max, 15, 'Max arg should be correct');
     assert.strictEqual(rangeData.arg.interval, 5, 'Min interval arg should be correct');
 });
 

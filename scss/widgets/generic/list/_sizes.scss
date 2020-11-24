@@ -14,36 +14,36 @@ $generic-list-select-all-label-line-height: null !default;
 $generic-list-searchbox-margin-bottom: null !default;
 $generic-list-item-vertical-padding: null !default;
 
-$generic-list-border-width: 1px;
+$generic-list-border-width: 1px !default;
 
 @if $size == "default" {
-  $generic-list-item-horizontal-padding: 10px;
-  $generic-list-item-border-width: 1px;
-  $generic-list-group-header-vertical-padding: $list-group-header-default-padding-top;
+  $generic-list-item-horizontal-padding: 10px !default;
+  $generic-list-item-border-width: 1px !default;
+  $generic-list-group-header-vertical-padding: $list-group-header-default-padding-top !default;
 
-  $generic-list-deletebutton-padding: 3px;
+  $generic-list-deletebutton-padding: 3px !default;
 
-  $generic-list-select-all-margin-top: -1px;
-  $generic-list-select-all-margin-right: 0;
-  $generic-list-select-all-label-margin-top: 1px;
-  $generic-list-select-all-label-line-height: 17px;
+  $generic-list-select-all-margin-top: -1px !default;
+  $generic-list-select-all-margin-right: 0 !default;
+  $generic-list-select-all-label-margin-top: 1px !default;
+  $generic-list-select-all-label-line-height: 17px !default;
 
-  $generic-list-searchbox-margin-bottom: 5px;
-  $generic-list-item-vertical-padding: 10px;
+  $generic-list-searchbox-margin-bottom: 5px !default;
+  $generic-list-item-vertical-padding: 10px !default;
 }
 
 @else if $size == "compact" {
-  $generic-list-item-horizontal-padding: 5px;
-  $generic-list-item-border-width: 0;
-  $generic-list-group-header-vertical-padding: $list-group-header-compact-padding-top;
+  $generic-list-item-horizontal-padding: 5px !default;
+  $generic-list-item-border-width: 0 !default;
+  $generic-list-group-header-vertical-padding: $list-group-header-compact-padding-top !default;
 
-  $generic-list-deletebutton-padding: 1px;
+  $generic-list-deletebutton-padding: 1px !default;
 
-  $generic-list-select-all-margin-top: 1px;
-  $generic-list-select-all-margin-right: $generic-list-item-horizontal-padding;
-  $generic-list-select-all-label-margin-top: -1px;
-  $generic-list-select-all-label-line-height: 16px;
+  $generic-list-select-all-margin-top: 1px !default;
+  $generic-list-select-all-margin-right: $generic-list-item-horizontal-padding !default;
+  $generic-list-select-all-label-margin-top: -1px !default;
+  $generic-list-select-all-label-line-height: 16px !default;
 
-  $generic-list-searchbox-margin-bottom: 3px;
-  $generic-list-item-vertical-padding: 5px;
+  $generic-list-searchbox-margin-bottom: 3px !default;
+  $generic-list-item-vertical-padding: 5px !default;
 }

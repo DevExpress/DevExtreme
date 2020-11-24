@@ -26,68 +26,68 @@ $material-command-edit-icon-size: null !default;
 $material-filter-row-between-editor-padding: null !default;
 $material-command-column-additional-right-margin: null !default;
 
-$material-grid-base-header-line-height: 16px;
-$material-grid-base-header-cell-font-size: 12px;
-$material-grid-base-header-icon-size: 15px;
-$material-grid-base-column-chooser-item-margin: 8px;
-$material-command-edit-icon-margin: 2px;
+$material-grid-base-header-line-height: 16px !default;
+$material-grid-base-header-cell-font-size: 12px !default;
+$material-grid-base-header-icon-size: 15px !default;
+$material-grid-base-column-chooser-item-margin: 8px !default;
+$material-command-edit-icon-margin: 2px !default;
 
 @if $size == "default" {
-  $material-grid-base-cell-height: 48px;
-  $material-grid-base-header-height: 56px;
-  $material-grid-base-cell-line-height: 20px;
-  $material-grid-base-cell-font-size: 14px;
+  $material-grid-base-cell-height: 48px !default;
+  $material-grid-base-header-height: 56px !default;
+  $material-grid-base-cell-line-height: 20px !default;
+  $material-grid-base-cell-font-size: 14px !default;
 
-  $material-grid-base-checkbox-size: 18px;
-  $material-grid-base-cell-horizontal-padding: 14px;
-  $material-grid-base-cell-first-column-padding: 18px;
-  $material-grid-base-cell-last-column-padding: 18px;
-  $material-grid-base-filter-icon-size: 22px;
+  $material-grid-base-checkbox-size: 18px !default;
+  $material-grid-base-cell-horizontal-padding: 14px !default;
+  $material-grid-base-cell-first-column-padding: 18px !default;
+  $material-grid-base-cell-last-column-padding: 18px !default;
+  $material-grid-base-filter-icon-size: 22px !default;
 
-  $material-grid-base-texteditor-input-padding: 32px;
-  $material-grid-base-menu-item-padding: 11px 4px;
-  $material-grid-base-column-chooser-horizontal-padding: 24px;
-  $material-grid-base-column-chooser-paddings: 16px $material-grid-base-column-chooser-horizontal-padding 9px;
-  $material-grid-base-grouppanel-item-margin: 10px;
-  $material-grid-base-header-panel-padding: 0 14px 0 24px;
+  $material-grid-base-texteditor-input-padding: 40px !default;
+  $material-grid-base-menu-item-padding: 11px 4px !default;
+  $material-grid-base-column-chooser-horizontal-padding: 24px !default;
+  $material-grid-base-column-chooser-paddings: 16px $material-grid-base-column-chooser-horizontal-padding 9px !default;
+  $material-grid-base-grouppanel-item-margin: 10px !default;
+  $material-grid-base-header-panel-padding: 0 14px 0 24px !default;
 
-  $material-grid-base-command-edit-column-width: 115px;
-  $material-grid-base-command-edit-column-with-icons-width: 93px;
-  $material-grid-base-adaptive-column-height: 40px;
-  $material-grid-base-treeview-search-margin: 10px;
-  $material-grid-base-nodata-font-size: 17px;
-  $material-command-edit-icon-size: 18px;
+  $material-grid-base-command-edit-column-width: 115px !default;
+  $material-grid-base-command-edit-column-with-icons-width: 93px !default;
+  $material-grid-base-adaptive-column-height: 40px !default;
+  $material-grid-base-treeview-search-margin: 10px !default;
+  $material-grid-base-nodata-font-size: 17px !default;
+  $material-command-edit-icon-size: 18px !default;
 
-  $material-filter-row-between-editor-padding: 12px;
-  $material-command-column-additional-right-margin: 0;
+  $material-filter-row-between-editor-padding: 12px !default;
+  $material-command-column-additional-right-margin: 0 !default;
 }
 
 @else if $size == "compact" {
-  $material-grid-base-cell-height: 36px;
-  $material-grid-base-header-height: 40px;
-  $material-grid-base-cell-line-height: 16px;
-  $material-grid-base-cell-font-size: 13px;
+  $material-grid-base-cell-height: 36px !default;
+  $material-grid-base-header-height: 40px !default;
+  $material-grid-base-cell-line-height: 16px !default;
+  $material-grid-base-cell-font-size: 13px !default;
 
-  $material-grid-base-checkbox-size: 16px;
-  $material-grid-base-cell-horizontal-padding: 10px;
-  $material-grid-base-cell-first-column-padding: 10px;
-  $material-grid-base-cell-last-column-padding: 10px;
-  $material-grid-base-filter-icon-size: 18px;
+  $material-grid-base-checkbox-size: 16px !default;
+  $material-grid-base-cell-horizontal-padding: 10px !default;
+  $material-grid-base-cell-first-column-padding: 10px !default;
+  $material-grid-base-cell-last-column-padding: 10px !default;
+  $material-grid-base-filter-icon-size: 18px !default;
 
-  $material-grid-base-texteditor-input-padding: 22px;
-  $material-grid-base-menu-item-padding: 8px 4px;
-  $material-grid-base-column-chooser-horizontal-padding: 8px;
-  $material-grid-base-column-chooser-paddings: 8px $material-grid-base-column-chooser-horizontal-padding 8px;
-  $material-grid-base-grouppanel-item-margin: 8px;
-  $material-grid-base-header-panel-padding: 0 10px 0 10px;
+  $material-grid-base-texteditor-input-padding: 36px !default;
+  $material-grid-base-menu-item-padding: 8px 4px !default;
+  $material-grid-base-column-chooser-horizontal-padding: 8px !default;
+  $material-grid-base-column-chooser-paddings: 8px $material-grid-base-column-chooser-horizontal-padding 8px !default;
+  $material-grid-base-grouppanel-item-margin: 8px !default;
+  $material-grid-base-header-panel-padding: 0 10px 0 10px !default;
 
-  $material-grid-base-command-edit-column-width: 105px;
-  $material-grid-base-command-edit-column-with-icons-width: 80px;
-  $material-grid-base-adaptive-column-height: 26px;
-  $material-grid-base-treeview-search-margin: 10px;
-  $material-grid-base-nodata-font-size: 14px;
-  $material-command-edit-icon-size: 16px;
+  $material-grid-base-command-edit-column-width: 105px !default;
+  $material-grid-base-command-edit-column-with-icons-width: 80px !default;
+  $material-grid-base-adaptive-column-height: 26px !default;
+  $material-grid-base-treeview-search-margin: 10px !default;
+  $material-grid-base-nodata-font-size: 14px !default;
+  $material-command-edit-icon-size: 16px !default;
 
-  $material-filter-row-between-editor-padding: 8px;
-  $material-command-column-additional-right-margin: 2px;
+  $material-filter-row-between-editor-padding: 8px !default;
+  $material-command-column-additional-right-margin: 2px !default;
 }

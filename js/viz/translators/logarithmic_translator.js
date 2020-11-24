@@ -2,11 +2,11 @@ import { raiseToExt as raiseTo, getLogExt as getLog } from '../core/utils';
 import { isDefined } from '../../core/utils/type';
 
 export default {
-    _fromValue: function(value) {
+    fromValue: function(value) {
         return value !== null ? getLog(value, this._canvasOptions.base, this._businessRange.allowNegatives, this._businessRange.linearThreshold) : value;
     },
 
-    _toValue: function(value) {
+    toValue: function(value) {
         return value !== null ? raiseTo(value, this._canvasOptions.base, this._businessRange.allowNegatives, this._businessRange.linearThreshold) : value;
     },
 
@@ -15,7 +15,7 @@ export default {
         const minValue = this.from(visibleArea.min + minBarSize);
         const canvasOptions = this._canvasOptions;
 
-        return Math.pow(canvasOptions.base, canvasOptions.rangeMinVisible + this._fromValue(this.from(visibleArea.min)) - this._fromValue(!isDefined(minValue) ? this.from(visibleArea.max) : minValue));
+        return Math.pow(canvasOptions.base, canvasOptions.rangeMinVisible + this.fromValue(this.from(visibleArea.min)) - this.fromValue(!isDefined(minValue) ? this.from(visibleArea.max) : minValue));
     },
 
     checkMinBarSize: function(initialValue, minShownValue, stackValue) {
@@ -26,8 +26,8 @@ export default {
         let updateValue;
 
         if(isDefined(minShownValue) && prevValue > 0) {
-            minBarSize = baseMethod(this._fromValue(stackValue / prevValue), this._fromValue(minShownValue) - canvasOptions.rangeMinVisible);
-            updateValue = Math.pow(canvasOptions.base, this._fromValue(prevValue) + minBarSize) - prevValue;
+            minBarSize = baseMethod(this.fromValue(stackValue / prevValue), this.fromValue(minShownValue) - canvasOptions.rangeMinVisible);
+            updateValue = Math.pow(canvasOptions.base, this.fromValue(prevValue) + minBarSize) - prevValue;
         } else {
             updateValue = baseMethod(initialValue, minShownValue);
         }

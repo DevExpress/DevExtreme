@@ -50,7 +50,7 @@ const baseRangeSeries = {
     _defaultAggregator: 'range',
 
     _aggregators: {
-        range({ intervalStart, data }, series) {
+        range({ intervalStart, intervalEnd, data }, series) {
             if(!data.length) {
                 return;
             }
@@ -74,7 +74,7 @@ const baseRangeSeries = {
             }, {
                 [val1Field]: Infinity,
                 [val2Field]: -Infinity,
-                [series.getArgumentField()]: intervalStart
+                [series.getArgumentField()]: series._getIntervalCenter(intervalStart, intervalEnd)
             });
 
             if(!isFinite(result[val1Field]) || !isFinite(result[val2Field])) {

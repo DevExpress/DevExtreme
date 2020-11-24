@@ -89,7 +89,6 @@ const createAxis = function(translator) {
     axis.getOptions = function() { return { hoverMode: 'allargumentpoints' }; };
 
     axis.stub('getZoomStartEventArg').returns({ mockArg: true });
-    axis.stub('getZoomEndEventArg').returns({ mockArg: true });
     axis.stub('getZoomBounds').returns({ mockWholeRange: true });
 
     return axis;
@@ -470,6 +469,22 @@ QUnit.test('dxpointermove on series, mouse out of the chart', function(assert) {
     assert.ok(this.options.crosshair.show.calledOnce, 'crosshair show');
     strictEqualForAllFields(assert, this.options.crosshair.show.lastCall.args[0], { point: this.point, x: 97, y: 45 });
     assert.equal(this.options.crosshair.hide.callCount, 1, 'crosshair hide');
+});
+
+QUnit.test('Mouseout from chart after dxpointermove on series. Curson on the interactive tooltip', function(assert) {
+    this.options.tooltip.stub('isCursorOnTooltip').returns(true);
+    // arrange
+    this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
+
+    // act
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    this.clock.tick(this.tracker.__trackerDelay);
+    $(document).trigger(getEvent('dxpointermove', { pageX: 500, pageY: 500 }));
+
+    // assert
+    assert.ok(this.options.tooltip.show.calledOnce);
+    assert.ok(!this.options.tooltip.stub('hide').called);
+    assert.deepEqual(this.options.tooltip.stub('isCursorOnTooltip').args[0], [500, 500]);
 });
 
 QUnit.test('dxpointermove over point', function(assert) {

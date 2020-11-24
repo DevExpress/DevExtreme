@@ -4,6 +4,7 @@ import { each as _each } from '../../core/utils/iterator';
 import { sign } from '../../core/utils/math';
 import { noop as _noop } from '../../core/utils/common';
 import { map as _map, normalizeEnum as _normalizeEnum } from './utils';
+import dateUtils from '../../core/utils/date';
 ///#DEBUG
 import { debug } from '../../core/utils/console';
 ///#ENDDEBUG
@@ -57,7 +58,21 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
     const allArguments = [];
     const seriesInStacks = {};
     const barGroupWidth = options.barGroupWidth;
-    const interval = series[0] && series[0].getArgumentAxis().getTranslator().getInterval();
+    const argumentAxis = series[0]?.getArgumentAxis();
+    let interval;
+
+    if(series[0]?.useAggregation()) {
+        const isDateArgAxis = series[0]?.argumentType === 'datetime';
+        let tickInterval = argumentAxis.getTickInterval();
+        let aggregationInterval = argumentAxis.getAggregationInterval();
+
+        tickInterval = isDateArgAxis ? dateUtils.dateToMilliseconds(tickInterval) : tickInterval;
+        aggregationInterval = isDateArgAxis ? dateUtils.dateToMilliseconds(aggregationInterval) : aggregationInterval;
+        interval = aggregationInterval < tickInterval ? aggregationInterval : tickInterval;
+    }
+
+    interval = argumentAxis?.getTranslator().getInterval(interval);
+
     const barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
     series.forEach(function(s, i) {

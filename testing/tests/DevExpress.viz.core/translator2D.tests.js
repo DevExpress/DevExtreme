@@ -925,6 +925,14 @@ QUnit.test('Default positioin when 0 is in break', function(assert) {
     assert.equal(translator.translate('canvas_position_default'), 640, 'BP inside range');
 });
 
+QUnit.test('getRangeByMinZoomValue', function(assert) {
+    const translator = createTranslatorWithScaleBreaks.call(this, { min: 100, max: 700 });
+
+    assert.deepEqual(translator.getRangeByMinZoomValue(100, { minVisible: 200, maxVisible: 250 }), [200, 300]);
+    assert.deepEqual(translator.getRangeByMinZoomValue(100, { minVisible: 100, maxVisible: 150 }), [100, 200]);
+    assert.deepEqual(translator.getRangeByMinZoomValue(100, { minVisible: 650, maxVisible: 690 }), [590, 690]);
+});
+
 QUnit.module('Datetime translator', {
     beforeEach: function() {
         this.createTranslator = function(range, _, options) {
@@ -1042,6 +1050,12 @@ QUnit.test('GetInterval when interval is 0', function(assert) {
     const translator = this.createTranslator({ min: new Date(2012, 8, 1), max: new Date(2012, 8, 3), interval: 0 });
 
     assert.equal(translator.getInterval(), 1000);
+});
+
+QUnit.test('convert', function(assert) {
+    const translator = this.createTranslator({ min: new Date(2012, 8, 1), max: new Date(2012, 8, 3) });
+
+    assert.equal(translator.convert({ days: 2 }), 172800000);
 });
 
 QUnit.module('Logarithmic translator', {
@@ -1893,6 +1907,14 @@ QUnit.test('\'to\' with datetime', function(assert) {
     });
 
     assert.equal(translator.to(new Date(2017, 1, 1, 0, 0, 0, 10), 1), 1500);
+});
+
+QUnit.test('getRangeByMinZoomValue', function(assert) {
+    const translator = this.createTranslator();
+
+    assert.deepEqual(translator.getRangeByMinZoomValue(3, { minVisible: 'a3', maxVisible: 'a4' }), ['a3', 'a5']);
+    assert.deepEqual(translator.getRangeByMinZoomValue(3, { minVisible: 'a1', maxVisible: 'a1' }), ['a1', 'a3']);
+    assert.deepEqual(translator.getRangeByMinZoomValue(3, { minVisible: 'a4', maxVisible: 'a5' }), ['a3', 'a5']);
 });
 
 QUnit.module('Interval translator', {

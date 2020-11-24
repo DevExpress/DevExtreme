@@ -125,7 +125,8 @@ export class GanttView extends Widget {
             allowTaskUpdate: value.allowTaskUpdating,
             allowResourceDelete: value.allowResourceDeleting,
             allowResourceInsert: value.allowResourceAdding,
-            allowResourceUpdate: value.allowResourceUpdating
+            allowResourceUpdate: value.allowResourceUpdating,
+            allowTaskResourceUpdate: value.allowTaskResourceUpdating
         };
     }
 
@@ -134,6 +135,9 @@ export class GanttView extends Widget {
             case 'width':
                 super._optionChanged(args);
                 this._ganttViewCore.setWidth(args.value);
+                break;
+            case 'height':
+                this._ganttViewCore.setHeight(args.value);
                 break;
             case 'tasks':
             case 'dependencies':

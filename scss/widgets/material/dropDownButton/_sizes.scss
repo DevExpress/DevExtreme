@@ -5,9 +5,9 @@
 $material-toggle-button-flex: null !default;
 
 @if $size == "default" {
-  $material-toggle-button-flex: 0 0 24px;
+  $material-toggle-button-flex: 0 0 24px !default;
 }
 
 @else if $size == "compact" {
-  $material-toggle-button-flex: 0 0 20px;
+  $material-toggle-button-flex: 0 0 20px !default;
 }

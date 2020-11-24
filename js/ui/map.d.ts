@@ -31,6 +31,14 @@ export interface MapLocation {
 
 export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
+     * @docid dxMapOptions.apiKey
+     * @type string|object
+     * @default { bing: '', google: '', googleStatic: '' }
+     * @prevFileNamespace DevExpress.ui
+     * @public
+     */
+    apiKey?: string | { bing?: string, google?: string, googleStatic?: string };
+    /**
      * @docid dxMapOptions.autoAdjust
      * @default true
      * @prevFileNamespace DevExpress.ui
@@ -69,9 +77,10 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     height?: number | string | (() => number | string);
     /**
      * @docid dxMapOptions.key
-     * @default ""
+     * @default { bing: '', google: '', googleStatic: '' }
      * @prevFileNamespace DevExpress.ui
      * @public
+     * @deprecated dxMapOptions.apiKey
      */
     key?: string | { bing?: string, google?: string, googleStatic?: string };
     /**

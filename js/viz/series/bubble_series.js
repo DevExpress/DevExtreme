@@ -56,7 +56,7 @@ chart.bubble = _extend({}, scatterSeries, {
     },
 
     _aggregators: {
-        avg({ data, intervalStart }, series) {
+        avg({ data, intervalStart, intervalEnd }, series) {
             if(!data.length) {
                 return;
             }
@@ -73,7 +73,7 @@ chart.bubble = _extend({}, scatterSeries, {
             return {
                 [valueField]: aggregate[0] / aggregate[2],
                 [sizeField]: aggregate[1] / aggregate[2],
-                [series.getArgumentField()]: intervalStart
+                [series.getArgumentField()]: series._getIntervalCenter(intervalStart, intervalEnd)
             };
         }
     },

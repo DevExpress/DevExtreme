@@ -77,12 +77,18 @@ class SchedulerTableCreator {
                 }
 
                 if(options.cellTemplate && options.cellTemplate.render) {
+                    let $templateContainer = $(td);
+                    if(options.addTemplateWrapper) {
+                        $templateContainer = $('<div>').appendTo($(td));
+                        $templateContainer.addClass(options.templateWrapperClass);
+                    }
+
                     const templateOptions = {
                         model: {
                             text: options.getCellText ? options.getCellText(i, j) : '',
                             date: options.getCellDate ? options.getCellDate(i) : undefined
                         },
-                        container: getPublicElement($(td)),
+                        container: getPublicElement($templateContainer),
                         index: i * options.cellCount + j
                     };
 
@@ -108,7 +114,10 @@ class SchedulerTableCreator {
 
                 } else {
                     if(options.getCellText) {
-                        td.innerHTML = '<div>' + options.getCellText(i, j) + '</div>';
+                        $('<div>')
+                            .text(options.getCellText(i, j))
+                            .addClass(options.getCellTextClass)
+                            .appendTo($(td));
                     }
                 }
             }

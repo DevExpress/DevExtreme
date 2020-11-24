@@ -7764,7 +7764,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxGantt.Options.editing]
          */
-        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
+        editing?: { allowDependencyAdding?: boolean, allowDependencyDeleting?: boolean, allowResourceAdding?: boolean, allowResourceDeleting?: boolean, allowResourceUpdating?: boolean, allowTaskAdding?: boolean, allowTaskDeleting?: boolean, allowTaskResourceUpdating?: boolean, allowTaskUpdating?: boolean, enabled?: boolean };
         /**
          * [descr:dxGantt.Options.firstDayOfWeek]
          */
@@ -8865,6 +8865,10 @@ declare module DevExpress.ui {
      */
     export interface dxMapOptions extends WidgetOptions<dxMap> {
         /**
+         * [descr:dxMap.Options.apiKey]
+         */
+        apiKey?: string | { bing?: string, google?: string, googleStatic?: string };
+        /**
          * [descr:dxMap.Options.autoAdjust]
          */
         autoAdjust?: boolean;
@@ -8886,6 +8890,7 @@ declare module DevExpress.ui {
         height?: number | string | Function;
         /**
          * [descr:dxMap.Options.key]
+         * @deprecated [depNote:dxMap.Options.key]
          */
         key?: string | { bing?: string, google?: string, googleStatic?: string };
         /**

@@ -1,5 +1,5 @@
 import { unique, getAddFunction, getLog } from '../../core/utils';
-import { isDefined } from '../../../core/utils/type';
+import { isDefined, isObject } from '../../../core/utils/type';
 import { noop } from '../../../core/utils/common';
 const DISCRETE = 'discrete';
 const { abs, floor, ceil, min } = Math;
@@ -64,8 +64,8 @@ function getInitialRange(axisType, dataType, firstValue) {
     if(axisType === DISCRETE) {
         range.categories = [];
     } else {
-        range.min = firstValue;
-        range.max = firstValue;
+        range.min = isObject(firstValue) ? firstValue.min : firstValue;
+        range.max = isObject(firstValue) ? firstValue.max : firstValue;
     }
     return range;
 }
@@ -211,7 +211,7 @@ export default {
             }
             return range;
         }, {
-            arg: getInitialRange(series.argumentAxisType, series.argumentType),
+            arg: getInitialRange(series.argumentAxisType, series.argumentType, series.getArgumentRangeInitialValue()),
             val: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined),
             viewport: getInitialRange(series.valueAxisType, series.valueType, points.length ? series.getValueRangeInitialValue() : undefined)
         });
