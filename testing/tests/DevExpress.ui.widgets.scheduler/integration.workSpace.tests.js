@@ -2956,7 +2956,26 @@ if(devices.real().deviceType === 'desktop') {
     });
 }
 
-QUnit.module('dateCellTemplate', () => {
+QUnit.module('Cell Templates', () => {
+    const baseConfig = {
+        currentView: 'day',
+        currentDate: new Date(2020, 10, 19),
+        resources: [{
+            fieldExpr: 'priority',
+            allowMultiple: false,
+            dataSource: [{
+                text: 'Low Priority',
+                id: 1
+            }, {
+                text: 'High Priority',
+                id: 2
+            }],
+            label: 'Priority',
+        }],
+        startDayHour: 10,
+        endDayHour: 12,
+    };
+
     const viewsBase = [{
         type: 'day',
         dateCellCount: 2,
@@ -2992,26 +3011,19 @@ QUnit.module('dateCellTemplate', () => {
     const totalDateCells = 55;
     const totalTimeCells = 44;
 
-    const priorityData = [{
-        text: 'Low Priority',
-        id: 1
-    }, {
-        text: 'High Priority',
-        id: 2
-    }];
+    const checkIfGroupsAreUndefined = (assert) => ({ groups, groupIndex }) => {
+        assert.equal(groups, undefined, 'Groups property is undefined');
+        assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
+    };
 
     [true, false].forEach((isRenovatedView) => {
         QUnit.test(`'"groups" and "groupIndex" shoud be correct in dateCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
             assert.expect(totalDateCells * 2);
 
             const scheduler = createWrapper({
+                ...baseConfig,
                 views: viewsBase,
-                currentView: 'day',
-                currentDate: new Date(2020, 10, 19),
-                dateCellTemplate: ({ groups, groupIndex }) => {
-                    assert.equal(groups, undefined, 'Groups property is undefined');
-                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
-                },
+                dateCellTemplate: checkIfGroupsAreUndefined(assert),
             });
 
             viewsBase.forEach(({ type }) => {
@@ -3028,20 +3040,10 @@ QUnit.module('dateCellTemplate', () => {
             }));
 
             const scheduler = createWrapper({
-                views: views,
-                currentView: 'day',
-                currentDate: new Date(2020, 10, 19),
-                dateCellTemplate: ({ groups, groupIndex }) => {
-                    assert.equal(groups, undefined, 'Groups property is undefined');
-                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
-                },
+                ...baseConfig,
+                views,
+                dateCellTemplate: checkIfGroupsAreUndefined(assert),
                 groups: ['priority'],
-                resources: [{
-                    fieldExpr: 'priority',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority',
-                }],
             });
 
             viewsBase.forEach(({ type }) => {
@@ -3059,20 +3061,10 @@ QUnit.module('dateCellTemplate', () => {
             }));
 
             const scheduler = createWrapper({
-                views: views,
-                currentView: 'day',
-                currentDate: new Date(2020, 10, 19),
-                dateCellTemplate: ({ groups, groupIndex }) => {
-                    assert.equal(groups, undefined, 'Groups property is undefined');
-                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
-                },
+                ...baseConfig,
+                views,
+                dateCellTemplate: checkIfGroupsAreUndefined(assert),
                 groups: ['priority'],
-                resources: [{
-                    fieldExpr: 'priority',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority',
-                }],
             });
 
             viewsBase.forEach(({ type }) => {
@@ -3090,9 +3082,8 @@ QUnit.module('dateCellTemplate', () => {
             let cellCountPerGroup = 2;
 
             const scheduler = createWrapper({
-                views: views,
-                currentView: 'day',
-                currentDate: new Date(2020, 10, 19),
+                ...baseConfig,
+                views,
                 dateCellTemplate: ({ groups, groupIndex }, index) => {
                     const currentGroupIndex = Math.floor(index / cellCountPerGroup);
 
@@ -3100,12 +3091,6 @@ QUnit.module('dateCellTemplate', () => {
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
                 },
                 groups: ['priority'],
-                resources: [{
-                    fieldExpr: 'priority',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority',
-                }],
             });
 
             viewsBase.forEach(({ type, dateCellCount }) => {
@@ -3114,19 +3099,13 @@ QUnit.module('dateCellTemplate', () => {
             });
         });
 
-        QUnit.test(`'"groups" and "groupIndex" shoud be correct in timrCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
+        QUnit.test(`'"groups" and "groupIndex" shoud be correct in timeCelltTemplate when renovateRender is ${isRenovatedView}`, function(assert) {
             assert.expect(totalTimeCells * 2);
 
             const scheduler = createWrapper({
+                ...baseConfig,
                 views: viewsBase,
-                currentView: 'day',
-                currentDate: new Date(2020, 10, 19),
-                timeCellTemplate: ({ groups, groupIndex }) => {
-                    assert.equal(groups, undefined, 'Groups property is undefined');
-                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
-                },
-                startDayHour: 10,
-                endDayHour: 12,
+                timeCellTemplate: checkIfGroupsAreUndefined(assert),
             });
 
             viewsBase.forEach(({ type }) => {
@@ -3134,7 +3113,7 @@ QUnit.module('dateCellTemplate', () => {
             });
         });
 
-        QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+        QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate '
             + `when renovateRender is ${isRenovatedView} and vertical grouping is used in simple views`, function(assert) {
             assert.expect(32);
             const views = viewsBase.map(({ type, intervalCount }) => ({
@@ -3145,9 +3124,8 @@ QUnit.module('dateCellTemplate', () => {
             let cellCountPerGroup = 4;
 
             const scheduler = createWrapper({
-                views: views,
-                currentView: 'day',
-                currentDate: new Date(2020, 10, 19),
+                ...baseConfig,
+                views,
                 timeCellTemplate: ({ groups, groupIndex }, index) => {
                     const currentGroupIndex = Math.floor(index / cellCountPerGroup);
 
@@ -3155,14 +3133,6 @@ QUnit.module('dateCellTemplate', () => {
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
                 },
                 groups: ['priority'],
-                resources: [{
-                    fieldExpr: 'priority',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority',
-                }],
-                startDayHour: 10,
-                endDayHour: 12,
             });
 
             viewsBase.slice(0, 3).forEach(({ type, timeCellCount }) => {
@@ -3171,7 +3141,7 @@ QUnit.module('dateCellTemplate', () => {
             });
         });
 
-        QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate'
+        QUnit.test('"groups" and "groupIndex" shoud be correct in timeCelltTemplate '
             + `when renovateRender is ${isRenovatedView} and vertical grouping is used in timleine views`, function(assert) {
             assert.expect(72);
             const views = viewsBase.map(({ type, intervalCount }) => ({
@@ -3181,22 +3151,11 @@ QUnit.module('dateCellTemplate', () => {
             }));
 
             const scheduler = createWrapper({
-                views: views,
-                currentView: 'timelineDay',
-                currentDate: new Date(2020, 10, 19),
-                timeCellTemplate: ({ groups, groupIndex }) => {
-                    assert.equal(groups, undefined, 'Groups property is undefined');
-                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
-                },
+                ...baseConfig,
+                views,
+                timeCellTemplate: checkIfGroupsAreUndefined(assert),
                 groups: ['priority'],
-                resources: [{
-                    fieldExpr: 'priority',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority',
-                }],
-                startDayHour: 10,
-                endDayHour: 12,
+                currentView: 'timelineDay',
             });
 
             viewsBase.slice(3, 6).forEach(({ type }) => {
@@ -3215,22 +3174,10 @@ QUnit.module('dateCellTemplate', () => {
             }));
 
             const scheduler = createWrapper({
-                views: views,
-                currentView: 'day',
-                currentDate: new Date(2020, 10, 19),
-                timeCellTemplate: ({ groups, groupIndex }) => {
-                    assert.equal(groups, undefined, 'Groups property is undefined');
-                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
-                },
+                ...baseConfig,
+                views,
+                timeCellTemplate: checkIfGroupsAreUndefined(assert),
                 groups: ['priority'],
-                resources: [{
-                    fieldExpr: 'priority',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority',
-                }],
-                startDayHour: 10,
-                endDayHour: 12,
             });
 
             viewsBase.forEach(({ type }) => {
@@ -3248,22 +3195,10 @@ QUnit.module('dateCellTemplate', () => {
             }));
 
             const scheduler = createWrapper({
-                views: views,
-                currentView: 'day',
-                currentDate: new Date(2020, 10, 19),
-                timeCellTemplate: ({ groups, groupIndex }) => {
-                    assert.equal(groups, undefined, 'Groups property is undefined');
-                    assert.equal(groupIndex, undefined, 'GroupIndex property is undefined');
-                },
+                ...baseConfig,
+                views,
+                timeCellTemplate: checkIfGroupsAreUndefined(assert),
                 groups: ['priority'],
-                resources: [{
-                    fieldExpr: 'priority',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority',
-                }],
-                startDayHour: 10,
-                endDayHour: 12,
             });
 
             viewsBase.slice(0, 3).forEach(({ type }) => {
@@ -3282,9 +3217,9 @@ QUnit.module('dateCellTemplate', () => {
             let cellCountPerGroup = 8;
 
             const scheduler = createWrapper({
-                views: views,
+                ...baseConfig,
+                views,
                 currentView: 'timelineDay',
-                currentDate: new Date(2020, 10, 19),
                 timeCellTemplate: ({ groups, groupIndex }, index) => {
                     const currentGroupIndex = Math.floor(index / cellCountPerGroup);
 
@@ -3292,14 +3227,6 @@ QUnit.module('dateCellTemplate', () => {
                     assert.equal(groupIndex, currentGroupIndex, 'GroupIndex property is correct');
                 },
                 groups: ['priority'],
-                resources: [{
-                    fieldExpr: 'priority',
-                    allowMultiple: false,
-                    dataSource: priorityData,
-                    label: 'Priority',
-                }],
-                startDayHour: 10,
-                endDayHour: 12,
             });
 
             viewsBase.slice(3, 6).forEach(({ type, timeCellCount }) => {
