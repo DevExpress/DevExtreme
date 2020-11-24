@@ -183,6 +183,9 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     _renderDateHeader() {
         const $headerRow = super._renderDateHeader();
         if(this._needRenderWeekHeader()) {
+            const firstViewDate = new Date(this._firstViewDate);
+            let currentDate = new Date(firstViewDate);
+
             const $cells = [];
             const groupCount = this._getGroupCount();
             const cellCountInDay = this._getCellCountInDay();
@@ -200,14 +203,13 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
             for(let templateIndex = 0; templateIndex < cellsCount; templateIndex++) {
                 const $th = $('<th>');
-                const date = this._getDateByCellIndexes(0, templateIndex * colSpan);
-                const text = this._formatWeekdayAndDay(date);
+                const text = this._formatWeekdayAndDay(currentDate);
 
                 if(cellTemplate) {
                     const templateOptions = {
                         model: {
                             text,
-                            date,
+                            date: currentDate,
                             ...this._getGroupsForDateHeaderTemplate(templateIndex, colSpan),
                         },
                         container: $th,
@@ -225,6 +227,11 @@ class SchedulerTimeline extends SchedulerWorkSpace {
                     .attr('colSpan', colSpan);
 
                 $cells.push($th);
+                if(templateIndex % cellsInGroup === cellsInGroup - 1) {
+                    currentDate = new Date(firstViewDate);
+                } else {
+                    this._incrementDate(currentDate);
+                }
             }
 
             const $row = $('<tr>').addClass(HEADER_ROW_CLASS).append($cells);
