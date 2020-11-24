@@ -334,8 +334,7 @@ const DropDownEditor = TextBox.inherit({
         $container.empty();
 
         const $templateWrapper = this._prepareFieldWrapper();
-        this._$buttonsContainer
-            .append(this._$afterButtonsContainer);
+
         fieldTemplate.render({
             model: data,
             container: getPublicElement($templateWrapper),
@@ -362,15 +361,15 @@ const DropDownEditor = TextBox.inherit({
         return $templateWrapper;
     },
 
+    _refreshButtonsContainer() {
+        this._$buttonsContainer = this.$element().children().eq(0);
+    },
+
     _integrateInput: function() {
         this._refreshEvents();
         this._refreshValueChangeEvent();
         this._renderFocusState();
         this._refreshEmptinessEvent();
-    },
-
-    _refreshButtonsContainer() {
-        this._$buttonsContainer = this.$element().children().eq(0);
     },
 
     _refreshEmptinessEvent: function() {
