@@ -1635,7 +1635,7 @@ class Scheduler extends Widget {
 
         const currentDate = this.timeZoneCalculator.createDate(this._dateOption('currentDate'), { path: 'toGrid' });
 
-        result.currentDate = currentDate;
+        result.currentDate = dateUtils.trimTime(currentDate);
         result.todayDate = () => this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
 
         return result;
