@@ -324,8 +324,6 @@ export default class ViewDataProvider {
     }
 
     findGroupCellStartDate(groupIndex, startDate, endDate, isAllDay) {
-        const { dateTable } = this.getGroupData(groupIndex);
-
         if(isAllDay) {
             const groupStartDate = this.getGroupStartDate(groupIndex);
 
@@ -333,6 +331,10 @@ export default class ViewDataProvider {
                 ? groupStartDate
                 : startDate;
         }
+
+        const { dateTable } = this.getGroupData(groupIndex);
+
+        if(!dateTable.length) return;
 
         for(let i = 0; i < dateTable[0].length; ++i) {
             let cell = dateTable[0][i];

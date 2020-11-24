@@ -1802,9 +1802,7 @@ class Scheduler extends Widget {
         const adapter = this.createAppointmentAdapter(appointment);
         const targetedAdapter = adapter.clone();
 
-        const isRecurrenceAppointment = adapter.recurrenceRule && getRecurrenceProcessor().isValidRecurrenceRule(adapter.recurrenceRule);
-
-        if(this._isAgenda() && isRecurrenceAppointment) {
+        if(this._isAgenda() && adapter.isRecurrent) {
             const getStartDate = this.getRenderingStrategyInstance().getAppointmentDataCalculator();
             const newStartDate = getStartDate($(element), adapter.startDate).startDate;
 
