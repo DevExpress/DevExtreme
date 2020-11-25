@@ -606,4 +606,29 @@ QUnit.module('live update', {
         $('.dx-list-item:eq(0)').trigger('dxclick');
         assert.deepEqual(list.option('selectedItemKeys'), [1]);
     });
+
+    QUnit.test('repaintChangesOnly, clear item selection after reload if key is not defined (T944954)', function(assert) {
+        const selectedItemSelector = '.dx-list-item-selected';
+
+        const list = this.createList({
+            dataSource: {
+                load: () => ([{ id: 1 }, { id: 2 }]),
+                key: null
+            },
+            repaintChangesOnly: true,
+            selectionMode: 'single'
+        });
+
+        list.selectItem(1);
+
+        assert.strictEqual(list.itemElements().filter(selectedItemSelector).length, 1, 'one selected item');
+        const $itemElements = list.itemElements();
+
+        list.getDataSource().reload();
+
+        assert.equal(list.itemElements().length, 2, 'item element count');
+        assert.strictEqual(list.itemElements().filter(selectedItemSelector).length, 0, 'no selected items');
+        assert.equal(list.itemElements().get(0), $itemElements.get(0), 'item element 0 is not rerenderd');
+        assert.notEqual(list.itemElements().get(1), $itemElements.get(1), 'item element 1 is rerenderd');
+    });
 });
