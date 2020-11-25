@@ -43,6 +43,7 @@ const getAria = (args: object): { [name: string]: string } => Object.keys(args).
 const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string => {
   const isFocusable = !!model.focusStateEnabled && !model.disabled;
   const isHoverable = !!model.hoverStateEnabled && !model.disabled;
+  const canBeActive = !!model.activeStateEnabled && !model.disabled;
   const classesMap = {
     'dx-widget': true,
     [String(model.classes)]: !!model.classes,
@@ -50,7 +51,7 @@ const getCssClasses = (model: Partial<Widget> & Partial<WidgetProps>): string =>
     'dx-state-disabled': !!model.disabled,
     'dx-state-invisible': !model.visible,
     'dx-state-focused': !!model.focused && isFocusable,
-    'dx-state-active': !!model.active,
+    'dx-state-active': !!model.active && canBeActive,
     'dx-state-hover': !!model.hovered && isHoverable && !model.active,
     'dx-rtl': !!model.rtlEnabled,
     'dx-visibility-change-handler': !!model.onVisibilityChange,
@@ -363,6 +364,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       classes,
       className,
       disabled,
+      activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
       onVisibilityChange,
@@ -376,6 +378,7 @@ export class Widget extends JSXComponent(WidgetProps) {
       className,
       classes,
       disabled,
+      activeStateEnabled,
       focusStateEnabled,
       hoverStateEnabled,
       onVisibilityChange,
