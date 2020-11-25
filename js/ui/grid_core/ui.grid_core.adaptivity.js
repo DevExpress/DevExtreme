@@ -1126,9 +1126,10 @@ export default {
                 },
 
                 toggleCommandAdaptiveAriaLabel: function(key, oldKey) {
-                    const rowIndex = this.getRowIndexByKey(key || oldKey);
-                    const $row = $(this.component.getRowElement(rowIndex));
                     const isExpanded = isDefined(key);
+                    const rowKey = isExpanded ? key : oldKey;
+                    const rowIndex = this.getRowIndexByKey(rowKey);
+                    const $row = $(this.component.getRowElement(rowIndex));
                     const rowsView = this.component.getView('rowsView');
 
                     rowsView.setCommandAdaptiveAriaLabel($row, isExpanded ? COLLAPSE_ARIA_NAME : EXPAND_ARIA_NAME);
