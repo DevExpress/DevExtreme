@@ -18,68 +18,68 @@ $generic-select-all-text-offset: null !default;
 $generic-treeview-arrow-icon-size: null !default;
 $generic-treeview-searchbox-margin-bottom: null !default;
 
-$generic-treeview-border-padding: 1px;
-$generic-treeview-loadincicator-offset-top: 8px;
-$generic-treeview-loadincicator-offset-left: -1px;
+$generic-treeview-border-padding: 1px !default;
+$generic-treeview-loadincicator-offset-top: 8px !default;
+$generic-treeview-loadincicator-offset-left: -1px !default;
 
 @if $size == "default" {
-  $generic-treeview-container-with-border-offset: 7px;
+  $generic-treeview-container-with-border-offset: 7px !default;
 
-  $generic-treeview-node-offset: 15px;
+  $generic-treeview-node-offset: 15px !default;
 
-  $generic-treeview-toggle-item-width: 21px;
+  $generic-treeview-toggle-item-width: 21px !default;
 
-  $generic-treeview-item-with-checkbox-offset: 36px;
-  $generic-select-all-item-offset: 20px;
+  $generic-treeview-item-with-checkbox-offset: 36px !default;
+  $generic-select-all-item-offset: 20px !default;
 
-  $generic-select-all-item-padding: 9px 0 11px $generic-select-all-item-offset;
-  $generic-select-all-item-left-padding: 26px;
+  $generic-select-all-item-padding: 9px 0 11px $generic-select-all-item-offset !default;
+  $generic-select-all-item-left-padding: 26px !default;
 
-  $generic-treeview-item-padding: 5px 6px;
-  $generic-treeview-min-item-height: 32px;
+  $generic-treeview-item-padding: 5px 6px !default;
+  $generic-treeview-min-item-height: 32px !default;
 
-  $generic-treeview-checkbox-offset: 19px;
+  $generic-treeview-checkbox-offset: 19px !default;
 
-  $generic-treeview-item-visibility-icon-size: 10px;
+  $generic-treeview-item-visibility-icon-size: 10px !default;
 
-  $generic-treeview-loadincicator-size: 14px;
-  $generic-select-all-text-offset: 31px;
+  $generic-treeview-loadincicator-size: 14px !default;
+  $generic-select-all-text-offset: 31px !default;
 
-  $generic-treeview-arrow-icon-size: 22px;
+  $generic-treeview-arrow-icon-size: 22px !default;
 
-  $generic-treeview-searchbox-margin-bottom: 5px;
+  $generic-treeview-searchbox-margin-bottom: 5px !default;
 }
 
 @else if $size == "compact" {
-  $generic-treeview-container-with-border-offset: 6px;
+  $generic-treeview-container-with-border-offset: 6px !default;
 
-  $generic-treeview-node-offset: 10px;
+  $generic-treeview-node-offset: 10px !default;
 
-  $generic-treeview-toggle-item-width: 16px;
+  $generic-treeview-toggle-item-width: 16px !default;
 
-  $generic-treeview-item-with-checkbox-offset: 31px;
-  $generic-select-all-item-offset: 15px;
+  $generic-treeview-item-with-checkbox-offset: 31px !default;
+  $generic-select-all-item-offset: 15px !default;
 
-  $generic-select-all-item-padding: 6px 0 8px $generic-select-all-item-offset;
-  $generic-select-all-item-left-padding: 20px;
+  $generic-select-all-item-padding: 6px 0 8px $generic-select-all-item-offset !default;
+  $generic-select-all-item-left-padding: 20px !default;
 
-  $generic-treeview-item-padding: 4px 6px;
-  $generic-treeview-min-item-height: 28px;
+  $generic-treeview-item-padding: 4px 6px !default;
+  $generic-treeview-min-item-height: 28px !default;
 
-  $generic-treeview-checkbox-offset: 14px;
+  $generic-treeview-checkbox-offset: 14px !default;
 
-  $generic-treeview-item-visibility-icon-size: 8px;
+  $generic-treeview-item-visibility-icon-size: 8px !default;
 
-  $generic-treeview-loadincicator-size: 11px;
-  $generic-select-all-text-offset: 26px;
+  $generic-treeview-loadincicator-size: 11px !default;
+  $generic-select-all-text-offset: 26px !default;
 
-  $generic-treeview-arrow-icon-size: 18px;
+  $generic-treeview-arrow-icon-size: 18px !default;
 
-  $generic-treeview-searchbox-margin-bottom: 3px;
+  $generic-treeview-searchbox-margin-bottom: 3px !default;
 }
 
 $generic-treeview-container-padding:
   $generic-treeview-border-padding
   $generic-treeview-border-padding
   $generic-treeview-border-padding
-  $generic-treeview-container-with-border-offset;
+  $generic-treeview-container-with-border-offset !default;

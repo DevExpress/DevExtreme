@@ -112,6 +112,9 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
             columns: [{ dataField: 'field1', width: 100 }, { dataField: 'field2', width: 100 }, { dataField: 'field3', width: 100 }, { dataField: 'field4', width: 100 }, { dataField: 'field5', width: 100 }],
             dataSource: [{ field1: '1', field2: '2', field3: '3', field4: '4' }]
         });
+        const getRightScrollOffset = function(scrollable) {
+            return scrollable.scrollWidth() - scrollable.clientWidth() - scrollable.scrollLeft();
+        };
 
         this.clock.tick();
         const scrollable = $('.dx-scrollable').dxScrollable('instance');
@@ -121,6 +124,7 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
         this.clock.restore();
         scrollable.scrollTo({ x: 100 });
+        const scrollRight = getRightScrollOffset(scrollable);
 
         setTimeout(function() {
             // act
@@ -128,8 +132,10 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
 
             setTimeout(function() {
                 // assert
+
+                const scrollRightAfterGrouping = getRightScrollOffset(scrollable);
                 assert.ok($(dataGrid.$element()).find('.dx-datagrid-rowsview').find('tbody > tr').first().hasClass('dx-group-row'));
-                assert.equal(scrollable.scrollLeft(), 100, 'scroll position after grouping');
+                assert.equal(scrollRightAfterGrouping, scrollRight, 'scroll position after grouping');
                 done();
             });
         });

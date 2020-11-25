@@ -10,29 +10,29 @@ $material-field-vertical-margin: null !default;
 $material-field-labelvalue-spacing: null !default;
 
 @if $size == "default" {
-  $material-fieldset-vertical-margin: 30px;
-  $material-fieldset-horizontal-margin: 20px;
-  $material-fieldset-header-vertical-margin: 20px;
-  $material-field-vertical-margin: 30px;
-  $material-field-labelvalue-spacing: 15px;
+  $material-fieldset-vertical-margin: 30px !default;
+  $material-fieldset-horizontal-margin: 20px !default;
+  $material-fieldset-header-vertical-margin: 20px !default;
+  $material-field-vertical-margin: 30px !default;
+  $material-field-labelvalue-spacing: 15px !default;
 }
 
 @else if $size == "compact" {
-  $material-fieldset-vertical-margin: 20px;
-  $material-fieldset-horizontal-margin: 16px;
-  $material-fieldset-header-vertical-margin: 16px;
-  $material-field-vertical-margin: 20px;
-  $material-field-labelvalue-spacing: 12px;
+  $material-fieldset-vertical-margin: 20px !default;
+  $material-fieldset-horizontal-margin: 16px !default;
+  $material-fieldset-header-vertical-margin: 16px !default;
+  $material-field-vertical-margin: 20px !default;
+  $material-field-labelvalue-spacing: 12px !default;
 }
 
-$material-field-min-height: $material-base-inline-widget-height;
-$material-field-value-top-padding: 21px;
-$material-field-value-horizontal-padding: $material-base-inline-horizontal-padding;
-$material-field-value-bottom-padding: 20px;
-$material-fieldset-attention-icon-offset: $material-base-inline-horizontal-padding + $material-invalid-badge-size;
-$material-radiogroup-min-height: 26px;
+$material-field-min-height: $material-base-inline-widget-height !default;
+$material-field-value-top-padding: 21px !default;
+$material-field-value-horizontal-padding: $material-base-inline-horizontal-padding !default;
+$material-field-value-bottom-padding: 20px !default;
+$material-fieldset-attention-icon-offset: $material-base-inline-horizontal-padding + $material-invalid-badge-size !default;
+$material-radiogroup-min-height: 26px !default;
 
-$material-mobile-fieldset-vertical-margin: 20px;
-$material-mobile-fieldset-horizontal-margin: 15px;
-$material-mobile-fieldset-header-vertical-margin: 20px;
-$material-mobile-field-vertical-margin: 10px;
+$material-mobile-fieldset-vertical-margin: 20px !default;
+$material-mobile-fieldset-horizontal-margin: 15px !default;
+$material-mobile-fieldset-header-vertical-margin: 20px !default;
+$material-mobile-field-vertical-margin: 10px !default;

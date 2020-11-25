@@ -614,12 +614,12 @@ const Popup = Overlay.inherit({
         };
     },
 
-    _useFixedPosition: function() {
+    _shouldFixBodyPosition: function() {
         return this.callBase() || this.option('fullScreen');
     },
 
     _toggleSafariFullScreen: function(value) {
-        const toggleFullScreenBeforeShown = this._useFixedPosition() && value && !this._isShown;
+        const toggleFullScreenBeforeShown = this._shouldFixBodyPosition() && value && !this._isShown;
         if(toggleFullScreenBeforeShown) {
             this._bodyScrollTop = value ? window.pageYOffset : undefined;
         } else {

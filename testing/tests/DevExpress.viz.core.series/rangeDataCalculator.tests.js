@@ -2998,6 +2998,17 @@ QUnit.test('Calculate interval in range data when aggregation is enabled', funct
     assert.strictEqual(rangeData.arg.interval, 4, 'Min interval arg should be correct');
 });
 
+QUnit.test('Calculate range data when aggregation is enabled. Discrete data', function(assert) {
+    const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
+    const series = createSeries({ type: 'bar', argumentAxisType: 'discrete', aggregation: { enabled: true, type: 'sum' } });
+
+    series.updateData(data);
+    series.createPoints();
+    const rangeData = series.getRangeData();
+
+    assert.deepEqual(rangeData.arg, { categories: [2, 5, 13, 20] });
+});
+
 QUnit.test('Calculate range data when aggregation enabled. Add data range if axis viewport is set ', function(assert) {
     const data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }];
     const series = createSeries({ type: 'scatter', argumentAxisType: 'continuous', aggregation: { enabled: true } });

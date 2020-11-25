@@ -6,11 +6,11 @@ $material-badge-padding: null !default;
 $material-badge-font-size: null !default;
 
 @if $size == "default" {
-  $material-badge-padding: 3px 9px;
-  $material-badge-font-size: 12px;
+  $material-badge-padding: 3px 9px !default;
+  $material-badge-font-size: 12px !default;
 }
 
 @else if $size == "compact" {
-  $material-badge-padding: 2px 7px;
-  $material-badge-font-size: 11px;
+  $material-badge-padding: 2px 7px !default;
+  $material-badge-font-size: 11px !default;
 }

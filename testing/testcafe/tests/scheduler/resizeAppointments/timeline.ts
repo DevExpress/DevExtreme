@@ -95,3 +95,29 @@ test('Resize appointment on timelineWeek view with custom startDayHour & endDayH
     endDate: new Date(2019, 8, 2, 11),
   }],
 }));
+
+// T948164
+test('Resize should work correctly when cell\'s width is not an integer', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const appointment = scheduler.getAppointment('Appointment');
+
+  await t
+    .drag(appointment.resizableHandle.right, 100, 0)
+    .expect(appointment.date.time)
+    .eql('12:00 AM - 4:00 AM');
+}).before(() => createScheduler({
+  views: [{
+    type: 'timelineDay',
+    cellDuration: 120,
+  }],
+  currentView: 'timelineDay',
+  currentDate: new Date(2020, 10, 13),
+  dataSource: [{
+    text: 'Appointment',
+    startDate: new Date(2020, 10, 13, 0, 0),
+    endDate: new Date(2020, 10, 13, 2, 0),
+  }],
+  width: 2999, // Cell's width in this case will not be an integer
+  startDayHour: 0,
+  endDayHour: 24,
+}));

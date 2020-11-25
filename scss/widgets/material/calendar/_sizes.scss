@@ -11,31 +11,31 @@ $material-calendar-cell-width: null !default;
 $material-calendar-cell-diameter: null !default;
 $material-calendar-cell-vertical-padding: null !default;
 
-$material-calendar-cell-font-size: 12px;
-$material-calendar-footer-height: 45px;
-$material-calendar-navigator-vertical-padding: 9px;
-$material-calendar-header-bottom-padding: 10px;
-$material-calendar-cell-horizontal-padding: 8px;
-$material-calendar-caption-button-padding: 2px 15px 4px;
+$material-calendar-cell-font-size: 12px !default;
+$material-calendar-footer-height: 45px !default;
+$material-calendar-navigator-vertical-padding: 9px !default;
+$material-calendar-header-bottom-padding: 10px !default;
+$material-calendar-cell-horizontal-padding: 8px !default;
+$material-calendar-caption-button-padding: 2px 15px 4px !default;
 
 @if $size == "default" {
-  $material-calendar-body-width: 320px;
-  $material-calendar-body-height: 267px;
-  $material-calendar-body-top: 49px;
-  $material-calendar-navigator-height: 36px;
-  $material-nav-button-width: 32px;
-  $material-calendar-cell-width: 39px;
-  $material-calendar-cell-diameter: 32px;
-  $material-calendar-cell-vertical-padding: 4px;
+  $material-calendar-body-width: 320px !default;
+  $material-calendar-body-height: 267px !default;
+  $material-calendar-body-top: 49px !default;
+  $material-calendar-navigator-height: 36px !default;
+  $material-nav-button-width: 32px !default;
+  $material-calendar-cell-width: 39px !default;
+  $material-calendar-cell-diameter: 32px !default;
+  $material-calendar-cell-vertical-padding: 4px !default;
 }
 
 @else if $size == "compact" {
-  $material-calendar-body-width: 250px;
-  $material-calendar-body-height: 200px;
-  $material-calendar-body-top: 35px;
-  $material-calendar-navigator-height: 28px;
-  $material-nav-button-width: 28px;
-  $material-calendar-cell-width: 32px;
-  $material-calendar-cell-diameter: 28px;
-  $material-calendar-cell-vertical-padding: 0;
+  $material-calendar-body-width: 250px !default;
+  $material-calendar-body-height: 200px !default;
+  $material-calendar-body-top: 35px !default;
+  $material-calendar-navigator-height: 28px !default;
+  $material-nav-button-width: 28px !default;
+  $material-calendar-cell-width: 32px !default;
+  $material-calendar-cell-diameter: 28px !default;
+  $material-calendar-cell-vertical-padding: 0 !default;
 }

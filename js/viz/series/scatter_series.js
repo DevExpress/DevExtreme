@@ -318,8 +318,8 @@ const baseScatterMethods = {
 
         if(this.useAggregation() && points.length) {
             return {
-                min: points[0].aggregationInfo.intervalStart,
-                max: points[points.length - 1].aggregationInfo.intervalEnd
+                min: points[0].aggregationInfo?.intervalStart,
+                max: points[points.length - 1].aggregationInfo?.intervalEnd
             };
         }
 

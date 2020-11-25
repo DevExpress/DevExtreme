@@ -7,14 +7,14 @@ $treelist-collapsed-icon-margin-left: null !default;
 $treelist-icon-margin-top: null !default;
 
 @if $size == "default" {
-  $treelist-expanded-icon-margin-left: 5px;
-  $treelist-collapsed-icon-margin-left: 6px;
-  $treelist-icon-margin-top: $generic-base-icon-size / 2 - 1;
+  $treelist-expanded-icon-margin-left: 5px !default;
+  $treelist-collapsed-icon-margin-left: 6px !default;
+  $treelist-icon-margin-top: $generic-base-icon-size / 2 - 1 !default;
 }
 
 @else if $size == "compact" {
-  $treelist-expanded-icon-margin-left: 3px;
-  $treelist-collapsed-icon-margin-left: 4px;
-  $treelist-icon-margin-top: $generic-base-icon-size / 2;
+  $treelist-expanded-icon-margin-left: 3px !default;
+  $treelist-collapsed-icon-margin-left: 4px !default;
+  $treelist-icon-margin-top: $generic-base-icon-size / 2 !default;
 }
 

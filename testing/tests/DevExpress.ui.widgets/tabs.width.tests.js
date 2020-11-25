@@ -1,4 +1,5 @@
 import 'common.css!';
+import 'generic_light.css!';
 import { triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
 import 'ui/tabs';
@@ -60,8 +61,8 @@ QUnit.module('Width', () => {
             this.assert.equal(this.tabs.option('width'), this._isOptionApproach() ? 400 : undefined);
 
             this.assert.equal(this.$tabs.outerWidth(), 400);
-            this.assert.ok(this._getTabItem(0).width() > 190, this._getTabItem(0).width() + ' > 190');
-            this.assert.ok(this._getTabItem(1).width() > 190, this._getTabItem(1).width() + ' > 190');
+            this.assert.ok(this._getTabItem(0).outerWidth() > 190, this._getTabItem(0).outerWidth() + ' > 190');
+            this.assert.ok(this._getTabItem(1).outerWidth() > 190, this._getTabItem(1).outerWidth() + ' > 190');
             this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
         }
 
@@ -74,8 +75,8 @@ QUnit.module('Width', () => {
             this.assert.equal(this.tabs.option('width'), this._isOptionApproach() ? 200 : undefined);
 
             this.assert.equal(this.$tabs.outerWidth(), 200);
-            this.assert.ok(this._getTabItem(0).width() < 70, this._getTabItem(0).width() + ' < 70');
-            this.assert.ok(this._getTabItem(1).width() > 130, this._getTabItem(1).width() + ' > 130');
+            this.assert.ok(this._getTabItem(0).outerWidth() < 70, this._getTabItem(0).outerWidth() + ' < 70');
+            this.assert.ok(this._getTabItem(1).outerWidth() > 130, this._getTabItem(1).outerWidth() + ' > 130');
             this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
         }
 
@@ -90,12 +91,12 @@ QUnit.module('Width', () => {
             this.assert.equal(this.$tabs.outerWidth(), 100);
 
             if(this.scrollingEnabled) {
-                this.assert.ok(this._getTabItem(0).width() < 70, this._getTabItem().width() + ' < 70');
-                this.assert.ok(this._getTabItem(1).width() > 100, this._getTabItem().width() + ' > 100');
+                this.assert.ok(this._getTabItem(0).outerWidth() < 70, this._getTabItem().outerWidth() + ' < 70');
+                this.assert.ok(this._getTabItem(1).outerWidth() > 100, this._getTabItem().outerWidth() + ' > 100');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 2, 'nav buttons aren\'t rendered');
             } else {
-                this.assert.ok(this._getTabItem(0).width() < 55, this._getTabItem(0).width() + ' < 55');
-                this.assert.ok(this._getTabItem(1).width() < 55, this._getTabItem(1).width() + ' < 55');
+                this.assert.ok(this._getTabItem(0).outerWidth() < 55, this._getTabItem(0).outerWidth() + ' < 55');
+                this.assert.ok(this._getTabItem(1).outerWidth() < 55, this._getTabItem(1).outerWidth() + ' < 55');
                 this.assert.equal(this.$tabs.find(`.${TABS_NAV_BUTTON_CLASS}`).length, 0, 'nav buttons aren\'t rendered');
             }
         }

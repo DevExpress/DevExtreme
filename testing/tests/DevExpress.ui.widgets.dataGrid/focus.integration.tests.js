@@ -3881,4 +3881,36 @@ QUnit.module('Column Resizing', baseModuleConfig, () => {
         // assert
         assert.ok(isLoseFocusCalled, 'loseFocus is called');
     });
+
+    QUnit.testInActiveWindow('Scroll position should not be changed after click on button element (T945907)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'keyboard navigation is disabled for not desktop devices');
+            return;
+        }
+
+        // arrange
+        const dataGrid = createDataGrid({
+            height: 50,
+            scrolling: {
+                useNative: false
+            },
+            dataSource: [{ id: 1 }, { id: 2 }, { id: 3 }],
+            columns: [{
+                cellTemplate: function(_, options) {
+                    return $('<button>').attr('id', 'button' + options.data.id).text('button');
+                }
+            }],
+        });
+        this.clock.tick();
+
+        dataGrid.getScrollable().scrollTo({ y: 10 });
+        this.clock.tick();
+
+        // act
+        $('#button1').trigger('dxpointerdown');
+        this.clock.tick();
+
+        // assert
+        assert.equal(dataGrid.getScrollable().scrollTop(), 10, 'scroll top is not changed');
+    });
 });
