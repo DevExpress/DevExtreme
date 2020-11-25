@@ -63,11 +63,7 @@ export default CollectionWidget.inherit({
     },
 
     _isItemEquals: function(item1, item2) {
-        const privateKey = item1 && item1[PRIVATE_KEY_FIELD];
-        if(privateKey) {
-            if(!this.key() && this._selection.isItemSelected(privateKey)) {
-                return false;
-            }
+        if(item1 && item1[PRIVATE_KEY_FIELD]) {
             item1 = item1.data;
         }
 
@@ -78,6 +74,10 @@ export default CollectionWidget.inherit({
         }
     },
 
+    _isItemStrictEquals: function(item1, item2) {
+        return this._isItemEquals(item1, item2);
+    },
+
     _partialRefresh: function() {
         if(this.option('repaintChangesOnly')) {
             const keyOf = (data) => {
@@ -86,7 +86,7 @@ export default CollectionWidget.inherit({
                 }
                 return this.keyOf(data);
             };
-            const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemEquals.bind(this));
+            const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemStrictEquals.bind(this));
             if(result && this._itemsCache.length) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
