@@ -760,9 +760,13 @@ export default {
                     }
 
                     if(options.row.rowType === 'data') {
-                        const $adaptiveCommand = $row.find('.dx-command-adaptive');
-                        $adaptiveCommand.attr('aria-label', messageLocalization.format(EXPAND_ARIA_NAME));
+                        this.setCommandAdaptiveAriaLabel($row, EXPAND_ARIA_NAME);
                     }
+                },
+
+                setCommandAdaptiveAriaLabel: function($row, labelName) {
+                    const $adaptiveCommand = $row.find('.dx-command-adaptive');
+                    $adaptiveCommand.attr('aria-label', messageLocalization.format(labelName));
                 },
 
                 _getColumnIndexByElementCore: function($element) {
@@ -1118,17 +1122,16 @@ export default {
                         rowIndices: [oldExpandLoadedRowIndex - rowIndexDelta, newExpandLoadedRowIndex - rowIndexDelta]
                     });
 
-                    this.setCommandAdaptiveAriaLabel(key, oldKey);
+                    this.toggleCommandAdaptiveAriaLabel(key, oldKey);
                 },
 
-                setCommandAdaptiveAriaLabel: function(key, oldKey) {
+                toggleCommandAdaptiveAriaLabel: function(key, oldKey) {
                     const rowIndex = this.getRowIndexByKey(key || oldKey);
                     const $row = $(this.component.getRowElement(rowIndex));
-                    const $adaptiveCommand = $row.find('.dx-command-adaptive');
                     const isExpanded = isDefined(key);
-                    const label = messageLocalization.format(isExpanded ? COLLAPSE_ARIA_NAME : EXPAND_ARIA_NAME);
+                    const rowsView = this.component.getView('rowsView');
 
-                    $adaptiveCommand.attr('aria-label', label);
+                    rowsView.setCommandAdaptiveAriaLabel($row, isExpanded ? COLLAPSE_ARIA_NAME : EXPAND_ARIA_NAME);
                 },
 
                 init: function() {
