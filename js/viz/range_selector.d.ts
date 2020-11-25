@@ -156,7 +156,7 @@ export default class dxRangeSelector extends BaseWidget {
     constructor(element: JQuery, options?: dxRangeSelectorOptions)
     getDataSource(): DataSource;
     /**
-     * @docid dxRangeSelectorMethods.getValue
+     * @docid dxRangeSelector.getValue
      * @publicName getValue()
      * @return Array<number,string,Date>
      * @prevFileNamespace DevExpress.viz
@@ -165,7 +165,7 @@ export default class dxRangeSelector extends BaseWidget {
     getValue(): Array<number | string | Date>;
     render(): void;
     /**
-     * @docid dxRangeSelectorMethods.render
+     * @docid dxRangeSelector.render
      * @publicName render(skipChartAnimation)
      * @param1 skipChartAnimation:boolean
      * @prevFileNamespace DevExpress.viz
@@ -173,7 +173,7 @@ export default class dxRangeSelector extends BaseWidget {
      */
     render(skipChartAnimation: boolean): void;
     /**
-     * @docid dxRangeSelectorMethods.setValue
+     * @docid dxRangeSelector.setValue
      * @publicName setValue(value)
      * @param1 value:Array<number,string,Date> | VizRange
      * @prevFileNamespace DevExpress.viz

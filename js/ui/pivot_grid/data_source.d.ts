@@ -404,7 +404,7 @@ export interface PivotGridDataSourceField {
 export default class PivotGridDataSource {
     constructor(options?: PivotGridDataSourceOptions)
     /**
-     * @docid PivotGridDataSourceMethods.collapseAll
+     * @docid PivotGridDataSource.collapseAll
      * @publicName collapseAll(id)
      * @param1 id:number|string
      * @prevFileNamespace DevExpress.ui
@@ -412,7 +412,7 @@ export default class PivotGridDataSource {
      */
     collapseAll(id: number | string): void;
     /**
-     * @docid PivotGridDataSourceMethods.collapseHeaderItem
+     * @docid PivotGridDataSource.collapseHeaderItem
      * @publicName collapseHeaderItem(area, path)
      * @param1 area:string
      * @param2 path:Array<string, number, Date>
@@ -421,7 +421,7 @@ export default class PivotGridDataSource {
      */
     collapseHeaderItem(area: string, path: Array<string | number | Date>): void;
     /**
-     * @docid PivotGridDataSourceMethods.createDrillDownDataSource
+     * @docid PivotGridDataSource.createDrillDownDataSource
      * @publicName createDrillDownDataSource(options)
      * @param1 options:object
      * @param1_field1 columnPath:Array<string, number, Date>
@@ -435,14 +435,14 @@ export default class PivotGridDataSource {
      */
     createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>, rowPath?: Array<string | number | Date>, dataIndex?: number, maxRowCount?: number, customColumns?: Array<string> }): DataSource;
     /**
-     * @docid PivotGridDataSourceMethods.dispose
+     * @docid PivotGridDataSource.dispose
      * @publicName dispose()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dispose(): void;
     /**
-     * @docid PivotGridDataSourceMethods.expandAll
+     * @docid PivotGridDataSource.expandAll
      * @publicName expandAll(id)
      * @param1 id:number|string
      * @prevFileNamespace DevExpress.ui
@@ -450,7 +450,7 @@ export default class PivotGridDataSource {
      */
     expandAll(id: number | string): void;
     /**
-     * @docid PivotGridDataSourceMethods.expandHeaderItem
+     * @docid PivotGridDataSource.expandHeaderItem
      * @publicName expandHeaderItem(area, path)
      * @param1 area:string
      * @param2 path:Array<Object>
@@ -459,7 +459,7 @@ export default class PivotGridDataSource {
      */
     expandHeaderItem(area: string, path: Array<any>): void;
     /**
-     * @docid PivotGridDataSourceMethods.field
+     * @docid PivotGridDataSource.field
      * @publicName field(id)
      * @param1 id:number|string
      * @return object
@@ -468,7 +468,7 @@ export default class PivotGridDataSource {
      */
     field(id: number | string): any;
     /**
-     * @docid PivotGridDataSourceMethods.field
+     * @docid PivotGridDataSource.field
      * @publicName field(id, options)
      * @param1 id:number|string
      * @param2 options:object
@@ -477,7 +477,7 @@ export default class PivotGridDataSource {
      */
     field(id: number | string, options: any): void;
     /**
-     * @docid PivotGridDataSourceMethods.fields
+     * @docid PivotGridDataSource.fields
      * @publicName fields()
      * @return Array<PivotGridDataSourceOptions.fields>
      * @prevFileNamespace DevExpress.ui
@@ -485,7 +485,7 @@ export default class PivotGridDataSource {
      */
     fields(): Array<PivotGridDataSourceField>;
     /**
-     * @docid PivotGridDataSourceMethods.fields
+     * @docid PivotGridDataSource.fields
      * @publicName fields(fields)
      * @param1 fields:Array<PivotGridDataSourceOptions.fields>
      * @prevFileNamespace DevExpress.ui
@@ -493,7 +493,7 @@ export default class PivotGridDataSource {
      */
     fields(fields: Array<PivotGridDataSourceField>): void;
     /**
-     * @docid PivotGridDataSourceMethods.filter
+     * @docid PivotGridDataSource.filter
      * @publicName filter()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -501,7 +501,7 @@ export default class PivotGridDataSource {
      */
     filter(): any;
     /**
-     * @docid PivotGridDataSourceMethods.filter
+     * @docid PivotGridDataSource.filter
      * @publicName filter(filterExpr)
      * @param1 filterExpr:object
      * @prevFileNamespace DevExpress.ui
@@ -509,7 +509,7 @@ export default class PivotGridDataSource {
      */
     filter(filterExpr: any): void;
     /**
-     * @docid PivotGridDataSourceMethods.getAreaFields
+     * @docid PivotGridDataSource.getAreaFields
      * @publicName getAreaFields(area, collectGroups)
      * @param1 area:string
      * @param2 collectGroups:boolean
@@ -519,7 +519,7 @@ export default class PivotGridDataSource {
      */
     getAreaFields(area: string, collectGroups: boolean): Array<PivotGridDataSourceField>;
     /**
-     * @docid PivotGridDataSourceMethods.getData
+     * @docid PivotGridDataSource.getData
      * @publicName getData()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -527,7 +527,7 @@ export default class PivotGridDataSource {
      */
     getData(): any;
     /**
-     * @docid PivotGridDataSourceMethods.isLoading
+     * @docid PivotGridDataSource.isLoading
      * @publicName isLoading()
      * @return boolean
      * @prevFileNamespace DevExpress.ui
@@ -535,7 +535,7 @@ export default class PivotGridDataSource {
      */
     isLoading(): boolean;
     /**
-     * @docid PivotGridDataSourceMethods.load
+     * @docid PivotGridDataSource.load
      * @publicName load()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.ui
@@ -543,7 +543,7 @@ export default class PivotGridDataSource {
      */
     load(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid PivotGridDataSourceMethods.off
+     * @docid PivotGridDataSource.off
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
@@ -552,7 +552,7 @@ export default class PivotGridDataSource {
      */
     off(eventName: string): this;
     /**
-     * @docid PivotGridDataSourceMethods.off
+     * @docid PivotGridDataSource.off
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -562,7 +562,7 @@ export default class PivotGridDataSource {
      */
     off(eventName: string, eventHandler: Function): this;
     /**
-     * @docid PivotGridDataSourceMethods.on
+     * @docid PivotGridDataSource.on
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -572,7 +572,7 @@ export default class PivotGridDataSource {
      */
     on(eventName: string, eventHandler: Function): this;
     /**
-     * @docid PivotGridDataSourceMethods.on
+     * @docid PivotGridDataSource.on
      * @publicName on(events)
      * @param1 events:object
      * @return this
@@ -581,7 +581,7 @@ export default class PivotGridDataSource {
      */
     on(events: any): this;
     /**
-     * @docid PivotGridDataSourceMethods.reload
+     * @docid PivotGridDataSource.reload
      * @publicName reload()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.ui
@@ -589,7 +589,7 @@ export default class PivotGridDataSource {
      */
     reload(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid PivotGridDataSourceMethods.state
+     * @docid PivotGridDataSource.state
      * @publicName state()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -597,7 +597,7 @@ export default class PivotGridDataSource {
      */
     state(): any;
     /**
-     * @docid PivotGridDataSourceMethods.state
+     * @docid PivotGridDataSource.state
      * @publicName state(state)
      * @param1 state:object
      * @prevFileNamespace DevExpress.ui

@@ -44,7 +44,7 @@ export type ChartSingleValueSeriesAggregationMethodType = 'avg' | 'count' | 'max
 
 export interface baseLabelObject {
     /**
-     * @docid baseLabelObjectMethods.getBoundingRect
+     * @docid baseLabelObject.getBoundingRect
      * @publicName getBoundingRect()
      * @return object
      * @prevFileNamespace DevExpress.viz
@@ -52,14 +52,14 @@ export interface baseLabelObject {
      */
     getBoundingRect(): any;
     /**
-     * @docid baseLabelObjectMethods.hide
+     * @docid baseLabelObject.hide
      * @publicName hide()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hide(): void;
     /**
-     * @docid baseLabelObjectMethods.hide
+     * @docid baseLabelObject.hide
      * @publicName hide(holdInvisible)
      * @param1 holdInvisible:boolean
      * @prevFileNamespace DevExpress.viz
@@ -67,7 +67,7 @@ export interface baseLabelObject {
      */
     hide(holdInvisible: boolean): void;
     /**
-     * @docid baseLabelObjectMethods.isVisible
+     * @docid baseLabelObject.isVisible
      * @publicName isVisible()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -75,14 +75,14 @@ export interface baseLabelObject {
      */
     isVisible(): boolean;
     /**
-     * @docid baseLabelObjectMethods.show
+     * @docid baseLabelObject.show
      * @publicName show()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     show(): void;
     /**
-     * @docid baseLabelObjectMethods.show
+     * @docid baseLabelObject.show
      * @publicName show(holdVisible)
      * @param1 holdVisible:boolean
      * @prevFileNamespace DevExpress.viz
@@ -93,33 +93,33 @@ export interface baseLabelObject {
 
 export interface basePointObject {
     /**
-     * @docid basePointObjectMethods.clearHover
+     * @docid basePointObject.clearHover
      * @publicName clearHover()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearHover(): void;
     /**
-     * @docid basePointObjectMethods.clearSelection
+     * @docid basePointObject.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid basePointObjectFields.data
+     * @docid basePointObject.data
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     data?: any;
     /**
-     * @docid basePointObjectFields.fullState
+     * @docid basePointObject.fullState
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     fullState?: number;
     /**
-     * @docid basePointObjectMethods.getColor
+     * @docid basePointObject.getColor
      * @publicName getColor()
      * @return string
      * @prevFileNamespace DevExpress.viz
@@ -127,7 +127,7 @@ export interface basePointObject {
      */
     getColor(): string;
     /**
-     * @docid basePointObjectMethods.getLabel
+     * @docid basePointObject.getLabel
      * @publicName getLabel()
      * @return baseLabelObject|Array<baseLabelObject>
      * @prevFileNamespace DevExpress.viz
@@ -135,21 +135,21 @@ export interface basePointObject {
      */
     getLabel(): baseLabelObject & Array<baseLabelObject>;
     /**
-     * @docid basePointObjectMethods.hideTooltip
+     * @docid basePointObject.hideTooltip
      * @publicName hideTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
     /**
-     * @docid basePointObjectMethods.hover
+     * @docid basePointObject.hover
      * @publicName hover()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hover(): void;
     /**
-     * @docid basePointObjectMethods.isHovered
+     * @docid basePointObject.isHovered
      * @publicName isHovered()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -157,7 +157,7 @@ export interface basePointObject {
      */
     isHovered(): boolean;
     /**
-     * @docid basePointObjectMethods.isSelected
+     * @docid basePointObject.isSelected
      * @publicName isSelected()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -165,39 +165,39 @@ export interface basePointObject {
      */
     isSelected(): boolean;
     /**
-     * @docid basePointObjectFields.originalArgument
+     * @docid basePointObject.originalArgument
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     originalArgument?: string | number | Date;
     /**
-     * @docid basePointObjectFields.originalValue
+     * @docid basePointObject.originalValue
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     originalValue?: string | number | Date;
     /**
-     * @docid basePointObjectMethods.select
+     * @docid basePointObject.select
      * @publicName select()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     select(): void;
     /**
-     * @docid basePointObjectFields.series
+     * @docid basePointObject.series
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     series?: any;
     /**
-     * @docid basePointObjectMethods.showTooltip
+     * @docid basePointObject.showTooltip
      * @publicName showTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTooltip(): void;
     /**
-     * @docid basePointObjectFields.tag
+     * @docid basePointObject.tag
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -206,21 +206,21 @@ export interface basePointObject {
 
 export interface baseSeriesObject {
     /**
-     * @docid baseSeriesObjectMethods.clearHover
+     * @docid baseSeriesObject.clearHover
      * @publicName clearHover()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearHover(): void;
     /**
-     * @docid baseSeriesObjectMethods.clearSelection
+     * @docid baseSeriesObject.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid baseSeriesObjectMethods.deselectPoint
+     * @docid baseSeriesObject.deselectPoint
      * @publicName deselectPoint(point)
      * @param1 point:basePointObject
      * @prevFileNamespace DevExpress.viz
@@ -228,13 +228,13 @@ export interface baseSeriesObject {
      */
     deselectPoint(point: basePointObject): void;
     /**
-     * @docid baseSeriesObjectFields.fullState
+     * @docid baseSeriesObject.fullState
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     fullState?: number;
     /**
-     * @docid baseSeriesObjectMethods.getAllPoints
+     * @docid baseSeriesObject.getAllPoints
      * @publicName getAllPoints()
      * @return Array<basePointObject>
      * @prevFileNamespace DevExpress.viz
@@ -242,7 +242,7 @@ export interface baseSeriesObject {
      */
     getAllPoints(): Array<basePointObject>;
     /**
-     * @docid baseSeriesObjectMethods.getColor
+     * @docid baseSeriesObject.getColor
      * @publicName getColor()
      * @return string
      * @prevFileNamespace DevExpress.viz
@@ -250,7 +250,7 @@ export interface baseSeriesObject {
      */
     getColor(): string;
     /**
-     * @docid baseSeriesObjectMethods.getPointByPos
+     * @docid baseSeriesObject.getPointByPos
      * @publicName getPointByPos(positionIndex)
      * @param1 positionIndex:number
      * @return basePointObject
@@ -259,7 +259,7 @@ export interface baseSeriesObject {
      */
     getPointByPos(positionIndex: number): basePointObject;
     /**
-     * @docid baseSeriesObjectMethods.getPointsByArg
+     * @docid baseSeriesObject.getPointsByArg
      * @publicName getPointsByArg(pointArg)
      * @param1 pointArg:number|string|date
      * @return Array<basePointObject>
@@ -268,7 +268,7 @@ export interface baseSeriesObject {
      */
     getPointsByArg(pointArg: number | string | Date): Array<basePointObject>;
     /**
-     * @docid baseSeriesObjectMethods.getVisiblePoints
+     * @docid baseSeriesObject.getVisiblePoints
      * @publicName getVisiblePoints()
      * @return Array<basePointObject>
      * @prevFileNamespace DevExpress.viz
@@ -276,21 +276,21 @@ export interface baseSeriesObject {
      */
     getVisiblePoints(): Array<basePointObject>;
     /**
-     * @docid baseSeriesObjectMethods.hide
+     * @docid baseSeriesObject.hide
      * @publicName hide()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hide(): void;
     /**
-     * @docid baseSeriesObjectMethods.hover
+     * @docid baseSeriesObject.hover
      * @publicName hover()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hover(): void;
     /**
-     * @docid baseSeriesObjectMethods.isHovered
+     * @docid baseSeriesObject.isHovered
      * @publicName isHovered()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -298,7 +298,7 @@ export interface baseSeriesObject {
      */
     isHovered(): boolean;
     /**
-     * @docid baseSeriesObjectMethods.isSelected
+     * @docid baseSeriesObject.isSelected
      * @publicName isSelected()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -306,7 +306,7 @@ export interface baseSeriesObject {
      */
     isSelected(): boolean;
     /**
-     * @docid baseSeriesObjectMethods.isVisible
+     * @docid baseSeriesObject.isVisible
      * @publicName isVisible()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -314,20 +314,20 @@ export interface baseSeriesObject {
      */
     isVisible(): boolean;
     /**
-     * @docid baseSeriesObjectFields.name
+     * @docid baseSeriesObject.name
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     name?: any;
     /**
-     * @docid baseSeriesObjectMethods.select
+     * @docid baseSeriesObject.select
      * @publicName select()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     select(): void;
     /**
-     * @docid baseSeriesObjectMethods.selectPoint
+     * @docid baseSeriesObject.selectPoint
      * @publicName selectPoint(point)
      * @param1 point:basePointObject
      * @prevFileNamespace DevExpress.viz
@@ -335,20 +335,20 @@ export interface baseSeriesObject {
      */
     selectPoint(point: basePointObject): void;
     /**
-     * @docid baseSeriesObjectMethods.show
+     * @docid baseSeriesObject.show
      * @publicName show()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     show(): void;
     /**
-     * @docid baseSeriesObjectFields.tag
+     * @docid baseSeriesObject.tag
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     tag?: any;
     /**
-     * @docid baseSeriesObjectFields.type
+     * @docid baseSeriesObject.type
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -357,7 +357,7 @@ export interface baseSeriesObject {
 
 export interface chartAxisObject {
     /**
-     * @docid chartAxisObjectMethods.visualRange
+     * @docid chartAxisObject.visualRange
      * @publicName visualRange()
      * @return VizRange
      * @prevFileNamespace DevExpress.viz
@@ -365,7 +365,7 @@ export interface chartAxisObject {
      */
     visualRange(): VizRange;
     /**
-     * @docid chartAxisObjectMethods.visualRange
+     * @docid chartAxisObject.visualRange
      * @publicName visualRange(visualRange)
      * @param1 visualRange:Array<number,string,Date> | VizRange
      * @prevFileNamespace DevExpress.viz
@@ -403,13 +403,13 @@ export interface chartPointAggregationInfoObject {
 
 export interface chartPointObject extends basePointObject {
     /**
-     * @docid chartPointObjectFields.aggregationInfo
+     * @docid chartPointObject.aggregationInfo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     aggregationInfo?: chartPointAggregationInfoObject;
     /**
-     * @docid chartPointObjectmethods.getBoundingRect
+     * @docid chartPointObject.getBoundingRect
      * @publicName getBoundingRect()
      * @return object
      * @prevFileNamespace DevExpress.viz
@@ -417,37 +417,37 @@ export interface chartPointObject extends basePointObject {
      */
     getBoundingRect(): any;
     /**
-     * @docid chartPointObjectFields.originalCloseValue
+     * @docid chartPointObject.originalCloseValue
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     originalCloseValue?: number | string;
     /**
-     * @docid chartPointObjectFields.originalHighValue
+     * @docid chartPointObject.originalHighValue
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     originalHighValue?: number | string;
     /**
-     * @docid chartPointObjectFields.originalLowValue
+     * @docid chartPointObject.originalLowValue
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     originalLowValue?: number | string;
     /**
-     * @docid chartPointObjectFields.originalMinValue
+     * @docid chartPointObject.originalMinValue
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     originalMinValue?: string | number | Date;
     /**
-     * @docid chartPointObjectFields.originalOpenValue
+     * @docid chartPointObject.originalOpenValue
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     originalOpenValue?: number | string;
     /**
-     * @docid chartPointObjectFields.size
+     * @docid chartPointObject.size
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -456,19 +456,19 @@ export interface chartPointObject extends basePointObject {
 
 export interface chartSeriesObject extends baseSeriesObject {
     /**
-     * @docid chartSeriesObjectFields.axis
+     * @docid chartSeriesObject.axis
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     axis?: string;
     /**
-     * @docid chartSeriesObjectFields.barOverlapGroup
+     * @docid chartSeriesObject.barOverlapGroup
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     barOverlapGroup?: string;
     /**
-     * @docid chartSeriesObjectMethods.getArgumentAxis
+     * @docid chartSeriesObject.getArgumentAxis
      * @publicName getArgumentAxis()
      * @return chartAxisObject
      * @prevFileNamespace DevExpress.viz
@@ -476,7 +476,7 @@ export interface chartSeriesObject extends baseSeriesObject {
      */
     getArgumentAxis(): chartAxisObject;
     /**
-     * @docid chartSeriesObjectMethods.getValueAxis
+     * @docid chartSeriesObject.getValueAxis
      * @publicName getValueAxis()
      * @return chartAxisObject
      * @prevFileNamespace DevExpress.viz
@@ -484,13 +484,13 @@ export interface chartSeriesObject extends baseSeriesObject {
      */
     getValueAxis(): chartAxisObject;
     /**
-     * @docid chartSeriesObjectFields.pane
+     * @docid chartSeriesObject.pane
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     pane?: string;
     /**
-     * @docid chartSeriesObjectFields.stack
+     * @docid chartSeriesObject.stack
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -2267,7 +2267,7 @@ export default class dxChart extends BaseChart {
     constructor(element: Element, options?: dxChartOptions)
     constructor(element: JQuery, options?: dxChartOptions)
     /**
-     * @docid dxchartmethods.getArgumentAxis
+     * @docid dxchart.getArgumentAxis
      * @publicName getArgumentAxis()
      * @return chartAxisObject
      * @prevFileNamespace DevExpress.viz
@@ -2275,7 +2275,7 @@ export default class dxChart extends BaseChart {
      */
     getArgumentAxis(): chartAxisObject;
     /**
-     * @docid dxchartmethods.getValueAxis
+     * @docid dxchart.getValueAxis
      * @publicName getValueAxis()
      * @return chartAxisObject
      * @prevFileNamespace DevExpress.viz
@@ -2283,7 +2283,7 @@ export default class dxChart extends BaseChart {
      */
     getValueAxis(): chartAxisObject;
     /**
-     * @docid dxchartmethods.getValueAxis(name)
+     * @docid dxchart.getValueAxis(name)
      * @publicName getValueAxis(name)
      * @param1 name:string
      * @return chartAxisObject
@@ -2292,14 +2292,14 @@ export default class dxChart extends BaseChart {
      */
     getValueAxis(name: string): chartAxisObject;
     /**
-     * @docid dxchartmethods.resetVisualRange
+     * @docid dxchart.resetVisualRange
      * @publicName resetVisualRange()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     resetVisualRange(): void;
     /**
-     * @docid dxchartmethods.zoomArgument
+     * @docid dxchart.zoomArgument
      * @publicName zoomArgument(startValue,endValue)
      * @param1 startValue:Number|Date|string
      * @param2 endValue:Number|Date|string

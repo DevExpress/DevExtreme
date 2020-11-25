@@ -71,21 +71,21 @@ export default class dxValidator extends DOMComponent {
     constructor(element: Element, options?: dxValidatorOptions)
     constructor(element: JQuery, options?: dxValidatorOptions)
     /**
-     * @docid dxValidatorMethods.focus
+     * @docid dxValidator.focus
      * @publicName focus()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focus(): void;
     /**
-     * @docid dxValidatorMethods.reset
+     * @docid dxValidator.reset
      * @publicName reset()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
     /**
-     * @docid dxValidatorMethods.validate
+     * @docid dxValidator.validate
      * @publicName validate()
      * @return dxValidatorResult
      * @prevFileNamespace DevExpress.ui

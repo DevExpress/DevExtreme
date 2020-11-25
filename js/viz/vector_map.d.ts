@@ -38,20 +38,20 @@ import {
 
 export interface MapLayer {
     /**
-     * @docid MapLayerMethods.clearSelection
+     * @docid MapLayer.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid MapLayerFields.elementType
+     * @docid MapLayer.elementType
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     elementType?: string;
     /**
-     * @docid MapLayerMethods.getDataSource
+     * @docid MapLayer.getDataSource
      * @publicName getDataSource()
      * @return DataSource
      * @prevFileNamespace DevExpress.viz
@@ -59,7 +59,7 @@ export interface MapLayer {
      */
     getDataSource(): DataSource;
     /**
-     * @docid MapLayerMethods.getElements
+     * @docid MapLayer.getElements
      * @publicName getElements()
      * @return Array<MapLayerElement>
      * @prevFileNamespace DevExpress.viz
@@ -67,19 +67,19 @@ export interface MapLayer {
      */
     getElements(): Array<MapLayerElement>;
     /**
-     * @docid MapLayerFields.index
+     * @docid MapLayer.index
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     index?: number;
     /**
-     * @docid MapLayerFields.name
+     * @docid MapLayer.name
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     name?: string;
     /**
-     * @docid MapLayerFields.type
+     * @docid MapLayer.type
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -88,7 +88,7 @@ export interface MapLayer {
 
 export interface MapLayerElement {
     /**
-     * @docid MapLayerElementMethods.applySettings
+     * @docid MapLayerElement.applySettings
      * @publicName applySettings(settings)
      * @param1 settings:object
      * @prevFileNamespace DevExpress.viz
@@ -96,7 +96,7 @@ export interface MapLayerElement {
      */
     applySettings(settings: any): void;
     /**
-     * @docid MapLayerElementMethods.attribute
+     * @docid MapLayerElement.attribute
      * @publicName attribute(name)
      * @return any
      * @param1 name:string
@@ -105,7 +105,7 @@ export interface MapLayerElement {
      */
     attribute(name: string): any;
     /**
-     * @docid MapLayerElementMethods.attribute
+     * @docid MapLayerElement.attribute
      * @publicName attribute(name, value)
      * @param1 name:string
      * @param2 value:any
@@ -114,7 +114,7 @@ export interface MapLayerElement {
      */
     attribute(name: string, value: any): void;
     /**
-     * @docid MapLayerElementMethods.coordinates
+     * @docid MapLayerElement.coordinates
      * @publicName coordinates()
      * @return object
      * @prevFileNamespace DevExpress.viz
@@ -122,13 +122,13 @@ export interface MapLayerElement {
      */
     coordinates(): any;
     /**
-     * @docid MapLayerElementFields.layer
+     * @docid MapLayerElement.layer
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     layer?: any;
     /**
-     * @docid MapLayerElementMethods.selected
+     * @docid MapLayerElement.selected
      * @publicName selected()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -136,7 +136,7 @@ export interface MapLayerElement {
      */
     selected(): boolean;
     /**
-     * @docid MapLayerElementMethods.selected
+     * @docid MapLayerElement.selected
      * @publicName selected(state)
      * @param1 state:boolean
      * @prevFileNamespace DevExpress.viz
@@ -538,7 +538,7 @@ export default class dxVectorMap extends BaseWidget {
     constructor(element: Element, options?: dxVectorMapOptions)
     constructor(element: JQuery, options?: dxVectorMapOptions)
     /**
-     * @docid dxVectorMapMethods.center
+     * @docid dxVectorMap.center
      * @publicName center()
      * @return Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -546,7 +546,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     center(): Array<number>;
     /**
-     * @docid dxVectorMapMethods.center
+     * @docid dxVectorMap.center
      * @publicName center(centerCoordinates)
      * @param1 centerCoordinates:Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -554,14 +554,14 @@ export default class dxVectorMap extends BaseWidget {
      */
     center(centerCoordinates: Array<number>): void;
     /**
-     * @docid dxVectorMapMethods.clearSelection
+     * @docid dxVectorMap.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid dxVectorMapMethods.convertCoordinates
+     * @docid dxVectorMap.convertCoordinates
      * @publicName convertCoordinates(x, y)
      * @param1 x:number
      * @param2 y:number
@@ -572,7 +572,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     convertCoordinates(x: number, y: number): Array<number>;
     /**
-     * @docid dxVectorMapMethods.convertToGeo
+     * @docid dxVectorMap.convertToGeo
      * @publicName convertToGeo(x, y)
      * @param1 x:number
      * @param2 y:number
@@ -582,7 +582,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     convertToGeo(x: number, y: number): Array<number>;
     /**
-     * @docid dxVectorMapMethods.convertToXY
+     * @docid dxVectorMap.convertToXY
      * @publicName convertToXY(longitude, latitude)
      * @param1 longitude:number
      * @param2 latitude:number
@@ -592,7 +592,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     convertToXY(longitude: number, latitude: number): Array<number>;
     /**
-     * @docid dxVectorMapMethods.getLayerByIndex
+     * @docid dxVectorMap.getLayerByIndex
      * @publicName getLayerByIndex(index)
      * @return MapLayer
      * @param1 index:number
@@ -601,7 +601,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     getLayerByIndex(index: number): MapLayer;
     /**
-     * @docid dxVectorMapMethods.getLayerByName
+     * @docid dxVectorMap.getLayerByName
      * @publicName getLayerByName(name)
      * @return MapLayer
      * @param1 name:string
@@ -610,7 +610,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     getLayerByName(name: string): MapLayer;
     /**
-     * @docid dxVectorMapMethods.getLayers
+     * @docid dxVectorMap.getLayers
      * @publicName getLayers()
      * @return Array<MapLayer>
      * @prevFileNamespace DevExpress.viz
@@ -618,7 +618,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     getLayers(): Array<MapLayer>;
     /**
-     * @docid dxVectorMapMethods.viewport
+     * @docid dxVectorMap.viewport
      * @publicName viewport()
      * @return Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -626,7 +626,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     viewport(): Array<number>;
     /**
-     * @docid dxVectorMapMethods.viewport
+     * @docid dxVectorMap.viewport
      * @publicName viewport(viewportCoordinates)
      * @param1 viewportCoordinates:Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -634,7 +634,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     viewport(viewportCoordinates: Array<number>): void;
     /**
-     * @docid dxVectorMapMethods.zoomFactor
+     * @docid dxVectorMap.zoomFactor
      * @publicName zoomFactor()
      * @return number
      * @prevFileNamespace DevExpress.viz
@@ -642,7 +642,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     zoomFactor(): number;
     /**
-     * @docid dxVectorMapMethods.zoomFactor
+     * @docid dxVectorMap.zoomFactor
      * @publicName zoomFactor(zoomFactor)
      * @param1 zoomFactor:number
      * @prevFileNamespace DevExpress.viz

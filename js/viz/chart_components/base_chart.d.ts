@@ -294,14 +294,14 @@ export class BaseChart extends BaseWidget {
     constructor(element: Element, options?: BaseChartOptions)
     constructor(element: JQuery, options?: BaseChartOptions)
     /**
-     * @docid BaseChartMethods.clearSelection
+     * @docid BaseChart.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid BaseChartMethods.getAllSeries
+     * @docid BaseChart.getAllSeries
      * @publicName getAllSeries()
      * @return Array<baseSeriesObject>
      * @prevFileNamespace DevExpress.viz
@@ -310,7 +310,7 @@ export class BaseChart extends BaseWidget {
     getAllSeries(): Array<baseSeriesObject>;
     getDataSource(): DataSource;
     /**
-     * @docid BaseChartMethods.getSeriesByName
+     * @docid BaseChart.getSeriesByName
      * @publicName getSeriesByName(seriesName)
      * @param1 seriesName:any
      * @return chartSeriesObject
@@ -319,7 +319,7 @@ export class BaseChart extends BaseWidget {
      */
     getSeriesByName(seriesName: any): chartSeriesObject;
     /**
-     * @docid BaseChartMethods.getSeriesByPos
+     * @docid BaseChart.getSeriesByPos
      * @publicName getSeriesByPos(seriesIndex)
      * @param1 seriesIndex:number
      * @return chartSeriesObject
@@ -328,14 +328,14 @@ export class BaseChart extends BaseWidget {
      */
     getSeriesByPos(seriesIndex: number): chartSeriesObject;
     /**
-     * @docid BaseChartMethods.hideTooltip
+     * @docid BaseChart.hideTooltip
      * @publicName hideTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
     /**
-     * @docid BaseChartMethods.refresh
+     * @docid BaseChart.refresh
      * @publicName refresh()
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -343,7 +343,7 @@ export class BaseChart extends BaseWidget {
     refresh(): void;
     render(): void;
     /**
-     * @docid BaseChartMethods.render
+     * @docid BaseChart.render
      * @publicName render(renderOptions)
      * @param1 renderOptions:object
      * @prevFileNamespace DevExpress.viz

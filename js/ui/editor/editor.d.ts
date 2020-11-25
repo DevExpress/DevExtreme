@@ -91,7 +91,7 @@ export default class Editor extends Widget {
     constructor(element: Element, options?: EditorOptions)
     constructor(element: JQuery, options?: EditorOptions)
     /**
-     * @docid EditorMethods.reset
+     * @docid Editor.reset
      * @publicName reset()
      * @prevFileNamespace DevExpress.ui
      * @public

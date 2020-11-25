@@ -71,14 +71,14 @@ export default class dxScrollView extends dxScrollable {
     constructor(element: Element, options?: dxScrollViewOptions)
     constructor(element: JQuery, options?: dxScrollViewOptions)
     /**
-     * @docid dxScrollViewMethods.refresh
+     * @docid dxScrollView.refresh
      * @publicName refresh()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     refresh(): void;
     /**
-     * @docid dxScrollViewMethods.release
+     * @docid dxScrollView.release
      * @publicName release(preventScrollBottom)
      * @param1 preventScrollBottom:boolean
      * @return Promise<void>

@@ -301,7 +301,7 @@ export default class dxDiagram extends Widget {
     constructor(element: Element, options?: dxDiagramOptions)
     constructor(element: JQuery, options?: dxDiagramOptions)
     /**
-     * @docid dxDiagramMethods.getNodeDataSource
+     * @docid dxDiagram.getNodeDataSource
      * @publicName getNodeDataSource()
      * @return DataSource
      * @prevFileNamespace DevExpress.ui
@@ -309,7 +309,7 @@ export default class dxDiagram extends Widget {
      */
     getNodeDataSource(): DataSource;
     /**
-     * @docid dxDiagramMethods.getEdgeDataSource
+     * @docid dxDiagram.getEdgeDataSource
      * @publicName getEdgeDataSource()
      * @return DataSource
      * @prevFileNamespace DevExpress.ui
@@ -317,7 +317,7 @@ export default class dxDiagram extends Widget {
      */
     getEdgeDataSource(): DataSource;
     /**
-     * @docid dxDiagramMethods.getItemByKey
+     * @docid dxDiagram.getItemByKey
      * @publicName getItemByKey(key)
      * @param1 key:Object
      * @return dxDiagramItem
@@ -326,7 +326,7 @@ export default class dxDiagram extends Widget {
      */
     getItemByKey(key: Object): dxDiagramItem;
     /**
-     * @docid dxDiagramMethods.getItemById
+     * @docid dxDiagram.getItemById
      * @publicName getItemById(id)
      * @param1 id:String
      * @return dxDiagramItem
@@ -335,7 +335,7 @@ export default class dxDiagram extends Widget {
      */
     getItemById(id: string): dxDiagramItem;
     /**
-     * @docid dxDiagramMethods.export
+     * @docid dxDiagram.export
      * @publicName export()
      * @return string
      * @prevFileNamespace DevExpress.ui
@@ -343,7 +343,7 @@ export default class dxDiagram extends Widget {
      */
     export(): string;
     /**
-     * @docid dxDiagramMethods.exportTo
+     * @docid dxDiagram.exportTo
      * @publicName exportTo(format, callback)
      * @param1 format:Enums.DiagramExportFormat
      * @param2 callback:function
@@ -352,7 +352,7 @@ export default class dxDiagram extends Widget {
      */
     exportTo(format: 'svg' | 'png' | 'jpg', callback: Function): void;
     /**
-     * @docid dxDiagramMethods.import
+     * @docid dxDiagram.import
      * @publicName import(data, updateExistingItemsOnly)
      * @param1 data:string
      * @param2 updateExistingItemsOnly?:boolean
@@ -361,7 +361,7 @@ export default class dxDiagram extends Widget {
      */
     import(data: string, updateExistingItemsOnly?: boolean): void;
     /**
-     * @docid dxDiagramMethods.updateToolbox
+     * @docid dxDiagram.updateToolbox
      * @publicName updateToolbox()
      * @prevFileNamespace DevExpress.ui
      * @public

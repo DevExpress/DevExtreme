@@ -84,14 +84,14 @@ export default class Widget extends DOMComponent {
     constructor(element: Element, options?: WidgetOptions)
     constructor(element: JQuery, options?: WidgetOptions)
     /**
-     * @docid WidgetMethods.focus
+     * @docid Widget.focus
      * @publicName focus()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focus(): void;
     /**
-     * @docid WidgetMethods.registerKeyHandler
+     * @docid Widget.registerKeyHandler
      * @publicName registerKeyHandler(key, handler)
      * @param1 key:string
      * @param2 handler:function
@@ -100,7 +100,7 @@ export default class Widget extends DOMComponent {
      */
     registerKeyHandler(key: string, handler: Function): void;
     /**
-     * @docid WidgetMethods.repaint
+     * @docid Widget.repaint
      * @publicName repaint()
      * @prevFileNamespace DevExpress.ui
      * @public

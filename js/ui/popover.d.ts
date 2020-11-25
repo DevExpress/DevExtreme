@@ -122,7 +122,7 @@ export default class dxPopover extends dxPopup {
     constructor(element: JQuery, options?: dxPopoverOptions)
     show(): Promise<boolean> & JQueryPromise<boolean>;
     /**
-     * @docid dxPopoverMethods.show
+     * @docid dxPopover.show
      * @publicName show(target)
      * @param1 target:string|Element|jQuery
      * @return Promise<boolean>

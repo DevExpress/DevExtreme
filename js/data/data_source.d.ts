@@ -166,7 +166,7 @@ export default class DataSource {
     constructor(store: Store);
     constructor(url: string);
     /**
-     * @docid DataSourceMethods.cancel
+     * @docid DataSource.cancel
      * @publicName cancel(operationId)
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -174,14 +174,14 @@ export default class DataSource {
      */
     cancel(): boolean;
     /**
-     * @docid DataSourceMethods.dispose
+     * @docid DataSource.dispose
      * @publicName dispose()
      * @prevFileNamespace DevExpress.data
      * @public
      */
     dispose(): void;
     /**
-     * @docid DataSourceMethods.filter
+     * @docid DataSource.filter
      * @publicName filter()
      * @return object
      * @prevFileNamespace DevExpress.data
@@ -189,7 +189,7 @@ export default class DataSource {
      */
     filter(): any;
     /**
-     * @docid DataSourceMethods.filter
+     * @docid DataSource.filter
      * @publicName filter(filterExpr)
      * @param1 filterExpr:object
      * @prevFileNamespace DevExpress.data
@@ -197,7 +197,7 @@ export default class DataSource {
      */
     filter(filterExpr: any): void;
     /**
-     * @docid DataSourceMethods.group
+     * @docid DataSource.group
      * @publicName group()
      * @return object
      * @prevFileNamespace DevExpress.data
@@ -205,7 +205,7 @@ export default class DataSource {
      */
     group(): any;
     /**
-     * @docid DataSourceMethods.group
+     * @docid DataSource.group
      * @publicName group(groupExpr)
      * @param1 groupExpr:object
      * @prevFileNamespace DevExpress.data
@@ -213,7 +213,7 @@ export default class DataSource {
      */
     group(groupExpr: any): void;
     /**
-     * @docid DataSourceMethods.isLastPage
+     * @docid DataSource.isLastPage
      * @publicName isLastPage()
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -221,7 +221,7 @@ export default class DataSource {
      */
     isLastPage(): boolean;
     /**
-     * @docid DataSourceMethods.isLoaded
+     * @docid DataSource.isLoaded
      * @publicName isLoaded()
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -229,7 +229,7 @@ export default class DataSource {
      */
     isLoaded(): boolean;
     /**
-     * @docid DataSourceMethods.isLoading
+     * @docid DataSource.isLoading
      * @publicName isLoading()
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -237,7 +237,7 @@ export default class DataSource {
      */
     isLoading(): boolean;
     /**
-     * @docid DataSourceMethods.items
+     * @docid DataSource.items
      * @publicName items()
      * @return Array<any>
      * @prevFileNamespace DevExpress.data
@@ -245,7 +245,7 @@ export default class DataSource {
      */
     items(): Array<any>;
     /**
-     * @docid DataSourceMethods.key
+     * @docid DataSource.key
      * @publicName key()
      * @return object|string|number
      * @prevFileNamespace DevExpress.data
@@ -253,7 +253,7 @@ export default class DataSource {
      */
     key(): any & string & number;
     /**
-     * @docid DataSourceMethods.load
+     * @docid DataSource.load
      * @publicName load()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -261,7 +261,7 @@ export default class DataSource {
      */
     load(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid DataSourceMethods.loadOptions
+     * @docid DataSource.loadOptions
      * @publicName loadOptions()
      * @return object
      * @prevFileNamespace DevExpress.data
@@ -269,7 +269,7 @@ export default class DataSource {
      */
     loadOptions(): any;
     /**
-     * @docid DataSourceMethods.off
+     * @docid DataSource.off
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
@@ -278,7 +278,7 @@ export default class DataSource {
      */
     off(eventName: string): this;
     /**
-     * @docid DataSourceMethods.off
+     * @docid DataSource.off
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -288,7 +288,7 @@ export default class DataSource {
      */
     off(eventName: string, eventHandler: Function): this;
     /**
-     * @docid DataSourceMethods.on
+     * @docid DataSource.on
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -298,7 +298,7 @@ export default class DataSource {
      */
     on(eventName: string, eventHandler: Function): this;
     /**
-     * @docid DataSourceMethods.on
+     * @docid DataSource.on
      * @publicName on(events)
      * @param1 events:object
      * @return this
@@ -307,7 +307,7 @@ export default class DataSource {
      */
     on(events: any): this;
     /**
-     * @docid DataSourceMethods.pageIndex
+     * @docid DataSource.pageIndex
      * @publicName pageIndex()
      * @return numeric
      * @prevFileNamespace DevExpress.data
@@ -315,7 +315,7 @@ export default class DataSource {
      */
     pageIndex(): number;
     /**
-     * @docid DataSourceMethods.pageIndex
+     * @docid DataSource.pageIndex
      * @publicName pageIndex(newIndex)
      * @param1 newIndex:numeric
      * @prevFileNamespace DevExpress.data
@@ -323,7 +323,7 @@ export default class DataSource {
      */
     pageIndex(newIndex: number): void;
     /**
-     * @docid DataSourceMethods.pageSize
+     * @docid DataSource.pageSize
      * @publicName pageSize()
      * @return numeric
      * @prevFileNamespace DevExpress.data
@@ -331,7 +331,7 @@ export default class DataSource {
      */
     pageSize(): number;
     /**
-     * @docid DataSourceMethods.pageSize
+     * @docid DataSource.pageSize
      * @publicName pageSize(value)
      * @param1 value:numeric
      * @prevFileNamespace DevExpress.data
@@ -339,7 +339,7 @@ export default class DataSource {
      */
     pageSize(value: number): void;
     /**
-     * @docid DataSourceMethods.paginate
+     * @docid DataSource.paginate
      * @publicName paginate()
      * @return Boolean
      * @prevFileNamespace DevExpress.data
@@ -347,7 +347,7 @@ export default class DataSource {
      */
     paginate(): boolean;
     /**
-     * @docid DataSourceMethods.paginate
+     * @docid DataSource.paginate
      * @publicName paginate(value)
      * @param1 value:Boolean
      * @prevFileNamespace DevExpress.data
@@ -355,7 +355,7 @@ export default class DataSource {
      */
     paginate(value: boolean): void;
     /**
-     * @docid DataSourceMethods.reload
+     * @docid DataSource.reload
      * @publicName reload()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -363,7 +363,7 @@ export default class DataSource {
      */
     reload(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid DataSourceMethods.requireTotalCount
+     * @docid DataSource.requireTotalCount
      * @publicName requireTotalCount()
      * @return boolean
      * @prevFileNamespace DevExpress.data
@@ -371,7 +371,7 @@ export default class DataSource {
      */
     requireTotalCount(): boolean;
     /**
-     * @docid DataSourceMethods.requireTotalCount
+     * @docid DataSource.requireTotalCount
      * @publicName requireTotalCount(value)
      * @param1 value:boolean
      * @prevFileNamespace DevExpress.data
@@ -379,7 +379,7 @@ export default class DataSource {
      */
     requireTotalCount(value: boolean): void;
     /**
-     * @docid DataSourceMethods.searchExpr
+     * @docid DataSource.searchExpr
      * @publicName searchExpr()
      * @return getter|Array<getter>
      * @prevFileNamespace DevExpress.data
@@ -387,7 +387,7 @@ export default class DataSource {
      */
     searchExpr(): string & Function & Array<string | Function>;
     /**
-     * @docid DataSourceMethods.searchExpr
+     * @docid DataSource.searchExpr
      * @publicName searchExpr(expr)
      * @param1 expr:getter|Array<getter>
      * @prevFileNamespace DevExpress.data
@@ -395,7 +395,7 @@ export default class DataSource {
      */
     searchExpr(expr: string | Function | Array<string | Function>): void;
     /**
-     * @docid DataSourceMethods.searchOperation
+     * @docid DataSource.searchOperation
      * @publicName searchOperation()
      * @return string
      * @prevFileNamespace DevExpress.data
@@ -403,7 +403,7 @@ export default class DataSource {
      */
     searchOperation(): string;
     /**
-     * @docid DataSourceMethods.searchOperation
+     * @docid DataSource.searchOperation
      * @publicName searchOperation(op)
      * @param1 op:string
      * @prevFileNamespace DevExpress.data
@@ -411,7 +411,7 @@ export default class DataSource {
      */
     searchOperation(op: string): void;
     /**
-     * @docid DataSourceMethods.searchValue
+     * @docid DataSource.searchValue
      * @publicName searchValue()
      * @return any
      * @prevFileNamespace DevExpress.data
@@ -419,7 +419,7 @@ export default class DataSource {
      */
     searchValue(): any;
     /**
-     * @docid DataSourceMethods.searchValue
+     * @docid DataSource.searchValue
      * @publicName searchValue(value)
      * @param1 value:any
      * @prevFileNamespace DevExpress.data
@@ -427,7 +427,7 @@ export default class DataSource {
      */
     searchValue(value: any): void;
     /**
-     * @docid DataSourceMethods.select
+     * @docid DataSource.select
      * @publicName select()
      * @return any
      * @prevFileNamespace DevExpress.data
@@ -435,7 +435,7 @@ export default class DataSource {
      */
     select(): any;
     /**
-     * @docid DataSourceMethods.select
+     * @docid DataSource.select
      * @publicName select(expr)
      * @param1 expr:any
      * @prevFileNamespace DevExpress.data
@@ -443,7 +443,7 @@ export default class DataSource {
      */
     select(expr: any): void;
     /**
-     * @docid DataSourceMethods.sort
+     * @docid DataSource.sort
      * @publicName sort()
      * @return any
      * @prevFileNamespace DevExpress.data
@@ -451,7 +451,7 @@ export default class DataSource {
      */
     sort(): any;
     /**
-     * @docid DataSourceMethods.sort
+     * @docid DataSource.sort
      * @publicName sort(sortExpr)
      * @param1 sortExpr:any
      * @prevFileNamespace DevExpress.data
@@ -459,7 +459,7 @@ export default class DataSource {
      */
     sort(sortExpr: any): void;
     /**
-     * @docid DataSourceMethods.store
+     * @docid DataSource.store
      * @publicName store()
      * @return object
      * @prevFileNamespace DevExpress.data
@@ -467,7 +467,7 @@ export default class DataSource {
      */
     store(): any;
     /**
-     * @docid DataSourceMethods.totalCount
+     * @docid DataSource.totalCount
      * @publicName totalCount()
      * @return numeric
      * @prevFileNamespace DevExpress.data

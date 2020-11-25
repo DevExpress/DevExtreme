@@ -31,14 +31,14 @@ export default class dxValidationGroup extends DOMComponent {
     constructor(element: Element, options?: dxValidationGroupOptions)
     constructor(element: JQuery, options?: dxValidationGroupOptions)
     /**
-     * @docid dxValidationGroupMethods.reset
+     * @docid dxValidationGroup.reset
      * @publicName reset()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reset(): void;
     /**
-     * @docid dxValidationGroupMethods.validate
+     * @docid dxValidationGroup.validate
      * @publicName validate()
      * @return dxValidationGroupResult
      * @prevFileNamespace DevExpress.ui

@@ -85,7 +85,7 @@ export interface DOMComponentOptions<T = DOMComponent> extends ComponentOptions<
 export default class DOMComponent extends Component {
     constructor(element: Element | JQuery, options?: DOMComponentOptions);
     /**
-     * @docid DOMComponentMethods.defaultOptions
+     * @docid DOMComponent.defaultOptions
      * @static
      * @section uiWidgets
      * @publicName defaultOptions(rule)
@@ -97,14 +97,14 @@ export default class DOMComponent extends Component {
      */
     static defaultOptions(rule: { device?: Device | Array<Device> | Function, options?: any }): void;
     /**
-     * @docid DOMComponentMethods.dispose
+     * @docid DOMComponent.dispose
      * @publicName dispose()
      * @prevFileNamespace DevExpress.core
      * @public
      */
     dispose(): void;
     /**
-     * @docid DOMComponentMethods.element
+     * @docid DOMComponent.element
      * @publicName element()
      * @return dxElement
      * @prevFileNamespace DevExpress.core
@@ -112,7 +112,7 @@ export default class DOMComponent extends Component {
      */
     element(): dxElement;
     /**
-     * @docid DOMComponentMethods.getInstance
+     * @docid DOMComponent.getInstance
      * @static
      * @section uiWidgets
      * @publicName getInstance(element)

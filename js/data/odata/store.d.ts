@@ -108,7 +108,7 @@ export default class ODataStore extends Store {
     constructor(options?: ODataStoreOptions)
     byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid ODataStoreMethods.byKey
+     * @docid ODataStore.byKey
      * @publicName byKey(key, extraOptions)
      * @param1 key:object|string|number
      * @param2 extraOptions:object
@@ -120,7 +120,7 @@ export default class ODataStore extends Store {
      */
     byKey(key: any | string | number, extraOptions: { expand?: string | Array<string>, select?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid ODataStoreMethods.createQuery
+     * @docid ODataStore.createQuery
      * @publicName createQuery(loadOptions)
      * @param1 loadOptions:object
      * @return object

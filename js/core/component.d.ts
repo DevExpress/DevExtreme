@@ -50,21 +50,21 @@ export interface ComponentOptions<T = Component> {
 export default class Component {
   constructor(options?: ComponentOptions);
   /**
-   * @docid componentmethods.beginupdate
+   * @docid component.beginupdate
    * @publicName beginUpdate()
    * @prevFileNamespace DevExpress.core
    * @public
    */
   beginUpdate(): void;
   /**
-   * @docid componentmethods.endupdate
+   * @docid component.endupdate
    * @publicName endUpdate()
    * @prevFileNamespace DevExpress.core
    * @public
    */
   endUpdate(): void;
   /**
-   * @docid componentmethods.instance
+   * @docid component.instance
    * @publicName instance()
    * @return this
    * @prevFileNamespace DevExpress.core
@@ -72,7 +72,7 @@ export default class Component {
    */
   instance(): this;
   /**
-   * @docid ComponentMethods.off
+   * @docid Component.off
    * @publicName off(eventName)
    * @param1 eventName:string
    * @return this
@@ -81,7 +81,7 @@ export default class Component {
    */
   off(eventName: string): this;
   /**
-   * @docid ComponentMethods.off
+   * @docid Component.off
    * @publicName off(eventName, eventHandler)
    * @param1 eventName:string
    * @param2 eventHandler:function
@@ -91,7 +91,7 @@ export default class Component {
    */
   off(eventName: string, eventHandler: Function): this;
   /**
-   * @docid ComponentMethods.on
+   * @docid Component.on
    * @publicName on(eventName, eventHandler)
    * @param1 eventName:string
    * @param2 eventHandler:function
@@ -101,7 +101,7 @@ export default class Component {
    */
   on(eventName: string, eventHandler: Function): this;
   /**
-   * @docid ComponentMethods.on
+   * @docid Component.on
    * @publicName on(events)
    * @param1 events:object
    * @return this
@@ -110,7 +110,7 @@ export default class Component {
    */
   on(events: any): this;
   /**
-   * @docid componentmethods.option
+   * @docid component.option
    * @publicName option()
    * @return object
    * @prevFileNamespace DevExpress.core
@@ -118,7 +118,7 @@ export default class Component {
    */
   option(): any;
   /**
-   * @docid componentmethods.option
+   * @docid component.option
    * @publicName option(optionName)
    * @param1 optionName:string
    * @return any
@@ -127,7 +127,7 @@ export default class Component {
    */
   option(optionName: string): any;
   /**
-   * @docid componentmethods.option
+   * @docid component.option
    * @publicName option(optionName, optionValue)
    * @param1 optionName:string
    * @param2 optionValue:any
@@ -136,7 +136,7 @@ export default class Component {
    */
   option(optionName: string, optionValue: any): void;
   /**
-   * @docid componentmethods.option
+   * @docid component.option
    * @publicName option(options)
    * @param1 options:object
    * @prevFileNamespace DevExpress.core
@@ -144,7 +144,7 @@ export default class Component {
    */
   option(options: any): void;
   /**
-   * @docid componentmethods.resetOption
+   * @docid component.resetOption
    * @publicName resetOption(optionName)
    * @param1 optionName:string
    * @prevFileNamespace DevExpress.core

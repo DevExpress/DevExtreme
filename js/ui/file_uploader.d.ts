@@ -389,14 +389,14 @@ export default class dxFileUploader extends Editor {
     constructor(element: Element, options?: dxFileUploaderOptions)
     constructor(element: JQuery, options?: dxFileUploaderOptions)
     /**
-     * @docid dxFileUploaderMethods.upload
+     * @docid dxFileUploader.upload
      * @publicName upload()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     upload(): void;
     /**
-     * @docid dxFileUploaderMethods.upload
+     * @docid dxFileUploader.upload
      * @publicName upload(fileIndex)
      * @param1 fileIndex:number
      * @prevFileNamespace DevExpress.ui
@@ -404,7 +404,7 @@ export default class dxFileUploader extends Editor {
      */
     upload(fileIndex: number): void;
     /**
-     * @docid dxFileUploaderMethods.upload
+     * @docid dxFileUploader.upload
      * @publicName upload(file)
      * @param1 file:File
      * @prevFileNamespace DevExpress.ui
@@ -412,14 +412,14 @@ export default class dxFileUploader extends Editor {
      */
     upload(file: File): void;
     /**
-     * @docid dxFileUploaderMethods.abortUpload
+     * @docid dxFileUploader.abortUpload
      * @publicName abortUpload()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     abortUpload(): void;
     /**
-     * @docid dxFileUploaderMethods.abortUpload
+     * @docid dxFileUploader.abortUpload
      * @publicName abortUpload(fileIndex)
      * @param1 fileIndex:number
      * @prevFileNamespace DevExpress.ui
@@ -427,7 +427,7 @@ export default class dxFileUploader extends Editor {
      */
     abortUpload(fileIndex: number): void;
     /**
-     * @docid dxFileUploaderMethods.abortUpload
+     * @docid dxFileUploader.abortUpload
      * @publicName abortUpload(file)
      * @param1 file:File
      * @prevFileNamespace DevExpress.ui
@@ -435,7 +435,7 @@ export default class dxFileUploader extends Editor {
      */
     abortUpload(file: File): void;
     /**
-     * @docid dxFileUploaderMethods.removeFile
+     * @docid dxFileUploader.removeFile
      * @publicName removeFile(fileIndex)
      * @param1 fileIndex:number
      * @prevFileNamespace DevExpress.ui
@@ -443,7 +443,7 @@ export default class dxFileUploader extends Editor {
      */
     removeFile(fileIndex: number): void;
     /**
-     * @docid dxFileUploaderMethods.removeFile
+     * @docid dxFileUploader.removeFile
      * @publicName removeFile(file)
      * @param1 file:File
      * @prevFileNamespace DevExpress.ui

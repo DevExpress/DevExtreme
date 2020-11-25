@@ -35,7 +35,7 @@ export interface LocalStoreOptions extends ArrayStoreOptions<LocalStore> {
 export default class LocalStore extends ArrayStore {
     constructor(options?: LocalStoreOptions)
     /**
-     * @docid LocalStoreMethods.clear
+     * @docid LocalStore.clear
      * @publicName clear()
      * @prevFileNamespace DevExpress.data
      * @public

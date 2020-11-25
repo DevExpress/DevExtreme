@@ -134,14 +134,14 @@ export default class dxDropDownEditor extends dxTextBox {
     constructor(element: Element, options?: dxDropDownEditorOptions)
     constructor(element: JQuery, options?: dxDropDownEditorOptions)
     /**
-     * @docid dxDropDownEditorMethods.close
+     * @docid dxDropDownEditor.close
      * @publicName close()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     close(): void;
     /**
-     * @docid dxDropDownEditorMethods.content
+     * @docid dxDropDownEditor.content
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -149,7 +149,7 @@ export default class dxDropDownEditor extends dxTextBox {
      */
     content(): dxElement;
     /**
-     * @docid dxDropDownEditorMethods.field
+     * @docid dxDropDownEditor.field
      * @publicName field()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -157,7 +157,7 @@ export default class dxDropDownEditor extends dxTextBox {
      */
     field(): dxElement;
     /**
-     * @docid dxDropDownEditorMethods.open
+     * @docid dxDropDownEditor.open
      * @publicName open()
      * @prevFileNamespace DevExpress.ui
      * @public

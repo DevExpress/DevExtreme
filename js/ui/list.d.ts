@@ -440,7 +440,7 @@ export default class dxList extends CollectionWidget {
     constructor(element: Element, options?: dxListOptions)
     constructor(element: JQuery, options?: dxListOptions)
     /**
-     * @docid dxListMethods.clientHeight
+     * @docid dxList.clientHeight
      * @publicName clientHeight()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -448,7 +448,7 @@ export default class dxList extends CollectionWidget {
      */
     clientHeight(): number;
     /**
-     * @docid dxListMethods.collapseGroup
+     * @docid dxList.collapseGroup
      * @publicName collapseGroup(groupIndex)
      * @param1 groupIndex:Number
      * @return Promise<void>
@@ -457,7 +457,7 @@ export default class dxList extends CollectionWidget {
      */
     collapseGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.deleteItem
+     * @docid dxList.deleteItem
      * @publicName deleteItem(itemElement)
      * @param1 itemElement:Element
      * @return Promise<void>
@@ -466,7 +466,7 @@ export default class dxList extends CollectionWidget {
      */
     deleteItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.deleteItem
+     * @docid dxList.deleteItem
      * @publicName deleteItem(itemIndex)
      * @param1 itemIndex:Number|Object
      * @return Promise<void>
@@ -475,7 +475,7 @@ export default class dxList extends CollectionWidget {
      */
     deleteItem(itemIndex: number | any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.expandGroup
+     * @docid dxList.expandGroup
      * @publicName expandGroup(groupIndex)
      * @param1 groupIndex:Number
      * @return Promise<void>
@@ -484,7 +484,7 @@ export default class dxList extends CollectionWidget {
      */
     expandGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.isItemSelected
+     * @docid dxList.isItemSelected
      * @publicName isItemSelected(itemElement)
      * @param1 itemElement:Element
      * @return boolean
@@ -493,7 +493,7 @@ export default class dxList extends CollectionWidget {
      */
     isItemSelected(itemElement: Element): boolean;
     /**
-     * @docid dxListMethods.isItemSelected
+     * @docid dxList.isItemSelected
      * @publicName isItemSelected(itemIndex)
      * @param1 itemIndex:Number|Object
      * @return boolean
@@ -502,14 +502,14 @@ export default class dxList extends CollectionWidget {
      */
     isItemSelected(itemIndex: number | any): boolean;
     /**
-     * @docid dxListMethods.reload
+     * @docid dxList.reload
      * @publicName reload()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     reload(): void;
     /**
-     * @docid dxListMethods.reorderItem
+     * @docid dxList.reorderItem
      * @publicName reorderItem(itemElement, toItemElement)
      * @param1 itemElement:Element
      * @param2 toItemElement:Element
@@ -519,7 +519,7 @@ export default class dxList extends CollectionWidget {
      */
     reorderItem(itemElement: Element, toItemElement: Element): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.reorderItem
+     * @docid dxList.reorderItem
      * @publicName reorderItem(itemIndex, toItemIndex)
      * @param1 itemIndex:Number|Object
      * @param2 toItemIndex:Number|Object
@@ -529,7 +529,7 @@ export default class dxList extends CollectionWidget {
      */
     reorderItem(itemIndex: number | any, toItemIndex: number | any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxListMethods.scrollBy
+     * @docid dxList.scrollBy
      * @publicName scrollBy(distance)
      * @param1 distance:numeric
      * @prevFileNamespace DevExpress.ui
@@ -537,7 +537,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollBy(distance: number): void;
     /**
-     * @docid dxListMethods.scrollHeight
+     * @docid dxList.scrollHeight
      * @publicName scrollHeight()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -545,7 +545,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollHeight(): number;
     /**
-     * @docid dxListMethods.scrollTo
+     * @docid dxList.scrollTo
      * @publicName scrollTo(location)
      * @param1 location:numeric
      * @prevFileNamespace DevExpress.ui
@@ -553,7 +553,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollTo(location: number): void;
     /**
-     * @docid dxListMethods.scrollToItem
+     * @docid dxList.scrollToItem
      * @publicName scrollToItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
@@ -561,7 +561,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollToItem(itemElement: Element): void;
     /**
-     * @docid dxListMethods.scrollToItem
+     * @docid dxList.scrollToItem
      * @publicName scrollToItem(itemIndex)
      * @param1 itemIndex:Number|Object
      * @prevFileNamespace DevExpress.ui
@@ -569,7 +569,7 @@ export default class dxList extends CollectionWidget {
      */
     scrollToItem(itemIndex: number | any): void;
     /**
-     * @docid dxListMethods.scrollTop
+     * @docid dxList.scrollTop
      * @publicName scrollTop()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -577,14 +577,14 @@ export default class dxList extends CollectionWidget {
      */
     scrollTop(): number;
     /**
-     * @docid dxListMethods.selectAll
+     * @docid dxList.selectAll
      * @publicName selectAll()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectAll(): void;
     /**
-     * @docid dxListMethods.selectItem
+     * @docid dxList.selectItem
      * @publicName selectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
@@ -592,7 +592,7 @@ export default class dxList extends CollectionWidget {
      */
     selectItem(itemElement: Element): void;
     /**
-     * @docid dxListMethods.selectItem
+     * @docid dxList.selectItem
      * @publicName selectItem(itemIndex)
      * @param1 itemIndex:Number|Object
      * @prevFileNamespace DevExpress.ui
@@ -600,14 +600,14 @@ export default class dxList extends CollectionWidget {
      */
     selectItem(itemIndex: number | any): void;
     /**
-     * @docid dxListMethods.unselectAll
+     * @docid dxList.unselectAll
      * @publicName unselectAll()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     unselectAll(): void;
     /**
-     * @docid dxListMethods.unselectItem
+     * @docid dxList.unselectItem
      * @publicName unselectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
@@ -615,7 +615,7 @@ export default class dxList extends CollectionWidget {
      */
     unselectItem(itemElement: Element): void;
     /**
-     * @docid dxListMethods.unselectItem
+     * @docid dxList.unselectItem
      * @publicName unselectItem(itemIndex)
      * @param1 itemIndex:Number|Object
      * @prevFileNamespace DevExpress.ui
@@ -623,7 +623,7 @@ export default class dxList extends CollectionWidget {
      */
     unselectItem(itemIndex: number | any): void;
     /**
-     * @docid dxListMethods.updateDimensions
+     * @docid dxList.updateDimensions
      * @publicName updateDimensions()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui

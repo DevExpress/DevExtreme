@@ -275,7 +275,7 @@ export default class dxPivotGrid extends Widget {
     constructor(element: Element, options?: dxPivotGridOptions)
     constructor(element: JQuery, options?: dxPivotGridOptions)
     /**
-     * @docid dxPivotGridMethods.bindChart
+     * @docid dxPivotGrid.bindChart
      * @publicName bindChart(chart, integrationOptions)
      * @param1 chart:string|jQuery|object
      * @param2 integrationOptions:object
@@ -292,7 +292,7 @@ export default class dxPivotGrid extends Widget {
      */
     bindChart(chart: string | JQuery | any, integrationOptions: { inverted?: boolean, dataFieldsDisplayMode?: string, putDataFieldsInto?: string, alternateDataFields?: boolean, processCell?: Function, customizeChart?: Function, customizeSeries?: Function }): Function & null;
     /**
-     * @docid dxPivotGridMethods.exportToExcel
+     * @docid dxPivotGrid.exportToExcel
      * @publicName exportToExcel()
      * @deprecated excelExporter.exportPivotGrid
      * @prevFileNamespace DevExpress.ui
@@ -300,7 +300,7 @@ export default class dxPivotGrid extends Widget {
      */
     exportToExcel(): void;
     /**
-     * @docid dxPivotGridMethods.getDataSource
+     * @docid dxPivotGrid.getDataSource
      * @publicName getDataSource()
      * @return PivotGridDataSource
      * @prevFileNamespace DevExpress.ui
@@ -308,7 +308,7 @@ export default class dxPivotGrid extends Widget {
      */
     getDataSource(): PivotGridDataSource;
     /**
-     * @docid dxPivotGridMethods.getFieldChooserPopup
+     * @docid dxPivotGrid.getFieldChooserPopup
      * @publicName getFieldChooserPopup()
      * @return dxPopup
      * @prevFileNamespace DevExpress.ui
@@ -316,7 +316,7 @@ export default class dxPivotGrid extends Widget {
      */
     getFieldChooserPopup(): dxPopup;
     /**
-     * @docid dxPivotGridMethods.updateDimensions
+     * @docid dxPivotGrid.updateDimensions
      * @publicName updateDimensions()
      * @prevFileNamespace DevExpress.ui
      * @public

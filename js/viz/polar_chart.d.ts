@@ -1257,7 +1257,7 @@ export default class dxPolarChart extends BaseChart {
     constructor(element: Element, options?: dxPolarChartOptions)
     constructor(element: JQuery, options?: dxPolarChartOptions)
     /**
-     * @docid dxPolarChartMethods.getValueAxis
+     * @docid dxPolarChart.getValueAxis
      * @publicName getValueAxis()
      * @return chartAxisObject
      * @prevFileNamespace DevExpress.viz
@@ -1265,7 +1265,7 @@ export default class dxPolarChart extends BaseChart {
      */
     getValueAxis(): chartAxisObject;
     /**
-     * @docid dxPolarChartMethods.resetVisualRange
+     * @docid dxPolarChart.resetVisualRange
      * @publicName resetVisualRange()
      * @prevFileNamespace DevExpress.viz
      * @public

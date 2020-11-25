@@ -8,31 +8,31 @@ import '../jquery_augmentation';
  */
 export class dxEvent {
     /**
-     * @docid dxEventFields.currentTarget
+     * @docid dxEvent.currentTarget
      * @prevFileNamespace DevExpress.events
      * @public
      */
     currentTarget: Element;
     /**
-     * @docid dxEventFields.data
+     * @docid dxEvent.data
      * @prevFileNamespace DevExpress.events
      * @public
      */
     data: any;
     /**
-     * @docid dxEventFields.delegateTarget
+     * @docid dxEvent.delegateTarget
      * @prevFileNamespace DevExpress.events
      * @public
      */
     delegateTarget: Element;
     /**
-     * @docid dxEventFields.target
+     * @docid dxEvent.target
      * @prevFileNamespace DevExpress.events
      * @public
      */
     target: Element;
     /**
-     * @docid dxEventMethods.isDefaultPrevented
+     * @docid dxEvent.isDefaultPrevented
      * @publicName isDefaultPrevented()
      * @return boolean
      * @prevFileNamespace DevExpress.events
@@ -40,7 +40,7 @@ export class dxEvent {
      */
     isDefaultPrevented(): boolean;
     /**
-     * @docid dxEventMethods.isImmediatePropagationStopped
+     * @docid dxEvent.isImmediatePropagationStopped
      * @publicName isImmediatePropagationStopped()
      * @return boolean
      * @prevFileNamespace DevExpress.events
@@ -48,7 +48,7 @@ export class dxEvent {
      */
     isImmediatePropagationStopped(): boolean;
     /**
-     * @docid dxEventMethods.isPropagationStopped
+     * @docid dxEvent.isPropagationStopped
      * @publicName isPropagationStopped()
      * @return boolean
      * @prevFileNamespace DevExpress.events
@@ -56,21 +56,21 @@ export class dxEvent {
      */
     isPropagationStopped(): boolean;
     /**
-     * @docid dxEventMethods.preventDefault
+     * @docid dxEvent.preventDefault
      * @publicName preventDefault()
      * @prevFileNamespace DevExpress.events
      * @public
      */
     preventDefault(): void;
     /**
-     * @docid dxEventMethods.stopImmediatePropagation
+     * @docid dxEvent.stopImmediatePropagation
      * @publicName stopImmediatePropagation()
      * @prevFileNamespace DevExpress.events
      * @public
      */
     stopImmediatePropagation(): void;
     /**
-     * @docid dxEventMethods.stopPropagation
+     * @docid dxEvent.stopPropagation
      * @publicName stopPropagation()
      * @prevFileNamespace DevExpress.events
      * @public

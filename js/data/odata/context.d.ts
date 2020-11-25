@@ -82,7 +82,7 @@ export interface ODataContextOptions {
 export default class ODataContext {
     constructor(options?: ODataContextOptions)
     /**
-     * @docid ODataContextmethods.get
+     * @docid ODataContext.get
      * @publicName get(operationName, params)
      * @param1 operationName:string
      * @param2 params:object
@@ -92,7 +92,7 @@ export default class ODataContext {
      */
     get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid ODataContextmethods.invoke
+     * @docid ODataContext.invoke
      * @publicName invoke(operationName, params, httpMethod)
      * @param1 operationName:string
      * @param2 params:object
@@ -103,7 +103,7 @@ export default class ODataContext {
      */
     invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid ODataContextmethods.objectLink
+     * @docid ODataContext.objectLink
      * @publicName objectLink(entityAlias, key)
      * @param1 entityAlias:string
      * @param2 key:object|string|number

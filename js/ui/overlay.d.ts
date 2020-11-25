@@ -205,7 +205,7 @@ export default class dxOverlay extends Widget {
     constructor(element: Element, options?: dxOverlayOptions)
     constructor(element: JQuery, options?: dxOverlayOptions)
     /**
-     * @docid dxOverlaymethods.content
+     * @docid dxOverlay.content
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -213,7 +213,7 @@ export default class dxOverlay extends Widget {
      */
     content(): dxElement;
     /**
-     * @docid dxOverlaymethods.hide
+     * @docid dxOverlay.hide
      * @publicName hide()
      * @return Promise<boolean>
      * @prevFileNamespace DevExpress.ui
@@ -221,14 +221,14 @@ export default class dxOverlay extends Widget {
      */
     hide(): Promise<boolean> & JQueryPromise<boolean>;
     /**
-     * @docid dxOverlaymethods.repaint
+     * @docid dxOverlay.repaint
      * @publicName repaint()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     repaint(): void;
     /**
-     * @docid dxOverlaymethods.show
+     * @docid dxOverlay.show
      * @publicName show()
      * @return Promise<boolean>
      * @prevFileNamespace DevExpress.ui
@@ -236,7 +236,7 @@ export default class dxOverlay extends Widget {
      */
     show(): Promise<boolean> & JQueryPromise<boolean>;
     /**
-     * @docid dxOverlaymethods.toggle
+     * @docid dxOverlay.toggle
      * @publicName toggle(showing)
      * @param1 showing:boolean
      * @return Promise<boolean>
@@ -247,7 +247,7 @@ export default class dxOverlay extends Widget {
 }
 
 /**
- * @docid ui.dxOverlayMethods.baseZIndex
+ * @docid ui.dxOverlay.baseZIndex
  * @publicName baseZIndex(zIndex)
  * @param1 zIndex:number
  * @namespace DevExpress.ui.dxOverlay

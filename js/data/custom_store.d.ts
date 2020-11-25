@@ -95,7 +95,7 @@ export interface CustomStoreOptions extends StoreOptions<CustomStore> {
 export default class CustomStore extends Store {
     constructor(options?: CustomStoreOptions)
     /**
-     * @docid CustomStoreMethods.clearRawDataCache
+     * @docid CustomStore.clearRawDataCache
      * @publicName clearRawDataCache()
      * @prevFileNamespace DevExpress.data
      * @public

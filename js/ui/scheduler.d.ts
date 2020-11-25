@@ -567,7 +567,7 @@ export default class dxScheduler extends Widget {
     constructor(element: Element, options?: dxSchedulerOptions)
     constructor(element: JQuery, options?: dxSchedulerOptions)
     /**
-     * @docid dxSchedulerMethods.addAppointment
+     * @docid dxScheduler.addAppointment
      * @publicName addAppointment(appointment)
      * @param1 appointment:Object
      * @prevFileNamespace DevExpress.ui
@@ -575,7 +575,7 @@ export default class dxScheduler extends Widget {
      */
     addAppointment(appointment: any): void;
     /**
-     * @docid dxSchedulerMethods.deleteAppointment
+     * @docid dxScheduler.deleteAppointment
      * @publicName deleteAppointment(appointment)
      * @param1 appointment:Object
      * @prevFileNamespace DevExpress.ui
@@ -584,7 +584,7 @@ export default class dxScheduler extends Widget {
     deleteAppointment(appointment: any): void;
     getDataSource(): DataSource;
     /**
-     * @docid dxSchedulerMethods.getEndViewDate
+     * @docid dxScheduler.getEndViewDate
      * @publicName getEndViewDate()
      * @return Date
      * @prevFileNamespace DevExpress.ui
@@ -592,7 +592,7 @@ export default class dxScheduler extends Widget {
      */
     getEndViewDate(): Date;
     /**
-     * @docid dxSchedulerMethods.getStartViewDate
+     * @docid dxScheduler.getStartViewDate
      * @publicName getStartViewDate()
      * @return Date
      * @prevFileNamespace DevExpress.ui
@@ -600,7 +600,7 @@ export default class dxScheduler extends Widget {
      */
     getStartViewDate(): Date;
     /**
-     * @docid dxSchedulerMethods.hideAppointmentPopup
+     * @docid dxScheduler.hideAppointmentPopup
      * @publicName hideAppointmentPopup(saveChanges)
      * @param1 saveChanges:Boolean|undefined
      * @prevFileNamespace DevExpress.ui
@@ -608,14 +608,14 @@ export default class dxScheduler extends Widget {
      */
     hideAppointmentPopup(saveChanges?: boolean): void;
     /**
-     * @docid dxSchedulerMethods.hideAppointmentTooltip
+     * @docid dxScheduler.hideAppointmentTooltip
      * @publicName hideAppointmentTooltip()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hideAppointmentTooltip(): void;
     /**
-     * @docid dxSchedulerMethods.scrollToTime
+     * @docid dxScheduler.scrollToTime
      * @publicName scrollToTime(hours, minutes, date)
      * @param1 hours:Number
      * @param2 minutes:Number
@@ -625,7 +625,7 @@ export default class dxScheduler extends Widget {
      */
     scrollToTime(hours: number, minutes: number, date?: Date): void;
     /**
-     * @docid dxSchedulerMethods.showAppointmentPopup
+     * @docid dxScheduler.showAppointmentPopup
      * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
      * @param1 appointmentData:Object|undefined
      * @param2 createNewAppointment:Boolean|undefined
@@ -635,7 +635,7 @@ export default class dxScheduler extends Widget {
      */
     showAppointmentPopup(appointmentData?: any, createNewAppointment?: boolean, currentAppointmentData?: any): void;
     /**
-     * @docid dxSchedulerMethods.showAppointmentTooltip
+     * @docid dxScheduler.showAppointmentTooltip
      * @publicName showAppointmentTooltip(appointmentData, target, currentAppointmentData)
      * @param1 appointmentData:Object
      * @param2 target:string|Element|jQuery
@@ -645,7 +645,7 @@ export default class dxScheduler extends Widget {
      */
     showAppointmentTooltip(appointmentData: any, target: string | Element | JQuery, currentAppointmentData?: any): void;
     /**
-     * @docid dxSchedulerMethods.updateAppointment
+     * @docid dxScheduler.updateAppointment
      * @publicName updateAppointment(target, appointment)
      * @param1 target:Object
      * @param2 appointment:Object

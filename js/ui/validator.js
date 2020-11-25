@@ -57,17 +57,17 @@ const Validator = DOMComponent.inherit({
             */
 
             /**
-            * @name dxValidatorMethods.beginUpdate
+            * @name dxValidator.beginUpdate
             * @publicName beginUpdate()
             * @hidden
             */
             /**
-            * @name dxValidatorMethods.defaultOptions
+            * @name dxValidator.defaultOptions
             * @publicName defaultOptions(rule)
             * @hidden
             */
             /**
-            * @name dxValidatorMethods.endUpdate
+            * @name dxValidator.endUpdate
             * @publicName endUpdate()
             * @hidden
             */

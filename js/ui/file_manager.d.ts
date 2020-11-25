@@ -229,7 +229,7 @@ export default class dxFileManager extends Widget {
     constructor(element: Element, options?: dxFileManagerOptions)
     constructor(element: JQuery, options?: dxFileManagerOptions)
     /**
-     * @docid dxFileManagerMethods.getCurrentDirectory
+     * @docid dxFileManager.getCurrentDirectory
      * @publicName getCurrentDirectory()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -237,7 +237,7 @@ export default class dxFileManager extends Widget {
      */
     getCurrentDirectory(): any;
     /**
-     * @docid dxFileManagerMethods.getSelectedItems
+     * @docid dxFileManager.getSelectedItems
      * @publicName getSelectedItems()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
@@ -245,7 +245,7 @@ export default class dxFileManager extends Widget {
      */
     getSelectedItems(): Array<any>;
     /**
-     * @docid dxFileManagerMethods.refresh
+     * @docid dxFileManager.refresh
      * @publicName refresh()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.ui

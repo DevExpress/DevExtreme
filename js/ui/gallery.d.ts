@@ -134,7 +134,7 @@ export default class dxGallery extends CollectionWidget {
     constructor(element: Element, options?: dxGalleryOptions)
     constructor(element: JQuery, options?: dxGalleryOptions)
     /**
-     * @docid dxGalleryMethods.goToItem
+     * @docid dxGallery.goToItem
      * @publicName goToItem(itemIndex, animation)
      * @param1 itemIndex:numeric
      * @param2 animation:boolean
@@ -144,7 +144,7 @@ export default class dxGallery extends CollectionWidget {
      */
     goToItem(itemIndex: number, animation: boolean): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxGalleryMethods.nextItem
+     * @docid dxGallery.nextItem
      * @publicName nextItem(animation)
      * @param1 animation:boolean
      * @return Promise<void>
@@ -153,7 +153,7 @@ export default class dxGallery extends CollectionWidget {
      */
     nextItem(animation: boolean): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxGalleryMethods.prevItem
+     * @docid dxGallery.prevItem
      * @publicName prevItem(animation)
      * @param1 animation:boolean
      * @return Promise<void>

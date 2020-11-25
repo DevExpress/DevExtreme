@@ -89,12 +89,12 @@ const Autocomplete = DropDownList.inherit({
     },
 
     /**
-    * @name dxAutocompletemethods.open
+    * @name dxAutocomplete.open
     * @publicName open()
     * @hidden
     */
     /**
-    * @name dxAutocompletemethods.close
+    * @name dxAutocomplete.close
     * @publicName close()
     * @hidden
     */

@@ -270,21 +270,21 @@ export default class dxTextEditor extends Editor {
     constructor(element: Element, options?: dxTextEditorOptions)
     constructor(element: JQuery, options?: dxTextEditorOptions)
     /**
-     * @docid dxTextEditorMethods.blur
+     * @docid dxTextEditor.blur
      * @publicName blur()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     blur(): void;
     /**
-     * @docid dxTextEditorMethods.focus
+     * @docid dxTextEditor.focus
      * @publicName focus()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focus(): void;
     /**
-     * @docid dxTextEditorMethods.getButton
+     * @docid dxTextEditor.getButton
      * @publicName getButton(name)
      * @param1 name:string
      * @return dxButton | undefined

@@ -542,7 +542,7 @@ export default class dxTreeList extends Widget implements GridBase {
     constructor(element: Element, options?: dxTreeListOptions)
     constructor(element: JQuery, options?: dxTreeListOptions)
     /**
-     * @docid dxTreeListMethods.addColumn
+     * @docid dxTreeList.addColumn
      * @publicName addColumn(columnOptions)
      * @param1 columnOptions:object|string
      * @prevFileNamespace DevExpress.ui
@@ -550,7 +550,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     addColumn(columnOptions: any | string): void;
     /**
-     * @docid dxTreeListMethods.addRow
+     * @docid dxTreeList.addRow
      * @publicName addRow()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -558,7 +558,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     addRow(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.addRow
+     * @docid dxTreeList.addRow
      * @publicName addRow(parentId)
      * @param1 parentId:any
      * @return Promise<void>
@@ -567,7 +567,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     addRow(parentId: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.collapseRow
+     * @docid dxTreeList.collapseRow
      * @publicName collapseRow(key)
      * @param1 key:any
      * @return Promise<void>
@@ -576,7 +576,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     collapseRow(key: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.expandRow
+     * @docid dxTreeList.expandRow
      * @publicName expandRow(key)
      * @param1 key:any
      * @return Promise<void>
@@ -585,7 +585,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     expandRow(key: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.forEachNode
+     * @docid dxTreeList.forEachNode
      * @publicName forEachNode(callback)
      * @param1 callback:function
      * @prevFileNamespace DevExpress.ui
@@ -593,7 +593,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     forEachNode(callback: Function): void;
     /**
-     * @docid dxTreeListMethods.forEachNode
+     * @docid dxTreeList.forEachNode
      * @publicName forEachNode(nodes, callback)
      * @param1 nodes:Array<dxTreeListNode>
      * @param2 callback:function
@@ -602,7 +602,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     forEachNode(nodes: Array<dxTreeListNode>, callback: Function): void;
     /**
-     * @docid dxTreeListMethods.getNodeByKey
+     * @docid dxTreeList.getNodeByKey
      * @publicName getNodeByKey(key)
      * @param1 key:object|string|number
      * @return dxTreeListNode
@@ -611,7 +611,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getNodeByKey(key: any | string | number): dxTreeListNode;
     /**
-     * @docid dxTreeListMethods.getRootNode
+     * @docid dxTreeList.getRootNode
      * @publicName getRootNode()
      * @return dxTreeListNode
      * @prevFileNamespace DevExpress.ui
@@ -619,7 +619,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getRootNode(): dxTreeListNode;
     /**
-     * @docid dxTreeListMethods.getSelectedRowKeys
+     * @docid dxTreeList.getSelectedRowKeys
      * @publicName getSelectedRowKeys()
      * @return Array<any>
      * @prevFileNamespace DevExpress.ui
@@ -627,7 +627,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getSelectedRowKeys(): Array<any>;
     /**
-     * @docid dxTreeListMethods.getSelectedRowKeys
+     * @docid dxTreeList.getSelectedRowKeys
      * @publicName getSelectedRowKeys(mode)
      * @param1 mode:string
      * @return Array<any>
@@ -636,7 +636,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getSelectedRowKeys(mode: string): Array<any>;
     /**
-     * @docid dxTreeListMethods.getSelectedRowsData
+     * @docid dxTreeList.getSelectedRowsData
      * @publicName getSelectedRowsData()
      * @return Array<any>
      * @prevFileNamespace DevExpress.ui
@@ -644,7 +644,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getSelectedRowsData(): Array<any>;
     /**
-     * @docid dxTreeListMethods.getSelectedRowsData
+     * @docid dxTreeList.getSelectedRowsData
      * @publicName getSelectedRowsData(mode)
      * @param1 mode:string
      * @return Array<any>
@@ -653,7 +653,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getSelectedRowsData(mode: string): Array<any>;
     /**
-     * @docid dxTreeListMethods.getVisibleColumns
+     * @docid dxTreeList.getVisibleColumns
      * @publicName getVisibleColumns()
      * @return Array<dxTreeListColumn>
      * @prevFileNamespace DevExpress.ui
@@ -661,7 +661,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getVisibleColumns(): Array<dxTreeListColumn>;
     /**
-     * @docid dxTreeListMethods.getVisibleColumns
+     * @docid dxTreeList.getVisibleColumns
      * @publicName getVisibleColumns(headerLevel)
      * @param1 headerLevel:number
      * @return Array<dxTreeListColumn>
@@ -670,7 +670,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getVisibleColumns(headerLevel: number): Array<dxTreeListColumn>;
     /**
-     * @docid dxTreeListMethods.getVisibleRows
+     * @docid dxTreeList.getVisibleRows
      * @publicName getVisibleRows()
      * @return Array<dxTreeListRowObject>
      * @prevFileNamespace DevExpress.ui
@@ -678,7 +678,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     getVisibleRows(): Array<dxTreeListRowObject>;
     /**
-     * @docid dxTreeListMethods.isRowExpanded
+     * @docid dxTreeList.isRowExpanded
      * @publicName isRowExpanded(key)
      * @param1 key:any
      * @return boolean
@@ -687,7 +687,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     isRowExpanded(key: any): boolean;
     /**
-     * @docid dxTreeListMethods.loadDescendants
+     * @docid dxTreeList.loadDescendants
      * @publicName loadDescendants()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -695,7 +695,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     loadDescendants(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.loadDescendants
+     * @docid dxTreeList.loadDescendants
      * @publicName loadDescendants(keys)
      * @param1 keys:Array<any>
      * @return Promise<void>
@@ -704,7 +704,7 @@ export default class dxTreeList extends Widget implements GridBase {
      */
     loadDescendants(keys: Array<any>): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxTreeListMethods.loadDescendants
+     * @docid dxTreeList.loadDescendants
      * @publicName loadDescendants(keys, childrenOnly)
      * @param1 keys:Array<any>
      * @param2 childrenOnly:boolean

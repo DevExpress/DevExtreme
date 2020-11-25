@@ -122,14 +122,14 @@ export default class dxHtmlEditor extends Editor {
     constructor(element: Element, options?: dxHtmlEditorOptions)
     constructor(element: JQuery, options?: dxHtmlEditorOptions)
     /**
-     * @docid dxHtmlEditorMethods.clearHistory
+     * @docid dxHtmlEditor.clearHistory
      * @publicName clearHistory()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     clearHistory(): void;
     /**
-     * @docid dxHtmlEditorMethods.delete
+     * @docid dxHtmlEditor.delete
      * @publicName delete(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -138,7 +138,7 @@ export default class dxHtmlEditor extends Editor {
      */
     delete(index: number, length: number): void;
     /**
-     * @docid dxHtmlEditorMethods.format
+     * @docid dxHtmlEditor.format
      * @publicName format(formatName, formatValue)
      * @param1 formatName:Enums.HtmlEditorFormat|string
      * @param2 formatValue:any
@@ -147,7 +147,7 @@ export default class dxHtmlEditor extends Editor {
      */
     format(formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatLine
+     * @docid dxHtmlEditor.formatLine
      * @publicName formatLine(index, length, formatName, formatValue)
      * @param1 index:number
      * @param2 length:number
@@ -158,7 +158,7 @@ export default class dxHtmlEditor extends Editor {
      */
     formatLine(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatLine
+     * @docid dxHtmlEditor.formatLine
      * @publicName formatLine(index, length, formats)
      * @param1 index:number
      * @param2 length:number
@@ -168,7 +168,7 @@ export default class dxHtmlEditor extends Editor {
      */
     formatLine(index: number, length: number, formats: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatText
+     * @docid dxHtmlEditor.formatText
      * @publicName formatText(index, length, formatName, formatValue)
      * @param1 index:number
      * @param2 length:number
@@ -179,7 +179,7 @@ export default class dxHtmlEditor extends Editor {
      */
     formatText(index: number, length: number, formatName: 'background' | 'bold' | 'color' | 'font' | 'italic' | 'link' | 'size' | 'strike' | 'script' | 'underline' | 'blockquote' | 'header' | 'indent' | 'list' | 'align' | 'code-block' | string, formatValue: any): void;
     /**
-     * @docid dxHtmlEditorMethods.formatText
+     * @docid dxHtmlEditor.formatText
      * @publicName formatText(index, length, formats)
      * @param1 index:number
      * @param2 length:number
@@ -189,7 +189,7 @@ export default class dxHtmlEditor extends Editor {
      */
     formatText(index: number, length: number, formats: any): void;
     /**
-     * @docid dxHtmlEditorMethods.get
+     * @docid dxHtmlEditor.get
      * @publicName get(componentPath)
      * @param1 componentPath:string
      * @return Object
@@ -198,7 +198,7 @@ export default class dxHtmlEditor extends Editor {
      */
     get(componentPath: string): any;
     /**
-     * @docid dxHtmlEditorMethods.getFormat
+     * @docid dxHtmlEditor.getFormat
      * @publicName getFormat(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -208,7 +208,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getFormat(index: number, length: number): any;
     /**
-     * @docid dxHtmlEditorMethods.getLength
+     * @docid dxHtmlEditor.getLength
      * @publicName getLength()
      * @return number
      * @prevFileNamespace DevExpress.ui
@@ -216,7 +216,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getLength(): number;
     /**
-     * @docid dxHtmlEditorMethods.getModule
+     * @docid dxHtmlEditor.getModule
      * @publicName getModule(moduleName)
      * @param1 moduleName:string
      * @return Object
@@ -225,7 +225,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getModule(moduleName: string): any;
     /**
-     * @docid dxHtmlEditorMethods.getQuillInstance
+     * @docid dxHtmlEditor.getQuillInstance
      * @publicName getQuillInstance()
      * @return Object
      * @prevFileNamespace DevExpress.ui
@@ -233,7 +233,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getQuillInstance(): any;
     /**
-     * @docid dxHtmlEditorMethods.getSelection
+     * @docid dxHtmlEditor.getSelection
      * @publicName getSelection()
      * @return Object
      * @prevFileNamespace DevExpress.ui
@@ -241,7 +241,7 @@ export default class dxHtmlEditor extends Editor {
      */
     getSelection(): any;
     /**
-     * @docid dxHtmlEditorMethods.insertEmbed
+     * @docid dxHtmlEditor.insertEmbed
      * @publicName insertEmbed(index, type, config)
      * @param1 index:number
      * @param2 type:string
@@ -251,7 +251,7 @@ export default class dxHtmlEditor extends Editor {
      */
     insertEmbed(index: number, type: string, config: any): void;
     /**
-     * @docid dxHtmlEditorMethods.insertText
+     * @docid dxHtmlEditor.insertText
      * @publicName insertText(index, text, formats)
      * @param1 index:number
      * @param2 text:string
@@ -261,14 +261,14 @@ export default class dxHtmlEditor extends Editor {
      */
     insertText(index: number, text: string, formats: any): void;
     /**
-     * @docid dxHtmlEditorMethods.redo
+     * @docid dxHtmlEditor.redo
      * @publicName redo()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     redo(): void;
     /**
-     * @docid dxHtmlEditorMethods.register
+     * @docid dxHtmlEditor.register
      * @publicName register(components)
      * @param1 modules:Object
      * @prevFileNamespace DevExpress.ui
@@ -276,7 +276,7 @@ export default class dxHtmlEditor extends Editor {
      */
     register(modules: any): void;
     /**
-     * @docid dxHtmlEditorMethods.removeFormat
+     * @docid dxHtmlEditor.removeFormat
      * @publicName removeFormat(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -285,7 +285,7 @@ export default class dxHtmlEditor extends Editor {
      */
     removeFormat(index: number, length: number): void;
     /**
-     * @docid dxHtmlEditorMethods.setSelection
+     * @docid dxHtmlEditor.setSelection
      * @publicName setSelection(index, length)
      * @param1 index:number
      * @param2 length:number
@@ -294,7 +294,7 @@ export default class dxHtmlEditor extends Editor {
      */
     setSelection(index: number, length: number): void;
     /**
-     * @docid dxHtmlEditorMethods.undo
+     * @docid dxHtmlEditor.undo
      * @publicName undo()
      * @prevFileNamespace DevExpress.ui
      * @public

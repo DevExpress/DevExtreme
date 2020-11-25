@@ -212,7 +212,7 @@ export default class dxMap extends Widget {
     constructor(element: Element, options?: dxMapOptions)
     constructor(element: JQuery, options?: dxMapOptions)
     /**
-     * @docid dxMapMethods.addmarker
+     * @docid dxMap.addmarker
      * @publicName addMarker(markerOptions)
      * @param1 markerOptions:Object|Array<Object>
      * @return Promise<Object>
@@ -221,7 +221,7 @@ export default class dxMap extends Widget {
      */
     addMarker(markerOptions: any | Array<any>): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid dxMapMethods.addroute
+     * @docid dxMap.addroute
      * @publicName addRoute(routeOptions)
      * @param1 options:object|Array<Object>
      * @return Promise<Object>
@@ -230,7 +230,7 @@ export default class dxMap extends Widget {
      */
     addRoute(options: any | Array<any>): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid dxMapMethods.removemarker
+     * @docid dxMap.removemarker
      * @publicName removeMarker(marker)
      * @param1 marker:Object|number|Array<Object>
      * @return Promise<void>
@@ -239,7 +239,7 @@ export default class dxMap extends Widget {
      */
     removeMarker(marker: any | number | Array<any>): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxMapMethods.removeroute
+     * @docid dxMap.removeroute
      * @publicName removeRoute(route)
      * @param1 route:object|number|Array<Object>
      * @return Promise<void>

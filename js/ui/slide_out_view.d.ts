@@ -65,7 +65,7 @@ export default class dxSlideOutView extends Widget {
     constructor(element: Element, options?: dxSlideOutViewOptions)
     constructor(element: JQuery, options?: dxSlideOutViewOptions)
     /**
-     * @docid dxSlideOutViewMethods.content
+     * @docid dxSlideOutView.content
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -73,7 +73,7 @@ export default class dxSlideOutView extends Widget {
      */
     content(): dxElement;
     /**
-     * @docid dxSlideOutViewMethods.hideMenu
+     * @docid dxSlideOutView.hideMenu
      * @publicName hideMenu()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -81,7 +81,7 @@ export default class dxSlideOutView extends Widget {
      */
     hideMenu(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxSlideOutViewMethods.menuContent
+     * @docid dxSlideOutView.menuContent
      * @publicName menuContent()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -89,7 +89,7 @@ export default class dxSlideOutView extends Widget {
      */
     menuContent(): dxElement;
     /**
-     * @docid dxSlideOutViewMethods.showMenu
+     * @docid dxSlideOutView.showMenu
      * @publicName showMenu()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -97,7 +97,7 @@ export default class dxSlideOutView extends Widget {
      */
     showMenu(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxSlideOutViewMethods.toggleMenuVisibility
+     * @docid dxSlideOutView.toggleMenuVisibility
      * @publicName toggleMenuVisibility()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui

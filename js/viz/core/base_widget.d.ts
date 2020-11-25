@@ -476,7 +476,7 @@ export default class BaseWidget extends DOMComponent {
     constructor(element: Element, options?: BaseWidgetOptions)
     constructor(element: JQuery, options?: BaseWidgetOptions)
     /**
-     * @docid BaseWidgetMethods.exportTo
+     * @docid BaseWidget.exportTo
      * @publicName exportTo(fileName, format)
      * @param1 fileName:string
      * @param2 format:string
@@ -485,7 +485,7 @@ export default class BaseWidget extends DOMComponent {
      */
     exportTo(fileName: string, format: string): void;
     /**
-     * @docid BaseWidgetMethods.getSize
+     * @docid BaseWidget.getSize
      * @publicName getSize()
      * @return BaseWidgetOptions.size
      * @prevFileNamespace DevExpress.viz
@@ -493,35 +493,35 @@ export default class BaseWidget extends DOMComponent {
      */
     getSize(): BaseWidgetSize;
     /**
-     * @docid BaseWidgetMethods.hideLoadingIndicator
+     * @docid BaseWidget.hideLoadingIndicator
      * @publicName hideLoadingIndicator()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideLoadingIndicator(): void;
     /**
-     * @docid BaseWidgetMethods.print
+     * @docid BaseWidget.print
      * @publicName print()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     print(): void;
     /**
-     * @docid BaseWidgetMethods.render
+     * @docid BaseWidget.render
      * @publicName render()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     render(): void;
     /**
-     * @docid BaseWidgetMethods.showLoadingIndicator
+     * @docid BaseWidget.showLoadingIndicator
      * @publicName showLoadingIndicator()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     showLoadingIndicator(): void;
     /**
-     * @docid BaseWidgetMethods.svg
+     * @docid BaseWidget.svg
      * @publicName svg()
      * @return string
      * @prevFileNamespace DevExpress.viz

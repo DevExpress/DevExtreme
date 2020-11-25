@@ -166,7 +166,7 @@ function clickedOnFieldsArea($targetElement) {
 */
 
 /**
-* @name dxPivotGridMethods.registerKeyHandler
+* @name dxPivotGrid.registerKeyHandler
 * @publicName registerKeyHandler(key, handler)
 * @hidden
 */

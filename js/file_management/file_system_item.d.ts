@@ -10,77 +10,77 @@ export default class FileSystemItem {
     constructor(path: string, isDirectory: boolean, pathKeys?: Array<string>);
 
     /**
-     * @docid FileSystemItemFields.path
+     * @docid FileSystemItem.path
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     path: string;
 
     /**
-     * @docid FileSystemItemFields.pathKeys
+     * @docid FileSystemItem.pathKeys
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     pathKeys: Array<string>;
 
     /**
-     * @docid FileSystemItemFields.key
+     * @docid FileSystemItem.key
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     key: string;
 
     /**
-     * @docid FileSystemItemFields.name
+     * @docid FileSystemItem.name
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     name: string;
 
     /**
-     * @docid FileSystemItemFields.dateModified
+     * @docid FileSystemItem.dateModified
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     dateModified: Date;
 
     /**
-     * @docid FileSystemItemFields.size
+     * @docid FileSystemItem.size
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     size: number;
 
     /**
-     * @docid FileSystemItemFields.isDirectory
+     * @docid FileSystemItem.isDirectory
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     isDirectory: boolean;
 
     /**
-     * @docid FileSystemItemFields.hasSubDirectories
+     * @docid FileSystemItem.hasSubDirectories
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     hasSubDirectories: boolean;
 
     /**
-     * @docid FileSystemItemFields.thumbnail
+     * @docid FileSystemItem.thumbnail
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     thumbnail: string;
 
     /**
-     * @docid FileSystemItemFields.dataItem
+     * @docid FileSystemItem.dataItem
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     dataItem: any;
 
     /**
-     * @docid FileSystemItemMethods.getFileExtension
+     * @docid FileSystemItem.getFileExtension
      * @publicName getFileExtension()
      * @return string
      * @prevFileNamespace DevExpress.fileManagement

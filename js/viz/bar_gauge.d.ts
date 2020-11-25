@@ -303,7 +303,7 @@ export default class dxBarGauge extends BaseWidget {
     constructor(element: Element, options?: dxBarGaugeOptions)
     constructor(element: JQuery, options?: dxBarGaugeOptions)
     /**
-     * @docid dxbargaugemethods.values
+     * @docid dxbargauge.values
      * @publicName values()
      * @return Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -311,7 +311,7 @@ export default class dxBarGauge extends BaseWidget {
      */
     values(): Array<number>;
     /**
-     * @docid dxbargaugemethods.values
+     * @docid dxbargauge.values
      * @publicName values(newValues)
      * @param1 values:Array<number>
      * @prevFileNamespace DevExpress.viz

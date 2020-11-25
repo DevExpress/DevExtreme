@@ -378,7 +378,7 @@ export default class dxGantt extends Widget {
     constructor(element: Element, options?: dxGanttOptions)
     constructor(element: JQuery, options?: dxGanttOptions)
     /**
-     * @docid dxGanttMethods.getTaskData
+     * @docid dxGantt.getTaskData
      * @publicName getTaskData(key)
      * @param1 key:object
      * @return Object
@@ -387,7 +387,7 @@ export default class dxGantt extends Widget {
      */
     getTaskData(key: any): any;
     /**
-     * @docid dxGanttMethods.getDependencyData
+     * @docid dxGantt.getDependencyData
      * @publicName getDependencyData(key)
      * @param1 key:object
      * @return Object
@@ -396,7 +396,7 @@ export default class dxGantt extends Widget {
      */
     getDependencyData(key: any): any;
     /**
-     * @docid dxGanttMethods.getResourceData
+     * @docid dxGantt.getResourceData
      * @publicName getResourceData(key)
      * @param1 key:object
      * @return Object
@@ -405,7 +405,7 @@ export default class dxGantt extends Widget {
      */
     getResourceData(key: any): any;
     /**
-     * @docid dxGanttMethods.getResourceAssignmentData
+     * @docid dxGantt.getResourceAssignmentData
      * @publicName getResourceAssignmentData(key)
      * @param1 key:object
      * @return Object
@@ -414,7 +414,7 @@ export default class dxGantt extends Widget {
      */
     getResourceAssignmentData(key: any): any;
     /**
-     * @docid dxGanttMethods.insertTask
+     * @docid dxGantt.insertTask
      * @publicName insertTask(data)
      * @param1 data:object
      * @prevFileNamespace DevExpress.ui
@@ -422,7 +422,7 @@ export default class dxGantt extends Widget {
      */
     insertTask(data: any): void;
     /**
-     * @docid dxGanttMethods.deleteTask
+     * @docid dxGantt.deleteTask
      * @publicName deleteTask(key)
      * @param1 key:object
      * @prevFileNamespace DevExpress.ui
@@ -430,7 +430,7 @@ export default class dxGantt extends Widget {
      */
     deleteTask(key: any): void;
     /**
-     * @docid dxGanttMethods.updateTask
+     * @docid dxGantt.updateTask
      * @publicName updateTask(key, data)
      * @param1 key:object
      * @param2 data:object
@@ -439,7 +439,7 @@ export default class dxGantt extends Widget {
      */
     updateTask(key: any, data: any): void;
     /**
-     * @docid dxGanttMethods.insertDependency
+     * @docid dxGantt.insertDependency
      * @publicName insertDependency(data)
      * @param1 data:object
      * @prevFileNamespace DevExpress.ui
@@ -447,7 +447,7 @@ export default class dxGantt extends Widget {
      */
     insertDependency(data: any): void;
     /**
-     * @docid dxGanttMethods.deleteDependency
+     * @docid dxGantt.deleteDependency
      * @publicName deleteDependency(key)
      * @param1 key:object
      * @prevFileNamespace DevExpress.ui
@@ -455,7 +455,7 @@ export default class dxGantt extends Widget {
      */
     deleteDependency(key: any): void;
     /**
-     * @docid dxGanttMethods.insertResource
+     * @docid dxGantt.insertResource
      * @publicName insertResource(data, taskKeys)
      * @param1 data:object
      * @param2 taskKeys?:Array<object>
@@ -464,7 +464,7 @@ export default class dxGantt extends Widget {
      */
     insertResource(data: any,  taskKeys?: Array<any>): void;
     /**
-     * @docid dxGanttMethods.deleteResource
+     * @docid dxGantt.deleteResource
      * @publicName deleteResource(key)
      * @param1 key:object
      * @prevFileNamespace DevExpress.ui
@@ -472,7 +472,7 @@ export default class dxGantt extends Widget {
      */
     deleteResource(key: any): void;
     /**
-     * @docid dxGanttMethods.assignResourceToTask
+     * @docid dxGantt.assignResourceToTask
      * @publicName assignResourceToTask(resourceKey, taskKey)
      * @param1 resourceKey:object
      * @param2 taskKey:object
@@ -481,7 +481,7 @@ export default class dxGantt extends Widget {
      */
     assignResourceToTask(resourceKey: any, taskKey: any): void;
     /**
-     * @docid dxGanttMethods.unassignResourceFromTask
+     * @docid dxGantt.unassignResourceFromTask
      * @publicName unassignResourceFromTask(resourceKey, taskKey)
      * @param1 resourceKey:object
      * @param2 taskKey:object
@@ -490,7 +490,7 @@ export default class dxGantt extends Widget {
      */
     unassignResourceFromTask(resourceKey: any, taskKey: any): void;
     /**
-     * @docid dxGanttMethods.getTaskResources
+     * @docid dxGantt.getTaskResources
      * @publicName getTaskResources(key)
      * @param1 key:object
      * @return Array<object>
@@ -499,7 +499,7 @@ export default class dxGantt extends Widget {
      */
     getTaskResources(key: any): Array<any>;
     /**
-     * @docid dxGanttMethods.getVisibleTaskKeys
+     * @docid dxGantt.getVisibleTaskKeys
      * @publicName getVisibleTaskKeys()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
@@ -507,7 +507,7 @@ export default class dxGantt extends Widget {
      */
     getVisibleTaskKeys(): Array<any>;
     /**
-     * @docid dxGanttMethods.getVisibleDependencyKeys
+     * @docid dxGantt.getVisibleDependencyKeys
      * @publicName getVisibleDependencyKeys()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
@@ -515,7 +515,7 @@ export default class dxGantt extends Widget {
      */
     getVisibleDependencyKeys(): Array<any>;
     /**
-     * @docid dxGanttMethods.getVisibleResourceKeys
+     * @docid dxGantt.getVisibleResourceKeys
      * @publicName getVisibleResourceKeys()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
@@ -523,7 +523,7 @@ export default class dxGantt extends Widget {
      */
     getVisibleResourceKeys(): Array<any>;
     /**
-     * @docid dxGanttMethods.getVisibleResourceAssignmentKeys
+     * @docid dxGantt.getVisibleResourceAssignmentKeys
      * @publicName getVisibleResourceAssignmentKeys()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
@@ -531,7 +531,7 @@ export default class dxGantt extends Widget {
      */
     getVisibleResourceAssignmentKeys(): Array<any>;
     /**
-     * @docid dxGanttMethods.updateDimensions
+     * @docid dxGantt.updateDimensions
      * @publicName updateDimensions()
      * @prevFileNamespace DevExpress.ui
      * @public

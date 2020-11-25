@@ -108,21 +108,21 @@ export default class dxPivotGridFieldChooser extends Widget {
     constructor(element: Element, options?: dxPivotGridFieldChooserOptions)
     constructor(element: JQuery, options?: dxPivotGridFieldChooserOptions)
     /**
-     * @docid dxPivotGridFieldChooserMethods.applyChanges
+     * @docid dxPivotGridFieldChooser.applyChanges
      * @publicName applyChanges()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     applyChanges(): void;
     /**
-     * @docid dxPivotGridFieldChooserMethods.cancelChanges
+     * @docid dxPivotGridFieldChooser.cancelChanges
      * @publicName cancelChanges()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelChanges(): void;
     /**
-     * @docid dxPivotGridFieldChooserMethods.getDataSource
+     * @docid dxPivotGridFieldChooser.getDataSource
      * @publicName getDataSource()
      * @return PivotGridDataSource
      * @prevFileNamespace DevExpress.ui
@@ -130,7 +130,7 @@ export default class dxPivotGridFieldChooser extends Widget {
      */
     getDataSource(): PivotGridDataSource;
     /**
-     * @docid dxPivotGridFieldChooserMethods.updateDimensions
+     * @docid dxPivotGridFieldChooser.updateDimensions
      * @publicName updateDimensions()
      * @prevFileNamespace DevExpress.ui
      * @public

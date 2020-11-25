@@ -162,14 +162,14 @@ export default class dxDateBox extends dxDropDownEditor {
     constructor(element: Element, options?: dxDateBoxOptions)
     constructor(element: JQuery, options?: dxDateBoxOptions)
     /**
-     * @docid dxDateBoxMethods.close
+     * @docid dxDateBox.close
      * @publicName close()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     close(): void;
     /**
-     * @docid dxDateBoxMethods.open
+     * @docid dxDateBox.open
      * @publicName open()
      * @prevFileNamespace DevExpress.ui
      * @public

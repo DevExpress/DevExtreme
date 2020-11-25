@@ -244,7 +244,7 @@ export default class dxSankey extends BaseWidget {
     constructor(element: Element, options?: dxSankeyOptions)
     constructor(element: JQuery, options?: dxSankeyOptions)
     /**
-     * @docid dxSankeyMethods.getAllLinks
+     * @docid dxSankey.getAllLinks
      * @publicName getAllLinks()
      * @return Array<dxSankeyLink>
      * @prevFileNamespace DevExpress.viz
@@ -252,7 +252,7 @@ export default class dxSankey extends BaseWidget {
      */
     getAllLinks(): Array<dxSankeyLink>;
     /**
-     * @docid dxSankeyMethods.getAllNodes
+     * @docid dxSankey.getAllNodes
      * @publicName getAllNodes()
      * @return Array<dxSankeyNode>
      * @prevFileNamespace DevExpress.viz
@@ -261,7 +261,7 @@ export default class dxSankey extends BaseWidget {
     getAllNodes(): Array<dxSankeyNode>;
     getDataSource(): DataSource;
     /**
-     * @docid dxSankeyMethods.hideTooltip
+     * @docid dxSankey.hideTooltip
      * @publicName hideTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -292,20 +292,20 @@ export interface dxSankeyConnectionInfoObject {
 
 export interface dxSankeyLink {
     /**
-     * @docid dxSankeyLinkfields.connection
+     * @docid dxSankeyLink.connection
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     connection?: dxSankeyConnectionInfoObject;
     /**
-     * @docid dxSankeyLinkmethods.hideTooltip
+     * @docid dxSankeyLink.hideTooltip
      * @publicName hideTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
     /**
-     * @docid dxSankeyLinkmethods.hover
+     * @docid dxSankeyLink.hover
      * @publicName hover(state)
      * @param1 state:boolean
      * @prevFileNamespace DevExpress.viz
@@ -313,7 +313,7 @@ export interface dxSankeyLink {
      */
     hover(state: boolean): void;
     /**
-     * @docid dxSankeyLinkmethods.isHovered
+     * @docid dxSankeyLink.isHovered
      * @publicName isHovered()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -321,7 +321,7 @@ export interface dxSankeyLink {
      */
     isHovered(): boolean;
     /**
-     * @docid dxSankeyLinkmethods.showTooltip
+     * @docid dxSankeyLink.showTooltip
      * @publicName showTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -331,14 +331,14 @@ export interface dxSankeyLink {
 
 export interface dxSankeyNode {
     /**
-     * @docid dxSankeyNodemethods.hideTooltip
+     * @docid dxSankeyNode.hideTooltip
      * @publicName hideTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
     /**
-     * @docid dxSankeyNodemethods.hover
+     * @docid dxSankeyNode.hover
      * @publicName hover(state)
      * @param1 state:boolean
      * @prevFileNamespace DevExpress.viz
@@ -346,7 +346,7 @@ export interface dxSankeyNode {
      */
     hover(state: boolean): void;
     /**
-     * @docid dxSankeyNodemethods.isHovered
+     * @docid dxSankeyNode.isHovered
      * @publicName isHovered()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -354,32 +354,32 @@ export interface dxSankeyNode {
      */
     isHovered(): boolean;
     /**
-     * @docid dxSankeyNodefields.label
+     * @docid dxSankeyNode.label
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     label?: string;
     /**
-     * @docid dxSankeyNodefields.linksIn
+     * @docid dxSankeyNode.linksIn
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     linksIn?: Array<any>;
     /**
-     * @docid dxSankeyNodefields.linksOut
+     * @docid dxSankeyNode.linksOut
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     linksOut?: Array<any>;
     /**
-     * @docid dxSankeyNodemethods.showTooltip
+     * @docid dxSankeyNode.showTooltip
      * @publicName showTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTooltip(): void;
     /**
-     * @docid dxSankeyNodefields.title
+     * @docid dxSankeyNode.title
      * @deprecated
      * @prevFileNamespace DevExpress.viz
      * @public

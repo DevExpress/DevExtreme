@@ -2,7 +2,7 @@ import '../jquery_augmentation';
 
 export interface Query {
     /**
-     * @docid QueryMethods.aggregate
+     * @docid Query.aggregate
      * @publicName aggregate(seed, step, finalize)
      * @param1 seed:object
      * @param2 step:function
@@ -13,7 +13,7 @@ export interface Query {
      */
     aggregate(seed: any, step: Function, finalize: Function): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid QueryMethods.aggregate
+     * @docid Query.aggregate
      * @publicName aggregate(step)
      * @param1 step:function
      * @return Promise<any>
@@ -22,7 +22,7 @@ export interface Query {
      */
     aggregate(step: Function): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid QueryMethods.avg
+     * @docid Query.avg
      * @publicName avg()
      * @return Promise<number>
      * @prevFileNamespace DevExpress.data
@@ -30,7 +30,7 @@ export interface Query {
      */
     avg(): Promise<number> & JQueryPromise<number>;
     /**
-     * @docid QueryMethods.avg
+     * @docid Query.avg
      * @publicName avg(getter)
      * @param1 getter:object
      * @return Promise<number>
@@ -39,7 +39,7 @@ export interface Query {
      */
     avg(getter: any): Promise<number> & JQueryPromise<number>;
     /**
-     * @docid QueryMethods.count
+     * @docid Query.count
      * @publicName count()
      * @return Promise<number>
      * @prevFileNamespace DevExpress.data
@@ -47,7 +47,7 @@ export interface Query {
      */
     count(): Promise<number> & JQueryPromise<number>;
     /**
-     * @docid QueryMethods.enumerate
+     * @docid Query.enumerate
      * @publicName enumerate()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -55,7 +55,7 @@ export interface Query {
      */
     enumerate(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid QueryMethods.filter
+     * @docid Query.filter
      * @publicName filter(criteria)
      * @param1 criteria:Array<any>
      * @return Query
@@ -64,7 +64,7 @@ export interface Query {
      */
     filter(criteria: Array<any>): Query;
     /**
-     * @docid QueryMethods.filter
+     * @docid Query.filter
      * @publicName filter(predicate)
      * @param1 predicate:function
      * @return Query
@@ -73,7 +73,7 @@ export interface Query {
      */
     filter(predicate: Function): Query;
     /**
-     * @docid QueryMethods.groupBy
+     * @docid Query.groupBy
      * @publicName groupBy(getter)
      * @param1 getter:object
      * @return Query
@@ -82,7 +82,7 @@ export interface Query {
      */
     groupBy(getter: any): Query;
     /**
-     * @docid QueryMethods.max
+     * @docid Query.max
      * @publicName max()
      * @return Promise<number,Date>
      * @prevFileNamespace DevExpress.data
@@ -90,7 +90,7 @@ export interface Query {
      */
     max(): Promise<number | Date> & JQueryPromise<number | Date>;
     /**
-     * @docid QueryMethods.max
+     * @docid Query.max
      * @publicName max(getter)
      * @param1 getter:object
      * @return Promise<number,Date>
@@ -99,7 +99,7 @@ export interface Query {
      */
     max(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
     /**
-     * @docid QueryMethods.min
+     * @docid Query.min
      * @publicName min()
      * @return Promise<number,Date>
      * @prevFileNamespace DevExpress.data
@@ -107,7 +107,7 @@ export interface Query {
      */
     min(): Promise<number | Date> & JQueryPromise<number | Date>;
     /**
-     * @docid QueryMethods.min
+     * @docid Query.min
      * @publicName min(getter)
      * @param1 getter:object
      * @return Promise<number,Date>
@@ -116,7 +116,7 @@ export interface Query {
      */
     min(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
     /**
-     * @docid QueryMethods.select
+     * @docid Query.select
      * @publicName select(getter)
      * @param1 getter:object
      * @return Query
@@ -125,7 +125,7 @@ export interface Query {
      */
     select(getter: any): Query;
     /**
-     * @docid QueryMethods.slice
+     * @docid Query.slice
      * @publicName slice(skip, take)
      * @param1 skip:number
      * @param2 take:number|undefined
@@ -135,7 +135,7 @@ export interface Query {
      */
     slice(skip: number, take?: number): Query;
     /**
-     * @docid QueryMethods.sortBy
+     * @docid Query.sortBy
      * @publicName sortBy(getter)
      * @param1 getter:object
      * @return Query
@@ -144,7 +144,7 @@ export interface Query {
      */
     sortBy(getter: any): Query;
     /**
-     * @docid QueryMethods.sortBy
+     * @docid Query.sortBy
      * @publicName sortBy(getter, desc)
      * @param1 getter:object
      * @param2 desc:boolean
@@ -154,7 +154,7 @@ export interface Query {
      */
     sortBy(getter: any, desc: boolean): Query;
     /**
-     * @docid QueryMethods.sum
+     * @docid Query.sum
      * @publicName sum()
      * @return Promise<number>
      * @prevFileNamespace DevExpress.data
@@ -162,7 +162,7 @@ export interface Query {
      */
     sum(): Promise<number> & JQueryPromise<number>;
     /**
-     * @docid QueryMethods.sum
+     * @docid Query.sum
      * @publicName sum(getter)
      * @param1 getter:object
      * @return Promise<number>
@@ -171,7 +171,7 @@ export interface Query {
      */
     sum(getter: any): Promise<number> & JQueryPromise<number>;
     /**
-     * @docid QueryMethods.thenBy
+     * @docid Query.thenBy
      * @publicName thenBy(getter)
      * @param1 getter:object
      * @return Query
@@ -180,7 +180,7 @@ export interface Query {
      */
     thenBy(getter: any): Query;
     /**
-     * @docid QueryMethods.thenBy
+     * @docid Query.thenBy
      * @publicName thenBy(getter, desc)
      * @param1 getter:object
      * @param2 desc:boolean
@@ -190,7 +190,7 @@ export interface Query {
      */
     thenBy(getter: any, desc: boolean): Query;
     /**
-     * @docid QueryMethods.toArray
+     * @docid Query.toArray
      * @publicName toArray()
      * @return Array<any>
      * @prevFileNamespace DevExpress.data

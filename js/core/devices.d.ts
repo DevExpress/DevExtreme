@@ -74,7 +74,7 @@ export interface Device {
 declare class DevicesObject {
     constructor(options: { window?: Window });
     /**
-     * @docid DevicesObjectmethods.current
+     * @docid DevicesObject.current
      * @publicName current()
      * @return Device
      * @prevFileNamespace DevExpress.core
@@ -82,7 +82,7 @@ declare class DevicesObject {
      */
     current(): Device;
     /**
-     * @docid DevicesObjectmethods.current
+     * @docid DevicesObject.current
      * @publicName current(deviceName)
      * @param1 deviceName:string|Device
      * @prevFileNamespace DevExpress.core
@@ -90,7 +90,7 @@ declare class DevicesObject {
      */
     current(deviceName: string | Device): void;
     /**
-     * @docid DevicesObjectMethods.off
+     * @docid DevicesObject.off
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
@@ -99,7 +99,7 @@ declare class DevicesObject {
      */
     off(eventName: string): this;
     /**
-     * @docid DevicesObjectMethods.off
+     * @docid DevicesObject.off
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -109,7 +109,7 @@ declare class DevicesObject {
      */
     off(eventName: string, eventHandler: Function): this;
     /**
-     * @docid DevicesObjectMethods.on
+     * @docid DevicesObject.on
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -119,7 +119,7 @@ declare class DevicesObject {
      */
     on(eventName: string, eventHandler: Function): this;
     /**
-     * @docid DevicesObjectMethods.on
+     * @docid DevicesObject.on
      * @publicName on(events)
      * @param1 events:object
      * @return this
@@ -128,7 +128,7 @@ declare class DevicesObject {
      */
     on(events: any): this;
     /**
-     * @docid DevicesObjectMethods.orientation
+     * @docid DevicesObject.orientation
      * @publicName orientation()
      * @return String
      * @prevFileNamespace DevExpress.core
@@ -136,7 +136,7 @@ declare class DevicesObject {
      */
     orientation(): string;
     /**
-     * @docid DevicesObjectMethods.real
+     * @docid DevicesObject.real
      * @publicName real()
      * @return Device
      * @prevFileNamespace DevExpress.core

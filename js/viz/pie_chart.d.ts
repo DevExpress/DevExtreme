@@ -382,7 +382,7 @@ export default class dxPieChart extends BaseChart {
     constructor(element: Element, options?: dxPieChartOptions)
     constructor(element: JQuery, options?: dxPieChartOptions)
     /**
-     * @docid dxPieChartMethods.getInnerRadius
+     * @docid dxPieChart.getInnerRadius
      * @publicName getInnerRadius()
      * @return number
      * @prevFileNamespace DevExpress.viz
@@ -515,14 +515,14 @@ export interface dxPieChartSeriesTypesCommonPieChartSeries {
 
 export interface piePointObject extends basePointObject {
     /**
-     * @docid piePointObjectMethods.hide
+     * @docid piePointObject.hide
      * @publicName hide()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hide(): void;
     /**
-     * @docid piePointObjectMethods.isVisible
+     * @docid piePointObject.isVisible
      * @publicName isVisible()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -530,13 +530,13 @@ export interface piePointObject extends basePointObject {
      */
     isVisible(): boolean;
     /**
-     * @docid piePointObjectFields.percent
+     * @docid piePointObject.percent
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     percent?: string | number | Date;
     /**
-     * @docid piePointObjectMethods.show
+     * @docid piePointObject.show
      * @publicName show()
      * @prevFileNamespace DevExpress.viz
      * @public

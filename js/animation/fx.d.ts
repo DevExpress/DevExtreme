@@ -83,7 +83,7 @@ export interface animationConfig {
 
 declare const fx: {
     /**
-     * @docid fxmethods.animate
+     * @docid fx.animate
      * @publicName animate(element, config)
      * @param1 element:Element
      * @param2 config:animationConfig
@@ -95,7 +95,7 @@ declare const fx: {
     animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
     
     /**
-     * @docid fxmethods.isAnimating
+     * @docid fx.isAnimating
      * @publicName isAnimating(element)
      * @param1 element:Element
      * @return boolean
@@ -106,7 +106,7 @@ declare const fx: {
     isAnimating(element: Element): boolean;
     
     /**
-     * @docid fxmethods.stop
+     * @docid fx.stop
      * @publicName stop(element, jumpToEnd)
      * @param1 element:Element
      * @param2 jumpToEnd:boolean

@@ -9,7 +9,7 @@
 export default class EndpointSelector {
     constructor(options: any);
     /**
-     * @docid EndpointSelectorMethods.urlFor
+     * @docid EndpointSelector.urlFor
      * @publicName urlFor(key)
      * @param1 key:string
      * @return string

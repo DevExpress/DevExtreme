@@ -760,10 +760,6 @@ declare module DevExpress {
     export class DevicesObject {
         constructor(options: { window?: Window });
         /**
-         * [descr:DevicesObject.orientationChanged]
-         */
-        orientationChanged?: EventType;
-        /**
          * [descr:DevicesObject.current()]
          */
         current(): Device;
@@ -2402,6 +2398,22 @@ declare module DevExpress.events {
      */
     export class dxEvent {
         /**
+         * [descr:dxEvent.currentTarget]
+         */
+        currentTarget: Element;
+        /**
+         * [descr:dxEvent.data]
+         */
+        data: any;
+        /**
+         * [descr:dxEvent.delegateTarget]
+         */
+        delegateTarget: Element;
+        /**
+         * [descr:dxEvent.target]
+         */
+        target: Element;
+        /**
          * [descr:dxEvent.isDefaultPrevented()]
          */
         isDefaultPrevented(): boolean;
@@ -2425,27 +2437,6 @@ declare module DevExpress.events {
          * [descr:dxEvent.stopPropagation()]
          */
         stopPropagation(): void;
-    }
-    /**
-     * [descr:dxEventFields]
-     */
-    export interface dxEventField {
-        /**
-         * [descr:dxEventFields.currentTarget]
-         */
-        currentTarget: Element;
-        /**
-         * [descr:dxEventFields.data]
-         */
-        data: any;
-        /**
-         * [descr:dxEventFields.delegateTarget]
-         */
-        delegateTarget: Element;
-        /**
-         * [descr:dxEventFields.target]
-         */
-        target: Element;
     }
     /**
      * [descr:event]
@@ -2799,54 +2790,49 @@ declare module DevExpress.fileManagement {
      */
     export class FileSystemItem {
         /**
-         * [descr:FileSystemItem.getFileExtension()]
-         */
-        getFileExtension(): string;
-    }
-    /**
-     * [descr:FileSystemItemFields]
-     */
-    export interface FileSystemItemField {
-        /**
-         * [descr:FileSystemItemFields.dataItem]
+         * [descr:FileSystemItem.dataItem]
          */
         dataItem: any;
         /**
-         * [descr:FileSystemItemFields.dateModified]
+         * [descr:FileSystemItem.dateModified]
          */
         dateModified: Date;
         /**
-         * [descr:FileSystemItemFields.hasSubDirectories]
+         * [descr:FileSystemItem.hasSubDirectories]
          */
         hasSubDirectories: boolean;
         /**
-         * [descr:FileSystemItemFields.isDirectory]
+         * [descr:FileSystemItem.isDirectory]
          */
         isDirectory: boolean;
         /**
-         * [descr:FileSystemItemFields.key]
+         * [descr:FileSystemItem.key]
          */
         key: string;
         /**
-         * [descr:FileSystemItemFields.name]
+         * [descr:FileSystemItem.name]
          */
         name: string;
         /**
-         * [descr:FileSystemItemFields.path]
+         * [descr:FileSystemItem.path]
          */
         path: string;
         /**
-         * [descr:FileSystemItemFields.pathKeys]
+         * [descr:FileSystemItem.pathKeys]
          */
         pathKeys: Array<string>;
         /**
-         * [descr:FileSystemItemFields.size]
+         * [descr:FileSystemItem.size]
          */
         size: number;
         /**
-         * [descr:FileSystemItemFields.thumbnail]
+         * [descr:FileSystemItem.thumbnail]
          */
         thumbnail: string;
+        /**
+         * [descr:FileSystemItem.getFileExtension()]
+         */
+        getFileExtension(): string;
     }
     /**
      * [descr:FileSystemProviderBase.Options]
@@ -13740,6 +13726,22 @@ declare module DevExpress.viz {
      */
     export class MapLayer {
         /**
+         * [descr:MapLayer.elementType]
+         */
+        elementType?: string;
+        /**
+         * [descr:MapLayer.index]
+         */
+        index?: number;
+        /**
+         * [descr:MapLayer.name]
+         */
+        name?: string;
+        /**
+         * [descr:MapLayer.type]
+         */
+        type?: string;
+        /**
          * [descr:MapLayer.clearSelection()]
          */
         clearSelection(): void;
@@ -13756,6 +13758,10 @@ declare module DevExpress.viz {
      * [descr:MapLayerElement]
      */
     export class MapLayerElement {
+        /**
+         * [descr:MapLayerElement.layer]
+         */
+        layer?: any;
         /**
          * [descr:MapLayerElement.applySettings(settings)]
          */
@@ -13780,36 +13786,6 @@ declare module DevExpress.viz {
          * [descr:MapLayerElement.selected(state)]
          */
         selected(state: boolean): void;
-    }
-    /**
-     * [descr:MapLayerElementFields]
-     */
-    export interface MapLayerElementField {
-        /**
-         * [descr:MapLayerElementFields.layer]
-         */
-        layer?: any;
-    }
-    /**
-     * [descr:MapLayerFields]
-     */
-    export interface MapLayerField {
-        /**
-         * [descr:MapLayerFields.elementType]
-         */
-        elementType?: string;
-        /**
-         * [descr:MapLayerFields.index]
-         */
-        index?: number;
-        /**
-         * [descr:MapLayerFields.name]
-         */
-        name?: string;
-        /**
-         * [descr:MapLayerFields.type]
-         */
-        type?: string;
     }
     /**
      * [descr:PieChartLegendItem]
@@ -13968,6 +13944,30 @@ declare module DevExpress.viz {
      */
     export class basePointObject {
         /**
+         * [descr:basePointObject.data]
+         */
+        data?: any;
+        /**
+         * [descr:basePointObject.fullState]
+         */
+        fullState?: number;
+        /**
+         * [descr:basePointObject.originalArgument]
+         */
+        originalArgument?: string | number | Date;
+        /**
+         * [descr:basePointObject.originalValue]
+         */
+        originalValue?: string | number | Date;
+        /**
+         * [descr:basePointObject.series]
+         */
+        series?: any;
+        /**
+         * [descr:basePointObject.tag]
+         */
+        tag?: any;
+        /**
          * [descr:basePointObject.clearHover()]
          */
         clearHover(): void;
@@ -14009,38 +14009,25 @@ declare module DevExpress.viz {
         showTooltip(): void;
     }
     /**
-     * [descr:basePointObjectFields]
-     */
-    export interface basePointObjectField {
-        /**
-         * [descr:basePointObjectFields.data]
-         */
-        data?: any;
-        /**
-         * [descr:basePointObjectFields.fullState]
-         */
-        fullState?: number;
-        /**
-         * [descr:basePointObjectFields.originalArgument]
-         */
-        originalArgument?: string | number | Date;
-        /**
-         * [descr:basePointObjectFields.originalValue]
-         */
-        originalValue?: string | number | Date;
-        /**
-         * [descr:basePointObjectFields.series]
-         */
-        series?: any;
-        /**
-         * [descr:basePointObjectFields.tag]
-         */
-        tag?: any;
-    }
-    /**
      * [descr:baseSeriesObject]
      */
     export class baseSeriesObject {
+        /**
+         * [descr:baseSeriesObject.fullState]
+         */
+        fullState?: number;
+        /**
+         * [descr:baseSeriesObject.name]
+         */
+        name?: any;
+        /**
+         * [descr:baseSeriesObject.tag]
+         */
+        tag?: any;
+        /**
+         * [descr:baseSeriesObject.type]
+         */
+        type?: string;
         /**
          * [descr:baseSeriesObject.clearHover()]
          */
@@ -14107,27 +14094,6 @@ declare module DevExpress.viz {
         show(): void;
     }
     /**
-     * [descr:baseSeriesObjectFields]
-     */
-    export interface baseSeriesObjectField {
-        /**
-         * [descr:baseSeriesObjectFields.fullState]
-         */
-        fullState?: number;
-        /**
-         * [descr:baseSeriesObjectFields.name]
-         */
-        name?: any;
-        /**
-         * [descr:baseSeriesObjectFields.tag]
-         */
-        tag?: any;
-        /**
-         * [descr:baseSeriesObjectFields.type]
-         */
-        type?: string;
-    }
-    /**
      * [descr:chartAxisObject]
      */
     export class chartAxisObject {
@@ -14166,47 +14132,58 @@ declare module DevExpress.viz {
      */
     export class chartPointObject extends basePointObject {
         /**
+         * [descr:chartPointObject.aggregationInfo]
+         */
+        aggregationInfo?: chartPointAggregationInfoObject;
+        /**
+         * [descr:chartPointObject.originalCloseValue]
+         */
+        originalCloseValue?: number | string;
+        /**
+         * [descr:chartPointObject.originalHighValue]
+         */
+        originalHighValue?: number | string;
+        /**
+         * [descr:chartPointObject.originalLowValue]
+         */
+        originalLowValue?: number | string;
+        /**
+         * [descr:chartPointObject.originalMinValue]
+         */
+        originalMinValue?: string | number | Date;
+        /**
+         * [descr:chartPointObject.originalOpenValue]
+         */
+        originalOpenValue?: number | string;
+        /**
+         * [descr:chartPointObject.size]
+         */
+        size?: number | string;
+        /**
          * [descr:chartPointObject.getBoundingRect()]
          */
         getBoundingRect(): any;
     }
     /**
-     * [descr:chartPointObjectFields]
-     */
-    export interface chartPointObjectField {
-        /**
-         * [descr:chartPointObjectFields.aggregationInfo]
-         */
-        aggregationInfo?: chartPointAggregationInfoObject;
-        /**
-         * [descr:chartPointObjectFields.originalCloseValue]
-         */
-        originalCloseValue?: number | string;
-        /**
-         * [descr:chartPointObjectFields.originalHighValue]
-         */
-        originalHighValue?: number | string;
-        /**
-         * [descr:chartPointObjectFields.originalLowValue]
-         */
-        originalLowValue?: number | string;
-        /**
-         * [descr:chartPointObjectFields.originalMinValue]
-         */
-        originalMinValue?: string | number | Date;
-        /**
-         * [descr:chartPointObjectFields.originalOpenValue]
-         */
-        originalOpenValue?: number | string;
-        /**
-         * [descr:chartPointObjectFields.size]
-         */
-        size?: number | string;
-    }
-    /**
      * [descr:chartSeriesObject]
      */
     export class chartSeriesObject extends baseSeriesObject {
+        /**
+         * [descr:chartSeriesObject.axis]
+         */
+        axis?: string;
+        /**
+         * [descr:chartSeriesObject.barOverlapGroup]
+         */
+        barOverlapGroup?: string;
+        /**
+         * [descr:chartSeriesObject.pane]
+         */
+        pane?: string;
+        /**
+         * [descr:chartSeriesObject.stack]
+         */
+        stack?: string;
         /**
          * [descr:chartSeriesObject.getArgumentAxis()]
          */
@@ -14215,27 +14192,6 @@ declare module DevExpress.viz {
          * [descr:chartSeriesObject.getValueAxis()]
          */
         getValueAxis(): chartAxisObject;
-    }
-    /**
-     * [descr:chartSeriesObjectFields]
-     */
-    export interface chartSeriesObjectField {
-        /**
-         * [descr:chartSeriesObjectFields.axis]
-         */
-        axis?: string;
-        /**
-         * [descr:chartSeriesObjectFields.barOverlapGroup]
-         */
-        barOverlapGroup?: string;
-        /**
-         * [descr:chartSeriesObjectFields.pane]
-         */
-        pane?: string;
-        /**
-         * [descr:chartSeriesObjectFields.stack]
-         */
-        stack?: string;
     }
     /**
      * [descr:circularRangeBar]
@@ -17440,6 +17396,22 @@ declare module DevExpress.viz {
      */
     export class dxFunnelItem {
         /**
+         * [descr:dxFunnelItem.argument]
+         */
+        argument?: string | Date | number;
+        /**
+         * [descr:dxFunnelItem.data]
+         */
+        data?: any;
+        /**
+         * [descr:dxFunnelItem.percent]
+         */
+        percent?: number;
+        /**
+         * [descr:dxFunnelItem.value]
+         */
+        value?: number;
+        /**
          * [descr:dxFunnelItem.getColor()]
          */
         getColor(): string;
@@ -17463,27 +17435,6 @@ declare module DevExpress.viz {
          * [descr:dxFunnelItem.showTooltip()]
          */
         showTooltip(): void;
-    }
-    /**
-     * [descr:dxFunnelItemFields]
-     */
-    export interface dxFunnelItemField {
-        /**
-         * [descr:dxFunnelItemFields.argument]
-         */
-        argument?: string | Date | number;
-        /**
-         * [descr:dxFunnelItemFields.data]
-         */
-        data?: any;
-        /**
-         * [descr:dxFunnelItemFields.percent]
-         */
-        percent?: number;
-        /**
-         * [descr:dxFunnelItemFields.value]
-         */
-        value?: number;
     }
     /**
      * [descr:dxLinearGauge.Options]
@@ -19120,6 +19071,10 @@ declare module DevExpress.viz {
      */
     export class dxSankeyLink {
         /**
+         * [descr:dxSankeyLink.connection]
+         */
+        connection?: dxSankeyConnectionInfoObject;
+        /**
          * [descr:dxSankeyLink.hideTooltip()]
          */
         hideTooltip(): void;
@@ -19137,18 +19092,26 @@ declare module DevExpress.viz {
         showTooltip(): void;
     }
     /**
-     * [descr:dxSankeyLinkfields]
-     */
-    export interface dxSankeyLinkfield {
-        /**
-         * [descr:dxSankeyLinkfields.connection]
-         */
-        connection?: dxSankeyConnectionInfoObject;
-    }
-    /**
      * [descr:dxSankeyNode]
      */
     export class dxSankeyNode {
+        /**
+         * [descr:dxSankeyNode.label]
+         */
+        label?: string;
+        /**
+         * [descr:dxSankeyNode.linksIn]
+         */
+        linksIn?: Array<any>;
+        /**
+         * [descr:dxSankeyNode.linksOut]
+         */
+        linksOut?: Array<any>;
+        /**
+         * [descr:dxSankeyNode.title]
+         * @deprecated [depNote:dxSankeyNode.title]
+         */
+        title?: string;
         /**
          * [descr:dxSankeyNode.hideTooltip()]
          */
@@ -19165,28 +19128,6 @@ declare module DevExpress.viz {
          * [descr:dxSankeyNode.showTooltip()]
          */
         showTooltip(): void;
-    }
-    /**
-     * [descr:dxSankeyNodefields]
-     */
-    export interface dxSankeyNodefield {
-        /**
-         * [descr:dxSankeyNodefields.label]
-         */
-        label?: string;
-        /**
-         * [descr:dxSankeyNodefields.linksIn]
-         */
-        linksIn?: Array<any>;
-        /**
-         * [descr:dxSankeyNodefields.linksOut]
-         */
-        linksOut?: Array<any>;
-        /**
-         * [descr:dxSankeyNodefields.title]
-         * @deprecated [depNote:dxSankeyNodefields.title]
-         */
-        title?: string;
     }
     /**
      * [descr:dxSparkline.Options]
@@ -19442,6 +19383,18 @@ declare module DevExpress.viz {
      */
     export class dxTreeMapNode {
         /**
+         * [descr:dxTreeMapNode.data]
+         */
+        data?: any;
+        /**
+         * [descr:dxTreeMapNode.index]
+         */
+        index?: number;
+        /**
+         * [descr:dxTreeMapNode.level]
+         */
+        level?: number;
+        /**
          * [descr:dxTreeMapNode.customize(options)]
          */
         customize(options: any): void;
@@ -19509,23 +19462,6 @@ declare module DevExpress.viz {
          * [descr:dxTreeMapNode.value()]
          */
         value(): number;
-    }
-    /**
-     * [descr:dxTreeMapNodeFields]
-     */
-    export interface dxTreeMapNodeField {
-        /**
-         * [descr:dxTreeMapNodeFields.data]
-         */
-        data?: any;
-        /**
-         * [descr:dxTreeMapNodeFields.index]
-         */
-        index?: number;
-        /**
-         * [descr:dxTreeMapNodeFields.level]
-         */
-        level?: number;
     }
     /**
      * [descr:dxVectorMap.Options]
@@ -19802,6 +19738,10 @@ declare module DevExpress.viz {
      */
     export class piePointObject extends basePointObject {
         /**
+         * [descr:piePointObject.percent]
+         */
+        percent?: string | number | Date;
+        /**
          * [descr:piePointObject.hide()]
          */
         hide(): void;
@@ -19815,18 +19755,9 @@ declare module DevExpress.viz {
         show(): void;
     }
     /**
-     * [descr:piePointObjectFields]
+     * [descr:polarChartSeriesObject]
      */
-    export interface piePointObjectField {
-        /**
-         * [descr:piePointObjectFields.percent]
-         */
-        percent?: string | number | Date;
-    }
-    /**
-     * [descr:polarChartSeriesObjectFields]
-     */
-    export interface polarChartSeriesObjectField {
+    export interface polarChartSeriesObject extends baseSeriesObject {
     }
     /**
      * [descr:polarPointObject]

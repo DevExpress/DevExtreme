@@ -105,7 +105,7 @@ export default class dxActionSheet extends CollectionWidget {
     constructor(element: Element, options?: dxActionSheetOptions)
     constructor(element: JQuery, options?: dxActionSheetOptions)
     /**
-     * @docid dxActionSheetMethods.hide
+     * @docid dxActionSheet.hide
      * @publicName hide()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -113,7 +113,7 @@ export default class dxActionSheet extends CollectionWidget {
      */
     hide(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxActionSheetMethods.show
+     * @docid dxActionSheet.show
      * @publicName show()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -121,7 +121,7 @@ export default class dxActionSheet extends CollectionWidget {
      */
     show(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxActionSheetMethods.toggle
+     * @docid dxActionSheet.toggle
      * @publicName toggle(showing)
      * @param1 showing:boolean
      * @return Promise<void>

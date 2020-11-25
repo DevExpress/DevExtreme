@@ -141,7 +141,7 @@ export default class dxFilterBuilder extends Widget {
     constructor(element: Element, options?: dxFilterBuilderOptions)
     constructor(element: JQuery, options?: dxFilterBuilderOptions)
     /**
-     * @docid dxFilterBuilderMethods.getFilterExpression
+     * @docid dxFilterBuilder.getFilterExpression
      * @publicName getFilterExpression()
      * @return Filter expression
      * @prevFileNamespace DevExpress.ui

@@ -926,7 +926,7 @@ export interface GridBaseSelection {
  */
 export interface GridBase {
     /**
-     * @docid GridBaseMethods.beginCustomLoading
+     * @docid GridBase.beginCustomLoading
      * @publicName beginCustomLoading(messageText)
      * @param1 messageText:string
      * @prevFileNamespace DevExpress.ui
@@ -934,7 +934,7 @@ export interface GridBase {
      */
     beginCustomLoading(messageText: string): void;
     /**
-     * @docid GridBaseMethods.byKey
+     * @docid GridBase.byKey
      * @publicName byKey(key)
      * @param1 key:object|string|number
      * @return Promise<Object>
@@ -943,14 +943,14 @@ export interface GridBase {
      */
     byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid GridBaseMethods.cancelEditData
+     * @docid GridBase.cancelEditData
      * @publicName cancelEditData()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     cancelEditData(): void;
     /**
-     * @docid GridBaseMethods.cellValue
+     * @docid GridBase.cellValue
      * @publicName cellValue(rowIndex, dataField)
      * @param1 rowIndex:number
      * @param2 dataField:string
@@ -960,7 +960,7 @@ export interface GridBase {
      */
     cellValue(rowIndex: number, dataField: string): any;
     /**
-     * @docid GridBaseMethods.cellValue
+     * @docid GridBase.cellValue
      * @publicName cellValue(rowIndex, dataField, value)
      * @param1 rowIndex:number
      * @param2 dataField:string
@@ -970,7 +970,7 @@ export interface GridBase {
      */
     cellValue(rowIndex: number, dataField: string, value: any): void;
     /**
-     * @docid GridBaseMethods.cellValue
+     * @docid GridBase.cellValue
      * @publicName cellValue(rowIndex, visibleColumnIndex)
      * @param1 rowIndex:number
      * @param2 visibleColumnIndex:number
@@ -980,7 +980,7 @@ export interface GridBase {
      */
     cellValue(rowIndex: number, visibleColumnIndex: number): any;
     /**
-     * @docid GridBaseMethods.cellValue
+     * @docid GridBase.cellValue
      * @publicName cellValue(rowIndex, visibleColumnIndex, value)
      * @param1 rowIndex:number
      * @param2 visibleColumnIndex:number
@@ -990,14 +990,14 @@ export interface GridBase {
      */
     cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
     /**
-     * @docid GridBaseMethods.clearFilter
+     * @docid GridBase.clearFilter
      * @publicName clearFilter()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     clearFilter(): void;
     /**
-     * @docid GridBaseMethods.clearFilter
+     * @docid GridBase.clearFilter
      * @publicName clearFilter(filterName)
      * @param1 filterName:string
      * @prevFileNamespace DevExpress.ui
@@ -1005,35 +1005,35 @@ export interface GridBase {
      */
     clearFilter(filterName: string): void;
     /**
-     * @docid GridBaseMethods.clearSelection
+     * @docid GridBase.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid GridBaseMethods.clearSorting
+     * @docid GridBase.clearSorting
      * @publicName clearSorting()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     clearSorting(): void;
     /**
-     * @docid GridBaseMethods.closeEditCell
+     * @docid GridBase.closeEditCell
      * @publicName closeEditCell()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     closeEditCell(): void;
     /**
-     * @docid GridBaseMethods.collapseAdaptiveDetailRow
+     * @docid GridBase.collapseAdaptiveDetailRow
      * @publicName collapseAdaptiveDetailRow()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     collapseAdaptiveDetailRow(): void;
     /**
-     * @docid GridBaseMethods.columnCount
+     * @docid GridBase.columnCount
      * @publicName columnCount()
      * @return number
      * @prevFileNamespace DevExpress.ui
@@ -1041,7 +1041,7 @@ export interface GridBase {
      */
     columnCount(): number;
     /**
-     * @docid GridBaseMethods.columnOption
+     * @docid GridBase.columnOption
      * @publicName columnOption(id)
      * @param1 id:number|string
      * @return object
@@ -1050,7 +1050,7 @@ export interface GridBase {
      */
     columnOption(id: number | string): any;
     /**
-     * @docid GridBaseMethods.columnOption
+     * @docid GridBase.columnOption
      * @publicName columnOption(id, optionName)
      * @param1 id:number|string
      * @param2 optionName:string
@@ -1060,7 +1060,7 @@ export interface GridBase {
      */
     columnOption(id: number | string, optionName: string): any;
     /**
-     * @docid GridBaseMethods.columnOption
+     * @docid GridBase.columnOption
      * @publicName columnOption(id, optionName, optionValue)
      * @param1 id:number|string
      * @param2 optionName:string
@@ -1070,7 +1070,7 @@ export interface GridBase {
      */
     columnOption(id: number | string, optionName: string, optionValue: any): void;
     /**
-     * @docid GridBaseMethods.columnOption
+     * @docid GridBase.columnOption
      * @publicName columnOption(id, options)
      * @param1 id:number|string
      * @param2 options:object
@@ -1079,7 +1079,7 @@ export interface GridBase {
      */
     columnOption(id: number | string, options: any): void;
     /**
-     * @docid GridBaseMethods.deleteColumn
+     * @docid GridBase.deleteColumn
      * @publicName deleteColumn(id)
      * @param1 id:number|string
      * @prevFileNamespace DevExpress.ui
@@ -1087,7 +1087,7 @@ export interface GridBase {
      */
     deleteColumn(id: number | string): void;
     /**
-     * @docid GridBaseMethods.deleteRow
+     * @docid GridBase.deleteRow
      * @publicName deleteRow(rowIndex)
      * @param1 rowIndex:number
      * @prevFileNamespace DevExpress.ui
@@ -1095,7 +1095,7 @@ export interface GridBase {
      */
     deleteRow(rowIndex: number): void;
     /**
-     * @docid GridBaseMethods.deselectAll
+     * @docid GridBase.deselectAll
      * @publicName deselectAll()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -1103,7 +1103,7 @@ export interface GridBase {
      */
     deselectAll(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid GridBaseMethods.deselectRows
+     * @docid GridBase.deselectRows
      * @publicName deselectRows(keys)
      * @param1 keys:Array<any>
      * @return Promise<any>
@@ -1112,7 +1112,7 @@ export interface GridBase {
      */
     deselectRows(keys: Array<any>): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid GridBaseMethods.editCell
+     * @docid GridBase.editCell
      * @publicName editCell(rowIndex, dataField)
      * @param1 rowIndex:number
      * @param2 dataField:string
@@ -1121,7 +1121,7 @@ export interface GridBase {
      */
     editCell(rowIndex: number, dataField: string): void;
     /**
-     * @docid GridBaseMethods.editCell
+     * @docid GridBase.editCell
      * @publicName editCell(rowIndex, visibleColumnIndex)
      * @param1 rowIndex:number
      * @param2 visibleColumnIndex:number
@@ -1130,7 +1130,7 @@ export interface GridBase {
      */
     editCell(rowIndex: number, visibleColumnIndex: number): void;
     /**
-     * @docid GridBaseMethods.editRow
+     * @docid GridBase.editRow
      * @publicName editRow(rowIndex)
      * @param1 rowIndex:number
      * @prevFileNamespace DevExpress.ui
@@ -1138,14 +1138,14 @@ export interface GridBase {
      */
     editRow(rowIndex: number): void;
     /**
-     * @docid GridBaseMethods.endCustomLoading
+     * @docid GridBase.endCustomLoading
      * @publicName endCustomLoading()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     endCustomLoading(): void;
     /**
-     * @docid GridBaseMethods.expandAdaptiveDetailRow
+     * @docid GridBase.expandAdaptiveDetailRow
      * @publicName expandAdaptiveDetailRow(key)
      * @param1 key:any
      * @prevFileNamespace DevExpress.ui
@@ -1153,7 +1153,7 @@ export interface GridBase {
      */
     expandAdaptiveDetailRow(key: any): void;
     /**
-     * @docid GridBaseMethods.filter
+     * @docid GridBase.filter
      * @publicName filter()
      * @return any
      * @prevFileNamespace DevExpress.ui
@@ -1161,7 +1161,7 @@ export interface GridBase {
      */
     filter(): any;
     /**
-     * @docid GridBaseMethods.filter
+     * @docid GridBase.filter
      * @publicName filter(filterExpr)
      * @param1 filterExpr:any
      * @prevFileNamespace DevExpress.ui
@@ -1170,7 +1170,7 @@ export interface GridBase {
     filter(filterExpr: any): void;
     focus(): void;
     /**
-     * @docid GridBaseMethods.focus
+     * @docid GridBase.focus
      * @publicName focus(element)
      * @param1 element:Element|jQuery
      * @prevFileNamespace DevExpress.ui
@@ -1178,7 +1178,7 @@ export interface GridBase {
      */
     focus(element: Element | JQuery): void;
     /**
-     * @docid GridBaseMethods.getCellElement
+     * @docid GridBase.getCellElement
      * @publicName getCellElement(rowIndex, dataField)
      * @param1 rowIndex:number
      * @param2 dataField:string
@@ -1188,7 +1188,7 @@ export interface GridBase {
      */
     getCellElement(rowIndex: number, dataField: string): dxElement | undefined;
     /**
-     * @docid GridBaseMethods.getCellElement
+     * @docid GridBase.getCellElement
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
      * @param1 rowIndex:number
      * @param2 visibleColumnIndex:number
@@ -1198,7 +1198,7 @@ export interface GridBase {
      */
     getCellElement(rowIndex: number, visibleColumnIndex: number): dxElement | undefined;
     /**
-     * @docid GridBaseMethods.getCombinedFilter
+     * @docid GridBase.getCombinedFilter
      * @publicName getCombinedFilter()
      * @return any
      * @prevFileNamespace DevExpress.ui
@@ -1206,7 +1206,7 @@ export interface GridBase {
      */
     getCombinedFilter(): any;
     /**
-     * @docid GridBaseMethods.getCombinedFilter
+     * @docid GridBase.getCombinedFilter
      * @publicName getCombinedFilter(returnDataField)
      * @param1 returnDataField:boolean
      * @return any
@@ -1216,7 +1216,7 @@ export interface GridBase {
     getCombinedFilter(returnDataField: boolean): any;
     getDataSource(): DataSource;
     /**
-     * @docid GridBaseMethods.getKeyByRowIndex
+     * @docid GridBase.getKeyByRowIndex
      * @publicName getKeyByRowIndex(rowIndex)
      * @param1 rowIndex:numeric
      * @return any
@@ -1225,7 +1225,7 @@ export interface GridBase {
      */
     getKeyByRowIndex(rowIndex: number): any;
     /**
-     * @docid GridBaseMethods.getRowElement
+     * @docid GridBase.getRowElement
      * @publicName getRowElement(rowIndex)
      * @param1 rowIndex:number
      * @return Array<Element>|jQuery|undefined
@@ -1234,7 +1234,7 @@ export interface GridBase {
      */
     getRowElement(rowIndex: number): Array<Element> & JQuery | undefined;
     /**
-     * @docid GridBaseMethods.getRowIndexByKey
+     * @docid GridBase.getRowIndexByKey
      * @publicName getRowIndexByKey(key)
      * @param1 key:object|string|number
      * @return numeric
@@ -1243,7 +1243,7 @@ export interface GridBase {
      */
     getRowIndexByKey(key: any | string | number): number;
     /**
-     * @docid GridBaseMethods.getScrollable
+     * @docid GridBase.getScrollable
      * @publicName getScrollable()
      * @return dxScrollable
      * @prevFileNamespace DevExpress.ui
@@ -1251,7 +1251,7 @@ export interface GridBase {
      */
     getScrollable(): dxScrollable;
     /**
-     * @docid GridBaseMethods.getVisibleColumnIndex
+     * @docid GridBase.getVisibleColumnIndex
      * @publicName getVisibleColumnIndex(id)
      * @param1 id:number|string
      * @return number
@@ -1260,7 +1260,7 @@ export interface GridBase {
      */
     getVisibleColumnIndex(id: number | string): number;
     /**
-     * @docid GridBaseMethods.hasEditData
+     * @docid GridBase.hasEditData
      * @publicName hasEditData()
      * @return boolean
      * @prevFileNamespace DevExpress.ui
@@ -1268,14 +1268,14 @@ export interface GridBase {
      */
     hasEditData(): boolean;
     /**
-     * @docid GridBaseMethods.hideColumnChooser
+     * @docid GridBase.hideColumnChooser
      * @publicName hideColumnChooser()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hideColumnChooser(): void;
     /**
-     * @docid GridBaseMethods.isAdaptiveDetailRowExpanded
+     * @docid GridBase.isAdaptiveDetailRowExpanded
      * @publicName isAdaptiveDetailRowExpanded(key)
      * @param1 key:any
      * @return boolean
@@ -1284,7 +1284,7 @@ export interface GridBase {
      */
     isAdaptiveDetailRowExpanded(key: any): boolean;
     /**
-     * @docid GridBaseMethods.isRowFocused
+     * @docid GridBase.isRowFocused
      * @publicName isRowFocused(key)
      * @param1 key:any
      * @return boolean
@@ -1293,7 +1293,7 @@ export interface GridBase {
      */
     isRowFocused(key: any): boolean;
     /**
-     * @docid GridBaseMethods.isRowSelected(key)
+     * @docid GridBase.isRowSelected(key)
      * @publicName isRowSelected(key)
      * @param1 key:any
      * @return boolean
@@ -1302,7 +1302,7 @@ export interface GridBase {
      */
     isRowSelected(key: any): boolean;
     /**
-     * @docid GridBaseMethods.keyOf
+     * @docid GridBase.keyOf
      * @publicName keyOf(obj)
      * @param1 obj:object
      * @return any
@@ -1311,7 +1311,7 @@ export interface GridBase {
      */
     keyOf(obj: any): any;
     /**
-     * @docid GridBaseMethods.navigateToRow
+     * @docid GridBase.navigateToRow
      * @publicName navigateToRow(key)
      * @param1 key:any
      * @prevFileNamespace DevExpress.ui
@@ -1319,7 +1319,7 @@ export interface GridBase {
      */
     navigateToRow(key: any): void;
     /**
-     * @docid GridBaseMethods.pageCount
+     * @docid GridBase.pageCount
      * @publicName pageCount()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -1327,7 +1327,7 @@ export interface GridBase {
      */
     pageCount(): number;
     /**
-     * @docid GridBaseMethods.pageIndex
+     * @docid GridBase.pageIndex
      * @publicName pageIndex()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -1335,7 +1335,7 @@ export interface GridBase {
      */
     pageIndex(): number;
     /**
-     * @docid GridBaseMethods.pageIndex
+     * @docid GridBase.pageIndex
      * @publicName pageIndex(newIndex)
      * @param1 newIndex:numeric
      * @return Promise<void>
@@ -1344,7 +1344,7 @@ export interface GridBase {
      */
     pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid GridBaseMethods.pageSize
+     * @docid GridBase.pageSize
      * @publicName pageSize()
      * @return numeric
      * @prevFileNamespace DevExpress.ui
@@ -1352,7 +1352,7 @@ export interface GridBase {
      */
     pageSize(): number;
     /**
-     * @docid GridBaseMethods.pageSize
+     * @docid GridBase.pageSize
      * @publicName pageSize(value)
      * @param1 value:numeric
      * @prevFileNamespace DevExpress.ui
@@ -1360,7 +1360,7 @@ export interface GridBase {
      */
     pageSize(value: number): void;
     /**
-     * @docid GridBaseMethods.refresh
+     * @docid GridBase.refresh
      * @publicName refresh()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -1368,7 +1368,7 @@ export interface GridBase {
      */
     refresh(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid GridBaseMethods.refresh
+     * @docid GridBase.refresh
      * @publicName refresh(changesOnly)
      * @param1 changesOnly:boolean
      * @return Promise<void>
@@ -1377,7 +1377,7 @@ export interface GridBase {
      */
     refresh(changesOnly: boolean): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid GridBaseMethods.repaintRows
+     * @docid GridBase.repaintRows
      * @publicName repaintRows(rowIndexes)
      * @param1 rowIndexes:Array<number>
      * @prevFileNamespace DevExpress.ui
@@ -1385,7 +1385,7 @@ export interface GridBase {
      */
     repaintRows(rowIndexes: Array<number>): void;
     /**
-     * @docid GridBaseMethods.saveEditData
+     * @docid GridBase.saveEditData
      * @publicName saveEditData()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -1393,7 +1393,7 @@ export interface GridBase {
      */
     saveEditData(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid GridBaseMethods.searchByText
+     * @docid GridBase.searchByText
      * @publicName searchByText(text)
      * @param1 text:string
      * @prevFileNamespace DevExpress.ui
@@ -1401,7 +1401,7 @@ export interface GridBase {
      */
     searchByText(text: string): void;
     /**
-     * @docid GridBaseMethods.selectAll
+     * @docid GridBase.selectAll
      * @publicName selectAll()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -1409,7 +1409,7 @@ export interface GridBase {
      */
     selectAll(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid GridBaseMethods.selectRows
+     * @docid GridBase.selectRows
      * @publicName selectRows(keys, preserve)
      * @param1 keys:Array<any>
      * @param2 preserve:boolean
@@ -1419,7 +1419,7 @@ export interface GridBase {
      */
     selectRows(keys: Array<any>, preserve: boolean): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid GridBaseMethods.selectRowsByIndexes
+     * @docid GridBase.selectRowsByIndexes
      * @publicName selectRowsByIndexes(indexes)
      * @param1 indexes:Array<number>
      * @return Promise<any>
@@ -1428,14 +1428,14 @@ export interface GridBase {
      */
     selectRowsByIndexes(indexes: Array<number>): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid GridBaseMethods.showColumnChooser
+     * @docid GridBase.showColumnChooser
      * @publicName showColumnChooser()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showColumnChooser(): void;
     /**
-     * @docid GridBaseMethods.state
+     * @docid GridBase.state
      * @publicName state()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -1443,7 +1443,7 @@ export interface GridBase {
      */
     state(): any;
     /**
-     * @docid GridBaseMethods.state
+     * @docid GridBase.state
      * @publicName state(state)
      * @param1 state:object
      * @prevFileNamespace DevExpress.ui
@@ -1451,7 +1451,7 @@ export interface GridBase {
      */
     state(state: any): void;
     /**
-     * @docid GridBaseMethods.undeleteRow
+     * @docid GridBase.undeleteRow
      * @publicName undeleteRow(rowIndex)
      * @param1 rowIndex:number
      * @prevFileNamespace DevExpress.ui
@@ -1459,7 +1459,7 @@ export interface GridBase {
      */
     undeleteRow(rowIndex: number): void;
     /**
-     * @docid GridBaseMethods.updateDimensions
+     * @docid GridBase.updateDimensions
      * @publicName updateDimensions()
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -2393,7 +2393,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     constructor(element: Element, options?: dxDataGridOptions)
     constructor(element: JQuery, options?: dxDataGridOptions)
     /**
-     * @docid dxDataGridMethods.addColumn
+     * @docid dxDataGrid.addColumn
      * @publicName addColumn(columnOptions)
      * @param1 columnOptions:object|string
      * @prevFileNamespace DevExpress.ui
@@ -2401,7 +2401,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     addColumn(columnOptions: any | string): void;
     /**
-     * @docid dxDataGridMethods.addRow
+     * @docid dxDataGrid.addRow
      * @publicName addRow()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -2409,14 +2409,14 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     addRow(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxDataGridMethods.clearGrouping
+     * @docid dxDataGrid.clearGrouping
      * @publicName clearGrouping()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     clearGrouping(): void;
     /**
-     * @docid dxDataGridMethods.collapseAll
+     * @docid dxDataGrid.collapseAll
      * @publicName collapseAll(groupIndex)
      * @param1 groupIndex:number | undefined
      * @prevFileNamespace DevExpress.ui
@@ -2424,7 +2424,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     collapseAll(groupIndex?: number): void;
     /**
-     * @docid dxDataGridMethods.collapseRow
+     * @docid dxDataGrid.collapseRow
      * @publicName collapseRow(key)
      * @param1 key:any
      * @return Promise<void>
@@ -2433,7 +2433,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     collapseRow(key: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxDataGridMethods.expandAll
+     * @docid dxDataGrid.expandAll
      * @publicName expandAll(groupIndex)
      * @param1 groupIndex:number | undefined
      * @prevFileNamespace DevExpress.ui
@@ -2441,7 +2441,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     expandAll(groupIndex?: number): void;
     /**
-     * @docid dxDataGridMethods.expandRow
+     * @docid dxDataGrid.expandRow
      * @publicName expandRow(key)
      * @param1 key:any
      * @return Promise<void>
@@ -2450,7 +2450,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     expandRow(key: any): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxDataGridMethods.exportToExcel
+     * @docid dxDataGrid.exportToExcel
      * @publicName exportToExcel(selectionOnly)
      * @deprecated excelExporter.exportDataGrid
      * @param1 selectionOnly:boolean
@@ -2459,7 +2459,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     exportToExcel(selectionOnly: boolean): void;
     /**
-     * @docid dxDataGridMethods.getSelectedRowKeys
+     * @docid dxDataGrid.getSelectedRowKeys
      * @publicName getSelectedRowKeys()
      * @return Array<any> | Promise<any>
      * @prevFileNamespace DevExpress.ui
@@ -2467,7 +2467,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     getSelectedRowKeys(): Array<any> & Promise<any> & JQueryPromise<any>;
     /**
-     * @docid dxDataGridMethods.getSelectedRowsData
+     * @docid dxDataGrid.getSelectedRowsData
      * @publicName getSelectedRowsData()
      * @return Array<any> | Promise<any>
      * @prevFileNamespace DevExpress.ui
@@ -2475,7 +2475,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     getSelectedRowsData(): Array<any> & Promise<any> & JQueryPromise<any>;
     /**
-     * @docid dxDataGridMethods.getTotalSummaryValue
+     * @docid dxDataGrid.getTotalSummaryValue
      * @publicName getTotalSummaryValue(summaryItemName)
      * @param1 summaryItemName:String
      * @return any
@@ -2484,7 +2484,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     getTotalSummaryValue(summaryItemName: string): any;
     /**
-     * @docid dxDataGridMethods.getVisibleColumns
+     * @docid dxDataGrid.getVisibleColumns
      * @publicName getVisibleColumns()
      * @return Array<dxDataGridColumn>
      * @prevFileNamespace DevExpress.ui
@@ -2492,7 +2492,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     getVisibleColumns(): Array<dxDataGridColumn>;
     /**
-     * @docid dxDataGridMethods.getVisibleColumns
+     * @docid dxDataGrid.getVisibleColumns
      * @publicName getVisibleColumns(headerLevel)
      * @param1 headerLevel:number
      * @return Array<dxDataGridColumn>
@@ -2501,7 +2501,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     getVisibleColumns(headerLevel: number): Array<dxDataGridColumn>;
     /**
-     * @docid dxDataGridMethods.getVisibleRows
+     * @docid dxDataGrid.getVisibleRows
      * @publicName getVisibleRows()
      * @return Array<dxDataGridRowObject>
      * @prevFileNamespace DevExpress.ui
@@ -2509,7 +2509,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     getVisibleRows(): Array<dxDataGridRowObject>;
     /**
-     * @docid dxDataGridMethods.isRowExpanded
+     * @docid dxDataGrid.isRowExpanded
      * @publicName isRowExpanded(key)
      * @param1 key:any
      * @return boolean
@@ -2518,7 +2518,7 @@ declare class dxDataGrid extends Widget implements GridBase {
      */
     isRowExpanded(key: any): boolean;
     /**
-     * @docid dxDataGridMethods.isRowSelected(data)
+     * @docid dxDataGrid.isRowSelected(data)
      * @publicName isRowSelected(data)
      * @param1 data:any
      * @return boolean
@@ -2528,7 +2528,7 @@ declare class dxDataGrid extends Widget implements GridBase {
     isRowSelected(data: any): boolean;
     isRowSelected(key: any): boolean;
     /**
-     * @docid dxDataGridMethods.totalCount
+     * @docid dxDataGrid.totalCount
      * @publicName totalCount()
      * @return numeric
      * @prevFileNamespace DevExpress.ui

@@ -220,7 +220,7 @@ export default class dxForm extends Widget {
     constructor(element: Element, options?: dxFormOptions)
     constructor(element: JQuery, options?: dxFormOptions)
     /**
-     * @docid dxFormMethods.getButton
+     * @docid dxForm.getButton
      * @publicName getButton(name)
      * @param1 name:string
      * @return dxButton | undefined
@@ -229,7 +229,7 @@ export default class dxForm extends Widget {
      */
     getButton(name: string): dxButton | undefined;
     /**
-     * @docid dxFormMethods.getEditor
+     * @docid dxForm.getEditor
      * @publicName getEditor(dataField)
      * @param1 dataField:string
      * @return Editor | undefined
@@ -238,7 +238,7 @@ export default class dxForm extends Widget {
      */
     getEditor(dataField: string): Editor | undefined;
     /**
-     * @docid dxFormMethods.itemOption
+     * @docid dxForm.itemOption
      * @publicName itemOption(id)
      * @param1 id:string
      * @return any
@@ -247,7 +247,7 @@ export default class dxForm extends Widget {
      */
     itemOption(id: string): any;
     /**
-     * @docid dxFormMethods.itemOption
+     * @docid dxForm.itemOption
      * @publicName itemOption(id, option, value)
      * @param1 id:string
      * @param2 option:string
@@ -257,7 +257,7 @@ export default class dxForm extends Widget {
      */
     itemOption(id: string, option: string, value: any): void;
     /**
-     * @docid dxFormMethods.itemOption
+     * @docid dxForm.itemOption
      * @publicName itemOption(id, options)
      * @param1 id:string
      * @param2 options:object
@@ -266,14 +266,14 @@ export default class dxForm extends Widget {
      */
     itemOption(id: string, options: any): void;
     /**
-     * @docid dxFormMethods.resetValues
+     * @docid dxForm.resetValues
      * @publicName resetValues()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     resetValues(): void;
     /**
-     * @docid dxFormMethods.updateData
+     * @docid dxForm.updateData
      * @publicName updateData(data)
      * @param1 data:object
      * @prevFileNamespace DevExpress.ui
@@ -281,7 +281,7 @@ export default class dxForm extends Widget {
      */
     updateData(data: any): void;
     /**
-     * @docid dxFormMethods.updateData
+     * @docid dxForm.updateData
      * @publicName updateData(dataField, value)
      * @param1 dataField:string
      * @param2 value:object
@@ -290,7 +290,7 @@ export default class dxForm extends Widget {
      */
     updateData(dataField: string, value: any): void;
     /**
-     * @docid dxFormMethods.updateDimensions
+     * @docid dxForm.updateDimensions
      * @publicName updateDimensions()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -298,7 +298,7 @@ export default class dxForm extends Widget {
      */
     updateDimensions(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxFormMethods.validate
+     * @docid dxForm.validate
      * @publicName validate()
      * @return dxValidationGroupResult
      * @prevFileNamespace DevExpress.ui

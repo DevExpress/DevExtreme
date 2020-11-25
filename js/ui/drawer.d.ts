@@ -122,7 +122,7 @@ export default class dxDrawer extends Widget {
     constructor(element: Element, options?: dxDrawerOptions)
     constructor(element: JQuery, options?: dxDrawerOptions)
     /**
-     * @docid dxDrawerMethods.content
+     * @docid dxDrawer.content
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -130,7 +130,7 @@ export default class dxDrawer extends Widget {
      */
     content(): dxElement;
     /**
-     * @docid dxDrawerMethods.hide
+     * @docid dxDrawer.hide
      * @publicName hide()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -138,7 +138,7 @@ export default class dxDrawer extends Widget {
      */
     hide(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxDrawerMethods.show
+     * @docid dxDrawer.show
      * @publicName show()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -146,7 +146,7 @@ export default class dxDrawer extends Widget {
      */
     show(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxDrawerMethods.toggle
+     * @docid dxDrawer.toggle
      * @publicName toggle()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui

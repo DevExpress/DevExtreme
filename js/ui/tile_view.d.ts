@@ -100,7 +100,7 @@ export default class dxTileView extends CollectionWidget {
     constructor(element: Element, options?: dxTileViewOptions)
     constructor(element: JQuery, options?: dxTileViewOptions)
     /**
-     * @docid dxtileviewmethods.scrollPosition
+     * @docid dxtileview.scrollPosition
      * @publicName scrollPosition()
      * @return numeric
      * @prevFileNamespace DevExpress.ui

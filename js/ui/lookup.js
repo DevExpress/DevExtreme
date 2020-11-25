@@ -1154,7 +1154,7 @@ const Lookup = DropDownList.inherit({
     }
 
     /**
-    * @name dxLookupMethods.getButton
+    * @name dxLookup.getButton
     * @publicName getButton(name)
     * @hidden
     */

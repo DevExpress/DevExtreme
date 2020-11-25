@@ -84,7 +84,7 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
     constructor(element: Element, options?: dxMenuBaseOptions)
     constructor(element: JQuery, options?: dxMenuBaseOptions)
     /**
-     * @docid dxMenuBaseMethods.selectItem
+     * @docid dxMenuBase.selectItem
      * @publicName selectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
@@ -92,7 +92,7 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
      */
     selectItem(itemElement: Element): void;
     /**
-     * @docid dxMenuBaseMethods.unselectItem
+     * @docid dxMenuBase.unselectItem
      * @publicName unselectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui

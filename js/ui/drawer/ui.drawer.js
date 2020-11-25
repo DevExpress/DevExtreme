@@ -557,7 +557,7 @@ const Drawer = Widget.inherit({
     },
 
     /**
-    * @name dxDrawerMethods.viewContent
+    * @name dxDrawer.viewContent
     * @publicName viewContent()
     * @return dxElement
     * @hidden
@@ -584,13 +584,13 @@ const Drawer = Widget.inherit({
     }
 
     /**
-    * @name dxDrawerMethods.registerKeyHandler
+    * @name dxDrawer.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxDrawerMethods.focus
+    * @name dxDrawer.focus
     * @publicName focus()
     * @hidden
     */

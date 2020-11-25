@@ -149,7 +149,7 @@ export default class dxAccordion extends CollectionWidget {
     constructor(element: Element, options?: dxAccordionOptions)
     constructor(element: JQuery, options?: dxAccordionOptions)
     /**
-     * @docid dxAccordionMethods.collapseItem
+     * @docid dxAccordion.collapseItem
      * @publicName collapseItem(index)
      * @param1 index:numeric
      * @return Promise<void>
@@ -158,7 +158,7 @@ export default class dxAccordion extends CollectionWidget {
      */
     collapseItem(index: number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxAccordionMethods.expandItem
+     * @docid dxAccordion.expandItem
      * @publicName expandItem(index)
      * @param1 index:numeric
      * @return Promise<void>
@@ -167,7 +167,7 @@ export default class dxAccordion extends CollectionWidget {
      */
     expandItem(index: number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxAccordionMethods.updateDimensions
+     * @docid dxAccordion.updateDimensions
      * @publicName updateDimensions()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui

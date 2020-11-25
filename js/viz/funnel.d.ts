@@ -324,14 +324,14 @@ export default class dxFunnel extends BaseWidget {
     constructor(element: Element, options?: dxFunnelOptions)
     constructor(element: JQuery, options?: dxFunnelOptions)
     /**
-     * @docid dxFunnelMethods.clearSelection
+     * @docid dxFunnel.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid dxFunnelMethods.getAllItems
+     * @docid dxFunnel.getAllItems
      * @publicName getAllItems()
      * @return Array<dxFunnelItem>
      * @prevFileNamespace DevExpress.viz
@@ -340,7 +340,7 @@ export default class dxFunnel extends BaseWidget {
     getAllItems(): Array<dxFunnelItem>;
     getDataSource(): DataSource;
     /**
-     * @docid dxFunnelMethods.hideTooltip
+     * @docid dxFunnel.hideTooltip
      * @publicName hideTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -350,19 +350,19 @@ export default class dxFunnel extends BaseWidget {
 
 export interface dxFunnelItem {
     /**
-     * @docid dxFunnelItemFields.argument
+     * @docid dxFunnelItem.argument
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     argument?: string | Date | number;
     /**
-     * @docid dxFunnelItemFields.data
+     * @docid dxFunnelItem.data
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     data?: any;
     /**
-     * @docid dxFunnelItemMethods.getColor
+     * @docid dxFunnelItem.getColor
      * @publicName getColor()
      * @return string
      * @prevFileNamespace DevExpress.viz
@@ -370,7 +370,7 @@ export interface dxFunnelItem {
      */
     getColor(): string;
     /**
-     * @docid dxFunnelItemMethods.hover
+     * @docid dxFunnelItem.hover
      * @publicName hover(state)
      * @param1 state:boolean
      * @prevFileNamespace DevExpress.viz
@@ -378,7 +378,7 @@ export interface dxFunnelItem {
      */
     hover(state: boolean): void;
     /**
-     * @docid dxFunnelItemMethods.isHovered
+     * @docid dxFunnelItem.isHovered
      * @publicName isHovered()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -386,7 +386,7 @@ export interface dxFunnelItem {
      */
     isHovered(): boolean;
     /**
-     * @docid dxFunnelItemMethods.isSelected
+     * @docid dxFunnelItem.isSelected
      * @publicName isSelected()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -394,13 +394,13 @@ export interface dxFunnelItem {
      */
     isSelected(): boolean;
     /**
-     * @docid dxFunnelItemFields.percent
+     * @docid dxFunnelItem.percent
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     percent?: number;
     /**
-     * @docid dxFunnelItemMethods.select
+     * @docid dxFunnelItem.select
      * @publicName select(state)
      * @param1 state:boolean
      * @prevFileNamespace DevExpress.viz
@@ -408,14 +408,14 @@ export interface dxFunnelItem {
      */
     select(state: boolean): void;
     /**
-     * @docid dxFunnelItemMethods.showTooltip
+     * @docid dxFunnelItem.showTooltip
      * @publicName showTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTooltip(): void;
     /**
-     * @docid dxFunnelItemFields.value
+     * @docid dxFunnelItem.value
      * @prevFileNamespace DevExpress.viz
      * @public
      */

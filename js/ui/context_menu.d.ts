@@ -146,7 +146,7 @@ export default class dxContextMenu extends dxMenuBase {
     constructor(element: Element, options?: dxContextMenuOptions)
     constructor(element: JQuery, options?: dxContextMenuOptions)
     /**
-     * @docid dxContextMenuMethods.hide
+     * @docid dxContextMenu.hide
      * @publicName hide()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -154,7 +154,7 @@ export default class dxContextMenu extends dxMenuBase {
      */
     hide(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxContextMenuMethods.show
+     * @docid dxContextMenu.show
      * @publicName show()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -162,7 +162,7 @@ export default class dxContextMenu extends dxMenuBase {
      */
     show(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxContextMenuMethods.toggle
+     * @docid dxContextMenu.toggle
      * @publicName toggle(showing)
      * @param1 showing:boolean
      * @return Promise<void>

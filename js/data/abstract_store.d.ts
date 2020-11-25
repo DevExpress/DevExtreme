@@ -117,7 +117,7 @@ export interface StoreOptions<T = Store> {
 export default class Store {
     constructor(options?: StoreOptions)
     /**
-     * @docid StoreMethods.byKey
+     * @docid Store.byKey
      * @publicName byKey(key)
      * @param1 key:object|string|number
      * @return Promise<any>
@@ -126,7 +126,7 @@ export default class Store {
      */
     byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid StoreMethods.insert
+     * @docid Store.insert
      * @publicName insert(values)
      * @param1 values:object
      * @return Promise<any>
@@ -135,7 +135,7 @@ export default class Store {
      */
     insert(values: any): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid StoreMethods.key
+     * @docid Store.key
      * @publicName key()
      * @return any
      * @prevFileNamespace DevExpress.data
@@ -143,7 +143,7 @@ export default class Store {
      */
     key(): any;
     /**
-     * @docid StoreMethods.keyOf
+     * @docid Store.keyOf
      * @publicName keyOf(obj)
      * @param1 obj:object
      * @return any
@@ -152,7 +152,7 @@ export default class Store {
      */
     keyOf(obj: any): any;
     /**
-     * @docid StoreMethods.load
+     * @docid Store.load
      * @publicName load()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.data
@@ -160,7 +160,7 @@ export default class Store {
      */
     load(): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid StoreMethods.load
+     * @docid Store.load
      * @publicName load(options)
      * @param1 options:LoadOptions
      * @return Promise<any>
@@ -169,7 +169,7 @@ export default class Store {
      */
     load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
     /**
-     * @docid StoreMethods.off
+     * @docid Store.off
      * @publicName off(eventName)
      * @param1 eventName:string
      * @return this
@@ -178,7 +178,7 @@ export default class Store {
      */
     off(eventName: string): this;
     /**
-     * @docid StoreMethods.off
+     * @docid Store.off
      * @publicName off(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -188,7 +188,7 @@ export default class Store {
      */
     off(eventName: string, eventHandler: Function): this;
     /**
-     * @docid StoreMethods.on
+     * @docid Store.on
      * @publicName on(eventName, eventHandler)
      * @param1 eventName:string
      * @param2 eventHandler:function
@@ -198,7 +198,7 @@ export default class Store {
      */
     on(eventName: string, eventHandler: Function): this;
     /**
-     * @docid StoreMethods.on
+     * @docid Store.on
      * @publicName on(events)
      * @param1 events:object
      * @return this
@@ -207,7 +207,7 @@ export default class Store {
      */
     on(events: any): this;
     /**
-     * @docid StoreMethods.push
+     * @docid Store.push
      * @publicName push(changes)
      * @param1 changes:Array<any>
      * @prevFileNamespace DevExpress.data
@@ -215,7 +215,7 @@ export default class Store {
      */
     push(changes: Array<any>): void;
     /**
-     * @docid StoreMethods.remove
+     * @docid Store.remove
      * @publicName remove(key)
      * @param1 key:object|string|number
      * @return Promise<void>
@@ -224,7 +224,7 @@ export default class Store {
      */
     remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid StoreMethods.totalCount
+     * @docid Store.totalCount
      * @publicName totalCount(options)
      * @param1 obj:object
      * @param1_field1 filter:object
@@ -235,7 +235,7 @@ export default class Store {
      */
     totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
     /**
-     * @docid StoreMethods.update
+     * @docid Store.update
      * @publicName update(key, values)
      * @param1 key:object|string|number
      * @param2 values:object

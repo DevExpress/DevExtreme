@@ -9,7 +9,7 @@
 export class EdmLiteral {
     constructor(value: string);
     /**
-     * @docid EdmLiteralMethods.valueOf
+     * @docid EdmLiteral.valueOf
      * @publicName valueOf()
      * @return string
      * @prevFileNamespace DevExpress.data

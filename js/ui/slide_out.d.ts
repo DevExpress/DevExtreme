@@ -135,7 +135,7 @@ export default class dxSlideOut extends CollectionWidget {
     constructor(element: Element, options?: dxSlideOutOptions)
     constructor(element: JQuery, options?: dxSlideOutOptions)
     /**
-     * @docid dxSlideOutMethods.hide
+     * @docid dxSlideOut.hide
      * @publicName hideMenu()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -143,7 +143,7 @@ export default class dxSlideOut extends CollectionWidget {
      */
     hideMenu(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxSlideOutMethods.show
+     * @docid dxSlideOut.show
      * @publicName showMenu()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -151,7 +151,7 @@ export default class dxSlideOut extends CollectionWidget {
      */
     showMenu(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxSlideOutMethods.toggleMenuVisibility
+     * @docid dxSlideOut.toggleMenuVisibility
      * @publicName toggleMenuVisibility(showing)
      * @param1 showing:boolean
      * @return Promise<void>

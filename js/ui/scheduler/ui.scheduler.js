@@ -2513,7 +2513,7 @@ class Scheduler extends Widget {
     }
 
     /**
-        * @name dxSchedulerMethods.registerKeyHandler
+        * @name dxScheduler.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
         * @hidden
         */

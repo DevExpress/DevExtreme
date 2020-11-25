@@ -6,7 +6,7 @@
 */
 const polarSeriesObject = {
     /**
-    * @name polarChartSeriesObjectFields.axis
+    * @name polarChartSeriesObject.axis
     * @type string
     * @hidden
     */
@@ -21,7 +21,7 @@ const polarSeriesObject = {
 */
 const polarPointObject = {
     /**
-    * @name polarPointObjectMethods.getBoundingRect
+    * @name polarPointObject.getBoundingRect
     * @publicName getBoundingRect()
     * @hidden
     */

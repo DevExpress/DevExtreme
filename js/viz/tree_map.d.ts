@@ -260,21 +260,21 @@ export default class dxTreeMap extends BaseWidget {
     constructor(element: Element, options?: dxTreeMapOptions)
     constructor(element: JQuery, options?: dxTreeMapOptions)
     /**
-     * @docid dxTreeMapMethods.clearSelection
+     * @docid dxTreeMap.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid dxTreeMapMethods.drillUp
+     * @docid dxTreeMap.drillUp
      * @publicName drillUp()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     drillUp(): void;
     /**
-     * @docid dxTreeMapMethods.getCurrentNode
+     * @docid dxTreeMap.getCurrentNode
      * @publicName getCurrentNode()
      * @return dxTreeMapNode
      * @prevFileNamespace DevExpress.viz
@@ -283,7 +283,7 @@ export default class dxTreeMap extends BaseWidget {
     getCurrentNode(): dxTreeMapNode;
     getDataSource(): DataSource;
     /**
-     * @docid dxTreeMapMethods.getRootNode
+     * @docid dxTreeMap.getRootNode
      * @publicName getRootNode()
      * @return dxTreeMapNode
      * @prevFileNamespace DevExpress.viz
@@ -291,14 +291,14 @@ export default class dxTreeMap extends BaseWidget {
      */
     getRootNode(): dxTreeMapNode;
     /**
-     * @docid dxTreeMapMethods.hideTooltip
+     * @docid dxTreeMap.hideTooltip
      * @publicName hideTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     hideTooltip(): void;
     /**
-     * @docid dxTreeMapMethods.resetDrillDown
+     * @docid dxTreeMap.resetDrillDown
      * @publicName resetDrillDown()
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -308,7 +308,7 @@ export default class dxTreeMap extends BaseWidget {
 
 export interface dxTreeMapNode {
     /**
-     * @docid dxTreeMapNodeMethods.customize
+     * @docid dxTreeMapNode.customize
      * @publicName customize(options)
      * @param1 options:object
      * @prevFileNamespace DevExpress.viz
@@ -316,20 +316,20 @@ export interface dxTreeMapNode {
      */
     customize(options: any): void;
     /**
-     * @docid dxTreeMapNodeFields.data
+     * @docid dxTreeMapNode.data
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     data?: any;
     /**
-     * @docid dxTreeMapNodeMethods.drillDown
+     * @docid dxTreeMapNode.drillDown
      * @publicName drillDown()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     drillDown(): void;
     /**
-     * @docid dxTreeMapNodeMethods.getAllChildren
+     * @docid dxTreeMapNode.getAllChildren
      * @publicName getAllChildren()
      * @return Array<dxTreeMapNode>
      * @prevFileNamespace DevExpress.viz
@@ -337,7 +337,7 @@ export interface dxTreeMapNode {
      */
     getAllChildren(): Array<dxTreeMapNode>;
     /**
-     * @docid dxTreeMapNodeMethods.getAllNodes
+     * @docid dxTreeMapNode.getAllNodes
      * @publicName getAllNodes()
      * @return Array<dxTreeMapNode>
      * @prevFileNamespace DevExpress.viz
@@ -345,7 +345,7 @@ export interface dxTreeMapNode {
      */
     getAllNodes(): Array<dxTreeMapNode>;
     /**
-     * @docid dxTreeMapNodeMethods.getChild
+     * @docid dxTreeMapNode.getChild
      * @publicName getChild(index)
      * @param1 index:number
      * @return dxTreeMapNode
@@ -354,7 +354,7 @@ export interface dxTreeMapNode {
      */
     getChild(index: number): dxTreeMapNode;
     /**
-     * @docid dxTreeMapNodeMethods.getChildrenCount
+     * @docid dxTreeMapNode.getChildrenCount
      * @publicName getChildrenCount()
      * @return number
      * @prevFileNamespace DevExpress.viz
@@ -362,7 +362,7 @@ export interface dxTreeMapNode {
      */
     getChildrenCount(): number;
     /**
-     * @docid dxTreeMapNodeMethods.getParent
+     * @docid dxTreeMapNode.getParent
      * @publicName getParent()
      * @return dxTreeMapNode
      * @prevFileNamespace DevExpress.viz
@@ -370,13 +370,13 @@ export interface dxTreeMapNode {
      */
     getParent(): dxTreeMapNode;
     /**
-     * @docid dxTreeMapNodeFields.index
+     * @docid dxTreeMapNode.index
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     index?: number;
     /**
-     * @docid dxTreeMapNodeMethods.isActive
+     * @docid dxTreeMapNode.isActive
      * @publicName isActive()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -384,7 +384,7 @@ export interface dxTreeMapNode {
      */
     isActive(): boolean;
     /**
-     * @docid dxTreeMapNodeMethods.isHovered
+     * @docid dxTreeMapNode.isHovered
      * @publicName isHovered()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -392,7 +392,7 @@ export interface dxTreeMapNode {
      */
     isHovered(): boolean;
     /**
-     * @docid dxTreeMapNodeMethods.isleaf
+     * @docid dxTreeMapNode.isleaf
      * @publicName isLeaf()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -400,7 +400,7 @@ export interface dxTreeMapNode {
      */
     isLeaf(): boolean;
     /**
-     * @docid dxTreeMapNodeMethods.isSelected
+     * @docid dxTreeMapNode.isSelected
      * @publicName isSelected()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -408,7 +408,7 @@ export interface dxTreeMapNode {
      */
     isSelected(): boolean;
     /**
-     * @docid dxTreeMapNodeMethods.label
+     * @docid dxTreeMapNode.label
      * @publicName label()
      * @return string
      * @prevFileNamespace DevExpress.viz
@@ -416,7 +416,7 @@ export interface dxTreeMapNode {
      */
     label(): string;
     /**
-     * @docid dxTreeMapNodeMethods.label
+     * @docid dxTreeMapNode.label
      * @publicName label(label)
      * @param1 label:string
      * @prevFileNamespace DevExpress.viz
@@ -424,20 +424,20 @@ export interface dxTreeMapNode {
      */
     label(label: string): void;
     /**
-     * @docid dxTreeMapNodeFields.level
+     * @docid dxTreeMapNode.level
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     level?: number;
     /**
-     * @docid dxTreeMapNodeMethods.resetCustomization
+     * @docid dxTreeMapNode.resetCustomization
      * @publicName resetCustomization()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     resetCustomization(): void;
     /**
-     * @docid dxTreeMapNodeMethods.select
+     * @docid dxTreeMapNode.select
      * @publicName select(state)
      * @param1 state:boolean
      * @prevFileNamespace DevExpress.viz
@@ -445,14 +445,14 @@ export interface dxTreeMapNode {
      */
     select(state: boolean): void;
     /**
-     * @docid dxTreeMapNodeMethods.showTooltip
+     * @docid dxTreeMapNode.showTooltip
      * @publicName showTooltip()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     showTooltip(): void;
     /**
-     * @docid dxTreeMapNodeMethods.value
+     * @docid dxTreeMapNode.value
      * @publicName value()
      * @return number
      * @prevFileNamespace DevExpress.viz

@@ -346,7 +346,7 @@ export class dxBaseGauge extends BaseWidget {
     constructor(element: Element, options?: BaseGaugeOptions)
     constructor(element: JQuery, options?: BaseGaugeOptions)
     /**
-     * @docid BaseGaugeMethods.subvalues
+     * @docid BaseGauge.subvalues
      * @publicName subvalues()
      * @return Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -354,7 +354,7 @@ export class dxBaseGauge extends BaseWidget {
      */
     subvalues(): Array<number>;
     /**
-     * @docid BaseGaugeMethods.subvalues
+     * @docid BaseGauge.subvalues
      * @publicName subvalues(subvalues)
      * @param1 subvalues:Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -362,7 +362,7 @@ export class dxBaseGauge extends BaseWidget {
      */
     subvalues(subvalues: Array<number>): void;
     /**
-     * @docid BaseGaugeMethods.value
+     * @docid BaseGauge.value
      * @publicName value()
      * @return number
      * @prevFileNamespace DevExpress.viz
@@ -370,7 +370,7 @@ export class dxBaseGauge extends BaseWidget {
      */
     value(): number;
     /**
-     * @docid BaseGaugeMethods.value
+     * @docid BaseGauge.value
      * @publicName value(value)
      * @param1 value:number
      * @prevFileNamespace DevExpress.viz

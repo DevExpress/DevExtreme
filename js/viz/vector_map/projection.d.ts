@@ -28,7 +28,7 @@ type Projection = (data: VectorMapProjectionConfig) => any;
 
 type ProjectionMethods = {
     /**
-     * @docid viz.map.projectionmethods.add
+     * @docid viz.map.projection.add
      * @publicName add(name, projection)
      * @param1 name:string
      * @param2 projection:VectorMapProjectionConfig|object
@@ -40,7 +40,7 @@ type ProjectionMethods = {
     add(name: string, projection: VectorMapProjectionConfig | any): void;
 
     /**
-     * @docid viz.map.projectionmethods.get
+     * @docid viz.map.projection.get
      * @publicName get(name)
      * @param1 name:Enums.VectorMapProjection|string
      * @return object
@@ -53,7 +53,7 @@ type ProjectionMethods = {
 }
 
 /**
- * @docid viz.mapmethods.projection
+ * @docid viz.map.projection
  * @publicName projection(data)
  * @param1 data:VectorMapProjectionConfig
  * @return object
