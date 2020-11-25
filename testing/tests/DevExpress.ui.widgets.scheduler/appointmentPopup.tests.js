@@ -6,7 +6,6 @@ import { SchedulerTestWrapper, initTestMarkup, createWrapper, isDesktopEnvironme
 import $ from 'jquery';
 import devices from 'core/devices';
 import SelectBox from 'ui/select_box';
-// import SchedulerTimezoneEditor from 'ui/scheduler/timezones/ui.scheduler.timezone_editor';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import resizeCallbacks from 'core/utils/resize_callbacks';
