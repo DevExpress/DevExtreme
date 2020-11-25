@@ -63,9 +63,14 @@ export default CollectionWidget.inherit({
     },
 
     _isItemEquals: function(item1, item2) {
-        if(item1 && item1[PRIVATE_KEY_FIELD]) {
+        const privateKey = item1 && item1[PRIVATE_KEY_FIELD];
+        if(privateKey) {
+            if(!this.key() && this._selection.isItemSelected(privateKey)) {
+                return false;
+            }
             item1 = item1.data;
         }
+
         try {
             return JSON.stringify(item1) === JSON.stringify(item2);
         } catch(e) {
@@ -81,7 +86,7 @@ export default CollectionWidget.inherit({
                 }
                 return this.keyOf(data);
             };
-            const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemEquals);
+            const result = findChanges(this._itemsCache, this._editStrategy.itemsGetter(), keyOf, this._isItemEquals.bind(this));
             if(result && this._itemsCache.length) {
                 this._modifyByChanges(result, true);
                 this._renderEmptyMessage();
