@@ -136,6 +136,7 @@ $pulldown-padding: 15px;
 
 .dx-scrollview-content {
   position: static;
+  min-height: 100%;
 
   @include dx-clearfix-mixin();
 }
