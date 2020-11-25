@@ -1,39 +1,50 @@
 import {
-  Component, ComponentBindings, JSXComponent, OneWay, Slot, Fragment,
+  Component, ComponentBindings, JSXComponent, OneWay, Slot,
 } from 'devextreme-generator/component_declaration/common';
-import { Row } from './row';
 import { addHeightToStyle } from '../utils';
+import { VirtualRow } from './virtual-row';
 
-export const viewFunction = (viewModel: Table): JSX.Element => (
-  <table
+export const viewFunction = (viewModel: Table): JSX.Element => {
+  const {
+    isVirtual,
+    topVirtualRowHeight,
+    bottomVirtualRowHeight,
+    virtualCellsCount,
+    className,
+    children,
+  } = viewModel.props;
+  const hasTopVirtualRow = isVirtual && !!topVirtualRowHeight;
+  const hasBottomVirtualRow = isVirtual && !!bottomVirtualRowHeight;
+
+  return (
+    <table
         // eslint-disable-next-line react/jsx-props-no-spreading
-    {...viewModel.restAttributes}
-    className={viewModel.props.className}
-    style={viewModel.style}
-  >
-    <tbody>
-      <Fragment>
-        {
-        viewModel.props.isVirtual
-          && <Row isVirtual height={viewModel.props.topVirtualRowHeight} />
-        }
-        {viewModel.props.children}
-        {
-        viewModel.props.isVirtual
-          && <Row isVirtual height={viewModel.props.bottomVirtualRowHeight} />
-        }
-      </Fragment>
-    </tbody>
-  </table>
-);
+      {...viewModel.restAttributes}
+      className={className}
+      style={viewModel.style}
+    >
+      <tbody>
+        {hasTopVirtualRow && (
+          <VirtualRow height={topVirtualRowHeight} cellsCount={virtualCellsCount} />
+        )}
+        {children}
+        {hasBottomVirtualRow && (
+          <VirtualRow height={bottomVirtualRowHeight} cellsCount={virtualCellsCount} />
+        )}
+      </tbody>
+    </table>
+  );
+};
 
 @ComponentBindings()
 export class TableProps {
   @OneWay() className?: string = '';
 
-  @OneWay() topVirtualRowHeight?: number = 0;
+  @OneWay() topVirtualRowHeight = 0;
 
-  @OneWay() bottomVirtualRowHeight?: number = 0;
+  @OneWay() bottomVirtualRowHeight = 0;
+
+  @OneWay() virtualCellsCount = 0;
 
   @OneWay() isVirtual?: boolean = false;
 

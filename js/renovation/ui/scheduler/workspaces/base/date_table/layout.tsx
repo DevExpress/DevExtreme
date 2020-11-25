@@ -12,6 +12,7 @@ export const viewFunction = (viewModel: DateTableLayoutBase): JSX.Element => (
     isVirtual={viewModel.isVirtual}
     topVirtualRowHeight={viewModel.topVirtualRowHeight}
     bottomVirtualRowHeight={viewModel.bottomVirtualRowHeight}
+    virtualCellsCount={viewModel.props.viewData!.groupedData[0].dateTable[0].length}
     className={viewModel.classes}
   >
     <DateTableBody

@@ -21,7 +21,7 @@ export const addHeightToStyle = (
 
   return {
     ...nextStyle,
-    height: height ? `${height}px` : nextStyle.height,
+    height: height !== undefined ? `${height}px` : nextStyle.height,
   };
 };
 
