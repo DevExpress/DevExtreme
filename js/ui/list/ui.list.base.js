@@ -195,6 +195,8 @@ export const ListBase = CollectionWidget.inherit({
 
             _swipeEnabled: true,
 
+            _revertPageOnEmptyLoad: false,
+
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
             /**
@@ -531,7 +533,21 @@ export const ListBase = CollectionWidget.inherit({
 
         if(isElementVisible && !this._scrollViewIsFull() && !this._isDataSourceLoading() && !this._isLastPage()) {
             clearTimeout(this._loadNextPageTimer);
-            this._loadNextPageTimer = setTimeout(this._loadNextPage.bind(this));
+            this._loadNextPageTimer = setTimeout(() => {
+                this._loadNextPage().done(this._setPreviousPageIfNewIsEmpty.bind(this));
+            });
+        }
+    },
+
+    _setPreviousPageIfNewIsEmpty: function(result) {
+        if(this.option('_revertPageOnEmptyLoad')) {
+            const dataSource = this.getDataSource();
+            const pageIndex = dataSource?.pageIndex();
+
+            if(result?.length === 0 && pageIndex > 0) {
+                this._fireContentReadyAction();
+                dataSource.pageIndex(pageIndex - 1);
+            }
         }
     },
 
@@ -912,6 +928,7 @@ export const ListBase = CollectionWidget.inherit({
                 this._invalidate();
                 break;
             case '_swipeEnabled':
+            case '_revertPageOnEmptyLoad':
                 break;
             case '_listAttributes':
                 break;
