@@ -16,6 +16,9 @@ module.exports = {
         '!./js/renovation/**/*.j.tsx',
         '!./js/renovation/**/__tests__/**/*',
     ],
+    coveragePathIgnorePatterns: [
+        './js/renovation/ui/scrollable.tsx',
+    ],
     coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {
         './js/renovation/**/*.tsx': {

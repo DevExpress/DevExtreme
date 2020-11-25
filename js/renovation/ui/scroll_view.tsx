@@ -23,7 +23,19 @@ const DIRECTION_VERTICAL = 'vertical';
 const DIRECTION_HORIZONTAL = 'horizontal';
 const DIRECTION_BOTH = 'both';
 const SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
+const SCROLLABLE_SCROLLBARS_HIDDEN = 'dx-scrollable-scrollbars-hidden';
 
+const getCssClasses = (model: ScrollViewPropsType): string => {
+  const { direction, showScrollbar } = model;
+
+  const classesMap = {
+    'dx-scrollview dx-scrollable dx-scrollable-native dx-scrollable-renovated dx-scrollable-native-generic': true,
+    [`dx-scrollable-${direction}`]: true,
+    [SCROLLABLE_SCROLLBARS_HIDDEN]: !showScrollbar,
+  };
+
+  return combineClasses(classesMap);
+};
 export interface ScrollViewLocation {
   top: number;
   left: number;
@@ -103,11 +115,13 @@ export const viewFunction = ({
 export class ScrollViewProps {
   @Slot() children?: JSX.Element | (JSX.Element | undefined | false | null)[];
 
-  @OneWay() direction: ScrollViewDirection = DIRECTION_VERTICAL;
+  @OneWay() direction?: ScrollViewDirection = DIRECTION_VERTICAL;
+
+  @OneWay() showScrollbar?: boolean = true;
 
   @Event() onScroll?: EventCallback<ScrollEventArgs>;
 }
-type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
+export type ScrollViewPropsType = ScrollViewProps & Pick<BaseWidgetProps, 'rtlEnabled' | 'disabled' | 'width' | 'height'>;
 
 @Component({
   jQuery: { register: true },
@@ -148,7 +162,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
 
   @Method()
   scrollToElement(element: HTMLElement, offset?: Partial<ScrollOffset>): void {
-    if (element.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
+    if (element?.closest(`.${SCROLLABLE_CONTENT_CLASS}`)) {
       const scrollOffset = {
         top: 0,
         left: 0,
@@ -254,13 +268,7 @@ export class ScrollView extends JSXComponent<ScrollViewPropsType>() {
   }
 
   get cssClasses(): string {
-    const { direction } = this.props;
-
-    const classesMap = {
-      'dx-scrollview dx-scrollable dx-scrollable-native dx-scrollable-renovated dx-scrollable-native-generic': true,
-      [`dx-scrollable-${direction}`]: true,
-    };
-    return combineClasses(classesMap);
+    return getCssClasses(this.props);
   }
 
   private getScrollBarSize(dimension: string): number {
