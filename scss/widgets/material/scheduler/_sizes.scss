@@ -21,71 +21,71 @@ $material-tooltip-marker-dimension: null !default;
 $material-scheduler-appointment-tooltip-title-margin-top: null !default;
 $material-scheduler-appointment-tooltip-remove-padding-top: null !default;
 
-$scheduler-left-column-width: 65px;
-$material-scheduler-navigator-border-radius: $button-border-radius;
-$material-scheduler-navigation-buttons-padding: 6px;
-$material-scheduler-appointment-month-text-size: 12px;
-$material-scheduler-appointment-title-text-size: 12px;
-$material-scheduler-appointment-date-text-size: 10px;
-$material-scheduler-workspace-info-text-size: 16px;
-$material-scheduler-all-day-title-font-size: 12px;
-$material-scheduler-time-panel-font-size: 12px;
-$material-scheduler-header-panel-week-font-size: 12px;
-$material-scheduler-header-panel-margin: 14px;
-$material-scheduler-group-header-font-size: 14px;
-$material-scheduler-group-header-table-cell-width: 100px;
-$material-scheduler-appointment-transparent-left-border: 1px solid transparent;
-$material-scheduler-appointment-transparent-right-border: 1px solid transparent;
-$material-scheduler-appointment-tooltip-width: 300px;
-$material-scheduler-workspace-month-header-height: 22px;
-$material-scheduler-workspace-month-timeline--time-height: 34px;
+$scheduler-left-column-width: 65px !default;
+$material-scheduler-navigator-border-radius: $button-border-radius !default;
+$material-scheduler-navigation-buttons-padding: 6px !default;
+$material-scheduler-appointment-month-text-size: 12px !default;
+$material-scheduler-appointment-title-text-size: 12px !default;
+$material-scheduler-appointment-date-text-size: 10px !default;
+$material-scheduler-workspace-info-text-size: 16px !default;
+$material-scheduler-all-day-title-font-size: 12px !default;
+$material-scheduler-time-panel-font-size: 12px !default;
+$material-scheduler-header-panel-week-font-size: 12px !default;
+$material-scheduler-header-panel-margin: 14px !default;
+$material-scheduler-group-header-font-size: 14px !default;
+$material-scheduler-group-header-table-cell-width: 100px !default;
+$material-scheduler-appointment-transparent-left-border: 1px solid transparent !default;
+$material-scheduler-appointment-transparent-right-border: 1px solid transparent !default;
+$material-scheduler-appointment-tooltip-width: 300px !default;
+$material-scheduler-workspace-month-header-height: 22px !default;
+$material-scheduler-workspace-month-timeline--time-height: 34px !default;
 
 @if $size == "default" {
-  $material-scheduler-workspace-date-table-cell-height: 38px;
+  $material-scheduler-workspace-date-table-cell-height: 38px !default;
 
-  $material-scheduler-header-height: 64px;
-  $material-scheduler-navigator-height: 36px;
-  $material-scheduler-header-panel-day-font-size: 30px;
+  $material-scheduler-header-height: 64px !default;
+  $material-scheduler-navigator-height: 36px !default;
+  $material-scheduler-header-panel-day-font-size: 30px !default;
 
-  $material-scheduler-appointment-tooltip-title-font-size: 18px;
-  $material-scheduler-appointment-tooltip-date-font-size: 14px;
-  $material-scheduler-workspace-month-cell-left-offset: 8px;
+  $material-scheduler-appointment-tooltip-title-font-size: 18px !default;
+  $material-scheduler-appointment-tooltip-date-font-size: 14px !default;
+  $material-scheduler-workspace-month-cell-left-offset: 8px !default;
 
 
-  $material-scheduler-header-panel-table-cell-height: 56px;
-  $material-scheduler-appointment-content-padding: 5px 7px;
-  $material-scheduler-dropdown-appointment-margin-top: 7px;
-  $material-scheduler-dropdown-button-height: 22px;
-  $material-scheduler-dropdown-button-padding: 4px;
-  $material-scheduler-dropdown-day-margin: 5px;
+  $material-scheduler-header-panel-table-cell-height: 56px !default;
+  $material-scheduler-appointment-content-padding: 5px 7px !default;
+  $material-scheduler-dropdown-appointment-margin-top: 7px !default;
+  $material-scheduler-dropdown-button-height: 22px !default;
+  $material-scheduler-dropdown-button-padding: 4px !default;
+  $material-scheduler-dropdown-day-margin: 5px !default;
 
-  $material-scheduler-appointment-tooltip-content-margin-left: 10px;
-  $material-tooltip-marker-dimension: 24px;
-  $material-scheduler-appointment-tooltip-title-margin-top: 4px;
-  $material-scheduler-appointment-tooltip-remove-padding-top: 1px;
+  $material-scheduler-appointment-tooltip-content-margin-left: 10px !default;
+  $material-tooltip-marker-dimension: 24px !default;
+  $material-scheduler-appointment-tooltip-title-margin-top: 4px !default;
+  $material-scheduler-appointment-tooltip-remove-padding-top: 1px !default;
 }
 
 @else if $size == "compact" {
-  $material-scheduler-workspace-date-table-cell-height: 28px;
+  $material-scheduler-workspace-date-table-cell-height: 28px !default;
 
-  $material-scheduler-header-height: 48px;
-  $material-scheduler-navigator-height: 28px;
-  $material-scheduler-header-panel-day-font-size: 20px;
+  $material-scheduler-header-height: 48px !default;
+  $material-scheduler-navigator-height: 28px !default;
+  $material-scheduler-header-panel-day-font-size: 20px !default;
 
-  $material-scheduler-appointment-tooltip-title-font-size: 14px;
-  $material-scheduler-appointment-tooltip-date-font-size: 11px;
-  $material-scheduler-workspace-month-cell-left-offset: 4px;
+  $material-scheduler-appointment-tooltip-title-font-size: 14px !default;
+  $material-scheduler-appointment-tooltip-date-font-size: 11px !default;
+  $material-scheduler-workspace-month-cell-left-offset: 4px !default;
 
 
-  $material-scheduler-header-panel-table-cell-height: 40px;
-  $material-scheduler-appointment-content-padding: 2px 4px;
-  $material-scheduler-dropdown-appointment-margin-top: 3px;
-  $material-scheduler-dropdown-button-height: 18px;
-  $material-scheduler-dropdown-button-padding: 2px;
-  $material-scheduler-dropdown-day-margin: 2px;
+  $material-scheduler-header-panel-table-cell-height: 40px !default;
+  $material-scheduler-appointment-content-padding: 2px 4px !default;
+  $material-scheduler-dropdown-appointment-margin-top: 3px !default;
+  $material-scheduler-dropdown-button-height: 18px !default;
+  $material-scheduler-dropdown-button-padding: 2px !default;
+  $material-scheduler-dropdown-day-margin: 2px !default;
 
-  $material-scheduler-appointment-tooltip-content-margin-left: 8px;
-  $material-tooltip-marker-dimension: 18px;
-  $material-scheduler-appointment-tooltip-title-margin-top: 3px;
-  $material-scheduler-appointment-tooltip-remove-padding-top: 2px;
+  $material-scheduler-appointment-tooltip-content-margin-left: 8px !default;
+  $material-tooltip-marker-dimension: 18px !default;
+  $material-scheduler-appointment-tooltip-title-margin-top: 3px !default;
+  $material-scheduler-appointment-tooltip-remove-padding-top: 2px !default;
 }

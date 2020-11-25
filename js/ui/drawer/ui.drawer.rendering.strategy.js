@@ -143,7 +143,8 @@ class DrawerStrategy {
         return false;
     }
 
-    onViewContentWrapperCreated() {}
+    onPanelContentRendered() {
+    }
 }
 
 export default DrawerStrategy;

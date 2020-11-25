@@ -63,6 +63,17 @@ function isNotEmptyAxisBusinessRange(axis) {
     return !axis.getTranslator().getBusinessRange().isEmpty();
 }
 
+function axisZoom(axis, onlyAxisToNotify, getRange, getParameters, actionField, scale, e) {
+    const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
+    const range = getRange(axis);
+
+    const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome(actionField, scale, range);
+
+    const result = axis.handleZooming(stopInteraction ? null : correctedRange, getParameters(silent), e, actionField);
+    stopInteraction && axis.handleZoomEnd();
+    return { stopInteraction, result };
+}
+
 export default {
     name: 'zoom_and_pan',
     init: function() {
@@ -110,20 +121,20 @@ export default {
                     const translate = -offsetCalc(e, actionData, coordField, scale);
                     zoom = extend(true, zoom, axis.getTranslator().zoom(translate, scale, axis.getZoomBounds()));
                     const range = axis.adjustRange(getVizRangeObject([zoom.min, zoom.max]));
-                    const isMinZoom = axis.isZoomingLowerLimitOvercome(actionField, scale, range);
+                    const { stopInteraction, correctedRange } = axis.checkZoomingLowerLimitOvercome(actionField, scale, range);
 
                     if(!isDefined(viewport) ||
-                        viewport.startValue.valueOf() !== range.startValue.valueOf() ||
-                        viewport.endValue.valueOf() !== range.endValue.valueOf()) {
-                        axis.handleZooming(isMinZoom ? null : range, { start: true, end: true }, e, actionField);
-                        if(!isMinZoom) {
+                        viewport.startValue.valueOf() !== correctedRange.startValue.valueOf() ||
+                        viewport.endValue.valueOf() !== correctedRange.endValue.valueOf()) {
+                        axis.handleZooming(stopInteraction ? null : correctedRange, { start: true, end: true }, e, actionField);
+                        if(!stopInteraction) {
                             zoom.zoomed = true;
                             zoom.deltaTranslate = translate - zoom.translate;
                         }
                     } else if(e.pointerType === 'touch' && options.type === 'discrete') {
                         const isMinPosition = axis.isExtremePosition(false);
                         const isMaxPosition = axis.isExtremePosition(true);
-                        const zoomInEnabled = scale > 1 && !isMinZoom;
+                        const zoomInEnabled = scale > 1 && !stopInteraction;
                         const zoomOutEnabled = scale < 1 && (!isMinPosition || !isMaxPosition);
                         const panningEnabled = scale === 1 && !(isMinPosition && (translate < 0 && !options.inverted || translate > 0 && options.inverted) ||
                             isMaxPosition && (translate > 0 && !options.inverted || translate < 0 && options.inverted));
@@ -170,17 +181,18 @@ export default {
         }
 
         function finishAxesViewportChanging(zoomAndPan, actionField, e, offsetCalc) {
-            function zoomAxes(axes, criteria, coordField, e, actionData, onlyAxisToNotify) {
+            function zoomAxes(axes, criteria, coordField, actionData, onlyAxisToNotify) {
                 let zoomStarted = false;
-                criteria && axes.forEach(axis => {
-                    const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
-                    const scale = e.scale || 1;
+                const scale = e.scale || 1;
+                const getRange = (axis) => {
                     const zoom = axis.getTranslator().zoom(-offsetCalc(e, actionData, coordField, scale), scale, axis.getZoomBounds());
-                    const range = { startValue: zoom.min, endValue: zoom.max };
-                    const isMinZoom = axis.isZoomingLowerLimitOvercome(actionField, scale, range);
-
-                    axis.handleZooming(isMinZoom ? null : range, { start: true, end: silent }, e, actionField);
-                    isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
+                    return { startValue: zoom.min, endValue: zoom.max };
+                };
+                const getParameters = (silent) => {
+                    return { start: true, end: silent };
+                };
+                criteria && axes.forEach(axis => {
+                    zoomStarted = !axisZoom(axis, onlyAxisToNotify, getRange, getParameters, actionField, scale, e).stopInteraction;
                 });
                 return zoomStarted;
             }
@@ -191,8 +203,8 @@ export default {
             let zoomStarted = true;
 
             if(actionData.fallback) {
-                zoomStarted &= zoomAxes(chart._argumentAxes, options.argumentAxis[actionField], rotated ? 'y' : 'x', e, actionData, chart.getArgumentAxis());
-                zoomStarted |= zoomAxes(actionData.valueAxes, options.valueAxis[actionField], rotated ? 'x' : 'y', e, actionData);
+                zoomStarted &= zoomAxes(chart._argumentAxes, options.argumentAxis[actionField], rotated ? 'y' : 'x', actionData, chart.getArgumentAxis());
+                zoomStarted |= zoomAxes(actionData.valueAxes, options.valueAxis[actionField], rotated ? 'x' : 'y', actionData);
             } else {
                 let axes = [];
                 if(options.argumentAxis[actionField]) {
@@ -381,18 +393,23 @@ export default {
                         const curCoord = curCoords[coordField];
                         const startCoord = startCoords[coordField];
                         let zoomStarted = false;
+                        const getParameters = (silent) => {
+                            return { start: !!silent, end: !!silent };
+                        };
                         if(criteria && _abs(curCoord - startCoord) > MIN_DRAG_DELTA) {
                             axes.some(axis => {
                                 const tr = axis.getTranslator();
                                 if(tr.getBusinessRange().isEmpty()) {
                                     return;
                                 }
-                                const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
-                                const range = [tr.from(startCoord), tr.from(curCoord)];
-                                const isMinZoom = axis.isZoomingLowerLimitOvercome(actionData.action, tr.getMinScale(true), range);
-
-                                const result = axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, actionData.action);
-                                isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
+                                const getRange = () => {
+                                    return [tr.from(startCoord), tr.from(curCoord)];
+                                };
+                                const {
+                                    stopInteraction,
+                                    result
+                                } = axisZoom(axis, onlyAxisToNotify, getRange, getParameters, actionData.action, tr.getMinScale(true), e);
+                                zoomStarted = !stopInteraction;
                                 return onlyAxisToNotify && result.isPrevented;
                             });
                         }
@@ -464,23 +481,28 @@ export default {
                         function zoomAxes(axes, coord, delta, onlyAxisToNotify) {
                             axes = sortAxes(axes, onlyAxisToNotify);
                             let zoomStarted = false;
+                            const getParameters = (silent) => {
+                                return { start: !!silent, end: !!silent };
+                            };
                             axes.some(axis => {
                                 const translator = axis.getTranslator();
                                 if(translator.getBusinessRange().isEmpty()) {
                                     return;
                                 }
-                                const silent = onlyAxisToNotify && (axis !== onlyAxisToNotify);
                                 const scale = translator.getMinScale(delta > 0);
-                                const zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds());
-                                const range = { startValue: zoom.min, endValue: zoom.max };
-                                const isMinZoom = axis.isZoomingLowerLimitOvercome('zoom', scale, range);
-
-                                const result = axis.handleZooming(isMinZoom ? null : range, { start: !!silent, end: !!silent }, e, 'zoom');
-                                isMinZoom ? axis.handleZoomEnd() : (zoomStarted = true);
+                                const getRange = () => {
+                                    const zoom = translator.zoom(-(coord - coord * scale), scale, axis.getZoomBounds());
+                                    return { startValue: zoom.min, endValue: zoom.max };
+                                };
+                                const {
+                                    stopInteraction,
+                                    result
+                                } = axisZoom(axis, onlyAxisToNotify, getRange, getParameters, 'zoom', scale, e);
+                                zoomStarted = !stopInteraction;
                                 return onlyAxisToNotify && result.isPrevented;
                             });
 
-                            return !!zoomStarted;
+                            return zoomStarted;
                         }
 
                         const coords = calcCenterForDrag(e);

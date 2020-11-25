@@ -10,19 +10,19 @@ $material-filterbuilder-treeview-toggle-left: null !default;
 $material-filterbuilder-treeview-item-min-heigth: null !default;
 
 @if $size == "default" {
-  $material-filterbuilder-icon-padding: 8px;
-  $material-filterbuilder-filled-editor-padding: 13px 12px;
-  $material-filterbuilder-treeview-item-left-padding: 24px;
-  $material-filterbuilder-treeview-item-padding: 8px $material-filterbuilder-treeview-item-left-padding 10px;
-  $material-filterbuilder-treeview-toggle-left: 16px;
-  $material-filterbuilder-treeview-item-min-heigth: 36px;
+  $material-filterbuilder-icon-padding: 8px !default;
+  $material-filterbuilder-filled-editor-padding: 13px 12px !default;
+  $material-filterbuilder-treeview-item-left-padding: 24px !default;
+  $material-filterbuilder-treeview-item-padding: 8px $material-filterbuilder-treeview-item-left-padding 10px !default;
+  $material-filterbuilder-treeview-toggle-left: 16px !default;
+  $material-filterbuilder-treeview-item-min-heigth: 36px !default;
 }
 
 @else if $size == "compact" {
-  $material-filterbuilder-icon-padding: 4px;
-  $material-filterbuilder-filled-editor-padding: 8px 8px;
-  $material-filterbuilder-treeview-item-left-padding: 8px;
-  $material-filterbuilder-treeview-item-padding: 4px $material-filterbuilder-treeview-item-left-padding 5px;
-  $material-filterbuilder-treeview-toggle-left: 0;
-  $material-filterbuilder-treeview-item-min-heigth: 26px;
+  $material-filterbuilder-icon-padding: 4px !default;
+  $material-filterbuilder-filled-editor-padding: 8px 8px !default;
+  $material-filterbuilder-treeview-item-left-padding: 8px !default;
+  $material-filterbuilder-treeview-item-padding: 4px $material-filterbuilder-treeview-item-left-padding 5px !default;
+  $material-filterbuilder-treeview-toggle-left: 0 !default;
+  $material-filterbuilder-treeview-item-min-heigth: 26px !default;
 }

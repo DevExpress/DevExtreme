@@ -233,6 +233,9 @@ const EditorFactoryMixin = (function() {
     function prepareCheckBox(options) {
         options.editorName = 'dxCheckBox';
         options.editorOptions = getResultConfig({
+            elementAttr: {
+                id: options.id
+            },
             value: isDefined(options.value) ? options.value : undefined,
             hoverStateEnabled: !options.readOnly,
             focusStateEnabled: !options.readOnly,

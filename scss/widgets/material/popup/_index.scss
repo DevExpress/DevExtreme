@@ -8,6 +8,7 @@
 @use "../toolbar/mixins" as *;
 @use "../toolbar/sizes" as *;
 @use "../typography/sizes" as *;
+@use "../../base/popup";
 
 // adduse
 @use "../overlay";

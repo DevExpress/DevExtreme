@@ -15,35 +15,35 @@ $filemanager-large-icon-size: null !default;
 $filemanager-large-icon-button-content-padding: null !default;
 $filemanager-progress-box-button-close-margin-top: null !default;
 
-$filemanager-progress-panel-padding-top: 6px;
+$filemanager-progress-panel-padding-top: 6px !default;
 
 @if $size == "default" {
-  $filemanager-toolbar-separator-height: 36px;
-  $filemanager-toolbar-viewmode-width: 150px;
-  $filemanager-toolbar-viewmode-padding: 8px;
-  $filemanager-breadcrumbs-item-padding-top: 5px;
-  $filemanager-breadcrumbs-item-padding-bottom: 8px;
-  $filemanager-details-view-checkbox-column-width: 43px;
-  $filemanager-file-actions-button-size: 21px;
-  $filemanager-file-actions-button-top-bottom-padding: 10px;
-  $filemanager-dirs-tree-icon-margin-bottom: 0;
-  $filemanager-large-icon-size: 22px;
-  $filemanager-large-icon-button-content-padding: 4px;
-  $filemanager-progress-box-button-close-margin-top: 9px;
+  $filemanager-toolbar-separator-height: 36px !default;
+  $filemanager-toolbar-viewmode-width: 150px !default;
+  $filemanager-toolbar-viewmode-padding: 8px !default;
+  $filemanager-breadcrumbs-item-padding-top: 5px !default;
+  $filemanager-breadcrumbs-item-padding-bottom: 8px !default;
+  $filemanager-details-view-checkbox-column-width: 43px !default;
+  $filemanager-file-actions-button-size: 21px !default;
+  $filemanager-file-actions-button-top-bottom-padding: 10px !default;
+  $filemanager-dirs-tree-icon-margin-bottom: 0 !default;
+  $filemanager-large-icon-size: 22px !default;
+  $filemanager-large-icon-button-content-padding: 4px !default;
+  $filemanager-progress-box-button-close-margin-top: 9px !default;
 }
 
 @else if $size == "compact" {
-  $filemanager-toolbar-separator-height: 26px;
-  $filemanager-toolbar-viewmode-width: 130px;
-  $filemanager-toolbar-viewmode-padding: 5px;
-  $filemanager-breadcrumbs-item-padding-top: 3px;
-  $filemanager-breadcrumbs-item-padding-bottom: 7px;
-  $filemanager-details-view-checkbox-column-width: 39px;
-  $filemanager-file-actions-button-size: 18px;
-  $filemanager-file-actions-button-top-bottom-padding: 9px;
-  $filemanager-dirs-tree-icon-margin-bottom: 1px;
-  $filemanager-large-icon-size: 18px;
-  $filemanager-large-icon-button-content-padding: 3px;
-  $filemanager-progress-box-button-close-margin-top: 6px;
+  $filemanager-toolbar-separator-height: 26px !default;
+  $filemanager-toolbar-viewmode-width: 130px !default;
+  $filemanager-toolbar-viewmode-padding: 5px !default;
+  $filemanager-breadcrumbs-item-padding-top: 3px !default;
+  $filemanager-breadcrumbs-item-padding-bottom: 7px !default;
+  $filemanager-details-view-checkbox-column-width: 39px !default;
+  $filemanager-file-actions-button-size: 18px !default;
+  $filemanager-file-actions-button-top-bottom-padding: 9px !default;
+  $filemanager-dirs-tree-icon-margin-bottom: 1px !default;
+  $filemanager-large-icon-size: 18px !default;
+  $filemanager-large-icon-button-content-padding: 3px !default;
+  $filemanager-progress-box-button-close-margin-top: 6px !default;
 }
 

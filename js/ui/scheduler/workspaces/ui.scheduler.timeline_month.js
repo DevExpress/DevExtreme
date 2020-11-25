@@ -38,6 +38,10 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
         return new Date(dateOfLastViewCell.getTime() + this._calculateDayDuration() * toMs('hour'));
     }
 
+    isIndicatorVisible() {
+        return true;
+    }
+
     _getCellCount() {
         const currentDate = this.option('currentDate');
         let cellCount = 0;

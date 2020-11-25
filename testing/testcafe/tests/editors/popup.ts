@@ -58,3 +58,12 @@ test('Popup wrapper left top corner should be the same as the container right le
     .expect(wrapperRect.left)
     .within(containerRect.left - 0.5, containerRect.left + 0.5);
 });
+
+fixture`Popup T946851`
+  .page(url(__dirname, './pages/T946851.html'))
+  .beforeEach(async (t) => { await t.wait(10000); });
+
+test('There should not be any errors when position.of is html (T946851)', async (t) => {
+  await t
+    .expect(true).ok();
+});

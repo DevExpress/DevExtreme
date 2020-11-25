@@ -82,7 +82,7 @@ const FocusController = core.ViewController.inherit((function() {
                     const rowIndex = Math.min(visibleIndex, lastItemIndex);
                     const focusedRowKey = dataController.getKeyByRowIndex(rowIndex);
 
-                    if(focusedRowKey !== undefined && !this.isRowFocused(focusedRowKey)) {
+                    if(isDefined(focusedRowKey) && !this.isRowFocused(focusedRowKey)) {
                         this.option('focusedRowKey', focusedRowKey);
                     }
                 }
@@ -121,14 +121,14 @@ const FocusController = core.ViewController.inherit((function() {
                 const rowIndex = Math.min(index - dataController.getRowIndexOffset(), dataController.items().length - 1);
                 const focusedRowKey = dataController.getKeyByRowIndex(rowIndex);
 
-                if(focusedRowKey !== undefined && !this.isRowFocused(focusedRowKey)) {
+                if(isDefined(focusedRowKey) && !this.isRowFocused(focusedRowKey)) {
                     this.option('focusedRowKey', focusedRowKey);
                 }
             }
         },
 
         _focusRowByKey: function(key) {
-            if(key === undefined) {
+            if(!isDefined(key)) {
                 this._resetFocusedRow();
             } else {
                 this._navigateToRow(key, true);
@@ -136,13 +136,18 @@ const FocusController = core.ViewController.inherit((function() {
         },
 
         _resetFocusedRow: function() {
-            if(this.option('focusedRowKey') === undefined && this.option('focusedRowIndex') < 0) {
+            const focusedRowKey = this.option('focusedRowKey');
+            const isFocusedRowKeyDefined = isDefined(focusedRowKey);
+
+            if(!isFocusedRowKeyDefined && this.option('focusedRowIndex') < 0) {
                 return;
             }
 
             const keyboardController = this.getController('keyboardNavigation');
 
-            this.option('focusedRowKey', undefined);
+            if(isFocusedRowKeyDefined) {
+                this.option('focusedRowKey', undefined);
+            }
             keyboardController.setFocusedRowIndex(-1);
             this.option('focusedRowIndex', -1);
             this.getController('data').updateItems({
@@ -284,7 +289,7 @@ const FocusController = core.ViewController.inherit((function() {
             const keyboardController = this.getController('keyboardNavigation');
             const dataController = this.getController('data');
 
-            if(focusedRowKey !== undefined) {
+            if(isDefined(focusedRowKey)) {
                 const visibleRowIndex = dataController.getRowIndexByKey(focusedRowKey);
                 if(visibleRowIndex >= 0) {
                     if(keyboardController._isVirtualScrolling()) {
@@ -307,7 +312,7 @@ const FocusController = core.ViewController.inherit((function() {
         isRowFocused: function(key) {
             const focusedRowKey = this.option('focusedRowKey');
 
-            if(focusedRowKey !== undefined) {
+            if(isDefined(focusedRowKey)) {
                 return equalByValue(key, this.option('focusedRowKey'));
             }
         },
@@ -552,7 +557,7 @@ export default {
                     const focusedRowKey = this.option('focusedRowKey');
                     const isAutoNavigate = focusController.isAutoNavigateToFocusedRow();
 
-                    if(reload && !fullReload && focusedRowKey !== undefined) {
+                    if(reload && !fullReload && isDefined(focusedRowKey)) {
                         focusController._navigateToRow(focusedRowKey, true).done(function(focusedRowIndex) {
                             if(focusedRowIndex < 0) {
                                 focusController._focusRowByIndex();

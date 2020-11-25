@@ -92,6 +92,14 @@ testModule('Markdown converter', () => {
         assert.equal(markdownConverter.toMarkdown(html), 'Te**st**', 'It converts a HTML to Markdown');
     });
 
+    test('it convert a HTML with empty lines to the Markdown', function(assert) {
+        const markdownConverter = new MarkdownConverter();
+        const html = '<p>Te</p><p><br></p><p><br></p><p>st</p>';
+        const expectedValue = 'Te\n\n<br><br>\n\nst';
+
+        assert.equal(markdownConverter.toMarkdown(html), expectedValue, 'It converts a HTML to Markdown');
+    });
+
     test('it convert a Markdown to the HTML', function(assert) {
         const markdownConverter = new MarkdownConverter();
         const markdown = 'Te**st**';

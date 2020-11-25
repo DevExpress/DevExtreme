@@ -5,14 +5,19 @@ import { isNumeric } from '../../core/utils/type';
 const WINDOW_HEIGHT_PERCENT = 0.9;
 
 export const getElementMaxHeightByWindow = ($element, startLocation) => {
-    const window = getWindow();
-
+    const $window = $(getWindow());
+    const { top: elementOffset } = $element.offset();
     let actualOffset;
+
     if(isNumeric(startLocation)) {
-        actualOffset = $(window).innerHeight() - startLocation + $(window).scrollTop();
+        if(startLocation < elementOffset) {
+            return elementOffset - startLocation;
+        } else {
+            actualOffset = $window.innerHeight() - startLocation + $window.scrollTop();
+        }
     } else {
-        const offsetTop = $element.offset().top - $(window).scrollTop();
-        const offsetBottom = $(window).innerHeight() - offsetTop - $element.outerHeight();
+        const offsetTop = elementOffset - $window.scrollTop();
+        const offsetBottom = $window.innerHeight() - offsetTop - $element.outerHeight();
         actualOffset = Math.max(offsetTop, offsetBottom);
     }
 

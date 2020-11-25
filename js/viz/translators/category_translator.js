@@ -153,5 +153,18 @@ export default {
 
     _toValue: getValue,
 
-    isValueProlonged: true
+    isValueProlonged: true,
+
+    getRangeByMinZoomValue(minZoom, visualRange) {
+        const categories = this._categories;
+        const minVisibleIndex = categories.indexOf(visualRange.minVisible);
+        const maxVisibleIndex = categories.indexOf(visualRange.maxVisible);
+        const startIndex = minVisibleIndex + minZoom - 1;
+        const endIndex = maxVisibleIndex - minZoom + 1;
+        if(categories[startIndex]) {
+            return [visualRange.minVisible, categories[startIndex]];
+        } else {
+            return [categories[endIndex], visualRange.maxVisible];
+        }
+    }
 };

@@ -43,7 +43,7 @@ export default class DataCell extends FocusableElement {
   }
 
   getEditor(): FocusableElement {
-    return new FocusableElement(this.element.find(`.${CLASS.editorInput}`));
+    return new FocusableElement(this.element.find(`.${CLASS.editorInput}, .dx-checkbox`));
   }
 
   getRevertButton(): Selector {

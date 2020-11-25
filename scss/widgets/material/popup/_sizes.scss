@@ -10,27 +10,27 @@ $material-popup-toolbarbottom-padding: null !default;
 $material-popup-toolbarbottom-padding-rtl: null !default;
 $material-popup-bottom-toolbar-height: null !default;
 
-$material-popup-button-margin: 0 8px;
-$material-popup-toolbar-item-spacing: 8px;
+$material-popup-button-margin: 0 8px !default;
+$material-popup-toolbar-item-spacing: 8px !default;
 
 @if $size == "default" {
-  $material-popup-content-padding: 24px;
-  $material-popup-content-withtitle-top-padding: 20px;
+  $material-popup-content-padding: 24px !default;
+  $material-popup-content-withtitle-top-padding: 20px !default;
 
-  $material-popup-toolbartop-padding: 0 8px 0 24px;
-  $material-popup-toolbarbottom-padding: 0 8px 0 24px;
-  $material-popup-toolbartop-padding-rtl: 0 24px 0 8px;
-  $material-popup-toolbarbottom-padding-rtl: 0 24px 0 8px;
-  $material-popup-bottom-toolbar-height: 52px;
+  $material-popup-toolbartop-padding: 0 8px 0 24px !default;
+  $material-popup-toolbarbottom-padding: 0 8px 0 24px !default;
+  $material-popup-toolbartop-padding-rtl: 0 24px 0 8px !default;
+  $material-popup-toolbarbottom-padding-rtl: 0 24px 0 8px !default;
+  $material-popup-bottom-toolbar-height: 52px !default;
 }
 
 @else if $size == "compact" {
-  $material-popup-content-padding: 16px;
-  $material-popup-content-withtitle-top-padding: 14px;
+  $material-popup-content-padding: 16px !default;
+  $material-popup-content-withtitle-top-padding: 14px !default;
 
-  $material-popup-toolbartop-padding: 0 8px 0 16px;
-  $material-popup-toolbarbottom-padding: 0 8px 0 16px;
-  $material-popup-toolbartop-padding-rtl: 0 16px 0 8px;
-  $material-popup-toolbarbottom-padding-rtl: 0 16px 0 8px;
-  $material-popup-bottom-toolbar-height: 44px;
+  $material-popup-toolbartop-padding: 0 8px 0 16px !default;
+  $material-popup-toolbarbottom-padding: 0 8px 0 16px !default;
+  $material-popup-toolbartop-padding-rtl: 0 16px 0 8px !default;
+  $material-popup-toolbarbottom-padding-rtl: 0 16px 0 8px !default;
+  $material-popup-bottom-toolbar-height: 44px !default;
 }
