@@ -28,8 +28,7 @@ export default class AppointmentDragBehavior {
         this.initialPosition = initialPosition;
         this.appointmentInfo = {
             appointment: itemData,
-            targetedAppointment: itemSettings.info.sourceAppointment,
-            groupIndex: itemSettings.groupIndex,
+            settings: itemSettings,
         };
 
         this.appointments.notifyObserver('hideAppointmentTooltip');
@@ -142,5 +141,17 @@ export default class AppointmentDragBehavior {
             onDragEnd: this.createDragEndHandler(options, appointmentDragging),
             onDrop: this.createDropHandler(appointmentDragging),
         }));
+    }
+
+    updateDragSource(appointment, settings) {
+        const { appointmentInfo } = this;
+        if(appointmentInfo || appointment) {
+            const currentAppointment = appointment || appointmentInfo.appointment;
+            const currentSettings = settings || appointmentInfo.settings;
+
+            this.appointments._setDragSourceAppointment(
+                currentAppointment, currentSettings,
+            );
+        }
     }
 }

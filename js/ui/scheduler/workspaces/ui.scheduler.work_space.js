@@ -3249,7 +3249,7 @@ class SchedulerWorkSpace extends WidgetObserver {
                     event.data = event.data || {};
                     if(!canceled) {
                         if(!settings.isCompact) {
-                            appointments._setDragSourceAppointment(itemData, settings);
+                            dragBehavior.updateDragSource(itemData, settings);
                         }
 
                         dragElement = this._createDragAppointment(itemData, settings, appointments);
@@ -3335,6 +3335,11 @@ class SchedulerWorkSpace extends WidgetObserver {
 
     _isShowAllDayPanel() {
         return this.option('showAllDayPanel');
+    }
+
+    updateAppointments() {
+        this.invoke('renderAppointments');
+        this.dragBehavior?.updateDragSource();
     }
 }
 
