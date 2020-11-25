@@ -62,6 +62,10 @@ export default {
 };
 </script>
 <style>
+.dx-scheduler-group-header, .dx-scheduler-date-table-cell {
+    position: relative;
+}
+
 .dx-scheduler-date-table-other-month.dx-scheduler-date-table-cell {
     opacity: 1;
     color: rgba(0, 0, 0, 0.3);
