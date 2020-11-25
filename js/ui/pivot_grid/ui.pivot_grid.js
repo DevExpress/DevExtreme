@@ -635,13 +635,12 @@ const PivotGrid = Widget.inherit({
         });
     },
 
-    _updateCalculatedOptions: function(fields, isNewDataSource) {
+    _updateCalculatedOptions: function(fields) {
         const that = this;
         each(fields, function(index, field) {
             each(FIELD_CALCULATED_OPTIONS, function(_, optionName) {
-                const needUpdate = isNewDataSource
-                    ? field[optionName] === undefined
-                    : field._initProperties && (optionName in field._initProperties);
+                const isCalculated = (optionName in field._initProperties);
+                const needUpdate = field[optionName] === undefined || isCalculated;
                 if(needUpdate) {
                     setFieldProperty(field, optionName, that.option(optionName));
                 }
@@ -665,7 +664,7 @@ const PivotGrid = Widget.inherit({
             hideEmptySummaryCells: that.option('hideEmptySummaryCells'),
 
             onFieldsPrepared: function(fields) {
-                that._updateCalculatedOptions(fields, true);
+                that._updateCalculatedOptions(fields);
             }
         };
     },
@@ -736,6 +735,11 @@ const PivotGrid = Widget.inherit({
     _optionChanged: function(args) {
         const that = this;
 
+        if(FIELD_CALCULATED_OPTIONS.indexOf(args.name) >= 0) {
+            const fields = this.getDataSource().fields();
+            this._updateCalculatedOptions(fields);
+        }
+
         switch(args.name) {
             case 'dataSource':
             case 'allowSorting':
@@ -744,10 +748,6 @@ const PivotGrid = Widget.inherit({
             case 'allowSortingBySummary':
             case 'scrolling':
             case 'stateStoring':
-                if(FIELD_CALCULATED_OPTIONS.indexOf(args.name) >= 0) {
-                    const fields = this.getDataSource().fields();
-                    this._updateCalculatedOptions(fields, false);
-                }
                 that._initDataController();
                 that._fieldChooserPopup.hide();
                 that._renderFieldChooser();
