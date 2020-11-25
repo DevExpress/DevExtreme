@@ -27,36 +27,39 @@ export class AppointmentSettingsGeneratorBaseStrategy {
     get workspace() { return this.scheduler.getWorkSpace(); }
 
     create(rawAppointment) {
-        const appointment = this.scheduler.createAppointmentAdapter(rawAppointment);
         const itemResources = this.scheduler._resourcesManager.getResourcesFromItem(rawAppointment);
+        const appointmentList = this._createAppointments(rawAppointment, itemResources);
+        const isAllDay = this._isAllDayAppointment(rawAppointment);
 
-        let appointmentList = this._createAppointments(appointment, itemResources);
-
-        if(this._canProcessNotNativeTimezoneDates(appointmentList, appointment)) {
-            appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
-        }
-
-        let gridAppointmentList = this._createGridAppointmentList(appointmentList);
-        gridAppointmentList = this._cropAppointmentsByStartDayHour(gridAppointmentList, rawAppointment);
-
-        gridAppointmentList = this._getProcessedLongAppointmentsIfRequired(gridAppointmentList, appointment);
-
-        return this._createAppointmentInfos(gridAppointmentList, itemResources, this._isAllDayAppointment(rawAppointment));
+        return this._createAppointmentInfos(appointmentList, itemResources, isAllDay);
     }
 
     _isAllDayAppointment(rawAppointment) {
         return this.scheduler.appointmentTakesAllDay(rawAppointment) && this.workspace.supportAllDayRow();
     }
 
-    _createAppointments(appointment, resources) {
-        const appointmentList = this._createRecurrenceAppointments(appointment, resources);
+    _createAppointments(rawAppointment, resources) {
+        const appointment = this.scheduler.createAppointmentAdapter(rawAppointment);
+        let appointmentList = [];
 
-        if(appointmentList.length === 0) {
+        if(appointment.isRecurrent) {
+            appointmentList = this._createRecurrenceAppointments(appointment, resources);
+        } else {
             appointmentList.push({
                 startDate: appointment.startDate,
                 endDate: appointment.endDate
             });
         }
+
+        if(this._canProcessNotNativeTimezoneDates(appointmentList, appointment)) {
+            appointmentList = this._getProcessedNotNativeTimezoneDates(appointmentList, appointment);
+        }
+
+        appointmentList = this._createGridAppointmentList(appointmentList);
+
+        this._cropAppointmentsByStartDayHour(appointmentList, rawAppointment);
+
+        appointmentList = this._getProcessedLongAppointmentsIfRequired(appointmentList, appointment);
 
         return appointmentList;
     }
