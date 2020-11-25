@@ -639,7 +639,9 @@ const PivotGrid = Widget.inherit({
         const that = this;
         each(fields, function(index, field) {
             each(FIELD_CALCULATED_OPTIONS, function(_, optionName) {
-                const isCalculated = (optionName in field._initProperties);
+                const isCalculated = field._initProperties
+                    && (optionName in field._initProperties)
+                    && (field._initProperties[optionName] === undefined);
                 const needUpdate = field[optionName] === undefined || isCalculated;
                 if(needUpdate) {
                     setFieldProperty(field, optionName, that.option(optionName));
