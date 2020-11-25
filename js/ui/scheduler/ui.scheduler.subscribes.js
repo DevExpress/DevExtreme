@@ -169,20 +169,22 @@ const subscribes = {
         return this._appointmentModel.appointmentTakesSeveralDays(appointment);
     },
 
-    getTextAndFormatDate(appointment, targetedAppointment, format) { // TODO: rename to createFormattedDateText
-        const appointmentAdapter = this.createAppointmentAdapter(appointment);
-        const adapter = this.createAppointmentAdapter(targetedAppointment || appointment)
-            .clone({ pathTimeZone: 'toGrid' });
+    getTextAndFormatDate(appointmentRaw, targetedAppointmentRaw, format) { // TODO: rename to createFormattedDateText
+        const appointmentAdapter = this.createAppointmentAdapter(appointmentRaw);
+        const targetedAdapter = this.createAppointmentAdapter(targetedAppointmentRaw || appointmentRaw);
 
-        const formatType = format || this.fire('_getTypeFormat', adapter.startDate, adapter.endDate, adapter.allDay);
+        const startDate = this.timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
+        const endDate = this.timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
+
+        const formatType = format || this.fire('_getTypeFormat', startDate, endDate, targetedAdapter.allDay);
 
         return {
-            text: adapter.text || appointmentAdapter.text,
-            formatDate: this.fire('_formatDates', adapter.startDate, adapter.endDate, formatType)
+            text: targetedAdapter.text || appointmentAdapter.text,
+            formatDate: this.fire('_formatDates', startDate, endDate, formatType)
         };
     },
 
-    _getAppointmentFields(data, arrayOfFields) {
+    _getAppointmentFields(data, arrayOfFields) { // TODO: remove!!!!
         return arrayOfFields.reduce((accumulator, field) => {
             accumulator[field] = this.fire('getField', field, data);
             return accumulator;
