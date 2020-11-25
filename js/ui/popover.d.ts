@@ -28,6 +28,8 @@ export interface dxPopoverOptions<T = dxPopover> extends dxPopupOptions<T> {
     animation?: dxPopoverAnimation;
     /**
      * @docid dxPopoverOptions.closeOnOutsideClick
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

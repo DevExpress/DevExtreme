@@ -76,14 +76,15 @@ export interface dxLookupOptions extends dxDropDownListOptions<dxLookup> {
     /**
      * @docid dxLookupOptions.closeOnOutsideClick
      * @default false
-     * @type_function_return boolean
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
      * @publicName closeOnOutsideClick
      * @default true [for](Material)
      * @prevFileNamespace DevExpress.ui
      * @public
      * @deprecated dxLookupOptions.dropDownOptions
      */
-    closeOnOutsideClick?: boolean | (() => boolean);
+    closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
      * @docid dxLookupOptions.fieldTemplate
      * @default null

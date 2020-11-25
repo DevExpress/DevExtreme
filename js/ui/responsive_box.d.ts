@@ -23,6 +23,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     dataSource?: string | Array<string | dxResponsiveBoxItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxResponsiveBoxOptions.height
+     * @type_function_return number|string
      * @default '100%'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -57,6 +58,7 @@ export interface dxResponsiveBoxOptions extends CollectionWidgetOptions<dxRespon
     singleColumnScreen?: string;
     /**
      * @docid dxResponsiveBoxOptions.width
+     * @type_function_return number|string
      * @default '100%'
      * @prevFileNamespace DevExpress.ui
      * @public

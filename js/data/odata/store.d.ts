@@ -69,6 +69,8 @@ export interface ODataStoreOptions extends StoreOptions<ODataStore> {
     keyType?: 'String' | 'Int32' | 'Int64' | 'Guid' | 'Boolean' | 'Single' | 'Decimal' | any;
     /**
      * @docid ODataStoreOptions.onLoading
+     * @type function(loadOptions)
+     * @type_function_param1 loadOptions:LoadOptions
      * @action
      * @prevFileNamespace DevExpress.data
      * @public

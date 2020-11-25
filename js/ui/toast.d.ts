@@ -34,6 +34,8 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     closeOnClick?: boolean;
     /**
      * @docid dxToastOptions.closeOnOutsideClick
+     * @type_function_param1 event:event
+     * @type_function_return Boolean
      * @default true [for](Android)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -56,6 +58,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     displayTime?: number;
     /**
      * @docid dxToastOptions.height
+     * @type_function_return number|string
      * @default 'auto'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -63,6 +66,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     height?: number | string | (() => number | string);
     /**
      * @docid dxToastOptions.maxWidth
+     * @type_function_return number|string
      * @default 568 [for](Material)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -77,6 +81,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     message?: string;
     /**
      * @docid dxToastOptions.minWidth
+     * @type_function_return number|string
      * @default 344 [for](Material)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -108,6 +113,7 @@ export interface dxToastOptions extends dxOverlayOptions<dxToast> {
     type?: 'custom' | 'error' | 'info' | 'success' | 'warning';
     /**
      * @docid dxToastOptions.width
+     * @type_function_return number|string
      * @default function() {return $(window).width() * 0.8 }
      * @default 'auto' [for](Android)
      * @default function() { return $(window).width(); } [for](phones_on_Android)

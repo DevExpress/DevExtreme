@@ -43,6 +43,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxLoadPanelOptions.height
+     * @type_function_return number|string
      * @default 90
      * @default 60 [for](Material)
      * @prevFileNamespace DevExpress.ui
@@ -59,6 +60,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid dxLoadPanelOptions.maxHeight
      * @default 60 [for](Material)
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -66,6 +68,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
     /**
      * @docid dxLoadPanelOptions.maxWidth
      * @default 60 [for](Material)
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -111,6 +114,7 @@ export interface dxLoadPanelOptions extends dxOverlayOptions<dxLoadPanel> {
      * @docid dxLoadPanelOptions.width
      * @default 222
      * @default 60 [for](Material)
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */

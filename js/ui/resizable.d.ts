@@ -23,6 +23,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     handles?: 'bottom' | 'left' | 'right' | 'top' | 'all' | string;
     /**
      * @docid dxResizableOptions.height
+     * @type_function_return number|string
      * @fires dxResizableOptions.onResize
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -94,6 +95,7 @@ export interface dxResizableOptions extends DOMComponentOptions<dxResizable> {
     onResizeStart?: ((e: { component?: dxResizable, element?: dxElement, model?: any, event?: event, width?: number, height?: number }) => any);
     /**
      * @docid dxResizableOptions.width
+     * @type_function_return number|string
      * @fires dxResizableOptions.onResize
      * @prevFileNamespace DevExpress.ui
      * @public

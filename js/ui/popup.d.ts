@@ -59,6 +59,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     fullScreen?: boolean;
     /**
      * @docid dxPopupOptions.height
+     * @type_function_return number|string
      * @fires dxPopupOptions.onResize
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -152,6 +153,7 @@ export interface dxPopupOptions<T = dxPopup> extends dxOverlayOptions<T> {
     toolbarItems?: Array<dxPopupToolbarItem>;
     /**
      * @docid dxPopupOptions.width
+     * @type_function_return number|string
      * @fires dxPopupOptions.onResize
      * @prevFileNamespace DevExpress.ui
      * @public

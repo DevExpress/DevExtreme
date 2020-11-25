@@ -1780,7 +1780,7 @@ declare module DevExpress.data {
         /**
          * [descr:ODataStore.Options.onLoading]
          */
-        onLoading?: Function;
+        onLoading?: ((loadOptions: LoadOptions) => any);
         /**
          * [descr:ODataStore.Options.url]
          */
@@ -8605,7 +8605,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxLoadPanel.Options.height]
          */
-        height?: number | string | Function;
+        height?: number | string | (() => number | string);
         /**
          * [descr:dxLoadPanel.Options.indicatorSrc]
          */
@@ -8613,11 +8613,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxLoadPanel.Options.maxHeight]
          */
-        maxHeight?: number | string | Function;
+        maxHeight?: number | string | (() => number | string);
         /**
          * [descr:dxLoadPanel.Options.maxWidth]
          */
-        maxWidth?: number | string | Function;
+        maxWidth?: number | string | (() => number | string);
         /**
          * [descr:dxLoadPanel.Options.message]
          */
@@ -8641,7 +8641,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxLoadPanel.Options.width]
          */
-        width?: number | string | Function;
+        width?: number | string | (() => number | string);
     }
     /**
      * [descr:dxLoadPanel.Options.animation]
@@ -8696,7 +8696,7 @@ declare module DevExpress.ui {
          * [descr:dxLookup.Options.closeOnOutsideClick]
          * @deprecated [depNote:dxLookup.Options.closeOnOutsideClick]
          */
-        closeOnOutsideClick?: boolean | (() => boolean);
+        closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
          * [descr:dxLookup.Options.dropDownCentered]
          */
@@ -8873,7 +8873,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxMap.Options.height]
          */
-        height?: number | string | Function;
+        height?: number | string | (() => number | string);
         /**
          * [descr:dxMap.Options.key]
          * @deprecated [depNote:dxMap.Options.key]
@@ -8926,7 +8926,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxMap.Options.width]
          */
-        width?: number | string | Function;
+        width?: number | string | (() => number | string);
         /**
          * [descr:dxMap.Options.zoom]
          */
@@ -9704,7 +9704,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxPopover.Options.closeOnOutsideClick]
          */
-        closeOnOutsideClick?: boolean | Function;
+        closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
          * [descr:dxPopover.Options.height]
          */
@@ -9793,7 +9793,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxPopup.Options.height]
          */
-        height?: number | string | Function;
+        height?: number | string | (() => number | string);
         /**
          * [descr:dxPopup.Options.onResize]
          */
@@ -9841,7 +9841,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxPopup.Options.width]
          */
-        width?: number | string | Function;
+        width?: number | string | (() => number | string);
     }
     /**
      * [descr:dxPopup.Options.animation]
@@ -10035,7 +10035,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxResizable.Options.height]
          */
-        height?: number | string | Function;
+        height?: number | string | (() => number | string);
         /**
          * [descr:dxResizable.Options.maxHeight]
          */
@@ -10067,7 +10067,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxResizable.Options.width]
          */
-        width?: number | string | Function;
+        width?: number | string | (() => number | string);
     }
     /**
      * [descr:dxResizable]
@@ -10091,7 +10091,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxResponsiveBox.Options.height]
          */
-        height?: number | string | Function;
+        height?: number | string | (() => number | string);
         /**
          * [descr:dxResponsiveBox.Options.items]
          */
@@ -10111,7 +10111,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxResponsiveBox.Options.width]
          */
-        width?: number | string | Function;
+        width?: number | string | (() => number | string);
     }
     /**
      * [descr:dxResponsiveBox]
@@ -11553,7 +11553,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxToast.Options.closeOnOutsideClick]
          */
-        closeOnOutsideClick?: boolean | Function;
+        closeOnOutsideClick?: boolean | ((event: DevExpress.events.event) => boolean);
         /**
          * [descr:dxToast.Options.closeOnSwipe]
          */
@@ -11565,11 +11565,11 @@ declare module DevExpress.ui {
         /**
          * [descr:dxToast.Options.height]
          */
-        height?: number | string | Function;
+        height?: number | string | (() => number | string);
         /**
          * [descr:dxToast.Options.maxWidth]
          */
-        maxWidth?: number | string | Function;
+        maxWidth?: number | string | (() => number | string);
         /**
          * [descr:dxToast.Options.message]
          */
@@ -11577,7 +11577,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxToast.Options.minWidth]
          */
-        minWidth?: number | string | Function;
+        minWidth?: number | string | (() => number | string);
         /**
          * [descr:dxToast.Options.position]
          */
@@ -11593,7 +11593,7 @@ declare module DevExpress.ui {
         /**
          * [descr:dxToast.Options.width]
          */
-        width?: number | string | Function;
+        width?: number | string | (() => number | string);
     }
     /**
      * [descr:dxToast.Options.animation]

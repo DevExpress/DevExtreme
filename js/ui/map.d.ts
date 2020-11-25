@@ -71,6 +71,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid dxMapOptions.height
      * @default 300
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -187,6 +188,7 @@ export interface dxMapOptions extends WidgetOptions<dxMap> {
     /**
      * @docid dxMapOptions.width
      * @default 300
+     * @type_function_return number|string
      * @prevFileNamespace DevExpress.ui
      * @public
      */
