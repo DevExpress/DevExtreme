@@ -8,23 +8,23 @@ $generic-tabs-item-padding: null !default;
 $generic-tab-text-line-height: null !default;
 $generic-tabs-nav-button-position: null !default;
 $generic-tabs-nav-button-size: null !default;
-$generic-tabs-border-width: $generic-base-border-width;
-$generic-tabs-border: $generic-tabs-border-width solid $tabs-border-color;
-$generic-tabs-transparent-border: $generic-tabs-border-width solid $tabs-tab-bg;
-$generic-tab-focus-border: $generic-tabs-border-width solid $tabs-focused-border-color;
+$generic-tabs-border-width: $generic-base-border-width !default;
+$generic-tabs-border: $generic-tabs-border-width solid $tabs-border-color !default;
+$generic-tabs-transparent-border: $generic-tabs-border-width solid $tabs-tab-bg !default;
+$generic-tab-focus-border: $generic-tabs-border-width solid $tabs-focused-border-color !default;
 
 @if $size == "default" {
-  $generic-tabs-item-padding: 9px;
-  $generic-tab-text-line-height: 25px;
+  $generic-tabs-item-padding: 9px !default;
+  $generic-tab-text-line-height: 25px !default;
 
-  $generic-tabs-nav-button-position: 4px 6px;
-  $generic-tabs-nav-button-size: 20px;
+  $generic-tabs-nav-button-position: 4px 6px !default;
+  $generic-tabs-nav-button-size: 20px !default;
 }
 
 @else if $size == "compact" {
-  $generic-tabs-item-padding: 4px;
-  $generic-tab-text-line-height: 21px;
+  $generic-tabs-item-padding: 4px !default;
+  $generic-tab-text-line-height: 21px !default;
 
-  $generic-tabs-nav-button-position: 8px 5px;
-  $generic-tabs-nav-button-size: 13px;
+  $generic-tabs-nav-button-position: 8px 5px !default;
+  $generic-tabs-nav-button-size: 13px !default;
 }

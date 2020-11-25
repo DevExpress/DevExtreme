@@ -2183,6 +2183,63 @@ QUnit.module('Editing', baseModuleConfig, () => {
             assert.equal(validationCallback.callCount, 3, 'validation callback call count');
         });
     });
+
+    ['Row', 'Cell', 'Batch'].forEach(editMode => {
+        [false, true].forEach(repaintChangesOnly => {
+            QUnit.testInActiveWindow(`${editMode} - the data parameter of the validationCallback should not be empty on cell focus (repaintChangesOnly = ${repaintChangesOnly}) (T950070)`, function(assert) {
+                // arrange
+                const validationCallback = sinon.spy(e => {
+                    assert.deepEqual(e.data, { id: 1, name: 'test' }, 'row data');
+
+                    return true;
+                });
+                const dataGrid = createDataGrid({
+                    dataSource: [{ id: 1, name: 'test' }],
+                    keyExpr: 'id',
+                    repaintChangesOnly,
+                    columns: [
+                        {
+                            dataField: 'id',
+                            validationRules: [
+                                { type: 'custom', validationCallback }
+                            ]
+                        },
+                        {
+                            dataField: 'name',
+                            validationRules: [
+                                { type: 'custom', validationCallback }
+                            ]
+                        }
+                    ],
+                    editing: {
+                        mode: editMode.toLowerCase(),
+                        allowUpdating: true
+                    },
+                    loadingTimeout: undefined
+                });
+
+                // act
+                if(editMode === 'Row') {
+                    dataGrid.editRow(0);
+                } else {
+                    dataGrid.editCell(0, 0);
+                }
+                this.clock.tick();
+                $(dataGrid.getCellElement(0, 0)).find('.dx-texteditor-input').focus();
+                this.clock.tick();
+                if(editMode !== 'Row') {
+                    dataGrid.editCell(0, 1);
+                    this.clock.tick();
+                }
+                $(dataGrid.getCellElement(0, 1)).find('.dx-texteditor-input').focus();
+                this.clock.tick();
+
+
+                // assert
+                assert.equal(validationCallback.callCount, 2, 'validation callback call count');
+            });
+        });
+    });
 });
 
 QUnit.module('Validation with virtual scrolling and rendering', {
@@ -4456,6 +4513,52 @@ QUnit.module('Editing state', baseModuleConfig, () => {
 
             // assert
             assert.deepEqual(dataGrid.option('editing.changes'), [], 'changes are reset');
+        });
+    });
+
+    ['Row', 'Form', 'Popup', 'Cell', 'Batch'].forEach(editMode => {
+        ['changes', 'editRowKey', 'editColumnName'].forEach(editingOption => {
+            QUnit.test(`${editMode} - Changing the editing.${editingOption} option should not raise the onToolbarPreparing event (T949025)`, function(assert) {
+                // arrange
+                const onToolbarPreparingSpy = sinon.spy();
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource: [{ id: 1, field: 'field' }],
+                    keyExpr: 'id',
+                    editing: {
+                        allowUpdating: true,
+                        allowAdding: true,
+                        mode: editMode.toLowerCase()
+                    },
+                    loadingTimeout: undefined,
+                    onToolbarPreparing: onToolbarPreparingSpy
+                }).dxDataGrid('instance');
+
+                // assert
+                assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing should be called initially');
+
+                // act
+                let optionValue;
+                switch(editingOption) {
+                    case 'changes': {
+                        optionValue = [{ type: 'update', key: 1, data: { field: 'new value' } }];
+                        break;
+                    }
+                    case 'editRowKey': {
+                        optionValue = 1;
+                        break;
+                    }
+                    case 'editColumnName': {
+                        optionValue = 'field';
+                        break;
+                    }
+
+                }
+                dataGrid.option(`editing.${editingOption}`, optionValue);
+                this.clock.tick();
+
+                // assert
+                assert.equal(onToolbarPreparingSpy.callCount, 1, 'onToolbarPreparing should not be called on option change');
+            });
         });
     });
 });

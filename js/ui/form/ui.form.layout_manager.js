@@ -436,12 +436,9 @@ const LayoutManager = Widget.inherit({
                 if(e.location.col === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_COL_CLASS);
                 }
-                const form = that.option('form');
-                if(item.itemType === SIMPLE_ITEM_TYPE && form && form._itemsRunTimeInfo) {
-                    const formItems = form._itemsRunTimeInfo.getItems();
-                    if(formItems && formItems[item.guid] && formItems[item.guid].path.indexOf('.') === -1) {
-                        $itemElement.addClass(ROOT_SIMPLE_ITEM_CLASS);
-                    }
+
+                if(item.itemType === SIMPLE_ITEM_TYPE && that.option('isRoot')) {
+                    $itemElement.addClass(ROOT_SIMPLE_ITEM_CLASS);
                 }
                 const isLastColumn = (e.location.col === colCount - 1) || (e.location.col + e.location.colspan === colCount);
                 const rowsCount = that._getRowsCount();

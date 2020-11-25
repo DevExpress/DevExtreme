@@ -183,7 +183,7 @@ module('buttons group rendering', () => {
 
         clock.tick(300);
 
-        assert.strictEqual(onContentReadyHandler.callCount, 2);
+        assert.strictEqual(onContentReadyHandler.callCount, 3);
         assert.strictEqual($(instance.element()).find(`.${RADIO_BUTTON_CLASS}`).length, 3);
         clock.restore();
     });
