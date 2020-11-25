@@ -46,9 +46,12 @@ const TOOLBAR_MENU_BUTTON_CLASS = 'dx-toolbar-menu-button';
 const TOOLBAR_MENU_SECTION_CLASS = 'dx-toolbar-menu-section';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
+const TEXTEDITOR_CLASS = 'dx-texteditor';
 
 const DROP_DOWN_MENU_CLASS = 'dx-dropdownmenu';
 const DROP_DOWN_MENU_POPUP_WRAPPER_CLASS = 'dx-dropdownmenu-popup-wrapper';
+
+const BASE_TEXTEDITOR_WIDTH = '150px';
 
 QUnit.module('render', {
     beforeEach: function() {
@@ -752,6 +755,42 @@ QUnit.module('widget sizing render', () => {
         assert.equal(parseInt($center.css('margin-right')), 65);
         assert.equal($center.css('float'), 'none');
         assert.equal($center.width(), 220);
+    });
+
+    [
+        {
+            caseName: 'default toolbar TextEditor rendering',
+            itemConfig: {
+                widget: 'dxTextBox'
+            },
+            expectedResult: true
+        },
+        {
+            caseName: 'item template with the TextEditor at the root level',
+            itemConfig: {
+                template: () => $('<div>').dxTextBox()
+            },
+            expectedResult: true
+        },
+        {
+            caseName: 'item template with wrapped TextEditor (complex templates etc)',
+            itemConfig: {
+                template: () => $('<div>').append($('<div>').dxTextBox())
+            },
+            expectedResult: false
+        }
+    ].forEach(({ caseName, itemConfig, expectedResult }) => {
+        QUnit.test(`TextEditor sizing: ${caseName}`, function(assert) {
+            const $element = $('#widget').dxToolbar({
+                items: [itemConfig],
+                width: 400
+            });
+
+            const editorCssWidth = $element.find(`.${TEXTEDITOR_CLASS}`).css('width');
+            const isStandardWidth = editorCssWidth === BASE_TEXTEDITOR_WIDTH;
+
+            assert.strictEqual(isStandardWidth, expectedResult);
+        });
     });
 });
 
