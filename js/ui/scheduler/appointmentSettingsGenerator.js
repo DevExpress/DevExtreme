@@ -188,10 +188,6 @@ export class AppointmentSettingsGeneratorBaseStrategy {
             return {
                 startDate,
                 endDate,
-                sourceWithConvertedDates: {
-                    startDate,
-                    endDate,
-                },
                 source // TODO
             };
         });
