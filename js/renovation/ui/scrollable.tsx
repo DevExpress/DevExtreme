@@ -13,12 +13,14 @@ import {
 export const viewFunction = ({
   scrollViewRef,
   props: {
-    children, direction, onScroll, showScrollbar,
+    children, direction, height, width, onScroll, showScrollbar,
   },
   restAttributes,
 }: Scrollable): JSX.Element => (
   <ScrollView
     ref={scrollViewRef as any}
+    height={height}
+    width={width}
     direction={direction}
     onScroll={onScroll}
     showScrollbar={showScrollbar}
