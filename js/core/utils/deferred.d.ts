@@ -26,7 +26,4 @@ export interface dxDeferred<T> {
     promise(target?: any): dxPromise<T>;
 }
 
-/**
- * @public
- */
 export function Deferred<T>(): dxDeferred<T>;
