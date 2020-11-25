@@ -1298,21 +1298,22 @@ QUnit.module('popup', moduleConfig, () => {
                 paginate: true,
                 pageSize: 2
             }),
-            deferRendering: false,
             opened: true,
             onContentReady: onContentReadySpy
         }).dxDropDownList('instance');
         const listInstance = $(`.${LIST_CLASS}`).dxList('instance');
-        listInstance.option('pageLoadMode', 'scrollBottom');
-        listInstance.option('useNativeScrolling', 'true');
+        listInstance.option({
+            'pageLoadMode': 'scrollBottom',
+            'useNativeScrolling': 'true'
+        });
+        listInstance.option();
         dropDownList.close();
 
-        const dataSource = new DataSource({
+        dropDownList.option('dataSource', new DataSource({
             store: items,
             paginate: true,
             pageSize: 2
-        });
-        dropDownList.option('dataSource', dataSource);
+        }));
 
         dropDownList.open();
         this.clock.tick();
