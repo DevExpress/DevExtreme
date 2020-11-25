@@ -2632,10 +2632,12 @@ class Diagram extends Widget {
         };
     }
     getItemByKey(key) {
-        return this._diagramInstance && this._diagramInstance.getNativeItemByDataKey(key);
+        const nativeItem = this._diagramInstance && this._diagramInstance.getNativeItemByDataKey(key);
+        return nativeItem && this._nativeItemToDiagramItem(nativeItem);
     }
     getItemById(id) {
-        return this._diagramInstance && this._diagramInstance.getNativeItemByKey(id);
+        const nativeItem = this._diagramInstance && this._diagramInstance.getNativeItemByKey(id);
+        return nativeItem && this._nativeItemToDiagramItem(nativeItem);
     }
 
     _invalidateContextMenuCommands() {

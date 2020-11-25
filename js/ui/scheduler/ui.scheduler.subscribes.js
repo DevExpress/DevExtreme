@@ -38,6 +38,12 @@ const subscribes = {
         return this.isVirtualScrolling();
     },
 
+    getVirtualScrollingState: function() {
+        return this.fire('isVirtualScrolling')
+            ? this.getWorkSpace().virtualScrollingDispatcher.getState()
+            : null;
+    },
+
     setCellDataCacheAlias: function(appointment, geometry) {
         this._workSpace.setCellDataCacheAlias(appointment, geometry);
     },
