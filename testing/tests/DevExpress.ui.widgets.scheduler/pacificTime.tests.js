@@ -250,44 +250,114 @@ if(!browser.msie && (new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezo
     });
 
     module('Common', moduleConfig, () => {
-        const getToday = (offset = 0) => {
-            const realCurrentDay = new Date();
-            return (new Date(realCurrentDay.setDate(realCurrentDay.getDate() + offset))).getDate();
-        };
+        module('Today and current day in calendar', () => {
+            const views = ['month', 'week'];
+            const schedulerTimeZone = 18; // So that the difference between the local time zone is more than a day
 
-        [{
-            currentView: 'month',
-            getViewToday: scheduler => scheduler.workSpace.getMonthCurrentDay()
-        }, {
-            currentView: 'week',
-            getViewToday: scheduler => scheduler.workSpace.getWeekCurrentDay()
-        }].forEach(({ currentView, getViewToday }) => {
+            const getTodayValue = (offset = 0) => {
+                const currentDate = new Date();
+                return (new Date(currentDate.setDate(currentDate.getDate() + offset))).getDate();
+            };
+
+            const getViewToday = (scheduler, view) => {
+                if(view === 'month') {
+                    return scheduler.workSpace.getMonthCurrentDay();
+                }
+                if(view === 'week') {
+                    return scheduler.workSpace.getWeekCurrentDay();
+                }
+                new Error('Invalid view type');
+            };
+
+            views.forEach(currentView => {
+                [{
+                    timeZone: undefined,
+                    today: getTodayValue()
+                }, {
+                    timeZone: schedulerTimeZone,
+                    today: getTodayValue(1)
+                }].forEach(({ timeZone, today }) => {
+                    test(`Today in calendar should be equal with today in grid, view='${currentView}' timeZone='${timeZone}' (T946335)`, function(assert) {
+                        const scheduler = createWrapper({
+                            timeZone,
+                            currentView,
+                            views,
+                            dataSource: [],
+                            height: 600
+                        });
+
+                        assert.equal(getViewToday(scheduler, currentView), today, 'Grid\'s today value should be valid');
+
+                        const { navigator } = scheduler.header;
+                        navigator.caption.click();
+
+                        const calendarToday = navigator.popover.calendar.today.value;
+                        const calendarSelected = navigator.popover.calendar.selected.value;
+
+                        assert.equal(calendarToday, today, 'Calendar\'s today value should be valid');
+                        assert.equal(calendarSelected, today, 'Calendar\'s selected value should be valid');
+                    });
+                });
+            });
+
+            views.forEach(currentView => {
+                [{
+                    timeZone: undefined,
+                    expectedSelectedDay: 15
+                }, {
+                    timeZone: schedulerTimeZone,
+                    expectedSelectedDay: 16
+                }].forEach(({ timeZone, expectedSelectedDay }) => {
+                    test(`Calendar should be valid display currentDate from scheduler, view='${currentView}' timeZone='${timeZone}'`, function(assert) {
+                        const scheduler = createWrapper({
+                            timeZone,
+                            currentView,
+                            views,
+                            currentDate: new Date(2020, 6, 15),
+                            dataSource: [],
+                            height: 600
+                        });
+
+                        const { navigator } = scheduler.header;
+                        navigator.caption.click();
+
+                        const selectedDay = navigator.popover.calendar.selected.value;
+                        assert.equal(selectedDay, expectedSelectedDay, 'Calendar\'s selected value should be valid');
+                    });
+                });
+            });
+
             [{
                 timeZone: undefined,
-                today: getToday()
+                expectedToday: getTodayValue()
             }, {
-                timeZone: 18, // TODO so that the difference between the local time zone is more than a day
-                today: getToday(1)
-            }].forEach(({ timeZone, today }) => {
-                test(`Today in calendar should be equal with today in grid, view='${currentView}' timeZone='${timeZone}' (T946335)`, function(assert) {
+                timeZone: schedulerTimeZone,
+                expectedToday: getTodayValue(1)
+            }].forEach(({ timeZone, expectedToday }) => {
+                test(`Scheduler should be valid display today after change view type, timeZone='${timeZone}'`, function(assert) {
                     const scheduler = createWrapper({
                         timeZone,
-                        currentView,
+                        views,
+                        currentView: 'month',
                         dataSource: [],
-                        views: ['month', 'week'],
                         height: 600
                     });
 
-                    assert.equal(getViewToday(scheduler), today, 'Grid\'s today value should be valid');
-
                     const { navigator } = scheduler.header;
-                    navigator.caption.click();
+                    const { calendar } = navigator.popover;
 
-                    const calendarToday = navigator.popover.calendar.today.value;
-                    const calendarSelected = navigator.popover.calendar.selected.value;
+                    views.forEach(currentView => {
+                        scheduler.option('currentView', currentView);
 
-                    assert.equal(calendarToday, today, 'Calendar\'s today value should be valid');
-                    assert.equal(calendarSelected, today, 'Calendar\'s selected value should be valid');
+                        assert.equal(getViewToday(scheduler, currentView), expectedToday, `Grid's today value should be valid after set '${currentView}' view`);
+
+                        navigator.caption.click();
+
+                        assert.equal(calendar.today.value, expectedToday, `Calendar's today value should be valid after set '${currentView}' view`);
+                        assert.equal(calendar.selected.value, expectedToday, `Calendar's selected value should be valid after set '${currentView}' view`);
+
+                        navigator.caption.click(); // for hide calendar
+                    });
                 });
             });
         });

@@ -350,7 +350,6 @@ class Scheduler extends Widget {
                 */
 
             currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
-            // currentDate: dateUtils.trimTime(new Date()), // TODO
             currentDate: new Date(),
             min: undefined,
             max: undefined,
@@ -1045,7 +1044,7 @@ class Scheduler extends Widget {
         const viewCountConfig = this._getViewCountConfig();
         const currentDate = this.timeZoneCalculator.createDate(this._dateOption('currentDate'), { path: 'toGrid' });
 
-        this._header.option('currentDate', currentDate);
+        this._header.option('currentDate', dateUtils.trimTime(currentDate));
         this._header.option('intervalCount', viewCountConfig.intervalCount);
         this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
         this._header.option('min', this._dateOption('min'));
