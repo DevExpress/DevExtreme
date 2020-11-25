@@ -2340,7 +2340,7 @@ class Diagram extends Widget {
              * @hidden true
              */
             /**
-             * @name dxDiagramMethods.registerKeyHandler(key, handler)
+             * @name dxDiagram.registerKeyHandler(key, handler)
              * @hidden true
              */
         });

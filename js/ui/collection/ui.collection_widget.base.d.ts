@@ -23,7 +23,6 @@ import Widget, {
 export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOptions<T> {
     /**
      * @docid CollectionWidgetOptions.dataSource
-     * @type string|Array<string,CollectionWidgetItem>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -31,7 +30,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     dataSource?: string | Array<string | CollectionWidgetItem> | DataSource | DataSourceOptions;
     /**
      * @docid CollectionWidgetOptions.itemHoldTimeout
-     * @type number
      * @default 750
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -39,7 +37,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     itemHoldTimeout?: number;
     /**
      * @docid CollectionWidgetOptions.itemTemplate
-     * @type template|function
      * @default "item"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemIndex:number
@@ -51,7 +48,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     itemTemplate?: template | ((itemData: any, itemIndex: number, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid CollectionWidgetOptions.items
-     * @type Array<string, CollectionWidgetItem, object>
      * @fires CollectionWidgetOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -67,7 +63,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     keyExpr?: string | Function;
     /**
      * @docid CollectionWidgetOptions.noDataText
-     * @type string
      * @default "No data to display"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -75,7 +70,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     noDataText?: string;
     /**
      * @docid CollectionWidgetOptions.onItemClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
@@ -90,7 +84,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     /**
      * @docid CollectionWidgetOptions.onItemContextMenu
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -104,7 +97,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     /**
      * @docid CollectionWidgetOptions.onItemHold
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -118,7 +110,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     /**
      * @docid CollectionWidgetOptions.onItemRendered
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -131,7 +122,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     /**
      * @docid CollectionWidgetOptions.onSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
@@ -142,7 +132,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     onSelectionChanged?: ((e: { component?: T, element?: dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
     /**
      * @docid CollectionWidgetOptions.selectedIndex
-     * @type number
      * @default -1
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @prevFileNamespace DevExpress.ui
@@ -151,7 +140,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     selectedIndex?: number;
     /**
      * @docid CollectionWidgetOptions.selectedItem
-     * @type object
      * @default null
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @ref
@@ -161,7 +149,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     selectedItem?: any;
     /**
      * @docid CollectionWidgetOptions.selectedItemKeys
-     * @type Array<any>
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -169,7 +156,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
     selectedItemKeys?: Array<any>;
     /**
      * @docid CollectionWidgetOptions.selectedItems
-     * @type Array<any>
      * @fires CollectionWidgetOptions.onSelectionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -178,7 +164,6 @@ export interface CollectionWidgetOptions<T = CollectionWidget> extends WidgetOpt
 }
 /**
  * @docid CollectionWidget
- * @type object
  * @inherits Widget, DataHelperMixin
  * @module ui/collection/ui.collection_widget.base
  * @export default
@@ -194,7 +179,6 @@ export default class CollectionWidget extends Widget {
 export interface CollectionWidgetItem {
     /**
      * @docid CollectionWidgetItem.disabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -202,14 +186,12 @@ export interface CollectionWidgetItem {
     disabled?: boolean;
     /**
      * @docid CollectionWidgetItem.html
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     html?: string;
     /**
      * @docid CollectionWidgetItem.template
-     * @type template|function
      * @type_function_return string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -217,14 +199,12 @@ export interface CollectionWidgetItem {
     template?: template | (() => string | Element | JQuery);
     /**
      * @docid CollectionWidgetItem.text
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     text?: string;
     /**
      * @docid CollectionWidgetItem.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

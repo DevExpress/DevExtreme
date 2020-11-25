@@ -21,7 +21,6 @@ import Widget, {
 export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid dxButtonGroupOptions.buttonTemplate
-     * @type template|function
      * @default "content"
      * @type_function_param1 buttonData:object
      * @type_function_param2 buttonContent:dxElement
@@ -32,7 +31,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     buttonTemplate?: template | ((buttonData: any, buttonContent: dxElement) => string | Element | JQuery);
     /**
      * @docid dxButtonGroupOptions.focusStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -40,7 +38,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     focusStateEnabled?: boolean;
     /**
      * @docid dxButtonGroupOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -48,7 +45,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     hoverStateEnabled?: boolean;
     /**
      * @docid dxButtonGroupOptions.items
-     * @type Array<dxButtonGroupItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -64,7 +60,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid dxButtonGroupOptions.onItemClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -78,7 +73,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     /**
      * @docid dxButtonGroupOptions.onSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:array<any>
      * @type_function_param1_field5 removedItems:array<any>
@@ -89,7 +83,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     onSelectionChanged?: ((e: { component?: dxButtonGroup, element?: dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
     /**
      * @docid dxButtonGroupOptions.selectedItemKeys
-     * @type Array<any>
      * @fires dxButtonGroupOptions.onSelectionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -97,7 +90,6 @@ export interface dxButtonGroupOptions extends WidgetOptions<dxButtonGroup> {
     selectedItemKeys?: Array<any>;
     /**
      * @docid dxButtonGroupOptions.selectedItems
-     * @type Array<any>
      * @fires dxButtonGroupOptions.onSelectionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -136,14 +128,12 @@ export default class dxButtonGroup extends Widget {
 export interface dxButtonGroupItem extends CollectionWidgetItem {
     /**
      * @docid dxButtonGroupItem.hint
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     hint?: string;
     /**
      * @docid dxButtonGroupItem.icon
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */

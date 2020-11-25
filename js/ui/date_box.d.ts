@@ -13,7 +13,6 @@ import {
 export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     /**
      * @docid dxDateBoxOptions.adaptivityEnabled
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -21,7 +20,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     adaptivityEnabled?: boolean;
     /**
      * @docid dxDateBoxOptions.applyButtonText
-     * @type string
      * @default "OK"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -29,7 +27,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     applyButtonText?: string;
     /**
      * @docid dxDateBoxOptions.calendarOptions
-     * @type dxCalendarOptions
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -37,7 +34,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     calendarOptions?: dxCalendarOptions;
     /**
      * @docid dxDateBoxOptions.cancelButtonText
-     * @type string
      * @default "Cancel"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -45,7 +41,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     cancelButtonText?: string;
     /**
      * @docid dxDateBoxOptions.dateOutOfRangeMessage
-     * @type string
      * @default "Value is out of range"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -53,7 +48,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     dateOutOfRangeMessage?: string;
     /**
      * @docid dxDateBoxOptions.dateSerializationFormat
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -61,7 +55,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     dateSerializationFormat?: string;
     /**
      * @docid dxDateBoxOptions.disabledDates
-     * @type Array<Date>|function(data)
      * @default null
      * @type_function_param1 data:object
      * @type_function_param1_field1 component:dxDateBox
@@ -74,7 +67,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     disabledDates?: Array<Date> | ((data: { component?: dxDateBox, date?: Date, view?: string }) => boolean);
     /**
      * @docid dxDateBoxOptions.displayFormat
-     * @type format
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,7 +74,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     displayFormat?: format;
     /**
      * @docid dxDateBoxOptions.interval
-     * @type number
      * @default 30
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -90,7 +81,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     interval?: number;
     /**
      * @docid dxDateBoxOptions.invalidDateMessage
-     * @type string
      * @default "Value must be a date or time"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -98,7 +88,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     invalidDateMessage?: string;
     /**
      * @docid dxDateBoxOptions.max
-     * @type Date|number|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -106,7 +95,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     max?: Date | number | string;
     /**
      * @docid dxDateBoxOptions.min
-     * @type Date|number|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -126,7 +114,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     pickerType?: 'calendar' | 'list' | 'native' | 'rollers';
     /**
      * @docid dxDateBoxOptions.placeholder
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -134,7 +121,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     placeholder?: string;
     /**
      * @docid dxDateBoxOptions.showAnalogClock
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -150,7 +136,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     type?: 'date' | 'datetime' | 'time';
     /**
      * @docid dxDateBoxOptions.useMaskBehavior
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -158,7 +143,6 @@ export interface dxDateBoxOptions extends dxDropDownEditorOptions<dxDateBox> {
     useMaskBehavior?: boolean;
     /**
      * @docid dxDateBoxOptions.value
-     * @type Date|number|string
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -178,14 +162,14 @@ export default class dxDateBox extends dxDropDownEditor {
     constructor(element: Element, options?: dxDateBoxOptions)
     constructor(element: JQuery, options?: dxDateBoxOptions)
     /**
-     * @docid dxDateBoxMethods.close
+     * @docid dxDateBox.close
      * @publicName close()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     close(): void;
     /**
-     * @docid dxDateBoxMethods.open
+     * @docid dxDateBox.open
      * @publicName open()
      * @prevFileNamespace DevExpress.ui
      * @public

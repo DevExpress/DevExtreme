@@ -10,7 +10,6 @@ import CollectionWidget, {
 export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOptions<T> {
     /**
      * @docid dxMultiViewOptions.animationEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -18,7 +17,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     animationEnabled?: boolean;
     /**
      * @docid dxMultiViewOptions.dataSource
-     * @type string|Array<string,dxMultiViewItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -26,7 +24,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     dataSource?: string | Array<string | dxMultiViewItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxMultiViewOptions.deferRendering
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -34,7 +31,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     deferRendering?: boolean;
     /**
      * @docid dxMultiViewOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -42,7 +38,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     focusStateEnabled?: boolean;
     /**
      * @docid dxMultiViewOptions.items
-     * @type Array<string, dxMultiViewItem, object>
      * @fires dxMultiViewOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -50,7 +45,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     items?: Array<string | dxMultiViewItem | any>;
     /**
      * @docid dxMultiViewOptions.loop
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -58,7 +52,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     loop?: boolean;
     /**
      * @docid dxMultiViewOptions.selectedIndex
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -66,7 +59,6 @@ export interface dxMultiViewOptions<T = dxMultiView> extends CollectionWidgetOpt
     selectedIndex?: number;
     /**
      * @docid dxMultiViewOptions.swipeEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public

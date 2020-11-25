@@ -395,13 +395,13 @@ const ActionSheet = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxActionSheetMethods.registerKeyHandler
+    * @name dxActionSheet.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxActionSheetMethods.focus
+    * @name dxActionSheet.focus
     * @publicName focus()
     * @hidden
     */

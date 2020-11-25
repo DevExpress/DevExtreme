@@ -20,7 +20,6 @@ import CollectionWidget, {
 export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSheet> {
     /**
      * @docid dxActionSheetOptions.cancelText
-     * @type string
      * @default "Cancel"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -28,7 +27,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     cancelText?: string;
     /**
      * @docid dxActionSheetOptions.dataSource
-     * @type string|Array<string,dxActionSheetItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -36,7 +34,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     dataSource?: string | Array<string | dxActionSheetItem | any> | DataSource | DataSourceOptions;
     /**
      * @docid dxActionSheetOptions.items
-     * @type Array<string, dxActionSheetItem, object>
      * @fires dxActionSheetOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -44,7 +41,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     items?: Array<string | dxActionSheetItem | any>;
     /**
      * @docid dxActionSheetOptions.onCancelClick
-     * @type function(e)|string
      * @extends Action
      * @type_function_param1 e:object
      * @type_function_param1_field4 cancel:boolean
@@ -55,7 +51,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     onCancelClick?: ((e: { component?: dxActionSheet, element?: dxElement, model?: any, cancel?: boolean }) => any) | string;
     /**
      * @docid dxActionSheetOptions.showCancelButton
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -63,7 +58,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     showCancelButton?: boolean;
     /**
      * @docid dxActionSheetOptions.showTitle
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -71,14 +65,12 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     showTitle?: boolean;
     /**
      * @docid dxActionSheetOptions.target
-     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     target?: string | Element | JQuery;
     /**
      * @docid dxActionSheetOptions.title
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -86,7 +78,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     title?: string;
     /**
      * @docid dxActionSheetOptions.usePopover
-     * @type boolean
      * @default false
      * @default true [for](iPad)
      * @prevFileNamespace DevExpress.ui
@@ -95,7 +86,6 @@ export interface dxActionSheetOptions extends CollectionWidgetOptions<dxActionSh
     usePopover?: boolean;
     /**
      * @docid dxActionSheetOptions.visible
-     * @type boolean
      * @default false
      * @fires dxActionSheetOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
@@ -115,7 +105,7 @@ export default class dxActionSheet extends CollectionWidget {
     constructor(element: Element, options?: dxActionSheetOptions)
     constructor(element: JQuery, options?: dxActionSheetOptions)
     /**
-     * @docid dxActionSheetMethods.hide
+     * @docid dxActionSheet.hide
      * @publicName hide()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -123,7 +113,7 @@ export default class dxActionSheet extends CollectionWidget {
      */
     hide(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxActionSheetMethods.show
+     * @docid dxActionSheet.show
      * @publicName show()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -131,7 +121,7 @@ export default class dxActionSheet extends CollectionWidget {
      */
     show(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxActionSheetMethods.toggle
+     * @docid dxActionSheet.toggle
      * @publicName toggle(showing)
      * @param1 showing:boolean
      * @return Promise<void>
@@ -144,14 +134,12 @@ export default class dxActionSheet extends CollectionWidget {
 export interface dxActionSheetItem extends CollectionWidgetItem {
     /**
      * @docid dxActionSheetItem.icon
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     icon?: string;
     /**
      * @docid dxActionSheetItem.onClick
-     * @type function(e)|string
      * @default null
      * @type_function_param1 e:object
      * @type_function_param1_field1 component:dxActionSheet

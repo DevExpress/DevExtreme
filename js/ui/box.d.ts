@@ -26,7 +26,6 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     crossAlign?: 'center' | 'end' | 'start' | 'stretch';
     /**
      * @docid dxBoxOptions.dataSource
-     * @type string|Array<string,dxBoxItem,object>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -42,7 +41,6 @@ export interface dxBoxOptions extends CollectionWidgetOptions<dxBox> {
     direction?: 'col' | 'row';
     /**
      * @docid dxBoxOptions.items
-     * @type Array<string, dxBoxItem, object>
      * @fires dxBoxOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -73,7 +71,6 @@ export interface dxBoxItem extends CollectionWidgetItem {
     baseSize?: number | 'auto';
     /**
      * @docid dxBoxItem.box
-     * @type dxBoxOptions
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -81,7 +78,6 @@ export interface dxBoxItem extends CollectionWidgetItem {
     box?: dxBoxOptions;
     /**
      * @docid dxBoxItem.ratio
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -89,7 +85,6 @@ export interface dxBoxItem extends CollectionWidgetItem {
     ratio?: number;
     /**
      * @docid dxBoxItem.shrink
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public

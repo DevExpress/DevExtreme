@@ -1,6 +1,6 @@
 /**
  * @docid Utils.errorHandler
- * @type function
+ * @type function(e)
  * @type_function_param1 e:Error
  * @module data/errors
  * @export errorHandler

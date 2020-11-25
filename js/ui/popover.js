@@ -585,13 +585,13 @@ const Popover = Popup.inherit({
     }
 
     /**
-    * @name dxPopoverMethods.registerKeyHandler
+    * @name dxPopover.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxPopoverMethods.focus
+    * @name dxPopover.focus
     * @publicName focus()
     * @hidden
     */

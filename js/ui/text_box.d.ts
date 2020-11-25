@@ -5,7 +5,6 @@ import dxTextEditor, {
 export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> {
     /**
      * @docid dxTextBoxOptions.maxLength
-     * @type string|number
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -21,7 +20,6 @@ export interface dxTextBoxOptions<T = dxTextBox> extends dxTextEditorOptions<T> 
     mode?: 'email' | 'password' | 'search' | 'tel' | 'text' | 'url';
     /**
      * @docid dxTextBoxOptions.value
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public

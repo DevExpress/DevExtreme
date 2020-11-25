@@ -21,13 +21,13 @@ const BaseSparkline = {
     */
     loadingIndicator: undefined,
     /**
-    * @name basesparklinemethods.showLoadingIndicator
+    * @name basesparkline.showLoadingIndicator
     * @publicName showLoadingIndicator()
     * @hidden
     */
     showLoadingIndicator: function() { },
     /**
-    * @name basesparklinemethods.hideLoadingIndicator
+    * @name basesparkline.hideLoadingIndicator
     * @publicName hideLoadingIndicator()
     * @hidden
     */

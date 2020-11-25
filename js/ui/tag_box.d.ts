@@ -21,7 +21,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     applyValueMode?: 'instantly' | 'useButtons';
     /**
      * @docid dxTagBoxOptions.hideSelectedItems
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -29,7 +28,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     hideSelectedItems?: boolean;
     /**
      * @docid dxTagBoxOptions.maxDisplayedTags
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -37,7 +35,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     maxDisplayedTags?: number;
     /**
      * @docid dxTagBoxOptions.multiline
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -46,7 +43,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     /**
      * @docid dxTagBoxOptions.onMultiTagPreparing
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 multiTagElement:dxElement
      * @type_function_param1_field5 selectedItems:Array<string,number,Object>
@@ -60,7 +56,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     /**
      * @docid dxTagBoxOptions.onSelectAllValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:boolean
      * @action
@@ -71,7 +66,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     /**
      * @docid dxTagBoxOptions.onSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 addedItems:Array<string,number,Object>
      * @type_function_param1_field5 removedItems:Array<string,number,Object>
@@ -90,7 +84,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     selectAllMode?: 'allPages' | 'page';
     /**
      * @docid dxTagBoxOptions.selectedItems
-     * @type Array<string,number,Object>
      * @readonly
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -105,7 +98,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     showDropDownButton?: boolean;
     /**
      * @docid dxTagBoxOptions.showMultiTagOnly
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -113,7 +105,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     showMultiTagOnly?: boolean;
     /**
      * @docid dxTagBoxOptions.tagTemplate
-     * @type template|function
      * @default "tag"
      * @type_function_param1 itemData:object
      * @type_function_param2 itemElement:dxElement
@@ -124,7 +115,6 @@ export interface dxTagBoxOptions extends dxSelectBoxOptions<dxTagBox> {
     tagTemplate?: template | ((itemData: any, itemElement: dxElement) => string | Element | JQuery);
     /**
      * @docid dxTagBoxOptions.value
-     * @type Array<string,number,Object>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public

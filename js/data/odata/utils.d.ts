@@ -1,6 +1,5 @@
 /**
  * @docid EdmLiteral
- * @type object
  * @namespace DevExpress.data
  * @module data/odata/utils
  * @export EdmLiteral
@@ -10,7 +9,7 @@
 export class EdmLiteral {
     constructor(value: string);
     /**
-     * @docid EdmLiteralMethods.valueOf
+     * @docid EdmLiteral.valueOf
      * @publicName valueOf()
      * @return string
      * @prevFileNamespace DevExpress.data
@@ -22,7 +21,6 @@ export class EdmLiteral {
 /**
  * @const Utils.keyConverters
  * @publicName odata.keyConverters
- * @type object
  * @namespace DevExpress.data.utils.odata
  * @module data/odata/utils
  * @export keyConverters

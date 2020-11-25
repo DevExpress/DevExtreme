@@ -5,7 +5,6 @@ import Editor, {
 export interface dxRecurrenceEditorOptions extends EditorOptions<dxRecurrenceEditor> {
     /**
      * @docid dxRecurrenceEditorOptions.value
-     * @type string
      * @default null
      * @fires dxRecurrenceEditorOptions.onValueChanged
      * @prevFileNamespace DevExpress.ui
