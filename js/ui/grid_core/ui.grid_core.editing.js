@@ -1127,7 +1127,6 @@ const EditingController = modules.ViewController.inherit((function() {
                 return rowIndex;
             }
 
-
             return rowIndex + this._getEditRowIndexCorrection(columnName);
         },
 
@@ -1891,6 +1890,8 @@ const EditingController = modules.ViewController.inherit((function() {
 
             if(editMode !== EDIT_MODE_CELL) {
                 this._resetModifiedClassCells(changes);
+                this._resetEditIndices();
+            } else if(changes[0]?.type !== 'update') {
                 this._resetEditIndices();
             }
 
