@@ -2,6 +2,6 @@
 
 // adduse
 
-$treelist-expanded-icon-margin-left: 5px;
-$treelist-collapsed-icon-margin-left: 6px;
-$treelist-icon-margin-top: $material-base-icon-size / 2;
+$treelist-expanded-icon-margin-left: 5px !default;
+$treelist-collapsed-icon-margin-left: 6px !default;
+$treelist-icon-margin-top: $material-base-icon-size / 2 !default;

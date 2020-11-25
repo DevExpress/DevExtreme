@@ -6,11 +6,11 @@ $generic-navbar-icon-size: null !default;
 $generic-navbar-badge-top: null !default;
 
 @if $size == "default" {
-  $generic-navbar-icon-size: 31px;
-  $generic-navbar-badge-top: 11%;
+  $generic-navbar-icon-size: 31px !default;
+  $generic-navbar-badge-top: 11% !default;
 }
 
 @else if $size == "compact" {
-  $generic-navbar-icon-size: 26px;
-  $generic-navbar-badge-top: 6%;
+  $generic-navbar-icon-size: 26px !default;
+  $generic-navbar-badge-top: 6% !default;
 }

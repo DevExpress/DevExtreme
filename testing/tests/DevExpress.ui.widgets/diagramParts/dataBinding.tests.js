@@ -551,4 +551,32 @@ QUnit.module('DataBinding', {
 
         assert.equal(this.instance._diagramInstance.model.findShapeByDataKey('1').size.width, defaultWidth);
     });
+
+    test('internal diagram subscriptions must by updated correctly on data source assign and repaint', function(assert) {
+        assert.equal(this.instance._diagramInstance.modelManipulator.onModelChanged.listeners.length, 4);
+
+        const store = new ArrayStore({
+            key: 'id',
+            data: [
+                {
+                    id: '1',
+                    text: 'text1'
+                },
+                {
+                    id: '2',
+                    text: 'text2'
+                }
+            ],
+        });
+        const dataSource = new DataSource({
+            store
+        });
+        this.instance.option({
+            nodes: { dataSource }
+        });
+        assert.equal(this.instance._diagramInstance.modelManipulator.onModelChanged.listeners.length, 4);
+
+        this.instance.repaint();
+        assert.equal(this.instance._diagramInstance.modelManipulator.onModelChanged.listeners.length, 4);
+    });
 });

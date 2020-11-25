@@ -6650,6 +6650,38 @@ QUnit.module('Editing with real dataController', {
         assert.ok(items[1].isNewRow, 'second row is inserted');
     });
 
+    // T950444
+    QUnit.test('deleteRow should work after addRow in cell edit mode', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        $.extend(that.options.editing, {
+            allowAdding: true,
+            allowUpdating: true,
+            mode: 'cell'
+        });
+
+        rowsView.render(testElement);
+
+        // act
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.dataController.items().length, 8, 'item was added');
+
+        // act
+        this.saveEditData();
+        this.deleteRow(0);
+
+        // assert
+        assert.equal(this.dataController.items().length, 7, 'item was deleted');
+        assert.equal(this.option('editing.editRowKey'), null, 'editRowKey was reset');
+        assert.equal(this.option('editing.editColumnName'), null, 'editColumnName was reset');
+    });
+
     QUnit.test('Restore a height of rowsView when editing is canceled with empty data', function(assert) {
     // arrange
         const testElement = $('#container');

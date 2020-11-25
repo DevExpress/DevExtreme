@@ -6,11 +6,11 @@ $material-validation-message-padding: null !default;
 $material-validationsummary-item-margin: null !default;
 
 @if $size == "default" {
-  $material-validation-message-padding: 6px;
-  $material-validationsummary-item-margin: 10px;
+  $material-validation-message-padding: 6px !default;
+  $material-validationsummary-item-margin: 10px !default;
 }
 
 @else if $size == "compact" {
-  $material-validation-message-padding: 4px;
-  $material-validationsummary-item-margin: 6px;
+  $material-validation-message-padding: 4px !default;
+  $material-validationsummary-item-margin: 6px !default;
 }
