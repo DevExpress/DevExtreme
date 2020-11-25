@@ -803,7 +803,7 @@ class Scheduler extends Widget {
                 value = dateUtils.trimTime(new Date(value));
                 this.option('selectedCellData', []);
                 this._workSpace.option('currentDate', new Date(value));
-                this._header.option('currentDate', this.timeZoneCalculator.createDate(new Date(value), { path: 'toGrid' }));
+                this._header.option('currentDate', this._getHeaderCurrentDay(value));
                 this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
                 this._appointments.option('items', []);
                 this._filterAppointmentsByDate();
@@ -1042,9 +1042,8 @@ class Scheduler extends Widget {
 
     _updateHeader() {
         const viewCountConfig = this._getViewCountConfig();
-        const currentDate = this.timeZoneCalculator.createDate(this._dateOption('currentDate'), { path: 'toGrid' });
 
-        this._header.option('currentDate', dateUtils.trimTime(currentDate));
+        this._header.option('currentDate', this._getHeaderCurrentDay());
         this._header.option('intervalCount', viewCountConfig.intervalCount);
         this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
         this._header.option('min', this._dateOption('min'));
@@ -1631,13 +1630,16 @@ class Scheduler extends Widget {
         result.views = this.option('views');
         result.min = new Date(this._dateOption('min'));
         result.max = new Date(this._dateOption('max'));
-
-        const currentDate = this.timeZoneCalculator.createDate(this._dateOption('currentDate'), { path: 'toGrid' });
-
-        result.currentDate = dateUtils.trimTime(currentDate);
+        result.currentDate = this._getHeaderCurrentDay();
         result.todayDate = () => this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
 
         return result;
+    }
+
+    _getHeaderCurrentDay(currentDate) {
+        const date = new Date(currentDate || this._dateOption('currentDate'));
+        const result = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        return dateUtils.trimTime(result);
     }
 
     _appointmentsConfig() {
