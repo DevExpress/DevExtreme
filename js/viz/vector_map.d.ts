@@ -566,7 +566,7 @@ export default class dxVectorMap extends BaseWidget {
      * @param1 x:number
      * @param2 y:number
      * @return Array<number>
-     * @deprecated dxVectorMapMethods.convertToGeo
+     * @deprecated dxVectorMap.convertToGeo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
