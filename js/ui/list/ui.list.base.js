@@ -541,10 +541,10 @@ export const ListBase = CollectionWidget.inherit({
 
     _setPreviousPageIfNewIsEmpty: function(result) {
         if(this.option('_revertPageOnEmptyLoad')) {
-            const dataSource = this._dataSource;
+            const dataSource = this.getDataSource();
             const pageIndex = dataSource?.pageIndex();
 
-            if(result && result.length === 0 && pageIndex > 0) {
+            if(result?.length === 0 && pageIndex > 0) {
                 this._fireContentReadyAction();
                 dataSource.pageIndex(pageIndex - 1);
             }

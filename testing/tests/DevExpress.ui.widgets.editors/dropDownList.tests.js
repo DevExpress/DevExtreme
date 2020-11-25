@@ -1281,7 +1281,7 @@ QUnit.module('popup', moduleConfig, () => {
         }
     });
 
-    QUnit.test('widget has a correct popup height for the first opening if the pageSize equal dataSource length (T942881)', function(assert) {
+    QUnit.test('widget has a correct popup height for the first opening if the pageSize is equal to dataSource length (T942881)', function(assert) {
         const items = [{
             id: 1,
             value: 'value11'

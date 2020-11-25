@@ -2542,7 +2542,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         assert.deepEqual($element.dxList('option', 'items'), [1, 2, 3, 4], 'all data loaded');
     });
 
-    QUnit.test('widget has pageIndex == 1 if the pageSize equal dataSource length ', function(assert) {
+    QUnit.test('widget has pageIndex == 1 if the pageSize is equal to dataSource length', function(assert) {
         const dataSource = new DataSource({
             store: new ArrayStore([1, 2, 3, 4]),
             pageSize: 4
@@ -2564,7 +2564,7 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         assert.strictEqual(dataSource.pageIndex(), 1, 'page index is correct');
     });
 
-    QUnit.test('widget has a correct pageIndex if the pageSize equal dataSource length if it has _revertPageOnEmptyLoad as true (T942881)', function(assert) {
+    QUnit.test('widget has a correct pageIndex if the pageSize is equal to dataSource length if it has _revertPageOnEmptyLoad is true (T942881)', function(assert) {
         const onContentReadySpy = sinon.spy();
         const dataSource = new DataSource({
             store: new ArrayStore([1, 2, 3, 4]),
@@ -2581,7 +2581,6 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
                     return false;
                 };
             }
-
         });
 
         $element.show().triggerHandler('dxshown');
