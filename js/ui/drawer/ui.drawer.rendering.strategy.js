@@ -143,7 +143,7 @@ class DrawerStrategy {
         return false;
     }
 
-    onViewContentWrapperCreated($viewContentWrapper, panelPosition) {
+    onPanelContentRendered() {
     }
 }
 
