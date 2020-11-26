@@ -45,6 +45,8 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
     .expect(scheduler.getAppointmentCount()).eql(6)
     .click(scheduler.getAppointment('Text', 3).element)
 
+    .expect(scheduler.appointmentTooltip.element.exists)
+    .ok()
     .click(scheduler.appointmentTooltip.deleteElement)
     .click(Scheduler.getDialog().appointment)
 

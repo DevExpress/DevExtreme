@@ -16,8 +16,10 @@ createTestCafe('localhost', 1437, 1438)
 
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
+        if(fs.existsSync('./testing/testcafe/screenshots')) {
         // eslint-disable-next-line spellcheck/spell-checker
-        fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
+            fs.rmdirSync('./testing/testcafe/screenshots', { recursive: true });
+        }
         const runner = testCafe.createRunner()
             .browsers(args.browsers.split(' '))
 
