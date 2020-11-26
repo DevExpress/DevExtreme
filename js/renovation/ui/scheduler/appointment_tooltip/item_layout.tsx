@@ -1,6 +1,6 @@
 import {
   Component, ComponentBindings, JSXComponent,
-  OneWay, Template, Fragment, Event,
+  OneWay, Template, Event,
 } from 'devextreme-generator/component_declaration/common';
 import noop from '../../../utils/noop';
 /* eslint-disable-next-line import/named */
@@ -17,41 +17,36 @@ import { defaultGetTextAndFormatDate } from './utils/default_functions';
 export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
   const ItemContentTemplate = viewModel.props.itemContentTemplate;
 
-  return (
-    <Fragment>
-      {ItemContentTemplate && (
-        <ItemContentTemplate
-          model={{
-            appointmentData: viewModel.props.item.data,
-            targetedAppointmentData: viewModel.currentAppointment,
-          }}
-          index={viewModel.props.index}
-        />
-      )}
-      {!ItemContentTemplate && (
-        <div
-          className={`dx-tooltip-appointment-item ${viewModel.props.className}`}
+  return ItemContentTemplate ? (
+    <ItemContentTemplate
+      model={{
+        appointmentData: viewModel.props.item.data,
+        targetedAppointmentData: viewModel.currentAppointment,
+      }}
+      index={viewModel.props.index}
+    />
+  ) : (
+    <div
+      className={`dx-tooltip-appointment-item ${viewModel.props.className}`}
           // eslint-disable-next-line react/jsx-props-no-spreading
-          {...viewModel.restAttributes}
-        >
-          <Marker color={viewModel.props.item.color} />
-          <TooltipItemContent
-            text={viewModel.formattedContent.text}
-            formattedDate={viewModel.formattedContent.formatDate}
-          />
-          {viewModel.props.showDeleteButton && (
-            <div className="dx-tooltip-appointment-item-delete-button-container">
-              <Button
-                className="dx-tooltip-appointment-item-delete-button"
-                icon="trash"
-                stylingMode="text"
-                onClick={viewModel.onDeleteButtonClick}
-              />
-            </div>
-          )}
-        </div>
+      {...viewModel.restAttributes}
+    >
+      <Marker color={viewModel.props.item.color} />
+      <TooltipItemContent
+        text={viewModel.formattedContent.text}
+        formattedDate={viewModel.formattedContent.formatDate}
+      />
+      {viewModel.props.showDeleteButton && (
+      <div className="dx-tooltip-appointment-item-delete-button-container">
+        <Button
+          className="dx-tooltip-appointment-item-delete-button"
+          icon="trash"
+          stylingMode="text"
+          onClick={viewModel.onDeleteButtonClick}
+        />
+      </div>
       )}
-    </Fragment>
+    </div>
   );
 };
 
