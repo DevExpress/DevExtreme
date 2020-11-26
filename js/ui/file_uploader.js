@@ -217,6 +217,14 @@ class FileUploader extends Editor {
         ]);
     }
 
+    _initOptions(options) {
+        const isLabelTextDefined = 'labelText' in options;
+        super._initOptions(options);
+        if(!isLabelTextDefined && !this._shouldDragOverBeRendered()) {
+            this.option('labelText', '');
+        }
+    }
+
     _init() {
         super._init();
 
@@ -336,7 +344,12 @@ class FileUploader extends Editor {
             this._$inputLabel = $('<div>');
         }
 
-        this._$inputLabel.text(this.option('labelText'));
+        this._updateInputLabelText();
+    }
+
+    _updateInputLabelText() {
+        const correctedValue = this._isInteractionDisabled() ? '' : this.option('labelText');
+        this._$inputLabel.text(correctedValue);
     }
 
     _focusTarget() {
@@ -737,12 +750,14 @@ class FileUploader extends Editor {
         return !this.option('readOnly') && (this.option('uploadMode') !== 'useForm' || this.option('nativeDropSupported'));
     }
 
+    _isInteractionDisabled() {
+        return this.option('readOnly') || this.option('disabled');
+    }
+
     _renderInputContainer() {
         this._$inputContainer = $('<div>')
             .addClass(FILEUPLOADER_INPUT_CONTAINER_CLASS)
             .appendTo(this._$inputWrapper);
-
-        this._displayInputContainerIfNeeded();
 
         this._$fileInput
             .addClass(FILEUPLOADER_INPUT_CLASS);
@@ -757,11 +772,6 @@ class FileUploader extends Editor {
             .appendTo(this._$inputContainer);
 
         this.setAria('labelledby', labelId, this._$fileInput);
-    }
-
-    _displayInputContainerIfNeeded() {
-        const displayProperty = this._shouldDragOverBeRendered() ? '' : 'none';
-        this._$inputContainer.css('display', displayProperty);
     }
 
     _renderInput() {
@@ -1067,7 +1077,7 @@ class FileUploader extends Editor {
         const readOnly = this.option('readOnly');
         this._selectButton.option('disabled', readOnly);
         this._files.forEach(file => file.cancelButton?.option('disabled', readOnly));
-        this._displayInputContainerIfNeeded();
+        this._updateInputLabelText();
         this._renderDragEvents();
     }
 
@@ -1130,7 +1140,7 @@ class FileUploader extends Editor {
                 this._invalidate();
                 break;
             case 'labelText':
-                this._$inputLabel.text(value);
+                this._updateInputLabelText();
                 break;
             case 'showFileList':
                 if(!this._preventRecreatingFiles) {
