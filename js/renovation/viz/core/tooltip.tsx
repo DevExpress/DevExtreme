@@ -2,11 +2,11 @@ import {
   Component, ComponentBindings, JSXComponent, OneWay, Ref, Effect, InternalState,
 } from 'devextreme-generator/component_declaration/common';
 
-import { Canvas, RecalculateCoordinatesFn } from './utils/types.d';
+import { Canvas, RecalculateCoordinatesFn } from './common/types.d';
 
 import {
   getCloudPoints, recalculateCoordinates, getCloudAngle,
-} from './utils/tooltip';
+} from './common/tooltip_computeds';
 
 export const viewFunction = ({
   textRef,

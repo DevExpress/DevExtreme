@@ -3,9 +3,9 @@ import { shallow } from 'enzyme';
 import { Tooltip, viewFunction as TooltipComponent } from '../tooltip';
 import {
   recalculateCoordinates, getCloudAngle, getCloudPoints,
-} from '../utils/tooltip';
+} from '../common/tooltip_computeds';
 
-jest.mock('../utils/tooltip', () => ({
+jest.mock('../common/tooltip_computeds', () => ({
   getCloudPoints: jest.fn().mockReturnValue('test_cloud_points'),
   recalculateCoordinates: jest.fn().mockReturnValue({
     x: 4, y: 5, anchorX: 11, anchorY: 12,
