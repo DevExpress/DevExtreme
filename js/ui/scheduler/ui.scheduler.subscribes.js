@@ -173,6 +173,7 @@ const subscribes = {
         const appointmentAdapter = this.createAppointmentAdapter(appointmentRaw);
         const targetedAdapter = this.createAppointmentAdapter(targetedAppointmentRaw || appointmentRaw);
 
+        // TODO pull out time zone converting from appointment adapter for knockout(T947938)
         const startDate = this.timeZoneCalculator.createDate(targetedAdapter.startDate, { path: 'toGrid' });
         const endDate = this.timeZoneCalculator.createDate(targetedAdapter.endDate, { path: 'toGrid' });
 
