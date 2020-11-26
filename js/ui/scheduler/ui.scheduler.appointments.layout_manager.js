@@ -1,5 +1,3 @@
-// eslint-disable-next-line no-restricted-imports
-import $ from 'jquery';
 import { equalByValue } from '../../core/utils/common';
 import VerticalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.vertical';
 import HorizontalAppointmentsStrategy from './rendering_strategies/ui.scheduler.appointments.strategy.horizontal';
@@ -50,7 +48,7 @@ class AppointmentLayoutManager {
             callback: groupOrientation => this.instance._groupOrientation = groupOrientation
         });
 
-        const appointments = items.map(item => $.extend({}, item));
+        const appointments = items.slice();
         this._positionMap = this._renderingStrategyInstance.createTaskPositionMap(appointments);
 
         return this._createAppointmentsMapCore(appointments, this._positionMap);

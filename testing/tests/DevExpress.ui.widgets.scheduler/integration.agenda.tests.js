@@ -1595,6 +1595,9 @@ module('Integration: Agenda', {
 
         assert.deepEqual($itemElements.length, 3, 'Appointment elements amount is correct');
 
+        // TODO: filtered items should not have settings due to it is a filtered dataSource items.
+        filteredItems.forEach(item => item.settings = null);
+
         const renderingStrategy = this.instance.getLayoutManager().getRenderingStrategyInstance();
         const itemPositions = renderingStrategy.createTaskPositionMap(filteredItems);
 
