@@ -184,13 +184,6 @@ const subscribes = {
         };
     },
 
-    _getAppointmentFields(data, arrayOfFields) { // TODO: remove!!!!
-        return arrayOfFields.reduce((accumulator, field) => {
-            accumulator[field] = this.fire('getField', field, data);
-            return accumulator;
-        }, {});
-    },
-
     _getTypeFormat(startDate, endDate, isAllDay) {
         if(isAllDay) {
             return 'DATE';
