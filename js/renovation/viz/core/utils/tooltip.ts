@@ -15,12 +15,36 @@ function getAbsoluteArc(cornerRadius: number, x: number, y: number): string {
   return `A ${cornerRadius} ${cornerRadius} 0 0 1 ${x} ${y}`;
 }
 
+function rotateSize({ width, height }: Size, angle: number): Size {
+  if (angle % 90 === 0 && angle % 180 !== 0) {
+    return { width: height, height: width };
+  }
+  return { width, height };
+}
+
+function rotateX({
+  x, y, anchorX, anchorY,
+}: Coordinates, angle: number): number {
+  return (anchorX - x) * round(cos(angle)) + (anchorY - y) * round(sin(angle)) + x;
+}
+
+function rotateY({
+  x, y, anchorX, anchorY,
+}: Coordinates, angle: number): number {
+  return -(anchorX - x) * round(sin(angle)) + (anchorY - y) * round(cos(angle)) + y;
+}
+
 export function getCloudPoints(
-  { width, height }: Size,
-  x: number, y: number, anchorX: number, anchorY: number,
+  size: Size,
+  coordinates: Coordinates,
+  { rotationAngle, radRotationAngle }: { rotationAngle: number; radRotationAngle: number },
   options: { arrowWidth: number; cornerRadius: number },
   bounded: boolean,
 ): string {
+  const { x, y } = coordinates;
+  const { width, height } = rotateSize(size, rotationAngle);
+  const anchorX = rotateX(coordinates, radRotationAngle);
+  const anchorY = rotateY(coordinates, radRotationAngle);
   const halfArrowWidth = options.arrowWidth / 2;
   const halfWidth = width / 2;
   const halfHeight = height / 2;
@@ -275,23 +299,4 @@ export function getCloudAngle(
     rotationAngle: angle,
     radRotationAngle: (angle * PI) / 180,
   };
-}
-
-export function rotateSize({ width, height }: Size, angle: number): Size {
-  if (angle % 90 === 0 && angle % 180 !== 0) {
-    return { width: height, height: width };
-  }
-  return { width, height };
-}
-
-export function rotateX({
-  x, y, anchorX, anchorY,
-}: Coordinates, angle: number): number {
-  return (anchorX - x) * round(cos(angle)) + (anchorY - y) * round(sin(angle)) + x;
-}
-
-export function rotateY({
-  x, y, anchorX, anchorY,
-}: Coordinates, angle: number): number {
-  return -(anchorX - x) * round(sin(angle)) + (anchorY - y) * round(cos(angle)) + y;
 }

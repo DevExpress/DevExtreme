@@ -5,7 +5,7 @@ import {
 import { Canvas, RecalculateCoordinatesFn } from './utils/types.d';
 
 import {
-  getCloudPoints, recalculateCoordinates, getCloudAngle, rotateSize, rotateX, rotateY,
+  getCloudPoints, recalculateCoordinates, getCloudAngle,
 } from './utils/tooltip';
 
 export const viewFunction = ({
@@ -16,27 +16,23 @@ export const viewFunction = ({
     cornerRadius = 0, arrowWidth = 0, offset, canvas, arrowLength,
   },
 }: Tooltip): JSX.Element => {
-  const width = size.width + (paddingLeftRight || 0) * 2;
-  const height = size.height + (paddingTopBottom || 0) * 2;
-  const fullSize = { width, height };
+  const fullSize = {
+    width: size.width + (paddingLeftRight || 0) * 2,
+    height: size.height + (paddingTopBottom || 0) * 2,
+  };
   const correctedCoordinates = recalculateCoordinates({
     canvas, anchorX: x, anchorY: y, size: fullSize, offset, arrowLength,
   } as RecalculateCoordinatesFn);
-  const { rotationAngle, radRotationAngle } = getCloudAngle(fullSize, correctedCoordinates);
+  const angles = getCloudAngle(fullSize, correctedCoordinates);
   return (
     <g pointerEvents="none">
       <path
-        d={getCloudPoints(
-          rotateSize(fullSize, rotationAngle),
-          correctedCoordinates.x, correctedCoordinates.y,
-          rotateX(correctedCoordinates, radRotationAngle),
-          rotateY(correctedCoordinates, radRotationAngle),
-          { cornerRadius, arrowWidth }, true,
-        )}
+        d={getCloudPoints(fullSize, correctedCoordinates, angles,
+          { cornerRadius, arrowWidth }, true)}
         fill={color}
         stroke={border?.color}
         strokeWidth={border?.width}
-        transform={`rotate(${rotationAngle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
+        transform={`rotate(${angles.rotationAngle} ${correctedCoordinates.x} ${correctedCoordinates.y})`}
       />
       <g textAnchor="middle" ref={textRef as any} transform={`translate(${correctedCoordinates.x}, ${correctedCoordinates.y - size.height / 2 - size.y})`}>
         <text x={0} y={0}>
