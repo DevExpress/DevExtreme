@@ -76,4 +76,9 @@ export default {
     width: 50%;
     padding: 10px;
 }
+
+.dx-scrollview-content {
+    min-height: 380px;
+}
+
 </style>
