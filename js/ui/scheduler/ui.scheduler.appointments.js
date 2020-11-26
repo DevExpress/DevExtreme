@@ -530,8 +530,7 @@ const SchedulerAppointments = CollectionWidget.inherit({
                 startDate: new Date(info?.appointment.startDate),
                 cellWidth: this.invoke('getCellWidth'),
                 cellHeight: this.invoke('getCellHeight'),
-                resizableConfig: this._resizableConfig(data, settings),
-                isDragSource: settings.isDragSource,
+                resizableConfig: this._resizableConfig(data, settings)
             });
 
             deferredColor.done(function(color) {
