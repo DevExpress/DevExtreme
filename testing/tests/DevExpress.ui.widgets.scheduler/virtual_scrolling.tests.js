@@ -48,7 +48,8 @@ module('Virtual Scrolling', {
                     };
                     return options[name] && options[name][arg0];
                 },
-                _isVerticalGroupedWorkSpace: () => false
+                _isVerticalGroupedWorkSpace: () => false,
+                updateAppointments: () => {},
             };
 
             this.scrollableMock = {
