@@ -11,111 +11,111 @@ import CollectionWidget, {
 
 export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     /**
-     * @docid dxGalleryOptions.animationDuration
+     * @docid
      * @default 400
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationDuration?: number;
     /**
-     * @docid dxGalleryOptions.animationEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     animationEnabled?: boolean;
     /**
-     * @docid dxGalleryOptions.dataSource
+     * @docid
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     dataSource?: string | Array<string | dxGalleryItem | any> | DataSource | DataSourceOptions;
     /**
-     * @docid dxGalleryOptions.focusStateEnabled
+     * @docid
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     focusStateEnabled?: boolean;
     /**
-     * @docid dxGalleryOptions.indicatorEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     indicatorEnabled?: boolean;
     /**
-     * @docid dxGalleryOptions.initialItemWidth
+     * @docid
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     initialItemWidth?: number;
     /**
-     * @docid dxGalleryOptions.items
+     * @docid
      * @fires dxGalleryOptions.onOptionChanged
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<string | dxGalleryItem | any>;
     /**
-     * @docid dxGalleryOptions.loop
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     loop?: boolean;
     /**
-     * @docid dxGalleryOptions.noDataText
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     noDataText?: string;
     /**
-     * @docid dxGalleryOptions.selectedIndex
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     selectedIndex?: number;
     /**
-     * @docid dxGalleryOptions.showIndicator
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showIndicator?: boolean;
     /**
-     * @docid dxGalleryOptions.showNavButtons
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     showNavButtons?: boolean;
     /**
-     * @docid dxGalleryOptions.slideshowDelay
+     * @docid
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     slideshowDelay?: number;
     /**
-     * @docid dxGalleryOptions.stretchImages
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     stretchImages?: boolean;
     /**
-     * @docid dxGalleryOptions.swipeEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     swipeEnabled?: boolean;
     /**
-     * @docid dxGalleryOptions.wrapAround
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -123,7 +123,7 @@ export interface dxGalleryOptions extends CollectionWidgetOptions<dxGallery> {
     wrapAround?: boolean;
 }
 /**
- * @docid dxGallery
+ * @docid
  * @inherits CollectionWidget
  * @module ui/gallery
  * @export default
@@ -134,7 +134,7 @@ export default class dxGallery extends CollectionWidget {
     constructor(element: Element, options?: dxGalleryOptions)
     constructor(element: JQuery, options?: dxGalleryOptions)
     /**
-     * @docid dxGallery.goToItem
+     * @docid
      * @publicName goToItem(itemIndex, animation)
      * @param1 itemIndex:numeric
      * @param2 animation:boolean
@@ -144,7 +144,7 @@ export default class dxGallery extends CollectionWidget {
      */
     goToItem(itemIndex: number, animation: boolean): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxGallery.nextItem
+     * @docid
      * @publicName nextItem(animation)
      * @param1 animation:boolean
      * @return Promise<void>
@@ -153,7 +153,7 @@ export default class dxGallery extends CollectionWidget {
      */
     nextItem(animation: boolean): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxGallery.prevItem
+     * @docid
      * @publicName prevItem(animation)
      * @param1 animation:boolean
      * @return Promise<void>
@@ -163,15 +163,20 @@ export default class dxGallery extends CollectionWidget {
     prevItem(animation: boolean): Promise<void> & JQueryPromise<void>;
 }
 
+/**
+ * @docid
+ * @type object
+ * @inherits CollectionWidgetItem
+ */
 export interface dxGalleryItem extends CollectionWidgetItem {
     /**
-     * @docid dxGalleryItem.imageAlt
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     imageAlt?: string;
     /**
-     * @docid dxGalleryItem.imageSrc
+     * @docid
      * @prevFileNamespace DevExpress.ui
      * @public
      */

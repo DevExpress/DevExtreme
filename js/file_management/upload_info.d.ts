@@ -1,5 +1,5 @@
 /**
- * @docid UploadInfo
+ * @docid
  * @module file_management/upload_info
  * @namespace DevExpress.fileManagement
  * @export default
@@ -8,35 +8,35 @@
  */
 export default interface UploadInfo {
     /**
-     * @docid UploadInfo.bytesUploaded
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     bytesUploaded: number;
 
     /**
-     * @docid UploadInfo.chunkCount
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     chunkCount: number;
 
     /**
-     * @docid UploadInfo.customData
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     customData: any;
 
     /**
-     * @docid UploadInfo.chunkBlob
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
     chunkBlob: Blob;
 
     /**
-     * @docid UploadInfo.chunkIndex
+     * @docid
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */

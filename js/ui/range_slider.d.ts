@@ -9,21 +9,21 @@ import {
 import dxTrackBar from './track_bar';
 export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider> {
     /**
-     * @docid dxRangeSliderOptions.end
+     * @docid
      * @default 60
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     end?: number;
     /**
-     * @docid dxRangeSliderOptions.endName
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     endName?: string;
     /**
-     * @docid dxRangeSliderOptions.onValueChanged
+     * @docid
      * @action
      * @extends Action
      * @type_function_param1_field4 start:number
@@ -34,21 +34,21 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
      */
     onValueChanged?: ((e: { component?: dxRangeSlider, element?: dxElement, model?: any, start?: number, end?: number, value?: Array<number> }) => any);
     /**
-     * @docid dxRangeSliderOptions.start
+     * @docid
      * @default 40
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     start?: number;
     /**
-     * @docid dxRangeSliderOptions.startName
+     * @docid
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     startName?: string;
     /**
-     * @docid dxRangeSliderOptions.value
+     * @docid
      * @default [40, 60]
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -56,7 +56,7 @@ export interface dxRangeSliderOptions extends dxSliderBaseOptions<dxRangeSlider>
     value?: Array<number>;
 }
 /**
- * @docid dxRangeSlider
+ * @docid
  * @isEditor
  * @inherits dxSliderBase
  * @module ui/range_slider

@@ -197,11 +197,6 @@ export const ListBase = CollectionWidget.inherit({
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
-            /**
-            * @name dxListItem
-            * @inherits CollectionWidgetItem
-            * @type object
-            */
         });
     },
 

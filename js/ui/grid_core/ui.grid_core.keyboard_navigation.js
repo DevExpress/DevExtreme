@@ -1870,30 +1870,9 @@ export default {
             useLegacyKeyboardNavigation: false,
 
             keyboardNavigation: {
-                /**
-                 * @name GridBaseOptions.keyboardNavigation.enabled
-                 * @type boolean
-                 * @default true
-                 */
                 enabled: true,
-
-                /**
-                 * @name GridBaseOptions.keyboardNavigation.enterKeyAction
-                 * @type Enums.GridEnterKeyAction
-                 * @default "startEdit"
-                 */
                 enterKeyAction: 'startEdit',
-                /**
-                 * @name GridBaseOptions.keyboardNavigation.enterKeyDirection
-                 * @type Enums.GridEnterKeyDirection
-                 * @default "none"
-                 */
                 enterKeyDirection: 'none',
-                /**
-                 * @name GridBaseOptions.keyboardNavigation.editOnKeyPress
-                 * @type boolean
-                 * @default false
-                 */
                 editOnKeyPress: false
             }
         };

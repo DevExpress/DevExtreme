@@ -14,7 +14,7 @@ import Widget, {
 
 export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     /**
-     * @docid dxSlideOutViewOptions.contentTemplate
+     * @docid
      * @type_function_param1 contentElement:dxElement
      * @default "content"
      * @prevFileNamespace DevExpress.ui
@@ -22,7 +22,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
      */
     contentTemplate?: template | ((contentElement: dxElement) => any);
     /**
-     * @docid dxSlideOutViewOptions.menuPosition
+     * @docid
      * @type Enums.SlideOutMenuPosition
      * @default "normal"
      * @prevFileNamespace DevExpress.ui
@@ -30,7 +30,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
      */
     menuPosition?: 'inverted' | 'normal';
     /**
-     * @docid dxSlideOutViewOptions.menuTemplate
+     * @docid
      * @type_function_param1 menuElement:dxElement
      * @default null
      * @prevFileNamespace DevExpress.ui
@@ -38,14 +38,14 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
      */
     menuTemplate?: template | ((menuElement: dxElement) => any);
     /**
-     * @docid dxSlideOutViewOptions.menuVisible
+     * @docid
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     menuVisible?: boolean;
     /**
-     * @docid dxSlideOutViewOptions.swipeEnabled
+     * @docid
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -53,7 +53,7 @@ export interface dxSlideOutViewOptions extends WidgetOptions<dxSlideOutView> {
     swipeEnabled?: boolean;
 }
 /**
- * @docid dxSlideOutView
+ * @docid
  * @inherits Widget
  * @hasTranscludedContent
  * @module ui/slide_out_view
@@ -65,7 +65,7 @@ export default class dxSlideOutView extends Widget {
     constructor(element: Element, options?: dxSlideOutViewOptions)
     constructor(element: JQuery, options?: dxSlideOutViewOptions)
     /**
-     * @docid dxSlideOutView.content
+     * @docid
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -73,7 +73,7 @@ export default class dxSlideOutView extends Widget {
      */
     content(): dxElement;
     /**
-     * @docid dxSlideOutView.hideMenu
+     * @docid
      * @publicName hideMenu()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -81,7 +81,7 @@ export default class dxSlideOutView extends Widget {
      */
     hideMenu(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxSlideOutView.menuContent
+     * @docid
      * @publicName menuContent()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -89,7 +89,7 @@ export default class dxSlideOutView extends Widget {
      */
     menuContent(): dxElement;
     /**
-     * @docid dxSlideOutView.showMenu
+     * @docid
      * @publicName showMenu()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -97,7 +97,7 @@ export default class dxSlideOutView extends Widget {
      */
     showMenu(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxSlideOutView.toggleMenuVisibility
+     * @docid
      * @publicName toggleMenuVisibility()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui

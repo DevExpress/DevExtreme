@@ -121,11 +121,6 @@ const ActionSheet = CollectionWidget.inherit({
     _initTemplates: function() {
         this.callBase();
         /**
-        * @name dxActionSheetItem
-        * @inherits CollectionWidgetItem
-        * @type object
-        */
-        /**
         * @name dxActionSheetItem.visible
         * @type boolean
         * @default true
