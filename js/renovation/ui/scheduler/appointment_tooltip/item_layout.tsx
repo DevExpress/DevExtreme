@@ -67,7 +67,7 @@ export class TooltipItemLayoutProps {
 
   @Template() itemContentTemplate?: any;
 
-  @Event() onDelete?: CheckAndDeleteAppointmentFn = noop;
+  @Event() onDelete: CheckAndDeleteAppointmentFn = noop;
 
   @Event() onHide: () => void = noop;
 
@@ -95,7 +95,7 @@ export class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
     return (e: { event: Event }): void => {
       onHide();
       e.event.stopPropagation();
-      onDelete?.(item.data, singleAppointment);
+      onDelete(item.data, singleAppointment);
     };
   }
 
