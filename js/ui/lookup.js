@@ -899,6 +899,7 @@ const Lookup = DropDownList.inherit({
         }
 
         e.preventDefault();
+        this._saveValueChangeEvent(e);
         this._selectListItem(e.itemData, $itemElement);
     },
 
