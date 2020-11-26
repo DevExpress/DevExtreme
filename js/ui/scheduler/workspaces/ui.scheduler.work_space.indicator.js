@@ -13,10 +13,14 @@ const TIME_PANEL_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-time-panel-current-time
 const HEADER_CURRENT_TIME_CELL_CLASS = 'dx-scheduler-header-panel-current-time-cell';
 
 class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
+    _getTimeZoneCalculator() {
+        return this.invoke('getTimeZoneCalculator');
+    }
     _getToday() {
-        const date = this.option('indicatorTime') || new Date();
+        const todayDate = this.option('indicatorTime') || new Date();
 
-        return this.invoke('convertDateByTimezone', date) || date;
+        const timeZoneCalculator = this._getTimeZoneCalculator();
+        return timeZoneCalculator?.createDate(todayDate, { path: 'toGrid' }) || todayDate;
     }
 
     isIndicationOnView() {
@@ -202,16 +206,12 @@ class SchedulerWorkSpaceIndicator extends SchedulerWorkSpace {
     }
 
     _isCurrentTimeHeaderCell(headerIndex) {
-        let result = false;
-
         if(this.isIndicationOnView()) {
             const date = this._getDateByIndex(headerIndex);
-            const now = this.option('indicatorTime') || new Date();
-
-            result = dateUtils.sameDate(date, now);
+            return dateUtils.sameDate(date, this._getToday());
         }
 
-        return result;
+        return false;
     }
 
     _getTimeCellClass(i) {
