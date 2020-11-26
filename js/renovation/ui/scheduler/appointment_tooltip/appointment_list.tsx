@@ -5,7 +5,7 @@ import noop from '../../../utils/noop';
 import { List } from '../../list';
 import { TooltipItemLayout } from './item_layout';
 import {
-  GetTextAndFormatDateFn, GetSingleAppointmentFn,
+  GetTextAndFormatDateFn, GetSingleAppointmentFn, ItemContentTemplate,
   CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
 } from './types.d';
 import getCurrentAppointment from './utils/get_current_appointment';
@@ -19,10 +19,10 @@ interface ItemTemplateProps {
   container: HTMLDivElement;
 }
 interface ListItemProps {
-  itemData?: AppointmentItem;
+  itemData: AppointmentItem;
 }
 
-export const viewFunction = (viewModel: AppointmentList) => (
+export const viewFunction = (viewModel: AppointmentList): JSX.Element => (
   <List
     itemTemplate={({ item, index }: ItemTemplateProps): JSX.Element => (
       <TooltipItemLayout
@@ -32,7 +32,7 @@ export const viewFunction = (viewModel: AppointmentList) => (
         onHide={viewModel.props.onHide}
         itemContentTemplate={viewModel.props.itemContentTemplate}
         getTextAndFormatDate={viewModel.props.getTextAndFormatDate}
-        singleAppointment={viewModel.props.getSingleAppointmentData!(
+        singleAppointment={viewModel.props.getSingleAppointmentData(
           item.data, viewModel.props.target!,
         )}
         showDeleteButton={viewModel.props.isEditingAllowed && !item.data.disabled}
@@ -64,9 +64,9 @@ export class AppointmentListProps {
 
   @Event() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 
-  @Event() getSingleAppointmentData?: GetSingleAppointmentFn = defaultGetSingleAppointment;
+  @Event() getSingleAppointmentData: GetSingleAppointmentFn = defaultGetSingleAppointment;
 
-  @Template() itemContentTemplate?: any;
+  @Template() itemContentTemplate?: ItemContentTemplate;
 }
 
 @Component({
@@ -77,7 +77,7 @@ export class AppointmentList extends JSXComponent(AppointmentListProps) {
   get onItemClick() {
     return ({ itemData }: ListItemProps): void => {
       const { showAppointmentPopup } = this.props;
-      showAppointmentPopup!(itemData!.data, false, getCurrentAppointment(itemData!));
+      showAppointmentPopup?.(itemData.data, false, getCurrentAppointment(itemData));
     };
   }
 }

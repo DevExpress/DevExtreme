@@ -2,12 +2,12 @@ import {
   Component, ComponentBindings, JSXComponent,
   OneWay, Template, Fragment, Event,
 } from 'devextreme-generator/component_declaration/common';
-import BaseComponent from '../../../preact_wrapper/tooltip_item_content';
 import noop from '../../../utils/noop';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../ui/scheduler';
 import {
-  AppointmentItem, FormattedContent, GetTextAndFormatDateFn, CheckAndDeleteAppointmentFn,
+  AppointmentItem, FormattedContent, GetTextAndFormatDateFn,
+  CheckAndDeleteAppointmentFn, ItemContentTemplate as ItemContentTemplateType,
 } from './types.d';
 import { Marker } from './marker';
 import { Button } from '../../button';
@@ -15,27 +15,27 @@ import { TooltipItemContent } from './item_content';
 import getCurrentAppointment from './utils/get_current_appointment';
 import { defaultGetTextAndFormatDate } from './utils/default_functions';
 
-export const viewFunction = (viewModel: TooltipItemLayout) => {
-  const useTemplate = !!viewModel.props.itemContentTemplate;
+export const viewFunction = (viewModel: TooltipItemLayout): JSX.Element => {
+  const ItemContentTemplate = viewModel.props.itemContentTemplate;
 
   return (
     <Fragment>
-      {useTemplate && (
-        <viewModel.props.itemContentTemplate
+      {ItemContentTemplate && (
+        <ItemContentTemplate
           model={{
-            appointmentData: viewModel.props.item!.data,
+            appointmentData: viewModel.props.item.data,
             targetedAppointmentData: viewModel.currentAppointment,
           }}
           index={viewModel.props.index}
         />
       )}
-      {!useTemplate && (
+      {!ItemContentTemplate && (
         <div
           className={`dx-tooltip-appointment-item ${viewModel.props.className}`}
           // eslint-disable-next-line react/jsx-props-no-spreading
           {...viewModel.restAttributes}
         >
-          <Marker color={viewModel.props.item!.color} />
+          <Marker color={viewModel.props.item.color} />
           <TooltipItemContent
             text={viewModel.formattedContent.text}
             formattedDate={viewModel.formattedContent.formatDate}
@@ -60,54 +60,50 @@ export const viewFunction = (viewModel: TooltipItemLayout) => {
 export class TooltipItemLayoutProps {
   @OneWay() className?: string = '';
 
-  @OneWay() item?: AppointmentItem = { data: {} };
+  @OneWay() item: AppointmentItem = { data: {} };
 
-  @OneWay() index?: number;
+  @OneWay() index = 0;
 
   @OneWay() showDeleteButton?: boolean = true;
 
-  @Template() itemContentTemplate?: any;
+  @Template() itemContentTemplate?: ItemContentTemplateType;
 
   @Event() onDelete?: CheckAndDeleteAppointmentFn = noop;
 
-  @Event() onHide?: () => void = noop;
+  @Event() onHide: () => void = noop;
 
-  @OneWay() getTextAndFormatDate?: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
+  @OneWay() getTextAndFormatDate: GetTextAndFormatDateFn = defaultGetTextAndFormatDate;
 
-  @OneWay() singleAppointment?: dxSchedulerAppointment;
+  @OneWay() singleAppointment: dxSchedulerAppointment = {};
 }
 
 @Component({
   defaultOptionRules: null,
   view: viewFunction,
-  jQuery: {
-    register: true,
-    component: BaseComponent,
-  },
 })
 export class TooltipItemLayout extends JSXComponent(TooltipItemLayoutProps) {
   get currentAppointment(): dxSchedulerAppointment {
     const { item } = this.props;
 
-    return getCurrentAppointment(item!);
+    return getCurrentAppointment(item);
   }
 
-  get onDeleteButtonClick(): (e: any) => void {
+  get onDeleteButtonClick(): (e: { event: Event }) => void {
     const {
       singleAppointment, item, onHide, onDelete,
     } = this.props;
 
-    return (e: any): void => {
-      onHide!();
+    return (e: { event: Event }): void => {
+      onHide();
       e.event.stopPropagation();
-      onDelete!(item!.data, singleAppointment!);
+      onDelete?.(item.data, singleAppointment);
     };
   }
 
   get formattedContent(): FormattedContent {
     const { getTextAndFormatDate, item } = this.props;
-    const { data } = item!;
+    const { data } = item;
 
-    return getTextAndFormatDate!(data, this.currentAppointment);
+    return getTextAndFormatDate(data, this.currentAppointment);
   }
 }
