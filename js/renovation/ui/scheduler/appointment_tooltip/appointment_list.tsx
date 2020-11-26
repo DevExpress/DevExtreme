@@ -5,7 +5,7 @@ import noop from '../../../utils/noop';
 import { List } from '../../list';
 import { TooltipItemLayout } from './item_layout';
 import {
-  GetTextAndFormatDateFn, GetSingleAppointmentFn, ItemContentTemplate,
+  GetTextAndFormatDateFn, GetSingleAppointmentFn,
   CheckAndDeleteAppointmentFn, ShowAppointmentPopupFn, AppointmentItem,
 } from './types.d';
 import getCurrentAppointment from './utils/get_current_appointment';
@@ -66,7 +66,7 @@ export class AppointmentListProps {
 
   @Event() getSingleAppointmentData: GetSingleAppointmentFn = defaultGetSingleAppointment;
 
-  @Template() itemContentTemplate?: ItemContentTemplate;
+  @Template() itemContentTemplate?: any;
 }
 
 @Component({

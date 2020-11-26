@@ -6,8 +6,7 @@ import noop from '../../../utils/noop';
 /* eslint-disable-next-line import/named */
 import { dxSchedulerAppointment } from '../../../../ui/scheduler';
 import {
-  AppointmentItem, FormattedContent, GetTextAndFormatDateFn,
-  CheckAndDeleteAppointmentFn, ItemContentTemplate as ItemContentTemplateType,
+  AppointmentItem, FormattedContent, GetTextAndFormatDateFn, CheckAndDeleteAppointmentFn,
 } from './types.d';
 import { Marker } from './marker';
 import { Button } from '../../button';
@@ -66,7 +65,7 @@ export class TooltipItemLayoutProps {
 
   @OneWay() showDeleteButton?: boolean = true;
 
-  @Template() itemContentTemplate?: ItemContentTemplateType;
+  @Template() itemContentTemplate?: any;
 
   @Event() onDelete?: CheckAndDeleteAppointmentFn = noop;
 

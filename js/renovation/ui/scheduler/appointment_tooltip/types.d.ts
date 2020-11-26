@@ -51,13 +51,3 @@ export type ShowAppointmentPopupFn = (
   appointment: dxSchedulerAppointment, visibleButtons: boolean,
   currentAppointment: dxSchedulerAppointment,
 ) => void;
-
-export type ItemContentTemplate = (
-  props: {
-    model: {
-      appointmentData: dxSchedulerAppointment;
-      targetedAppointmentData?: dxSchedulerAppointment;
-    };
-    index: number;
-  },
-) => JSX.Element;
