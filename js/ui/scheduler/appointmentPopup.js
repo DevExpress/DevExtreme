@@ -142,9 +142,9 @@ export default class AppointmentPopup {
         return formElement;
     }
 
-    _createAppointmentFormData(appointmentData) {
-        const recurrenceRule = this.scheduler.fire('getField', 'recurrenceRule', appointmentData);
-        const result = extend(true, { repeat: !!recurrenceRule }, appointmentData);
+    _createAppointmentFormData(rawAppointment) {
+        const appointment = this._createAppointmentAdapter(rawAppointment);
+        const result = extend(true, { repeat: !!appointment.recurrenceRule }, rawAppointment);
         each(this.scheduler._resourcesManager.getResourcesFromItem(result, true) || {}, (name, value) => result[name] = value);
 
         return result;
@@ -193,9 +193,13 @@ export default class AppointmentPopup {
         return this.scheduler._editAppointmentData ? !this.scheduler._editing.allowUpdating : false;
     }
 
+    _createAppointmentAdapter(rawAppointment) {
+        return this.scheduler.createAppointmentAdapter(rawAppointment);
+    }
+
     _updateForm() {
         const { data } = this.state.appointment;
-        const adapter = this.scheduler.createAppointmentAdapter(data);
+        const adapter = this._createAppointmentAdapter(data);
 
         const allDay = adapter.allDay;
         const startDate = adapter.startDate && adapter.calculateStartDate('toAppointment');
@@ -204,7 +208,18 @@ export default class AppointmentPopup {
         this.state.appointment.isEmptyText = data === undefined || adapter.text === undefined;
         this.state.appointment.isEmptyDescription = data === undefined || adapter.description === undefined;
 
-        const formData = extend({ text: '', description: '', recurrenceRule: '' }, this._createAppointmentFormData(data));
+        const appointment = this._createAppointmentAdapter(this._createAppointmentFormData(data));
+        if(appointment.text === undefined) {
+            appointment.text = '';
+        }
+        if(appointment.description === undefined) {
+            appointment.description = '';
+        }
+        if(appointment.recurrenceRule === undefined) {
+            appointment.recurrenceRule = '';
+        }
+
+        const formData = appointment.source();
 
         if(startDate) {
             this.scheduler.fire('setField', 'startDate', formData, startDate);
