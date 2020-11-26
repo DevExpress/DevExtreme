@@ -21,6 +21,7 @@ class AgendaRenderingStrategy extends BaseAppointmentsStrategy {
     createTaskPositionMap(appointments) {
         let height;
         let appointmentsByResources;
+
         if(appointments.length) {
             height = this.instance.fire('getAgendaVerticalStepHeight');
             appointmentsByResources = this.instance.fire('groupAppointmentsByResources', appointments);

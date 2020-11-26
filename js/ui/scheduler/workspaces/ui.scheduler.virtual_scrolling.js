@@ -140,11 +140,11 @@ export default class VirtualScrollingDispatcher {
             clearTimeout(this._renderAppointmentTimeout);
 
             this._renderAppointmentTimeout = setTimeout(
-                () => workspace.invoke('renderAppointments'),
+                () => workspace.invoke('processAppointments'),
                 renderTimeout
             );
         } else {
-            workspace.invoke('renderAppointments');
+            workspace.invoke('processAppointments');
         }
     }
 }

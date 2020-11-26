@@ -32,6 +32,7 @@ import AppointmentDragBehavior from '../appointmentDragBehavior';
 import { FIXED_CONTAINER_CLASS } from '../constants';
 import timeZoneUtils from '../utils.timeZone';
 import WidgetObserver from '../base/widgetObserver';
+import DataHelperMixin from '../../../data_helper';
 
 import VirtualScrollingDispatcher from './ui.scheduler.virtual_scrolling';
 import ViewDataProvider from './view_data_provider';
@@ -1197,6 +1198,13 @@ class SchedulerWorkSpace extends WidgetObserver {
         this._updateGroupTableHeight();
 
         this._shader = new VerticalShader(this);
+    }
+
+    onDataSourceChanged() {
+    }
+
+    preRenderAppointments(options) {
+        this.option('allDayExpanded', options.allDayExpanded);
     }
 
     isGroupedAllDayPanel() {
@@ -3267,5 +3275,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         return this.option('showAllDayPanel');
     }
 }
+
+SchedulerWorkSpace.include(DataHelperMixin);
 
 export default SchedulerWorkSpace;

@@ -1326,13 +1326,12 @@ class Scheduler extends Widget {
         if(this._readyToRenderAppointments) {
             this._workSpaceRecalculation.done((function() {
 
-                this._renderAppointments();
+                this._processAppointments();
 
-                if(this._isAgenda()) {
-                    this._workSpace._renderView();
-                    // TODO: remove rows calculation from this callback
-                    this._dataSourceLoadedCallback.fireWith(this, [result]);
-                }
+                const filteredItems = this.getFilteredItems();
+
+                this.getWorkSpace().onDataSourceChanged(filteredItems);
+
             }).bind(this));
         }
     }
@@ -1349,14 +1348,15 @@ class Scheduler extends Widget {
         return this.fire(prerenderFilterName);
     }
 
-    _renderAppointments() {
+    _processAppointments() {
+        const workspace = this.getWorkSpace();
+
         this._filteredItems = this._filterAppointments();
 
-        this._workSpace.option('allDayExpanded', this._isAllDayExpanded(this._filteredItems));
-
-        if(this._isAgenda()) {
-            this.getRenderingStrategyInstance().calculateRows(this._filteredItems, 7, this.option('currentDate'), true);
-        }
+        workspace.preRenderAppointments({
+            allDayExpanded: workspace.option('allDayExpanded', this._isAllDayExpanded(this._filteredItems)),
+            appointments: this._filteredItems
+        });
 
         if(this._filteredItems.length && this._isVisible()) {
             this._appointments.option('items', this._getAppointmentsToRepaint());
