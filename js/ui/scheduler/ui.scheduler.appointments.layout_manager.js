@@ -48,7 +48,10 @@ class AppointmentLayoutManager {
             callback: groupOrientation => this.instance._groupOrientation = groupOrientation
         });
 
-        const appointments = items.slice();
+        const appointments = items
+            ? items.slice()
+            : [];
+
         this._positionMap = this._renderingStrategyInstance.createTaskPositionMap(appointments);
 
         return this._createAppointmentsMapCore(appointments, this._positionMap);
