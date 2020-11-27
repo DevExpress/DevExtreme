@@ -781,7 +781,7 @@ export const BaseChart = BaseWidget.inherit({
         that._seriesElementsDrawn = true;
     },
 
-    _chargesApplied() {
+    _changesApplied() {
         const that = this;
         if(that._seriesElementsDrawn) {
             that._seriesElementsDrawn = false;
