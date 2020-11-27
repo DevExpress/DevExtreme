@@ -34,6 +34,9 @@ const FEEDBACK_SHOW_TIMEOUT = 30;
 const FEEDBACK_HIDE_TIMEOUT = 400;
 const CONTAINER_MARGIN = 7;
 
+const getRight = (el) => $(el).get(0).getBoundingClientRect().right;
+const getLeft = (el) => $(el).get(0).getBoundingClientRect().left;
+const getWidth = (el) => $(el).get(0).getBoundingClientRect().width;
 
 const isRangeSliderDimensionsMatchOptions = (id, assert) => {
     const element = $(id);
@@ -50,15 +53,9 @@ const isRangeSliderDimensionsMatchOptions = (id, assert) => {
     const range = element.find('.' + SLIDER_RANGE_CLASS);
     const trackBarContainer = range.parent();
 
-    const rangeMargins = CONTAINER_MARGIN;
-
-    const getRight = (el) => $(el).get(0).getBoundingClientRect().right;
-    const getLeft = (el) => $(el).get(0).getBoundingClientRect().left;
-    const getWidth = (el) => $(el).get(0).getBoundingClientRect().width;
-
-    let expectedRangeWidth = (end - start) / (max - min) * (width - 2 * rangeMargins);
-    let expectedRangeLeftOffset = (start - min) / (max - min) * (width - 2 * rangeMargins);
-    let expectedRangeRightOffset = (max - end) / (max - min) * (width - 2 * rangeMargins);
+    let expectedRangeWidth = (end - start) / (max - min) * (width - 2 * CONTAINER_MARGIN);
+    let expectedRangeLeftOffset = (start - min) / (max - min) * (width - 2 * CONTAINER_MARGIN);
+    let expectedRangeRightOffset = (max - end) / (max - min) * (width - 2 * CONTAINER_MARGIN);
 
     if(rtl) {
         const tmpRangeOffset = expectedRangeLeftOffset;
@@ -74,9 +71,11 @@ const isRangeSliderDimensionsMatchOptions = (id, assert) => {
     const calculatedRangeLeftOffset = getLeft(range) - getLeft(trackBarContainer);
     const calculatedRangeRightOffset = getRight(trackBarContainer) - getRight(range);
 
-    // TODO what 6 is?? 7 for rtl
-    const calculatedStartHandleOffset = getLeft(handleStart) - getLeft(trackBarContainer) + 6;
-    const calculatedEndHandleOffset = getRight(trackBarContainer) - getRight(handleEnd) + 6;
+    const startHandleAndRangeDifference = Math.abs(parseInt(handleStart.css('marginLeft')) + parseInt(range.css('borderLeftWidth')));
+    const endHandleAndRangeDifference = Math.abs(parseInt(handleEnd.css('marginRight')) + parseInt(range.css('borderRightWidth')));
+
+    const calculatedStartHandleOffset = getLeft(handleStart) - getLeft(trackBarContainer) + startHandleAndRangeDifference;
+    const calculatedEndHandleOffset = getRight(trackBarContainer) - getRight(handleEnd) + endHandleAndRangeDifference;
 
     if(expectedRangeWidth === 0) {
         // range has 1px border and if width === 0, real width === 2
@@ -94,7 +93,6 @@ const isRangeSliderDimensionsMatchOptions = (id, assert) => {
     assert.roughEqual(calculatedRangeRightOffset, expectedRangeRightOffset, 0.5, `${SLIDER_RANGE_CLASS} right offset`);
     assert.roughEqual(calculatedStartHandleOffset, expectedRangeLeftOffset, 1, `start ${SLIDER_HANDLE_CLASS} offset`);
     assert.roughEqual(calculatedEndHandleOffset, expectedRangeRightOffset, 1, `end ${SLIDER_HANDLE_CLASS} offset`);
-
 };
 
 const moduleOptions = {
