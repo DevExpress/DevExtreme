@@ -212,6 +212,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
             that._applyChanges();
             that._changes.reset();
             that._applyingChanges = false;
+            that._changesApplied();
             that._renderer.unlock();
             if(that._optionsQueue) {
                 that._applyQueuedOptions();
@@ -623,6 +624,8 @@ const baseWidget = isServerSide ? getEmptyComponent() : DOMComponent.inherit({
     },
 
     _notify: noop,
+
+    _changesApplied: noop,
 
     _optionChangesMap: {
         size: 'CONTAINER_SIZE',
