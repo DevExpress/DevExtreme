@@ -41,12 +41,13 @@ QUnit.test('Appointment template should be render once(T947938)', function(asser
         this.schedulerOptions = {
             dataSource: [{
                 text: ko.observable('Website Re-Design Plan'),
-                startDate: ko.observable(new Date('2021-05-24T06:30:00.000Z')),
-                endDate: ko.observable(new Date('2021-05-24T08:30:00.000Z'))
+                startDate: ko.observable(new Date(2021, 4, 25, 1)),
+                endDate: ko.observable(new Date(2021, 4, 25, 2))
             }],
             views: ['week'],
             currentView: 'week',
             currentDate: new Date(2021, 4, 25),
+            height: 600
         };
     }
 
