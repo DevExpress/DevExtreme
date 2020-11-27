@@ -375,7 +375,10 @@ module.exports = {
                                             break;
                                         case 'insert':
                                             if(!$rowsElement.length) {
-                                                tableElement && $newRowElement.prependTo(tableElement.children('tbody'));
+                                                if(tableElement) {
+                                                    const target = $newRowElement.is('tbody') ? tableElement : tableElement.children('tbody');
+                                                    $newRowElement.prependTo(target);
+                                                }
                                             } else if($rowElement.length) {
                                                 $newRowElement.insertBefore($rowElement);
                                             } else {

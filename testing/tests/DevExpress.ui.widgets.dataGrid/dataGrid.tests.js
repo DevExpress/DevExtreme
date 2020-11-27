@@ -5818,6 +5818,81 @@ QUnit.module('templates', baseModuleConfig, () => {
         assert.strictEqual($(dataGrid.$element()).find('[data-options]').length, 0, 'no elements with data-options attribute');
     });
 
+    // T952701
+    QUnit.test('Add row when DataGrid is empty and rowTemplate is used', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [],
+            loadingTimeout: undefined,
+            columns: ['field1', {
+                dataField: 'field2',
+                width: 100
+            }],
+            rowTemplate: (container, options) => {
+                $(container).append(
+                    `<tbody class='dx-row'>
+                        <tr>
+                            <td>new</td>
+                            <td>new</td>
+                        </tr>
+                    </tbody>`
+                );
+            }
+        });
+
+        // act
+        dataGrid.addRow();
+
+        // assert
+        const $row = $(dataGrid.getRowElement(0));
+        const $cells = $row.find('td');
+        assert.equal($cells.eq(0).outerWidth(), 900, 'first cell width');
+        assert.equal($cells.eq(1).outerWidth(), 100, 'second cell width');
+        assert.equal(dataGrid.$element().outerWidth(), 1000, 'dataGrid width');
+    });
+
+    // T952701
+    QUnit.test('Add row when DataGrid is empty and rowTemplate is used (with columnAutoWidth and editing)', function(assert) {
+        const dataGrid = createDataGrid({
+            dataSource: [],
+            loadingTimeout: undefined,
+            rowTemplate: (container, options) => {
+                $(container).append(
+                    `<tbody class='dx-row'>
+                        <tr>
+                            <td>new</td>
+                            <td>new</td>
+                        </tr>
+                    </tbody>`
+                );
+            },
+            editing: { allowAdding: true },
+            columns: ['field1', {
+                dataField: 'field2',
+                width: 100
+            }, {
+                type: 'buttons',
+                visible: false
+            }],
+            columnAutoWidth: true
+        });
+
+        try {
+            // act
+            dataGrid.addRow();
+        } catch(err) {
+            // assert
+            assert.notOk(true, 'error should not be thrown');
+            return;
+        }
+
+        // assert
+        const $row = $(dataGrid.getRowElement(0));
+        const $cells = $row.find('td');
+        assert.equal($cells.eq(0).outerWidth(), 900, 'first cell width');
+        assert.equal($cells.eq(1).outerWidth(), 100, 'second cell width');
+        assert.equal(dataGrid.$element().outerWidth(), 1000, 'dataGrid width');
+    });
+
     QUnit.test('rowElement argument of rowTemplate option is correct', function(assert) {
     // arrange, act
         createDataGrid({
