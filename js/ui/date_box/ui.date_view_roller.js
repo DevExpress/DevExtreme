@@ -3,7 +3,6 @@ import eventsEngine from '../../events/core/events_engine';
 import registerComponent from '../../core/component_registrator';
 import { extend } from '../../core/utils/extend';
 import { each } from '../../core/utils/iterator';
-import { getBoundingRect } from '../../core/utils/position';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 import Scrollable from '../scroll_view/ui.scrollable';
@@ -200,16 +199,14 @@ const DateViewRoller = Scrollable.inherit({
             this._strategy._prepareDirections(true);
 
             if(this._animation && !this._shouldScrollToNeighborItem()) {
-                const that = this;
-
                 fx.stop(this._$content);
                 fx.animate(this._$content, {
                     duration: 200,
                     type: 'slide',
                     to: { top: Math.floor(delta.y) },
-                    complete: function() {
-                        resetPosition(that._$content);
-                        that._strategy.handleMove({ delta: delta });
+                    complete: () => {
+                        resetPosition(this._$content);
+                        this._strategy.handleMove({ delta: delta });
                     }
                 });
                 delete this._animation;
@@ -275,7 +272,7 @@ const DateViewRoller = Scrollable.inherit({
     _itemHeight: function() {
         const $item = this._$items.first();
 
-        return $item.get(0) && getBoundingRect($item.get(0)).height || 0;
+        return $item.height() || 0;
     },
 
     _toggleActive: function(state) {
@@ -311,7 +308,11 @@ const DateViewRoller = Scrollable.inherit({
         const selectedIndex = this.option('selectedIndex');
         const fitIndex = this._fitIndex(selectedIndex);
 
-        fitIndex === selectedIndex ? this._renderActiveStateItem() : this.option('selectedIndex', fitIndex);
+        if(fitIndex === selectedIndex) {
+            this._renderActiveStateItem();
+        } else {
+            this.option('selectedIndex', fitIndex);
+        }
     },
 
     _optionChanged: function(args) {
