@@ -1877,6 +1877,21 @@ QUnit.test('Validate Axis on update', function(assert) {
 
 });
 
+// T951843
+QUnit.test('Chart can hide series on done event', function(assert) {
+    const drawn = sinon.spy();
+    createChartInstance({
+        series: {},
+        dataSource: [{ arg: 1, val: 1 }],
+        onDrawn: drawn,
+        onDone(e) {
+            e.component.getAllSeries()[0].hide();
+        }
+    }, $('#chartContainer'));
+
+    assert.strictEqual(drawn.callCount, 2);
+});
+
 QUnit.module('Legend title', $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);

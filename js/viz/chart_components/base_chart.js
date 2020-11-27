@@ -778,9 +778,16 @@ export const BaseChart = BaseWidget.inherit({
 
         that._renderExtraElements();
         that._clearCanvas();
+        that._seriesElementsDrawn = true;
+    },
 
-        that._drawn();
-        that._renderCompleteHandler();
+    _chargesApplied() {
+        const that = this;
+        if(that._seriesElementsDrawn) {
+            that._seriesElementsDrawn = false;
+            that._drawn();
+            that._renderCompleteHandler();
+        }
     },
 
     _locateLabels(resolveLabelOverlapping) {
