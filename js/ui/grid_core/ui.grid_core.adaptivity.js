@@ -720,10 +720,14 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         const rowIndex = this._dataController.getRowIndexByKey(rowKey);
         const component = this.component;
         const $row = $(component.getRowElement(rowIndex));
-        const rowsView = component.getView('rowsView');
         const label = isExpanded ? COLLAPSE_ARIA_NAME : EXPAND_ARIA_NAME;
 
-        rowsView.setCommandAdaptiveAriaLabel($row, label);
+        this.setCommandAdaptiveAriaLabel($row, label);
+    },
+
+    setCommandAdaptiveAriaLabel: function($row, labelName) {
+        const $adaptiveCommand = $row.find('.dx-command-adaptive');
+        $adaptiveCommand.attr('aria-label', messageLocalization.format(labelName));
     }
 });
 
@@ -764,21 +768,17 @@ export default {
                 _renderCells: function($row, options) {
                     this.callBase($row, options);
 
-                    const hidingColumnsQueueLength = this._adaptiveColumnsController.getHidingColumnsQueue().length;
-                    const hiddenColumnsLength = this._adaptiveColumnsController.getHiddenColumns().length;
+                    const adaptiveColumnsController = this._adaptiveColumnsController;
+                    const hidingColumnsQueueLength = adaptiveColumnsController.getHidingColumnsQueue().length;
+                    const hiddenColumnsLength = adaptiveColumnsController.getHiddenColumns().length;
 
                     if(hidingColumnsQueueLength && !hiddenColumnsLength) {
                         getDataCellElements($row).last().addClass(LAST_DATA_CELL_CLASS);
                     }
 
                     if(options.row.rowType === 'data') {
-                        this.setCommandAdaptiveAriaLabel($row, EXPAND_ARIA_NAME);
+                        adaptiveColumnsController.setCommandAdaptiveAriaLabel($row, EXPAND_ARIA_NAME);
                     }
-                },
-
-                setCommandAdaptiveAriaLabel: function($row, labelName) {
-                    const $adaptiveCommand = $row.find('.dx-command-adaptive');
-                    $adaptiveCommand.attr('aria-label', messageLocalization.format(labelName));
                 },
 
                 _getColumnIndexByElementCore: function($element) {
