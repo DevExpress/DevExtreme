@@ -22,6 +22,11 @@ export const CLASSES = {
     navigatorNextButton: '.dx-scheduler-navigator-next',
     navigatorPopover: '.dx-scheduler-navigator-calendar-popover',
     navigatorPopoverContent: '.dx-scheduler-navigator-calendar-popover > .dx-overlay-content',
+
+    calendar: 'dx-scheduler-navigator-calendar',
+    calendarToday: '.dx-calendar-today',
+    calendarSelected: '.dx-calendar-selected-date',
+
     scrollableAppointmentsContainer: '.dx-scheduler-scrollable-appointments',
     schedulerSmall: '.dx-scheduler-small',
 
@@ -86,6 +91,26 @@ class NavigatorCaption extends ClickElementWrapper {
     }
 }
 
+class CalendarCell extends ClickElementWrapper {
+    get value() {
+        return parseInt(this.getElement().find('span').text());
+    }
+}
+
+class Calendar extends ElementWrapper {
+    constructor() {
+        super(CLASSES.calendar);
+    }
+
+    get today() {
+        return new CalendarCell(CLASSES.calendarToday);
+    }
+
+    get selected() {
+        return new CalendarCell(CLASSES.calendarSelected);
+    }
+}
+
 class NavigatorPopover extends ElementWrapper {
     get isVisible() {
         return this.content.getElement().is(':visible');
@@ -93,6 +118,10 @@ class NavigatorPopover extends ElementWrapper {
 
     get content() {
         return new ElementWrapper(CLASSES.navigatorPopoverContent);
+    }
+
+    get calendar() {
+        return new Calendar();
     }
 
     get hasScroll() {
@@ -314,6 +343,12 @@ export class SchedulerTestWrapper extends ElementWrapper {
 
         this.workSpace = {
             getWorkSpace: () => $('.dx-scheduler-work-space'),
+
+            getMonthCurrentDay: () => parseInt($('.dx-scheduler-date-table-current-date > div').text()),
+            getWeekCurrentDay: () => {
+                const value = $('.dx-scheduler-header-panel-current-time-cell').text();
+                return parseInt(value.replace(/^\D+/g, ''));
+            },
 
             getDateTableScrollable: () => $('.dx-scheduler-date-table-scrollable'),
             getHeaderScrollable: () => $('.dx-scheduler-header-scrollable'),
