@@ -157,7 +157,7 @@
         "dxDataGrid-ariaSearchInGrid": "Search in data grid",
         "dxDataGrid-ariaSelectAll": "Select all",
         "dxDataGrid-ariaSelectRow": "Select row",
-        "dxDataGrid-ariaToolbar": "Grid's toolbar",
+        "dxDataGrid-ariaToolbar": "Data grid's toolbar",
         "dxDataGrid-filterBuilderPopupTitle": "Filter Builder",
         "dxDataGrid-filterPanelCreateFilter": "Create Filter",
         "dxDataGrid-filterPanelClearFilter": "Clear",
