@@ -38,5 +38,9 @@ gulp.task('bundler-config', function() {
 });
 
 gulp.task('bundler-config-dev', function() {
-    return gulp.watch(BUNDLE_CONFIG_SOURCES, gulp.series('bundler-config'));
+    return gulp
+        .watch(BUNDLE_CONFIG_SOURCES, gulp.series('bundler-config'))
+        .on('ready', () => console.log(
+            'bundler-config task is watching for changes...'
+        ));
 });

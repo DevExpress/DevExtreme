@@ -144,7 +144,7 @@ gulp.task('version-replace', gulp.series('transpile', gulp.parallel([
 ])));
 
 gulp.task('transpile-watch', gulp.series('version-replace', () =>
-    watch(src)
+    watch(src).on('ready', () => console.log('transpile task is watching for changes...'))
         .pipe(plumber({
             errorHandler: notify
                 .onError('Error: <%= error.message %>')

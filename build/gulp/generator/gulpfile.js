@@ -60,7 +60,10 @@ function generateJQueryComponents(isWatch) {
         generateJQueryOnly: true
     };
 
-    const pipe = isWatch ? watch(SRC) : gulp.src(SRC);
+    const pipe = isWatch ? watch(SRC).on('ready', () => console.log(
+        'generate-jquery-components task is watching for changes...'
+    )) : gulp.src(SRC);
+
     return pipe
         .pipe(generateComponents(generator))
         .pipe(plumber(()=>null))
@@ -254,7 +257,11 @@ addGenerationTask('angular', [
 addGenerationTask('vue', [], false, true, false);
 
 gulp.task('generate-components-watch', gulp.series('generate-components', function() {
-    gulp.watch(SRC, gulp.series('generate-components-dev'));
+    gulp
+        .watch(SRC, gulp.series('generate-components-dev'))
+        .on('ready', () => console.log(
+            'generate-components task is watching for changes...'
+        ));
 }));
 
 gulp.task('react-compilation-check', function() {
