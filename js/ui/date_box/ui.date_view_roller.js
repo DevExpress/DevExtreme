@@ -199,14 +199,16 @@ const DateViewRoller = Scrollable.inherit({
             this._strategy._prepareDirections(true);
 
             if(this._animation && !this._shouldScrollToNeighborItem()) {
+                const that = this;
+
                 fx.stop(this._$content);
                 fx.animate(this._$content, {
                     duration: 200,
                     type: 'slide',
                     to: { top: Math.floor(delta.y) },
-                    complete: () => {
-                        resetPosition(this._$content);
-                        this._strategy.handleMove({ delta: delta });
+                    complete: function() {
+                        resetPosition(that._$content);
+                        that._strategy.handleMove({ delta: delta });
                     }
                 });
                 delete this._animation;
