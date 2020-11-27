@@ -10,7 +10,7 @@ import '../drop_down_menu';
 const HEADER_PANEL_CLASS = 'header-panel';
 const TOOLBAR_BUTTON_CLASS = 'toolbar-button';
 
-const TOOLBAR_ARIA_LABEL = 'dxDataGrid-ariaToolbar';
+const TOOLBAR_ARIA_LABEL = '-ariaToolbar';
 
 const HeaderPanel = ColumnsView.inherit({
     _getToolbarItems: function() {
@@ -55,7 +55,7 @@ const HeaderPanel = ColumnsView.inherit({
         if(!this._toolbar) {
             const $headerPanel = this.element();
             $headerPanel.addClass(this.addWidgetPrefix(HEADER_PANEL_CLASS));
-            const label = messageLocalization.format(TOOLBAR_ARIA_LABEL);
+            const label = messageLocalization.format(this.component.NAME + TOOLBAR_ARIA_LABEL);
             const $toolbar = $('<div>').attr('aria-label', label).appendTo($headerPanel);
             this._toolbar = this._createComponent($toolbar, Toolbar, this._toolbarOptions);
         } else {

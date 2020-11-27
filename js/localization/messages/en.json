@@ -164,6 +164,8 @@
         "dxDataGrid-filterPanelFilterEnabledHint": "Enable the filter",
 
         "dxTreeList-ariaTreeList": "Tree list",
+        "dxTreeList-ariaSearchInGrid": "Search in tree list",
+        "dxTreeList-ariaToolbar": "Tree list's toolbar",
         "dxTreeList-editingAddRowToNode": "Add",
 
         "dxPager-infoText": "Page {0} of {1} ({2} items)",

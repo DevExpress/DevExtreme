@@ -151,6 +151,8 @@
         "dxDataGrid-filterPanelClearFilter": "Очистить",
         "dxDataGrid-filterPanelFilterEnabledHint": "Активировать фильтр",
         "dxTreeList-ariaTreeList": "Иерархическая таблица данных",
+        "dxTreeList-ariaSearchInGrid": "Искать в иерархической таблице данных",
+        "dxTreeList-ariaToolbar": "Панель инструментов иерархической таблицы",
         "dxTreeList-editingAddRowToNode": "Добавить",
         "dxPager-infoText": "Страница {0} из {1} (Всего элементов: {2})",
         "dxPager-pagesCountText": "из",

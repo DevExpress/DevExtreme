@@ -712,6 +712,18 @@ const AdaptiveColumnsController = modules.ViewController.inherit({
         if(this.hasAdaptiveDetailRowExpanded()) {
             this.toggleExpandAdaptiveDetailRow();
         }
+    },
+
+    toggleCommandAdaptiveAriaLabel: function(key, oldKey) {
+        const isExpanded = isDefined(key);
+        const rowKey = isExpanded ? key : oldKey;
+        const rowIndex = this._dataController.getRowIndexByKey(rowKey);
+        const component = this.component;
+        const $row = $(component.getRowElement(rowIndex));
+        const rowsView = component.getView('rowsView');
+        const label = isExpanded ? COLLAPSE_ARIA_NAME : EXPAND_ARIA_NAME;
+
+        rowsView.setCommandAdaptiveAriaLabel($row, label);
     }
 });
 
@@ -1122,17 +1134,7 @@ export default {
                         rowIndices: [oldExpandLoadedRowIndex - rowIndexDelta, newExpandLoadedRowIndex - rowIndexDelta]
                     });
 
-                    this.toggleCommandAdaptiveAriaLabel(key, oldKey);
-                },
-
-                toggleCommandAdaptiveAriaLabel: function(key, oldKey) {
-                    const isExpanded = isDefined(key);
-                    const rowKey = isExpanded ? key : oldKey;
-                    const rowIndex = this.getRowIndexByKey(rowKey);
-                    const $row = $(this.component.getRowElement(rowIndex));
-                    const rowsView = this.component.getView('rowsView');
-
-                    rowsView.setCommandAdaptiveAriaLabel($row, isExpanded ? COLLAPSE_ARIA_NAME : EXPAND_ARIA_NAME);
+                    this.getController('adaptiveColumns').toggleCommandAdaptiveAriaLabel(key, oldKey);
                 },
 
                 init: function() {

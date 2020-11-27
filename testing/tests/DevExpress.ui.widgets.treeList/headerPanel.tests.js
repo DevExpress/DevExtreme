@@ -81,5 +81,23 @@ QUnit.module('Header panel', { beforeEach: setupModule, afterEach: teardownModul
         // assert
         assert.equal($testElement.find('.dx-treelist-column-chooser-button').length, 1, 'cancel button');
     });
+
+    QUnit.test('Toolbar should have correct aria-label', function(assert) {
+        // arrange
+        const $testElement = $('#treeList');
+
+        this.options.columnChooser = {
+            enabled: true
+        };
+        this.setupTreeList();
+
+        // act
+        this.headerPanel.render($testElement);
+
+        // assert
+        const $toolbar = $testElement.find('.dx-toolbar');
+        assert.equal($toolbar.length, 1, 'toolbar');
+        assert.equal($toolbar.attr('aria-label'), 'TreeList\'s toolbar', 'toolbar aria-label');
+    });
 });
 
