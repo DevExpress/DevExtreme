@@ -19,9 +19,6 @@ const toMs = dateUtils.dateToMilliseconds;
 const HOUR_MS = toMs('hour');
 
 const subscribes = {
-    getTimeZoneCalculator: function() {
-        return this.timeZoneCalculator;
-    },
     isCurrentViewAgenda: function() {
         return this.option('currentView') === 'agenda';
     },
