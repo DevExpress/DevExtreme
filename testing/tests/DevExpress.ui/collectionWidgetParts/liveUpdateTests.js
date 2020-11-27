@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import CollectionWidget from 'ui/collection/ui.collection_widget.live_update';
 import { DataSource } from 'data/data_source/data_source';
+import CustomStore from 'data/custom_store';
 
 const { module, test } = QUnit;
 
@@ -50,10 +51,14 @@ class LiveUpdateTestHelper {
         return this.instance.option('items');
     }
 
-    getInstance() {
+    getItemElements() {
+        return this.instance.itemElements();
+    }
+
+    getInstance(options) {
         this.onItemDeletingSpy = sinon.spy();
 
-        return new TestComponent(this.$element, {
+        return new TestComponent(this.$element, options || {
             dataSource: new DataSource({
                 load: (e) => this.data.sort((a, b) => a.index - b.index),
                 loadMode: 'raw',
@@ -63,6 +68,11 @@ class LiveUpdateTestHelper {
             }),
             onItemDeleting: this.onItemDeletingSpy
         });
+    }
+
+    reinitializeWithOptions(options) {
+        this.instance.dispose();
+        this.instance = this.getInstance(options);
     }
 }
 
@@ -143,5 +153,34 @@ module('live update', {
     test('item is pushed to the end of store\'s array', function(assert) {
         helper.store.push([{ type: 'insert', data: { id: 200, text: 'text ' + 200, index: 0 }, index: 0 }]);
         assert.equal(helper.data.pop().id, 200);
+    });
+
+    test('next page items should be correctly updated with "repaintChangesOnly" mode when dataSource reloaded(T950597)', function(assert) {
+        let isMarked = false;
+        const store = new CustomStore({
+            load: () => generateData(25),
+            onLoaded: function(result) {
+                result.forEach((entry) => {
+                    entry.text = isMarked ? `${entry.text} mark` : entry.text;
+                });
+            }
+        });
+        helper.reinitializeWithOptions({
+            dataSource: {
+                store,
+                paginate: true
+            },
+            displayExpr: 'text',
+            repaintChangesOnly: true
+        });
+
+        helper.instance.loadNextPage();
+        isMarked = true;
+        helper.instance.reload();
+        helper.instance.loadNextPage();
+
+        const $items = helper.getItemElements();
+        assert.strictEqual($items.first().text(), 'text 0 mark', 'the first item correctly updated');
+        assert.strictEqual($items.last().text(), 'text 24 mark', 'the last item correctly updated');
     });
 });
