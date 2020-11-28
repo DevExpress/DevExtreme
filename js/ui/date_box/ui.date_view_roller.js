@@ -208,12 +208,12 @@ const DateViewRoller = Scrollable.inherit({
                     to: { top: Math.floor(delta.y) },
                     complete: function() {
                         resetPosition(that._$content);
-                        that._strategy.handleMove({ delta: delta });
+                        that._strategy.handleMove({ delta });
                     }
                 });
                 delete this._animation;
             } else {
-                this._strategy.handleMove({ delta: delta });
+                this._strategy.handleMove({ delta });
             }
         }
     },
