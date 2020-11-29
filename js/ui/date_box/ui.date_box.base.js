@@ -347,6 +347,9 @@ const DateBox = DropDownEditor.inherit({
 
     _renderPopup: function() {
         this.callBase();
+        this._popup.on('shown', () => {
+            this._strategy.renderOpenedState();
+        });
         this._popup._wrapper().addClass(DATEBOX_WRAPPER_CLASS);
         this._renderPopupWrapper();
     },
@@ -571,8 +574,6 @@ const DateBox = DropDownEditor.inherit({
         if(this._strategy.isAdaptivityChanged()) {
             this._refreshStrategy();
         }
-
-        this._strategy.renderOpenedState();
     },
 
     _getPopupTitle: function() {
