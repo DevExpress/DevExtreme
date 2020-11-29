@@ -13,7 +13,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
     disabledExpr?: string | Function;
     /**
      * @docid HierarchicalCollectionWidgetOptions.displayExpr
-     * @type string|function(item)
      * @default 'text'
      * @type_function_param1 item:object
      * @type_function_return string
@@ -23,7 +22,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
     displayExpr?: string | ((item: any) => string);
     /**
      * @docid HierarchicalCollectionWidgetOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -31,7 +29,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
     focusStateEnabled?: boolean;
     /**
      * @docid HierarchicalCollectionWidgetOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -64,7 +61,6 @@ export interface HierarchicalCollectionWidgetOptions<T = HierarchicalCollectionW
 }
 /**
  * @docid HierarchicalCollectionWidget
- * @type object
  * @inherits CollectionWidget
  * @module ui/hierarchical_collection/ui.hierarchical_collection_widget
  * @export default

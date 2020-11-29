@@ -12,7 +12,6 @@ export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseO
     contentExpr?: string | Function;
     /**
      * @docid ObjectFileSystemProviderOptions.data
-     * @type Array<any>
      * @prevFileNamespace DevExpress.fileManagement
      * @public
      */
@@ -28,7 +27,6 @@ export interface ObjectFileSystemProviderOptions extends FileSystemProviderBaseO
 /**
  * @docid ObjectFileSystemProvider
  * @inherits FileSystemProviderBase
- * @type object
  * @module file_management/object_provider
  * @namespace DevExpress.fileManagement
  * @export default

@@ -38,21 +38,20 @@ import {
 
 export interface MapLayer {
     /**
-     * @docid MapLayerMethods.clearSelection
+     * @docid MapLayer.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid MapLayerFields.elementType
-     * @type string
+     * @docid MapLayer.elementType
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     elementType?: string;
     /**
-     * @docid MapLayerMethods.getDataSource
+     * @docid MapLayer.getDataSource
      * @publicName getDataSource()
      * @return DataSource
      * @prevFileNamespace DevExpress.viz
@@ -60,7 +59,7 @@ export interface MapLayer {
      */
     getDataSource(): DataSource;
     /**
-     * @docid MapLayerMethods.getElements
+     * @docid MapLayer.getElements
      * @publicName getElements()
      * @return Array<MapLayerElement>
      * @prevFileNamespace DevExpress.viz
@@ -68,22 +67,19 @@ export interface MapLayer {
      */
     getElements(): Array<MapLayerElement>;
     /**
-     * @docid MapLayerFields.index
-     * @type number
+     * @docid MapLayer.index
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     index?: number;
     /**
-     * @docid MapLayerFields.name
-     * @type string
+     * @docid MapLayer.name
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     name?: string;
     /**
-     * @docid MapLayerFields.type
-     * @type string
+     * @docid MapLayer.type
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -92,7 +88,7 @@ export interface MapLayer {
 
 export interface MapLayerElement {
     /**
-     * @docid MapLayerElementMethods.applySettings
+     * @docid MapLayerElement.applySettings
      * @publicName applySettings(settings)
      * @param1 settings:object
      * @prevFileNamespace DevExpress.viz
@@ -100,7 +96,7 @@ export interface MapLayerElement {
      */
     applySettings(settings: any): void;
     /**
-     * @docid MapLayerElementMethods.attribute
+     * @docid MapLayerElement.attribute
      * @publicName attribute(name)
      * @return any
      * @param1 name:string
@@ -109,7 +105,7 @@ export interface MapLayerElement {
      */
     attribute(name: string): any;
     /**
-     * @docid MapLayerElementMethods.attribute
+     * @docid MapLayerElement.attribute
      * @publicName attribute(name, value)
      * @param1 name:string
      * @param2 value:any
@@ -118,7 +114,7 @@ export interface MapLayerElement {
      */
     attribute(name: string, value: any): void;
     /**
-     * @docid MapLayerElementMethods.coordinates
+     * @docid MapLayerElement.coordinates
      * @publicName coordinates()
      * @return object
      * @prevFileNamespace DevExpress.viz
@@ -126,14 +122,13 @@ export interface MapLayerElement {
      */
     coordinates(): any;
     /**
-     * @docid MapLayerElementFields.layer
-     * @type object
+     * @docid MapLayerElement.layer
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     layer?: any;
     /**
-     * @docid MapLayerElementMethods.selected
+     * @docid MapLayerElement.selected
      * @publicName selected()
      * @return boolean
      * @prevFileNamespace DevExpress.viz
@@ -141,7 +136,7 @@ export interface MapLayerElement {
      */
     selected(): boolean;
     /**
-     * @docid MapLayerElementMethods.selected
+     * @docid MapLayerElement.selected
      * @publicName selected(state)
      * @param1 state:boolean
      * @prevFileNamespace DevExpress.viz
@@ -153,28 +148,24 @@ export interface MapLayerElement {
 export interface VectorMapLegendItem extends BaseLegendItem {
     /**
      * @docid VectorMapLegendItem.color
-     * @type string
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     color?: string;
     /**
      * @docid VectorMapLegendItem.end
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     end?: number;
     /**
      * @docid VectorMapLegendItem.size
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     size?: number;
     /**
      * @docid VectorMapLegendItem.start
-     * @type number
      * @prevFileNamespace DevExpress.viz
      * @public
      */
@@ -184,14 +175,12 @@ export interface VectorMapLegendItem extends BaseLegendItem {
 export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.background
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     background?: { borderColor?: string, color?: string };
     /**
      * @docid dxVectorMapOptions.bounds
-     * @type Array<number>
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -200,7 +189,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     bounds?: Array<number>;
     /**
      * @docid dxVectorMapOptions.center
-     * @type Array<number>
      * @default [0, 0]
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -209,14 +197,12 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     center?: Array<number>;
     /**
      * @docid dxVectorMapOptions.controlBar
-     * @type object
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     controlBar?: { borderColor?: string, color?: string, enabled?: boolean, horizontalAlignment?: 'center' | 'left' | 'right', margin?: number, opacity?: number, verticalAlignment?: 'bottom' | 'top' };
     /**
      * @docid dxVectorMapOptions.layers
-     * @type Array<Object>|Object
      * @default undefined
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -234,7 +220,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     legends?: Array<dxVectorMapLegends>;
     /**
      * @docid dxVectorMapOptions.maxZoomFactor
-     * @type number
      * @default 256
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -244,7 +229,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onCenterChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 center:Array<number>
      * @notUsedInTheme
@@ -256,7 +240,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onClick
      * @extends Action
-     * @type function|string
      * @type_function_param1 e:object
      * @type_function_param1_field4 event:event
      * @type_function_param1_field5 target:MapLayerElement
@@ -269,7 +252,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onSelectionChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement
      * @notUsedInTheme
@@ -281,7 +263,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onTooltipHidden
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -293,7 +274,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onTooltipShown
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 target:MapLayerElement | dxVectorMapAnnotationConfig
      * @notUsedInTheme
@@ -305,7 +285,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     /**
      * @docid dxVectorMapOptions.onZoomFactorChanged
      * @extends Action
-     * @type function
      * @type_function_param1 e:object
      * @type_function_param1_field4 zoomFactor:number
      * @notUsedInTheme
@@ -316,7 +295,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     onZoomFactorChanged?: ((e: { component?: dxVectorMap, element?: dxElement, model?: any, zoomFactor?: number }) => any);
     /**
      * @docid dxVectorMapOptions.panningEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -340,7 +318,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     tooltip?: dxVectorMapTooltip;
     /**
      * @docid dxVectorMapOptions.touchEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -348,7 +325,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     touchEnabled?: boolean;
     /**
      * @docid dxVectorMapOptions.wheelEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -356,7 +332,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     wheelEnabled?: boolean;
     /**
      * @docid dxVectorMapOptions.zoomFactor
-     * @type number
      * @default 1
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
@@ -365,7 +340,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     zoomFactor?: number;
     /**
      * @docid dxVectorMapOptions.zoomingEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -373,14 +347,12 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     zoomingEnabled?: boolean;
     /**
      * @docid dxVectorMapOptions.commonAnnotationSettings
-     * @type dxVectorMapCommonAnnotationConfig
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     commonAnnotationSettings?: dxVectorMapCommonAnnotationConfig;
     /**
      * @docid dxVectorMapOptions.annotations
-     * @type Array<dxVectorMapAnnotationConfig,object>
      * @inherits dxVectorMapOptions.commonAnnotationSettings
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -388,7 +360,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
     annotations?: Array<dxVectorMapAnnotationConfig | any>;
     /**
      * @docid dxVectorMapOptions.customizeAnnotation
-     * @type function(annotation)
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_return dxVectorMapAnnotationConfig
      * @default undefined
@@ -402,7 +373,6 @@ export interface dxVectorMapOptions extends BaseWidgetOptions<dxVectorMap> {
 export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotationConfig {
     /**
      * @docid dxVectorMapAnnotationConfig.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -413,7 +383,6 @@ export interface dxVectorMapAnnotationConfig extends dxVectorMapCommonAnnotation
 export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationConfig {
     /**
      * @docid dxVectorMapCommonAnnotationConfig.coordinates
-     * @type Array<number>
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -421,7 +390,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     coordinates?: Array<number>;
     /**
      * @docid dxVectorMapCommonAnnotationConfig.customizeTooltip
-     * @type function(annotation)
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_return object
      * @default undefined
@@ -432,7 +400,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     customizeTooltip?: ((annotation: dxVectorMapAnnotationConfig | any) => any);
     /**
      * @docid dxVectorMapCommonAnnotationConfig.template
-     * @type template|function
      * @default undefined
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_param2 element:SVGGElement
@@ -443,7 +410,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
     template?: template | ((annotation: dxVectorMapAnnotationConfig | any, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxVectorMapCommonAnnotationConfig.tooltipTemplate
-     * @type template|function(annotation, element)
      * @type_function_param1 annotation:dxVectorMapAnnotationConfig|any
      * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
@@ -457,7 +423,6 @@ export interface dxVectorMapCommonAnnotationConfig extends BaseWidgetAnnotationC
 export interface dxVectorMapLegends extends BaseLegend {
     /**
      * @docid dxVectorMapOptions.legends.customizeHint
-     * @type function(itemInfo)
      * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 start:number
      * @type_function_param1_field2 end:number
@@ -472,7 +437,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
     /**
      * @docid dxVectorMapOptions.legends.customizeItems
-     * @type function(items)
      * @type_function_param1 items:Array<VectorMapLegendItem>
      * @type_function_return Array<VectorMapLegendItem>
      * @prevFileNamespace DevExpress.viz
@@ -481,7 +445,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     customizeItems?: ((items: Array<VectorMapLegendItem>) => Array<VectorMapLegendItem>);
     /**
      * @docid dxVectorMapOptions.legends.customizeText
-     * @type function(itemInfo)
      * @type_function_param1 itemInfo:object
      * @type_function_param1_field1 start:number
      * @type_function_param1_field2 end:number
@@ -496,7 +459,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string);
     /**
      * @docid dxVectorMapOptions.legends.font
-     * @type Font
      * @default '#2b2b2b' [prop](color)
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -504,7 +466,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     font?: Font;
     /**
      * @docid dxVectorMapOptions.legends.markerColor
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -520,7 +481,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     markerShape?: 'circle' | 'square';
     /**
      * @docid dxVectorMapOptions.legends.markerSize
-     * @type number
      * @default 12
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -528,7 +488,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     markerSize?: number;
     /**
      * @docid dxVectorMapOptions.legends.markerTemplate
-     * @type template|function
      * @default undefined
      * @type_function_param1 legendItem:VectorMapLegendItem
      * @type_function_param2 element:SVGGElement
@@ -539,7 +498,6 @@ export interface dxVectorMapLegends extends BaseLegend {
     markerTemplate?: template | ((legendItem: VectorMapLegendItem, element: SVGGElement) => string | SVGElement | JQuery);
     /**
      * @docid dxVectorMapOptions.legends.source
-     * @type object
      * @notUsedInTheme
      * @prevFileNamespace DevExpress.viz
      * @public
@@ -549,7 +507,6 @@ export interface dxVectorMapLegends extends BaseLegend {
 export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     /**
      * @docid dxVectorMapOptions.tooltip.contentTemplate
-     * @type template | function(info, element)
      * @type_function_param1 info:MapLayerElement
      * @type_function_param2 element:dxElement
      * @type_function_return string|Element|jQuery
@@ -560,7 +517,6 @@ export interface dxVectorMapTooltip extends BaseWidgetTooltip {
     contentTemplate?: template | ((info: MapLayerElement, element: dxElement) => string | Element | JQuery);
     /**
      * @docid dxVectorMapOptions.tooltip.customizeTooltip
-     * @type function(info)
      * @type_function_param1 info:MapLayerElement
      * @type_function_return object
      * @default undefined
@@ -582,7 +538,7 @@ export default class dxVectorMap extends BaseWidget {
     constructor(element: Element, options?: dxVectorMapOptions)
     constructor(element: JQuery, options?: dxVectorMapOptions)
     /**
-     * @docid dxVectorMapMethods.center
+     * @docid dxVectorMap.center
      * @publicName center()
      * @return Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -590,7 +546,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     center(): Array<number>;
     /**
-     * @docid dxVectorMapMethods.center
+     * @docid dxVectorMap.center
      * @publicName center(centerCoordinates)
      * @param1 centerCoordinates:Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -598,25 +554,25 @@ export default class dxVectorMap extends BaseWidget {
      */
     center(centerCoordinates: Array<number>): void;
     /**
-     * @docid dxVectorMapMethods.clearSelection
+     * @docid dxVectorMap.clearSelection
      * @publicName clearSelection()
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     clearSelection(): void;
     /**
-     * @docid dxVectorMapMethods.convertCoordinates
+     * @docid dxVectorMap.convertCoordinates
      * @publicName convertCoordinates(x, y)
      * @param1 x:number
      * @param2 y:number
      * @return Array<number>
-     * @deprecated dxVectorMapMethods.convertToGeo
+     * @deprecated dxVectorMap.convertToGeo
      * @prevFileNamespace DevExpress.viz
      * @public
      */
     convertCoordinates(x: number, y: number): Array<number>;
     /**
-     * @docid dxVectorMapMethods.convertToGeo
+     * @docid dxVectorMap.convertToGeo
      * @publicName convertToGeo(x, y)
      * @param1 x:number
      * @param2 y:number
@@ -626,7 +582,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     convertToGeo(x: number, y: number): Array<number>;
     /**
-     * @docid dxVectorMapMethods.convertToXY
+     * @docid dxVectorMap.convertToXY
      * @publicName convertToXY(longitude, latitude)
      * @param1 longitude:number
      * @param2 latitude:number
@@ -636,7 +592,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     convertToXY(longitude: number, latitude: number): Array<number>;
     /**
-     * @docid dxVectorMapMethods.getLayerByIndex
+     * @docid dxVectorMap.getLayerByIndex
      * @publicName getLayerByIndex(index)
      * @return MapLayer
      * @param1 index:number
@@ -645,7 +601,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     getLayerByIndex(index: number): MapLayer;
     /**
-     * @docid dxVectorMapMethods.getLayerByName
+     * @docid dxVectorMap.getLayerByName
      * @publicName getLayerByName(name)
      * @return MapLayer
      * @param1 name:string
@@ -654,7 +610,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     getLayerByName(name: string): MapLayer;
     /**
-     * @docid dxVectorMapMethods.getLayers
+     * @docid dxVectorMap.getLayers
      * @publicName getLayers()
      * @return Array<MapLayer>
      * @prevFileNamespace DevExpress.viz
@@ -662,7 +618,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     getLayers(): Array<MapLayer>;
     /**
-     * @docid dxVectorMapMethods.viewport
+     * @docid dxVectorMap.viewport
      * @publicName viewport()
      * @return Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -670,7 +626,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     viewport(): Array<number>;
     /**
-     * @docid dxVectorMapMethods.viewport
+     * @docid dxVectorMap.viewport
      * @publicName viewport(viewportCoordinates)
      * @param1 viewportCoordinates:Array<number>
      * @prevFileNamespace DevExpress.viz
@@ -678,7 +634,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     viewport(viewportCoordinates: Array<number>): void;
     /**
-     * @docid dxVectorMapMethods.zoomFactor
+     * @docid dxVectorMap.zoomFactor
      * @publicName zoomFactor()
      * @return number
      * @prevFileNamespace DevExpress.viz
@@ -686,7 +642,7 @@ export default class dxVectorMap extends BaseWidget {
      */
     zoomFactor(): number;
     /**
-     * @docid dxVectorMapMethods.zoomFactor
+     * @docid dxVectorMap.zoomFactor
      * @publicName zoomFactor(zoomFactor)
      * @param1 zoomFactor:number
      * @prevFileNamespace DevExpress.viz

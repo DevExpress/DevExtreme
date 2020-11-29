@@ -20,7 +20,6 @@ import Widget, {
 export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid dxFilterBuilderOptions.allowHierarchicalFields
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -28,7 +27,6 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     allowHierarchicalFields?: boolean;
     /**
      * @docid dxFilterBuilderOptions.customOperations
-     * @type Array<dxFilterBuilderCustomOperation>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -36,7 +34,6 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     customOperations?: Array<dxFilterBuilderCustomOperation>;
     /**
      * @docid dxFilterBuilderOptions.fields
-     * @type Array<dxFilterBuilderField>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -44,14 +41,12 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     fields?: Array<dxFilterBuilderField>;
     /**
      * @docid dxFilterBuilderOptions.filterOperationDescriptions
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     filterOperationDescriptions?: { between?: string, contains?: string, endsWith?: string, equal?: string, greaterThan?: string, greaterThanOrEqual?: string, isBlank?: string, isNotBlank?: string, lessThan?: string, lessThanOrEqual?: string, notContains?: string, notEqual?: string, startsWith?: string };
     /**
      * @docid dxFilterBuilderOptions.groupOperationDescriptions
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -66,7 +61,6 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     groupOperations?: Array<'and' | 'or' | 'notAnd' | 'notOr'>;
     /**
      * @docid dxFilterBuilderOptions.maxGroupLevel
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -74,7 +68,6 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     maxGroupLevel?: number;
     /**
      * @docid dxFilterBuilderOptions.onEditorPrepared
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:any
      * @type_function_param1_field5 setValue(newValue):any
@@ -95,7 +88,6 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     onEditorPrepared?: ((e: { component?: dxFilterBuilder, element?: dxElement, model?: any, value?: any, setValue?: any, editorElement?: dxElement, editorName?: string, dataField?: string, filterOperation?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
     /**
      * @docid dxFilterBuilderOptions.onEditorPreparing
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:any
      * @type_function_param1_field5 setValue(newValue):any
@@ -119,7 +111,6 @@ export interface dxFilterBuilderOptions extends WidgetOptions<dxFilterBuilder> {
     /**
      * @docid dxFilterBuilderOptions.onValueChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 value:object
      * @type_function_param1_field5 previousValue:object
@@ -150,7 +141,7 @@ export default class dxFilterBuilder extends Widget {
     constructor(element: Element, options?: dxFilterBuilderOptions)
     constructor(element: JQuery, options?: dxFilterBuilderOptions)
     /**
-     * @docid dxFilterBuilderMethods.getFilterExpression
+     * @docid dxFilterBuilder.getFilterExpression
      * @publicName getFilterExpression()
      * @return Filter expression
      * @prevFileNamespace DevExpress.ui
@@ -162,7 +153,6 @@ export default class dxFilterBuilder extends Widget {
 export interface dxFilterBuilderCustomOperation {
     /**
      * @docid dxFilterBuilderCustomOperation.calculateFilterExpression
-     * @type function(filterValue, field)
      * @type_function_param1 filterValue:any
      * @type_function_param2 field:dxFilterBuilderField
      * @type_function_return Filter expression
@@ -172,7 +162,6 @@ export interface dxFilterBuilderCustomOperation {
     calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | Array<any> | Function);
     /**
      * @docid dxFilterBuilderCustomOperation.caption
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -180,7 +169,6 @@ export interface dxFilterBuilderCustomOperation {
     caption?: string;
     /**
      * @docid dxFilterBuilderCustomOperation.customizeText
-     * @type function(fieldInfo)
      * @type_function_param1 fieldInfo:object
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 valueText:string
@@ -200,7 +188,6 @@ export interface dxFilterBuilderCustomOperation {
     dataTypes?: Array<'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime'>;
     /**
      * @docid dxFilterBuilderCustomOperation.editorTemplate
-     * @type template|function
      * @type_function_param1 conditionInfo:object
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 field:dxFilterBuilderField
@@ -213,7 +200,6 @@ export interface dxFilterBuilderCustomOperation {
     editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, field?: dxFilterBuilderField, setValue?: Function }, container: dxElement) => string | Element | JQuery);
     /**
      * @docid dxFilterBuilderCustomOperation.hasValue
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -221,7 +207,6 @@ export interface dxFilterBuilderCustomOperation {
     hasValue?: boolean;
     /**
      * @docid dxFilterBuilderCustomOperation.icon
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -229,7 +214,6 @@ export interface dxFilterBuilderCustomOperation {
     icon?: string;
     /**
      * @docid dxFilterBuilderCustomOperation.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -240,7 +224,6 @@ export interface dxFilterBuilderCustomOperation {
 export interface dxFilterBuilderField {
     /**
      * @docid dxFilterBuilderField.calculateFilterExpression
-     * @type function(filterValue, selectedFilterOperation)
      * @type_function_param1 filterValue:any
      * @type_function_param2 selectedFilterOperation:string
      * @type_function_return Filter expression
@@ -250,7 +233,6 @@ export interface dxFilterBuilderField {
     calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | Array<any> | Function);
     /**
      * @docid dxFilterBuilderField.caption
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -258,7 +240,6 @@ export interface dxFilterBuilderField {
     caption?: string;
     /**
      * @docid dxFilterBuilderField.customizeText
-     * @type function(fieldInfo)
      * @type_function_param1 fieldInfo:object
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 valueText:string
@@ -269,7 +250,6 @@ export interface dxFilterBuilderField {
     customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string }) => string);
     /**
      * @docid dxFilterBuilderField.dataField
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -285,14 +265,12 @@ export interface dxFilterBuilderField {
     dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
     /**
      * @docid dxFilterBuilderField.editorOptions
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     editorOptions?: any;
     /**
      * @docid dxFilterBuilderField.editorTemplate
-     * @type template|function
      * @type_function_param1 conditionInfo:object
      * @type_function_param1_field1 value:string|number|date
      * @type_function_param1_field2 filterOperation:string
@@ -306,7 +284,6 @@ export interface dxFilterBuilderField {
     editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, filterOperation?: string, field?: dxFilterBuilderField, setValue?: Function }, container: dxElement) => string | Element | JQuery);
     /**
      * @docid dxFilterBuilderField.falseText
-     * @type string
      * @default "false"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -322,7 +299,6 @@ export interface dxFilterBuilderField {
     filterOperations?: Array<'=' | '<>' | '<' | '<=' | '>' | '>=' | 'contains' | 'endswith' | 'isblank' | 'isnotblank' | 'notcontains' | 'startswith' | 'between' | string>;
     /**
      * @docid dxFilterBuilderField.format
-     * @type format
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -330,7 +306,6 @@ export interface dxFilterBuilderField {
     format?: format;
     /**
      * @docid dxFilterBuilderField.lookup
-     * @type object
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -338,7 +313,6 @@ export interface dxFilterBuilderField {
     lookup?: { allowClearing?: boolean, dataSource?: Array<any> | DataSourceOptions | Store, displayExpr?: string | ((data: any) => string), valueExpr?: string | ((data: any) => string | number | boolean) };
     /**
      * @docid dxFilterBuilderField.name
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -346,7 +320,6 @@ export interface dxFilterBuilderField {
     name?: string;
     /**
      * @docid dxFilterBuilderField.trueText
-     * @type string
      * @default "true"
      * @prevFileNamespace DevExpress.ui
      * @public

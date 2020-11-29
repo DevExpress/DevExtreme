@@ -11,7 +11,6 @@ import {
 export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataExpressionMixinOptions<dxRadioGroup> {
     /**
      * @docid dxRadioGroupOptions.activeStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -19,7 +18,6 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
     activeStateEnabled?: boolean;
     /**
      * @docid dxRadioGroupOptions.focusStateEnabled
-     * @type boolean
      * @default true [for](desktop)
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -27,7 +25,6 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
     focusStateEnabled?: boolean;
     /**
      * @docid dxRadioGroupOptions.hoverStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -44,7 +41,6 @@ export interface dxRadioGroupOptions extends EditorOptions<dxRadioGroup>, DataEx
     layout?: 'horizontal' | 'vertical';
     /**
      * @docid dxRadioGroupOptions.name
-     * @type string
      * @hidden false
      * @prevFileNamespace DevExpress.ui
      * @public

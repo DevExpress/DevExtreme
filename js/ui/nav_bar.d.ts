@@ -27,7 +27,6 @@ export default class dxNavBar extends dxTabs {
 export interface dxNavBarItem extends dxTabsItem {
     /**
      * @docid dxNavBarItem.badge
-     * @type String
      * @prevFileNamespace DevExpress.ui
      * @public
      */

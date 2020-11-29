@@ -461,6 +461,15 @@ QUnit.module('format: fixed point format', moduleConfig, () => {
         assert.equal(this.input.val(), '1.00', 'required digits was added on first input');
     });
 
+    QUnit.test('Value should be formatted after change on focusout if mask behavior is used (T942114)', function(assert) {
+        this.instance.option('format', '#,##0.00\'0\'');
+
+        this.keyboard
+            .type('1.111')
+            .change();
+        assert.strictEqual(this.instance.option('value'), 1.11, 'value is formatted');
+    });
+
     QUnit.test('value option should have right value after typing when format is enabled (T829935)', function(assert) {
         this.instance.option('format', '000.00');
 

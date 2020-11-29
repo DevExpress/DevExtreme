@@ -21,7 +21,6 @@ import {
 export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBoxOptions<T> {
     /**
      * @docid dxDropDownEditorOptions.acceptCustomValue
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -29,7 +28,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     acceptCustomValue?: boolean;
     /**
      * @docid dxDropDownEditorOptions.activeStateEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -45,7 +43,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     applyValueMode?: 'instantly' | 'useButtons';
     /**
      * @docid dxDropDownEditorOptions.dropDownOptions
-     * @type dxPopupOptions
      * @default {}
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -61,7 +58,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     buttons?: Array<'clear' | 'dropDown' | dxTextEditorButton>;
     /**
      * @docid dxDropDownEditorOptions.deferRendering
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -69,7 +65,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     deferRendering?: boolean;
     /**
      * @docid dxDropDownEditorOptions.dropDownButtonTemplate
-     * @type template|function
      * @default "dropDownButton"
      * @type_function_param1 buttonData:object
      * @type_function_param1_field1 text:string
@@ -98,7 +93,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     onOpened?: ((e: { component?: T, element?: dxElement, model?: any }) => any);
     /**
      * @docid dxDropDownEditorOptions.openOnFieldClick
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -106,7 +100,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     openOnFieldClick?: boolean;
     /**
      * @docid dxDropDownEditorOptions.opened
-     * @type boolean
      * @default false
      * @fires dxDropDownEditorOptions.onOpened
      * @fires dxDropDownEditorOptions.onClosed
@@ -116,7 +109,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     opened?: boolean;
     /**
      * @docid dxDropDownEditorOptions.showDropDownButton
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -124,7 +116,6 @@ export interface dxDropDownEditorOptions<T = dxDropDownEditor> extends dxTextBox
     showDropDownButton?: boolean;
     /**
      * @docid dxDropDownEditorOptions.value
-     * @type any
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -143,14 +134,14 @@ export default class dxDropDownEditor extends dxTextBox {
     constructor(element: Element, options?: dxDropDownEditorOptions)
     constructor(element: JQuery, options?: dxDropDownEditorOptions)
     /**
-     * @docid dxDropDownEditorMethods.close
+     * @docid dxDropDownEditor.close
      * @publicName close()
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     close(): void;
     /**
-     * @docid dxDropDownEditorMethods.content
+     * @docid dxDropDownEditor.content
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -158,7 +149,7 @@ export default class dxDropDownEditor extends dxTextBox {
      */
     content(): dxElement;
     /**
-     * @docid dxDropDownEditorMethods.field
+     * @docid dxDropDownEditor.field
      * @publicName field()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -166,7 +157,7 @@ export default class dxDropDownEditor extends dxTextBox {
      */
     field(): dxElement;
     /**
-     * @docid dxDropDownEditorMethods.open
+     * @docid dxDropDownEditor.open
      * @publicName open()
      * @prevFileNamespace DevExpress.ui
      * @public

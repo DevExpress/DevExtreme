@@ -19,7 +19,6 @@ import Widget, {
 export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**
      * @docid dxDrawerOptions.animationDuration
-     * @type number
      * @default 400
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -27,7 +26,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     animationDuration?: number;
     /**
      * @docid dxDrawerOptions.animationEnabled
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -35,7 +33,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     animationEnabled?: boolean;
     /**
      * @docid dxDrawerOptions.closeOnOutsideClick
-     * @type boolean|function
      * @default false
      * @type_function_param1 event:event
      * @type_function_return Boolean
@@ -45,7 +42,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     closeOnOutsideClick?: boolean | ((event: event) => boolean);
     /**
      * @docid dxDrawerOptions.maxSize
-     * @type number
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -53,7 +49,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     maxSize?: number;
     /**
      * @docid dxDrawerOptions.minSize
-     * @type number
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -61,7 +56,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     minSize?: number;
     /**
      * @docid dxDrawerOptions.opened
-     * @type boolean
      * @fires dxDrawerOptions.onOptionChanged
      * @default false
      * @prevFileNamespace DevExpress.ui
@@ -94,7 +88,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     revealMode?: 'slide' | 'expand';
     /**
      * @docid dxDrawerOptions.shading
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -102,7 +95,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     shading?: boolean;
     /**
      * @docid dxDrawerOptions.target
-     * @type string|Element|jQuery
      * @prevFileNamespace DevExpress.ui
      * @deprecated
      * @public
@@ -111,7 +103,6 @@ export interface dxDrawerOptions extends WidgetOptions<dxDrawer> {
     /**
      * @docid dxDrawerOptions.template
      * @type_function_param1 Element:dxElement
-     * @type template|function
      * @default 'panel'
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -131,7 +122,7 @@ export default class dxDrawer extends Widget {
     constructor(element: Element, options?: dxDrawerOptions)
     constructor(element: JQuery, options?: dxDrawerOptions)
     /**
-     * @docid dxDrawerMethods.content
+     * @docid dxDrawer.content
      * @publicName content()
      * @return dxElement
      * @prevFileNamespace DevExpress.ui
@@ -139,7 +130,7 @@ export default class dxDrawer extends Widget {
      */
     content(): dxElement;
     /**
-     * @docid dxDrawerMethods.hide
+     * @docid dxDrawer.hide
      * @publicName hide()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -147,7 +138,7 @@ export default class dxDrawer extends Widget {
      */
     hide(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxDrawerMethods.show
+     * @docid dxDrawer.show
      * @publicName show()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui
@@ -155,7 +146,7 @@ export default class dxDrawer extends Widget {
      */
     show(): Promise<void> & JQueryPromise<void>;
     /**
-     * @docid dxDrawerMethods.toggle
+     * @docid dxDrawer.toggle
      * @publicName toggle()
      * @return Promise<void>
      * @prevFileNamespace DevExpress.ui

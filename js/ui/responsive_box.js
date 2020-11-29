@@ -689,13 +689,13 @@ const ResponsiveBox = CollectionWidget.inherit({
     }
 
     /**
-    * @name dxResponsiveBoxMethods.registerKeyHandler
+    * @name dxResponsiveBox.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxResponsiveBoxMethods.focus
+    * @name dxResponsiveBox.focus
     * @publicName focus()
     * @hidden
     */

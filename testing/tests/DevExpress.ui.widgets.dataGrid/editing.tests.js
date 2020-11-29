@@ -3061,8 +3061,8 @@ QUnit.module('Editing with real dataController', {
         assert.equal(getInputElements(testElement.find('tbody > tr').first()).length, 1);
         testElement.find('input').first().val('Test update cell');
 
-        assert.ok(this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass('dx-state-disabled'), 'save changes button disabled');
-        assert.ok(this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass('dx-state-disabled'), 'cancel changes button disabled');
+        assert.notOk(this.find(headerPanelElement, '.dx-datagrid-save-button').hasClass('dx-state-disabled'), 'save changes button enabled');
+        assert.notOk(this.find(headerPanelElement, '.dx-datagrid-cancel-button').hasClass('dx-state-disabled'), 'cancel changes button enabled');
 
         testElement.find('input').first().trigger('change');
         assert.ok(testElement.find('td').first().hasClass('dx-cell-modified'));
@@ -6648,6 +6648,38 @@ QUnit.module('Editing with real dataController', {
         const items = this.dataController.items();
         assert.ok(items[0].isNewRow, 'first row is inserted');
         assert.ok(items[1].isNewRow, 'second row is inserted');
+    });
+
+    // T950444
+    QUnit.test('deleteRow should work after addRow in cell edit mode', function(assert) {
+        // arrange
+        const that = this;
+        const rowsView = this.rowsView;
+        const testElement = $('#container');
+
+        $.extend(that.options.editing, {
+            allowAdding: true,
+            allowUpdating: true,
+            mode: 'cell'
+        });
+
+        rowsView.render(testElement);
+
+        // act
+        this.addRow();
+        this.clock.tick();
+
+        // assert
+        assert.equal(this.dataController.items().length, 8, 'item was added');
+
+        // act
+        this.saveEditData();
+        this.deleteRow(0);
+
+        // assert
+        assert.equal(this.dataController.items().length, 7, 'item was deleted');
+        assert.equal(this.option('editing.editRowKey'), null, 'editRowKey was reset');
+        assert.equal(this.option('editing.editColumnName'), null, 'editColumnName was reset');
     });
 
     QUnit.test('Restore a height of rowsView when editing is canceled with empty data', function(assert) {

@@ -13,7 +13,7 @@ function isLocalHostName(url) {
 }
 
 /**
-* @name EndpointSelectorMethods.ctor
+* @name EndpointSelector.ctor
 * @publicName ctor(options)
 * @param1 options:Object
 * @hidden

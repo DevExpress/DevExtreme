@@ -1324,6 +1324,28 @@ QUnit.test('Html text, tooltip is interactive', function(assert) {
     }, 'text can be selected');
 });
 
+QUnit.test('check cursor on tooltip, interactive', function(assert) {
+    this.options.interactive = true;
+    const tooltip = this.tooltip;
+    tooltip.update(this.options);
+    tooltip.plaque.getBBox = sinon.stub().returns({ x: 4, y: 5, width: 20, height: 10 });
+
+    assert.ok(tooltip.isCursorOnTooltip(10, 7));
+    assert.ok(!tooltip.isCursorOnTooltip(10, 20));
+    assert.ok(!tooltip.isCursorOnTooltip(30, 7));
+});
+
+QUnit.test('check cursor on tooltip, is not interactive', function(assert) {
+    this.options.interactive = false;
+    const tooltip = this.tooltip;
+    tooltip.update(this.options);
+    tooltip.plaque.getBBox = sinon.stub().returns({ x: 4, y: 5, width: 20, height: 10 });
+
+    assert.ok(!tooltip.isCursorOnTooltip(10, 7));
+    assert.ok(!tooltip.isCursorOnTooltip(10, 20));
+    assert.ok(!tooltip.isCursorOnTooltip(30, 7));
+});
+
 QUnit.test('Call template if empty text', function(assert) {
     const eventData = { tag: 'event-data' };
     this.tooltip._getCanvas = function() { return CANVAS; };

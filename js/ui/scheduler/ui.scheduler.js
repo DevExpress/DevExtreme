@@ -117,7 +117,7 @@ const VIEWS_CONFIG = {
 
 class Scheduler extends Widget {
     _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
+        const defaultOptions = extend(super._getDefaultOptions(), {
             /**
                 * @pseudo StartDayHour
                 * @type number
@@ -350,7 +350,7 @@ class Scheduler extends Widget {
                 */
 
             currentView: 'day', // TODO: should we calculate currentView if views array contains only one item, for example 'month'?
-            currentDate: dateUtils.trimTime(new Date()),
+            currentDate: new Date(),
             min: undefined,
             max: undefined,
             dateSerializationFormat: undefined,
@@ -647,6 +647,8 @@ class Scheduler extends Widget {
 
             recurrenceExceptionExpr: 'recurrenceException',
 
+            disabledExpr: 'disabled',
+
             remoteFiltering: false,
 
             timeZone: '',
@@ -689,6 +691,12 @@ class Scheduler extends Widget {
                 * @inherits CollectionWidgetItem
                 * @type object
                 */
+        });
+
+        return extend(true, defaultOptions, {
+            integrationOptions: {
+                useDeferUpdateForTemplates: false
+            }
         });
     }
 
@@ -791,11 +799,11 @@ class Scheduler extends Widget {
                 this._updateOption('header', name, value);
                 break;
             case 'currentDate':
-                value = this._dateOption(name);
+                value = this._dateOption('currentDate');
                 value = dateUtils.trimTime(new Date(value));
                 this.option('selectedCellData', []);
-                this._workSpace.option(name, new Date(value));
-                this._header.option(name, new Date(value));
+                this._workSpace.option('currentDate', new Date(value));
+                this._header.option('currentDate', this._getHeaderCurrentDay(value));
                 this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
                 this._appointments.option('items', []);
                 this._filterAppointmentsByDate();
@@ -1010,6 +1018,7 @@ class Scheduler extends Widget {
             case 'allDayExpr':
             case 'recurrenceRuleExpr':
             case 'recurrenceExceptionExpr':
+            case 'disabledExpr':
                 this._updateExpression(name, value);
                 this._appointmentModel.setDataAccessors(this._combineDataAccessors());
 
@@ -1033,11 +1042,12 @@ class Scheduler extends Widget {
 
     _updateHeader() {
         const viewCountConfig = this._getViewCountConfig();
+
+        this._header.option('currentDate', this._getHeaderCurrentDay());
         this._header.option('intervalCount', viewCountConfig.intervalCount);
         this._header.option('displayedDate', this._workSpace._getViewStartByOptions());
         this._header.option('min', this._dateOption('min'));
         this._header.option('max', this._dateOption('max'));
-        this._header.option('currentDate', this._dateOption('currentDate'));
         this._header.option('firstDayOfWeek', this._getCurrentViewOption('firstDayOfWeek'));
         this._header.option('currentView', this._currentView);
     }
@@ -1218,7 +1228,8 @@ class Scheduler extends Widget {
             text: this.option('textExpr'),
             description: this.option('descriptionExpr'),
             recurrenceRule: this.option('recurrenceRuleExpr'),
-            recurrenceException: this.option('recurrenceExceptionExpr')
+            recurrenceException: this.option('recurrenceExceptionExpr'),
+            disabled: this.option('disabledExpr')
         });
 
         super._init();
@@ -1320,7 +1331,7 @@ class Scheduler extends Widget {
                 if(this._isAgenda()) {
                     this._workSpace._renderView();
                     // TODO: remove rows calculation from this callback
-                    this._dataSourceLoadedCallback.fireWith(this, [result]);
+                    this._dataSourceLoadedCallback.fireWith(this, [this.getFilteredItems()]);
                 }
             }).bind(this));
         }
@@ -1619,9 +1630,16 @@ class Scheduler extends Widget {
         result.views = this.option('views');
         result.min = new Date(this._dateOption('min'));
         result.max = new Date(this._dateOption('max'));
-        result.currentDate = dateUtils.trimTime(new Date(this._dateOption('currentDate')));
+        result.currentDate = this._getHeaderCurrentDay();
+        result.todayDate = () => this.timeZoneCalculator.createDate(new Date(), { path: 'toGrid' });
 
         return result;
+    }
+
+    _getHeaderCurrentDay(currentDate) {
+        const date = new Date(currentDate || this._dateOption('currentDate'));
+        const result = this.timeZoneCalculator.createDate(date, { path: 'toGrid' });
+        return dateUtils.trimTime(result);
     }
 
     _appointmentsConfig() {
@@ -2503,7 +2521,7 @@ class Scheduler extends Widget {
     }
 
     /**
-        * @name dxSchedulerMethods.registerKeyHandler
+        * @name dxScheduler.registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
         * @hidden
         */

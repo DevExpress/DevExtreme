@@ -471,6 +471,22 @@ QUnit.test('dxpointermove on series, mouse out of the chart', function(assert) {
     assert.equal(this.options.crosshair.hide.callCount, 1, 'crosshair hide');
 });
 
+QUnit.test('Mouseout from chart after dxpointermove on series. Curson on the interactive tooltip', function(assert) {
+    this.options.tooltip.stub('isCursorOnTooltip').returns(true);
+    // arrange
+    this.series.getNeighborPoint.withArgs(97, 45).returns(this.point);
+
+    // act
+    $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+    this.clock.tick(this.tracker.__trackerDelay);
+    $(document).trigger(getEvent('dxpointermove', { pageX: 500, pageY: 500 }));
+
+    // assert
+    assert.ok(this.options.tooltip.show.calledOnce);
+    assert.ok(!this.options.tooltip.stub('hide').called);
+    assert.deepEqual(this.options.tooltip.stub('isCursorOnTooltip').args[0], [500, 500]);
+});
+
 QUnit.test('dxpointermove over point', function(assert) {
     // act
     $(this.renderer.root.element).trigger(getEvent('dxpointermove', { pageX: 100, pageY: 50, target: this.pointElement.element }));

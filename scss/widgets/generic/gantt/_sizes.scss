@@ -10,26 +10,26 @@ $gantt-cv-dialog-padding-bottom: null !default;
 $gantt-cv-dialog-row-padding-top: null !default;
 $gantt-treelist-text-min-height: null !default;
 
-$gantt-header-item-height: 45px;
-$gantt-task-wrapper-padding-top: 0;
+$gantt-header-item-height: 45px !default;
+$gantt-task-wrapper-padding-top: 0 !default;
 
 @if $size == "default" {
-  $gantt-task-title-padding-left: 7px;
-  $gantt-task-height: 21px;
-  $gantt-dependency-successor-size: 10px;
-  $gantt-milestone-size: 14px;
-  $gantt-cv-dialog-padding-bottom: 8px;
-  $gantt-cv-dialog-row-padding-top: 12px;
-  $gantt-treelist-text-min-height: 19px;
+  $gantt-task-title-padding-left: 7px !default;
+  $gantt-task-height: 21px !default;
+  $gantt-dependency-successor-size: 10px !default;
+  $gantt-milestone-size: 14px !default;
+  $gantt-cv-dialog-padding-bottom: 8px !default;
+  $gantt-cv-dialog-row-padding-top: 12px !default;
+  $gantt-treelist-text-min-height: 19px !default;
 }
 
 @else if $size == "compact" {
-  $gantt-task-title-padding-left: 5px;
-  $gantt-task-height: 18px;
-  $gantt-dependency-successor-size: 9px;
-  $gantt-milestone-size: 12px;
-  $gantt-cv-dialog-padding-bottom: 10px;
-  $gantt-cv-dialog-row-padding-top: 10px;
-  $gantt-treelist-text-min-height: 16px;
+  $gantt-task-title-padding-left: 5px !default;
+  $gantt-task-height: 18px !default;
+  $gantt-dependency-successor-size: 9px !default;
+  $gantt-milestone-size: 12px !default;
+  $gantt-cv-dialog-padding-bottom: 10px !default;
+  $gantt-cv-dialog-row-padding-top: 10px !default;
+  $gantt-treelist-text-min-height: 16px !default;
 }
 

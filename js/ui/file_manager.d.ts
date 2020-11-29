@@ -25,7 +25,6 @@ import Widget, {
 export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.allowedFileExtensions
-     * @type Array<string>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -33,14 +32,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     allowedFileExtensions?: Array<string>;
     /**
      * @docid dxFileManagerOptions.contextMenu
-     * @type dxFileManagerContextMenu
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     contextMenu?: dxFileManagerContextMenu;
     /**
      * @docid dxFileManagerOptions.currentPath
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -48,7 +45,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     currentPath?: string;
     /**
      * @docid dxFileManagerOptions.currentPathKeys
-     * @type Array<string>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -56,7 +52,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     currentPathKeys?: Array<string>;
     /**
      * @docid dxFileManagerOptions.customizeDetailColumns
-     * @type function
      * @type_function_param1 columns:Array<dxFileManagerDetailsColumn>
      * @type_function_return Array<dxFileManagerDetailsColumn>
      * @prevFileNamespace DevExpress.ui
@@ -65,7 +60,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     customizeDetailColumns?: ((columns: Array<dxFileManagerDetailsColumn>) => Array<dxFileManagerDetailsColumn>);
     /**
      * @docid dxFileManagerOptions.customizeThumbnail
-     * @type function
      * @type_function_param1 fileSystemItem:FileSystemItem
      * @type_function_return string
      * @prevFileNamespace DevExpress.ui
@@ -74,7 +68,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     customizeThumbnail?: ((fileSystemItem: FileSystemItem) => string);
     /**
      * @docid dxFileManagerOptions.fileSystemProvider
-     * @type object
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,7 +75,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     fileSystemProvider?: any;
     /**
      * @docid dxFileManagerOptions.itemView
-     * @type object
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -91,7 +83,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onContextMenuItemClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -107,7 +98,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onCurrentDirectoryChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 directory:FileSystemItem
      * @default null
@@ -119,7 +109,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onSelectedFileOpened
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 file:FileSystemItem
      * @default null
@@ -131,7 +120,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onSelectionChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 currentSelectedItemKeys:Array<string>
      * @type_function_param1_field5 currentDeselectedItemKeys:Array<string>
@@ -146,7 +134,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onToolbarItemClick
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 itemData:object
      * @type_function_param1_field5 itemElement:dxElement
@@ -160,7 +147,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onFocusedItemChanged
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 item:FileSystemItem
      * @type_function_param1_field5 itemElement:dxElement
@@ -173,7 +159,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     /**
      * @docid dxFileManagerOptions.onErrorOccurred
      * @extends Action
-     * @type function(e)
      * @type_function_param1 e:object
      * @type_function_param1_field4 errorCode:number
      * @type_function_param1_field5 errorText:string
@@ -186,14 +171,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     onErrorOccurred?: ((e: { component?: dxFileManager, element?: dxElement, model?: any, errorCode?: number, errorText?: string, fileSystemItem?: FileSystemItem }) => any);
     /**
      * @docid dxFileManagerOptions.permissions
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     permissions?: { copy?: boolean, create?: boolean, download?: boolean, move?: boolean, delete?: boolean, rename?: boolean, upload?: boolean };
     /**
      * @docid dxFileManagerOptions.rootFolderName
-     * @type string
      * @default "Files"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -209,7 +192,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     selectionMode?: 'multiple' | 'single';
     /**
      * @docid dxFileManagerOptions.selectedItemKeys
-     * @type Array<string>
      * @default []
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -217,7 +199,6 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     selectedItemKeys?: Array<string>;
     /**
      * @docid dxFileManagerOptions.focusedItemKey
-     * @type string
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -225,14 +206,12 @@ export interface dxFileManagerOptions extends WidgetOptions<dxFileManager> {
     focusedItemKey?: string;
     /**
      * @docid dxFileManagerOptions.toolbar
-     * @type dxFileManagerToolbar
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     toolbar?: dxFileManagerToolbar;
     /**
      * @docid dxFileManagerOptions.upload
-     * @type object
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -250,7 +229,7 @@ export default class dxFileManager extends Widget {
     constructor(element: Element, options?: dxFileManagerOptions)
     constructor(element: JQuery, options?: dxFileManagerOptions)
     /**
-     * @docid dxFileManagerMethods.getCurrentDirectory
+     * @docid dxFileManager.getCurrentDirectory
      * @publicName getCurrentDirectory()
      * @return object
      * @prevFileNamespace DevExpress.ui
@@ -258,7 +237,7 @@ export default class dxFileManager extends Widget {
      */
     getCurrentDirectory(): any;
     /**
-     * @docid dxFileManagerMethods.getSelectedItems
+     * @docid dxFileManager.getSelectedItems
      * @publicName getSelectedItems()
      * @return Array<object>
      * @prevFileNamespace DevExpress.ui
@@ -266,7 +245,7 @@ export default class dxFileManager extends Widget {
      */
     getSelectedItems(): Array<any>;
     /**
-     * @docid dxFileManagerMethods.refresh
+     * @docid dxFileManager.refresh
      * @publicName refresh()
      * @return Promise<any>
      * @prevFileNamespace DevExpress.ui
@@ -289,7 +268,6 @@ export interface dxFileManagerContextMenu {
 export interface dxFileManagerContextMenuItem extends dxContextMenuItem {
     /**
      * @docid dxFileManagerContextMenuItem.items
-     * @type Array<dxFileManagerContextMenuItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -332,7 +310,6 @@ export interface dxFileManagerToolbar {
 export interface dxFileManagerToolbarItem extends dxToolbarItem {
     /**
      * @docid dxFileManagerToolbarItem.icon
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -341,6 +318,7 @@ export interface dxFileManagerToolbarItem extends dxToolbarItem {
     /**
      * @docid dxFileManagerToolbarItem.location
      * @default "before"
+     * @type Enums.ToolbarItemLocation
      * @prevFileNamespace DevExpress.ui
      * @public
      */
@@ -373,7 +351,6 @@ export interface dxFileManagerDetailsColumn {
     alignment?: 'center' | 'left' | 'right' | undefined;
     /**
      * @docid dxFileManagerDetailsColumn.caption
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -381,7 +358,6 @@ export interface dxFileManagerDetailsColumn {
     caption?: string;
     /**
      * @docid dxFileManagerDetailsColumn.cssClass
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -389,7 +365,6 @@ export interface dxFileManagerDetailsColumn {
     cssClass?: string;
     /**
      * @docid dxFileManagerDetailsColumn.dataField
-     * @type string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -405,7 +380,6 @@ export interface dxFileManagerDetailsColumn {
     dataType?: 'string' | 'number' | 'date' | 'boolean' | 'object' | 'datetime';
     /**
      * @docid dxFileManagerDetailsColumn.hidingPriority
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -413,7 +387,6 @@ export interface dxFileManagerDetailsColumn {
     hidingPriority?: number;
     /**
      * @docid dxFileManagerDetailsColumn.sortIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -430,7 +403,6 @@ export interface dxFileManagerDetailsColumn {
     sortOrder?: 'asc' | 'desc' | undefined;
     /**
      * @docid dxFileManagerDetailsColumn.visible
-     * @type boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -438,7 +410,6 @@ export interface dxFileManagerDetailsColumn {
     visible?: boolean;
     /**
      * @docid dxFileManagerDetailsColumn.visibleIndex
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -446,7 +417,6 @@ export interface dxFileManagerDetailsColumn {
     visibleIndex?: number;
     /**
      * @docid dxFileManagerDetailsColumn.width
-     * @type number|string
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public

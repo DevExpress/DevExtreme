@@ -18,7 +18,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     buttons?: Array<'clear' | 'spins' | dxTextEditorButton>;
     /**
      * @docid dxNumberBoxOptions.format
-     * @type format
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -26,7 +25,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     format?: format;
     /**
      * @docid dxNumberBoxOptions.invalidValueMessage
-     * @type string
      * @default "Value must be a number"
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -34,7 +32,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     invalidValueMessage?: string;
     /**
      * @docid dxNumberBoxOptions.max
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -42,7 +39,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     max?: number;
     /**
      * @docid dxNumberBoxOptions.min
-     * @type number
      * @default undefined
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -59,7 +55,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     mode?: 'number' | 'text' | 'tel';
     /**
      * @docid dxNumberBoxOptions.showSpinButtons
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -67,7 +62,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     showSpinButtons?: boolean;
     /**
      * @docid dxNumberBoxOptions.step
-     * @type number
      * @default 1
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -75,7 +69,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     step?: number;
     /**
      * @docid dxNumberBoxOptions.useLargeSpinButtons
-     * @type boolean
      * @default true
      * @default false [for](desktop)
      * @prevFileNamespace DevExpress.ui
@@ -84,7 +77,6 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
     useLargeSpinButtons?: boolean;
     /**
      * @docid dxNumberBoxOptions.value
-     * @type number
      * @default 0
      * @prevFileNamespace DevExpress.ui
      * @public

@@ -35,7 +35,9 @@ export async function disposeWidgets() {
       const $widgetElement = $(element);
       const widgetNames = $widgetElement.data().dxComponents;
       widgetNames?.forEach((name) => {
-        ($widgetElement as any)[name]('dispose');
+        if ($widgetElement.hasClass('dx-widget')) {
+          ($widgetElement as any)[name]('dispose');
+        }
       });
       $widgetElement.empty();
     });

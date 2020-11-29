@@ -17,7 +17,6 @@ import {
 export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectionWidgetOptions<T> {
     /**
      * @docid dxMenuBaseOptions.activeStateEnabled
-     * @type Boolean
      * @default true
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -25,7 +24,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     activeStateEnabled?: boolean;
     /**
      * @docid dxMenuBaseOptions.animation
-     * @type object
      * @default { show: { type: "fade", from: 0, to: 1, duration: 100 }, hide: { type: "fade", from: 1, to: 0, duration: 100 } }
      * @ref
      * @prevFileNamespace DevExpress.ui
@@ -34,7 +32,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     animation?: { hide?: animationConfig, show?: animationConfig };
     /**
      * @docid dxMenuBaseOptions.cssClass
-     * @type string
      * @default ""
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -42,7 +39,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     cssClass?: string;
     /**
      * @docid dxMenuBaseOptions.dataSource
-     * @type string|Array<dxMenuBaseItem>|DataSource|DataSourceOptions
      * @default null
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -50,14 +46,12 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
     dataSource?: string | Array<dxMenuBaseItem> | DataSource | DataSourceOptions;
     /**
      * @docid dxMenuBaseOptions.items
-     * @type Array<dxMenuBaseItem>
      * @prevFileNamespace DevExpress.ui
      * @public
      */
     items?: Array<dxMenuBaseItem>;
     /**
      * @docid dxMenuBaseOptions.selectByClick
-     * @type boolean
      * @default false
      * @prevFileNamespace DevExpress.ui
      * @public
@@ -82,7 +76,6 @@ export interface dxMenuBaseOptions<T = dxMenuBase> extends HierarchicalCollectio
 }
 /**
  * @docid dxMenuBase
- * @type object
  * @inherits HierarchicalCollectionWidget
  * @hidden
  * @prevFileNamespace DevExpress.ui
@@ -91,7 +84,7 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
     constructor(element: Element, options?: dxMenuBaseOptions)
     constructor(element: JQuery, options?: dxMenuBaseOptions)
     /**
-     * @docid dxMenuBaseMethods.selectItem
+     * @docid dxMenuBase.selectItem
      * @publicName selectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui
@@ -99,7 +92,7 @@ export default class dxMenuBase extends HierarchicalCollectionWidget {
      */
     selectItem(itemElement: Element): void;
     /**
-     * @docid dxMenuBaseMethods.unselectItem
+     * @docid dxMenuBase.unselectItem
      * @publicName unselectItem(itemElement)
      * @param1 itemElement:Element
      * @prevFileNamespace DevExpress.ui

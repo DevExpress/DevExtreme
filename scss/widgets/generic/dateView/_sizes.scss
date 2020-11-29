@@ -6,11 +6,11 @@ $generic-dateview-roller-height: null !default;
 $generic-dateview-roller-item-height: null !default;
 
 @if $size == "default" {
-  $generic-dateview-roller-height: 182px;
-  $generic-dateview-roller-item-height: 40px;
+  $generic-dateview-roller-height: 182px !default;
+  $generic-dateview-roller-item-height: 40px !default;
 }
 
 @else if $size == "compact" {
-  $generic-dateview-roller-height: 152px;
-  $generic-dateview-roller-item-height: 34px;
+  $generic-dateview-roller-height: 152px !default;
+  $generic-dateview-roller-item-height: 34px !default;
 }

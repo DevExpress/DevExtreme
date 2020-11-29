@@ -214,7 +214,8 @@ const Popover = Popup.inherit({
             closeOnTargetScroll: true,
             arrowPosition: '',
             arrowOffset: 0,
-            boundaryOffset: { h: 10, v: 10 }
+            boundaryOffset: { h: 10, v: 10 },
+            _fixedPosition: true
 
             /**
             * @name dxPopoverOptions.focusStateEnabled
@@ -584,13 +585,13 @@ const Popover = Popup.inherit({
     }
 
     /**
-    * @name dxPopoverMethods.registerKeyHandler
+    * @name dxPopover.registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
     */
 
     /**
-    * @name dxPopoverMethods.focus
+    * @name dxPopover.focus
     * @publicName focus()
     * @hidden
     */
